@@ -1,4 +1,8 @@
-﻿Namespace HoMIDom
+﻿Imports System.IO
+Imports System.Xml.Serialization
+
+
+Namespace HoMIDom
 
     '***********************************************
     '** CLASS SERVER
@@ -9,7 +13,7 @@
 
     <Serializable()> Public Class Server
         Inherits MarshalByRefObject
-        Implements IHoMIDom
+        Implements IHoMIDom 'implémente l'interface dans cette class
 
 #Region "Event"
         '********************************************************************
@@ -86,6 +90,25 @@
             Log.Log(Log.TypeLog.INFO, TypeSource.SERVEUR, "     -> Heure du lever : " & _HeureLeverSoleil)
             Log.Log(Log.TypeLog.INFO, "Serveur", "     -> Heure du coucher : " & _HeureCoucherSoleil)
         End Sub
+
+        '--- Chargement de la config depuis le fichier XML
+        Public Sub LoadConfig(ByVal Fichier As String, ByVal Objet As Server)
+            Try
+
+            Catch ex As Exception
+                MsgBox("Impossible de charger le fichier de config xml: " & ex.Message)
+            End Try
+        End Sub
+
+        '--- Sauvegarde de la config dans le fichier XML
+        Public Sub SaveConfig(ByVal Fichier As String)
+            Try
+                
+            Catch ex As Exception
+                MsgBox("Impossible d'enregistrer le fichier de config: " & ex.Message)
+            End Try
+        End Sub
+
 #End Region
 
 #Region "Interface Client"
@@ -93,7 +116,8 @@
         'Fonctions/Sub/Propriétés partagées en service web pour les clients
         '********************************************************************
 
-        'PROPRIETES
+        '**** PROPRIETES ***************************
+
         Public Property Drivers() As ArrayList Implements IHoMIDom.Drivers
             Get
                 Return _ListDrivers
@@ -112,7 +136,43 @@
             End Set
         End Property
 
-        'FONCTIONS
+        Public Property Longitude() As Double Implements IHoMIDom.Longitude
+            Get
+                Return _Longitude
+            End Get
+            Set(ByVal value As Double)
+                _Longitude = value
+            End Set
+        End Property
+
+        Public Property Latitude() As Double Implements IHoMIDom.Latitude
+            Get
+                Return _Latitude
+            End Get
+            Set(ByVal value As Double)
+                _Latitude = value
+            End Set
+        End Property
+
+        Public Property HeureCorrectionCoucher() As Integer Implements IHoMIDom.HeureCorrectionCoucher
+            Get
+                Return _HeureCoucherSoleilCorrection
+            End Get
+            Set(ByVal value As Integer)
+                _HeureCoucherSoleilCorrection = value
+            End Set
+        End Property
+
+        Public Property HeureCorrectionLever() As Integer Implements IHoMIDom.HeureCorrectionLever
+            Get
+                Return _HeureLeverSoleilCorrection
+            End Get
+            Set(ByVal value As Integer)
+                _HeureLeverSoleilCorrection = value
+            End Set
+        End Property
+
+        '*** FONCTIONS ******************************************
 
         'Supprimer un device
         Public Function DeleteDevice(ByVal deviceId As String) As Integer Implements IHoMIDom.DeleteDevice

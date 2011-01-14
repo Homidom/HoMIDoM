@@ -3,13 +3,14 @@ Namespace HoMIDom
 
     '***********************************************
     '** INTERFACE SOAP HTTP
+    '** Liste toutes les functions et propriétés accessibles par les clients
     '** version 1.0
     '** Date de création: 12/01/2011
     '** Historique (SebBergues): 12/01/2011: Création 
     '***********************************************
 
     Public Interface IHoMIDom
-        'Fonctions
+        '---- Fonctions ---------------------------------------
         Function DeleteDevice(ByVal deviceId As String) As Integer 'Supprimer un device
         Function DeleteDriver(ByVal driverId As String) As Integer 'Supprimer un driver de la config
         Function ReturnDeviceByID(ByVal Id As String) As Object 'Retourne l'objet d'un device par son ID
@@ -19,9 +20,19 @@ Namespace HoMIDom
         Function StartIrLearning() As String 'Commencer l'apprentissage d'un commande IR
         Function HeureLeverSoleil() As String 'Valeur du couché du soleil
         Function HeureCoucherSoleil() As String 'valeur du levé du soleil
-        'Propriétés
+
+        '---- Propriétés --------------------------------------
         Property Devices() As ArrayList 'Liste des devices
         Property Drivers() As ArrayList 'Liste des drivers
+        Property Longitude() As Double 'Longitude
+        Property Latitude() As Double 'Latitude
+        Property HeureCorrectionCoucher() As Integer
+        Property HeureCorrectionLever() As Integer
+
+        '---- Variables ---------------------------------------
+
+        '---- Events ---------------------------------------
+
     End Interface
 
 End Namespace
