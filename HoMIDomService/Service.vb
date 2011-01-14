@@ -14,10 +14,11 @@ Imports HoMIDom.HoMIDom
 '***********************************************
 
 Module Service
-    Dim obj As Server = New Server()
+
 
     Sub Main()
         Try
+            Dim obj As Server = New Server()
 
             Console.WriteLine("******************************")
             Console.WriteLine("DEMARRAGE DU SERVEUR**********")
@@ -42,10 +43,6 @@ Module Service
             Console.WriteLine("SERVEUR DEMARRE **************")
             Console.WriteLine("******************************")
             Console.WriteLine(" ")
-
-            If Console.ReadLine = "end" Then
-                End
-            End If
         Catch ex As Exception
             Console.WriteLine(Now & " ERREUR " & ex.Message)
         End Try
