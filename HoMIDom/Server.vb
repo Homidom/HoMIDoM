@@ -17,7 +17,7 @@
         '********************************************************************
 
         'Evenement provenant des drivers
-        Public Sub DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object)
+        Public Sub DriversEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object)
 
         End Sub
 
@@ -69,6 +69,25 @@
         Dim TimerSecond As New Timers.Timer 'Timer à la seconde
 #End Region
 
+#Region "Fonctions/Sub propres au serveur"
+
+        '---------- Initialisation des heures du soleil -------              
+        Public Sub MAJ_HeuresSoleil()
+
+            Dim dtSunrise As Date
+            Dim dtSolarNoon As Date
+            Dim dtSunset As Date
+
+            Soleil.CalculateSolarTimes(_Latitude, _Longitude, Date.Now, dtSunrise, dtSolarNoon, dtSunset)
+            Log.Log(TypeLog.INFO, TypeSource.SERVEUR, "Initialisation des heures du soleil")
+            _HeureCoucherSoleil = DateAdd(DateInterval.Minute, _HeureCoucherSoleilCorrection, dtSunset)
+            _HeureLeverSoleil = DateAdd(DateInterval.Minute, _HeureLeverSoleilCorrection, dtSunrise)
+
+            Log.Log(Log.TypeLog.INFO, TypeSource.SERVEUR, "     -> Heure du lever : " & _HeureLeverSoleil)
+            Log.Log(Log.TypeLog.INFO, "Serveur", "     -> Heure du coucher : " & _HeureCoucherSoleil)
+        End Sub
+#End Region
+
 #Region "Interface Client"
         '********************************************************************
         'Fonctions/Sub/Propriétés partagées en service web pour les clients
@@ -117,12 +136,12 @@
 
         'Retourne l'heure du couché du soleil
         Function HeureCoucherSoleil() As String Implements IHoMIDom.HeureCoucherSoleil
-
+            Return _HeureCoucherSoleil
         End Function
 
         'Retour l'heure de lever du soleil
         Function HeureLeverSoleil() As String Implements IHoMIDom.HeureLeverSoleil
-
+            Return _HeureLeverSoleil
         End Function
 
         'Sauvegarder ou créer un device
@@ -498,7 +517,7 @@
                             .COM = com
                             .Refresh = refresh
                             .Picture = picture
-                            AddHandler o.DriverEvent, AddressOf DriverEvent
+                            AddHandler o.DriverEvent, AddressOf DriversEvent
                         End With
                         _ListDrivers.Add(o)
                 End Select
@@ -523,6 +542,19 @@
             'génration de l'event
 
             Return myID
+        End Function
+
+        'Commencer un apprentissage IR
+        Public Function StartIrLearning() As String Implements IHoMIDom.StartIrLearning
+            Dim retour As String = ""
+            For i As Integer = 0 To _ListDrivers.Count - 1
+                If _ListDrivers.Item(i).protocol = "IR" Then
+                    Dim x As Driver_Usbuirt = _ListDrivers.Item(i)
+                    retour = x.LearnCodeIR()
+                    Log.Log(Log.TypeLog.INFO, TypeSource.SERVEUR, "Apprentissage IR: " & retour)
+                End If
+            Next
+            Return retour
         End Function
 
         'retourne le device par son ID
