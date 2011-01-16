@@ -4,36 +4,28 @@ Imports System.IO
 Namespace HoMIDom
     '***********************************************
     '** CLASS DEVICE
-    '** version 1.0
+    '** version 1.1
     '** Date de création: 12/01/2011
     '** Historique (SebBergues): 12/01/2011: Création 
+    '** Historique (Davidinfo): 17/01/2011: Ajout de classes generiques + ajout _formatage
     '***********************************************
+
     Public Class Device
-
-        <Serializable()> Class TEMPERATURE
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "TEMPERATURE"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
-
-            Dim _Value As Double
-            Dim _ValueMin As Double = -9999
-            Dim _ValueMax As Double = 9999
-            Dim _ValueDef As Double
-            Dim _Precision As String
-            Dim _Correction As Double
-
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
+        Public Class DeviceGenerique
+            Protected _ID As String
+            Protected _Name As String
+            Protected _Enable As Boolean
+            Protected _Driver As Object
+            Protected _Description As String
+            Protected _Type As String
+            Protected _Adresse1 As String
+            Protected _Adresse2 As String
+            Protected _DateCreated As Date
+            Protected _LastChanged As Date
+            Protected _Refresh As Integer
+            Protected _Modele As String
+            Protected _Picture As String
+            Protected MyTimer As New Timers.Timer
 
             'Identification unique du device
             Public Property ID() As String
@@ -131,6 +123,111 @@ Namespace HoMIDom
                     _LastChanged = value
                 End Set
             End Property
+
+            'Modèle du composant
+            Public Property Modele() As String
+                Get
+                    Return _Modele
+                End Get
+                Set(ByVal value As String)
+                    _Modele = value
+                End Set
+            End Property
+
+            'Adresse de son image
+            Public Property Picture() As String
+                Get
+                    Return _Picture
+                End Get
+                Set(ByVal value As String)
+                    _Picture = value
+                End Set
+            End Property
+
+        End Class
+
+        Class DeviceGeneriqueValue
+            Inherits DeviceGenerique
+            Protected _Value As Double
+            Protected _ValueMin As Double = -9999
+            Protected _ValueMax As Double = 9999
+            Protected _ValueDef As Double
+            Protected _Precision As Double
+            Protected _Correction As Double
+            Protected _Formatage As String
+
+            'Valeur minimale que value peut avoir 
+            Public Property ValueMin() As Double
+                Get
+                    Return _ValueMin
+                End Get
+                Set(ByVal value As Double)
+                    _ValueMin = value
+                End Set
+            End Property
+
+            'Valeur maximale que value peut avoir 
+            Public Property ValueMax() As Double
+                Get
+                    Return _ValueMax
+                End Get
+                Set(ByVal value As Double)
+                    _ValueMax = value
+                End Set
+            End Property
+
+            'Valeur par défaut de Value au démarrage du Device, si Vide = Value
+            Public Property ValueDef() As Double
+                Get
+                    Return _ValueDef
+                End Get
+                Set(ByVal value As Double)
+                    _ValueDef = value
+                    _Value = _ValueDef
+                End Set
+            End Property
+
+            'Precision de value
+            Public Property Precision() As String
+                Get
+                    Return _Precision
+                End Get
+                Set(ByVal value As String)
+                    _Precision = value
+                End Set
+            End Property
+
+            'Correction en +/-/*/div à effectuer sur la value
+            Public Property Correction() As Double
+                Get
+                    Return _Correction
+                End Get
+                Set(ByVal value As Double)
+                    _Correction = value
+                End Set
+            End Property
+
+            'Format de value 0.0 ou 0.00...
+            Public Property Formatage() As String
+                Get
+                    Return _Formatage
+                End Get
+                Set(ByVal value As String)
+                    _Formatage = value
+                End Set
+            End Property
+
+        End Class
+
+        <Serializable()> Class TEMPERATURE
+            Inherits DeviceGeneriqueValue
+
+            'Creation d'un device Temperature
+            Public Sub New()
+                _Type = "TEMPERATURE"
+            End Sub
+
+            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -152,26 +249,6 @@ Namespace HoMIDom
                 Value = Driver.ReadTemp(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Valeur de température
             Public Property Value() As Double
                 Get
@@ -181,7 +258,7 @@ Namespace HoMIDom
                     Dim tmp As Double = value
                     If tmp < _ValueMin Then tmp = _ValueMin
                     If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Precision <> "" Then tmp = Format(tmp, _Precision)
+                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
                     tmp += _Correction
 
                     'Si la valeur a changé on la prend en compte et on créer l'event
@@ -193,179 +270,17 @@ Namespace HoMIDom
                 End Set
             End Property
 
-            'Valeur minimale que value peut avoir 
-            Public Property ValueMin() As Double
-                Get
-                    Return _ValueMin
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMin = value
-                End Set
-            End Property
-
-            'Valeur maximale que value peut avoir 
-            Public Property ValueMax() As Double
-                Get
-                    Return _ValueMax
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMax = value
-                End Set
-            End Property
-
-            'Valeur par défaut de Value au démarrage du Device, si Vide = Value
-            Public Property ValueDef() As Double
-                Get
-                    Return _ValueDef
-                End Get
-                Set(ByVal value As Double)
-                    _ValueDef = value
-                    _Value = _ValueDef
-                End Set
-            End Property
-
-            'Precision de value
-            Public Property Precision() As String
-                Get
-                    Return _Precision
-                End Get
-                Set(ByVal value As String)
-                    _Precision = value
-                End Set
-            End Property
-
-            'Correction en +/-/*/div à effectuer sur la value
-            Public Property Correction() As Double
-                Get
-                    Return _Correction
-                End Get
-                Set(ByVal value As Double)
-                    _Correction = value
-                End Set
-            End Property
         End Class
 
         <Serializable()> Class HUMIDITE
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "HUMIDITE"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
+            Inherits DeviceGeneriqueValue
 
-            Dim _Value As Double
-            Dim _ValueMin As Double = -9999
-            Dim _ValueMax As Double = 9999
-            Dim _ValueDef As Double
-            Dim _Precision As String
-            Dim _Correction As Double
+            'Creation du device
+            Public Sub New()
+                _Type = "HUMIDITE"
+            End Sub
 
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -387,26 +302,6 @@ Namespace HoMIDom
                 Value = Driver.ReadHum(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Valeur d'Humidité
             Public Property Value() As Double
                 Get
@@ -416,7 +311,7 @@ Namespace HoMIDom
                     Dim tmp As Double = value
                     If tmp < _ValueMin Then tmp = _ValueMin
                     If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Precision <> "" Then tmp = Format(tmp, _Precision)
+                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
                     tmp += _Correction
 
                     'Si la valeur a changé on la prend en compte et on créer l'event
@@ -428,174 +323,19 @@ Namespace HoMIDom
                 End Set
             End Property
 
-            'Valeur minimale que value peut avoir 
-            Public Property ValueMin() As Double
-                Get
-                    Return _ValueMin
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMin = value
-                End Set
-            End Property
-
-            'Valeur maximale que value peut avoir 
-            Public Property ValueMax() As Double
-                Get
-                    Return _ValueMax
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMax = value
-                End Set
-            End Property
-
-            'Valeur par défaut de Value au démarrage du Device, si Vide = Value
-            Public Property ValueDef() As Double
-                Get
-                    Return _ValueDef
-                End Get
-                Set(ByVal value As Double)
-                    _ValueDef = value
-                    _Value = _ValueDef
-                End Set
-            End Property
-
-            'Precision de value
-            Public Property Precision() As String
-                Get
-                    Return _Precision
-                End Get
-                Set(ByVal value As String)
-                    _Precision = value
-                End Set
-            End Property
-
-            'Correction en +/-/*/div à effectuer sur la value
-            Public Property Correction() As Double
-                Get
-                    Return _Correction
-                End Get
-                Set(ByVal value As Double)
-                    _Correction = value
-                End Set
-            End Property
         End Class
 
         <Serializable()> Class BATTERIE
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "BATTERIE"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
+            Inherits DeviceGenerique
 
             Dim _Value As String
 
+            'Creation d'un device BATTERIE
+            Public Sub New()
+                _Type = "BATTERIE"
+            End Sub
+
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -617,26 +357,6 @@ Namespace HoMIDom
                 Value = Driver.ReadBatterie(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'OK/Low
             Public Property Value() As String
                 Get
@@ -657,121 +377,16 @@ Namespace HoMIDom
         End Class
 
         <Serializable()> Class NIVRECEPTION
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "NIVRECEPTION"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
+            Inherits DeviceGenerique
 
             Dim _Value As Integer
 
+            'Creation du device
+            Public Sub New()
+                _Type = "NIVRECEPTION"
+            End Sub
+
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -793,26 +408,6 @@ Namespace HoMIDom
                 Value = Driver.ReadNivRecept(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Niv de Réception
             Public Property Value() As Integer
                 Get
@@ -833,126 +428,14 @@ Namespace HoMIDom
         End Class
 
         <Serializable()> Class TEMPERATURECONSIGNE
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "TEMPERATURECONSIGNE"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
-
-            Dim _Value As Double
-            Dim _ValueMin As Double = -9999
-            Dim _ValueMax As Double = 9999
-            Dim _ValueDef As Double
-            Dim _Precision As String
-            Dim _Correction As Double
+            Inherits DeviceGeneriqueValue
 
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
 
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
+            'Creation du device
+            Public Sub New()
+                _Type = "TEMPERATURECONSIGNE"
+            End Sub
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -974,26 +457,6 @@ Namespace HoMIDom
                 Value = Driver.ReadTempCsg(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Valeur de Température de consigne
             Public Property Value() As Double
                 Get
@@ -1003,7 +466,7 @@ Namespace HoMIDom
                     Dim tmp As Double = value
                     If tmp < _ValueMin Then tmp = _ValueMin
                     If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Precision <> "" Then tmp = Format(tmp, _Precision)
+                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
                     tmp += _Correction
 
                     'Si la valeur a changé on la prend en compte et on créer l'event
@@ -1015,179 +478,17 @@ Namespace HoMIDom
                 End Set
             End Property
 
-            'Valeur minimale que value peut avoir 
-            Public Property ValueMin() As Double
-                Get
-                    Return _ValueMin
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMin = value
-                End Set
-            End Property
-
-            'Valeur maximale que value peut avoir 
-            Public Property ValueMax() As Double
-                Get
-                    Return _ValueMax
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMax = value
-                End Set
-            End Property
-
-            'Valeur par défaut de Value au démarrage du Device, si Vide = Value
-            Public Property ValueDef() As Double
-                Get
-                    Return _ValueDef
-                End Get
-                Set(ByVal value As Double)
-                    _ValueDef = value
-                    _Value = _ValueDef
-                End Set
-            End Property
-
-            'Precision de value
-            Public Property Precision() As String
-                Get
-                    Return _Precision
-                End Get
-                Set(ByVal value As String)
-                    _Precision = value
-                End Set
-            End Property
-
-            'Correction en +/-/*/div à effectuer sur la value
-            Public Property Correction() As Double
-                Get
-                    Return _Correction
-                End Get
-                Set(ByVal value As Double)
-                    _Correction = value
-                End Set
-            End Property
         End Class
 
         <Serializable()> Class ENERGIETOTALE
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "ENERGIETOTALE"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
+            Inherits DeviceGeneriqueValue
 
-            Dim _Value As Double
-            Dim _ValueMin As Double = -9999
-            Dim _ValueMax As Double = 9999
-            Dim _ValueDef As Double
-            Dim _Precision As String
-            Dim _Correction As Double
+            'Creation du device
+            Public Sub New()
+                _Type = "ENERGIETOTALE"
+            End Sub
 
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -1209,26 +510,6 @@ Namespace HoMIDom
                 Value = Driver.ReadEnergieTot(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Valeur Energie Totale
             Public Property Value() As Double
                 Get
@@ -1238,7 +519,7 @@ Namespace HoMIDom
                     Dim tmp As Double = value
                     If tmp < _ValueMin Then tmp = _ValueMin
                     If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Precision <> "" Then tmp = Format(tmp, _Precision)
+                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
                     tmp += _Correction
 
                     'Si la valeur a changé on la prend en compte et on créer l'event
@@ -1250,179 +531,17 @@ Namespace HoMIDom
                 End Set
             End Property
 
-            'Valeur minimale que value peut avoir 
-            Public Property ValueMin() As Double
-                Get
-                    Return _ValueMin
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMin = value
-                End Set
-            End Property
-
-            'Valeur maximale que value peut avoir 
-            Public Property ValueMax() As Double
-                Get
-                    Return _ValueMax
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMax = value
-                End Set
-            End Property
-
-            'Valeur par défaut de Value au démarrage du Device, si Vide = Value
-            Public Property ValueDef() As Double
-                Get
-                    Return _ValueDef
-                End Get
-                Set(ByVal value As Double)
-                    _ValueDef = value
-                    _Value = _ValueDef
-                End Set
-            End Property
-
-            'Precision de value
-            Public Property Precision() As String
-                Get
-                    Return _Precision
-                End Get
-                Set(ByVal value As String)
-                    _Precision = value
-                End Set
-            End Property
-
-            'Correction en +/-/*/div à effectuer sur la value
-            Public Property Correction() As Double
-                Get
-                    Return _Correction
-                End Get
-                Set(ByVal value As Double)
-                    _Correction = value
-                End Set
-            End Property
         End Class
 
         <Serializable()> Class ENERGIEINSTANTANEE
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "ENERGIEINSTANTANEE"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
+            Inherits DeviceGeneriqueValue
 
-            Dim _Value As Double
-            Dim _ValueMin As Double = -9999
-            Dim _ValueMax As Double = 9999
-            Dim _ValueDef As Double
-            Dim _Precision As String
-            Dim _Correction As Double
+            'Creation du device
+            Public Sub New()
+                _Type = "ENERGIEINSTANTANEE"
+            End Sub
 
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -1444,26 +563,6 @@ Namespace HoMIDom
                 Value = Driver.ReadEnergieInst(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Valeur Energie Instantanée
             Public Property Value() As Double
                 Get
@@ -1473,7 +572,7 @@ Namespace HoMIDom
                     Dim tmp As Double = value
                     If tmp < _ValueMin Then tmp = _ValueMin
                     If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Precision <> "" Then tmp = Format(tmp, _Precision)
+                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
                     tmp += _Correction
 
                     'Si la valeur a changé on la prend en compte et on créer l'event
@@ -1485,179 +584,18 @@ Namespace HoMIDom
                 End Set
             End Property
 
-            'Valeur minimale que value peut avoir 
-            Public Property ValueMin() As Double
-                Get
-                    Return _ValueMin
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMin = value
-                End Set
-            End Property
-
-            'Valeur maximale que value peut avoir 
-            Public Property ValueMax() As Double
-                Get
-                    Return _ValueMax
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMax = value
-                End Set
-            End Property
-
-            'Valeur par défaut de Value au démarrage du Device, si Vide = Value
-            Public Property ValueDef() As Double
-                Get
-                    Return _ValueDef
-                End Get
-                Set(ByVal value As Double)
-                    _ValueDef = value
-                    _Value = _ValueDef
-                End Set
-            End Property
-
-            'Precision de value
-            Public Property Precision() As String
-                Get
-                    Return _Precision
-                End Get
-                Set(ByVal value As String)
-                    _Precision = value
-                End Set
-            End Property
-
-            'Correction en +/-/*/div à effectuer sur la value
-            Public Property Correction() As Double
-                Get
-                    Return _Correction
-                End Get
-                Set(ByVal value As Double)
-                    _Correction = value
-                End Set
-            End Property
         End Class
 
         <Serializable()> Class PLUIETOTAL
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "PLUIETOTAL"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
+            Inherits DeviceGeneriqueValue
 
-            Dim _Value As Double
-            Dim _ValueMin As Double = -9999
-            Dim _ValueMax As Double = 9999
-            Dim _ValueDef As Double
-            Dim _Precision As String
-            Dim _Correction As Double
+            'Creation du device
+            Public Sub New()
+                _Type = "PLUIETOTAL"
+            End Sub
+
 
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -1679,26 +617,6 @@ Namespace HoMIDom
                 Value = Driver.ReadPluieTot(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Valeur Pluie Totale
             Public Property Value() As Double
                 Get
@@ -1708,7 +626,7 @@ Namespace HoMIDom
                     Dim tmp As Double = value
                     If tmp < _ValueMin Then tmp = _ValueMin
                     If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Precision <> "" Then tmp = Format(tmp, _Precision)
+                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
                     tmp += _Correction
 
                     'Si la valeur a changé on la prend en compte et on créer l'event
@@ -1720,179 +638,17 @@ Namespace HoMIDom
                 End Set
             End Property
 
-            'Valeur minimale que value peut avoir 
-            Public Property ValueMin() As Double
-                Get
-                    Return _ValueMin
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMin = value
-                End Set
-            End Property
-
-            'Valeur maximale que value peut avoir 
-            Public Property ValueMax() As Double
-                Get
-                    Return _ValueMax
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMax = value
-                End Set
-            End Property
-
-            'Valeur par défaut de Value au démarrage du Device, si Vide = Value
-            Public Property ValueDef() As Double
-                Get
-                    Return _ValueDef
-                End Get
-                Set(ByVal value As Double)
-                    _ValueDef = value
-                    _Value = _ValueDef
-                End Set
-            End Property
-
-            'Precision de value
-            Public Property Precision() As String
-                Get
-                    Return _Precision
-                End Get
-                Set(ByVal value As String)
-                    _Precision = value
-                End Set
-            End Property
-
-            'Correction en +/-/*/div à effectuer sur la value
-            Public Property Correction() As Double
-                Get
-                    Return _Correction
-                End Get
-                Set(ByVal value As Double)
-                    _Correction = value
-                End Set
-            End Property
         End Class
 
         <Serializable()> Class PLUIECOURANT
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "PLUIECOURANT"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
+            Inherits DeviceGeneriqueValue
 
-            Dim _Value As Double
-            Dim _ValueMin As Double = -9999
-            Dim _ValueMax As Double = 9999
-            Dim _ValueDef As Double
-            Dim _Precision As String
-            Dim _Correction As Double
+            'Creation du device
+            Public Sub New()
+                _Type = "PLUIECOURANT"
+            End Sub
 
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -1914,26 +670,6 @@ Namespace HoMIDom
                 Value = Driver.ReadPluieCrt(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Valeur Niveau de pluie courant (Currant Rain)
             Public Property Value() As Double
                 Get
@@ -1943,7 +679,7 @@ Namespace HoMIDom
                     Dim tmp As Double = value
                     If tmp < _ValueMin Then tmp = _ValueMin
                     If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Precision <> "" Then tmp = Format(tmp, _Precision)
+                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
                     tmp += _Correction
 
                     'Si la valeur a changé on la prend en compte et on créer l'event
@@ -1955,179 +691,17 @@ Namespace HoMIDom
                 End Set
             End Property
 
-            'Valeur minimale que value peut avoir 
-            Public Property ValueMin() As Double
-                Get
-                    Return _ValueMin
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMin = value
-                End Set
-            End Property
-
-            'Valeur maximale que value peut avoir 
-            Public Property ValueMax() As Double
-                Get
-                    Return _ValueMax
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMax = value
-                End Set
-            End Property
-
-            'Valeur par défaut de Value au démarrage du Device, si Vide = Value
-            Public Property ValueDef() As Double
-                Get
-                    Return _ValueDef
-                End Get
-                Set(ByVal value As Double)
-                    _ValueDef = value
-                    _Value = _ValueDef
-                End Set
-            End Property
-
-            'Precision de value
-            Public Property Precision() As String
-                Get
-                    Return _Precision
-                End Get
-                Set(ByVal value As String)
-                    _Precision = value
-                End Set
-            End Property
-
-            'Correction en +/-/*/div à effectuer sur la value
-            Public Property Correction() As Double
-                Get
-                    Return _Correction
-                End Get
-                Set(ByVal value As Double)
-                    _Correction = value
-                End Set
-            End Property
         End Class
 
         <Serializable()> Class VITESSEVENT
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "VITESSEVENT"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
+            Inherits DeviceGeneriqueValue
 
-            Dim _Value As Double
-            Dim _ValueMin As Double = -9999
-            Dim _ValueMax As Double = 9999
-            Dim _ValueDef As Double
-            Dim _Precision As String
-            Dim _Correction As Double
+            'Creation du device
+            Public Sub New()
+                _Type = "VITESSEVENT"
+            End Sub
 
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -2149,26 +723,6 @@ Namespace HoMIDom
                 Value = Driver.ReadVitessVent(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Valeur Mesure de la vitesse du vent
             Public Property Value() As Double
                 Get
@@ -2178,7 +732,7 @@ Namespace HoMIDom
                     Dim tmp As Double = value
                     If tmp < _ValueMin Then tmp = _ValueMin
                     If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Precision <> "" Then tmp = Format(tmp, _Precision)
+                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
                     tmp += _Correction
 
                     'Si la valeur a changé on la prend en compte et on créer l'event
@@ -2190,174 +744,18 @@ Namespace HoMIDom
                 End Set
             End Property
 
-            'Valeur minimale que value peut avoir 
-            Public Property ValueMin() As Double
-                Get
-                    Return _ValueMin
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMin = value
-                End Set
-            End Property
-
-            'Valeur maximale que value peut avoir 
-            Public Property ValueMax() As Double
-                Get
-                    Return _ValueMax
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMax = value
-                End Set
-            End Property
-
-            'Valeur par défaut de Value au démarrage du Device, si Vide = Value
-            Public Property ValueDef() As Double
-                Get
-                    Return _ValueDef
-                End Get
-                Set(ByVal value As Double)
-                    _ValueDef = value
-                    _Value = _ValueDef
-                End Set
-            End Property
-
-            'Precision de value
-            Public Property Precision() As String
-                Get
-                    Return _Precision
-                End Get
-                Set(ByVal value As String)
-                    _Precision = value
-                End Set
-            End Property
-
-            'Correction en +/-/*/div à effectuer sur la value
-            Public Property Correction() As Double
-                Get
-                    Return _Correction
-                End Get
-                Set(ByVal value As Double)
-                    _Correction = value
-                End Set
-            End Property
         End Class
 
         <Serializable()> Class DIRECTIONVENT
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "DIRECTIONVENT"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
-
+            Inherits DeviceGenerique
             Dim _Value As String
 
+            'Creation du device
+            Public Sub New()
+                _Type = "DIRECTIONVENT"
+            End Sub
+
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -2379,26 +777,6 @@ Namespace HoMIDom
                 Value = Driver.ReadDirectVent(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Valeur Direction du vent
             Public Property Value() As String
                 Get
@@ -2414,129 +792,18 @@ Namespace HoMIDom
                     End If
                 End Set
             End Property
+
         End Class
 
         <Serializable()> Class UV
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "UV"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
+            Inherits DeviceGeneriqueValue
 
-            Dim _Value As Double
-            Dim _ValueMin As Double = -9999
-            Dim _ValueMax As Double = 9999
-            Dim _ValueDef As Double
-            Dim _Precision As String
-            Dim _Correction As Double
+            'Creation du device
+            Public Sub New()
+                _Type = "UV"
+            End Sub
 
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -2558,26 +825,6 @@ Namespace HoMIDom
                 Value = Driver.ReadUV(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Valeur Niveau d’UV
             Public Property Value() As Double
                 Get
@@ -2587,7 +834,7 @@ Namespace HoMIDom
                     Dim tmp As Double = value
                     If tmp < _ValueMin Then tmp = _ValueMin
                     If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Precision <> "" Then tmp = Format(tmp, _Precision)
+                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
                     tmp += _Correction
 
                     'Si la valeur a changé on la prend en compte et on créer l'event
@@ -2599,174 +846,18 @@ Namespace HoMIDom
                 End Set
             End Property
 
-            'Valeur minimale que value peut avoir 
-            Public Property ValueMin() As Double
-                Get
-                    Return _ValueMin
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMin = value
-                End Set
-            End Property
-
-            'Valeur maximale que value peut avoir 
-            Public Property ValueMax() As Double
-                Get
-                    Return _ValueMax
-                End Get
-                Set(ByVal value As Double)
-                    _ValueMax = value
-                End Set
-            End Property
-
-            'Valeur par défaut de Value au démarrage du Device, si Vide = Value
-            Public Property ValueDef() As Double
-                Get
-                    Return _ValueDef
-                End Get
-                Set(ByVal value As Double)
-                    _ValueDef = value
-                    _Value = _ValueDef
-                End Set
-            End Property
-
-            'Precision de value
-            Public Property Precision() As String
-                Get
-                    Return _Precision
-                End Get
-                Set(ByVal value As String)
-                    _Precision = value
-                End Set
-            End Property
-
-            'Correction en +/-/*/div à effectuer sur la value
-            Public Property Correction() As Double
-                Get
-                    Return _Correction
-                End Get
-                Set(ByVal value As Double)
-                    _Correction = value
-                End Set
-            End Property
         End Class
 
         <Serializable()> Class APPAREIL
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "APPAREIL"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
-
+            Inherits DeviceGenerique
             Dim _Value As Boolean
 
+            'Creation du device
+            Public Sub New()
+                _Type = "APPAREIL"
+            End Sub
+
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -2787,26 +878,6 @@ Namespace HoMIDom
             Private Sub TimerTick()
                 Value = Driver.ReadAppareil(Me)
             End Sub
-
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
 
             'Valeur Direction du vent
             Public Property Value() As Boolean
@@ -2836,121 +907,15 @@ Namespace HoMIDom
         End Class
 
         <Serializable()> Class LAMPE
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "LAMPE"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
-
+            Inherits DeviceGenerique
             Dim _Value As Integer
 
+            'Creation du device
+            Public Sub New()
+                _Type = "LAMPE"
+            End Sub
+
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -2971,26 +936,6 @@ Namespace HoMIDom
             Private Sub TimerTick()
                 Value = Driver.ReadLampe(Me)
             End Sub
-
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
 
             'Valeur Variation
             Public Property Value() As Integer
@@ -3024,127 +969,27 @@ Namespace HoMIDom
 
             'DIM
             Public Sub [DIM](ByVal Variation As Integer)
-                Value = Variation
+                If Variation < 0 Then
+                    Value = 0
+                ElseIf Variation > 100 Then
+                    Value = 100
+                Else
+                    Value = Variation
+                End If
             End Sub
 
         End Class
 
         <Serializable()> Class CONTACT
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "CONTACT"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
-
+            Inherits DeviceGenerique
             Dim _Value As Boolean
 
+            'Creation du device
+            Public Sub New()
+                _Type = "CONTACT"
+            End Sub
+
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -3166,26 +1011,6 @@ Namespace HoMIDom
                 Value = Driver.ReadContact(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Valeur Contact
             Public Property Value() As Boolean
                 Get
@@ -3201,24 +1026,11 @@ Namespace HoMIDom
                     End If
                 End Set
             End Property
+
         End Class
 
         <Serializable()> Class METEO
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "METEO"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
-
+            Inherits DeviceGenerique
             Dim _ConditionActuel As String = ""
             Dim _TempActuel As String = ""
             Dim _HumActuel As String = ""
@@ -3245,104 +1057,12 @@ Namespace HoMIDom
             Dim _IconJ3 As String = ""
             Dim _ConditionJ3 As String = ""
 
+            'Creation du device
+            Public Sub New()
+                _Type = "METEO"
+            End Sub
+
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -3363,26 +1083,6 @@ Namespace HoMIDom
             Private Sub TimerTick()
                 Driver.ReadMeteo(Me)
             End Sub
-
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
 
             Public Property ConditionActuel() As String
                 Get
@@ -3648,125 +1348,20 @@ Namespace HoMIDom
                     RaiseEvent DeviceChanged(_ID, "ConditionJ3", value)
                 End Set
             End Property
+
         End Class
 
         <Serializable()> Class AUDIO
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "AUDIO"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
-
+            Inherits DeviceGenerique
             Dim _Value As String
             Dim _Fichier As String
 
+            'Creation du device
+            Public Sub New()
+                _Type = "AUDIO"
+            End Sub
+
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -3787,26 +1382,6 @@ Namespace HoMIDom
             Private Sub TimerTick()
 
             End Sub
-
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
 
             'Représente le status du lecteur (Play, Pause, Stop)
             Public Property Value() As String
@@ -3907,194 +1482,21 @@ Namespace HoMIDom
                     '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " VOLUME MUTE: " & ex.Message)
                 End Try
             End Sub
+
         End Class
 
         <Serializable()> Class MULTIMEDIA
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "MULTIMEDIA"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
-
+            Inherits DeviceGenerique
             Dim _Value As String
 
             Public ListCommandName As New ArrayList
             Public ListCommandData As New ArrayList
             Public ListCommandRepeat As New ArrayList
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-
-            End Sub
-
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
-            'Représente le status du lecteur (Play, Pause, Stop)
-            Public Property Value() As String
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As String)
-                    Dim tmp As String = value
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
-            Public Sub SendCommand(ByVal NameCommand As String)
-                For i As Integer = 0 To ListCommandName.Count - 1
-                    If ListCommandName(i) = NameCommand Then
-                        Driver.SendCodeIR(ListCommandData(i), ListCommandRepeat(i))
-                    End If
-                Next
-            End Sub
-
+            'Creation du device
             Public Sub New()
+                _Type = "MULTIMEDIA"
+
                 ListCommandName.Add("Power")
                 ListCommandData.Add("0")
                 ListCommandRepeat.Add("0")
@@ -4146,131 +1548,9 @@ Namespace HoMIDom
                 ListCommandName.Add("9")
                 ListCommandData.Add("0")
                 ListCommandRepeat.Add("0")
-
             End Sub
 
-        End Class
-
-        <Serializable()> Class FREEBOX
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "FREEBOX"
-            Dim _Adresse1 As String = " http://hd1.freebox.fr/pub/remote_control ?key="
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
-
-            Dim _Value As String
-
-            Public ListCommandName As New ArrayList
-            Public ListCommandData As New ArrayList
-            Public ListCommandRepeat As New ArrayList
-
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -4292,25 +1572,66 @@ Namespace HoMIDom
 
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
+            'Représente le status du lecteur (Play, Pause, Stop)
+            Public Property Value() As String
                 Get
-                    Return _Modele
+                    Return _Value
                 End Get
                 Set(ByVal value As String)
-                    _Modele = value
+                    Dim tmp As String = value
+                    'Si la valeur a changé on la prend en compte et on créer l'event
+                    If tmp <> _Value Then
+                        _Value = tmp
+                        _LastChanged = Now
+                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
+                    End If
                 End Set
             End Property
 
-            'Adresse de son image
-            Public Property Picture() As String
+            Public Sub SendCommand(ByVal NameCommand As String)
+                For i As Integer = 0 To ListCommandName.Count - 1
+                    If ListCommandName(i) = NameCommand Then
+                        Driver.SendCodeIR(ListCommandData(i), ListCommandRepeat(i))
+                    End If
+                Next
+            End Sub
+
+        End Class
+
+        <Serializable()> Class FREEBOX
+            Inherits DeviceGenerique
+            Dim _Value As String
+            Public ListCommandName As New ArrayList
+            Public ListCommandData As New ArrayList
+            Public ListCommandRepeat As New ArrayList
+
+            'Creation du device
+            Public Sub New()
+                _Type = "FREEBOX"
+                _Adresse1 = " http://hd1.freebox.fr/pub/remote_control ?key="
+            End Sub
+
+            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
+
+            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
+            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
+            Public Property Refresh() As Integer
                 Get
-                    Return _Picture
+                    Return _Refresh
                 End Get
-                Set(ByVal value As String)
-                    _Picture = value
+                Set(ByVal value As Integer)
+                    _Refresh = value
+                    If _Refresh > 0 Then
+                        MyTimer.Interval = _Refresh
+                        MyTimer.Enabled = True
+                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
+                    End If
                 End Set
             End Property
+
+            Private Sub TimerTick()
+
+            End Sub
 
             'Représente la dernière commande envoyée
             Public Property Value() As String
@@ -4631,124 +1952,19 @@ Namespace HoMIDom
                     Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " BoutonBLEU: " & ex.Message)
                 End Try
             End Sub
+
         End Class
 
         <Serializable()> Class VOLET
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "VOLET"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
-
+            Inherits DeviceGenerique
             Dim _Value As Integer
 
+            'Creation du device
+            Public Sub New()
+                _Type = "VOLET"
+            End Sub
+
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -4769,26 +1985,6 @@ Namespace HoMIDom
             Private Sub TimerTick()
                 Value = Driver.ReadVolet(Me)
             End Sub
-
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
 
             'Valeur Variation ouverture volet
             Public Property Value() As Integer
@@ -4828,121 +2024,15 @@ Namespace HoMIDom
         End Class
 
         <Serializable()> Class OBSCURITE
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "OBSCURITE"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
-
+            Inherits DeviceGenerique
             Dim _Value As Boolean
 
+            'Creation du device
+            Public Sub New()
+                _Type = "OBSCURITE"
+            End Sub
+
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -4964,26 +2054,6 @@ Namespace HoMIDom
                 Value = Driver.ReadObscurite(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Valeur Contact
             Public Property Value() As Boolean
                 Get
@@ -4999,124 +2069,19 @@ Namespace HoMIDom
                     End If
                 End Set
             End Property
+
         End Class
 
         <Serializable()> Class SWITCH
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "SWITCH"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
-
+            Inherits DeviceGenerique
             Dim _Value As Boolean
 
+            'Creation du device
+            Public Sub New()
+                _Type = "SWITCH"
+            End Sub
+
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -5138,26 +2103,6 @@ Namespace HoMIDom
                 Value = Driver.ReadSwitch(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Valeur Du Switch
             Public Property Value() As Boolean
                 Get
@@ -5173,124 +2118,19 @@ Namespace HoMIDom
                     End If
                 End Set
             End Property
+
         End Class
 
         <Serializable()> Class TELECOMMANDE
-            Dim _ID As String
-            Dim _Name As String
-            Dim _Enable As Boolean
-            Dim _Driver As Object
-            Dim _Description As String
-            Dim _Type As String = "TELECOMMANDE"
-            Dim _Adresse1 As String
-            Dim _Adresse2 As String
-            Dim _DateCreated As Date
-            Dim _LastChanged As Date
-            Dim _Refresh As Integer
-            Dim _Modele As String
-            Dim _Picture As String
-            Dim MyTimer As New Timers.Timer
-
+            Inherits DeviceGenerique
             Dim _Value As String
 
+            'Creation du device
+            Public Sub New()
+                _Type = "TELECOMMANDE"
+            End Sub
+
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Identification unique du device
-            Public Property ID() As String
-                Get
-                    Return _ID
-                End Get
-                Set(ByVal value As String)
-                    _ID = value
-                End Set
-            End Property
-
-            'Libellé de device (qui sert aussi à l'affichage)
-            Public Property Name() As String
-                Get
-                    Return _Name
-                End Get
-                Set(ByVal value As String)
-                    _Name = value
-                End Set
-            End Property
-
-            'Activation du Device
-            Public Property Enable() As Boolean
-                Get
-                    Return _Enable
-                End Get
-                Set(ByVal value As Boolean)
-                    _Enable = value
-                End Set
-            End Property
-
-            'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
-                Get
-                    Return _Driver
-                End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
-            End Property
-
-            'Description qui peut être le modèle du device ou autre chose
-            Public Property Description() As String
-                Get
-                    Return _Description
-                End Get
-                Set(ByVal value As String)
-                    _Description = value
-                End Set
-            End Property
-
-            'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-            Public ReadOnly Property Type() As String
-                Get
-                    Return _Type
-                End Get
-            End Property
-
-            'Adresse par défaut (pour le X10 par exemple)
-            Public Property Adresse1() As String
-                Get
-                    Return _Adresse1
-                End Get
-                Set(ByVal value As String)
-                    _Adresse1 = value
-                End Set
-            End Property
-
-            'Adresse supplémentaire si besoin (cas du RFXCOM)
-            Public Property Adresse2() As String
-                Get
-                    Return _Adresse2
-                End Get
-                Set(ByVal value As String)
-                    _Adresse2 = value
-                End Set
-            End Property
-
-            'Date et heure de création du device
-            Public Property DateCreated() As Date
-                Get
-                    Return _DateCreated
-                End Get
-                Set(ByVal value As Date)
-                    _DateCreated = value
-                End Set
-            End Property
-
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
-            Public Property LastChange() As Date
-                Get
-                    Return _LastChanged
-                End Get
-                Set(ByVal value As Date)
-                    _LastChanged = value
-                End Set
-            End Property
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -5312,26 +2152,6 @@ Namespace HoMIDom
                 Value = Driver.ReadTelecommande(Me)
             End Sub
 
-            'Modèle du composant
-            Public Property Modele() As String
-                Get
-                    Return _Modele
-                End Get
-                Set(ByVal value As String)
-                    _Modele = value
-                End Set
-            End Property
-
-            'Adresse de son image
-            Public Property Picture() As String
-                Get
-                    Return _Picture
-                End Get
-                Set(ByVal value As String)
-                    _Picture = value
-                End Set
-            End Property
-
             'Valeur Du Switch
             Public Property Value() As String
                 Get
@@ -5347,6 +2167,8 @@ Namespace HoMIDom
                     End If
                 End Set
             End Property
+
         End Class
+
     End Class
 End Namespace
