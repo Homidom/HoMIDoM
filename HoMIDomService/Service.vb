@@ -3,6 +3,7 @@ Imports System.Runtime.Remoting.Channels
 Imports System.Runtime.Remoting.Channels.Http
 Imports System.Runtime.Remoting.Lifetime
 Imports HoMIDom.HoMIDom
+Imports System.IO
 
 '***********************************************
 '** SERVICE HOMIDom - Simple exe qui sera ensuite convertit en service Windows
@@ -43,6 +44,8 @@ Module Service
             Console.WriteLine("SERVEUR DEMARRE **************")
             Console.WriteLine("******************************")
             Console.WriteLine(" ")
+
+            Console.ReadLine()
         Catch ex As Exception
             Console.WriteLine(Now & " ERREUR " & ex.Message)
         End Try

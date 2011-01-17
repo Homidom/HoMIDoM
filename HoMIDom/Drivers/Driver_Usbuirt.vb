@@ -205,17 +205,17 @@ Namespace HoMIDom
                 'capte les events
                 AddHandler mc.Received, AddressOf handler_mc_received
                 _IsConnect = True
-                Log.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver " & Me.Nom & " démarré")
+                'Log.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver " & Me.Nom & " démarré")
             Catch ex As Exception
                 _IsConnect = False
-                Log.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Driver " & Me.Nom & " erreur lors du démarrage: " & ex.Message)
+                'Log.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Driver " & Me.Nom & " erreur lors du démarrage: " & ex.Message)
             End Try
         End Sub
 
         Public Sub [Stop]()
             Me.mc = Nothing
             _IsConnect = False
-            Log.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver " & Me.Nom & " arrêté")
+            'Log.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver " & Me.Nom & " arrêté")
         End Sub
 
         Public Sub Restart()
@@ -270,7 +270,7 @@ Namespace HoMIDom
                 RemoveHandler mc.LearnCompleted, AddressOf handler_mc_learning_completed
 
             Catch ex As Exception
-                Log.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Driver " & _Nom & " Erreur:" & ex.Message)
+                'Log.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Driver " & _Nom & " Erreur:" & ex.Message)
                 Return Nothing
             End Try
 
@@ -285,9 +285,9 @@ Namespace HoMIDom
         Public Sub SendCodeIR(ByVal ir_code As String, ByVal RepeatCount As Integer)
             Try
                 mc.Transmit(ir_code, CodeFormat.Uuirt, RepeatCount, TimeSpan.Zero)
-                Log.Log(TypeLog.MESSAGE, TypeSource.DRIVER, "Driver " & _Nom & "IR envoyé: " & ir_code & " repeat: " & RepeatCount)
+                'Log.Log(TypeLog.MESSAGE, TypeSource.DRIVER, "Driver " & _Nom & "IR envoyé: " & ir_code & " repeat: " & RepeatCount)
             Catch ex As Exception
-                Log.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Driver " & _Nom & "Problème de transmission: " & ex.Message)
+                'Log.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Driver " & _Nom & "Problème de transmission: " & ex.Message)
             End Try
         End Sub
 

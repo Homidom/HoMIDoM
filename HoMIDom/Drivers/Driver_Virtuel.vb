@@ -29,6 +29,8 @@
 
         Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object)
 
+
+
         'Identification unique du driver
         Public Property ID() As String
             Get
@@ -186,12 +188,12 @@
 
         Public Sub Start()
             _IsConnect = True
-            Log.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver " & Me.Nom & " démarré")
+            'Log.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver " & Me.Nom & " démarré")
         End Sub
 
         Public Sub [Stop]()
             _IsConnect = False
-            Log.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver " & Me.Nom & " arrêté")
+            'Log.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver " & Me.Nom & " arrêté")
         End Sub
 
         Public Sub Restart()

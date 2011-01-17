@@ -11,6 +11,7 @@ Namespace HoMIDom
     '***********************************************
 
     Public Class Device
+
         Public Class DeviceGenerique
             Protected _ID As String
             Protected _Name As String
@@ -148,6 +149,7 @@ Namespace HoMIDom
 
         Class DeviceGeneriqueValue
             Inherits DeviceGenerique
+
             Protected _Value As Double
             Protected _ValueMin As Double = -9999
             Protected _ValueMax As Double = 9999

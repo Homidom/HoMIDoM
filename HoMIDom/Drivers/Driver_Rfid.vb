@@ -201,17 +201,17 @@ Namespace HoMIDom
                 Me.usb1.VendorId = Int32.Parse("1DA8", System.Globalization.NumberStyles.HexNumber)
                 Me.usb1.CheckDevicePresent()
                 _IsConnect = True
-                Log.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver " & Me.Nom & " démarré")
+                'Log.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver " & Me.Nom & " démarré")
             Catch ex As Exception
                 _IsConnect = False
-                Log.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Driver " & Me.Nom & " erreur lors du démarrage: " & ex.Message)
+                'Log.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Driver " & Me.Nom & " erreur lors du démarrage: " & ex.Message)
             End Try
         End Sub
 
         Public Sub [Stop]()
             usb1 = Nothing
             _IsConnect = False
-            Log.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver " & Me.Nom & " arrêté")
+            'Log.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver " & Me.Nom & " arrêté")
         End Sub
 
         Public Sub Restart()
@@ -287,7 +287,7 @@ Namespace HoMIDom
                     'MsgBox("ID:" & idZtamp & " - DEPOSE")
                 End If
             Else
-                Log.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Driver " & _Nom & " une erreur inconnue est survenue...")
+                'Log.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Driver " & _Nom & " une erreur inconnue est survenue...")
             End If
         End Sub
     End Class
