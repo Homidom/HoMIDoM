@@ -8,14 +8,17 @@ Namespace HoMIDom
     '** Date de création: 12/01/2011
     '** Historique (SebBergues): 12/01/2011: Création 
     '** Historique (Davidinfo): 17/01/2011: Ajout de classes generiques + ajout _formatage
+    '** Historique (SebBergues: 19/01/2011: Ecriture ou lecture via Read/Write + ajout proriété Solo
     '***********************************************
 
     Public Class Device
 
         Public Class DeviceGenerique
+            Protected _Server As Server
             Protected _ID As String
             Protected _Name As String
             Protected _Enable As Boolean
+            Protected _DriverId As String
             Protected _Driver As Object
             Protected _Description As String
             Protected _Type As String
@@ -26,6 +29,7 @@ Namespace HoMIDom
             Protected _Refresh As Integer
             Protected _Modele As String
             Protected _Picture As String
+            Protected _Solo As Boolean = True
             Protected MyTimer As New Timers.Timer
 
             'Identification unique du device
@@ -58,14 +62,22 @@ Namespace HoMIDom
                 End Set
             End Property
 
+            'Id du driver affect
+            Public Property DriverID() As String
+                Get
+                    Return _DriverId
+                End Get
+                Set(ByVal value As String)
+                    _DriverId = value
+                    _Driver = _Server.ReturnDriverById(value)
+                End Set
+            End Property
+
             'Driver affecté (représentant l’objet déclaré du driver)
-            Public Property Driver() As Object
+            Public ReadOnly Property Driver() As Object
                 Get
                     Return _Driver
                 End Get
-                Set(ByVal value As Object)
-                    _Driver = value
-                End Set
             End Property
 
             'Description qui peut être le modèle du device ou autre chose
@@ -144,7 +156,6 @@ Namespace HoMIDom
                     _Picture = value
                 End Set
             End Property
-
         End Class
 
         Class DeviceGeneriqueValue
@@ -225,7 +236,8 @@ Namespace HoMIDom
             Inherits DeviceGeneriqueValue
 
             'Creation d'un device Temperature
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "TEMPERATURE"
             End Sub
 
@@ -248,7 +260,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadTemp(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur de température
@@ -278,7 +290,8 @@ Namespace HoMIDom
             Inherits DeviceGeneriqueValue
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "HUMIDITE"
             End Sub
 
@@ -301,7 +314,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadHum(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur d'Humidité
@@ -333,7 +346,8 @@ Namespace HoMIDom
             Dim _Value As String
 
             'Creation d'un device BATTERIE
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "BATTERIE"
             End Sub
 
@@ -356,7 +370,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadBatterie(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'OK/Low
@@ -384,7 +398,8 @@ Namespace HoMIDom
             Dim _Value As Integer
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "NIVRECEPTION"
             End Sub
 
@@ -407,7 +422,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadNivRecept(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Niv de Réception
@@ -435,7 +450,8 @@ Namespace HoMIDom
             Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "TEMPERATURECONSIGNE"
             End Sub
 
@@ -456,7 +472,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadTempCsg(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur de Température de consigne
@@ -486,7 +502,8 @@ Namespace HoMIDom
             Inherits DeviceGeneriqueValue
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "ENERGIETOTALE"
             End Sub
 
@@ -509,7 +526,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadEnergieTot(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur Energie Totale
@@ -539,7 +556,8 @@ Namespace HoMIDom
             Inherits DeviceGeneriqueValue
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "ENERGIEINSTANTANEE"
             End Sub
 
@@ -562,7 +580,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadEnergieInst(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur Energie Instantanée
@@ -592,7 +610,8 @@ Namespace HoMIDom
             Inherits DeviceGeneriqueValue
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "PLUIETOTAL"
             End Sub
 
@@ -616,7 +635,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadPluieTot(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur Pluie Totale
@@ -646,7 +665,8 @@ Namespace HoMIDom
             Inherits DeviceGeneriqueValue
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "PLUIECOURANT"
             End Sub
 
@@ -669,7 +689,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadPluieCrt(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur Niveau de pluie courant (Currant Rain)
@@ -699,7 +719,8 @@ Namespace HoMIDom
             Inherits DeviceGeneriqueValue
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "VITESSEVENT"
             End Sub
 
@@ -722,7 +743,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadVitessVent(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur Mesure de la vitesse du vent
@@ -753,7 +774,8 @@ Namespace HoMIDom
             Dim _Value As String
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "DIRECTIONVENT"
             End Sub
 
@@ -776,7 +798,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadDirectVent(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur Direction du vent
@@ -801,7 +823,8 @@ Namespace HoMIDom
             Inherits DeviceGeneriqueValue
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "UV"
             End Sub
 
@@ -824,7 +847,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadUV(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur Niveau d’UV
@@ -855,7 +878,8 @@ Namespace HoMIDom
             Dim _Value As Boolean
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "APPAREIL"
             End Sub
 
@@ -878,7 +902,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadAppareil(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur Direction du vent
@@ -899,12 +923,12 @@ Namespace HoMIDom
 
             'ON
             Public Sub [ON]()
-                Driver.ON(Me)
+                Driver.Write(Me, "ON")
             End Sub
 
             'OFF
             Public Sub OFF()
-                Driver.OFF(Me)
+                Driver.Write(Me, "OFF")
             End Sub
         End Class
 
@@ -913,7 +937,8 @@ Namespace HoMIDom
             Dim _Value As Integer
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "LAMPE"
             End Sub
 
@@ -936,7 +961,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadLampe(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur Variation
@@ -953,7 +978,7 @@ Namespace HoMIDom
                     If tmp <> _Value Then
                         _Value = tmp
                         _LastChanged = Now
-                        Driver.DIM(Me, _Value)
+                        Driver.Write(Me, "DIM", _Value)
                         RaiseEvent DeviceChanged(_ID, "Value", _Value)
                     End If
                 End Set
@@ -987,7 +1012,8 @@ Namespace HoMIDom
             Dim _Value As Boolean
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "CONTACT"
             End Sub
 
@@ -1010,7 +1036,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadContact(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur Contact
@@ -1060,7 +1086,8 @@ Namespace HoMIDom
             Dim _ConditionJ3 As String = ""
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "METEO"
             End Sub
 
@@ -1083,7 +1110,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Driver.ReadMeteo(Me)
+                Driver.Read(Me)
             End Sub
 
             Public Property ConditionActuel() As String
@@ -1359,7 +1386,8 @@ Namespace HoMIDom
             Dim _Fichier As String
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "AUDIO"
             End Sub
 
@@ -1412,7 +1440,7 @@ Namespace HoMIDom
 
             Public Sub Play()
                 Try
-                    Driver.PlayAudio(Me)
+                    Driver.Write(Me, "PlayAudio")
                     Value = "PLAY"
                 Catch ex As Exception
                     '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " PLAY: " & ex.Message)
@@ -1421,7 +1449,7 @@ Namespace HoMIDom
 
             Public Sub Pause()
                 Try
-                    Driver.PauseAudio(Me)
+                    Driver.Write(Me, "PauseAudio")
                     Value = "PAUSE"
                 Catch ex As Exception
                     '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " PAUSE: " & ex.Message)
@@ -1430,7 +1458,7 @@ Namespace HoMIDom
 
             Public Sub [Stop]()
                 Try
-                    Driver.StopAudio(Me)
+                    Driver.Write(Me, "StopAudio")
                     Value = "STOP"
                 Catch ex As Exception
                     '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " STOP: " & ex.Message)
@@ -1439,7 +1467,7 @@ Namespace HoMIDom
 
             Public Sub Random()
                 Try
-                    Driver.RandomAudio(Me)
+                    Driver.Write(Me, "RandomAudio")
                 Catch ex As Exception
                     '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " RANDOM: " & ex.Message)
                 End Try
@@ -1447,7 +1475,7 @@ Namespace HoMIDom
 
             Public Sub [Next]()
                 Try
-                    Driver.NextAudio(Me)
+                    Driver.Write(Me, "NextAudio")
                 Catch ex As Exception
                     '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " NEXT: " & ex.Message)
                 End Try
@@ -1455,7 +1483,7 @@ Namespace HoMIDom
 
             Public Sub Previous()
                 Try
-                    Driver.PreviousAudio(Me)
+                    Driver.Write(Me, "PreviousAudio")
                 Catch ex As Exception
                     '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " PREVIOUS: " & ex.Message)
                 End Try
@@ -1463,7 +1491,7 @@ Namespace HoMIDom
 
             Public Sub VolumeDown()
                 Try
-                    Driver.VolumeDownAudio(Me)
+                    Driver.Write(Me, "VolumeDownAudio")
                 Catch ex As Exception
                     '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " VOLUME DOWN: " & ex.Message)
                 End Try
@@ -1471,7 +1499,7 @@ Namespace HoMIDom
 
             Public Sub VolumeUp()
                 Try
-                    Driver.VolumeUpAudio(Me)
+                    Driver.Write(Me, "VolumeUpAudio")
                 Catch ex As Exception
                     '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " VOLUME UP: " & ex.Message)
                 End Try
@@ -1479,7 +1507,7 @@ Namespace HoMIDom
 
             Public Sub VolumeMute()
                 Try
-                    Driver.VolumeMuteAudio(Me)
+                    Driver.Write(Me, "VolumeMuteAudio")
                 Catch ex As Exception
                     '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " VOLUME MUTE: " & ex.Message)
                 End Try
@@ -1496,7 +1524,8 @@ Namespace HoMIDom
             Public ListCommandRepeat As New ArrayList
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "MULTIMEDIA"
 
                 ListCommandName.Add("Power")
@@ -1593,7 +1622,7 @@ Namespace HoMIDom
             Public Sub SendCommand(ByVal NameCommand As String)
                 For i As Integer = 0 To ListCommandName.Count - 1
                     If ListCommandName(i) = NameCommand Then
-                        Driver.SendCodeIR(ListCommandData(i), ListCommandRepeat(i))
+                        Driver.Write(Me, "SendCodeIR", ListCommandData(i), ListCommandRepeat(i))
                     End If
                 Next
             End Sub
@@ -1603,12 +1632,10 @@ Namespace HoMIDom
         <Serializable()> Class FREEBOX
             Inherits DeviceGenerique
             Dim _Value As String
-            Public ListCommandName As New ArrayList
-            Public ListCommandData As New ArrayList
-            Public ListCommandRepeat As New ArrayList
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "FREEBOX"
                 _Adresse1 = " http://hd1.freebox.fr/pub/remote_control ?key="
             End Sub
@@ -1671,7 +1698,7 @@ Namespace HoMIDom
                     retour = Sendhttp("0")
                     Value = "0"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche0: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche0: " & ex.Message)
                 End Try
             End Sub
 
@@ -1681,7 +1708,7 @@ Namespace HoMIDom
                     retour = Sendhttp("1")
                     Value = "1"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche1: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche1: " & ex.Message)
                 End Try
             End Sub
 
@@ -1691,7 +1718,7 @@ Namespace HoMIDom
                     retour = Sendhttp("2")
                     Value = "2"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche2: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche2: " & ex.Message)
                 End Try
             End Sub
 
@@ -1701,7 +1728,7 @@ Namespace HoMIDom
                     retour = Sendhttp("3")
                     Value = "3"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche3: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche3: " & ex.Message)
                 End Try
             End Sub
 
@@ -1711,7 +1738,7 @@ Namespace HoMIDom
                     retour = Sendhttp("4")
                     Value = "4"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche4: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche4: " & ex.Message)
                 End Try
             End Sub
 
@@ -1721,7 +1748,7 @@ Namespace HoMIDom
                     retour = Sendhttp("5")
                     Value = "5"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche5: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche5: " & ex.Message)
                 End Try
             End Sub
 
@@ -1731,7 +1758,7 @@ Namespace HoMIDom
                     retour = Sendhttp("6")
                     Value = "6"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche6: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche6: " & ex.Message)
                 End Try
             End Sub
 
@@ -1741,7 +1768,7 @@ Namespace HoMIDom
                     retour = Sendhttp("7")
                     Value = "7"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche7: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche7: " & ex.Message)
                 End Try
             End Sub
 
@@ -1751,7 +1778,7 @@ Namespace HoMIDom
                     retour = Sendhttp("8")
                     Value = "8"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche8: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche8: " & ex.Message)
                 End Try
             End Sub
 
@@ -1761,7 +1788,7 @@ Namespace HoMIDom
                     retour = Sendhttp("9")
                     Value = "9"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche9: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche9: " & ex.Message)
                 End Try
             End Sub
 
@@ -1771,7 +1798,7 @@ Namespace HoMIDom
                     retour = Sendhttp("vol_inc")
                     Value = "vol_inc"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " VolumeUp: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " VolumeUp: " & ex.Message)
                 End Try
             End Sub
 
@@ -1781,7 +1808,7 @@ Namespace HoMIDom
                     retour = Sendhttp("vol_dec")
                     Value = "vol_dec"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " VolumeDown: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " VolumeDown: " & ex.Message)
                 End Try
             End Sub
 
@@ -1791,7 +1818,7 @@ Namespace HoMIDom
                     retour = Sendhttp("ok")
                     Value = "ok"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " OK: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " OK: " & ex.Message)
                 End Try
             End Sub
 
@@ -1801,7 +1828,7 @@ Namespace HoMIDom
                     retour = Sendhttp("up")
                     Value = "up"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " HAUT: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " HAUT: " & ex.Message)
                 End Try
             End Sub
 
@@ -1811,7 +1838,7 @@ Namespace HoMIDom
                     retour = Sendhttp("down")
                     Value = "down"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " BAS: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " BAS: " & ex.Message)
                 End Try
             End Sub
 
@@ -1821,7 +1848,7 @@ Namespace HoMIDom
                     retour = Sendhttp("left")
                     Value = "left"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " GAUCHE: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " GAUCHE: " & ex.Message)
                 End Try
             End Sub
 
@@ -1831,7 +1858,7 @@ Namespace HoMIDom
                     retour = Sendhttp("right")
                     Value = "right"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " DROITE: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " DROITE: " & ex.Message)
                 End Try
             End Sub
 
@@ -1841,7 +1868,7 @@ Namespace HoMIDom
                     retour = Sendhttp("mute")
                     Value = "mute"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " MUTE: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " MUTE: " & ex.Message)
                 End Try
             End Sub
 
@@ -1851,7 +1878,7 @@ Namespace HoMIDom
                     retour = Sendhttp("home")
                     Value = "home"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " HOME: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " HOME: " & ex.Message)
                 End Try
             End Sub
 
@@ -1861,7 +1888,7 @@ Namespace HoMIDom
                     retour = Sendhttp("rec")
                     Value = "rec"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " ENREGISTRER: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " ENREGISTRER: " & ex.Message)
                 End Try
             End Sub
 
@@ -1871,7 +1898,7 @@ Namespace HoMIDom
                     retour = Sendhttp("bwd")
                     Value = "bwd"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " RETOUR: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " RETOUR: " & ex.Message)
                 End Try
             End Sub
 
@@ -1881,7 +1908,7 @@ Namespace HoMIDom
                     retour = Sendhttp("prev")
                     Value = "prev"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " PRECEDENT: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " PRECEDENT: " & ex.Message)
                 End Try
             End Sub
 
@@ -1891,7 +1918,7 @@ Namespace HoMIDom
                     retour = Sendhttp("play")
                     Value = "play"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " PLAY: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " PLAY: " & ex.Message)
                 End Try
             End Sub
 
@@ -1901,7 +1928,7 @@ Namespace HoMIDom
                     retour = Sendhttp("fwd")
                     Value = "fwd"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " AVANCE: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " AVANCE: " & ex.Message)
                 End Try
             End Sub
 
@@ -1911,7 +1938,7 @@ Namespace HoMIDom
                     retour = Sendhttp("next")
                     Value = "next"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " SUIVANT: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " SUIVANT: " & ex.Message)
                 End Try
             End Sub
 
@@ -1921,7 +1948,7 @@ Namespace HoMIDom
                     retour = Sendhttp("red")
                     Value = "red"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " BoutonROUGE: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " BoutonROUGE: " & ex.Message)
                 End Try
             End Sub
 
@@ -1931,7 +1958,7 @@ Namespace HoMIDom
                     retour = Sendhttp("green")
                     Value = "green"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " BoutonVERT: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " BoutonVERT: " & ex.Message)
                 End Try
             End Sub
 
@@ -1941,7 +1968,7 @@ Namespace HoMIDom
                     retour = Sendhttp("yellow")
                     Value = "yellow"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " BoutonJAUNE: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " BoutonJAUNE: " & ex.Message)
                 End Try
             End Sub
 
@@ -1951,7 +1978,7 @@ Namespace HoMIDom
                     retour = Sendhttp("blue")
                     Value = "blue"
                 Catch ex As Exception
-                    Log.Log(Log.TypeLog.ERREUR, Log.TypeSource.DEVICE, "Erreur " & Me.Name & " BoutonBLEU: " & ex.Message)
+                    _Server.Log(_Server.TypeLog.ERREUR, _Server.TypeSource.DEVICE, "Erreur " & Me.Name & " BoutonBLEU: " & ex.Message)
                 End Try
             End Sub
 
@@ -1962,7 +1989,8 @@ Namespace HoMIDom
             Dim _Value As Integer
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal server As Server)
+                _Server = server
                 _Type = "VOLET"
             End Sub
 
@@ -1985,7 +2013,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadVolet(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur Variation ouverture volet
@@ -2002,7 +2030,7 @@ Namespace HoMIDom
                     If tmp <> _Value Then
                         _Value = tmp
                         _LastChanged = Now
-                        Driver.Volet(Me, _Value)
+                        Driver.Write(Me, "Volet", _Value)
                         RaiseEvent DeviceChanged(_ID, "Value", _Value)
                     End If
                 End Set
@@ -2030,7 +2058,8 @@ Namespace HoMIDom
             Dim _Value As Boolean
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal server As Server)
+                _Server = server
                 _Type = "OBSCURITE"
             End Sub
 
@@ -2053,7 +2082,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadObscurite(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur Contact
@@ -2079,7 +2108,8 @@ Namespace HoMIDom
             Dim _Value As Boolean
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal server As Server)
+                _Server = server
                 _Type = "SWITCH"
             End Sub
 
@@ -2102,7 +2132,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadSwitch(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur Du Switch
@@ -2128,7 +2158,8 @@ Namespace HoMIDom
             Dim _Value As String
 
             'Creation du device
-            Public Sub New()
+            Public Sub New(ByVal server As Server)
+                _Server = server
                 _Type = "TELECOMMANDE"
             End Sub
 
@@ -2151,7 +2182,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub TimerTick()
-                Value = Driver.ReadTelecommande(Me)
+                Value = Driver.Read(Me)
             End Sub
 
             'Valeur Du Switch

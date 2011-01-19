@@ -94,57 +94,182 @@ Namespace HoMIDom
         End Sub
 
         '--- Chargement de la config depuis le fichier XML
-        Public Sub LoadConfig(ByVal Fichier As String, ByVal Objet As Server)
+        Public Function LoadConfig(ByVal Fichier As String) As Server
             Try
-
+                Dim xR As XmlReader = XmlReader.Create(Fichier)
+                Dim xS As New XmlSerializer(GetType(Server))
+                Return TryCast(xS.Deserialize(xR), Server)
             Catch ex As Exception
                 MsgBox("Impossible de charger le fichier de config xml: " & ex.Message)
             End Try
-        End Sub
+        End Function
 
         '--- Sauvegarde de la config dans le fichier XML
-        Public Sub SaveConfig(ByVal Fichier As String)
+        Public Sub SaveConfig(ByVal Fichier As String, ByVal Objet As Object)
             Try
-                
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde de la config sous le fichier " & Fichier)
+
+                'Copy du fichier de config avant sauvegarde
+                Try
+                    Dim _file As String = Fichier.Replace(".xml", "")
+                    If File.Exists(_file & ".sav") = True Then File.Delete(_file & ".sav")
+                    File.Copy(_file & ".xml", _file & ".sav")
+                Catch ex As Exception
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
+                End Try
+
+                'Creation du fichier XML
+                Dim writer As New XmlTextWriter(Fichier, System.Text.Encoding.UTF8)
+                writer.WriteStartDocument(True)
+                writer.Formatting = Formatting.Indented
+                writer.Indentation = 2
+
+                writer.WriteStartElement("wehome")
+
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des paramètres serveur")
+                '------------ server
+                writer.WriteStartElement("server")
+                writer.WriteStartElement("longitude")
+                writer.WriteString(_Longitude)
+                writer.WriteEndElement()
+                writer.WriteStartElement("latitude")
+                writer.WriteString(_Latitude)
+                writer.WriteEndElement()
+                writer.WriteStartElement("heurecorrectionlever")
+                writer.WriteString(HeureCorrectionLever)
+                writer.WriteEndElement()
+                writer.WriteStartElement("heurecorrectioncoucher")
+                writer.WriteString(HeureCorrectionCoucher)
+                writer.WriteEndElement()
+                writer.WriteEndElement()
+
+                '-------------------
+                '------------drivers
+                '------------------
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des drivers")
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).PluginName <> "server" Then
+                        writer.WriteStartElement("service")
+                        writer.WriteStartElement("id")
+                        writer.WriteString(_ListDrivers.Item(i).ID)
+                        writer.WriteEndElement()
+                        writer.WriteStartElement("name")
+                        writer.WriteString(_ListDrivers.Item(i).PluginName)
+                        writer.WriteEndElement()
+                        writer.WriteStartElement("protocol")
+                        writer.WriteString(_ListDrivers.Item(i).Protocol)
+                        writer.WriteEndElement()
+                        writer.WriteStartElement("port")
+                        writer.WriteString(_ListDrivers.Item(i).Protocol)
+                        writer.WriteEndElement()
+                        writer.WriteStartElement("startauto")
+                        writer.WriteString(_ListDrivers.Item(i).AutoStart)
+                        writer.WriteEndElement()
+                        writer.WriteStartElement("parametres")
+                        writer.WriteString(_ListDrivers.Item(i).Parametres)
+                        writer.WriteEndElement()
+                        writer.WriteEndElement()
+                    End If
+                Next
+
+                '------------
+                'Sauvegarde des devices
+                '------------
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des devices")
+                writer.WriteStartElement("devices")
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    writer.WriteStartElement("device")
+                    writer.WriteStartElement("typeclass")
+                    writer.WriteString(_ListDevices.Item(i).TypeClass)
+                    writer.WriteEndElement()
+                    writer.WriteStartElement("id")
+                    writer.WriteString(_ListDevices.Item(i).ID)
+                    writer.WriteEndElement()
+                    writer.WriteStartElement("name")
+                    writer.WriteString(_ListDevices.Item(i).Name)
+                    writer.WriteEndElement()
+                    writer.WriteStartElement("adresse")
+                    writer.WriteString(_ListDevices.Item(i).Adresse)
+                    writer.WriteEndElement()
+                    writer.WriteStartElement("enable")
+                    writer.WriteString(_ListDevices.Item(i).Enable)
+                    writer.WriteEndElement()
+                    writer.WriteStartElement("driver")
+                    writer.WriteString(_ListDevices.Item(i).DriverID)
+                    writer.WriteEndElement()
+                    writer.WriteStartElement("image")
+                    writer.WriteString(_ListDevices.Item(i).Picture)
+                    writer.WriteEndElement()
+                    Select Case _ListDevices.Item(i).TypeClass
+                        Case "tv"
+                            writer.WriteStartElement("commands")
+                            For k As Integer = 0 To _ListDevices.Item(i).ListCommandName.Count - 1
+                                writer.WriteStartElement("command")
+                                writer.WriteStartAttribute("key")
+                                writer.WriteValue(_ListDevices.Item(i).ListCommandName(k))
+                                writer.WriteEndAttribute()
+                                writer.WriteStartAttribute("data")
+                                writer.WriteValue(_ListDevices.Item(i).ListCommandData(k))
+                                writer.WriteEndAttribute()
+                                writer.WriteStartAttribute("repeat")
+                                writer.WriteValue(_ListDevices.Item(i).ListCommandRepeat(k))
+                                writer.WriteEndAttribute()
+                                writer.WriteEndElement()
+                            Next
+                            writer.WriteEndElement()
+                    End Select
+                    writer.WriteEndElement()
+                Next
+                writer.WriteEndElement()
+                '------------
+
+                writer.WriteEndDocument()
+                writer.Close()
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde terminée")
             Catch ex As Exception
-                MsgBox("Impossible d'enregistrer le fichier de config: " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, " Erreur de sauvegarde de la configuration: " & ex.Message)
             End Try
+
         End Sub
 
         '--- Charge les drivers
         Public Sub LoadDrivers()
-            Dim tx As String
-            Dim dll As Reflection.Assembly
-            Dim tp As Type
-            Dim Chm As String = "C:\HoMIDom\Applications\Plugins\" 'Emplacement par défaut des plugins
+            Try
+                Dim tx As String
+                Dim dll As Reflection.Assembly
+                Dim tp As Type
+                Dim Chm As String = "C:\HoMIDom\Applications\Plugins\" 'Emplacement par défaut des plugins
 
 
-            Dim strFileSize As String = ""
-            Dim di As New IO.DirectoryInfo(Chm)
-            Dim aryFi As IO.FileInfo() = di.GetFiles("*.dll")
-            Dim fi As IO.FileInfo
+                Dim strFileSize As String = ""
+                Dim di As New IO.DirectoryInfo(Chm)
+                Dim aryFi As IO.FileInfo() = di.GetFiles("*.dll")
+                Dim fi As IO.FileInfo
 
-            'Cherche tous les fichiers dll dans le répertoie plugin
-            For Each fi In aryFi
-                'chargement du plugin
-                tx = fi.FullName   'emplacement de la dll
-                'chargement de la dll
-                dll = Reflection.Assembly.LoadFrom(tx)
-                'Vérification de la présence de l'interface recherchée
-                For Each tp In dll.GetTypes
-                    If tp.IsClass Then
-                        If tp.GetInterface("IDriver", True) IsNot Nothing Then
-                            'création de la référence au plugin
-                            Dim i1 As IDriver
-                            i1 = dll.CreateInstance(tp.ToString)
-                            i1.Server = Me
-                            _ListDrivers.Add(i1)
-                            i1.Start()
+                'Cherche tous les fichiers dll dans le répertoie plugin
+                For Each fi In aryFi
+                    'chargement du plugin
+                    tx = fi.FullName   'emplacement de la dll
+                    'chargement de la dll
+                    dll = Reflection.Assembly.LoadFrom(tx)
+                    'Vérification de la présence de l'interface recherchée
+                    For Each tp In dll.GetTypes
+                        If tp.IsClass Then
+                            If tp.GetInterface("IDriver", True) IsNot Nothing Then
+                                'création de la référence au plugin
+                                Dim i1 As IDriver
+                                i1 = DirectCast(dll.CreateInstance(tp.FullName), IDriver)
+                                'i1 = dll.CreateInstance(tp.ToString)
+                                i1.Server = Me
+                                _ListDrivers.Add(i1)
+                                i1.Start()
+                            End If
                         End If
-                    End If
+                    Next
                 Next
-            Next
-
+            Catch ex As Exception
+                MsgBox("Erreur lors du chargement des drivers: " & ex.Message)
+            End Try
         End Sub
 #End Region
 
@@ -242,7 +367,7 @@ Namespace HoMIDom
         End Function
 
         'Sauvegarder ou créer un device
-        Public Function SaveDevice(ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal address2 As String, ByVal image As String, ByVal enable As Boolean, ByVal adapter As String, ByVal typeclass As String) As String Implements IHoMIDom.SaveDevice
+        Public Function SaveDevice(ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal address2 As String, ByVal image As String, ByVal enable As Boolean, ByVal driverId As String, ByVal typeclass As String) As String Implements IHoMIDom.SaveDevice
             Dim myID As String
 
             If deviceId = "" Then 'C'est un nouveau device
@@ -250,7 +375,7 @@ Namespace HoMIDom
                 'Suivant chaque type de device
                 Select Case UCase(typeclass)
                     Case "TEMPERATURE"
-                        Dim o As New Device.TEMPERATURE
+                        Dim o As New Device.TEMPERATURE(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -259,12 +384,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "HUMIDITE"
-                        Dim o As New Device.HUMIDITE
+                        Dim o As New Device.HUMIDITE(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -273,12 +398,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "BATTERIE"
-                        Dim o As New Device.BATTERIE
+                        Dim o As New Device.BATTERIE(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -287,12 +412,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = DriverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "NIVRECEPTION"
-                        Dim o As New Device.NIVRECEPTION
+                        Dim o As New Device.NIVRECEPTION(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -301,12 +426,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "TEMPERATURECONSIGNE"
-                        Dim o As New Device.TEMPERATURECONSIGNE
+                        Dim o As New Device.TEMPERATURECONSIGNE(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -315,12 +440,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "ENERGIETOTALE"
-                        Dim o As New Device.ENERGIETOTALE
+                        Dim o As New Device.ENERGIETOTALE(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -329,12 +454,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "ENERGIEINSTANTANEE"
-                        Dim o As New Device.ENERGIEINSTANTANEE
+                        Dim o As New Device.ENERGIEINSTANTANEE(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -343,12 +468,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "PLUIETOTAL"
-                        Dim o As New Device.PLUIETOTAL
+                        Dim o As New Device.PLUIETOTAL(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -357,12 +482,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "PLUIECOURANT"
-                        Dim o As New Device.PLUIECOURANT
+                        Dim o As New Device.PLUIECOURANT(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -371,12 +496,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "VITESSEVENT"
-                        Dim o As New Device.VITESSEVENT
+                        Dim o As New Device.VITESSEVENT(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -385,12 +510,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "DIRECTIONVENT"
-                        Dim o As New Device.DIRECTIONVENT
+                        Dim o As New Device.DIRECTIONVENT(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -399,12 +524,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "UV"
-                        Dim o As New Device.UV
+                        Dim o As New Device.UV(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -413,12 +538,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "APPAREIL"
-                        Dim o As New Device.APPAREIL
+                        Dim o As New Device.APPAREIL(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -427,12 +552,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "LAMPE"
-                        Dim o As New Device.LAMPE
+                        Dim o As New Device.LAMPE(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -441,12 +566,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "CONTACT"
-                        Dim o As New Device.CONTACT
+                        Dim o As New Device.CONTACT(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -455,12 +580,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "METEO"
-                        Dim o As New Device.METEO
+                        Dim o As New Device.METEO(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -469,12 +594,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "AUDIO"
-                        Dim o As New Device.AUDIO
+                        Dim o As New Device.AUDIO(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -483,12 +608,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "MULTIMEDIA"
-                        Dim o As New Device.MULTIMEDIA
+                        Dim o As New Device.MULTIMEDIA(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -497,12 +622,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "FREEBOX"
-                        Dim o As New Device.FREEBOX
+                        Dim o As New Device.FREEBOX(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -511,12 +636,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "VOLET"
-                        Dim o As New Device.VOLET
+                        Dim o As New Device.VOLET(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -525,12 +650,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "OBSCURITE"
-                        Dim o As New Device.OBSCURITE
+                        Dim o As New Device.OBSCURITE(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -539,12 +664,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "SWITCH"
-                        Dim o As New Device.SWITCH
+                        Dim o As New Device.SWITCH(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -553,12 +678,12 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
                     Case "TELECOMMANDE"
-                        Dim o As New Device.TELECOMMANDE
+                        Dim o As New Device.TELECOMMANDE(Me)
                         With o
                             .ID = myID
                             .Name = name
@@ -567,7 +692,7 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .Driver = ReturnDriverById(adapter)
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -582,8 +707,7 @@ Namespace HoMIDom
                         _ListDevices.Item(i).adresse2 = address2
                         _ListDevices.Item(i).picture = image
                         _ListDevices.Item(i).enable = enable
-                        _ListDevices.Item(i).driverid = adapter
-                        _ListDevices.Item(i).Driver = ReturnDriverById(adapter)
+                        _ListDevices.Item(i).driverid = driverId
                     End If
                 Next
             End If
