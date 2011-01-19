@@ -21,6 +21,8 @@ Module Service
         Try
             Dim obj As Server = New Server()
 
+
+
             Console.WriteLine("******************************")
             Console.WriteLine("DEMARRAGE DU SERVEUR**********")
             Console.WriteLine("******************************")
@@ -28,6 +30,7 @@ Module Service
 
             Console.WriteLine(Now & " Chargement de la configuration")
             'Chargement de la config
+
             'Console.WriteLine(Now & obj.LoadConfig("C:\ehome\config\"))
 
             'Démarrage du serviceWeb
@@ -45,7 +48,10 @@ Module Service
             Console.WriteLine("******************************")
             Console.WriteLine(" ")
 
+            obj.SaveConfig("TOTO", obj)
+
             Console.ReadLine()
+            
         Catch ex As Exception
             Console.WriteLine(Now & " ERREUR " & ex.Message)
         End Try
