@@ -101,132 +101,162 @@ Namespace HoMIDom
                 Return TryCast(xS.Deserialize(xR), Server)
             Catch ex As Exception
                 MsgBox("Impossible de charger le fichier de config xml: " & ex.Message)
+                Return Nothing
             End Try
         End Function
 
         '--- Sauvegarde de la config dans le fichier XML
         Public Sub SaveConfig(ByVal Fichier As String, ByVal Objet As Object)
             Try
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde de la config sous le fichier " & Fichier)
+                'Serialize object to a text file.
+                Dim objStreamWriter As New StreamWriter(Fichier)
+                Dim x As New XmlSerializer(Objet.GetType)
+                x.Serialize(objStreamWriter, Objet)
+                objStreamWriter.Close()
 
-                'Copy du fichier de config avant sauvegarde
-                Try
-                    Dim _file As String = Fichier.Replace(".xml", "")
-                    If File.Exists(_file & ".sav") = True Then File.Delete(_file & ".sav")
-                    File.Copy(_file & ".xml", _file & ".sav")
-                Catch ex As Exception
-                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
-                End Try
+                'Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde de la config sous le fichier " & Fichier)
 
-                'Creation du fichier XML
-                Dim writer As New XmlTextWriter(Fichier, System.Text.Encoding.UTF8)
-                writer.WriteStartDocument(True)
-                writer.Formatting = Formatting.Indented
-                writer.Indentation = 2
+                ''Copy du fichier de config avant sauvegarde
+                'Try
+                '    Dim _file As String = Fichier.Replace(".xml", "")
+                '    If File.Exists(_file & ".sav") = True Then File.Delete(_file & ".sav")
+                '    File.Copy(_file & ".xml", _file & ".sav")
+                'Catch ex As Exception
+                '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
+                'End Try
 
-                writer.WriteStartElement("wehome")
+                ''Creation du fichier XML
+                'Dim writer As New XmlTextWriter(Fichier, System.Text.Encoding.UTF8)
+                'writer.WriteStartDocument(True)
+                'writer.Formatting = Formatting.Indented
+                'writer.Indentation = 2
 
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des paramètres serveur")
-                '------------ server
-                writer.WriteStartElement("server")
-                writer.WriteStartElement("longitude")
-                writer.WriteString(_Longitude)
-                writer.WriteEndElement()
-                writer.WriteStartElement("latitude")
-                writer.WriteString(_Latitude)
-                writer.WriteEndElement()
-                writer.WriteStartElement("heurecorrectionlever")
-                writer.WriteString(HeureCorrectionLever)
-                writer.WriteEndElement()
-                writer.WriteStartElement("heurecorrectioncoucher")
-                writer.WriteString(HeureCorrectionCoucher)
-                writer.WriteEndElement()
-                writer.WriteEndElement()
+                'writer.WriteStartElement("homidom")
 
-                '-------------------
-                '------------drivers
-                '------------------
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des drivers")
-                For i As Integer = 0 To _ListDrivers.Count - 1
-                    If _ListDrivers.Item(i).PluginName <> "server" Then
-                        writer.WriteStartElement("service")
-                        writer.WriteStartElement("id")
-                        writer.WriteString(_ListDrivers.Item(i).ID)
-                        writer.WriteEndElement()
-                        writer.WriteStartElement("name")
-                        writer.WriteString(_ListDrivers.Item(i).PluginName)
-                        writer.WriteEndElement()
-                        writer.WriteStartElement("protocol")
-                        writer.WriteString(_ListDrivers.Item(i).Protocol)
-                        writer.WriteEndElement()
-                        writer.WriteStartElement("port")
-                        writer.WriteString(_ListDrivers.Item(i).Protocol)
-                        writer.WriteEndElement()
-                        writer.WriteStartElement("startauto")
-                        writer.WriteString(_ListDrivers.Item(i).AutoStart)
-                        writer.WriteEndElement()
-                        writer.WriteStartElement("parametres")
-                        writer.WriteString(_ListDrivers.Item(i).Parametres)
-                        writer.WriteEndElement()
-                        writer.WriteEndElement()
-                    End If
-                Next
+                'Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des paramètres serveur")
+                ''------------ server
+                'writer.WriteStartElement("server")
+                'writer.WriteStartElement("longitude")
+                'writer.WriteString(_Longitude)
+                'writer.WriteEndElement()
+                'writer.WriteStartElement("latitude")
+                'writer.WriteString(_Latitude)
+                'writer.WriteEndElement()
+                'writer.WriteStartElement("heurecorrectionlever")
+                'writer.WriteString(HeureCorrectionLever)
+                'writer.WriteEndElement()
+                'writer.WriteStartElement("heurecorrectioncoucher")
+                'writer.WriteString(HeureCorrectionCoucher)
+                'writer.WriteEndElement()
+                'writer.WriteEndElement()
 
-                '------------
-                'Sauvegarde des devices
-                '------------
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des devices")
-                writer.WriteStartElement("devices")
-                For i As Integer = 0 To _ListDevices.Count - 1
-                    writer.WriteStartElement("device")
-                    writer.WriteStartElement("typeclass")
-                    writer.WriteString(_ListDevices.Item(i).TypeClass)
-                    writer.WriteEndElement()
-                    writer.WriteStartElement("id")
-                    writer.WriteString(_ListDevices.Item(i).ID)
-                    writer.WriteEndElement()
-                    writer.WriteStartElement("name")
-                    writer.WriteString(_ListDevices.Item(i).Name)
-                    writer.WriteEndElement()
-                    writer.WriteStartElement("adresse")
-                    writer.WriteString(_ListDevices.Item(i).Adresse)
-                    writer.WriteEndElement()
-                    writer.WriteStartElement("enable")
-                    writer.WriteString(_ListDevices.Item(i).Enable)
-                    writer.WriteEndElement()
-                    writer.WriteStartElement("driver")
-                    writer.WriteString(_ListDevices.Item(i).DriverID)
-                    writer.WriteEndElement()
-                    writer.WriteStartElement("image")
-                    writer.WriteString(_ListDevices.Item(i).Picture)
-                    writer.WriteEndElement()
-                    Select Case _ListDevices.Item(i).TypeClass
-                        Case "tv"
-                            writer.WriteStartElement("commands")
-                            For k As Integer = 0 To _ListDevices.Item(i).ListCommandName.Count - 1
-                                writer.WriteStartElement("command")
-                                writer.WriteStartAttribute("key")
-                                writer.WriteValue(_ListDevices.Item(i).ListCommandName(k))
-                                writer.WriteEndAttribute()
-                                writer.WriteStartAttribute("data")
-                                writer.WriteValue(_ListDevices.Item(i).ListCommandData(k))
-                                writer.WriteEndAttribute()
-                                writer.WriteStartAttribute("repeat")
-                                writer.WriteValue(_ListDevices.Item(i).ListCommandRepeat(k))
-                                writer.WriteEndAttribute()
-                                writer.WriteEndElement()
-                            Next
-                            writer.WriteEndElement()
-                    End Select
-                    writer.WriteEndElement()
-                Next
-                writer.WriteEndElement()
-                '------------
+                ''-------------------
+                ''------------drivers
+                ''------------------
+                'Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des drivers")
+                'For i As Integer = 0 To _ListDrivers.Count - 1
+                '    writer.WriteStartElement("driver")
+                '    writer.WriteStartAttribute("id")
+                '    writer.WriteValue(_ListDrivers.Item(i).ID)
+                '    writer.WriteEndAttribute()
+                '    writer.WriteStartAttribute("nom")
+                '    writer.WriteValue(_ListDrivers.Item(i).Nom)
+                '    writer.WriteEndAttribute()
+                '    writer.WriteStartAttribute("enable")
+                '    writer.WriteValue(_ListDrivers.Item(i).Enable)
+                '    writer.WriteEndAttribute()
+                '    writer.WriteStartAttribute("description")
+                '    writer.WriteValue(_ListDrivers.Item(i).Description)
+                '    writer.WriteEndAttribute()
+                '    writer.WriteStartAttribute("startauto")
+                '    writer.WriteValue(_ListDrivers.Item(i).StartAuto)
+                '    writer.WriteEndAttribute()
+                '    writer.WriteStartAttribute("protocol")
+                '    writer.WriteValue(_ListDrivers.Item(i).Protocol)
+                '    writer.WriteEndAttribute()
+                '    writer.WriteStartAttribute("iptcp")
+                '    writer.WriteValue(_ListDrivers.Item(i).IP_TCP)
+                '    writer.WriteEndAttribute()
+                '    writer.WriteStartAttribute("porttcp")
+                '    writer.WriteValue(_ListDrivers.Item(i).Port_TCP)
+                '    writer.WriteEndAttribute()
+                '    writer.WriteStartAttribute("ipudp")
+                '    writer.WriteValue(_ListDrivers.Item(i).IP_UDP)
+                '    writer.WriteEndAttribute()
+                '    writer.WriteStartAttribute("portudp")
+                '    writer.WriteValue(_ListDrivers.Item(i).Port_UDP)
+                '    writer.WriteEndAttribute()
+                '    writer.WriteStartAttribute("com")
+                '    writer.WriteValue(_ListDrivers.Item(i).Com)
+                '    writer.WriteEndAttribute()
+                '    writer.WriteStartAttribute("refresh")
+                '    writer.WriteValue(_ListDrivers.Item(i).Refresh)
+                '    writer.WriteEndAttribute()
+                '    writer.WriteStartAttribute("modele")
+                '    writer.WriteValue(_ListDrivers.Item(i).modele)
+                '    writer.WriteEndAttribute()
+                '    writer.WriteStartAttribute("picture")
+                '    writer.WriteValue(_ListDrivers.Item(i).Picture)
+                '    writer.WriteEndAttribute()
+                '    writer.WriteEndElement()
+                'Next
 
-                writer.WriteEndDocument()
-                writer.Close()
+                ''------------
+                ''Sauvegarde des devices
+                ''------------
+                'Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des devices")
+                'writer.WriteStartElement("devices")
+                'For i As Integer = 0 To _ListDevices.Count - 1
+                '    writer.WriteStartElement("device")
+                '    writer.WriteStartElement("typeclass")
+                '    writer.WriteString(_ListDevices.Item(i).TypeClass)
+                '    writer.WriteEndElement()
+                '    writer.WriteStartElement("id")
+                '    writer.WriteString(_ListDevices.Item(i).ID)
+                '    writer.WriteEndElement()
+                '    writer.WriteStartElement("name")
+                '    writer.WriteString(_ListDevices.Item(i).Name)
+                '    writer.WriteEndElement()
+                '    writer.WriteStartElement("adresse")
+                '    writer.WriteString(_ListDevices.Item(i).Adresse)
+                '    writer.WriteEndElement()
+                '    writer.WriteStartElement("enable")
+                '    writer.WriteString(_ListDevices.Item(i).Enable)
+                '    writer.WriteEndElement()
+                '    writer.WriteStartElement("driver")
+                '    writer.WriteString(_ListDevices.Item(i).DriverID)
+                '    writer.WriteEndElement()
+                '    writer.WriteStartElement("image")
+                '    writer.WriteString(_ListDevices.Item(i).Picture)
+                '    writer.WriteEndElement()
+                '    Select Case _ListDevices.Item(i).TypeClass
+                '        Case "tv"
+                '            writer.WriteStartElement("commands")
+                '            For k As Integer = 0 To _ListDevices.Item(i).ListCommandName.Count - 1
+                '                writer.WriteStartElement("command")
+                '                writer.WriteStartAttribute("key")
+                '                writer.WriteValue(_ListDevices.Item(i).ListCommandName(k))
+                '                writer.WriteEndAttribute()
+                '                writer.WriteStartAttribute("data")
+                '                writer.WriteValue(_ListDevices.Item(i).ListCommandData(k))
+                '                writer.WriteEndAttribute()
+                '                writer.WriteStartAttribute("repeat")
+                '                writer.WriteValue(_ListDevices.Item(i).ListCommandRepeat(k))
+                '                writer.WriteEndAttribute()
+                '                writer.WriteEndElement()
+                '            Next
+                '            writer.WriteEndElement()
+                '    End Select
+                '    writer.WriteEndElement()
+                'Next
+                'writer.WriteEndElement()
+                ''------------
+
+                'writer.WriteEndDocument()
+                'writer.Close()
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde terminée")
             Catch ex As Exception
+                MsgBox("ERREUR SAVECONFIG " & ex.ToString)
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, " Erreur de sauvegarde de la configuration: " & ex.Message)
             End Try
 
@@ -257,8 +287,12 @@ Namespace HoMIDom
                         If tp.IsClass Then
                             If tp.GetInterface("IDriver", True) IsNot Nothing Then
                                 'création de la référence au plugin
+                                'Dim obj As Object
+                                'obj = AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(tp.FullName, "IDriver")
+
                                 Dim i1 As IDriver
                                 i1 = DirectCast(dll.CreateInstance(tp.FullName), IDriver)
+                                i1 = CType(i1, IDriver)
                                 'i1 = dll.CreateInstance(tp.ToString)
                                 i1.Server = Me
                                 _ListDrivers.Add(i1)

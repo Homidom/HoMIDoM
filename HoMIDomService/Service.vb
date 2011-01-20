@@ -48,7 +48,7 @@ Module Service
             Console.WriteLine("******************************")
             Console.WriteLine(" ")
 
-            obj.SaveConfig("TOTO", obj)
+            obj.SaveConfig("C:\testcfg.xml", obj)
 
             Console.ReadLine()
             
