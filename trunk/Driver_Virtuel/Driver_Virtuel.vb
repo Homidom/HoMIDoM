@@ -2,7 +2,7 @@
 Imports System.Xml.Serialization
 Imports HoMIDom.HoMIDom.Server
 
-<Serializable()> Public Class Driver_Virtuel
+<Serializable(), Xml.Serialization.XmlInclude(GetType(HoMIDom.HoMIDom.IDriver))> Public Class Driver_Virtuel
     Inherits MarshalByRefObject
     Implements HoMIDom.HoMIDom.IDriver
 
