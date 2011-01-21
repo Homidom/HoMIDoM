@@ -13,22 +13,22 @@ Namespace HoMIDom
 
     Public Class Device
 
-        Public Class DeviceGenerique
+        <Serializable()> Public Class DeviceGenerique
             Protected _Server As Server
-            Protected _ID As String
-            Protected _Name As String
-            Protected _Enable As Boolean
-            Protected _DriverId As String
-            Protected _Driver As Object
-            Protected _Description As String
-            Protected _Type As String
-            Protected _Adresse1 As String
-            Protected _Adresse2 As String
-            Protected _DateCreated As Date
-            Protected _LastChanged As Date
-            Protected _Refresh As Integer
-            Protected _Modele As String
-            Protected _Picture As String
+            Protected _ID As String = ""
+            Protected _Name As String = ""
+            Protected _Enable As Boolean = False
+            Protected _DriverId As String = ""
+            <NonSerialized()> Protected _Driver As Object
+            Protected _Description As String = ""
+            Protected _Type As String = ""
+            Protected _Adresse1 As String = ""
+            Protected _Adresse2 As String = ""
+            Protected _DateCreated As Date = Now
+            Protected _LastChanged As Date = Now
+            Protected _Refresh As Integer = 0
+            Protected _Modele As String = ""
+            Protected _Picture As String = ""
             Protected _Solo As Boolean = True
             Protected MyTimer As New Timers.Timer
 
@@ -156,18 +156,28 @@ Namespace HoMIDom
                     _Picture = value
                 End Set
             End Property
+
+            'Si le device est solo ou s'il contient plusieurs I/O
+            Public Property Solo() As Boolean
+                Get
+                    Return _Solo
+                End Get
+                Set(ByVal value As Boolean)
+                    _Solo = value
+                End Set
+            End Property
         End Class
 
-        Class DeviceGeneriqueValue
+        <Serializable()> Class DeviceGeneriqueValue
             Inherits DeviceGenerique
 
-            Protected _Value As Double
+            Protected _Value As Double = 0
             Protected _ValueMin As Double = -9999
             Protected _ValueMax As Double = 9999
-            Protected _ValueDef As Double
-            Protected _Precision As Double
-            Protected _Correction As Double
-            Protected _Formatage As String
+            Protected _ValueDef As Double = 0
+            Protected _Precision As Double = 0
+            Protected _Correction As Double = 0
+            Protected _Formatage As String = ""
 
             'Valeur minimale que value peut avoir 
             Public Property ValueMin() As Double

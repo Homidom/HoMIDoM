@@ -10,6 +10,9 @@ Namespace HoMIDom
     '***********************************************
 
     Public Interface IHoMIDom
+        '---- Subs --------------------------------------------
+        Sub SaveConfig() 'Sauvegarde de la configuration
+
         '---- Fonctions ---------------------------------------
         Function DeleteDevice(ByVal deviceId As String) As Integer 'Supprimer un device
         Function DeleteDriver(ByVal driverId As String) As Integer 'Supprimer un driver de la config

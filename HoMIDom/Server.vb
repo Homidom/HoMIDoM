@@ -1,6 +1,8 @@
 ﻿Imports System.IO
 Imports System.Xml
+Imports System.Xml.XPath
 Imports System.Xml.Serialization
+Imports System.Reflection
 
 Namespace HoMIDom
 
@@ -94,166 +96,493 @@ Namespace HoMIDom
         End Sub
 
         '--- Chargement de la config depuis le fichier XML
-        Public Function LoadConfig(ByVal Fichier As String) As Server
+        Public Function LoadConfig(ByVal Fichier As String) As String
+            'Copy du fichier de config avant chargement
             Try
-                Dim xR As XmlReader = XmlReader.Create(Fichier)
-                Dim xS As New XmlSerializer(GetType(Server))
-                Return TryCast(xS.Deserialize(xR), Server)
+                Dim _file As String = Fichier & "homidom"
+                If File.Exists(_file & ".bak") = True Then File.Delete(_file & ".bak")
+                File.Copy(_file & ".xml", Mid(_file & ".xml", 1, Len(_file & ".xml") - 4) & ".bak")
             Catch ex As Exception
-                MsgBox("Impossible de charger le fichier de config xml: " & ex.Message)
-                Return Nothing
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
+            End Try
+
+            Try
+                Dim dirInfo As New System.IO.DirectoryInfo(Fichier)
+                Dim file As System.IO.FileInfo
+                Dim files() As System.IO.FileInfo = dirInfo.GetFiles("homidom.xml")
+                Dim myxml As Xml
+
+                If (files IsNot Nothing) Then
+                    For Each file In files
+                        Dim myfile As String = file.FullName
+                        Dim list As XmlNodeList
+
+                        myxml = New Xml(myfile)
+
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Chargement du fichier config: " & myfile)
+
+                        '******************************************
+                        'on va chercher les paramètres du serveur
+                        '******************************************
+                        list = myxml.SelectNodes("/homidom/server")
+                        If list.Count > 0 Then 'présence des paramètres du server
+                            For j As Integer = 0 To list.Item(0).Attributes.Count - 1
+                                Select Case list.Item(0).Attributes.Item(j).Name
+                                    Case "longitude"
+                                        _Longitude = list.Item(0).Attributes.Item(j).Value
+                                    Case "latitude"
+                                        _Latitude = list.Item(0).Attributes.Item(j).Value
+                                    Case "heurecorrectionlever"
+                                        _HeureLeverSoleilCorrection = list.Item(0).Attributes.Item(j).Value
+                                    Case "heurecorrectioncoucher"
+                                        _HeureCoucherSoleilCorrection = list.Item(0).Attributes.Item(j).Value
+                                    Case Else
+                                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                End Select
+                            Next
+                        Else
+                            MsgBox("Il manque les paramètres du serveur dans le fichier de config !!")
+                        End If
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Paramètres du serveur chargés")
+
+                        '********************************
+                        'on va chercher les drivers
+                        '*********************************
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Chargement des drivers")
+                        list = Nothing
+                        list = myxml.SelectNodes("/homidom/drivers/driver")
+
+                        If list.Count > 0 Then 'présence d'un ou des driver(s)
+                            For j As Integer = 0 To list.Count - 1
+                                'on récupère l'id du driver
+                                Dim _IdDriver = list.Item(j).Attributes.Item(0).Value
+                                Dim _drv As IDriver = ReturnDriverById(_IdDriver)
+
+                                If _drv IsNot Nothing Then
+                                    _drv.Enable = list.Item(j).Attributes.GetNamedItem("enable").Value
+                                    _drv.StartAuto = list.Item(j).Attributes.GetNamedItem("startauto").Value
+                                    _drv.IP_TCP = list.Item(j).Attributes.GetNamedItem("iptcp").Value
+                                    _drv.Port_TCP = list.Item(j).Attributes.GetNamedItem("porttcp").Value
+                                    _drv.IP_UDP = list.Item(j).Attributes.GetNamedItem("ipudp").Value
+                                    _drv.Port_UDP = list.Item(j).Attributes.GetNamedItem("portudp").Value
+                                    _drv.COM = list.Item(j).Attributes.GetNamedItem("com").Value
+                                    _drv.Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
+                                    _drv.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
+                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Driver " & _drv.Nom & " chargé")
+                                    _drv = Nothing
+                                End If
+                            Next
+                        Else
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "Aucun driver n'est enregistré dans le fichier de config")
+                        End If
+
+                        '******************************************
+                        'on va chercher les devices
+                        '********************************************
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Chargement des devices")
+                        list = Nothing
+                        list = myxml.SelectNodes("/homidom/devices/device")
+
+                        If list.Count > 0 Then 'présence d'un device
+                            For j As Integer = 0 To list.Count - 1
+                                Dim _Dev As Object = Nothing
+
+                                'Suivant chaque type de device
+                                Select Case UCase(list.Item(j).Attributes.GetNamedItem("type").Value)
+                                    Case "APPAREIL"
+                                        Dim o As New Device.APPAREIL(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "AUDIO"
+                                        Dim o As New Device.AUDIO(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "BATTERIE"
+                                        Dim o As New Device.BATTERIE(Me)
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "CONTACT"
+                                        Dim o As New Device.CONTACT(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "DIRECTIONVENT"
+                                        Dim o As New Device.DIRECTIONVENT(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "ENERGIEINSTANTANEE"
+                                        Dim o As New Device.ENERGIEINSTANTANEE(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "ENERGIETOTALE"
+                                        Dim o As New Device.ENERGIETOTALE(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "FREEBOX"
+                                        Dim o As New Device.FREEBOX(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "HUMIDITE"
+                                        Dim o As New Device.HUMIDITE(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "LAMPE"
+                                        Dim o As New Device.LAMPE(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "METEO"
+                                        Dim o As New Device.METEO(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "MULTIMEDIA"
+                                        Dim o As New Device.MULTIMEDIA(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "NIVRECEPTION"
+                                        Dim o As New Device.NIVRECEPTION(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "OBSCURITE"
+                                        Dim o As New Device.OBSCURITE(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "PLUIECOURANT"
+                                        Dim o As New Device.PLUIECOURANT(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "PLUIETOTAL"
+                                        Dim o As New Device.PLUIETOTAL(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "SWITCH"
+                                        Dim o As New Device.SWITCH(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "TELECOMMANDE"
+                                        Dim o As New Device.TELECOMMANDE(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "TEMPERATURE"
+                                        Dim o As New Device.TEMPERATURE(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "TEMPERATURECONSIGNE"
+                                        Dim o As New Device.TEMPERATURECONSIGNE(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "UV"
+                                        Dim o As New Device.UV(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "VITESSEVENT"
+                                        Dim o As New Device.VITESSEVENT(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "VOLET"
+                                        Dim o As New Device.VOLET(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                End Select
+
+                                With _Dev
+                                    'Affectation des valeurs sur les propriétés génériques
+                                    .ID = list.Item(j).Attributes.GetNamedItem("id").Value
+                                    .Name = list.Item(j).Attributes.GetNamedItem("name").Value
+                                    .Enable = list.Item(j).Attributes.GetNamedItem("enable").Value
+                                    .DriverId = list.Item(j).Attributes.GetNamedItem("driverid").Value
+                                    .Description = list.Item(j).Attributes.GetNamedItem("description").Value
+                                    .Adresse1 = list.Item(j).Attributes.GetNamedItem("adresse1").Value
+                                    .Adresse2 = list.Item(j).Attributes.GetNamedItem("adresse2").Value
+                                    .DateCreated = list.Item(j).Attributes.GetNamedItem("datecreated").Value
+                                    .LastChange = list.Item(j).Attributes.GetNamedItem("lastchange").Value
+                                    .Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
+                                    .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
+                                    .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
+                                    .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
+                                    '-- propriétés generique value --
+                                    If _Dev.Type = "TEMPERATURE" _
+                                    Or _Dev.Type = "HUMIDITE" _
+                                    Or _Dev.Type = "TEMPERATURECONSIGNE" _
+                                    Or _Dev.Type = "ENERGIETOTALE" _
+                                    Or _Dev.Type = "ENERGIEINSTANTANEE" _
+                                    Or _Dev.Type = "PLUIETOTAL" _
+                                    Or _Dev.Type = "PLUIECOURANT" _
+                                    Or _Dev.Type = "VITESSEVENT" _
+                                    Or _Dev.Type = "UV" _
+                                    Or _Dev.Type = "HUMIDITE" _
+                                    Then
+                                        .Value = list.Item(j).Attributes.GetNamedItem("value").Value
+                                        .ValueMin = list.Item(j).Attributes.GetNamedItem("valuemin").Value
+                                        .ValueMax = list.Item(j).Attributes.GetNamedItem("valuemax").Value
+                                        .ValueDef = list.Item(j).Attributes.GetNamedItem("valuedef").Value
+                                        .Precision = list.Item(j).Attributes.GetNamedItem("precision").Value
+                                        .Correction = list.Item(j).Attributes.GetNamedItem("correction").Value
+                                        .Formatage = list.Item(j).Attributes.GetNamedItem("formatage").Value
+                                    End If
+                                    '-- cas spécifique du multimedia pour récupérer les commandes IR --
+                                    If _Dev.type = "MULTIMEDIA" Then
+                                        For k As Integer = 0 To list.Item(j).ChildNodes.Count - 1
+                                            If list.Item(j).ChildNodes.Item(k).Name = "commands" Then
+                                                _Dev.ListCommandName.Clear()
+                                                _Dev.ListCommandData.Clear()
+                                                _Dev.ListCommandRepeat.Clear()
+                                                For k1 As Integer = 0 To list.Item(j).ChildNodes.Item(k).ChildNodes.Count - 1
+                                                    _Dev.ListCommandName.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(0).Value)
+                                                    _Dev.ListCommandData.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(1).Value)
+                                                    _Dev.ListCommandRepeat.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(2).Value)
+                                                Next
+                                            End If
+                                        Next
+                                    End If
+                                End With
+                                _ListDevices.Add(_Dev)
+                                _Dev = Nothing
+                            Next
+                        End If
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, _ListDevices.Count & " devices(s) trouvé(s)")
+                        list = Nothing
+                    Next
+                Else
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Aucun device n'est enregistré dans le fichier de config")
+                End If
+
+                'Vide les variables
+                dirInfo = Nothing
+                file = Nothing
+                files = Nothing
+                myxml = Nothing
+
+                Return " Chargement de la configuration terminée"
+
+            Catch ex As Exception
+                Return " Erreur de chargement de la config: " & ex.Message
             End Try
         End Function
 
         '--- Sauvegarde de la config dans le fichier XML
-        Public Sub SaveConfig(ByVal Fichier As String, ByVal Objet As Object)
+        Private Sub SaveConfig(ByVal Fichier As String)
             Try
-                'Serialize object to a text file.
-                Dim objStreamWriter As New StreamWriter(Fichier)
-                Dim x As New XmlSerializer(Objet.GetType)
-                x.Serialize(objStreamWriter, Objet)
-                objStreamWriter.Close()
-
-                'Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde de la config sous le fichier " & Fichier)
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde de la config sous le fichier " & Fichier)
 
                 ''Copy du fichier de config avant sauvegarde
-                'Try
-                '    Dim _file As String = Fichier.Replace(".xml", "")
-                '    If File.Exists(_file & ".sav") = True Then File.Delete(_file & ".sav")
-                '    File.Copy(_file & ".xml", _file & ".sav")
-                'Catch ex As Exception
-                '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
-                'End Try
+                Try
+                    Dim _file As String = Fichier.Replace(".xml", "")
+                    If File.Exists(_file & ".sav") = True Then File.Delete(_file & ".sav")
+                    File.Copy(_file & ".xml", _file & ".sav")
+                Catch ex As Exception
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
+                End Try
 
                 ''Creation du fichier XML
-                'Dim writer As New XmlTextWriter(Fichier, System.Text.Encoding.UTF8)
-                'writer.WriteStartDocument(True)
-                'writer.Formatting = Formatting.Indented
-                'writer.Indentation = 2
+                Dim writer As New XmlTextWriter(Fichier, System.Text.Encoding.UTF8)
+                writer.WriteStartDocument(True)
+                writer.Formatting = Formatting.Indented
+                writer.Indentation = 2
 
-                'writer.WriteStartElement("homidom")
+                writer.WriteStartElement("homidom")
 
-                'Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des paramètres serveur")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des paramètres serveur")
                 ''------------ server
-                'writer.WriteStartElement("server")
-                'writer.WriteStartElement("longitude")
-                'writer.WriteString(_Longitude)
-                'writer.WriteEndElement()
-                'writer.WriteStartElement("latitude")
-                'writer.WriteString(_Latitude)
-                'writer.WriteEndElement()
-                'writer.WriteStartElement("heurecorrectionlever")
-                'writer.WriteString(HeureCorrectionLever)
-                'writer.WriteEndElement()
-                'writer.WriteStartElement("heurecorrectioncoucher")
-                'writer.WriteString(HeureCorrectionCoucher)
-                'writer.WriteEndElement()
-                'writer.WriteEndElement()
+                writer.WriteStartElement("server")
+                writer.WriteStartAttribute("longitude")
+                writer.WriteValue(_Longitude)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("latitude")
+                writer.WriteValue(_Latitude)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("heurecorrectionlever")
+                writer.WriteValue(HeureCorrectionLever)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("heurecorrectioncoucher")
+                writer.WriteValue(HeureCorrectionCoucher)
+                writer.WriteEndAttribute()
+                writer.WriteEndElement()
 
                 ''-------------------
                 ''------------drivers
                 ''------------------
-                'Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des drivers")
-                'For i As Integer = 0 To _ListDrivers.Count - 1
-                '    writer.WriteStartElement("driver")
-                '    writer.WriteStartAttribute("id")
-                '    writer.WriteValue(_ListDrivers.Item(i).ID)
-                '    writer.WriteEndAttribute()
-                '    writer.WriteStartAttribute("nom")
-                '    writer.WriteValue(_ListDrivers.Item(i).Nom)
-                '    writer.WriteEndAttribute()
-                '    writer.WriteStartAttribute("enable")
-                '    writer.WriteValue(_ListDrivers.Item(i).Enable)
-                '    writer.WriteEndAttribute()
-                '    writer.WriteStartAttribute("description")
-                '    writer.WriteValue(_ListDrivers.Item(i).Description)
-                '    writer.WriteEndAttribute()
-                '    writer.WriteStartAttribute("startauto")
-                '    writer.WriteValue(_ListDrivers.Item(i).StartAuto)
-                '    writer.WriteEndAttribute()
-                '    writer.WriteStartAttribute("protocol")
-                '    writer.WriteValue(_ListDrivers.Item(i).Protocol)
-                '    writer.WriteEndAttribute()
-                '    writer.WriteStartAttribute("iptcp")
-                '    writer.WriteValue(_ListDrivers.Item(i).IP_TCP)
-                '    writer.WriteEndAttribute()
-                '    writer.WriteStartAttribute("porttcp")
-                '    writer.WriteValue(_ListDrivers.Item(i).Port_TCP)
-                '    writer.WriteEndAttribute()
-                '    writer.WriteStartAttribute("ipudp")
-                '    writer.WriteValue(_ListDrivers.Item(i).IP_UDP)
-                '    writer.WriteEndAttribute()
-                '    writer.WriteStartAttribute("portudp")
-                '    writer.WriteValue(_ListDrivers.Item(i).Port_UDP)
-                '    writer.WriteEndAttribute()
-                '    writer.WriteStartAttribute("com")
-                '    writer.WriteValue(_ListDrivers.Item(i).Com)
-                '    writer.WriteEndAttribute()
-                '    writer.WriteStartAttribute("refresh")
-                '    writer.WriteValue(_ListDrivers.Item(i).Refresh)
-                '    writer.WriteEndAttribute()
-                '    writer.WriteStartAttribute("modele")
-                '    writer.WriteValue(_ListDrivers.Item(i).modele)
-                '    writer.WriteEndAttribute()
-                '    writer.WriteStartAttribute("picture")
-                '    writer.WriteValue(_ListDrivers.Item(i).Picture)
-                '    writer.WriteEndAttribute()
-                '    writer.WriteEndElement()
-                'Next
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des drivers")
+                writer.WriteStartElement("drivers")
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    writer.WriteStartElement("driver")
+                    writer.WriteStartAttribute("id")
+                    writer.WriteValue(_ListDrivers.Item(i).ID)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("nom")
+                    writer.WriteValue(_ListDrivers.Item(i).Nom)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("enable")
+                    writer.WriteValue(_ListDrivers.Item(i).Enable)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("description")
+                    writer.WriteValue(_ListDrivers.Item(i).Description)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("startauto")
+                    writer.WriteValue(_ListDrivers.Item(i).StartAuto)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("protocol")
+                    writer.WriteValue(_ListDrivers.Item(i).Protocol)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("iptcp")
+                    writer.WriteValue(_ListDrivers.Item(i).IP_TCP)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("porttcp")
+                    writer.WriteValue(_ListDrivers.Item(i).Port_TCP)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("ipudp")
+                    writer.WriteValue(_ListDrivers.Item(i).IP_UDP)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("portudp")
+                    writer.WriteValue(_ListDrivers.Item(i).Port_UDP)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("com")
+                    writer.WriteValue(_ListDrivers.Item(i).Com)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("refresh")
+                    writer.WriteValue(_ListDrivers.Item(i).Refresh)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("modele")
+                    writer.WriteValue(_ListDrivers.Item(i).modele)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("picture")
+                    writer.WriteValue(_ListDrivers.Item(i).Picture)
+                    writer.WriteEndAttribute()
+                    writer.WriteEndElement()
+                Next
+                writer.WriteEndElement()
 
                 ''------------
                 ''Sauvegarde des devices
                 ''------------
-                'Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des devices")
-                'writer.WriteStartElement("devices")
-                'For i As Integer = 0 To _ListDevices.Count - 1
-                '    writer.WriteStartElement("device")
-                '    writer.WriteStartElement("typeclass")
-                '    writer.WriteString(_ListDevices.Item(i).TypeClass)
-                '    writer.WriteEndElement()
-                '    writer.WriteStartElement("id")
-                '    writer.WriteString(_ListDevices.Item(i).ID)
-                '    writer.WriteEndElement()
-                '    writer.WriteStartElement("name")
-                '    writer.WriteString(_ListDevices.Item(i).Name)
-                '    writer.WriteEndElement()
-                '    writer.WriteStartElement("adresse")
-                '    writer.WriteString(_ListDevices.Item(i).Adresse)
-                '    writer.WriteEndElement()
-                '    writer.WriteStartElement("enable")
-                '    writer.WriteString(_ListDevices.Item(i).Enable)
-                '    writer.WriteEndElement()
-                '    writer.WriteStartElement("driver")
-                '    writer.WriteString(_ListDevices.Item(i).DriverID)
-                '    writer.WriteEndElement()
-                '    writer.WriteStartElement("image")
-                '    writer.WriteString(_ListDevices.Item(i).Picture)
-                '    writer.WriteEndElement()
-                '    Select Case _ListDevices.Item(i).TypeClass
-                '        Case "tv"
-                '            writer.WriteStartElement("commands")
-                '            For k As Integer = 0 To _ListDevices.Item(i).ListCommandName.Count - 1
-                '                writer.WriteStartElement("command")
-                '                writer.WriteStartAttribute("key")
-                '                writer.WriteValue(_ListDevices.Item(i).ListCommandName(k))
-                '                writer.WriteEndAttribute()
-                '                writer.WriteStartAttribute("data")
-                '                writer.WriteValue(_ListDevices.Item(i).ListCommandData(k))
-                '                writer.WriteEndAttribute()
-                '                writer.WriteStartAttribute("repeat")
-                '                writer.WriteValue(_ListDevices.Item(i).ListCommandRepeat(k))
-                '                writer.WriteEndAttribute()
-                '                writer.WriteEndElement()
-                '            Next
-                '            writer.WriteEndElement()
-                '    End Select
-                '    writer.WriteEndElement()
-                'Next
-                'writer.WriteEndElement()
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des devices")
+                writer.WriteStartElement("devices")
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    writer.WriteStartElement("device")
+                    '-- propriétés génériques --
+                    writer.WriteStartAttribute("id")
+                    writer.WriteValue(_ListDevices.Item(i).id)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("name")
+                    writer.WriteValue(_ListDevices.Item(i).Name)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("enable")
+                    writer.WriteValue(_ListDevices.Item(i).enable)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("driverid")
+                    writer.WriteValue(_ListDevices.Item(i).driverid)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("description")
+                    writer.WriteValue(_ListDevices.Item(i).description)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("type")
+                    writer.WriteValue(_ListDevices.Item(i).type)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("adresse1")
+                    writer.WriteValue(_ListDevices.Item(i).adresse1)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("adresse2")
+                    writer.WriteValue(_ListDevices.Item(i).adresse2)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("datecreated")
+                    writer.WriteValue(_ListDevices.Item(i).datecreated)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("lastchange")
+                    writer.WriteValue(_ListDevices.Item(i).lastchange)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("refresh")
+                    writer.WriteValue(_ListDevices.Item(i).refresh)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("modele")
+                    writer.WriteValue(_ListDevices.Item(i).modele)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("picture")
+                    writer.WriteValue(_ListDevices.Item(i).picture)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("solo")
+                    writer.WriteValue(_ListDevices.Item(i).solo)
+                    writer.WriteEndAttribute()
+
+                    '-- propriétés generique value --
+                    If _ListDevices.Item(i).Type = "TEMPERATURE" _
+                    Or _ListDevices.Item(i).Type = "HUMIDITE" _
+                    Or _ListDevices.Item(i).Type = "TEMPERATURECONSIGNE" _
+                    Or _ListDevices.Item(i).Type = "ENERGIETOTALE" _
+                    Or _ListDevices.Item(i).Type = "ENERGIEINSTANTANEE" _
+                    Or _ListDevices.Item(i).Type = "PLUIETOTAL" _
+                    Or _ListDevices.Item(i).Type = "PLUIECOURANT" _
+                    Or _ListDevices.Item(i).Type = "VITESSEVENT" _
+                    Or _ListDevices.Item(i).Type = "UV" _
+                    Or _ListDevices.Item(i).Type = "HUMIDITE" _
+                    Then
+                        writer.WriteStartAttribute("value")
+                        writer.WriteValue(_ListDevices.Item(i).value)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("valuemin")
+                        writer.WriteValue(_ListDevices.Item(i).valuemin)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("valuemax")
+                        writer.WriteValue(_ListDevices.Item(i).valuemax)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("precision")
+                        writer.WriteValue(_ListDevices.Item(i).precision)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("correction")
+                        writer.WriteValue(_ListDevices.Item(i).correction)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("valuedef")
+                        writer.WriteValue(_ListDevices.Item(i).valuedef)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("formatage")
+                        writer.WriteValue(_ListDevices.Item(i).formatage)
+                        writer.WriteEndAttribute()
+                    End If
+
+                    '-- Cas Code IR a ajouter pour MULTIMEDIA
+                    If _ListDevices.Item(i).Type = "MULTIMEDIA" Then
+                        writer.WriteStartElement("commands")
+                        For k As Integer = 0 To _ListDevices.Item(i).ListCommandName.Count - 1
+                            writer.WriteStartElement("command")
+                            writer.WriteStartAttribute("key")
+                            writer.WriteValue(_ListDevices.Item(i).ListCommandName(k))
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("data")
+                            writer.WriteValue(_ListDevices.Item(i).ListCommandData(k))
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("repeat")
+                            writer.WriteValue(_ListDevices.Item(i).ListCommandRepeat(k))
+                            writer.WriteEndAttribute()
+                            writer.WriteEndElement()
+                        Next
+                        writer.WriteEndElement()
+                    End If
+                    writer.WriteEndElement()
+                Next
+                writer.WriteEndElement()
                 ''------------
 
-                'writer.WriteEndDocument()
-                'writer.Close()
+                writer.WriteEndDocument()
+                writer.Close()
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde terminée")
             Catch ex As Exception
                 MsgBox("ERREUR SAVECONFIG " & ex.ToString)
@@ -316,10 +645,10 @@ Namespace HoMIDom
 
         Public Property Drivers() As ArrayList Implements IHoMIDom.Drivers
             Get
-                Return _ListDrivers
+                Return Nothing
             End Get
             Set(ByVal value As ArrayList)
-                _ListDrivers = value
+
             End Set
         End Property
 
@@ -399,6 +728,11 @@ Namespace HoMIDom
         Function HeureLeverSoleil() As String Implements IHoMIDom.HeureLeverSoleil
             Return _HeureLeverSoleil
         End Function
+
+        'Sauvegarder la configuration
+        Public Sub SaveConfiguration() Implements IHoMIDom.SaveConfig
+            SaveConfig("C:\homidom\config\homidom.xml")
+        End Sub
 
         'Sauvegarder ou créer un device
         Public Function SaveDevice(ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal address2 As String, ByVal image As String, ByVal enable As Boolean, ByVal driverId As String, ByVal typeclass As String) As String Implements IHoMIDom.SaveDevice
@@ -755,44 +1089,21 @@ Namespace HoMIDom
         Public Function SaveDriver(ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String) As String Implements IHoMIDom.SaveDriver
             Dim myID As String
 
-            If driverId = "" Then 'C'est un nouveau driver
-                myID = Api.GenerateGUID
-                'Suivant chaque type de driver
-                Select Case UCase(name)
-                    Case "VIRTUEL"
-                        Dim o As New Driver_Virtuel
-                        With o
-                            .ID = myID
-                            .Enable = enable
-                            .StartAuto = startauto
-                            .IP_TCP = iptcp
-                            .Port_TCP = porttcp
-                            .IP_UDP = ipudp
-                            .Port_UDP = portudp
-                            .COM = com
-                            .Refresh = refresh
-                            .Picture = picture
-                            AddHandler o.DriverEvent, AddressOf DriversEvent
-                        End With
-                        _ListDrivers.Add(o)
-                End Select
-
-            Else 'Driver Existant
-                myID = driverId
-                For i As Integer = 0 To _ListDrivers.Count - 1
-                    If _ListDrivers.Item(i).id = driverId Then
-                        _ListDrivers.Item(i).Enable = enable
-                        _ListDrivers.Item(i).StartAuto = startauto
-                        _ListDrivers.Item(i).IP_TCP = iptcp
-                        _ListDrivers.Item(i).Port_TCP = porttcp
-                        _ListDrivers.Item(i).IP_UDP = ipudp
-                        _ListDrivers.Item(i).Port_UDP = portudp
-                        _ListDrivers.Item(i).Com = com
-                        _ListDrivers.Item(i).Refresh = refresh
-                        _ListDrivers.Item(i).Picture = picture
-                    End If
-                Next
-            End If
+            'Driver Existant
+            myID = driverId
+            For i As Integer = 0 To _ListDrivers.Count - 1
+                If _ListDrivers.Item(i).id = driverId Then
+                    _ListDrivers.Item(i).Enable = enable
+                    _ListDrivers.Item(i).StartAuto = startauto
+                    _ListDrivers.Item(i).IP_TCP = iptcp
+                    _ListDrivers.Item(i).Port_TCP = porttcp
+                    _ListDrivers.Item(i).IP_UDP = ipudp
+                    _ListDrivers.Item(i).Port_UDP = portudp
+                    _ListDrivers.Item(i).Com = com
+                    _ListDrivers.Item(i).Refresh = refresh
+                    _ListDrivers.Item(i).Picture = picture
+                End If
+            Next
 
             'génration de l'event
 
@@ -848,7 +1159,7 @@ Namespace HoMIDom
 #End Region
 
 #Region "Log"
-        Dim _File As String 'Représente le fichier log: ex"C:\log.xml"
+        Dim _File As String = "C:\homidom\logs\log.xml" 'Représente le fichier log: ex"C:\log.xml"
         Dim _MaxFileSize As Long = 5120000 'en bytes
 
         Public Property FichierLog() As String
@@ -902,6 +1213,9 @@ Namespace HoMIDom
                     File.Delete(_File)
                 End If
 
+                'on affiche dans la console
+                Console.WriteLine(Now & " " & TypLog & " " & Source & " " & Message)
+
                 Dim xmldoc As New XmlDocument()
 
                 'Ecrire le log
@@ -931,6 +1245,7 @@ Namespace HoMIDom
                     'on enregistre le fichier xml
                     xmldoc.Save(_File)
 
+                    
                 Catch ex As Exception
 
                 End Try

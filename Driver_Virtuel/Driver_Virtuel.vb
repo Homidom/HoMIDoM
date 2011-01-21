@@ -1,27 +1,29 @@
 ﻿Imports HoMIDom
+Imports System.Xml
 Imports System.Xml.Serialization
 Imports HoMIDom.HoMIDom.Server
 
-<Serializable(), Xml.Serialization.XmlInclude(GetType(HoMIDom.HoMIDom.IDriver))> Public Class Driver_Virtuel
-    Inherits MarshalByRefObject
+<Serializable()> Public Class Driver_Virtuel
     Implements HoMIDom.HoMIDom.IDriver
 
-    Dim _ID As String
+    '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
+    'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
+    Dim _ID As String = "DE96B466-2540-11E0-A321-65D7DFD72085"
     Dim _Nom As String = "Virtuel"
     Dim _Enable As String = False
     Dim _Description As String = "Driver Virtuel"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "Virtuel"
     Dim _IsConnect As Boolean = False
-    Dim _IP_TCP As String
-    Dim _Port_TCP As String
-    Dim _IP_UDP As String
-    Dim _Port_UDP As String
-    Dim _Com As String
-    Dim _Refresh As Integer
+    Dim _IP_TCP As String = ""
+    Dim _Port_TCP As String = ""
+    Dim _IP_UDP As String = ""
+    Dim _Port_UDP As String = ""
+    Dim _Com As String = ""
+    Dim _Refresh As Integer = 0
     Dim _Modele As String = "Virtuel"
     Dim _Version As String = "1.0"
-    Dim _Picture As String
+    Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _DeviceSupport As New ArrayList
     Dim MyTimer As New Timers.Timer
@@ -68,13 +70,10 @@ Imports HoMIDom.HoMIDom.Server
         End Set
     End Property
 
-    Public Property ID() As String Implements HoMIDom.HoMIDom.IDriver.ID
+    Public ReadOnly Property ID() As String Implements HoMIDom.HoMIDom.IDriver.ID
         Get
             Return _ID
         End Get
-        Set(ByVal value As String)
-            _ID = value
-        End Set
     End Property
 
     Public Property IP_TCP() As String Implements HoMIDom.HoMIDom.IDriver.IP_TCP
@@ -171,7 +170,6 @@ Imports HoMIDom.HoMIDom.Server
 
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         _IsConnect = True
-        _Server.Longitude = 12
         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver " & Me.Nom & " démarré")
     End Sub
 
@@ -205,4 +203,5 @@ Imports HoMIDom.HoMIDom.Server
     Public Sub New()
         _DeviceSupport.Add("FREEBOX")
     End Sub
+
 End Class
