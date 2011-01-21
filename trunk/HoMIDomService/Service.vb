@@ -12,6 +12,7 @@ Imports System.IO
 '** version 1.0
 '** Date de création: 14/01/2011
 '** Historique (SebBergues): 14/01/2011: Création 
+'** Historique (SebBergues) : 21/01/2011: Ajout de la gestion de la config
 '***********************************************
 
 Module Service
@@ -30,8 +31,7 @@ Module Service
 
             Console.WriteLine(Now & " Chargement de la configuration")
             'Chargement de la config
-
-            'Console.WriteLine(Now & obj.LoadConfig("C:\ehome\config\"))
+            obj.LoadConfig("C:\homidom\Config\")
 
             'Démarrage du serviceWeb
             Console.WriteLine(Now & " ")
@@ -40,15 +40,12 @@ Module Service
             ChannelServices.RegisterChannel(chnl, False)
             LifetimeServices.LeaseTime = Nothing
             RemotingServices.Marshal(obj, "RemoteObjectServer.soap")
-            Console.WriteLine(Now & " ")
             Console.WriteLine(Now & " ServiceWeb Démarré sur port:8888") ' & obj.PortTCP)
 
             Console.WriteLine("******************************")
             Console.WriteLine("SERVEUR DEMARRE **************")
             Console.WriteLine("******************************")
             Console.WriteLine(" ")
-
-            obj.SaveConfig("C:\testcfg.xml", obj)
 
             Console.ReadLine()
             
