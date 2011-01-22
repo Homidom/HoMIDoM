@@ -64,7 +64,10 @@ Namespace HoMIDom
         Public Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
         Public Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
 
-        Dim _MonRepertoire As String 'représente le répertoire où est située la dll
+        'Application.StartupPath
+
+        'Dim _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application
+        Public _MonRepertoire As String = System.Reflection.Assembly.GetExecutingAssembly.Location.ToString()
 
         Dim Soleil As New Soleil 'Déclaration class Soleil
         Dim _Longitude As Double 'Longitude
@@ -597,7 +600,7 @@ Namespace HoMIDom
                 Dim tx As String
                 Dim dll As Reflection.Assembly
                 Dim tp As Type
-                Dim Chm As String = "C:\HoMIDom\Applications\Plugins\" 'Emplacement par défaut des plugins
+                Dim Chm As String = _MonRepertoire & "\Plugins\" 'Emplacement par défaut des plugins
 
 
                 Dim strFileSize As String = ""
@@ -731,7 +734,7 @@ Namespace HoMIDom
 
         'Sauvegarder la configuration
         Public Sub SaveConfiguration() Implements IHoMIDom.SaveConfig
-            SaveConfig("C:\homidom\config\homidom.xml")
+            SaveConfig(_MonRepertoire & "\config\homidom.xml")
         End Sub
 
         'Sauvegarder ou créer un device
@@ -1159,7 +1162,7 @@ Namespace HoMIDom
 #End Region
 
 #Region "Log"
-        Dim _File As String = "C:\homidom\logs\log.xml" 'Représente le fichier log: ex"C:\log.xml"
+        Dim _File As String = _MonRepertoire & "\logs\log.xml" 'Représente le fichier log: ex"C:\homidom\log\log.xml"
         Dim _MaxFileSize As Long = 5120000 'en bytes
 
         Public Property FichierLog() As String

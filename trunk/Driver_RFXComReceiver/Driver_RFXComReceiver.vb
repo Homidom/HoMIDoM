@@ -19,6 +19,8 @@ Imports System.Globalization
     Implements HoMIDom.HoMIDom.IDriver
 
 #Region "Variable Driver"
+    '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
+    'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "3B808B6C-25B3-11E0-A6DB-36D2DED72085"
     Dim _Nom As String = "RFXCom_receiver"
     Dim _Enable As String = False
@@ -253,10 +255,11 @@ Imports System.Globalization
     End Sub
 
     Public Sub New()
-        _DeviceSupport.Add("RFXCOM_RECEIVER")
+        _DeviceSupport.Add(_server.Devices.)
     End Sub
 
 
+#Region "Fonctions propres au driver"
 
     Public Function ouvrir(ByVal numero As String, ByVal rfx_tpsentrereponse As Integer, ByVal RFX_ignoreadresse As Boolean, ByVal DOM_lastetat As Boolean) As String
         'Forcer le . 
@@ -512,9 +515,6 @@ Imports System.Globalization
 
     Public Sub ProcessReceivedChar(ByVal temp As Byte)
         Try
-            'si Domos est actif
-            'If Not domos_svc.Serv_DOMOS Then Exit Sub
-
             'rassemble un message complet pour le traiter ensuite avec displaymess
             'Dim temp As Byte
             'temp = sComChar
@@ -638,11 +638,11 @@ Imports System.Globalization
                 ElseIf rfxsensor Then : processrfxsensor()
                 ElseIf rfxpower Then : processrfxmeter()
                     'ElseIf protocol = MODEVISONIC Then : processvisonic(recbits)
-                ElseIf protocol = MODEVAR And recbits = 20 Then : processati()
-                ElseIf protocol = MODEVAR And recbits = 21 Then : processatiplus()
-                ElseIf protocol = MODEVAR And (recbits = 12 Or recbits = 34 Or recbits = 38) Then : processhe()
-                ElseIf protocol = MODEVAR And recbits = 56 Then : processsomfy()
-                ElseIf protocol = MODEVAR And (recbits = 56 Or recbits > 59) Then : processoregon(recbits)
+                ElseIf Protocol = MODEVAR And recbits = 20 Then : processati()
+                ElseIf Protocol = MODEVAR And recbits = 21 Then : processatiplus()
+                ElseIf Protocol = MODEVAR And (recbits = 12 Or recbits = 34 Or recbits = 38) Then : processhe()
+                ElseIf Protocol = MODEVAR And recbits = 56 Then : processsomfy()
+                ElseIf Protocol = MODEVAR And (recbits = 56 Or recbits > 59) Then : processoregon(recbits)
                     '    ElseIf protocol = MODENOXLAT Then
                     '    If recbits = 36 Or recbits = 66 Or recbits = 72 Then
                     '        processvisonic(recbits)
@@ -671,6 +671,8 @@ Imports System.Globalization
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER display_mess", ex.Message)
         End Try
     End Sub
+
+#End Region
 
 #Region "Process"
 
@@ -745,7 +747,7 @@ Imports System.Globalization
                 'End If
                 If valeur <> "" Then WriteRetour(adresse, valeur)
 
-            ElseIf protocol = MODEVAR Or protocol = MODENOXLAT Then
+            ElseIf Protocol = MODEVAR Or Protocol = MODENOXLAT Then
                 If recbits = 32 And recbuf(0) = &H52 And recbuf(1) = &H46 Then
                     Select Case recbuf(2)
                         Case &H58 : valeur = "RFXSensor Type-1"
@@ -1732,7 +1734,7 @@ Imports System.Globalization
                 Case &HF8 : valeur = "Light detected"
                 Case Else : valeur = "ALERT ??????"
             End Select
-            If protocol = MODEB32 Then
+            If Protocol = MODEB32 Then
                 'hsaddr = createhsaddr()
                 'WriteLog("DEBUG : X10Security : addr:" & VB.Right("0" & Hex(recbuf(0)), 2) & " ID:" & VB.Right("    " & Str(hsaddr), 5))
             Else
@@ -1777,7 +1779,7 @@ Imports System.Globalization
                 End Select
             End If
             valeur = Convert.ToString(recbuf(3)) 'valeur de la temperature mesurée
-            If protocol = MODEB32 Then
+            If Protocol = MODEB32 Then
                 parity = Not (((recbuf(0) And &HF0) >> 4) + (recbuf(0) And &HF) + ((recbuf(1) And &HF0) >> 4) + (recbuf(1) And &HF) + ((recbuf(2) And &HF0) >> 4)) And &HF
                 If parity <> (recbuf(2) And &HF) Then
                     WriteLog("ERR: DIGIMAX " & adresse & " : Parity error on address/status SB:" & Hex(parity))
@@ -2616,7 +2618,7 @@ Imports System.Globalization
             'log tous les paquets en mode debug
             WriteLog("DBG: WriteBattery : receive from " & adresse)
 
-            'on ne traite rien pendant les x premieres secondes
+            'on ne traite rien pendant les 6 premieres secondes
             If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
 
                 'EVENT BATTERY
@@ -2666,7 +2668,7 @@ Imports System.Globalization
             'log tous les paquets en mode debug
             WriteLog("DBG: WriteRetour receive from " & adresse & " -> " & valeur)
 
-            'on ne traite rien pendant les x premieres secondes
+            'on ne traite rien pendant les 6 premieres secondes
             If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
 
                 'EVENT VALEUR
@@ -2774,17 +2776,6 @@ Imports System.Globalization
             WriteLog("ERR: Writeretour Exception : " & ex.Message)
         End Try
     End Sub
-
-    'Public Sub WriteMessage(ByVal message As String, ByVal linefeed As Boolean)
-    '    messagetemp = messagetemp & message
-    '    If linefeed Then
-    '        If messagetemp <> messagelast And messagetemp <> "" Then
-    '            Domos.log("RFX : " & messagetemp)
-    '            messagelast = messagetemp
-    '        End If
-    '        messagetemp = ""
-    '    End If
-    'End Sub
 
 #End Region
 
