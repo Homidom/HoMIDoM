@@ -1,0 +1,42 @@
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Release\eHomeVisualProjectAdmin.exe
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Release\eHomeVisualProjectAdmin.pdb
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Release\eHomeVisualProjectAdmin.xml
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.FRMMere.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.Resources.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.vbproj.GenerateResource.Cache
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.exe
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.xml
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.pdb
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Release\eHomeVisualProjectAdmin.exe
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Release\eHomeVisualProjectAdmin.pdb
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Release\eHomeVisualProjectAdmin.xml
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Release\eHomeApi.dll
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Release\OneWireAPI.NET.dll
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Release\UsbLibrary.dll
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Release\UsbUirtManagedWrapper.dll
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Release\eHomeApi.pdb
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Release\eHomeApi.xml
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\ResolveAssemblyReference.cache
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.FrmLog.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.FrmMenu.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.FrmZone.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.CtrlExit.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.CtrlParler.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.CtrlCondition.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.CtrlIf.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.CtrlMail.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.CtrlScript.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.FrmConfigProperty.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.FrmScene.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.CtrlPause.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.CtrlDevice.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.FrmDevice.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.FRMMere.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.FrmSchedule.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.FrmTrigger.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.Resources.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.vbproj.GenerateResource.Cache
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.exe
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.xml
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Release\eHomeVisualProjectAdmin.pdb
