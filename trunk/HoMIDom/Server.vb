@@ -1182,22 +1182,29 @@ Namespace HoMIDom
 
         'Indique le type du Log: si c'est une erreur, une info, un message...
         Public Enum TypeLog
-            ERREUR
-            INFO
+            DEBUG               'visible uniquement si Homidom est en mode debug
+            ERREUR              'erreur générale
+            ERREUR_CRITIQUE     'erreur critique demandant la fermeture du programme
+            INFO                'divers
             MESSAGE
-            DEBUG
+            ACTION              'action lancé par un driver/device/trigger
+            VALEUR_CHANGE       'Valeur ayant changé
+            VALEUR_INCHANGE     'Valeur n'ayant pas changé
+            VALEUR_INCHANGE_PRECISION   'Valeur n'ayant pas changé pour cause de precision
+            VALEUR_INCHANGE_LASTETAT    'Valeur n'ayant pas changé pour cause de lastetat
         End Enum
 
-        'Indique la source du log si c'est le serveur, un scriopt, un device...
+        'Indique la source du log si c'est le serveur, un script, un device...
         Public Enum TypeSource
             SERVEUR
             SCRIPT
             TRIGGER
             DEVICE
             DRIVER
+            SOAP
         End Enum
 
-        Public Sub Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Message As String)
+        Public Sub Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
             Try
                 Dim Fichier As FileInfo
 
@@ -1214,7 +1221,7 @@ Namespace HoMIDom
                 End If
 
                 'on affiche dans la console
-                Console.WriteLine(Now & " " & TypLog & " " & Source & " " & Message)
+                Console.WriteLine(Now & " " & TypLog & " " & Source & " " & Fonction & " " & Message)
 
                 Dim xmldoc As New XmlDocument()
 
@@ -1225,18 +1232,21 @@ Namespace HoMIDom
                     Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
                     Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
                     Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
+                    Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
                     Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
 
                     'on affecte les attributs à l'élément
                     elelog.SetAttributeNode(atttime)
                     elelog.SetAttributeNode(atttype)
                     elelog.SetAttributeNode(attsrc)
+                    elelog.SetAttributeNode(attfct)
                     elelog.SetAttributeNode(attmsg)
 
                     'on affecte les valeur
                     elelog.SetAttribute("time", Now)
                     elelog.SetAttribute("type", TypLog)
                     elelog.SetAttribute("source", Source)
+                    elelog.SetAttribute("fonction", Fonction)
                     elelog.SetAttribute("message", Message)
 
                     Dim root As XmlElement = xmldoc.Item("logs")
@@ -1245,7 +1255,7 @@ Namespace HoMIDom
                     'on enregistre le fichier xml
                     xmldoc.Save(_File)
 
-                    
+
                 Catch ex As Exception
 
                 End Try
