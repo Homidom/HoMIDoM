@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{36984173-2EA7-49FB-BDDE-AE1E5F1979F6}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -218,21 +218,27 @@
   <ItemGroup>
     <EmbeddedResource Include="FrmHisto.resx">
       <DependentUpon>FrmHisto.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmLog.resx">
       <DependentUpon>FrmLog.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmMenu.resx">
       <DependentUpon>FrmMenu.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmZone.resx">
       <DependentUpon>FrmZone.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControl\CtrlExit.resx">
       <DependentUpon>CtrlExit.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControl\CtrlHisto.resx">
       <DependentUpon>CtrlHisto.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControl\CtrlPARLER.resx">
       <DependentUpon>CtrlPARLER.vb</DependentUpon>

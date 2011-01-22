@@ -31,7 +31,7 @@ Module Service
 
             Console.WriteLine(Now & " Chargement de la configuration")
             'Chargement de la config
-            obj.LoadConfig("C:\homidom\Config\")
+            obj.LoadConfig(obj._MonRepertoire & "\Config\")
 
             'Démarrage du serviceWeb
             Console.WriteLine(Now & " ")
