@@ -1,0 +1,94 @@
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\eHomeVisualProjectAdmin.exe
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\eHomeVisualProjectAdmin.pdb
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\eHomeVisualProjectAdmin.xml
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\eHomeServer.dll
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\eHomeServer.pdb
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\eHomeServer.xml
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FRMMere.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.Resources.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.vbproj.GenerateResource.Cache
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.exe
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.xml
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.pdb
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\IeHomeDriver.dll
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\IeHomeDriver.pdb
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\IeHomeDriver.xml
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmDevice.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmDriver.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmTrigger.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlDevice.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlPause.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlMail.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmScene.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlExit.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlCondition.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.Ctrlif.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlScript.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmSchedule.resources
+C:\Documents and Settings\Administrateur.PCALR\Mes documents\Visual Studio 2008\Projects\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmConfigProperty.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\eHomeVisualProjectAdmin.exe
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\eHomeVisualProjectAdmin.pdb
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\eHomeVisualProjectAdmin.xml
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\ResolveAssemblyReference.cache
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlCondition.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlIf.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlMail.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlScript.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmConfigProperty.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmScene.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlPause.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlDevice.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmDevice.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FRMMere.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmSchedule.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmTrigger.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.Resources.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.vbproj.GenerateResource.Cache
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.exe
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.xml
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.pdb
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\eHomeApi.dll
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\UsbUirtManagedWrapper.dll
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\eHomeApi.pdb
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\eHomeApi.xml
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlParler.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmZone.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlExit.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\UsbLibrary.dll
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\bin\Debug\OneWireAPI.NET.dll
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmLog.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmMenu.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.FrmHisto.resources
+d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\eHomeVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.CtrlHisto.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\bin\Debug\HoMIDomVisualProjectAdmin.exe
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\bin\Debug\HoMIDomVisualProjectAdmin.pdb
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\bin\Debug\HoMIDomVisualProjectAdmin.xml
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\bin\Debug\HoMIDom.dll
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\bin\Debug\HoMIDom.pdb
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\bin\Debug\HoMIDom.xml
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.FrmHisto.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.FrmLog.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.FrmMenu.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.FrmZone.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.CtrlExit.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.CtrlHisto.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.CtrlParler.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.CtrlCondition.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.CtrlIf.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.CtrlMail.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.CtrlScript.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.FrmConfigProperty.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.FrmScene.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.CtrlPause.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.CtrlDevice.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.FrmDevice.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.FRMMere.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.FrmSchedule.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.FrmTrigger.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.Resources.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\eHomeVisualProjectAdmin.vbproj.GenerateResource.Cache
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.exe
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.xml
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomVisualProjectAdmin\obj\Debug\HoMIDomVisualProjectAdmin.pdb
