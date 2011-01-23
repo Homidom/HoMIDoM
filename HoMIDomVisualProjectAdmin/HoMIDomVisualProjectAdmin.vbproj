@@ -17,6 +17,7 @@
     <OptionCompare>Binary</OptionCompare>
     <OptionStrict>Off</OptionStrict>
     <OptionInfer>On</OptionInfer>
+    <ApplicationIcon>icone.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -311,6 +312,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="icone.ico" />
     <Content Include="Images\bullet-fleche-vers-le-bas-icone-5704-32.png" />
     <Content Include="Images\bullet-fleche-vers-le-haut-icone-8574-32.png" />
     <Content Include="Images\corbeille-poubelle-icone-5980-128.png" />

@@ -2,6 +2,7 @@
 Imports System.Xml
 Imports System.Xml.Serialization
 Imports HoMIDom.HoMIDom.Server
+Imports HoMIDom.HoMIDom.Device
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports VB = Microsoft.VisualBasic
 Imports System.IO.Ports
@@ -38,6 +39,7 @@ Imports System.Globalization
     Dim _Version As String = "1.0"
     Dim _Picture As String = "rfxcom.png"
     Dim _Server As HoMIDom.HoMIDom.Server
+    Dim _Device As HoMIDom.HoMIDom.Device
     Dim _DeviceSupport As New ArrayList
     Dim MyTimer As New Timers.Timer
 #End Region
@@ -255,7 +257,13 @@ Imports System.Globalization
     End Sub
 
     Public Sub New()
-        _DeviceSupport.Add(_server.Devices.)
+        _DeviceSupport.Add(ListeDevices.TEMPERATURE)
+        _DeviceSupport.Add(ListeDevices.APPAREIL)
+        _DeviceSupport.Add(ListeDevices.TELECOMMANDE)
+        _DeviceSupport.Add(ListeDevices.SWITCH)
+        _DeviceSupport.Add(ListeDevices.VOLET)
+        _DeviceSupport.Add(ListeDevices.OBSCURITE)
+        'ajouter les autres
     End Sub
 
 
