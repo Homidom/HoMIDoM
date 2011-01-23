@@ -65,7 +65,6 @@ Namespace HoMIDom
         Public Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
 
         'Application.StartupPath
-
         'Dim _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application
         Public _MonRepertoire As String = System.Reflection.Assembly.GetExecutingAssembly.Location.ToString()
 
@@ -78,6 +77,7 @@ Namespace HoMIDom
         Dim _HeureCoucherSoleilCorrection As Integer
 
         Dim TimerSecond As New Timers.Timer 'Timer à la seconde
+
 #End Region
 
 #Region "Fonctions/Sub propres au serveur"
@@ -90,12 +90,12 @@ Namespace HoMIDom
             Dim dtSunset As Date
 
             Soleil.CalculateSolarTimes(_Latitude, _Longitude, Date.Now, dtSunrise, dtSolarNoon, dtSunset)
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "Initialisation des heures du soleil")
+            Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Initialisation des heures du soleil")
             _HeureCoucherSoleil = DateAdd(DateInterval.Minute, _HeureCoucherSoleilCorrection, dtSunset)
             _HeureLeverSoleil = DateAdd(DateInterval.Minute, _HeureLeverSoleilCorrection, dtSunrise)
 
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "     -> Heure du lever : " & _HeureLeverSoleil)
-            Log(TypeLog.INFO, "Serveur", "     -> Heure du coucher : " & _HeureCoucherSoleil)
+            Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "     -> Heure du lever : " & _HeureLeverSoleil)
+            Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "     -> Heure du coucher : " & _HeureCoucherSoleil)
         End Sub
 
         '--- Chargement de la config depuis le fichier XML
@@ -106,7 +106,7 @@ Namespace HoMIDom
                 If File.Exists(_file & ".bak") = True Then File.Delete(_file & ".bak")
                 File.Copy(_file & ".xml", Mid(_file & ".xml", 1, Len(_file & ".xml") - 4) & ".bak")
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
             End Try
 
             Try
@@ -122,7 +122,7 @@ Namespace HoMIDom
 
                         myxml = New Xml(myfile)
 
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Chargement du fichier config: " & myfile)
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement du fichier config: " & myfile)
 
                         '******************************************
                         'on va chercher les paramètres du serveur
@@ -140,18 +140,18 @@ Namespace HoMIDom
                                     Case "heurecorrectioncoucher"
                                         _HeureCoucherSoleilCorrection = list.Item(0).Attributes.Item(j).Value
                                     Case Else
-                                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                 End Select
                             Next
                         Else
                             MsgBox("Il manque les paramètres du serveur dans le fichier de config !!")
                         End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Paramètres du serveur chargés")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du serveur chargés")
 
                         '********************************
                         'on va chercher les drivers
                         '*********************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Chargement des drivers")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des drivers")
                         list = Nothing
                         list = myxml.SelectNodes("/homidom/drivers/driver")
 
@@ -171,18 +171,18 @@ Namespace HoMIDom
                                     _drv.COM = list.Item(j).Attributes.GetNamedItem("com").Value
                                     _drv.Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
                                     _drv.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
-                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Driver " & _drv.Nom & " chargé")
+                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Driver " & _drv.Nom & " chargé")
                                     _drv = Nothing
                                 End If
                             Next
                         Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "Aucun driver n'est enregistré dans le fichier de config")
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun driver n'est enregistré dans le fichier de config")
                         End If
 
                         '******************************************
                         'on va chercher les devices
                         '********************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Chargement des devices")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des devices")
                         list = Nothing
                         list = myxml.SelectNodes("/homidom/devices/device")
 
@@ -363,11 +363,11 @@ Namespace HoMIDom
                                 _Dev = Nothing
                             Next
                         End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, _ListDevices.Count & " devices(s) trouvé(s)")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListDevices.Count & " devices(s) trouvé(s)")
                         list = Nothing
                     Next
                 Else
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Aucun device n'est enregistré dans le fichier de config")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun device n'est enregistré dans le fichier de config")
                 End If
 
                 'Vide les variables
@@ -386,7 +386,7 @@ Namespace HoMIDom
         '--- Sauvegarde de la config dans le fichier XML
         Private Sub SaveConfig(ByVal Fichier As String)
             Try
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde de la config sous le fichier " & Fichier)
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde de la config sous le fichier " & Fichier)
 
                 ''Copy du fichier de config avant sauvegarde
                 Try
@@ -394,7 +394,7 @@ Namespace HoMIDom
                     If File.Exists(_file & ".sav") = True Then File.Delete(_file & ".sav")
                     File.Copy(_file & ".xml", _file & ".sav")
                 Catch ex As Exception
-                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
                 End Try
 
                 ''Creation du fichier XML
@@ -405,7 +405,7 @@ Namespace HoMIDom
 
                 writer.WriteStartElement("homidom")
 
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des paramètres serveur")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des paramètres serveur")
                 ''------------ server
                 writer.WriteStartElement("server")
                 writer.WriteStartAttribute("longitude")
@@ -425,7 +425,7 @@ Namespace HoMIDom
                 ''-------------------
                 ''------------drivers
                 ''------------------
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des drivers")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des drivers")
                 writer.WriteStartElement("drivers")
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     writer.WriteStartElement("driver")
@@ -478,7 +478,7 @@ Namespace HoMIDom
                 ''------------
                 ''Sauvegarde des devices
                 ''------------
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde des devices")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des devices")
                 writer.WriteStartElement("devices")
                 For i As Integer = 0 To _ListDevices.Count - 1
                     writer.WriteStartElement("device")
@@ -586,10 +586,10 @@ Namespace HoMIDom
 
                 writer.WriteEndDocument()
                 writer.Close()
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Sauvegarde terminée")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde terminée")
             Catch ex As Exception
                 MsgBox("ERREUR SAVECONFIG " & ex.ToString)
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, " Erreur de sauvegarde de la configuration: " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: " & ex.Message)
             End Try
 
         End Sub
@@ -635,6 +635,7 @@ Namespace HoMIDom
                 Next
             Catch ex As Exception
                 MsgBox("Erreur lors du chargement des drivers: " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadDrivers", " Erreur lors du chargement des drivers: " & ex.Message)
             End Try
         End Sub
 #End Region
@@ -1285,6 +1286,7 @@ Namespace HoMIDom
             rw.Close()
         End Sub
 #End Region
+
     End Class
 
 End Namespace

@@ -170,7 +170,7 @@ Imports HoMIDom.HoMIDom.Server
 
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         _IsConnect = True
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver " & Me.Nom & " démarré")
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver Virtuel", "Driver " & Me.Nom & " démarré")
     End Sub
 
     Public Property StartAuto() As Boolean Implements HoMIDom.HoMIDom.IDriver.StartAuto

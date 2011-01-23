@@ -13,6 +13,33 @@ Namespace HoMIDom
 
     Public Class Device
 
+        'Indique la liste des devices gérés
+        Public Enum ListeDevices
+            APPAREIL
+            AUDIO
+            BATTERIE
+            CONTACT
+            DIRECTIONVENT
+            ENERGIEINSTANTANEE
+            ENERGIETOTALE
+            FREEBOX
+            HUMIDITE
+            LAMPE
+            METEO
+            MULTIMEDIA
+            NIVRECEPTION
+            OBSCURITE
+            PLUIECOURANT
+            PLUIETOTAL
+            SWITCH
+            TELECOMMANDE
+            TEMPERATURE
+            TEMPERATURECONSIGNE
+            UV
+            VITESSEVENT
+            VOLET
+        End Enum
+
         <Serializable()> Public Class DeviceGenerique
             Protected _Server As Server
             Protected _ID As String = ""
@@ -1708,7 +1735,7 @@ Namespace HoMIDom
                     retour = Sendhttp("0")
                     Value = "0"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche0: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche0: " & ex.Message)
                 End Try
             End Sub
 
@@ -1718,7 +1745,7 @@ Namespace HoMIDom
                     retour = Sendhttp("1")
                     Value = "1"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche1: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche1: " & ex.Message)
                 End Try
             End Sub
 
@@ -1728,7 +1755,7 @@ Namespace HoMIDom
                     retour = Sendhttp("2")
                     Value = "2"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche2: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche2: " & ex.Message)
                 End Try
             End Sub
 
@@ -1738,7 +1765,7 @@ Namespace HoMIDom
                     retour = Sendhttp("3")
                     Value = "3"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche3: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche3: " & ex.Message)
                 End Try
             End Sub
 
@@ -1748,7 +1775,7 @@ Namespace HoMIDom
                     retour = Sendhttp("4")
                     Value = "4"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche4: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche4: " & ex.Message)
                 End Try
             End Sub
 
@@ -1758,7 +1785,7 @@ Namespace HoMIDom
                     retour = Sendhttp("5")
                     Value = "5"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche5: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche5: " & ex.Message)
                 End Try
             End Sub
 
@@ -1768,7 +1795,7 @@ Namespace HoMIDom
                     retour = Sendhttp("6")
                     Value = "6"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche6: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche6: " & ex.Message)
                 End Try
             End Sub
 
@@ -1778,7 +1805,7 @@ Namespace HoMIDom
                     retour = Sendhttp("7")
                     Value = "7"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche7: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche7: " & ex.Message)
                 End Try
             End Sub
 
@@ -1788,7 +1815,7 @@ Namespace HoMIDom
                     retour = Sendhttp("8")
                     Value = "8"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche8: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche8: " & ex.Message)
                 End Try
             End Sub
 
@@ -1798,7 +1825,7 @@ Namespace HoMIDom
                     retour = Sendhttp("9")
                     Value = "9"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " Touche9: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche9: " & ex.Message)
                 End Try
             End Sub
 
@@ -1808,7 +1835,7 @@ Namespace HoMIDom
                     retour = Sendhttp("vol_inc")
                     Value = "vol_inc"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " VolumeUp: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " VolumeUp: " & ex.Message)
                 End Try
             End Sub
 
@@ -1818,7 +1845,7 @@ Namespace HoMIDom
                     retour = Sendhttp("vol_dec")
                     Value = "vol_dec"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " VolumeDown: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " VolumeDown: " & ex.Message)
                 End Try
             End Sub
 
@@ -1828,7 +1855,7 @@ Namespace HoMIDom
                     retour = Sendhttp("ok")
                     Value = "ok"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " OK: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " OK: " & ex.Message)
                 End Try
             End Sub
 
@@ -1838,7 +1865,7 @@ Namespace HoMIDom
                     retour = Sendhttp("up")
                     Value = "up"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " HAUT: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " HAUT: " & ex.Message)
                 End Try
             End Sub
 
@@ -1848,7 +1875,7 @@ Namespace HoMIDom
                     retour = Sendhttp("down")
                     Value = "down"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " BAS: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " BAS: " & ex.Message)
                 End Try
             End Sub
 
@@ -1858,7 +1885,7 @@ Namespace HoMIDom
                     retour = Sendhttp("left")
                     Value = "left"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " GAUCHE: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " GAUCHE: " & ex.Message)
                 End Try
             End Sub
 
@@ -1868,7 +1895,7 @@ Namespace HoMIDom
                     retour = Sendhttp("right")
                     Value = "right"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " DROITE: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " DROITE: " & ex.Message)
                 End Try
             End Sub
 
@@ -1878,7 +1905,7 @@ Namespace HoMIDom
                     retour = Sendhttp("mute")
                     Value = "mute"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " MUTE: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " MUTE: " & ex.Message)
                 End Try
             End Sub
 
@@ -1888,7 +1915,7 @@ Namespace HoMIDom
                     retour = Sendhttp("home")
                     Value = "home"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " HOME: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " HOME: " & ex.Message)
                 End Try
             End Sub
 
@@ -1898,7 +1925,7 @@ Namespace HoMIDom
                     retour = Sendhttp("rec")
                     Value = "rec"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " ENREGISTRER: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " ENREGISTRER: " & ex.Message)
                 End Try
             End Sub
 
@@ -1908,7 +1935,7 @@ Namespace HoMIDom
                     retour = Sendhttp("bwd")
                     Value = "bwd"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " RETOUR: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " RETOUR: " & ex.Message)
                 End Try
             End Sub
 
@@ -1918,7 +1945,7 @@ Namespace HoMIDom
                     retour = Sendhttp("prev")
                     Value = "prev"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " PRECEDENT: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " PRECEDENT: " & ex.Message)
                 End Try
             End Sub
 
@@ -1928,7 +1955,7 @@ Namespace HoMIDom
                     retour = Sendhttp("play")
                     Value = "play"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " PLAY: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " PLAY: " & ex.Message)
                 End Try
             End Sub
 
@@ -1938,7 +1965,7 @@ Namespace HoMIDom
                     retour = Sendhttp("fwd")
                     Value = "fwd"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " AVANCE: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " AVANCE: " & ex.Message)
                 End Try
             End Sub
 
@@ -1948,7 +1975,7 @@ Namespace HoMIDom
                     retour = Sendhttp("next")
                     Value = "next"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " SUIVANT: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " SUIVANT: " & ex.Message)
                 End Try
             End Sub
 
@@ -1958,7 +1985,7 @@ Namespace HoMIDom
                     retour = Sendhttp("red")
                     Value = "red"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " BoutonROUGE: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " BoutonROUGE: " & ex.Message)
                 End Try
             End Sub
 
@@ -1968,7 +1995,7 @@ Namespace HoMIDom
                     retour = Sendhttp("green")
                     Value = "green"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " BoutonVERT: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " BoutonVERT: " & ex.Message)
                 End Try
             End Sub
 
@@ -1978,7 +2005,7 @@ Namespace HoMIDom
                     retour = Sendhttp("yellow")
                     Value = "yellow"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " BoutonJAUNE: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " BoutonJAUNE: " & ex.Message)
                 End Try
             End Sub
 
@@ -1988,7 +2015,7 @@ Namespace HoMIDom
                     retour = Sendhttp("blue")
                     Value = "blue"
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Erreur " & Me.Name & " BoutonBLEU: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " BoutonBLEU: " & ex.Message)
                 End Try
             End Sub
 
