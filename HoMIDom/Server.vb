@@ -61,12 +61,13 @@ Namespace HoMIDom
 
 #Region "Declaration des variables"
         'Déclaration des variables
-        Public Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
+        Private Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
+        Private Shared _ListImgDrivers As New ArrayList
         Public Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
 
         'Application.StartupPath
-        'Dim _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application
-        Public _MonRepertoire As String = System.Reflection.Assembly.GetExecutingAssembly.Location.ToString()
+        ' Dim _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application
+        Public _MonRepertoire As String = "C:\homidom\applications" 'System.Reflection.Assembly.GetExecutingAssembly.Location.ToString()
 
         Dim Soleil As New Soleil 'Déclaration class Soleil
         Dim _Longitude As Double 'Longitude
@@ -602,7 +603,6 @@ Namespace HoMIDom
                 Dim tp As Type
                 Dim Chm As String = _MonRepertoire & "\Plugins\" 'Emplacement par défaut des plugins
 
-
                 Dim strFileSize As String = ""
                 Dim di As New IO.DirectoryInfo(Chm)
                 Dim aryFi As IO.FileInfo() = di.GetFiles("*.dll")
@@ -627,7 +627,9 @@ Namespace HoMIDom
                                 i1 = CType(i1, IDriver)
                                 'i1 = dll.CreateInstance(tp.ToString)
                                 i1.Server = Me
+                                Dim pt As New Driver(Me, i1.ID)
                                 _ListDrivers.Add(i1)
+                                _ListImgDrivers.Add(pt)
                                 i1.Start()
                             End If
                         End If
@@ -637,6 +639,45 @@ Namespace HoMIDom
                 MsgBox("Erreur lors du chargement des drivers: " & ex.Message)
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadDrivers", " Erreur lors du chargement des drivers: " & ex.Message)
             End Try
+        End Sub
+
+        '-- Retourne les propriétés d'un driver
+        Public Function ReturnDriver(ByVal DriverId As String) As ArrayList
+            For i As Integer = 0 To _ListDrivers.Count - 1
+                Dim tabl As New ArrayList
+                If _ListDrivers.Item(i).ID = DriverId Then
+                    tabl.Add(_ListDrivers.Item(i).nom)
+                    tabl.Add(_ListDrivers.Item(i).enable)
+                    tabl.Add(_ListDrivers.Item(i).description)
+                    tabl.Add(_ListDrivers.Item(i).startauto)
+                    tabl.Add(_ListDrivers.Item(i).protocol)
+                    tabl.Add(_ListDrivers.Item(i).isconnect)
+                    tabl.Add(_ListDrivers.Item(i).IP_TCP)
+                    tabl.Add(_ListDrivers.Item(i).Port_TCP)
+                    tabl.Add(_ListDrivers.Item(i).IP_UDP)
+                    tabl.Add(_ListDrivers.Item(i).Port_UDP)
+                    tabl.Add(_ListDrivers.Item(i).COM)
+                    tabl.Add(_ListDrivers.Item(i).Refresh)
+                    tabl.Add(_ListDrivers.Item(i).Modele)
+                    tabl.Add(_ListDrivers.Item(i).Version)
+                    tabl.Add(_ListDrivers.Item(i).Picture)
+                    tabl.Add(_ListDrivers.Item(i).DeviceSupport)
+                    Return tabl
+                    Exit For
+                End If
+            Next
+        End Function
+
+        '-- Ecrire ou lance propritété/Sub d'un driver
+        Sub WriteDriver(ByVal DriverId As String, ByVal Command As String, ByVal Parametre As Object)
+            For i As Integer = 0 To _ListDrivers.Count - 1
+                If _ListDrivers.Item(i).ID = DriverId Then
+                    Select Case UCase(Command)
+
+                    End Select
+                    Exit For
+                End If
+            Next
         End Sub
 #End Region
 
@@ -649,7 +690,7 @@ Namespace HoMIDom
 
         Public Property Drivers() As ArrayList Implements IHoMIDom.Drivers
             Get
-                Return Nothing
+                Return _ListImgDrivers
             End Get
             Set(ByVal value As ArrayList)
 
@@ -1150,6 +1191,7 @@ Namespace HoMIDom
             Next
             Return retour
         End Function
+
 
 #End Region
 

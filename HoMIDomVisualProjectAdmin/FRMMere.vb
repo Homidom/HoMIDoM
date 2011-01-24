@@ -28,7 +28,7 @@ Public Class FRMMere
     Public Sub AffDriver()
         TreeViewDriver.Nodes.Clear()
         For i As Integer = 0 To Obj.Drivers.Count - 1
-            TreeViewDriver.Nodes.Add(Obj.Drivers.Item(i).nom)
+            TreeViewDriver.Nodes.Add(Obj.Drivers.Item(i).id, Obj.Drivers.Item(i).Nom)
         Next
     End Sub
 
@@ -85,7 +85,7 @@ Public Class FRMMere
             'Afficher les différentes listes
             AffZone()
             AffDevice()
-            'AffDriver()
+            AffDriver()
             'AffScene()
             'AffTrigger()
             'AffSchedule()
@@ -106,12 +106,12 @@ Public Class FRMMere
 #Region "Driver"
     'Sélection d'un driver dans la liste
     Private Sub TreeViewDriver_NodeMouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.TreeNodeMouseClickEventArgs) Handles TreeViewDriver.NodeMouseClick
-        'For i As Integer = 0 To Obj.Drivers.Count - 1
-        '    If Obj.Drivers.Item(i).id = e.Node.Name Then
-        '        PropertyGrid1.SelectedObject = Obj.Drivers.Item(i)
-        '        Exit Sub
-        '    End If
-        'Next
+        For i As Integer = 0 To Obj.Drivers.Count - 1
+            If Obj.Drivers.Item(i).id = e.Node.Name Then
+                PropertyGrid1.SelectedObject = Obj.Drivers.Item(i)
+                Exit Sub
+            End If
+        Next
     End Sub
 
     'Démarrer le driver
