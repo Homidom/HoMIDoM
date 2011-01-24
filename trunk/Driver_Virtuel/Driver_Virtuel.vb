@@ -2,6 +2,7 @@
 Imports System.Xml
 Imports System.Xml.Serialization
 Imports HoMIDom.HoMIDom.Server
+Imports HoMIDom.HoMIDom.Device
 
 <Serializable()> Public Class Driver_Virtuel
     Implements HoMIDom.HoMIDom.IDriver
@@ -201,7 +202,7 @@ Imports HoMIDom.HoMIDom.Server
     End Sub
 
     Public Sub New()
-        _DeviceSupport.Add("FREEBOX")
+        _DeviceSupport.Add(ListeDevices.FREEBOX)
     End Sub
 
 End Class

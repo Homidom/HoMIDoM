@@ -35,7 +35,7 @@ Imports System.Globalization
     Dim _Port_UDP As String = ""
     Dim _Com As String = ""
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = "Virtuel"
+    Dim _Modele As String = "RFXCom"
     Dim _Version As String = "1.0"
     Dim _Picture As String = "rfxcom.png"
     Dim _Server As HoMIDom.HoMIDom.Server
