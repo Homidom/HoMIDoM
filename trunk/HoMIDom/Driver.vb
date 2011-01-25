@@ -3,7 +3,7 @@
     '** CLASS NAMESPACE
     '** version 1.1
     '** Date de création: 21/01/2011
-    '** Historique (SebBergues): 21/01/2011: Création 
+    '** Historique (SebBergues): 21/01/2011: Création, sert d'image pour le service web
     '***********************************************
 
     <Serializable()> Public Class Driver
