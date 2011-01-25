@@ -1,0 +1,526 @@
+<?xml version="1.0"?>
+<logs>
+  <log time="21/01/2011 12:36:34" type="0" source="0" message="Création du nouveau fichier log" />
+  <log time="21/01/2011 12:36:34" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 12:36:34" type="1" source="0" message="Sauvegarde de la config sous le fichier C:\testcfg.xml" />
+  <log time="21/01/2011 12:36:34" type="1" source="0" message="Sauvegarde des paramètres serveur" />
+  <log time="21/01/2011 12:36:34" type="1" source="0" message="Sauvegarde des drivers" />
+  <log time="21/01/2011 12:36:34" type="1" source="0" message="Sauvegarde des devices" />
+  <log time="21/01/2011 12:36:34" type="1" source="0" message="Sauvegarde terminée" />
+  <log time="21/01/2011 12:36:34" type="0" source="0" message="Erreur impossible de créer une copie de backup du fichier de config: Impossible de trouver le fichier 'C:\homidom.xml'." />
+  <log time="21/01/2011 12:36:34" type="1" source="0" message="Chargement du fichier config: C:\testcfg.xml" />
+  <log time="21/01/2011 12:36:34" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 12:36:34" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 12:36:34" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 12:36:34" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 12:36:34" type="1" source="0" message="2 devices(s) trouvé(s)" />
+  <log time="21/01/2011 12:37:42" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 12:37:42" type="1" source="0" message="Sauvegarde de la config sous le fichier C:\testcfg.xml" />
+  <log time="21/01/2011 12:37:42" type="1" source="0" message="Sauvegarde des paramètres serveur" />
+  <log time="21/01/2011 12:37:42" type="1" source="0" message="Sauvegarde des drivers" />
+  <log time="21/01/2011 12:37:42" type="1" source="0" message="Sauvegarde des devices" />
+  <log time="21/01/2011 12:37:42" type="1" source="0" message="Sauvegarde terminée" />
+  <log time="21/01/2011 12:37:42" type="0" source="0" message="Erreur impossible de créer une copie de backup du fichier de config: Impossible de trouver le fichier 'C:\homidom.xml'." />
+  <log time="21/01/2011 12:37:42" type="1" source="0" message="Chargement du fichier config: C:\testcfg.xml" />
+  <log time="21/01/2011 12:37:42" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 12:37:42" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 12:37:42" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 12:37:42" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 12:37:42" type="1" source="0" message="2 devices(s) trouvé(s)" />
+  <log time="21/01/2011 12:39:09" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 12:39:09" type="1" source="0" message="Sauvegarde de la config sous le fichier C:\testcfg.xml" />
+  <log time="21/01/2011 12:39:09" type="1" source="0" message="Sauvegarde des paramètres serveur" />
+  <log time="21/01/2011 12:39:09" type="1" source="0" message="Sauvegarde des drivers" />
+  <log time="21/01/2011 12:39:09" type="1" source="0" message="Sauvegarde des devices" />
+  <log time="21/01/2011 12:39:09" type="1" source="0" message="Sauvegarde terminée" />
+  <log time="21/01/2011 12:39:09" type="0" source="0" message="Erreur impossible de créer une copie de backup du fichier de config: Impossible de trouver le fichier 'C:\homidom.xml'." />
+  <log time="21/01/2011 12:39:48" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 12:39:48" type="1" source="0" message="Sauvegarde de la config sous le fichier C:\homidom\applications\homidom.xml" />
+  <log time="21/01/2011 12:39:48" type="0" source="0" message="Erreur impossible de créer une copie de backup du fichier de config: Impossible de trouver le fichier 'C:\homidom\applications\homidom.xml'." />
+  <log time="21/01/2011 12:39:48" type="1" source="0" message="Sauvegarde des paramètres serveur" />
+  <log time="21/01/2011 12:39:48" type="1" source="0" message="Sauvegarde des drivers" />
+  <log time="21/01/2011 12:39:48" type="1" source="0" message="Sauvegarde des devices" />
+  <log time="21/01/2011 12:39:48" type="1" source="0" message="Sauvegarde terminée" />
+  <log time="21/01/2011 12:39:48" type="0" source="0" message="Erreur impossible de créer une copie de backup du fichier de config: Impossible de trouver le fichier 'C:\homidom.xml'." />
+  <log time="21/01/2011 12:40:19" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 12:40:20" type="1" source="0" message="Sauvegarde de la config sous le fichier C:\homidom\applications\homidom.xml" />
+  <log time="21/01/2011 12:40:20" type="1" source="0" message="Sauvegarde des paramètres serveur" />
+  <log time="21/01/2011 12:40:20" type="1" source="0" message="Sauvegarde des drivers" />
+  <log time="21/01/2011 12:40:20" type="1" source="0" message="Sauvegarde des devices" />
+  <log time="21/01/2011 12:40:20" type="1" source="0" message="Sauvegarde terminée" />
+  <log time="21/01/2011 12:40:50" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 12:40:50" type="1" source="0" message="Sauvegarde de la config sous le fichier C:\homidom\applications\homidom.xml" />
+  <log time="21/01/2011 12:40:50" type="1" source="0" message="Sauvegarde des paramètres serveur" />
+  <log time="21/01/2011 12:40:50" type="1" source="0" message="Sauvegarde des drivers" />
+  <log time="21/01/2011 12:40:50" type="1" source="0" message="Sauvegarde des devices" />
+  <log time="21/01/2011 12:40:50" type="1" source="0" message="Sauvegarde terminée" />
+  <log time="21/01/2011 12:40:50" type="1" source="0" message="Chargement du fichier config: C:\homidom\applications\homidom.xml" />
+  <log time="21/01/2011 12:40:50" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 12:40:50" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 12:40:50" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 12:40:50" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 12:40:50" type="1" source="0" message="2 devices(s) trouvé(s)" />
+  <log time="21/01/2011 12:42:32" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 12:42:32" type="1" source="0" message="Sauvegarde de la config sous le fichier C:\homidom\applications\homidom.xml" />
+  <log time="21/01/2011 12:42:32" type="1" source="0" message="Sauvegarde des paramètres serveur" />
+  <log time="21/01/2011 12:42:32" type="1" source="0" message="Sauvegarde des drivers" />
+  <log time="21/01/2011 12:42:32" type="1" source="0" message="Sauvegarde des devices" />
+  <log time="21/01/2011 12:42:32" type="1" source="0" message="Sauvegarde terminée" />
+  <log time="21/01/2011 12:42:32" type="1" source="0" message="Chargement du fichier config: C:\homidom\applications\homidom.xml" />
+  <log time="21/01/2011 12:42:32" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 12:42:32" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 12:42:32" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 12:42:32" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 12:42:48" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 12:42:48" type="1" source="0" message="Sauvegarde de la config sous le fichier C:\homidom\applications\homidom.xml" />
+  <log time="21/01/2011 12:42:48" type="1" source="0" message="Sauvegarde des paramètres serveur" />
+  <log time="21/01/2011 12:42:48" type="1" source="0" message="Sauvegarde des drivers" />
+  <log time="21/01/2011 12:42:49" type="1" source="0" message="Sauvegarde des devices" />
+  <log time="21/01/2011 12:42:49" type="1" source="0" message="Sauvegarde terminée" />
+  <log time="21/01/2011 12:42:49" type="1" source="0" message="Chargement du fichier config: C:\homidom\applications\homidom.xml" />
+  <log time="21/01/2011 12:42:49" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 12:42:49" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 12:42:49" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 12:42:49" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 12:42:49" type="1" source="0" message="0 devices(s) trouvé(s)" />
+  <log time="21/01/2011 12:43:10" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 12:43:10" type="1" source="0" message="Sauvegarde de la config sous le fichier C:\homidom\applications\homidom.xml" />
+  <log time="21/01/2011 12:43:10" type="1" source="0" message="Sauvegarde des paramètres serveur" />
+  <log time="21/01/2011 12:43:10" type="1" source="0" message="Sauvegarde des drivers" />
+  <log time="21/01/2011 12:43:10" type="1" source="0" message="Sauvegarde des devices" />
+  <log time="21/01/2011 12:43:10" type="1" source="0" message="Sauvegarde terminée" />
+  <log time="21/01/2011 12:43:10" type="1" source="0" message="Chargement du fichier config: C:\homidom\applications\homidom.xml" />
+  <log time="21/01/2011 12:43:10" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 12:43:10" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 12:43:10" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 12:43:10" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 12:43:10" type="1" source="0" message="2 devices(s) trouvé(s)" />
+  <log time="21/01/2011 12:43:23" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 12:43:24" type="1" source="0" message="Chargement du fichier config: C:\homidom\applications\homidom.xml" />
+  <log time="21/01/2011 12:43:24" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 12:43:24" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 12:43:24" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 12:43:24" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 12:43:24" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 12:53:41" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 12:53:41" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 12:53:41" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 12:53:41" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 12:53:41" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 12:53:41" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 12:53:41" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 12:54:23" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 12:54:23" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 12:54:23" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 12:54:23" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 12:54:23" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 12:54:23" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 12:54:23" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 12:59:39" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 12:59:39" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 12:59:39" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 12:59:39" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 12:59:39" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 12:59:39" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 12:59:39" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 13:19:54" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 13:19:54" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 13:19:54" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 13:19:54" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 13:19:54" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 13:19:54" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 13:19:54" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 13:21:32" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 13:21:32" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 13:21:32" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 13:21:32" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 13:21:32" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 13:21:32" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 13:21:32" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 13:24:10" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 13:24:10" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 13:24:10" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 13:24:10" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 13:24:10" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 13:24:10" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 13:24:10" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 13:35:21" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 13:35:22" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 13:35:22" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 13:35:22" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 13:35:22" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 13:35:22" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 13:35:22" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 13:36:31" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 13:36:31" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 13:36:31" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 13:36:31" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 13:36:31" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 13:36:31" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 13:36:31" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 13:40:49" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 13:40:49" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 13:40:49" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 13:40:49" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 13:40:49" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 13:40:49" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 13:40:49" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 13:41:58" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 13:41:58" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 13:41:58" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 13:41:58" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 13:41:58" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 13:41:58" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 13:41:58" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 13:43:28" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 13:43:28" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 13:43:28" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 13:43:28" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 13:43:28" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 13:43:28" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 13:43:28" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 13:46:36" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 13:46:36" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 13:46:36" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 13:46:36" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 13:46:36" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 13:46:36" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 13:46:36" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 13:47:23" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 13:47:23" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 13:47:23" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 13:47:23" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 13:47:23" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 13:47:23" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 13:47:23" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 13:49:00" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 13:49:00" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 13:49:00" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 13:49:00" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 13:49:00" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 13:49:00" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 13:49:00" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:05:52" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:05:52" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:05:52" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:05:52" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:05:52" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:05:52" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:05:52" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:06:16" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:06:16" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:06:16" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:06:16" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:06:16" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:06:16" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:06:16" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:06:32" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:06:32" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:06:32" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:06:32" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:06:32" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:06:32" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:06:32" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:09:39" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:09:39" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:09:39" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:09:39" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:09:39" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:09:39" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:09:39" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:10:58" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:10:59" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:10:59" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:10:59" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:10:59" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:10:59" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:10:59" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:12:00" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:12:00" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:12:00" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:12:00" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:12:00" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:12:00" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:12:00" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:12:26" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:12:26" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:12:26" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:12:26" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:12:26" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:12:26" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:12:26" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:13:57" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:13:57" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:13:57" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:13:57" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:13:57" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:13:57" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:13:57" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:15:43" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:15:43" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:15:43" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:15:43" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:15:43" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:15:43" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:15:43" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:16:32" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:16:32" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:16:32" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:16:32" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:16:32" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:16:32" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:16:32" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:18:07" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:18:07" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:18:07" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:18:07" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:18:07" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:18:07" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:18:07" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:18:41" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:18:41" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:18:41" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:18:41" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:18:41" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:18:41" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:18:41" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:21:56" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:21:56" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:21:56" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:21:56" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:21:56" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:21:56" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:21:56" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:22:31" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:22:31" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:22:31" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:22:31" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:22:31" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:22:31" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:22:31" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:22:52" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:22:52" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:22:52" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:22:52" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:22:52" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:22:52" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:22:52" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:23:55" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:23:55" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:23:55" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:23:55" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:23:55" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:23:55" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:23:55" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:24:36" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:24:37" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:24:37" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:24:37" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:24:37" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:24:37" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:24:37" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:25:27" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:25:27" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:25:27" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:25:27" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:25:27" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:25:27" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:25:27" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:26:07" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:26:08" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:26:08" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:26:08" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:26:08" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:26:08" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:26:08" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:26:29" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:26:30" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:26:30" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:26:30" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:26:30" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:26:30" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:26:30" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:27:30" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:27:30" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:27:30" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:27:30" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:27:30" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:27:30" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:27:30" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:28:25" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:28:25" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:28:25" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:28:25" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:28:25" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:28:25" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:28:25" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:29:40" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:29:40" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:29:40" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:29:40" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:29:40" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:29:40" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:29:40" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:31:49" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:31:49" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:31:49" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:31:49" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:31:49" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:31:49" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:31:49" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:34:00" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:34:01" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:34:01" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:34:01" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:34:01" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:34:01" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:34:01" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:35:06" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:35:07" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:35:07" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:35:07" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:35:08" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:35:08" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:35:09" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:36:21" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:36:21" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:36:21" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:36:21" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:36:21" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:36:21" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:36:21" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:37:11" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:37:11" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:37:11" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:37:11" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:37:11" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:37:11" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:37:11" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:40:50" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:40:50" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:40:50" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:40:50" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:40:50" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:40:50" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:40:50" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:42:38" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:42:38" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:42:38" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:42:39" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:42:39" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:42:39" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:42:39" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:43:27" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:43:27" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:43:27" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:43:27" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:43:27" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:43:27" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:43:27" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:43:42" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:43:42" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:43:42" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:43:42" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:43:42" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:43:42" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:43:42" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="21/01/2011 14:47:42" type="1" source="4" message="Driver Virtuel démarré" />
+  <log time="21/01/2011 14:47:42" type="1" source="0" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="21/01/2011 14:47:42" type="1" source="0" message="Paramètres du serveur chargés" />
+  <log time="21/01/2011 14:47:42" type="1" source="0" message="Chargement des drivers" />
+  <log time="21/01/2011 14:47:42" type="1" source="0" message="Driver Virtuel chargé" />
+  <log time="21/01/2011 14:47:42" type="1" source="0" message="Chargement des devices" />
+  <log time="21/01/2011 14:47:42" type="1" source="0" message="1 devices(s) trouvé(s)" />
+  <log time="24/01/2011 08:54:17" type="1" source="0" fonction="LoadDrivers" message=" Erreur lors du chargement des drivers: Impossible de trouver une partie du chemin d'accès 'C:\homidom\Plugins'." />
+  <log time="24/01/2011 08:54:17" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\homidom\Config\homidom.xml" />
+  <log time="24/01/2011 08:54:17" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="24/01/2011 08:54:17" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="24/01/2011 08:54:17" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="24/01/2011 08:54:17" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="25/01/2011 09:05:58" type="1" source="0" fonction="LoadDrivers" message=" Erreur lors du chargement des drivers: Impossible de trouver une partie du chemin d'accès 'C:\Homidom\Plugins'." />
+  <log time="25/01/2011 09:05:58" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Homidom\Config\homidom.xml" />
+  <log time="25/01/2011 09:05:58" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="25/01/2011 09:05:58" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="25/01/2011 09:05:58" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="25/01/2011 09:05:58" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="25/01/2011 09:07:17" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="25/01/2011 09:07:17" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="25/01/2011 09:07:18" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Homidom\Config\homidom.xml" />
+  <log time="25/01/2011 09:07:18" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="25/01/2011 09:07:18" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="25/01/2011 09:07:18" type="3" source="0" fonction="LoadConfig" message="Driver Virtuel chargé" />
+  <log time="25/01/2011 09:07:18" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="25/01/2011 09:07:18" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="25/01/2011 09:08:23" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Homidom\Config\homidom.xml" />
+  <log time="25/01/2011 09:08:23" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="25/01/2011 09:08:23" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="25/01/2011 09:08:23" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="25/01/2011 09:08:23" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="25/01/2011 09:08:23" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="25/01/2011 09:08:23" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="25/01/2011 09:19:40" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="25/01/2011 09:19:40" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="25/01/2011 09:19:40" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="25/01/2011 09:19:40" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="25/01/2011 09:19:40" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="25/01/2011 09:19:51" type="1" source="0" fonction="LoadDrivers" message=" Erreur lors du chargement des drivers: Impossible de trouver une partie du chemin d'accès 'C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debugapplications\Plugins'." />
+  <log time="25/01/2011 09:20:15" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="25/01/2011 09:20:15" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="25/01/2011 09:20:15" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="25/01/2011 09:20:15" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="25/01/2011 09:20:15" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="25/01/2011 09:20:15" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="25/01/2011 09:20:16" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="25/01/2011 09:27:59" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="25/01/2011 09:27:59" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="25/01/2011 09:27:59" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="25/01/2011 09:27:59" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="25/01/2011 09:27:59" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="25/01/2011 09:27:59" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="25/01/2011 09:27:59" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="25/01/2011 09:34:24" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="25/01/2011 09:34:24" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="25/01/2011 09:34:24" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="25/01/2011 09:34:24" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="25/01/2011 09:34:24" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="25/01/2011 09:34:24" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="25/01/2011 09:34:24" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="25/01/2011 09:34:25" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="25/01/2011 09:34:25" type="3" source="0" fonction="MAJ_HeuresSoleil" message="     -&gt; Heure du lever : 25/01/2011 07:56:00" />
+  <log time="25/01/2011 09:34:25" type="3" source="0" fonction="MAJ_HeuresSoleil" message="     -&gt; Heure du coucher : 25/01/2011 20:03:28" />
+  <log time="25/01/2011 09:36:04" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="25/01/2011 09:36:04" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="25/01/2011 09:36:04" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="25/01/2011 09:36:04" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="25/01/2011 09:36:04" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="25/01/2011 09:36:04" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="25/01/2011 09:36:04" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="25/01/2011 09:36:05" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="25/01/2011 09:36:05" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 25/01/2011 07:56:00" />
+  <log time="25/01/2011 09:36:05" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 25/01/2011 20:03:28" />
+  <log time="25/01/2011 09:38:13" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="25/01/2011 09:38:13" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="25/01/2011 09:38:13" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="25/01/2011 09:38:13" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="25/01/2011 09:38:13" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="25/01/2011 09:38:13" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="25/01/2011 09:38:13" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="25/01/2011 09:38:14" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="25/01/2011 09:38:14" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 25/01/2011 07:56:00" />
+  <log time="25/01/2011 09:38:14" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 25/01/2011 20:03:28" />
+  <log time="25/01/2011 09:38:35" type="3" source="0" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\config\homidom.xml" />
+  <log time="25/01/2011 09:38:35" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
+  <log time="25/01/2011 09:38:35" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des drivers" />
+  <log time="25/01/2011 09:38:35" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des devices" />
+  <log time="25/01/2011 09:38:35" type="3" source="0" fonction="SaveConfig" message="Sauvegarde terminée" />
+  <log time="25/01/2011 09:40:41" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="25/01/2011 09:40:41" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="25/01/2011 09:40:41" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="25/01/2011 09:40:41" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="25/01/2011 09:40:41" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="25/01/2011 09:40:41" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="25/01/2011 09:40:41" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="25/01/2011 09:40:42" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="25/01/2011 09:40:42" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 25/01/2011 07:56:00" />
+  <log time="25/01/2011 09:40:42" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 25/01/2011 20:03:28" />
+</logs>

@@ -29,9 +29,8 @@ Module Service
             Console.WriteLine("******************************")
             Console.WriteLine(" ")
 
-            Console.WriteLine(Now & " Chargement de la configuration")
-            'Chargement de la config
-            obj.LoadConfig(obj._MonRepertoire & "\Config\")
+            'Console.WriteLine(Now & " Chargement de la configuration")
+            
 
             'Démarrage du serviceWeb
             Console.WriteLine(Now & " ")
