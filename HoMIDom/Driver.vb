@@ -21,7 +21,7 @@
                 Return _Server.ReturnDriver(_ID).Item(10)
             End Get
             Set(ByVal value As String)
-                _Server.ReturnDriverById(_ID).COM = value
+                _Server.WriteDriver(_ID, "COM", value)
             End Set
         End Property
 
@@ -36,7 +36,7 @@
                 Return _Server.ReturnDriver(_ID).Item(1)
             End Get
             Set(ByVal value As Boolean)
-                '_Server.ReturnDriverById(_ID).Enable = value
+                _Server.WriteDriver(_ID, "ENABLE", value)
             End Set
         End Property
 
@@ -51,7 +51,7 @@
                 Return _Server.ReturnDriver(_ID).Item(6)
             End Get
             Set(ByVal value As String)
-                '_Server.ReturnDriverById(_ID).IP_TCP = value
+                _Server.WriteDriver(_ID, "IP_TCP", value)
             End Set
         End Property
 
@@ -60,7 +60,7 @@
                 Return _Server.ReturnDriver(_ID).Item(8)
             End Get
             Set(ByVal value As String)
-                '_Server.ReturnDriverById(_ID).IP_UDP = value
+                _Server.WriteDriver(_ID, "IP_UDP", value)
             End Set
         End Property
 
@@ -87,7 +87,7 @@
                 Return _Server.ReturnDriver(_ID).Item(14)
             End Get
             Set(ByVal value As String)
-                '   _Server.ReturnDriverById(_ID).Picture = value
+                _Server.WriteDriver(_ID, "PICTURE", value)
             End Set
         End Property
 
@@ -96,7 +96,7 @@
                 Return _Server.ReturnDriver(_ID).Item(7)
             End Get
             Set(ByVal value As Object)
-                ' _Server.ReturnDriverById(_ID).Port_TCP = value
+                _Server.WriteDriver(_ID, "PORT_TCP", value)
             End Set
         End Property
 
@@ -105,7 +105,7 @@
                 Return _Server.ReturnDriver(_ID).Item(9)
             End Get
             Set(ByVal value As String)
-                '_Server.ReturnDriverById(_ID).Port_UDP = value
+                _Server.WriteDriver(_ID, "PORT_UDP", value)
             End Set
         End Property
 
@@ -120,16 +120,16 @@
                 Return _Server.ReturnDriver(_ID).Item(11)
             End Get
             Set(ByVal value As Integer)
-                '_Server.ReturnDriverById(_ID).refresh = value
+                _Server.WriteDriver(_ID, "REFRESH", value)
             End Set
         End Property
 
         Public Sub Restart()
-            '_Server.ReturnDriverById(_ID).restart()
+            _Server.WriteDriver(_ID, "RESTART", Nothing)
         End Sub
 
         Public Sub Start()
-            '_Server.ReturnDriverById(_ID).start()
+            _Server.WriteDriver(_ID, "START", Nothing)
         End Sub
 
         Public Property StartAuto() As Boolean
@@ -137,12 +137,12 @@
                 Return _Server.ReturnDriver(_ID).Item(3)
             End Get
             Set(ByVal value As Boolean)
-                '  _Server.ReturnDriverById(_ID).StartAuto = value
+                _Server.WriteDriver(_ID, "STARTAUTO", value)
             End Set
         End Property
 
         Public Sub [Stop]()
-            '_Server.ReturnDriverById(_ID).stop()
+            _Server.WriteDriver(_ID, "STOP", Nothing)
         End Sub
 
         Public ReadOnly Property Version() As String

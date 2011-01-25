@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<homidom>
+  <server longitude="12" latitude="0" heurecorrectionlever="0" heurecorrectioncoucher="0" />
+  <drivers>
+    <driver id="DE96B466-2540-11E0-A321-65D7DFD72085" nom="Virtuel" enable="false" description="Driver Virtuel" startauto="false" protocol="Virtuel" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="Virtuel" picture="" />
+  </drivers>
+  <devices>
+    <device id="297cda8d-af2b-495c-ae58-edfe71ce962f" name="FREEBOX" enable="true" driverid="DE96B466-2540-11E0-A321-65D7DFD72085" description="" type="FREEBOX" adresse1="" adresse2="" datecreated="2011-01-21T12:43:10.1686977+01:00" lastchange="2011-01-21T12:43:10.1686977+01:00" refresh="0" modele="" picture="" solo="true" />
+  </devices>
+</homidom>

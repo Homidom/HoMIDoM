@@ -48,12 +48,12 @@ Namespace HoMIDom
 
             'Actions à effectuer à minuit
             If Now.Hour = 0 And Now.Minute = 0 And Now.Second = 0 Then
-
+                MAJ_HeuresSoleil()
             End If
 
             'Actions à effectuer à midi
             If Now.Hour = 12 And Now.Minute = 0 And Now.Second = 0 Then
-
+                MAJ_HeuresSoleil()
             End If
         End Sub
 
@@ -66,8 +66,8 @@ Namespace HoMIDom
         Public Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
 
         'Application.StartupPath
-        ' Dim _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application
-        Public _MonRepertoire As String = "C:\homidom\applications" 'System.Reflection.Assembly.GetExecutingAssembly.Location.ToString()
+        Public _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application
+        'Public _MonRepertoire As String = "C:\Homidom\" ' System.Reflection.Assembly.GetExecutingAssembly.Location.ToString()
 
         Dim Soleil As New Soleil 'Déclaration class Soleil
         Dim _Longitude As Double 'Longitude
@@ -95,8 +95,8 @@ Namespace HoMIDom
             _HeureCoucherSoleil = DateAdd(DateInterval.Minute, _HeureCoucherSoleilCorrection, dtSunset)
             _HeureLeverSoleil = DateAdd(DateInterval.Minute, _HeureLeverSoleilCorrection, dtSunrise)
 
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "     -> Heure du lever : " & _HeureLeverSoleil)
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "     -> Heure du coucher : " & _HeureCoucherSoleil)
+            Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Heure du lever : " & _HeureLeverSoleil)
+            Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Heure du coucher : " & _HeureCoucherSoleil)
         End Sub
 
         '--- Chargement de la config depuis le fichier XML
@@ -601,7 +601,7 @@ Namespace HoMIDom
                 Dim tx As String
                 Dim dll As Reflection.Assembly
                 Dim tp As Type
-                Dim Chm As String = _MonRepertoire & "\Plugins\" 'Emplacement par défaut des plugins
+                Dim Chm As String = _MonRepertoire & "\applications\Plugins\" 'Emplacement par défaut des plugins
 
                 Dim strFileSize As String = ""
                 Dim di As New IO.DirectoryInfo(Chm)
@@ -673,7 +673,30 @@ Namespace HoMIDom
             For i As Integer = 0 To _ListDrivers.Count - 1
                 If _ListDrivers.Item(i).ID = DriverId Then
                     Select Case UCase(Command)
-
+                        Case "COM"
+                            _ListDrivers.Item(i).Com = Parametre
+                        Case "ENABLE"
+                            _ListDrivers.Item(i).Enable = Parametre
+                        Case "IP_TCP"
+                            _ListDrivers.Item(i).IP_TCP = Parametre
+                        Case "PORT_TCP"
+                            _ListDrivers.Item(i).Port_TCP = Parametre
+                        Case "IP_UDP"
+                            _ListDrivers.Item(i).IP_UDP = Parametre
+                        Case "PORT_UDP"
+                            _ListDrivers.Item(i).Port_UDP = Parametre
+                        Case "PICTURE"
+                            _ListDrivers.Item(i).Picture = Parametre
+                        Case "REFRESH"
+                            _ListDrivers.Item(i).Refresh = Parametre
+                        Case "STARTAUTO"
+                            _ListDrivers.Item(i).StartAuto = Parametre
+                        Case "START"
+                            _ListDrivers.Item(i).Start()
+                        Case "STOP"
+                            _ListDrivers.Item(i).Stop()
+                        Case "RESTART"
+                            _ListDrivers.Item(i).Restart()
                     End Select
                     Exit For
                 End If
@@ -1197,10 +1220,13 @@ Namespace HoMIDom
 
 #Region "Declaration de la classe Server"
         Public Sub New()
+            'Chargement de la config
+            LoadConfig(_MonRepertoire & "\Config\")
             LoadDrivers()
             TimerSecond.Interval = 1000
             AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
             TimerSecond.Enabled = True
+            MAJ_HeuresSoleil()
         End Sub
 #End Region
 
