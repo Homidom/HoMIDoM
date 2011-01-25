@@ -252,13 +252,33 @@ Namespace HoMIDom
                                         AddHandler o.DeviceChanged, AddressOf DeviceChange
                                         _Dev = o
                                         o = Nothing
-                                    Case "NIVRECEPTION"
-                                        Dim o As New Device.NIVRECEPTION(Me)
+                                    Case "DETECTEUR"
+                                        Dim o As New Device.DETECTEUR(Me)
                                         AddHandler o.DeviceChanged, AddressOf DeviceChange
                                         _Dev = o
                                         o = Nothing
-                                    Case "OBSCURITE"
-                                        Dim o As New Device.OBSCURITE(Me)
+                                    Case "BAROMETRE"
+                                        Dim o As New Device.BAROMETRE(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "COMPTEUR"
+                                        Dim o As New Device.COMPTEUR(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "GENERIQUEBOOLEEN"
+                                        Dim o As New Device.GENERIQUEBOOLEEN(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "GENERIQUESTRING"
+                                        Dim o As New Device.GENERIQUESTRING(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "GENERIQUEVALUE"
+                                        Dim o As New Device.GENERIQUEVALUE(Me)
                                         AddHandler o.DeviceChanged, AddressOf DeviceChange
                                         _Dev = o
                                         o = Nothing
@@ -865,20 +885,6 @@ Namespace HoMIDom
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
-                    Case "NIVRECEPTION"
-                        Dim o As New Device.NIVRECEPTION(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverId
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
                     Case "TEMPERATURECONSIGNE"
                         Dim o As New Device.TEMPERATURECONSIGNE(Me)
                         With o
@@ -1103,8 +1109,78 @@ Namespace HoMIDom
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
-                    Case "OBSCURITE"
-                        Dim o As New Device.OBSCURITE(Me)
+                    Case "BAROMETRE"
+                        Dim o As New Device.BAROMETRE(Me)
+                        With o
+                            .ID = myID
+                            .Name = name
+                            .DateCreated = Now
+                            .Picture = image
+                            .Adresse1 = address1
+                            .Adresse2 = address2
+                            .Enable = enable
+                            .DriverID = driverId
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                        End With
+                        _ListDevices.Add(o)
+                    Case "COMPTEUR"
+                        Dim o As New Device.COMPTEUR(Me)
+                        With o
+                            .ID = myID
+                            .Name = name
+                            .DateCreated = Now
+                            .Picture = image
+                            .Adresse1 = address1
+                            .Adresse2 = address2
+                            .Enable = enable
+                            .DriverID = driverId
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                        End With
+                        _ListDevices.Add(o)
+                    Case "DETECTEUR"
+                        Dim o As New Device.DETECTEUR(Me)
+                        With o
+                            .ID = myID
+                            .Name = name
+                            .DateCreated = Now
+                            .Picture = image
+                            .Adresse1 = address1
+                            .Adresse2 = address2
+                            .Enable = enable
+                            .DriverID = driverId
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                        End With
+                        _ListDevices.Add(o)
+                    Case "GENERIQUEBOOLEEN"
+                        Dim o As New Device.GENERIQUEBOOLEEN(Me)
+                        With o
+                            .ID = myID
+                            .Name = name
+                            .DateCreated = Now
+                            .Picture = image
+                            .Adresse1 = address1
+                            .Adresse2 = address2
+                            .Enable = enable
+                            .DriverID = driverId
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                        End With
+                        _ListDevices.Add(o)
+                    Case "GENERIQUESTRING"
+                        Dim o As New Device.GENERIQUESTRING(Me)
+                        With o
+                            .ID = myID
+                            .Name = name
+                            .DateCreated = Now
+                            .Picture = image
+                            .Adresse1 = address1
+                            .Adresse2 = address2
+                            .Enable = enable
+                            .DriverID = driverId
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                        End With
+                        _ListDevices.Add(o)
+                    Case "GENERIQUEVALUE"
+                        Dim o As New Device.GENERIQUEVALUE(Me)
                         With o
                             .ID = myID
                             .Name = name
