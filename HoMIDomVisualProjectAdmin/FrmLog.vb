@@ -8,7 +8,8 @@ Public Class FrmLog
     End Sub
 
     Private Sub RefreshLog()
-        TxtLog.LoadFile("C:\ehome\log\Servicehome.log", RichTextBoxStreamType.PlainText)
+        TxtLog.Text = FRMMere.Obj.ReturnLog()
+        '        TxtLog.LoadFile("C:\ehome\log\Servicehome.log", RichTextBoxStreamType.PlainText)
     End Sub
 
     Public Sub New()

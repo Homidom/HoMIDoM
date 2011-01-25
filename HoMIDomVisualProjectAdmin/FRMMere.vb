@@ -116,24 +116,24 @@ Public Class FRMMere
 
     'Démarrer le driver
     Private Sub BtnStartDriver_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnStartDriver.Click
-        'If TreeViewDriver.SelectedNode.Text <> "" Then
-        '    For i As Integer = 0 To Obj.Drivers.Count - 1
-        '        If TreeViewDriver.SelectedNode.Text = Obj.Drivers.Item(0).nom Then
-        '            Obj.Drivers.Item(i).start()
-        '        End If
-        '    Next
-        'End If
+        If TreeViewDriver.SelectedNode.Text <> "" Then
+            For i As Integer = 0 To Obj.Drivers.Count - 1
+                If TreeViewDriver.SelectedNode.Text = Obj.Drivers.Item(0).nom Then
+                    Obj.Drivers.Item(i).start()
+                End If
+            Next
+        End If
     End Sub
 
     'Arrêter le driver
     Private Sub BtnStopDriver_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnStopDriver.Click
-        'If TreeViewDriver.SelectedNode.Text <> "" Then
-        '    For i As Integer = 0 To Obj.Drivers.Count - 1
-        '        If TreeViewDriver.SelectedNode.Text = Obj.Drivers.Item(0).nom Then
-        '            Obj.Drivers.Item(i).stop()
-        '        End If
-        '    Next
-        'End If
+        If TreeViewDriver.SelectedNode.Text <> "" Then
+            For i As Integer = 0 To Obj.Drivers.Count - 1
+                If TreeViewDriver.SelectedNode.Text = Obj.Drivers.Item(0).nom Then
+                    Obj.Drivers.Item(i).stop()
+                End If
+            Next
+        End If
     End Sub
 #End Region
 

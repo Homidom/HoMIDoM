@@ -23,6 +23,7 @@ Namespace HoMIDom
         Function StartIrLearning() As String 'Commencer l'apprentissage d'un commande IR
         Function HeureLeverSoleil() As String 'Valeur du couché du soleil
         Function HeureCoucherSoleil() As String 'valeur du levé du soleil
+        Function ReturnLog(Optional ByVal Requete As String = "") As String 'renvoi le fichier log suivant une requête xml si besoin
 
         '---- Propriétés --------------------------------------
         Property Devices() As ArrayList 'Liste des devices

@@ -797,6 +797,19 @@ Namespace HoMIDom
             Return _HeureLeverSoleil
         End Function
 
+        'renvoi le fichier log suivant une requête xml si besoin
+        Function ReturnLog(Optional ByVal Requete As String = "") As String Implements IHoMIDom.ReturnLog
+            If Requete = "" Then
+                Dim SR As New StreamReader(_MonRepertoire & "\logs\log.xml")
+                ReturnLog = SR.ReadToEnd()
+                SR.Close()
+            Else
+                'creation d'une nouvelle instance du membre xmldocument
+                Dim XmlDoc As XmlDocument = New XmlDocument()
+                XmlDoc.Load(_MonRepertoire & "\logs\log.xml")
+            End If
+        End Function
+
         'Sauvegarder la configuration
         Public Sub SaveConfiguration() Implements IHoMIDom.SaveConfig
             SaveConfig(_MonRepertoire & "\config\homidom.xml")
@@ -848,7 +861,7 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = DriverId
+                            .DriverID = driverId
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)

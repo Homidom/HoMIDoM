@@ -217,7 +217,7 @@ Partial Class FRMMere
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage1.Size = New System.Drawing.Size(219, 378)
         Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "Driver"
+        Me.TabPage1.Text = "Drivers"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
         'BtnStopDriver
@@ -252,10 +252,10 @@ Partial Class FRMMere
         '
         Me.TabPage2.Controls.Add(Me.Panel6)
         Me.TabPage2.Controls.Add(Me.TreeViewZone)
-        Me.TabPage2.Location = New System.Drawing.Point(4, 40)
+        Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(219, 378)
+        Me.TabPage2.Size = New System.Drawing.Size(219, 396)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Zone"
         Me.TabPage2.UseVisualStyleBackColor = True
@@ -266,7 +266,7 @@ Partial Class FRMMere
         Me.Panel6.Controls.Add(Me.BtnDeleteZone)
         Me.Panel6.Controls.Add(Me.BtnNewZone)
         Me.Panel6.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel6.Location = New System.Drawing.Point(3, 315)
+        Me.Panel6.Location = New System.Drawing.Point(3, 333)
         Me.Panel6.Name = "Panel6"
         Me.Panel6.Size = New System.Drawing.Size(213, 60)
         Me.Panel6.TabIndex = 4
@@ -303,9 +303,9 @@ Partial Class FRMMere
         '
         Me.TabPage3.Controls.Add(Me.Panel5)
         Me.TabPage3.Controls.Add(Me.TreeViewDevice)
-        Me.TabPage3.Location = New System.Drawing.Point(4, 40)
+        Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Size = New System.Drawing.Size(219, 378)
+        Me.TabPage3.Size = New System.Drawing.Size(219, 396)
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "Devices"
         Me.TabPage3.UseVisualStyleBackColor = True
@@ -316,7 +316,7 @@ Partial Class FRMMere
         Me.Panel5.Controls.Add(Me.BtnDeleteDevice)
         Me.Panel5.Controls.Add(Me.BtnNewDevice)
         Me.Panel5.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel5.Location = New System.Drawing.Point(0, 318)
+        Me.Panel5.Location = New System.Drawing.Point(0, 336)
         Me.Panel5.Name = "Panel5"
         Me.Panel5.Size = New System.Drawing.Size(219, 60)
         Me.Panel5.TabIndex = 11
@@ -353,9 +353,9 @@ Partial Class FRMMere
         '
         Me.TabPage5.Controls.Add(Me.Panel4)
         Me.TabPage5.Controls.Add(Me.TreeViewMenus)
-        Me.TabPage5.Location = New System.Drawing.Point(4, 40)
+        Me.TabPage5.Location = New System.Drawing.Point(4, 22)
         Me.TabPage5.Name = "TabPage5"
-        Me.TabPage5.Size = New System.Drawing.Size(219, 378)
+        Me.TabPage5.Size = New System.Drawing.Size(219, 396)
         Me.TabPage5.TabIndex = 4
         Me.TabPage5.Text = "Menus"
         Me.TabPage5.UseVisualStyleBackColor = True
@@ -364,7 +364,7 @@ Partial Class FRMMere
         '
         Me.Panel4.Controls.Add(Me.BtnNewMenu)
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel4.Location = New System.Drawing.Point(0, 338)
+        Me.Panel4.Location = New System.Drawing.Point(0, 356)
         Me.Panel4.Name = "Panel4"
         Me.Panel4.Size = New System.Drawing.Size(219, 40)
         Me.Panel4.TabIndex = 1
