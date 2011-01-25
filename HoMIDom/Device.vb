@@ -20,7 +20,7 @@ Namespace HoMIDom
             BAROMETRE 'pour stocker les valeur issu d'un barometre meteo ou web
             BATTERIE
             COMPTEUR 'compteur DS2423, RFXPower...
-            CONTACT 'detecteur de contac : switch 1-wire
+            CONTACT 'detecteur de contact : switch 1-wire
             DETECTEUR 'tous detecteurs : mouvement, obscurite...
             DIRECTIONVENT
             ENERGIEINSTANTANEE
@@ -305,7 +305,7 @@ Namespace HoMIDom
                 Value = Driver.Read(Me)
             End Sub
 
-            'Valeur Direction du vent
+            'Valeur de l'etat de l'appareil : ON/OFF
             Public Property Value() As Boolean
                 Get
                     Return _Value
@@ -499,7 +499,7 @@ Namespace HoMIDom
                 Value = Driver.Read(Me)
             End Sub
 
-            'Valeur Pluie Totale
+            'Valeur Barometre
             Public Property Value() As Double
                 Get
                     Return _Value

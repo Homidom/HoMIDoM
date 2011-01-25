@@ -42,11 +42,15 @@ Imports System.Globalization
     Dim _Device As HoMIDom.HoMIDom.Device
     Dim _DeviceSupport As New ArrayList
     Dim MyTimer As New Timers.Timer
+
+    'A ajouter dans les ppt du driver
+    Dim _tempsentrereponse As Integer = 1500
+    Dim _ignoreadresse As Boolean = False
+    Dim _lastetat As Boolean = True
 #End Region
 
 #Region "Déclaration"
     Private WithEvents port As New System.IO.Ports.SerialPort
-    Private port_ouvert As Boolean = False
     Private port_name As String = ""
     'Liste des commandes
     Private Const SWVERS As Byte = &H20
@@ -94,9 +98,6 @@ Imports System.Globalization
     Private WithEvents tmrRead As New System.Timers.Timer
     Private messagetemp, messagelast, adresselast, valeurlast, recbuf_last As String
     Private nblast As Integer = 0
-    Private tempsentrereponse As Integer = 1500
-    Private ignoreadresse As Boolean = False
-    Private lastetat As Boolean = True
     Private BufferIn(8192) As Byte
 #End Region
 
@@ -230,8 +231,32 @@ Imports System.Globalization
     End Sub
 
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
-        _IsConnect = True
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", "Driver " & Me.Nom & " démarré")
+        '_IsConnect = True
+        Dim retour As String
+        'ouverture du port suivant le Port Com ou IP
+        If _Com <> "" Then
+            retour = ouvrir(_Com)
+        ElseIf _IP_TCP <> "" Then
+            retour = ouvrir(_IP_TCP)
+        Else
+            retour = "ERR: Port Com ou IP_TCP non défini. Impossible d'ouvrir le port !"
+        End If
+        'traitement du message de retour
+        If STRGS.Left(retour, 4) = "ERR:" Then
+            retour = STRGS.Right(retour, retour.Length - 5)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER", "Driver non démarré : " & retour)
+        Else
+            'le driver est démarré, on log puis on lance les handlers
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", "Driver démarré : " & retour)
+            retour = lancer()
+            If STRGS.Left(retour, 4) = "ERR:" Then
+                retour = STRGS.Right(retour, retour.Length - 5)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour & " non lancé, arrêt du driver")
+                [Stop]()
+            Else
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour)
+            End If
+        End If
     End Sub
 
     Public Property StartAuto() As Boolean Implements HoMIDom.HoMIDom.IDriver.StartAuto
@@ -244,8 +269,14 @@ Imports System.Globalization
     End Property
 
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
-        _IsConnect = False
-
+        Dim retour As String
+        retour = fermer()
+        If STRGS.Left(retour, 4) = "ERR:" Then
+            retour = STRGS.Right(retour, retour.Length - 5)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour)
+        Else
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour)
+        End If
     End Sub
 
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
@@ -257,34 +288,49 @@ Imports System.Globalization
     End Sub
 
     Public Sub New()
-        _DeviceSupport.Add(ListeDevices.TEMPERATURE)
         _DeviceSupport.Add(ListeDevices.APPAREIL)
-        _DeviceSupport.Add(ListeDevices.TELECOMMANDE)
+        _DeviceSupport.Add(ListeDevices.BAROMETRE)
+        _DeviceSupport.Add(ListeDevices.BATTERIE)
+        _DeviceSupport.Add(ListeDevices.COMPTEUR)
+        _DeviceSupport.Add(ListeDevices.CONTACT)
+        _DeviceSupport.Add(ListeDevices.DETECTEUR)
+        _DeviceSupport.Add(ListeDevices.DIRECTIONVENT)
+        _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE)
+        _DeviceSupport.Add(ListeDevices.ENERGIETOTALE)
+        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
+        _DeviceSupport.Add(ListeDevices.GENERIQUESTRING)
+        _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE)
+        _DeviceSupport.Add(ListeDevices.HUMIDITE)
+        _DeviceSupport.Add(ListeDevices.LAMPE)
+        _DeviceSupport.Add(ListeDevices.PLUIECOURANT)
+        _DeviceSupport.Add(ListeDevices.PLUIETOTAL)
         _DeviceSupport.Add(ListeDevices.SWITCH)
+        _DeviceSupport.Add(ListeDevices.TELECOMMANDE)
+        _DeviceSupport.Add(ListeDevices.TEMPERATURE)
+        _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE)
+        _DeviceSupport.Add(ListeDevices.UV)
+        _DeviceSupport.Add(ListeDevices.VITESSEVENT)
         _DeviceSupport.Add(ListeDevices.VOLET)
-        _DeviceSupport.Add(ListeDevices.OBSCURITE)
-        'ajouter les autres
     End Sub
-
 
 #Region "Fonctions propres au driver"
 
-    Public Function ouvrir(ByVal numero As String, ByVal rfx_tpsentrereponse As Integer, ByVal RFX_ignoreadresse As Boolean, ByVal DOM_lastetat As Boolean) As String
+    Private Function ouvrir(ByVal numero As String) As String
         'Forcer le . 
         Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
         My.Application.ChangeCulture("en-US")
         'recuperation de la configuration
-        tempsentrereponse = rfx_tpsentrereponse
-        ignoreadresse = RFX_ignoreadresse
-        lastetat = DOM_lastetat
+        'tempsentrereponse = rfx_tpsentrereponse
+        'ignoreadresse = RFX_ignoreadresse
+        'lastetat = DOM_lastetat
         Try
-            If Not port_ouvert Then
+            If Not _IsConnect Then
                 port_name = numero 'pour se rapeller du nom du port
                 If VB.Left(numero, 3) <> "COM" Then
                     'RFXCOM est un modele ethernet
                     tcp = True
                     client = New TcpClient(numero, 10001)
-                    port_ouvert = True
+                    _IsConnect = True
                     Return ("Port IP " & port_name & " ouvert")
                 Else
                     'RFXCOM est un modele usb
@@ -302,7 +348,7 @@ Imports System.Globalization
                     port.ReadTimeout = 100
                     port.WriteTimeout = 500
                     port.Open()
-                    port_ouvert = True
+                    _IsConnect = True
                     If port.IsOpen Then
                         port.DtrEnable = True
                         port.RtsEnable = True
@@ -319,7 +365,7 @@ Imports System.Globalization
         End Try
     End Function
 
-    Public Function lancer() As String
+    Private Function lancer() As String
         If tcp Then
             Try
                 stream = client.GetStream()
@@ -340,25 +386,24 @@ Imports System.Globalization
                 Return "ERR: Handler COM"
             End Try
         End If
-
     End Function
 
-    Public Function fermer() As String
+    Private Function fermer() As String
         Try
-            If port_ouvert Then
-                'suppression de l'attente de données à lire
-                RemoveHandler port.DataReceived, AddressOf DataReceived
-                RemoveHandler port.ErrorReceived, AddressOf ReadErrorEvent
+            If _IsConnect Then
                 'fermeture des ports
                 If tcp Then
-                    port_ouvert = False
+                    _IsConnect = False
                     client.Close()
                     stream.Close()
                     Return ("Port IP fermé")
                 Else
+                    _IsConnect = False
+                    'suppression de l'attente de données à lire
+                    RemoveHandler port.DataReceived, AddressOf DataReceived
+                    RemoveHandler port.ErrorReceived, AddressOf ReadErrorEvent
                     If (Not (port Is Nothing)) Then ' The COM port exists.
                         If port.IsOpen Then
-                            port_ouvert = False
                             Dim limite As Integer = 0
                             'vidage des tampons
                             port.DiscardInBuffer()
@@ -449,7 +494,7 @@ Imports System.Globalization
         Try
             Dim count As Integer = 0
             count = port.BytesToRead
-            If port_ouvert And count > 0 Then
+            If _IsConnect And count > 0 Then
                 port.Read(BufferIn, 0, count)
                 For i As Integer = 0 To count - 1
                     ProcessReceivedChar(BufferIn(i))
@@ -464,7 +509,7 @@ Imports System.Globalization
         Try
             Dim count As Integer = 0
             count = port.BytesToRead
-            If port_ouvert And count > 0 Then
+            If _IsConnect And count > 0 Then
                 port.Read(BufferIn, 0, count)
                 For i As Integer = 0 To count - 1
                     ProcessReceivedChar(BufferIn(i))
@@ -478,7 +523,7 @@ Imports System.Globalization
     Private Sub TCPDataReceived(ByVal ar As IAsyncResult)
         Dim intCount As Integer
         Try
-            If port_ouvert Then
+            If _IsConnect Then
                 intCount = stream.EndRead(ar)
                 ProcessNewTCPData(TCPData, 0, intCount)
                 stream.BeginRead(TCPData, 0, 1024, AddressOf TCPDataReceived, Nothing)
@@ -492,7 +537,6 @@ Imports System.Globalization
         Dim intIndex As Integer
         Try
             For intIndex = offset To offset + count - 1
-                'If Not port_ouvert Then Exit Sub 'si on ferme le port on quitte cette boucle
                 ProcessReceivedChar(Bytes(intIndex))
             Next
         Catch ex As Exception
@@ -581,7 +625,7 @@ Imports System.Globalization
 
     Public Sub display_mess()
         Try
-            If Not port_ouvert Then Exit Sub 'si on ferme le port on quitte cette boucle
+            If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte cette boucle
             'interprete le message recu
             Dim parity As Integer
             Dim rfxsensor, rfxpower As Boolean
@@ -2665,7 +2709,7 @@ Imports System.Globalization
 
     Public Sub WriteRetour(ByVal adresse As String, ByVal valeur As String)
         Try
-            If Not port_ouvert Then Exit Sub 'si on ferme le port on quitte cette boucle
+            If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte cette boucle
 
             'Forcer le . 
             Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
@@ -2681,6 +2725,11 @@ Imports System.Globalization
 
                 'EVENT VALEUR
                 'Faudra gérer le fait que le RFXCOM envoie deux fois le même ordre : utilisation de tempsentrereponse : pourra etre generaliser pour eviter les envois multiples
+
+
+                'Recherche si un device affecté
+
+
 
                 ''on verifie si un composant correspond à cette adresse
                 'tabletmp = domos_svc.table_composants.Select("composants_adresse = '" & adresse.ToString & "' AND composants_modele_norme = 'RFX'")
