@@ -6,8 +6,8 @@ Imports HoMIDom.HoMIDom
 
 Class Window1
 
-    Public Obj As IHoMIDom
-    Public IsConnect As Boolean
+    Public Shared Obj As IHoMIDom
+    Public Shared IsConnect As Boolean
 
     Public Sub New()
 
@@ -135,6 +135,15 @@ Class Window1
         End If
     End Sub
 
+    Public Sub UnloadControl(ByVal MyControl As Object)
+        For i As Integer = 0 To CanvasRight.Children.Count - 1
+            If CanvasRight.Children.Item(i).Uid = MyControl.uid Then
+                CanvasRight.Children.RemoveAt(i)
+                Exit Sub
+            End If
+        Next
+    End Sub
+
     Private Sub BtnStop_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnStop.Click
         If TreeViewDriver.SelectedItem IsNot Nothing Then
             For i As Integer = 0 To Obj.Drivers.Count - 1
@@ -146,4 +155,13 @@ Class Window1
             MessageBox.Show("Veuillez sélectionner un Driver!")
         End If
     End Sub
+
+    Private Sub MnuConfigSrv(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem3.Click
+        Dim x As New uConfigServer
+        x.Uid = System.Guid.NewGuid.ToString()
+        AddHandler x.CloseMe, AddressOf UnloadControl
+        CanvasRight.Children.Add(x)
+    End Sub
+
+
 End Class

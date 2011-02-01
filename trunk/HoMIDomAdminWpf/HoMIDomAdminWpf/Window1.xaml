@@ -84,6 +84,7 @@
             <Menu Height="20.004" HorizontalAlignment="Left" Margin="12.667,0,0,6" Name="Menu1" VerticalAlignment="Bottom" Width="63.346" Background="Transparent">
                 <MenuItem Header="Fichier" Foreground="WhiteSmoke">
                     <MenuItem Header="Save Config" Name="MenuItem2" />
+                    <MenuItem Header="Config Serveur" Name="MenuItem3" />
                     <MenuItem Header="Quitter" Name="MenuItem1" />
                 </MenuItem>
             </Menu>
@@ -118,6 +119,7 @@
         </Grid>
         <Grid Margin="194,58,0,29.578" Name="Grid1" Background="Cyan">
             <Image Margin="-6.668,0,0,-3.578" Name="Image1" Stretch="Fill" Source="/HoMIDomAdminWpf;component/Images/01.png" />
+            <Canvas Margin="5,0,0,-3.578" Name="CanvasRight" Background="Transparent" />
         </Grid>
         <Grid Height="31" Name="GridBottom" VerticalAlignment="Bottom" Background="Black">
             <Rectangle Height="5" Margin="0,0,0,0" Name="MyLine2" Stroke="Black" VerticalAlignment="Top" Grid.ColumnSpan="3">
