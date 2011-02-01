@@ -1,0 +1,57 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+WpfApplication1
+</name>
+</assembly>
+<members>
+<member name="M:WpfApplication1.Application.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="M:WpfApplication1.Application.Main">
+	<summary>
+Application Entry Point.
+</summary>
+</member><member name="T:WpfApplication1.Application">
+	<summary>
+Application
+</summary>
+</member><member name="M:WpfApplication1.Window1.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.Window1">
+	<summary>
+Window1
+</summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Application">
+	<summary>
+ Retourne l'objet application pour l'application en cours d'exécution
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Computer">
+	<summary>
+ Retourne les informations relatives à l'ordinateur hôte.
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.User">
+	<summary>
+ Retourne les informations relatives à l'utilisateur actuel. Si vous souhaitez exécuter l'application avec les 
+ informations d'identification de l'utilisateur Windows, appelez My.User.InitializeWithWindowsUser().
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Log">
+	<summary>
+ Retourne le journal de l'application. L'écouteur peut être configuré par le fichier de configuration de l'application.
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Windows">
+	<summary>
+ Retourne la collection de fenêtres définie dans le projet.
+ </summary>
+</member><member name="T:WpfApplication1.My.MyWpfExtension">
+	<summary>
+ Module utilisé pour définir les propriétés qui sont disponibles dans l'espace de noms My pour WPF
+ </summary>
+	<remarks></remarks>
+</member>
+</members>
+</doc>
