@@ -69,9 +69,15 @@
         </ControlTemplate>
     </UserControl.Resources>
 
-    <Grid>
-        <Image Margin="0,0,2,0" Name="Image1" Stretch="Fill" Source="/HoMIDomAdminWpf;component/Images/Back_03.png" />
-        <Label Height="24" HorizontalAlignment="Left" Margin="14,30,0,0" Name="Label1" VerticalAlignment="Top" Width="67" Foreground="White">Longitude:</Label>
+    <Grid Margin="1">
+        <Grid.Background >
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="DarkGray" Offset="0.0" />
+                <GradientStop Color="DarkGray" Offset="0.5" />
+                <GradientStop Color="Black" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+            <Label Height="24" HorizontalAlignment="Left" Margin="14,30,0,0" Name="Label1" VerticalAlignment="Top" Width="67" Foreground="White">Longitude:</Label>
         <Label Foreground="White" Height="24" HorizontalAlignment="Left" Margin="14,52,0,0" Name="Label2" VerticalAlignment="Top" Width="67">Latitude:</Label>
         <Label Foreground="White" Margin="14,0,92,61" Name="Label3" Height="24" VerticalAlignment="Bottom">Correction Heure Lever Soleil:</Label>
         <Label Foreground="White" Margin="14,0,79,35" Name="Label4" Height="24" VerticalAlignment="Bottom">Correction Heure Coucher Soleil:</Label>
@@ -79,7 +85,7 @@
         <TextBox Height="20" Margin="80,60,65,0" Name="TxtLat" VerticalAlignment="Top" />
         <TextBox Height="20" Margin="0,0,38,39" Width="35" Name="HCC" VerticalAlignment="Bottom" HorizontalAlignment="Right">0</TextBox>
         <TextBox Margin="0,0,38,65" Width="35" Name="HCL" HorizontalAlignment="Right" Height="20" VerticalAlignment="Bottom">0</TextBox>
-        <Label Height="28" Margin="14,0,36,0" Name="Label5" VerticalAlignment="Top" Foreground="Tomato" FontSize="14" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Propriétés du serveur</Label>
+        <Label Height="28" Margin="14,0,36,0" Name="Label5" VerticalAlignment="Top" Foreground="Tomato" FontSize="14" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic">Propriétés du serveur</Label>
         <Button Height="23" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,0,25,7" Name="BtnCancel" VerticalAlignment="Bottom" Width="72" Foreground="White">Annuler</Button>
         <Button Height="23" Template="{DynamicResource GlassButton}" Margin="86,0,103,7" Name="BtnOK" VerticalAlignment="Bottom" Foreground="White">OK</Button>
     </Grid>

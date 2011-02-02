@@ -75,6 +75,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Control\uDevice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Window1.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -109,6 +113,9 @@
   <ItemGroup>
     <Compile Include="Control\uConfigServer.xaml.vb">
       <DependentUpon>uConfigServer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\uDevice.xaml.vb">
+      <DependentUpon>uDevice.xaml</DependentUpon>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb">
       <SubType>Code</SubType>
@@ -158,6 +165,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Back_03.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Defaut-128.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

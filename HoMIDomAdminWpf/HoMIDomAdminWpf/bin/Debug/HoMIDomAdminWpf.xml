@@ -34,6 +34,14 @@ InitializeComponent
 	<summary>
 uConfigServer
 </summary>
+</member><member name="M:WpfApplication1.uDevice.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uDevice">
+	<summary>
+uDevice
+</summary>
 </member><member name="P:WpfApplication1.My.MyWpfExtension.Application">
 	<summary>
  Retourne l'objet application pour l'application en cours d'exécution

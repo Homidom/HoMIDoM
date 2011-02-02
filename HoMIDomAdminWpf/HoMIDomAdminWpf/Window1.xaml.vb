@@ -112,6 +112,14 @@ Class Window1
         For i As Integer = 0 To Obj.Devices.Count - 1
             If Obj.Devices.Item(i).id = e.NewValue.uid Then
                 PropertyGrid1.SelectedObject = Obj.Devices.Item(i)
+
+                Dim x As New uDevice(uDevice.EAction.Modifier, e.NewValue.uid)
+                x.Uid = System.Guid.NewGuid.ToString()
+                AddHandler x.CloseMe, AddressOf UnloadControl
+                CanvasRight.Children.Add(x)
+                CanvasRight.SetLeft(x, 50)
+                CanvasRight.SetTop(x, 50)
+
                 Exit Sub
             End If
         Next
@@ -161,6 +169,8 @@ Class Window1
         x.Uid = System.Guid.NewGuid.ToString()
         AddHandler x.CloseMe, AddressOf UnloadControl
         CanvasRight.Children.Add(x)
+        CanvasRight.SetLeft(x, 50)
+        CanvasRight.SetTop(x, 50)
     End Sub
 
 
