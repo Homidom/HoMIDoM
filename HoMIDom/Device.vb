@@ -159,13 +159,23 @@ Namespace HoMIDom
                 End Set
             End Property
 
-            'Date et heure du dernier changement de propriétés (Value, Status…) correspondant à l’event généré
+            'Date et heure de la derniere modification de Value
             Public Property LastChange() As Date
                 Get
                     Return _LastChanged
                 End Get
                 Set(ByVal value As Date)
                     _LastChanged = value
+                End Set
+            End Property
+
+            'Si Lastchanged+LastchangedDuree< Now alors le composant a un problème car il n'a pas emis depuis au moins lastchangedduree.
+            Public Property LastChangedDuree() As Integer
+                Get
+                    Return _LastChangedDuree
+                End Get
+                Set(ByVal value As Integer)
+                    _LastChangedDuree = value
                 End Set
             End Property
 
