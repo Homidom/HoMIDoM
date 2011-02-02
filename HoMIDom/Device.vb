@@ -57,6 +57,7 @@ Namespace HoMIDom
             Protected _Adresse2 As String = ""
             Protected _DateCreated As Date = Now
             Protected _LastChanged As Date = Now
+            Protected _LastChangedDuree As Integer = 0
             Protected _Refresh As Integer = 0
             Protected _Modele As String = ""
             Protected _Picture As String = ""
@@ -197,9 +198,11 @@ Namespace HoMIDom
                     _Solo = value
                 End Set
             End Property
+
         End Class
 
-        <Serializable()> Class DeviceGeneriqueValue
+        'Classe valeur Double avec min/max/def/correction...
+        <Serializable()> Public Class DeviceGenerique_ValueDouble
             Inherits DeviceGenerique
 
             Protected _Value As Double = 0
@@ -271,19 +274,56 @@ Namespace HoMIDom
                 End Set
             End Property
 
-        End Class
+            'Event lancé sur changement de Value
+            Public Event DeviceChanged(ByVal Device As Object, ByVal [Property] As String, ByVal Parametre As Object)
 
-        <Serializable()> Class APPAREIL
-            Inherits DeviceGenerique
-            Dim _Value As Boolean
+            Public Property Refresh() As Integer
+                Get
+                    Return _Refresh
+                End Get
+                Set(ByVal value As Integer)
+                    _Refresh = value
+                    If _Refresh > 0 Then
+                        MyTimer.Interval = _Refresh
+                        MyTimer.Enabled = True
+                        AddHandler MyTimer.Elapsed, AddressOf Read
+                    End If
+                End Set
+            End Property
 
-            'Creation du device
-            Public Sub New(ByVal Server As Server)
-                _Server = Server
-                _Type = "APPAREIL"
+            Public Sub Read()
+                Driver.Read(Me)
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
+            'Valeur
+            Public Property Value() As Double
+                Get
+                    Return _Value
+                End Get
+                Set(ByVal value As Double)
+                    Dim tmp As Double = value
+                    _LastChanged = Now
+                    If tmp < _ValueMin Then tmp = _ValueMin
+                    If tmp > _ValueMax Then tmp = _ValueMax
+                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
+                    tmp += _Correction
+                    'Si la valeur a changé on la prend en compte et on créer l'event
+                    If tmp <> _Value Then
+                        _Value = tmp
+                        RaiseEvent DeviceChanged(Me, "Value", _Value)
+                    End If
+                End Set
+            End Property
+        End Class
+
+        'Classe valeur True/False pour device ON/OFF
+        <Serializable()> Public Class DeviceGenerique_ValueBool
+            Inherits DeviceGenerique
+
+            Protected _Value As Boolean = False
+
+            'Event lancé sur changement de Value
+            Public Event DeviceChanged(ByVal Device As Object, ByVal [Property] As String, ByVal Parametre As Object)
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -296,30 +336,138 @@ Namespace HoMIDom
                     If _Refresh > 0 Then
                         MyTimer.Interval = _Refresh
                         MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
+                        AddHandler MyTimer.Elapsed, AddressOf Read
                     End If
                 End Set
             End Property
 
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
+            'Demande de Lecture au driver
+            Public Sub Read()
+                Driver.Read(Me)
             End Sub
 
-            'Valeur de l'etat de l'appareil : ON/OFF
+            'Valeur : ON/OFF = True/False
             Public Property Value() As Boolean
                 Get
                     Return _Value
                 End Get
                 Set(ByVal value As Boolean)
                     Dim tmp As Boolean = value
+                    _LastChanged = Now
                     'Si la valeur a changé on la prend en compte et on créer l'event
                     If tmp <> _Value Then
                         _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
+                        RaiseEvent DeviceChanged(Me, "Value", _Value)
                     End If
                 End Set
             End Property
+
+        End Class
+
+        'Classe valeur Integer pour device avce valeur de 0(OFF) à 100(ON)
+        <Serializable()> Public Class DeviceGenerique_ValueInt
+            Inherits DeviceGenerique
+
+            Protected _Value As Integer = 0
+
+            'Event lancé sur changement de Value
+            Public Event DeviceChanged(ByVal Device As Object, ByVal [Property] As String, ByVal Parametre As Object)
+
+            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
+            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
+            Public Property Refresh() As Integer
+                Get
+                    Return _Refresh
+                End Get
+                Set(ByVal value As Integer)
+                    _Refresh = value
+                    If _Refresh > 0 Then
+                        MyTimer.Interval = _Refresh
+                        MyTimer.Enabled = True
+                        AddHandler MyTimer.Elapsed, AddressOf Read
+                    End If
+                End Set
+            End Property
+
+            'Demande de Lecture au driver
+            Public Sub Read()
+                Driver.Read(Me)
+            End Sub
+
+            'Valeur de 0 à 100
+            Public Property Value() As Integer
+                Get
+                    Return _Value
+                End Get
+                Set(ByVal value As Integer)
+                    Dim tmp As Integer = value
+                    _LastChanged = Now
+                    If tmp < 0 Then tmp = 0
+                    If tmp > 100 Then tmp = 100
+
+                    'Si la valeur a changé on la prend en compte et on créer l'event
+                    If tmp <> _Value Then
+                        _Value = tmp
+                        RaiseEvent DeviceChanged(Me, "Value", _Value)
+                    End If
+                End Set
+            End Property
+
+        End Class
+
+        'Classe valeur String pour device style Direction du Vent
+        <Serializable()> Public Class DeviceGenerique_ValueString
+            Inherits DeviceGenerique
+
+            Protected _Value As String = ""
+
+            Public Event DeviceChanged(ByVal Device As Object, ByVal [Property] As String, ByVal Parametre As Object)
+
+            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
+            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
+            Public Property Refresh() As Integer
+                Get
+                    Return _Refresh
+                End Get
+                Set(ByVal value As Integer)
+                    _Refresh = value
+                    If _Refresh > 0 Then
+                        MyTimer.Interval = _Refresh
+                        MyTimer.Enabled = True
+                        AddHandler MyTimer.Elapsed, AddressOf Read
+                    End If
+                End Set
+            End Property
+
+            Private Sub Read()
+                Driver.Read(Me)
+            End Sub
+
+            Public Property Value() As String
+                Get
+                    Return _Value
+                End Get
+                Set(ByVal value As String)
+                    Dim tmp As String = value
+                    _LastChanged = Now
+                    'Si la valeur a changé on la prend en compte et on créer l'event
+                    If tmp <> _Value Then
+                        _Value = tmp
+                        RaiseEvent DeviceChanged(Me, "Value", _Value)
+                    End If
+                End Set
+            End Property
+
+        End Class
+
+        <Serializable()> Class APPAREIL
+            Inherits DeviceGenerique_ValueBool
+
+            'Creation du device
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
+                _Type = "APPAREIL"
+            End Sub
 
             'ON
             Public Sub [ON]()
@@ -333,8 +481,7 @@ Namespace HoMIDom
         End Class
 
         <Serializable()> Class AUDIO
-            Inherits DeviceGenerique
-            Dim _Value As String
+            Inherits DeviceGenerique_ValueString
             Dim _Fichier As String
 
             'Creation du device
@@ -343,43 +490,10 @@ Namespace HoMIDom
                 _Type = "AUDIO"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
+            'redéfinition car on ne veut rien faire
+            Public Sub Read()
 
             End Sub
-
-            'Représente le status du lecteur (Play, Pause, Stop)
-            Public Property Value() As String
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As String)
-                    Dim tmp As String = value
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
 
             Public Property Fichier() As String
                 Get
@@ -390,85 +504,55 @@ Namespace HoMIDom
                 End Set
             End Property
 
-            Public Sub Play()
+            Private Sub touche(ByVal commande As String)
                 Try
-                    Driver.Write(Me, "PlayAudio")
-                    Value = "PLAY"
+                    Driver.Write(Me, commande)
+                    Value = commande
                 Catch ex As Exception
-                    '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " PLAY: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche" & commande & " : " & ex.Message)
                 End Try
+            End Sub
+
+            Public Sub Play()
+                touche("PlayAudio")
             End Sub
 
             Public Sub Pause()
-                Try
-                    Driver.Write(Me, "PauseAudio")
-                    Value = "PAUSE"
-                Catch ex As Exception
-                    '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " PAUSE: " & ex.Message)
-                End Try
+                touche("PauseAudio")
             End Sub
 
             Public Sub [Stop]()
-                Try
-                    Driver.Write(Me, "StopAudio")
-                    Value = "STOP"
-                Catch ex As Exception
-                    '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " STOP: " & ex.Message)
-                End Try
+                touche("StopAudio")
             End Sub
 
             Public Sub Random()
-                Try
-                    Driver.Write(Me, "RandomAudio")
-                Catch ex As Exception
-                    '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " RANDOM: " & ex.Message)
-                End Try
+                touche("RandomAudio")
             End Sub
 
             Public Sub [Next]()
-                Try
-                    Driver.Write(Me, "NextAudio")
-                Catch ex As Exception
-                    '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " NEXT: " & ex.Message)
-                End Try
+                touche("NextAudio")
             End Sub
 
             Public Sub Previous()
-                Try
-                    Driver.Write(Me, "PreviousAudio")
-                Catch ex As Exception
-                    '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " PREVIOUS: " & ex.Message)
-                End Try
+                touche("PreviousAudio")
             End Sub
 
             Public Sub VolumeDown()
-                Try
-                    Driver.Write(Me, "VolumeDownAudio")
-                Catch ex As Exception
-                    '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " VOLUME DOWN: " & ex.Message)
-                End Try
+                touche("VolumeDownAudio")
             End Sub
 
             Public Sub VolumeUp()
-                Try
-                    Driver.Write(Me, "VolumeUpAudio")
-                Catch ex As Exception
-                    '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " VOLUME UP: " & ex.Message)
-                End Try
+                touche("VolumeUpAudio")
             End Sub
 
             Public Sub VolumeMute()
-                Try
-                    Driver.Write(Me, "VolumeMuteAudio")
-                Catch ex As Exception
-                    '_Log.AddToLog(Log.TypeLog.INFO, "Serveur", "Erreur " & Me.Name & " VOLUME MUTE: " & ex.Message)
-                End Try
+                touche("VolumeMuteAudio")
             End Sub
 
         End Class
 
         <Serializable()> Class BAROMETRE
-            Inherits DeviceGeneriqueValue
+            Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -476,56 +560,10 @@ Namespace HoMIDom
                 _Type = "BAROMETRE"
             End Sub
 
-
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Barometre
-            Public Property Value() As Double
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Double)
-                    Dim tmp As Double = value
-                    If tmp < _ValueMin Then tmp = _ValueMin
-                    If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                    tmp += _Correction
-
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class BATTERIE
-            Inherits DeviceGenerique
-
-            Dim _Value As String
+            Inherits DeviceGenerique_ValueString
 
             'Creation d'un device BATTERIE
             Public Sub New(ByVal Server As Server)
@@ -533,50 +571,10 @@ Namespace HoMIDom
                 _Type = "BATTERIE"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'OK/Low
-            Public Property Value() As String
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As String)
-                    Dim tmp As String = value
-
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class COMPTEUR
-            Inherits DeviceGenerique
-            Dim _Value As Double
+            Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -584,49 +582,10 @@ Namespace HoMIDom
                 _Type = "COMPTEUR"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Contact
-            Public Property Value() As Double
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Double)
-                    Dim tmp As Double = value
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class CONTACT
-            Inherits DeviceGenerique
-            Dim _Value As Boolean
+            Inherits DeviceGenerique_ValueBool
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -634,49 +593,10 @@ Namespace HoMIDom
                 _Type = "CONTACT"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Contact
-            Public Property Value() As Boolean
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Boolean)
-                    Dim tmp As Boolean = value
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class DETECTEUR
-            Inherits DeviceGenerique
-            Dim _Value As Boolean
+            Inherits DeviceGenerique_ValueBool
 
             'Creation du device
             Public Sub New(ByVal server As Server)
@@ -684,49 +604,10 @@ Namespace HoMIDom
                 _Type = "DETECTEUR"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Contact
-            Public Property Value() As Boolean
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Boolean)
-                    Dim tmp As Boolean = value
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class DIRECTIONVENT
-            Inherits DeviceGenerique
-            Dim _Value As String
+            Inherits DeviceGenerique_ValueString
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -734,48 +615,10 @@ Namespace HoMIDom
                 _Type = "DIRECTIONVENT"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Direction du vent
-            Public Property Value() As String
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As String)
-                    Dim tmp As String = value
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class ENERGIEINSTANTANEE
-            Inherits DeviceGeneriqueValue
+            Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -783,53 +626,10 @@ Namespace HoMIDom
                 _Type = "ENERGIEINSTANTANEE"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Energie Instantanée
-            Public Property Value() As Double
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Double)
-                    Dim tmp As Double = value
-                    If tmp < _ValueMin Then tmp = _ValueMin
-                    If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                    tmp += _Correction
-
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class ENERGIETOTALE
-            Inherits DeviceGeneriqueValue
+            Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -837,98 +637,16 @@ Namespace HoMIDom
                 _Type = "ENERGIETOTALE"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Energie Totale
-            Public Property Value() As Double
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Double)
-                    Dim tmp As Double = value
-                    If tmp < _ValueMin Then tmp = _ValueMin
-                    If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                    tmp += _Correction
-
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class GENERIQUEBOOLEEN
-            Inherits DeviceGenerique
-            Dim _Value As Boolean
+            Inherits DeviceGenerique_ValueBool
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "GENERIQUEBOOLEEN"
             End Sub
-
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Direction du vent
-            Public Property Value() As Boolean
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Boolean)
-                    Dim tmp As Boolean = value
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
 
             'ON
             Public Sub [ON]()
@@ -939,60 +657,22 @@ Namespace HoMIDom
             Public Sub OFF()
                 Driver.Write(Me, "OFF")
             End Sub
+
         End Class
 
         <Serializable()> Class GENERIQUESTRING
-            Inherits DeviceGenerique
-            Dim _Value As String
-
+            Inherits DeviceGenerique_ValueString
+            
             'Creation du device
             Public Sub New(ByVal server As Server)
                 _Server = server
                 _Type = "GENERIQUESTRING"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Du Switch
-            Public Property Value() As String
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As String)
-                    Dim tmp As String = value
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class GENERIQUEVALUE
-            Inherits DeviceGeneriqueValue
+            Inherits DeviceGenerique_ValueDouble
 
             'Creation d'un device Temperature
             Public Sub New(ByVal Server As Server)
@@ -1000,54 +680,10 @@ Namespace HoMIDom
                 _Type = "GENERIQUEVALUE"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur de température
-            Public Property Value() As Double
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Double)
-                    Dim tmp As Double = value
-                    If tmp < _ValueMin Then tmp = _ValueMin
-                    If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                    tmp += _Correction
-
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class FREEBOX
-            Inherits DeviceGenerique
-            Dim _Value As String
+            Inherits DeviceGenerique_ValueString
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -1056,43 +692,10 @@ Namespace HoMIDom
                 _Adresse1 = " http://hd1.freebox.fr/pub/remote_control ?key="
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
+            'redefinition de read pour ne rien faire :)
+            Private Sub Read()
 
             End Sub
-
-            'Représente la dernière commande envoyée
-            Public Property Value() As String
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As String)
-                    Dim tmp As String = value
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
 
             Private Function Sendhttp(ByVal cmd As String) As String
                 Dim URL As String = Adresse1 & cmd
@@ -1108,300 +711,137 @@ Namespace HoMIDom
                 Return str
             End Function
 
-            Public Sub Touche0()
+            'function generique pour toutes les touches appelé par les fonctions touchexxx
+            Private Sub Touche(ByVal commande As String)
                 Try
                     Dim retour As String
-                    retour = Sendhttp("0")
-                    Value = "0"
+                    retour = Sendhttp(commande)
+                    Value = commande
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche0: " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche" & commande & " : " & ex.Message)
                 End Try
+            End Sub
+
+            Public Sub Touche0()
+                Touche("0")
             End Sub
 
             Public Sub Touche1()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("1")
-                    Value = "1"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche1: " & ex.Message)
-                End Try
+                Touche("1")
             End Sub
 
             Public Sub Touche2()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("2")
-                    Value = "2"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche2: " & ex.Message)
-                End Try
+                Touche("2")
             End Sub
 
             Public Sub Touche3()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("3")
-                    Value = "3"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche3: " & ex.Message)
-                End Try
+                Touche("3")
             End Sub
 
             Public Sub Touche4()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("4")
-                    Value = "4"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche4: " & ex.Message)
-                End Try
+                Touche("4")
             End Sub
 
             Public Sub Touche5()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("5")
-                    Value = "5"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche5: " & ex.Message)
-                End Try
+                Touche("5")
             End Sub
 
             Public Sub Touche6()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("6")
-                    Value = "6"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche6: " & ex.Message)
-                End Try
+                Touche("6")
             End Sub
 
             Public Sub Touche7()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("7")
-                    Value = "7"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche7: " & ex.Message)
-                End Try
+                Touche("7")
             End Sub
 
             Public Sub Touche8()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("8")
-                    Value = "8"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche8: " & ex.Message)
-                End Try
+                Touche("8")
             End Sub
 
             Public Sub Touche9()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("9")
-                    Value = "9"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche9: " & ex.Message)
-                End Try
+                Touche("9")
             End Sub
 
             Public Sub VolumeUp()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("vol_inc")
-                    Value = "vol_inc"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " VolumeUp: " & ex.Message)
-                End Try
+                Touche("vol_inc")
             End Sub
 
             Public Sub VolumeDown()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("vol_dec")
-                    Value = "vol_dec"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " VolumeDown: " & ex.Message)
-                End Try
+                Touche("vol_dec")
             End Sub
 
             Public Sub OK()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("ok")
-                    Value = "ok"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " OK: " & ex.Message)
-                End Try
+               Touche("ok")
             End Sub
 
             Public Sub HAUT()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("up")
-                    Value = "up"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " HAUT: " & ex.Message)
-                End Try
+                Touche("up")
             End Sub
 
             Public Sub BAS()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("down")
-                    Value = "down"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " BAS: " & ex.Message)
-                End Try
+                Touche("down")
             End Sub
 
             Public Sub GAUCHE()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("left")
-                    Value = "left"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " GAUCHE: " & ex.Message)
-                End Try
+                Touche("left")
             End Sub
 
             Public Sub DROITE()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("right")
-                    Value = "right"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " DROITE: " & ex.Message)
-                End Try
+                Touche("right")
             End Sub
 
             Public Sub MUTE()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("mute")
-                    Value = "mute"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " MUTE: " & ex.Message)
-                End Try
+                Touche("mute")
             End Sub
 
             Public Sub HOME()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("home")
-                    Value = "home"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " HOME: " & ex.Message)
-                End Try
+                Touche("home")
             End Sub
 
             Public Sub ENREGISTRER()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("rec")
-                    Value = "rec"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " ENREGISTRER: " & ex.Message)
-                End Try
+                Touche("rec")
             End Sub
 
             Public Sub RETOUR()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("bwd")
-                    Value = "bwd"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " RETOUR: " & ex.Message)
-                End Try
+                Touche("bwd")
             End Sub
 
             Public Sub PRECEDENT()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("prev")
-                    Value = "prev"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " PRECEDENT: " & ex.Message)
-                End Try
+                Touche("prev")
             End Sub
 
             Public Sub PLAY()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("play")
-                    Value = "play"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " PLAY: " & ex.Message)
-                End Try
+                Touche("play")
             End Sub
 
             Public Sub AVANCE()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("fwd")
-                    Value = "fwd"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " AVANCE: " & ex.Message)
-                End Try
+                Touche("fwd")
             End Sub
 
             Public Sub SUIVANT()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("next")
-                    Value = "next"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " SUIVANT: " & ex.Message)
-                End Try
+                Touche("next")
             End Sub
 
             Public Sub BoutonROUGE()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("red")
-                    Value = "red"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " BoutonROUGE: " & ex.Message)
-                End Try
+                Touche("red")
             End Sub
 
             Public Sub BoutonVERT()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("green")
-                    Value = "green"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " BoutonVERT: " & ex.Message)
-                End Try
+                Touche("green")
             End Sub
 
             Public Sub BoutonJAUNE()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("yellow")
-                    Value = "yellow"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " BoutonJAUNE: " & ex.Message)
-                End Try
+                Touche("yellow")
             End Sub
 
             Public Sub BoutonBLEU()
-                Try
-                    Dim retour As String
-                    retour = Sendhttp("blue")
-                    Value = "blue"
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " BoutonBLEU: " & ex.Message)
-                End Try
+                Touche("blue")
             End Sub
 
         End Class
 
         <Serializable()> Class HUMIDITE
-            Inherits DeviceGeneriqueValue
+            Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -1409,54 +849,10 @@ Namespace HoMIDom
                 _Type = "HUMIDITE"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur d'Humidité
-            Public Property Value() As Double
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Double)
-                    Dim tmp As Double = value
-                    If tmp < _ValueMin Then tmp = _ValueMin
-                    If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                    tmp += _Correction
-
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class LAMPE
-            Inherits DeviceGenerique
-            Dim _Value As Integer
+            Inherits DeviceGenerique_ValueInt
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -1464,67 +860,24 @@ Namespace HoMIDom
                 _Type = "LAMPE"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Variation
-            Public Property Value() As Integer
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Integer)
-                    Dim tmp As Integer = value
-                    If tmp < 0 Then tmp = 0
-                    If tmp > 100 Then tmp = 100
-
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        Driver.Write(Me, "DIM", _Value)
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
             'ON
             Public Sub [ON]()
-                Value = 100
+                Driver.Write(Me, "ON")
             End Sub
 
             'OFF
             Public Sub OFF()
-                Value = 0
+                Driver.Write(Me, "OFF")
             End Sub
 
             'DIM
             Public Sub [DIM](ByVal Variation As Integer)
                 If Variation < 0 Then
-                    Value = 0
+                    Variation = 0
                 ElseIf Variation > 100 Then
-                    Value = 100
-                Else
-                    Value = Variation
+                    Variation = 100
                 End If
+                Driver.Write(Me, "DIM", Variation)
             End Sub
 
         End Class
@@ -1563,7 +916,7 @@ Namespace HoMIDom
                 _Type = "METEO"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
+            Public Event DeviceChanged(ByVal device As Object, ByVal [Property] As String, ByVal Parametre As Object)
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
@@ -1576,12 +929,12 @@ Namespace HoMIDom
                     If _Refresh > 0 Then
                         MyTimer.Interval = _Refresh
                         MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
+                        AddHandler MyTimer.Elapsed, AddressOf Read
                     End If
                 End Set
             End Property
 
-            Private Sub TimerTick()
+            Public Sub Read()
                 Driver.Read(Me)
             End Sub
 
@@ -1592,7 +945,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _ConditionActuel = value
                     _LastChanged = Now
-                    RaiseEvent DeviceChanged(_ID, "ConditionActuel", value)
+                    RaiseEvent DeviceChanged(Me, "ConditionActuel", value)
                 End Set
             End Property
 
@@ -1853,8 +1206,7 @@ Namespace HoMIDom
         End Class
 
         <Serializable()> Class MULTIMEDIA
-            Inherits DeviceGenerique
-            Dim _Value As String
+            Inherits DeviceGenerique_ValueString
 
             Public ListCommandName As New ArrayList
             Public ListCommandData As New ArrayList
@@ -1918,48 +1270,16 @@ Namespace HoMIDom
                 ListCommandRepeat.Add("0")
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
+            'redéfinition car on veut rien faire
+            Private Sub Read()
 
             End Sub
-
-            'Représente le status du lecteur (Play, Pause, Stop)
-            Public Property Value() As String
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As String)
-                    Dim tmp As String = value
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
 
             Public Sub SendCommand(ByVal NameCommand As String)
                 For i As Integer = 0 To ListCommandName.Count - 1
                     If ListCommandName(i) = NameCommand Then
                         Driver.Write(Me, "SendCodeIR", ListCommandData(i), ListCommandRepeat(i))
+                        Exit For
                     End If
                 Next
             End Sub
@@ -1967,7 +1287,7 @@ Namespace HoMIDom
         End Class
 
         <Serializable()> Class PLUIECOURANT
-            Inherits DeviceGeneriqueValue
+            Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -1975,53 +1295,10 @@ Namespace HoMIDom
                 _Type = "PLUIECOURANT"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Niveau de pluie courant (Currant Rain)
-            Public Property Value() As Double
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Double)
-                    Dim tmp As Double = value
-                    If tmp < _ValueMin Then tmp = _ValueMin
-                    If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                    tmp += _Correction
-
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class PLUIETOTAL
-            Inherits DeviceGeneriqueValue
+            Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -2029,55 +1306,10 @@ Namespace HoMIDom
                 _Type = "PLUIETOTAL"
             End Sub
 
-
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Pluie Totale
-            Public Property Value() As Double
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Double)
-                    Dim tmp As Double = value
-                    If tmp < _ValueMin Then tmp = _ValueMin
-                    If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                    tmp += _Correction
-
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class SWITCH
-            Inherits DeviceGenerique
-            Dim _Value As Boolean
+            Inherits DeviceGenerique_ValueBool
 
             'Creation du device
             Public Sub New(ByVal server As Server)
@@ -2085,49 +1317,19 @@ Namespace HoMIDom
                 _Type = "SWITCH"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
+            'ON
+            Public Sub [ON]()
+                Driver.Write(Me, "ON")
             End Sub
 
-            'Valeur Du Switch
-            Public Property Value() As Boolean
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Boolean)
-                    Dim tmp As Boolean = value
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
+            'OFF
+            Public Sub OFF()
+                Driver.Write(Me, "OFF")
+            End Sub
         End Class
 
         <Serializable()> Class TELECOMMANDE
-            Inherits DeviceGenerique
-            Dim _Value As String
+            Inherits DeviceGenerique_ValueString
 
             'Creation du device
             Public Sub New(ByVal server As Server)
@@ -2135,48 +1337,15 @@ Namespace HoMIDom
                 _Type = "TELECOMMANDE"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
+            'redéfinition car on veut rien faire
+            Private Sub Read()
 
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
             End Sub
-
-            'Valeur Du Switch
-            Public Property Value() As String
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As String)
-                    Dim tmp As String = value
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
 
         End Class
 
         <Serializable()> Class TEMPERATURE
-            Inherits DeviceGeneriqueValue
+            Inherits DeviceGenerique_ValueDouble
 
             'Creation d'un device Temperature
             Public Sub New(ByVal Server As Server)
@@ -2184,55 +1353,10 @@ Namespace HoMIDom
                 _Type = "TEMPERATURE"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur de température
-            Public Property Value() As Double
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Double)
-                    Dim tmp As Double = value
-                    If tmp < _ValueMin Then tmp = _ValueMin
-                    If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                    tmp += _Correction
-
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class TEMPERATURECONSIGNE
-            Inherits DeviceGeneriqueValue
-
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
+            Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -2240,51 +1364,10 @@ Namespace HoMIDom
                 _Type = "TEMPERATURECONSIGNE"
             End Sub
 
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur de Température de consigne
-            Public Property Value() As Double
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Double)
-                    Dim tmp As Double = value
-                    If tmp < _ValueMin Then tmp = _ValueMin
-                    If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                    tmp += _Correction
-
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class UV
-            Inherits DeviceGeneriqueValue
+            Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -2292,53 +1375,10 @@ Namespace HoMIDom
                 _Type = "UV"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Niveau d’UV
-            Public Property Value() As Double
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Double)
-                    Dim tmp As Double = value
-                    If tmp < _ValueMin Then tmp = _ValueMin
-                    If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                    tmp += _Correction
-
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class VITESSEVENT
-            Inherits DeviceGeneriqueValue
+            Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -2346,54 +1386,10 @@ Namespace HoMIDom
                 _Type = "VITESSEVENT"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Mesure de la vitesse du vent
-            Public Property Value() As Double
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Double)
-                    Dim tmp As Double = value
-                    If tmp < _ValueMin Then tmp = _ValueMin
-                    If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                    tmp += _Correction
-
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
         End Class
 
         <Serializable()> Class VOLET
-            Inherits DeviceGenerique
-            Dim _Value As Integer
+            Inherits DeviceGenerique_ValueInt
 
             'Creation du device
             Public Sub New(ByVal server As Server)
@@ -2401,67 +1397,24 @@ Namespace HoMIDom
                 _Type = "VOLET"
             End Sub
 
-            Public Event DeviceChanged(ByVal Id As String, ByVal [Property] As String, ByVal Parametre As Object)
-
-            'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
-            'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
-                Get
-                    Return _Refresh
-                End Get
-                Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-                End Set
-            End Property
-
-            Private Sub TimerTick()
-                Value = Driver.Read(Me)
-            End Sub
-
-            'Valeur Variation ouverture volet
-            Public Property Value() As Integer
-                Get
-                    Return _Value
-                End Get
-                Set(ByVal value As Integer)
-                    Dim tmp As Integer = value
-                    If tmp < 0 Then tmp = 0
-                    If tmp > 100 Then tmp = 100
-
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        _LastChanged = Now
-                        Driver.Write(Me, "Volet", _Value)
-                        RaiseEvent DeviceChanged(_ID, "Value", _Value)
-                    End If
-                End Set
-            End Property
-
             'Ouvrir volet
             Public Sub OPEN()
-                Value = 100
+                Driver.Write(Me, "ON")
             End Sub
 
             'Fermer Volet
             Public Sub CLOSE()
-                Value = 0
+                Driver.Write(Me, "OFF")
             End Sub
 
             'Ouvrir/Fermer % Volet
             Public Sub [DIM](ByVal Variation As Integer)
                 If Variation < 0 Then
-                    Value = 0
+                    Variation = 0
                 ElseIf Variation > 100 Then
-                    Value = 100
-                Else
-                    Value = Variation
+                    Variation = 100
                 End If
+                Driver.Write(Me, "DIM", Variation)
             End Sub
 
         End Class
