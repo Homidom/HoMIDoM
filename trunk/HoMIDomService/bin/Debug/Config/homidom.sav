@@ -2,6 +2,7 @@
 <homidom>
   <server longitude="12" latitude="0" heurecorrectionlever="0" heurecorrectioncoucher="0" />
   <drivers>
+    <driver id="3B808B6C-25B3-11E0-A6DB-36D2DED72085" nom="RFXCom_receiver" enable="false" description="RFXCom Receiver COM, USB or Ethernet" startauto="false" protocol="Virtuel" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="RFXCom" picture="rfxcom.png" />
     <driver id="DE96B466-2540-11E0-A321-65D7DFD72085" nom="Virtuel" enable="false" description="Driver Virtuel" startauto="false" protocol="Virtuel" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="Virtuel" picture="" />
   </drivers>
   <devices>
