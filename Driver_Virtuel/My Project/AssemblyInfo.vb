@@ -10,9 +10,9 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("Driver_Virtuel")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("cyberconseil")> 
+<Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("Driver_Virtuel")> 
-<Assembly: AssemblyCopyright("Copyright © cyberconseil 2011")> 
+<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2011")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

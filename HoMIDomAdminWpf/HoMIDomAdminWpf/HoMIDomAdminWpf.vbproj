@@ -13,6 +13,7 @@
     <OptionCompare>Binary</OptionCompare>
     <OptionStrict>Off</OptionStrict>
     <OptionInfer>On</OptionInfer>
+    <ApplicationIcon>icone.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,7 +64,8 @@
     <Reference Include="System.Xml" />
     <Reference Include="WpfPropertyGrid, Version=1.0.1.0, Culture=neutral, PublicKeyToken=be4b71144cd8a3e5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Téléchargements\WpfPropertyGrid.dll</HintPath>
+      <HintPath>..\..\Dll_externes\WpfPropertyGrid.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +111,8 @@
     <Import Include="System.Windows.Media" />
     <Import Include="System.Windows.Media.Imaging" />
     <Import Include="System.Windows.Navigation" />
+    <Import Include="WpfPropertyGrid" />
+    <Import Include="XamlGeneratedNamespace" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Control\uConfigServer.xaml.vb">
@@ -169,6 +173,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Defaut-128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icone.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
