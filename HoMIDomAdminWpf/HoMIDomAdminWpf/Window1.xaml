@@ -111,6 +111,8 @@
                     <TabItem Header="Devices">
                         <Grid Height="250.05">
                             <TreeView Margin="6,6,3.334,38.341" Name="TreeViewDevice" />
+                            <Button Height="19" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5,0,0,13" Name="BtnNewDevice" VerticalAlignment="Bottom" Width="62" Foreground="White">Nouveau</Button>
+                            <Button Foreground="White" Height="19" Template="{DynamicResource GlassButton}" Margin="0,0,40,13" Name="BtnDelDevice" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="62.036">Supprimer</Button>
                         </Grid>
                     </TabItem>
                 </TabControl>

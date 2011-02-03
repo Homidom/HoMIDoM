@@ -1040,4 +1040,657 @@
   <log time="02/02/2011 11:22:53" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
   <log time="02/02/2011 11:22:53" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 02/02/2011 07:58:00" />
   <log time="02/02/2011 11:22:53" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 02/02/2011 20:04:59" />
+  <log time="03/02/2011 08:10:52" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 08:10:52" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 08:10:52" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 08:10:52" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 08:10:53" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 08:10:53" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 08:10:53" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 08:10:54" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 08:10:54" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 08:10:54" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 08:11:26" type="3" source="0" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\config\homidom.xml" />
+  <log time="03/02/2011 08:11:26" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
+  <log time="03/02/2011 08:11:26" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des drivers" />
+  <log time="03/02/2011 08:11:26" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des devices" />
+  <log time="03/02/2011 08:11:26" type="3" source="0" fonction="SaveConfig" message="Sauvegarde terminée" />
+  <log time="03/02/2011 08:12:44" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 08:12:44" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 08:12:44" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 08:12:44" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 08:12:44" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 08:12:45" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 08:12:45" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 08:12:45" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 08:12:45" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 08:12:45" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 08:13:21" type="3" source="0" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\config\homidom.xml" />
+  <log time="03/02/2011 08:13:21" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
+  <log time="03/02/2011 08:13:21" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des drivers" />
+  <log time="03/02/2011 08:13:21" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des devices" />
+  <log time="03/02/2011 08:13:21" type="3" source="0" fonction="SaveConfig" message="Sauvegarde terminée" />
+  <log time="03/02/2011 08:16:48" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 08:16:48" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 08:16:48" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 08:16:48" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 08:16:48" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 08:16:48" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 08:16:48" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 08:16:48" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 08:16:48" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 08:16:48" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 08:18:00" type="3" source="0" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\config\homidom.xml" />
+  <log time="03/02/2011 08:18:00" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
+  <log time="03/02/2011 08:18:00" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des drivers" />
+  <log time="03/02/2011 08:18:00" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des devices" />
+  <log time="03/02/2011 08:18:00" type="3" source="0" fonction="SaveConfig" message="Sauvegarde terminée" />
+  <log time="03/02/2011 08:18:41" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 08:18:41" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 08:18:41" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 08:18:41" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 08:18:41" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 08:18:41" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 08:18:41" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 08:18:41" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 08:18:41" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 08:18:41" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 08:19:12" type="3" source="0" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\config\homidom.xml" />
+  <log time="03/02/2011 08:19:12" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
+  <log time="03/02/2011 08:19:12" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des drivers" />
+  <log time="03/02/2011 08:19:12" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des devices" />
+  <log time="03/02/2011 08:19:12" type="3" source="0" fonction="SaveConfig" message="Sauvegarde terminée" />
+  <log time="03/02/2011 08:20:45" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 08:20:45" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 08:20:45" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 08:20:45" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 08:20:45" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 08:20:45" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 08:20:45" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 08:20:45" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 08:20:45" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 08:20:45" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 08:24:56" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 08:24:56" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 08:24:56" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 08:24:56" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 08:24:56" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 08:24:56" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 08:24:56" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 08:24:56" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 08:24:56" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 08:24:56" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 08:25:32" type="3" source="0" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\config\homidom.xml" />
+  <log time="03/02/2011 08:25:32" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
+  <log time="03/02/2011 08:25:32" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des drivers" />
+  <log time="03/02/2011 08:25:32" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des devices" />
+  <log time="03/02/2011 08:25:50" type="3" source="0" fonction="SaveConfig" message="Sauvegarde terminée" />
+  <log time="03/02/2011 08:26:26" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 08:26:26" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 08:26:26" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 08:26:26" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 08:26:26" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 08:26:26" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 08:26:26" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 08:26:26" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 08:26:26" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 08:26:26" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 08:26:51" type="3" source="0" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\config\homidom.xml" />
+  <log time="03/02/2011 08:26:51" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
+  <log time="03/02/2011 08:26:51" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des drivers" />
+  <log time="03/02/2011 08:26:51" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des devices" />
+  <log time="03/02/2011 08:27:23" type="3" source="0" fonction="SaveConfig" message="Sauvegarde terminée" />
+  <log time="03/02/2011 08:38:31" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 08:38:31" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 08:38:31" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 08:38:31" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 08:38:31" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 08:38:31" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 08:38:31" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 08:38:31" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 08:38:31" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 08:38:31" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 08:39:01" type="3" source="0" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\config\homidom.xml" />
+  <log time="03/02/2011 08:39:01" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
+  <log time="03/02/2011 08:39:01" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des drivers" />
+  <log time="03/02/2011 08:39:01" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des devices" />
+  <log time="03/02/2011 08:39:01" type="3" source="0" fonction="SaveConfig" message="Sauvegarde terminée" />
+  <log time="03/02/2011 08:40:36" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 08:40:36" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 08:40:36" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 08:40:36" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 08:40:36" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 08:40:36" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 08:40:36" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 08:40:36" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 08:40:36" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 08:40:36" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 08:41:08" type="3" source="0" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\config\homidom.xml" />
+  <log time="03/02/2011 08:41:08" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
+  <log time="03/02/2011 08:41:08" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des drivers" />
+  <log time="03/02/2011 08:41:08" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des devices" />
+  <log time="03/02/2011 08:41:08" type="3" source="0" fonction="SaveConfig" message="Sauvegarde terminée" />
+  <log time="03/02/2011 08:45:44" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 08:45:44" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 08:45:44" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 08:45:44" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 08:45:44" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 08:45:44" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 08:45:44" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 08:45:44" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 08:45:44" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 08:45:44" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 08:49:08" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 08:49:09" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 08:49:09" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 08:49:09" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 08:49:09" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 08:49:09" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 08:49:09" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 08:49:09" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 08:49:09" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 08:49:09" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 08:50:45" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 08:50:45" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 08:50:45" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 08:50:45" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 08:50:48" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 08:50:48" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 08:50:48" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 08:50:48" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 08:50:48" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 08:50:48" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 09:07:09" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 09:07:09" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 09:07:09" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 09:07:09" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 09:07:09" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 09:07:09" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 09:07:09" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 09:07:09" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 09:07:09" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 09:07:09" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 09:07:44" type="3" source="0" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\config\homidom.xml" />
+  <log time="03/02/2011 09:07:44" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
+  <log time="03/02/2011 09:07:44" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des drivers" />
+  <log time="03/02/2011 09:07:44" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des devices" />
+  <log time="03/02/2011 09:07:44" type="3" source="0" fonction="SaveConfig" message="Sauvegarde terminée" />
+  <log time="03/02/2011 09:09:16" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 09:09:16" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 09:09:16" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 09:09:16" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 09:09:16" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 09:09:16" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 09:09:16" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 09:09:16" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 09:09:16" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 09:09:16" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 09:12:33" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 09:12:33" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 09:12:33" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 09:12:33" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 09:12:33" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 09:12:33" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 09:12:33" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 09:12:33" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 09:12:33" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 09:12:33" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 09:17:06" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 09:17:06" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 09:17:06" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 09:17:06" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 09:17:06" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 09:17:06" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 09:17:06" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 09:17:06" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 09:17:06" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 09:17:06" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 09:18:15" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 09:18:15" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 09:18:15" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 09:18:15" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 09:18:15" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 09:18:15" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 09:18:15" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 09:18:15" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 09:18:15" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 09:18:15" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 09:24:31" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 09:24:31" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 09:24:31" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 09:24:31" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 09:24:31" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 09:24:31" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 09:24:31" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 09:24:32" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 09:24:32" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 09:24:32" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 09:25:45" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 09:25:45" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 09:25:45" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 09:25:45" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 09:25:45" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 09:25:45" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 09:25:45" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 09:25:45" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 09:25:45" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 09:25:45" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 10:49:35" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 10:49:35" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 10:49:35" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 10:49:35" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 10:49:35" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 10:49:35" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 10:49:35" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 10:49:35" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 10:49:35" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 10:49:35" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 10:58:59" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 10:58:59" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 10:58:59" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 10:58:59" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 10:58:59" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 10:58:59" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 10:58:59" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 10:59:00" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 10:59:00" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 10:59:00" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:00:04" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:00:04" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:00:04" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:00:04" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:00:04" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:00:04" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:00:04" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:00:05" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:00:05" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:00:05" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:00:58" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:00:58" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:00:58" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:00:58" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:00:58" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:00:58" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:00:58" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:00:59" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:00:59" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:00:59" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:04:58" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:04:58" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:04:58" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:04:58" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:04:58" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:04:58" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:04:58" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:04:59" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:04:59" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:04:59" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:06:09" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:06:09" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:06:09" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:06:09" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:06:09" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:06:09" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:06:09" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:06:09" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:06:09" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:06:09" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:10:33" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:10:34" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:10:34" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:10:34" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:10:34" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:10:34" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:10:34" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:10:34" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:10:34" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:10:34" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:11:20" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:11:20" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:11:20" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:11:20" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:11:20" type="3" source="0" fonction="LoadConfig" message="1 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:11:20" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:11:20" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:11:20" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:11:20" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:11:20" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:12:09" type="3" source="0" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\config\homidom.xml" />
+  <log time="03/02/2011 11:12:09" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
+  <log time="03/02/2011 11:12:09" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des drivers" />
+  <log time="03/02/2011 11:12:09" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des devices" />
+  <log time="03/02/2011 11:12:09" type="3" source="0" fonction="SaveConfig" message="Sauvegarde terminée" />
+  <log time="03/02/2011 11:12:18" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:12:18" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:12:18" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:12:18" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:12:18" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:12:18" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:12:18" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:12:18" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:12:18" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:12:18" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:20:12" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:20:12" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:20:12" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:20:12" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:20:12" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:20:12" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:20:12" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:20:12" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:20:12" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:20:12" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:22:46" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:22:46" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:22:46" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:22:46" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:22:46" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:22:47" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:22:47" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:22:47" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:22:47" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:22:47" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:26:13" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:26:13" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:26:13" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:26:13" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:26:13" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:26:13" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:26:13" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:26:14" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:26:14" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:26:14" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:27:01" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:27:01" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:27:01" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:27:01" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:27:01" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:27:01" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:27:01" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:27:01" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:27:01" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:27:01" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:27:35" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:27:35" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:27:35" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:27:35" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:27:35" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:27:35" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:27:35" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:27:36" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:27:36" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:27:36" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:29:35" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:29:35" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:29:35" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:29:35" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:29:35" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:29:35" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:29:35" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:29:35" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:29:35" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:29:35" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:32:11" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:32:11" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:32:11" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:32:11" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:32:11" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:32:11" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:32:11" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:32:11" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:32:11" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:32:11" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:33:43" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:33:43" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:33:43" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:33:43" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:33:43" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:33:43" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:33:43" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:33:43" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:33:43" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:33:43" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:37:40" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:37:40" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:37:40" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:37:40" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:37:40" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:37:41" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:37:41" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:37:41" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:37:41" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:37:41" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:39:05" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:39:05" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:39:05" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:39:05" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:39:05" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:39:05" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:39:05" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:39:05" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:39:05" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:39:05" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:41:04" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:41:04" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:41:04" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:41:04" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:41:04" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:41:04" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:41:04" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:41:04" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:41:04" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:41:04" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:43:15" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:43:15" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:43:15" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:43:15" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:43:15" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:43:15" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:43:15" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:43:15" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:43:15" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:43:15" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:45:04" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:45:04" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:45:04" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:45:04" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:45:04" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:45:04" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:45:04" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:45:04" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:45:04" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:45:04" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:46:20" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:46:20" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:46:20" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:46:20" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:46:20" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:46:20" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:46:20" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:46:20" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:46:20" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:46:20" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:52:39" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:52:40" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:52:40" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:52:40" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:52:40" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:52:40" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:52:40" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:52:40" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:52:40" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:52:40" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:54:14" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:54:14" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:54:14" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:54:14" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:54:14" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:54:14" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:54:14" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:54:14" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:54:14" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:54:14" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:55:51" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:55:51" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:55:51" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:55:51" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:55:51" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:55:51" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:55:51" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:55:51" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:55:51" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:55:51" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:57:46" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:57:46" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:57:46" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:57:46" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:57:46" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:57:46" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:57:46" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:57:46" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:57:46" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:57:46" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 11:59:57" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 11:59:57" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 11:59:57" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 11:59:57" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 11:59:57" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 11:59:57" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 11:59:57" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 11:59:57" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 11:59:57" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 11:59:57" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 12:00:00" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 12:00:00" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 12:00:00" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 12:00:28" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 12:00:28" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 12:00:28" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 12:00:28" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 12:00:28" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 12:00:28" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 12:00:28" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 12:00:28" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 12:00:28" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 12:00:28" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 12:02:58" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 12:02:58" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 12:02:58" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 12:02:58" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 12:02:58" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 12:02:58" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 12:02:58" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 12:02:59" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 12:02:59" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 12:02:59" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 12:05:43" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 12:05:43" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 12:05:43" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 12:05:43" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 12:05:43" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 12:05:43" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 12:05:43" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 12:05:44" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 12:05:44" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 12:05:44" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 12:08:59" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 12:08:59" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 12:08:59" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 12:08:59" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 12:08:59" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 12:08:59" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 12:08:59" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 12:08:59" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 12:08:59" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 12:08:59" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 12:18:55" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 12:18:55" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 12:18:55" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 12:18:55" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 12:18:55" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 12:18:55" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 12:18:55" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 12:18:55" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 12:18:55" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 12:18:55" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 12:20:19" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 12:20:19" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 12:20:19" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 12:20:19" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 12:20:19" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 12:20:19" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 12:20:19" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 12:20:19" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 12:20:19" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 12:20:19" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 12:22:03" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 12:22:03" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 12:22:03" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 12:22:03" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 12:22:03" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 12:22:03" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 12:22:03" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 12:22:03" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 12:22:03" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 12:22:03" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 12:24:53" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 12:24:53" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 12:24:53" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 12:24:53" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 12:24:53" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 12:24:53" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 12:24:53" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 12:24:53" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 12:24:53" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 12:24:54" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 12:26:35" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 12:26:35" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 12:26:35" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 12:26:35" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 12:26:35" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 12:26:36" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 12:26:36" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 12:26:36" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 12:26:36" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 12:26:36" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 12:27:26" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 12:27:26" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 12:27:26" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 12:27:26" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 12:27:26" type="3" source="0" fonction="LoadConfig" message="2 devices(s) trouvé(s)" />
+  <log time="03/02/2011 12:27:26" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 12:27:26" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 12:27:26" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 12:27:26" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 12:27:26" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 12:28:05" type="3" source="0" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\config\homidom.xml" />
+  <log time="03/02/2011 12:28:05" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
+  <log time="03/02/2011 12:28:05" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des drivers" />
+  <log time="03/02/2011 12:28:05" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des devices" />
+  <log time="03/02/2011 12:28:05" type="3" source="0" fonction="SaveConfig" message="Sauvegarde terminée" />
+  <log time="03/02/2011 12:28:11" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 12:28:11" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 12:28:11" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 12:28:11" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 12:28:11" type="3" source="0" fonction="LoadConfig" message="3 devices(s) trouvé(s)" />
+  <log time="03/02/2011 12:28:11" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 12:28:11" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 12:28:11" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 12:28:11" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 12:28:11" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 12:32:32" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="03/02/2011 12:32:32" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="03/02/2011 12:32:32" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="03/02/2011 12:32:32" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="03/02/2011 12:32:32" type="3" source="0" fonction="LoadConfig" message="3 devices(s) trouvé(s)" />
+  <log time="03/02/2011 12:32:32" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="03/02/2011 12:32:32" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="03/02/2011 12:32:32" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/02/2011 12:32:32" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
+  <log time="03/02/2011 12:32:32" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+  <log time="03/02/2011 12:35:41" type="3" source="0" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\config\homidom.xml" />
+  <log time="03/02/2011 12:35:41" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
+  <log time="03/02/2011 12:35:41" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des drivers" />
+  <log time="03/02/2011 12:35:41" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des devices" />
+  <log time="03/02/2011 12:35:41" type="3" source="0" fonction="SaveConfig" message="Sauvegarde terminée" />
 </logs>
