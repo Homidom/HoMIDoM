@@ -5,6 +5,7 @@ Partial Public Class uDevice
     Public Event CloseMe(ByVal MyObject As Object)
     Dim _Action As EAction 'Définit si modif ou création d'un device
     Dim _DeviceId As String 'Id du device à modifier
+
     Public Enum EAction
         Nouveau
         Modifier
@@ -40,6 +41,7 @@ Partial Public Class uDevice
                 ChkEnable.IsChecked = x.Enable
                 ChKSolo.IsChecked = x.Solo
                 CbType.SelectedValue = x.type
+                CbType.IsEnabled = False
 
                 For j As Integer = 0 To Window1.Obj.Drivers.Count - 1
                     If Window1.Obj.Drivers.Item(j).id = x.driverid Then
@@ -88,16 +90,88 @@ Partial Public Class uDevice
         End If
     End Sub
 
+    'Bouton Fermer
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
         RaiseEvent CloseMe(Me)
     End Sub
 
-    Private Sub CbType_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbType.SelectionChanged
+    'Bouton Ok
+    Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
+        If TxtNom.Text = "" Then
+            MessageBox.Show("Le nom du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Exit Sub
+        End If
+        If CbType.Text = "" Then
+            MessageBox.Show("Le type du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Exit Sub
+        End If
+        If CbDriver.Text = "" Then
+            MessageBox.Show("Le driver du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Exit Sub
+        End If
+        If TxtAdresse1.Text = "" Then
+            MessageBox.Show("L'adresse de base du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Exit Sub
+        End If
 
+        Dim _driverid As String = ""
+        For i As Integer = 0 To Window1.Obj.Drivers.Count - 1
+            If Window1.Obj.Drivers.Item(i).nom = CbDriver.Text Then
+                _driverid = Window1.Obj.Drivers.Item(i).id
+                Exit For
+            End If
+        Next
+        Window1.Obj.SaveDevice(_DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, "", TxtModele.Text, TxtDescript.Text)
+        RaiseEvent CloseMe(Me)
     End Sub
 
-    Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        Dim x As Object = Window1.Obj.ReturnDeviceByID(_DeviceId)
-        x.description = TxtCorrection.Text
+    Private Sub TxtRefresh_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtRefresh.TextChanged
+        If TxtRefresh.Text <> "" And IsNumeric(TxtRefresh.Text) = False Then
+            MessageBox.Show("Veuillez saisir une valeur numérique")
+            TxtRefresh.Text = 0
+        End If
+    End Sub
+
+    Private Sub CbType_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbType.MouseLeave
+        TxtCorrection.Visibility = Windows.Visibility.Hidden
+        TxtFormatage.Visibility = Windows.Visibility.Hidden
+        TxtPrecision.Visibility = Windows.Visibility.Hidden
+        TxtValueMax.Visibility = Windows.Visibility.Hidden
+        TxtValueMin.Visibility = Windows.Visibility.Hidden
+        TxtValDef.Visibility = Windows.Visibility.Hidden
+        Label10.Visibility = Windows.Visibility.Hidden
+        Label11.Visibility = Windows.Visibility.Hidden
+        Label12.Visibility = Windows.Visibility.Hidden
+        Label13.Visibility = Windows.Visibility.Hidden
+        Label14.Visibility = Windows.Visibility.Hidden
+        Label15.Visibility = Windows.Visibility.Hidden
+
+        If _Action = EAction.Nouveau Then
+            'Gestion si Device avec Value
+            If CbType.SelectedValue Is Nothing Then Exit Sub
+            If CbType.SelectedValue = "TEMPERATURE" _
+                               Or CbType.Text = "HUMIDITE" _
+                               Or CbType.Text = "TEMPERATURECONSIGNE" _
+                               Or CbType.Text = "ENERGIETOTALE" _
+                               Or CbType.Text = "ENERGIEINSTANTANEE" _
+                               Or CbType.Text = "PLUIETOTAL" _
+                               Or CbType.Text = "PLUIECOURANT" _
+                               Or CbType.Text = "VITESSEVENT" _
+                               Or CbType.Text = "UV" _
+                               Then
+                TxtCorrection.Visibility = Windows.Visibility.Visible
+                TxtFormatage.Visibility = Windows.Visibility.Visible
+                TxtPrecision.Visibility = Windows.Visibility.Visible
+                TxtValueMax.Visibility = Windows.Visibility.Visible
+                TxtValueMin.Visibility = Windows.Visibility.Visible
+                TxtValDef.Visibility = Windows.Visibility.Visible
+                Label10.Visibility = Windows.Visibility.Visible
+                Label11.Visibility = Windows.Visibility.Visible
+                Label12.Visibility = Windows.Visibility.Visible
+                Label13.Visibility = Windows.Visibility.Visible
+                Label14.Visibility = Windows.Visibility.Visible
+                Label15.Visibility = Windows.Visibility.Visible
+            End If
+        End If
     End Sub
 End Class

@@ -32,19 +32,19 @@
         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Margin="15,0,0,198.373" Name="TxtAdresse1" VerticalAlignment="Bottom" Width="215" />
         <Label Foreground="White" Margin="249,211.709,274,220.044" Name="Label7">Adresse2:</Label>
         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="250,0,117,198.373" Name="TxtAdresse2" Height="22" VerticalAlignment="Bottom" />
-        <CheckBox Foreground="White" Height="18" HorizontalAlignment="Right" Margin="0,111,180,0" Name="ChKSolo" VerticalAlignment="Top" Width="62">Solo</CheckBox>
+        <CheckBox Foreground="White" Height="18" HorizontalAlignment="Right" Margin="0,111,180,0" Name="ChKSolo" VerticalAlignment="Top" Width="62" IsChecked="True">Solo</CheckBox>
         <Label Foreground="White" Height="24" HorizontalAlignment="Left" Margin="14,0,0,178.369" Name="Label8" VerticalAlignment="Bottom" Width="62">Modele:</Label>
         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Margin="15,0,0,156.698" Name="TxtModele" VerticalAlignment="Bottom" Width="215" />
         <Label Foreground="White" Height="24" Margin="250,0,250,178.369" Name="Label9" VerticalAlignment="Bottom">Refresh (ms):</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Margin="251,0,116,156.698" Name="TxtRefresh" VerticalAlignment="Bottom" />
+        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Margin="251,0,116,156.698" Name="TxtRefresh" VerticalAlignment="Bottom">0</TextBox>
         <Label Foreground="White" HorizontalAlignment="Left" Margin="14,0,0,135.027" Name="Label10" Width="62" Height="24" VerticalAlignment="Bottom" Visibility="Hidden">Value Min:</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Margin="15,0,0,113.356" Name="TxtValueMin" VerticalAlignment="Bottom" Width="215" Visibility="Hidden" />
+        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Margin="15,0,0,113.356" Name="TxtValueMin" VerticalAlignment="Bottom" Width="215" Visibility="Hidden">-9999</TextBox>
         <Label Foreground="White" Margin="250,0,250,135.027" Name="Label11" Height="24" VerticalAlignment="Bottom" Visibility="Hidden">Value Max:</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Margin="251,0,116,113.356" Name="TxtValueMax" VerticalAlignment="Bottom" Visibility="Hidden" />
+        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Margin="251,0,116,113.356" Name="TxtValueMax" VerticalAlignment="Bottom" Visibility="Hidden">9999</TextBox>
         <Label Foreground="White" Margin="0,0,269,47.921" Name="Label12" Height="24" VerticalAlignment="Bottom" Visibility="Hidden" HorizontalAlignment="Right" Width="62">Precision:</Label>
         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="252,0,115,26.25" Name="TxtPrecision" Height="22" VerticalAlignment="Bottom" Visibility="Hidden" />
         <Label Foreground="White" Margin="251,0,249,90.018" Name="Label13" Height="24" VerticalAlignment="Bottom" Visibility="Hidden">Correction:</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="252,0,115,68.347" Name="TxtCorrection" Height="22" VerticalAlignment="Bottom" Visibility="Hidden" />
+        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="252,0,115,68.347" Name="TxtCorrection" Height="22" VerticalAlignment="Bottom" Visibility="Hidden">0</TextBox>
         <Label Foreground="White" Height="24" HorizontalAlignment="Left" Margin="15,0,0,48.75" Name="Label14" VerticalAlignment="Bottom" Width="76" Visibility="Hidden">Formatage:</Label>
         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Margin="16.25,0,0,26.25" Name="TxtFormatage" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="214.5" Visibility="Hidden" />
         <Button Height="25" HorizontalAlignment="Right" Margin="0,42.5,20,0" Name="BtnClose" VerticalAlignment="Top" Width="88.75">Fermer</Button>

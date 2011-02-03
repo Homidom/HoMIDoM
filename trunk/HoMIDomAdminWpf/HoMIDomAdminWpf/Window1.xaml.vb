@@ -32,6 +32,12 @@ Class Window1
 
         AffDriver()
         AffDevice()
+
+        'Dim Mnu As New ContextMenu
+        'Dim item1 As New MenuItem
+        'item1.Header = "Nouveau"
+        'Mnu.Items.Add(item1)
+        ' TreeViewDevice.ContextMenu = Mnu
     End Sub
 
     'Menu Quitter
@@ -105,52 +111,6 @@ Class Window1
             End If
         Next
     End Sub
-#End Region
-
-#Region "Devices"
-    Private Sub TreeViewDevice_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewDevice.SelectedItemChanged
-        For i As Integer = 0 To Obj.Devices.Count - 1
-            If Obj.Devices.Item(i).id = e.NewValue.uid Then
-                PropertyGrid1.SelectedObject = Obj.Devices.Item(i)
-
-                Dim x As New uDevice(uDevice.EAction.Modifier, e.NewValue.uid)
-                x.Uid = System.Guid.NewGuid.ToString()
-                AddHandler x.CloseMe, AddressOf UnloadControl
-                CanvasRight.Children.Add(x)
-                CanvasRight.SetLeft(x, 50)
-                CanvasRight.SetTop(x, 50)
-
-                Exit Sub
-            End If
-        Next
-    End Sub
-#End Region
-
-    'Menu Save Config
-    Private Sub MnuSaveConfig(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem2.Click
-        Obj.SaveConfig()
-    End Sub
-
-    Private Sub BtnStart_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnStart.Click
-        If TreeViewDriver.SelectedItem IsNot Nothing Then
-            For i As Integer = 0 To Obj.Drivers.Count - 1
-                If TreeViewDriver.SelectedItem.Header = Obj.Drivers.Item(0).Nom Then
-                    Obj.Drivers.Item(i).Start()
-                End If
-            Next
-        Else
-            MessageBox.Show("Veuillez sélectionner un Driver!")
-        End If
-    End Sub
-
-    Public Sub UnloadControl(ByVal MyControl As Object)
-        For i As Integer = 0 To CanvasRight.Children.Count - 1
-            If CanvasRight.Children.Item(i).Uid = MyControl.uid Then
-                CanvasRight.Children.RemoveAt(i)
-                Exit Sub
-            End If
-        Next
-    End Sub
 
     Private Sub BtnStop_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnStop.Click
         If TreeViewDriver.SelectedItem IsNot Nothing Then
@@ -164,6 +124,79 @@ Class Window1
         End If
     End Sub
 
+    Private Sub BtnStart_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnStart.Click
+        If TreeViewDriver.SelectedItem IsNot Nothing Then
+            For i As Integer = 0 To Obj.Drivers.Count - 1
+                If TreeViewDriver.SelectedItem.Header = Obj.Drivers.Item(0).Nom Then
+                    Obj.Drivers.Item(i).Start()
+                End If
+            Next
+        Else
+            MessageBox.Show("Veuillez sélectionner un Driver!")
+        End If
+    End Sub
+#End Region
+
+#Region "Devices"
+    'Modifier un device
+    Private Sub TreeViewDevice_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewDevice.MouseDoubleClick
+        If TreeViewDevice.SelectedItem IsNot Nothing Then
+            For i As Integer = 0 To Obj.Devices.Count - 1
+                If Obj.Devices.Item(i).id = TreeViewDevice.SelectedItem.uid Then
+                    PropertyGrid1.SelectedObject = Obj.Devices.Item(i)
+
+                    Dim x As New uDevice(uDevice.EAction.Modifier, TreeViewDevice.SelectedItem.uid)
+                    x.Uid = System.Guid.NewGuid.ToString()
+                    AddHandler x.CloseMe, AddressOf UnloadControl
+                    CanvasRight.Children.Add(x)
+                    CanvasRight.SetLeft(x, 50)
+                    CanvasRight.SetTop(x, 50)
+
+                    Exit Sub
+                End If
+            Next
+        End If
+    End Sub
+
+    'Bouton nouveau Device
+    Private Sub BtnNewDevice_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewDevice.Click
+        Dim x As New uDevice(uDevice.EAction.Nouveau, "")
+        x.Uid = System.Guid.NewGuid.ToString()
+        AddHandler x.CloseMe, AddressOf UnloadControl
+        CanvasRight.Children.Add(x)
+        CanvasRight.SetLeft(x, 50)
+        CanvasRight.SetTop(x, 50)
+    End Sub
+
+    'Bouton supprimer device
+    Private Sub BtnDelDevice_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelDevice.Click
+        If TreeViewDevice.SelectedItem IsNot Nothing Then
+            Window1.Obj.DeleteDevice(TreeViewDevice.SelectedItem.uid)
+            AffDevice()
+        Else
+            MessageBox.Show("Veuillez sélectionner un Device à supprimer!")
+        End If
+    End Sub
+#End Region
+
+    'Menu Save Config
+    Private Sub MnuSaveConfig(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem2.Click
+        Obj.SaveConfig()
+    End Sub
+
+    'Décharger une fenêtre suivant son Id
+    Public Sub UnloadControl(ByVal MyControl As Object)
+        For i As Integer = 0 To CanvasRight.Children.Count - 1
+            If CanvasRight.Children.Item(i).Uid = MyControl.uid Then
+                CanvasRight.Children.RemoveAt(i)
+                AffDevice()
+                Exit Sub
+            End If
+        Next
+
+    End Sub
+
+    'Menu Sauvegarder la config
     Private Sub MnuConfigSrv(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem3.Click
         Dim x As New uConfigServer
         x.Uid = System.Guid.NewGuid.ToString()
@@ -172,6 +205,4 @@ Class Window1
         CanvasRight.SetLeft(x, 50)
         CanvasRight.SetTop(x, 50)
     End Sub
-
-
 End Class

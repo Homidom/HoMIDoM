@@ -791,7 +791,8 @@ Namespace HoMIDom
         Public Function DeleteDevice(ByVal deviceId As String) As Integer Implements IHoMIDom.DeleteDevice
             For i As Integer = 0 To _ListDevices.Count - 1
                 If _ListDevices.Item(i).Id = deviceId Then
-                    _ListDevices.Item(i).removeat(i)
+                    _ListDevices.RemoveAt(i)
+                    DeleteDevice = 0
                     Exit Function
                 End If
             Next
@@ -836,13 +837,13 @@ Namespace HoMIDom
         End Sub
 
         'Sauvegarder ou créer un device
-        Public Function SaveDevice(ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal address2 As String, ByVal image As String, ByVal enable As Boolean, ByVal driverId As String, ByVal typeclass As String) As String Implements IHoMIDom.SaveDevice
+        Public Function SaveDevice(ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "") As String Implements IHoMIDom.SaveDevice
             Dim myID As String
 
             If deviceId = "" Then 'C'est un nouveau device
                 myID = Api.GenerateGUID
                 'Suivant chaque type de device
-                Select Case UCase(typeclass)
+                Select Case UCase(type)
                     Case "TEMPERATURE"
                         Dim o As New Device.TEMPERATURE(Me)
                         With o
@@ -853,7 +854,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -867,7 +872,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -881,7 +890,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -895,7 +908,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -909,7 +926,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -923,7 +944,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -937,7 +962,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -951,7 +980,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -965,7 +998,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -979,7 +1016,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -993,7 +1034,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1007,7 +1052,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1021,7 +1070,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1035,7 +1088,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1049,7 +1106,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1063,7 +1124,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1077,7 +1142,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1091,7 +1160,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1105,7 +1178,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1119,7 +1196,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1133,7 +1214,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1147,7 +1232,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1161,7 +1250,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1175,7 +1268,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1189,7 +1286,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1203,7 +1304,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1217,7 +1322,11 @@ Namespace HoMIDom
                             .Adresse1 = address1
                             .Adresse2 = address2
                             .Enable = enable
-                            .DriverID = driverId
+                            .DriverID = driverid
+                            .Modele = modele
+                            .Refresh = refresh
+                            .Solo = solo
+                            .Description = description
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1232,7 +1341,11 @@ Namespace HoMIDom
                         _ListDevices.Item(i).adresse2 = address2
                         _ListDevices.Item(i).picture = image
                         _ListDevices.Item(i).enable = enable
-                        _ListDevices.Item(i).driverid = driverId
+                        _ListDevices.Item(i).driverid = driverid
+                        _ListDevices.Item(i).description = description
+                        _ListDevices.Item(i).modele = modele
+                        _ListDevices.Item(i).refresh = refresh
+                        _ListDevices.Item(i).solo = solo
                     End If
                 Next
             End If
