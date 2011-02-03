@@ -13,9 +13,9 @@ Imports System.Windows
 
 <Assembly: AssemblyTitle("WpfApplication1")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("cyberconseil")> 
+<Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("WpfApplication1")> 
-<Assembly: AssemblyCopyright("Copyright @ cyberconseil 2011")> 
+<Assembly: AssemblyCopyright("Copyright @ HoMIDoM 2011")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: ComVisible(false)>
 

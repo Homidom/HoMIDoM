@@ -10,9 +10,9 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("eHomeVisualProjectAdmin")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("AHALR")> 
+<Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("eHomeVisualProjectAdmin")> 
-<Assembly: AssemblyCopyright("Copyright © AHALR 2009")> 
+<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2009")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

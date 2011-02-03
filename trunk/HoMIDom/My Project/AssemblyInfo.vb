@@ -10,9 +10,9 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("HoMIDom")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("cyberconseil")> 
+<Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("HoMIDom")> 
-<Assembly: AssemblyCopyright("Copyright © cyberconseil 2011")> 
+<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2011")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
