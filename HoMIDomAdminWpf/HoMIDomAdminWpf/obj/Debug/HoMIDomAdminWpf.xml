@@ -34,6 +34,14 @@ InitializeComponent
 	<summary>
 uConfigServer
 </summary>
+</member><member name="M:WpfApplication1.uLog.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uLog">
+	<summary>
+uLog
+</summary>
 </member><member name="M:WpfApplication1.uDevice.InitializeComponent">
 	<summary>
 InitializeComponent

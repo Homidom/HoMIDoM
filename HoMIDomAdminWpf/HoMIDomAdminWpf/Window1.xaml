@@ -85,10 +85,11 @@
                 <MenuItem Header="Fichier" Foreground="WhiteSmoke">
                     <MenuItem Header="Save Config" Name="MenuItem2" />
                     <MenuItem Header="Config Serveur" Name="MenuItem3" />
+                    <MenuItem Header="Consulter Log" Name="MenuItem4" />
                     <MenuItem Header="Quitter" Name="MenuItem1" />
                 </MenuItem>
             </Menu>
-            <Image HorizontalAlignment="Right" Margin="0,8.335,6,10.002" Name="Image2" Stretch="Fill" Width="251.717" Source="/HoMIDomAdminWpf;component/Images/image003.jpg" />
+            <Image HorizontalAlignment="Right" Margin="0,8.335,6,10.002" Name="Image2" Stretch="Fill" Width="394" Source="/HoMIDomAdminWpf;component/Images/bandeau_1_950x60.jpg" />
         </Grid>
         <Grid HorizontalAlignment="Left" Margin="0,58,0,29" Name="GridLeft" Width="193" Background="Black">
             <Canvas Margin="6,6.668,5.001,273.388" Name="Canvas1" Background="Black">
@@ -133,6 +134,7 @@
                     </RadialGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>
+            <Label HorizontalAlignment="Left" Margin="6,8,0,0" Name="LblStatus" Width="402" Foreground="White">#####</Label>
         </Grid>
     </Grid>
 </Window>

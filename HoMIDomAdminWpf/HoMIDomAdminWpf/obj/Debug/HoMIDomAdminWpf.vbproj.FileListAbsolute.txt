@@ -19,3 +19,5 @@ C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomAdminWpf\HoMIDomAd
 C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomAdminWpf\HoMIDomAdminWpf\obj\Debug\Control\uConfigServer.g.vb
 C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomAdminWpf\HoMIDomAdminWpf\obj\Debug\Control\uDevice.baml
 C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomAdminWpf\HoMIDomAdminWpf\obj\Debug\Control\uDevice.g.vb
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomAdminWpf\HoMIDomAdminWpf\obj\Debug\Control\uLog.baml
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomAdminWpf\HoMIDomAdminWpf\obj\Debug\Control\uLog.g.vb

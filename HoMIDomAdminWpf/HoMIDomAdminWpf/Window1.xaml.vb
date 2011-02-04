@@ -1,4 +1,5 @@
-﻿Imports System.Runtime.Serialization.Formatters.Soap
+﻿Imports System.Windows.Threading
+Imports System.Runtime.Serialization.Formatters.Soap
 Imports System.Runtime.Remoting
 Imports System.Runtime.Remoting.Channels.Http
 Imports System.Runtime.Remoting.Channels
@@ -15,29 +16,40 @@ Class Window1
         InitializeComponent()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+        Dim dt As DispatcherTimer = New DispatcherTimer()
+        AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
+        dt.Interval = New TimeSpan(0, 0, 1)
+        dt.Start()
 
         'Connexion au serveur
         'Connexion au service Web
-        Dim channel As New HttpChannel()
-        ChannelServices.RegisterChannel(channel, False)
+        Try
+            Dim channel As New HttpChannel()
+            ChannelServices.RegisterChannel(channel, False)
 
-        Obj = CType(Activator.GetObject( _
-            GetType(HoMIDom.HoMIDom.IHoMIDom), _
-            "http://localhost:8888/RemoteObjectServer.soap"),  _
-             HoMIDom.HoMIDom.IHoMIDom)
+            Obj = CType(Activator.GetObject( _
+                GetType(HoMIDom.HoMIDom.IHoMIDom), _
+                "http://localhost:8888/RemoteObjectServer.soap"),  _
+                 HoMIDom.HoMIDom.IHoMIDom)
 
-        If Obj IsNot Nothing Then
-            IsConnect = True
+            If Obj IsNot Nothing Then
+                IsConnect = True
+            End If
+
+            AffDriver()
+            AffDevice()
+        Catch ex As Exception
+            IsConnect = False
+        End Try
+    End Sub
+
+    'Affiche la date et heure, heures levé et couché du soleil
+    Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
+        If IsConnect = True Then
+            LblStatus.Content = Now.ToLongDateString & " " & Now.ToShortTimeString & "      " & "Serveur connecté"
+        Else
+            LblStatus.Content = Now.ToLongDateString & " " & Now.ToShortTimeString & "      " & "Serveur non connecté"
         End If
-
-        AffDriver()
-        AffDevice()
-
-        'Dim Mnu As New ContextMenu
-        'Dim item1 As New MenuItem
-        'item1.Header = "Nouveau"
-        'Mnu.Items.Add(item1)
-        ' TreeViewDevice.ContextMenu = Mnu
     End Sub
 
     'Menu Quitter
@@ -199,6 +211,16 @@ Class Window1
     'Menu Sauvegarder la config
     Private Sub MnuConfigSrv(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem3.Click
         Dim x As New uConfigServer
+        x.Uid = System.Guid.NewGuid.ToString()
+        AddHandler x.CloseMe, AddressOf UnloadControl
+        CanvasRight.Children.Add(x)
+        CanvasRight.SetLeft(x, 50)
+        CanvasRight.SetTop(x, 50)
+    End Sub
+
+    'Menu Consulter le log
+    Private Sub MnuViewLog(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem4.Click
+        Dim x As New uLog
         x.Uid = System.Guid.NewGuid.ToString()
         AddHandler x.CloseMe, AddressOf UnloadControl
         CanvasRight.Children.Add(x)
