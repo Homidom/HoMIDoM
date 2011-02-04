@@ -1693,6 +1693,18 @@
   <log time="03/02/2011 12:35:41" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des drivers" />
   <log time="03/02/2011 12:35:41" type="3" source="0" fonction="SaveConfig" message="Sauvegarde des devices" />
   <log time="03/02/2011 12:35:41" type="3" source="0" fonction="SaveConfig" message="Sauvegarde terminée" />
+<<<<<<< .mine
+  <log time="04/02/2011 08:27:44" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\HoMIDomService\bin\Debug\Config\homidom.xml" />
+  <log time="04/02/2011 08:27:45" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="04/02/2011 08:27:45" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="04/02/2011 08:27:45" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="04/02/2011 08:27:45" type="3" source="0" fonction="LoadConfig" message="3 devices(s) trouvé(s)" />
+  <log time="04/02/2011 08:27:46" type="3" source="4" fonction="RFXCOM_RECEIVER" message="Driver RFXCom_receiver démarré" />
+  <log time="04/02/2011 08:27:46" type="3" source="4" fonction="Driver Virtuel" message="Driver Virtuel démarré" />
+  <log time="04/02/2011 08:27:47" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="04/02/2011 08:27:47" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 04/02/2011 07:58:00" />
+  <log time="04/02/2011 08:27:47" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 04/02/2011 20:05:14" />
+=======
   <log time="03/02/2011 23:44:01" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: D:\Domotique\Homidom\HoMIDomService\bin\Debug\Config\homidom.xml" />
   <log time="03/02/2011 23:44:01" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
   <log time="03/02/2011 23:44:01" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
@@ -1723,4 +1735,5 @@
   <log time="03/02/2011 23:54:24" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
   <log time="03/02/2011 23:54:25" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/02/2011 07:58:00" />
   <log time="03/02/2011 23:54:25" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/02/2011 20:05:07" />
+>>>>>>> .r33
 </logs>
