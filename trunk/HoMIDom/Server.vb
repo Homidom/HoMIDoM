@@ -339,7 +339,8 @@ Namespace HoMIDom
                                     .Adresse1 = list.Item(j).Attributes.GetNamedItem("adresse1").Value
                                     .Adresse2 = list.Item(j).Attributes.GetNamedItem("adresse2").Value
                                     .DateCreated = list.Item(j).Attributes.GetNamedItem("datecreated").Value
-                                    .LastChange = list.Item(j).Attributes.GetNamedItem("lastchange").Value
+                                    .LastChanged = list.Item(j).Attributes.GetNamedItem("lastchanged").Value
+                                    .LastChangedDuree = list.Item(j).Attributes.GetNamedItem("lastchangedduree").Value
                                     .Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
                                     .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
                                     .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value

@@ -53,26 +53,26 @@ Imports System.Globalization
     Private WithEvents port As New System.IO.Ports.SerialPort
     Private port_name As String = ""
     'Liste des commandes
-    Private Const SWVERS As Byte = &H20
-    Private Const MODEHS As Byte = &H21
-    Private Const MODEKOP As Byte = &H23
-    Private Const MODEARC As Byte = &H24
-    Private Const MODEBD As Byte = &H25
-    Private Const MODEB32 As Byte = &H29
-    Private Const MODEVISONIC As Byte = &H40
-    Private Const MODENOXLAT As Byte = &H41
-    Private Const MODEVISAUX As Byte = &H42
-    Private Const MODEVAR As Byte = &H2C
-    Private Const ENALL As Byte = &H2A
-    Private Const DISARC As Byte = &H2D
-    Private Const DISKOP As Byte = &H2E
-    Private Const DISX10 As Byte = &H2F
-    Private Const DISHE As Byte = &H28
-    Private Const DISOREGON As Byte = &H43
-    Private Const DISATI As Byte = &H44
-    Private Const DISVIS As Byte = &H45
-    Private Const DISSOMFY As Byte = &H46
-    Private Const DISEU As Byte = &H47
+    Public Const SWVERS As Byte = &H20
+    Public Const MODEHS As Byte = &H21
+    Public Const MODEKOP As Byte = &H23
+    Public Const MODEARC As Byte = &H24
+    Public Const MODEBD As Byte = &H25
+    Public Const MODEB32 As Byte = &H29
+    Public Const MODEVISONIC As Byte = &H40
+    Public Const MODENOXLAT As Byte = &H41
+    Public Const MODEVISAUX As Byte = &H42
+    Public Const MODEVAR As Byte = &H2C
+    Public Const ENALL As Byte = &H2A
+    Public Const DISARC As Byte = &H2D
+    Public Const DISKOP As Byte = &H2E
+    Public Const DISX10 As Byte = &H2F
+    Public Const DISHE As Byte = &H28
+    Public Const DISOREGON As Byte = &H43
+    Public Const DISATI As Byte = &H44
+    Public Const DISVIS As Byte = &H45
+    Public Const DISSOMFY As Byte = &H46
+    Public Const DISEU As Byte = &H47
     'liste des variables de base
     Private slave As Boolean
     Private mess As Boolean = False
@@ -227,7 +227,8 @@ Imports System.Globalization
 #End Region
 
     Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
-
+        [Stop]()
+        Start()
     End Sub
 
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
@@ -259,6 +260,7 @@ Imports System.Globalization
         End If
     End Sub
 
+    '???? quoi mettre dedans ?
     Public Property StartAuto() As Boolean Implements HoMIDom.HoMIDom.IDriver.StartAuto
         Get
 
@@ -284,7 +286,8 @@ Imports System.Globalization
     End Sub
 
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-
+        'command pas utiliser car String, on utilise donc Parametre1 pour transmettre les commandes style MODEB32
+        ecrire(&HF0, Parametre1)
     End Sub
 
     Public Sub New()
@@ -366,6 +369,7 @@ Imports System.Globalization
     End Function
 
     Private Function lancer() As String
+        'lancer les handlers
         If tcp Then
             Try
                 stream = client.GetStream()
@@ -386,6 +390,21 @@ Imports System.Globalization
                 Return "ERR: Handler COM"
             End Try
         End If
+        'configurer le rfxcom
+        Try
+            ecrire(&HF0, MODEVAR)
+            ecrire(&HF0, ENALL)
+            'ecrire(&HF0, DISOREGON)
+            'ecrire(&HF0, DISATI)
+            ecrire(&HF0, DISSOMFY) 'disable SOMFY car pas encore géré
+            'ecrire(&HF0, DISVIS)
+            'ecrire(&HF0, DISHE)
+            'ecrire(&HF0, DISKOP)
+            'ecrire(&HF0, DISARC)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER LANCER Configuration", ex.Message)
+            Return "ERR: Configuration du RFXCOM_Receiver"
+        End Try
     End Function
 
     Private Function fermer() As String
@@ -797,7 +816,7 @@ Imports System.Globalization
                 'Else
                 '    WriteLog("X10Security : addr:" & VB.Right("0" & Hex(recbuf(0)), 2) & VB.Right("0" & Hex(recbuf(1)), 2) & " " & VB.Right("0" & Hex(recbuf(4)), 2) & " ID:" & VB.Right("    " & Str(hsaddr), 5))
                 'End If
-                If valeur <> "" Then WriteRetour(adresse, valeur)
+                If valeur <> "" Then WriteRetour(adresse, "", valeur)
 
             ElseIf Protocol = MODEVAR Or Protocol = MODENOXLAT Then
                 If recbits = 32 And recbuf(0) = &H52 And recbuf(1) = &H46 Then
@@ -851,10 +870,10 @@ Imports System.Globalization
             adresse = Hex(recbuf(0) >> 6) & VB.Right("0" & Hex((recbuf(0) << 2 Or recbuf(1) >> 6) And &HFF), 2) & VB.Right("0" & Hex((recbuf(1) << 2 Or recbuf(2) >> 6) And &HFF), 2) & VB.Right("0" & Hex((recbuf(2) << 2 Or recbuf(3) >> 6) And &HFF), 2) & "-" & CStr((recbuf(3) And &HF) + 1)
             If recbits = 34 Then
                 Select Case recbuf(3) And &H30
-                    Case &H0 : WriteRetour(adresse, "OFF")
-                    Case &H10 : WriteRetour(adresse, "ON")
-                    Case &H20 : WriteRetour(adresse, "GROUP OFF")
-                    Case &H30 : WriteRetour(adresse, "GROUP ON")
+                    Case &H0 : WriteRetour(adresse, "", "OFF")
+                    Case &H10 : WriteRetour(adresse, "", "ON")
+                    Case &H20 : WriteRetour(adresse, "", "GROUP OFF")
+                    Case &H30 : WriteRetour(adresse, "", "GROUP ON")
                 End Select
             Else
                 valeur = ""
@@ -870,7 +889,7 @@ Imports System.Globalization
                     Case &H8 : valeur = "CFG: Reserved (unexpected)"
                     Case &HC : valeur = "CFG: Reserved (unexpected)"
                 End Select
-                WriteRetour(adresse, "CFG: " & valeur & " Level=" & CStr((recbuf(4) >> 4) + 1))
+                WriteRetour(adresse, "", "CFG: " & valeur & " Level=" & CStr((recbuf(4) >> 4) + 1))
             End If
         Catch ex As Exception
             WriteLog("ERR: RFXCOM processhe : " & ex.Message)
@@ -966,7 +985,7 @@ Imports System.Globalization
                 Case &H7D : valeur = "X-END"
                 Case Else : valeur = "unknown"
             End Select
-            WriteRetour(adresse, valeur)
+            WriteRetour(adresse, "", valeur)
         Catch ex As Exception
             WriteLog("ERR: RFXCOM processati : " & ex.Message)
         End Try
@@ -1060,7 +1079,7 @@ Imports System.Globalization
                 Case &H7D : valeur = "X-END"
                 Case Else : valeur = "unknown"
             End Select
-            WriteRetour(adresse, valeur)
+            WriteRetour(adresse, "", valeur)
         Catch ex As Exception
             WriteLog("ERR: RFXCOM processatiplus : " & ex.Message)
         End Try
@@ -1115,7 +1134,7 @@ Imports System.Globalization
                     End Select
                     adresse = housecode & Str(group) & Str(unit)
                 End If
-                WriteRetour(adresse, message)
+                WriteRetour(adresse, "", message)
             ElseIf bytecnt = 8 Or bytecnt = 9 Then
                 message = " HomeEasy code="
                 For i = 0 To (bytecnt - 1)
@@ -1264,7 +1283,7 @@ Imports System.Globalization
                 recbuf(1) = recbuf(1) >> 1
             Next
             If (parity And &H1) <> 0 Then message = message & " Even parity error in byte 1-2"
-            WriteRetour(adresse, message)
+            WriteRetour(adresse, "", message)
         Catch ex As Exception
             WriteLog("ERR: RFXCOM processkoppla : " & ex.Message)
         End Try
@@ -1295,7 +1314,7 @@ Imports System.Globalization
                 If (recbuf(7) And &H8) <> 0 Then message = " Arm-Home"
                 If (recbuf(8) And &H4) <> 0 Then message = " Repeat bit"
                 If (recbuf(8) And &H8) <> 0 Then message = " Bat-Low"
-                WriteRetour(adresse, message)
+                WriteRetour(adresse, "", message)
             ElseIf recbits = 36 Then
                 parity = &H0
                 If (recbuf(0) And &H10) <> 0 Then parity += 1
@@ -1376,7 +1395,7 @@ Imports System.Globalization
                 End If
                 If (recbuf(3) And &H2) <> 0 Then message = message & " Bit 5??"
                 If (recbuf(3) And &H1) <> 0 Then message = message & " Bit 4??"
-                WriteRetour(adresse, message)
+                WriteRetour(adresse, "", message)
             End If
         Catch ex As Exception
             WriteLog("ERR: RFXCOM processvisonic : " & ex.Message)
@@ -1484,7 +1503,7 @@ Imports System.Globalization
             Select Case recbuf(5) And &HF0
                 Case &H0
                     valeur = ((recbuf(4) * 65536) + (recbuf(2) * 256) + recbuf(3))
-                    WriteRetour(adresse, valeur / 100)
+                    WriteRetour(adresse, "", valeur / 100)
                     'WriteMessage("RFXMeter: " & Convert.ToString(measured_value), False)
                     'WriteMessage(";  RFXPower: " & Convert.ToString(measured_value / 100) & " kWh", False)
                     'WriteMessage(";  RFXPower-Module: " & Convert.ToString(measured_value / 1000) & " kWh", False)
@@ -1500,7 +1519,7 @@ Imports System.Globalization
                         Case &H80 : valeur = "Interval: 60 min."
                         Case Else : valeur = "Interval: illegal value"
                     End Select
-                    WriteRetour(adresse, "CFG: " & valeur)
+                    WriteRetour(adresse, "", "CFG: " & valeur)
                 Case &H20
                     Select Case (recbuf(4) And &HC0)
                         Case &H0 : valeurtemp = "Input-0 "
@@ -1514,52 +1533,52 @@ Imports System.Globalization
                         valeurtemp = valeurtemp & "RFXPower= " & Convert.ToString(Round(1 / ((16 * valeur) / (3600000 / 100)), 3)) & "kW"
                         valeurtemp = valeurtemp & " RFXPwr= " & Convert.ToString(Round(1 / ((16 * valeur) / (3600000 / 62.5)), 3)) & "|" & Convert.ToString(Round((1 / ((16 * valeur) / (3600000 / 62.5))) * 1.917, 3)) & "kW"
                     End If
-                    WriteRetour(adresse, "CFG: Calibration" & Convert.ToString(valeur) & "msec " & valeurtemp)
+                    WriteRetour(adresse, "", "CFG: Calibration" & Convert.ToString(valeur) & "msec " & valeurtemp)
                 Case &H30
-                    WriteRetour(adresse, "CFG: New address set")
+                    WriteRetour(adresse, "", "CFG: New address set")
                 Case &H40
                     Select Case (recbuf(4) And &HC0)
-                        Case &H0 : WriteRetour(adresse, "CFG: Counter for Input-0 will be set to zero within 5 seconds OR push MODE button for next command.")
-                        Case &H40 : WriteRetour(adresse, "CFG: Counter for Input-1 will be set to zero within 5 seconds OR push MODE button for next command.")
-                        Case &H80 : WriteRetour(adresse, "CFG: Counter for Input-2 will be set to zero within 5 seconds OR push MODE button for next command.")
-                        Case Else : WriteRetour(adresse, "ERR: unknown input ")
+                        Case &H0 : WriteRetour(adresse, "", "CFG: Counter for Input-0 will be set to zero within 5 seconds OR push MODE button for next command.")
+                        Case &H40 : WriteRetour(adresse, "", "CFG: Counter for Input-1 will be set to zero within 5 seconds OR push MODE button for next command.")
+                        Case &H80 : WriteRetour(adresse, "", "CFG: Counter for Input-2 will be set to zero within 5 seconds OR push MODE button for next command.")
+                        Case Else : WriteRetour(adresse, "", "ERR: unknown input ")
                     End Select
                 Case &H50
                     valeur = (recbuf(2) >> 4) * 100000 + (recbuf(2) And &HF) * 10000 + (recbuf(3) >> 4) * 1000 + (recbuf(3) And &HF) * 100 + (recbuf(4) >> 4) * 10 + (recbuf(4) And &HF)
-                    WriteRetour(adresse, "CFG: Push MODE push button within 5 seconds to increment the 1st digit - Counter value = " & VB.Right("00000" & Convert.ToString(valeur), 6))
+                    WriteRetour(adresse, "", "CFG: Push MODE push button within 5 seconds to increment the 1st digit - Counter value = " & VB.Right("00000" & Convert.ToString(valeur), 6))
                 Case &H60
                     valeur = (recbuf(2) >> 4) * 100000 + (recbuf(2) And &HF) * 10000 + (recbuf(3) >> 4) * 1000 + (recbuf(3) And &HF) * 100 + (recbuf(4) >> 4) * 10 + (recbuf(4) And &HF)
-                    WriteRetour(adresse, "CFG: Push MODE push button within 5 seconds to increment the 2nd digit - Counter value = " & VB.Right("00000" & Convert.ToString(valeur), 6))
+                    WriteRetour(adresse, "", "CFG: Push MODE push button within 5 seconds to increment the 2nd digit - Counter value = " & VB.Right("00000" & Convert.ToString(valeur), 6))
                 Case &H70
                     valeur = (recbuf(2) >> 4) * 100000 + (recbuf(2) And &HF) * 10000 + (recbuf(3) >> 4) * 1000 + (recbuf(3) And &HF) * 100 + (recbuf(4) >> 4) * 10 + (recbuf(4) And &HF)
-                    WriteRetour(adresse, "CFG: Push MODE push button within 5 seconds to increment the 3rd digit - Counter value = " & VB.Right("00000" & Convert.ToString(valeur), 6))
+                    WriteRetour(adresse, "", "CFG: Push MODE push button within 5 seconds to increment the 3rd digit - Counter value = " & VB.Right("00000" & Convert.ToString(valeur), 6))
                 Case &H80
                     valeur = (recbuf(2) >> 4) * 100000 + (recbuf(2) And &HF) * 10000 + (recbuf(3) >> 4) * 1000 + (recbuf(3) And &HF) * 100 + (recbuf(4) >> 4) * 10 + (recbuf(4) And &HF)
-                    WriteRetour(adresse, "CFG: Push MODE push button within 5 seconds to increment the 4th digit - Counter value = " & VB.Right("00000" & Convert.ToString(valeur), 6))
+                    WriteRetour(adresse, "", "CFG: Push MODE push button within 5 seconds to increment the 4th digit - Counter value = " & VB.Right("00000" & Convert.ToString(valeur), 6))
                 Case &H90
                     valeur = (recbuf(2) >> 4) * 100000 + (recbuf(2) And &HF) * 10000 + (recbuf(3) >> 4) * 1000 + (recbuf(3) And &HF) * 100 + (recbuf(4) >> 4) * 10 + (recbuf(4) And &HF)
-                    WriteRetour(adresse, "CFG: Push MODE push button within 5 seconds to increment the 5th digit - Counter value = " & VB.Right("00000" & Convert.ToString(valeur), 6))
+                    WriteRetour(adresse, "", "CFG: Push MODE push button within 5 seconds to increment the 5th digit - Counter value = " & VB.Right("00000" & Convert.ToString(valeur), 6))
                 Case &HA0
                     valeur = (recbuf(2) >> 4) * 100000 + (recbuf(2) And &HF) * 10000 + (recbuf(3) >> 4) * 1000 + (recbuf(3) And &HF) * 100 + (recbuf(4) >> 4) * 10 + (recbuf(4) And &HF)
-                    WriteRetour(adresse, "CFG: Push MODE push button within 5 seconds to increment the 6th digit - Counter value = " & VB.Right("00000" & Convert.ToString(valeur), 6))
+                    WriteRetour(adresse, "", "CFG: Push MODE push button within 5 seconds to increment the 6th digit - Counter value = " & VB.Right("00000" & Convert.ToString(valeur), 6))
                 Case &HB0
                     Select Case recbuf(4)
-                        Case &H0 : WriteRetour(adresse, "CFG: Counter for Input-0 reset to zero.")
-                        Case &H40 : WriteRetour(adresse, "CFG: Counter for Input-1 reset to zero.")
-                        Case &H80 : WriteRetour(adresse, "CFG: Counter for Input-2 reset to zero.")
-                        Case Else : WriteRetour(adresse, "CFG: protocol error.")
+                        Case &H0 : WriteRetour(adresse, "", "CFG: Counter for Input-0 reset to zero.")
+                        Case &H40 : WriteRetour(adresse, "", "CFG: Counter for Input-1 reset to zero.")
+                        Case &H80 : WriteRetour(adresse, "", "CFG: Counter for Input-2 reset to zero.")
+                        Case Else : WriteRetour(adresse, "", "CFG: protocol error.")
                     End Select
                 Case &HC0
-                    WriteRetour(adresse, "CFG: Enter SET INTERVAL RATE mode within 5 seconds OR push MODE button for next command.")
+                    WriteRetour(adresse, "", "CFG: Enter SET INTERVAL RATE mode within 5 seconds OR push MODE button for next command.")
                 Case &HD0
                     Select Case (recbuf(4) And &HC0)
-                        Case &H0 : WriteRetour(adresse, "CFG: Enter CALIBRATION mode for Input-0 within 5 seconds OR push MODE button for next command.")
-                        Case &H40 : WriteRetour(adresse, "CFG: Enter CALIBRATION mode for Input-1 within 5 seconds OR push MODE button for next command.")
-                        Case &H80 : WriteRetour(adresse, "CFG: Enter CALIBRATION mode for Input-2 within 5 seconds OR push MODE button for next command.")
-                        Case Else : WriteRetour(adresse, "CFG: unknown input ")
+                        Case &H0 : WriteRetour(adresse, "", "CFG: Enter CALIBRATION mode for Input-0 within 5 seconds OR push MODE button for next command.")
+                        Case &H40 : WriteRetour(adresse, "", "CFG: Enter CALIBRATION mode for Input-1 within 5 seconds OR push MODE button for next command.")
+                        Case &H80 : WriteRetour(adresse, "", "CFG: Enter CALIBRATION mode for Input-2 within 5 seconds OR push MODE button for next command.")
+                        Case Else : WriteRetour(adresse, "", "CFG: unknown input ")
                     End Select
                 Case &HE0
-                    WriteRetour(adresse, "CFG: Enter SET ADDRESS mode within 5 seconds OR push MODE button for next command.")
+                    WriteRetour(adresse, "", "CFG: Enter SET ADDRESS mode within 5 seconds OR push MODE button for next command.")
                 Case &HF0
                     If recbuf(2) < &H40 Then
                         valeur = "RFXPower Identification, "
@@ -1582,9 +1601,9 @@ Imports System.Globalization
                         Case &H80 : valeur = valeur & "60 minutes"
                         Case Else : valeur = valeur & "illegal value"
                     End Select
-                    WriteRetour(adresse, "CFG:" & valeur)
+                    WriteRetour(adresse, "", "CFG:" & valeur)
                 Case Else
-                    WriteRetour(adresse, "ERR: illegal packet type")
+                    WriteRetour(adresse, "", "ERR: illegal packet type")
             End Select
         Catch ex As Exception
             WriteLog("ERR: RFXCOM processrfxmeter : " & ex.Message)
@@ -1684,7 +1703,7 @@ Imports System.Globalization
                         valeur = "OFF"
                     End If
             End Select
-            WriteRetour(adresse, valeur)
+            WriteRetour(adresse, "", valeur)
         Catch ex As Exception
             WriteLog("ERR: RFXCOM processx10 : " & ex.Message)
         End Try
@@ -1703,7 +1722,7 @@ Imports System.Globalization
                 Case &HF8 : valeur = "Light detected"
                 Case Else : valeur = "Unknown command:" & VB.Right("0" & Hex(recbuf(2)), 2)
             End Select
-            WriteRetour(adresse, valeur)
+            WriteRetour(adresse, "", valeur)
         Catch ex As Exception
             WriteLog("ERR: RFXCOM processdm10 : " & ex.Message)
         End Try
@@ -1796,7 +1815,7 @@ Imports System.Globalization
             If valeur <> "" Then
                 'valeur = valeur + " " + VB.Right("0" & Hex(recbuf(0)), 2) + "-" + VB.Right("0" & Hex(recbuf(1)), 2) + "-" + VB.Right("0" & Hex(recbuf(2)), 2) + "-" + VB.Right("0" & Hex(recbuf(3)), 2) + "-" + VB.Right("0" & Hex(recbuf(4)), 2) + "-" + VB.Right("0" & Hex(recbuf(5)), 2)
                 valeur = valeur & " (" & VB.Right("0" & Hex(recbuf(2)), 2) & ")"
-                WriteRetour(adresse, valeur)
+                WriteRetour(adresse, "", valeur)
                 If batteryempty Then WriteBattery(adresse)
             End If
         Catch ex As Exception
@@ -1850,7 +1869,7 @@ Imports System.Globalization
                     err = True
                 End If
             End If
-            If err = False Then WriteRetour(adresse, valeur)
+            If err = False Then WriteRetour(adresse, "", valeur)
         Catch ex As Exception
             WriteLog("ERR: RFXCOM processdigimax : " & ex.Message)
         End Try
@@ -1882,7 +1901,7 @@ Imports System.Globalization
                 Else
                     valeur = "ERR: wrong value in temperature field=" & Hex(recbuf(5)) & "." & Hex(recbuf(4) >> 4)
                 End If
-                WriteRetour(adresse, valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
                 If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
                 'checksum8()
 
@@ -1896,7 +1915,7 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse, valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
                 If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
                 'checksumw()
 
@@ -1910,12 +1929,12 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse & "_THE", valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse & "_HUM", valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse & "_THE")
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
                 'checksum8()
 
             ElseIf recbuf(0) = &HFA And recbuf(1) = &H28 And recbits >= 72 Then
@@ -1928,12 +1947,12 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse & "_THE", valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse & "_HUM", valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse & "_THE")
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
                 'checksum8()
 
             ElseIf (recbuf(0) And &HF) = &HA And recbuf(1) = &HCC And recbits >= 72 Then
@@ -1947,12 +1966,12 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse & "_THE", valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse & "_HUM", valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse & "_THE")
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
                 'checksum8()
 
             ElseIf recbuf(0) = &HCA And recbuf(1) = &H2C And recbits >= 72 Then
@@ -1966,12 +1985,12 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse & "_THE", valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse & "_HUM", valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse & "_THE")
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
                 'checksum8()
 
             ElseIf recbuf(0) = &HFA And recbuf(1) = &HB8 And recbits >= 72 Then
@@ -1983,13 +2002,13 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse & "_THE", valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse & "_HUM", valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
                 valeur = wrbattery()
-                WriteRetour(adresse & "_BAT", valeur)
+                WriteRetour(adresse, ListeDevices.BATTERIE, valeur)
                 'checksum8()
 
             ElseIf recbuf(0) = &H1A And recbuf(1) = &H3D And recbits >= 72 Then
@@ -2002,13 +2021,13 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse & "_THE", valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse & "_HUM", valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
                 valeur = wrbattery()
-                WriteRetour(adresse & "_BAT", valeur)
+                WriteRetour(adresse, ListeDevices.BATTERIE, valeur)
                 'checksum8()
 
             ElseIf recbuf(0) = &H5A And recbuf(1) = &H5D And recbits >= 88 Then
@@ -2021,16 +2040,22 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse & "_THE", valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse & "_HUM", valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
                 valeur = CStr(recbuf(8) + 795) 'en hPa
-                WriteRetour(adresse & "_BAR", valeur)
+                WriteRetour(adresse, ListeDevices.BAROMETRE, valeur)
                 valeur = wrforecast(recbuf(9) And &HF)
-                WriteRetour(adresse & "_FOR", valeur)
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse & "_THE")
+
+
+                'FOR ?????
+                'WriteRetour(adresse, "FOR", valeur)
+
+
+
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
                 'checksum10()
 
             ElseIf recbuf(0) = &H5A And recbuf(1) = &H6D And recbits >= 88 Then
@@ -2043,17 +2068,23 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse & "_THE", valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse & "_HUM", valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
                 valeur = CStr(recbuf(8) + 795) 'en hPa
-                WriteRetour(adresse & "_BAR", valeur)
+                WriteRetour(adresse, ListeDevices.BAROMETRE, valeur)
                 valeur = wrforecast(recbuf(9) >> 4)
-                WriteRetour(adresse & "_FOR", valeur)
+
+
+                'FOR ?????
+                'WriteRetour(adresse, "FOR", valeur)
+
+
+
                 valeur = wrbattery()
-                WriteRetour(adresse & "_BAT", valeur)
+                WriteRetour(adresse, ListeDevices.BATTERIE, valeur)
                 'checksum10()
 
             ElseIf recbuf(0) = &H2A And recbuf(1) = &H1D And recbits >= 80 Then
@@ -2061,12 +2092,18 @@ Imports System.Globalization
                 oregon = True
                 adresse = CStr(recbuf(3) * 256)
                 valeur = CStr(CSng(Hex(recbuf(5))) * 10 + CSng(Hex((recbuf(4) >> 4) And &HF)))
-                WriteRetour(adresse & "_RAF", valeur) 'mm/hr
+                WriteRetour(adresse, ListeDevices.PLUIECOURANT, valeur) 'mm/hr
                 valeur = CStr(CSng(Hex(recbuf(8) And &HF)) * 1000 + CSng(Hex(recbuf(7))) * 10 + CSng(Hex(recbuf(6) >> 4)))
-                WriteRetour(adresse & "_RAT", valeur) 'mm
+                WriteRetour(adresse, ListeDevices.PLUIETOTAL, valeur) 'mm
                 valeur = Hex(recbuf(6) And &HF)
-                WriteRetour(adresse & "_RAP", valeur) 'flip cnt
-                If (recbuf(4) And &H4) <> 0 Then WriteBattery(adresse & "_RAF")
+
+
+                'RAP ?????
+                'WriteRetour(adresse, "RAP", valeur) 'flip cnt
+
+
+
+                If (recbuf(4) And &H4) <> 0 Then WriteBattery(adresse)
                 'checksum2()
 
             ElseIf recbuf(0) = &H2A And recbuf(1) = &H19 And recbits >= 84 Then
@@ -2074,11 +2111,11 @@ Imports System.Globalization
                 oregon = True
                 adresse = CStr(recbuf(3) * 256)
                 valeur = CStr(Round((((CSng(Hex(recbuf(5))) + CSng(Hex((recbuf(4) >> 4) And &HF))) / 10 + CSng(Hex((recbuf(4) And &HF))) / 100) * 25.4), 2)) ' mm/hr"
-                WriteRetour(adresse & "_RAF", valeur) 'mm/hr
+                WriteRetour(adresse, ListeDevices.PLUIECOURANT, valeur)
                 valeur = (CSng(Hex(recbuf(7))) / 100 + CSng(Hex(recbuf(6) >> 4)) / 1000)
                 valeur = CStr(Round(((valeur + (CSng(Hex(recbuf(9) And &HF)) * 100 + CSng(Hex(recbuf(8))))) * 25.4), 2))
-                WriteRetour(adresse & "_RAT", valeur) 'mm
-                If (recbuf(4) And &H4) <> 0 Then WriteBattery(adresse & "_RAF")
+                WriteRetour(adresse, ListeDevices.PLUIETOTAL, valeur) 'mm
+                If (recbuf(4) And &H4) <> 0 Then WriteBattery(adresse)
                 'checksumr()
 
             ElseIf recbuf(0) = &H6 And recbuf(1) = &HE4 And recbits >= 84 Then
@@ -2086,11 +2123,11 @@ Imports System.Globalization
                 oregon = True
                 adresse = CStr(recbuf(3) * 256)
                 valeur = CStr(Round((((CSng(Hex(recbuf(5))) + CSng(Hex((recbuf(4) >> 4) And &HF))) / 10 + CSng(Hex((recbuf(4) And &HF))) / 100) * 25.4), 2)) ' mm/hr"
-                WriteRetour(adresse & "_RAF", valeur) 'mm/hr
+                WriteRetour(adresse, ListeDevices.PLUIECOURANT, valeur)
                 valeur = (CSng(Hex(recbuf(7))) / 100 + CSng(Hex(recbuf(6) >> 4)) / 1000)
                 valeur = CStr(Round(((valeur + (CSng(Hex(recbuf(9) And &HF)) * 100 + CSng(Hex(recbuf(8))))) * 25.4), 2))
-                WriteRetour(adresse & "_RAT", valeur) 'mm
-                If (recbuf(4) And &H4) <> 0 Then WriteBattery(adresse & "_RAF")
+                WriteRetour(adresse, ListeDevices.PLUIETOTAL, valeur) 'mm
+                If (recbuf(4) And &H4) <> 0 Then WriteBattery(adresse)
                 'checksumr()
 
             ElseIf recbuf(0) = &H1A And recbuf(1) = &H99 And recbits >= 80 Then
@@ -2098,19 +2135,20 @@ Imports System.Globalization
                 oregon = True
                 adresse = CStr(recbuf(3) * 256)
                 valeur = CStr(CSng(recbuf(4) >> 4) * 22.5)
-                WriteRetour(adresse & "_WID", valeur) '°
+                'WriteRetour(adresse & "_WID", valeur) '°
                 valeur = wrdirection(direction)
-                WriteRetour(adresse & "_WIL", valeur) 'direction en lettres
+                WriteRetour(adresse, ListeDevices.DIRECTIONVENT, valeur) 'direction en lettres
                 valeur = (CSng(Hex(recbuf(7) And &HF)) * 10) + (CSng(Hex(recbuf(6))) / 10)
-                WriteRetour(adresse & "_WIS", valeur) 'vitesse en m/s
+                WriteRetour(adresse, ListeDevices.VITESSEVENT, valeur) 'vitesse en m/s
                 valeur = wrspeed(valeur)
-                WriteRetour(adresse & "_WIF", valeur) 'vitesse en Force
+                'WriteRetour(adresse & "_WIF", valeur) 'vitesse en Force
+                WriteRetour(adresse, ListeDevices.VITESSEVENT, valeur) 'vitesse en Force
                 ' autre mesure mais je sais pas a quoi ca correpond
                 'speed = CSng(Hex(recbuf(8))) + (CSng(Hex((recbuf(7) >> 4) And &HF)) / 10)
                 'WriteMessage(" av.", False)
                 'wrspeed(speed)
                 valeur = wrbattery()
-                WriteRetour(adresse & "_BAT", valeur)
+                WriteRetour(adresse, ListeDevices.BATTERIE, valeur)
                 'checksum9()
 
             ElseIf recbuf(0) = &H1A And recbuf(1) = &H89 And recbits >= 80 Then
@@ -2118,19 +2156,19 @@ Imports System.Globalization
                 oregon = True
                 adresse = CStr(recbuf(3) * 256)
                 valeur = CStr(CSng(recbuf(4) >> 4) * 22.5)
-                WriteRetour(adresse & "_WID", valeur) '°
+                'WriteRetour(adresse & "_WID", valeur) '°
                 valeur = wrdirection(direction)
-                WriteRetour(adresse & "_WIL", valeur) 'direction en lettres
+                WriteRetour(adresse, ListeDevices.DIRECTIONVENT, valeur) 'direction en lettres
                 valeur = (CSng(Hex(recbuf(7) And &HF)) * 10) + (CSng(Hex(recbuf(6))) / 10)
-                WriteRetour(adresse & "_WIS", valeur) 'vitesse en m/s
+                WriteRetour(adresse, ListeDevices.VITESSEVENT, valeur) 'vitesse en m/s
                 valeur = wrspeed(valeur)
-                WriteRetour(adresse & "_WIF", valeur) 'vitesse en Force
+                'WriteRetour(adresse & "_WIF", valeur) 'vitesse en Force
                 ' autre mesure mais je sais pas a quoi ca correpond
                 'speed = CSng(Hex(recbuf(8))) + (CSng(Hex((recbuf(7) >> 4) And &HF)) / 10)
                 'WriteMessage(" av.", False)
                 'wrspeed(speed)
                 valeur = wrbattery()
-                WriteRetour(adresse & "_BAT", valeur)
+                WriteRetour(adresse, ListeDevices.BATTERIE, valeur)
                 'checksum9()
 
             ElseIf recbuf(0) = &H3A And recbuf(1) = &HD And recbits >= 80 Then
@@ -2138,19 +2176,19 @@ Imports System.Globalization
                 oregon = True
                 adresse = CStr(recbuf(3) * 256)
                 valeur = CStr(CSng(recbuf(4) >> 4) * 22.5)
-                WriteRetour(adresse & "_WID", valeur) '°
+                'WriteRetour(adresse & "_WID", valeur) '°
                 valeur = wrdirection(direction)
-                WriteRetour(adresse & "_WIL", valeur) 'direction en lettres
+                WriteRetour(adresse, ListeDevices.DIRECTIONVENT, valeur) 'direction en lettres
                 valeur = (CSng(Hex(recbuf(7) And &HF)) * 10) + (CSng(Hex(recbuf(6))) / 10)
-                WriteRetour(adresse & "_WIS", valeur) 'vitesse en m/s
+                WriteRetour(adresse, ListeDevices.VITESSEVENT, valeur) 'vitesse en m/s
                 valeur = wrspeed(valeur)
-                WriteRetour(adresse & "_WIF", valeur) 'vitesse en Force
+                'WriteRetour(adresse & "_WIF", valeur) 'vitesse en Force
                 ' autre mesure mais je sais pas a quoi ca correpond
                 'speed = CSng(Hex(recbuf(8))) + (CSng(Hex((recbuf(7) >> 4) And &HF)) / 10)
                 'WriteMessage(" av.", False)
                 'wrspeed(speed)
                 valeur = wrbattery()
-                WriteRetour(adresse & "_BAT", valeur)
+                WriteRetour(adresse, ListeDevices.BATTERIE, valeur)
                 'checksum9()
 
             ElseIf recbuf(0) = &HEA And recbuf(1) = &H7C And recbits >= 60 Then
@@ -2158,19 +2196,19 @@ Imports System.Globalization
                 oregon = True
                 adresse = CStr(recbuf(3) * 256)
                 uv = CSng(Hex(recbuf(5) And &HF)) * 10 + CSng(Hex(recbuf(4) >> 4))
-                WriteRetour(adresse & "_UVV", CStr(uv)) 'en chiffre
-                If uv < 3 Then
-                    WriteRetour(adresse & "_UVL", "Low") 'en level
-                ElseIf uv < 6 Then
-                    WriteRetour(adresse & "_UVL", "Medium") 'en level
-                ElseIf uv < 8 Then
-                    WriteRetour(adresse & "_UVL", "High") 'en level
-                ElseIf uv < 11 Then
-                    WriteRetour(adresse & "_UVL", "Very High") 'en level
-                Else
-                    WriteRetour(adresse & "_UVL", "Dangerous") 'en level
-                End If
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse & "_UVV")
+                WriteRetour(adresse, ListeDevices.UV, CStr(uv)) 'en chiffre
+                'If uv < 3 Then
+                '    WriteRetour(adresse & "_UVL", "Low") 'en level
+                'ElseIf uv < 6 Then
+                '    WriteRetour(adresse & "_UVL", "Medium") 'en level
+                'ElseIf uv < 8 Then
+                '    WriteRetour(adresse & "_UVL", "High") 'en level
+                'ElseIf uv < 11 Then
+                '    WriteRetour(adresse & "_UVL", "Very High") 'en level
+                'Else
+                '    WriteRetour(adresse & "_UVL", "Dangerous") 'en level
+                'End If
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
                 'checksumw()
 
             ElseIf recbuf(0) = &HDA And recbuf(1) = &H78 And recbits >= 64 Then
@@ -2178,19 +2216,19 @@ Imports System.Globalization
                 oregon = True
                 adresse = CStr((recbuf(3)) * 256)
                 uv = CSng(Hex(recbuf(5) And &HF)) * 10 + CSng(Hex(recbuf(4) >> 4))
-                WriteRetour(adresse & "_UVV", CStr(uv)) 'en chiffre
-                If uv < 3 Then
-                    WriteRetour(adresse & "_UVL", "Low") 'en level
-                ElseIf uv < 6 Then
-                    WriteRetour(adresse & "_UVL", "Medium") 'en level
-                ElseIf uv < 8 Then
-                    WriteRetour(adresse & "_UVL", "High") 'en level
-                ElseIf uv < 11 Then
-                    WriteRetour(adresse & "_UVL", "Very High") 'en level
-                Else
-                    WriteRetour(adresse & "_UVL", "Dangerous") 'en level
-                End If
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse & "_UVV")
+                WriteRetour(adresse, ListeDevices.UV, CStr(uv)) 'en chiffre
+                'If uv < 3 Then
+                '    WriteRetour(adresse & "_UVL", "Low") 'en level
+                'ElseIf uv < 6 Then
+                '    WriteRetour(adresse & "_UVL", "Medium") 'en level
+                'ElseIf uv < 8 Then
+                '    WriteRetour(adresse & "_UVL", "High") 'en level
+                'ElseIf uv < 11 Then
+                '    WriteRetour(adresse & "_UVL", "Very High") 'en level
+                'Else
+                '    WriteRetour(adresse & "_UVL", "Dangerous") 'en level
+                'End If
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
                 'checksum7()
 
             ElseIf recbuf(0) = &H8A And recbuf(1) = &HEC And recbits >= 96 Then
@@ -2217,7 +2255,7 @@ Imports System.Globalization
                 mm = CSng(recbuf(8) >> 4)
                 yy = CSng(recbuf(10) And &HF) * 10 + CSng(recbuf(9) >> 4) + 2000
                 valeur = valeur & " " & dd & "-" & mm & "-" & yy
-                WriteRetour(adresse, valeur)
+                'WriteRetour(adresse, valeur) 'renvoie la date/heure
                 'checksum11()
 
             ElseIf recbuf(0) = &HEA And (recbuf(1) And &HC0) = &H0 And recbits >= 64 Then
@@ -2226,11 +2264,11 @@ Imports System.Globalization
                 adresse = CStr(recbuf(2) * 256)
                 ' WriteMessage(" counter:" & CSng(recbuf(1) And &HF), False)
                 valeur = CStr((CSng(recbuf(3)) + CSng((recbuf(4) And &H3) * 256)) / 10)
-                WriteRetour(adresse & "_CT1", valeur) 'en Ampere
+                WriteRetour(adresse & "-1", ListeDevices.COMPTEUR, valeur) 'en Ampere
                 valeur = CStr((CSng((recbuf(4) >> 2) And &H3F) + CSng((recbuf(5) And &HF) * 64)) / 10)
-                WriteRetour(adresse & "_CT2", valeur) 'en Ampere
+                WriteRetour(adresse & "-2", ListeDevices.COMPTEUR, valeur) 'en Ampere
                 valeur = CStr((CSng((recbuf(5) >> 4) And &HF) + CSng((recbuf(6) And &H3F) * 16)) / 10)
-                WriteRetour(adresse & "_CT3", valeur) 'en Ampere
+                WriteRetour(adresse & "-3", ListeDevices.COMPTEUR, valeur) 'en Ampere
                 'checksume()
 
             ElseIf recbits = 56 Then
@@ -2240,13 +2278,13 @@ Imports System.Globalization
                 If IsNumeric(Hex(recbuf(4))) And IsNumeric(Hex(recbuf(3) >> 4)) Then
                     'WriteMessage(" addr:" & Hex(recbuf(1) >> 4), False)
                     valeur = CStr(CSng(Hex(recbuf(5) And &H1)) * 100 + CSng(Hex(recbuf(4))) + CSng(Hex(recbuf(3) >> 4)) / 10)
-                    WriteRetour(adresse, valeur) 'en kg
+                    WriteRetour(adresse, ListeDevices.GENERIQUEVALUE, valeur) 'en kg
                     'WriteMessage(" Unknown byte=" & CStr(Hex(recbuf(3) And &HF)) & CStr(Hex(recbuf(2) >> 4)), False)
                     'If Not (((recbuf(0) And &HF0) = (recbuf(5) And &HF0)) And ((recbuf(1) And &HF) = (recbuf(6) And &HF))) Then
                     '    WriteRetour(adresse, "ERR: Checksum error")
                     'End If
                 Else
-                    WriteRetour(adresse, "ERR: weight value is not a decimal value.")
+                    WriteRetour(adresse, ListeDevices.GENERIQUEVALUE, "ERR: weight value is not a decimal value.")
                 End If
 
             ElseIf (recbuf(0) And &HF) = &H3 And recbits = 64 Then
@@ -2258,7 +2296,7 @@ Imports System.Globalization
                 '    WriteMessage(VB.Right("0" & Hex(recbuf(i)), 2), False)
                 'Next
                 valeur = CStr(Round((((recbuf(4) And &HF) * 4096) + (recbuf(3) * 16) + (recbuf(2) >> 4) / 400.8), 1))
-                WriteRetour(adresse, valeur) 'en kg
+                WriteRetour(adresse, ListeDevices.GENERIQUEVALUE, valeur) 'en kg
 
                 ' 
             ElseIf (recbuf(0) = &H1A Or recbuf(0) = &H2A Or recbuf(0) = &H3A) And recbits = 108 Then
@@ -2275,8 +2313,8 @@ Imports System.Globalization
                 valeur += (CLng(recbuf(5)) >> 4) And &HF
                 valeur = valeur / 223000
                 'Checksum12() 
-                WriteRetour(adresse, valeur) 'total en kWh
-                'WriteRetour(adresse, CSng((recbuf(5) And &HF) * 65536) + CSng(recbuf(4) * 256) + CSng(recbuf(3))) 'now en Watt
+                WriteRetour(adresse, ListeDevices.ENERGIETOTALE, valeur) 'total en kWh
+                WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE, CSng((recbuf(5) And &HF) * 65536) + CSng(recbuf(4) * 256) + CSng(recbuf(3))) 'now en Watt
             End If
             Return oregon
         Catch ex As Exception
@@ -2707,7 +2745,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Public Sub WriteRetour(ByVal adresse As String, ByVal valeur As String)
+    Public Sub WriteRetour(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
         Try
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte cette boucle
 
@@ -2722,6 +2760,8 @@ Imports System.Globalization
 
             'on ne traite rien pendant les 6 premieres secondes
             If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
+
+
 
                 'EVENT VALEUR
                 'Faudra gérer le fait que le RFXCOM envoie deux fois le même ordre : utilisation de tempsentrereponse : pourra etre generaliser pour eviter les envois multiples

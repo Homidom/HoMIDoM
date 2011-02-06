@@ -672,7 +672,7 @@ Namespace HoMIDom
 
         <Serializable()> Class GENERIQUESTRING
             Inherits DeviceGenerique_ValueString
-            
+
             'Creation du device
             Public Sub New(ByVal server As Server)
                 _Server = server
@@ -781,7 +781,7 @@ Namespace HoMIDom
             End Sub
 
             Public Sub OK()
-               Touche("ok")
+                Touche("ok")
             End Sub
 
             Public Sub HAUT()
