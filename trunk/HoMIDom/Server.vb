@@ -203,12 +203,27 @@ Namespace HoMIDom
                                         AddHandler o.DeviceChanged, AddressOf DeviceChange
                                         _Dev = o
                                         o = Nothing
+                                    Case "BAROMETRE"
+                                        Dim o As New Device.BAROMETRE(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
                                     Case "BATTERIE"
                                         Dim o As New Device.BATTERIE(Me)
                                         _Dev = o
                                         o = Nothing
+                                    Case "COMPTEUR"
+                                        Dim o As New Device.COMPTEUR(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
                                     Case "CONTACT"
                                         Dim o As New Device.CONTACT(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "DETECTEUR"
+                                        Dim o As New Device.DETECTEUR(Me)
                                         AddHandler o.DeviceChanged, AddressOf DeviceChange
                                         _Dev = o
                                         o = Nothing
@@ -232,6 +247,21 @@ Namespace HoMIDom
                                         AddHandler o.DeviceChanged, AddressOf DeviceChange
                                         _Dev = o
                                         o = Nothing
+                                    Case "GENERIQUEBOOLEEN"
+                                        Dim o As New Device.GENERIQUEBOOLEEN(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "GENERIQUESTRING"
+                                        Dim o As New Device.GENERIQUESTRING(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
+                                    Case "GENERIQUEVALUE"
+                                        Dim o As New Device.GENERIQUEVALUE(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                        _Dev = o
+                                        o = Nothing
                                     Case "HUMIDITE"
                                         Dim o As New Device.HUMIDITE(Me)
                                         AddHandler o.DeviceChanged, AddressOf DeviceChange
@@ -249,36 +279,6 @@ Namespace HoMIDom
                                         o = Nothing
                                     Case "MULTIMEDIA"
                                         Dim o As New Device.MULTIMEDIA(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "DETECTEUR"
-                                        Dim o As New Device.DETECTEUR(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "BAROMETRE"
-                                        Dim o As New Device.BAROMETRE(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "COMPTEUR"
-                                        Dim o As New Device.COMPTEUR(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "GENERIQUEBOOLEEN"
-                                        Dim o As New Device.GENERIQUEBOOLEEN(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "GENERIQUESTRING"
-                                        Dim o As New Device.GENERIQUESTRING(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "GENERIQUEVALUE"
-                                        Dim o As New Device.GENERIQUEVALUE(Me)
                                         AddHandler o.DeviceChanged, AddressOf DeviceChange
                                         _Dev = o
                                         o = Nothing
@@ -331,39 +331,42 @@ Namespace HoMIDom
 
                                 With _Dev
                                     'Affectation des valeurs sur les propriétés génériques
-                                    .ID = list.Item(j).Attributes.GetNamedItem("id").Value
-                                    .Name = list.Item(j).Attributes.GetNamedItem("name").Value
-                                    .Enable = list.Item(j).Attributes.GetNamedItem("enable").Value
-                                    .DriverId = list.Item(j).Attributes.GetNamedItem("driverid").Value
-                                    .Description = list.Item(j).Attributes.GetNamedItem("description").Value
-                                    .Adresse1 = list.Item(j).Attributes.GetNamedItem("adresse1").Value
-                                    .Adresse2 = list.Item(j).Attributes.GetNamedItem("adresse2").Value
-                                    .DateCreated = list.Item(j).Attributes.GetNamedItem("datecreated").Value
-                                    .LastChanged = list.Item(j).Attributes.GetNamedItem("lastchanged").Value
-                                    .LastChangedDuree = list.Item(j).Attributes.GetNamedItem("lastchangedduree").Value
-                                    .Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
-                                    .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
-                                    .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
-                                    .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("id") Is Nothing) Then .ID = list.Item(j).Attributes.GetNamedItem("id").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("name") Is Nothing) Then .Name = list.Item(j).Attributes.GetNamedItem("name").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("enable") Is Nothing) Then .Enable = list.Item(j).Attributes.GetNamedItem("enable").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("driverid") Is Nothing) Then .DriverId = list.Item(j).Attributes.GetNamedItem("driverid").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("description") Is Nothing) Then .Description = list.Item(j).Attributes.GetNamedItem("description").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("adresse1") Is Nothing) Then .Adresse1 = list.Item(j).Attributes.GetNamedItem("adresse1").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("adresse2") Is Nothing) Then .Adresse2 = list.Item(j).Attributes.GetNamedItem("adresse2").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("datecreated") Is Nothing) Then .DateCreated = list.Item(j).Attributes.GetNamedItem("datecreated").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("lastchange") Is Nothing) Then .LastChange = list.Item(j).Attributes.GetNamedItem("lastchange").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("lastchangeduree") Is Nothing) Then .LastChangeDuree = list.Item(j).Attributes.GetNamedItem("lastchangeduree").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("modele") Is Nothing) Then .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("picture") Is Nothing) Then .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("solo") Is Nothing) Then .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = list.Item(j).Attributes.GetNamedItem("value").Value
                                     '-- propriétés generique value --
-                                    If _Dev.Type = "TEMPERATURE" _
-                                    Or _Dev.Type = "HUMIDITE" _
-                                    Or _Dev.Type = "TEMPERATURECONSIGNE" _
-                                    Or _Dev.Type = "ENERGIETOTALE" _
+                                    If _Dev.Type = "BAROMETRE" _
+                                    Or _Dev.Type = "COMPTEUR" _
                                     Or _Dev.Type = "ENERGIEINSTANTANEE" _
-                                    Or _Dev.Type = "PLUIETOTAL" _
+                                    Or _Dev.Type = "ENERGIETOTALE" _
+                                    Or _Dev.Type = "GENERIQUEVALUE" _
+                                    Or _Dev.Type = "HUMIDITE" _
                                     Or _Dev.Type = "PLUIECOURANT" _
+                                    Or _Dev.Type = "PLUIETOTAL" _
+                                    Or _Dev.Type = "TEMPERATURE" _
+                                    Or _Dev.Type = "TEMPERATURECONSIGNE" _
                                     Or _Dev.Type = "VITESSEVENT" _
                                     Or _Dev.Type = "UV" _
-                                    Or _Dev.Type = "HUMIDITE" _
+                                    Or _Dev.Type = "VITESSEVENT" _
                                     Then
-                                        .Value = list.Item(j).Attributes.GetNamedItem("value").Value
-                                        .ValueMin = list.Item(j).Attributes.GetNamedItem("valuemin").Value
-                                        .ValueMax = list.Item(j).Attributes.GetNamedItem("valuemax").Value
-                                        .ValueDef = list.Item(j).Attributes.GetNamedItem("valuedef").Value
-                                        .Precision = list.Item(j).Attributes.GetNamedItem("precision").Value
-                                        .Correction = list.Item(j).Attributes.GetNamedItem("correction").Value
-                                        .Formatage = list.Item(j).Attributes.GetNamedItem("formatage").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("valuemin") Is Nothing) Then .ValueMin = list.Item(j).Attributes.GetNamedItem("valuemin").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("valuemax") Is Nothing) Then .ValueMax = list.Item(j).Attributes.GetNamedItem("valuemax").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("valuedef") Is Nothing) Then .ValueDef = list.Item(j).Attributes.GetNamedItem("valuedef").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("precision") Is Nothing) Then .Precision = list.Item(j).Attributes.GetNamedItem("precision").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("correction") Is Nothing) Then .Correction = list.Item(j).Attributes.GetNamedItem("correction").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("formatage") Is Nothing) Then .Formatage = list.Item(j).Attributes.GetNamedItem("formatage").Value
                                     End If
                                     '-- cas spécifique du multimedia pour récupérer les commandes IR --
                                     If _Dev.type = "MULTIMEDIA" Then
@@ -380,16 +383,24 @@ Namespace HoMIDom
                                             End If
                                         Next
                                     End If
+                                    If .ID <> "" And .Name <> "" And .Adresse1 <> "" And .DriverId <> "" Then
+                                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement du device " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
+                                    Else
+                                        _Dev.Enable = False
+                                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement du device (information incomplete -> Disable) " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
+                                    End If
                                 End With
                                 _ListDevices.Add(_Dev)
                                 _Dev = Nothing
                             Next
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListDevices.Count & " devices(s) trouvé(s)")
+                        Else
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun device trouvé dans le fichier de configuration")
                         End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListDevices.Count & " devices(s) trouvé(s)")
                         list = Nothing
                     Next
                 Else
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun device n'est enregistré dans le fichier de config")
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Fichier de configuration non trouvé")
                 End If
 
                 'Vide les variables
@@ -630,6 +641,7 @@ Namespace HoMIDom
                 Dim fi As IO.FileInfo
 
                 'Cherche tous les fichiers dll dans le répertoie plugin
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadDrivers", "Chargement des DLL des drivers")
                 For Each fi In aryFi
                     'chargement du plugin
                     tx = fi.FullName   'emplacement de la dll
@@ -651,7 +663,8 @@ Namespace HoMIDom
                                 Dim pt As New Driver(Me, i1.ID)
                                 _ListDrivers.Add(i1)
                                 _ListImgDrivers.Add(pt)
-                                i1.Start()
+                                'i1.Start()
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadDrivers", " - " & i1.Nom & " chargé")
                             End If
                         End If
                     Next
@@ -659,6 +672,24 @@ Namespace HoMIDom
             Catch ex As Exception
                 MsgBox("Erreur lors du chargement des drivers: " & ex.Message)
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadDrivers", " Erreur lors du chargement des drivers: " & ex.Message)
+            End Try
+        End Sub
+
+        Public Sub StartDrivers()
+            Try
+                'Cherche tous les drivers chargés
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadDrivers", "Démarrage des drivers")
+                For Each driver In _ListDrivers
+                    If driver.Enable And driver.StartAuto Then
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "StartDrivers", " - " & driver.Nom & " démarré")
+                        driver.start()
+                    Else
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "StartDrivers", " - " & driver.Nom & " non démarré car non Auto")
+                    End If
+                Next
+            Catch ex As Exception
+                MsgBox("Erreur lors du démarrage des drivers: " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "StartDrivers", " Erreur lors du démarrage des drivers: " & ex.Message)
             End Try
         End Sub
 
@@ -1431,14 +1462,14 @@ Namespace HoMIDom
         End Function
 
         'retourne une liste de device par son Adresse1 et/ou type et/ou son driver, ex: "A1" "TEMPERATURE" "RFXCOM_RECEIVER"
-        Public Function ReturnDeviceByAdresse1TypeDriver(ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DeviceDriver As String) As arraylist Implements IHoMIDom.ReturnDeviceByAdresse1TypeDriver
+        Public Function ReturnDeviceByAdresse1TypeDriver(ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DriverID As String) As ArrayList Implements IHoMIDom.ReturnDeviceByAdresse1TypeDriver
             Dim retour As Object = Nothing
-            Dim listresultat As new arraylist
+            Dim listresultat As New ArrayList
             For i As Integer = 0 To _ListDevices.Count - 1
-                If (DeviceAdresse="" OR _ListDevices.Item(i).Adresse1 = DeviceAdresse.ToUpper()) AND (DeviceType="" OR _ListDevices.Item(i).type = DeviceType.ToUpper()) AND (DeviceDriver="" OR _ListDevices.Item(i).Driver.Nom = DeviceDriver.ToUpper()) Then
+                If (DeviceAdresse = "" Or _ListDevices.Item(i).Adresse1 = DeviceAdresse.ToUpper()) And (DeviceType = "" Or _ListDevices.Item(i).type = DeviceType.ToUpper()) And (DriverID = "" Or _ListDevices.Item(i).DriverID = DriverID.ToUpper()) Then
                     retour = _ListDevices.Item(i)
-                    listresultat.add(retour)
-                    retour=Nothing
+                    listresultat.Add(retour)
+                    retour = Nothing
                 End If
             Next
             Return listresultat
@@ -1448,9 +1479,12 @@ Namespace HoMIDom
 
 #Region "Declaration de la classe Server"
         Public Sub New()
+            Dim retour As String
             'Chargement de la config
-            LoadConfig(_MonRepertoire & "\Config\")
             LoadDrivers()
+            retour = LoadConfig(_MonRepertoire & "\Config\")
+            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", retour)
+            StartDrivers()
             TimerSecond.Interval = 1000
             AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
             TimerSecond.Enabled = True

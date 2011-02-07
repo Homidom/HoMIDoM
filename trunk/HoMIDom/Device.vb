@@ -56,8 +56,8 @@ Namespace HoMIDom
             Protected _Adresse1 As String = ""
             Protected _Adresse2 As String = ""
             Protected _DateCreated As Date = Now
-            Protected _LastChanged As Date = Now
-            Protected _LastChangedDuree As Integer = 0
+            Protected _LastChange As Date = Now
+            Protected _LastChangeDuree As Integer = 0
             Protected _Refresh As Integer = 0
             Protected _Modele As String = ""
             Protected _Picture As String = ""
@@ -162,20 +162,20 @@ Namespace HoMIDom
             'Date et heure de la derniere modification de Value
             Public Property LastChange() As Date
                 Get
-                    Return _LastChanged
+                    Return _LastChange
                 End Get
                 Set(ByVal value As Date)
-                    _LastChanged = value
+                    _LastChange = value
                 End Set
             End Property
 
-            'Si Lastchanged+LastchangedDuree< Now alors le composant a un problème car il n'a pas emis depuis au moins lastchangedduree.
-            Public Property LastChangedDuree() As Integer
+            'Si Lastchanged+LastchangeDuree< Now alors le composant a un problème car il n'a pas emis depuis au moins lastchangedduree.
+            Public Property LastChangeDuree() As Integer
                 Get
-                    Return _LastChangedDuree
+                    Return _LastChangeDuree
                 End Get
                 Set(ByVal value As Integer)
-                    _LastChangedDuree = value
+                    _LastChangeDuree = value
                 End Set
             End Property
 
@@ -312,7 +312,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As Double)
                     Dim tmp As Double = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     If tmp < _ValueMin Then tmp = _ValueMin
                     If tmp > _ValueMax Then tmp = _ValueMax
                     If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
@@ -363,7 +363,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As Boolean)
                     Dim tmp As Boolean = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     'Si la valeur a changé on la prend en compte et on créer l'event
                     If tmp <> _Value Then
                         _Value = tmp
@@ -411,7 +411,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As Integer)
                     Dim tmp As Integer = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     If tmp < 0 Then tmp = 0
                     If tmp > 100 Then tmp = 100
 
@@ -459,7 +459,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     Dim tmp As String = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     'Si la valeur a changé on la prend en compte et on créer l'event
                     If tmp <> _Value Then
                         _Value = tmp
@@ -894,6 +894,7 @@ Namespace HoMIDom
 
         <Serializable()> Class METEO
             Inherits DeviceGenerique
+            Dim _Value As String = ""
             Dim _ConditionActuel As String = ""
             Dim _TempActuel As String = ""
             Dim _HumActuel As String = ""
@@ -948,13 +949,28 @@ Namespace HoMIDom
                 Driver.Read(Me)
             End Sub
 
+            Public Property Value() As String
+                Get
+                    Return _Value
+                End Get
+                Set(ByVal value As String)
+                    Dim tmp As String = value
+                    _LastChange = Now
+                    'Si la valeur a changé on la prend en compte et on créer l'event
+                    If tmp <> _Value Then
+                        _Value = tmp
+                        RaiseEvent DeviceChanged(Me, "Value", _Value)
+                    End If
+                End Set
+            End Property
+
             Public Property ConditionActuel() As String
                 Get
                     Return _ConditionActuel
                 End Get
                 Set(ByVal value As String)
                     _ConditionActuel = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(Me, "ConditionActuel", value)
                 End Set
             End Property
@@ -965,7 +981,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _TempActuel = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "TemperatureActuel", value)
                 End Set
             End Property
@@ -976,7 +992,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _HumActuel = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "HumiditeActuel", value)
                 End Set
             End Property
@@ -996,7 +1012,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _VentActuel = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "VentActuel", value)
                 End Set
             End Property
@@ -1007,7 +1023,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _JourToday = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "JourToday", value)
                 End Set
             End Property
@@ -1018,7 +1034,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _MinToday = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "MinToday", value)
                 End Set
             End Property
@@ -1029,7 +1045,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _MaxToday = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "MaxToday", value)
                 End Set
             End Property
@@ -1049,7 +1065,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _ConditionToday = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "ConditionToday", value)
                 End Set
             End Property
@@ -1060,7 +1076,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _JourJ1 = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "JourJ1", value)
                 End Set
             End Property
@@ -1071,7 +1087,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _MinJ1 = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "MinJ1", value)
                 End Set
             End Property
@@ -1082,7 +1098,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _MaxJ1 = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "MaxJ1", value)
                 End Set
             End Property
@@ -1102,7 +1118,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _ConditionJ1 = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "ConditionJ1", value)
                 End Set
             End Property
@@ -1113,7 +1129,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _JourJ2 = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "JourJ2", value)
                 End Set
             End Property
@@ -1124,7 +1140,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _MinJ2 = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "MinJ2", value)
                 End Set
             End Property
@@ -1135,7 +1151,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _MaxJ2 = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "MaxJ2", value)
                 End Set
             End Property
@@ -1155,7 +1171,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _ConditionJ2 = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "ConditionJ2", value)
                 End Set
             End Property
@@ -1166,7 +1182,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _JourJ3 = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "JourJ3", value)
                 End Set
             End Property
@@ -1177,7 +1193,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _MinJ3 = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "MinJ3", value)
                 End Set
             End Property
@@ -1188,7 +1204,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _MaxJ3 = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "MaxJ3", value)
                 End Set
             End Property
@@ -1208,7 +1224,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _ConditionJ3 = value
-                    _LastChanged = Now
+                    _LastChange = Now
                     RaiseEvent DeviceChanged(_ID, "ConditionJ3", value)
                 End Set
             End Property
