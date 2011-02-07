@@ -28,8 +28,8 @@ Namespace HoMIDom
         End Sub
 
         'Evenement provenant des devices
-        Public Sub DeviceChange(ByVal Id As String, ByVal [Property] As String, ByVal Parametres As Object)
-
+        Public Sub DeviceChange(ByVal DeviceId As Object, ByVal [Property] As String, ByVal Parametres As Object)
+            Log(TypeLog.INFO, TypeSource.SERVEUR, "DeviceChange", "Historiser " & DeviceId.nom & " (" & [Property] & ") : " & Parametres)
         End Sub
 
         'Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi
