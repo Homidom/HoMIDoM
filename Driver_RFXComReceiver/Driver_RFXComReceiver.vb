@@ -27,7 +27,7 @@ Imports System.Globalization
     Dim _Enable As String = False
     Dim _Description As String = "RFXCom Receiver COM, USB or Ethernet"
     Dim _StartAuto As Boolean = False
-    Dim _Protocol As String = "Virtuel"
+    Dim _Protocol As String = "RF"
     Dim _IsConnect As Boolean = False
     Dim _IP_TCP As String = ""
     Dim _Port_TCP As String = ""
@@ -234,30 +234,43 @@ Imports System.Globalization
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         '_IsConnect = True
         Dim retour As String
-        'ouverture du port suivant le Port Com ou IP
-        If _Com <> "" Then
-            retour = ouvrir(_Com)
-        ElseIf _IP_TCP <> "" Then
-            retour = ouvrir(_IP_TCP)
-        Else
-            retour = "ERR: Port Com ou IP_TCP non défini. Impossible d'ouvrir le port !"
-        End If
-        'traitement du message de retour
-        If STRGS.Left(retour, 4) = "ERR:" Then
-            retour = STRGS.Right(retour, retour.Length - 5)
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER", "Driver non démarré : " & retour)
-        Else
-            'le driver est démarré, on log puis on lance les handlers
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", "Driver démarré : " & retour)
-            retour = lancer()
+        Try
+            'ouverture du port suivant le Port Com ou IP
+            If _Com <> "" Then
+                retour = ouvrir(_Com)
+            ElseIf _IP_TCP <> "" Then
+                retour = ouvrir(_IP_TCP)
+            Else
+                retour = "ERR: Port Com ou IP_TCP non défini. Impossible d'ouvrir le port !"
+            End If
+            'traitement du message de retour
             If STRGS.Left(retour, 4) = "ERR:" Then
                 retour = STRGS.Right(retour, retour.Length - 5)
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour & " non lancé, arrêt du driver")
-                [Stop]()
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER", "Driver non démarré : " & retour)
             Else
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour)
+                'le driver est démarré, on log puis on lance les handlers
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", "Driver démarré : " & retour)
+                retour = lancer()
+                If STRGS.Left(retour, 4) = "ERR:" Then
+                    retour = STRGS.Right(retour, retour.Length - 5)
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour & " non lancé, arrêt du driver")
+                    [Stop]()
+                Else
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour)
+                    'les handlers sont lancés, on configure le rfxcom
+                    retour = configurer()
+                    If STRGS.Left(retour, 4) = "ERR:" Then
+                        retour = STRGS.Right(retour, retour.Length - 5)
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour)
+                        [Stop]()
+                    Else
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour)
+                    End If
+                End If
             End If
-        End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER Start", ex.Message)
+        End Try
     End Sub
 
     '???? quoi mettre dedans ?
@@ -390,6 +403,9 @@ Imports System.Globalization
                 Return "ERR: Handler COM"
             End Try
         End If
+    End Function
+
+    Private Function configurer() As String
         'configurer le rfxcom
         Try
             ecrire(&HF0, MODEVAR)
@@ -401,9 +417,10 @@ Imports System.Globalization
             'ecrire(&HF0, DISHE)
             'ecrire(&HF0, DISKOP)
             'ecrire(&HF0, DISARC)
+            Return "Configuration OK"
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER LANCER Configuration", ex.Message)
-            Return "ERR: Configuration du RFXCOM_Receiver"
+            Return "ERR: Configuration " & ex.Message
         End Try
     End Function
 
@@ -524,7 +541,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Sub ReadErrorEvent(ByVal sender As Object, ByVal ev As SerialErrorReceivedEventArgs)
+    Private Sub ReadErrorEvent(ByVal sender As Object, ByVal ev As SerialErrorReceivedEventArgs)
         Try
             Dim count As Integer = 0
             count = port.BytesToRead
@@ -652,14 +669,15 @@ Imports System.Globalization
             mess = False
             firstbyte = True
 
-            'affichage de la chaine reçu
+            ''affichage de la chaine reçu
             'Dim valtemp As String = ""
             'Dim xxx As String = ""
             'For i As Integer = 0 To bytecnt
-            '    'valtemp = valtemp & recbuf(i)
+            '    valtemp = valtemp & recbuf(i)
             '    xxx = xxx & (VB.Right("0" & Hex(recbuf(i)), 2))
             'Next
             'WriteLog(xxx)
+
             If Not waitforack Then
                 If bytecnt = 4 Then
                     parity = Not (((recbuf(0) And &HF0) >> 4) + (recbuf(0) And &HF) + (recbuf(1) >> 4) + (recbuf(1) And &HF) + (recbuf(2) >> 4) + (recbuf(2) And &HF) + (recbuf(3) >> 4)) And &HF
@@ -668,6 +686,7 @@ Imports System.Globalization
                     parity = Not ((recbuf(0) >> 4) + (recbuf(0) And &HF) + (recbuf(1) >> 4) + (recbuf(1) And &HF) + (recbuf(2) >> 4) + (recbuf(2) And &HF) + (recbuf(3) >> 4) + (recbuf(3) And &HF) + (recbuf(4) >> 4) + (recbuf(4) And &HF) + (recbuf(5) >> 4)) And &HF
                     If (parity = (recbuf(5) And &HF)) And (recbuf(0) + (recbuf(1) Xor &HF) = &HFF) Then rfxpower = True Else rfxpower = False
                 End If
+
                 If vresponse Then  'display version
                     vresponse = False
                     recbits = 0
@@ -704,17 +723,17 @@ Imports System.Globalization
                         End If
                     End If
                     WriteLog(logtemp)
-                    'ElseIf protocol = MODEARC Then : processARC()
-                    'ElseIf protocol = MODEKOP Then : processkoppla()
+                    'ElseIf protocolmode = MODEARC Then : processARC()
+                    'ElseIf protocolmode = MODEKOP Then : processkoppla()
                 ElseIf rfxsensor Then : processrfxsensor()
                 ElseIf rfxpower Then : processrfxmeter()
-                    'ElseIf protocol = MODEVISONIC Then : processvisonic(recbits)
-                ElseIf Protocol = MODEVAR And recbits = 20 Then : processati()
-                ElseIf Protocol = MODEVAR And recbits = 21 Then : processatiplus()
-                ElseIf Protocol = MODEVAR And (recbits = 12 Or recbits = 34 Or recbits = 38) Then : processhe()
-                ElseIf Protocol = MODEVAR And recbits = 56 Then : processsomfy()
-                ElseIf Protocol = MODEVAR And (recbits = 56 Or recbits > 59) Then : processoregon(recbits)
-                    '    ElseIf protocol = MODENOXLAT Then
+                    'ElseIf protocolmode = MODEVISONIC Then : processvisonic(recbits)
+                ElseIf protocolmode = MODEVAR And recbits = 20 Then : processati()
+                ElseIf protocolmode = MODEVAR And recbits = 21 Then : processatiplus()
+                ElseIf protocolmode = MODEVAR And (recbits = 12 Or recbits = 34 Or recbits = 38) Then : processhe()
+                ElseIf protocolmode = MODEVAR And recbits = 56 Then : processsomfy()
+                ElseIf protocolmode = MODEVAR And (recbits = 56 Or recbits > 59) Then : processoregon(recbits)
+                    '    ElseIf protocolmode = MODENOXLAT Then
                     '    If recbits = 36 Or recbits = 66 Or recbits = 72 Then
                     '        processvisonic(recbits)
                     '    ElseIf recbits > 59 Then
@@ -727,7 +746,7 @@ Imports System.Globalization
                 Else
                     processx(recbits)
                 End If
-                'If (protocol = MODEVAR Or protocol = MODENOXLAT) And recbits <> 0 Then
+                'If (protocolmode = MODEVAR Or protocolmode = MODENOXLAT) And recbits <> 0 Then
                 '    If slave Then
                 '        WriteMessage(" bits=" & Convert.ToString(recbits) & " from SLAVE", False)
                 '    Else
@@ -739,7 +758,7 @@ Imports System.Globalization
             End If
             waitforack = False
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER display_mess", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER display_mess", ex.ToString)
         End Try
     End Sub
 
@@ -811,14 +830,14 @@ Imports System.Globalization
                     Case Else : WriteLog("ERR: Unknown data packet received")
                 End Select
                 'hsaddr = createhsaddr()
-                'If protocol = MODEB32 Then
+                'If protocolmode = MODEB32 Then
                 '    WriteLog("X10Security : addr:" & VB.Right("0" & Hex(recbuf(0)), 2) & " ID:" & VB.Right("    " & Str(hsaddr), 5))
                 'Else
                 '    WriteLog("X10Security : addr:" & VB.Right("0" & Hex(recbuf(0)), 2) & VB.Right("0" & Hex(recbuf(1)), 2) & " " & VB.Right("0" & Hex(recbuf(4)), 2) & " ID:" & VB.Right("    " & Str(hsaddr), 5))
                 'End If
                 If valeur <> "" Then WriteRetour(adresse, "", valeur)
 
-            ElseIf Protocol = MODEVAR Or Protocol = MODENOXLAT Then
+            ElseIf protocolmode = MODEVAR Or protocolmode = MODENOXLAT Then
                 If recbits = 32 And recbuf(0) = &H52 And recbuf(1) = &H46 Then
                     Select Case recbuf(2)
                         Case &H58 : valeur = "RFXSensor Type-1"
@@ -1805,7 +1824,7 @@ Imports System.Globalization
                 Case &HF8 : valeur = "Light detected"
                 Case Else : valeur = "ALERT ??????"
             End Select
-            If Protocol = MODEB32 Then
+            If protocolmode = MODEB32 Then
                 'hsaddr = createhsaddr()
                 'WriteLog("DEBUG : X10Security : addr:" & VB.Right("0" & Hex(recbuf(0)), 2) & " ID:" & VB.Right("    " & Str(hsaddr), 5))
             Else
@@ -1850,7 +1869,7 @@ Imports System.Globalization
                 End Select
             End If
             valeur = Convert.ToString(recbuf(3)) 'valeur de la temperature mesurée
-            If Protocol = MODEB32 Then
+            If protocolmode = MODEB32 Then
                 parity = Not (((recbuf(0) And &HF0) >> 4) + (recbuf(0) And &HF) + ((recbuf(1) And &HF0) >> 4) + (recbuf(1) And &HF) + ((recbuf(2) And &HF0) >> 4)) And &HF
                 If parity <> (recbuf(2) And &HF) Then
                     WriteLog("ERR: DIGIMAX " & adresse & " : Parity error on address/status SB:" & Hex(parity))
@@ -2756,7 +2775,7 @@ Imports System.Globalization
             'Dim tabletmp() As DataRow
             'Dim dateheure, Err As String
             'log tous les paquets en mode debug
-            WriteLog("DBG: WriteRetour receive from " & adresse & " -> " & valeur)
+            WriteLog("DBG: WriteRetour receive from " & adresse & " (" & type & ") -> " & valeur)
 
             'on ne traite rien pendant les 6 premieres secondes
             If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
@@ -2770,7 +2789,7 @@ Imports System.Globalization
                 'Recherche si un device affecté
 
                 Dim listedevices As New ArrayList
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(adresse, type, Me._Nom)
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(adresse, type, Me._ID)
                 If (listedevices.Count = 1) Then
                     listedevices.Item(0).value = valeur
                 ElseIf (listedevices.Count > 1) Then

@@ -20,14 +20,13 @@ Module Service
 
     Sub Main()
         Try
-            Dim obj As Server = New Server()
-
-
 
             Console.WriteLine("******************************")
             Console.WriteLine("DEMARRAGE DU SERVEUR**********")
             Console.WriteLine("******************************")
             Console.WriteLine(" ")
+
+            Dim obj As Server = New Server()
 
             'Console.WriteLine(Now & " Chargement de la configuration")
             
