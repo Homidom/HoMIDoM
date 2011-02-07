@@ -1417,8 +1417,33 @@ Namespace HoMIDom
             Next
             Return retour
         End Function
+        
+        'retourne le driver par son Nom
+        Public Function ReturnDriverByNom(ByVal DriverNom As String) As Object Implements IHoMIDom.ReturnDriverByNom
+            Dim retour As Object = Nothing
+            For i As Integer = 0 To _ListDrivers.Count - 1
+                If _ListDrivers.Item(i).Nom = DriverNom.ToUpper() Then
+                    retour = _ListDrivers.Item(i)
+                    Exit For
+                End If
+            Next
+            Return retour
+        End Function
 
-
+        'retourne une liste de device par son Adresse1 et/ou type et/ou son driver, ex: "A1" "TEMPERATURE" "RFXCOM_RECEIVER"
+        Public Function ReturnDeviceByAdresse1TypeDriver(ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DeviceDriver As String) As arraylist Implements IHoMIDom.ReturnDeviceByAdresse1TypeDriver
+            Dim retour As Object = Nothing
+            Dim listresultat As new arraylist
+            For i As Integer = 0 To _ListDevices.Count - 1
+                If (DeviceAdresse="" OR _ListDevices.Item(i).Adresse1 = DeviceAdresse.ToUpper()) AND (DeviceType="" OR _ListDevices.Item(i).type = DeviceType.ToUpper()) AND (DeviceDriver="" OR _ListDevices.Item(i).Driver.Nom = DeviceDriver.ToUpper()) Then
+                    retour = _ListDevices.Item(i)
+                    listresultat.add(retour)
+                    retour=Nothing
+                End If
+            Next
+            Return listresultat
+        End Function
+        
 #End Region
 
 #Region "Declaration de la classe Server"
