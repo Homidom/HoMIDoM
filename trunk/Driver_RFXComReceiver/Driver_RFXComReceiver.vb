@@ -2769,7 +2769,15 @@ Imports System.Globalization
 
                 'Recherche si un device affecté
 
-
+                Dim listedevices As New ArrayList
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(adresse, type, Me._Nom)
+                If (listedevices.Count = 1) Then
+                    listedevices.Item(0).value = valeur
+                ElseIf (listedevices.Count > 1) Then
+                    WriteLog("ERR: Plusieurs device correspondent à : " & type & "/" & adresse & ":" & valeur)
+                Else
+                    WriteLog("ERR: Device non trouvé : " & type & "/" & adresse & ":" & valeur)
+                End If
 
                 ''on verifie si un composant correspond à cette adresse
                 'tabletmp = domos_svc.table_composants.Select("composants_adresse = '" & adresse.ToString & "' AND composants_modele_norme = 'RFX'")
