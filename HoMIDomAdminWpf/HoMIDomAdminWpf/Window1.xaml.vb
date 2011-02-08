@@ -162,7 +162,7 @@ Class Window1
                     AddHandler x.CloseMe, AddressOf UnloadControl
                     CanvasRight.Children.Add(x)
                     CanvasRight.SetLeft(x, 50)
-                    CanvasRight.SetTop(x, 50)
+                    CanvasRight.SetTop(x, 5)
 
                     Exit Sub
                 End If
@@ -177,7 +177,7 @@ Class Window1
         AddHandler x.CloseMe, AddressOf UnloadControl
         CanvasRight.Children.Add(x)
         CanvasRight.SetLeft(x, 50)
-        CanvasRight.SetTop(x, 50)
+        CanvasRight.SetTop(x, 5)
     End Sub
 
     'Bouton supprimer device
