@@ -83,6 +83,16 @@ Namespace HoMIDom
 
 #Region "Fonctions/Sub propres au serveur"
 
+        'Liste les type de devices dans le combo
+        Public Function ReturnSringFromEnumDevice(ByVal Index As Integer) As String
+            For Each value As Device.ListeDevices In [Enum].GetValues(GetType(Device.ListeDevices))
+                If value.GetHashCode = Index Then
+                    Return value.ToString
+                    Exit Function
+                End If
+            Next
+        End Function
+
         '---------- Initialisation des heures du soleil -------              
         Public Sub MAJ_HeuresSoleil()
 
@@ -114,14 +124,14 @@ Namespace HoMIDom
                 Dim dirInfo As New System.IO.DirectoryInfo(Fichier)
                 Dim file As System.IO.FileInfo
                 Dim files() As System.IO.FileInfo = dirInfo.GetFiles("homidom.xml")
-                Dim myxml As Xml
+                Dim myxml As XML
 
                 If (files IsNot Nothing) Then
                     For Each file In files
                         Dim myfile As String = file.FullName
                         Dim list As XmlNodeList
 
-                        myxml = New Xml(myfile)
+                        myxml = New XML(myfile)
 
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement du fichier config: " & myfile)
 
@@ -869,7 +879,7 @@ Namespace HoMIDom
         End Sub
 
         'Sauvegarder ou créer un device
-        Public Function SaveDevice(ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "") As String Implements IHoMIDom.SaveDevice
+        Public Function SaveDevice(ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0) As String Implements IHoMIDom.SaveDevice
             Dim myID As String
 
             If deviceId = "" Then 'C'est un nouveau device
@@ -891,6 +901,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -909,6 +920,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -927,6 +939,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -945,6 +958,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -963,6 +977,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -981,6 +996,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -999,6 +1015,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1017,6 +1034,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1035,6 +1053,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1053,6 +1072,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1071,6 +1091,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1089,6 +1110,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1107,6 +1129,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1125,6 +1148,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1143,6 +1167,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1161,6 +1186,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1179,6 +1205,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1197,6 +1224,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1215,6 +1243,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1233,6 +1262,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1251,6 +1281,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1269,6 +1300,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1287,6 +1319,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1305,6 +1338,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1323,6 +1357,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1341,6 +1376,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1359,6 +1395,7 @@ Namespace HoMIDom
                             .Refresh = refresh
                             .Solo = solo
                             .Description = description
+                            .LastChangeDuree = lastchangeduree
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
@@ -1378,6 +1415,7 @@ Namespace HoMIDom
                         _ListDevices.Item(i).modele = modele
                         _ListDevices.Item(i).refresh = refresh
                         _ListDevices.Item(i).solo = solo
+                        _ListDevices.Item(i).LastChangeDuree = lastchangeduree
                     End If
                 Next
             End If
@@ -1448,7 +1486,7 @@ Namespace HoMIDom
             Next
             Return retour
         End Function
-        
+
         'retourne le driver par son Nom
         Public Function ReturnDriverByNom(ByVal DriverNom As String) As Object Implements IHoMIDom.ReturnDriverByNom
             Dim retour As Object = Nothing
@@ -1474,7 +1512,7 @@ Namespace HoMIDom
             Next
             Return listresultat
         End Function
-        
+
 #End Region
 
 #Region "Declaration de la classe Server"

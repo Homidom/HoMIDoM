@@ -5,6 +5,7 @@ Partial Public Class uDevice
     Public Event CloseMe(ByVal MyObject As Object)
     Dim _Action As EAction 'Définit si modif ou création d'un device
     Dim _DeviceId As String 'Id du device à modifier
+    Dim FlagNewCmd As Boolean
 
     Public Enum EAction
         Nouveau
@@ -54,6 +55,7 @@ Partial Public Class uDevice
                 TxtAdresse2.Text = x.adresse2
                 TxtModele.Text = x.modele
                 TxtRefresh.Text = x.refresh
+                TxtLastChangeDuree.Text = x.LastChangeDuree
 
                 'Gestion si Device avec Value
                 If x.Type = "TEMPERATURE" _
@@ -85,6 +87,12 @@ Partial Public Class uDevice
                     Label13.Visibility = Windows.Visibility.Visible
                     Label14.Visibility = Windows.Visibility.Visible
                     Label15.Visibility = Windows.Visibility.Visible
+                End If
+
+                If x.Type = "MULTIMEDIA" Then
+                    GroupBox1.Visibility = Windows.Visibility.Visible
+                Else
+                    GroupBox1.Visibility = Windows.Visibility.Hidden
                 End If
             End If
         End If
@@ -121,7 +129,7 @@ Partial Public Class uDevice
                 Exit For
             End If
         Next
-        Window1.Obj.SaveDevice(_DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, "", TxtModele.Text, TxtDescript.Text)
+        Window1.Obj.SaveDevice(_DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, "", TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
         RaiseEvent CloseMe(Me)
     End Sub
 
@@ -172,6 +180,75 @@ Partial Public Class uDevice
                 Label14.Visibility = Windows.Visibility.Visible
                 Label15.Visibility = Windows.Visibility.Visible
             End If
+
+            If CbType.SelectedValue = "MULTIMEDIA" Then
+                GroupBox1.Visibility = Windows.Visibility.Visible
+            Else
+                GroupBox1.Visibility = Windows.Visibility.Hidden
+            End If
+        End If
+    End Sub
+
+    Private Sub BtnNewCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewCmd.Click
+        TxtCmdName.Text = ""
+        TxtCmdRepeat.Text = "0"
+        TxtCmdData.Text = ""
+
+        FlagNewCmd = True
+    End Sub
+
+    Private Sub BtnSaveCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSaveCmd.Click
+        If IsNumeric(TxtCmdRepeat.Text) = False Then
+            MsgBox("Numérique obligatoire pour repeat !!")
+            Exit Sub
+        End If
+
+        If FlagNewCmd = True Then 'nouvelle commande
+            'FRMMere.Obj.SaveDeviceCommand(DeviceID, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
+        Else 'modifier commande
+            'FRMMere.Obj.SaveDeviceCommand(DeviceID, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
+        End If
+
+        ListCmd.Items.Clear()
+        Dim x As Object = Window1.Obj.ReturnDeviceByID(_DeviceId)
+        For i As Integer = 0 To x.listcommandname.count - 1
+            ListCmd.Items.Add(x.listcommandname(i))
+        Next
+        x = Nothing
+
+        FlagNewCmd = False
+    End Sub
+
+    Private Sub BtnDelCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelCmd.Click
+        If ListCmd.SelectedIndex >= 0 Then
+            'FRMMere.Obj.DeleteDeviceCommand(FRMMere.Obj.ReturnDeviceByID(DeviceID).id, TxtCmdName.Text)
+
+            TxtCmdName.Text = ""
+            TxtCmdData.Text = ""
+            TxtCmdRepeat.Text = "0"
+            ListCmd.Items.Clear()
+
+            Dim x As Object = Window1.Obj.ReturnDeviceByID(_DeviceId)
+            For i As Integer = 0 To x.listcommandname.count - 1
+                ListCmd.Items.Add(x.listcommandname(i))
+            Next
+            x = Nothing
+
+        End If
+    End Sub
+
+    Private Sub BtnTstCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTstCmd.Click
+        'Window1.Obj.s(TxtCmdName.Text, DeviceID)
+    End Sub
+
+    Private Sub BtnLearn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnLearn.Click
+        TxtCmdData.Text = Window1.Obj.StartIrLearning
+    End Sub
+
+    Private Sub TxtLastChangeDuree_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtLastChangeDuree.TextChanged
+        If TxtLastChangeDuree.Text <> "" And IsNumeric(TxtLastChangeDuree.Text) = False Then
+            MessageBox.Show("Veuillez saisir une valeur numérique")
+            TxtLastChangeDuree.Text = 0
         End If
     End Sub
 End Class

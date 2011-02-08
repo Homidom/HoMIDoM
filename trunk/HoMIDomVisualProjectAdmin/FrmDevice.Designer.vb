@@ -356,7 +356,7 @@ Partial Class FrmDevice
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.DimGray
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.ClientSize = New System.Drawing.Size(558, 203)
+        Me.ClientSize = New System.Drawing.Size(558, 366)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.MyImage)
         Me.Controls.Add(Me.BtnLoadImg)
