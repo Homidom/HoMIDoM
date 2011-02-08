@@ -1527,6 +1527,7 @@ Namespace HoMIDom
             AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
             TimerSecond.Enabled = True
             MAJ_HeuresSoleil()
+
         End Sub
 #End Region
 
@@ -1626,7 +1627,6 @@ Namespace HoMIDom
 
                     'on enregistre le fichier xml
                     xmldoc.Save(_File)
-
 
                 Catch ex As Exception
 

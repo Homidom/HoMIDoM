@@ -273,13 +273,12 @@ Imports System.Globalization
         End Try
     End Sub
 
-    '???? quoi mettre dedans ?
     Public Property StartAuto() As Boolean Implements HoMIDom.HoMIDom.IDriver.StartAuto
         Get
-
+            Return _StartAuto
         End Get
         Set(ByVal value As Boolean)
-
+            _StartAuto = value
         End Set
     End Property
 
