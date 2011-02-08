@@ -226,6 +226,7 @@ Imports System.Globalization
     End Property
 #End Region
 
+#Region "Fonctions du Driver"
     Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
         [Stop]()
         Start()
@@ -327,6 +328,7 @@ Imports System.Globalization
         _DeviceSupport.Add(ListeDevices.VITESSEVENT)
         _DeviceSupport.Add(ListeDevices.VOLET)
     End Sub
+#End Region
 
 #Region "Fonctions propres au driver"
 
@@ -1919,7 +1921,7 @@ Imports System.Globalization
                 Else
                     valeur = "ERR: wrong value in temperature field=" & Hex(recbuf(5)) & "." & Hex(recbuf(4) >> 4)
                 End If
-                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
                 If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
                 'checksum8()
 
@@ -1933,7 +1935,7 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
                 If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
                 'checksumw()
 
@@ -1947,9 +1949,9 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
                 If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
@@ -1965,9 +1967,9 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
                 If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
@@ -1984,9 +1986,9 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
                 If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
@@ -2003,9 +2005,9 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
                 If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
@@ -2020,13 +2022,13 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
                 valeur = wrbattery()
-                WriteRetour(adresse, ListeDevices.BATTERIE, valeur)
+                WriteRetour(adresse, ListeDevices.BATTERIE.ToString, valeur)
                 'checksum8()
 
             ElseIf recbuf(0) = &H1A And recbuf(1) = &H3D And recbits >= 72 Then
@@ -2039,13 +2041,13 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
                 valeur = wrbattery()
-                WriteRetour(adresse, ListeDevices.BATTERIE, valeur)
+                WriteRetour(adresse, ListeDevices.BATTERIE.ToString, valeur)
                 'checksum8()
 
             ElseIf recbuf(0) = &H5A And recbuf(1) = &H5D And recbits >= 88 Then
@@ -2058,13 +2060,13 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
                 WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
                 valeur = CStr(recbuf(8) + 795) 'en hPa
-                WriteRetour(adresse, ListeDevices.BAROMETRE, valeur)
+                WriteRetour(adresse, ListeDevices.BAROMETRE.ToString, valeur)
                 valeur = wrforecast(recbuf(9) And &HF)
 
 
@@ -2086,13 +2088,13 @@ Imports System.Globalization
                 Else
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
-                WriteRetour(adresse, ListeDevices.TEMPERATURE, valeur)
+                WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
                 valeur = CStr(VB.Right(Hex(((recbuf(7) << 4) And &HF0) + ((recbuf(6) >> 4) And &HF)), 2))
-                WriteRetour(adresse, ListeDevices.HUMIDITE, valeur)
+                WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
                 valeur = CStr(recbuf(8) + 795) 'en hPa
-                WriteRetour(adresse, ListeDevices.BAROMETRE, valeur)
+                WriteRetour(adresse, ListeDevices.BAROMETRE.ToString, valeur)
                 valeur = wrforecast(recbuf(9) >> 4)
 
 
@@ -2102,7 +2104,7 @@ Imports System.Globalization
 
 
                 valeur = wrbattery()
-                WriteRetour(adresse, ListeDevices.BATTERIE, valeur)
+                WriteRetour(adresse, ListeDevices.BATTERIE.ToString, valeur)
                 'checksum10()
 
             ElseIf recbuf(0) = &H2A And recbuf(1) = &H1D And recbits >= 80 Then
@@ -2110,9 +2112,9 @@ Imports System.Globalization
                 oregon = True
                 adresse = CStr(recbuf(3) * 256)
                 valeur = CStr(CSng(Hex(recbuf(5))) * 10 + CSng(Hex((recbuf(4) >> 4) And &HF)))
-                WriteRetour(adresse, ListeDevices.PLUIECOURANT, valeur) 'mm/hr
+                WriteRetour(adresse, ListeDevices.PLUIECOURANT.ToString, valeur) 'mm/hr
                 valeur = CStr(CSng(Hex(recbuf(8) And &HF)) * 1000 + CSng(Hex(recbuf(7))) * 10 + CSng(Hex(recbuf(6) >> 4)))
-                WriteRetour(adresse, ListeDevices.PLUIETOTAL, valeur) 'mm
+                WriteRetour(adresse, ListeDevices.PLUIETOTAL.ToString, valeur) 'mm
                 valeur = Hex(recbuf(6) And &HF)
 
 
@@ -2129,10 +2131,10 @@ Imports System.Globalization
                 oregon = True
                 adresse = CStr(recbuf(3) * 256)
                 valeur = CStr(Round((((CSng(Hex(recbuf(5))) + CSng(Hex((recbuf(4) >> 4) And &HF))) / 10 + CSng(Hex((recbuf(4) And &HF))) / 100) * 25.4), 2)) ' mm/hr"
-                WriteRetour(adresse, ListeDevices.PLUIECOURANT, valeur)
+                WriteRetour(adresse, ListeDevices.PLUIECOURANT.ToString, valeur)
                 valeur = (CSng(Hex(recbuf(7))) / 100 + CSng(Hex(recbuf(6) >> 4)) / 1000)
                 valeur = CStr(Round(((valeur + (CSng(Hex(recbuf(9) And &HF)) * 100 + CSng(Hex(recbuf(8))))) * 25.4), 2))
-                WriteRetour(adresse, ListeDevices.PLUIETOTAL, valeur) 'mm
+                WriteRetour(adresse, ListeDevices.PLUIETOTAL.ToString, valeur) 'mm
                 If (recbuf(4) And &H4) <> 0 Then WriteBattery(adresse)
                 'checksumr()
 
@@ -2141,10 +2143,10 @@ Imports System.Globalization
                 oregon = True
                 adresse = CStr(recbuf(3) * 256)
                 valeur = CStr(Round((((CSng(Hex(recbuf(5))) + CSng(Hex((recbuf(4) >> 4) And &HF))) / 10 + CSng(Hex((recbuf(4) And &HF))) / 100) * 25.4), 2)) ' mm/hr"
-                WriteRetour(adresse, ListeDevices.PLUIECOURANT, valeur)
+                WriteRetour(adresse, ListeDevices.PLUIECOURANT.ToString, valeur)
                 valeur = (CSng(Hex(recbuf(7))) / 100 + CSng(Hex(recbuf(6) >> 4)) / 1000)
                 valeur = CStr(Round(((valeur + (CSng(Hex(recbuf(9) And &HF)) * 100 + CSng(Hex(recbuf(8))))) * 25.4), 2))
-                WriteRetour(adresse, ListeDevices.PLUIETOTAL, valeur) 'mm
+                WriteRetour(adresse, ListeDevices.PLUIETOTAL.ToString, valeur) 'mm
                 If (recbuf(4) And &H4) <> 0 Then WriteBattery(adresse)
                 'checksumr()
 
@@ -2155,18 +2157,18 @@ Imports System.Globalization
                 valeur = CStr(CSng(recbuf(4) >> 4) * 22.5)
                 'WriteRetour(adresse & "_WID", valeur) '°
                 valeur = wrdirection(direction)
-                WriteRetour(adresse, ListeDevices.DIRECTIONVENT, valeur) 'direction en lettres
+                WriteRetour(adresse, ListeDevices.DIRECTIONVENT.ToString, valeur) 'direction en lettres
                 valeur = (CSng(Hex(recbuf(7) And &HF)) * 10) + (CSng(Hex(recbuf(6))) / 10)
-                WriteRetour(adresse, ListeDevices.VITESSEVENT, valeur) 'vitesse en m/s
+                WriteRetour(adresse, ListeDevices.VITESSEVENT.ToString, valeur) 'vitesse en m/s
                 valeur = wrspeed(valeur)
                 'WriteRetour(adresse & "_WIF", valeur) 'vitesse en Force
-                WriteRetour(adresse, ListeDevices.VITESSEVENT, valeur) 'vitesse en Force
+                WriteRetour(adresse, ListeDevices.VITESSEVENT.ToString, valeur) 'vitesse en Force
                 ' autre mesure mais je sais pas a quoi ca correpond
                 'speed = CSng(Hex(recbuf(8))) + (CSng(Hex((recbuf(7) >> 4) And &HF)) / 10)
                 'WriteMessage(" av.", False)
                 'wrspeed(speed)
                 valeur = wrbattery()
-                WriteRetour(adresse, ListeDevices.BATTERIE, valeur)
+                WriteRetour(adresse, ListeDevices.BATTERIE.ToString, valeur)
                 'checksum9()
 
             ElseIf recbuf(0) = &H1A And recbuf(1) = &H89 And recbits >= 80 Then
@@ -2176,9 +2178,9 @@ Imports System.Globalization
                 valeur = CStr(CSng(recbuf(4) >> 4) * 22.5)
                 'WriteRetour(adresse & "_WID", valeur) '°
                 valeur = wrdirection(direction)
-                WriteRetour(adresse, ListeDevices.DIRECTIONVENT, valeur) 'direction en lettres
+                WriteRetour(adresse, ListeDevices.DIRECTIONVENT.ToString, valeur) 'direction en lettres
                 valeur = (CSng(Hex(recbuf(7) And &HF)) * 10) + (CSng(Hex(recbuf(6))) / 10)
-                WriteRetour(adresse, ListeDevices.VITESSEVENT, valeur) 'vitesse en m/s
+                WriteRetour(adresse, ListeDevices.VITESSEVENT.ToString, valeur) 'vitesse en m/s
                 valeur = wrspeed(valeur)
                 'WriteRetour(adresse & "_WIF", valeur) 'vitesse en Force
                 ' autre mesure mais je sais pas a quoi ca correpond
@@ -2186,7 +2188,7 @@ Imports System.Globalization
                 'WriteMessage(" av.", False)
                 'wrspeed(speed)
                 valeur = wrbattery()
-                WriteRetour(adresse, ListeDevices.BATTERIE, valeur)
+                WriteRetour(adresse, ListeDevices.BATTERIE.ToString, valeur)
                 'checksum9()
 
             ElseIf recbuf(0) = &H3A And recbuf(1) = &HD And recbits >= 80 Then
@@ -2196,9 +2198,9 @@ Imports System.Globalization
                 valeur = CStr(CSng(recbuf(4) >> 4) * 22.5)
                 'WriteRetour(adresse & "_WID", valeur) '°
                 valeur = wrdirection(direction)
-                WriteRetour(adresse, ListeDevices.DIRECTIONVENT, valeur) 'direction en lettres
+                WriteRetour(adresse, ListeDevices.DIRECTIONVENT.ToString, valeur) 'direction en lettres
                 valeur = (CSng(Hex(recbuf(7) And &HF)) * 10) + (CSng(Hex(recbuf(6))) / 10)
-                WriteRetour(adresse, ListeDevices.VITESSEVENT, valeur) 'vitesse en m/s
+                WriteRetour(adresse, ListeDevices.VITESSEVENT.ToString, valeur) 'vitesse en m/s
                 valeur = wrspeed(valeur)
                 'WriteRetour(adresse & "_WIF", valeur) 'vitesse en Force
                 ' autre mesure mais je sais pas a quoi ca correpond
@@ -2206,7 +2208,7 @@ Imports System.Globalization
                 'WriteMessage(" av.", False)
                 'wrspeed(speed)
                 valeur = wrbattery()
-                WriteRetour(adresse, ListeDevices.BATTERIE, valeur)
+                WriteRetour(adresse, ListeDevices.BATTERIE.ToString, valeur)
                 'checksum9()
 
             ElseIf recbuf(0) = &HEA And recbuf(1) = &H7C And recbits >= 60 Then
@@ -2214,7 +2216,7 @@ Imports System.Globalization
                 oregon = True
                 adresse = CStr(recbuf(3) * 256)
                 uv = CSng(Hex(recbuf(5) And &HF)) * 10 + CSng(Hex(recbuf(4) >> 4))
-                WriteRetour(adresse, ListeDevices.UV, CStr(uv)) 'en chiffre
+                WriteRetour(adresse, ListeDevices.UV.ToString, CStr(uv)) 'en chiffre
                 'If uv < 3 Then
                 '    WriteRetour(adresse & "_UVL", "Low") 'en level
                 'ElseIf uv < 6 Then
@@ -2234,7 +2236,7 @@ Imports System.Globalization
                 oregon = True
                 adresse = CStr((recbuf(3)) * 256)
                 uv = CSng(Hex(recbuf(5) And &HF)) * 10 + CSng(Hex(recbuf(4) >> 4))
-                WriteRetour(adresse, ListeDevices.UV, CStr(uv)) 'en chiffre
+                WriteRetour(adresse, ListeDevices.UV.ToString, CStr(uv)) 'en chiffre
                 'If uv < 3 Then
                 '    WriteRetour(adresse & "_UVL", "Low") 'en level
                 'ElseIf uv < 6 Then
@@ -2282,11 +2284,11 @@ Imports System.Globalization
                 adresse = CStr(recbuf(2) * 256)
                 ' WriteMessage(" counter:" & CSng(recbuf(1) And &HF), False)
                 valeur = CStr((CSng(recbuf(3)) + CSng((recbuf(4) And &H3) * 256)) / 10)
-                WriteRetour(adresse & "-1", ListeDevices.COMPTEUR, valeur) 'en Ampere
+                WriteRetour(adresse & "-1", ListeDevices.COMPTEUR.ToString, valeur) 'en Ampere
                 valeur = CStr((CSng((recbuf(4) >> 2) And &H3F) + CSng((recbuf(5) And &HF) * 64)) / 10)
-                WriteRetour(adresse & "-2", ListeDevices.COMPTEUR, valeur) 'en Ampere
+                WriteRetour(adresse & "-2", ListeDevices.COMPTEUR.ToString, valeur) 'en Ampere
                 valeur = CStr((CSng((recbuf(5) >> 4) And &HF) + CSng((recbuf(6) And &H3F) * 16)) / 10)
-                WriteRetour(adresse & "-3", ListeDevices.COMPTEUR, valeur) 'en Ampere
+                WriteRetour(adresse & "-3", ListeDevices.COMPTEUR.ToString, valeur) 'en Ampere
                 'checksume()
 
             ElseIf recbits = 56 Then
@@ -2296,13 +2298,13 @@ Imports System.Globalization
                 If IsNumeric(Hex(recbuf(4))) And IsNumeric(Hex(recbuf(3) >> 4)) Then
                     'WriteMessage(" addr:" & Hex(recbuf(1) >> 4), False)
                     valeur = CStr(CSng(Hex(recbuf(5) And &H1)) * 100 + CSng(Hex(recbuf(4))) + CSng(Hex(recbuf(3) >> 4)) / 10)
-                    WriteRetour(adresse, ListeDevices.GENERIQUEVALUE, valeur) 'en kg
+                    WriteRetour(adresse, ListeDevices.GENERIQUEVALUE.ToString, valeur) 'en kg
                     'WriteMessage(" Unknown byte=" & CStr(Hex(recbuf(3) And &HF)) & CStr(Hex(recbuf(2) >> 4)), False)
                     'If Not (((recbuf(0) And &HF0) = (recbuf(5) And &HF0)) And ((recbuf(1) And &HF) = (recbuf(6) And &HF))) Then
                     '    WriteRetour(adresse, "ERR: Checksum error")
                     'End If
                 Else
-                    WriteRetour(adresse, ListeDevices.GENERIQUEVALUE, "ERR: weight value is not a decimal value.")
+                    WriteRetour(adresse, ListeDevices.GENERIQUEVALUE.ToString, "ERR: weight value is not a decimal value.")
                 End If
 
             ElseIf (recbuf(0) And &HF) = &H3 And recbits = 64 Then
@@ -2314,7 +2316,7 @@ Imports System.Globalization
                 '    WriteMessage(VB.Right("0" & Hex(recbuf(i)), 2), False)
                 'Next
                 valeur = CStr(Round((((recbuf(4) And &HF) * 4096) + (recbuf(3) * 16) + (recbuf(2) >> 4) / 400.8), 1))
-                WriteRetour(adresse, ListeDevices.GENERIQUEVALUE, valeur) 'en kg
+                WriteRetour(adresse, ListeDevices.GENERIQUEVALUE.ToString, valeur) 'en kg
 
                 ' 
             ElseIf (recbuf(0) = &H1A Or recbuf(0) = &H2A Or recbuf(0) = &H3A) And recbits = 108 Then
@@ -2331,8 +2333,8 @@ Imports System.Globalization
                 valeur += (CLng(recbuf(5)) >> 4) And &HF
                 valeur = valeur / 223000
                 'Checksum12() 
-                WriteRetour(adresse, ListeDevices.ENERGIETOTALE, valeur) 'total en kWh
-                WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE, CSng((recbuf(5) And &HF) * 65536) + CSng(recbuf(4) * 256) + CSng(recbuf(3))) 'now en Watt
+                WriteRetour(adresse, ListeDevices.ENERGIETOTALE.ToString, valeur) 'total en kWh
+                WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE.ToString, CSng((recbuf(5) And &HF) * 65536) + CSng(recbuf(4) * 256) + CSng(recbuf(3))) 'now en Watt
             End If
             Return oregon
         Catch ex As Exception
@@ -2708,11 +2710,11 @@ Imports System.Globalization
         Try
             'utilise la fonction de base pour loguer un event
             If STRGS.InStr(message, "DBG:") > 0 Then
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXCOM_RECEIVER ", message)
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXCOM_RECEIVER ", STRGS.Right(message, message.Length - 4))
             ElseIf STRGS.InStr(message, "ERR:") > 0 Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER ", message)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER ", STRGS.Right(message, message.Length - 4))
             Else
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER ", message)
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER ", STRGS.Right(message, message.Length - 4))
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER WriteLog", ex.Message)
@@ -2728,35 +2730,19 @@ Imports System.Globalization
 
             'on ne traite rien pendant les 6 premieres secondes
             If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
+                'Recherche si un device affecté
+                Dim listedevices As New ArrayList
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(adresse, "", Me._ID)
+                If (listedevices.Count >= 1) Then
+                    'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
+                    WriteLog(listedevices.Item(0)._Name & " (" & adresse & ") : Battery Empty")
+                Else
+                    'device pas trouvé
+                    WriteLog("ERR: Device non trouvé : RFXCOM " & adresse & ": Battery Empty")
 
-                'EVENT BATTERY
+                    'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
 
-                ''on verifie si un composant correspond à cette adresse
-                'tabletmp = domos_svc.table_composants.Select("composants_adresse = '" & adresse.ToString & "' AND composants_modele_norme = 'RFX'")
-                'If tabletmp.GetUpperBound(0) >= 0 Then
-                '    '--- On attend au moins x seconde entre deux receptions ou si valeur<>valeurlastetat (donc pas le meme composant)
-                '    If (DateTime.Now - Date.Parse(tabletmp(0)("composants_etatdate"))).TotalMilliseconds > tempsentrereponse Then
-                '        WriteLog("ERR: " & tabletmp(0)("composants_nom").ToString() & "  Battery Empty")
-                '    Else
-                '        WriteLog("DBG: BatteryEmpty recu il y a moins de " & tempsentrereponse & " msec : " & adresse.ToString)
-                '    End If
-                'ElseIf Not ignoreadresse Then
-                '    'erreur d'adresse composant
-                '    If adresse <> adresselast Then
-                '        tabletmp = domos_svc.table_composants_bannis.Select("composants_bannis_adresse = '" & adresse.ToString & "' AND composants_bannis_norme = 'RFX'")
-                '        If tabletmp.GetUpperBound(0) >= 0 Then
-                '            'on logue en debug car c'est une adresse bannie
-                '            WriteLog("DBG: WriteBattery Empty : Adresse Bannie : " & adresse.ToString)
-                '        Else
-                '            WriteLog("ERR: WriteBattery Empty : Adresse composant : " & adresse.ToString)
-                '        End If
-                '    Else
-                '        'on logue en debug car c'est la même adresse non trouvé depuis le dernier message
-                '        WriteLog("DBG: WriteBattery Empty : Adresse composant : " & adresse.ToString)
-                '    End If
-                'Else
-                '    WriteLog("DBG: WriteBattery Empty : Adresse composant : " & adresse.ToString & " : ")
-                'End If
+                End If
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER WriteBattery", ex.Message & " --> " & adresse)
@@ -2765,132 +2751,33 @@ Imports System.Globalization
 
     Public Sub WriteRetour(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
         Try
-            If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte cette boucle
+            If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
 
             'Forcer le . 
             Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
             My.Application.ChangeCulture("en-US")
 
-            'Dim tabletmp() As DataRow
-            'Dim dateheure, Err As String
             'log tous les paquets en mode debug
-            WriteLog("DBG: WriteRetour receive from " & adresse & " (" & type & ") -> " & valeur)
+            'WriteLog("DBG: WriteRetour receive from " & adresse & " (" & type & ") -> " & valeur)
 
             'on ne traite rien pendant les 6 premieres secondes
             If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
-
-
-
-                'EVENT VALEUR
-                'Faudra gérer le fait que le RFXCOM envoie deux fois le même ordre : utilisation de tempsentrereponse : pourra etre generaliser pour eviter les envois multiples
-
-
                 'Recherche si un device affecté
-
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(adresse, type, Me._ID)
                 If (listedevices.Count = 1) Then
-                    listedevices.Item(0).value = valeur
+                    'un device trouvé on maj la value
+                    listedevices.Item(0).Value = valeur
                 ElseIf (listedevices.Count > 1) Then
-                    WriteLog("ERR: Plusieurs device correspondent à : " & type & "/" & adresse & ":" & valeur)
+                    WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
                 Else
-                    WriteLog("ERR: Device non trouvé : " & type & "/" & adresse & ":" & valeur)
+                    WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
+
+
+                    'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+
+
                 End If
-
-                ''on verifie si un composant correspond à cette adresse
-                'tabletmp = domos_svc.table_composants.Select("composants_adresse = '" & adresse.ToString & "' AND composants_modele_norme = 'RFX'")
-                'If tabletmp.GetUpperBound(0) >= 0 Then
-                '    '--- On attend au moins x seconde entre deux receptions ou si valeur<>valeurlastetat (donc pas le meme composant)
-                '    'If (DateTime.Now - Date.Parse(tabletmp(0)("composants_etatdate"))).TotalMilliseconds > tempsentrereponse Or valeur <> valeurlast Then
-                '    If (DateTime.Now - Date.Parse(tabletmp(0)("composants_etatdate"))).TotalMilliseconds > tempsentrereponse Then
-                '        If VB.Left(valeur, 4) <> "ERR:" Then 'si y a pas erreur d'acquisition
-                '            '--- Remplacement de , par .
-                '            valeur = STRGS.Replace(valeur, ",", ".")
-                '            '--- Correction si besoin ---
-                '            If (tabletmp(0)("composants_correction") <> "" And tabletmp(0)("composants_correction") <> "0") Then
-                '                valeur = valeur + CDbl(tabletmp(0)("composants_correction"))
-                '            End If
-                '            '--- comparaison du relevé avec le dernier etat ---
-                '            '--- si la valeur a changé ou autre chose qu'un nombre (ON, OFF, ALERT...) --- 
-                '            If valeur.ToString <> tabletmp(0)("composants_etat").ToString() Or Not IsNumeric(valeur) Then
-                '                'si nombre alors 
-                '                If (IsNumeric(valeur) And IsNumeric(tabletmp(0)("lastetat")) And IsNumeric(tabletmp(0)("composants_etat"))) Then
-                '                    'on vérifie que la valeur a changé par rapport a l'avant dernier etat (lastetat) si lastetat (table config)
-                '                    If lastetat And valeur.ToString = tabletmp(0)("lastetat").ToString() Then
-                '                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString & " (inchangé lastetat " & tabletmp(0)("lastetat").ToString() & ")")
-                '                        '--- Modification de la date dans la base SQL ---
-                '                        dateheure = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
-                '                        Err = domos_svc.mysql.mysql_nonquery("UPDATE composants SET composants_etatdate='" & dateheure & "' WHERE composants_id='" & tabletmp(0)("composants_id") & "'")
-                '                        If Err <> "" Then WriteLog("ERR: inchange lastetat " & Err)
-                '                    Else
-                '                        'on vérifie que la valeur a changé de plus de composants_precision sinon inchangé
-                '                        'If (valeur + CDbl(tabletmp(0)("composants_precision"))).ToString >= tabletmp(0)("composants_etat").ToString() And (valeur - CDbl(tabletmp(0)("composants_precision"))).ToString <= tabletmp(0)("composants_etat").ToString() Then
-                '                        If (CDbl(valeur) + CDbl(tabletmp(0)("composants_precision"))) >= CDbl(tabletmp(0)("composants_etat")) And (CDbl(valeur) - CDbl(tabletmp(0)("composants_precision"))) <= CDbl(tabletmp(0)("composants_etat")) Then
-                '                            'log de "inchangé précision"
-                '                            _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString & " (inchangé precision " & tabletmp(0)("composants_etat").ToString & "+-" & tabletmp(0)("composants_precision").ToString & ")")
-                '                            '--- Modification de la date dans la base SQL ---
-                '                            dateheure = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
-                '                            Err = domos_svc.mysql.mysql_nonquery("UPDATE composants SET composants_etatdate='" & dateheure & "' WHERE composants_id='" & tabletmp(0)("composants_id") & "'")
-                '                            If Err <> "" Then WriteLog("ERR: inchange precision " & Err)
-                '                        Else
-                '                            _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString)
-
-                '                            '  --- modification de l'etat du composant dans la table en memoire ---
-                '                            tabletmp(0)("lastetat") = tabletmp(0)("composants_etat") 'on garde l'ancien etat en memoire pour le test de lastetat
-                '                            tabletmp(0)("composants_etat") = valeur.ToString
-                '                            tabletmp(0)("composants_etatdate") = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
-                '                        End If
-                '                    End If
-                '                Else
-                '                    'si la valeur a changer et = ON ou OFF on logue sinon debug
-                '                    If valeur.ToString = tabletmp(0)("composants_etat").ToString() And (valeur.ToString = "ON" Or valeur.ToString = "OFF") Then
-                '                        WriteLog("DBG: inchange ON-OFF: " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString)
-                '                    Else
-                '                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString)
-                '                    End If
-                '                    '  --- modification de l'etat du composant dans la table en memoire ---
-                '                    If VB.Left(valeur, 4) <> "CFG:" Then
-                '                        tabletmp(0)("lastetat") = tabletmp(0)("composants_etat") 'on garde l'ancien etat en memoire pour le test de lastetat
-                '                        tabletmp(0)("composants_etat") = valeur.ToString
-                '                        tabletmp(0)("composants_etatdate") = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
-                '                    End If
-                '                End If
-                '            Else
-                '                'la valeur n'a pas changé, on log en 7 et on maj la date dans la base sql
-                '                _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString & " (inchangé " & tabletmp(0)("composants_etat").ToString() & ")")
-                '                '--- Modification de la date dans la base SQL ---
-                '                dateheure = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
-                '                Err = domos_svc.mysql.mysql_nonquery("UPDATE composants SET composants_etatdate='" & dateheure & "' WHERE composants_id='" & tabletmp(0)("composants_id") & "'")
-                '                If Err <> "" Then WriteLog("ERR: inchange : " & Err)
-                '            End If
-                '        Else
-                '            'erreur d'acquisition ou battery
-                '            If InStr(LCase(valeur), "battery") > 0 Then
-                '                WriteLog("ERR: " & tabletmp(0)("composants_nom").ToString() & " : " & valeur.ToString)
-                '            Else
-                '                WriteLog("ERR: " & tabletmp(0)("composants_nom").ToString() & " : " & valeur.ToString)
-                '            End If
-                '        End If
-                '    Else
-                '        WriteLog("DBG: IGNORE : Etat recu il y a moins de " & domos_svc.rfx_tpsentrereponse & " msec : " & adresse.ToString & " : " & valeur.ToString)
-                '    End If
-                'ElseIf Not domos_svc.RFX_ignoreadresse Then
-                '    'erreur d'adresse composant
-                '    If adresse <> adresselast Then
-                '        tabletmp = domos_svc.table_composants_bannis.Select("composants_bannis_adresse = '" & adresse.ToString & "' AND composants_bannis_norme = 'RFX'")
-                '        If tabletmp.GetUpperBound(0) >= 0 Then
-                '            'on logue en debug car c'est une adresse bannie
-                '            WriteLog("DBG: IGNORE : Adresse Bannie : " & adresse.ToString & " : " & valeur.ToString)
-                '        Else
-                '            WriteLog("ERR: Adresse composant : " & adresse.ToString & " : " & valeur.ToString)
-                '        End If
-                '    Else
-                '        'on logue en debug car c'est la même adresse non trouvé depuis le dernier message
-                '        WriteLog("DBG: IGNORE : Adresse composant : " & adresse.ToString & " : " & valeur.ToString)
-                '    End If
-                'Else
-                '    WriteLog("DBG: IGNORE : Adresse composant : " & adresse.ToString & " : " & valeur.ToString)
-                'End If
             End If
             adresselast = adresse
             valeurlast = valeur

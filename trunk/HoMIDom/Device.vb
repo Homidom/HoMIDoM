@@ -15,33 +15,33 @@ Namespace HoMIDom
 
         'Indique la liste des devices gérés
         Public Enum ListeDevices
-            APPAREIL 'modules pour diriger un appareil  ON/OFF
-            AUDIO
-            BAROMETRE 'pour stocker les valeur issu d'un barometre meteo ou web
-            BATTERIE
-            COMPTEUR 'compteur DS2423, RFXPower...
-            CONTACT 'detecteur de contact : switch 1-wire
-            DETECTEUR 'tous detecteurs : mouvement, obscurite...
-            DIRECTIONVENT
-            ENERGIEINSTANTANEE
-            ENERGIETOTALE
-            FREEBOX
-            GENERIQUEBOOLEEN
-            GENERIQUESTRING
-            GENERIQUEVALUE
-            HUMIDITE
-            LAMPE
-            METEO
-            MULTIMEDIA
-            PLUIECOURANT
-            PLUIETOTAL
-            SWITCH
-            TELECOMMANDE
-            TEMPERATURE
-            TEMPERATURECONSIGNE
-            UV
-            VITESSEVENT
-            VOLET
+            APPAREIL = 1 'modules pour diriger un appareil  ON/OFF
+            AUDIO = 2
+            BAROMETRE = 3 'pour stocker les valeur issu d'un barometre meteo ou web
+            BATTERIE = 4
+            COMPTEUR = 5 'compteur DS2423, RFXPower...
+            CONTACT = 6 'detecteur de contact : switch 1-wire
+            DETECTEUR = 7 'tous detecteurs : mouvement, obscurite...
+            DIRECTIONVENT = 8
+            ENERGIEINSTANTANEE = 9
+            ENERGIETOTALE = 10
+            FREEBOX = 11
+            GENERIQUEBOOLEEN = 12
+            GENERIQUESTRING = 13
+            GENERIQUEVALUE = 14
+            HUMIDITE = 15
+            LAMPE = 16
+            METEO = 17
+            MULTIMEDIA = 18
+            PLUIECOURANT = 19
+            PLUIETOTAL = 20
+            SWITCH = 21
+            TELECOMMANDE = 22
+            TEMPERATURE = 23
+            TEMPERATURECONSIGNE = 24
+            UV = 25
+            VITESSEVENT = 26
+            VOLET = 27
         End Enum
 
         <Serializable()> Public Class DeviceGenerique
@@ -318,6 +318,7 @@ Namespace HoMIDom
                     If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
                     tmp += _Correction
                     'Si la valeur a changé on la prend en compte et on créer l'event
+                    'MsgBox("Device double a recu une value : " & _Name & " - " & tmp)
                     If tmp <> _Value Then
                         _Value = tmp
                         RaiseEvent DeviceChanged(Me, "Value", _Value)
@@ -364,11 +365,9 @@ Namespace HoMIDom
                 Set(ByVal value As Boolean)
                     Dim tmp As Boolean = value
                     _LastChange = Now
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        RaiseEvent DeviceChanged(Me, "Value", _Value)
-                    End If
+                    'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
+                    _Value = tmp
+                    RaiseEvent DeviceChanged(Me, "Value", _Value)
                 End Set
             End Property
 
@@ -415,11 +414,9 @@ Namespace HoMIDom
                     If tmp < 0 Then tmp = 0
                     If tmp > 100 Then tmp = 100
 
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _Value = tmp
-                        RaiseEvent DeviceChanged(Me, "Value", _Value)
-                    End If
+                    'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
+                    _Value = tmp
+                    RaiseEvent DeviceChanged(Me, "Value", _Value)
                 End Set
             End Property
 

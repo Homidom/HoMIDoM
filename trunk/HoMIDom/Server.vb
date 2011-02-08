@@ -30,6 +30,105 @@ Namespace HoMIDom
         'Evenement provenant des devices
         Public Sub DeviceChange(ByVal DeviceId As Object, ByVal [Property] As String, ByVal Parametres As Object)
             Log(TypeLog.INFO, TypeSource.SERVEUR, "DeviceChange", "Historiser " & DeviceId.nom & " (" & [Property] & ") : " & Parametres)
+
+
+            ''on verifie si un composant correspond à cette adresse
+            'tabletmp = domos_svc.table_composants.Select("composants_adresse = '" & adresse.ToString & "' AND composants_modele_norme = 'RFX'")
+            'If tabletmp.GetUpperBound(0) >= 0 Then
+            '    '--- On attend au moins x seconde entre deux receptions ou si valeur<>valeurlastetat (donc pas le meme composant)
+            '    'If (DateTime.Now - Date.Parse(tabletmp(0)("composants_etatdate"))).TotalMilliseconds > tempsentrereponse Or valeur <> valeurlast Then
+            '    If (DateTime.Now - Date.Parse(tabletmp(0)("composants_etatdate"))).TotalMilliseconds > tempsentrereponse Then
+            '        If VB.Left(valeur, 4) <> "ERR:" Then 'si y a pas erreur d'acquisition
+            '            '--- Remplacement de , par .
+            '            valeur = STRGS.Replace(valeur, ",", ".")
+            '            '--- Correction si besoin ---
+            '            If (tabletmp(0)("composants_correction") <> "" And tabletmp(0)("composants_correction") <> "0") Then
+            '                valeur = valeur + CDbl(tabletmp(0)("composants_correction"))
+            '            End If
+            '            '--- comparaison du relevé avec le dernier etat ---
+            '            '--- si la valeur a changé ou autre chose qu'un nombre (ON, OFF, ALERT...) --- 
+            '            If valeur.ToString <> tabletmp(0)("composants_etat").ToString() Or Not IsNumeric(valeur) Then
+            '                'si nombre alors 
+            '                If (IsNumeric(valeur) And IsNumeric(tabletmp(0)("lastetat")) And IsNumeric(tabletmp(0)("composants_etat"))) Then
+            '                    'on vérifie que la valeur a changé par rapport a l'avant dernier etat (lastetat) si lastetat (table config)
+            '                    If lastetat And valeur.ToString = tabletmp(0)("lastetat").ToString() Then
+            '                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString & " (inchangé lastetat " & tabletmp(0)("lastetat").ToString() & ")")
+            '                        '--- Modification de la date dans la base SQL ---
+            '                        dateheure = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
+            '                        Err = domos_svc.mysql.mysql_nonquery("UPDATE composants SET composants_etatdate='" & dateheure & "' WHERE composants_id='" & tabletmp(0)("composants_id") & "'")
+            '                        If Err <> "" Then WriteLog("ERR: inchange lastetat " & Err)
+            '                    Else
+            '                        'on vérifie que la valeur a changé de plus de composants_precision sinon inchangé
+            '                        'If (valeur + CDbl(tabletmp(0)("composants_precision"))).ToString >= tabletmp(0)("composants_etat").ToString() And (valeur - CDbl(tabletmp(0)("composants_precision"))).ToString <= tabletmp(0)("composants_etat").ToString() Then
+            '                        If (CDbl(valeur) + CDbl(tabletmp(0)("composants_precision"))) >= CDbl(tabletmp(0)("composants_etat")) And (CDbl(valeur) - CDbl(tabletmp(0)("composants_precision"))) <= CDbl(tabletmp(0)("composants_etat")) Then
+            '                            'log de "inchangé précision"
+            '                            _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString & " (inchangé precision " & tabletmp(0)("composants_etat").ToString & "+-" & tabletmp(0)("composants_precision").ToString & ")")
+            '                            '--- Modification de la date dans la base SQL ---
+            '                            dateheure = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
+            '                            Err = domos_svc.mysql.mysql_nonquery("UPDATE composants SET composants_etatdate='" & dateheure & "' WHERE composants_id='" & tabletmp(0)("composants_id") & "'")
+            '                            If Err <> "" Then WriteLog("ERR: inchange precision " & Err)
+            '                        Else
+            '                            _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString)
+
+            '                            '  --- modification de l'etat du composant dans la table en memoire ---
+            '                            tabletmp(0)("lastetat") = tabletmp(0)("composants_etat") 'on garde l'ancien etat en memoire pour le test de lastetat
+            '                            tabletmp(0)("composants_etat") = valeur.ToString
+            '                            tabletmp(0)("composants_etatdate") = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
+            '                        End If
+            '                    End If
+            '                Else
+            '                    'si la valeur a changer et = ON ou OFF on logue sinon debug
+            '                    If valeur.ToString = tabletmp(0)("composants_etat").ToString() And (valeur.ToString = "ON" Or valeur.ToString = "OFF") Then
+            '                        WriteLog("DBG: inchange ON-OFF: " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString)
+            '                    Else
+            '                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString)
+            '                    End If
+            '                    '  --- modification de l'etat du composant dans la table en memoire ---
+            '                    If VB.Left(valeur, 4) <> "CFG:" Then
+            '                        tabletmp(0)("lastetat") = tabletmp(0)("composants_etat") 'on garde l'ancien etat en memoire pour le test de lastetat
+            '                        tabletmp(0)("composants_etat") = valeur.ToString
+            '                        tabletmp(0)("composants_etatdate") = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
+            '                    End If
+            '                End If
+            '            Else
+            '                'la valeur n'a pas changé, on log en 7 et on maj la date dans la base sql
+            '                _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString & " (inchangé " & tabletmp(0)("composants_etat").ToString() & ")")
+            '                '--- Modification de la date dans la base SQL ---
+            '                dateheure = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
+            '                Err = domos_svc.mysql.mysql_nonquery("UPDATE composants SET composants_etatdate='" & dateheure & "' WHERE composants_id='" & tabletmp(0)("composants_id") & "'")
+            '                If Err <> "" Then WriteLog("ERR: inchange : " & Err)
+            '            End If
+            '        Else
+            '            'erreur d'acquisition ou battery
+            '            If InStr(LCase(valeur), "battery") > 0 Then
+            '                WriteLog("ERR: " & tabletmp(0)("composants_nom").ToString() & " : " & valeur.ToString)
+            '            Else
+            '                WriteLog("ERR: " & tabletmp(0)("composants_nom").ToString() & " : " & valeur.ToString)
+            '            End If
+            '        End If
+            '    Else
+            '        WriteLog("DBG: IGNORE : Etat recu il y a moins de " & domos_svc.rfx_tpsentrereponse & " msec : " & adresse.ToString & " : " & valeur.ToString)
+            '    End If
+            'ElseIf Not domos_svc.RFX_ignoreadresse Then
+            '    'erreur d'adresse composant
+            '    If adresse <> adresselast Then
+            '        tabletmp = domos_svc.table_composants_bannis.Select("composants_bannis_adresse = '" & adresse.ToString & "' AND composants_bannis_norme = 'RFX'")
+            '        If tabletmp.GetUpperBound(0) >= 0 Then
+            '            'on logue en debug car c'est une adresse bannie
+            '            WriteLog("DBG: IGNORE : Adresse Bannie : " & adresse.ToString & " : " & valeur.ToString)
+            '        Else
+            '            WriteLog("ERR: Adresse composant : " & adresse.ToString & " : " & valeur.ToString)
+            '        End If
+            '    Else
+            '        'on logue en debug car c'est la même adresse non trouvé depuis le dernier message
+            '        WriteLog("DBG: IGNORE : Adresse composant : " & adresse.ToString & " : " & valeur.ToString)
+            '    End If
+            'Else
+            '    WriteLog("DBG: IGNORE : Adresse composant : " & adresse.ToString & " : " & valeur.ToString)
+            'End If
+            'adresselast = adresse
+            'valeurlast = valeur
+
         End Sub
 
         'Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi
@@ -91,6 +190,7 @@ Namespace HoMIDom
                     Exit Function
                 End If
             Next
+            Return ""
         End Function
 
         '---------- Initialisation des heures du soleil -------              
@@ -220,6 +320,7 @@ Namespace HoMIDom
                                         o = Nothing
                                     Case "BATTERIE"
                                         Dim o As New Device.BATTERIE(Me)
+                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
                                         _Dev = o
                                         o = Nothing
                                     Case "COMPTEUR"
@@ -1555,26 +1656,26 @@ Namespace HoMIDom
 
         'Indique le type du Log: si c'est une erreur, une info, un message...
         Public Enum TypeLog
-            DEBUG               'visible uniquement si Homidom est en mode debug
-            ERREUR              'erreur générale
-            ERREUR_CRITIQUE     'erreur critique demandant la fermeture du programme
-            INFO                'divers
-            MESSAGE
-            ACTION              'action lancé par un driver/device/trigger
-            VALEUR_CHANGE       'Valeur ayant changé
-            VALEUR_INCHANGE     'Valeur n'ayant pas changé
-            VALEUR_INCHANGE_PRECISION   'Valeur n'ayant pas changé pour cause de precision
-            VALEUR_INCHANGE_LASTETAT    'Valeur n'ayant pas changé pour cause de lastetat
+            INFO = 1                    'divers
+            ACTION = 2                  'action lancé par un driver/device/trigger
+            MESSAGE = 3
+            VALEUR_CHANGE = 4           'Valeur ayant changé
+            VALEUR_INCHANGE = 5         'Valeur n'ayant pas changé
+            VALEUR_INCHANGE_PRECISION = 6 'Valeur n'ayant pas changé pour cause de precision
+            VALEUR_INCHANGE_LASTETAT = 7 'Valeur n'ayant pas changé pour cause de lastetat
+            ERREUR = 8                   'erreur générale
+            ERREUR_CRITIQUE = 9          'erreur critique demandant la fermeture du programme
+            DEBUG = 10                   'visible uniquement si Homidom est en mode debug
         End Enum
 
         'Indique la source du log si c'est le serveur, un script, un device...
         Public Enum TypeSource
-            SERVEUR
-            SCRIPT
-            TRIGGER
-            DEVICE
-            DRIVER
-            SOAP
+            SERVEUR = 1
+            SCRIPT = 2
+            TRIGGER = 3
+            DEVICE = 4
+            DRIVER = 5
+            SOAP = 6
         End Enum
 
         Public Sub Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
