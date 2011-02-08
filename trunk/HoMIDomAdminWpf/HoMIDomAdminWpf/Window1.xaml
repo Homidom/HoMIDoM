@@ -90,6 +90,14 @@
                 </MenuItem>
             </Menu>
             <Image HorizontalAlignment="Right" Margin="0,16,6,9" Name="Image2" Stretch="Fill" Width="394" Source="/HoMIDomAdminWpf;component/Images/bandeau_1_950x60.jpg" />
+            <Label HorizontalAlignment="Left" Margin="1.667,0,0,16" Name="Label1" Width="170" Content="HoMIDom Admin" FontSize="20">
+                <Label.Foreground>
+                    <LinearGradientBrush EndPoint="0.494,0.889" StartPoint="0.494,0.028">
+                        <GradientStop Color="#CCFFFFFF" Offset="0" />
+                        <GradientStop Color="#55FFFFFF" Offset="1" />
+                    </LinearGradientBrush>
+                </Label.Foreground>
+            </Label>
         </Grid>
         <Grid HorizontalAlignment="Left" Margin="0,58,0,29" Name="GridLeft" Width="193" Background="Black">
             <Canvas Margin="6,6.668,5.001,273.388" Name="Canvas1" Background="Black">
