@@ -293,6 +293,8 @@ Namespace HoMIDom
                         '******************************************
                         'on va chercher les zones
                         '******************************************
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des zones")
+                        list = Nothing
                         list = myxml.SelectNodes("/homidom/zones/zone")
                         If list.Count > 0 Then 'présence des zones
                             For i As Integer = 0 To list.Count - 1
@@ -326,7 +328,7 @@ Namespace HoMIDom
                         Else
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Il manque les zones dans le fichier de config !!")
                         End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListZones.Count & " Zones chargées")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListZones.Count & " Zone(s) chargée(s)")
 
                         '******************************************
                         'on va chercher les devices

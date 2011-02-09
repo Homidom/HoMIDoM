@@ -38,6 +38,7 @@ Class Window1
 
             AffDriver()
             AffDevice()
+            AffZone()
         Catch ex As Exception
             IsConnect = False
         End Try
@@ -60,10 +61,13 @@ Class Window1
 #Region "Affichage"
     'Afficher la liste des zones
     Public Sub AffZone()
-        'TreeViewZone.Nodes.Clear()
-        'For i As Integer = 0 To Obj.Zones.Count - 1
-        '    TreeViewZone.Nodes.Add(Obj.Zones.Item(i).ID, Obj.Zones.Item(0).Name)
-        'Next
+        TreeViewZone.Items.Clear()
+        For i As Integer = 0 To Obj.Zones.Count - 1
+            Dim newchild As New TreeViewItem
+            newchild.Header = Obj.Zones.Item(i).Name
+            newchild.Uid = Obj.Zones.Item(i).id
+            TreeViewZone.Items.Add(newchild)
+        Next
     End Sub
 
     'Afficher la liste des drivers
@@ -226,5 +230,14 @@ Class Window1
         CanvasRight.Children.Add(x)
         CanvasRight.SetLeft(x, 50)
         CanvasRight.SetTop(x, 50)
+    End Sub
+
+    Private Sub BtnNewZone_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewZone.Click
+        Dim x As New uZone(uDevice.EAction.Nouveau, "")
+        x.Uid = System.Guid.NewGuid.ToString()
+        AddHandler x.CloseMe, AddressOf UnloadControl
+        CanvasRight.Children.Add(x)
+        CanvasRight.SetLeft(x, 50)
+        CanvasRight.SetTop(x, 5)
     End Sub
 End Class
