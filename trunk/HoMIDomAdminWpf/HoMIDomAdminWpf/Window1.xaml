@@ -124,6 +124,13 @@
                             <Button Foreground="White" Height="19" Template="{DynamicResource GlassButton}" Margin="0,0,40,13" Name="BtnDelDevice" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="62.036">Supprimer</Button>
                         </Grid>
                     </TabItem>
+                    <TabItem Header="Zones">
+                        <Grid Height="250.05">
+                            <TreeView Margin="6,6,3.334,38.341" Name="TreeViewZone" />
+                            <Button Height="19" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5,0,0,13" Name="BtnNewZone" VerticalAlignment="Bottom" Width="62" Foreground="White">Nouveau</Button>
+                            <Button Foreground="White" Height="19" Template="{DynamicResource GlassButton}" Margin="0,0,40,13" Name="BtnDelZone" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="62.036">Supprimer</Button>
+                        </Grid>
+                    </TabItem>
                 </TabControl>
             </Canvas>
             <my:PropertyGrid Height="265.053" Margin="1.667,0,0,8.335" Name="PropertyGrid1" VerticalAlignment="Bottom" FontSize="9" />
