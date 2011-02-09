@@ -827,7 +827,7 @@ Namespace HoMIDom
                 Dim tx As String
                 Dim dll As Reflection.Assembly
                 Dim tp As Type
-                Dim Chm As String = _MonRepertoire & "\applications\Plugins\" 'Emplacement par défaut des plugins
+                Dim Chm As String = _MonRepertoire & "\Plugins\" 'Emplacement par défaut des plugins
 
                 Dim strFileSize As String = ""
                 Dim di As New IO.DirectoryInfo(Chm)
