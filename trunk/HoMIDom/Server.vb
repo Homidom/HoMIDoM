@@ -1043,6 +1043,16 @@ Namespace HoMIDom
             Next
         End Function
 
+        'Supprimer une zone de la config
+        Public Function DeleteZone(ByVal zoneId As String) As Integer Implements IHoMIDom.DeleteZone
+            For i As Integer = 0 To _ListZones.Count - 1
+                If _ListZones.Item(i).Id = zoneId Then
+                    _ListZones.Item(i).removeat(i)
+                    Exit Function
+                End If
+            Next
+        End Function
+
         'Retourne l'heure du couché du soleil
         Function HeureCoucherSoleil() As String Implements IHoMIDom.HeureCoucherSoleil
             Return _HeureCoucherSoleil

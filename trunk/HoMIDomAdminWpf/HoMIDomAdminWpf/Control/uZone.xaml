@@ -80,7 +80,7 @@
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
             <Label Height="46.25" Name="Label1" Width="105" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Zone</Label>
         </Border>
-        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIDomAdminWpf;component/Images/Defaut-128.png">
+        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgIcon" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIDomAdminWpf;component/Images/Defaut-128.png">
             <Image.LayoutTransform >
                 <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
             </Image.LayoutTransform>
@@ -97,6 +97,12 @@
                 <Button Height="21" HorizontalAlignment="Left" Margin="133,64,0,0" Name="BtnDel" VerticalAlignment="Top" Width="22">&lt;&lt;</Button>
                 <Label Height="24" HorizontalAlignment="Left" Margin="4,2,0,0" Name="Label5" VerticalAlignment="Top" Width="111" Foreground="White">Devices Disponibles:</Label>
                 <Label Height="24" Margin="0,2,180.5,0" Name="Label6" VerticalAlignment="Top" Foreground="White" HorizontalAlignment="Right" Width="119">Devices Sélectionnés:</Label>
+                <CheckBox Height="15" HorizontalAlignment="Right" Margin="0,22,56,0" Name="ChkVisible" VerticalAlignment="Top" Width="102" Foreground="White">Visible</CheckBox>
+                <Label Height="23" HorizontalAlignment="Right" Margin="0,44,91,0" Name="Label7" VerticalAlignment="Top" Width="68" Foreground="White">Position X:</Label>
+                <TextBox Height="19" HorizontalAlignment="Right" Margin="0,66,17,0" Name="TxtX" VerticalAlignment="Top" Width="141">0</TextBox>
+                <Label Foreground="White" Height="23" HorizontalAlignment="Right" Margin="0,0,90,62" Name="Label8" VerticalAlignment="Bottom" Width="68">Position Y:</Label>
+                <TextBox Height="19" HorizontalAlignment="Right" Margin="0,0,16,44" Name="TxtY" VerticalAlignment="Bottom" Width="141">0</TextBox>
+                <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,0,16,9" Name="BtnOkDev" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="88.75">Ok</Button>
             </Grid>
         </GroupBox>
         <Label Foreground="White" Height="24" HorizontalAlignment="Left" Margin="16,2,0,0" Name="Label4" VerticalAlignment="Top" Width="42">Icon:</Label>
