@@ -127,7 +127,7 @@ Class Window1
     Private Sub BtnStop_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnStop.Click
         If TreeViewDriver.SelectedItem IsNot Nothing Then
             For i As Integer = 0 To Obj.Drivers.Count - 1
-                If TreeViewDriver.SelectedItem.Header = Obj.Drivers.Item(0).Nom Then
+                If TreeViewDriver.SelectedItem.Header = Obj.Drivers.Item(i).Nom Then
                     Obj.Drivers.Item(i).Stop()
                 End If
             Next
@@ -139,7 +139,7 @@ Class Window1
     Private Sub BtnStart_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnStart.Click
         If TreeViewDriver.SelectedItem IsNot Nothing Then
             For i As Integer = 0 To Obj.Drivers.Count - 1
-                If TreeViewDriver.SelectedItem.Header = Obj.Drivers.Item(0).Nom Then
+                If TreeViewDriver.SelectedItem.Header = Obj.Drivers.Item(i).Nom Then
                     Obj.Drivers.Item(i).Start()
                 End If
             Next
