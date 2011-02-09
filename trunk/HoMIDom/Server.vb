@@ -28,9 +28,8 @@ Namespace HoMIDom
         End Sub
 
         'Evenement provenant des devices
-        Public Sub DeviceChange(ByVal DeviceId As Object, ByVal [Property] As String, ByVal Parametres As Object)
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "DeviceChange", "Historiser " & DeviceId.nom & " (" & [Property] & ") : " & Parametres)
-
+        Public Sub DeviceChange(ByVal Device As Object, ByVal [Property] As String, ByVal Parametres As Object)
+            Log(TypeLog.INFO, TypeSource.SERVEUR, "DeviceChange", "Historiser " & Device.name & " (" & [Property] & ") : " & Parametres)
 
             ''on verifie si un composant correspond à cette adresse
             'tabletmp = domos_svc.table_composants.Select("composants_adresse = '" & adresse.ToString & "' AND composants_modele_norme = 'RFX'")

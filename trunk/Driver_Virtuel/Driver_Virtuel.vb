@@ -184,7 +184,7 @@ Imports HoMIDom.HoMIDom.Device
     End Property
 
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
-
+        _IsConnect = False
     End Sub
 
     Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
