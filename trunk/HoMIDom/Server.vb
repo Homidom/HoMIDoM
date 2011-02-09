@@ -162,6 +162,7 @@ Namespace HoMIDom
         Private Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
         Private Shared _ListImgDrivers As New ArrayList
         Public Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
+        Public Shared _ListZones As New ArrayList 'Liste des zones
 
         'Application.StartupPath
         Public _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application
@@ -288,6 +289,44 @@ Namespace HoMIDom
                         Else
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun driver n'est enregistré dans le fichier de config")
                         End If
+
+                        '******************************************
+                        'on va chercher les zones
+                        '******************************************
+                        list = myxml.SelectNodes("/homidom/zones/zone")
+                        If list.Count > 0 Then 'présence des zones
+                            For i As Integer = 0 To list.Count - 1
+                                Dim x As New Zone
+                                For j As Integer = 0 To list.Item(i).Attributes.Count - 1
+                                    Select Case list.Item(i).Attributes.Item(j).Name
+                                        Case "id"
+                                            x.ID = list.Item(i).Attributes.Item(j).Value
+                                        Case "name"
+                                            x.Name = list.Item(i).Attributes.Item(j).Value
+                                        Case "icon"
+                                            If list.Item(i).Attributes.Item(j).Value <> Nothing Then x.Icon = list.Item(0).Attributes.Item(j).Value
+                                        Case "image"
+                                            If list.Item(i).Attributes.Item(j).Value <> Nothing Then x.Image = list.Item(0).Attributes.Item(j).Value
+                                        Case Else
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                    End Select
+                                Next
+                                If list.Item(i).HasChildNodes = True Then
+                                    For k As Integer = 0 To list.Item(i).ChildNodes.Count - 1
+                                        If list.Item(i).ChildNodes.Item(k).Name = "device" Then
+                                            For k1 As Integer = 0 To list.Item(i).ChildNodes.Item(k).ChildNodes.Count - 1
+                                                Dim _dev As New Zone.Device_Zone(list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(0).Value, list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(1).Value, list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(2).Value, list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(3).Value)
+                                                x.ListDevice.Add(_dev)
+                                            Next
+                                        End If
+                                    Next
+                                End If
+                                _ListZones.Add(x)
+                            Next
+                        Else
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Il manque les zones dans le fichier de config !!")
+                        End If
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListZones.Count & " Zones chargées")
 
                         '******************************************
                         'on va chercher les devices
@@ -509,6 +548,8 @@ Namespace HoMIDom
                         End If
                         list = Nothing
                     Next
+
+
                 Else
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Fichier de configuration non trouvé")
                 End If
@@ -614,6 +655,47 @@ Namespace HoMIDom
                     writer.WriteStartAttribute("picture")
                     writer.WriteValue(_ListDrivers.Item(i).Picture)
                     writer.WriteEndAttribute()
+                    writer.WriteEndElement()
+                Next
+                writer.WriteEndElement()
+
+                ''------------
+                ''Sauvegarde des zones
+                ''------------
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des zones")
+                writer.WriteStartElement("zones")
+                For i As Integer = 0 To _ListZones.Count - 1
+                    writer.WriteStartElement("zone")
+                    writer.WriteStartAttribute("id")
+                    writer.WriteValue(_ListZones.Item(i).id)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("name")
+                    writer.WriteValue(_ListZones.Item(i).name)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("icon")
+                    writer.WriteValue(_ListZones.Item(i).icon)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("image")
+                    writer.WriteValue(_ListZones.Item(i).image)
+                    writer.WriteEndAttribute()
+                    If _ListZones.Item(i).ListDevice IsNot Nothing Then
+                        For j As Integer = 0 To _ListZones.Item(i).listdevice.count - 1
+                            writer.WriteStartElement("device")
+                            writer.WriteStartAttribute("deviceid")
+                            writer.WriteValue(_ListZones.Item(i).listdevice.item(j).deviceid)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("visible")
+                            writer.WriteValue(_ListZones.Item(i).listdevice.item(j).visible)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("X")
+                            writer.WriteValue(_ListZones.Item(i).listdevice.item(j).x)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("Y")
+                            writer.WriteValue(_ListZones.Item(i).listdevice.item(j).y)
+                            writer.WriteEndAttribute()
+                            writer.WriteEndElement()
+                        Next
+                    End If
                     writer.WriteEndElement()
                 Next
                 writer.WriteEndElement()
@@ -891,6 +973,15 @@ Namespace HoMIDom
             End Set
         End Property
 
+        Public Property Zones() As ArrayList Implements IHoMIDom.zones
+            Get
+                Return _ListZones
+            End Get
+            Set(ByVal value As ArrayList)
+                _ListZones = value
+            End Set
+        End Property
+
         Public Property Longitude() As Double Implements IHoMIDom.Longitude
             Get
                 Return _Longitude
@@ -958,6 +1049,38 @@ Namespace HoMIDom
         'Retour l'heure de lever du soleil
         Function HeureLeverSoleil() As String Implements IHoMIDom.HeureLeverSoleil
             Return _HeureLeverSoleil
+        End Function
+
+        'ajouter un device à une zone
+        Function AddDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String, ByVal Visible As Boolean, Optional ByVal X As Double = 0, Optional ByVal Y As Double = 0) As String Implements IHoMIDom.AddDeviceToZone
+            Dim _zone As Zone = ReturnZoneById(ZoneId)
+            Dim _retour As String = ""
+
+            If _zone IsNot Nothing Then
+                Dim _dev As New Zone.Device_Zone("", Visible, X, Y)
+                _zone.ListDevice.Add(_dev)
+                _retour = "0"
+            End If
+
+            Return _retour
+        End Function
+
+        'supprimer un device à une zone
+        Function DeleteDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String) As String Implements IHoMIDom.DeleteDeviceToZone
+            Dim _zone As Zone = ReturnZoneById(ZoneId)
+            Dim _retour As String = ""
+
+            If _zone IsNot Nothing Then
+                For i As Integer = 0 To _zone.ListDevice.Count - 1
+                    If _zone.ListDevice.Item(i).deviceid = DeviceId Then
+                        _zone.ListDevice.RemoveAt(i)
+                        Exit For
+                    End If
+                Next
+                _retour = "0"
+            End If
+
+            Return _retour
         End Function
 
         'renvoi le fichier log suivant une requête xml si besoin
@@ -1550,6 +1673,38 @@ Namespace HoMIDom
             Return myID
         End Function
 
+        'sauvegarde ou créer une zone dans la config
+        Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListDevice As ArrayList = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String Implements IHoMIDom.SaveZone
+            Dim myID As String = ""
+
+            If zoneId = "" Then
+                Dim x As New Zone
+                With x
+                    x.ID = GenerateGUID()
+                    x.Name = name
+                    x.Icon = icon
+                    x.Image = image
+                    x.ListDevice = ListDevice
+                End With
+                myID = x.ID
+                _ListZones.Add(x)
+            Else
+                'zone Existante
+                myID = zoneId
+                For i As Integer = 0 To _ListZones.Count - 1
+                    If _ListZones.Item(i).id = zoneId Then
+                        _ListZones.Item(i).name = name
+                        _ListZones.Item(i).icon = icon
+                        _ListZones.Item(i).image = image
+                        _ListZones.Item(i).listdevice = ListDevice
+                    End If
+                Next
+            End If
+
+            'génration de l'event
+            Return myID
+        End Function
+
         'Commencer un apprentissage IR
         Public Function StartIrLearning() As String Implements IHoMIDom.StartIrLearning
             Dim retour As String = ""
@@ -1581,6 +1736,18 @@ Namespace HoMIDom
             For i As Integer = 0 To _ListDrivers.Count - 1
                 If _ListDrivers.Item(i).ID = DriverId Then
                     retour = _ListDrivers.Item(i)
+                    Exit For
+                End If
+            Next
+            Return retour
+        End Function
+
+        'retourne la zone par son ID
+        Public Function ReturnZoneById(ByVal ZoneId As String) As Object Implements IHoMIDom.ReturnZoneByID
+            Dim retour As Object = Nothing
+            For i As Integer = 0 To _ListZones.Count - 1
+                If _ListZones.Item(i).ID = ZoneId Then
+                    retour = _ListZones.Item(i)
                     Exit For
                 End If
             Next

@@ -32,7 +32,7 @@ Partial Public Class uDevice
             Next
 
             If Action = EAction.Nouveau Then 'Nouveau Device
-
+                ImgDevice.Tag = " "
             Else 'Modification d'un Device
                 Dim x As Object = Window1.Obj.ReturnDeviceByID(DeviceId)
 
