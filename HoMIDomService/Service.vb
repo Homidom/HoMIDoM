@@ -29,7 +29,6 @@ Module Service
             Dim obj As Server = New Server()
 
             'Console.WriteLine(Now & " Chargement de la configuration")
-            
 
             'Démarrage du serviceWeb
             Console.WriteLine(Now & " ")
@@ -44,6 +43,9 @@ Module Service
             Console.WriteLine("SERVEUR DEMARRE **************")
             Console.WriteLine("******************************")
             Console.WriteLine(" ")
+
+            'obj.SaveZone("", "Maison")
+            'obj.SaveConfiguration()
 
             Console.ReadLine()
             

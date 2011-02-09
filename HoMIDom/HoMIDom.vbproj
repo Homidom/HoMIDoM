@@ -95,6 +95,7 @@
     </Compile>
     <Compile Include="Soleil.vb" />
     <Compile Include="XML.vb" />
+    <Compile Include="Zone.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
