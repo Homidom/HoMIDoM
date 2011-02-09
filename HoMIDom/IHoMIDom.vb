@@ -18,6 +18,7 @@ Namespace HoMIDom
         Function DeleteDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String) As String 'supprimer un device à une zone
         Function DeleteDevice(ByVal deviceId As String) As Integer 'Supprimer un device
         Function DeleteDriver(ByVal driverId As String) As Integer 'Supprimer un driver de la config
+        Function DeleteZone(ByVal zoneId As String) As Integer 'Supprimer une zone de la config
         Function ReturnDeviceByID(ByVal Id As String) As Object 'Retourne l'objet d'un device par son ID
         Function ReturnDriverByID(ByVal Id As String) As Object 'Retourne l'objet d'un driver par son ID
         Function ReturnZoneByID(ByVal Id As String) As Object 'Retourne l'objet d'une zone par son ID

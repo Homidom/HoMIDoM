@@ -195,6 +195,48 @@ Class Window1
     End Sub
 #End Region
 
+#Region "Zones"
+    'Bouton nouvelle zone
+    Private Sub BtnNewZone_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewZone.Click
+        Dim x As New uZone(uDevice.EAction.Nouveau, "")
+        x.Uid = System.Guid.NewGuid.ToString()
+        AddHandler x.CloseMe, AddressOf UnloadControl
+        CanvasRight.Children.Add(x)
+        CanvasRight.SetLeft(x, 50)
+        CanvasRight.SetTop(x, 5)
+    End Sub
+
+    'Modiifer une zone
+    Private Sub TreeViewZone_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewZone.MouseDoubleClick
+        If TreeViewZone.SelectedItem IsNot Nothing Then
+            For i As Integer = 0 To Obj.Zones.Count - 1
+                If Obj.Zones.Item(i).id = TreeViewZone.SelectedItem.uid Then
+                    PropertyGrid1.SelectedObject = Obj.Zones.Item(i)
+
+                    Dim x As New uZone(uDevice.EAction.Modifier, TreeViewZone.SelectedItem.uid)
+                    x.Uid = System.Guid.NewGuid.ToString()
+                    AddHandler x.CloseMe, AddressOf UnloadControl
+                    CanvasRight.Children.Add(x)
+                    CanvasRight.SetLeft(x, 50)
+                    CanvasRight.SetTop(x, 5)
+
+                    Exit Sub
+                End If
+            Next
+        End If
+    End Sub
+
+    'bouton supprimer une zone
+    Private Sub BtnDelZone_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelZone.Click
+        If TreeViewZone.SelectedItem IsNot Nothing Then
+            Window1.Obj.DeleteZone(TreeViewZone.SelectedItem.uid)
+            AffZone()
+        Else
+            MessageBox.Show("Veuillez sélectionner une Zone à supprimer!")
+        End If
+    End Sub
+#End Region
+
     'Menu Save Config
     Private Sub MnuSaveConfig(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem2.Click
         Obj.SaveConfig()
@@ -232,12 +274,6 @@ Class Window1
         CanvasRight.SetTop(x, 50)
     End Sub
 
-    Private Sub BtnNewZone_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewZone.Click
-        Dim x As New uZone(uDevice.EAction.Nouveau, "")
-        x.Uid = System.Guid.NewGuid.ToString()
-        AddHandler x.CloseMe, AddressOf UnloadControl
-        CanvasRight.Children.Add(x)
-        CanvasRight.SetLeft(x, 50)
-        CanvasRight.SetTop(x, 5)
-    End Sub
+
+
 End Class
