@@ -1722,7 +1722,7 @@ Namespace HoMIDom
             Dim retour As String = ""
             For i As Integer = 0 To _ListDrivers.Count - 1
                 If _ListDrivers.Item(i).protocol = "IR" Then
-                    Dim x As Driver_Usbuirt = _ListDrivers.Item(i)
+                    Dim x As Object = _ListDrivers.Item(i)
                     retour = x.LearnCodeIR()
                     'Log.Log(Log.TypeLog.INFO, TypeSource.SERVEUR, "Apprentissage IR: " & retour)
                 End If
