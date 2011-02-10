@@ -1,25 +1,24 @@
 ﻿Imports HoMIDom
-Imports HoMIDom.HoMIDom.Device
 Imports HoMIDom.HoMIDom.Server
-Imports UsbLibrary
+Imports HoMIDom.HoMIDom.Device
+Imports System.IO
 
-' Driver RFID mir:ror
-' Nécessite la dll usblibrary
+' Driver k8056
 ' Auteur : Seb
 ' Date : 10/02/2011
 
-<Serializable()> Public Class Driver_RFID
+<Serializable()> Public Class Driver_k8056
     Implements HoMIDom.HoMIDom.IDriver
 
 #Region "Variable Driver"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
-    Dim _ID As String = "30E229A2-34F1-11E0-BDFE-9FD3DED72085"
-    Dim _Nom As String = "RFID"
+    Dim _ID As String = "22FED268-34F6-11E0-A23E-80D9DED72085"
+    Dim _Nom As String = "K8056"
     Dim _Enable As String = False
-    Dim _Description As String = "Récepteur Rfid mir:ror"
+    Dim _Description As String = "Carte Velleman k8056"
     Dim _StartAuto As Boolean = False
-    Dim _Protocol As String = "RFID"
+    Dim _Protocol As String = "RS232"
     Dim _IsConnect As Boolean = False
     Dim _IP_TCP As String = ""
     Dim _Port_TCP As String = ""
@@ -27,9 +26,9 @@ Imports UsbLibrary
     Dim _Port_UDP As String = ""
     Dim _Com As String = ""
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = "RFID"
+    Dim _Modele As String = "k8056"
     Dim _Version As String = "1.0"
-    Dim _Picture As String = "rfid.png"
+    Dim _Picture As String = "k8056.png"
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
     Dim _DeviceSupport As New ArrayList
@@ -41,13 +40,13 @@ Imports UsbLibrary
     Dim _lastetat As Boolean = True
 #End Region
 
-#Region "Déclaration#"
-    'variables propres à ce driver
-    Dim usb1 As UsbLibrary.UsbHidPort
+#Region "Declaration"
+    Dim rs232 As New System.IO.Ports.SerialPort
+    Dim tRelais(7, 7) As Boolean
+
 #End Region
 
 #Region "Fonctions génériques"
-
     Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
         Get
             Return _Com
@@ -183,21 +182,15 @@ Imports UsbLibrary
     End Property
 
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
+        'cree l'objet pour usbuirt
         Try
-            usb1 = New UsbLibrary.UsbHidPort
-            AddHandler usb1.OnSpecifiedDeviceRemoved, AddressOf usb_OnSpecifiedDeviceRemoved
-            AddHandler usb1.OnDeviceArrived, AddressOf usb_OnDeviceArrived
-            AddHandler usb1.OnDeviceRemoved, AddressOf usb_OnDeviceRemoved
-            AddHandler usb1.OnDataRecieved, AddressOf usb_OnDataRecieved
-            AddHandler usb1.OnSpecifiedDeviceArrived, AddressOf usb_OnSpecifiedDeviceArrived
-            Me.usb1.ProductId = Int32.Parse("1301", System.Globalization.NumberStyles.HexNumber)
-            Me.usb1.VendorId = Int32.Parse("1DA8", System.Globalization.NumberStyles.HexNumber)
-            Me.usb1.CheckDevicePresent()
+            With rs232
+                .PortName = _Com
+                .Open()
+            End With
             _IsConnect = True
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFID", "Driver démarré")
         Catch ex As Exception
             _IsConnect = False
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFID", "Driver erreur lors du démarrage: " & ex.Message)
         End Try
     End Sub
 
@@ -211,9 +204,8 @@ Imports UsbLibrary
     End Property
 
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
-        usb1 = Nothing
+        rs232.Close()
         _IsConnect = False
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFID", "Driver arrêté")
     End Sub
 
     Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
@@ -227,76 +219,113 @@ Imports UsbLibrary
     End Sub
 
     Public Sub New()
-        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
-        _DeviceSupport.Add(ListeDevices.SWITCH)
+        _DeviceSupport.Add(ListeDevices.APPAREIL)
     End Sub
 #End Region
 
 #Region "Fonctions propres au driver"
-    Private Sub usb_OnDeviceArrived(ByVal sender As Object, ByVal e As EventArgs)
-        'MsgBox("1")
+    Private Sub MAJ(ByVal Carte As Integer, ByVal Relais As Integer, ByVal Value As Boolean)
+        If Carte < 0 Then Carte = 0
+        If Carte > 7 Then Carte = 7
+        If Relais < 0 Then Relais = 0
+        If Relais > 7 Then Relais = 7
+        tRelais(Carte, Relais) = Value
     End Sub
-
-    Private Sub usb_OnDeviceRemoved(ByVal sender As Object, ByVal e As EventArgs)
-        'MsgBox("Device was removed")
-    End Sub
-
-    Private Sub usb_OnSpecifiedDeviceArrived(ByVal sender As Object, ByVal e As EventArgs)
-        _IsConnect = True
-    End Sub
-
-    Private Sub usb_OnSpecifiedDeviceRemoved(ByVal sender As Object, ByVal e As EventArgs)
-        'MsgBox("Device déconecté")
-    End Sub
-
-    Private Sub usb_OnDataRecieved(ByVal sender As Object, ByVal args As DataRecievedEventArgs)
-        Dim different0 As Boolean = False
-        Dim rec_data As String = "Data: "
-        For Each myData As Byte In args.data
-            If myData <> 0 Then
-                different0 = True
-            End If
-
-            rec_data += myData.ToString("X") & " "
-        Next
-
-        If different0 Then
-            processMirrorData(args.data)
-        End If
-    End Sub
-
-    Private Sub processMirrorData(ByVal mirrorData As Byte())
-        processLaunch(mirrorData)
-    End Sub
-
-    Private Sub processLaunch(ByVal mirrorData As Byte())
-        If mirrorData(1) = 1 Then
-            'action miroir 
-            If mirrorData(2) = 4 Then
-                'remis à l'endroit 
-                RaiseEvent DriverEvent(_Nom, 38, "2|Remise à l'endroit du mir:ror")
-            ElseIf mirrorData(2) = 5 Then
-                ' mise à l'envers 
-                RaiseEvent DriverEvent(_Nom, 38, "3|Retournement du mir:ror")
-            End If
-        ElseIf mirrorData(1) = 2 Then
-            'action ztamp 
-            Dim idZtamp As String = [String].Empty
-            For i As Integer = 3 To 13
-                idZtamp += mirrorData(i).ToString("X2")
+    Private Function ArretUrgence() As String
+        Dim i As Integer
+        Dim j As Integer
+        Call EnvoyerTrame(1, "E", 1)
+        For i = 0 To 7
+            For j = 0 To 7
+                MAJ(i, j, False)
             Next
-            If mirrorData(2) = 1 Then
-                'dépot 
-                RaiseEvent DriverEvent(_Nom, 38, "1|" & idZtamp)
-                'MsgBox("ID:" & idZtamp & " - POSE")
-            ElseIf mirrorData(2) = 2 Then
-                ' retrait 
-                RaiseEvent DriverEvent(_Nom, 38, "0|" & idZtamp)
-                'MsgBox("ID:" & idZtamp & " - DEPOSE")
-            End If
-        Else
-            'Log.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Driver " & _Nom & " une erreur inconnue est survenue...")
-        End If
+        Next
+        Return "Arrêt d'urgence effectué"
+    End Function
+
+    Private Function ClearRelais(ByVal Carte As Integer, ByVal Relais As Integer) As String
+        Call EnvoyerTrame(Carte, "C", Relais)
+        MAJ(Carte, Relais, False)
+        Return "Relais:" & Carte & "x" & Relais & " Etat:0"
+    End Function
+
+    Private Function GetEtatRelais(ByVal Carte As Integer, ByVal Relais As Integer) As Integer
+        GetEtatRelais = tRelais(Carte, Relais)
+    End Function
+
+    Private Function ResetAll() As String
+        Dim i As Integer
+        For i = 1 To 255
+            ResetCarte(i)
+        Next
+        Return "Reset effectué sur toutes les cartes"
+    End Function
+
+    Private Function ResetCarte(ByVal Carte As Integer) As String
+        Call EnvoyerTrame(Carte, "C", 9)
+        Dim i As Integer
+        For i = 0 To 7
+            MAJ(Carte, i, False)
+        Next
+        Return "Carte: " & Carte & " - Reset effectué"
+    End Function
+
+    Private Function SetAdresseCarte(ByVal Carte As Integer, ByVal NewAdresse As Integer) As String
+        Call EnvoyerTrame(Carte, "A", NewAdresse)
+        Return "Carte: " & Carte & " - Nouvelle adresse: " & NewAdresse
+    End Function
+
+    Private Function SetCarte(ByVal Carte As Integer) As String
+        Call EnvoyerTrame(Carte, "S", 9)
+        Dim i As Integer
+        For i = 0 To 7
+            MAJ(Carte, i, True)
+        Next
+        Return "Carte: " & Carte & " - Set effectué"
+    End Function
+
+    Private Function SetRelais(ByVal Carte As Integer, ByVal Relais As Integer) As String
+        Call EnvoyerTrame(Carte, "S", Relais)
+        MAJ(Carte, Relais, True)
+        Return "Relais:" & Carte & "x" & Relais & " Etat:1"
+    End Function
+
+    Private Function ShowAdrCarte() As String
+        Call EnvoyerTrame(1, "D", 1)
+        Return "Afficher les adresses des cartes"
+    End Function
+
+    Public Sub [On](ByVal Objet As Object)
+        SetRelais(0, Objet.adresse)
     End Sub
+
+    Public Sub [Off](ByVal Objet As Object)
+        ClearRelais(0, Objet.adresse)
+    End Sub
+
+    'Envoi de la trame à la carte
+    Private Sub EnvoyerTrame(ByVal AdresseCarte As String, ByVal Instruction As String, ByVal Adresse As String)
+        Dim Entete As String = Chr(13)
+        Dim m_Adresse As Integer
+        Dim Trame As String = ""
+        Dim i As Byte = 0
+        Dim checksum As Integer
+
+        m_Adresse = CInt(AdresseCarte)
+        'Calcul du CheckSum
+        checksum = ((255 - (13 + m_Adresse + Asc(Instruction) + Asc(Adresse)) + 1)) 'complément à 2 des 4 bytes
+        Try
+            Do While i < 3
+                Trame = Entete & Chr(m_Adresse) & Instruction & Adresse & Chr(checksum)
+                'Envoyer la trame
+                rs232.Write(Trame)
+                System.Threading.Thread.Sleep(10)
+                i = i + 1
+            Loop
+        Catch ex As Exception
+            '                    WriteLog(m_ServiceNom, "Erreur lors de l'envoi de la trame: " & Trame & " " & ex.ToString)
+        End Try
+    End Sub
+
 #End Region
 End Class

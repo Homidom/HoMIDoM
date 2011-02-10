@@ -1,25 +1,24 @@
 ﻿Imports HoMIDom
-Imports HoMIDom.HoMIDom.Device
 Imports HoMIDom.HoMIDom.Server
-Imports UsbLibrary
+Imports HoMIDom.HoMIDom.Device
 
-' Driver RFID mir:ror
-' Nécessite la dll usblibrary
+' Driver k8055
+'Nécessite la dll k8055d.dll
 ' Auteur : Seb
 ' Date : 10/02/2011
 
-<Serializable()> Public Class Driver_RFID
+<Serializable()> Public Class Driver_k8055
     Implements HoMIDom.HoMIDom.IDriver
 
 #Region "Variable Driver"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
-    Dim _ID As String = "30E229A2-34F1-11E0-BDFE-9FD3DED72085"
-    Dim _Nom As String = "RFID"
+    Dim _ID As String = "1BB97374-34F5-11E0-BF44-48D8DED72085"
+    Dim _Nom As String = "K8055"
     Dim _Enable As String = False
-    Dim _Description As String = "Récepteur Rfid mir:ror"
+    Dim _Description As String = "Carte Velleman k8055"
     Dim _StartAuto As Boolean = False
-    Dim _Protocol As String = "RFID"
+    Dim _Protocol As String = "USB"
     Dim _IsConnect As Boolean = False
     Dim _IP_TCP As String = ""
     Dim _Port_TCP As String = ""
@@ -27,9 +26,9 @@ Imports UsbLibrary
     Dim _Port_UDP As String = ""
     Dim _Com As String = ""
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = "RFID"
+    Dim _Modele As String = "k8055"
     Dim _Version As String = "1.0"
-    Dim _Picture As String = "rfid.png"
+    Dim _Picture As String = "k8055.png"
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
     Dim _DeviceSupport As New ArrayList
@@ -41,13 +40,30 @@ Imports UsbLibrary
     Dim _lastetat As Boolean = True
 #End Region
 
-#Region "Déclaration#"
-    'variables propres à ce driver
-    Dim usb1 As UsbLibrary.UsbHidPort
+#Region "Declaration"
+    Private Declare Function OpenDevice Lib "k8055d.dll" (ByVal CardAddress As Long) As Long
+    Private Declare Sub CloseDevice Lib "k8055d.dll" ()
+    Private Declare Sub WriteAllDigital Lib "k8055d.dll" (ByVal Data As Long)
+    Private Declare Sub ClearDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long)
+    Private Declare Sub ClearAllDigital Lib "k8055d.dll" ()
+    Private Declare Sub SetDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long)
+    Private Declare Sub SetAllDigital Lib "k8055d.dll" ()
+    Private Declare Function ReadDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long) As Boolean
+    Private Declare Function ReadAllDigital Lib "k8055d.dll" () As Long
+    Private Declare Function ReadAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long) As Long
+    Private Declare Sub ReadAllAnalog Lib "k8055d.dll" (ByVal Data1 As Long, ByVal Data2 As Long)
+    Private Declare Sub OutputAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long, ByVal Data As Long)
+    Private Declare Sub OutputAllAnalog Lib "k8055d.dll" (ByVal Data1 As Long, ByVal Data2 As Long)
+    Private Declare Sub ClearAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long)
+    Private Declare Function ReadCounter Lib "k8055d.dll" (ByVal CounterNr As Long) As Long
+    Private Declare Sub SetAllAnalog Lib "k8055d.dll" ()
+    Private Declare Sub ClearAllAnalog Lib "k8055d.dll" ()
+    Private Declare Sub ResetCounter Lib "k8055d.dll" (ByVal CounterNr As Long)
+    Private Declare Sub SetAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long)
+    Private Declare Sub SetCounterDebounceTime Lib "k8055d.dll" (ByVal CounterNr As Long, ByVal DebounceTime As Long)
 #End Region
 
 #Region "Fonctions génériques"
-
     Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
         Get
             Return _Com
@@ -183,21 +199,24 @@ Imports UsbLibrary
     End Property
 
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
+        'cree l'objet
         Try
-            usb1 = New UsbLibrary.UsbHidPort
-            AddHandler usb1.OnSpecifiedDeviceRemoved, AddressOf usb_OnSpecifiedDeviceRemoved
-            AddHandler usb1.OnDeviceArrived, AddressOf usb_OnDeviceArrived
-            AddHandler usb1.OnDeviceRemoved, AddressOf usb_OnDeviceRemoved
-            AddHandler usb1.OnDataRecieved, AddressOf usb_OnDataRecieved
-            AddHandler usb1.OnSpecifiedDeviceArrived, AddressOf usb_OnSpecifiedDeviceArrived
-            Me.usb1.ProductId = Int32.Parse("1301", System.Globalization.NumberStyles.HexNumber)
-            Me.usb1.VendorId = Int32.Parse("1DA8", System.Globalization.NumberStyles.HexNumber)
-            Me.usb1.CheckDevicePresent()
-            _IsConnect = True
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFID", "Driver démarré")
+            Dim h As Long
+            Dim carte As Long = 0
+            h = OpenDevice(carte)
+            Select Case h
+                'Case 0, 1, 2, 3
+                '    Return 0
+                '    Start = "Card " + Str(h) + " connected"
+                '    _IsConnect = True
+                'Case -1
+                '    Return -1
+                '    Start = "Card " + Str(carte) + " not found"
+                '    _IsConnect = False
+            End Select
         Catch ex As Exception
+            ' Start = "ERREUR: " & ex.Message
             _IsConnect = False
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFID", "Driver erreur lors du démarrage: " & ex.Message)
         End Try
     End Sub
 
@@ -211,9 +230,7 @@ Imports UsbLibrary
     End Property
 
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
-        usb1 = Nothing
-        _IsConnect = False
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFID", "Driver arrêté")
+
     End Sub
 
     Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
@@ -227,76 +244,91 @@ Imports UsbLibrary
     End Sub
 
     Public Sub New()
-        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
         _DeviceSupport.Add(ListeDevices.SWITCH)
+        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
+        _DeviceSupport.Add(ListeDevices.CONTACT)
+        _DeviceSupport.Add(ListeDevices.APPAREIL)
     End Sub
 #End Region
 
 #Region "Fonctions propres au driver"
-    Private Sub usb_OnDeviceArrived(ByVal sender As Object, ByVal e As EventArgs)
-        'MsgBox("1")
+    Public Sub ClearAllAnalogique()
+        ClearAllAnalog()
+    End Sub
+    Public Sub ClearAllBinaire()
+        ClearAllDigital()
     End Sub
 
-    Private Sub usb_OnDeviceRemoved(ByVal sender As Object, ByVal e As EventArgs)
-        'MsgBox("Device was removed")
+    Public Sub ClearAnalogiqueChannel(ByVal Channel As Long)
+        ClearAnalogChannel(Channel)
     End Sub
 
-    Private Sub usb_OnSpecifiedDeviceArrived(ByVal sender As Object, ByVal e As EventArgs)
-        _IsConnect = True
+    Public Sub ClearBinaireChannel(ByVal Channel As Long)
+        ClearDigitalChannel(Channel)
     End Sub
 
-    Private Sub usb_OnSpecifiedDeviceRemoved(ByVal sender As Object, ByVal e As EventArgs)
-        'MsgBox("Device déconecté")
+    Public Sub OutputAllAnalogique(ByVal Data1 As Long, ByVal Data2 As Long)
+        OutputAllAnalog(Data1, Data2)
     End Sub
 
-    Private Sub usb_OnDataRecieved(ByVal sender As Object, ByVal args As DataRecievedEventArgs)
-        Dim different0 As Boolean = False
-        Dim rec_data As String = "Data: "
-        For Each myData As Byte In args.data
-            If myData <> 0 Then
-                different0 = True
-            End If
-
-            rec_data += myData.ToString("X") & " "
-        Next
-
-        If different0 Then
-            processMirrorData(args.data)
-        End If
+    Public Sub OutputAnalogiqueChannel(ByVal Channel As Long, ByVal Data As Long)
+        OutputAnalogChannel(Channel, Data)
     End Sub
 
-    Private Sub processMirrorData(ByVal mirrorData As Byte())
-        processLaunch(mirrorData)
+    Public Sub ReadAllAnalogique(ByVal Data1 As Long, ByVal Data2 As Long)
+        ReadAllAnalog(Data1, Data2)
     End Sub
 
-    Private Sub processLaunch(ByVal mirrorData As Byte())
-        If mirrorData(1) = 1 Then
-            'action miroir 
-            If mirrorData(2) = 4 Then
-                'remis à l'endroit 
-                RaiseEvent DriverEvent(_Nom, 38, "2|Remise à l'endroit du mir:ror")
-            ElseIf mirrorData(2) = 5 Then
-                ' mise à l'envers 
-                RaiseEvent DriverEvent(_Nom, 38, "3|Retournement du mir:ror")
-            End If
-        ElseIf mirrorData(1) = 2 Then
-            'action ztamp 
-            Dim idZtamp As String = [String].Empty
-            For i As Integer = 3 To 13
-                idZtamp += mirrorData(i).ToString("X2")
-            Next
-            If mirrorData(2) = 1 Then
-                'dépot 
-                RaiseEvent DriverEvent(_Nom, 38, "1|" & idZtamp)
-                'MsgBox("ID:" & idZtamp & " - POSE")
-            ElseIf mirrorData(2) = 2 Then
-                ' retrait 
-                RaiseEvent DriverEvent(_Nom, 38, "0|" & idZtamp)
-                'MsgBox("ID:" & idZtamp & " - DEPOSE")
-            End If
-        Else
-            'Log.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Driver " & _Nom & " une erreur inconnue est survenue...")
-        End If
+    Public Function ReadAllBinaire() As Long
+        Return ReadAllDigital
+    End Function
+
+    Public Function ReadAnalogiqueChannel(ByVal Channel As Long) As Long
+        Return ReadAnalogChannel(Channel)
+    End Function
+
+    Public Function ReadCompter(ByVal CounterNr As Long) As Long
+        Return ReadCounter(CounterNr)
+    End Function
+
+    Public Function ReadBinaireChannel(ByVal Channel As Long) As Boolean
+        Return ReadDigitalChannel(Channel)
+    End Function
+
+    Public Sub ResetCompteur(ByVal CounterNr As Long)
+        ResetCounter(CounterNr)
+    End Sub
+
+    Public Sub SetAllAnalogique()
+        SetAllAnalog()
+    End Sub
+
+    Public Sub SetAllBinaire()
+        SetAllDigital()
+    End Sub
+
+    Public Sub SetAnalogiqueChannel(ByVal Channel As Long)
+        SetAnalogChannel(Channel)
+    End Sub
+
+    Public Sub SetCompteurDebounceTime(ByVal CounterNr As Long, ByVal DebounceTime As Long)
+        SetCounterDebounceTime(CounterNr, DebounceTime)
+    End Sub
+
+    Public Sub SetBinaireChannel(ByVal Channel As Long)
+        SetDigitalChannel(Channel)
+    End Sub
+
+    Public Sub WriteAllBinaire(ByVal Channel As Long)
+        WriteAllDigital(Channel)
+    End Sub
+
+    Public Sub [On](ByVal Objet As Object)
+        SetBinaireChannel(Objet.adresse)
+    End Sub
+
+    Public Sub Off(ByVal Objet As Object)
+        ClearBinaireChannel(Objet.adresse)
     End Sub
 #End Region
 End Class
