@@ -185,6 +185,7 @@ Imports HoMIDom.HoMIDom.Device
 
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         _IsConnect = False
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Driver Virtuel", "Driver " & Me.Nom & " arrêté")
     End Sub
 
     Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version

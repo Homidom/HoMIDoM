@@ -1,0 +1,14 @@
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\Driver_USBuirt\bin\Release\Driver_USBuirt.dll
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\Driver_USBuirt\bin\Release\Driver_USBuirt.pdb
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\Driver_USBuirt\bin\Release\Driver_USBuirt.xml
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\Driver_USBuirt\bin\Release\HoMIDom.dll
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\Driver_USBuirt\bin\Release\UsbUirtManagedWrapper.dll
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\Driver_USBuirt\bin\Release\UsbLibrary.dll
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\Driver_USBuirt\bin\Release\HoMIDom.pdb
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\Driver_USBuirt\bin\Release\HoMIDom.xml
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\Driver_USBuirt\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\Driver_USBuirt\obj\Release\Driver_USBuirt.Resources.resources
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\Driver_USBuirt\obj\Release\Driver_USBuirt.vbproj.GenerateResource.Cache
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\Driver_USBuirt\obj\Release\Driver_USBuirt.dll
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\Driver_USBuirt\obj\Release\Driver_USBuirt.xml
+C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\Driver_USBuirt\obj\Release\Driver_USBuirt.pdb
