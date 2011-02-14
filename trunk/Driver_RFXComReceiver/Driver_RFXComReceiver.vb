@@ -44,9 +44,9 @@ Imports System.Globalization
     Dim MyTimer As New Timers.Timer
 
     'A ajouter dans les ppt du driver
-    Dim _tempsentrereponse As Integer = 1500
-    Dim _ignoreadresse As Boolean = False
-    Dim _lastetat As Boolean = True
+    'Dim _tempsentrereponse As Integer = 1500
+    'Dim _ignoreadresse As Boolean = False
+    'Dim _lastetat As Boolean = True
 #End Region
 
 #Region "Déclaration"
@@ -224,14 +224,17 @@ Imports System.Globalization
             Return _Version
         End Get
     End Property
+    Public Property StartAuto() As Boolean Implements HoMIDom.HoMIDom.IDriver.StartAuto
+        Get
+            Return _StartAuto
+        End Get
+        Set(ByVal value As Boolean)
+            _StartAuto = value
+        End Set
+    End Property
 #End Region
 
 #Region "Fonctions du Driver"
-    Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
-        [Stop]()
-        Start()
-    End Sub
-
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         '_IsConnect = True
         Dim retour As String
@@ -274,15 +277,6 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Public Property StartAuto() As Boolean Implements HoMIDom.HoMIDom.IDriver.StartAuto
-        Get
-            Return _StartAuto
-        End Get
-        Set(ByVal value As Boolean)
-            _StartAuto = value
-        End Set
-    End Property
-
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Dim retour As String
         retour = fermer()
@@ -292,6 +286,11 @@ Imports System.Globalization
         Else
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour)
         End If
+    End Sub
+
+    Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
+        [Stop]()
+        Start()
     End Sub
 
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
@@ -304,29 +303,29 @@ Imports System.Globalization
     End Sub
 
     Public Sub New()
-        _DeviceSupport.Add(ListeDevices.APPAREIL)
-        _DeviceSupport.Add(ListeDevices.BAROMETRE)
-        _DeviceSupport.Add(ListeDevices.BATTERIE)
-        _DeviceSupport.Add(ListeDevices.COMPTEUR)
-        _DeviceSupport.Add(ListeDevices.CONTACT)
-        _DeviceSupport.Add(ListeDevices.DETECTEUR)
-        _DeviceSupport.Add(ListeDevices.DIRECTIONVENT)
-        _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE)
-        _DeviceSupport.Add(ListeDevices.ENERGIETOTALE)
-        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
-        _DeviceSupport.Add(ListeDevices.GENERIQUESTRING)
-        _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE)
-        _DeviceSupport.Add(ListeDevices.HUMIDITE)
-        _DeviceSupport.Add(ListeDevices.LAMPE)
-        _DeviceSupport.Add(ListeDevices.PLUIECOURANT)
-        _DeviceSupport.Add(ListeDevices.PLUIETOTAL)
-        _DeviceSupport.Add(ListeDevices.SWITCH)
-        _DeviceSupport.Add(ListeDevices.TELECOMMANDE)
-        _DeviceSupport.Add(ListeDevices.TEMPERATURE)
-        _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE)
-        _DeviceSupport.Add(ListeDevices.UV)
-        _DeviceSupport.Add(ListeDevices.VITESSEVENT)
-        _DeviceSupport.Add(ListeDevices.VOLET)
+        _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
+        _DeviceSupport.Add(ListeDevices.BAROMETRE.ToString)
+        _DeviceSupport.Add(ListeDevices.BATTERIE.ToString)
+        _DeviceSupport.Add(ListeDevices.COMPTEUR.ToString)
+        _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
+        _DeviceSupport.Add(ListeDevices.DETECTEUR.ToString)
+        _DeviceSupport.Add(ListeDevices.DIRECTIONVENT.ToString)
+        _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE.ToString)
+        _DeviceSupport.Add(ListeDevices.ENERGIETOTALE.ToString)
+        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
+        _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
+        _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE.ToString)
+        _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
+        _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
+        _DeviceSupport.Add(ListeDevices.PLUIECOURANT.ToString)
+        _DeviceSupport.Add(ListeDevices.PLUIETOTAL.ToString)
+        _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
+        _DeviceSupport.Add(ListeDevices.TELECOMMANDE.ToString)
+        _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
+        _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE.ToString)
+        _DeviceSupport.Add(ListeDevices.UV.ToString)
+        _DeviceSupport.Add(ListeDevices.VITESSEVENT.ToString)
+        _DeviceSupport.Add(ListeDevices.VOLET.ToString)
     End Sub
 #End Region
 

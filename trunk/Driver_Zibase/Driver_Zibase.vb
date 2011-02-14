@@ -212,10 +212,10 @@ Imports System.Globalization
     End Sub
 
     Public Sub New()
-        _DeviceSupport.Add(ListeDevices.SWITCH)
-        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
-        _DeviceSupport.Add(ListeDevices.CONTACT)
-        _DeviceSupport.Add(ListeDevices.APPAREIL)
+        _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
+        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
+        _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
+        _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
     End Sub
 #End Region
 
