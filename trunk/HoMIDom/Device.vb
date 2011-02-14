@@ -11,9 +11,16 @@ Namespace HoMIDom
     '** Historique (SebBergues: 19/01/2011: Ecriture ou lecture via Read/Write + ajout proriété Solo
     '***********************************************
 
+    ''' <summary>
+    ''' Class Device, définie tous différents types de devices
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Class Device
 
-        'Indique la liste des devices gérés
+        ''' <summary>
+        ''' Indique la liste des devices gérés
+        ''' </summary>
+        ''' <remarks></remarks>
         Public Enum ListeDevices
             APPAREIL = 1 'modules pour diriger un appareil  ON/OFF
             AUDIO = 2

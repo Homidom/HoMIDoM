@@ -102,12 +102,6 @@
       <Name>HoMIDom</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <NativeReference Include="RE-Applications.K8055D.Version3, Version=1.0.0.1000, ProcessorArchitecture=X86, Type=win32">
-      <Name>K8055D.dll</Name>
-      <HintPath>d:\cyber-SPA\PE - Perso\PERSO\Perso\TemplateLibraryService\IRemoteObjectK8055\bin\Release\K8055D.dll</HintPath>
-    </NativeReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

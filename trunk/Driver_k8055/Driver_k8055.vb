@@ -41,26 +41,26 @@ Imports HoMIDom.HoMIDom.Device
 #End Region
 
 #Region "Declaration"
-    Private Declare Function OpenDevice Lib "k8055d.dll" (ByVal CardAddress As Long) As Long
-    Private Declare Sub CloseDevice Lib "k8055d.dll" ()
-    Private Declare Sub WriteAllDigital Lib "k8055d.dll" (ByVal Data As Long)
-    Private Declare Sub ClearDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long)
-    Private Declare Sub ClearAllDigital Lib "k8055d.dll" ()
-    Private Declare Sub SetDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long)
-    Private Declare Sub SetAllDigital Lib "k8055d.dll" ()
-    Private Declare Function ReadDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long) As Boolean
-    Private Declare Function ReadAllDigital Lib "k8055d.dll" () As Long
-    Private Declare Function ReadAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long) As Long
-    Private Declare Sub ReadAllAnalog Lib "k8055d.dll" (ByVal Data1 As Long, ByVal Data2 As Long)
-    Private Declare Sub OutputAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long, ByVal Data As Long)
-    Private Declare Sub OutputAllAnalog Lib "k8055d.dll" (ByVal Data1 As Long, ByVal Data2 As Long)
-    Private Declare Sub ClearAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long)
-    Private Declare Function ReadCounter Lib "k8055d.dll" (ByVal CounterNr As Long) As Long
-    Private Declare Sub SetAllAnalog Lib "k8055d.dll" ()
-    Private Declare Sub ClearAllAnalog Lib "k8055d.dll" ()
-    Private Declare Sub ResetCounter Lib "k8055d.dll" (ByVal CounterNr As Long)
-    Private Declare Sub SetAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long)
-    Private Declare Sub SetCounterDebounceTime Lib "k8055d.dll" (ByVal CounterNr As Long, ByVal DebounceTime As Long)
+    'Private Declare Function OpenDevice Lib "k8055d.dll" (ByVal CardAddress As Long) As Long
+    'Private Declare Sub CloseDevice Lib "k8055d.dll" ()
+    'Private Declare Sub WriteAllDigital Lib "k8055d.dll" (ByVal Data As Long)
+    'Private Declare Sub ClearDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long)
+    'Private Declare Sub ClearAllDigital Lib "k8055d.dll" ()
+    'Private Declare Sub SetDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long)
+    'Private Declare Sub SetAllDigital Lib "k8055d.dll" ()
+    'Private Declare Function ReadDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long) As Boolean
+    'Private Declare Function ReadAllDigital Lib "k8055d.dll" () As Long
+    'Private Declare Function ReadAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long) As Long
+    'Private Declare Sub ReadAllAnalog Lib "k8055d.dll" (ByVal Data1 As Long, ByVal Data2 As Long)
+    'Private Declare Sub OutputAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long, ByVal Data As Long)
+    'Private Declare Sub OutputAllAnalog Lib "k8055d.dll" (ByVal Data1 As Long, ByVal Data2 As Long)
+    'Private Declare Sub ClearAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long)
+    'Private Declare Function ReadCounter Lib "k8055d.dll" (ByVal CounterNr As Long) As Long
+    'Private Declare Sub SetAllAnalog Lib "k8055d.dll" ()
+    'Private Declare Sub ClearAllAnalog Lib "k8055d.dll" ()
+    'Private Declare Sub ResetCounter Lib "k8055d.dll" (ByVal CounterNr As Long)
+    'Private Declare Sub SetAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long)
+    'Private Declare Sub SetCounterDebounceTime Lib "k8055d.dll" (ByVal CounterNr As Long, ByVal DebounceTime As Long)
 #End Region
 
 #Region "Fonctions génériques"
@@ -203,7 +203,7 @@ Imports HoMIDom.HoMIDom.Device
         Try
             Dim h As Long
             Dim carte As Long = 0
-            h = OpenDevice(carte)
+            ' h = OpenDevice(carte)
             Select Case h
                 'Case 0, 1, 2, 3
                 '    Return 0
@@ -253,74 +253,74 @@ Imports HoMIDom.HoMIDom.Device
 
 #Region "Fonctions propres au driver"
     Public Sub ClearAllAnalogique()
-        ClearAllAnalog()
+        'ClearAllAnalog()
     End Sub
     Public Sub ClearAllBinaire()
-        ClearAllDigital()
+        'ClearAllDigital()
     End Sub
 
     Public Sub ClearAnalogiqueChannel(ByVal Channel As Long)
-        ClearAnalogChannel(Channel)
+        'ClearAnalogChannel(Channel)
     End Sub
 
     Public Sub ClearBinaireChannel(ByVal Channel As Long)
-        ClearDigitalChannel(Channel)
+        'ClearDigitalChannel(Channel)
     End Sub
 
     Public Sub OutputAllAnalogique(ByVal Data1 As Long, ByVal Data2 As Long)
-        OutputAllAnalog(Data1, Data2)
+        'OutputAllAnalog(Data1, Data2)
     End Sub
 
     Public Sub OutputAnalogiqueChannel(ByVal Channel As Long, ByVal Data As Long)
-        OutputAnalogChannel(Channel, Data)
+        'OutputAnalogChannel(Channel, Data)
     End Sub
 
     Public Sub ReadAllAnalogique(ByVal Data1 As Long, ByVal Data2 As Long)
-        ReadAllAnalog(Data1, Data2)
+        'ReadAllAnalog(Data1, Data2)
     End Sub
 
     Public Function ReadAllBinaire() As Long
-        Return ReadAllDigital
+        'Return ReadAllDigital
     End Function
 
     Public Function ReadAnalogiqueChannel(ByVal Channel As Long) As Long
-        Return ReadAnalogChannel(Channel)
+        'Return ReadAnalogChannel(Channel)
     End Function
 
     Public Function ReadCompter(ByVal CounterNr As Long) As Long
-        Return ReadCounter(CounterNr)
+        'Return ReadCounter(CounterNr)
     End Function
 
     Public Function ReadBinaireChannel(ByVal Channel As Long) As Boolean
-        Return ReadDigitalChannel(Channel)
+        'Return ReadDigitalChannel(Channel)
     End Function
 
     Public Sub ResetCompteur(ByVal CounterNr As Long)
-        ResetCounter(CounterNr)
+        'ResetCounter(CounterNr)
     End Sub
 
     Public Sub SetAllAnalogique()
-        SetAllAnalog()
+        'SetAllAnalog()
     End Sub
 
     Public Sub SetAllBinaire()
-        SetAllDigital()
+        'SetAllDigital()
     End Sub
 
     Public Sub SetAnalogiqueChannel(ByVal Channel As Long)
-        SetAnalogChannel(Channel)
+        'SetAnalogChannel(Channel)
     End Sub
 
     Public Sub SetCompteurDebounceTime(ByVal CounterNr As Long, ByVal DebounceTime As Long)
-        SetCounterDebounceTime(CounterNr, DebounceTime)
+        'SetCounterDebounceTime(CounterNr, DebounceTime)
     End Sub
 
     Public Sub SetBinaireChannel(ByVal Channel As Long)
-        SetDigitalChannel(Channel)
+        'SetDigitalChannel(Channel)
     End Sub
 
     Public Sub WriteAllBinaire(ByVal Channel As Long)
-        WriteAllDigital(Channel)
+        ' WriteAllDigital(Channel)
     End Sub
 
     Public Sub [On](ByVal Objet As Object)

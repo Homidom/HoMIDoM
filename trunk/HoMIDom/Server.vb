@@ -13,6 +13,10 @@ Namespace HoMIDom
     '** Historique (SebBergues): 12/01/2011: Création 
     '***********************************************
 
+    ''' <summary>
+    ''' Classe Server
+    ''' </summary>
+    ''' <remarks></remarks>
     <Serializable()> Public Class Server
         Inherits MarshalByRefObject
         Implements IHoMIDom 'implémente l'interface dans cette class
@@ -22,12 +26,25 @@ Namespace HoMIDom
         'Gestion des Evènements
         '********************************************************************
 
-        'Evenement provenant des drivers
+        ''' <summary>
+        '''Evenement provenant des drivers 
+        ''' </summary>
+        ''' <param name="DriveName"></param>
+        ''' <param name="TypeEvent"></param>
+        ''' <param name="Parametre"></param>
+        ''' <remarks></remarks>
         Public Sub DriversEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object)
 
         End Sub
 
-        'Evenement provenant des devices
+
+        ''' <summary>
+        ''' Evenement provenant des devices
+        ''' </summary>
+        ''' <param name="Device"></param>
+        ''' <param name="Property"></param>
+        ''' <param name="Parametres"></param>
+        ''' <remarks></remarks>
         Public Sub DeviceChange(ByVal Device As Object, ByVal [Property] As String, ByVal Parametres As Object)
             Log(TypeLog.INFO, TypeSource.SERVEUR, "DeviceChange", "Historiser " & Device.name & " (" & [Property] & ") : " & Parametres)
 
@@ -130,7 +147,10 @@ Namespace HoMIDom
 
         End Sub
 
-        'Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi
+        ''' <summary>
+        ''' Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi
+        ''' </summary>
+        ''' <remarks></remarks>
         Sub TimerSecTick()
             'Action à effectuer toutes les secondes
 
@@ -171,10 +191,10 @@ Namespace HoMIDom
         Dim Soleil As New Soleil 'Déclaration class Soleil
         Dim _Longitude As Double 'Longitude
         Dim _Latitude As Double 'latitude
-        Dim _HeureLeverSoleil As DateTime
-        Dim _HeureCoucherSoleil As DateTime
-        Dim _HeureLeverSoleilCorrection As Integer
-        Dim _HeureCoucherSoleilCorrection As Integer
+        Dim _HeureLeverSoleil As DateTime 'heure du levé du soleil
+        Dim _HeureCoucherSoleil As DateTime 'heure du couché du soleil
+        Dim _HeureLeverSoleilCorrection As Integer 'correction à appliquer sur heure du levé du soleil
+        Dim _HeureCoucherSoleilCorrection As Integer 'correction à appliquer sur heure du couché du soleil
 
         Dim TimerSecond As New Timers.Timer 'Timer à la seconde
 
@@ -182,7 +202,12 @@ Namespace HoMIDom
 
 #Region "Fonctions/Sub propres au serveur"
 
-        'Liste les type de devices dans le combo
+        ''' <summary>
+        ''' Liste les type de devices par leur valeur d'Enum
+        ''' </summary>
+        ''' <param name="Index"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Function ReturnSringFromEnumDevice(ByVal Index As Integer) As String
             For Each value As Device.ListeDevices In [Enum].GetValues(GetType(Device.ListeDevices))
                 If value.GetHashCode = Index Then
@@ -193,7 +218,10 @@ Namespace HoMIDom
             Return ""
         End Function
 
-        '---------- Initialisation des heures du soleil -------              
+        ''' <summary>
+        ''' Initialisation des heures du soleil
+        ''' </summary>
+        ''' <remarks></remarks>
         Public Sub MAJ_HeuresSoleil()
 
             Dim dtSunrise As Date
@@ -209,7 +237,12 @@ Namespace HoMIDom
             Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Heure du coucher : " & _HeureCoucherSoleil)
         End Sub
 
-        '--- Chargement de la config depuis le fichier XML
+        ''' <summary>
+        ''' Chargement de la config depuis le fichier XML
+        ''' </summary>
+        ''' <param name="Fichier"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Function LoadConfig(ByVal Fichier As String) As String
             'Copy du fichier de config avant chargement
             Try
@@ -821,7 +854,7 @@ Namespace HoMIDom
 
         End Sub
 
-        '--- Charge les drivers
+        '--- Charge les drivers, donc toutes les dll dans le sous répertoire "plugins"
         Public Sub LoadDrivers()
             Try
                 Dim tx As String
@@ -869,6 +902,7 @@ Namespace HoMIDom
             End Try
         End Sub
 
+        'Démarre tous les drivers dont la propriété StartAuto=True
         Public Sub StartDrivers()
             Try
                 'Cherche tous les drivers chargés
@@ -975,7 +1009,7 @@ Namespace HoMIDom
             End Set
         End Property
 
-        Public Property Zones() As ArrayList Implements IHoMIDom.zones
+        Public Property Zones() As ArrayList Implements IHoMIDom.Zones
             Get
                 Return _ListZones
             End Get
@@ -1795,16 +1829,24 @@ Namespace HoMIDom
 #End Region
 
 #Region "Declaration de la classe Server"
+
+        ''' <summary>
+        ''' Déclaration de la class Server
+        ''' </summary>
+        ''' <remarks></remarks>
         Public Sub New()
             Dim retour As String
-            'Chargement de la config
+            'Charge les drivers
             LoadDrivers()
+            'Chargement de la config
             retour = LoadConfig(_MonRepertoire & "\Config\")
             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", retour)
+            'Démarre les drivers
             StartDrivers()
             TimerSecond.Interval = 1000
             AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
             TimerSecond.Enabled = True
+            'Calcul les heures de lever et coucher du soleil
             MAJ_HeuresSoleil()
 
         End Sub
@@ -1832,7 +1874,10 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Indique le type du Log: si c'est une erreur, une info, un message...
+        ''' <summary>
+        ''' Indique le type du Log: si c'est une erreur, une info, un message...
+        ''' </summary>
+        ''' <remarks></remarks>
         Public Enum TypeLog
             INFO = 1                    'divers
             ACTION = 2                  'action lancé par un driver/device/trigger
@@ -1846,7 +1891,10 @@ Namespace HoMIDom
             DEBUG = 10                   'visible uniquement si Homidom est en mode debug
         End Enum
 
-        'Indique la source du log si c'est le serveur, un script, un device...
+        ''' <summary>
+        ''' Indique la source du log si c'est le serveur, un script, un device...
+        ''' </summary>
+        ''' <remarks></remarks>
         Public Enum TypeSource
             SERVEUR = 1
             SCRIPT = 2
@@ -1856,6 +1904,14 @@ Namespace HoMIDom
             SOAP = 6
         End Enum
 
+        ''' <summary>
+        ''' Ecrit un log dans le fichier log au format xml
+        ''' </summary>
+        ''' <param name="TypLog"></param>
+        ''' <param name="Source"></param>
+        ''' <param name="Fonction"></param>
+        ''' <param name="Message"></param>
+        ''' <remarks></remarks>
         Public Sub Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
             Try
                 Dim Fichier As FileInfo
@@ -1917,7 +1973,11 @@ Namespace HoMIDom
             End Try
         End Sub
 
-        'Créer nouveau Fichier (donner chemin complet et nom) log
+        ''' <summary>
+        ''' Créer nouveau Fichier (donner chemin complet et nom) log
+        ''' </summary>
+        ''' <param name="NewFichier"></param>
+        ''' <remarks></remarks>
         Public Sub CreateNewFileLog(ByVal NewFichier As String)
             Dim rw As XmlTextWriter = New XmlTextWriter(NewFichier, Nothing)
             rw.WriteStartDocument()
