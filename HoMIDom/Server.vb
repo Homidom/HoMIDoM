@@ -780,7 +780,9 @@ Namespace HoMIDom
                     writer.WriteValue(_ListDevices.Item(i).modele)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("picture")
-                    writer.WriteValue(_ListDevices.Item(i).picture)
+                    Dim _pict As String = _ListDevices.Item(i).picture
+                    If _pict = "" Or _pict = Nothing Then _pict = " "
+                    writer.WriteValue(_pict)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("solo")
                     writer.WriteValue(_ListDevices.Item(i).solo)
@@ -1751,14 +1753,75 @@ Namespace HoMIDom
             Return myID
         End Function
 
-        'Commencer un apprentissage IR
+        ''' <summary>
+        ''' Supprime une commande IR d'un device
+        ''' </summary>
+        ''' <param name="deviceId"></param>
+        ''' <param name="CmdName"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function DeleteDeviceCommandIR(ByVal deviceId As String, ByVal CmdName As String) As Integer Implements IHoMIDom.DeleteDeviceCommandIR
+            For i As Integer = 0 To _ListDevices.Count - 1
+                If _ListDevices.Item(i).Id = deviceId Then
+                    For j As Integer = 0 To _ListDevices.Item(i).ListCommandname.count - 1
+                        If _ListDevices.Item(i).ListCommandname(j) = CmdName Then
+                            _ListDevices.Item(i).ListCommandname.removeat(j)
+                            _ListDevices.Item(i).ListCommanddata.removeat(j)
+                            _ListDevices.Item(i).ListCommandrepeat.removeat(j)
+                            'génération de l'event
+                            Exit Function
+                        End If
+                    Next
+                End If
+            Next
+        End Function
+
+        ''' <summary>
+        ''' Ajoute ou modifie une commande IR à un device
+        ''' </summary>
+        ''' <param name="deviceId"></param>
+        ''' <param name="CmdName"></param>
+        ''' <param name="CmdData"></param>
+        ''' <param name="CmdRepeat"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function SaveDeviceCommandIR(ByVal deviceId As String, ByVal CmdName As String, ByVal CmdData As String, ByVal CmdRepeat As String) As String Implements IHoMIDom.SaveDeviceCommandIR
+            Dim flag As Boolean
+
+            'On vérifie avant que si la commande existe on la modifie
+            For i As Integer = 0 To _ListDevices.Count - 1
+                If _ListDevices.Item(i).id = deviceId Then
+                    For j As Integer = 0 To _ListDevices.Item(i).listcommandName.count - 1
+                        If _ListDevices.Item(i).listcommandname(j) = CmdName Then
+                            _ListDevices.Item(i).listcommanddata(j) = CmdData
+                            _ListDevices.Item(i).listcommandrepeat(j) = CmdRepeat
+                            flag = True
+                        End If
+                    Next
+                    'sinon on la crée
+                    If flag = False Then
+                        _ListDevices.Item(i).listcommandname.add(CmdName)
+                        _ListDevices.Item(i).listcommanddata.add(CmdData)
+                        _ListDevices.Item(i).listcommandrepeat.add(CmdRepeat)
+                    End If
+                End If
+            Next
+
+            Return 0
+        End Function
+
+        ''' <summary>
+        ''' Commencer un apprentissage IR
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Function StartIrLearning() As String Implements IHoMIDom.StartIrLearning
             Dim retour As String = ""
             For i As Integer = 0 To _ListDrivers.Count - 1
                 If _ListDrivers.Item(i).protocol = "IR" Then
                     Dim x As Object = _ListDrivers.Item(i)
                     retour = x.LearnCodeIR()
-                    'Log.Log(Log.TypeLog.INFO, TypeSource.SERVEUR, "Apprentissage IR: " & retour)
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "SERVEUR", "Apprentissage IR: " & retour)
                 End If
             Next
             Return retour
