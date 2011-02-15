@@ -1,6 +1,10 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Device
 Imports HoMIDom.HoMIDom.Server
+Imports System.Collections.Generic
+Imports System.ComponentModel
+Imports System.Data
+Imports System.Threading
 Imports UsbLibrary
 
 ' Driver RFID mir:ror
@@ -41,9 +45,9 @@ Imports UsbLibrary
     Dim _lastetat As Boolean = True
 #End Region
 
-#Region "Déclaration#"
+#Region "Déclaration"
     'variables propres à ce driver
-    Dim usb1 As UsbLibrary.UsbHidPort
+    Dim WithEvents usb1 As UsbLibrary.UsbHidPort
 #End Region
 
 #Region "Fonctions génériques"
@@ -185,16 +189,22 @@ Imports UsbLibrary
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
             usb1 = New UsbLibrary.UsbHidPort
-            AddHandler usb1.OnSpecifiedDeviceRemoved, AddressOf usb_OnSpecifiedDeviceRemoved
-            AddHandler usb1.OnDeviceArrived, AddressOf usb_OnDeviceArrived
-            AddHandler usb1.OnDeviceRemoved, AddressOf usb_OnDeviceRemoved
-            AddHandler usb1.OnDataRecieved, AddressOf usb_OnDataRecieved
+            AddHandler usb1.OnSpecifiedDeviceRemoved, AddressOf Me.usb_OnSpecifiedDeviceRemoved
+            AddHandler usb1.OnDeviceArrived, AddressOf Me.usb_OnDeviceArrived
+            AddHandler usb1.OnDeviceRemoved, AddressOf Me.usb_OnDeviceRemoved
+            AddHandler usb1.OnDataRecieved, AddressOf Me.usb_OnDataRecieved
             AddHandler usb1.OnSpecifiedDeviceArrived, AddressOf usb_OnSpecifiedDeviceArrived
             Me.usb1.ProductId = Int32.Parse("1301", System.Globalization.NumberStyles.HexNumber)
             Me.usb1.VendorId = Int32.Parse("1DA8", System.Globalization.NumberStyles.HexNumber)
             Me.usb1.CheckDevicePresent()
-            _IsConnect = True
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFID", "Driver démarré")
+            If usb1 IsNot Nothing Then
+                '_IsConnect = True
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFID", "Driver démarré:" & IsConnect)
+            Else
+                _IsConnect = False
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFID", "Driver erreur lors du démarrage")
+            End If
+           
         Catch ex As Exception
             _IsConnect = False
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFID", "Driver erreur lors du démarrage: " & ex.Message)
@@ -234,19 +244,20 @@ Imports UsbLibrary
 
 #Region "Fonctions propres au driver"
     Private Sub usb_OnDeviceArrived(ByVal sender As Object, ByVal e As EventArgs)
-        'MsgBox("1")
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFID", "usb_OnDeviceArrived")
     End Sub
 
     Private Sub usb_OnDeviceRemoved(ByVal sender As Object, ByVal e As EventArgs)
-        'MsgBox("Device was removed")
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFID", "usb_OnDeviceRemoved")
     End Sub
 
     Private Sub usb_OnSpecifiedDeviceArrived(ByVal sender As Object, ByVal e As EventArgs)
         _IsConnect = True
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFID", "Lecteur RFID détecté")
     End Sub
 
     Private Sub usb_OnSpecifiedDeviceRemoved(ByVal sender As Object, ByVal e As EventArgs)
-        'MsgBox("Device déconecté")
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFID", "usb_OnSpecifiedDeviceRemoved")
     End Sub
 
     Private Sub usb_OnDataRecieved(ByVal sender As Object, ByVal args As DataRecievedEventArgs)
@@ -274,10 +285,10 @@ Imports UsbLibrary
             'action miroir 
             If mirrorData(2) = 4 Then
                 'remis à l'endroit 
-                RaiseEvent DriverEvent(_Nom, 38, "2|Remise à l'endroit du mir:ror")
+                'RaiseEvent DriverEvent(_Nom, 38, "2|Remise à l'endroit du mir:ror")
             ElseIf mirrorData(2) = 5 Then
                 ' mise à l'envers 
-                RaiseEvent DriverEvent(_Nom, 38, "3|Retournement du mir:ror")
+                'RaiseEvent DriverEvent(_Nom, 38, "3|Retournement du mir:ror")
             End If
         ElseIf mirrorData(1) = 2 Then
             'action ztamp 
@@ -287,16 +298,24 @@ Imports UsbLibrary
             Next
             If mirrorData(2) = 1 Then
                 'dépot 
-                RaiseEvent DriverEvent(_Nom, 38, "1|" & idZtamp)
-                'MsgBox("ID:" & idZtamp & " - POSE")
+                SetDevice(idZtamp, True)
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFID", "Puce RFID N°: " & idZtamp & " Value=True")
             ElseIf mirrorData(2) = 2 Then
                 ' retrait 
-                RaiseEvent DriverEvent(_Nom, 38, "0|" & idZtamp)
-                'MsgBox("ID:" & idZtamp & " - DEPOSE")
+                SetDevice(idZtamp, False)
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFID", "Puce RFID N°: " & idZtamp & " Value=False")
             End If
         Else
-            'Log.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Driver " & _Nom & " une erreur inconnue est survenue...")
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFID", "Une erreur inconnue est survenue...")
         End If
+    End Sub
+
+    Private Sub SetDevice(ByVal idZtamp As String, ByVal Value As Boolean)
+        For i As Integer = 0 To _Server.Devices.Count - 1
+            If _Server.Devices.Item(i).ID = idZtamp And (_Server.Devices.Item(i).type = "GENERIQUEBOOLEEN" Or _Server.Devices.Item(i).type = "SWITCH") Then
+                _Server.Devices.Item(i).value = Value
+            End If
+        Next
     End Sub
 #End Region
 End Class
