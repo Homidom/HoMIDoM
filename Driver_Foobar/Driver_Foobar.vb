@@ -1,11 +1,16 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
+Imports System.IO
 
 ' Driver Foobar multiroom
 ' Auteur : Seb
 ' Date : 10/02/2011
 
+''' <summary>
+''' Class Foobar le device doit donner par le biais de son adresse l'emplacement de l'executable de Foobar
+''' </summary>
+''' <remarks></remarks>
 <Serializable()> Public Class Driver_Foobar
     Implements HoMIDom.HoMIDom.IDriver
 
@@ -175,7 +180,8 @@ Imports HoMIDom.HoMIDom.Device
     End Property
 
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
-
+        _IsConnect = True
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "FOOBAR", "Driver démarré")
     End Sub
 
     Public Property StartAuto() As Boolean Implements HoMIDom.HoMIDom.IDriver.StartAuto
@@ -188,7 +194,8 @@ Imports HoMIDom.HoMIDom.Device
     End Property
 
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
-
+        _IsConnect = False
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "FOOBAR", "Driver arrêté")
     End Sub
 
     Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
@@ -198,7 +205,63 @@ Imports HoMIDom.HoMIDom.Device
     End Property
 
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-
+        If Objet.type = "AUDIO" Then
+            If File.Exists(Objet.adresse1) = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "FOOBAR", "Le fichier executable foobar n'existe pas")
+                Exit Sub
+            End If
+            Select Case UCase(Commande)
+                Case "PLAYAUDIO"
+                    If Objet.Fichier = "" Then Exit Sub
+                    Dim ProcId As Object
+                    ProcId = Shell(Objet.Adresse1 & " /hide", AppWinStyle.Hide)
+                    System.Threading.Thread.Sleep(1000)
+                    ProcId = Shell(Objet.Adresse1 & " /add " & Objet.Fichier, AppWinStyle.Hide)
+                    System.Threading.Thread.Sleep(3000)
+                    ProcId = Shell(Objet.Adresse1 & " /play", AppWinStyle.Hide)
+                    Objet.Value = "PLAY"
+                Case "PAUSEAUDIO"
+                    Dim ProcId As Object
+                    ProcId = Shell(Objet.Adresse1 & " /pause", AppWinStyle.Hide)
+                    Objet.Value = "PAUSE"
+                Case "STOPAUDIO"
+                    Dim ProcId As Object
+                    ProcId = Shell(Objet.Adresse1 & " /command:Clear", AppWinStyle.Hide)
+                    System.Threading.Thread.Sleep(500)
+                    ProcId = Shell(Objet.Adresse1 & " /stop", AppWinStyle.Hide)
+                    System.Threading.Thread.Sleep(500)
+                    ProcId = Shell(Objet.Adresse1 & " /exit", AppWinStyle.Hide)
+                    Objet.Value = "STOP"
+                Case "RANDOMAUDIO"
+                    Dim ProcId As Object
+                    ProcId = Shell(Objet.Adresse1 & " /random", AppWinStyle.Hide)
+                    Objet.Value = "RANDOM"
+                Case "NEXTAUDIO"
+                    Dim ProcId As Object
+                    ProcId = Shell(Objet.Adresse1 & " /next", AppWinStyle.Hide)
+                    Objet.Value = "NEXT"
+                Case "PREVIOUSAUDIO"
+                    Dim ProcId As Object
+                    ProcId = Shell(Objet.Adresse1 & " /previous", AppWinStyle.Hide)
+                    Objet.Value = "PREVIOUS"
+                Case "VOLUMEDOWNAUDIO"
+                    Dim ProcId As Object
+                    ProcId = Shell(Objet.Adresse1 & " /Volume Down", AppWinStyle.Hide)
+                    Objet.Value = "VOLUME DOWN"
+                Case "VOLUMEUPAUDIO"
+                    Dim ProcId As Object
+                    ProcId = Shell(Objet.Adresse1 & " /Volume Up", AppWinStyle.Hide)
+                    Objet.Value = "VOLUME UP"
+                Case "VOLUMEMUTEAUDIO"
+                    Dim ProcId As Object
+                    ProcId = Shell(Objet.Adresse1 & " /Volume mute", AppWinStyle.Hide)
+                    Objet.Value = "VOLUME MUTE"
+                Case Else
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "FOOBAR", "Commande inconnue:" & Commande)
+            End Select
+        Else
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "FOOBAR", "Impossible d'envoyer un code IR pour un type de device autre que AUDIO")
+        End If
     End Sub
 
     Public Sub New()
