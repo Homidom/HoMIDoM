@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CCD77A3B-B127-4EA4-8653-E810CA8243B2}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -50,7 +50,7 @@
     </Reference>
     <Reference Include="UsbLibrary, Version=1.0.2630.26688, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\ehome\bin\UsbLibrary.dll</HintPath>
+      <HintPath>..\Dll_externes\UsbLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
