@@ -53,6 +53,15 @@ Namespace HoMIDom
         Function DeleteDevice(ByVal deviceId As String) As Integer
 
         ''' <summary>
+        ''' Supprime une commande IR d'un device
+        ''' </summary>
+        ''' <param name="deviceId"></param>
+        ''' <param name="CmdName"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function DeleteDeviceCommandIR(ByVal deviceId As String, ByVal CmdName As String) As Integer
+
+        ''' <summary>
         ''' Supprimer un driver de la config
         ''' </summary>
         ''' <param name="driverId"></param>
@@ -129,6 +138,17 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function SaveDevice(ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0) As String
+
+        ''' <summary>
+        ''' 'Ajouter ou modifier une commande IR à un device (utilisé pour usbuirt)
+        ''' </summary>
+        ''' <param name="deviceId"></param>
+        ''' <param name="CmdName"></param>
+        ''' <param name="CmdData"></param>
+        ''' <param name="CmdRepeat"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function SaveDeviceCommandIR(ByVal deviceId As String, ByVal CmdName As String, ByVal CmdData As String, ByVal CmdRepeat As String) As String
 
         Function SaveDriver(ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String) As String 'Créer un nouveau driver ou sauvegarder la modif (si ID est complété)
 

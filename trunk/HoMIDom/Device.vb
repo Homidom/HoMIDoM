@@ -51,6 +51,10 @@ Namespace HoMIDom
             VOLET = 27
         End Enum
 
+        ''' <summary>
+        ''' Class de déclaration du Device Générique
+        ''' </summary>
+        ''' <remarks></remarks>
         <Serializable()> Public Class DeviceGenerique
             Protected _Server As Server
             Protected _ID As String = ""

@@ -1,4 +1,5 @@
 ﻿Imports HoMIDom.HoMIDom.Device
+Imports System.IO
 
 Partial Public Class uDevice
     '--- Variables ------------------
@@ -57,7 +58,7 @@ Partial Public Class uDevice
                     TxtRefresh.Text = x.refresh
                     TxtLastChangeDuree.Text = x.LastChangeDuree
 
-                    If x.Picture <> "" Then
+                    If x.Picture <> "" And File.Exists(x.picture) = True Then
                         Dim bmpImage As New BitmapImage()
                         bmpImage.BeginInit()
                         bmpImage.UriSource = New Uri(x.picture, UriKind.Absolute)
@@ -100,6 +101,11 @@ Partial Public Class uDevice
 
                     If x.Type = "MULTIMEDIA" Then
                         GroupBox1.Visibility = Windows.Visibility.Visible
+                        ListCmd.Items.Clear()
+                        For i As Integer = 0 To x.listcommandname.count - 1
+                            ListCmd.Items.Add(x.listcommandname(i))
+                        Next
+                        x = Nothing
                     Else
                         GroupBox1.Visibility = Windows.Visibility.Hidden
                     End If
@@ -214,11 +220,15 @@ Partial Public Class uDevice
             MsgBox("Numérique obligatoire pour repeat !!")
             Exit Sub
         End If
+        If TxtCmdName.Text = "" Or TxtCmdName.Text = " " Then
+            MsgBox("Le nom de la commande est obligatoire !!")
+            Exit Sub
+        End If
 
         If FlagNewCmd = True Then 'nouvelle commande
-            'FRMMere.Obj.SaveDeviceCommand(DeviceID, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
+            Window1.Obj.SaveDeviceCommandIR(_DeviceId, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
         Else 'modifier commande
-            'FRMMere.Obj.SaveDeviceCommand(DeviceID, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
+            Window1.Obj.SaveDeviceCommandIR(_DeviceId, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
         End If
 
         ListCmd.Items.Clear()
@@ -233,7 +243,7 @@ Partial Public Class uDevice
 
     Private Sub BtnDelCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelCmd.Click
         If ListCmd.SelectedIndex >= 0 Then
-            'FRMMere.Obj.DeleteDeviceCommand(FRMMere.Obj.ReturnDeviceByID(DeviceID).id, TxtCmdName.Text)
+            Window1.Obj.DeleteDeviceCommandIR(_DeviceId, TxtCmdName.Text)
 
             TxtCmdName.Text = ""
             TxtCmdData.Text = ""
@@ -250,7 +260,11 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub BtnTstCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTstCmd.Click
-        'Window1.Obj.s(TxtCmdName.Text, DeviceID)
+        Dim x As Object = Window1.Obj.ReturnDeviceByID(_DeviceId)
+
+        If x IsNot Nothing Then
+            x.sendcommand(TxtCmdName.Text)
+        End If
     End Sub
 
     Private Sub BtnLearn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnLearn.Click
@@ -276,5 +290,12 @@ Partial Public Class uDevice
             ImgDevice.Source = bmpImage
             ImgDevice.Tag = dlg.FileName
         End If
+    End Sub
+
+    Private Sub ListCmd_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles ListCmd.SelectionChanged
+        If ListCmd.SelectedIndex < 0 Then Exit Sub
+        TxtCmdName.Text = Window1.Obj.ReturnDeviceByID(_DeviceId).listcommandname(ListCmd.SelectedIndex)
+        TxtCmdData.Text = Window1.Obj.ReturnDeviceByID(_DeviceId).listcommanddata(ListCmd.SelectedIndex)
+        TxtCmdRepeat.Text = Window1.Obj.ReturnDeviceByID(_DeviceId).listcommandrepeat(ListCmd.SelectedIndex)
     End Sub
 End Class

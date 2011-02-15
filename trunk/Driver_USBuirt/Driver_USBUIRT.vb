@@ -8,6 +8,10 @@ Imports UsbUirt
 ' Auteur : Seb
 ' Date : 10/02/2011
 
+''' <summary>
+''' Class USBUIRT, permet d'apprendre des codes IR et de les restituer par la suite 
+''' </summary>
+''' <remarks></remarks>
 <Serializable()> Public Class Driver_USBUIRT
     Implements HoMIDom.HoMIDom.IDriver
 
@@ -227,7 +231,15 @@ Imports UsbUirt
     End Property
 
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-
+        If Objet.type = "MULTIMEDIA" Then
+            If Command() = "SendCodeIR" Then
+                SendCodeIR(Parametre1, Parametre2)
+            Else
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "La commande " & Commande & " est inconnue pour ce driver")
+            End If
+        Else
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUIRT", "Impossible d'envoyer un code IR pour un type de device autre que MULTIMEDIA")
+        End If
     End Sub
 
     Public Sub New()
@@ -236,7 +248,11 @@ Imports UsbUirt
 #End Region
 
 #Region "Fonctions propre au driver"
-    'Apprendre un code IR
+    ''' <summary>
+    ''' Apprendre un code IR
+    ''' </summary>
+    ''' <returns>Retourne le code IR</returns>
+    ''' <remarks></remarks>
     Public Function LearnCodeIR() As String
         If _IsConnect = False Then
             Return "Impossible d'apprendre le code IR le driver n'est pas connecté"
@@ -276,7 +292,7 @@ Imports UsbUirt
             RemoveHandler mc.LearnCompleted, AddressOf handler_mc_learning_completed
 
         Catch ex As Exception
-            'Log.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Driver " & _Nom & " Erreur:" & ex.Message)
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Erreur lors de l'apprentissage:" & ex.Message)
             Return Nothing
         End Try
 
@@ -287,31 +303,37 @@ Imports UsbUirt
     End Function
 
     '*****************************************************************************
-    'emet un code infrarouge
+    ''' <summary>
+    ''' Emet un code infrarouge
+    ''' </summary>
+    ''' <param name="ir_code"></param>
+    ''' <param name="RepeatCount"></param>
+    ''' <remarks></remarks>
     Public Sub SendCodeIR(ByVal ir_code As String, ByVal RepeatCount As Integer)
         Try
             mc.Transmit(ir_code, CodeFormat.Uuirt, RepeatCount, TimeSpan.Zero)
-            'Log.Log(TypeLog.MESSAGE, TypeSource.DRIVER, "Driver " & _Nom & "IR envoyé: " & ir_code & " repeat: " & RepeatCount)
+            _Server.Log(TypeLog.MESSAGE, TypeSource.DRIVER, "USBUIRT", "Code IR envoyé: " & ir_code & " repeat: " & RepeatCount)
         Catch ex As Exception
-            'Log.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Driver " & _Nom & "Problème de transmission: " & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUIRT", "Problème de transmission: " & ex.Message)
         End Try
     End Sub
 
     '*****************************************************************************
     'handler code recu
     Private Sub handler_mc_received(ByVal sender As Object, ByVal e As ReceivedEventArgs)
+        _Server.Log(TypeLog.MESSAGE, TypeSource.DRIVER, "USBUIRT", "Code IR reçu: " & e.IRCode)
         Debug.WriteLine("Code recu: " & e.IRCode)
         last_received_code = e.IRCode
-        'RaiseEvent SendMessage(_Nom, eHomeApi.IeHomeServer.Reason.MESSAGE_IR, e.IRCode)
+        RaiseEvent DriverEvent(_Nom, "CODE_RECU", e.IRCode)
     End Sub
 
     '*****************************************************************************
     'handler en apprentissage
     Private Sub handler_mc_learning(ByVal sender As Object, ByVal e As LearningEventArgs)
         Try
-            Debug.WriteLine("Learning: " & e.Progress & " freq=" & e.CarrierFrequency & " quality=" & e.SignalQuality)
+            'Debug.WriteLine("Learning: " & e.Progress & " freq=" & e.CarrierFrequency & " quality=" & e.SignalQuality)
         Catch ex As Exception
-            'Debug.WriteLine("Aahhhhhhhhhhhhhhhhhhh")
+
         End Try
     End Sub
 
@@ -319,8 +341,8 @@ Imports UsbUirt
     'handler a appris
     Private Sub handler_mc_learning_completed(ByVal sender As Object, ByVal e As LearnCompletedEventArgs)
         args = e
-        Debug.WriteLine("Learning completed: " & e.Code)
-        'RaiseEvent SendMessage(_Nom, eHomeApi.IeHomeServer.Reason.MESSAGE_IR, e.Code)
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Learning completed: " & e.Code)
+        RaiseEvent DriverEvent(_Nom, "LEARN_TERMINE", e.Code)
     End Sub
 #End Region
 End Class
