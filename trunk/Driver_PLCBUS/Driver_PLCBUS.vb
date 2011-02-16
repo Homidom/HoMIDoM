@@ -233,11 +233,23 @@ Imports System.Globalization
     End Sub
 
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
-        'pas utilisé
+        If (Objet.adresse1.ToString.Length > 1) Then
+            'c'est une adresse std on fait un status request
+            ecrire(Objet.adresse1, "STATUS_REQUEST", "", "", False)
+        ElseIf (Objet.adresse1.ToString.Length = 1) Then
+            'fastpooling
+            If plctriphase Then
+                ecrire(Objet.adresse1, "ReportOnlyOnIdPulse3Phase", "", "", False)
+            Else
+                ecrire(Objet.adresse1, "GetOnlyOnIdPulse", "", "", False)
+            End If
+        End If
     End Sub
 
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-
+        'Parametre1 = data1
+        'Parametre2 = data2
+        ecrire(Objet.adresse1, Commande, Parametre1, Parametre2, False)
     End Sub
 
     Public Sub New()
