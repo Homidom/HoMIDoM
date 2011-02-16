@@ -69,7 +69,7 @@ Namespace HoMIDom
             Protected _DateCreated As Date = Now
             Protected _LastChange As Date = Now
             Protected _LastChangeDuree As Integer = 0
-            Protected _Refresh As Integer = 0
+            Protected _Refresh As Double = 0
             Protected _Modele As String = ""
             Protected _Picture As String = ""
             Protected _Solo As Boolean = True
@@ -939,14 +939,16 @@ Namespace HoMIDom
 
             'Si X= 0 le serveur attend un event du driver pour mettre à jour la value du device (Cas du RFXCOM)
             'Si X>0 (cas du 1wire par ex) un timer propre au device se lance et effectue un mondevicetemp.Driver.ReadTemp(Me), le driver récupère l’adresse sur l’objet Me sachant que c’est un ReadTemp (donc température) va lire une température à l’adresse spécifié. Cependant un event d’un driver peut modifier la value d’un device même si un refresh a été paramétré
-            Public Property Refresh() As Integer
+            Public Property Refresh() As Double
                 Get
                     Return _Refresh
                 End Get
-                Set(ByVal value As Integer)
+                Set(ByVal value As Double)
                     _Refresh = value
                     If _Refresh > 0 Then
-                        MyTimer.Interval = _Refresh
+                        Driver.Read(Me)
+                        LastChange = Now
+                        MyTimer.Interval = value * 1000
                         MyTimer.Enabled = True
                         AddHandler MyTimer.Elapsed, AddressOf Read
                     End If
@@ -990,7 +992,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _TempActuel = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "TemperatureActuel", value)
+                    RaiseEvent DeviceChanged(Me, "TemperatureActuel", value)
                 End Set
             End Property
 
@@ -1001,7 +1003,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _HumActuel = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "HumiditeActuel", value)
+                    RaiseEvent DeviceChanged(Me, "HumiditeActuel", value)
                 End Set
             End Property
 
@@ -1021,7 +1023,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _VentActuel = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "VentActuel", value)
+                    RaiseEvent DeviceChanged(Me, "VentActuel", value)
                 End Set
             End Property
 
@@ -1032,7 +1034,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _JourToday = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "JourToday", value)
+                    RaiseEvent DeviceChanged(Me, "JourToday", value)
                 End Set
             End Property
 
@@ -1043,7 +1045,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _MinToday = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "MinToday", value)
+                    RaiseEvent DeviceChanged(Me, "MinToday", value)
                 End Set
             End Property
 
@@ -1054,7 +1056,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _MaxToday = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "MaxToday", value)
+                    RaiseEvent DeviceChanged(Me, "MaxToday", value)
                 End Set
             End Property
 
@@ -1074,7 +1076,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _ConditionToday = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "ConditionToday", value)
+                    RaiseEvent DeviceChanged(Me, "ConditionToday", value)
                 End Set
             End Property
 
@@ -1085,7 +1087,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _JourJ1 = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "JourJ1", value)
+                    RaiseEvent DeviceChanged(Me, "JourJ1", value)
                 End Set
             End Property
 
@@ -1096,7 +1098,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _MinJ1 = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "MinJ1", value)
+                    RaiseEvent DeviceChanged(Me, "MinJ1", value)
                 End Set
             End Property
 
@@ -1107,7 +1109,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _MaxJ1 = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "MaxJ1", value)
+                    RaiseEvent DeviceChanged(Me, "MaxJ1", value)
                 End Set
             End Property
 
@@ -1127,7 +1129,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _ConditionJ1 = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "ConditionJ1", value)
+                    RaiseEvent DeviceChanged(Me, "ConditionJ1", value)
                 End Set
             End Property
 
@@ -1138,7 +1140,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _JourJ2 = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "JourJ2", value)
+                    RaiseEvent DeviceChanged(Me, "JourJ2", value)
                 End Set
             End Property
 
@@ -1149,7 +1151,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _MinJ2 = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "MinJ2", value)
+                    RaiseEvent DeviceChanged(Me, "MinJ2", value)
                 End Set
             End Property
 
@@ -1160,7 +1162,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _MaxJ2 = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "MaxJ2", value)
+                    RaiseEvent DeviceChanged(Me, "MaxJ2", value)
                 End Set
             End Property
 
@@ -1180,7 +1182,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _ConditionJ2 = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "ConditionJ2", value)
+                    RaiseEvent DeviceChanged(Me, "ConditionJ2", value)
                 End Set
             End Property
 
@@ -1191,7 +1193,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _JourJ3 = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "JourJ3", value)
+                    RaiseEvent DeviceChanged(Me, "JourJ3", value)
                 End Set
             End Property
 
@@ -1202,7 +1204,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _MinJ3 = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "MinJ3", value)
+                    RaiseEvent DeviceChanged(Me, "MinJ3", value)
                 End Set
             End Property
 
@@ -1213,7 +1215,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _MaxJ3 = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "MaxJ3", value)
+                    RaiseEvent DeviceChanged(Me, "MaxJ3", value)
                 End Set
             End Property
 
@@ -1233,7 +1235,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     _ConditionJ3 = value
                     _LastChange = Now
-                    RaiseEvent DeviceChanged(_ID, "ConditionJ3", value)
+                    RaiseEvent DeviceChanged(Me, "ConditionJ3", value)
                 End Set
             End Property
 

@@ -7,6 +7,10 @@ Imports System.IO
 ' Auteur : Seb
 ' Date : 10/02/2011
 
+''' <summary>
+''' Driver Velleman k8056, le device doit dans son adresse 1 indiqué sa carte et son numéro de relais séparé par un x, exemple pour le relais 1 de la carte 1: 1x1
+''' </summary>
+''' <remarks></remarks>
 <Serializable()> Public Class Driver_k8056
     Implements HoMIDom.HoMIDom.IDriver
 
@@ -182,15 +186,16 @@ Imports System.IO
     End Property
 
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
-        'cree l'objet pour usbuirt
         Try
             With rs232
                 .PortName = _Com
                 .Open()
             End With
             _IsConnect = True
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8056", "Driver démarré")
         Catch ex As Exception
             _IsConnect = False
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8056", "Driver en erreur lors du démarrage: " & ex.Message)
         End Try
     End Sub
 
@@ -204,8 +209,13 @@ Imports System.IO
     End Property
 
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
-        rs232.Close()
-        _IsConnect = False
+        Try
+            rs232.Close()
+            _IsConnect = False
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "k8056", "Driver arrêté")
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "k8056", "Erreur lors de l'arrêt du Driver: " & ex.Message)
+        End Try
     End Sub
 
     Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
@@ -215,7 +225,24 @@ Imports System.IO
     End Property
 
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
+        Try
+            If Objet.type = "APPAREIL" Then
+                Dim tabl() As String = Objet.adresse1.split("x")
+                Select Case UCase(Commande)
+                    Case "ON"
+                        SetRelais(tabl(0), tabl(1))
 
+                    Case "OFF"
+
+                    Case Else
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "k8056", "Erreur la commande du device n'est pas supporté par ce driver - device: " & Objet.name & " commande:" & Commande)
+                End Select
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "k8056", "Erreur le type de device n'est pas supporté par ce driver - device: " & Objet.name & " type:" & Objet.type)
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "k8056", "Erreur lors de la traitement de la commande - device: " & Objet.name & " commande:" & Commande & " erreur: " & ex.Message)
+        End Try
     End Sub
 
     Public Sub New()
@@ -243,11 +270,10 @@ Imports System.IO
         Return "Arrêt d'urgence effectué"
     End Function
 
-    Private Function ClearRelais(ByVal Carte As Integer, ByVal Relais As Integer) As String
+    Private Sub ClearRelais(ByVal Carte As Integer, ByVal Relais As Integer)
         Call EnvoyerTrame(Carte, "C", Relais)
         MAJ(Carte, Relais, False)
-        Return "Relais:" & Carte & "x" & Relais & " Etat:0"
-    End Function
+    End Sub
 
     Private Function GetEtatRelais(ByVal Carte As Integer, ByVal Relais As Integer) As Integer
         GetEtatRelais = tRelais(Carte, Relais)
@@ -284,24 +310,15 @@ Imports System.IO
         Return "Carte: " & Carte & " - Set effectué"
     End Function
 
-    Private Function SetRelais(ByVal Carte As Integer, ByVal Relais As Integer) As String
+    Private Sub SetRelais(ByVal Carte As Integer, ByVal Relais As Integer)
         Call EnvoyerTrame(Carte, "S", Relais)
         MAJ(Carte, Relais, True)
-        Return "Relais:" & Carte & "x" & Relais & " Etat:1"
-    End Function
+    End Sub
 
     Private Function ShowAdrCarte() As String
         Call EnvoyerTrame(1, "D", 1)
         Return "Afficher les adresses des cartes"
     End Function
-
-    Public Sub [On](ByVal Objet As Object)
-        SetRelais(0, Objet.adresse)
-    End Sub
-
-    Public Sub [Off](ByVal Objet As Object)
-        ClearRelais(0, Objet.adresse)
-    End Sub
 
     'Envoi de la trame à la carte
     Private Sub EnvoyerTrame(ByVal AdresseCarte As String, ByVal Instruction As String, ByVal Adresse As String)
@@ -323,7 +340,7 @@ Imports System.IO
                 i = i + 1
             Loop
         Catch ex As Exception
-            '                    WriteLog(m_ServiceNom, "Erreur lors de l'envoi de la trame: " & Trame & " " & ex.ToString)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "k8056", "Erreur lors de l'envoi de la trame: " & ex.Message)
         End Try
     End Sub
 
