@@ -233,23 +233,35 @@ Imports System.Globalization
     End Sub
 
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
-        If (Objet.adresse1.ToString.Length > 1) Then
-            'c'est une adresse std on fait un status request
-            ecrire(Objet.adresse1, "STATUS_REQUEST", "", "", False)
-        ElseIf (Objet.adresse1.ToString.Length = 1) Then
-            'fastpooling
-            If plctriphase Then
-                ecrire(Objet.adresse1, "ReportOnlyOnIdPulse3Phase", "", "", False)
-            Else
-                ecrire(Objet.adresse1, "GetOnlyOnIdPulse", "", "", False)
+        Try
+            If (Objet.adresse1.ToString.Length > 1) Then
+                'c'est une adresse std on fait un status request
+                ecrire(Objet.adresse1, "STATUS_REQUEST")
+            ElseIf (Objet.adresse1.ToString.Length = 1) Then
+                'fastpooling
+                If plctriphase Then
+                    ecrire(Objet.adresse1, "ReportOnlyOnIdPulse3Phase")
+                Else
+                    ecrire(Objet.adresse1, "GetOnlyOnIdPulse")
+                End If
             End If
-        End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Read", ex.Message)
+        End Try
     End Sub
 
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         'Parametre1 = data1
         'Parametre2 = data2
-        ecrire(Objet.adresse1, Commande, Parametre1, Parametre2, False)
+        Dim sendtwice As Boolean = False
+        Try
+            If Parametre1 Is Nothing Then Parametre1 = 0
+            If Parametre2 Is Nothing Then Parametre2 = 0
+            If Objet.type = "APPAREIL" Or Objet.type = "LAMPE" Then sendtwice = True
+            ecrire(Objet.adresse1, Commande, Parametre1, Parametre2, sendtwice)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Write", ex.Message)
+        End Try
     End Sub
 
     Public Sub New()
@@ -461,7 +473,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Private Function ecrire(ByVal adresse As String, ByVal commande As String, ByVal data1 As Integer, ByVal data2 As Integer, ByVal ecriretwice As Boolean) As String
+    Private Function ecrire(ByVal adresse As String, ByVal commande As String, Optional ByVal data1 As Integer = 0, Optional ByVal data2 As Integer = 0, Optional ByVal ecriretwice As Boolean = False) As String
         'adresse= adresse du composant : A1
         'commande : ON, OFF...
         'data1 et 2, voir description des actions plus haut ou doc plcbus
@@ -626,8 +638,10 @@ Imports System.Globalization
                     ackreceived = False
 
                     Select Case plcbus_commande
-                        Case "ON", "OFF", "DIM", "BRIGHT", "PRESET_DIM", "BLINK", "FADE_STOP", "STATUS_REQUEST"
+                        Case "ON", "OFF", "BRIGHT", "BLINK", "FADE_STOP", "STATUS_REQUEST"
                             If data1 = 0 Then traitement("OFF", plcbus_adresse, plcbus_commande) Else traitement("ON", plcbus_adresse, plcbus_commande)
+                        Case "DIM", "PRESET_DIM"
+                            traitement(data1, plcbus_adresse, plcbus_commande)
                         Case "GetSignalStrength", "GetNoiseStrength"
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1)
                         Case "ReceiverMasterAddressSetup", "TransmitterMasterAddressSetup"
@@ -699,8 +713,24 @@ Imports System.Globalization
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(adresse, "", Me._ID)
+                'un device trouvé on maj la value
                 If (listedevices.Count = 1) Then
-                    'un device trouvé on maj la value
+                    'correction valeur pour correspondre au type de value
+                    If TypeOf listedevices.Item(0).Value Is Integer Then
+                        If valeur = "ON" Then
+                            valeur = 100
+                        ElseIf valeur = "OFF" Then
+                            valeur = 0
+                        End If
+                    ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
+                        If valeur = "ON" Then
+                            valeur = True
+                        ElseIf valeur = "OFF" Then
+                            valeur = False
+                        Else
+                            valeur = True
+                        End If
+                    End If
                     listedevices.Item(0).Value = valeur
                 ElseIf (listedevices.Count > 1) Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)

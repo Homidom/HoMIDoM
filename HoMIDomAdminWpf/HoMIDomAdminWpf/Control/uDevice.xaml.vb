@@ -300,15 +300,21 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub BtnRead_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnRead.Click
+        Dim x As Object = Nothing
         Try
-            Dim x As Object = Window1.Obj.ReturnDeviceByID(_DeviceId)
+            x = Window1.Obj.ReturnDeviceByID(_DeviceId)
+        Catch ex As Exception
+            MessageBox.Show("Error Read GET device" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+        Try
+            MessageBox.Show("test " & x.Adresse1, "tes", MessageBoxButton.OK, MessageBoxImage.Error)
             If x IsNot Nothing Then
-                x.read()
+                x.Read()
             Else
                 MessageBox.Show("Impossible d'exécuter le read car le device n'a pas été trouvé!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End If
         Catch ex As Exception
-            MessageBox.Show("Error Read device" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Error Read action" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 

@@ -317,7 +317,7 @@ Namespace HoMIDom
             End Property
 
             Public Sub Read()
-                Driver.Read(Me)
+                If Driver.IsConnect() Then Driver.Read(Me)
             End Sub
 
             'Valeur
@@ -369,7 +369,7 @@ Namespace HoMIDom
 
             'Demande de Lecture au driver
             Public Sub Read()
-                Driver.Read(Me)
+                If Driver.IsConnect() Then Driver.Read(Me)
             End Sub
 
             'Valeur : ON/OFF = True/False
@@ -415,7 +415,7 @@ Namespace HoMIDom
 
             'Demande de Lecture au driver
             Public Sub Read()
-                Driver.Read(Me)
+                If Driver.IsConnect() Then Driver.Read(Me)
             End Sub
 
             'Valeur de 0 à 100
@@ -462,7 +462,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub Read()
-                Driver.Read(Me)
+                If Driver.IsConnect() Then Driver.Read(Me)
             End Sub
 
             Public Property Value() As String
