@@ -75,6 +75,10 @@ Namespace HoMIDom
             Protected _Solo As Boolean = True
             Protected MyTimer As New Timers.Timer
 
+            Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
+                Driver.Write(UCase(Command), Parametre1, Parametre2)
+            End Sub
+
             'Identification unique du device
             Public Property ID() As String
                 Get
