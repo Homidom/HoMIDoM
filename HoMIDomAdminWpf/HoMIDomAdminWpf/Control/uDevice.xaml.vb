@@ -300,24 +300,32 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub BtnRead_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnRead.Click
-        Dim x As Object = Window1.Obj.ReturnDeviceByID(_DeviceId)
-        If x IsNot Nothing Then
-            x.read()
-        Else
-            MessageBox.Show("Impossible d'exécuter le read car le device n'a pas été trouvé!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-        End If
+        Try
+            Dim x As Object = Window1.Obj.ReturnDeviceByID(_DeviceId)
+            If x IsNot Nothing Then
+                x.read()
+            Else
+                MessageBox.Show("Impossible d'exécuter le read car le device n'a pas été trouvé!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Error Read device" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnWrite_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnWrite.Click
-        Dim x As Object = Window1.Obj.ReturnDeviceByID(_DeviceId)
-        If x IsNot Nothing Then
-            If TxtCmd.Text = "" Then
-                MessageBox.Show("Le nom de la commande est obligatoire!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-                Exit Sub
+        Try
+            Dim x As Object = Window1.Obj.ReturnDeviceByID(_DeviceId)
+            If x IsNot Nothing Then
+                If TxtCmd.Text = "" Then
+                    MessageBox.Show("Le nom de la commande est obligatoire!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Exit Sub
+                End If
+                x.TestWrite(TxtCmd.Text, TxtP1.Text, TxtP2.Text)
+            Else
+                MessageBox.Show("Impossible d'exécuter le write car le device n'a pas été trouvé!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End If
-            x.TestWrite(TxtCmd.Text, TxtP1.Text, TxtP2.Text)
-        Else
-            MessageBox.Show("Impossible d'exécuter le write car le device n'a pas été trouvé!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-        End If
+        Catch ex As Exception
+            MessageBox.Show("Error Write device" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 End Class
