@@ -18,9 +18,8 @@
     <HtmlHelpName>HoMIDom</HtmlHelpName>
     <Language>fr-FR</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\HoMIDom\bin\Release\HoMIDom.dll" />
-      <DocumentationSource sourceFile="..\..\HoMIDom\bin\Release\HoMIDom.xml" />
-    </DocumentationSources>
+      <DocumentationSource sourceFile="..\..\_LastVersionStable\HoMIDom.dll" />
+<DocumentationSource sourceFile="..\..\HoMIDom\bin\Release\HoMIDom.xml" /></DocumentationSources>
     <WorkingPath>..\..\..\..\..\..\trav\</WorkingPath>
     <BuildLogFile>
     </BuildLogFile>
@@ -36,7 +35,7 @@
     <Preliminary>True</Preliminary>
     <PresentationStyle>Prototype</PresentationStyle>
     <SdkLinkTarget>Blank</SdkLinkTarget>
-    <ContentPlacement>BelowNamespaces</ContentPlacement>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
     <ComponentConfigurations>
       <ComponentConfig id="Post-transform Component" enabled="True">
         <component id="Post-transform Component" type="SandcastleBuilder.Components.PostTransformComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll">
@@ -55,17 +54,7 @@
           <!-- Logo image file (optional).  Filename is required. The height,
                  width, altText, placement, and alignment attributes are
                  optional. -->
-          <logoFile filename="C:\Users\Laurent\Documents\homidom-read-only\Doc\Constructeurs\bandeau_1_950x42.jpg" height="0" width="0" altText="" placement="left" alignment="left" />
-        </component>
-      </ComponentConfig>
-      <ComponentConfig id="IntelliSense Component" enabled="True">
-        <component id="IntelliSense Component" type="SandcastleBuilder.Components.IntelliSenseComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll">
-          <!-- Output options (optional)
-                 Attributes:
-                    Include Namespaces (false by default)
-                    Namespaces filename ("Namespaces" if not specified or empty)
-                    Directory (current folder if not specified or empty) -->
-          <output includeNamespaces="false" namespacesFile="Summary" folder="{@OutputFolder}" />
+          <logoFile filename="C:\Users\Laurent\Documents\homidom\Images\bandeau_1_950x60.jpg" height="0" width="0" altText="" placement="right" alignment="left" />
         </component>
       </ComponentConfig>
     </ComponentConfigurations>
@@ -80,6 +69,9 @@
     <CopyrightText>HoMIDoM : a complete windows solution to manage your domotic installation</CopyrightText>
     <CopyrightHref>http://code.google.com/p/homidom/</CopyrightHref>
     <SyntaxFilters>CSharp, VisualBasic, VisualBasicUsage, CPlusPlus, JavaScript, AspNet</SyntaxFilters>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="(global)" isDocumented="True" xmlns="" />
+    </NamespaceSummaries>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional
