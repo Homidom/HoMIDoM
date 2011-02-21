@@ -79,6 +79,10 @@ Namespace HoMIDom
                 Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
             End Sub
 
+            Public Sub TestRead()
+                Driver.read(Me)
+            End Sub
+
             'Identification unique du device
             Public Property ID() As String
                 Get
@@ -715,8 +719,7 @@ Namespace HoMIDom
             End Sub
 
             'redefinition de read pour ne rien faire :)
-            Private Sub Read()
-
+            Public Sub Read()
             End Sub
 
             Private Function Sendhttp(ByVal cmd As String) As String

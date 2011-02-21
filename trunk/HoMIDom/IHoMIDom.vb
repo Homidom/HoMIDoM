@@ -21,6 +21,10 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Sub SaveConfig()
 
+        Sub TestWrite(ByVal IdDevice As String, ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
+
+        Sub TestRead(ByVal IdDevice As String)
+
         '---- Fonctions ---------------------------------------
         ''' <summary>
         ''' Ajouter un device à une zone
