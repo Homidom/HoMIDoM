@@ -1889,6 +1889,23 @@ Namespace HoMIDom
             Return listresultat
         End Function
 
+
+        Public Sub TestWrite(ByVal IdDevice As String, ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "") Implements IHoMIDom.TestWrite
+            Dim x As Object = ReturnDeviceById(IdDevice)
+
+            If x IsNot Nothing Then
+                x.Write(UCase(Commande), Parametre1, Parametre2)
+            End If
+        End Sub
+
+        Public Sub TestRead(ByVal IdDevice As String) Implements IHoMIDom.TestRead
+            Dim x As Object = ReturnDeviceById(IdDevice)
+
+            If x IsNot Nothing Then
+                x.read()
+            End If
+        End Sub
+
 #End Region
 
 #Region "Declaration de la classe Server"
