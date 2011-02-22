@@ -1894,7 +1894,7 @@ Namespace HoMIDom
             Dim x As Object = ReturnDeviceById(IdDevice)
 
             If x IsNot Nothing Then
-                x.Write(UCase(Commande), Parametre1, Parametre2)
+                x.testWrite(UCase(Commande), Parametre1, Parametre2)
             End If
         End Sub
 
@@ -1902,7 +1902,7 @@ Namespace HoMIDom
             Dim x As Object = ReturnDeviceById(IdDevice)
 
             If x IsNot Nothing Then
-                x.read()
+                x.testread()
             End If
         End Sub
 
