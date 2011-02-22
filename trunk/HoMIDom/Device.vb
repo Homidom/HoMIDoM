@@ -55,7 +55,7 @@ Namespace HoMIDom
         ''' Class de déclaration du Device Générique
         ''' </summary>
         ''' <remarks></remarks>
-        <Serializable()> Public Class DeviceGenerique
+        <Serializable()> Public MustInherit Class DeviceGenerique
             Protected _Server As Server
             Protected _ID As String = ""
             Protected _Name As String = ""
@@ -74,6 +74,25 @@ Namespace HoMIDom
             Protected _Picture As String = ""
             Protected _Solo As Boolean = True
             Protected MyTimer As New Timers.Timer
+
+            ''' <summary>
+            ''' Permet de tester une commande write
+            ''' </summary>
+            ''' <param name="Commande"></param>
+            ''' <param name="Parametre1"></param>
+            ''' <param name="Parametre2"></param>
+            ''' <remarks></remarks>
+            Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
+                Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
+            End Sub
+
+            ''' <summary>
+            ''' Permet de tester une commande read
+            ''' </summary>
+            ''' <remarks></remarks>
+            Public Sub TestRead()
+                Driver.read(Me)
+            End Sub
 
             'Identification unique du device
             Public Property ID() As String
@@ -385,7 +404,7 @@ Namespace HoMIDom
         End Class
 
         'Classe valeur Integer pour device avce valeur de 0(OFF) à 100(ON)
-        <Serializable()> Public Class DeviceGenerique_ValueInt
+        <Serializable()> Public MustInherit Class DeviceGenerique_ValueInt
             Inherits DeviceGenerique
 
             Protected _Value As Integer = 0
@@ -926,25 +945,6 @@ Namespace HoMIDom
 
         <Serializable()> Class LAMPE
             Inherits DeviceGenerique_ValueInt
-
-            ''' <summary>
-            ''' Permet de tester une commande write
-            ''' </summary>
-            ''' <param name="Commande"></param>
-            ''' <param name="Parametre1"></param>
-            ''' <param name="Parametre2"></param>
-            ''' <remarks></remarks>
-            Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
-                Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
-            End Sub
-
-            ''' <summary>
-            ''' Permet de tester une commande read
-            ''' </summary>
-            ''' <remarks></remarks>
-            Public Sub TestRead()
-                Driver.read(Me)
-            End Sub
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
