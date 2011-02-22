@@ -75,14 +75,6 @@ Namespace HoMIDom
             Protected _Solo As Boolean = True
             Protected MyTimer As New Timers.Timer
 
-            Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
-                Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
-            End Sub
-
-            Public Sub TestRead()
-                Driver.read(Me)
-            End Sub
-
             'Identification unique du device
             Public Property ID() As String
                 Get
@@ -489,6 +481,25 @@ Namespace HoMIDom
         <Serializable()> Class APPAREIL
             Inherits DeviceGenerique_ValueBool
 
+            ''' <summary>
+            ''' Permet de tester une commande write
+            ''' </summary>
+            ''' <param name="Commande"></param>
+            ''' <param name="Parametre1"></param>
+            ''' <param name="Parametre2"></param>
+            ''' <remarks></remarks>
+            Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
+                Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
+            End Sub
+
+            ''' <summary>
+            ''' Permet de tester une commande read
+            ''' </summary>
+            ''' <remarks></remarks>
+            Public Sub TestRead()
+                Driver.read(Me)
+            End Sub
+
             'Creation du device
             Public Sub New(ByVal Server As Server)
                 _Server = Server
@@ -509,6 +520,25 @@ Namespace HoMIDom
         <Serializable()> Class AUDIO
             Inherits DeviceGenerique_ValueString
             Dim _Fichier As String
+
+            ''' <summary>
+            ''' Permet de tester une commande write
+            ''' </summary>
+            ''' <param name="Commande"></param>
+            ''' <param name="Parametre1"></param>
+            ''' <param name="Parametre2"></param>
+            ''' <remarks></remarks>
+            Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
+                Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
+            End Sub
+
+            ''' <summary>
+            ''' Permet de tester une commande read
+            ''' </summary>
+            ''' <remarks></remarks>
+            Public Sub TestRead()
+                Driver.read(Me)
+            End Sub
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -612,6 +642,24 @@ Namespace HoMIDom
 
         <Serializable()> Class CONTACT
             Inherits DeviceGenerique_ValueBool
+            ''' <summary>
+            ''' Permet de tester une commande write
+            ''' </summary>
+            ''' <param name="Commande"></param>
+            ''' <param name="Parametre1"></param>
+            ''' <param name="Parametre2"></param>
+            ''' <remarks></remarks>
+            Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
+                Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
+            End Sub
+
+            ''' <summary>
+            ''' Permet de tester une commande read
+            ''' </summary>
+            ''' <remarks></remarks>
+            Public Sub TestRead()
+                Driver.read(Me)
+            End Sub
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -878,6 +926,25 @@ Namespace HoMIDom
 
         <Serializable()> Class LAMPE
             Inherits DeviceGenerique_ValueInt
+
+            ''' <summary>
+            ''' Permet de tester une commande write
+            ''' </summary>
+            ''' <param name="Commande"></param>
+            ''' <param name="Parametre1"></param>
+            ''' <param name="Parametre2"></param>
+            ''' <remarks></remarks>
+            Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
+                Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
+            End Sub
+
+            ''' <summary>
+            ''' Permet de tester une commande read
+            ''' </summary>
+            ''' <remarks></remarks>
+            Public Sub TestRead()
+                Driver.read(Me)
+            End Sub
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -1353,6 +1420,25 @@ Namespace HoMIDom
 
         <Serializable()> Class SWITCH
             Inherits DeviceGenerique_ValueBool
+
+            ''' <summary>
+            ''' Permet de tester une commande write
+            ''' </summary>
+            ''' <param name="Commande"></param>
+            ''' <param name="Parametre1"></param>
+            ''' <param name="Parametre2"></param>
+            ''' <remarks></remarks>
+            Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
+                Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
+            End Sub
+
+            ''' <summary>
+            ''' Permet de tester une commande read
+            ''' </summary>
+            ''' <remarks></remarks>
+            Public Sub TestRead()
+                Driver.read(Me)
+            End Sub
 
             'Creation du device
             Public Sub New(ByVal server As Server)
