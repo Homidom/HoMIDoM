@@ -3,6 +3,7 @@ Imports System.Xml
 Imports System.Xml.XPath
 Imports System.Xml.Serialization
 Imports System.Reflection
+Imports STRGS = Microsoft.VisualBasic.Strings
 
 Namespace HoMIDom
 
@@ -178,16 +179,13 @@ Namespace HoMIDom
 #End Region
 
 #Region "Declaration des variables"
-        'Déclaration des variables
         Private Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
         Private Shared _ListImgDrivers As New ArrayList
-        Public Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
-        Public Shared _ListZones As New ArrayList 'Liste des zones
-
-        'Application.StartupPath
-        Public _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application
-        'Public _MonRepertoire As String = "C:\Homidom\" ' System.Reflection.Assembly.GetExecutingAssembly.Location.ToString()
-
+        Private Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
+        Private Shared _ListZones As New ArrayList 'Liste des zones
+        Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
+        Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
+        Private _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application 'Application.StartupPath
         Dim Soleil As New Soleil 'Déclaration class Soleil
         Dim _Longitude As Double 'Longitude
         Dim _Latitude As Double 'latitude
@@ -1915,7 +1913,21 @@ Namespace HoMIDom
         ''' </summary>
         ''' <remarks></remarks>
         Public Sub New()
+
+        End Sub
+
+        ''' <summary>
+        ''' Démarrage du serveur
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub start()
             Dim retour As String
+            'Démarre les connexions Sqlite
+            retour = sqlite_homidom.connect("homidom")
+            If STRGS.Left(retour, 4) = "ERR:" Then
+
+            End If
+            sqlite_medias.connect("medias")
             'Charge les drivers
             LoadDrivers()
             'Chargement de la config
@@ -1928,8 +1940,16 @@ Namespace HoMIDom
             TimerSecond.Enabled = True
             'Calcul les heures de lever et coucher du soleil
             MAJ_HeuresSoleil()
+        End Sub
+
+        ''' <summary>
+        ''' Arrêt du serveur
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub [stop]()
 
         End Sub
+
 #End Region
 
 #Region "Log"

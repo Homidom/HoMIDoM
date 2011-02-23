@@ -17,6 +17,7 @@ Imports System.IO
 
 Module Service
 
+    Dim monserveur As Server = New Server()
 
     Sub Main()
         Try
@@ -26,7 +27,7 @@ Module Service
             Console.WriteLine("******************************")
             Console.WriteLine(" ")
 
-            Dim obj As Server = New Server()
+            monserveur.start()
 
             'Console.WriteLine(Now & " Chargement de la configuration")
 
@@ -36,7 +37,7 @@ Module Service
             Dim chnl As New HttpChannel(8888) 'obj.PortTCP)
             ChannelServices.RegisterChannel(chnl, False)
             LifetimeServices.LeaseTime = Nothing
-            RemotingServices.Marshal(obj, "RemoteObjectServer.soap")
+            RemotingServices.Marshal(monserveur, "RemoteObjectServer.soap")
             Console.WriteLine(Now & " ServiceWeb Démarré sur port:8888") ' & obj.PortTCP)
 
             Console.WriteLine("******************************")
@@ -52,6 +53,10 @@ Module Service
         Catch ex As Exception
             Console.WriteLine(Now & " ERREUR " & ex.Message)
         End Try
+    End Sub
+
+    Sub close()
+        monserveur.stop()
     End Sub
 
 End Module
