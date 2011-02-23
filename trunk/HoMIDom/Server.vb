@@ -27,9 +27,7 @@ Namespace HoMIDom
         'Gestion des Evènements
         '********************************************************************
 
-        ''' <summary>
-        '''Evenement provenant des drivers 
-        ''' </summary>
+        ''' <summary>Evenement provenant des drivers </summary>
         ''' <param name="DriveName"></param>
         ''' <param name="TypeEvent"></param>
         ''' <param name="Parametre"></param>
@@ -39,15 +37,26 @@ Namespace HoMIDom
         End Sub
 
 
-        ''' <summary>
-        ''' Evenement provenant des devices
-        ''' </summary>
+        ''' <summary>Evenement provenant des devices</summary>
         ''' <param name="Device"></param>
         ''' <param name="Property"></param>
         ''' <param name="Parametres"></param>
         ''' <remarks></remarks>
         Public Sub DeviceChange(ByVal Device As Object, ByVal [Property] As String, ByVal Parametres As Object)
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "DeviceChange", "Historiser " & Device.name & " (" & [Property] & ") : " & Parametres)
+            Dim retour As String
+            Try
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "DeviceChange", "Historiser " & Device.name & " (" & [Property] & ") : " & Parametres)
+
+                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (" & Device.ID & "," & [Property] & "," & Now.ToString() & "," & Parametres & ")")
+                If STRGS.Left(retour, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Exception : " & ex.Message)
+            End Try
+
+
+
 
             ''on verifie si un composant correspond à cette adresse
             'tabletmp = domos_svc.table_composants.Select("composants_adresse = '" & adresse.ToString & "' AND composants_modele_norme = 'RFX'")
@@ -600,7 +609,8 @@ Namespace HoMIDom
             End Try
         End Function
 
-        '--- Sauvegarde de la config dans le fichier XML
+        ''' <summary>Sauvegarde de la config dans le fichier XML</summary>
+        ''' <remarks></remarks>
         Private Sub SaveConfig(ByVal Fichier As String)
             Try
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde de la config sous le fichier " & Fichier)
@@ -854,8 +864,9 @@ Namespace HoMIDom
 
         End Sub
 
-        '--- Charge les drivers, donc toutes les dll dans le sous répertoire "plugins"
-        Public Sub LoadDrivers()
+        ''' <summary>Charge les drivers, donc toutes les dll dans le sous répertoire "plugins"</summary>
+        ''' <remarks></remarks>
+        Public Sub Drivers_Load()
             Try
                 Dim tx As String
                 Dim dll As Reflection.Assembly
@@ -868,7 +879,7 @@ Namespace HoMIDom
                 Dim fi As IO.FileInfo
 
                 'Cherche tous les fichiers dll dans le répertoie plugin
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadDrivers", "Chargement des DLL des drivers")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", "Chargement des DLL des drivers")
                 For Each fi In aryFi
                     'chargement du plugin
                     tx = fi.FullName   'emplacement de la dll
@@ -891,37 +902,84 @@ Namespace HoMIDom
                                 _ListDrivers.Add(i1)
                                 _ListImgDrivers.Add(pt)
                                 'i1.Start()
-                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadDrivers", " - " & i1.Nom & " chargé")
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " chargé")
                             End If
                         End If
                     Next
                 Next
             Catch ex As Exception
                 MsgBox("Erreur lors du chargement des drivers: " & ex.Message)
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadDrivers", " Erreur lors du chargement des drivers: " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Load", " Erreur lors du chargement des drivers: " & ex.Message)
             End Try
         End Sub
 
-        'Démarre tous les drivers dont la propriété StartAuto=True
-        Public Sub StartDrivers()
+        ''' <summary>Démarre tous les drivers dont la propriété StartAuto=True</summary>
+        ''' <remarks></remarks>
+        Public Sub Drivers_Start()
             Try
                 'Cherche tous les drivers chargés
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadDrivers", "Démarrage des drivers")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", "Démarrage des drivers")
                 For Each driver In _ListDrivers
                     If driver.Enable And driver.StartAuto Then
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "StartDrivers", " - " & driver.Nom & " démarré")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", " - " & driver.Nom & " démarré")
                         driver.start()
                     Else
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "StartDrivers", " - " & driver.Nom & " non démarré car non Auto")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", " - " & driver.Nom & " non démarré car non Auto")
                     End If
                 Next
             Catch ex As Exception
                 MsgBox("Erreur lors du démarrage des drivers: " & ex.Message)
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "StartDrivers", " Erreur lors du démarrage des drivers: " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Start", " Erreur lors du démarrage des drivers: " & ex.Message)
             End Try
         End Sub
 
-        '-- Retourne les propriétés d'un driver
+        ''' <summary>Arretes les drivers démarrés</summary>
+        ''' <remarks></remarks>
+        Public Sub Drivers_Stop()
+            Try
+                'Cherche tous les drivers chargés
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Stop", "Arrêt des drivers")
+                For Each driver In _ListDrivers
+                    If driver.Enable And driver.IsConnect Then
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Stop", " - " & driver.Nom & " démarré")
+                        driver.stop()
+                    End If
+                Next
+            Catch ex As Exception
+                MsgBox("Erreur lors de l arret des drivers: " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Stop", " Erreur lors de l'arret des drivers: " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>Arretes les devices (Handlers)</summary>
+        ''' <remarks></remarks>
+        Public Sub Devices_Stop()
+            Try
+                'Cherche tous les drivers chargés
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Devices_Stop", "Arrêt des devices")
+                For Each _dev In _ListDevices
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Devices_Stop", " - " & _dev.Name & " démarré")
+
+
+
+                    'marche pas !!!!!
+
+                    'RemoveHandler _dev.DeviceChanged, AddressOf DeviceChange
+
+
+
+
+
+
+                Next
+            Catch ex As Exception
+                MsgBox("Erreur lors de l arret des drivers: " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Devices_Stop", " Erreur lors de l'arret des devices: " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>Retourne les propriétés d'un driver</summary>
+        ''' <remarks></remarks>
         Public Function ReturnDriver(ByVal DriverId As String) As ArrayList
             For i As Integer = 0 To _ListDrivers.Count - 1
                 Dim tabl As New ArrayList
@@ -948,7 +1006,8 @@ Namespace HoMIDom
             Next
         End Function
 
-        '-- Ecrire ou lance propritété/Sub d'un driver
+        ''' <summary>Ecrire ou lance propritété/Sub d'un driver</summary>
+        ''' <remarks></remarks>
         Sub WriteDriver(ByVal DriverId As String, ByVal Command As String, ByVal Parametre As Object)
             For i As Integer = 0 To _ListDrivers.Count - 1
                 If _ListDrivers.Item(i).ID = DriverId Then
@@ -1908,33 +1967,36 @@ Namespace HoMIDom
 
 #Region "Declaration de la classe Server"
 
-        ''' <summary>
-        ''' Déclaration de la class Server
-        ''' </summary>
+        ''' <summary>Déclaration de la class Server</summary>
         ''' <remarks></remarks>
         Public Sub New()
 
         End Sub
 
-        ''' <summary>
-        ''' Démarrage du serveur
-        ''' </summary>
+        ''' <summary>Démarrage du serveur</summary>
         ''' <remarks></remarks>
         Public Sub start()
             Dim retour As String
-            'Démarre les connexions Sqlite
+            '----- Démarre les connexions Sqlite ----- 
             retour = sqlite_homidom.connect("homidom")
             If STRGS.Left(retour, 4) = "ERR:" Then
+                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour)
+                'on arrête tout
 
             End If
-            sqlite_medias.connect("medias")
-            'Charge les drivers
-            LoadDrivers()
-            'Chargement de la config
+            retour = sqlite_medias.connect("medias")
+            If STRGS.Left(retour, 4) = "ERR:" Then
+                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Medias : " & retour)
+                'on arrête tout
+
+            End If
+            '----- Charge les drivers ----- 
+            Drivers_Load()
+            '----- Chargement de la config ----- 
             retour = LoadConfig(_MonRepertoire & "\Config\")
             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", retour)
-            'Démarre les drivers
-            StartDrivers()
+            '----- Démarre les drivers ----- 
+            Drivers_Start()
             TimerSecond.Interval = 1000
             AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
             TimerSecond.Enabled = True
@@ -1942,12 +2004,23 @@ Namespace HoMIDom
             MAJ_HeuresSoleil()
         End Sub
 
-        ''' <summary>
-        ''' Arrêt du serveur
-        ''' </summary>
+        ''' <summary>Arrêt du serveur</summary>
         ''' <remarks></remarks>
         Public Sub [stop]()
-
+            Dim retour As String
+            '----- Arrete les devices ----- 
+            Devices_Stop()
+            '----- Arrete les drivers ----- 
+            Drivers_Stop()
+            '----- Arrete les connexions Sqlite -----
+            retour = sqlite_homidom.disconnect("homidom")
+            If STRGS.Left(retour, 4) = "ERR:" Then
+                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Homidom : " & retour)
+            End If
+            retour = sqlite_medias.disconnect("medias")
+            If STRGS.Left(retour, 4) = "ERR:" Then
+                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Medias : " & retour)
+            End If
         End Sub
 
 #End Region
@@ -1974,9 +2047,7 @@ Namespace HoMIDom
             End Set
         End Property
 
-        ''' <summary>
-        ''' Indique le type du Log: si c'est une erreur, une info, un message...
-        ''' </summary>
+        ''' <summary>Indique le type du Log: si c'est une erreur, une info, un message...</summary>
         ''' <remarks></remarks>
         Public Enum TypeLog
             INFO = 1                    'divers
@@ -1991,9 +2062,7 @@ Namespace HoMIDom
             DEBUG = 10                   'visible uniquement si Homidom est en mode debug
         End Enum
 
-        ''' <summary>
-        ''' Indique la source du log si c'est le serveur, un script, un device...
-        ''' </summary>
+        ''' <summary>Indique la source du log si c'est le serveur, un script, un device...</summary>
         ''' <remarks></remarks>
         Public Enum TypeSource
             SERVEUR = 1
@@ -2004,9 +2073,7 @@ Namespace HoMIDom
             SOAP = 6
         End Enum
 
-        ''' <summary>
-        ''' Ecrit un log dans le fichier log au format xml
-        ''' </summary>
+        ''' <summary>Ecrit un log dans le fichier log au format xml</summary>
         ''' <param name="TypLog"></param>
         ''' <param name="Source"></param>
         ''' <param name="Fonction"></param>
@@ -2017,15 +2084,17 @@ Namespace HoMIDom
                 Dim Fichier As FileInfo
 
                 'Vérifie si le fichier log existe sinon le crée
-                If File.Exists(_File) = False Then
+                If File.Exists(_File) Then
+                    Fichier = New FileInfo(_File)
+                    'Vérifie si le fichier est trop gros si oui, on l'archive
+                    If Fichier.Length > _MaxFileSize Then
+                        Dim filearchive As String
+                        filearchive = STRGS.Left(_File, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                        File.Move(_File, _File)
+                    End If
+                Else
                     CreateNewFileLog(_File)
-                End If
-
-                Fichier = New FileInfo(_File)
-
-                'Vérifie si le fichier est trop gros si oui le supprime
-                If Fichier.Length > _MaxFileSize Then
-                    File.Delete(_File)
+                    Fichier = New FileInfo(_File)
                 End If
 
                 'on affiche dans la console
@@ -2073,9 +2142,7 @@ Namespace HoMIDom
             End Try
         End Sub
 
-        ''' <summary>
-        ''' Créer nouveau Fichier (donner chemin complet et nom) log
-        ''' </summary>
+        ''' <summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
         ''' <param name="NewFichier"></param>
         ''' <remarks></remarks>
         Public Sub CreateNewFileLog(ByVal NewFichier As String)
