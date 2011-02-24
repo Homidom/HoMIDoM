@@ -29,8 +29,6 @@ Module Service
 
             monserveur.start()
 
-            'Console.WriteLine(Now & " Chargement de la configuration")
-
             'Démarrage du serviceWeb
             Console.WriteLine(Now & " ")
             Console.WriteLine(Now & " Start ServiceWeb")
@@ -56,7 +54,7 @@ Module Service
     End Sub
 
     Sub close()
-        monserveur.stop()
+        End
     End Sub
 
 End Module

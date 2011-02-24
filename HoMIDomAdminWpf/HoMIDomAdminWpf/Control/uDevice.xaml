@@ -77,7 +77,7 @@
                 <GradientStop Color="Black" Offset="1.0" />
             </LinearGradientBrush>
         </Grid.Background>
-        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0,0,-33.33,0">
+        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
             <Label Height="46.25" Name="Label1" Width="105" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Device</Label>
         </Border>
         <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIDomAdminWpf;component/Images/Defaut-128.png">
@@ -137,13 +137,6 @@
         </GroupBox>
         <Label Foreground="White" Height="23.645" HorizontalAlignment="Right" Margin="0,231.088,143.319,0" Name="Label19" VerticalAlignment="Top" Width="116.655">LastChange Duree:</Label>
         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Right" Margin="0,255.051,162.651,271.721" Name="TxtLastChangeDuree" Width="65.391">0</TextBox>
-        <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,93.352,20,0" Name="BtnRead" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Read</Button>
-        <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,130.026,20,0" Name="BtnWrite" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Write</Button>
-        <Label Foreground="White" Height="23.645" HorizontalAlignment="Right" Margin="0,159.984,25.339,0" Name="Label20" VerticalAlignment="Top" Width="84.411">Commande</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21.978" HorizontalAlignment="Right" Margin="0,183.315,25.339,0" Name="TxtCmd" VerticalAlignment="Top" Width="83.411">0</TextBox>
-        <Label Foreground="White" Height="23.645" HorizontalAlignment="Right" Margin="0,211.09,25.339,0" Name="Label21" VerticalAlignment="Top" Width="84.411">Parametre1</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Right" Margin="0,234.421,25.339,0" Name="TxtP1" Width="83.411" Height="21.978" VerticalAlignment="Top"></TextBox>
-        <Label Foreground="White" HorizontalAlignment="Right" Margin="0,262.196,25.339,263.307" Name="Label22" Width="84.411">Parametre2</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21.978" HorizontalAlignment="Right" Margin="0,0,25.339,241.087" Name="TxtP2" VerticalAlignment="Bottom" Width="83.411"></TextBox>
+        <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,93.352,20,0" Name="BtnRead" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Tester</Button>
     </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
 ﻿Imports HoMIDom.HoMIDom.Device
+Imports HoMIDom.HoMIDom.Api
 Imports System.IO
 
 Partial Public Class uDevice
@@ -300,18 +301,34 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub BtnRead_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnRead.Click
+
         Try
-            Window1.Obj.TestRead(_DeviceId)
+            Dim y As New uTestDevice(_DeviceId)
+            y.Uid = System.Guid.NewGuid.ToString()
+            AddHandler y.CloseMe, AddressOf UnloadControl
+            Window1.CanvasUser.Children.Add(y)
+            Window1.CanvasUser.SetLeft(y, 50)
+            Window1.CanvasUser.SetTop(y, 50)
         Catch ex As Exception
-            MessageBox.Show("Error Read GET device" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur Tester" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
-    Private Sub BtnWrite_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnWrite.Click
-        Try
-            Window1.Obj.TestWrite(_DeviceId, TxtCmd.Text, TxtP1.Text, TxtP2.Text)
-        Catch ex As Exception
-            MessageBox.Show("Error Write device" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
+    'Private Sub BtnWrite_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+    '    Try
+    '        Window1.Obj.TestWrite(_DeviceId, TxtCmd.Text, TxtP1.Text, TxtP2.Text)
+    '    Catch ex As Exception
+    '        MessageBox.Show("Error Write device" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+    '    End Try
+    'End Sub
+
+    Private Sub UnloadControl(ByVal MyControl As Object)
+        For i As Integer = 0 To Window1.CanvasUser.Children.Count - 1
+            If Window1.CanvasUser.Children.Item(i).Uid = MyControl.uid Then
+                Window1.CanvasUser.Children.RemoveAt(i)
+                Exit Sub
+            End If
+        Next
+
     End Sub
 End Class

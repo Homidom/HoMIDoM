@@ -9,6 +9,7 @@ Class Window1
 
     Public Shared Obj As IHoMIDom
     Public Shared IsConnect As Boolean
+    Public Shared CanvasUser As Canvas
 
     Public Sub New()
 
@@ -39,6 +40,8 @@ Class Window1
             AffDriver()
             AffDevice()
             AffZone()
+
+            CanvasUser = CanvasRight
         Catch ex As Exception
             IsConnect = False
         End Try
@@ -273,7 +276,6 @@ Class Window1
         CanvasRight.SetLeft(x, 50)
         CanvasRight.SetTop(x, 50)
     End Sub
-
 
 
 End Class

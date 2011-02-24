@@ -1977,29 +1977,37 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub start()
             Dim retour As String
+
             '----- Démarre les connexions Sqlite ----- 
             retour = sqlite_homidom.connect("homidom")
             If STRGS.Left(retour, 4) = "ERR:" Then
                 Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour)
                 'on arrête tout
-
+            Else
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour)
             End If
+
             retour = sqlite_medias.connect("medias")
             If STRGS.Left(retour, 4) = "ERR:" Then
                 Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Medias : " & retour)
                 'on arrête tout
-
+            Else
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Medias : " & retour)
             End If
+
             '----- Charge les drivers ----- 
             Drivers_Load()
+
             '----- Chargement de la config ----- 
             retour = LoadConfig(_MonRepertoire & "\Config\")
             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", retour)
+
             '----- Démarre les drivers ----- 
             Drivers_Start()
             TimerSecond.Interval = 1000
             AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
             TimerSecond.Enabled = True
+
             'Calcul les heures de lever et coucher du soleil
             MAJ_HeuresSoleil()
         End Sub
@@ -2023,6 +2031,11 @@ Namespace HoMIDom
             End If
         End Sub
 
+        Protected Overrides Sub Finalize()
+            'Mettre le Code pour l'arret
+            Stop
+            MyBase.Finalize()
+        End Sub
 #End Region
 
 #Region "Log"
