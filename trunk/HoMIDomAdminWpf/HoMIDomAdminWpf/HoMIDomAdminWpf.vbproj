@@ -85,6 +85,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Control\uTestDevice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Control\uZone.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -131,6 +135,9 @@
     </Compile>
     <Compile Include="Control\uLog.xaml.vb">
       <DependentUpon>uLog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\uTestDevice.xaml.vb">
+      <DependentUpon>uTestDevice.xaml</DependentUpon>
     </Compile>
     <Compile Include="Control\uZone.xaml.vb">
       <DependentUpon>uZone.xaml</DependentUpon>
