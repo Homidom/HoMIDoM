@@ -10,7 +10,6 @@ Partial Public Class uTestDevice
     Private Sub BtnTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTest.Click
         Try
             Dim _Param As New ArrayList
-            Dim _retour As Object
 
             If TxtP1.Text <> "" Then _Param.Add(TxtP1.Text)
             If TxtP2.Text <> "" Then _Param.Add(TxtP2.Text)
@@ -18,24 +17,7 @@ Partial Public Class uTestDevice
             If TxtP4.Text <> "" Then _Param.Add(TxtP4.Text)
             If TxtP5.Text <> "" Then _Param.Add(TxtP5.Text)
 
-            If _Param.Count > 0 Then
-                Select Case _Param.Count
-                    Case 1
-                        _retour = CallByName(_Device, CbCmd.Text, CallType.Method, _Param(0))
-                    Case 2
-                        _retour = CallByName(_Device, CbCmd.Text, CallType.Method, _Param(0), _Param(1))
-                    Case 3
-                        _retour = CallByName(_Device, CbCmd.Text, CallType.Method, _Param(0), _Param(1), _Param(2))
-                    Case 4
-                        _retour = CallByName(_Device, CbCmd.Text, CallType.Method, _Param(0), _Param(1), _Param(2), _Param(3))
-                    Case 5
-                        _retour = CallByName(_Device, CbCmd.Text, CallType.Method, _Param(0), _Param(1), _Param(2), _Param(3), _Param(4))
-                End Select
-
-            Else
-                CallByName(_Device, CbCmd.Text, CallType.Method)
-            End If
-
+            Window1.Obj.ExecuteDeviceCommand(_DeviceId, CbCmd.Text, _Param)
         Catch ex As Exception
             MessageBox.Show("Erreur lors du test: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try

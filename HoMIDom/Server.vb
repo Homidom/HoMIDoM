@@ -959,17 +959,9 @@ Namespace HoMIDom
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Devices_Stop", "Arrêt des devices")
                 For Each _dev In _ListDevices
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Devices_Stop", " - " & _dev.Name & " démarré")
-
-
-
                     'marche pas !!!!!
 
                     'RemoveHandler _dev.DeviceChanged, AddressOf DeviceChange
-
-
-
-
-
 
                 Next
             Catch ex As Exception
@@ -1947,22 +1939,42 @@ Namespace HoMIDom
         End Function
 
 
-        Public Sub TestWrite(ByVal IdDevice As String, ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "") Implements IHoMIDom.TestWrite
-            Dim x As Object = ReturnDeviceById(IdDevice)
+        ''' <summary>
+        ''' Permet d'exécuter une commande Sub d'un Device
+        ''' </summary>
+        ''' <param name="DeviceId"></param>
+        ''' <param name="Command"></param>
+        ''' <param name="Param"></param>
+        ''' <remarks></remarks>
+        Sub ExecuteDeviceCommand(ByVal DeviceId As String, ByVal Command As String, ByVal Param As ArrayList) Implements IHoMIDom.ExecuteDeviceCommand
+            Dim _retour As Object
+            Dim x As Object
+            Try
+                x = ReturnDeviceById(DeviceId)
+                If x IsNot Nothing Then
 
-            If x IsNot Nothing Then
-                x.testWrite(UCase(Commande), Parametre1, Parametre2)
-            End If
+                    If Param.Count > 0 Then
+                        Select Case Param.Count
+                            Case 1
+                                _retour = CallByName(x, Command, CallType.Method, Param(0))
+                            Case 2
+                                _retour = CallByName(x, Command, CallType.Method, Param(0), Param(1))
+                            Case 3
+                                _retour = CallByName(x, Command, CallType.Method, Param(0), Param(1), Param(2))
+                            Case 4
+                                _retour = CallByName(x, Command, CallType.Method, Param(0), Param(1), Param(2), Param(3))
+                            Case 5
+                                _retour = CallByName(x, Command, CallType.Method, Param(0), Param(1), Param(2), Param(3), Param(4))
+                        End Select
+
+                    Else
+                        CallByName(x, Command, CallType.Method)
+                    End If
+                End If
+            Catch ex As Exception
+                MsgBox("Erreur lors du test: " & ex.Message, "Erreur")
+            End Try
         End Sub
-
-        Public Sub TestRead(ByVal IdDevice As String) Implements IHoMIDom.TestRead
-            Dim x As Object = ReturnDeviceById(IdDevice)
-
-            If x IsNot Nothing Then
-                x.testread()
-            End If
-        End Sub
-
 #End Region
 
 #Region "Declaration de la classe Server"
@@ -2016,10 +2028,17 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub [stop]()
             Dim retour As String
+            TimerSecond.Enabled = False
+            TimerSecond.Dispose()
+
             '----- Arrete les devices ----- 
             Devices_Stop()
+            _ListDevices = Nothing
+
             '----- Arrete les drivers ----- 
             Drivers_Stop()
+            _ListDrivers = Nothing
+
             '----- Arrete les connexions Sqlite -----
             retour = sqlite_homidom.disconnect("homidom")
             If STRGS.Left(retour, 4) = "ERR:" Then
