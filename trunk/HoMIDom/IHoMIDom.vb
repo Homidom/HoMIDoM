@@ -21,9 +21,15 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Sub SaveConfig()
 
-        Sub TestWrite(ByVal IdDevice As String, ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
+        ''' <summary>
+        ''' Execute une commande d'un device
+        ''' </summary>
+        ''' <param name="DeviceId"></param>
+        ''' <param name="Command"></param>
+        ''' <param name="Param"></param>
+        ''' <remarks></remarks>
+        Sub ExecuteDeviceCommand(ByVal DeviceId As String, ByVal Command As String, ByVal Param As ArrayList)
 
-        Sub TestRead(ByVal IdDevice As String)
 
         '---- Fonctions ---------------------------------------
         ''' <summary>
