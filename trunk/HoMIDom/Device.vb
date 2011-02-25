@@ -936,7 +936,7 @@ Namespace HoMIDom
 
             'ON
             Public Sub [ON]()
-                Driver.Write(Me, "ON")
+                _Driver.Write(Me, "ON")
             End Sub
 
             'OFF
