@@ -331,4 +331,5 @@ Partial Public Class uDevice
         Next
 
     End Sub
+
 End Class

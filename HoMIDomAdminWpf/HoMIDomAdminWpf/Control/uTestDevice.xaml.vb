@@ -61,7 +61,7 @@ Partial Public Class uTestDevice
         RaiseEvent CloseMe(Me)
     End Sub
 
-    Private Sub CbCmd_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbCmd.SelectionChanged
+    Private Sub CbCmd_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbCmd.MouseLeave
         LblP1.Visibility = Windows.Visibility.Hidden
         LblP2.Visibility = Windows.Visibility.Hidden
         LblP3.Visibility = Windows.Visibility.Hidden
@@ -85,39 +85,41 @@ Partial Public Class uTestDevice
         Dim a() As String = _list(Idx).split("|")
         If a.Length > 1 Then
             For j As Integer = 1 To a.Length - 1
+
                 Select Case j
                     Case 1
                         Dim _tmp() As String = a(j).Split(":")
                         LblP1.Content = _tmp(0) & " :"
                         LblP1.Visibility = Windows.Visibility.Visible
-                        'TxtP1.Text = _tmp(1)
+                        TxtP1.ToolTip = _tmp(1)
                         TxtP1.Visibility = Windows.Visibility.Visible
                     Case 2
                         Dim _tmp() As String = a(j).Split(":")
                         LblP2.Content = _tmp(0) & " :"
                         LblP2.Visibility = Windows.Visibility.Visible
-                        'TxtP2.Text = _tmp(1)
+                        TxtP2.ToolTip = _tmp(1)
                         TxtP2.Visibility = Windows.Visibility.Visible
                     Case 3
                         Dim _tmp() As String = a(j).Split(":")
                         LblP3.Content = _tmp(0) & " :"
                         LblP3.Visibility = Windows.Visibility.Visible
-                        'TxtP3.Text = _tmp(1)
+                        TxtP3.ToolTip = _tmp(1)
                         TxtP3.Visibility = Windows.Visibility.Visible
                     Case 4
                         Dim _tmp() As String = a(j).Split(":")
                         LblP4.Content = _tmp(0) & " :"
                         LblP4.Visibility = Windows.Visibility.Visible
-                        'TxtP4.Text = _tmp(1)
+                        TxtP4.ToolTip = _tmp(1)
                         TxtP4.Visibility = Windows.Visibility.Visible
                     Case 5
                         Dim _tmp() As String = a(j).Split(":")
                         LblP5.Content = _tmp(0) & " :"
                         LblP5.Visibility = Windows.Visibility.Visible
-                        'TxtP5.Text = _tmp(1)
+                        TxtP5.ToolTip = _tmp(1)
                         TxtP5.Visibility = Windows.Visibility.Visible
                 End Select
             Next
         End If
     End Sub
+
 End Class
