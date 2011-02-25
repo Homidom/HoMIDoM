@@ -220,6 +220,9 @@ Namespace HoMIDom
                 End Set
             End Property
 
+            Protected Overrides Sub Finalize()
+                MyBase.Finalize()
+            End Sub
         End Class
 
         'Classe valeur Double avec min/max/def/correction...
