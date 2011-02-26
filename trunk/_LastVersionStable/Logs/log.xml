@@ -1,4 +1,11 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <logs>
-
+  <log time="26/02/2011 01:14:48" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: D:\Domotique\Homidom\_LastVersionStable\Config\homidom.xml" />
+  <log time="26/02/2011 01:14:48" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="26/02/2011 01:14:48" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="26/02/2011 01:14:48" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="26/02/2011 01:14:51" type="1" source="0" fonction="LoadDrivers" message=" Erreur lors du chargement des drivers: Impossible de trouver une partie du chemin d'accès 'D:\Domotique\Homidom\_LastVersionStable\applications\Plugins'." />
+  <log time="26/02/2011 01:14:51" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="26/02/2011 01:14:51" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 26/02/2011 07:58:00" />
+  <log time="26/02/2011 01:14:51" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 26/02/2011 20:04:40" />
 </logs>

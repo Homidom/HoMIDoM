@@ -36,7 +36,6 @@ Namespace HoMIDom
 
         End Sub
 
-
         ''' <summary>Evenement provenant des devices</summary>
         ''' <param name="Device"></param>
         ''' <param name="Property"></param>
@@ -45,11 +44,48 @@ Namespace HoMIDom
         Public Sub DeviceChange(ByVal Device As Object, ByVal [Property] As String, ByVal Parametres As Object)
             Dim retour As String
             Try
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "DeviceChange", "Historiser " & Device.name & " (" & [Property] & ") : " & Parametres)
+                Dim valeur = Parametres
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "DeviceChange", "Historiser " & Device.name & " (" & [Property] & ") : " & valeur)
 
-                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (" & Device.ID & "," & [Property] & "," & Now.ToString() & "," & Parametres & ")")
-                If STRGS.Left(retour, 4) = "ERR:" Then
-                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
+                If STRGS.Left(valeur, 4) <> "ERR:" Then 'si y a pas erreur d'acquisition
+                    '--- Remplacement de , par .
+                    Parametres = STRGS.Replace(valeur, ",", ".")
+                    '--- si c'est un nombre
+                    If (IsNumeric(valeur) And IsNumeric(Device.Value) And IsNumeric(Device.ValueLast)) Then
+                        'si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                        If Device.LastEtat And valeur.ToString = Device.ValueLast Then
+                            'log de "inchangé lastetat"
+                            Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (inchangé lastetat " & Device.ValueLast & ")")
+                        Else
+                            'on vérifie que la valeur a changé de plus de composants_precision sinon inchangé
+                            If (CDbl(valeur) + CDbl(Device.Precision)) >= CDbl(Device.Value) And (CDbl(valeur) - CDbl(Device.Precision)) <= CDbl(Device.Value) Then
+                                'log de "inchangé précision"
+                                Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (inchangé precision " & Device.ValueLast & ")")
+                            Else
+                                'log de la nouvelle valeur
+                                Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
+                                'On historise la nouvellevaleur
+                                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (" & Device.ID & "," & [Property] & "," & Now.ToString() & "," & valeur & ")")
+                                If STRGS.Left(retour, 4) = "ERR:" Then
+                                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
+                                End If
+                            End If
+                        End If
+                    Else
+                        'Valeur est autre chose qu'un nombre
+                        '--- log de la nouvelle valeur
+                        Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
+                        '--- historise la valeur si ce n'est pas une simple info de config
+                        If STRGS.Left(valeur, 4) <> "CFG:" Then
+                            retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (" & Device.ID & "," & [Property] & "," & Now.ToString() & "," & valeur & ")")
+                            If STRGS.Left(retour, 4) = "ERR:" Then
+                                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
+                            End If
+                        End If
+                    End If
+                Else
+                    'erreur d'acquisition
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur d'acquisition : " & Device.Name & " - " & valeur)
                 End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Exception : " & ex.Message)
@@ -157,9 +193,7 @@ Namespace HoMIDom
 
         End Sub
 
-        ''' <summary>
-        ''' Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi
-        ''' </summary>
+        ''' <summary>Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi</summary>
         ''' <remarks></remarks>
         Sub TimerSecTick()
             'Action à effectuer toutes les secondes
@@ -209,9 +243,7 @@ Namespace HoMIDom
 
 #Region "Fonctions/Sub propres au serveur"
 
-        ''' <summary>
-        ''' Liste les type de devices par leur valeur d'Enum
-        ''' </summary>
+        ''' <summary>Liste les type de devices par leur valeur d'Enum</summary>
         ''' <param name="Index"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
@@ -225,9 +257,7 @@ Namespace HoMIDom
             Return ""
         End Function
 
-        ''' <summary>
-        ''' Initialisation des heures du soleil
-        ''' </summary>
+        ''' <summary>Initialisation des heures du soleil</summary>
         ''' <remarks></remarks>
         Public Sub MAJ_HeuresSoleil()
 
@@ -244,9 +274,7 @@ Namespace HoMIDom
             Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Heure du coucher : " & _HeureCoucherSoleil)
         End Sub
 
-        ''' <summary>
-        ''' Chargement de la config depuis le fichier XML
-        ''' </summary>
+        ''' <summary>Chargement de la config depuis le fichier XML</summary>
         ''' <param name="Fichier"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
@@ -537,6 +565,8 @@ Namespace HoMIDom
                                     If (Not list.Item(j).Attributes.GetNamedItem("picture") Is Nothing) Then .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
                                     If (Not list.Item(j).Attributes.GetNamedItem("solo") Is Nothing) Then .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
                                     If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = list.Item(j).Attributes.GetNamedItem("value").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = list.Item(j).Attributes.GetNamedItem("valuelast").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("lastetat") Is Nothing) Then .LastEtat = list.Item(j).Attributes.GetNamedItem("lastetat").Value
                                     '-- propriétés generique value --
                                     If _Dev.Type = "BAROMETRE" _
                                     Or _Dev.Type = "COMPTEUR" _
@@ -795,6 +825,15 @@ Namespace HoMIDom
                     writer.WriteStartAttribute("solo")
                     writer.WriteValue(_ListDevices.Item(i).solo)
                     writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("value")
+                    writer.WriteValue(_ListDevices.Item(i).value)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("valuelast")
+                    writer.WriteValue(_ListDevices.Item(i).valuelast)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("lastetat")
+                    writer.WriteValue(_ListDevices.Item(i).lastetat)
+                    writer.WriteEndAttribute()
 
                     '-- propriétés generique value --
                     If _ListDevices.Item(i).Type = "TEMPERATURE" _
@@ -808,9 +847,6 @@ Namespace HoMIDom
                     Or _ListDevices.Item(i).Type = "UV" _
                     Or _ListDevices.Item(i).Type = "HUMIDITE" _
                     Then
-                        writer.WriteStartAttribute("value")
-                        writer.WriteValue(_ListDevices.Item(i).value)
-                        writer.WriteEndAttribute()
                         writer.WriteStartAttribute("valuemin")
                         writer.WriteValue(_ListDevices.Item(i).valuemin)
                         writer.WriteEndAttribute()
@@ -1988,71 +2024,79 @@ Namespace HoMIDom
         ''' <summary>Démarrage du serveur</summary>
         ''' <remarks></remarks>
         Public Sub start()
-            Dim retour As String
+            Try
+                Dim retour As String
 
-            '----- Démarre les connexions Sqlite ----- 
-            retour = sqlite_homidom.connect("homidom")
-            If STRGS.Left(retour, 4) = "ERR:" Then
-                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour)
-                'on arrête tout
-            Else
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour)
-            End If
+                '----- Démarre les connexions Sqlite ----- 
+                retour = sqlite_homidom.connect("homidom")
+                If STRGS.Left(retour, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour)
+                    'on arrête tout
+                Else
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour)
+                End If
 
-            retour = sqlite_medias.connect("medias")
-            If STRGS.Left(retour, 4) = "ERR:" Then
-                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Medias : " & retour)
-                'on arrête tout
-            Else
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Medias : " & retour)
-            End If
+                retour = sqlite_medias.connect("medias")
+                If STRGS.Left(retour, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Medias : " & retour)
+                    'on arrête tout
+                Else
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Medias : " & retour)
+                End If
 
-            '----- Charge les drivers ----- 
-            Drivers_Load()
+                '----- Charge les drivers ----- 
+                Drivers_Load()
 
-            '----- Chargement de la config ----- 
-            retour = LoadConfig(_MonRepertoire & "\Config\")
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", retour)
+                '----- Chargement de la config ----- 
+                retour = LoadConfig(_MonRepertoire & "\Config\")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", retour)
 
-            '----- Démarre les drivers ----- 
-            Drivers_Start()
-            TimerSecond.Interval = 1000
-            AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
-            TimerSecond.Enabled = True
+                '----- Démarre les drivers ----- 
+                Drivers_Start()
+                TimerSecond.Interval = 1000
+                AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
+                TimerSecond.Enabled = True
 
-            'Calcul les heures de lever et coucher du soleil
-            MAJ_HeuresSoleil()
+                'Calcul les heures de lever et coucher du soleil
+                MAJ_HeuresSoleil()
+            Catch ex As Exception
+                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>Arrêt du serveur</summary>
         ''' <remarks></remarks>
         Public Sub [stop]()
-            Dim retour As String
-            TimerSecond.Enabled = False
-            TimerSecond.Dispose()
+            Try
+                Dim retour As String
+                TimerSecond.Enabled = False
+                TimerSecond.Dispose()
 
-            '----- Arrete les devices ----- 
-            Devices_Stop()
-            _ListDevices = Nothing
+                '----- Arrete les devices ----- 
+                Devices_Stop()
+                _ListDevices = Nothing
 
-            '----- Arrete les drivers ----- 
-            Drivers_Stop()
-            _ListDrivers = Nothing
+                '----- Arrete les drivers ----- 
+                Drivers_Stop()
+                _ListDrivers = Nothing
 
-            '----- Arrete les connexions Sqlite -----
-            retour = sqlite_homidom.disconnect("homidom")
-            If STRGS.Left(retour, 4) = "ERR:" Then
-                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Homidom : " & retour)
-            End If
-            retour = sqlite_medias.disconnect("medias")
-            If STRGS.Left(retour, 4) = "ERR:" Then
-                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Medias : " & retour)
-            End If
+                '----- Arrete les connexions Sqlite -----
+                retour = sqlite_homidom.disconnect("homidom")
+                If STRGS.Left(retour, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Homidom : " & retour)
+                End If
+                retour = sqlite_medias.disconnect("medias")
+                If STRGS.Left(retour, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Medias : " & retour)
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         Protected Overrides Sub Finalize()
             'Mettre le Code pour l'arret
-            Stop
+            [stop]()
             MyBase.Finalize()
         End Sub
 #End Region

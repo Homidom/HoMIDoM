@@ -11,15 +11,13 @@ Namespace HoMIDom
     '** Historique (SebBergues: 19/01/2011: Ecriture ou lecture via Read/Write + ajout proriété Solo
     '***********************************************
 
-    ''' <summary>
-    ''' Class Device, définie tous différents types de devices
-    ''' </summary>
+    ''' <summary>Class Device, définie tous différents types de devices</summary>
     ''' <remarks></remarks>
     Public Class Device
 
-        ''' <summary>
-        ''' Indique la liste des devices gérés
-        ''' </summary>
+        Dim _Server As Server
+
+        ''' <summary>Indique la liste des devices gérés</summary>
         ''' <remarks></remarks>
         Public Enum ListeDevices
             APPAREIL = 1 'modules pour diriger un appareil  ON/OFF
@@ -51,9 +49,7 @@ Namespace HoMIDom
             VOLET = 27
         End Enum
 
-        ''' <summary>
-        ''' Class de déclaration du Device Générique
-        ''' </summary>
+        ''' <summary>Class de déclaration du Device Générique</summary>
         ''' <remarks></remarks>
         <Serializable()> Public MustInherit Class DeviceGenerique
             Protected _Server As Server
@@ -73,6 +69,7 @@ Namespace HoMIDom
             Protected _Modele As String = ""
             Protected _Picture As String = ""
             Protected _Solo As Boolean = True
+            Protected _LastEtat As Boolean = False
             Protected MyTimer As New Timers.Timer
 
             'Identification unique du device
@@ -220,22 +217,44 @@ Namespace HoMIDom
                 End Set
             End Property
 
+            'si =true, on ne prend pas en comtpe les modifications style 19.1 19 19.1 19...
+            Public Property LastEtat() As Boolean
+                Get
+                    Return _LastEtat
+                End Get
+                Set(ByVal value As Boolean)
+                    _LastEtat = value
+                End Set
+            End Property
+
             Protected Overrides Sub Finalize()
                 MyBase.Finalize()
             End Sub
         End Class
 
-        'Classe valeur Double avec min/max/def/correction...
+        ''' <summary>Classe valeur Double avec min/max/def/correction...</summary>
+        ''' <remarks></remarks>
         <Serializable()> Public Class DeviceGenerique_ValueDouble
             Inherits DeviceGenerique
 
             Protected _Value As Double = 0
+            Protected _ValueLast As Double = 0
             Protected _ValueMin As Double = -9999
             Protected _ValueMax As Double = 9999
             Protected _ValueDef As Double = 0
             Protected _Precision As Double = 0
             Protected _Correction As Double = 0
             Protected _Formatage As String = ""
+
+            'Contien l'avant derniere valeur
+            Public Property ValueLast() As Double
+                Get
+                    Return _ValueLast
+                End Get
+                Set(ByVal value As Double)
+                    _ValueLast = value
+                End Set
+            End Property
 
             'Valeur minimale que value peut avoir 
             Public Property ValueMin() As Double
@@ -269,11 +288,11 @@ Namespace HoMIDom
             End Property
 
             'Precision de value
-            Public Property Precision() As String
+            Public Property Precision() As Double
                 Get
                     Return _Precision
                 End Get
-                Set(ByVal value As String)
+                Set(ByVal value As Double)
                     _Precision = value
                 End Set
             End Property
@@ -334,18 +353,33 @@ Namespace HoMIDom
                     'Si la valeur a changé on la prend en compte et on créer l'event
                     'MsgBox("Device double a recu une value : " & _Name & " - " & tmp)
                     If tmp <> _Value Then
+                        _ValueLast = _Value 'on garde l'ancienne value en memoire
                         _Value = tmp
                         RaiseEvent DeviceChanged(Me, "Value", _Value)
+                    Else
+                        _Server.Log(Server.TypeLog.VALEUR_INCHANGE, Server.TypeSource.SERVEUR, "DeviceChange", _Name & " : " & _Adresse1 & " : " & _Value)
                     End If
                 End Set
             End Property
         End Class
 
-        'Classe valeur True/False pour device ON/OFF
+        ''' <summary>Classe valeur True/False pour device ON/OFF</summary>
+        ''' <remarks></remarks>
         <Serializable()> Public Class DeviceGenerique_ValueBool
             Inherits DeviceGenerique
 
             Protected _Value As Boolean = False
+            Protected _ValueLast As Double = 0
+
+            'Contien l'avant derniere valeur
+            Public Property ValueLast() As Double
+                Get
+                    Return _ValueLast
+                End Get
+                Set(ByVal value As Double)
+                    _ValueLast = value
+                End Set
+            End Property
 
             'Event lancé sur changement de Value
             Public Event DeviceChanged(ByVal Device As Object, ByVal [Property] As String, ByVal Parametre As Object)
@@ -379,19 +413,31 @@ Namespace HoMIDom
                 Set(ByVal value As Boolean)
                     Dim tmp As Boolean = value
                     _LastChange = Now
-                    'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
-                    _Value = tmp
+                    _ValueLast = _Value 'on garde l'ancienne value en memoire
+                    _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
                     RaiseEvent DeviceChanged(Me, "Value", _Value)
                 End Set
             End Property
 
         End Class
 
-        'Classe valeur Integer pour device avce valeur de 0(OFF) à 100(ON)
+        ''' <summary>Classe valeur Integer pour device avce valeur de 0(OFF) à 100(ON)</summary>
+        ''' <remarks></remarks>
         <Serializable()> Public MustInherit Class DeviceGenerique_ValueInt
             Inherits DeviceGenerique
 
             Protected _Value As Integer = 0
+            Protected _ValueLast As Double = 0
+
+            'Contien l'avant derniere valeur
+            Public Property ValueLast() As Double
+                Get
+                    Return _ValueLast
+                End Get
+                Set(ByVal value As Double)
+                    _ValueLast = value
+                End Set
+            End Property
 
             'Event lancé sur changement de Value
             Public Event DeviceChanged(ByVal Device As Object, ByVal [Property] As String, ByVal Parametre As Object)
@@ -427,20 +473,31 @@ Namespace HoMIDom
                     _LastChange = Now
                     If tmp < 0 Then tmp = 0
                     If tmp > 100 Then tmp = 100
-
-                    'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
-                    _Value = tmp
+                    _ValueLast = _Value 'on garde l'ancienne value en memoire
+                    _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
                     RaiseEvent DeviceChanged(Me, "Value", _Value)
                 End Set
             End Property
 
         End Class
 
-        'Classe valeur String pour device style Direction du Vent
+        ''' <summary>Classe valeur String pour device style Direction du Vent</summary>
+        ''' <remarks></remarks>
         <Serializable()> Public Class DeviceGenerique_ValueString
             Inherits DeviceGenerique
 
             Protected _Value As String = ""
+            Protected _ValueLast As Double = 0
+
+            'Contien l'avant derniere valeur
+            Public Property ValueLast() As Double
+                Get
+                    Return _ValueLast
+                End Get
+                Set(ByVal value As Double)
+                    _ValueLast = value
+                End Set
+            End Property
 
             Public Event DeviceChanged(ByVal Device As Object, ByVal [Property] As String, ByVal Parametre As Object)
 
@@ -473,8 +530,11 @@ Namespace HoMIDom
                     _LastChange = Now
                     'Si la valeur a changé on la prend en compte et on créer l'event
                     If tmp <> _Value Then
+                        _ValueLast = _Value 'on garde l'ancienne value en memoire
                         _Value = tmp
                         RaiseEvent DeviceChanged(Me, "Value", _Value)
+                    Else
+                        _Server.Log(Server.TypeLog.VALEUR_INCHANGE, Server.TypeSource.SERVEUR, "DeviceChange", _Name & " : " & _Adresse1 & " : " & _Value)
                     End If
                 End Set
             End Property
@@ -943,6 +1003,7 @@ Namespace HoMIDom
         <Serializable()> Class METEO
             Inherits DeviceGenerique
             Dim _Value As String = ""
+            Dim _ValueLast As String = ""
             Dim _ConditionActuel As String = ""
             Dim _TempActuel As String = ""
             Dim _HumActuel As String = ""
@@ -999,6 +1060,16 @@ Namespace HoMIDom
                 Driver.Read(Me)
             End Sub
 
+            'Contien l'avant derniere valeur
+            Public Property ValueLast() As Double
+                Get
+                    Return _ValueLast
+                End Get
+                Set(ByVal value As Double)
+                    _ValueLast = value
+                End Set
+            End Property
+
             Public Property Value() As String
                 Get
                     Return _Value
@@ -1008,6 +1079,7 @@ Namespace HoMIDom
                     _LastChange = Now
                     'Si la valeur a changé on la prend en compte et on créer l'event
                     If tmp <> _Value Then
+                        _ValueLast = _Value 'on garde l'ancienne valeur en memoire
                         _Value = tmp
                         RaiseEvent DeviceChanged(Me, "Value", _Value)
                     End If
