@@ -3,7 +3,7 @@
 Partial Public Class uTestDevice
     Dim _DeviceId As String
     Dim _Device As Object
-    Dim _list As New ArrayList
+    Dim _list As New List(Of String)
 
     Public Event CloseMe(ByVal MyObject As Object)
 
@@ -17,7 +17,7 @@ Partial Public Class uTestDevice
             If TxtP4.Text <> "" Then _Param.Add(TxtP4.Text)
             If TxtP5.Text <> "" Then _Param.Add(TxtP5.Text)
 
-            Window1.Obj.ExecuteDeviceCommand(_DeviceId, CbCmd.Text, _Param)
+            Window1.myService.ExecuteDeviceCommand(_DeviceId, CbCmd.Text, _Param)
         Catch ex As Exception
             MessageBox.Show("Erreur lors du test: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -31,11 +31,11 @@ Partial Public Class uTestDevice
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         _DeviceId = DeviceId
 
-        _Device = Window1.Obj.ReturnDeviceByID(_DeviceId)
+        _Device = Window1.myService.ReturnDeviceByID(_DeviceId)
 
         If _Device IsNot Nothing Then
 
-            _list = ListMethod(_Device)
+            _list = Window1.myService.ListMethod(_DeviceId)
 
             For i As Integer = 0 To _list.Count - 1
                 Dim a() As String

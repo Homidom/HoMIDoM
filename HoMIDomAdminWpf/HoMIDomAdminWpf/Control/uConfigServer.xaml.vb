@@ -2,10 +2,10 @@
     Public Event CloseMe(ByVal MyObject As Object)
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        Window1.Obj.Longitude = CDbl(TxtLong.Text.Replace(".", ","))
-        Window1.Obj.Latitude = CDbl(TxtLat.Text.Replace(".", ","))
-        Window1.Obj.HeureCorrectionLever = CInt(HCL.Text)
-        Window1.Obj.HeureCorrectionCoucher = CInt(HCC.Text)
+        Window1.myService.SetLongitude(CDbl(TxtLong.Text.Replace(".", ",")))
+        Window1.myService.SetLatitude(CDbl(TxtLat.Text.Replace(".", ",")))
+        Window1.myService.SetHeureCorrectionLever(CInt(HCL.Text))
+        Window1.myService.SetHeureCorrectionCoucher(CInt(HCC.Text))
         RaiseEvent CloseMe(Me)
     End Sub
 
@@ -19,9 +19,9 @@
         InitializeComponent()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        TxtLat.Text = Window1.Obj.Latitude
-        TxtLong.Text = Window1.Obj.Longitude
-        HCL.Text = Window1.Obj.HeureCorrectionLever
-        HCC.Text = Window1.Obj.HeureCorrectionCoucher
+        TxtLat.Text = Window1.myService.GetLatitude
+        TxtLong.Text = Window1.myService.GetLongitude
+        HCL.Text = Window1.myService.GetHeureCorrectionLever
+        HCC.Text = Window1.myService.GetHeureCorrectionCoucher
     End Sub
 End Class

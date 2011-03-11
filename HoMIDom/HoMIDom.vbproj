@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1F0CE8B5-5BA9-4704-8B5E-52682635F803}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -41,6 +41,9 @@
     <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dll_externes\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Core">
@@ -87,6 +90,8 @@
     </Compile>
     <Compile Include="Soleil.vb" />
     <Compile Include="Sqlite.vb" />
+    <Compile Include="TplDevice.vb" />
+    <Compile Include="TplDriver.vb" />
     <Compile Include="XML.vb" />
     <Compile Include="Zone.vb" />
   </ItemGroup>

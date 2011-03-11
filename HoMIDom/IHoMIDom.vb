@@ -1,4 +1,7 @@
-﻿
+﻿Imports System.ServiceModel
+Imports System.Runtime.Serialization
+Imports System.Linq
+
 Namespace HoMIDom
 
     '***********************************************
@@ -13,13 +16,41 @@ Namespace HoMIDom
     ''' Liste toutes les functions et propriétés accessibles par les clients
     ''' </summary>
     ''' <remarks></remarks>
-    Public Interface IHoMIDom
+    <ServiceContract(Namespace:="http://HoMIDom/")> Public Interface IHoMIDom
         '---- Subs --------------------------------------------
         ''' <summary>
         ''' 'Sauvegarde de la configuration
         ''' </summary>
         ''' <remarks></remarks>
-        Sub SaveConfig()
+        <OperationContract()> Sub SaveConfig()
+
+        ''' <summary>
+        ''' Démarre le service et charge la config
+        ''' </summary>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub Start()
+
+        ''' <summary>
+        ''' Obtient la liste des devices
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetAllDevices() As List(Of TplDevice)
+
+        ''' <summary>
+        ''' Obtient la liste des drivers
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetAllDrivers() As List(Of TplDriver)
+
+        ''' <summary>
+        ''' Obtient la liste des zones
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetAllZones() As List(Of Zone)
+
 
         ''' <summary>
         ''' Execute une commande d'un device
@@ -28,8 +59,9 @@ Namespace HoMIDom
         ''' <param name="Command"></param>
         ''' <param name="Param"></param>
         ''' <remarks></remarks>
-        Sub ExecuteDeviceCommand(ByVal DeviceId As String, ByVal Command As String, ByVal Param As ArrayList)
+        <OperationContract()> Sub ExecuteDeviceCommand(ByVal DeviceId As String, ByVal Command As String, ByVal Param As ArrayList)
 
+        <OperationContract()> Function ListMethod(ByVal DeviceId As String) As List(Of String)
 
         '---- Fonctions ---------------------------------------
         ''' <summary>
@@ -42,7 +74,7 @@ Namespace HoMIDom
         ''' <param name="Y"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function AddDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String, ByVal Visible As Boolean, Optional ByVal X As Double = 0, Optional ByVal Y As Double = 0) As String
+        <OperationContract()> Function AddDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String, ByVal Visible As Boolean, Optional ByVal X As Double = 0, Optional ByVal Y As Double = 0) As String
 
         ''' <summary>
         ''' Supprimer un device à une zone
@@ -52,7 +84,7 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
 
-        Function DeleteDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String) As String
+        <OperationContract()> Function DeleteDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String) As String
 
         ''' <summary>
         ''' Supprimer un device
@@ -60,7 +92,7 @@ Namespace HoMIDom
         ''' <param name="deviceId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function DeleteDevice(ByVal deviceId As String) As Integer
+        <OperationContract()> Function DeleteDevice(ByVal deviceId As String) As Integer
 
         ''' <summary>
         ''' Supprime une commande IR d'un device
@@ -69,7 +101,7 @@ Namespace HoMIDom
         ''' <param name="CmdName"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function DeleteDeviceCommandIR(ByVal deviceId As String, ByVal CmdName As String) As Integer
+        <OperationContract()> Function DeleteDeviceCommandIR(ByVal deviceId As String, ByVal CmdName As String) As Integer
 
         ''' <summary>
         ''' Supprimer un driver de la config
@@ -77,7 +109,7 @@ Namespace HoMIDom
         ''' <param name="driverId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function DeleteDriver(ByVal driverId As String) As Integer
+        <OperationContract()> Function DeleteDriver(ByVal driverId As String) As Integer
 
         ''' <summary>
         ''' Supprimer une zone de la config
@@ -85,7 +117,7 @@ Namespace HoMIDom
         ''' <param name="zoneId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function DeleteZone(ByVal zoneId As String) As Integer
+        <OperationContract()> Function DeleteZone(ByVal zoneId As String) As Integer
 
         ''' <summary>
         ''' Retourne l'objet d'un device par son ID
@@ -93,7 +125,7 @@ Namespace HoMIDom
         ''' <param name="Id"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function ReturnDeviceByID(ByVal Id As String) As Object
+        <OperationContract()> Function ReturnDeviceByID(ByVal Id As String) As TplDevice
 
         ''' <summary>
         ''' Retourne l'objet d'un driver par son ID
@@ -101,7 +133,7 @@ Namespace HoMIDom
         ''' <param name="Id"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function ReturnDriverByID(ByVal Id As String) As Object
+        <OperationContract()> Function ReturnDriverByID(ByVal Id As String) As Object
 
         ''' <summary>
         ''' Retourne l'objet d'une zone par son ID
@@ -109,7 +141,7 @@ Namespace HoMIDom
         ''' <param name="Id"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function ReturnZoneByID(ByVal Id As String) As Object
+        <OperationContract()> Function ReturnZoneByID(ByVal Id As String) As Zone
 
         ''' <summary>
         ''' Retourne l'objet d'un driver par son nom
@@ -117,7 +149,7 @@ Namespace HoMIDom
         ''' <param name="name"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function ReturnDriverByNom(ByVal name As String) As Object
+        <OperationContract()> Function ReturnDriverByNom(ByVal name As String) As Object
 
         ''' <summary>
         ''' Retourne une liste de device suivant l'addresse1 et/ou son type et/ou le driver
@@ -127,7 +159,7 @@ Namespace HoMIDom
         ''' <param name="DeviceDriver"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function ReturnDeviceByAdresse1TypeDriver(ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DeviceDriver As String) As ArrayList
+        <OperationContract()> Function ReturnDeviceByAdresse1TypeDriver(ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DeviceDriver As String) As ArrayList
 
         ''' <summary>
         ''' Créer un nouveau device ou sauvegarder la modif (si ID est complété)
@@ -147,7 +179,7 @@ Namespace HoMIDom
         ''' <param name="lastchangeduree"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function SaveDevice(ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0) As String
+        <OperationContract()> Function SaveDevice(ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0) As String
 
         ''' <summary>
         ''' 'Ajouter ou modifier une commande IR à un device (utilisé pour usbuirt)
@@ -158,9 +190,9 @@ Namespace HoMIDom
         ''' <param name="CmdRepeat"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function SaveDeviceCommandIR(ByVal deviceId As String, ByVal CmdName As String, ByVal CmdData As String, ByVal CmdRepeat As String) As String
+        <OperationContract()> Function SaveDeviceCommandIR(ByVal deviceId As String, ByVal CmdName As String, ByVal CmdData As String, ByVal CmdRepeat As String) As String
 
-        Function SaveDriver(ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String) As String 'Créer un nouveau driver ou sauvegarder la modif (si ID est complété)
+        <OperationContract()> Function SaveDriver(ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String) As String 'Créer un nouveau driver ou sauvegarder la modif (si ID est complété)
 
         ''' <summary>
         ''' Créer un nouveau zone ou sauvegarder la modif (si ID est complété)
@@ -172,28 +204,98 @@ Namespace HoMIDom
         ''' <param name="image"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListDevice As ArrayList = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String
+        <OperationContract()> Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListDevice As ArrayList = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String
 
         ''' <summary>
         ''' Commencer l'apprentissage d'un commande IR
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function StartIrLearning() As String
+        <OperationContract()> Function StartIrLearning() As String
 
         ''' <summary>
         ''' Valeur du levé du soleil
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function HeureLeverSoleil() As String
+        <OperationContract()> Function GetHeureLeverSoleil() As String
 
         ''' <summary>
         ''' Valeur du couché du soleil
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function HeureCoucherSoleil() As String
+        <OperationContract()> Function GetHeureCoucherSoleil() As String
+
+        ''' <summary>
+        ''' Obtenir la valeur de longitude
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetLongitude() As Double
+
+        ''' <summary>
+        ''' Appliquer une valeur de longitude
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetLongitude(ByVal Value As Double)
+
+        ''' <summary>
+        ''' Obtenir la valeur de latitude
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetLatitude() As Double
+
+        ''' <summary>
+        ''' Appliquer la valeur de latitude
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetLatitude(ByVal Value As Double)
+
+        ''' <summary>
+        ''' Obtenir la correction sur l'heure du coucher du soleil
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetHeureCorrectionCoucher() As Integer
+
+        ''' <summary>
+        ''' Appliquer une correction sur l'heure du coucher du soleil
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetHeureCorrectionCoucher(ByVal Value As Integer)
+
+        ''' <summary>
+        ''' Obtenir la correction sur l'heure de lever du soleil
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetHeureCorrectionLever() As Integer
+
+        ''' <summary>
+        ''' Appliquer une correction sur l'heure de lever du soleil
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetHeureCorrectionLever(ByVal Value As Integer)
+
+        ''' <summary>
+        ''' Arrêter un driver
+        ''' </summary>
+        ''' <param name="DriverId"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub StopDriver(ByVal DriverId As String)
+
+        ''' <summary>
+        ''' Démarrer un driver
+        ''' </summary>
+        ''' <param name="DriverId"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub StartDriver(ByVal DriverId As String)
 
         ''' <summary>
         ''' Renvoi le fichier log suivant une requête xml si besoin
@@ -201,7 +303,7 @@ Namespace HoMIDom
         ''' <param name="Requete"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function ReturnLog(Optional ByVal Requete As String = "") As String
+        <OperationContract()> Function ReturnLog(Optional ByVal Requete As String = "") As String
 
         '---- Propriétés --------------------------------------
         ''' <summary>
@@ -210,7 +312,7 @@ Namespace HoMIDom
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Property Devices() As ArrayList 'Liste des devices
+        'Property Devices() As ArrayList 'Liste des devices
 
         ''' <summary>
         ''' Liste des drivers
@@ -218,7 +320,7 @@ Namespace HoMIDom
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Property Drivers() As ArrayList 'Liste des drivers
+        'Property Drivers() As ArrayList 'Liste des drivers
 
         ''' <summary>
         ''' Liste des zones
@@ -226,7 +328,7 @@ Namespace HoMIDom
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Property Zones() As ArrayList 'Liste des zones
+        'Property Zones() As ArrayList 'Liste des zones
 
         ''' <summary>
         ''' Longitude du serveur pour calcul des heures de lever et coucher du soleil
@@ -234,7 +336,7 @@ Namespace HoMIDom
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Property Longitude() As Double 'Longitude
+        'Property Longitude() As Double 'Longitude
 
         ''' <summary>
         ''' Latitude du serveur pour calcul des heures de lever et coucher du soleil
@@ -242,7 +344,7 @@ Namespace HoMIDom
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Property Latitude() As Double 'Latitude
+        'Property Latitude() As Double 'Latitude
 
         ''' <summary>
         ''' Valeur de correction de l'heure de couché du soleil
@@ -250,7 +352,7 @@ Namespace HoMIDom
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Property HeureCorrectionCoucher() As Integer
+        'Property HeureCorrectionCoucher() As Integer
 
         ''' <summary>
         ''' Valeur de correction de l'heure de levé du soleil
@@ -258,7 +360,7 @@ Namespace HoMIDom
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Property HeureCorrectionLever() As Integer
+        'Property HeureCorrectionLever() As Integer
 
         '---- Variables ---------------------------------------
 
