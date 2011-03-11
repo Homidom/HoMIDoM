@@ -4,12 +4,16 @@ Imports System.Runtime.Remoting
 Imports System.Runtime.Remoting.Channels.Http
 Imports System.Runtime.Remoting.Channels
 Imports HoMIDom.HoMIDom
+Imports HoMIDom.TplDriver
+
+Imports System.ServiceModel
 
 Class Window1
 
     Public Shared Obj As IHoMIDom
     Public Shared IsConnect As Boolean
     Public Shared CanvasUser As Canvas
+    Public Shared myService As HoMIDom.HoMIDom.IHoMIDom
 
     Public Sub New()
 
@@ -23,19 +27,30 @@ Class Window1
         dt.Start()
 
         'Connexion au serveur
+        Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
+
+        Try
+            myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
+            myService = myChannelFactory.CreateChannel()
+            IsConnect = True
+        Catch ex As Exception
+            myChannelFactory.Abort()
+            IsConnect = False
+        End Try
+
         'Connexion au service Web
         Try
-            Dim channel As New HttpChannel()
-            ChannelServices.RegisterChannel(channel, False)
+            'Dim channel As New HttpChannel()
+            'ChannelServices.RegisterChannel(channel, False)
 
-            Obj = CType(Activator.GetObject( _
-                GetType(HoMIDom.HoMIDom.IHoMIDom), _
-                "http://localhost:8888/RemoteObjectServer.soap"),  _
-                 HoMIDom.HoMIDom.IHoMIDom)
+            'Obj = CType(Activator.GetObject( _
+            '    GetType(HoMIDom.HoMIDom.IHoMIDom), _
+            '    "http://localhost:8888/RemoteObjectServer.soap"),  _
+            '     HoMIDom.HoMIDom.IHoMIDom)
 
-            If Obj IsNot Nothing Then
-                IsConnect = True
-            End If
+            'If Obj IsNot Nothing Then
+            '    IsConnect = True
+            'End If
 
             AffDriver()
             AffDevice()
@@ -43,7 +58,7 @@ Class Window1
 
             CanvasUser = CanvasRight
         Catch ex As Exception
-            IsConnect = False
+            MessageBox.Show("Erreur: " & ex.ToString)
         End Try
     End Sub
 
@@ -65,10 +80,10 @@ Class Window1
     'Afficher la liste des zones
     Public Sub AffZone()
         TreeViewZone.Items.Clear()
-        For i As Integer = 0 To Obj.Zones.Count - 1
+        For i As Integer = 0 To myService.GetAllZones.Count - 1
             Dim newchild As New TreeViewItem
-            newchild.Header = Obj.Zones.Item(i).Name
-            newchild.Uid = Obj.Zones.Item(i).id
+            newchild.Header = myService.GetAllZones.Item(i).Name
+            newchild.Uid = myService.GetAllZones.Item(i).ID
             TreeViewZone.Items.Add(newchild)
         Next
     End Sub
@@ -76,10 +91,10 @@ Class Window1
     'Afficher la liste des drivers
     Public Sub AffDriver()
         TreeViewDriver.Items.Clear()
-        For i As Integer = 0 To Obj.Drivers.Count - 1
+        For i As Integer = 0 To myService.GetAllDrivers.Count - 1 'Obj.Drivers.Count - 1
             Dim newchild As New TreeViewItem
-            newchild.Header = Obj.Drivers.Item(i).Nom
-            newchild.Uid = Obj.Drivers.Item(i).id
+            newchild.Header = myService.GetAllDrivers.Item(i).Nom 'Obj.Drivers.Item(i).Nom
+            newchild.Uid = myService.GetAllDrivers.Item(i).ID 'Obj.Drivers.Item(i).id
             TreeViewDriver.Items.Add(newchild)
         Next
     End Sub
@@ -87,10 +102,10 @@ Class Window1
     'Afficher la liste des devices
     Public Sub AffDevice()
         TreeViewDevice.Items.Clear()
-        For i As Integer = 0 To Obj.Devices.Count - 1
+        For i As Integer = 0 To myService.GetAllDevices.Count - 1 'Obj.Devices.Count - 1
             Dim newchild As New TreeViewItem
-            newchild.Header = Obj.Devices.Item(i).Name
-            newchild.Uid = Obj.Devices.Item(i).id
+            newchild.Header = myService.GetAllDevices.Item(i).name 'Obj.Devices.Item(i).Name
+            newchild.Uid = myService.GetAllDevices.Item(i).id 'Obj.Devices.Item(i).id
             TreeViewDevice.Items.Add(newchild)
         Next
     End Sub
@@ -123,9 +138,11 @@ Class Window1
 
 #Region "Drivers"
     Private Sub TreeViewDriver_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewDriver.SelectedItemChanged
-        For i As Integer = 0 To Obj.Drivers.Count - 1
-            If Obj.Drivers.Item(i).id = e.NewValue.uid Then
-                PropertyGrid1.SelectedObject = Obj.Drivers.Item(i)
+        For i As Integer = 0 To myService.GetAllDrivers.Count - 1
+            If myService.GetAllDrivers.Item(i).ID = e.NewValue.uid Then
+                Dim x As Object
+                x = myService.GetAllDrivers.Item(i)
+                PropertyGrid1.SelectedObject = x
                 Exit Sub
             End If
         Next
@@ -133,11 +150,7 @@ Class Window1
 
     Private Sub BtnStop_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnStop.Click
         If TreeViewDriver.SelectedItem IsNot Nothing Then
-            For i As Integer = 0 To Obj.Drivers.Count - 1
-                If TreeViewDriver.SelectedItem.Header = Obj.Drivers.Item(i).Nom Then
-                    Obj.Drivers.Item(i).Stop()
-                End If
-            Next
+            myService.StopDriver(TreeViewDriver.SelectedItem.uid)
         Else
             MessageBox.Show("Veuillez sélectionner un Driver!")
         End If
@@ -145,11 +158,7 @@ Class Window1
 
     Private Sub BtnStart_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnStart.Click
         If TreeViewDriver.SelectedItem IsNot Nothing Then
-            For i As Integer = 0 To Obj.Drivers.Count - 1
-                If TreeViewDriver.SelectedItem.Header = Obj.Drivers.Item(i).Nom Then
-                    Obj.Drivers.Item(i).Start()
-                End If
-            Next
+            myService.StartDriver(TreeViewDriver.SelectedItem.uid)
         Else
             MessageBox.Show("Veuillez sélectionner un Driver!")
         End If
@@ -160,9 +169,9 @@ Class Window1
     'Modifier un device
     Private Sub TreeViewDevice_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewDevice.MouseDoubleClick
         If TreeViewDevice.SelectedItem IsNot Nothing Then
-            For i As Integer = 0 To Obj.Devices.Count - 1
-                If Obj.Devices.Item(i).id = TreeViewDevice.SelectedItem.uid Then
-                    PropertyGrid1.SelectedObject = Obj.Devices.Item(i)
+            For i As Integer = 0 To myService.GetAllDevices.Count - 1
+                If myService.GetAllDevices.Item(i).ID = TreeViewDevice.SelectedItem.uid Then
+                    PropertyGrid1.SelectedObject = myService.GetAllDevices.Item(i)
 
                     Dim x As New uDevice(uDevice.EAction.Modifier, TreeViewDevice.SelectedItem.uid)
                     x.Uid = System.Guid.NewGuid.ToString()
@@ -212,9 +221,9 @@ Class Window1
     'Modiifer une zone
     Private Sub TreeViewZone_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewZone.MouseDoubleClick
         If TreeViewZone.SelectedItem IsNot Nothing Then
-            For i As Integer = 0 To Obj.Zones.Count - 1
-                If Obj.Zones.Item(i).id = TreeViewZone.SelectedItem.uid Then
-                    PropertyGrid1.SelectedObject = Obj.Zones.Item(i)
+            For i As Integer = 0 To myService.GetAllZones.Count - 1
+                If myService.GetAllZones.Item(i).ID = TreeViewZone.SelectedItem.uid Then
+                    PropertyGrid1.SelectedObject = myService.GetAllZones.Item(i)
 
                     Dim x As New uZone(uDevice.EAction.Modifier, TreeViewZone.SelectedItem.uid)
                     x.Uid = System.Guid.NewGuid.ToString()

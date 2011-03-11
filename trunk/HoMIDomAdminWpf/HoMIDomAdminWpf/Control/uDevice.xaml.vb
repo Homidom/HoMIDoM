@@ -29,26 +29,26 @@ Partial Public Class uDevice
             Next
 
             'Liste les drivers dans le combo
-            For i As Integer = 0 To Window1.Obj.Drivers.Count - 1
-                CbDriver.Items.Add(Window1.Obj.Drivers.Item(i).nom)
+            For i As Integer = 0 To Window1.myService.GetAllDrivers.Count - 1 'Window1.Obj.Drivers.Count - 1
+                CbDriver.Items.Add(Window1.myService.GetAllDrivers.Item(i).Nom)  '(Window1.Obj.Drivers.Item(i).nom)
             Next
 
             If Action = EAction.Nouveau Then 'Nouveau Device
                 ImgDevice.Tag = " "
             Else 'Modification d'un Device
-                Dim x As Object = Window1.Obj.ReturnDeviceByID(DeviceId)
+                Dim x As HoMIDom.TplDevice = Window1.myService.ReturnDeviceByID(DeviceId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
 
                 If x IsNot Nothing Then 'on a trouvé le device
-                    TxtNom.Text = x.name
+                    TxtNom.Text = x.Name
                     TxtDescript.Text = x.description
                     ChkEnable.IsChecked = x.Enable
                     ChKSolo.IsChecked = x.Solo
                     CbType.SelectedValue = x.type
                     CbType.IsEnabled = False
 
-                    For j As Integer = 0 To Window1.Obj.Drivers.Count - 1
-                        If Window1.Obj.Drivers.Item(j).id = x.driverid Then
-                            CbDriver.SelectedValue = Window1.Obj.Drivers.Item(j).nom
+                    For j As Integer = 0 To Window1.myService.GetAllDrivers.Count - 1 'Window1.Obj.Drivers.Count - 1
+                        If Window1.myService.GetAllDrivers.Item(j).ID = x.DriverId Then
+                            CbDriver.SelectedValue = Window1.myService.GetAllDrivers.Item(j).Nom
                             Exit For
                         End If
                     Next
@@ -142,13 +142,13 @@ Partial Public Class uDevice
         End If
 
         Dim _driverid As String = ""
-        For i As Integer = 0 To Window1.Obj.Drivers.Count - 1
-            If Window1.Obj.Drivers.Item(i).nom = CbDriver.Text Then
-                _driverid = Window1.Obj.Drivers.Item(i).id
+        For i As Integer = 0 To Window1.myService.GetAllDrivers.Count - 1 'Window1.Obj.Drivers.Count - 1
+            If Window1.myService.GetAllDrivers.Item(i).Nom = CbDriver.Text Then
+                _driverid = Window1.myService.GetAllDrivers.Item(i).ID
                 Exit For
             End If
         Next
-        Window1.Obj.SaveDevice(_DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
+        Window1.myService.SaveDevice(_DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
         RaiseEvent CloseMe(Me)
     End Sub
 
@@ -227,13 +227,13 @@ Partial Public Class uDevice
         End If
 
         If FlagNewCmd = True Then 'nouvelle commande
-            Window1.Obj.SaveDeviceCommandIR(_DeviceId, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
+            Window1.myService.SaveDeviceCommandIR(_DeviceId, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
         Else 'modifier commande
-            Window1.Obj.SaveDeviceCommandIR(_DeviceId, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
+            Window1.myService.SaveDeviceCommandIR(_DeviceId, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
         End If
 
         ListCmd.Items.Clear()
-        Dim x As Object = Window1.Obj.ReturnDeviceByID(_DeviceId)
+        Dim x As Object = Window1.myService.ReturnDeviceByID(_DeviceId)
         For i As Integer = 0 To x.listcommandname.count - 1
             ListCmd.Items.Add(x.listcommandname(i))
         Next
@@ -244,14 +244,14 @@ Partial Public Class uDevice
 
     Private Sub BtnDelCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelCmd.Click
         If ListCmd.SelectedIndex >= 0 Then
-            Window1.Obj.DeleteDeviceCommandIR(_DeviceId, TxtCmdName.Text)
+            Window1.myService.DeleteDeviceCommandIR(_DeviceId, TxtCmdName.Text)
 
             TxtCmdName.Text = ""
             TxtCmdData.Text = ""
             TxtCmdRepeat.Text = "0"
             ListCmd.Items.Clear()
 
-            Dim x As Object = Window1.Obj.ReturnDeviceByID(_DeviceId)
+            Dim x As Object = Window1.myService.ReturnDeviceByID(_DeviceId)
             For i As Integer = 0 To x.listcommandname.count - 1
                 ListCmd.Items.Add(x.listcommandname(i))
             Next
@@ -261,15 +261,13 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub BtnTstCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTstCmd.Click
-        Dim x As Object = Window1.Obj.ReturnDeviceByID(_DeviceId)
-
-        If x IsNot Nothing Then
-            x.sendcommand(TxtCmdName.Text)
-        End If
+        Dim _Param As New ArrayList
+        _Param.Add(TxtCmdName.Text)
+        Window1.myService.ExecuteDeviceCommand(_DeviceId, "SendCommand", _Param)
     End Sub
 
     Private Sub BtnLearn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnLearn.Click
-        TxtCmdData.Text = Window1.Obj.StartIrLearning
+        TxtCmdData.Text = Window1.myService.StartIrLearning
     End Sub
 
     Private Sub TxtLastChangeDuree_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtLastChangeDuree.TextChanged
@@ -295,9 +293,9 @@ Partial Public Class uDevice
 
     Private Sub ListCmd_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles ListCmd.SelectionChanged
         If ListCmd.SelectedIndex < 0 Then Exit Sub
-        TxtCmdName.Text = Window1.Obj.ReturnDeviceByID(_DeviceId).listcommandname(ListCmd.SelectedIndex)
-        TxtCmdData.Text = Window1.Obj.ReturnDeviceByID(_DeviceId).listcommanddata(ListCmd.SelectedIndex)
-        TxtCmdRepeat.Text = Window1.Obj.ReturnDeviceByID(_DeviceId).listcommandrepeat(ListCmd.SelectedIndex)
+        TxtCmdName.Text = Window1.myService.ReturnDeviceByID(_DeviceId).ListCommandName(ListCmd.SelectedIndex)
+        TxtCmdData.Text = Window1.myService.ReturnDeviceByID(_DeviceId).ListCommandData(ListCmd.SelectedIndex)
+        TxtCmdRepeat.Text = Window1.myService.ReturnDeviceByID(_DeviceId).ListCommandRepeat(ListCmd.SelectedIndex)
     End Sub
 
     Private Sub BtnRead_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnRead.Click
@@ -310,7 +308,7 @@ Partial Public Class uDevice
             Window1.CanvasUser.SetLeft(y, 50)
             Window1.CanvasUser.SetTop(y, 50)
         Catch ex As Exception
-            MessageBox.Show("Erreur Tester" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur Tester: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 

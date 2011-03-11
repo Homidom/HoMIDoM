@@ -5,6 +5,11 @@ Imports System.Xml.Serialization
 Imports System.Reflection
 Imports STRGS = Microsoft.VisualBasic.Strings
 
+
+Imports System.ServiceModel
+Imports System.ServiceModel.Description
+
+
 Namespace HoMIDom
 
     '***********************************************
@@ -19,8 +24,8 @@ Namespace HoMIDom
     ''' </summary>
     ''' <remarks></remarks>
     <Serializable()> Public Class Server
-        Inherits MarshalByRefObject
-        Implements IHoMIDom 'implémente l'interface dans cette class
+        'Inherits MarshalByRefObject
+        Implements HoMIDom.IHoMIDom 'implémente l'interface dans cette class
 
 #Region "Event"
         '********************************************************************
@@ -229,13 +234,13 @@ Namespace HoMIDom
         Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
         Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
         Private _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application 'Application.StartupPath
-        Dim Soleil As New Soleil 'Déclaration class Soleil
-        Dim _Longitude As Double 'Longitude
-        Dim _Latitude As Double 'latitude
-        Dim _HeureLeverSoleil As DateTime 'heure du levé du soleil
-        Dim _HeureCoucherSoleil As DateTime 'heure du couché du soleil
-        Dim _HeureLeverSoleilCorrection As Integer 'correction à appliquer sur heure du levé du soleil
-        Dim _HeureCoucherSoleilCorrection As Integer 'correction à appliquer sur heure du couché du soleil
+        Shared Soleil As New Soleil 'Déclaration class Soleil
+        Shared _Longitude As Double 'Longitude
+        Shared _Latitude As Double 'latitude
+        Private Shared _HeureLeverSoleil As DateTime 'heure du levé du soleil
+        Private Shared _HeureCoucherSoleil As DateTime 'heure du couché du soleil
+        Shared _HeureLeverSoleilCorrection As Integer 'correction à appliquer sur heure du levé du soleil
+        Shared _HeureCoucherSoleilCorrection As Integer 'correction à appliquer sur heure du couché du soleil
 
         Dim TimerSecond As New Timers.Timer 'Timer à la seconde
 
@@ -1078,7 +1083,7 @@ Namespace HoMIDom
 
         '**** PROPRIETES ***************************
 
-        Public Property Drivers() As ArrayList Implements IHoMIDom.Drivers
+        Public Property Drivers() As ArrayList
             Get
                 Return _ListImgDrivers
             End Get
@@ -1087,7 +1092,7 @@ Namespace HoMIDom
             End Set
         End Property
 
-        Public Property Devices() As ArrayList Implements IHoMIDom.Devices
+        Public Property Devices() As ArrayList
             Get
                 Return _ListDevices
             End Get
@@ -1096,7 +1101,7 @@ Namespace HoMIDom
             End Set
         End Property
 
-        Public Property Zones() As ArrayList Implements IHoMIDom.Zones
+        Public Property Zones() As ArrayList
             Get
                 Return _ListZones
             End Get
@@ -1105,7 +1110,7 @@ Namespace HoMIDom
             End Set
         End Property
 
-        Public Property Longitude() As Double Implements IHoMIDom.Longitude
+        Public Property Longitude() As Double
             Get
                 Return _Longitude
             End Get
@@ -1114,7 +1119,7 @@ Namespace HoMIDom
             End Set
         End Property
 
-        Public Property Latitude() As Double Implements IHoMIDom.Latitude
+        Public Property Latitude() As Double
             Get
                 Return _Latitude
             End Get
@@ -1123,7 +1128,7 @@ Namespace HoMIDom
             End Set
         End Property
 
-        Public Property HeureCorrectionCoucher() As Integer Implements IHoMIDom.HeureCorrectionCoucher
+        Public Property HeureCorrectionCoucher() As Integer
             Get
                 Return _HeureCoucherSoleilCorrection
             End Get
@@ -1132,7 +1137,7 @@ Namespace HoMIDom
             End Set
         End Property
 
-        Public Property HeureCorrectionLever() As Integer Implements IHoMIDom.HeureCorrectionLever
+        Public Property HeureCorrectionLever() As Integer
             Get
                 Return _HeureLeverSoleilCorrection
             End Get
@@ -1175,13 +1180,138 @@ Namespace HoMIDom
         End Function
 
         'Retourne l'heure du couché du soleil
-        Function HeureCoucherSoleil() As String Implements IHoMIDom.HeureCoucherSoleil
+        Function GetHeureCoucherSoleil() As String Implements IHoMIDom.GetHeureCoucherSoleil
             Return _HeureCoucherSoleil
         End Function
 
         'Retour l'heure de lever du soleil
-        Function HeureLeverSoleil() As String Implements IHoMIDom.HeureLeverSoleil
+        Function GetHeureLeverSoleil() As String Implements IHoMIDom.GetHeureLeverSoleil
             Return _HeureLeverSoleil
+        End Function
+
+        Function GetLongitude() As Double Implements IHoMIDom.GetLongitude
+            Return _Longitude
+        End Function
+
+        Sub SetLongitude(ByVal value As Double) Implements IHoMIDom.SetLongitude
+            _Longitude = value
+        End Sub
+
+        Function GetLatitude() As Double Implements IHoMIDom.GetLatitude
+            Return _Latitude
+        End Function
+
+        Sub SetLatitude(ByVal value As Double) Implements IHoMIDom.SetLatitude
+            _Latitude = value
+        End Sub
+
+        Function GetHeureCorrectionCoucher() As Integer Implements IHoMIDom.GetHeureCorrectionCoucher
+            Return _HeureCoucherSoleilCorrection
+        End Function
+
+        Sub SetHeureCorrectionCoucher(ByVal value As Integer) Implements IHoMIDom.SetHeureCorrectionCoucher
+            _HeureCoucherSoleilCorrection = value
+        End Sub
+
+        Function GetHeureCorrectionLever() As Integer Implements IHoMIDom.GetHeureCorrectionLever
+            Return _HeureLeverSoleilCorrection
+        End Function
+
+        Sub SetHeureCorrectionLever(ByVal value As Integer) Implements IHoMIDom.SetHeureCorrectionLever
+            _HeureLeverSoleilCorrection = value
+        End Sub
+
+        Sub StopDriver(ByVal DriverId As String) Implements IHoMIDom.StopDriver
+            For i As Integer = 0 To _ListDrivers.Count - 1
+                If _ListDrivers.Item(i).id = DriverId Then
+                    _ListDrivers.Item(i).stop()
+                End If
+            Next
+        End Sub
+
+        Sub StartDriver(ByVal DriverId As String) Implements IHoMIDom.StartDriver
+            For i As Integer = 0 To _ListDrivers.Count - 1
+                If _ListDrivers.Item(i).id = DriverId Then
+                    _ListDrivers.Item(i).start()
+                End If
+            Next
+        End Sub
+
+        ''' <summary>
+        ''' Retourne la liste de tous les devices
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function GetAllDevices() As List(Of TplDevice) Implements IHoMIDom.GetAllDevices
+            Dim _list As New List(Of TplDevice)
+            For i As Integer = 0 To _ListDevices.Count - 1
+                Dim x As New TplDevice
+                With x
+                    .Name = _ListDevices.Item(i).name
+                    .ID = _ListDevices.Item(i).id
+                End With
+                _list.Add(x)
+            Next
+            Return _list
+        End Function
+
+        ''' <summary>
+        ''' Retourne la liste de tous les drivers
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function GetAllDrivers() As List(Of TplDriver) Implements IHoMIDom.GetAllDrivers
+            Dim _list As New List(Of TplDriver)
+            For i As Integer = 0 To _ListDrivers.Count - 1
+                Dim x As New TplDriver
+                With x
+                    .Nom = _ListDrivers.Item(i).nom
+                    .ID = _ListDrivers.Item(i).id
+                    .COM = _ListDrivers.Item(i).com
+                    .Description = _ListDrivers.Item(i).description
+                    .Enable = _ListDrivers.Item(i).enable
+                    .IP_TCP = _ListDrivers.Item(i).ip_tcp
+                    .IP_UDP = _ListDrivers.Item(i).ip_udp
+                    .IsConnect = _ListDrivers.Item(i).isconnect
+                    .Modele = _ListDrivers.Item(i).modele
+                    .Picture = _ListDrivers.Item(i).picture
+                    .Port_TCP = _ListDrivers.Item(i).port_tcp
+                    .Port_UDP = _ListDrivers.Item(i).port_udp
+                    .Protocol = _ListDrivers.Item(i).protocol
+                    .Refresh = _ListDrivers.Item(i).refresh
+                    .StartAuto = _ListDrivers.Item(i).startauto
+                    .Version = _ListDrivers.Item(i).version
+                    For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
+                        .DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
+                    Next
+                End With
+                _list.Add(x)
+            Next
+            Return _list
+        End Function
+
+
+        ''' <summary>
+        ''' Retourne la liste de tous les drivers
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function GetAllZones() As List(Of Zone) Implements IHoMIDom.GetAllZones
+            Dim _list As New List(Of Zone)
+            For i As Integer = 0 To _ListZones.Count - 1
+                Dim x As New Zone
+                With x
+                    .Name = _ListZones.Item(i).name
+                    .ID = _ListZones.Item(i).id
+                    .Icon = _ListZones.Item(i).icon
+                    .Image = _ListZones.Item(i).Image
+                    For j As Integer = 0 To _ListZones.Item(i).ListDevice.count - 1
+                        .ListDevice.Add(_ListZones.Item(i).ListDevice.item(j).ToString)
+                    Next
+                End With
+                _list.Add(x)
+            Next
+            Return _list
         End Function
 
         'ajouter un device à une zone
@@ -1913,15 +2043,70 @@ Namespace HoMIDom
         End Function
 
         'retourne le device par son ID
-        Public Function ReturnDeviceById(ByVal DeviceId As String) As Object Implements IHoMIDom.ReturnDeviceByID
-            Dim retour As Object = Nothing
+        Public Function ReturnDeviceById(ByVal DeviceId As String) As TplDevice Implements IHoMIDom.ReturnDeviceByID
+            Dim retour As New TplDevice
             For i As Integer = 0 To _ListDevices.Count - 1
                 If _ListDevices.Item(i).ID = DeviceId Then
-                    retour = _ListDevices.Item(i)
+                    retour.ID = _ListDevices.Item(i).id
+                    retour.Name = _ListDevices.Item(i).name
+                    retour.Type = _ListDevices.Item(i).type
+                    retour.Description = _ListDevices.Item(i).description
+                    retour.Adresse1 = _ListDevices.Item(i).adresse1
+                    retour.Adresse2 = _ListDevices.Item(i).adresse2
+                    retour.DriverId = _ListDevices.Item(i).driverid
+                    retour.Picture = _ListDevices.Item(i).picture
+                    retour.Solo = _ListDevices.Item(i).solo
+                    retour.Refresh = _ListDevices.Item(i).refresh
+                    retour.Modele = _ListDevices.Item(i).modele
+
+                    If retour.Type = "BAROMETRE" _
+                                    Or retour.Type = "COMPTEUR" _
+                                    Or retour.Type = "ENERGIEINSTANTANEE" _
+                                    Or retour.Type = "ENERGIETOTALE" _
+                                    Or retour.Type = "GENERIQUEVALUE" _
+                                    Or retour.Type = "HUMIDITE" _
+                                    Or retour.Type = "PLUIECOURANT" _
+                                    Or retour.Type = "PLUIETOTAL" _
+                                    Or retour.Type = "TEMPERATURE" _
+                                    Or retour.Type = "TEMPERATURECONSIGNE" _
+                                    Or retour.Type = "VITESSEVENT" _
+                                    Or retour.Type = "UV" _
+                                    Or retour.Type = "VITESSEVENT" _
+                                    Then
+                        retour.Correction = _ListDevices.Item(i).correction
+                        retour.Precision = _ListDevices.Item(i).precision
+                        retour.Formatage = _ListDevices.Item(i).formatage
+                        retour.Value = _ListDevices.Item(i).value
+                        retour.ValueDef = _ListDevices.Item(i).valuedef
+                        retour.ValueLast = _ListDevices.Item(i).valuelast
+                        retour.ValueMax = _ListDevices.Item(i).valuemax
+                        retour.ValueMin = _ListDevices.Item(i).valuemin
+                    End If
+
+                    If retour.Type = "MULTIMEDIA" Then
+                        For j As Integer = 0 To _ListDevices.Item(i).listcommandname.count - 1
+                            retour.ListCommandName.Add(_ListDevices.Item(i).listcommandname.item(j))
+                            retour.ListCommandData.Add(_ListDevices.Item(i).ListCommandData.item(j))
+                            retour.ListCommandRepeat.Add(_ListDevices.Item(i).ListCommandRepeat.item(j))
+                        Next
+                    End If
+                    'retour = _ListDevices.Item(i)
                     Exit For
                 End If
             Next
             Return retour
+        End Function
+
+        Function ListMethod(ByVal DeviceId As String) As List(Of String) Implements IHoMIDom.ListMethod
+            Dim _list As New List(Of String)
+            For i As Integer = 0 To _ListDevices.Count - 1
+                If _ListDevices.Item(i).ID = DeviceId Then
+                    For j As Integer = 0 To Api.ListMethod(_ListDevices.Item(i)).Count - 1
+                        _list.Add(Api.ListMethod(_ListDevices.Item(i)).Item(j).ToString)
+                    Next
+                End If
+            Next
+            Return _list
         End Function
 
         'retourne le driver par son ID
@@ -1937,7 +2122,7 @@ Namespace HoMIDom
         End Function
 
         'retourne la zone par son ID
-        Public Function ReturnZoneById(ByVal ZoneId As String) As Object Implements IHoMIDom.ReturnZoneByID
+        Public Function ReturnZoneById(ByVal ZoneId As String) As Zone Implements IHoMIDom.ReturnZoneByID
             Dim retour As Object = Nothing
             For i As Integer = 0 To _ListZones.Count - 1
                 If _ListZones.Item(i).ID = ZoneId Then
@@ -1984,9 +2169,16 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Sub ExecuteDeviceCommand(ByVal DeviceId As String, ByVal Command As String, ByVal Param As ArrayList) Implements IHoMIDom.ExecuteDeviceCommand
             Dim _retour As Object
-            Dim x As Object
+            Dim x As Object = Nothing
+
             Try
-                x = ReturnDeviceById(DeviceId)
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).id = DeviceId Then
+                        x = _ListDevices.Item(i)
+                        Exit For
+                    End If
+                Next
+
                 If x IsNot Nothing Then
 
                     If Param.Count > 0 Then
@@ -2008,7 +2200,7 @@ Namespace HoMIDom
                     End If
                 End If
             Catch ex As Exception
-                MsgBox("Erreur lors du test: " & ex.Message, "Erreur")
+                MsgBox("Erreur lors du test: " & ex.Message)
             End Try
         End Sub
 #End Region
@@ -2023,7 +2215,7 @@ Namespace HoMIDom
 
         ''' <summary>Démarrage du serveur</summary>
         ''' <remarks></remarks>
-        Public Sub start()
+        Public Sub start() Implements IHoMIDom.Start
             Try
                 Dim retour As String
 
@@ -2096,7 +2288,7 @@ Namespace HoMIDom
 
         Protected Overrides Sub Finalize()
             'Mettre le Code pour l'arret
-            [stop]()
+            '[stop]()
             MyBase.Finalize()
         End Sub
 #End Region

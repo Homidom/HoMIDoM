@@ -21,7 +21,7 @@ Partial Public Class uZone
             Exit Sub
         End If
 
-        Window1.Obj.SaveZone(_ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag, ImgZone.Tag)
+        Window1.myService.SaveZone(_ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag, ImgZone.Tag)
     End Sub
 
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
@@ -36,15 +36,15 @@ Partial Public Class uZone
         ImgIcon.Tag = " "
         ImgZone.Tag = " "
 
-        For i As Integer = 0 To Window1.Obj.Devices.Count - 1
-            _ListIdDispo.Add(Window1.Obj.Devices.Item(i).id)
+        For i As Integer = 0 To Window1.myService.GetAllDevices.Count - 1
+            _ListIdDispo.Add(Window1.myService.GetAllDevices.Item(i).ID)
         Next
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         If Action = EAction.Nouveau Then 'Nouvelle Zone
 
         Else 'Modifier zone
-            Dim x As Object = Window1.Obj.ReturnZoneByID(ZoneId)
+            Dim x As Object = Window1.myService.ReturnZoneByID(ZoneId)
             _ZoneId = ZoneId
             If x IsNot Nothing Then
                 TxtName.Text = x.Name
@@ -86,13 +86,13 @@ Partial Public Class uZone
         ListBxDevice.Items.Clear()
 
         For i As Integer = 0 To _ListIdDispo.Count - 1
-            Dim x As Object = Window1.Obj.ReturnDeviceByID(_ListIdDispo.Item(i))
+            Dim x As Object = Window1.myService.ReturnDeviceByID(_ListIdDispo.Item(i))
             ListBxDispo.Items.Add(x.name)
             x = Nothing
         Next
 
         For i As Integer = 0 To _ListIdSelect.Count - 1
-            ListBxDevice.Items.Add(Window1.Obj.ReturnDeviceByID(_ListIdSelect.Item(i).deviceid).name)
+            ListBxDevice.Items.Add(Window1.myService.ReturnDeviceByID(_ListIdSelect.Item(i).deviceid).Name)
         Next
     End Sub
 
