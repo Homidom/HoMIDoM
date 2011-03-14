@@ -1,4 +1,8 @@
-﻿<Serializable()> Public Class TplDriver
+﻿''' <summary>
+''' Template de Classe de type Driver pour le service web
+''' </summary>
+''' <remarks></remarks>
+<Serializable()> Public Class TplDriver
     Public ID As String = "" 'Identification unique du driver
     Public Nom As String = ""
     Public Enable As Boolean = False

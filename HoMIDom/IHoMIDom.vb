@@ -51,7 +51,6 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function GetAllZones() As List(Of Zone)
 
-
         ''' <summary>
         ''' Execute une commande d'un device
         ''' </summary>
