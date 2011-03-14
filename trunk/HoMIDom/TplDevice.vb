@@ -1,4 +1,15 @@
-﻿<Serializable()> Public Class TplDevice
+﻿'***********************************************
+'** CLASS TPLDEVICE
+'** version 1.0
+'** Date de création: 09/02/2011
+'** Historique (SebBergues): 09/02/2011: Création 
+'***********************************************
+
+''' <summary>
+''' Template de class de type Device pour le service web
+''' </summary>
+''' <remarks></remarks>
+<Serializable()> Public Class TplDevice
     Public Name As String = ""
     Public ID As String = ""
     Public Enable As Boolean = False

@@ -11,7 +11,7 @@ Imports System.ServiceModel.Description
 '***********************************************
 '** SERVICE HOMIDom - Simple exe qui sera ensuite convertit en service Windows
 '** Ce service créer le serveur SOAP Web via l'interface IHoMIDom
-'** Par défaut le service est lancé sur le port 8888
+'** Par défaut le service est lancé sur le port 8000
 '** version 1.0
 '** Date de création: 14/01/2011
 '** Historique (SebBergues): 14/01/2011: Création 
@@ -20,9 +20,7 @@ Imports System.ServiceModel.Description
 
 Module Service
 
-    'Dim monserveur As Server = New Server()
-    ' Dim host As ServiceHost
-    Dim myService As Homidom.HoMIDom.IHoMIDom
+    Dim myService As HoMIDom.HoMIDom.IHoMIDom
 
     Sub Main()
         Try
@@ -32,8 +30,6 @@ Module Service
             Console.WriteLine("******************************")
             Console.WriteLine(" ")
 
-            ' monserveur.start()
-
             'Démarrage du serviceWeb
             Console.WriteLine(Now & " ")
             Console.WriteLine(Now & " Start ServiceWeb")
@@ -41,11 +37,6 @@ Module Service
             Using host As New ServiceHost(GetType(Server))
                 host.Open()
 
-
-                '''Dim chnl As New HttpChannel(8888) 'obj.PortTCP)
-                '''ChannelServices.RegisterChannel(chnl, False)
-                '''LifetimeServices.LeaseTime = Nothing
-                '''RemotingServices.Marshal(monserveur, "RemoteObjectServer.soap")
                 Console.WriteLine(Now & " ServiceWeb Démarré") ' & obj.PortTCP)
 
                 Console.WriteLine("******************************")
@@ -53,20 +44,17 @@ Module Service
                 Console.WriteLine("******************************")
                 Console.WriteLine(" ")
 
-                'obj.SaveZone("", "Maison")
-                'obj.SaveConfiguration()
-
                 'Connexion au serveur
                 Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
 
                 Try
                     myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
                     myService = myChannelFactory.CreateChannel()
+                    'Démarrage du serveur pour charger la config
                     myService.Start()
                 Catch ex As Exception
                     myChannelFactory.Abort()
                 End Try
-
 
                 Console.ReadLine()
                 host.Close()
@@ -77,12 +65,6 @@ Module Service
     End Sub
 
     Sub close()
-        'If host.State = CommunicationState.Opened Or _
-        '  host.State = CommunicationState.Faulted Or _
-        '  host.State = CommunicationState.Opening Then
-
-        '    host.Close()
-        'End If
         End
     End Sub
 
