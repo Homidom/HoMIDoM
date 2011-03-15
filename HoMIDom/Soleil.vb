@@ -2,6 +2,10 @@
 
 Namespace HoMIDom
 
+    ''' <summary>
+    ''' Classe permettant le calcul des heures de lever et coucher du soleil
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Class Soleil
         Public Sub CalculateSolarTimes(ByVal dLatitude As Double, ByVal dLongitude As Double, _
                                      ByVal dtDesiredDate As Date, ByRef dtSunrise As Date, _

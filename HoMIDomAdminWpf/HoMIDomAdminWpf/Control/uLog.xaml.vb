@@ -7,7 +7,7 @@
     End Sub
 
     Private Sub RefreshLog()
-        TxtLog.Text = Window1.Obj.ReturnLog()
+        TxtLog.Text = Window1.myService.ReturnLog()
     End Sub
 
 

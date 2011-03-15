@@ -1,8 +1,4 @@
-﻿Imports System.Runtime.Remoting
-Imports System.Runtime.Remoting.Channels
-Imports System.Runtime.Remoting.Channels.Http
-Imports System.Runtime.Remoting.Lifetime
-Imports HoMIDom.HoMIDom
+﻿Imports HoMIDom.HoMIDom
 Imports System.IO
 
 Imports System.ServiceModel
