@@ -1,8 +1,5 @@
 ﻿Imports System.Windows.Threading
 Imports System.Runtime.Serialization.Formatters.Soap
-Imports System.Runtime.Remoting
-Imports System.Runtime.Remoting.Channels.Http
-Imports System.Runtime.Remoting.Channels
 Imports HoMIDom.HoMIDom
 Imports HoMIDom.TplDriver
 
@@ -10,7 +7,6 @@ Imports System.ServiceModel
 
 Class Window1
 
-    Public Shared Obj As IHoMIDom
     Public Shared IsConnect As Boolean
     Public Shared CanvasUser As Canvas
     Public Shared myService As HoMIDom.HoMIDom.IHoMIDom
@@ -26,7 +22,7 @@ Class Window1
         dt.Interval = New TimeSpan(0, 0, 1)
         dt.Start()
 
-        'Connexion au serveur
+        'Connexion au serveur web
         Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
 
         Try
@@ -38,20 +34,8 @@ Class Window1
             IsConnect = False
         End Try
 
-        'Connexion au service Web
+        'Affichage des éléments 
         Try
-            'Dim channel As New HttpChannel()
-            'ChannelServices.RegisterChannel(channel, False)
-
-            'Obj = CType(Activator.GetObject( _
-            '    GetType(HoMIDom.HoMIDom.IHoMIDom), _
-            '    "http://localhost:8888/RemoteObjectServer.soap"),  _
-            '     HoMIDom.HoMIDom.IHoMIDom)
-
-            'If Obj IsNot Nothing Then
-            '    IsConnect = True
-            'End If
-
             AffDriver()
             AffDevice()
             AffZone()
@@ -140,7 +124,7 @@ Class Window1
     Private Sub TreeViewDriver_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewDriver.SelectedItemChanged
         For i As Integer = 0 To myService.GetAllDrivers.Count - 1
             If myService.GetAllDrivers.Item(i).ID = e.NewValue.uid Then
-                Dim x As Object
+                Dim x As New HoMIDom.TemplateDriver
                 x = myService.GetAllDrivers.Item(i)
                 PropertyGrid1.SelectedObject = x
                 Exit Sub
@@ -199,7 +183,7 @@ Class Window1
     'Bouton supprimer device
     Private Sub BtnDelDevice_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelDevice.Click
         If TreeViewDevice.SelectedItem IsNot Nothing Then
-            Window1.Obj.DeleteDevice(TreeViewDevice.SelectedItem.uid)
+            Window1.myService.DeleteDevice(TreeViewDevice.SelectedItem.uid)
             AffDevice()
         Else
             MessageBox.Show("Veuillez sélectionner un Device à supprimer!")
@@ -241,7 +225,7 @@ Class Window1
     'bouton supprimer une zone
     Private Sub BtnDelZone_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelZone.Click
         If TreeViewZone.SelectedItem IsNot Nothing Then
-            Window1.Obj.DeleteZone(TreeViewZone.SelectedItem.uid)
+            Window1.myService.DeleteZone(TreeViewZone.SelectedItem.uid)
             AffZone()
         Else
             MessageBox.Show("Veuillez sélectionner une Zone à supprimer!")
@@ -251,7 +235,7 @@ Class Window1
 
     'Menu Save Config
     Private Sub MnuSaveConfig(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem2.Click
-        Obj.SaveConfig()
+        myService.SaveConfig()
     End Sub
 
     'Décharger une fenêtre suivant son Id

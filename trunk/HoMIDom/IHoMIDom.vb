@@ -35,14 +35,14 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetAllDevices() As List(Of TplDevice)
+        <OperationContract()> Function GetAllDevices() As List(Of TemplateDevice)
 
         ''' <summary>
         ''' Obtient la liste des drivers
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetAllDrivers() As List(Of TplDriver)
+        <OperationContract()> Function GetAllDrivers() As List(Of TemplateDriver)
 
         ''' <summary>
         ''' Obtient la liste des zones
@@ -52,7 +52,7 @@ Namespace HoMIDom
         <OperationContract()> Function GetAllZones() As List(Of Zone)
 
         ''' <summary>
-        ''' Execute une commande d'un device
+        ''' Execute une commande (COMMAND) d'un device (DeviceID) associés à des paramètres (Param)
         ''' </summary>
         ''' <param name="DeviceId"></param>
         ''' <param name="Command"></param>
@@ -60,6 +60,14 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Sub ExecuteDeviceCommand(ByVal DeviceId As String, ByVal Command As String, ByVal Param As ArrayList)
 
+        ''' <summary>
+        ''' Liste les méthodes (actions) dispo pour un device (par son id)
+        ''' Retourne pour chaque élément de la liste NOMDELAMETHODE|Parametre1:TypeParametre1|Parametre2:TypeParametre2...
+        ''' '' ex pour la classe lampe cela retourne: DIM|Variation:Int32
+        ''' </summary>
+        ''' <param name="DeviceId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         <OperationContract()> Function ListMethod(ByVal DeviceId As String) As List(Of String)
 
         '---- Fonctions ---------------------------------------
@@ -124,7 +132,7 @@ Namespace HoMIDom
         ''' <param name="Id"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ReturnDeviceByID(ByVal Id As String) As TplDevice
+        <OperationContract()> Function ReturnDeviceByID(ByVal Id As String) As TemplateDevice
 
         ''' <summary>
         ''' Retourne l'objet d'un driver par son ID

@@ -3,6 +3,10 @@ Imports HoMIDom.HoMIDom.Server
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports System.IO
 
+''' <summary>
+''' Classe de gestion des base de données sqlite
+''' </summary>
+''' <remarks></remarks>
 Public Class Sqlite
 
     Private SQLconnect As New SQLiteConnection()
