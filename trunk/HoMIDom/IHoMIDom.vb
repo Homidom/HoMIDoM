@@ -140,7 +140,7 @@ Namespace HoMIDom
         ''' <param name="Id"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ReturnDriverByID(ByVal Id As String) As Object
+        <OperationContract()> Function ReturnDriverByID(ByVal Id As String) As TemplateDriver
 
         ''' <summary>
         ''' Retourne l'objet d'une zone par son ID

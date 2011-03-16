@@ -109,7 +109,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _DriverId = value
-                    _Driver = _Server.ReturnDriverById(DriverID)
+                    _Driver = _Server.ReturnDrvById(DriverID)
                 End Set
             End Property
 
