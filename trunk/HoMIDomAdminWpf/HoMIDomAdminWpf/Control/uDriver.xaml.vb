@@ -6,6 +6,7 @@ Partial Public Class uDriver
     '--- Variables ------------------
     Public Event CloseMe(ByVal MyObject As Object)
     Dim _DriverId As String 'Id du device à modifier
+    Dim x As HoMIDom.HoMIDom.TemplateDriver
 
     Public Sub New(ByVal DriverId As String)
 
@@ -15,7 +16,7 @@ Partial Public Class uDriver
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             _DriverId = DriverId
 
-            Dim x As HoMIDom.HoMIDom.TemplateDriver = Window1.myService.ReturnDriverByID(DriverId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
+            x = Window1.myService.ReturnDriverByID(DriverId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
 
             If x IsNot Nothing Then 'on a trouvé le device
                 TxtNom.Text = x.Nom
@@ -91,4 +92,111 @@ Partial Public Class uDriver
 
     End Sub
 
+    Private Sub BtnAv_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnAv.Click
+        If GroupBox1.Visibility = Windows.Visibility.Hidden Then
+            BtnAv.Content = "<<"
+            GroupBox1.Visibility = Windows.Visibility.Visible
+            CbCmd.Items.Clear()
+            If x IsNot Nothing Then
+                For i As Integer = 0 To x.DeviceAction.Count - 1
+                    CbCmd.Items.Add(x.DeviceAction.Item(i).Nom)
+                Next
+            End If
+        Else
+            CbCmd.Items.Clear()
+            BtnAv.Content = ">>"
+            GroupBox1.Visibility = Windows.Visibility.Hidden
+        End If
+    End Sub
+
+    Private Sub CbCmd_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbCmd.MouseLeave
+        LblP1.Visibility = Windows.Visibility.Hidden
+        LblP2.Visibility = Windows.Visibility.Hidden
+        LblP3.Visibility = Windows.Visibility.Hidden
+        LblP4.Visibility = Windows.Visibility.Hidden
+        LblP5.Visibility = Windows.Visibility.Hidden
+        TxtP1.Text = ""
+        TxtP2.Text = ""
+        TxtP3.Text = ""
+        TxtP4.Text = ""
+        TxtP5.Text = ""
+        TxtP1.Visibility = Windows.Visibility.Hidden
+        TxtP2.Visibility = Windows.Visibility.Hidden
+        TxtP3.Visibility = Windows.Visibility.Hidden
+        TxtP4.Visibility = Windows.Visibility.Hidden
+        TxtP5.Visibility = Windows.Visibility.Hidden
+
+        If CbCmd.Text = "" Then Exit Sub
+        If CbCmd.SelectedIndex < 0 Then Exit Sub
+
+        Dim Idx As Integer = CbCmd.SelectedIndex
+        For j As Integer = 0 To x.DeviceAction.Item(Idx).Parametres.Count - 1
+
+            Select Case j
+                Case 0
+                    LblP1.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                    LblP1.Visibility = Windows.Visibility.Visible
+                    TxtP1.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                    TxtP1.Visibility = Windows.Visibility.Visible
+                Case 1
+                    LblP2.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                    LblP2.Visibility = Windows.Visibility.Visible
+                    TxtP2.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                    TxtP2.Visibility = Windows.Visibility.Visible
+                Case 2
+                    LblP3.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                    LblP3.Visibility = Windows.Visibility.Visible
+                    TxtP3.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                    TxtP3.Visibility = Windows.Visibility.Visible
+                Case 3
+                    LblP4.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                    LblP4.Visibility = Windows.Visibility.Visible
+                    TxtP4.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                    TxtP4.Visibility = Windows.Visibility.Visible
+                Case 4
+                    LblP5.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                    LblP5.Visibility = Windows.Visibility.Visible
+                    TxtP5.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                    TxtP5.Visibility = Windows.Visibility.Visible
+            End Select
+        Next
+    End Sub
+
+    Private Sub BtnTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTest.Click
+        Try
+            Dim a As New HoMIDom.HoMIDom.DeviceAction
+
+            a.Nom = CbCmd.Text
+
+            If TxtP1.Text <> "" Then
+                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                y.Value = TxtP1.Text
+                a.Parametres.Add(y)
+            End If
+            If TxtP2.Text <> "" Then
+                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                y.Value = TxtP2.Text
+                a.Parametres.Add(y)
+            End If
+            If TxtP3.Text <> "" Then
+                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                y.Value = TxtP3.Text
+                a.Parametres.Add(y)
+            End If
+            If TxtP4.Text <> "" Then
+                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                y.Value = TxtP4.Text
+                a.Parametres.Add(y)
+            End If
+            If TxtP5.Text <> "" Then
+                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                y.Value = TxtP5.Text
+                a.Parametres.Add(y)
+            End If
+
+            Window1.myService.ExecuteDriverCommand(_DriverId, a)
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors du test: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
 End Class

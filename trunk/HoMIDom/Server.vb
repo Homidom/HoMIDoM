@@ -1296,15 +1296,6 @@ Namespace HoMIDom
                     End If
                     _listact = Nothing
 
-                    'Dim _listactdrv As New ArrayList
-                    'Dim _listactd As New List(Of String)
-                    'For j As Integer = 0 To Api.ListMethod(_ListDevices.Item(i).Driver).Count - 1
-                    '    _listactd.Add(Api.ListMethod(_ListDevices.Item(i).Driver).Item(j).ToString)
-                    'Next
-
-                    '_listactd = Nothing
-                    '_listactdrv = Nothing
-
                     If .Type = "BAROMETRE" _
                                     Or .Type = "COMPTEUR" _
                                     Or .Type = "ENERGIEINSTANTANEE" _
@@ -1371,6 +1362,36 @@ Namespace HoMIDom
                     For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
                         .DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
                     Next
+
+                    Dim _listactdrv As New ArrayList
+                    Dim _listactd As New List(Of String)
+                    For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
+                        _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
+                    Next
+                    If _listactd.Count > 0 Then
+                        For n As Integer = 0 To _listactd.Count - 1
+                            Dim a() As String = _listactd.Item(n).Split("|")
+                            Dim p As New DeviceAction
+                            With p
+                                .Nom = a(0)
+                                If a.Length > 1 Then
+                                    For t As Integer = 1 To a.Length - 1
+                                        Dim pr As New DeviceAction.Parametre
+                                        Dim b() As String = a(t).Split(":")
+                                        With pr
+                                            .Nom = b(0)
+                                            .Type = b(1)
+                                        End With
+                                        p.Parametres.Add(pr)
+                                    Next
+                                End If
+                            End With
+                            .DeviceAction.Add(p)
+                        Next
+                    End If
+
+                    _listactd = Nothing
+                    _listactdrv = Nothing
                 End With
                 _list.Add(x)
             Next
@@ -2305,6 +2326,36 @@ Namespace HoMIDom
                     retour.Refresh = _ListDrivers.Item(i).refresh
                     retour.StartAuto = _ListDrivers.Item(i).startauto
                     retour.Version = _ListDrivers.Item(i).version
+
+                    Dim _listactdrv As New ArrayList
+                    Dim _listactd As New List(Of String)
+                    For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
+                        _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
+                    Next
+                    If _listactd.Count > 0 Then
+                        For n As Integer = 0 To _listactd.Count - 1
+                            Dim a() As String = _listactd.Item(n).Split("|")
+                            Dim p As New DeviceAction
+                            With p
+                                .Nom = a(0)
+                                If a.Length > 1 Then
+                                    For t As Integer = 1 To a.Length - 1
+                                        Dim pr As New DeviceAction.Parametre
+                                        Dim b() As String = a(t).Split(":")
+                                        With pr
+                                            .Nom = b(0)
+                                            .Type = b(1)
+                                        End With
+                                        p.Parametres.Add(pr)
+                                    Next
+                                End If
+                            End With
+                            retour.DeviceAction.Add(p)
+                        Next
+                    End If
+
+                    _listactd = Nothing
+                    _listactdrv = Nothing
                     Exit For
                 End If
             Next
@@ -2418,6 +2469,49 @@ Namespace HoMIDom
                 End If
             Catch ex As Exception
                 MsgBox("Erreur lors du test: " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Permet d'exécuter une commande Sub d'un Driver
+        ''' </summary>
+        ''' <param name="DriverId"></param>
+        ''' <param name="Command"></param>
+        ''' <param name="Param"></param>
+        ''' <remarks></remarks>
+        Sub ExecuteDriverCommand(ByVal DriverId As String, ByVal Action As DeviceAction) Implements IHoMIDom.ExecuteDriverCommand
+            Dim _retour As Object
+            Dim x As Object = Nothing
+
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).id = DriverId Then
+                        x = _ListDrivers.Item(i)
+                        Exit For
+                    End If
+                Next
+
+                If x IsNot Nothing Then
+
+                    If Action.Parametres.Count > 0 Then
+                        Select Case Action.Parametres.Count
+                            Case 1
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value)
+                            Case 2
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value)
+                            Case 3
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value, Action.Parametres.Item(2).Value)
+                            Case 4
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value, Action.Parametres.Item(2).Value, Action.Parametres.Item(3).Value)
+                            Case 5
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value, Action.Parametres.Item(2).Value, Action.Parametres.Item(3).Value, Action.Parametres.Item(4).Value)
+                        End Select
+                    Else
+                        CallByName(x, Action.Nom, CallType.Method)
+                    End If
+                End If
+            Catch ex As Exception
+                MsgBox("Erreur lors du traitement de la commande ExecuteDriverCommand: " & ex.Message)
             End Try
         End Sub
 #End Region

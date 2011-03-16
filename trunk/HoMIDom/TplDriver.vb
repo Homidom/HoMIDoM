@@ -22,6 +22,7 @@
         Dim _Version As String = ""
         Dim _Picture As String = ""
         Dim _DeviceSupport As New List(Of String)
+        Dim _DeviceAction As New List(Of DeviceAction)
 
         Public Property ID() As String  'Identification unique du driver
             Get
@@ -159,6 +160,15 @@
                 _DeviceSupport = value
             End Set
         End Property
+        Public Property DeviceAction() As List(Of DeviceAction)
+            Get
+                Return _DeviceAction
+            End Get
+            Set(ByVal value As List(Of DeviceAction))
+                _DeviceAction = value
+            End Set
+        End Property
+
     End Class
 
 End Namespace
