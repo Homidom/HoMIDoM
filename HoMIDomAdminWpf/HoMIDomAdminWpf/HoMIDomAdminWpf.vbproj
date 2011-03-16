@@ -76,6 +76,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Control\uDriver.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Control\uConfigServer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -130,6 +134,9 @@
     <Import Include="XamlGeneratedNamespace" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Control\uDriver.xaml.vb">
+      <DependentUpon>uDriver.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Control\uConfigServer.xaml.vb">
       <DependentUpon>uConfigServer.xaml</DependentUpon>
     </Compile>

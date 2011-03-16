@@ -119,6 +119,26 @@ Class Window1
 #End Region
 
 #Region "Drivers"
+
+    Private Sub TreeViewDriver_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewDriver.MouseDoubleClick
+        If TreeViewDriver.SelectedItem IsNot Nothing Then
+            For i As Integer = 0 To myService.GetAllDrivers.Count - 1
+                If myService.GetAllDrivers.Item(i).ID = TreeViewDriver.SelectedItem.uid Then
+                    Dim y As TemplateDriver = myService.GetAllDrivers.Item(i)
+                    PropertyGrid1.SelectedObject = y
+
+                    Dim x As New uDriver(TreeViewDriver.SelectedItem.uid)
+                    x.Uid = System.Guid.NewGuid.ToString()
+                    AddHandler x.CloseMe, AddressOf UnloadControl
+                    CanvasRight.Children.Add(x)
+                    CanvasRight.SetLeft(x, 50)
+                    CanvasRight.SetTop(x, 5)
+
+                    Exit Sub
+                End If
+            Next
+        End If
+    End Sub
     Private Sub TreeViewDriver_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewDriver.SelectedItemChanged
         For i As Integer = 0 To myService.GetAllDrivers.Count - 1
             If myService.GetAllDrivers.Item(i).ID = e.NewValue.uid Then

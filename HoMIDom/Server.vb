@@ -340,7 +340,7 @@ Namespace HoMIDom
                             For j As Integer = 0 To list.Count - 1
                                 'on récupère l'id du driver
                                 Dim _IdDriver = list.Item(j).Attributes.Item(0).Value
-                                Dim _drv As IDriver = ReturnDriverById(_IdDriver)
+                                Dim _drv As IDriver = ReturnDrvById(_IdDriver)
 
                                 If _drv IsNot Nothing Then
                                     _drv.Enable = list.Item(j).Attributes.GetNamedItem("enable").Value
@@ -1273,7 +1273,6 @@ Namespace HoMIDom
                     .Modele = _ListDevices.Item(i).modele
 
                     _listact = ListMethod(_ListDevices.Item(i).id)
-                    _listact = _listact
                     If _listact.Count > 0 Then
                         For n As Integer = 0 To _listact.Count - 1
                             Dim a() As String = _listact.Item(n).Split("|")
@@ -1295,6 +1294,16 @@ Namespace HoMIDom
                             .DeviceAction.Add(p)
                         Next
                     End If
+                    _listact = Nothing
+
+                    'Dim _listactdrv As New ArrayList
+                    'Dim _listactd As New List(Of String)
+                    'For j As Integer = 0 To Api.ListMethod(_ListDevices.Item(i).Driver).Count - 1
+                    '    _listactd.Add(Api.ListMethod(_ListDevices.Item(i).Driver).Item(j).ToString)
+                    'Next
+
+                    '_listactd = Nothing
+                    '_listactdrv = Nothing
 
                     If .Type = "BAROMETRE" _
                                     Or .Type = "COMPTEUR" _
@@ -2276,7 +2285,34 @@ Namespace HoMIDom
         End Function
 
         'retourne le driver par son ID
-        Public Function ReturnDriverById(ByVal DriverId As String) As Object Implements IHoMIDom.ReturnDriverByID
+        Public Function ReturnDriverById(ByVal DriverId As String) As TemplateDriver Implements IHoMIDom.ReturnDriverByID
+            Dim retour As New TemplateDriver
+            For i As Integer = 0 To _ListDrivers.Count - 1
+                If _ListDrivers.Item(i).ID = DriverId Then
+                    retour.Nom = _ListDrivers.Item(i).nom
+                    retour.ID = _ListDrivers.Item(i).id
+                    retour.COM = _ListDrivers.Item(i).com
+                    retour.Description = _ListDrivers.Item(i).description
+                    retour.Enable = _ListDrivers.Item(i).enable
+                    retour.IP_TCP = _ListDrivers.Item(i).ip_tcp
+                    retour.IP_UDP = _ListDrivers.Item(i).ip_udp
+                    retour.IsConnect = _ListDrivers.Item(i).isconnect
+                    retour.Modele = _ListDrivers.Item(i).modele
+                    retour.Picture = _ListDrivers.Item(i).picture
+                    retour.Port_TCP = _ListDrivers.Item(i).port_tcp
+                    retour.Port_UDP = _ListDrivers.Item(i).port_udp
+                    retour.Protocol = _ListDrivers.Item(i).protocol
+                    retour.Refresh = _ListDrivers.Item(i).refresh
+                    retour.StartAuto = _ListDrivers.Item(i).startauto
+                    retour.Version = _ListDrivers.Item(i).version
+                    Exit For
+                End If
+            Next
+            Return retour
+        End Function
+
+        'retourne le driver par son ID
+        Public Function ReturnDrvById(ByVal DriverId As String) As Object
             Dim retour As Object = Nothing
             For i As Integer = 0 To _ListDrivers.Count - 1
                 If _ListDrivers.Item(i).ID = DriverId Then
@@ -2287,7 +2323,12 @@ Namespace HoMIDom
             Return retour
         End Function
 
-        'retourne la zone par son ID
+        ''' <summary>
+        ''' Retourne la zone par son ID
+        ''' </summary>
+        ''' <param name="ZoneId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Function ReturnZoneById(ByVal ZoneId As String) As Zone Implements IHoMIDom.ReturnZoneByID
             Dim retour As Object = Nothing
             For i As Integer = 0 To _ListZones.Count - 1
@@ -2299,7 +2340,12 @@ Namespace HoMIDom
             Return retour
         End Function
 
-        'retourne le driver par son Nom
+        ''' <summary>
+        ''' Retourne le driver par son Nom
+        ''' </summary>
+        ''' <param name="DriverNom"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Function ReturnDriverByNom(ByVal DriverNom As String) As Object Implements IHoMIDom.ReturnDriverByNom
             Dim retour As Object = Nothing
             For i As Integer = 0 To _ListDrivers.Count - 1
@@ -2311,7 +2357,14 @@ Namespace HoMIDom
             Return retour
         End Function
 
-        'retourne une liste de device par son Adresse1 et/ou type et/ou son driver, ex: "A1" "TEMPERATURE" "RFXCOM_RECEIVER"
+        ''' <summary>
+        ''' Retourne une liste de device par son Adresse1 et/ou type et/ou son driver, ex: "A1" "TEMPERATURE" "RFXCOM_RECEIVER"
+        ''' </summary>
+        ''' <param name="DeviceAdresse"></param>
+        ''' <param name="DeviceType"></param>
+        ''' <param name="DriverID"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Function ReturnDeviceByAdresse1TypeDriver(ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DriverID As String) As ArrayList Implements IHoMIDom.ReturnDeviceByAdresse1TypeDriver
             Dim retour As Object = Nothing
             Dim listresultat As New ArrayList
