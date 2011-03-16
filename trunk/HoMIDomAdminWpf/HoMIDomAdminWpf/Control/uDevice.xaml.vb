@@ -36,7 +36,7 @@ Partial Public Class uDevice
             If Action = EAction.Nouveau Then 'Nouveau Device
                 ImgDevice.Tag = " "
             Else 'Modification d'un Device
-                Dim x As HoMIDom.TemplateDevice = Window1.myService.ReturnDeviceByID(DeviceId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
+                Dim x As HoMIDom.HoMIDom.TemplateDevice = Window1.myService.ReturnDeviceByID(DeviceId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
 
                 If x IsNot Nothing Then 'on a trouvé le device
                     TxtNom.Text = x.Name
@@ -262,8 +262,17 @@ Partial Public Class uDevice
 
     Private Sub BtnTstCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTstCmd.Click
         Dim _Param As New ArrayList
-        _Param.Add(TxtCmdName.Text)
-        Window1.myService.ExecuteDeviceCommand(_DeviceId, "SendCommand", _Param)
+        Dim x As New HoMIDom.HoMIDom.DeviceAction
+        Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+
+        y.Value = TxtCmdName.Text
+
+        With x
+            .Nom = "SendCommand"
+            .Parametres.Add(y)
+        End With
+
+        Window1.myService.ExecuteDeviceCommand(_DeviceId, x)
     End Sub
 
     Private Sub BtnLearn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnLearn.Click

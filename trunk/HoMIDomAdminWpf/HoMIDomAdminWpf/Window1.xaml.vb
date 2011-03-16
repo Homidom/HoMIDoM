@@ -1,8 +1,6 @@
 ﻿Imports System.Windows.Threading
 Imports System.Runtime.Serialization.Formatters.Soap
 Imports HoMIDom.HoMIDom
-Imports HoMIDom.TplDriver
-
 Imports System.ServiceModel
 
 Class Window1
@@ -124,9 +122,7 @@ Class Window1
     Private Sub TreeViewDriver_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewDriver.SelectedItemChanged
         For i As Integer = 0 To myService.GetAllDrivers.Count - 1
             If myService.GetAllDrivers.Item(i).ID = e.NewValue.uid Then
-                Dim x As New HoMIDom.TemplateDriver
-                x = myService.GetAllDrivers.Item(i)
-                PropertyGrid1.SelectedObject = x
+                PropertyGrid1.SelectedObject = myService.GetAllDrivers.Item(i)
                 Exit Sub
             End If
         Next
@@ -155,7 +151,8 @@ Class Window1
         If TreeViewDevice.SelectedItem IsNot Nothing Then
             For i As Integer = 0 To myService.GetAllDevices.Count - 1
                 If myService.GetAllDevices.Item(i).ID = TreeViewDevice.SelectedItem.uid Then
-                    PropertyGrid1.SelectedObject = myService.GetAllDevices.Item(i)
+                    Dim y As TemplateDevice = myService.GetAllDevices.Item(i)
+                    PropertyGrid1.SelectedObject = y
 
                     Dim x As New uDevice(uDevice.EAction.Modifier, TreeViewDevice.SelectedItem.uid)
                     x.Uid = System.Guid.NewGuid.ToString()
