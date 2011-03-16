@@ -127,5 +127,4 @@ Partial Public Class uTestDevice
             End Select
         Next
     End Sub
-
 End Class

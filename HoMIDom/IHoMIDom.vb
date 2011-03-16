@@ -61,6 +61,14 @@ Namespace HoMIDom
         <OperationContract()> Sub ExecuteDeviceCommand(ByVal DeviceId As String, ByVal Action As DeviceAction)
 
         ''' <summary>
+        ''' Execute une commande (COMMAND) d'un driver (DriverID) associés à des paramètres (Param)
+        ''' </summary>
+        ''' <param name="DriverId"></param>
+        ''' <param name="Action"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub ExecuteDriverCommand(ByVal DriverId As String, ByVal Action As DeviceAction)
+
+        ''' <summary>
         ''' Liste les méthodes (actions) dispo pour un device (par son id)
         ''' Retourne pour chaque élément de la liste NOMDELAMETHODE|Parametre1:TypeParametre1|Parametre2:TypeParametre2...
         ''' '' ex pour la classe lampe cela retourne: DIM|Variation:Int32

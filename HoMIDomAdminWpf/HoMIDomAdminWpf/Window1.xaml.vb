@@ -142,7 +142,8 @@ Class Window1
     Private Sub TreeViewDriver_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewDriver.SelectedItemChanged
         For i As Integer = 0 To myService.GetAllDrivers.Count - 1
             If myService.GetAllDrivers.Item(i).ID = e.NewValue.uid Then
-                PropertyGrid1.SelectedObject = myService.GetAllDrivers.Item(i)
+                Dim x As TemplateDriver = myService.GetAllDrivers.Item(i)
+                PropertyGrid1.SelectedObject = x
                 Exit Sub
             End If
         Next

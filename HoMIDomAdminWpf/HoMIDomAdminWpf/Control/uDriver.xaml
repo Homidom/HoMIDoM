@@ -111,5 +111,24 @@
         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Margin="17,255.051,0,271.721" Name="TxtCom" Width="83.411">0</TextBox>
         <Label Foreground="White" Height="23.645" Margin="213,232,287,0" Name="Label11" VerticalAlignment="Top">Version:</Label>
         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="222,253.895,0,272.105" Name="TxtVersion" Width="40" HorizontalAlignment="Left" IsEnabled="False">0</TextBox>
+        <Label Height="24" HorizontalAlignment="Left" Margin="18,0,0,240" Name="Label12" VerticalAlignment="Bottom" Width="110" Foreground="White">Fonctions avancées:</Label>
+        <Button Height="23" HorizontalAlignment="Left" Margin="134,0,0,242" Name="BtnAv" VerticalAlignment="Bottom" Width="22">&gt;&gt;</Button>
+        <GroupBox Header="Fonctions Avancées" Height="229" Margin="16,0,12,12" Name="GroupBox1" VerticalAlignment="Bottom" Visibility="Hidden">
+            <Grid>
+                <Label Foreground="White" Height="22" HorizontalAlignment="Left" Margin="10,10,0,0" Name="Label13" VerticalAlignment="Top" Width="62">Fonction:</Label>
+                <ComboBox Height="20" HorizontalAlignment="Left" Margin="70,12,0,0" Name="CbCmd" VerticalAlignment="Top" Width="211" />
+                <Label Foreground="White" Height="23" HorizontalAlignment="Left" Margin="26,45,0,0" Name="LblP1" VerticalAlignment="Top" Visibility="Hidden" Width="76">##########:</Label>
+                <TextBox Height="20" Margin="106,49,271.493,0" Name="TxtP1" VerticalAlignment="Top" Visibility="Hidden" />
+                <Label Foreground="White" HorizontalAlignment="Left" Margin="26,71,0,0" Name="LblP2" Visibility="Hidden" Width="76" Height="23.723" VerticalAlignment="Top">##########:</Label>
+                <TextBox Margin="106,75,271.493,0" Name="TxtP2" Visibility="Hidden" Height="20.723" VerticalAlignment="Top" />
+                <Label Foreground="White" HorizontalAlignment="Left" Margin="26,97,0,90" Name="LblP3" Visibility="Hidden" Width="76">##########:</Label>
+                <TextBox Margin="106,101,271.493,89" Name="TxtP3" Visibility="Hidden" />
+                <Label Foreground="White" Height="23" HorizontalAlignment="Left" Margin="26,0,0,64" Name="LblP4" VerticalAlignment="Bottom" Visibility="Hidden" Width="76">##########:</Label>
+                <TextBox Height="20" Margin="106,0,271.493,63" Name="TxtP4" VerticalAlignment="Bottom" Visibility="Hidden" />
+                <Label Foreground="White" Height="23" HorizontalAlignment="Left" Margin="26,0,0,39" Name="LblP5" VerticalAlignment="Bottom" Visibility="Hidden" Width="76">##########:</Label>
+                <TextBox Height="20" Margin="106,0,271.493,38" Name="TxtP5" VerticalAlignment="Bottom" Visibility="Hidden" />
+                <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,10,29,0" Name="BtnTest" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Tester</Button>
+            </Grid>
+        </GroupBox>
     </Grid>
 </UserControl>
