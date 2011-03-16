@@ -58,7 +58,7 @@ Namespace HoMIDom
         ''' <param name="Command"></param>
         ''' <param name="Param"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub ExecuteDeviceCommand(ByVal DeviceId As String, ByVal Command As String, ByVal Param As ArrayList)
+        <OperationContract()> Sub ExecuteDeviceCommand(ByVal DeviceId As String, ByVal Action As DeviceAction)
 
         ''' <summary>
         ''' Liste les méthodes (actions) dispo pour un device (par son id)

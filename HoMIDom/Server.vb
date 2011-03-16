@@ -1257,6 +1257,8 @@ Namespace HoMIDom
             Dim _list As New List(Of TemplateDevice)
             For i As Integer = 0 To _ListDevices.Count - 1
                 Dim x As New TemplateDevice
+                Dim _listact As New List(Of String)
+
                 With x
                     .Name = _ListDevices.Item(i).name
                     .ID = _ListDevices.Item(i).id
@@ -1269,6 +1271,30 @@ Namespace HoMIDom
                     .Solo = _ListDevices.Item(i).solo
                     .Refresh = _ListDevices.Item(i).refresh
                     .Modele = _ListDevices.Item(i).modele
+
+                    _listact = ListMethod(_ListDevices.Item(i).id)
+                    _listact = _listact
+                    If _listact.Count > 0 Then
+                        For n As Integer = 0 To _listact.Count - 1
+                            Dim a() As String = _listact.Item(n).Split("|")
+                            Dim p As New DeviceAction
+                            With p
+                                .Nom = a(0)
+                                If a.Length > 1 Then
+                                    For t As Integer = 1 To a.Length - 1
+                                        Dim pr As New DeviceAction.Parametre
+                                        Dim b() As String = a(t).Split(":")
+                                        With pr
+                                            .Nom = b(0)
+                                            .Type = b(1)
+                                        End With
+                                        p.Parametres.Add(pr)
+                                    Next
+                                End If
+                            End With
+                            .DeviceAction.Add(p)
+                        Next
+                    End If
 
                     If .Type = "BAROMETRE" _
                                     Or .Type = "COMPTEUR" _
@@ -2160,6 +2186,8 @@ Namespace HoMIDom
         'retourne le device par son ID
         Public Function ReturnDeviceById(ByVal DeviceId As String) As TemplateDevice Implements IHoMIDom.ReturnDeviceByID
             Dim retour As New TemplateDevice
+            Dim _listact As New List(Of String)
+
             For i As Integer = 0 To _ListDevices.Count - 1
                 If _ListDevices.Item(i).ID = DeviceId Then
                     retour.ID = _ListDevices.Item(i).id
@@ -2173,6 +2201,30 @@ Namespace HoMIDom
                     retour.Solo = _ListDevices.Item(i).solo
                     retour.Refresh = _ListDevices.Item(i).refresh
                     retour.Modele = _ListDevices.Item(i).modele
+
+                    _listact = ListMethod(_ListDevices.Item(i).id)
+                    _listact = _listact
+                    If _listact.Count > 0 Then
+                        For n As Integer = 0 To _listact.Count - 1
+                            Dim a() As String = _listact.Item(n).Split("|")
+                            Dim p As New DeviceAction
+                            With p
+                                .Nom = a(0)
+                                If a.Length > 1 Then
+                                    For t As Integer = 1 To a.Length - 1
+                                        Dim pr As New DeviceAction.Parametre
+                                        Dim b() As String = a(t).Split(":")
+                                        With pr
+                                            .Nom = b(0)
+                                            .Type = b(1)
+                                        End With
+                                        p.Parametres.Add(pr)
+                                    Next
+                                End If
+                            End With
+                            retour.DeviceAction.Add(p)
+                        Next
+                    End If
 
                     If retour.Type = "BAROMETRE" _
                                     Or retour.Type = "COMPTEUR" _
@@ -2280,7 +2332,7 @@ Namespace HoMIDom
         ''' <param name="Command"></param>
         ''' <param name="Param"></param>
         ''' <remarks></remarks>
-        Sub ExecuteDeviceCommand(ByVal DeviceId As String, ByVal Command As String, ByVal Param As ArrayList) Implements IHoMIDom.ExecuteDeviceCommand
+        Sub ExecuteDeviceCommand(ByVal DeviceId As String, ByVal Action As DeviceAction) Implements IHoMIDom.ExecuteDeviceCommand
             Dim _retour As Object
             Dim x As Object = Nothing
 
@@ -2294,22 +2346,21 @@ Namespace HoMIDom
 
                 If x IsNot Nothing Then
 
-                    If Param.Count > 0 Then
-                        Select Case Param.Count
+                    If Action.Parametres.Count > 0 Then
+                        Select Case Action.Parametres.Count
                             Case 1
-                                _retour = CallByName(x, Command, CallType.Method, Param(0))
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value)
                             Case 2
-                                _retour = CallByName(x, Command, CallType.Method, Param(0), Param(1))
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value)
                             Case 3
-                                _retour = CallByName(x, Command, CallType.Method, Param(0), Param(1), Param(2))
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value, Action.Parametres.Item(2).Value)
                             Case 4
-                                _retour = CallByName(x, Command, CallType.Method, Param(0), Param(1), Param(2), Param(3))
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value, Action.Parametres.Item(2).Value, Action.Parametres.Item(3).Value)
                             Case 5
-                                _retour = CallByName(x, Command, CallType.Method, Param(0), Param(1), Param(2), Param(3), Param(4))
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value, Action.Parametres.Item(2).Value, Action.Parametres.Item(3).Value, Action.Parametres.Item(4).Value)
                         End Select
-
                     Else
-                        CallByName(x, Command, CallType.Method)
+                        CallByName(x, Action.Nom, CallType.Method)
                     End If
                 End If
             Catch ex As Exception

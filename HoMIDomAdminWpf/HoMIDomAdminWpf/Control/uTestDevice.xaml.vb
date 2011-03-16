@@ -2,22 +2,43 @@
 
 Partial Public Class uTestDevice
     Dim _DeviceId As String
-    Dim _Device As Object
-    Dim _list As New List(Of String)
+    Dim _Device As HoMIDom.HoMIDom.TemplateDevice
 
     Public Event CloseMe(ByVal MyObject As Object)
 
     Private Sub BtnTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTest.Click
         Try
-            Dim _Param As New ArrayList
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
 
-            If TxtP1.Text <> "" Then _Param.Add(TxtP1.Text)
-            If TxtP2.Text <> "" Then _Param.Add(TxtP2.Text)
-            If TxtP3.Text <> "" Then _Param.Add(TxtP3.Text)
-            If TxtP4.Text <> "" Then _Param.Add(TxtP4.Text)
-            If TxtP5.Text <> "" Then _Param.Add(TxtP5.Text)
+            x.Nom = CbCmd.Text
 
-            Window1.myService.ExecuteDeviceCommand(_DeviceId, CbCmd.Text, _Param)
+            If TxtP1.Text <> "" Then
+                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                y.Value = TxtP1.Text
+                x.Parametres.Add(y)
+            End If
+            If TxtP2.Text <> "" Then
+                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                y.Value = TxtP2.Text
+                x.Parametres.Add(y)
+            End If
+            If TxtP3.Text <> "" Then
+                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                y.Value = TxtP3.Text
+                x.Parametres.Add(y)
+            End If
+            If TxtP4.Text <> "" Then
+                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                y.Value = TxtP4.Text
+                x.Parametres.Add(y)
+            End If
+            If TxtP5.Text <> "" Then
+                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                y.Value = TxtP5.Text
+                x.Parametres.Add(y)
+            End If
+
+            Window1.myService.ExecuteDeviceCommand(_DeviceId, x)
         Catch ex As Exception
             MessageBox.Show("Erreur lors du test: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -35,21 +56,14 @@ Partial Public Class uTestDevice
 
         If _Device IsNot Nothing Then
 
-            _list = Window1.myService.ListMethod(_DeviceId)
-
-            For i As Integer = 0 To _list.Count - 1
-                Dim a() As String
-                a = _list(i).split("|")
-                If a.Length > 0 Then
-                    CbCmd.Items.Add(a(0))
-                End If
-                If a.Length > 1 Then 'il y a des paramètres
-                    If a.Length > 6 Then
-                        MessageBox.Show("Seuls 5 paramètres sont acceptés veuillez contacter l'administrateur !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                        RaiseEvent CloseMe(Me)
-                    End If
+            For i As Integer = 0 To _Device.DeviceAction.Count - 1
+                CbCmd.Items.Add(_Device.DeviceAction.Item(i).Nom)
+                If _Device.DeviceAction.Item(i).Parametres.Count > 5 Then
+                    MessageBox.Show("Seuls 5 paramètres sont acceptés veuillez contacter l'administrateur !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    RaiseEvent CloseMe(Me)
                 End If
             Next
+
         Else
             MessageBox.Show("Le Device est inconnu !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             RaiseEvent CloseMe(Me)
@@ -82,44 +96,36 @@ Partial Public Class uTestDevice
         If CbCmd.SelectedIndex < 0 Then Exit Sub
 
         Dim Idx As Integer = CbCmd.SelectedIndex
-        Dim a() As String = _list(Idx).split("|")
-        If a.Length > 1 Then
-            For j As Integer = 1 To a.Length - 1
+        For j As Integer = 0 To _Device.DeviceAction.Item(Idx).Parametres.Count - 1
 
-                Select Case j
-                    Case 1
-                        Dim _tmp() As String = a(j).Split(":")
-                        LblP1.Content = _tmp(0) & " :"
-                        LblP1.Visibility = Windows.Visibility.Visible
-                        TxtP1.ToolTip = _tmp(1)
-                        TxtP1.Visibility = Windows.Visibility.Visible
-                    Case 2
-                        Dim _tmp() As String = a(j).Split(":")
-                        LblP2.Content = _tmp(0) & " :"
-                        LblP2.Visibility = Windows.Visibility.Visible
-                        TxtP2.ToolTip = _tmp(1)
-                        TxtP2.Visibility = Windows.Visibility.Visible
-                    Case 3
-                        Dim _tmp() As String = a(j).Split(":")
-                        LblP3.Content = _tmp(0) & " :"
-                        LblP3.Visibility = Windows.Visibility.Visible
-                        TxtP3.ToolTip = _tmp(1)
-                        TxtP3.Visibility = Windows.Visibility.Visible
-                    Case 4
-                        Dim _tmp() As String = a(j).Split(":")
-                        LblP4.Content = _tmp(0) & " :"
-                        LblP4.Visibility = Windows.Visibility.Visible
-                        TxtP4.ToolTip = _tmp(1)
-                        TxtP4.Visibility = Windows.Visibility.Visible
-                    Case 5
-                        Dim _tmp() As String = a(j).Split(":")
-                        LblP5.Content = _tmp(0) & " :"
-                        LblP5.Visibility = Windows.Visibility.Visible
-                        TxtP5.ToolTip = _tmp(1)
-                        TxtP5.Visibility = Windows.Visibility.Visible
-                End Select
-            Next
-        End If
+            Select Case j
+                Case 0
+                    LblP1.Content = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                    LblP1.Visibility = Windows.Visibility.Visible
+                    TxtP1.ToolTip = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                    TxtP1.Visibility = Windows.Visibility.Visible
+                Case 1
+                    LblP2.Content = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                    LblP2.Visibility = Windows.Visibility.Visible
+                    TxtP2.ToolTip = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                    TxtP2.Visibility = Windows.Visibility.Visible
+                Case 2
+                    LblP3.Content = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                    LblP3.Visibility = Windows.Visibility.Visible
+                    TxtP3.ToolTip = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                    TxtP3.Visibility = Windows.Visibility.Visible
+                Case 3
+                    LblP4.Content = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                    LblP4.Visibility = Windows.Visibility.Visible
+                    TxtP4.ToolTip = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                    TxtP4.Visibility = Windows.Visibility.Visible
+                Case 4
+                    LblP5.Content = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                    LblP5.Visibility = Windows.Visibility.Visible
+                    TxtP5.ToolTip = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                    TxtP5.Visibility = Windows.Visibility.Visible
+            End Select
+        Next
     End Sub
 
 End Class
