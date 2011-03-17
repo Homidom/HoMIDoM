@@ -1413,7 +1413,7 @@ Namespace HoMIDom
                     .Icon = _ListZones.Item(i).icon
                     .Image = _ListZones.Item(i).Image
                     For j As Integer = 0 To _ListZones.Item(i).ListDevice.count - 1
-                        .ListDevice.Add(_ListZones.Item(i).ListDevice.item(j).ToString)
+                        .ListDevice.Add(_ListZones.Item(i).ListDevice.item(j))
                     Next
                 End With
                 _list.Add(x)
@@ -2108,7 +2108,7 @@ Namespace HoMIDom
         ''' <param name="image"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListDevice As ArrayList = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String Implements IHoMIDom.SaveZone
+        Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListDevice As List(Of Zone.Device_Zone) = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String Implements IHoMIDom.SaveZone
             Dim myID As String = ""
 
             If zoneId = "" Then
@@ -2372,6 +2372,10 @@ Namespace HoMIDom
                 End If
             Next
             Return retour
+        End Function
+
+        Function GetDeviceInZone(ByVal zoneId) As List(Of TemplateDevice) Implements IHoMIDom.GetDeviceInZone
+
         End Function
 
         ''' <summary>

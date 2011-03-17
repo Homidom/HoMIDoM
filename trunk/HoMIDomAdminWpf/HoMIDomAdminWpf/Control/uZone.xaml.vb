@@ -7,8 +7,8 @@ Partial Public Class uZone
     Dim _Action As EAction 'Définit si modif ou création d'un device
     Dim _ZoneId As String 'Id de la zone à modifier
     Dim FlagNewCmd As Boolean
-    Dim _ListIdDispo As New ArrayList
-    Dim _ListIdSelect As New ArrayList
+    Dim _ListIdDispo As New List(Of Zone.Device_Zone)
+    Dim _ListIdSelect As New List(Of Zone.Device_Zone)
 
     Public Enum EAction
         Nouveau
@@ -20,7 +20,6 @@ Partial Public Class uZone
             MessageBox.Show("Le nom de la zone est obligatoire!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         End If
-
         Window1.myService.SaveZone(_ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag, ImgZone.Tag)
     End Sub
 
@@ -37,21 +36,22 @@ Partial Public Class uZone
         ImgZone.Tag = " "
 
         For i As Integer = 0 To Window1.myService.GetAllDevices.Count - 1
-            _ListIdDispo.Add(Window1.myService.GetAllDevices.Item(i).ID)
+            Dim x As New Zone.Device_Zone(Window1.myService.GetAllDevices.Item(i).ID, False, 0, 0)
+            _ListIdDispo.Add(x)
         Next
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         If Action = EAction.Nouveau Then 'Nouvelle Zone
 
         Else 'Modifier zone
-            Dim x As Object = Window1.myService.ReturnZoneByID(ZoneId)
+            Dim x As Zone = Window1.myService.ReturnZoneByID(ZoneId)
             _ZoneId = ZoneId
             If x IsNot Nothing Then
                 TxtName.Text = x.Name
-                For j As Integer = 0 To x.listdevice.count - 1
-                    _ListIdSelect.Add(x.listdevice.item(j))
+                For j As Integer = 0 To x.ListDevice.Count - 1
+                    _ListIdSelect.Add(x.ListDevice.Item(j))
                     For k As Integer = 0 To _ListIdDispo.Count - 1
-                        If _ListIdDispo.Item(k) = x.listdevice.item(j).deviceid Then
+                        If _ListIdDispo.Item(k).DeviceID = x.ListDevice.Item(j).DeviceID Then
                             _ListIdDispo.RemoveAt(k)
                         End If
                     Next
@@ -86,13 +86,13 @@ Partial Public Class uZone
         ListBxDevice.Items.Clear()
 
         For i As Integer = 0 To _ListIdDispo.Count - 1
-            Dim x As Object = Window1.myService.ReturnDeviceByID(_ListIdDispo.Item(i))
+            Dim x As TemplateDevice = Window1.myService.ReturnDeviceByID(_ListIdDispo.Item(i).DeviceID)
             ListBxDispo.Items.Add(x.name)
             x = Nothing
         Next
 
         For i As Integer = 0 To _ListIdSelect.Count - 1
-            ListBxDevice.Items.Add(Window1.myService.ReturnDeviceByID(_ListIdSelect.Item(i).deviceid).Name)
+            ListBxDevice.Items.Add(Window1.myService.ReturnDeviceByID(_ListIdSelect.Item(i).DeviceID).Name)
         Next
     End Sub
 
@@ -100,8 +100,7 @@ Partial Public Class uZone
         If ListBxDispo.SelectedIndex < 0 Then
             MessageBox.Show("Veuillez sélectionner un device", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
         Else
-            Dim x As New Zone.Device_Zone(_ListIdDispo.Item(ListBxDispo.SelectedIndex), False, 0, 0)
-            _ListIdSelect.Add(x)
+            _ListIdSelect.Add(_ListIdDispo.Item(ListBxDispo.SelectedIndex))
             _ListIdDispo.RemoveAt(ListBxDispo.SelectedIndex)
         End If
         RefreshLists()
@@ -111,7 +110,7 @@ Partial Public Class uZone
         If ListBxDevice.SelectedIndex < 0 Then
             MessageBox.Show("Veuillez sélectionner un device", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
         Else
-            _ListIdDispo.Add(_ListIdSelect.Item(ListBxDevice.SelectedIndex).deviceid)
+            _ListIdDispo.Add(_ListIdSelect.Item(ListBxDevice.SelectedIndex))
             _ListIdSelect.RemoveAt(ListBxDevice.SelectedIndex)
         End If
 
@@ -150,9 +149,9 @@ Partial Public Class uZone
         If ListBxDevice.SelectedIndex < 0 Then
             MessageBox.Show("Veuillez sélectionner un device", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
         Else
-            _ListIdSelect(ListBxDevice.SelectedIndex).visible = ChkVisible.IsChecked
-            _ListIdSelect(ListBxDevice.SelectedIndex).x = TxtX.Text
-            _ListIdSelect(ListBxDevice.SelectedIndex).y = TxtY.Text
+            _ListIdSelect(ListBxDevice.SelectedIndex).Visible = ChkVisible.IsChecked
+            _ListIdSelect(ListBxDevice.SelectedIndex).X = TxtX.Text
+            _ListIdSelect(ListBxDevice.SelectedIndex).Y = TxtY.Text
         End If
     End Sub
 

@@ -10,7 +10,7 @@
     <Serializable()> Public Class Zone
         Dim _Id As String 'Id unique de la zone
         Dim _Name As String 'Libellé de la zone
-        Dim _ListDevice As New ArrayList 'Liste d'objet de type DeviceZone
+        Dim _ListDevice As New List(Of Device_Zone) 'Liste d'objet de type DeviceZone
         Dim _Icon As String = "" 'Icon de la zone
         Dim _Image As String = "" 'Image de la zone
 
@@ -50,11 +50,11 @@
             End Set
         End Property
 
-        Public Property ListDevice() As ArrayList
+        Public Property ListDevice() As List(Of Device_Zone)
             Get
                 Return _ListDevice
             End Get
-            Set(ByVal value As ArrayList)
+            Set(ByVal value As List(Of Device_Zone))
                 _ListDevice = value
             End Set
         End Property
