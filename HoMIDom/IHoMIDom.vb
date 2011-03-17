@@ -61,6 +61,14 @@ Namespace HoMIDom
         <OperationContract()> Sub ExecuteDeviceCommand(ByVal DeviceId As String, ByVal Action As DeviceAction)
 
         ''' <summary>
+        ''' Retourne la liste des devices d'une zone (par son id)
+        ''' </summary>
+        ''' <param name="zoneId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetDeviceInZone(ByVal zoneId) As List(Of TemplateDevice)
+
+        ''' <summary>
         ''' Execute une commande (COMMAND) d'un driver (DriverID) associés à des paramètres (Param)
         ''' </summary>
         ''' <param name="DriverId"></param>
@@ -219,7 +227,7 @@ Namespace HoMIDom
         ''' <param name="image"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListDevice As ArrayList = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String
+        <OperationContract()> Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListDevice As List(Of Zone.Device_Zone) = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String
 
         ''' <summary>
         ''' Commencer l'apprentissage d'un commande IR
