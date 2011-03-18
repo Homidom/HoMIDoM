@@ -18,7 +18,7 @@
     <HtmlHelpName>HoMIDomAdminWpf</HtmlHelpName>
     <Language>fr-FR</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\HoMIDomAdminWpf\HoMIDomAdminWpf\obj\Release\HoMIDomAdminWpf.exe" />
+      <DocumentationSource sourceFile="..\..\_LastVersionStable\HoMIDomAdminWpf.exe" />
 <DocumentationSource sourceFile="..\..\HoMIDomAdminWpf\HoMIDomAdminWpf\obj\Release\HoMIDomAdminWpf.xml" /></DocumentationSources>
     <WorkingPath>..\..\..\..\..\..\trav\</WorkingPath>
     <BuildLogFile>
@@ -54,20 +54,14 @@
           <!-- Logo image file (optional).  Filename is required. The height,
                  width, altText, placement, and alignment attributes are
                  optional. -->
-          <logoFile filename="C:\Users\Laurent\Documents\homidom-read-only\Doc\Constructeurs\bandeau_1_950x42.jpg" height="0" width="0" altText="" placement="left" alignment="left" />
+          <logoFile filename="C:\Users\Laurent\Documents\homidom\Images\bandeau_1_950x60.jpg" height="0" width="0" altText="" placement="left" alignment="left" />
         </component>
       </ComponentConfig>
-      <ComponentConfig id="IntelliSense Component" enabled="True">
-        <component id="IntelliSense Component" type="SandcastleBuilder.Components.IntelliSenseComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll">
-          <!-- Output options (optional)
+<ComponentConfig id="IntelliSense Component" enabled="True"><component id="IntelliSense Component" type="SandcastleBuilder.Components.IntelliSenseComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll"><!-- Output options (optional)
                  Attributes:
                     Include Namespaces (false by default)
                     Namespaces filename ("Namespaces" if not specified or empty)
-                    Directory (current folder if not specified or empty) -->
-          <output includeNamespaces="false" namespacesFile="Summary" folder="{@OutputFolder}" />
-        </component>
-      </ComponentConfig>
-    </ComponentConfigurations>
+                    Directory (current folder if not specified or empty) --><output includeNamespaces="false" namespacesFile="Summary" folder="{@OutputFolder}" /></component></ComponentConfig></ComponentConfigurations>
     <RootNamespaceContainer>True</RootNamespaceContainer>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <NewProperty1>
