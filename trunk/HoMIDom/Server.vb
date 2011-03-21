@@ -7,7 +7,6 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 Imports System.ServiceModel
 Imports System.ServiceModel.Description
 
-
 Namespace HoMIDom
 
     '***********************************************
@@ -830,9 +829,6 @@ Namespace HoMIDom
                     writer.WriteStartAttribute("value")
                     writer.WriteValue(_ListDevices.Item(i).value)
                     writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("valuelast")
-                    writer.WriteValue(_ListDevices.Item(i).valuelast)
-                    writer.WriteEndAttribute()
                     writer.WriteStartAttribute("lastetat")
                     writer.WriteValue(_ListDevices.Item(i).lastetat)
                     writer.WriteEndAttribute()
@@ -866,6 +862,9 @@ Namespace HoMIDom
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("formatage")
                         writer.WriteValue(_ListDevices.Item(i).formatage)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("valuelast")
+                        writer.WriteValue(_ListDevices.Item(i).valuelast)
                         writer.WriteEndAttribute()
                     End If
 
@@ -1262,11 +1261,39 @@ Namespace HoMIDom
                 With x
                     .Name = _ListDevices.Item(i).name
                     .ID = _ListDevices.Item(i).id
-                    .Type = _ListDevices.Item(i).type
+                    Select Case UCase(_ListDevices.Item(i).type)
+                        Case "APPAREIL" : .Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
+                        Case "AUDIO" : .Type = Device.ListeDevices.AUDIO
+                        Case "BAROMETRE" : .Type = Device.ListeDevices.BAROMETRE  'pour stocker les valeur issu d'un barometre meteo ou web
+                        Case "BATTERIE" : .Type = Device.ListeDevices.BAROMETRE
+                        Case "COMPTEUR" : .Type = Device.ListeDevices.COMPTEUR  'compteur DS2423, RFXPower...
+                        Case "CONTACT" : .Type = Device.ListeDevices.CONTACT  'detecteur de contact : switch 1-wire
+                        Case "DETECTEUR" : .Type = Device.ListeDevices.DETECTEUR  'tous detecteurs : mouvement, obscurite...
+                        Case "DIRECTIONVENT" : .Type = Device.ListeDevices.DIRECTIONVENT
+                        Case "ENERGIEINSTANTANEE" : .Type = Device.ListeDevices.ENERGIEINSTANTANEE
+                        Case "ENERGIETOTALE" : .Type = Device.ListeDevices.ENERGIETOTALE
+                        Case "FREEBOX" : .Type = Device.ListeDevices.FREEBOX
+                        Case "GENERIQUEBOOLEEN" : .Type = Device.ListeDevices.GENERIQUEBOOLEEN
+                        Case "GENERIQUESTRING" : .Type = Device.ListeDevices.GENERIQUESTRING
+                        Case "GENERIQUEVALUE" : .Type = Device.ListeDevices.GENERIQUEVALUE
+                        Case "HUMIDITE" : .Type = Device.ListeDevices.HUMIDITE
+                        Case "LAMPE" : .Type = Device.ListeDevices.LAMPE
+                        Case "METEO" : .Type = Device.ListeDevices.METEO
+                        Case "MULTIMEDIA" : .Type = Device.ListeDevices.MULTIMEDIA
+                        Case "PLUIECOURANT" : .Type = Device.ListeDevices.PLUIECOURANT
+                        Case "PLUIETOTAL" : .Type = Device.ListeDevices.PLUIETOTAL
+                        Case "SWITCH" : .Type = Device.ListeDevices.SWITCH
+                        Case "TELECOMMANDE" : .Type = Device.ListeDevices.TELECOMMANDE
+                        Case "TEMPERATURE" : .Type = Device.ListeDevices.TEMPERATURE
+                        Case "TEMPERATURECONSIGNE" : .Type = Device.ListeDevices.TEMPERATURECONSIGNE
+                        Case "UV" : .Type = Device.ListeDevices.UV
+                        Case "VITESSEVENT" : .Type = Device.ListeDevices.VITESSEVENT
+                        Case "VOLET" : .Type = Device.ListeDevices.VOLET
+                    End Select
                     .Description = _ListDevices.Item(i).description
                     .Adresse1 = _ListDevices.Item(i).adresse1
                     .Adresse2 = _ListDevices.Item(i).adresse2
-                    .DriverId = _ListDevices.Item(i).driverid
+                    .DriverID = _ListDevices.Item(i).driverid
                     .Picture = _ListDevices.Item(i).picture
                     .Solo = _ListDevices.Item(i).solo
                     .Refresh = _ListDevices.Item(i).refresh
@@ -1296,19 +1323,19 @@ Namespace HoMIDom
                     End If
                     _listact = Nothing
 
-                    If .Type = "BAROMETRE" _
-                                    Or .Type = "COMPTEUR" _
-                                    Or .Type = "ENERGIEINSTANTANEE" _
-                                    Or .Type = "ENERGIETOTALE" _
-                                    Or .Type = "GENERIQUEVALUE" _
-                                    Or .Type = "HUMIDITE" _
-                                    Or .Type = "PLUIECOURANT" _
-                                    Or .Type = "PLUIETOTAL" _
-                                    Or .Type = "TEMPERATURE" _
-                                    Or .Type = "TEMPERATURECONSIGNE" _
-                                    Or .Type = "VITESSEVENT" _
-                                    Or .Type = "UV" _
-                                    Or .Type = "VITESSEVENT" _
+                    If .Type = (Device.ListeDevices.BAROMETRE) _
+                                    Or .Type = Device.ListeDevices.COMPTEUR _
+                                    Or .Type = Device.ListeDevices.ENERGIEINSTANTANEE _
+                                    Or .Type = Device.ListeDevices.ENERGIETOTALE _
+                                    Or .Type = Device.ListeDevices.GENERIQUEVALUE _
+                                    Or .Type = Device.ListeDevices.HUMIDITE _
+                                    Or .Type = Device.ListeDevices.PLUIECOURANT _
+                                    Or .Type = Device.ListeDevices.PLUIETOTAL _
+                                    Or .Type = Device.ListeDevices.TEMPERATURE _
+                                    Or .Type = Device.ListeDevices.TEMPERATURECONSIGNE _
+                                    Or .Type = Device.ListeDevices.VITESSEVENT _
+                                    Or .Type = Device.ListeDevices.UV _
+                                    Or .Type = Device.ListeDevices.VITESSEVENT _
                                     Then
                         .Correction = _ListDevices.Item(i).correction
                         .Precision = _ListDevices.Item(i).precision
@@ -1320,7 +1347,7 @@ Namespace HoMIDom
                         .ValueMin = _ListDevices.Item(i).valuemin
                     End If
 
-                    If .Type = "MULTIMEDIA" Then
+                    If .Type = Device.ListeDevices.MULTIMEDIA Then
                         For j As Integer = 0 To _ListDevices.Item(i).listcommandname.count - 1
                             .ListCommandName.Add(_ListDevices.Item(i).listcommandname.item(j))
                             .ListCommandData.Add(_ListDevices.Item(i).ListCommandData.item(j))
@@ -2222,7 +2249,35 @@ Namespace HoMIDom
                 If _ListDevices.Item(i).ID = DeviceId Then
                     retour.ID = _ListDevices.Item(i).id
                     retour.Name = _ListDevices.Item(i).name
-                    retour.Type = _ListDevices.Item(i).type
+                    Select Case UCase(_ListDevices.Item(i).type)
+                        Case "APPAREIL" : retour.Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
+                        Case "AUDIO" : retour.Type = Device.ListeDevices.AUDIO
+                        Case "BAROMETRE" : retour.Type = Device.ListeDevices.BAROMETRE  'pour stocker les valeur issu d'un barometre meteo ou web
+                        Case "BATTERIE" : retour.Type = Device.ListeDevices.BAROMETRE
+                        Case "COMPTEUR" : retour.Type = Device.ListeDevices.COMPTEUR  'compteur DS2423, RFXPower...
+                        Case "CONTACT" : retour.Type = Device.ListeDevices.CONTACT  'detecteur de contact : switch 1-wire
+                        Case "DETECTEUR" : retour.Type = Device.ListeDevices.DETECTEUR  'tous detecteurs : mouvement, obscurite...
+                        Case "DIRECTIONVENT" : retour.Type = Device.ListeDevices.DIRECTIONVENT
+                        Case "ENERGIEINSTANTANEE" : retour.Type = Device.ListeDevices.ENERGIEINSTANTANEE
+                        Case "ENERGIETOTALE" : retour.Type = Device.ListeDevices.ENERGIETOTALE
+                        Case "FREEBOX" : retour.Type = Device.ListeDevices.FREEBOX
+                        Case "GENERIQUEBOOLEEN" : retour.Type = Device.ListeDevices.GENERIQUEBOOLEEN
+                        Case "GENERIQUESTRING" : retour.Type = Device.ListeDevices.GENERIQUESTRING
+                        Case "GENERIQUEVALUE" : retour.Type = Device.ListeDevices.GENERIQUEVALUE
+                        Case "HUMIDITE" : retour.Type = Device.ListeDevices.HUMIDITE
+                        Case "LAMPE" : retour.Type = Device.ListeDevices.LAMPE
+                        Case "METEO" : retour.Type = Device.ListeDevices.METEO
+                        Case "MULTIMEDIA" : retour.Type = Device.ListeDevices.MULTIMEDIA
+                        Case "PLUIECOURANT" : retour.Type = Device.ListeDevices.PLUIECOURANT
+                        Case "PLUIETOTAL" : retour.Type = Device.ListeDevices.PLUIETOTAL
+                        Case "SWITCH" : retour.Type = Device.ListeDevices.SWITCH
+                        Case "TELECOMMANDE" : retour.Type = Device.ListeDevices.TELECOMMANDE
+                        Case "TEMPERATURE" : retour.Type = Device.ListeDevices.TEMPERATURE
+                        Case "TEMPERATURECONSIGNE" : retour.Type = Device.ListeDevices.TEMPERATURECONSIGNE
+                        Case "UV" : retour.Type = Device.ListeDevices.UV
+                        Case "VITESSEVENT" : retour.Type = Device.ListeDevices.VITESSEVENT
+                        Case "VOLET" : retour.Type = Device.ListeDevices.VOLET
+                    End Select
                     retour.Description = _ListDevices.Item(i).description
                     retour.Adresse1 = _ListDevices.Item(i).adresse1
                     retour.Adresse2 = _ListDevices.Item(i).adresse2
@@ -2256,19 +2311,19 @@ Namespace HoMIDom
                         Next
                     End If
 
-                    If retour.Type = "BAROMETRE" _
-                                    Or retour.Type = "COMPTEUR" _
-                                    Or retour.Type = "ENERGIEINSTANTANEE" _
-                                    Or retour.Type = "ENERGIETOTALE" _
-                                    Or retour.Type = "GENERIQUEVALUE" _
-                                    Or retour.Type = "HUMIDITE" _
-                                    Or retour.Type = "PLUIECOURANT" _
-                                    Or retour.Type = "PLUIETOTAL" _
-                                    Or retour.Type = "TEMPERATURE" _
-                                    Or retour.Type = "TEMPERATURECONSIGNE" _
-                                    Or retour.Type = "VITESSEVENT" _
-                                    Or retour.Type = "UV" _
-                                    Or retour.Type = "VITESSEVENT" _
+                    If retour.Type = Device.ListeDevices.BAROMETRE _
+                                    Or retour.Type = Device.ListeDevices.COMPTEUR _
+                                    Or retour.Type = Device.ListeDevices.ENERGIEINSTANTANEE _
+                                    Or retour.Type = Device.ListeDevices.ENERGIETOTALE _
+                                    Or retour.Type = Device.ListeDevices.GENERIQUEVALUE _
+                                    Or retour.Type = Device.ListeDevices.HUMIDITE _
+                                    Or retour.Type = Device.ListeDevices.PLUIECOURANT _
+                                    Or retour.Type = Device.ListeDevices.PLUIETOTAL _
+                                    Or retour.Type = Device.ListeDevices.TEMPERATURE _
+                                    Or retour.Type = Device.ListeDevices.TEMPERATURECONSIGNE _
+                                    Or retour.Type = Device.ListeDevices.VITESSEVENT _
+                                    Or retour.Type = Device.ListeDevices.UV _
+                                    Or retour.Type = Device.ListeDevices.VITESSEVENT _
                                     Then
                         retour.Correction = _ListDevices.Item(i).correction
                         retour.Precision = _ListDevices.Item(i).precision
@@ -2280,7 +2335,7 @@ Namespace HoMIDom
                         retour.ValueMin = _ListDevices.Item(i).valuemin
                     End If
 
-                    If retour.Type = "MULTIMEDIA" Then
+                    If retour.Type = Device.ListeDevices.MULTIMEDIA Then
                         For j As Integer = 0 To _ListDevices.Item(i).listcommandname.count - 1
                             retour.ListCommandName.Add(_ListDevices.Item(i).listcommandname.item(j))
                             retour.ListCommandData.Add(_ListDevices.Item(i).ListCommandData.item(j))
