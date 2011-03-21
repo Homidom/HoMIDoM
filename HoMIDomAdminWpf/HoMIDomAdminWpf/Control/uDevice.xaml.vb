@@ -43,7 +43,7 @@ Partial Public Class uDevice
                     TxtDescript.Text = x.description
                     ChkEnable.IsChecked = x.Enable
                     ChKSolo.IsChecked = x.Solo
-                    CbType.SelectedValue = x.type
+                    CbType.SelectedValue = x.Type.ToString
                     CbType.IsEnabled = False
 
                     For j As Integer = 0 To Window1.myService.GetAllDrivers.Count - 1 'Window1.Obj.Drivers.Count - 1
@@ -69,16 +69,16 @@ Partial Public Class uDevice
                     End If
 
                     'Gestion si Device avec Value
-                    If x.Type = "TEMPERATURE" _
-                                       Or x.Type = "HUMIDITE" _
-                                       Or x.Type = "TEMPERATURECONSIGNE" _
-                                       Or x.Type = "ENERGIETOTALE" _
-                                       Or x.Type = "ENERGIEINSTANTANEE" _
-                                       Or x.Type = "PLUIETOTAL" _
-                                       Or x.Type = "PLUIECOURANT" _
-                                       Or x.Type = "VITESSEVENT" _
-                                       Or x.Type = "UV" _
-                                       Or x.Type = "HUMIDITE" _
+                    If x.Type = ListeDevices.TEMPERATURE _
+                                       Or x.Type = ListeDevices.HUMIDITE _
+                                       Or x.Type = ListeDevices.TEMPERATURECONSIGNE _
+                                       Or x.Type = ListeDevices.ENERGIETOTALE _
+                                       Or x.Type = ListeDevices.ENERGIEINSTANTANEE _
+                                       Or x.Type = ListeDevices.PLUIETOTAL _
+                                       Or x.Type = ListeDevices.PLUIECOURANT _
+                                       Or x.Type = ListeDevices.VITESSEVENT _
+                                       Or x.Type = ListeDevices.UV _
+                                       Or x.Type = ListeDevices.HUMIDITE _
                                        Then
                         TxtCorrection.Visibility = Windows.Visibility.Visible
                         TxtCorrection.Text = x.Correction
@@ -89,9 +89,9 @@ Partial Public Class uDevice
                         TxtValueMax.Visibility = Windows.Visibility.Visible
                         TxtValueMax.Text = x.ValueMax
                         TxtValueMin.Visibility = Windows.Visibility.Visible
-                        TxtValueMin.Text = x.valueMin
+                        TxtValueMin.Text = x.ValueMin
                         TxtValDef.Visibility = Windows.Visibility.Visible
-                        TxtValDef.Text = x.valueDef
+                        TxtValDef.Text = x.ValueDef
                         Label10.Visibility = Windows.Visibility.Visible
                         Label11.Visibility = Windows.Visibility.Visible
                         Label12.Visibility = Windows.Visibility.Visible
@@ -100,11 +100,11 @@ Partial Public Class uDevice
                         Label15.Visibility = Windows.Visibility.Visible
                     End If
 
-                    If x.Type = "MULTIMEDIA" Then
+                    If x.Type = ListeDevices.MULTIMEDIA Then
                         GroupBox1.Visibility = Windows.Visibility.Visible
                         ListCmd.Items.Clear()
-                        For i As Integer = 0 To x.listcommandname.count - 1
-                            ListCmd.Items.Add(x.listcommandname(i))
+                        For i As Integer = 0 To x.ListCommandName.Count - 1
+                            ListCmd.Items.Add(x.ListCommandName(i))
                         Next
                         x = Nothing
                     Else

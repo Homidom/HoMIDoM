@@ -16,7 +16,7 @@ Namespace HoMIDom
         Dim _Enable As Boolean = False
         Dim _DriverId As String = ""
         Dim _Description As String = ""
-        Dim _Type As String = ""
+        Dim _Type As Device.ListeDevices
         Dim _Adresse1 As String = ""
         Dim _Adresse2 As String = ""
         Dim _DateCreated As Date = Now
@@ -85,11 +85,11 @@ Namespace HoMIDom
         End Property
 
         'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
-        Public Property Type() As String
+        Public Property Type() As Device.ListeDevices
             Get
                 Return _Type
             End Get
-            Set(ByVal value As String)
+            Set(ByVal value As Device.ListeDevices)
                 _Type = value
             End Set
         End Property
