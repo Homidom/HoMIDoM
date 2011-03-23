@@ -36,6 +36,31 @@ Namespace HoMIDom
         Dim _Formatage As String = ""
         Dim _Value As Object = Nothing
         Dim _DeviceAction As New List(Of DeviceAction)
+        Dim _ConditionActuel As String = ""
+        Dim _TempActuel As String = ""
+        Dim _HumActuel As String = ""
+        Dim _IconActuel As String = ""
+        Dim _VentActuel As String = ""
+        Dim _JourToday As String = ""
+        Dim _MinToday As String = ""
+        Dim _MaxToday As String = ""
+        Dim _IconToday As String = ""
+        Dim _ConditionToday As String = ""
+        Dim _JourJ1 As String = ""
+        Dim _MinJ1 As String = ""
+        Dim _MaxJ1 As String = ""
+        Dim _IconJ1 As String = ""
+        Dim _ConditionJ1 As String = ""
+        Dim _JourJ2 As String = ""
+        Dim _MinJ2 As String = ""
+        Dim _MaxJ2 As String = ""
+        Dim _IconJ2 As String = ""
+        Dim _ConditionJ2 As String = ""
+        Dim _JourJ3 As String = ""
+        Dim _MinJ3 As String = ""
+        Dim _MaxJ3 As String = ""
+        Dim _IconJ3 As String = ""
+        Dim _ConditionJ3 As String = ""
 
         Public Property Name() As String
             Get
@@ -281,8 +306,234 @@ Namespace HoMIDom
             End Set
         End Property
 
+        Public Property ConditionActuel() As String
+            Get
+                Return _ConditionActuel
+            End Get
+            Set(ByVal value As String)
+                _ConditionActuel = value
+            End Set
+        End Property
+
+        Public Property TemperatureActuel() As String
+            Get
+                Return _TempActuel
+            End Get
+            Set(ByVal value As String)
+                _TempActuel = value
+            End Set
+        End Property
+
+        Public Property HumiditeActuel() As String
+            Get
+                Return _HumActuel
+            End Get
+            Set(ByVal value As String)
+                _HumActuel = value
+            End Set
+        End Property
+
+        Public Property IconActuel() As String
+            Get
+                Return _IconActuel
+            End Get
+            Set(ByVal value As String)
+                _IconActuel = value
+            End Set
+        End Property
+
+        Public Property VentActuel() As String
+            Get
+                Return _VentActuel
+            End Get
+            Set(ByVal value As String)
+                _VentActuel = value
+            End Set
+        End Property
+
+        Public Property JourToday() As String
+            Get
+                Return _JourToday
+            End Get
+            Set(ByVal value As String)
+                _JourToday = value
+            End Set
+        End Property
+
+        Public Property MinToday() As String
+            Get
+                Return _MinToday
+            End Get
+            Set(ByVal value As String)
+                _MinToday = value
+            End Set
+        End Property
+
+        Public Property MaxToday() As String
+            Get
+                Return _MaxToday
+            End Get
+            Set(ByVal value As String)
+                _MaxToday = value
+            End Set
+        End Property
+
+        Public Property IconToday() As String
+            Get
+                Return _IconToday
+            End Get
+            Set(ByVal value As String)
+                _IconToday = value
+            End Set
+        End Property
+
+        Public Property ConditionToday() As String
+            Get
+                Return _ConditionToday
+            End Get
+            Set(ByVal value As String)
+                _ConditionToday = value
+            End Set
+        End Property
+
+        Public Property JourJ1() As String
+            Get
+                Return _JourJ1
+            End Get
+            Set(ByVal value As String)
+                _JourJ1 = value
+            End Set
+        End Property
+
+        Public Property MinJ1() As String
+            Get
+                Return _MinJ1
+            End Get
+            Set(ByVal value As String)
+                _MinJ1 = value
+            End Set
+        End Property
+
+        Public Property MaxJ1() As String
+            Get
+                Return _MaxJ1
+            End Get
+            Set(ByVal value As String)
+                _MaxJ1 = value
+            End Set
+        End Property
+
+        Public Property IconJ1() As String
+            Get
+                Return _IconJ1
+            End Get
+            Set(ByVal value As String)
+                _IconJ1 = value
+            End Set
+        End Property
+
+        Public Property ConditionJ1() As String
+            Get
+                Return _ConditionJ1
+            End Get
+            Set(ByVal value As String)
+                _ConditionJ1 = value
+            End Set
+        End Property
+
+        Public Property JourJ2() As String
+            Get
+                Return _JourJ2
+            End Get
+            Set(ByVal value As String)
+                _JourJ2 = value
+            End Set
+        End Property
+
+        Public Property MinJ2() As String
+            Get
+                Return _MinJ2
+            End Get
+            Set(ByVal value As String)
+                _MinJ2 = value
+            End Set
+        End Property
+
+        Public Property MaxJ2() As String
+            Get
+                Return _MaxJ2
+            End Get
+            Set(ByVal value As String)
+                _MaxJ2 = value
+            End Set
+        End Property
+
+        Public Property IconJ2() As String
+            Get
+                Return _IconJ2
+            End Get
+            Set(ByVal value As String)
+                _IconJ2 = value
+            End Set
+        End Property
+
+        Public Property ConditionJ2() As String
+            Get
+                Return _ConditionJ2
+            End Get
+            Set(ByVal value As String)
+                _ConditionJ2 = value
+            End Set
+        End Property
+
+        Public Property JourJ3() As String
+            Get
+                Return _JourJ3
+            End Get
+            Set(ByVal value As String)
+                _JourJ3 = value
+            End Set
+        End Property
+
+        Public Property MinJ3() As String
+            Get
+                Return _MinJ3
+            End Get
+            Set(ByVal value As String)
+                _MinJ3 = value
+            End Set
+        End Property
+
+        Public Property MaxJ3() As String
+            Get
+                Return _MaxJ3
+            End Get
+            Set(ByVal value As String)
+                _MaxJ3 = value
+            End Set
+        End Property
+
+        Public Property IconJ3() As String
+            Get
+                Return _IconJ3
+            End Get
+            Set(ByVal value As String)
+                _IconJ3 = value
+            End Set
+        End Property
+
+        Public Property ConditionJ3() As String
+            Get
+                Return _ConditionJ3
+            End Get
+            Set(ByVal value As String)
+                _ConditionJ3 = value
+            End Set
+        End Property
+
         Public ListCommandName As New List(Of String)
         Public ListCommandData As New List(Of String)
         Public ListCommandRepeat As New List(Of String)
+
     End Class
 End Namespace

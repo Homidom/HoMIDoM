@@ -5,7 +5,7 @@ Imports System.ServiceModel
 
 Class Window1
 
-    Public Shared IsConnect As Boolean
+    Public Shared IsConnect As Boolean = False
     Public Shared CanvasUser As Canvas
     Public Shared myService As HoMIDom.HoMIDom.IHoMIDom
 
@@ -40,6 +40,7 @@ Class Window1
 
             CanvasUser = CanvasRight
         Catch ex As Exception
+            IsConnect = False
             MessageBox.Show("Erreur: " & ex.ToString)
         End Try
     End Sub
@@ -47,9 +48,41 @@ Class Window1
     'Affiche la date et heure, heures levé et couché du soleil
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         If IsConnect = True Then
-            LblStatus.Content = Now.ToLongDateString & " " & Now.ToShortTimeString & "      " & "Serveur connecté"
+            Try
+                Dim mytime As String = myService.GetTime
+                LblStatus.Content = Now.ToLongDateString & " " & mytime & " "
+                LblConnect.Content = "Serveur connecté"
+
+                Dim myBrush As New RadialGradientBrush()
+                myBrush.GradientOrigin = New Point(0.75, 0.25)
+                myBrush.GradientStops.Add(New GradientStop(Colors.LightGreen, 0.0))
+                myBrush.GradientStops.Add(New GradientStop(Colors.Green, 0.5))
+                myBrush.GradientStops.Add(New GradientStop(Colors.DarkGreen, 1.0))
+                Ellipse1.Fill = myBrush
+            Catch ex As Exception
+                IsConnect = False
+                LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString & " "
+                LblConnect.Content = "Serveur non connecté"
+
+                Dim myBrush As New RadialGradientBrush()
+                myBrush.GradientOrigin = New Point(0.75, 0.25)
+                myBrush.GradientStops.Add(New GradientStop(Colors.Yellow, 0.0))
+                myBrush.GradientStops.Add(New GradientStop(Colors.Red, 0.5))
+                myBrush.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
+
+                Ellipse1.Fill = myBrush
+            End Try
         Else
-            LblStatus.Content = Now.ToLongDateString & " " & Now.ToShortTimeString & "      " & "Serveur non connecté"
+            LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString & "      "
+            LblConnect.Content = "Serveur non connecté"
+
+            Dim myBrush As New RadialGradientBrush()
+            myBrush.GradientOrigin = New Point(0.75, 0.25)
+            myBrush.GradientStops.Add(New GradientStop(Colors.Yellow, 0.0))
+            myBrush.GradientStops.Add(New GradientStop(Colors.Red, 0.5))
+            myBrush.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
+
+            Ellipse1.Fill = myBrush
         End If
     End Sub
 
@@ -64,6 +97,7 @@ Class Window1
         TreeViewZone.Items.Clear()
         For i As Integer = 0 To myService.GetAllZones.Count - 1
             Dim newchild As New TreeViewItem
+            newchild.Foreground = New SolidColorBrush(Colors.White)
             newchild.Header = myService.GetAllZones.Item(i).Name
             newchild.Uid = myService.GetAllZones.Item(i).ID
             TreeViewZone.Items.Add(newchild)
@@ -75,6 +109,7 @@ Class Window1
         TreeViewDriver.Items.Clear()
         For i As Integer = 0 To myService.GetAllDrivers.Count - 1 'Obj.Drivers.Count - 1
             Dim newchild As New TreeViewItem
+            newchild.Foreground = New SolidColorBrush(Colors.White)
             newchild.Header = myService.GetAllDrivers.Item(i).Nom 'Obj.Drivers.Item(i).Nom
             newchild.Uid = myService.GetAllDrivers.Item(i).ID 'Obj.Drivers.Item(i).id
             TreeViewDriver.Items.Add(newchild)
@@ -86,6 +121,7 @@ Class Window1
         TreeViewDevice.Items.Clear()
         For i As Integer = 0 To myService.GetAllDevices.Count - 1 'Obj.Devices.Count - 1
             Dim newchild As New TreeViewItem
+            newchild.Foreground = New SolidColorBrush(Colors.White)
             newchild.Header = myService.GetAllDevices.Item(i).name 'Obj.Devices.Item(i).Name
             newchild.Uid = myService.GetAllDevices.Item(i).id 'Obj.Devices.Item(i).id
             TreeViewDevice.Items.Add(newchild)
@@ -253,6 +289,11 @@ Class Window1
 
     'Menu Save Config
     Private Sub MnuSaveConfig(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem2.Click
+        If IsConnect = False Then
+            MessageBox.Show("Impossible d'afficher le log car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+            Exit Sub
+        End If
+
         myService.SaveConfig()
     End Sub
 
@@ -270,6 +311,11 @@ Class Window1
 
     'Menu Sauvegarder la config
     Private Sub MnuConfigSrv(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem3.Click
+        If IsConnect = False Then
+            MessageBox.Show("Impossible d'afficher le log car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+            Exit Sub
+        End If
+
         Dim x As New uConfigServer
         x.Uid = System.Guid.NewGuid.ToString()
         AddHandler x.CloseMe, AddressOf UnloadControl
@@ -280,6 +326,11 @@ Class Window1
 
     'Menu Consulter le log
     Private Sub MnuViewLog(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem4.Click
+        If IsConnect = False Then
+            MessageBox.Show("Impossible d'afficher le log car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+            Exit Sub
+        End If
+
         Dim x As New uLog
         x.Uid = System.Guid.NewGuid.ToString()
         AddHandler x.CloseMe, AddressOf UnloadControl

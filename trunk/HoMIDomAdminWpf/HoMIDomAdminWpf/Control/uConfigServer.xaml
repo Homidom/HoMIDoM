@@ -88,5 +88,6 @@
         <Label Height="28" Margin="14,0,36,0" Name="Label5" VerticalAlignment="Top" Foreground="DarkOrange" FontSize="14" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic">Propriétés du serveur</Label>
         <Button Height="23" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,0,25,7" Name="BtnCancel" VerticalAlignment="Bottom" Width="72" Foreground="White">Annuler</Button>
         <Button Height="23" Template="{DynamicResource GlassButton}" Margin="86,0,103,7" Name="BtnOK" VerticalAlignment="Bottom" Foreground="White">OK</Button>
+        <Border Name="Border1" BorderThickness="2" BorderBrush="Gray" />
     </Grid>
 </UserControl>

@@ -112,21 +112,21 @@
                     <TabItem Header="Drivers" Name="TabItem1">
                         <Grid Height="250.05">
                         
-                            <TreeView Margin="6,6,3.334,38.341" Name="TreeViewDriver" />
+                            <TreeView Margin="6,6,3.334,38.341" Name="TreeViewDriver" Background="DimGray" Foreground="White" />
                             <Button Height="19" HorizontalAlignment="Left" Margin="5,0,0,12" Name="BtnStart" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" Width="53" Foreground="White">Start</Button>
                             <Button Height="19" Margin="64,0,58,12" Name="BtnStop" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Foreground="White">Stop</Button>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Devices">
                         <Grid Height="250.05">
-                            <TreeView Margin="6,6,3.334,38.341" Name="TreeViewDevice" />
+                            <TreeView Margin="6,6,3.334,38.341" Name="TreeViewDevice" Background="DimGray" />
                             <Button Height="19" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5,0,0,13" Name="BtnNewDevice" VerticalAlignment="Bottom" Width="62" Foreground="White">Nouveau</Button>
                             <Button Foreground="White" Height="19" Template="{DynamicResource GlassButton}" Margin="0,0,40,13" Name="BtnDelDevice" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="62.036">Supprimer</Button>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Zones">
                         <Grid Height="250.05">
-                            <TreeView Margin="6,6,3.334,38.341" Name="TreeViewZone" />
+                            <TreeView Margin="6,6,3.334,38.341" Name="TreeViewZone" Background="DimGray" />
                             <Button Height="19" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5,0,0,13" Name="BtnNewZone" VerticalAlignment="Bottom" Width="62" Foreground="White">Nouveau</Button>
                             <Button Foreground="White" Height="19" Template="{DynamicResource GlassButton}" Margin="0,0,40,13" Name="BtnDelZone" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="62.036">Supprimer</Button>
                         </Grid>
@@ -149,7 +149,11 @@
                     </RadialGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>
-            <Label HorizontalAlignment="Left" Margin="6,8,0,0" Name="LblStatus" Width="Auto" Foreground="White">#####</Label>
+            <StackPanel HorizontalAlignment="Right" Margin="0,7,507,3" Name="StackPanel1" Width="493" Orientation="Horizontal">
+                <Label Foreground="White" Height="23" Name="LblStatus" Width="Auto">#####</Label>
+                <Ellipse Height="20" Name="Ellipse1" Stroke="Black" Width="20" Fill="Cyan" />
+                <Label Foreground="White" Height="23" Name="LblConnect" Width="Auto">#####</Label>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

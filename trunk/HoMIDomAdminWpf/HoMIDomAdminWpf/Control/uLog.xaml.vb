@@ -7,7 +7,7 @@
     End Sub
 
     Private Sub RefreshLog()
-        TxtLog.Text = Window1.myService.ReturnLog()
+        If Window1.IsConnect = True Then TxtLog.Text = Window1.myService.ReturnLog()
     End Sub
 
 

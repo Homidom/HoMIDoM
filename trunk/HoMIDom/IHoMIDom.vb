@@ -19,6 +19,12 @@ Namespace HoMIDom
     <ServiceContract(Namespace:="http://HoMIDom/")> Public Interface IHoMIDom
         '---- Subs --------------------------------------------
         ''' <summary>
+        ''' Retourne l'heure du serveur
+        ''' </summary>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetTime() As String
+
+        ''' <summary>
         ''' 'Sauvegarde de la configuration
         ''' </summary>
         ''' <remarks></remarks>
