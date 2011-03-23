@@ -1186,6 +1186,15 @@ Namespace HoMIDom
         End Sub
 
         ''' <summary>
+        ''' Retourne l'heure du serveur
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetTime() As String Implements IHoMIDom.GetTime
+            Return Now.ToLongTimeString
+        End Function
+
+        ''' <summary>
         ''' Retourne la valeur de correction de l'heure de coucher du soleil
         ''' </summary>
         ''' <returns></returns>
@@ -1347,6 +1356,34 @@ Namespace HoMIDom
                         .ValueMin = _ListDevices.Item(i).valuemin
                     End If
 
+                    If .Type = Device.ListeDevices.METEO Then
+                        .ConditionActuel = _ListDevices.Item(i).ConditionActuel
+                        .ConditionJ1 = _ListDevices.Item(i).ConditionJ1
+                        .ConditionJ2 = _ListDevices.Item(i).ConditionActuel
+                        .ConditionJ3 = _ListDevices.Item(i).ConditionJ3
+                        .ConditionToday = _ListDevices.Item(i).ConditionToday
+                        .HumiditeActuel = _ListDevices.Item(i).HumiditeActuel
+                        .IconActuel = _ListDevices.Item(i).IconActuel
+                        .IconJ1 = _ListDevices.Item(i).IconJ1
+                        .IconJ2 = _ListDevices.Item(i).IconJ2
+                        .IconJ3 = _ListDevices.Item(i).IconJ3
+                        .IconToday = _ListDevices.Item(i).IconToday
+                        .JourJ1 = _ListDevices.Item(i).JourJ1
+                        .JourJ2 = _ListDevices.Item(i).JourJ2
+                        .JourJ3 = _ListDevices.Item(i).JourJ3
+                        .JourToday = _ListDevices.Item(i).JourToday
+                        .MaxJ1 = _ListDevices.Item(i).MaxJ1
+                        .MaxJ2 = _ListDevices.Item(i).MaxJ2
+                        .MaxJ3 = _ListDevices.Item(i).MaxJ3
+                        .MaxToday = _ListDevices.Item(i).MaxToday
+                        .MinJ1 = _ListDevices.Item(i).MinJ1
+                        .MinJ2 = _ListDevices.Item(i).MinJ2
+                        .MinJ3 = _ListDevices.Item(i).MinJ3
+                        .MinToday = _ListDevices.Item(i).MinToday
+                        .TemperatureActuel = _ListDevices.Item(i).TemperatureActuel
+                        .VentActuel = _ListDevices.Item(i).VentActuel
+                    End If
+
                     If .Type = Device.ListeDevices.MULTIMEDIA Then
                         For j As Integer = 0 To _ListDevices.Item(i).listcommandname.count - 1
                             .ListCommandName.Add(_ListDevices.Item(i).listcommandname.item(j))
@@ -1502,15 +1539,25 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function ReturnLog(Optional ByVal Requete As String = "") As String Implements IHoMIDom.ReturnLog
-            If Requete = "" Then
-                Dim SR As New StreamReader(_MonRepertoire & "\logs\log.xml")
-                ReturnLog = SR.ReadToEnd()
-                SR.Close()
-            Else
-                'creation d'une nouvelle instance du membre xmldocument
-                Dim XmlDoc As XmlDocument = New XmlDocument()
-                XmlDoc.Load(_MonRepertoire & "\logs\log.xml")
-            End If
+            Try
+                Dim retour As String = ""
+                If Requete = "" Then
+                    Dim SR As New StreamReader(_MonRepertoire & "\logs\log.xml")
+                    retour = SR.ReadToEnd()
+                    SR.Close()
+                Else
+                    'creation d'une nouvelle instance du membre xmldocument
+                    Dim XmlDoc As XmlDocument = New XmlDocument()
+                    XmlDoc.Load(_MonRepertoire & "\logs\log.xml")
+                End If
+                If retour.Length > 65000 Then
+                    retour = "Erreur, trop de ligne à traiter depuis le log !!"
+                    Return retour
+                End If
+                Return retour
+            Catch ex As Exception
+                ReturnLog = "Erreur lors de la récupération du log: " & ex.ToString
+            End Try
         End Function
 
         ''' <summary>
@@ -2333,6 +2380,34 @@ Namespace HoMIDom
                         retour.ValueLast = _ListDevices.Item(i).valuelast
                         retour.ValueMax = _ListDevices.Item(i).valuemax
                         retour.ValueMin = _ListDevices.Item(i).valuemin
+                    End If
+
+                    If retour.Type = Device.ListeDevices.METEO Then
+                        retour.ConditionActuel = _ListDevices.Item(i).ConditionActuel
+                        retour.ConditionJ1 = _ListDevices.Item(i).ConditionJ1
+                        retour.ConditionJ2 = _ListDevices.Item(i).ConditionActuel
+                        retour.ConditionJ3 = _ListDevices.Item(i).ConditionJ3
+                        retour.ConditionToday = _ListDevices.Item(i).ConditionToday
+                        retour.HumiditeActuel = _ListDevices.Item(i).HumiditeActuel
+                        retour.IconActuel = _ListDevices.Item(i).IconActuel
+                        retour.IconJ1 = _ListDevices.Item(i).IconJ1
+                        retour.IconJ2 = _ListDevices.Item(i).IconJ2
+                        retour.IconJ3 = _ListDevices.Item(i).IconJ3
+                        retour.IconToday = _ListDevices.Item(i).IconToday
+                        retour.JourJ1 = _ListDevices.Item(i).JourJ1
+                        retour.JourJ2 = _ListDevices.Item(i).JourJ2
+                        retour.JourJ3 = _ListDevices.Item(i).JourJ3
+                        retour.JourToday = _ListDevices.Item(i).JourToday
+                        retour.MaxJ1 = _ListDevices.Item(i).MaxJ1
+                        retour.MaxJ2 = _ListDevices.Item(i).MaxJ2
+                        retour.MaxJ3 = _ListDevices.Item(i).MaxJ3
+                        retour.MaxToday = _ListDevices.Item(i).MaxToday
+                        retour.MinJ1 = _ListDevices.Item(i).MinJ1
+                        retour.MinJ2 = _ListDevices.Item(i).MinJ2
+                        retour.MinJ3 = _ListDevices.Item(i).MinJ3
+                        retour.MinToday = _ListDevices.Item(i).MinToday
+                        retour.TemperatureActuel = _ListDevices.Item(i).TemperatureActuel
+                        retour.VentActuel = _ListDevices.Item(i).VentActuel
                     End If
 
                     If retour.Type = Device.ListeDevices.MULTIMEDIA Then

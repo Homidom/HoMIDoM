@@ -19,9 +19,11 @@
         InitializeComponent()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        TxtLat.Text = Window1.myService.GetLatitude
-        TxtLong.Text = Window1.myService.GetLongitude
-        HCL.Text = Window1.myService.GetHeureCorrectionLever
-        HCC.Text = Window1.myService.GetHeureCorrectionCoucher
+        If Window1.IsConnect = True Then
+            TxtLat.Text = Window1.myService.GetLatitude
+            TxtLong.Text = Window1.myService.GetLongitude
+            HCL.Text = Window1.myService.GetHeureCorrectionLever
+            HCC.Text = Window1.myService.GetHeureCorrectionCoucher
+        End If
     End Sub
 End Class

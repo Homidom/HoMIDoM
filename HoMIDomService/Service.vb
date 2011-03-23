@@ -27,7 +27,6 @@ Module Service
             Console.WriteLine(" ")
 
             'Démarrage du serviceWeb
-            Console.WriteLine(Now & " ")
             Console.WriteLine(Now & " Start ServiceWeb")
 
             Using host As New ServiceHost(GetType(Server))
