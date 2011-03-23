@@ -87,7 +87,7 @@ Class Window1
     End Sub
 
     'Menu Quitter
-    Private Sub Quitter(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem1.Click
+    Private Sub Quitter(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuQuitter.Click
         End
     End Sub
 
@@ -288,7 +288,7 @@ Class Window1
 #End Region
 
     'Menu Save Config
-    Private Sub MnuSaveConfig(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem2.Click
+    Private Sub MnuSaveConfig(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuConfigSrv.Click
         If IsConnect = False Then
             MessageBox.Show("Impossible d'afficher le log car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
             Exit Sub
@@ -310,7 +310,7 @@ Class Window1
     End Sub
 
     'Menu Sauvegarder la config
-    Private Sub MnuConfigSrv(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem3.Click
+    Private Sub MnuConfigSrv(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuConfigSrv.Click
         If IsConnect = False Then
             MessageBox.Show("Impossible d'afficher le log car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
             Exit Sub
@@ -325,7 +325,7 @@ Class Window1
     End Sub
 
     'Menu Consulter le log
-    Private Sub MnuViewLog(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem4.Click
+    Private Sub MnuViewLog(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuConsultLog.Click
         If IsConnect = False Then
             MessageBox.Show("Impossible d'afficher le log car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
             Exit Sub
@@ -339,5 +339,13 @@ Class Window1
         CanvasRight.SetTop(x, 50)
     End Sub
 
-
+    ''' <summary>
+    ''' Menu à propose
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub MnuPropos(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuPropos.Click
+        Process.Start("http://www.homidom.com/#")
+    End Sub
 End Class

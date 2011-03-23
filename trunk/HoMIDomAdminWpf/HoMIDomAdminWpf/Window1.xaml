@@ -81,16 +81,9 @@
                     </RadialGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>
-            <Menu Height="20.004" HorizontalAlignment="Left" Margin="12.667,0,0,6" Name="Menu1" VerticalAlignment="Bottom" Width="63.346" Background="Transparent">
-                <MenuItem Header="Fichier" Foreground="WhiteSmoke">
-                    <MenuItem Header="Save Config" Name="MenuItem2" />
-                    <MenuItem Header="Config Serveur" Name="MenuItem3" />
-                    <MenuItem Header="Consulter Log" Name="MenuItem4" />
-                    <MenuItem Header="Quitter" Name="MenuItem1" />
-                </MenuItem>
-            </Menu>
+
             <Image HorizontalAlignment="Right" Margin="0,16,6,9" Name="Image2" Stretch="Fill" Width="394" Source="/HoMIDomAdminWpf;component/Images/bandeau_1_950x60.jpg" />
-            <Label HorizontalAlignment="Left" Margin="1.667,0,0,16" Name="Label1" Width="170" Content="HoMIDom Admin" FontSize="20">
+            <Label HorizontalAlignment="Left" Margin="1.667,0,0,24" Name="Label1" Width="170" Content="HoMIDom Admin" FontSize="20">
                 <Label.Foreground>
                     <LinearGradientBrush EndPoint="0.494,0.889" StartPoint="0.494,0.028">
                         <GradientStop Color="#CCFFFFFF" Offset="0" />
@@ -98,6 +91,22 @@
                     </LinearGradientBrush>
                 </Label.Foreground>
             </Label>
+            <StackPanel HorizontalAlignment="Left" Margin="12,27,0,6" Name="StackPanel2" Width="380" Orientation="Horizontal">
+                <Menu Height="25.004" HorizontalAlignment="Left"  Name="Menu1" VerticalAlignment="Bottom" Width="Auto" Background="Transparent">
+                    <MenuItem Header="Fichier" Foreground="WhiteSmoke">
+                        <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig" />
+                        <MenuItem Header="Configuration du Serveur" Name="MenuConfigSrv" />
+                        <MenuItem Header="Quitter" Name="MenuQuitter"/>
+                    </MenuItem>
+                    <MenuItem Header="Affichage" Foreground="WhiteSmoke">
+                        <MenuItem Header="Consulter Log" Name="MenuConsultLog" />
+                    </MenuItem> 
+                    <MenuItem Header="?" Foreground="WhiteSmoke">
+                        <MenuItem Header="A propos" Name="MenuPropos" />
+                    </MenuItem>
+                </Menu>
+
+            </StackPanel>
         </Grid>
         <Grid HorizontalAlignment="Left" Margin="0,58,0,29" Name="GridLeft" Width="193" Background="Black">
             <Canvas Margin="6,6.668,5.001,273.388" Name="Canvas1" Background="Black">
