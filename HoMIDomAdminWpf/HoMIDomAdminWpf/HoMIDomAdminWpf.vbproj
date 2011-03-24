@@ -44,11 +44,16 @@
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="taglib-sharp, Version=2.0.3.7, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>d:\cyber-SPA\PE - Perso\Visual Studio 2008\Projects\WpfApplicationSearchMusic\WpfApplicationSearchMusic\bin\Debug\taglib-sharp.dll</HintPath>
     </Reference>
     <Reference Include="UIAutomationProvider">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -91,6 +96,10 @@
     <Page Include="Control\uLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control\uPlaylist.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Control\uTestDevice.xaml">
       <SubType>Designer</SubType>
@@ -145,6 +154,9 @@
     </Compile>
     <Compile Include="Control\uLog.xaml.vb">
       <DependentUpon>uLog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\uPlaylist.xaml.vb">
+      <DependentUpon>uPlaylist.xaml</DependentUpon>
     </Compile>
     <Compile Include="Control\uTestDevice.xaml.vb">
       <DependentUpon>uTestDevice.xaml</DependentUpon>

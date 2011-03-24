@@ -348,4 +348,19 @@ Class Window1
     Private Sub MnuPropos(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuPropos.Click
         Process.Start("http://www.homidom.com/#")
     End Sub
+
+    ''' <summary>
+    ''' Afficher la playlist
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub MnuPlayList(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuPlayList.Click
+        Dim x As New uPlaylist
+        x.Uid = System.Guid.NewGuid.ToString()
+        AddHandler x.CloseMe, AddressOf UnloadControl
+        CanvasRight.Children.Add(x)
+        CanvasRight.SetLeft(x, 50)
+        CanvasRight.SetTop(x, 50)
+    End Sub
 End Class
