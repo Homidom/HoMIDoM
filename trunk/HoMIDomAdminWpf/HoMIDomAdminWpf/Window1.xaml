@@ -100,6 +100,7 @@
                     </MenuItem>
                     <MenuItem Header="Affichage" Foreground="WhiteSmoke">
                         <MenuItem Header="Consulter Log" Name="MenuConsultLog" />
+                        <MenuItem Header="PlayList" Name="MenuPlayList" />
                     </MenuItem> 
                     <MenuItem Header="?" Foreground="WhiteSmoke">
                         <MenuItem Header="A propos" Name="MenuPropos" />

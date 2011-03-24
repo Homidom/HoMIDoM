@@ -16,7 +16,6 @@ Partial Public Class uPlaylist
     Private ListPlist As New List(Of FilePlayList)
 
 
-
     Public Enum EAction
         Nouveau
         Modifier
