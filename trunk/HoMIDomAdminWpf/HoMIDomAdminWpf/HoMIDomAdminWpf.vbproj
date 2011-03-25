@@ -143,6 +143,7 @@
     <Import Include="XamlGeneratedNamespace" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClServer.vb" />
     <Compile Include="Control\uDriver.xaml.vb">
       <DependentUpon>uDriver.xaml</DependentUpon>
     </Compile>

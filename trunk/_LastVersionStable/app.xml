@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <system.serviceModel>
+    <services>
+      <service name="Homidom.Server">
+        <endpoint
+            address="http://localhost:8018/Homidom"
+            binding="basicHttpBinding"
+            contract="HoMIDom.IHoMIDom" />
+      </service>
+    </services>
+  </system.serviceModel>
+</configuration>
