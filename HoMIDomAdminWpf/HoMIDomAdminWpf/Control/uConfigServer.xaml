@@ -81,12 +81,15 @@
         </Border>
         <GroupBox Header="Connexion" Name="GroupBox1" Margin="6.5,37,6.5,0" Height="145" VerticalAlignment="Top">
             <Grid>
-                <Label Foreground="White" HorizontalAlignment="Left" Margin="10,10,0,0" Name="Label6" Width="96" Height="27" VerticalAlignment="Top">Adresse Serveur:</Label>
-                <ComboBox Margin="104,10,12.5,0" Name="CbAdress" Height="19" VerticalAlignment="Top" IsEditable="True" />
-                <CheckBox HorizontalAlignment="Left" Margin="14,40,0,0" Name="CheckBox1" Width="159" Foreground="White" Height="15.723" VerticalAlignment="Top">Serveur par défaut</CheckBox>
-                <Button Height="23" HorizontalAlignment="Left" Margin="16,0,0,10" Name="BtnNewServer" VerticalAlignment="Bottom" Width="80">Nouveau</Button>
-                <Button Height="23" HorizontalAlignment="Left" Margin="102,0,0,10" Name="BtnSaveServer" VerticalAlignment="Bottom" Width="80">Enregistrer</Button>
-                <Button Height="23" Margin="188,0,109,10" Name="BtnDelServer" VerticalAlignment="Bottom">Supprimer</Button>
+                <Label Foreground="White" Margin="136,10,145,0" Name="Label6" Height="27" VerticalAlignment="Top">Adresse Serveur:</Label>
+                <CheckBox Margin="140,0,78,47" Name="CheckBox1" Foreground="White" Height="15.723" VerticalAlignment="Bottom">Serveur par défaut</CheckBox>
+                <Button Height="23" Margin="168,0,0,10" Name="BtnNewServer" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Foreground="White" HorizontalAlignment="Left" Width="59">Nouveau</Button>
+                <Button Height="23" HorizontalAlignment="Right" Margin="0,0,80,10" Name="BtnSaveServer" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="64" Foreground="White">Enregistrer</Button>
+                <Button Height="23" Margin="0,0,10,11" Name="BtnDelServer" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Width="64" Foreground="White">Supprimer</Button>
+                <Label Foreground="White" Height="27" Margin="136,35,145,0" Name="Label7" VerticalAlignment="Top">Port Serveur:</Label>
+                <TextBox Height="19" Margin="0,38,60,0" Name="TxtPort" VerticalAlignment="Top" HorizontalAlignment="Right" Width="87" />
+                <ListBox HorizontalAlignment="Left" Margin="16,8,0,11" Name="ListBox1" Width="114" />
+                <TextBox Height="19" Margin="0,10,10,0" Name="TxtAdr" VerticalAlignment="Top" HorizontalAlignment="Right" Width="137" />
             </Grid>
         </GroupBox>
         <Label HorizontalAlignment="Left" Margin="14,0,0,104" Name="Label1" Width="67" Foreground="White" Height="28" VerticalAlignment="Bottom">Longitude:</Label>

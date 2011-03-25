@@ -12,7 +12,6 @@ Class Window1
     Public Shared myService As HoMIDom.HoMIDom.IHoMIDom
     Public Shared ListServer As New List(Of ClServer)
     Dim Myfile As String
-    Public Shared AdresseSrv As String
 
     Public Sub New()
 
@@ -42,12 +41,14 @@ Class Window1
 
                     Dim myadress As String = ""
                     For i As Integer = 0 To ListServer.Count - 1
-                        If ListServer.Item(i).Defaut = True Then myadress = ListServer.Item(i).Adresse
+                        If ListServer.Item(i).Defaut = True Then
+                            myadress = "http://" & ListServer.Item(i).Adresse & ":" & ListServer.Item(i).Port & "/ServiceModelSamples/service"
+                        End If
                     Next
 
                     If myadress = "" Then
                         myadress = "http://localhost:8000/ServiceModelSamples/service"
-                        MessageBox.Show("Aucun adresse par défaut n'a été trouvée, le système se connectera à l'adresse suivante: " & myadress, "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        MessageBox.Show("Aucune adresse par défaut n'a été trouvée, le système se connectera à l'adresse suivante: " & myadress, "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     End If
                     myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
 
@@ -385,13 +386,8 @@ Class Window1
 
     End Sub
 
-    'Menu Sauvegarder la config
+    'Menu paramétrer le serveur
     Private Sub MnuConfigSrv(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuConfigSrv.Click
-        If IsConnect = False Then
-            MessageBox.Show("Impossible d'afficher le log car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-            Exit Sub
-        End If
-
         Dim x As New uConfigServer
         x.Uid = System.Guid.NewGuid.ToString()
         AddHandler x.CloseMe, AddressOf UnloadControl
