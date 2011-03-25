@@ -2,12 +2,17 @@
 Imports System.Runtime.Serialization.Formatters.Soap
 Imports HoMIDom.HoMIDom
 Imports System.ServiceModel
+Imports System.IO
+Imports System.Xml.Serialization
 
 Class Window1
 
     Public Shared IsConnect As Boolean = False
     Public Shared CanvasUser As Canvas
     Public Shared myService As HoMIDom.HoMIDom.IHoMIDom
+    Public Shared ListServer As New List(Of ClServer)
+    Dim Myfile As String
+    Public Shared AdresseSrv As String
 
     Public Sub New()
 
@@ -20,11 +25,41 @@ Class Window1
         dt.Interval = New TimeSpan(0, 0, 1)
         dt.Start()
 
+        Dim MyRep As String = System.Environment.CurrentDirectory
+        myfile = MyRep & "\config.xml"
+
         'Connexion au serveur web
         Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
 
         Try
-            myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
+            If File.Exists(Myfile) Then
+                Try
+                    'Deserialize text file to a new object.
+                    Dim objStreamReader As New StreamReader(Myfile)
+                    Dim x As New XmlSerializer(ListServer.GetType)
+                    ListServer = x.Deserialize(objStreamReader)
+                    objStreamReader.Close()
+
+                    Dim myadress As String = ""
+                    For i As Integer = 0 To ListServer.Count - 1
+                        If ListServer.Item(i).Defaut = True Then myadress = ListServer.Item(i).Adresse
+                    Next
+
+                    If myadress = "" Then
+                        myadress = "http://localhost:8000/ServiceModelSamples/service"
+                        MessageBox.Show("Aucun adresse par défaut n'a été trouvée, le système se connectera à l'adresse suivante: " & myadress, "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    End If
+                    myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
+
+                Catch ex As Exception
+                    MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                End Try
+
+            Else 'on utilise le fichier app.config
+                MessageBox.Show("Aucun fichier de config n'a été trouvée, le système se base donc sur le fichier app.config", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
+            End If
+
             myService = myChannelFactory.CreateChannel()
             IsConnect = True
         Catch ex As Exception
@@ -41,7 +76,7 @@ Class Window1
             CanvasUser = CanvasRight
         Catch ex As Exception
             IsConnect = False
-            MessageBox.Show("Erreur: " & ex.ToString)
+            MessageBox.Show("Erreur Lors de la connexion au serveur: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -95,6 +130,7 @@ Class Window1
     'Afficher la liste des zones
     Public Sub AffZone()
         TreeViewZone.Items.Clear()
+        If IsConnect = False Then Exit Sub
         For i As Integer = 0 To myService.GetAllZones.Count - 1
             Dim newchild As New TreeViewItem
             newchild.Foreground = New SolidColorBrush(Colors.White)
@@ -107,11 +143,40 @@ Class Window1
     'Afficher la liste des drivers
     Public Sub AffDriver()
         TreeViewDriver.Items.Clear()
+        If IsConnect = False Then Exit Sub
         For i As Integer = 0 To myService.GetAllDrivers.Count - 1 'Obj.Drivers.Count - 1
             Dim newchild As New TreeViewItem
+            Dim stack As New StackPanel
+            stack.Orientation = Orientation.Horizontal
+
+            Dim Elipse As New Ellipse
+            Elipse.Width = 9
+            Elipse.Height = 9
+            Dim myBrush As New RadialGradientBrush()
+            myBrush.GradientOrigin = New Point(0.75, 0.25)
+
+            If myService.GetAllDrivers.Item(i).IsConnect = True Then
+                myBrush.GradientStops.Add(New GradientStop(Colors.LightGreen, 0.0))
+                myBrush.GradientStops.Add(New GradientStop(Colors.Green, 0.5))
+                myBrush.GradientStops.Add(New GradientStop(Colors.DarkGreen, 1.0))
+            Else
+                myBrush.GradientStops.Add(New GradientStop(Colors.Yellow, 0.0))
+                myBrush.GradientStops.Add(New GradientStop(Colors.Red, 0.5))
+                myBrush.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
+            End If
+
+            Elipse.Fill = myBrush
+
+            Dim label As New Label
+            label.Foreground = New SolidColorBrush(Colors.White)
+            label.Content = myService.GetAllDrivers.Item(i).Nom
+
+            stack.Children.Add(Elipse)
+            stack.Children.Add(label)
+
             newchild.Foreground = New SolidColorBrush(Colors.White)
-            newchild.Header = myService.GetAllDrivers.Item(i).Nom 'Obj.Drivers.Item(i).Nom
-            newchild.Uid = myService.GetAllDrivers.Item(i).ID 'Obj.Drivers.Item(i).id
+            newchild.Header = stack 'myService.GetAllDrivers.Item(i).Nom
+            newchild.Uid = myService.GetAllDrivers.Item(i).ID
             TreeViewDriver.Items.Add(newchild)
         Next
     End Sub
@@ -119,6 +184,7 @@ Class Window1
     'Afficher la liste des devices
     Public Sub AffDevice()
         TreeViewDevice.Items.Clear()
+        If IsConnect = False Then Exit Sub
         For i As Integer = 0 To myService.GetAllDevices.Count - 1 'Obj.Devices.Count - 1
             Dim newchild As New TreeViewItem
             newchild.Foreground = New SolidColorBrush(Colors.White)
@@ -176,6 +242,11 @@ Class Window1
         End If
     End Sub
     Private Sub TreeViewDriver_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewDriver.SelectedItemChanged
+        If IsConnect = False Then
+            MessageBox.Show("Impossible d'afficher le driver car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+            Exit Sub
+        End If
+
         For i As Integer = 0 To myService.GetAllDrivers.Count - 1
             If myService.GetAllDrivers.Item(i).ID = e.NewValue.uid Then
                 Dim x As TemplateDriver = myService.GetAllDrivers.Item(i)
@@ -205,6 +276,11 @@ Class Window1
 #Region "Devices"
     'Modifier un device
     Private Sub TreeViewDevice_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewDevice.MouseDoubleClick
+        If IsConnect = False Then
+            MessageBox.Show("Impossible d'afficher le device car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+            Exit Sub
+        End If
+
         If TreeViewDevice.SelectedItem IsNot Nothing Then
             For i As Integer = 0 To myService.GetAllDevices.Count - 1
                 If myService.GetAllDevices.Item(i).ID = TreeViewDevice.SelectedItem.uid Then
@@ -362,5 +438,20 @@ Class Window1
         CanvasRight.Children.Add(x)
         CanvasRight.SetLeft(x, 10)
         CanvasRight.SetTop(x, 5)
+    End Sub
+
+    Protected Overrides Sub Finalize()
+        Try
+            If ListServer.Count > 0 Then
+                'Serialize object to a text file.
+                Dim objStreamWriter As New StreamWriter(Myfile)
+                Dim x As New XmlSerializer(ListServer.GetType)
+                x.Serialize(objStreamWriter, ListServer)
+                objStreamWriter.Close()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de l'enregistrement du fichier de config xml de l'application Admin : " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+        MyBase.Finalize()
     End Sub
 End Class
