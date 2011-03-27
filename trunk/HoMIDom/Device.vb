@@ -544,9 +544,7 @@ Namespace HoMIDom
         <Serializable()> Class APPAREIL
             Inherits DeviceGenerique_ValueBool
 
-            ''' <summary>
-            ''' Permet de tester une commande write
-            ''' </summary>
+            ''' <summary>Permet de tester une commande write</summary>
             ''' <param name="Commande"></param>
             ''' <param name="Parametre1"></param>
             ''' <param name="Parametre2"></param>
@@ -555,9 +553,7 @@ Namespace HoMIDom
                 Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
             End Sub
 
-            ''' <summary>
-            ''' Permet de tester une commande read
-            ''' </summary>
+            ''' <summary>Permet de tester une commande read</summary>
             ''' <remarks></remarks>
             Public Sub TestRead()
                 Driver.read(Me)
@@ -584,9 +580,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueString
             Dim _Fichier As String
 
-            ''' <summary>
-            ''' Permet de tester une commande write
-            ''' </summary>
+            ''' <summary>Permet de tester une commande write</summary>
             ''' <param name="Commande"></param>
             ''' <param name="Parametre1"></param>
             ''' <param name="Parametre2"></param>
@@ -595,9 +589,7 @@ Namespace HoMIDom
                 Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
             End Sub
 
-            ''' <summary>
-            ''' Permet de tester une commande read
-            ''' </summary>
+            ''' <summary>Permet de tester une commande read</summary>
             ''' <remarks></remarks>
             Public Sub TestRead()
                 Driver.read(Me)

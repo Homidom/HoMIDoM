@@ -46,19 +46,20 @@ Namespace HoMIDom
             Dim retour As String
             Try
                 Dim valeur = Parametres
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "DeviceChange", "Historiser " & Device.name & " (" & [Property] & ") : " & valeur)
+                '--- on logue tout ce qui arrive en mode debug
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", "Historiser " & Device.name & " (" & [Property] & ") : " & valeur)
 
                 If STRGS.Left(valeur, 4) <> "ERR:" Then 'si y a pas erreur d'acquisition
                     '--- Remplacement de , par .
                     Parametres = STRGS.Replace(valeur, ",", ".")
                     '--- si c'est un nombre
                     If (IsNumeric(valeur) And IsNumeric(Device.Value) And IsNumeric(Device.ValueLast)) Then
-                        'si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                        '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
                         If Device.LastEtat And valeur.ToString = Device.ValueLast Then
                             'log de "inchangé lastetat"
                             Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (inchangé lastetat " & Device.ValueLast & ")")
                         Else
-                            'on vérifie que la valeur a changé de plus de composants_precision sinon inchangé
+                            '--- on vérifie que la valeur a changé de plus de composants_precision sinon inchangé
                             If (CDbl(valeur) + CDbl(Device.Precision)) >= CDbl(Device.Value) And (CDbl(valeur) - CDbl(Device.Precision)) <= CDbl(Device.Value) Then
                                 'log de "inchangé précision"
                                 Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (inchangé precision " & Device.ValueLast & ")")
@@ -73,8 +74,8 @@ Namespace HoMIDom
                             End If
                         End If
                     Else
-                        'Valeur est autre chose qu'un nombre
-                        '--- log de la nouvelle valeur
+                        '--- Valeur est autre chose qu'un nombre
+                        'log de la nouvelle valeur
                         Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
                         '--- historise la valeur si ce n'est pas une simple info de config
                         If STRGS.Left(valeur, 4) <> "CFG:" Then
@@ -994,11 +995,155 @@ Namespace HoMIDom
             Try
                 'Cherche tous les drivers chargés
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Devices_Stop", "Arrêt des devices")
-                For Each _dev In _ListDevices
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Devices_Stop", " - " & _dev.Name & " démarré")
+                For Each _dev As Device.DeviceGenerique In _ListDevices
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Devices_Stop", " - " & _dev.Name & " arrété")
                     'marche pas !!!!!
-
-                    'RemoveHandler _dev.DeviceChanged, AddressOf DeviceChange
+                    'Suivant chaque type de device
+                    Select Case _dev.Type
+                        Case "APPAREIL"
+                            Dim o As Device.APPAREIL
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "AUDIO"
+                            Dim o As Device.AUDIO
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "BAROMETRE"
+                            Dim o As Device.BAROMETRE
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "BATTERIE"
+                            Dim o As Device.BATTERIE
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "COMPTEUR"
+                            Dim o As Device.COMPTEUR
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "CONTACT"
+                            Dim o As Device.CONTACT
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "DETECTEUR"
+                            Dim o As Device.DETECTEUR
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "DIRECTIONVENT"
+                            Dim o As Device.DIRECTIONVENT
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "ENERGIEINSTANTANEE"
+                            Dim o As Device.ENERGIEINSTANTANEE
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "ENERGIETOTALE"
+                            Dim o As Device.ENERGIETOTALE
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "FREEBOX"
+                            Dim o As Device.FREEBOX
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "GENERIQUEBOOLEEN"
+                            Dim o As Device.GENERIQUEBOOLEEN
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "GENERIQUESTRING"
+                            Dim o As Device.GENERIQUESTRING
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "GENERIQUEVALUE"
+                            Dim o As Device.GENERIQUEVALUE
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "HUMIDITE"
+                            Dim o As Device.HUMIDITE
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "LAMPE"
+                            Dim o As Device.LAMPE
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "METEO"
+                            Dim o As Device.METEO
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "MULTIMEDIA"
+                            Dim o As Device.MULTIMEDIA
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "PLUIECOURANT"
+                            Dim o As Device.PLUIECOURANT
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "PLUIETOTAL"
+                            Dim o As Device.PLUIETOTAL
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "SWITCH"
+                            Dim o As Device.SWITCH
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "TELECOMMANDE"
+                            Dim o As Device.TELECOMMANDE
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "TEMPERATURE"
+                            Dim o As Device.TEMPERATURE
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "TEMPERATURECONSIGNE"
+                            Dim o As Device.TEMPERATURECONSIGNE
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "UV"
+                            Dim o As Device.UV
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "VITESSEVENT"
+                            Dim o As Device.VITESSEVENT
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "VOLET"
+                            Dim o As Device.VOLET
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case Else
+                            Dim o As Device.GENERIQUEVALUE
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                    End Select
 
                 Next
             Catch ex As Exception
@@ -1033,6 +1178,7 @@ Namespace HoMIDom
                     Exit For
                 End If
             Next
+            Return Nothing
         End Function
 
         ''' <summary>Ecrire ou lance propritété/Sub d'un driver</summary>
@@ -2505,7 +2651,7 @@ Namespace HoMIDom
         End Function
 
         Function GetDeviceInZone(ByVal zoneId) As List(Of TemplateDevice) Implements IHoMIDom.GetDeviceInZone
-
+            Return Nothing
         End Function
 
         ''' <summary>
@@ -2567,8 +2713,7 @@ Namespace HoMIDom
         ''' Permet d'exécuter une commande Sub d'un Device
         ''' </summary>
         ''' <param name="DeviceId"></param>
-        ''' <param name="Command"></param>
-        ''' <param name="Param"></param>
+        ''' <param name="Action"></param>
         ''' <remarks></remarks>
         Sub ExecuteDeviceCommand(ByVal DeviceId As String, ByVal Action As DeviceAction) Implements IHoMIDom.ExecuteDeviceCommand
             Dim _retour As Object
@@ -2610,8 +2755,7 @@ Namespace HoMIDom
         ''' Permet d'exécuter une commande Sub d'un Driver
         ''' </summary>
         ''' <param name="DriverId"></param>
-        ''' <param name="Command"></param>
-        ''' <param name="Param"></param>
+        ''' <param name="Action"></param>
         ''' <remarks></remarks>
         Sub ExecuteDriverCommand(ByVal DriverId As String, ByVal Action As DeviceAction) Implements IHoMIDom.ExecuteDriverCommand
             Dim _retour As Object
