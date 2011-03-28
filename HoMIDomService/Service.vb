@@ -1,6 +1,7 @@
 ﻿Imports HoMIDom.HoMIDom
 Imports System.IO
-
+Imports System.Xml
+Imports System.Xml.XPath
 Imports System.ServiceModel
 Imports System.ServiceModel.Description
 
@@ -17,6 +18,7 @@ Imports System.ServiceModel.Description
 Module Service
 
     Dim myService As HoMIDom.HoMIDom.IHoMIDom
+    Dim MyRep As String = System.Environment.CurrentDirectory
 
     Sub Main()
         Try
@@ -28,8 +30,11 @@ Module Service
 
             'Démarrage du serviceWeb
             Console.WriteLine(Now & " Start ServiceWeb")
-
-            Using host As New ServiceHost(GetType(Server))
+            Dim PortSOAP As String = LoadPort()
+            If PortSOAP = "" Or IsNumeric(PortSOAP) = False Then PortSOAP = "8000"
+            Dim baseAddress As Uri = New Uri("http://localhost:" & PortSOAP & "/ServiceModelSamples/service")
+            Console.WriteLine(Now & " Adresss SOAP: " & baseAddress.ToString)
+            Using host As New ServiceHost(GetType(Server), baseAddress)
                 host.Open()
 
                 Console.WriteLine(Now & " ServiceWeb Démarré") ' & obj.PortTCP)
@@ -43,7 +48,9 @@ Module Service
                 Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
 
                 Try
-                    myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
+                    'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
+                    Dim myadress As String = "http://localhost:" & PortSOAP & "/ServiceModelSamples/service"
+                    myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
                     myService = myChannelFactory.CreateChannel()
                     'Démarrage du serveur pour charger la config
                     myService.Start()
@@ -55,9 +62,38 @@ Module Service
                 host.Close()
             End Using
         Catch ex As Exception
+            MsgBox("Erreur lors du service: " & ex.Message, MsgBoxStyle.Critical, "ERREUR SERVICE")
             Console.WriteLine(Now & " ERREUR " & ex.Message & " : " & ex.ToString)
         End Try
     End Sub
+
+    Function LoadPort() As String
+        Dim _portip As String = ""
+
+        MyRep = MyRep & "\Config\homidom.xml"
+
+        If File.Exists(MyRep) = True Then
+            Dim myxml As XML
+            Dim list As XmlNodeList
+
+            myxml = New XML(MyRep)
+
+            list = myxml.SelectNodes("/homidom/server")
+            If list.Count > 0 Then 'présence des paramètres du server
+                For j As Integer = 0 To list.Item(0).Attributes.Count - 1
+                    Select Case list.Item(0).Attributes.Item(j).Name
+                        Case "portsoap"
+                            _portip = list.Item(0).Attributes.Item(j).Value
+                            Exit For
+                    End Select
+                Next
+            Else
+                _portip = ""
+            End If
+
+            Return _portip
+        End If
+    End Function
 
     Sub close()
         End

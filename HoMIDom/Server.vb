@@ -238,7 +238,7 @@ Namespace HoMIDom
         Private Shared _HeureCoucherSoleil As DateTime 'heure du couché du soleil
         Shared _HeureLeverSoleilCorrection As Integer 'correction à appliquer sur heure du levé du soleil
         Shared _HeureCoucherSoleilCorrection As Integer 'correction à appliquer sur heure du couché du soleil
-
+        Private Shared _PortSOAP As String 'Port IP de connexion SOAP
         Dim TimerSecond As New Timers.Timer 'Timer à la seconde
 
 #End Region
@@ -320,6 +320,8 @@ Namespace HoMIDom
                                         _HeureLeverSoleilCorrection = list.Item(0).Attributes.Item(j).Value
                                     Case "heurecorrectioncoucher"
                                         _HeureCoucherSoleilCorrection = list.Item(0).Attributes.Item(j).Value
+                                    Case "portsoap"
+                                        _PortSOAP = list.Item(0).Attributes.Item(j).Value
                                     Case Else
                                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                 End Select
@@ -667,6 +669,9 @@ Namespace HoMIDom
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des paramètres serveur")
                 ''------------ server
                 writer.WriteStartElement("server")
+                writer.WriteStartAttribute("portsoap")
+                writer.WriteValue(_PortSOAP)
+                writer.WriteEndAttribute()
                 writer.WriteStartAttribute("longitude")
                 writer.WriteValue(_Longitude)
                 writer.WriteEndAttribute()
@@ -2279,6 +2284,24 @@ Namespace HoMIDom
         End Function
 
         ''' <summary>
+        ''' Fixer la valeur du port SOAP
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        Public Sub SetPortSOAP(ByVal Value As Double) Implements IHoMIDom.SetPortSOAP
+            _PortSOAP = Value
+        End Sub
+
+        ''' <summary>
+        ''' Retourne la valeur du port SOAP
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetPortSOAP() As Double Implements IHoMIDom.GetPortSOAP
+            Return _PortSOAP
+        End Function
+
+        ''' <summary>
         ''' Sauvegarde ou créer un driver dans la config
         ''' </summary>
         ''' <param name="driverId"></param>
@@ -2474,7 +2497,7 @@ Namespace HoMIDom
                     retour.Description = _ListDevices.Item(i).description
                     retour.Adresse1 = _ListDevices.Item(i).adresse1
                     retour.Adresse2 = _ListDevices.Item(i).adresse2
-                    retour.DriverId = _ListDevices.Item(i).driverid
+                    retour.DriverID = _ListDevices.Item(i).driverid
                     retour.Picture = _ListDevices.Item(i).picture
                     retour.Solo = _ListDevices.Item(i).solo
                     retour.Refresh = _ListDevices.Item(i).refresh
@@ -2847,7 +2870,7 @@ Namespace HoMIDom
 
         ''' <summary>Arrêt du serveur</summary>
         ''' <remarks></remarks>
-        Public Sub [stop]()
+        Public Sub [stop]() Implements IHoMIDom.Stop
             Try
                 Dim retour As String
                 TimerSecond.Enabled = False

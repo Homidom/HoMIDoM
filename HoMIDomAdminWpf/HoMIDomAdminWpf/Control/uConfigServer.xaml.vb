@@ -4,6 +4,14 @@
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         If Window1.IsConnect = True Then
+            If IsNumeric(TxtSOAP.Text) = False Or TxtSOAP.Text = "" Then
+                MessageBox.Show("Le port SOAP est erroné !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                Exit Sub
+            End If
+            If TxtSOAP.Text <> Window1.myService.GetPortSOAP Then
+                MessageBox.Show("Vous avez modifié le port SOAP, n'oubliez pas:" & vbCrLf & "- D'enregistrer la configuration pour qu'elle soit prise en compte au prochain démarrage" & vbCrLf & "- De redémarrer le service", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Window1.myService.SetPortSOAP(TxtSOAP.Text)
+            End If
             Window1.myService.SetLongitude(CDbl(TxtLong.Text.Replace(".", ",")))
             Window1.myService.SetLatitude(CDbl(TxtLat.Text.Replace(".", ",")))
             Window1.myService.SetHeureCorrectionLever(CInt(HCL.Text))
@@ -23,6 +31,7 @@
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         If Window1.IsConnect = True Then
+            TxtSOAP.Text = Window1.myService.GetPortSOAP
             TxtLat.Text = Window1.myService.GetLatitude
             TxtLong.Text = Window1.myService.GetLongitude
             HCL.Text = Window1.myService.GetHeureCorrectionLever
