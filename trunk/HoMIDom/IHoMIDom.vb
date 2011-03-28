@@ -37,6 +37,26 @@ Namespace HoMIDom
         <OperationContract()> Sub Start()
 
         ''' <summary>
+        ''' Arrête le service et charge la config
+        ''' </summary>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub [Stop]()
+
+        ''' <summary>
+        ''' Fixe la valeur de port SOAP
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetPortSOAP(ByVal Value As Double)
+
+        ''' <summary>
+        ''' Retourne la valeur de port SOAP
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetPortSOAP() As Double
+
+        ''' <summary>
         ''' Obtient la liste des devices
         ''' </summary>
         ''' <returns></returns>

@@ -12,6 +12,8 @@ Class Window1
     Public Shared myService As HoMIDom.HoMIDom.IHoMIDom
     Public Shared ListServer As New List(Of ClServer)
     Dim Myfile As String
+    Dim MyPort As String = ""
+    Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
 
     Public Sub New()
 
@@ -28,7 +30,6 @@ Class Window1
         myfile = MyRep & "\config.xml"
 
         'Connexion au serveur web
-        Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
 
         Try
             If File.Exists(Myfile) Then
@@ -43,11 +44,13 @@ Class Window1
                     For i As Integer = 0 To ListServer.Count - 1
                         If ListServer.Item(i).Defaut = True Then
                             myadress = "http://" & ListServer.Item(i).Adresse & ":" & ListServer.Item(i).Port & "/ServiceModelSamples/service"
+                            MyPort = ListServer.Item(i).Port
                         End If
                     Next
 
                     If myadress = "" Then
                         myadress = "http://localhost:8000/ServiceModelSamples/service"
+                        MyPort = "8000"
                         MessageBox.Show("Aucune adresse par défaut n'a été trouvée, le système se connectera à l'adresse suivante: " & myadress, "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     End If
                     myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
@@ -59,6 +62,7 @@ Class Window1
             Else 'on utilise le fichier app.config
                 MessageBox.Show("Aucun fichier de config n'a été trouvée, le système se base donc sur le fichier app.config", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
+
             End If
 
             myService = myChannelFactory.CreateChannel()
@@ -87,7 +91,7 @@ Class Window1
             Try
                 Dim mytime As String = myService.GetTime
                 LblStatus.Content = Now.ToLongDateString & " " & mytime & " "
-                LblConnect.Content = "Serveur connecté"
+                LblConnect.Content = "Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString()
 
                 Dim myBrush As New RadialGradientBrush()
                 myBrush.GradientOrigin = New Point(0.75, 0.25)
@@ -365,7 +369,7 @@ Class Window1
 #End Region
 
     'Menu Save Config
-    Private Sub MnuSaveConfig(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuConfigSrv.Click
+    Private Sub MnuSaveConfig(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuSaveConfig.Click
         If IsConnect = False Then
             MessageBox.Show("Impossible d'afficher le log car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
             Exit Sub
@@ -450,4 +454,5 @@ Class Window1
         End Try
         MyBase.Finalize()
     End Sub
+
 End Class
