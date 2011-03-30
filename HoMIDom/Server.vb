@@ -6,6 +6,8 @@ Imports System.Reflection
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports System.ServiceModel
 Imports System.ServiceModel.Description
+Imports System.Security.Cryptography
+Imports System.Text
 
 Namespace HoMIDom
 
@@ -228,6 +230,7 @@ Namespace HoMIDom
         Private Shared _ListImgDrivers As New ArrayList
         Private Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
         Private Shared _ListZones As New ArrayList 'Liste des zones
+        Private Shared _ListUsers As New ArrayList 'Liste des users
         Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
         Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
         Private _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application 'Application.StartupPath
@@ -401,6 +404,61 @@ Namespace HoMIDom
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Il manque les zones dans le fichier de config !!")
                         End If
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListZones.Count & " Zone(s) chargée(s)")
+
+                        '******************************************
+                        'on va chercher les users
+                        '******************************************
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des users")
+                        list = Nothing
+                        list = myxml.SelectNodes("/homidom/users/user")
+                        If list.Count > 0 Then 'présence des users
+                            For i As Integer = 0 To list.Count - 1
+                                Dim x As New Users.User
+                                For j As Integer = 0 To list.Item(i).Attributes.Count - 1
+                                    Select Case list.Item(i).Attributes.Item(j).Name
+                                        Case "id"
+                                            x.ID = list.Item(i).Attributes.Item(j).Value
+                                        Case "username"
+                                            x.UserName = list.Item(i).Attributes.Item(j).Value
+                                        Case "nom"
+                                            x.Nom = list.Item(i).Attributes.Item(j).Value
+                                        Case "prenom"
+                                            x.Prenom = list.Item(i).Attributes.Item(j).Value
+                                        Case "profil"
+                                            x.Profil = list.Item(i).Attributes.Item(j).Value
+                                        Case "password"
+                                            x.Password = list.Item(i).Attributes.Item(j).Value
+                                        Case "numberidentification"
+                                            x.NumberIdentification = list.Item(i).Attributes.Item(j).Value
+                                        Case "image"
+                                            x.Image = list.Item(i).Attributes.Item(j).Value
+                                        Case "email"
+                                            x.eMail = list.Item(i).Attributes.Item(j).Value
+                                        Case "emailautre"
+                                            x.eMailAutre = list.Item(i).Attributes.Item(j).Value
+                                        Case "telfixe"
+                                            x.TelFixe = list.Item(i).Attributes.Item(j).Value
+                                        Case "telmobile"
+                                            x.TelMobile = list.Item(i).Attributes.Item(j).Value
+                                        Case "telautre"
+                                            x.TelAutre = list.Item(i).Attributes.Item(j).Value
+                                        Case "adresse"
+                                            x.Adresse = list.Item(i).Attributes.Item(j).Value
+                                        Case "ville"
+                                            x.Ville = list.Item(i).Attributes.Item(j).Value
+                                        Case "codepostal"
+                                            x.CodePostal = list.Item(i).Attributes.Item(j).Value
+                                        Case Else
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                    End Select
+                                Next
+                                _ListUsers.Add(x)
+                            Next
+                        Else
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Il manque des users dans le fichier de config !!")
+                        End If
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListUsers.Count & " Users(s) chargé(s)")
+
 
                         '******************************************
                         'on va chercher les devices
@@ -776,6 +834,65 @@ Namespace HoMIDom
                             writer.WriteEndElement()
                         Next
                     End If
+                    writer.WriteEndElement()
+                Next
+                writer.WriteEndElement()
+
+                ''------------
+                ''Sauvegarde des users
+                ''------------
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des users")
+                writer.WriteStartElement("users")
+                For i As Integer = 0 To _ListUsers.Count - 1
+                    writer.WriteStartElement("user")
+                    writer.WriteStartAttribute("id")
+                    writer.WriteValue(_ListUsers.Item(i).id)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("username")
+                    writer.WriteValue(_ListUsers.Item(i).username)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("nom")
+                    writer.WriteValue(_ListUsers.Item(i).nom)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("prenom")
+                    writer.WriteValue(_ListUsers.Item(i).prenom)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("profil")
+                    writer.WriteValue(_ListUsers.Item(i).profil)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("password")
+                    writer.WriteValue(_ListUsers.Item(i).password)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("numberidentification")
+                    writer.WriteValue(_ListUsers.Item(i).numberidentification)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("image")
+                    writer.WriteValue(_ListUsers.Item(i).image)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("email")
+                    writer.WriteValue(_ListUsers.Item(i).email)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("emailautre")
+                    writer.WriteValue(_ListUsers.Item(i).emailautre)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("telfixe")
+                    writer.WriteValue(_ListUsers.Item(i).telfixe)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("telmobile")
+                    writer.WriteValue(_ListUsers.Item(i).telmobile)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("telautre")
+                    writer.WriteValue(_ListUsers.Item(i).telautre)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("adresse")
+                    writer.WriteValue(_ListUsers.Item(i).adresse)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("ville")
+                    writer.WriteValue(_ListUsers.Item(i).ville)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("codepostal")
+                    writer.WriteValue(_ListUsers.Item(i).codepostal)
+                    writer.WriteEndAttribute()
                     writer.WriteEndElement()
                 Next
                 writer.WriteEndElement()
@@ -1221,6 +1338,30 @@ Namespace HoMIDom
                 End If
             Next
         End Sub
+
+        ''' <summary>
+        ''' Permet d'encoder le password
+        ''' </summary>
+        ''' <param name="str"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetSHA512(ByVal str As String) As String
+            'desc   : Encrypt a strin using the SHA512 algorithm
+            Dim UE As UnicodeEncoding = New UnicodeEncoding
+            Dim HashValue As Byte()
+            'convert the string to Byte
+            Dim MessageBytes As Byte() = UE.GetBytes(str)
+            Dim SHhash As SHA512Managed = New SHA512Managed
+            Dim strHex As String = ""
+
+            'create the hash table using the SHA512 algorithm
+            HashValue = SHhash.ComputeHash(MessageBytes)
+            'convert the hash table to a string
+            For Each b As Byte In HashValue
+                strHex += String.Format("{0:x2}", b)
+            Next
+            Return strHex
+        End Function
 #End Region
 
 #Region "Interface Client"
@@ -1277,6 +1418,21 @@ Namespace HoMIDom
             For i As Integer = 0 To _ListZones.Count - 1
                 If _ListZones.Item(i).Id = zoneId Then
                     _ListZones.Item(i).removeat(i)
+                    Exit Function
+                End If
+            Next
+        End Function
+
+        ''' <summary>
+        ''' Supprime un user
+        ''' </summary>
+        ''' <param name="userId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function DeleteUser(ByVal userId As String) As Integer Implements IHoMIDom.DeleteUser
+            For i As Integer = 0 To _ListUsers.Count - 1
+                If _ListUsers.Item(i).Id = userId Then
+                    _ListUsers.Item(i).removeat(i)
                     Exit Function
                 End If
             Next
@@ -1630,6 +1786,38 @@ Namespace HoMIDom
                     For j As Integer = 0 To _ListZones.Item(i).ListDevice.count - 1
                         .ListDevice.Add(_ListZones.Item(i).ListDevice.item(j))
                     Next
+                End With
+                _list.Add(x)
+            Next
+            Return _list
+        End Function
+
+        ''' <summary>
+        ''' Retourne la liste de tous les drivers
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function GetAllUsers() As List(Of Users.User) Implements IHoMIDom.GetAllUsers
+            Dim _list As New List(Of Users.User)
+            For i As Integer = 0 To _ListUsers.Count - 1
+                Dim x As New Users.User
+                With x
+                    .Adresse = _ListUsers.Item(i).Adresse
+                    .CodePostal = _ListUsers.Item(i).CodePostal
+                    .eMail = _ListUsers.Item(i).eMail
+                    .eMailAutre = _ListUsers.Item(i).eMailAutre
+                    .ID = _ListUsers.Item(i).ID
+                    .Image = _ListUsers.Item(i).Image
+                    .Nom = _ListUsers.Item(i).Nom
+                    .NumberIdentification = _ListUsers.Item(i).NumberIdentification
+                    .Password = _ListUsers.Item(i).Password
+                    .Prenom = _ListUsers.Item(i).Prenom
+                    .Profil = _ListUsers.Item(i).Profil
+                    .TelAutre = _ListUsers.Item(i).TelAutre
+                    .TelFixe = _ListUsers.Item(i).TelFixe
+                    .TelMobile = _ListUsers.Item(i).TelMobile
+                    .UserName = _ListUsers.Item(i).UserName
+                    .Ville = _ListUsers.Item(i).Ville
                 End With
                 _list.Add(x)
             Next
@@ -2382,6 +2570,89 @@ Namespace HoMIDom
             Return myID
         End Function
 
+
+        Function SaveUser(ByVal userId As String, ByVal UserName As String, ByVal Password As String, ByVal Profil As Users.TypeProfil, ByVal Nom As String, ByVal Prenom As String, Optional ByVal NumberIdentification As String = "", Optional ByVal Image As String = "", Optional ByVal eMail As String = "", Optional ByVal eMailAutre As String = "", Optional ByVal TelFixe As String = "", Optional ByVal TelMobile As String = "", Optional ByVal TelAutre As String = "", Optional ByVal Adresse As String = "", Optional ByVal Ville As String = "", Optional ByVal CodePostal As String = "") As String Implements IHoMIDom.SaveUser
+            Dim myID As String = ""
+
+            If userId = "" Then
+                For i As Integer = 0 To _ListUsers.Count - 1
+                    If _ListUsers.Item(i).username = UserName Then
+                        myID = "ERROR Username déjà utlisé"
+                        Return myID
+                    End If
+                Next
+                Dim x As New Users.User
+                With x
+                    x.ID = GenerateGUID()
+                    x.Adresse = Adresse
+                    x.CodePostal = CodePostal
+                    x.eMail = eMail
+                    x.eMailAutre = eMailAutre
+                    x.Image = Image
+                    x.Nom = Nom
+                    x.NumberIdentification = NumberIdentification
+                    x.Password = GetSHA512(Password)
+                    x.Prenom = Prenom
+                    x.Profil = Profil
+                    x.TelAutre = TelAutre
+                    x.TelFixe = TelFixe
+                    x.TelMobile = TelMobile
+                    x.UserName = UserName
+                    x.Ville = Ville
+                End With
+                myID = x.ID
+                _ListUsers.Add(x)
+            Else
+                'user Existant
+                myID = userId
+                For i As Integer = 0 To _ListUsers.Count - 1
+                    If _ListUsers.Item(i).id = userId Then
+                        _ListUsers.Item(i).Adresse = Adresse
+                        _ListUsers.Item(i).CodePostal = CodePostal
+                        _ListUsers.Item(i).eMail = eMail
+                        _ListUsers.Item(i).eMailAutre = eMailAutre
+                        _ListUsers.Item(i).Image = Image
+                        _ListUsers.Item(i).Nom = Nom
+                        _ListUsers.Item(i).NumberIdentification = NumberIdentification
+                        _ListUsers.Item(i).Password = GetSHA512(Password)
+                        _ListUsers.Item(i).Prenom = Prenom
+                        _ListUsers.Item(i).Profil = Profil
+                        _ListUsers.Item(i).TelAutre = TelAutre
+                        _ListUsers.Item(i).TelFixe = TelFixe
+                        _ListUsers.Item(i).TelMobile = TelMobile
+                        _ListUsers.Item(i).UserName = UserName
+                        _ListUsers.Item(i).Ville = Ville
+                    End If
+                Next
+            End If
+
+            'génration de l'event
+            Return myID
+        End Function
+
+
+        ''' <summary>
+        ''' Vérifie le couple username password
+        ''' </summary>
+        ''' <param name="Username"></param>
+        ''' <param name="Password"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function VerifLogin(ByVal Username As String, ByVal Password As String) As Boolean Implements IHoMIDom.VerifLogin
+            Dim retour As Boolean = False
+
+            For i As Integer = 0 To _ListUsers.Count - 1
+                If _ListUsers.Item(i).username = Username Then
+                    If GetSHA512(Password) = _ListUsers.Item(i).password Then
+                        Return True
+                        Exit For
+                    End If
+                End If
+            Next
+
+            Return retour
+        End Function
+
         ''' <summary>
         ''' Supprime une commande IR d'un device
         ''' </summary>
@@ -2688,6 +2959,23 @@ Namespace HoMIDom
             For i As Integer = 0 To _ListZones.Count - 1
                 If _ListZones.Item(i).ID = ZoneId Then
                     retour = _ListZones.Item(i)
+                    Exit For
+                End If
+            Next
+            Return retour
+        End Function
+
+        ''' <summary>
+        ''' Retourne un user par son ID
+        ''' </summary>
+        ''' <param name="UserId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnUserById(ByVal UserId As String) As Users.User Implements IHoMIDom.ReturnUserById
+            Dim retour As Object = Nothing
+            For i As Integer = 0 To _ListUsers.Count - 1
+                If _ListUsers.Item(i).ID = UserId Then
+                    retour = _ListUsers.Item(i)
                     Exit For
                 End If
             Next

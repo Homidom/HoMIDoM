@@ -12,6 +12,7 @@ Namespace HoMIDom
     '** Historique (SebBergues): 12/01/2011: Création 
     '***********************************************
 
+
     ''' <summary>
     ''' Liste toutes les functions et propriétés accessibles par les clients
     ''' </summary>
@@ -23,6 +24,15 @@ Namespace HoMIDom
         ''' </summary>
         ''' <remarks></remarks>
         <OperationContract()> Function GetTime() As String
+
+        ''' <summary>
+        ''' Vérifie le couple username + login  renvoi true si ok
+        ''' </summary>
+        ''' <param name="Username"></param>
+        ''' <param name="Password"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function VerifLogin(ByVal Username As String, ByVal Password As String) As Boolean
 
         ''' <summary>
         ''' 'Sauvegarde de la configuration
@@ -76,6 +86,13 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         <OperationContract()> Function GetAllZones() As List(Of Zone)
+
+        ''' <summary>
+        ''' Obtient la liste des users
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetAllUsers() As List(Of Users.User)
 
         ''' <summary>
         ''' Execute une commande (COMMAND) d'un device (DeviceID) associés à des paramètres (Param)
@@ -168,6 +185,14 @@ Namespace HoMIDom
         <OperationContract()> Function DeleteZone(ByVal zoneId As String) As Integer
 
         ''' <summary>
+        ''' Supprime un user
+        ''' </summary>
+        ''' <param name="userId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function DeleteUser(ByVal userId As String) As Integer
+
+        ''' <summary>
         ''' Retourne l'objet d'un device par son ID
         ''' </summary>
         ''' <param name="Id"></param>
@@ -190,6 +215,14 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         <OperationContract()> Function ReturnZoneByID(ByVal Id As String) As Zone
+
+        ''' <summary>
+        ''' Retourne l'objet d'un user par son ID
+        ''' </summary>
+        ''' <param name="UserId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function ReturnUserById(ByVal UserId As String) As Users.User
 
         ''' <summary>
         ''' Retourne l'objet d'un driver par son nom
@@ -253,6 +286,29 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         <OperationContract()> Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListDevice As List(Of Zone.Device_Zone) = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String
+
+        ''' <summary>
+        ''' Créer ou modifier un user
+        ''' </summary>
+        ''' <param name="userId"></param>
+        ''' <param name="UserName"></param>
+        ''' <param name="Password"></param>
+        ''' <param name="Profil"></param>
+        ''' <param name="Nom"></param>
+        ''' <param name="Prenom"></param>
+        ''' <param name="NumberIdentification"></param>
+        ''' <param name="Image"></param>
+        ''' <param name="eMail"></param>
+        ''' <param name="eMailAutre"></param>
+        ''' <param name="TelFixe"></param>
+        ''' <param name="TelMobile"></param>
+        ''' <param name="TelAutre"></param>
+        ''' <param name="Adresse"></param>
+        ''' <param name="Ville"></param>
+        ''' <param name="CodePostal"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function SaveUser(ByVal userId As String, ByVal UserName As String, ByVal Password As String, ByVal Profil As Users.TypeProfil, ByVal Nom As String, ByVal Prenom As String, Optional ByVal NumberIdentification As String = "", Optional ByVal Image As String = "", Optional ByVal eMail As String = "", Optional ByVal eMailAutre As String = "", Optional ByVal TelFixe As String = "", Optional ByVal TelMobile As String = "", Optional ByVal TelAutre As String = "", Optional ByVal Adresse As String = "", Optional ByVal Ville As String = "", Optional ByVal CodePostal As String = "") As String
 
         ''' <summary>
         ''' Commencer l'apprentissage d'un commande IR
