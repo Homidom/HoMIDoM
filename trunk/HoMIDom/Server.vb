@@ -455,7 +455,8 @@ Namespace HoMIDom
                                 _ListUsers.Add(x)
                             Next
                         Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Il manque des users dans le fichier de config !!")
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du user admin par défaut !!")
+                            SaveUser("", "Admin", "password", Users.TypeProfil.admin, "Administrateur", "Admin")
                         End If
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListUsers.Count & " Users(s) chargé(s)")
 
@@ -858,7 +859,14 @@ Namespace HoMIDom
                     writer.WriteValue(_ListUsers.Item(i).prenom)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("profil")
-                    writer.WriteValue(_ListUsers.Item(i).profil)
+                    Select Case _ListUsers.Item(i).profil
+                        Case Users.TypeProfil.invite
+                            writer.WriteValue("0")
+                        Case Users.TypeProfil.user
+                            writer.WriteValue("1")
+                        Case Users.TypeProfil.admin
+                            writer.WriteValue("2")
+                    End Select
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("password")
                     writer.WriteValue(_ListUsers.Item(i).password)
@@ -1340,28 +1348,69 @@ Namespace HoMIDom
         End Sub
 
         ''' <summary>
-        ''' Permet d'encoder le password
+        ''' Crypter un string
         ''' </summary>
-        ''' <param name="str"></param>
+        ''' <param name="sIn"></param>
+        ''' <param name="sKey"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function GetSHA512(ByVal str As String) As String
-            'desc   : Encrypt a strin using the SHA512 algorithm
-            Dim UE As UnicodeEncoding = New UnicodeEncoding
-            Dim HashValue As Byte()
-            'convert the string to Byte
-            Dim MessageBytes As Byte() = UE.GetBytes(str)
-            Dim SHhash As SHA512Managed = New SHA512Managed
-            Dim strHex As String = ""
+        Public Shared Function EncryptTripleDES(ByVal sIn As String, ByVal sKey As String) As String
+            Dim DES As New System.Security.Cryptography.TripleDESCryptoServiceProvider
+            Dim hashMD5 As New System.Security.Cryptography.MD5CryptoServiceProvider
 
-            'create the hash table using the SHA512 algorithm
-            HashValue = SHhash.ComputeHash(MessageBytes)
-            'convert the hash table to a string
-            For Each b As Byte In HashValue
-                strHex += String.Format("{0:x2}", b)
-            Next
-            Return strHex
+            ' scramble the key
+            sKey = ScrambleKey(sKey)
+            ' Compute the MD5 hash.
+            DES.Key = hashMD5.ComputeHash(System.Text.ASCIIEncoding.ASCII.GetBytes(sKey))
+            ' Set the cipher mode.
+            DES.Mode = System.Security.Cryptography.CipherMode.ECB
+            ' Create the encryptor.
+            Dim DESEncrypt As System.Security.Cryptography.ICryptoTransform = DES.CreateEncryptor()
+            ' Get a byte array of the string.
+            Dim Buffer As Byte() = System.Text.ASCIIEncoding.ASCII.GetBytes(sIn)
+            ' Transform and return the string.
+            Return Convert.ToBase64String(DESEncrypt.TransformFinalBlock(Buffer, 0, Buffer.Length))
         End Function
+
+        ''' <summary>
+        ''' Décrypter un string
+        ''' </summary>
+        ''' <param name="sOut"></param>
+        ''' <param name="sKey"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Shared Function DecryptTripleDES(ByVal sOut As String, ByVal sKey As String) As String
+            Dim DES As New System.Security.Cryptography.TripleDESCryptoServiceProvider()
+            Dim hashMD5 As New System.Security.Cryptography.MD5CryptoServiceProvider
+
+            ' scramble the key
+            sKey = ScrambleKey(sKey)
+            ' Compute the MD5 hash.
+            DES.Key = hashMD5.ComputeHash(System.Text.ASCIIEncoding.ASCII.GetBytes(sKey))
+            ' Set the cipher mode.
+            DES.Mode = System.Security.Cryptography.CipherMode.ECB
+            ' Create the decryptor.
+            Dim DESDecrypt As System.Security.Cryptography.ICryptoTransform = DES.CreateDecryptor()
+            Dim Buffer As Byte() = Convert.FromBase64String(sOut)
+            ' Transform and return the string.
+            Return System.Text.ASCIIEncoding.ASCII.GetString(DESDecrypt.TransformFinalBlock(Buffer, 0, Buffer.Length))
+        End Function
+
+        Private Shared Function ScrambleKey(ByVal v_strKey As String) As String
+
+            Dim sbKey As New System.Text.StringBuilder
+            Dim intPtr As Integer
+            For intPtr = 1 To v_strKey.Length
+                Dim intIn As Integer = v_strKey.Length - intPtr + 1
+                sbKey.Append(Mid(v_strKey, intIn, 1))
+            Next
+
+            Dim strKey As String = sbKey.ToString
+
+            Return sbKey.ToString
+
+        End Function
+
 #End Region
 
 #Region "Interface Client"
@@ -2570,7 +2619,27 @@ Namespace HoMIDom
             Return myID
         End Function
 
-
+        ''' <summary>
+        ''' Créer ou modifie un user par son ID
+        ''' </summary>
+        ''' <param name="userId"></param>
+        ''' <param name="UserName"></param>
+        ''' <param name="Password"></param>
+        ''' <param name="Profil"></param>
+        ''' <param name="Nom"></param>
+        ''' <param name="Prenom"></param>
+        ''' <param name="NumberIdentification"></param>
+        ''' <param name="Image"></param>
+        ''' <param name="eMail"></param>
+        ''' <param name="eMailAutre"></param>
+        ''' <param name="TelFixe"></param>
+        ''' <param name="TelMobile"></param>
+        ''' <param name="TelAutre"></param>
+        ''' <param name="Adresse"></param>
+        ''' <param name="Ville"></param>
+        ''' <param name="CodePostal"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Function SaveUser(ByVal userId As String, ByVal UserName As String, ByVal Password As String, ByVal Profil As Users.TypeProfil, ByVal Nom As String, ByVal Prenom As String, Optional ByVal NumberIdentification As String = "", Optional ByVal Image As String = "", Optional ByVal eMail As String = "", Optional ByVal eMailAutre As String = "", Optional ByVal TelFixe As String = "", Optional ByVal TelMobile As String = "", Optional ByVal TelAutre As String = "", Optional ByVal Adresse As String = "", Optional ByVal Ville As String = "", Optional ByVal CodePostal As String = "") As String Implements IHoMIDom.SaveUser
             Dim myID As String = ""
 
@@ -2591,7 +2660,7 @@ Namespace HoMIDom
                     x.Image = Image
                     x.Nom = Nom
                     x.NumberIdentification = NumberIdentification
-                    x.Password = GetSHA512(Password)
+                    x.Password = EncryptTripleDES(Password, "homidom")
                     x.Prenom = Prenom
                     x.Profil = Profil
                     x.TelAutre = TelAutre
@@ -2614,7 +2683,7 @@ Namespace HoMIDom
                         _ListUsers.Item(i).Image = Image
                         _ListUsers.Item(i).Nom = Nom
                         _ListUsers.Item(i).NumberIdentification = NumberIdentification
-                        _ListUsers.Item(i).Password = GetSHA512(Password)
+                        _ListUsers.Item(i).Password = EncryptTripleDES(Password, "homidom")
                         _ListUsers.Item(i).Prenom = Prenom
                         _ListUsers.Item(i).Profil = Profil
                         _ListUsers.Item(i).TelAutre = TelAutre
@@ -2630,7 +2699,6 @@ Namespace HoMIDom
             Return myID
         End Function
 
-
         ''' <summary>
         ''' Vérifie le couple username password
         ''' </summary>
@@ -2643,13 +2711,40 @@ Namespace HoMIDom
 
             For i As Integer = 0 To _ListUsers.Count - 1
                 If _ListUsers.Item(i).username = Username Then
-                    If GetSHA512(Password) = _ListUsers.Item(i).password Then
+                    Dim a As String = EncryptTripleDES(Password, "homidom")
+                    Dim b As String = DecryptTripleDES(_ListUsers.Item(i).password, "homidom")
+                    If a = b Then
                         Return True
                         Exit For
                     End If
                 End If
             Next
 
+            Return retour
+        End Function
+
+        ''' <summary>
+        ''' Permet de changer de Password sur un user
+        ''' </summary>
+        ''' <param name="Username"></param>
+        ''' <param name="OldPassword"></param>
+        ''' <param name="ConfirmOldPassword"></param>
+        ''' <param name="Password"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function ChangePassword(ByVal Username As String, ByVal OldPassword As String, ByVal ConfirmNewPassword As String, ByVal Password As String) As Boolean Implements IHoMIDom.ChangePassword
+            Dim retour As Boolean = False
+            For i As Integer = 0 To _ListUsers.Count - 1
+                If _ListUsers.Item(i).username = Username Then
+                    If _ListUsers.Item(i).password = OldPassword Then
+                        If ConfirmNewPassword = Password Then
+                            _ListUsers.Item(i).password = EncryptTripleDES(Password, "homidom")
+                            retour = True
+                            Exit For
+                        End If
+                    End If
+                End If
+            Next
             Return retour
         End Function
 

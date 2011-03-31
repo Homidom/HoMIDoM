@@ -39,6 +39,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.ServiceModel">
@@ -81,6 +82,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Control\uUser.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Control\uDriver.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -144,6 +149,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClServer.vb" />
+    <Compile Include="Control\uUser.xaml.vb">
+      <DependentUpon>uUser.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Control\uDriver.xaml.vb">
       <DependentUpon>uDriver.xaml</DependentUpon>
     </Compile>
@@ -227,6 +235,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\5250-128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\user.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

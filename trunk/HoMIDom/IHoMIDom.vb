@@ -35,6 +35,17 @@ Namespace HoMIDom
         <OperationContract()> Function VerifLogin(ByVal Username As String, ByVal Password As String) As Boolean
 
         ''' <summary>
+        ''' Permet de changer le mot de passe d'un user
+        ''' </summary>
+        ''' <param name="Username"></param>
+        ''' <param name="OldPassword"></param>
+        ''' <param name="ConfirmOldPassword"></param>
+        ''' <param name="New"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function ChangePassword(ByVal Username As String, ByVal OldPassword As String, ByVal ConfirmNewPassword As String, ByVal Password As String) As Boolean
+
+        ''' <summary>
         ''' 'Sauvegarde de la configuration
         ''' </summary>
         ''' <remarks></remarks>
