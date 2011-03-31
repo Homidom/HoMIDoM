@@ -77,6 +77,7 @@ Class Window1
             AffDriver()
             AffDevice()
             AffZone()
+            AffUser()
 
             CanvasUser = CanvasRight
         Catch ex As Exception
@@ -142,6 +143,19 @@ Class Window1
             newchild.Header = myService.GetAllZones.Item(i).Name
             newchild.Uid = myService.GetAllZones.Item(i).ID
             TreeViewZone.Items.Add(newchild)
+        Next
+    End Sub
+
+    'Afficher la liste des users
+    Public Sub AffUser()
+        TreeViewUsers.Items.Clear()
+        If IsConnect = False Then Exit Sub
+        For i As Integer = 0 To myService.GetAllUsers.Count - 1
+            Dim newchild As New TreeViewItem
+            newchild.Foreground = New SolidColorBrush(Colors.White)
+            newchild.Header = myService.GetAllUsers.Item(i).UserName
+            newchild.Uid = myService.GetAllUsers.Item(i).ID
+            TreeViewUsers.Items.Add(newchild)
         Next
     End Sub
 
@@ -368,6 +382,48 @@ Class Window1
     End Sub
 #End Region
 
+#Region "User"
+    'Bouton Nouveau user
+    Private Sub BtnNewUser_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewUser.Click
+        Dim x As New uUser(uDevice.EAction.Nouveau, "")
+        x.Uid = System.Guid.NewGuid.ToString()
+        AddHandler x.CloseMe, AddressOf UnloadControl
+        CanvasRight.Children.Add(x)
+        CanvasRight.SetLeft(x, 50)
+        CanvasRight.SetTop(x, 5)
+    End Sub
+
+    'Bouton supprimer un user
+    Private Sub BtnDelUser_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelUser.Click
+        If TreeViewUsers.SelectedItem IsNot Nothing Then
+            Window1.myService.DeleteUser(TreeViewUsers.SelectedItem.uid)
+            AffUser()
+        Else
+            MessageBox.Show("Veuillez sélectionner un utilisateur à supprimer!")
+        End If
+    End Sub
+
+    'Sélection d'un user
+    Private Sub TreeViewUsers_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewUsers.MouseDoubleClick
+        If TreeViewUsers.SelectedItem IsNot Nothing Then
+            For i As Integer = 0 To myService.GetAllUsers.Count - 1
+                If myService.GetAllUsers.Item(i).ID = TreeViewUsers.SelectedItem.uid Then
+                    PropertyGrid1.SelectedObject = myService.GetAllUsers.Item(i)
+
+                    Dim x As New uUser(uDevice.EAction.Modifier, TreeViewUsers.SelectedItem.uid)
+                    x.Uid = System.Guid.NewGuid.ToString()
+                    AddHandler x.CloseMe, AddressOf UnloadControl
+                    CanvasRight.Children.Add(x)
+                    CanvasRight.SetLeft(x, 50)
+                    CanvasRight.SetTop(x, 5)
+
+                    Exit Sub
+                End If
+            Next
+        End If
+    End Sub
+#End Region
+
     'Menu Save Config
     Private Sub MnuSaveConfig(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuSaveConfig.Click
         If IsConnect = False Then
@@ -383,11 +439,13 @@ Class Window1
         For i As Integer = 0 To CanvasRight.Children.Count - 1
             If CanvasRight.Children.Item(i).Uid = MyControl.uid Then
                 CanvasRight.Children.RemoveAt(i)
+                AffDriver()
                 AffDevice()
+                AffZone()
+                AffUser()
                 Exit Sub
             End If
         Next
-
     End Sub
 
     'Menu paramétrer le serveur
@@ -454,5 +512,7 @@ Class Window1
         End Try
         MyBase.Finalize()
     End Sub
+
+
 
 End Class

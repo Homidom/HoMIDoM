@@ -141,6 +141,13 @@
                             <Button Foreground="White" Height="19" Template="{DynamicResource GlassButton}" Margin="0,0,40,13" Name="BtnDelZone" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="62.036">Supprimer</Button>
                         </Grid>
                     </TabItem>
+                    <TabItem Header="Utilisateurs">
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <TreeView Background="DimGray" Margin="5,4,4,30" Name="TreeViewUsers" />
+                            <Button Foreground="White" Height="19" HorizontalAlignment="Left" Margin="4,0,0,4" Name="BtnNewUser" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Nouveau</Button>
+                            <Button Foreground="White" Height="19" Margin="72,0,41,4" Name="BtnDelUser" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom">Supprimer</Button>
+                        </Grid>
+                    </TabItem>
                 </TabControl>
             </Canvas>
             <my:PropertyGrid Height="265.053" Margin="1.667,0,0,8.335" Name="PropertyGrid1" VerticalAlignment="Bottom" FontSize="9" />
