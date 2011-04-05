@@ -4,7 +4,7 @@
     <services>
       <service name="Homidom.Server">
         <endpoint
-            address="http://localhost:8018/Homidom"
+            address="http://localhost:8000/Homidom"
             binding="basicHttpBinding"
             contract="HoMIDom.IHoMIDom" />
       </service>
