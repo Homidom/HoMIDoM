@@ -19,7 +19,8 @@
     <Language>fr-FR</Language>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\..\_LastVersionStable\HoMIDom.dll" />
-<DocumentationSource sourceFile="..\..\HoMIDom\bin\Release\HoMIDom.xml" /></DocumentationSources>
+      <DocumentationSource sourceFile="..\..\HoMIDom\bin\Release\HoMIDom.xml" />
+    </DocumentationSources>
     <WorkingPath>..\..\..\..\..\..\trav\</WorkingPath>
     <BuildLogFile>
     </BuildLogFile>
