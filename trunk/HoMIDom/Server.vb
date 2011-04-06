@@ -2728,7 +2728,6 @@ Namespace HoMIDom
         ''' </summary>
         ''' <param name="Username"></param>
         ''' <param name="OldPassword"></param>
-        ''' <param name="ConfirmOldPassword"></param>
         ''' <param name="Password"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>

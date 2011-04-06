@@ -1,735 +1,154 @@
 <?xml version="1.0"?>
 <logs>
-  <log time="26/02/2011 01:14:48" type="3" source="0" fonction="LoadConfig" message="Chargement du fichier config: D:\Domotique\Homidom\_LastVersionStable\Config\homidom.xml" />
-  <log time="26/02/2011 01:14:48" type="3" source="0" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="26/02/2011 01:14:48" type="3" source="0" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="26/02/2011 01:14:48" type="3" source="0" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="26/02/2011 01:14:51" type="1" source="0" fonction="LoadDrivers" message=" Erreur lors du chargement des drivers: Impossible de trouver une partie du chemin d'accès 'D:\Domotique\Homidom\_LastVersionStable\applications\Plugins'." />
-  <log time="26/02/2011 01:14:51" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="26/02/2011 01:14:51" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du lever : 26/02/2011 07:58:00" />
-  <log time="26/02/2011 01:14:51" type="3" source="0" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 26/02/2011 20:04:40" />
-  <log time="25/03/2011 11:08:15" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="25/03/2011 11:08:15" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="25/03/2011 11:08:15" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="25/03/2011 11:08:15" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="25/03/2011 11:08:15" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="25/03/2011 11:08:15" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="LoadConfig" message="Il manque les zones dans le fichier de config !!" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="LoadConfig" message="0 Zone(s) chargée(s)" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="LoadConfig" message="Chargement du device FREEBOX (297cda8d-af2b-495c-ae58-edfe71ce962f - 12 - FREEBOX)" />
-  <log time="25/03/2011 11:08:16" type="5" source="1" fonction="DeviceChange" message="test : 11 : 0" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="LoadConfig" message="Chargement du device test (e3c8b070-b76a-4b35-b0ac-e93961ab4821 - 11 - ENERGIETOTALE)" />
-  <log time="25/03/2011 11:08:16" type="5" source="1" fonction="DeviceChange" message="test12 : 12 : 0" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="LoadConfig" message="Chargement du device test12 (1dd32640-c852-4af5-844a-121fc0969862 - 12 - TEMPERATURE)" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="LoadConfig" message="3 devices(s) trouvé(s)" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="LoadConfig" message=" Chargement de la configuration terminée" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="Drivers_Start" message=" - RFID non démarré car non Auto" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt non démarré car non Auto" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 25/03/2011 07:51:00" />
-  <log time="25/03/2011 11:08:16" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 25/03/2011 19:57:41" />
-  <log time="25/03/2011 11:10:50" type="1" source="1" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\config\homidom.xml" />
-  <log time="25/03/2011 11:10:50" type="1" source="1" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
-  <log time="25/03/2011 11:10:50" type="1" source="1" fonction="SaveConfig" message="Sauvegarde des drivers" />
-  <log time="25/03/2011 11:10:50" type="1" source="1" fonction="SaveConfig" message="Sauvegarde des zones" />
-  <log time="25/03/2011 11:10:50" type="1" source="1" fonction="SaveConfig" message="Sauvegarde des devices" />
-  <log time="25/03/2011 11:10:50" type="1" source="1" fonction="SaveConfig" message="Sauvegarde terminée" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Driver PLCBUS chargé" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Il manque les zones dans le fichier de config !!" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="0 Zone(s) chargée(s)" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="25/03/2011 11:11:42" type="5" source="1" fonction="DeviceChange" message="FREEBOX : 12 : " />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Chargement du device FREEBOX (297cda8d-af2b-495c-ae58-edfe71ce962f - 12 - FREEBOX)" />
-  <log time="25/03/2011 11:11:42" type="5" source="1" fonction="DeviceChange" message="test : 11 : 0" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Chargement du device test (e3c8b070-b76a-4b35-b0ac-e93961ab4821 - 11 - ENERGIETOTALE)" />
-  <log time="25/03/2011 11:11:42" type="5" source="1" fonction="DeviceChange" message="test12 : 12 : 0" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="Chargement du device test12 (1dd32640-c852-4af5-844a-121fc0969862 - 12 - TEMPERATURE)" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message="3 devices(s) trouvé(s)" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="LoadConfig" message=" Chargement de la configuration terminée" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Drivers_Start" message=" - RFID non démarré car non Auto" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt non démarré car non Auto" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 25/03/2011 07:51:00" />
-  <log time="25/03/2011 11:11:42" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 25/03/2011 19:57:41" />
-  <log time="25/03/2011 11:12:25" type="1" source="1" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\config\homidom.xml" />
-  <log time="25/03/2011 11:12:25" type="1" source="1" fonction="SaveConfig" message="Sauvegarde des paramètres serveur" />
-  <log time="25/03/2011 11:12:25" type="1" source="1" fonction="SaveConfig" message="Sauvegarde des drivers" />
-  <log time="25/03/2011 11:12:25" type="1" source="1" fonction="SaveConfig" message="Sauvegarde des zones" />
-  <log time="25/03/2011 11:12:25" type="1" source="1" fonction="SaveConfig" message="Sauvegarde des devices" />
-  <log time="25/03/2011 11:12:25" type="1" source="1" fonction="SaveConfig" message="Sauvegarde terminée" />
-  <log time="25/03/2011 12:07:02" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="25/03/2011 12:07:02" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="25/03/2011 12:07:02" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="25/03/2011 12:07:02" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="25/03/2011 12:07:02" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="25/03/2011 12:07:02" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="25/03/2011 12:07:02" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="25/03/2011 12:07:02" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="25/03/2011 12:07:02" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Driver PLCBUS chargé" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Il manque les zones dans le fichier de config !!" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="0 Zone(s) chargée(s)" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="25/03/2011 12:07:03" type="5" source="1" fonction="DeviceChange" message="FREEBOX : 12 : " />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Chargement du device FREEBOX (297cda8d-af2b-495c-ae58-edfe71ce962f - 12 - FREEBOX)" />
-  <log time="25/03/2011 12:07:03" type="5" source="1" fonction="DeviceChange" message="test : 11 : 0" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Chargement du device test (e3c8b070-b76a-4b35-b0ac-e93961ab4821 - 11 - ENERGIETOTALE)" />
-  <log time="25/03/2011 12:07:03" type="5" source="1" fonction="DeviceChange" message="test12 : 12 : 0" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="Chargement du device test12 (1dd32640-c852-4af5-844a-121fc0969862 - 12 - TEMPERATURE)" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message="3 devices(s) trouvé(s)" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="LoadConfig" message=" Chargement de la configuration terminée" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="Drivers_Start" message=" - RFID non démarré car non Auto" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt non démarré car non Auto" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 25/03/2011 07:51:00" />
-  <log time="25/03/2011 12:07:03" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 25/03/2011 19:57:41" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Driver PLCBUS chargé" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Il manque les zones dans le fichier de config !!" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="0 Zone(s) chargée(s)" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="25/03/2011 12:10:59" type="5" source="1" fonction="DeviceChange" message="FREEBOX : 12 : " />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Chargement du device FREEBOX (297cda8d-af2b-495c-ae58-edfe71ce962f - 12 - FREEBOX)" />
-  <log time="25/03/2011 12:10:59" type="5" source="1" fonction="DeviceChange" message="test : 11 : 0" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Chargement du device test (e3c8b070-b76a-4b35-b0ac-e93961ab4821 - 11 - ENERGIETOTALE)" />
-  <log time="25/03/2011 12:10:59" type="5" source="1" fonction="DeviceChange" message="test12 : 12 : 0" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="Chargement du device test12 (1dd32640-c852-4af5-844a-121fc0969862 - 12 - TEMPERATURE)" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message="3 devices(s) trouvé(s)" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="LoadConfig" message=" Chargement de la configuration terminée" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="25/03/2011 12:10:59" type="1" source="1" fonction="Drivers_Start" message=" - RFID non démarré car non Auto" />
-  <log time="25/03/2011 12:11:00" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="25/03/2011 12:11:00" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt non démarré car non Auto" />
-  <log time="25/03/2011 12:11:00" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="25/03/2011 12:11:00" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="25/03/2011 12:11:00" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 25/03/2011 07:51:00" />
-  <log time="25/03/2011 12:11:00" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 25/03/2011 19:57:41" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Driver PLCBUS chargé" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Il manque les zones dans le fichier de config !!" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="0 Zone(s) chargée(s)" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Création du user admin par défaut !!" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="1 Users(s) chargé(s)" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="05/04/2011 11:56:52" type="5" source="1" fonction="DeviceChange" message="FREEBOX : 12 : " />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Chargement du device FREEBOX (297cda8d-af2b-495c-ae58-edfe71ce962f - 12 - FREEBOX)" />
-  <log time="05/04/2011 11:56:52" type="5" source="1" fonction="DeviceChange" message="test : 11 : 0" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Chargement du device test (e3c8b070-b76a-4b35-b0ac-e93961ab4821 - 11 - ENERGIETOTALE)" />
-  <log time="05/04/2011 11:56:52" type="5" source="1" fonction="DeviceChange" message="test12 : 12 : 0" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="Chargement du device test12 (1dd32640-c852-4af5-844a-121fc0969862 - 12 - TEMPERATURE)" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message="3 devices(s) trouvé(s)" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="LoadConfig" message=" Chargement de la configuration terminée" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Drivers_Start" message=" - RFID non démarré car non Auto" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt non démarré car non Auto" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 05/04/2011 08:48:00" />
-  <log time="05/04/2011 11:56:52" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 05/04/2011 20:54:13" />
-  <log time="05/04/2011 12:00:00" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="05/04/2011 12:00:00" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 05/04/2011 08:48:00" />
-  <log time="05/04/2011 12:00:00" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 05/04/2011 20:54:13" />
-  <log time="05/04/2011 12:02:37" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="05/04/2011 12:02:37" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="05/04/2011 12:02:37" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="05/04/2011 12:02:37" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="05/04/2011 12:02:37" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="05/04/2011 12:02:37" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="05/04/2011 12:02:37" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:02:37" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="05/04/2011 12:02:37" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Driver PLCBUS chargé" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Il manque les zones dans le fichier de config !!" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="0 Zone(s) chargée(s)" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Création du user admin par défaut !!" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="1 Users(s) chargé(s)" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="05/04/2011 12:02:38" type="5" source="1" fonction="DeviceChange" message="FREEBOX : 12 : " />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Chargement du device FREEBOX (297cda8d-af2b-495c-ae58-edfe71ce962f - 12 - FREEBOX)" />
-  <log time="05/04/2011 12:02:38" type="5" source="1" fonction="DeviceChange" message="test : 11 : 0" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Chargement du device test (e3c8b070-b76a-4b35-b0ac-e93961ab4821 - 11 - ENERGIETOTALE)" />
-  <log time="05/04/2011 12:02:38" type="5" source="1" fonction="DeviceChange" message="test12 : 12 : 0" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="Chargement du device test12 (1dd32640-c852-4af5-844a-121fc0969862 - 12 - TEMPERATURE)" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message="3 devices(s) trouvé(s)" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="LoadConfig" message=" Chargement de la configuration terminée" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="Drivers_Start" message=" - RFID non démarré car non Auto" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt non démarré car non Auto" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 05/04/2011 08:48:00" />
-  <log time="05/04/2011 12:02:38" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 05/04/2011 20:54:13" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="05/04/2011 12:04:26" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
-  <log time="05/04/2011 12:04:26" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Drivers_Start" message=" - RFID démarré" />
-  <log time="05/04/2011 12:04:26" type="1" source="5" fonction="RFID" message="Driver démarré:False" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt démarré" />
-  <log time="05/04/2011 12:04:26" type="8" source="5" fonction="USBUIRT" message="Driver erreur lors du démarrage: Unable to connect to USB-UIRT device! Please ensure device is connected to the computer" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 05/04/2011 08:00:00" />
-  <log time="05/04/2011 12:04:26" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 05/04/2011 20:06:14" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="05/04/2011 12:06:23" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
-  <log time="05/04/2011 12:06:23" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Drivers_Start" message=" - RFID démarré" />
-  <log time="05/04/2011 12:06:23" type="1" source="5" fonction="RFID" message="Driver démarré:False" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="05/04/2011 12:06:23" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt démarré" />
-  <log time="05/04/2011 12:06:24" type="8" source="5" fonction="USBUIRT" message="Driver erreur lors du démarrage: Unable to connect to USB-UIRT device! Please ensure device is connected to the computer" />
-  <log time="05/04/2011 12:06:24" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="05/04/2011 12:06:24" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="05/04/2011 12:06:24" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 05/04/2011 08:00:00" />
-  <log time="05/04/2011 12:06:24" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 05/04/2011 20:06:14" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="05/04/2011 12:12:52" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
-  <log time="05/04/2011 12:12:52" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Drivers_Start" message=" - RFID démarré" />
-  <log time="05/04/2011 12:12:52" type="1" source="5" fonction="RFID" message="Driver démarré:False" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="05/04/2011 12:12:52" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt démarré" />
-  <log time="05/04/2011 12:12:53" type="8" source="5" fonction="USBUIRT" message="Driver erreur lors du démarrage: Unable to connect to USB-UIRT device! Please ensure device is connected to the computer" />
-  <log time="05/04/2011 12:12:53" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="05/04/2011 12:12:53" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="05/04/2011 12:12:53" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 05/04/2011 08:00:00" />
-  <log time="05/04/2011 12:12:53" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 05/04/2011 20:06:14" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="05/04/2011 12:15:14" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
-  <log time="05/04/2011 12:15:14" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Drivers_Start" message=" - RFID démarré" />
-  <log time="05/04/2011 12:15:14" type="1" source="5" fonction="RFID" message="Driver démarré:False" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt démarré" />
-  <log time="05/04/2011 12:15:14" type="8" source="5" fonction="USBUIRT" message="Driver erreur lors du démarrage: Unable to connect to USB-UIRT device! Please ensure device is connected to the computer" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 05/04/2011 08:00:00" />
-  <log time="05/04/2011 12:15:14" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 05/04/2011 20:06:14" />
-  <log time="05/04/2011 12:16:57" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="05/04/2011 12:16:57" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="05/04/2011 12:16:57" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="05/04/2011 12:16:57" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="05/04/2011 12:16:57" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="05/04/2011 12:16:57" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="05/04/2011 12:16:57" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:16:57" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="05/04/2011 12:16:57" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="05/04/2011 12:16:57" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="05/04/2011 12:16:57" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="05/04/2011 12:16:57" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="05/04/2011 12:16:57" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="05/04/2011 12:16:58" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
-  <log time="05/04/2011 12:16:58" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="Drivers_Start" message=" - RFID démarré" />
-  <log time="05/04/2011 12:16:58" type="1" source="5" fonction="RFID" message="Driver démarré:False" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt démarré" />
-  <log time="05/04/2011 12:16:58" type="8" source="5" fonction="USBUIRT" message="Driver erreur lors du démarrage: Unable to connect to USB-UIRT device! Please ensure device is connected to the computer" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 05/04/2011 08:00:00" />
-  <log time="05/04/2011 12:16:58" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 05/04/2011 20:06:14" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="05/04/2011 12:24:43" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
-  <log time="05/04/2011 12:24:43" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Drivers_Start" message=" - RFID démarré" />
-  <log time="05/04/2011 12:24:43" type="1" source="5" fonction="RFID" message="Driver démarré:False" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt démarré" />
-  <log time="05/04/2011 12:24:43" type="8" source="5" fonction="USBUIRT" message="Driver erreur lors du démarrage: Unable to connect to USB-UIRT device! Please ensure device is connected to the computer" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 05/04/2011 08:00:00" />
-  <log time="05/04/2011 12:24:43" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 05/04/2011 20:06:14" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="05/04/2011 12:26:56" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
-  <log time="05/04/2011 12:26:56" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Drivers_Start" message=" - RFID démarré" />
-  <log time="05/04/2011 12:26:56" type="1" source="5" fonction="RFID" message="Driver démarré:False" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt démarré" />
-  <log time="05/04/2011 12:26:56" type="8" source="5" fonction="USBUIRT" message="Driver erreur lors du démarrage: Unable to connect to USB-UIRT device! Please ensure device is connected to the computer" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 05/04/2011 08:00:00" />
-  <log time="05/04/2011 12:26:56" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 05/04/2011 20:06:14" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="05/04/2011 12:31:34" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
-  <log time="05/04/2011 12:31:34" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Drivers_Start" message=" - RFID démarré" />
-  <log time="05/04/2011 12:31:34" type="1" source="5" fonction="RFID" message="Driver démarré:False" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt démarré" />
-  <log time="05/04/2011 12:31:34" type="8" source="5" fonction="USBUIRT" message="Driver erreur lors du démarrage: Unable to connect to USB-UIRT device! Please ensure device is connected to the computer" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 05/04/2011 08:00:00" />
-  <log time="05/04/2011 12:31:34" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 05/04/2011 20:06:14" />
-  <log time="06/04/2011 08:35:53" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="06/04/2011 08:35:53" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="06/04/2011 08:35:54" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="06/04/2011 08:35:54" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="06/04/2011 08:35:54" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
-  <log time="06/04/2011 08:35:55" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="06/04/2011 08:35:56" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
-  <log time="06/04/2011 08:35:56" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
-  <log time="06/04/2011 08:35:56" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
-  <log time="06/04/2011 08:35:56" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
-  <log time="06/04/2011 08:35:56" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
-  <log time="06/04/2011 08:35:56" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="06/04/2011 08:35:56" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="06/04/2011 08:35:56" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="06/04/2011 08:35:56" type="1" source="1" fonction="Drivers_Start" message=" - RFID démarré" />
-  <log time="06/04/2011 08:35:57" type="1" source="5" fonction="RFID" message="Driver démarré:False" />
-  <log time="06/04/2011 08:35:57" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="06/04/2011 08:35:57" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt démarré" />
-  <log time="06/04/2011 08:35:58" type="8" source="5" fonction="USBUIRT" message="Driver erreur lors du démarrage: Unable to connect to USB-UIRT device! Please ensure device is connected to the computer" />
-  <log time="06/04/2011 08:35:58" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="06/04/2011 08:35:58" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="06/04/2011 08:35:58" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 06/04/2011 07:59:00" />
-  <log time="06/04/2011 08:35:58" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 06/04/2011 20:05:56" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="06/04/2011 09:00:25" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
-  <log time="06/04/2011 09:00:25" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
-  <log time="06/04/2011 09:00:25" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
-  <log time="06/04/2011 09:00:26" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
-  <log time="06/04/2011 09:00:26" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="06/04/2011 09:00:26" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="06/04/2011 09:00:26" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="06/04/2011 09:00:26" type="1" source="1" fonction="Drivers_Start" message=" - RFID démarré" />
-  <log time="06/04/2011 09:00:26" type="1" source="5" fonction="RFID" message="Driver démarré:False" />
-  <log time="06/04/2011 09:00:26" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="06/04/2011 09:00:26" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt démarré" />
-  <log time="06/04/2011 09:00:26" type="8" source="5" fonction="USBUIRT" message="Driver erreur lors du démarrage: Unable to connect to USB-UIRT device! Please ensure device is connected to the computer" />
-  <log time="06/04/2011 09:00:26" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="06/04/2011 09:00:26" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="06/04/2011 09:00:26" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 06/04/2011 07:59:00" />
-  <log time="06/04/2011 09:00:26" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 06/04/2011 20:05:56" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="06/04/2011 09:01:43" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
-  <log time="06/04/2011 09:01:43" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Drivers_Start" message=" - RFID démarré" />
-  <log time="06/04/2011 09:01:43" type="1" source="5" fonction="RFID" message="Driver démarré:False" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt démarré" />
-  <log time="06/04/2011 09:01:43" type="8" source="5" fonction="USBUIRT" message="Driver erreur lors du démarrage: Unable to connect to USB-UIRT device! Please ensure device is connected to the computer" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 06/04/2011 07:59:00" />
-  <log time="06/04/2011 09:01:43" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 06/04/2011 20:05:56" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: C:\Documents and Settings\SPATTE\Bureau\HoMIDom\Source\_LastVersionStable\Config\homidom.xml" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
-  <log time="06/04/2011 09:06:50" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
-  <log time="06/04/2011 09:06:50" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Drivers_Start" message=" - RFID démarré" />
-  <log time="06/04/2011 09:06:50" type="1" source="5" fonction="RFID" message="Driver démarré:False" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt démarré" />
-  <log time="06/04/2011 09:06:50" type="8" source="5" fonction="USBUIRT" message="Driver erreur lors du démarrage: Unable to connect to USB-UIRT device! Please ensure device is connected to the computer" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 06/04/2011 07:59:00" />
-  <log time="06/04/2011 09:06:50" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 06/04/2011 20:05:56" />
+  <log time="6/04/2011 16:35:00" type="0" source="0" message="Création du nouveau fichier log" />
+  <log time="6/04/2011 16:35:00" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
+  <log time="6/04/2011 16:35:00" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
+  <log time="6/04/2011 16:35:00" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
+  <log time="6/04/2011 16:35:00" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
+  <log time="6/04/2011 16:35:00" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
+  <log time="6/04/2011 16:35:00" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
+  <log time="6/04/2011 16:35:00" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
+  <log time="6/04/2011 16:35:00" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
+  <log time="6/04/2011 16:35:00" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
+  <log time="6/04/2011 16:35:00" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: D:\Homidom\_LastVersionStable\Config\homidom.xml" />
+  <log time="6/04/2011 16:35:01" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="6/04/2011 16:35:01" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="6/04/2011 16:35:01" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
+  <log time="6/04/2011 16:35:01" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
+  <log time="6/04/2011 16:35:01" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
+  <log time="6/04/2011 16:35:01" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
+  <log time="6/04/2011 16:35:01" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
+  <log time="6/04/2011 16:35:01" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
+  <log time="6/04/2011 16:35:01" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
+  <log time="6/04/2011 16:35:01" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
+  <log time="6/04/2011 16:35:01" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
+  <log time="6/04/2011 16:35:01" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="6/04/2011 16:35:01" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
+  <log time="6/04/2011 16:35:01" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
+  <log time="6/04/2011 16:35:01" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
+  <log time="6/04/2011 16:35:01" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
+  <log time="6/04/2011 16:35:02" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
+  <log time="6/04/2011 16:35:02" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
+  <log time="6/04/2011 16:35:02" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
+  <log time="6/04/2011 16:35:02" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
+  <log time="6/04/2011 16:35:02" type="1" source="1" fonction="Drivers_Start" message=" - RFID démarré" />
+  <log time="6/04/2011 16:35:02" type="1" source="5" fonction="RFID" message="Driver démarré:False" />
+  <log time="6/04/2011 16:35:02" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
+  <log time="6/04/2011 16:35:02" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt démarré" />
+  <log time="6/04/2011 16:35:02" type="8" source="5" fonction="USBUIRT" message="Driver erreur lors du démarrage: The type initializer for 'UsbUirt.Controller' threw an exception." />
+  <log time="6/04/2011 16:35:02" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
+  <log time="6/04/2011 16:35:02" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="6/04/2011 16:35:02" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 6/04/2011 07:59:00" />
+  <log time="6/04/2011 16:35:02" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 6/04/2011 20:05:56" />
+  <log time="6/04/2011 16:37:00" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
+  <log time="6/04/2011 16:37:00" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
+  <log time="6/04/2011 16:37:00" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
+  <log time="6/04/2011 16:37:00" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
+  <log time="6/04/2011 16:37:00" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
+  <log time="6/04/2011 16:37:00" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
+  <log time="6/04/2011 16:37:00" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
+  <log time="6/04/2011 16:37:00" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
+  <log time="6/04/2011 16:37:00" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: D:\Homidom\_LastVersionStable\Config\homidom.xml" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="6/04/2011 16:37:01" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
+  <log time="6/04/2011 16:37:01" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="Drivers_Start" message=" - RFID non démarré car non Auto" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt non démarré car non Auto" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="6/04/2011 16:37:01" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 6/04/2011 07:59:00" />
+  <log time="6/04/2011 16:37:02" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 6/04/2011 20:05:56" />
+  <log time="6/04/2011 16:41:18" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: D:\Homidom\_LastVersionStable\Config\homidom.xml" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="6/04/2011 16:41:19" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
+  <log time="6/04/2011 16:41:19" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
+  <log time="6/04/2011 16:41:19" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
+  <log time="6/04/2011 16:41:20" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
+  <log time="6/04/2011 16:41:20" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
+  <log time="6/04/2011 16:41:20" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
+  <log time="6/04/2011 16:41:20" type="1" source="1" fonction="Drivers_Start" message=" - RFID non démarré car non Auto" />
+  <log time="6/04/2011 16:41:20" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
+  <log time="6/04/2011 16:41:20" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt non démarré car non Auto" />
+  <log time="6/04/2011 16:41:20" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
+  <log time="6/04/2011 16:41:20" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="6/04/2011 16:41:20" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 6/04/2011 07:59:00" />
+  <log time="6/04/2011 16:41:20" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 6/04/2011 20:05:56" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="Start" message="Connexion à la BDD Homidom : Connecté à la base sqlite homidom" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="Start" message="Connexion à la BDD Medias : Connecté à la base sqlite medias" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="Drivers_Load" message=" - Foobar chargé" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS chargé" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="Drivers_Load" message=" - RFID chargé" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver chargé" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt chargé" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel chargé" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: D:\Homidom\_LastVersionStable\Config\homidom.xml" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="LoadConfig" message="Paramètres du serveur chargés" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="LoadConfig" message="Driver Foobar chargé" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="LoadConfig" message="Driver RFID chargé" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver chargé" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt chargé" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel chargé" />
+  <log time="6/04/2011 16:44:57" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="LoadConfig" message="1 Zone(s) chargée(s)" />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="LoadConfig" message="2 Users(s) chargé(s)" />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="6/04/2011 16:44:58" type="5" source="1" fonction="DeviceChange" message="Freebox : a : " />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
+  <log time="6/04/2011 16:44:58" type="5" source="1" fonction="DeviceChange" message="Telecommande TV : 0 : " />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: Variable objet ou variable d'un bloc With non définie." />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="Drivers_Start" message="Démarrage des drivers" />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non démarré car non Auto" />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non démarré car non Auto" />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="Drivers_Start" message=" - RFID non démarré car non Auto" />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non démarré car non Auto" />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt non démarré car non Auto" />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non démarré car non Auto" />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 6/04/2011 07:59:00" />
+  <log time="6/04/2011 16:44:58" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 6/04/2011 20:05:56" />
 </logs>

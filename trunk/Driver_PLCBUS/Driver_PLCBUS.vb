@@ -1,15 +1,15 @@
 ﻿Imports HoMIDom
-Imports System.Xml
-Imports System.Xml.Serialization
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
+'Imports System.Xml
+'Imports System.Xml.Serialization
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports VB = Microsoft.VisualBasic
 Imports System.IO.Ports
-Imports System.Math
-Imports System.Net.Sockets
-Imports System.Threading
-Imports System.Globalization
+'Imports System.Math
+'Imports System.Net.Sockets
+'Imports System.Threading
+'Imports System.Globalization
 
 ' Driver PLCBUS COM/USB(COM Virtuel)
 ' Pour la version USB, necessite l'installation du driver

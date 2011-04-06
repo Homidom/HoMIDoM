@@ -5,9 +5,9 @@
     <driver id="9C3E7696-34F7-11E0-AEB0-53DBDED72085" nom="Foobar" enable="false" description="Multiroom audio Foobar" startauto="false" protocol="AUDIO" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="Foobar" picture="audio.png" />
     <driver id="22FED268-34F6-11E0-A23E-80D9DED72085" nom="K8056" enable="false" description="Carte Velleman k8056" startauto="false" protocol="RS232" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="k8056" picture="k8056.png" />
     <driver id="1E8C5CD4-34F4-11E0-A743-FED6DED72085" nom="MeteoGoogle" enable="true" description="Meteo provenant de Google" startauto="true" protocol="WEB" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="Google Weather" picture="meteo.png" />
-    <driver id="30E229A2-34F1-11E0-BDFE-9FD3DED72085" nom="RFID" enable="true" description="Récepteur Rfid mir:ror" startauto="true" protocol="RFID" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="RFID" picture="rfid.png" />
+    <driver id="30E229A2-34F1-11E0-BDFE-9FD3DED72085" nom="RFID" enable="false" description="Récepteur Rfid mir:ror" startauto="true" protocol="RFID" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="RFID" picture="rfid.png" />
     <driver id="3B808B6C-25B3-11E0-A6DB-36D2DED72085" nom="RFXCom_receiver" enable="false" description="RFXCom Receiver COM, USB or Ethernet" startauto="false" protocol="Virtuel" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="RFXCom" picture="rfxcom.png" />
-    <driver id="74FD4E7C-34ED-11E0-8AC4-70CEDED72085" nom="USBuirt" enable="true" description="Emetteur/Récepteur Infrarouge sur port USB" startauto="true" protocol="IR" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="USBuirt" picture="usbuirt.png" />
+    <driver id="74FD4E7C-34ED-11E0-8AC4-70CEDED72085" nom="USBuirt" enable="false" description="Emetteur/Récepteur Infrarouge sur port USB" startauto="true" protocol="IR" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="USBuirt" picture="usbuirt.png" />
     <driver id="DE96B466-2540-11E0-A321-65D7DFD72085" nom="Virtuel" enable="true" description="Driver Virtuel" startauto="false" protocol="Virtuel" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="Virtuel" picture="" />
   </drivers>
   <zones>
