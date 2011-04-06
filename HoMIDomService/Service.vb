@@ -31,9 +31,15 @@ Module Service
             'Démarrage du serviceWeb
             Console.WriteLine(Now & " Start ServiceWeb")
             Dim PortSOAP As String = LoadPort()
-            If PortSOAP = "" Or IsNumeric(PortSOAP) = False Then PortSOAP = "8000"
+            If PortSOAP = "" Or IsNumeric(PortSOAP) = False Then
+                PortSOAP = "8000"
+                Console.WriteLine(Now & "ERREUR: Le fichier de config ou la balise portsoap n'ont pas été trouvé !")
+            End If
+
+
             Dim baseAddress As Uri = New Uri("http://localhost:" & PortSOAP & "/ServiceModelSamples/service")
             Console.WriteLine(Now & " Adresss SOAP: " & baseAddress.ToString)
+
             Using host As New ServiceHost(GetType(Server), baseAddress)
                 host.Open()
 
@@ -56,6 +62,7 @@ Module Service
                     myService.Start()
                 Catch ex As Exception
                     myChannelFactory.Abort()
+                    Console.WriteLine(Now & "ERREUR: Erreur lors du lancement du service SOAP: " & ex.Message)
                 End Try
 
                 Console.ReadLine()
@@ -92,8 +99,8 @@ Module Service
                 _portip = ""
             End If
 
-            Return _portip
         End If
+        Return _portip
     End Function
 
     Sub close()
