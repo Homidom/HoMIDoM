@@ -29,61 +29,7 @@ Class Window1
         Dim MyRep As String = System.Environment.CurrentDirectory
         myfile = MyRep & "\config.xml"
 
-        'Connexion au serveur web
-
-        Try
-            If File.Exists(Myfile) Then
-                Try
-                    'Deserialize text file to a new object.
-                    Dim objStreamReader As New StreamReader(Myfile)
-                    Dim x As New XmlSerializer(ListServer.GetType)
-                    ListServer = x.Deserialize(objStreamReader)
-                    objStreamReader.Close()
-
-                    Dim myadress As String = ""
-                    For i As Integer = 0 To ListServer.Count - 1
-                        If ListServer.Item(i).Defaut = True Then
-                            myadress = "http://" & ListServer.Item(i).Adresse & ":" & ListServer.Item(i).Port & "/ServiceModelSamples/service"
-                            MyPort = ListServer.Item(i).Port
-                        End If
-                    Next
-
-                    If myadress = "" Then
-                        myadress = "http://localhost:8000/ServiceModelSamples/service"
-                        MyPort = "8000"
-                        MessageBox.Show("Aucune adresse par défaut n'a été trouvée, le système se connectera à l'adresse suivante: " & myadress, "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                    End If
-                    myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
-
-                Catch ex As Exception
-                    MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
-
-            Else 'on utilise le fichier app.config
-                MessageBox.Show("Aucun fichier de config n'a été trouvée, le système se base donc sur le fichier app.config", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
-
-            End If
-
-            myService = myChannelFactory.CreateChannel()
-            IsConnect = True
-        Catch ex As Exception
-            myChannelFactory.Abort()
-            IsConnect = False
-        End Try
-
-        'Affichage des éléments 
-        Try
-            AffDriver()
-            AffDevice()
-            AffZone()
-            AffUser()
-
-            CanvasUser = CanvasRight
-        Catch ex As Exception
-            IsConnect = False
-            MessageBox.Show("Erreur Lors de la connexion au serveur: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
+        
     End Sub
 
     'Affiche la date et heure, heures levé et couché du soleil
@@ -513,6 +459,61 @@ Class Window1
         MyBase.Finalize()
     End Sub
 
+    Private Sub Window1_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
+        'Connexion au serveur web
 
+        Try
+            If File.Exists(Myfile) Then
+                Try
+                    'Deserialize text file to a new object.
+                    Dim objStreamReader As New StreamReader(Myfile)
+                    Dim x As New XmlSerializer(ListServer.GetType)
+                    ListServer = x.Deserialize(objStreamReader)
+                    objStreamReader.Close()
 
+                    Dim myadress As String = ""
+                    For i As Integer = 0 To ListServer.Count - 1
+                        If ListServer.Item(i).Defaut = True Then
+                            myadress = "http://" & ListServer.Item(i).Adresse & ":" & ListServer.Item(i).Port & "/ServiceModelSamples/service"
+                            MyPort = ListServer.Item(i).Port
+                        End If
+                    Next
+
+                    If myadress = "" Then
+                        myadress = "http://localhost:8000/ServiceModelSamples/service"
+                        MyPort = "8000"
+                        MessageBox.Show("Aucune adresse par défaut n'a été trouvée, le système se connectera à l'adresse suivante: " & myadress, "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    End If
+                    myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
+
+                Catch ex As Exception
+                    MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                End Try
+
+            Else 'on utilise le fichier app.config
+                MessageBox.Show("Aucun fichier de config n'a été trouvée, le système se base donc sur le fichier app.config", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
+
+            End If
+
+            myService = myChannelFactory.CreateChannel()
+            IsConnect = True
+        Catch ex As Exception
+            myChannelFactory.Abort()
+            IsConnect = False
+        End Try
+
+        'Affichage des éléments 
+        Try
+            AffDriver()
+            AffDevice()
+            AffZone()
+            AffUser()
+
+            CanvasUser = CanvasRight
+        Catch ex As Exception
+            IsConnect = False
+            MessageBox.Show("Erreur Lors de la connexion au serveur: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
 End Class
