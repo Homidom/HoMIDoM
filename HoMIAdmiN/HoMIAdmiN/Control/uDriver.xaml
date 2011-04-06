@@ -1,0 +1,134 @@
+﻿<UserControl x:Class="uDriver"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="654.379" Height="550">
+
+    <UserControl.Resources>
+        <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
+            <ControlTemplate.Resources>
+                <Storyboard x:Key="Timeline1">
+                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="glow" Storyboard.TargetProperty="(UIElement.Opacity)">
+                        <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="1"/>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+                <Storyboard x:Key="Timeline2">
+                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="glow" Storyboard.TargetProperty="(UIElement.Opacity)">
+                        <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+            </ControlTemplate.Resources>
+            <Border BorderBrush="#FFFFFFFF" BorderThickness="1,1,1,1" CornerRadius="4,4,4,4">
+                <Border x:Name="border" Background="#7F000000" BorderBrush="#FF000000" BorderThickness="1,1,1,1" CornerRadius="4,4,4,4">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.507*"/>
+                            <RowDefinition Height="0.493*"/>
+                        </Grid.RowDefinitions>
+                        <Border Opacity="0" HorizontalAlignment="Stretch" x:Name="glow" Width="Auto" Grid.RowSpan="2" CornerRadius="4,4,4,4">
+                            <Border.Background>
+                                <RadialGradientBrush>
+                                    <RadialGradientBrush.RelativeTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="1.702" ScaleY="2.243"/>
+                                            <SkewTransform AngleX="0" AngleY="0"/>
+                                            <RotateTransform Angle="0"/>
+                                            <TranslateTransform X="-0.368" Y="-0.152"/>
+                                        </TransformGroup>
+                                    </RadialGradientBrush.RelativeTransform>
+                                    <GradientStop Color="#B28DBDFF" Offset="0"/>
+                                    <GradientStop Color="#008DBDFF" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Width="Auto" Grid.RowSpan="2"/>
+                        <Border HorizontalAlignment="Stretch" Margin="0,0,0,0" x:Name="shine" Width="Auto" CornerRadius="4,4,0,0">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.494,0.889" StartPoint="0.494,0.028">
+                                    <GradientStop Color="#99FFFFFF" Offset="0"/>
+                                    <GradientStop Color="#33FFFFFF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" TargetName="shine" Value="0.4"/>
+                    <Setter Property="Background" TargetName="border" Value="#CC000000"/>
+                    <Setter Property="Visibility" TargetName="glow" Value="Hidden"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource Timeline1}"/>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard x:Name="Timeline2_BeginStoryboard" Storyboard="{StaticResource Timeline2}"/>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </UserControl.Resources>
+
+    <Grid Margin="1" Height="548.75" Width="625.493" Visibility="Visible">
+        <Grid.Background >
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="Gray" Offset="0.0" />
+                <GradientStop Color="DarkGray" Offset="0.6" />
+                <GradientStop Color="Black" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
+            <Label Height="46.25" Name="Label1" Width="105" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Driver</Label>
+        </Border>
+        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIDomAdminWpf;component/Images/Defaut-128.png">
+            <Image.LayoutTransform >
+                <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
+            </Image.LayoutTransform>
+                   </Image> 
+        <Label HorizontalAlignment="Left" Margin="16,71.681,0,0" Name="Label2" Width="53" Foreground="White" Height="22.5" VerticalAlignment="Top">Nom:</Label>
+        <TextBox Height="22" HorizontalAlignment="Left" Margin="17,90.018,0,0" Name="TxtNom" VerticalAlignment="Top" Width="215" Foreground="White" Background="DarkGray" BorderBrush="Black" IsEnabled="False" />
+        <CheckBox Height="18" Margin="265,93.352,258,0" Name="ChkEnable" VerticalAlignment="Top" Foreground="White" IsChecked="False">Enable</CheckBox>
+        <Label Foreground="White" HorizontalAlignment="Left" Margin="15,110.022,0,0" Name="Label3" Width="76" Height="22" VerticalAlignment="Top">Descriptions:</Label>
+        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="17,130.026,0,0" Name="TxtDescript" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" IsEnabled="False" />
+        <Label Foreground="White" HorizontalAlignment="Left" Margin="14,150,0,0" Name="Label6" Width="62" Height="22.5" VerticalAlignment="Top">Protocol:</Label>
+        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Margin="17,170,0,0" Name="TxtProtocol" Width="215" Height="21.978" VerticalAlignment="Top" IsEnabled="False" />
+        <Label Foreground="White" Margin="276.493,231.895,287,0" Name="Label8" Height="23.75" VerticalAlignment="Top">Modele:</Label>
+        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="276.493,253.895,200,273.105" Name="TxtModele" IsEnabled="False" />
+        <Label Foreground="White" Margin="118.507,232,0,0" Name="Label9" Height="23.645" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125.493">Refresh (ms):</Label>
+        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="0,254.279,423.575,271.721" Name="TxtRefresh" HorizontalAlignment="Right" Width="83.411">0</TextBox>
+        <Button Height="25" HorizontalAlignment="Right" Margin="0,42.5,20,0" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Foreground="White">Fermer</Button>
+        <Button Height="25" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Margin="0,11.25,20,0" Name="BtnOK" VerticalAlignment="Top" Width="88.75" Foreground="White">Ok</Button>
+        <CheckBox Foreground="White" Height="18" HorizontalAlignment="Right" IsChecked="False" Margin="0,93.018,195,0" Name="CbStartAuto" VerticalAlignment="Top" Width="102.493">StartAuto</CheckBox>
+        <Label Foreground="White" Height="24" HorizontalAlignment="Left" Margin="13,187,0,0" Name="Label4" VerticalAlignment="Top" Visibility="Visible" Width="78">Adresse IP:</Label>
+        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Margin="14,211,0,0" Name="TxtAdrTCP" VerticalAlignment="Top" Visibility="Visible" Width="150"></TextBox>
+        <Label Foreground="White" Height="24" Margin="173,187,0,0" Name="Label5" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="125.493">Port IP:</Label>
+        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Margin="174,211,0,0" Name="TxtPortTCP" VerticalAlignment="Top" Visibility="Visible" Width="70" HorizontalAlignment="Left"></TextBox>
+        <Label Foreground="White" Height="24" Margin="260,187,287,0" Name="Label7" VerticalAlignment="Top" Visibility="Visible">Adresse UDP:</Label>
+        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Margin="0,211,214,0" Name="TxtAdrUDP" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Right" Width="150.493"></TextBox>
+        <Label Foreground="White" Height="24" HorizontalAlignment="Right" Margin="0,187,80,0" Name="Label16" VerticalAlignment="Top" Visibility="Visible" Width="125.493">Port UDP:</Label>
+        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Right" Margin="0,211,134,0" Name="TxtPortUDP" VerticalAlignment="Top" Visibility="Visible" Width="70"></TextBox>
+        <Label Foreground="White" Height="23.645" HorizontalAlignment="Left" Margin="16,232.051,0,0" Name="Label10" VerticalAlignment="Top" Width="125.493">Port COM:</Label>
+        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Margin="17,255.051,0,271.721" Name="TxtCom" Width="83.411">0</TextBox>
+        <Label Foreground="White" Height="23.645" Margin="213,232,287,0" Name="Label11" VerticalAlignment="Top">Version:</Label>
+        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="222,253.895,0,272.105" Name="TxtVersion" Width="40" HorizontalAlignment="Left" IsEnabled="False">0</TextBox>
+        <Label Height="24" HorizontalAlignment="Left" Margin="18,0,0,240" Name="Label12" VerticalAlignment="Bottom" Width="110" Foreground="White">Fonctions avancées:</Label>
+        <Button Height="23" HorizontalAlignment="Left" Margin="134,0,0,242" Name="BtnAv" VerticalAlignment="Bottom" Width="22">&gt;&gt;</Button>
+        <GroupBox Header="Fonctions Avancées" Height="229" Margin="16,0,12,12" Name="GroupBox1" VerticalAlignment="Bottom" Visibility="Hidden">
+            <Grid>
+                <Label Foreground="White" Height="22" HorizontalAlignment="Left" Margin="10,10,0,0" Name="Label13" VerticalAlignment="Top" Width="62">Fonction:</Label>
+                <ComboBox Height="20" HorizontalAlignment="Left" Margin="70,12,0,0" Name="CbCmd" VerticalAlignment="Top" Width="211" />
+                <Label Foreground="White" Height="23" HorizontalAlignment="Left" Margin="26,45,0,0" Name="LblP1" VerticalAlignment="Top" Visibility="Hidden" Width="76">##########:</Label>
+                <TextBox Height="20" Margin="106,49,271.493,0" Name="TxtP1" VerticalAlignment="Top" Visibility="Hidden" />
+                <Label Foreground="White" HorizontalAlignment="Left" Margin="26,71,0,0" Name="LblP2" Visibility="Hidden" Width="76" Height="23.723" VerticalAlignment="Top">##########:</Label>
+                <TextBox Margin="106,75,271.493,0" Name="TxtP2" Visibility="Hidden" Height="20.723" VerticalAlignment="Top" />
+                <Label Foreground="White" HorizontalAlignment="Left" Margin="26,97,0,90" Name="LblP3" Visibility="Hidden" Width="76">##########:</Label>
+                <TextBox Margin="106,101,271.493,89" Name="TxtP3" Visibility="Hidden" />
+                <Label Foreground="White" Height="23" HorizontalAlignment="Left" Margin="26,0,0,64" Name="LblP4" VerticalAlignment="Bottom" Visibility="Hidden" Width="76">##########:</Label>
+                <TextBox Height="20" Margin="106,0,271.493,63" Name="TxtP4" VerticalAlignment="Bottom" Visibility="Hidden" />
+                <Label Foreground="White" Height="23" HorizontalAlignment="Left" Margin="26,0,0,39" Name="LblP5" VerticalAlignment="Bottom" Visibility="Hidden" Width="76">##########:</Label>
+                <TextBox Height="20" Margin="106,0,271.493,38" Name="TxtP5" VerticalAlignment="Bottom" Visibility="Hidden" />
+                <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,10,29,0" Name="BtnTest" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Tester</Button>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>
