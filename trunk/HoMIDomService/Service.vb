@@ -64,6 +64,7 @@ Module Service
         Catch ex As Exception
             MsgBox("Erreur lors du service: " & ex.Message, MsgBoxStyle.Critical, "ERREUR SERVICE")
             Console.WriteLine(Now & " ERREUR " & ex.Message & " : " & ex.ToString)
+            Console.ReadLine()
         End Try
     End Sub
 
