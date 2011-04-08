@@ -1437,121 +1437,133 @@ Namespace HoMIDom
 
         'Supprimer un device
         Public Function DeleteDevice(ByVal deviceId As String) As Integer Implements IHoMIDom.DeleteDevice
-            For i As Integer = 0 To _ListDevices.Count - 1
-                If _ListDevices.Item(i).Id = deviceId Then
-                    _ListDevices.RemoveAt(i)
-                    DeleteDevice = 0
-                    Exit Function
-                End If
-            Next
+            Try
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).Id = deviceId Then
+                        _ListDevices.RemoveAt(i)
+                        DeleteDevice = 0
+                        Exit Function
+                    End If
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDevice", "Exception : " & ex.Message)
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Supprimer un driver de la config
-        ''' </summary>
+        ''' <summary>Supprimer un driver de la config</summary>
         ''' <param name="driverId"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
         Public Function DeleteDriver(ByVal driverId As String) As Integer Implements IHoMIDom.DeleteDriver
-            For i As Integer = 0 To _ListDrivers.Count - 1
-                If _ListDrivers.Item(i).Id = driverId Then
-                    _ListDrivers.Item(i).removeat(i)
-                    Exit Function
-                End If
-            Next
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).Id = driverId Then
+                        _ListDrivers.Item(i).removeat(i)
+                        Exit Function
+                    End If
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDriver", "Exception : " & ex.Message)
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Supprimer une zone de la config
-        ''' </summary>
+        ''' <summary>Supprimer une zone de la config</summary>
         ''' <param name="zoneId"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
         Public Function DeleteZone(ByVal zoneId As String) As Integer Implements IHoMIDom.DeleteZone
-            For i As Integer = 0 To _ListZones.Count - 1
-                If _ListZones.Item(i).Id = zoneId Then
-                    _ListZones.Item(i).removeat(i)
-                    Exit Function
-                End If
-            Next
+            Try
+                For i As Integer = 0 To _ListZones.Count - 1
+                    If _ListZones.Item(i).Id = zoneId Then
+                        _ListZones.Item(i).removeat(i)
+                        Exit Function
+                    End If
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteZone", "Exception : " & ex.Message)
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Supprime un user
-        ''' </summary>
+        ''' <summary>Supprime un user</summary>
         ''' <param name="userId"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
         Public Function DeleteUser(ByVal userId As String) As Integer Implements IHoMIDom.DeleteUser
-            For i As Integer = 0 To _ListUsers.Count - 1
-                If _ListUsers.Item(i).Id = userId Then
-                    _ListUsers.Item(i).removeat(i)
-                    Exit Function
-                End If
-            Next
+            Try
+                For i As Integer = 0 To _ListUsers.Count - 1
+                    If _ListUsers.Item(i).Id = userId Then
+                        _ListUsers.Item(i).removeat(i)
+                        Exit Function
+                    End If
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteUser", "Exception : " & ex.Message)
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Retourne l'heure du couché du soleil
-        ''' </summary>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
+        ''' <summary>Retourne l'heure du couché du soleil</summary>
         Function GetHeureCoucherSoleil() As String Implements IHoMIDom.GetHeureCoucherSoleil
-            Return _HeureCoucherSoleil
+            Try
+                Return _HeureCoucherSoleil
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHeureCoucherSoleil", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Retour l'heure de lever du soleil
-        ''' </summary>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
+        ''' <summary>Retour l'heure de lever du soleil</summary>
         Function GetHeureLeverSoleil() As String Implements IHoMIDom.GetHeureLeverSoleil
-            Return _HeureLeverSoleil
+            Try
+                Return _HeureLeverSoleil
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHeureLeverSoleil", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Retourne la longitude du serveur
-        ''' </summary>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
+        ''' <summary>Retourne la longitude du serveur</summary>
         Function GetLongitude() As Double Implements IHoMIDom.GetLongitude
-            Return _Longitude
+            Try
+                Return _Longitude
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetLongitude", "Exception : " & ex.Message)
+                Return 0
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Applique une valeur de longitude au serveur
-        ''' </summary>
+        ''' <summary>Applique une valeur de longitude au serveur</summary>
         ''' <param name="value"></param>
-        ''' <remarks></remarks>
         Sub SetLongitude(ByVal value As Double) Implements IHoMIDom.SetLongitude
-            _Longitude = value
+            Try
+                _Longitude = value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetLongitude", "Exception : " & ex.Message)
+            End Try
         End Sub
 
-        ''' <summary>
-        ''' Retourne la latitude du serveur
-        ''' </summary>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
+        ''' <summary>Retourne la latitude du serveur</summary>
         Function GetLatitude() As Double Implements IHoMIDom.GetLatitude
-            Return _Latitude
+            Try
+                Return _Latitude
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetLatitude", "Exception : " & ex.Message)
+                Return 0
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Applique une valeur de latitude du serveur
-        ''' </summary>
+        ''' <summary>Applique une valeur de latitude du serveur</summary>
         ''' <param name="value"></param>
-        ''' <remarks></remarks>
         Sub SetLatitude(ByVal value As Double) Implements IHoMIDom.SetLatitude
-            _Latitude = value
+            Try
+                _Latitude = value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetLatitude", "Exception : " & ex.Message)
+            End Try
         End Sub
 
-        ''' <summary>
-        ''' Retourne l'heure du serveur
-        ''' </summary>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
+        ''' <summary>Retourne l'heure du serveur</summary>
+        ''' <returns>String : heure du serveur</returns>
         Public Function GetTime() As String Implements IHoMIDom.GetTime
-            Return Now.ToLongTimeString
+            Try
+                Return Now.ToLongTimeString
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetTime", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 
         ''' <summary>
