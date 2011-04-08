@@ -4,6 +4,7 @@ Imports HoMIDom.HoMIDom
 Imports System.ServiceModel
 Imports System.IO
 Imports System.Xml.Serialization
+Imports System.Threading
 
 Class Window1
 
@@ -16,9 +17,12 @@ Class Window1
     Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
 
     Public Sub New()
-
+        Dim spl As Window2 = New Window2
+        spl.Show()
+        Thread.Sleep(2000)
         ' Cet appel est requis par le Concepteur Windows Form.
         InitializeComponent()
+        spl.Close()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         Dim dt As DispatcherTimer = New DispatcherTimer()
