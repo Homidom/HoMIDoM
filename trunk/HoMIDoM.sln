@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual Basic Express 2010
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Foobar", "Driver_Foobar\Driver_Foobar.vbproj", "{62C5EA60-2FE8-4F56-BC66-BE2D7B14CA5B}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_k8055", "Driver_k8055\Driver_k8055.vbproj", "{B1154B53-619A-4878-8915-9A98904EEEF5}"
@@ -36,6 +36,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_X10", "Driver_X10\Dr
 	EndProjectSection
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Zibase", "Driver_Zibase\Driver_Zibase.vbproj", "{0B857806-380B-4290-94DB-80EE647CBEB2}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HoMIAdmiN", "HoMIAdmiN\HoMIAdmiN\HoMIAdmiN.vbproj", "{6BB2F741-F077-4D87-90C5-619AF11786FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -197,6 +199,16 @@ Global
 		{0B857806-380B-4290-94DB-80EE647CBEB2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0B857806-380B-4290-94DB-80EE647CBEB2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0B857806-380B-4290-94DB-80EE647CBEB2}.Release|x86.ActiveCfg = Release|Any CPU
+		{6BB2F741-F077-4D87-90C5-619AF11786FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BB2F741-F077-4D87-90C5-619AF11786FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BB2F741-F077-4D87-90C5-619AF11786FF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6BB2F741-F077-4D87-90C5-619AF11786FF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6BB2F741-F077-4D87-90C5-619AF11786FF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6BB2F741-F077-4D87-90C5-619AF11786FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BB2F741-F077-4D87-90C5-619AF11786FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BB2F741-F077-4D87-90C5-619AF11786FF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6BB2F741-F077-4D87-90C5-619AF11786FF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6BB2F741-F077-4D87-90C5-619AF11786FF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
