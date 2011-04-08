@@ -8,6 +8,7 @@ Imports System.ServiceModel
 Imports System.ServiceModel.Description
 Imports System.Security.Cryptography
 Imports System.Text
+Imports System.Web.HttpUtility
 
 Namespace HoMIDom
 
@@ -771,7 +772,6 @@ Namespace HoMIDom
                     writer.WriteValue(_ListDrivers.Item(i).Protocol)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("iptcp")
-                    writer.WriteValue(_ListDrivers.Item(i).IP_TCP)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("porttcp")
                     writer.WriteValue(_ListDrivers.Item(i).Port_TCP)
@@ -1948,6 +1948,7 @@ Namespace HoMIDom
                 If Requete = "" Then
                     Dim SR As New StreamReader(_MonRepertoire & "\logs\log.xml")
                     retour = SR.ReadToEnd()
+                    retour = HtmlDecode(retour)
                     SR.Close()
                 Else
                     'creation d'une nouvelle instance du membre xmldocument
@@ -2580,11 +2581,11 @@ Namespace HoMIDom
                 If _ListDrivers.Item(i).id = driverId Then
                     _ListDrivers.Item(i).Enable = enable
                     _ListDrivers.Item(i).StartAuto = startauto
-                    _ListDrivers.Item(i).IP_TCP = iptcp
-                    _ListDrivers.Item(i).Port_TCP = porttcp
-                    _ListDrivers.Item(i).IP_UDP = ipudp
-                    _ListDrivers.Item(i).Port_UDP = portudp
-                    _ListDrivers.Item(i).Com = com
+                    If _ListDrivers.Item(i).IP_TCP <> "@" Then _ListDrivers.Item(i).IP_TCP = iptcp
+                    If _ListDrivers.Item(i).Port_TCP <> "@" Then _ListDrivers.Item(i).Port_TCP = porttcp
+                    If _ListDrivers.Item(i).IP_UDP <> "@" Then _ListDrivers.Item(i).IP_UDP = ipudp
+                    If _ListDrivers.Item(i).Port_UDP <> "@" Then _ListDrivers.Item(i).Port_UDP = portudp
+                    If _ListDrivers.Item(i).Com <> "@" Then _ListDrivers.Item(i).Com = com
                     _ListDrivers.Item(i).Refresh = refresh
                     _ListDrivers.Item(i).Picture = picture
                 End If
@@ -3369,7 +3370,7 @@ Namespace HoMIDom
                     If Fichier.Length > _MaxFileSize Then
                         Dim filearchive As String
                         filearchive = STRGS.Left(_File, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                        File.Move(_File, _File)
+                        File.Move(_File, filearchive)
                     End If
                 Else
                     CreateNewFileLog(_File)
@@ -3403,7 +3404,7 @@ Namespace HoMIDom
                     elelog.SetAttribute("type", TypLog)
                     elelog.SetAttribute("source", Source)
                     elelog.SetAttribute("fonction", Fonction)
-                    elelog.SetAttribute("message", Message)
+                    elelog.SetAttribute("message", HtmlEncode(Message))
 
                     Dim root As XmlElement = xmldoc.Item("logs")
                     root.AppendChild(elelog)
@@ -3411,13 +3412,45 @@ Namespace HoMIDom
                     'on enregistre le fichier xml
                     xmldoc.Save(_File)
 
-                Catch ex As Exception
+                Catch ex As Exception 'Le fichier xml est corrompu ou comporte des caractères non supportés par xml
+                    Console.WriteLine(Now & " Impossible d'écrire dans le fichier log un nouveau fichier à été créé: " & ex.Message)
+                    Dim filearchive As String
+                    filearchive = STRGS.Left(_File, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                    File.Move(_File, filearchive)
+                    CreateNewFileLog(_File)
+                    Fichier = New FileInfo(_File)
+                    xmldoc.Load(_File) 'ouvre le fichier xml
+                    Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
+                    Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
+                    Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
+                    Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
+                    Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
+                    Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
 
+                    'on affecte les attributs à l'élément
+                    elelog.SetAttributeNode(atttime)
+                    elelog.SetAttributeNode(atttype)
+                    elelog.SetAttributeNode(attsrc)
+                    elelog.SetAttributeNode(attfct)
+                    elelog.SetAttributeNode(attmsg)
+
+                    'on affecte les valeur
+                    elelog.SetAttribute("time", Now)
+                    elelog.SetAttribute("type", TypLog)
+                    elelog.SetAttribute("source", Source)
+                    elelog.SetAttribute("fonction", Fonction)
+                    elelog.SetAttribute("message", HtmlEncode(Message))
+
+                    Dim root As XmlElement = xmldoc.Item("logs")
+                    root.AppendChild(elelog)
+
+                    'on enregistre le fichier xml
+                    xmldoc.Save(_File)
                 End Try
 
                 Fichier = Nothing
             Catch ex As Exception
-
+                MsgBox("Erreur lors de l'écriture d'un log: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
             End Try
         End Sub
 

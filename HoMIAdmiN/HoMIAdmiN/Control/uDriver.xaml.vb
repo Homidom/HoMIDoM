@@ -19,6 +19,42 @@ Partial Public Class uDriver
             x = Window1.myService.ReturnDriverByID(DriverId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
 
             If x IsNot Nothing Then 'on a trouvé le device
+                If x.IP_TCP = "@" Then
+                    Label4.Visibility = Windows.Visibility.Hidden
+                    TxtAdrTCP.Visibility = Windows.Visibility.Hidden
+                Else
+                    Label4.Visibility = Windows.Visibility.Visible
+                    TxtAdrTCP.Visibility = Windows.Visibility.Visible
+                End If
+                If x.Port_TCP = "@" Then
+                    Label5.Visibility = Windows.Visibility.Hidden
+                    TxtPortTCP.Visibility = Windows.Visibility.Hidden
+                Else
+                    Label5.Visibility = Windows.Visibility.Visible
+                    TxtPortTCP.Visibility = Windows.Visibility.Visible
+                End If
+                If x.IP_UDP = "@" Then
+                    Label7.Visibility = Windows.Visibility.Hidden
+                    TxtAdrUDP.Visibility = Windows.Visibility.Hidden
+                Else
+                    Label7.Visibility = Windows.Visibility.Visible
+                    TxtAdrUDP.Visibility = Windows.Visibility.Visible
+                End If
+                If x.Port_UDP = "@" Then
+                    Label16.Visibility = Windows.Visibility.Hidden
+                    TxtPortUDP.Visibility = Windows.Visibility.Hidden
+                Else
+                    Label16.Visibility = Windows.Visibility.Visible
+                    TxtPortUDP.Visibility = Windows.Visibility.Visible
+                End If
+                If x.COM = "@" Then
+                    Label10.Visibility = Windows.Visibility.Hidden
+                    TxtCom.Visibility = Windows.Visibility.Hidden
+                Else
+                    Label10.Visibility = Windows.Visibility.Visible
+                    TxtCom.Visibility = Windows.Visibility.Visible
+                End If
+
                 TxtNom.Text = x.Nom
                 TxtDescript.Text = x.Description
                 ChkEnable.IsChecked = x.Enable
