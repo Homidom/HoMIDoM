@@ -103,7 +103,7 @@
         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Margin="14,211,0,0" Name="TxtAdrTCP" VerticalAlignment="Top" Visibility="Visible" Width="150"></TextBox>
         <Label Foreground="White" Height="24" Margin="173,187,0,0" Name="Label5" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="125.493">Port IP:</Label>
         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Margin="174,211,0,0" Name="TxtPortTCP" VerticalAlignment="Top" Visibility="Visible" Width="70" HorizontalAlignment="Left"></TextBox>
-        <Label Foreground="White" Height="24" Margin="260,187,287,0" Name="Label7" VerticalAlignment="Top" Visibility="Visible">Adresse UDP:</Label>
+        <Label Foreground="White" Height="24" Margin="260,187,0,0" Name="Label7" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="78">Adresse UDP:</Label>
         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Margin="0,211,214,0" Name="TxtAdrUDP" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Right" Width="150.493"></TextBox>
         <Label Foreground="White" Height="24" HorizontalAlignment="Right" Margin="0,187,80,0" Name="Label16" VerticalAlignment="Top" Visibility="Visible" Width="125.493">Port UDP:</Label>
         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Right" Margin="0,211,134,0" Name="TxtPortUDP" VerticalAlignment="Top" Visibility="Visible" Width="70"></TextBox>

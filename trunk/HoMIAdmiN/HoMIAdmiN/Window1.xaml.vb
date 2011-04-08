@@ -19,7 +19,7 @@ Class Window1
     Public Sub New()
         Dim spl As Window2 = New Window2
         spl.Show()
-        Thread.Sleep(2000)
+        Thread.Sleep(1000)
         ' Cet appel est requis par le Concepteur Windows Form.
         InitializeComponent()
         spl.Close()
