@@ -100,10 +100,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WpfPropertyGrid, Version=1.0.1.0, Culture=neutral, PublicKeyToken=be4b71144cd8a3e5, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Dll_externes\WpfPropertyGrid.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="WpfPropertyGrid">
+      <HintPath>..\..\_LastVersionStable\WpfPropertyGrid.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -193,8 +191,6 @@
     <Import Include="System.Windows.Media" />
     <Import Include="System.Windows.Media.Imaging" />
     <Import Include="System.Windows.Navigation" />
-    <Import Include="WpfPropertyGrid" />
-    <Import Include="XamlGeneratedNamespace" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClServer.vb" />

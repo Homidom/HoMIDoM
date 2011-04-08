@@ -995,7 +995,7 @@ Namespace HoMIDom
         <Serializable()> Class METEO
             Inherits DeviceGenerique
             Dim _Value As String = ""
-            Dim _ValueLast As String = ""
+            Dim _ValueLast As Double
             Dim _ConditionActuel As String = ""
             Dim _TempActuel As String = ""
             Dim _HumActuel As String = ""

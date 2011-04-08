@@ -73,7 +73,7 @@
     </Reference>
     <Reference Include="UsbUirtManagedWrapper, Version=0.0.5.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>d:\cyber-SPA\PE - Perso\PERSO\UsbUirt\UsbUirt\UsbUirtManagedWrapper.dll</HintPath>
+      <HintPath>..\_LastVersionStable\UsbUirtManagedWrapper.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

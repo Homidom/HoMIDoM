@@ -212,6 +212,8 @@ Class Window1
             Exit Sub
         End If
 
+        If e.NewValue Is Nothing Then Exit Sub
+
         For i As Integer = 0 To myService.GetAllDrivers.Count - 1
             If myService.GetAllDrivers.Item(i).ID = e.NewValue.uid Then
                 Dim x As TemplateDriver = myService.GetAllDrivers.Item(i)
@@ -246,7 +248,10 @@ Class Window1
             Exit Sub
         End If
 
+        If TreeViewDevice.SelectedItem.uid Is Nothing Then Exit Sub
+
         If TreeViewDevice.SelectedItem IsNot Nothing Then
+
             For i As Integer = 0 To myService.GetAllDevices.Count - 1
                 If myService.GetAllDevices.Item(i).ID = TreeViewDevice.SelectedItem.uid Then
                     Dim y As TemplateDevice = myService.GetAllDevices.Item(i)
@@ -299,6 +304,8 @@ Class Window1
 
     'Modiifer une zone
     Private Sub TreeViewZone_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewZone.MouseDoubleClick
+        If TreeViewZone.SelectedItem.uid Is Nothing Then Exit Sub
+
         If TreeViewZone.SelectedItem IsNot Nothing Then
             For i As Integer = 0 To myService.GetAllZones.Count - 1
                 If myService.GetAllZones.Item(i).ID = TreeViewZone.SelectedItem.uid Then
@@ -487,7 +494,7 @@ Class Window1
                     myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
 
                 Catch ex As Exception
-                    MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                    MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml, vérifiez que toutes les balises requisent soient présentes: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
                 End Try
 
             Else 'on utilise le fichier app.config

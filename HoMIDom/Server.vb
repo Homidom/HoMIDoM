@@ -792,7 +792,11 @@ Namespace HoMIDom
                     writer.WriteValue(_ListDrivers.Item(i).modele)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("picture")
-                    writer.WriteValue(_ListDrivers.Item(i).Picture)
+                    If _ListDrivers.Item(i).Picture IsNot Nothing Then
+                        writer.WriteValue(_ListDrivers.Item(i).Picture)
+                    Else
+                        writer.WriteValue(" ")
+                    End If
                     writer.WriteEndAttribute()
                     writer.WriteEndElement()
                 Next
@@ -1938,8 +1942,9 @@ Namespace HoMIDom
                     Dim XmlDoc As XmlDocument = New XmlDocument()
                     XmlDoc.Load(_MonRepertoire & "\logs\log.xml")
                 End If
-                If retour.Length > 65000 Then
-                    retour = "Erreur, trop de ligne à traiter depuis le log !!"
+                If retour.Length > 8000 Then
+                    Dim retour2 As String = Mid(retour, retour.Length - 8001, 8000)
+                    retour = "Erreur, trop de ligne à traiter depuis le log seules les dernières lignes seront affichées, merci de consulter le fichier sur le serveur par en avoir la totalité!!" & vbCrLf & vbCrLf & retour2
                     Return retour
                 End If
                 Return retour
