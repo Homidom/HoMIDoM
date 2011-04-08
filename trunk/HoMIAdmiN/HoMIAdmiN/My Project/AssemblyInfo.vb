@@ -11,7 +11,7 @@ Imports System.Windows
 
 ' Vérifiez les valeurs des attributs de l'assembly
 
-<Assembly: AssemblyTitle("WpfApplication1")> 
+<Assembly: AssemblyTitle("HoMIDom Administration")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("WpfApplication1")> 
