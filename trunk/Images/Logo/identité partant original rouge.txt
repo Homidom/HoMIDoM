@@ -1,0 +1,12 @@
+Identité Bleu : -131
+
+Identité Jaune : 60
+
+Identité Verte : 113
+
+Identité Orange : 25
+
+Identité Turquoise : 180
+
+Identité rose : -20
+
