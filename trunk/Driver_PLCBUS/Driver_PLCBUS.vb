@@ -543,7 +543,7 @@ Imports System.IO.Ports
                 Dim checksum = &H3 'pour les modeles 1141 standard
                 If plcmodeleplus Then
                     'pour les modeles 1141+
-                    checksum = &H2 + &H5 + usercode + _adresse + _cmd + data1 + data2
+                    checksum = &H200 - (&H2 + &H5 + usercode + _adresse + _cmd + data1 + data2)
                 End If
 
                 Dim donnee() As Byte = {&H2, &H5, usercode, _adresse, _cmd, data1, data2, checksum}
@@ -649,9 +649,9 @@ Imports System.IO.Ports
         Try
 
             'pour les modeles 1141+
-            Dim checksum = comBuffer(0) + comBuffer(1) + comBuffer(2) + comBuffer(3) + comBuffer(4) + comBuffer(5) + comBuffer(6) + comBuffer(7)
+            Dim checksum = comBuffer(0) + comBuffer(1) + comBuffer(2) + comBuffer(3) + comBuffer(4) + comBuffer(5) + comBuffer(6) + comBuffer(7) + comBuffer(8)
 
-            If (((comBuffer(1) = &H6) And (comBuffer(0) = &H2) And (comBuffer(8) = &H3)) Or ((comBuffer(1) = &H6) And (comBuffer(0) = &H2) And (comBuffer(8) = checksum))) Then ' si trame de reponse valide
+            If (((comBuffer(1) = &H6) And (comBuffer(0) = &H2) And (comBuffer(8) = &H3)) Or ((comBuffer(1) = &H6) And (comBuffer(0) = &H2) And (checksum = &H200))) Then ' si trame de reponse valide
                 plcbus_adresse = hex_to_adresse(comBuffer(3))
                 plcbus_commande = hex_to_com(comBuffer(4))
                 data1 = comBuffer(5)
