@@ -1471,7 +1471,7 @@ Namespace HoMIDom
             Try
                 For i As Integer = 0 To _ListZones.Count - 1
                     If _ListZones.Item(i).Id = zoneId Then
-                        _ListZones.Item(i).removeat(i)
+                        _ListZones.RemoveAt(i)
                         Exit Function
                     End If
                 Next
@@ -1486,7 +1486,7 @@ Namespace HoMIDom
             Try
                 For i As Integer = 0 To _ListUsers.Count - 1
                     If _ListUsers.Item(i).Id = userId Then
-                        _ListUsers.Item(i).removeat(i)
+                        _ListUsers.RemoveAt(i)
                         Exit Function
                     End If
                 Next

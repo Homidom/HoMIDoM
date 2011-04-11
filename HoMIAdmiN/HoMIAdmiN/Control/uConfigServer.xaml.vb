@@ -50,8 +50,8 @@
     End Sub
 
     Private Sub BtnSaveServer_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSaveServer.Click
-        If TxtAdr.Text = "" Or TxtPort.Text = "" Or IsNumeric(TxtPort.Text) = False Then
-            MessageBox.Show("Veuillez saisir une adresse et un numéro de port!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+        If TxtAdr.Text = "" Or TxtPort.Text = "" Or IsNumeric(TxtPort.Text) = False Or TxtNom.Text = "" Then
+            MessageBox.Show("Veuillez saisir un nom, une adresse et un numéro de port!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         Else
             If Flag = True Then
@@ -59,6 +59,7 @@
                     If Window1.ListServer.Count = 0 Then
                         MessageBox.Show("Ceci est votre première adresse donc elle sera mis par défaut!", "Message", MessageBoxButton.OK, MessageBoxImage.Information)
                         Dim x As New ClServer
+                        x.Nom = TxtNom.Text
                         x.Adresse = TxtAdr.Text
                         x.Defaut = True
                         x.Port = TxtPort.Text
@@ -69,6 +70,7 @@
                                 If MessageBox.Show("Etes vous sur de mettre cette adresse par défaut à la place de: " & Window1.ListServer.Item(i).Adresse, "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
                                     Window1.ListServer.Item(i).Defaut = False
                                     Dim x As New ClServer
+                                    x.Nom = TxtNom.Text
                                     x.Adresse = TxtAdr.Text
                                     x.Defaut = CheckBox1.IsChecked
                                     x.Port = TxtPort.Text
@@ -79,6 +81,7 @@
                     End If
                 Else
                     Dim x As New ClServer
+                    x.Nom = TxtNom.Text
                     x.Adresse = TxtAdr.Text
                     x.Defaut = CheckBox1.IsChecked
                     x.Port = TxtPort.Text
@@ -89,10 +92,11 @@
                     MessageBox.Show("Veuillez sélectionner un élément dans la liste!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     Exit Sub
                 End If
+                Window1.ListServer.Item(ListBox1.SelectedIndex).Nom = TxtNom.Text
                 Window1.ListServer.Item(ListBox1.SelectedIndex).Adresse = TxtAdr.Text
                 Window1.ListServer.Item(ListBox1.SelectedIndex).Defaut = CheckBox1.IsChecked
                 Window1.ListServer.Item(ListBox1.SelectedIndex).Port = TxtPort.Text
-                End If
+            End If
         End If
         RefreshList()
         Flag = False
@@ -101,7 +105,7 @@
     Private Sub RefreshList()
         ListBox1.Items.Clear()
         For i As Integer = 0 To Window1.ListServer.Count - 1
-            Dim a As String = Window1.ListServer.Item(i).Adresse & " : " & Window1.ListServer.Item(i).Port
+            Dim a As String = Window1.ListServer.Item(i).Nom & " " & Window1.ListServer.Item(i).Adresse & " : " & Window1.ListServer.Item(i).Port
             ListBox1.Items.Add(a)
         Next
     End Sub
@@ -121,6 +125,7 @@
 
     Private Sub ListBox1_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles ListBox1.SelectionChanged
         If ListBox1.SelectedIndex >= 0 Then
+            TxtNom.Text = Window1.ListServer.Item(ListBox1.SelectedIndex).Nom
             TxtAdr.Text = Window1.ListServer.Item(ListBox1.SelectedIndex).Adresse
             TxtPort.Text = Window1.ListServer.Item(ListBox1.SelectedIndex).Port
             CheckBox1.IsChecked = Window1.ListServer.Item(ListBox1.SelectedIndex).Defaut

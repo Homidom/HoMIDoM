@@ -352,9 +352,11 @@ Class Window1
 
     'Bouton supprimer un user
     Private Sub BtnDelUser_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelUser.Click
-        If TreeViewUsers.SelectedItem IsNot Nothing Then
-            Window1.myService.DeleteUser(TreeViewUsers.SelectedItem.uid)
-            AffUser()
+        If TreeViewUsers.SelectedItem IsNot Nothing And TreeViewUsers.SelectedItem.uid IsNot Nothing Then
+            If MessageBox.Show("Etes vous sur de supprimer ce user: " & TreeViewUsers.SelectedItem.header & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                Window1.myService.DeleteUser(TreeViewUsers.SelectedItem.uid)
+                AffUser()
+            End If
         Else
             MessageBox.Show("Veuillez sélectionner un utilisateur à supprimer!")
         End If
@@ -524,7 +526,7 @@ Class Window1
             CanvasUser = CanvasRight
         Catch ex As Exception
             IsConnect = False
-            MessageBox.Show("Erreur Lors de la connexion au serveur: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur Lors de la connexion au serveur: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 End Class

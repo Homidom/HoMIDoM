@@ -82,15 +82,17 @@
         </Border>
         <GroupBox Header="Connexion" Name="GroupBox1" Margin="6.5,37,6.5,0" Height="145" VerticalAlignment="Top">
             <Grid>
-                <Label Foreground="White" Margin="136,10,145,0" Name="Label6" Height="27" VerticalAlignment="Top">Adresse Serveur:</Label>
-                <CheckBox Margin="140,0,78,47" Name="CheckBox1" Foreground="White" Height="15.723" VerticalAlignment="Bottom">Serveur par défaut</CheckBox>
-                <Button Height="23" Margin="168,0,0,10" Name="BtnNewServer" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Foreground="White" HorizontalAlignment="Left" Width="59">Nouveau</Button>
-                <Button Height="23" HorizontalAlignment="Right" Margin="0,0,80,10" Name="BtnSaveServer" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="64" Foreground="White">Enregistrer</Button>
-                <Button Height="23" Margin="0,0,10,11" Name="BtnDelServer" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Width="64" Foreground="White">Supprimer</Button>
-                <Label Foreground="White" Height="27" Margin="136,35,145,0" Name="Label7" VerticalAlignment="Top">Port Serveur:</Label>
-                <TextBox Height="19" Margin="0,38,60,0" Name="TxtPort" VerticalAlignment="Top" HorizontalAlignment="Right" Width="87" />
-                <ListBox HorizontalAlignment="Left" Margin="16,8,0,11" Name="ListBox1" Width="114" />
-                <TextBox Height="19" Margin="0,10,10,0" Name="TxtAdr" VerticalAlignment="Top" HorizontalAlignment="Right" Width="137" />
+                <Label Foreground="White" Margin="136,30,145,0" Name="Label6" Height="27" VerticalAlignment="Top">Adresse Serveur:</Label>
+                <CheckBox Margin="140,0,78,33" Name="CheckBox1" Foreground="White" Height="15.723" VerticalAlignment="Bottom">Serveur par défaut</CheckBox>
+                <Button Height="23" Margin="168,0,0,5" Name="BtnNewServer" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Foreground="White" HorizontalAlignment="Left" Width="59">Nouveau</Button>
+                <Button Height="23" HorizontalAlignment="Right" Margin="0,0,80,5" Name="BtnSaveServer" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="64" Foreground="White">Enregistrer</Button>
+                <Button Height="23" Margin="0,0,10,6" Name="BtnDelServer" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Width="64" Foreground="White">Supprimer</Button>
+                <Label Foreground="White" Height="27" Margin="136,49,145,0" Name="Label7" VerticalAlignment="Top">Port Serveur:</Label>
+                <TextBox Height="19" Margin="0,52,60,0" Name="TxtPort" VerticalAlignment="Top" HorizontalAlignment="Right" Width="87" />
+                <ListBox HorizontalAlignment="Left" Margin="6,8,0,11" Name="ListBox1" Width="124" />
+                <TextBox Height="19" Margin="0,30,10,0" Name="TxtAdr" VerticalAlignment="Top" HorizontalAlignment="Right" Width="137" />
+                <Label Content="Nom du Serveur:" Foreground="White" Height="27" Margin="136,8,145,0" Name="Label9" VerticalAlignment="Top" />
+                <TextBox Height="19" HorizontalAlignment="Right" Margin="0,8,10,0" Name="TxtNom" VerticalAlignment="Top" Width="137" />
             </Grid>
         </GroupBox>
         <GroupBox Header="Paramètres Serveur" Name="GroupBox2" Margin="5.5,187,5.5,36">
@@ -108,7 +110,7 @@
             </Grid>
         </GroupBox>
         
-        <Label Height="37" Margin="14,0,36,0" Name="Label5" VerticalAlignment="Top" Foreground="DarkOrange" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic">Propriétés du serveur</Label>
+        <Label Height="37" Margin="14,0,25,0" Name="Label5" VerticalAlignment="Top" Foreground="DarkOrange" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic">Propriétés du serveur</Label>
         <Button Height="23" Template="{DynamicResource GlassButton}" Name="BtnOK" Foreground="White" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Margin="0,0,107,7" HorizontalAlignment="Right" Width="72">OK</Button>
         <Button Height="23" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,0,25,7" Name="BtnCancel" VerticalAlignment="Bottom" Width="72" Foreground="White">Fermer</Button>
     </Grid>

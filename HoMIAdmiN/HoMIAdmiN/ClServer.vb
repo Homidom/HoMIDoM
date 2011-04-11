@@ -5,9 +5,26 @@
 ''' </summary>
 ''' <remarks></remarks>
 <Serializable()> Public Class ClServer
+    Dim _Nom As String
     Dim _Adresse As String
     Dim _Defaut As Boolean
     Dim _Port As Double
+
+    ''' <summary>
+    ''' Nom du serveur
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Property Nom As String
+        Get
+            Return _Nom
+        End Get
+        Set(ByVal value As String)
+            _Nom = value
+        End Set
+    End Property
+
 
     ''' <summary>
     ''' Adresse du serveur
