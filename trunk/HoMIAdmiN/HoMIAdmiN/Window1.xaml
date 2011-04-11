@@ -82,7 +82,7 @@
                 </Rectangle.Fill>
             </Rectangle>
 
-            <Image HorizontalAlignment="Right" Margin="0,16,6,9" Name="Image2" Stretch="Fill" Width="394" Source="/HoMIDomAdminWpf;component/Images/bandeau_1_950x60.jpg" />
+            <Image HorizontalAlignment="Right" Margin="0,8,6,6" Name="Image2" Stretch="Fill" Width="343" Source="/HoMIDomAdminWpf;component/Images/bandeau_1_950x60.jpg" />
             <Label HorizontalAlignment="Left" Margin="1.667,0,0,24" Name="Label1" Width="170" Content="HoMIAdmiN" FontSize="20">
                 <Label.Foreground>
                     <LinearGradientBrush EndPoint="0.494,0.889" StartPoint="0.494,0.028">
