@@ -36,7 +36,7 @@ Imports System.IO.Ports
     Dim _Com As String = ""
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "PLCBUS"
-    Dim _Version As String = "1.0"
+    Dim _Version As String = "1.1"
     Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
@@ -44,8 +44,9 @@ Imports System.IO.Ports
     Dim MyTimer As New Timers.Timer
 
     'A ajouter dans les ppt du driver
-    Public plcack As Boolean = True
-    Public plctriphase As Boolean = False
+    Public plcack As Boolean = True 'gestion des acks ?
+    Public plctriphase As Boolean = False 'installation en triphase
+    Public plcmodeleplus As Boolean = False 'si modele 1141+, utilise le checksum plutot que H3 en fin de paquet
 #End Region
 
 #Region "Déclaration"
@@ -61,9 +62,6 @@ Imports System.IO.Ports
     Private firstbyte As Boolean = True
     Private bytecnt As Integer = 0
     Private recbuf(30) As Byte
-
-    Public gestion_ack As Boolean = True
-    Public gestion_triphase As Boolean = False
 #End Region
 
 #Region "Fonctions génériques"
@@ -192,12 +190,14 @@ Imports System.IO.Ports
 
 #Region "Fonctions du Driver"
 
+    ''' <summary>Démarrer le du driver PLCBUS</summary>
+    ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Dim retour As String
         Try
             'ouverture du port suivant le Port Com ou IP
             If _Com <> "" Then
-                retour = ouvrir(_Com, plcack, plctriphase)
+                retour = ouvrir(_Com)
             Else
                 retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
             End If
@@ -216,6 +216,8 @@ Imports System.IO.Ports
         End Try
     End Sub
 
+    ''' <summary>Arrêter le du driver PLCBUS</summary>
+    ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Dim retour As String
         retour = fermer()
@@ -227,11 +229,16 @@ Imports System.IO.Ports
         End If
     End Sub
 
+    ''' <summary>Re-Démarrer le du driver PLCBUSm</summary>
+    ''' <remarks></remarks>
     Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
         [Stop]()
         Start()
     End Sub
 
+    ''' <summary>Intérroger un device PLCBUS</summary>
+    ''' <param name="Objet">Objet représetant le device à interroger</param>
+    ''' <remarks></remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
             If (Objet.adresse1.ToString.Length > 1) Then
@@ -250,6 +257,12 @@ Imports System.IO.Ports
         End Try
     End Sub
 
+    ''' <summary>Commander un device PLCBUS</summary>
+    ''' <param name="Objet">Objet représetant le device à interroger</param>
+    ''' <param name="Commande">La commande à passer</param>
+    ''' <param name="Parametre1"></param>
+    ''' <param name="Parametre2"></param>
+    ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         'Parametre1 = data1
         'Parametre2 = data2
@@ -264,6 +277,8 @@ Imports System.IO.Ports
         End Try
     End Sub
 
+    ''' <summary>Creation d'un objet de type PLCBUS</summary>
+    ''' <remarks></remarks>
     Public Sub New()
         _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
         _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
@@ -341,11 +356,14 @@ Imports System.IO.Ports
 #End Region
 
 #Region "Fonctions propres au driver"
-    Public Function ouvrir(ByVal numero As String, ByVal plcack As Boolean, ByVal plctriphase As Boolean) As String
+
+    ''' <summary>Ouvrir le port PLCBUS</summary>
+    ''' <param name="numero">Nom/Numero du port COM: COM2</param>
+    ''' <param name="plcack">Booleen : Gestion du ack</param>
+    ''' <param name="plctriphase">Booleen : Installation en triphase</param>
+    ''' <remarks></remarks>
+    Public Function ouvrir(ByVal numero As String) As String
         Try
-            'recuperation de la configuration
-            gestion_ack = plcack
-            gestion_triphase = plctriphase
             'ouverture du port
             If Not _IsConnect Then
                 port_name = numero
@@ -370,6 +388,8 @@ Imports System.IO.Ports
         End Try
     End Function
 
+    ''' <summary>Fermer le port PLCBUS</summary>
+    ''' <remarks></remarks>
     Public Function fermer() As String
         Try
             If _IsConnect Then
@@ -385,7 +405,7 @@ Imports System.IO.Ports
                         Loop
                         i = 0
                         port.DiscardInBuffer()
-                       Do While (port.BytesToRead > 0 And i < 20) ' Wait for the receipt buffer to empty.
+                        Do While (port.BytesToRead > 0 And i < 20) ' Wait for the receipt buffer to empty.
                             i = i + 1
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Fermer", "Wait " & port.BytesToRead & "BytesToRead " & i)
                             wait(10)
@@ -409,6 +429,7 @@ Imports System.IO.Ports
         End Try
         Return True
     End Function
+
 
     Private Function adresse_to_hex(ByVal adresse As String)
         'convertit une adresse du type L1 en byte
@@ -473,6 +494,13 @@ Imports System.IO.Ports
         End Try
     End Sub
 
+    ''' <summary>Ecrire sur le port PLCBUS</summary>
+    ''' <param name="adresse">Adresse du device</param>
+    ''' <param name="commande">commande à envoyer</param>
+    ''' <param name="data1"></param>
+    ''' <param name="data2"></param>
+    ''' <param name="ecriretwice">Booleen : Ecrire l'ordre deux fois</param>
+    ''' <remarks></remarks>
     Private Function ecrire(ByVal adresse As String, ByVal commande As String, Optional ByVal data1 As Integer = 0, Optional ByVal data2 As Integer = 0, Optional ByVal ecriretwice As Boolean = False) As String
         'adresse= adresse du composant : A1
         'commande : ON, OFF...
@@ -498,7 +526,7 @@ Imports System.IO.Ports
 
             Try
                 '--- TriPhase ---
-                If gestion_triphase Then _cmd = _cmd Or &H40
+                If plctriphase Then _cmd = _cmd Or &H40
                 '--- request acks --- (sauf pour les status_request car pas important et encombre le port)
                 'If commande <> "STATUS_REQUEST" And commande <> "GetOnlyOnIdPulse" And commande <> "GetAllIdPulse" And commande <> "ReportAllIdPulse3Phase" And commande <> "ReportOnlyOnIdPulse3Phase" Then
                 '    _cmd = _cmd Or &H20
@@ -512,14 +540,20 @@ Imports System.IO.Ports
                     data2 = 0
                 End If
 
-                Dim donnee() As Byte = {&H2, &H5, usercode, _adresse, _cmd, data1, data2, &H3}
+                Dim checksum = &H3 'pour les modeles 1141 standard
+                If plcmodeleplus Then
+                    'pour les modeles 1141+
+                    checksum = &H2 + &H5 + usercode + _adresse + _cmd + data1 + data2
+                End If
+
+                Dim donnee() As Byte = {&H2, &H5, usercode, _adresse, _cmd, data1, data2, checksum}
 
                 'ecriture sur le port
                 port.Write(donnee, 0, donnee.Length)
                 If ecriretwice Then port.Write(donnee, 0, donnee.Length) 'on ecrit deux fois : voir la norme PLCBUS
 
                 'gestion des acks (sauf pour les status_request car pas important et encombre le port)
-                If gestion_ack And Not attente_ack() And commande <> "STATUS_REQUEST" And commande <> "GetOnlyOnIdPulse" And commande <> "GetAllIdPulse" And commande <> "ReportAllIdPulse3Phase" And commande <> "ReportOnlyOnIdPulse3Phase" Then
+                If plcack And Not attente_ack() And commande <> "STATUS_REQUEST" And commande <> "GetOnlyOnIdPulse" And commande <> "GetAllIdPulse" And commande <> "ReportAllIdPulse3Phase" And commande <> "ReportOnlyOnIdPulse3Phase" Then
                     'pas de ack, on relance l ordre
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Pas de Ack -> resend : " & adresse & " : " & commande & " " & data1 & "-" & data2)
                     port.Write(donnee, 0, donnee.Length)
@@ -613,7 +647,11 @@ Imports System.IO.Ports
         Dim unbyte As Byte
 
         Try
-            If ((comBuffer(1) = &H6) And (comBuffer(0) = &H2) And (comBuffer(8) = &H3)) Then ' si trame de reponse valide
+
+            'pour les modeles 1141+
+            Dim checksum = comBuffer(0) + comBuffer(1) + comBuffer(2) + comBuffer(3) + comBuffer(4) + comBuffer(5) + comBuffer(6) + comBuffer(7)
+
+            If (((comBuffer(1) = &H6) And (comBuffer(0) = &H2) And (comBuffer(8) = &H3)) Or ((comBuffer(1) = &H6) And (comBuffer(0) = &H2) And (comBuffer(8) = checksum))) Then ' si trame de reponse valide
                 plcbus_adresse = hex_to_adresse(comBuffer(3))
                 plcbus_commande = hex_to_com(comBuffer(4))
                 data1 = comBuffer(5)
