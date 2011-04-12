@@ -359,8 +359,6 @@ Imports System.IO.Ports
 
     ''' <summary>Ouvrir le port PLCBUS</summary>
     ''' <param name="numero">Nom/Numero du port COM: COM2</param>
-    ''' <param name="plcack">Booleen : Gestion du ack</param>
-    ''' <param name="plctriphase">Booleen : Installation en triphase</param>
     ''' <remarks></remarks>
     Public Function ouvrir(ByVal numero As String) As String
         Try
@@ -430,7 +428,8 @@ Imports System.IO.Ports
         Return True
     End Function
 
-
+    ''' <summary>Converti les adresses de string en hexa</summary>
+    ''' <remarks></remarks>
     Private Function adresse_to_hex(ByVal adresse As String)
         'convertit une adresse du type L1 en byte
         Dim table() As String = {0, 16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240}
@@ -441,6 +440,8 @@ Imports System.IO.Ports
         End If
     End Function
 
+    ''' <summary>Converti les adresses d'hexa en string</summary>
+    ''' <remarks></remarks>
     Private Function hex_to_adresse(ByVal adresse As Byte)
         'convertit une adresse en byte en type L1
         Dim x As Integer = 0
@@ -481,6 +482,8 @@ Imports System.IO.Ports
         Return Chr(x + 65) & (y + 1)
     End Function
 
+    ''' <summary>Pause pour attendre x msecondes </summary>
+    ''' <remarks></remarks>
     Private Sub wait(ByVal msec As Integer)
         '100msec = 1 secondes
         Try
@@ -600,6 +603,8 @@ Imports System.IO.Ports
         Return False
     End Function
 
+    ''' <summary>Fonction lancée sur reception de données sur le port COM</summary>
+    ''' <remarks></remarks>
     Private Sub DataReceived(ByVal sender As Object, ByVal e As SerialDataReceivedEventArgs)
         'fonction qui lit les données sur le port serie
         Try
@@ -616,6 +621,8 @@ Imports System.IO.Ports
         End Try
     End Sub
 
+    ''' <summary>Récupére les données reçu du port com et detecte les débuts et fin de paquet</summary>
+    ''' <remarks></remarks>
     Private Sub ProcessReceivedChar(ByVal temp As Byte)
         'fonction qui rassemble un message complet
         'si c'est le premier byte qu'on recoit
@@ -635,6 +642,8 @@ Imports System.IO.Ports
         End Try
     End Sub
 
+    ''' <summary>Recomponse les messages reçu</summary>
+    ''' <remarks></remarks>
     Private Sub Process(ByVal comBuffer() As Byte)
         'traite le message recu
         Dim plcbus_commande As String = ""
@@ -744,6 +753,8 @@ Imports System.IO.Ports
         End Try
     End Sub
 
+    ''' <summary>Traite les paquets reçus</summary>
+    ''' <remarks></remarks>
     Private Sub traitement(ByVal valeur As String, ByVal adresse As String, ByVal plcbus_commande As String)
         If valeur <> "" Then
             Try
