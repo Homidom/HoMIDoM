@@ -31,7 +31,7 @@ Class Window1
         dt.Start()
 
         Dim MyRep As String = System.Environment.CurrentDirectory
-        myfile = MyRep & "\config.xml"
+        Myfile = MyRep & "\HoMIDAdmiN_config.xml"
 
         
     End Sub

@@ -45,9 +45,9 @@ Imports System.IO.Ports
     Dim MyTimer As New Timers.Timer
 
     'A ajouter dans les ppt du driver
-    Public plcack As Boolean = True 'gestion des acks ?
-    Public plctriphase As Boolean = False 'installation en triphase
-    Public plcmodeleplus As Boolean = False 'si modele 1141+, utilise le checksum plutot que H3 en fin de paquet
+    Dim plcack As Boolean = True 'gestion des acks ?
+    Dim plctriphase As Boolean = False 'installation en triphase
+    Dim plcmodele As String = "1141" '"1141" ou "1141+" si modele 1141+, utilise le checksum plutot que H3 en fin de paquet
 #End Region
 
 #Region "Déclaration"
@@ -204,9 +204,18 @@ Imports System.IO.Ports
     ''' <summary>Démarrer le du driver PLCBUS</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
-        Dim retour As String
+        Dim retour As String = ""
+        'récupération des paramétres avancés
         Try
-            'ouverture du port suivant le Port Com ou IP
+            plcack = _Parametres.Item(0).Valeur
+            plctriphase = _Parametres.Item(1).Valeur
+            plcmodele = _Parametres.Item(2).Valeur
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+        End Try
+
+        'ouverture du port suivant le Port Com ou IP
+        Try
             If _Com <> "" Then
                 retour = ouvrir(_Com)
             Else
@@ -291,6 +300,24 @@ Imports System.IO.Ports
     ''' <summary>Creation d'un objet de type PLCBUS</summary>
     ''' <remarks></remarks>
     Public Sub New()
+        'Paramétres avancés
+        Dim x As New HoMIDom.HoMIDom.Driver.Parametre
+        x.Nom = "ack"
+        x.Description = "Gestion du ack"
+        x.Valeur = True
+        _Parametres.Add(x)
+        x = New HoMIDom.HoMIDom.Driver.Parametre
+        x.Nom = "triphase"
+        x.Description = "Installation en triphase"
+        x.Valeur = False
+        _Parametres.Add(x)
+        x = New HoMIDom.HoMIDom.Driver.Parametre
+        x.Nom = "modele"
+        x.Description = "Modele de l'interface : 1141 ou 1141+"
+        x.Valeur = "1141"
+        _Parametres.Add(x)
+
+        'Liste des devices compatibles
         _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
         _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
         _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
@@ -509,18 +536,16 @@ Imports System.IO.Ports
     End Sub
 
     ''' <summary>Ecrire sur le port PLCBUS</summary>
-    ''' <param name="adresse">Adresse du device</param>
-    ''' <param name="commande">commande à envoyer</param>
-    ''' <param name="data1"></param>
-    ''' <param name="data2"></param>
+    ''' <param name="adresse">Adresse du device : A1...</param>
+    ''' <param name="commande">commande à envoyer : ON, OFF...</param>
+    ''' <param name="data1">voir description des actions plus haut ou doc plcbus</param>
+    ''' <param name="data2">voir description des actions plus haut ou doc plcbus</param>
     ''' <param name="ecriretwice">Booleen : Ecrire l'ordre deux fois</param>
     ''' <remarks></remarks>
     Private Function ecrire(ByVal adresse As String, ByVal commande As String, Optional ByVal data1 As Integer = 0, Optional ByVal data2 As Integer = 0, Optional ByVal ecriretwice As Boolean = False) As String
-        'adresse= adresse du composant : A1
-        'commande : ON, OFF...
-        'data1 et 2, voir description des actions plus haut ou doc plcbus
         Dim _adresse = 0
         Dim _cmd = 0
+        Dim checksum = &H3
         'Dim tblack() As DataRow
 
         If _IsConnect Then
@@ -554,10 +579,12 @@ Imports System.IO.Ports
                     data2 = 0
                 End If
 
-                Dim checksum = &H3 'pour les modeles 1141 standard
-                If plcmodeleplus Then
+                If plcmodele = "1141+" Then
                     'pour les modeles 1141+
                     checksum = &H200 - (&H2 + &H5 + usercode + _adresse + _cmd + data1 + data2)
+                Else
+                    'pour les modéles 1141
+                    checksum = &H3
                 End If
 
                 Dim donnee() As Byte = {&H2, &H5, usercode, _adresse, _cmd, data1, data2, checksum}
