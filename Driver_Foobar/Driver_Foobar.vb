@@ -36,6 +36,7 @@ Imports System.IO
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
     Dim _DeviceSupport As New ArrayList
+    Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
 
     'A ajouter dans les ppt du driver
@@ -64,6 +65,15 @@ Imports System.IO
         Get
             Return _DeviceSupport
         End Get
+    End Property
+
+    Public Property Parametres() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.Parametres
+        Get
+            Return _Parametres
+        End Get
+        Set(ByVal value As System.Collections.ArrayList)
+            _Parametres = value
+        End Set
     End Property
 
     Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent

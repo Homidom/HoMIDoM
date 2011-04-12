@@ -27,6 +27,7 @@ Imports HoMIDom.HoMIDom.Device
     Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _DeviceSupport As New ArrayList
+    Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
 
     'Objet Server
@@ -43,6 +44,15 @@ Imports HoMIDom.HoMIDom.Device
         Get
             Return _DeviceSupport
         End Get
+    End Property
+
+    Public Property Parametres() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.Parametres
+        Get
+            Return _Parametres
+        End Get
+        Set(ByVal value As System.Collections.ArrayList)
+            _Parametres = value
+        End Set
     End Property
 
     Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
@@ -204,6 +214,11 @@ Imports HoMIDom.HoMIDom.Device
 
     Public Sub New()
         _DeviceSupport.Add(ListeDevices.FREEBOX)
+
+        Dim x As New HoMIDom.HoMIDom.Driver.Parametre
+        x.Nom = "test"
+        x.Description = "Description"
+        _Parametres.Add(x)
     End Sub
 
 End Class

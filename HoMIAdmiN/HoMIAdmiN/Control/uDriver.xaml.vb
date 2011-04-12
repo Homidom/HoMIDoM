@@ -7,6 +7,7 @@ Partial Public Class uDriver
     Public Event CloseMe(ByVal MyObject As Object)
     Dim _DriverId As String 'Id du device à modifier
     Dim x As HoMIDom.HoMIDom.TemplateDriver
+    Dim _ListParam As New ArrayList
 
     Public Sub New(ByVal DriverId As String)
 
@@ -54,7 +55,22 @@ Partial Public Class uDriver
                     Label10.Visibility = Windows.Visibility.Visible
                     TxtCom.Visibility = Windows.Visibility.Visible
                 End If
-
+                If x.Parametres IsNot Nothing And x.Parametres.Count > 0 Then
+                    Label15.Visibility = Windows.Visibility.Visible
+                    Label14.Visibility = Windows.Visibility.Visible
+                    TxtParam.Visibility = Windows.Visibility.Visible
+                    CbParam.Visibility = Windows.Visibility.Visible
+                    CbParam.Items.Clear()
+                    For k As Integer = 0 To x.Parametres.Count - 1
+                        CbParam.Items.Add(x.Parametres.Item(k).Nom)
+                        _ListParam.Add(x.Parametres.Item(k).Valeur)
+                    Next
+                Else
+                    Label15.Visibility = Windows.Visibility.Hidden
+                    Label14.Visibility = Windows.Visibility.Hidden
+                    TxtParam.Visibility = Windows.Visibility.Hidden
+                    CbParam.Visibility = Windows.Visibility.Hidden
+                End If
                 TxtNom.Text = x.Nom
                 TxtDescript.Text = x.Description
                 ChkEnable.IsChecked = x.Enable
@@ -92,7 +108,7 @@ Partial Public Class uDriver
 
     'Bouton Ok
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        Window1.myService.SaveDriver(_DriverId, TxtNom.Text, ChkEnable.IsChecked, CbStartAuto.IsChecked, TxtAdrTCP.Text, TxtPortTCP.Text, TxtAdrUDP.Text, TxtPortUDP.Text, TxtCom.Text, TxtRefresh.Text, ImgDevice.Tag)
+        Window1.myService.SaveDriver(_DriverId, TxtNom.Text, ChkEnable.IsChecked, CbStartAuto.IsChecked, TxtAdrTCP.Text, TxtPortTCP.Text, TxtAdrUDP.Text, TxtPortUDP.Text, TxtCom.Text, TxtRefresh.Text, ImgDevice.Tag, _ListParam)
         RaiseEvent CloseMe(Me)
     End Sub
 
@@ -234,5 +250,19 @@ Partial Public Class uDriver
         Catch ex As Exception
             MessageBox.Show("Erreur lors du test: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+    Private Sub CbParam_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbParam.SelectionChanged
+        If CbParam.SelectedIndex >= 0 Then
+            CbParam.ToolTip = x.Parametres.Item(CbParam.SelectedIndex).Description
+            TxtParam.Text = _ListParam.Item(CbParam.SelectedIndex)
+        End If
+    End Sub
+
+    Private Sub BtnOkParam_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkParam.Click
+        If CbParam.SelectedIndex >= 0 And TxtParam.Text <> "" Then
+            _ListParam.Item(CbParam.SelectedIndex) = TxtParam.Text
+        Else
+            MessageBox.Show("Veuillez sélectionner un paramètre ou saisir sa valeur", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+        End If
     End Sub
 End Class

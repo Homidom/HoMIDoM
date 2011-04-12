@@ -358,6 +358,16 @@ Namespace HoMIDom
                                     _drv.COM = list.Item(j).Attributes.GetNamedItem("com").Value
                                     _drv.Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
                                     _drv.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
+
+                                    For i As Integer = 0 To list.Item(j).Attributes.Count - 1
+                                        Dim a As String = UCase(list.Item(j).Attributes.Item(i).Name)
+                                        If a.StartsWith("PARAMETRE") Then
+                                            Dim idx As Integer = Mid(a, 10, Len(a) - 9)
+                                            _drv.Parametres.Item(idx).valeur = list.Item(j).Attributes.Item(i).Value
+                                        End If
+                                        a = Nothing
+                                    Next
+
                                     Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Driver " & _drv.Nom & " chargé")
                                     _drv = Nothing
                                 End If
@@ -798,6 +808,17 @@ Namespace HoMIDom
                         writer.WriteValue(" ")
                     End If
                     writer.WriteEndAttribute()
+                    If _ListDrivers.Item(i).Parametres IsNot Nothing Then
+                        For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
+                            writer.WriteStartAttribute("parametre" & j)
+                            If _ListDrivers.Item(i).Parametres.Item(j).valeur IsNot Nothing Then
+                                writer.WriteValue(_ListDrivers.Item(i).Parametres.Item(j).valeur)
+                            Else
+                                writer.WriteValue(" ")
+                            End If
+                            writer.WriteEndAttribute()
+                        Next
+                    End If
                     writer.WriteEndElement()
                 Next
                 writer.WriteEndElement()
@@ -1308,6 +1329,7 @@ Namespace HoMIDom
                     tabl.Add(_ListDrivers.Item(i).Version)
                     tabl.Add(_ListDrivers.Item(i).Picture)
                     tabl.Add(_ListDrivers.Item(i).DeviceSupport)
+                    tabl.Add(_ListDrivers.Item(i).Parametres)
                     Return tabl
                     Exit For
                 End If
@@ -1345,8 +1367,13 @@ Namespace HoMIDom
                             _ListDrivers.Item(i).Stop()
                         Case "RESTART"
                             _ListDrivers.Item(i).Restart()
+                        Case "PARAMETRES"
+                            For idx As Integer = 0 To Parametre.count - 1
+                                _ListDrivers.Item(i).Parametres.item(idx).valeur = Parametre(idx)
+                            Next
                     End Select
                     Exit For
+
                 End If
             Next
         End Sub
@@ -1798,7 +1825,13 @@ Namespace HoMIDom
                     For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
                         .DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
                     Next
-
+                    For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
+                        Dim y As New Driver.Parametre
+                        y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
+                        y.Description = _ListDrivers.Item(i).Parametres.item(j).description
+                        y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
+                        .Parametres.Add(y)
+                    Next
                     Dim _listactdrv As New ArrayList
                     Dim _listactd As New List(Of String)
                     For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
@@ -2572,7 +2605,7 @@ Namespace HoMIDom
         ''' <param name="picture"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveDriver(ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String) As String Implements IHoMIDom.SaveDriver
+        Public Function SaveDriver(ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String, Optional ByVal Parametres As ArrayList = Nothing) As String Implements IHoMIDom.SaveDriver
             Dim myID As String
 
             'Driver Existant
@@ -2588,6 +2621,11 @@ Namespace HoMIDom
                     If _ListDrivers.Item(i).Com <> "@" Then _ListDrivers.Item(i).Com = com
                     _ListDrivers.Item(i).Refresh = refresh
                     _ListDrivers.Item(i).Picture = picture
+                    If Parametres IsNot Nothing Then
+                        For j As Integer = 0 To Parametres.Count - 1
+                            _ListDrivers.Item(i).parametres.item(j).valeur = Parametres.Item(j)
+                        Next
+                    End If
                 End If
             Next
 
@@ -3008,6 +3046,17 @@ Namespace HoMIDom
                     retour.Refresh = _ListDrivers.Item(i).refresh
                     retour.StartAuto = _ListDrivers.Item(i).startauto
                     retour.Version = _ListDrivers.Item(i).version
+
+                    For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
+                        retour.DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
+                    Next
+                    For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
+                        Dim y As New Driver.Parametre
+                        y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
+                        y.Description = _ListDrivers.Item(i).Parametres.item(j).description
+                        y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
+                        retour.Parametres.Add(y)
+                    Next
 
                     Dim _listactdrv As New ArrayList
                     Dim _listactd As New List(Of String)

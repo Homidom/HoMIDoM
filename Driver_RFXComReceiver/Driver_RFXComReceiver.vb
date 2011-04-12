@@ -41,6 +41,7 @@ Imports System.Globalization
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
     Dim _DeviceSupport As New ArrayList
+    Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
 
     'A ajouter dans les ppt du driver
@@ -114,6 +115,14 @@ Imports System.Globalization
         Get
             Return _DeviceSupport
         End Get
+    End Property
+    Public Property Parametres() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.Parametres
+        Get
+            Return _Parametres
+        End Get
+        Set(ByVal value As System.Collections.ArrayList)
+            _Parametres = value
+        End Set
     End Property
     Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
         Get
