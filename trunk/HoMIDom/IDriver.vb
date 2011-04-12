@@ -30,6 +30,7 @@
         ReadOnly Property Version() As String
         Property Picture() As String
         ReadOnly Property DeviceSupport() As ArrayList
+        Property Parametres() As ArrayList
 
         Sub Start()
         Sub [Stop]()

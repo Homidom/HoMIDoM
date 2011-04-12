@@ -130,5 +130,10 @@
                 <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,10,29,0" Name="BtnTest" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Tester</Button>
             </Grid>
         </GroupBox>
+        <Label Content="Paramètres avancés:" Foreground="White" Height="24" HorizontalAlignment="Right" Margin="0,150,240,0" Name="Label14" VerticalAlignment="Top" Visibility="Visible" Width="125.493" />
+        <ComboBox Height="22" HorizontalAlignment="Left" Margin="263,170,0,0" Name="CbParam" VerticalAlignment="Top" Width="148" Background="White" AllowDrop="True" Foreground="Black"></ComboBox>
+        <TextBox Height="21" HorizontalAlignment="Right" Margin="0,169,48,0" Name="TxtParam" VerticalAlignment="Top" Width="144" Background="White" AllowDrop="True" Foreground="Black" />
+        <Label Content="=" Foreground="White" Height="24" HorizontalAlignment="Right" Margin="0,168,192,0" Name="Label15" VerticalAlignment="Top" Visibility="Visible" Width="24" />
+        <Button Content="Ok" Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,168,18,0" Name="BtnOkParam" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="28" />
     </Grid>
 </UserControl>

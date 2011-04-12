@@ -16,6 +16,15 @@
             End Get
         End Property
 
+        Public Property Parametres() As ArrayList
+            Get
+                Return _Server.ReturnDriver(_ID).Item(16)
+            End Get
+            Set(ByVal value As ArrayList)
+                _Server.WriteDriver(_ID, "PARAMETRES", value)
+            End Set
+        End Property
+
         Public Property COM() As String
             Get
                 Return _Server.ReturnDriver(_ID).Item(10)
@@ -155,5 +164,38 @@
             _Server = Serveur
             _ID = DriverId
         End Sub
+
+        Public Class Parametre
+            Dim _Nom As String
+            Dim _Description As String
+            Dim _Value As Object
+
+            Public Property Nom As String
+                Get
+                    Return _Nom
+                End Get
+                Set(ByVal value As String)
+                    _Nom = value
+                End Set
+            End Property
+
+            Public Property Description As String
+                Get
+                    Return _Description
+                End Get
+                Set(ByVal value As String)
+                    _Description = value
+                End Set
+            End Property
+
+            Public Property Valeur As Object
+                Get
+                    Return _Value
+                End Get
+                Set(ByVal value As Object)
+                    _Value = value
+                End Set
+            End Property
+        End Class
     End Class
 End Namespace

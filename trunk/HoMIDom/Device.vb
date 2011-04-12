@@ -335,6 +335,7 @@ Namespace HoMIDom
             End Property
 
             Public Sub Read()
+                If _Enable = False Then Exit Sub
                 If Driver.IsConnect() Then Driver.Read(Me)
             End Sub
 
@@ -402,6 +403,7 @@ Namespace HoMIDom
 
             'Demande de Lecture au driver
             Public Sub Read()
+                If _Enable = False Then Exit Sub
                 If Driver.IsConnect() Then Driver.Read(Me)
             End Sub
 
@@ -460,6 +462,7 @@ Namespace HoMIDom
 
             'Demande de Lecture au driver
             Public Sub Read()
+                If _Enable = False Then Exit Sub
                 If Driver.IsConnect() Then Driver.Read(Me)
             End Sub
 
@@ -518,6 +521,7 @@ Namespace HoMIDom
             End Property
 
             Private Sub Read()
+                If _Enable = False Then Exit Sub
                 If Driver.IsConnect() Then Driver.Read(Me)
             End Sub
 
@@ -550,12 +554,14 @@ Namespace HoMIDom
             ''' <param name="Parametre2"></param>
             ''' <remarks></remarks>
             Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
+                If _Enable = False Then Exit Sub
                 Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
             End Sub
 
             ''' <summary>Permet de tester une commande read</summary>
             ''' <remarks></remarks>
             Public Sub TestRead()
+                If _Enable = False Then Exit Sub
                 Driver.read(Me)
             End Sub
 
@@ -567,11 +573,13 @@ Namespace HoMIDom
 
             'ON
             Public Sub [ON]()
+                If _Enable = False Then Exit Sub
                 Driver.Write(Me, "ON")
             End Sub
 
             'OFF
             Public Sub OFF()
+                If _Enable = False Then Exit Sub
                 Driver.Write(Me, "OFF")
             End Sub
         End Class
@@ -586,12 +594,14 @@ Namespace HoMIDom
             ''' <param name="Parametre2"></param>
             ''' <remarks></remarks>
             Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
+                If _Enable = False Then Exit Sub
                 Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
             End Sub
 
             ''' <summary>Permet de tester une commande read</summary>
             ''' <remarks></remarks>
             Public Sub TestRead()
+                If _Enable = False Then Exit Sub
                 Driver.read(Me)
             End Sub
 
@@ -603,7 +613,7 @@ Namespace HoMIDom
 
             'redéfinition car on ne veut rien faire
             Public Sub Read()
-
+                If _Enable = False Then Exit Sub
             End Sub
 
             Public Property Fichier() As String
@@ -617,6 +627,7 @@ Namespace HoMIDom
 
             Private Sub touche(ByVal commande As String)
                 Try
+                    If _Enable = False Then Exit Sub
                     Driver.Write(Me, commande)
                     Value = commande
                 Catch ex As Exception
@@ -761,11 +772,13 @@ Namespace HoMIDom
 
             'ON
             Public Sub [ON]()
+                If _Enable = False Then Exit Sub
                 Driver.Write(Me, "ON")
             End Sub
 
             'OFF
             Public Sub OFF()
+                If _Enable = False Then Exit Sub
                 Driver.Write(Me, "OFF")
             End Sub
 
@@ -805,6 +818,7 @@ Namespace HoMIDom
 
             'redefinition de read pour ne rien faire :)
             Public Sub Read()
+                If _Enable = False Then Exit Sub
             End Sub
 
             Private Function Sendhttp(ByVal cmd As String) As String
@@ -972,11 +986,13 @@ Namespace HoMIDom
 
             'ON
             Public Sub [ON]()
+                If _Enable = False Then Exit Sub
                 _Driver.Write(Me, "ON")
             End Sub
 
             'OFF
             Public Sub OFF()
+                If _Enable = False Then Exit Sub
                 Driver.Write(Me, "OFF")
             End Sub
 
@@ -987,6 +1003,7 @@ Namespace HoMIDom
                 ElseIf Variation > 100 Then
                     Variation = 100
                 End If
+                If _Enable = False Then Exit Sub
                 Driver.Write(Me, "DIM", Variation)
             End Sub
 
@@ -1049,6 +1066,7 @@ Namespace HoMIDom
             End Property
 
             Public Sub Read()
+                If _Enable = False Then Exit Sub
                 Driver.Read(Me)
             End Sub
 
@@ -1343,6 +1361,10 @@ Namespace HoMIDom
                 End Set
             End Property
 
+            Protected Overrides Sub Finalize()
+                MyBase.Finalize()
+                MyTimer.Enabled = True
+            End Sub
         End Class
 
         <Serializable()> Class MULTIMEDIA
@@ -1412,18 +1434,23 @@ Namespace HoMIDom
 
             'redéfinition car on veut rien faire
             Private Sub Read()
-
+                If _Enable = False Then Exit Sub
             End Sub
 
             Public Sub SendCommand(ByVal NameCommand As String)
                 For i As Integer = 0 To ListCommandName.Count - 1
                     If ListCommandName(i) = NameCommand Then
+                        If _Enable = False Then Exit Sub
                         Driver.Write(Me, "SendCodeIR", ListCommandData(i), ListCommandRepeat(i))
                         Exit For
                     End If
                 Next
             End Sub
 
+            Protected Overrides Sub Finalize()
+                MyBase.Finalize()
+                MyTimer.Enabled = False
+            End Sub
         End Class
 
         <Serializable()> Class PLUIECOURANT
@@ -1459,11 +1486,13 @@ Namespace HoMIDom
 
             'ON
             Public Sub [ON]()
+                If _Enable = False Then Exit Sub
                 Driver.Write(Me, "ON")
             End Sub
 
             'OFF
             Public Sub OFF()
+                If _Enable = False Then Exit Sub
                 Driver.Write(Me, "OFF")
             End Sub
         End Class
@@ -1479,7 +1508,7 @@ Namespace HoMIDom
 
             'redéfinition car on veut rien faire
             Private Sub Read()
-
+                If _Enable = False Then Exit Sub
             End Sub
 
         End Class
@@ -1539,11 +1568,13 @@ Namespace HoMIDom
 
             'Ouvrir volet
             Public Sub OPEN()
+                If _Enable = False Then Exit Sub
                 Driver.Write(Me, "ON")
             End Sub
 
             'Fermer Volet
             Public Sub CLOSE()
+                If _Enable = False Then Exit Sub
                 Driver.Write(Me, "OFF")
             End Sub
 
@@ -1554,6 +1585,7 @@ Namespace HoMIDom
                 ElseIf Variation > 100 Then
                     Variation = 100
                 End If
+                If _Enable = False Then Exit Sub
                 Driver.Write(Me, "DIM", Variation)
             End Sub
 
