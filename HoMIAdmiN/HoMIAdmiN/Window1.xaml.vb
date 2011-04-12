@@ -15,6 +15,7 @@ Class Window1
     Dim Myfile As String
     Dim MyPort As String = ""
     Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
+    Dim myadress As String = ""
 
     Public Sub New()
         Dim spl As Window2 = New Window2
@@ -433,6 +434,10 @@ Class Window1
         CanvasRight.SetTop(x, 50)
     End Sub
 
+    Private Sub MenuConnexion(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Call Connect_Srv(sender.uid)
+    End Sub
+
     ''' <summary>
     ''' Menu à propose
     ''' </summary>
@@ -473,6 +478,26 @@ Class Window1
         MyBase.Finalize()
     End Sub
 
+    Private Sub Connect_Srv(ByVal Index As Integer)
+        Try
+            myadress = "http://" & ListServer.Item(Index).Adresse & ":" & ListServer.Item(Index).Port & "/ServiceModelSamples/service"
+            MyPort = ListServer.Item(Index).Port
+            myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
+            myService = myChannelFactory.CreateChannel()
+            IsConnect = True
+
+            AffDriver()
+            AffDevice()
+            AffZone()
+            AffUser()
+
+            CanvasUser = CanvasRight
+        Catch ex As Exception
+            IsConnect = False
+            MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
     Private Sub Window1_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         'Connexion au serveur web
 
@@ -485,20 +510,36 @@ Class Window1
                     ListServer = x.Deserialize(objStreamReader)
                     objStreamReader.Close()
 
-                    Dim myadress As String = ""
-                    For i As Integer = 0 To ListServer.Count - 1
-                        If ListServer.Item(i).Defaut = True Then
-                            myadress = "http://" & ListServer.Item(i).Adresse & ":" & ListServer.Item(i).Port & "/ServiceModelSamples/service"
-                            MyPort = ListServer.Item(i).Port
-                        End If
-                    Next
-
-                    If myadress = "" Then
+                    If ListServer.Count = 0 Then
                         myadress = "http://localhost:8000/ServiceModelSamples/service"
                         MyPort = "8000"
                         MessageBox.Show("Aucune adresse par défaut n'a été trouvée, le système se connectera à l'adresse suivante: " & myadress, "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
+                    Else
+                        For i As Integer = 0 To ListServer.Count - 1
+                            Dim mnu As New MenuItem
+                            mnu.Header = ListServer.Item(i).Nom
+                            mnu.Uid = i
+                            mnu.IsCheckable = True
+                            mnu.IsChecked = ListServer.Item(i).Defaut
+
+                            AddHandler mnu.Click, AddressOf MenuConnexion
+                            MnuConnexion.Items.Add(mnu)
+
+                            'If ListServer.Item(i).Defaut = True Then
+                            '    myadress = "http://" & ListServer.Item(i).Adresse & ":" & ListServer.Item(i).Port & "/ServiceModelSamples/service"
+                            '    MyPort = ListServer.Item(i).Port
+                            'End If
+                        Next
                     End If
-                    myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
+                   
+
+                    'If myadress = "" Then
+                    '    myadress = "http://localhost:8000/ServiceModelSamples/service"
+                    '    MyPort = "8000"
+                    '    MessageBox.Show("Aucune adresse par défaut n'a été trouvée, le système se connectera à l'adresse suivante: " & myadress, "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    'End If
+                    'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
 
                 Catch ex As Exception
                     MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml, vérifiez que toutes les balises requisent soient présentes: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -507,27 +548,29 @@ Class Window1
             Else 'on utilise le fichier app.config
                 MessageBox.Show("Aucun fichier de config n'a été trouvée, le système se base donc sur le fichier app.config", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
+                myService = myChannelFactory.CreateChannel()
+                IsConnect = True
+
+                'Affichage des éléments 
+                Try
+                    AffDriver()
+                    AffDevice()
+                    AffZone()
+                    AffUser()
+
+                    CanvasUser = CanvasRight
+
+                Catch ex As Exception
+                    IsConnect = False
+                    MessageBox.Show("Erreur Lors de la connexion au serveur: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                End Try
 
             End If
-
-            myService = myChannelFactory.CreateChannel()
-            IsConnect = True
         Catch ex As Exception
             myChannelFactory.Abort()
             IsConnect = False
         End Try
 
-        'Affichage des éléments 
-        Try
-            AffDriver()
-            AffDevice()
-            AffZone()
-            AffUser()
-
-            CanvasUser = CanvasRight
-        Catch ex As Exception
-            IsConnect = False
-            MessageBox.Show("Erreur Lors de la connexion au serveur: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
+    
     End Sub
 End Class
