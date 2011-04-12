@@ -94,6 +94,7 @@
             <StackPanel HorizontalAlignment="Left" Margin="12,27,0,6" Name="StackPanel2" Width="380" Orientation="Horizontal">
                 <Menu Height="25.004" HorizontalAlignment="Left"  Name="Menu1" VerticalAlignment="Bottom" Width="Auto" Background="Transparent">
                     <MenuItem Header="Fichier" Foreground="WhiteSmoke">
+                        <MenuItem Header="Connexion" Name="MnuConnexion" />
                         <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig" />
                         <MenuItem Header="Configuration du Serveur" Name="MenuConfigSrv" />
                         <MenuItem Header="Quitter" Name="MenuQuitter"/>
