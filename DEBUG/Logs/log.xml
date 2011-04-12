@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<logs>
+  <log time="12/04/2011 15:11:22" type="0" source="0" message="Création du nouveau fichier log" />
+  <log time="12/04/2011 15:11:22" type="1" source="1" fonction="Start" message="Connexion &amp;#224; la BDD Homidom : Connect&amp;#233; &amp;#224; la base sqlite homidom" />
+  <log time="12/04/2011 15:11:23" type="1" source="1" fonction="Start" message="Connexion &amp;#224; la BDD Medias : Connect&amp;#233; &amp;#224; la base sqlite medias" />
+  <log time="12/04/2011 15:11:23" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
+  <log time="12/04/2011 15:11:23" type="1" source="1" fonction="Drivers_Load" message=" - Foobar charg&amp;#233;" />
+  <log time="12/04/2011 15:11:23" type="1" source="1" fonction="Drivers_Load" message=" - K8055 charg&amp;#233;" />
+  <log time="12/04/2011 15:11:23" type="1" source="1" fonction="Drivers_Load" message=" - K8056 charg&amp;#233;" />
+  <log time="12/04/2011 15:11:23" type="1" source="1" fonction="Drivers_Load" message=" - MeteoGoogle charg&amp;#233;" />
+  <log time="12/04/2011 15:11:23" type="1" source="1" fonction="Drivers_Load" message=" - OpenWebNet charg&amp;#233;" />
+  <log time="12/04/2011 15:11:23" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS charg&amp;#233;" />
+  <log time="12/04/2011 15:11:23" type="1" source="1" fonction="Drivers_Load" message=" - RFID charg&amp;#233;" />
+  <log time="12/04/2011 15:11:23" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver charg&amp;#233;" />
+  <log time="12/04/2011 15:11:23" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt charg&amp;#233;" />
+  <log time="12/04/2011 15:11:23" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel charg&amp;#233;" />
+  <log time="12/04/2011 15:11:23" type="1" source="1" fonction="Drivers_Load" message=" - ZIBASE charg&amp;#233;" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: D:\Homidom\DEBUG\Config\homidom.xml" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Param&amp;#232;tres du serveur charg&amp;#233;s" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Driver Foobar charg&amp;#233;" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Driver K8055 charg&amp;#233;" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Driver K8056 charg&amp;#233;" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Driver MeteoGoogle charg&amp;#233;" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Driver OpenWebNet charg&amp;#233;" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Driver PLCBUS charg&amp;#233;" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Driver RFID charg&amp;#233;" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver charg&amp;#233;" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt charg&amp;#233;" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel charg&amp;#233;" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="13 Zone(s) charg&amp;#233;e(s)" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="2 Users(s) charg&amp;#233;(s)" />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="12/04/2011 15:11:24" type="5" source="1" fonction="DeviceChange" message="Freebox (Virtuel) : a : " />
+  <log time="12/04/2011 15:11:24" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (Virtuel) (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
+  <log time="12/04/2011 15:11:24" type="5" source="1" fonction="DeviceChange" message="Telecommande TV (USBUIRT) : 0 : " />
+  <log time="12/04/2011 15:11:25" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (USBUIRT) (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
+  <log time="12/04/2011 15:11:25" type="1" source="1" fonction="LoadConfig" message="Chargement du device Meteo Calais (Google) (3ebcd1d4-f991-4e4f-9afa-d321dbbd9865 - calais - METEO)" />
+  <log time="12/04/2011 15:11:25" type="10" source="1" fonction="DeviceChange" message="Historiser lampe (Virtuel) (Value) : 0" />
+  <log time="12/04/2011 15:11:25" type="8" source="1" fonction="DeviceChange" message="Exception : Le membre public &amp;#39;Precision&amp;#39; du type &amp;#39;LAMPE&amp;#39; est introuvable." />
+  <log time="12/04/2011 15:11:25" type="8" source="5" fonction="GOOGLEMETEO" message="Erreur Lors de la MaJ de Meteo Calais (Google) : The remote server returned an error: (407) Proxy Authentication Required." />
+  <log time="12/04/2011 15:11:25" type="1" source="1" fonction="LoadConfig" message="Chargement du device lampe (Virtuel) (8efb097e-4c14-4d5e-bb83-95d32a5bc6c4 - 12 - LAMPE)" />
+  <log time="12/04/2011 15:11:25" type="10" source="1" fonction="DeviceChange" message="Historiser lustre du salon (PLCBUS) (Value) : 0" />
+  <log time="12/04/2011 15:11:25" type="8" source="1" fonction="DeviceChange" message="Exception : Le membre public &amp;#39;Precision&amp;#39; du type &amp;#39;LAMPE&amp;#39; est introuvable." />
+  <log time="12/04/2011 15:11:25" type="1" source="1" fonction="LoadConfig" message="Chargement du device lustre du salon (PLCBUS) (c7b458fd-7eca-4bb6-8874-277ac837d3d5 - L4 - LAMPE)" />
+  <log time="12/04/2011 15:11:25" type="5" source="1" fonction="DeviceChange" message="temperature SAM (RFXCOM) : 49922 : 0" />
+  <log time="12/04/2011 15:11:25" type="1" source="1" fonction="LoadConfig" message="Chargement du device temperature SAM (RFXCOM) (bb84549a-e0cf-4638-ae26-77fe22a6c228 - 49922 - TEMPERATURE)" />
+  <log time="12/04/2011 15:11:25" type="5" source="1" fonction="DeviceChange" message="humidit&amp;#233; SAM (RFXCOM) : 49922 : 0" />
+  <log time="12/04/2011 15:11:25" type="1" source="1" fonction="LoadConfig" message="Chargement du device humidit&amp;#233; SAM (RFXCOM) (3faa8af6-955b-43da-ba07-00b3176771af - 49922 - HUMIDITE)" />
+  <log time="12/04/2011 15:11:25" type="5" source="1" fonction="DeviceChange" message="HP SDB (Foobar) : sdb : " />
+  <log time="12/04/2011 15:11:25" type="1" source="1" fonction="LoadConfig" message="Chargement du device HP SDB (Foobar) (eb29498f-3465-4eb3-af39-743690398e10 - sdb - MULTIMEDIA)" />
+  <log time="12/04/2011 15:11:25" type="1" source="1" fonction="LoadConfig" message="8 devices(s) trouv&amp;#233;(s)" />
+  <log time="12/04/2011 15:11:25" type="1" source="1" fonction="LoadConfig" message=" Chargement de la configuration termin&amp;#233;e" />
+  <log time="12/04/2011 15:11:25" type="1" source="1" fonction="Drivers_Start" message="D&amp;#233;marrage des drivers" />
+  <log time="12/04/2011 15:11:25" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:11:26" type="1" source="1" fonction="Drivers_Start" message=" - K8055 non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:11:26" type="1" source="1" fonction="Drivers_Start" message=" - K8056 non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:11:26" type="1" source="1" fonction="Drivers_Start" message=" - MeteoGoogle non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:11:26" type="1" source="1" fonction="Drivers_Start" message=" - OpenWebNet non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:11:26" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:11:26" type="1" source="1" fonction="Drivers_Start" message=" - RFID non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:11:26" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:11:26" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:11:26" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:11:26" type="1" source="1" fonction="Drivers_Start" message=" - ZIBASE non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:11:26" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="12/04/2011 15:11:26" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 12/04/2011 07:58:00" />
+  <log time="12/04/2011 15:11:26" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 12/04/2011 20:04:12" />
+  <log time="12/04/2011 15:28:22" type="1" source="1" fonction="Start" message="Connexion &amp;#224; la BDD Homidom : Connect&amp;#233; &amp;#224; la base sqlite homidom" />
+  <log time="12/04/2011 15:28:22" type="1" source="1" fonction="Start" message="Connexion &amp;#224; la BDD Medias : Connect&amp;#233; &amp;#224; la base sqlite medias" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="Drivers_Load" message=" - Foobar charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="Drivers_Load" message=" - K8055 charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="Drivers_Load" message=" - K8056 charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="Drivers_Load" message=" - MeteoGoogle charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="Drivers_Load" message=" - OpenWebNet charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="Drivers_Load" message=" - RFID charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="Drivers_Load" message=" - ZIBASE charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: D:\Homidom\DEBUG\Config\homidom.xml" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="LoadConfig" message="Param&amp;#232;tres du serveur charg&amp;#233;s" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="LoadConfig" message="Chargement des drivers" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="LoadConfig" message="Driver Foobar charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="LoadConfig" message="Driver K8055 charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="LoadConfig" message="Driver K8056 charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="LoadConfig" message="Driver MeteoGoogle charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="LoadConfig" message="Driver OpenWebNet charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="LoadConfig" message="Driver PLCBUS charg&amp;#233;" />
+  <log time="12/04/2011 15:28:23" type="1" source="1" fonction="LoadConfig" message="Driver RFID charg&amp;#233;" />
+  <log time="12/04/2011 15:28:24" type="1" source="1" fonction="LoadConfig" message="Driver RFXCom_receiver charg&amp;#233;" />
+  <log time="12/04/2011 15:28:24" type="1" source="1" fonction="LoadConfig" message="Driver USBuirt charg&amp;#233;" />
+  <log time="12/04/2011 15:28:24" type="1" source="1" fonction="LoadConfig" message="Driver Virtuel charg&amp;#233;" />
+  <log time="12/04/2011 15:28:24" type="1" source="1" fonction="LoadConfig" message="Chargement des zones" />
+  <log time="12/04/2011 15:28:24" type="1" source="1" fonction="LoadConfig" message="3 Zone(s) charg&amp;#233;e(s)" />
+  <log time="12/04/2011 15:28:24" type="1" source="1" fonction="LoadConfig" message="Chargement des users" />
+  <log time="12/04/2011 15:28:24" type="1" source="1" fonction="LoadConfig" message="2 Users(s) charg&amp;#233;(s)" />
+  <log time="12/04/2011 15:28:24" type="1" source="1" fonction="LoadConfig" message="Chargement des devices" />
+  <log time="12/04/2011 15:28:24" type="5" source="1" fonction="DeviceChange" message="Freebox (Virtuel) : a : " />
+  <log time="12/04/2011 15:28:24" type="1" source="1" fonction="LoadConfig" message="Chargement du device Freebox (Virtuel) (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)" />
+  <log time="12/04/2011 15:28:24" type="5" source="1" fonction="DeviceChange" message="Telecommande TV (USBUIRT) : 0 : " />
+  <log time="12/04/2011 15:28:24" type="1" source="1" fonction="LoadConfig" message="Chargement du device Telecommande TV (USBUIRT) (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)" />
+  <log time="12/04/2011 15:28:24" type="1" source="1" fonction="LoadConfig" message="Chargement du device Meteo Calais (Google) (3ebcd1d4-f991-4e4f-9afa-d321dbbd9865 - calais - METEO)" />
+  <log time="12/04/2011 15:28:24" type="10" source="1" fonction="DeviceChange" message="Historiser lampe (Virtuel) (Value) : 0" />
+  <log time="12/04/2011 15:28:24" type="8" source="1" fonction="DeviceChange" message="Exception : Le membre public &amp;#39;Precision&amp;#39; du type &amp;#39;LAMPE&amp;#39; est introuvable." />
+  <log time="12/04/2011 15:28:24" type="1" source="1" fonction="LoadConfig" message="Chargement du device lampe (Virtuel) (8efb097e-4c14-4d5e-bb83-95d32a5bc6c4 - 12 - LAMPE)" />
+  <log time="12/04/2011 15:28:24" type="10" source="1" fonction="DeviceChange" message="Historiser lustre du salon (PLCBUS) (Value) : 0" />
+  <log time="12/04/2011 15:28:24" type="8" source="5" fonction="GOOGLEMETEO" message="Erreur Lors de la MaJ de Meteo Calais (Google) : The remote server returned an error: (407) Proxy Authentication Required." />
+  <log time="12/04/2011 15:28:24" type="8" source="1" fonction="DeviceChange" message="Exception : Le membre public &amp;#39;Precision&amp;#39; du type &amp;#39;LAMPE&amp;#39; est introuvable." />
+  <log time="12/04/2011 15:28:24" type="1" source="1" fonction="LoadConfig" message="Chargement du device lustre du salon (PLCBUS) (c7b458fd-7eca-4bb6-8874-277ac837d3d5 - L4 - LAMPE)" />
+  <log time="12/04/2011 15:28:25" type="5" source="1" fonction="DeviceChange" message="temperature SAM (RFXCOM) : 49922 : 0" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="LoadConfig" message="Chargement du device temperature SAM (RFXCOM) (bb84549a-e0cf-4638-ae26-77fe22a6c228 - 49922 - TEMPERATURE)" />
+  <log time="12/04/2011 15:28:25" type="5" source="1" fonction="DeviceChange" message="humidit&amp;#233; SAM (RFXCOM) : 49922 : 0" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="LoadConfig" message="Chargement du device humidit&amp;#233; SAM (RFXCOM) (3faa8af6-955b-43da-ba07-00b3176771af - 49922 - HUMIDITE)" />
+  <log time="12/04/2011 15:28:25" type="5" source="1" fonction="DeviceChange" message="HP SDB (Foobar) : sdb : " />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="LoadConfig" message="Chargement du device HP SDB (Foobar) (eb29498f-3465-4eb3-af39-743690398e10 - sdb - MULTIMEDIA)" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="LoadConfig" message="8 devices(s) trouv&amp;#233;(s)" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="LoadConfig" message=" Chargement de la configuration termin&amp;#233;e" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="Drivers_Start" message="D&amp;#233;marrage des drivers" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="Drivers_Start" message=" - K8055 non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="Drivers_Start" message=" - K8056 non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="Drivers_Start" message=" - MeteoGoogle non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="Drivers_Start" message=" - OpenWebNet non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="Drivers_Start" message=" - RFID non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="Drivers_Start" message=" - ZIBASE non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 12/04/2011 07:58:00" />
+  <log time="12/04/2011 15:28:25" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 12/04/2011 20:04:12" />
+</logs>

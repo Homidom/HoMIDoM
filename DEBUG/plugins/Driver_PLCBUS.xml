@@ -1,0 +1,83 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Driver_PLCBUS
+</name>
+</assembly>
+<members>
+<member name="P:Driver_PLCBUS.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:Driver_PLCBUS.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:Driver_PLCBUS.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Start">
+	<summary>Démarrer le du driver PLCBUS</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Stop">
+	<summary>Arrêter le du driver PLCBUS</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Restart">
+	<summary>Re-Démarrer le du driver PLCBUSm</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Read(System.Object)">
+	<summary>Intérroger un device PLCBUS</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Write(System.Object,System.String,System.Object,System.Object)">
+	<summary>Commander un device PLCBUS</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<param name="Commande">La commande à passer</param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.#ctor">
+	<summary>Creation d'un objet de type PLCBUS</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.ouvrir(System.String)">
+	<summary>Ouvrir le port PLCBUS</summary>
+	<param name="numero">Nom/Numero du port COM: COM2</param>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.fermer">
+	<summary>Fermer le port PLCBUS</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.adresse_to_hex(System.String)">
+	<summary>Converti les adresses de string en hexa</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.hex_to_adresse(System.Byte)">
+	<summary>Converti les adresses d'hexa en string</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.wait(System.Int32)">
+	<summary>Pause pour attendre x msecondes </summary>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.ecrire(System.String,System.String,System.Int32,System.Int32,System.Boolean)">
+	<summary>Ecrire sur le port PLCBUS</summary>
+	<param name="adresse">Adresse du device : A1...</param>
+	<param name="commande">commande à envoyer : ON, OFF...</param>
+	<param name="data1">voir description des actions plus haut ou doc plcbus</param>
+	<param name="data2">voir description des actions plus haut ou doc plcbus</param>
+	<param name="ecriretwice">Booleen : Ecrire l'ordre deux fois</param>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
+	<summary>Fonction lancée sur reception de données sur le port COM</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.ProcessReceivedChar(System.Byte)">
+	<summary>Récupére les données reçu du port com et detecte les débuts et fin de paquet</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Process(System.Byte[])">
+	<summary>Recomponse les messages reçu</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.traitement(System.String,System.String,System.String)">
+	<summary>Traite les paquets reçus</summary>
+	<remarks></remarks>
+</member>
+</members>
+</doc>
