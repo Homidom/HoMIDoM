@@ -17,6 +17,7 @@
   <zones>
     <zone id="97da176d-abe9-45c2-85db-dc2e8adb2e48" name="Maison" icon=" " image=" " />
     <zone id="005147d9-a705-4d71-8f4d-8edc405c8a79" name="Salon" icon=" " image=" " />
+    <zone id="f3f351a1-9526-4d83-aef4-9a84b1e85de5" name="Salon" icon=" " image=" " />
   </zones>
   <users>
     <user id="f1da9939-3419-47a9-a0b3-f69a1c62e3cf" username="Admin" nom="Administrateur" prenom="Admin" profil="2" password="PAvsrAy++QJoiwy5JaPK9bqiqALOdu18pAdW5z/lljk=" numberidentification="" image=" " email="" emailautre="" telfixe="" telmobile="" telautre="" adresse="" ville="" codepostal="" />
