@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Imports System
+Imports System.IO
 Imports System.Xml
 Imports System.Xml.XPath
 Imports System.Xml.Serialization
@@ -9,6 +10,7 @@ Imports System.ServiceModel.Description
 Imports System.Security.Cryptography
 Imports System.Text
 Imports System.Web.HttpUtility
+
 
 Namespace HoMIDom
 
@@ -3188,6 +3190,25 @@ Namespace HoMIDom
             Next
             Return listresultat
         End Function
+
+        ''' <summary>
+        ''' Permet de télécharger un fichier
+        ''' </summary>
+        ''' <param name="fileName"></param>
+        ''' <param name="buffer"></param>
+        ''' <remarks></remarks>
+        Public Sub LoadDocument(ByVal Fichier As String, ByVal TablBytes() As Byte) Implements IHoMIDom.LoadDocument
+            Dim MonFichier As New System.IO.FileInfo(Fichier)
+            Dim MonFileStream As System.IO.FileStream = MonFichier.OpenRead()
+            Dim TableauDeBytes(MonFileStream.Length) As Byte
+
+            ' On charge le fichier dans un tableau de byte
+            MonFileStream.Read(TableauDeBytes, 0, MonFileStream.Length)
+
+            ' On ferme le stream
+            MonFileStream.Close()
+            TablBytes = TableauDeBytes
+        End Sub
 
         ''' <summary>
         ''' Permet d'exécuter une commande Sub d'un Device

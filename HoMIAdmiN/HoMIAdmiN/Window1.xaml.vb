@@ -610,4 +610,17 @@ Class Window1
         My.Settings.ViewProperty = False
         My.Settings.Save()
     End Sub
+
+    Private Sub MenuTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuTest.Click
+        Try
+            Dim TableauDeByte() As Byte
+            myService.LoadDocument("C:\Test.txt", TableauDeByte)
+            Dim MonFileStream As New System.IO.FileStream("D:\Test.txt", System.IO.FileMode.Create)
+            MonFileStream.Write(TableauDeByte, 0, TableauDeByte.Length - 1)
+            MonFileStream.Close()
+
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString)
+        End Try
+    End Sub
 End Class
