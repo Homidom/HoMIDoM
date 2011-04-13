@@ -45,16 +45,23 @@ Partial Public Class uZone
 
         Else 'Modifier zone
             Dim x As Zone = Window1.myService.ReturnZoneByID(ZoneId)
+            Dim _list As New List(Of Integer)
+
             _ZoneId = ZoneId
             If x IsNot Nothing Then
                 TxtName.Text = x.Name
                 For j As Integer = 0 To x.ListDevice.Count - 1
                     _ListIdSelect.Add(x.ListDevice.Item(j))
+
                     For k As Integer = 0 To _ListIdDispo.Count - 1
                         If _ListIdDispo.Item(k).DeviceID = x.ListDevice.Item(j).DeviceID Then
-                            _ListIdDispo.RemoveAt(k)
+                            _list.Add(k)
                         End If
                     Next
+                Next
+
+                For j As Integer = 0 To _list.Count - 1
+                    _ListIdDispo.RemoveAt(_list.Item(j))
                 Next
 
 
@@ -140,9 +147,16 @@ Partial Public Class uZone
     Private Sub ListBxDevice_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ListBxDevice.MouseDoubleClick
         If ListBxDevice.SelectedIndex < 0 Then Exit Sub
 
-        ChkVisible.IsChecked = _ListIdSelect.Item(ListBxDevice.SelectedIndex).visible
-        TxtX.Text = _ListIdSelect.Item(ListBxDevice.SelectedIndex).x
-        TxtY.Text = _ListIdSelect.Item(ListBxDevice.SelectedIndex).y
+        ChkVisible.Visibility = Windows.Visibility.Visible
+        TxtX.Visibility = Windows.Visibility.Visible
+        TxtY.Visibility = Windows.Visibility.Visible
+        BtnOkDev.Visibility = Windows.Visibility.Visible
+        Label7.Visibility = Windows.Visibility.Visible
+        Label8.Visibility = Windows.Visibility.Visible
+
+        ChkVisible.IsChecked = _ListIdSelect.Item(ListBxDevice.SelectedIndex).Visible
+        TxtX.Text = _ListIdSelect.Item(ListBxDevice.SelectedIndex).X
+        TxtY.Text = _ListIdSelect.Item(ListBxDevice.SelectedIndex).Y
     End Sub
 
     Private Sub BtnOkDev_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkDev.Click
@@ -152,6 +166,13 @@ Partial Public Class uZone
             _ListIdSelect(ListBxDevice.SelectedIndex).Visible = ChkVisible.IsChecked
             _ListIdSelect(ListBxDevice.SelectedIndex).X = TxtX.Text
             _ListIdSelect(ListBxDevice.SelectedIndex).Y = TxtY.Text
+
+            ChkVisible.Visibility = Windows.Visibility.Hidden
+            TxtX.Visibility = Windows.Visibility.Hidden
+            TxtY.Visibility = Windows.Visibility.Hidden
+            BtnOkDev.Visibility = Windows.Visibility.Hidden
+            Label7.Visibility = Windows.Visibility.Hidden
+            Label8.Visibility = Windows.Visibility.Hidden
         End If
     End Sub
 
@@ -181,5 +202,9 @@ Partial Public Class uZone
             ImgIcon.Source = bmpImage
             ImgIcon.Tag = dlg.FileName
         End If
+    End Sub
+
+    Private Sub ListBxDevice_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ListBxDevice.MouseDown
+
     End Sub
 End Class

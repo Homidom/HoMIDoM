@@ -52,6 +52,54 @@ Partial Friend NotInheritable Class MySettings
             Return defaultInstance
         End Get
     End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+    Public Property SavePassword() As Boolean
+        Get
+            Return CType(Me("SavePassword"),Boolean)
+        End Get
+        Set
+            Me("SavePassword") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+    Public Property Password() As String
+        Get
+            Return CType(Me("Password"),String)
+        End Get
+        Set
+            Me("Password") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+    Public Property ViewProperty() As Boolean
+        Get
+            Return CType(Me("ViewProperty"),Boolean)
+        End Get
+        Set
+            Me("ViewProperty") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+    Public Property UserPassword() As String
+        Get
+            Return CType(Me("UserPassword"),String)
+        End Get
+        Set
+            Me("UserPassword") = value
+        End Set
+    End Property
 End Class
 
 Namespace My
