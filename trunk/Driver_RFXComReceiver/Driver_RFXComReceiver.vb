@@ -311,6 +311,14 @@ Imports System.Globalization
         ecrire(&HF0, Parametre1)
     End Sub
 
+    Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
+
+    End Sub
+
+    Public Sub NewDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.NewDevice
+
+    End Sub
+
     Public Sub New()
         _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
         _DeviceSupport.Add(ListeDevices.BAROMETRE.ToString)

@@ -297,6 +297,14 @@ Imports System.IO.Ports
         End Try
     End Sub
 
+    Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
+
+    End Sub
+
+    Public Sub NewDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.NewDevice
+
+    End Sub
+
     ''' <summary>Creation d'un objet de type PLCBUS</summary>
     ''' <remarks></remarks>
     Public Sub New()
