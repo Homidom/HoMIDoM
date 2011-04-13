@@ -1372,6 +1372,10 @@ Namespace HoMIDom
                             For idx As Integer = 0 To Parametre.count - 1
                                 _ListDrivers.Item(i).Parametres.item(idx).valeur = Parametre(idx)
                             Next
+                        Case "DELETEDEVICE"
+                            _ListDrivers.Item(i).DeleteDevice(Parametre)
+                        Case "NEWDEVICE"
+                            _ListDrivers.Item(i).NewDevice(Parametre)
                     End Select
                     Exit For
 
@@ -1468,6 +1472,7 @@ Namespace HoMIDom
             Try
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).Id = deviceId Then
+                        _ListDevices.Item(i).driver.deletedevice(deviceId)
                         _ListDevices.RemoveAt(i)
                         DeleteDevice = 0
                         Exit Function
@@ -2546,6 +2551,7 @@ Namespace HoMIDom
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                         End With
                         _ListDevices.Add(o)
+                        o.Driver.newdevice(deviceId)
                 End Select
 
             Else 'Device Existant
@@ -2563,6 +2569,7 @@ Namespace HoMIDom
                         _ListDevices.Item(i).refresh = refresh
                         _ListDevices.Item(i).solo = solo
                         _ListDevices.Item(i).LastChangeDuree = lastchangeduree
+                        _ListDevices.Item(i).Driver.newdevice(deviceId)
                     End If
                 Next
             End If

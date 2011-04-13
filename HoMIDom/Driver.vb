@@ -154,6 +154,14 @@
             _Server.WriteDriver(_ID, "STOP", Nothing)
         End Sub
 
+        Public Sub DeleteDevice(ByVal DeviceId As String)
+            _Server.WriteDriver(_ID, "DELETEDEVICE", DeviceId)
+        End Sub
+
+        Public Sub NewDevice(ByVal DeviceId)
+            _Server.WriteDriver(_ID, "NEWDEVICE", DeviceId)
+        End Sub
+
         Public ReadOnly Property Version() As String
             Get
                 Return _Server.ReturnDriver(_ID).Item(13)

@@ -37,6 +37,8 @@
         Sub Restart()
         Sub Read(ByVal Objet As Object)
         Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing)
+        Sub DeleteDevice(ByVal DeviceId As String)
+        Sub NewDevice(ByVal DeviceId As String)
 
         'Fonctions à gérer par driver
 

@@ -217,6 +217,14 @@ Imports HoMIDom.HoMIDom.Server
 
     End Sub
 
+    Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
+
+    End Sub
+
+    Public Sub NewDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.NewDevice
+
+    End Sub
+
     Public Sub New()
         _DeviceSupport.Add(ListeDevices.APPAREIL)
     End Sub
