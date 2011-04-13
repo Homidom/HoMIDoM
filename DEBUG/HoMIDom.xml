@@ -6,7 +6,18 @@ HoMIDom
 </name>
 </assembly>
 <members>
-<member name="T:HoMIDom.HoMIDom.TemplateDriver">
+<member name="M:HoMIDom.graphes.grapher_courbe(System.String,System.String,System.Int32,System.Int32)">
+	<summary>Créer un graphe de type Courbe simple</summary>
+	<param name="nomfichier">Nom du fichier : "test"</param>
+	<param name="largeur">largeur de l'image</param>
+	<param name="hauteur">hauteur de l'image</param>
+	<param name="titre">Titre du graphe</param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.graphes.#ctor(System.String)">
+	<summary>initialisation de l'objet Graphes</summary>
+	<param name="chemin">Chemin ou enregistrer les graphes</param>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.TemplateDriver">
 	<summary>
  Template de Classe de type Driver pour le service web
  </summary>

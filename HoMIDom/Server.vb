@@ -244,6 +244,7 @@ Namespace HoMIDom
         Shared _HeureCoucherSoleilCorrection As Integer 'correction à appliquer sur heure du couché du soleil
         Private Shared _PortSOAP As String 'Port IP de connexion SOAP
         Dim TimerSecond As New Timers.Timer 'Timer à la seconde
+        Private graphe As New graphes(_MonRepertoire + "\Images\Graphes\")
 
 #End Region
 
@@ -3312,6 +3313,17 @@ Namespace HoMIDom
 
                 'Calcul les heures de lever et coucher du soleil
                 MAJ_HeuresSoleil()
+
+
+
+                'test avec graphe
+                graphe.grapher_courbe("test", "Temperature extérieure", 800, 400)
+
+
+
+
+
+
             Catch ex As Exception
                 Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Exception : " & ex.Message)
             End Try
