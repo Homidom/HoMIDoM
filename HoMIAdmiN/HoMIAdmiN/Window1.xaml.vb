@@ -16,6 +16,8 @@ Class Window1
     Dim MyPort As String = ""
     Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
     Dim myadress As String = ""
+    Dim FlagStart As Boolean = False
+    Dim MemCanvas As Canvas
 
     Public Sub New()
         Dim spl As Window2 = New Window2
@@ -478,7 +480,12 @@ Class Window1
         MyBase.Finalize()
     End Sub
 
-    Private Sub Connect_Srv(ByVal Index As Integer)
+    ''' <summary>
+    ''' Sélection d'un serveur pour connexion dans le sous menu connexion
+    ''' </summary>
+    ''' <param name="Index"></param>
+    ''' <remarks></remarks>
+    Public Sub Connect_Srv(ByVal Index As Integer)
         Try
             myadress = "http://" & ListServer.Item(Index).Adresse & ":" & ListServer.Item(Index).Port & "/ServiceModelSamples/service"
             MyPort = ListServer.Item(Index).Port
@@ -486,13 +493,9 @@ Class Window1
             myService = myChannelFactory.CreateChannel()
             IsConnect = True
 
-            AffDriver()
-            AffDevice()
-            AffZone()
-            AffUser()
-
             CanvasUser = CanvasRight
         Catch ex As Exception
+            myChannelFactory.Abort()
             IsConnect = False
             MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -500,77 +503,111 @@ Class Window1
 
     Private Sub Window1_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         'Connexion au serveur web
+        If File.Exists(Myfile) Then
+            Try
+                'Deserialize text file to a new object.
+                Dim objStreamReader As New StreamReader(Myfile)
+                Dim x As New XmlSerializer(ListServer.GetType)
+                ListServer = x.Deserialize(objStreamReader)
+                objStreamReader.Close()
 
-        Try
-            If File.Exists(Myfile) Then
-                Try
-                    'Deserialize text file to a new object.
-                    Dim objStreamReader As New StreamReader(Myfile)
-                    Dim x As New XmlSerializer(ListServer.GetType)
-                    ListServer = x.Deserialize(objStreamReader)
-                    objStreamReader.Close()
-
-                    If ListServer.Count = 0 Then
-                        myadress = "http://localhost:8000/ServiceModelSamples/service"
-                        MyPort = "8000"
-                        MessageBox.Show("Aucune adresse par défaut n'a été trouvée, le système se connectera à l'adresse suivante: " & myadress, "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                        myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
-                    Else
-                        For i As Integer = 0 To ListServer.Count - 1
-                            Dim mnu As New MenuItem
-                            mnu.Header = ListServer.Item(i).Nom
-                            mnu.Uid = i
-                            mnu.IsCheckable = True
-                            mnu.IsChecked = ListServer.Item(i).Defaut
-
-                            AddHandler mnu.Click, AddressOf MenuConnexion
-                            MnuConnexion.Items.Add(mnu)
-
-                            'If ListServer.Item(i).Defaut = True Then
-                            '    myadress = "http://" & ListServer.Item(i).Adresse & ":" & ListServer.Item(i).Port & "/ServiceModelSamples/service"
-                            '    MyPort = ListServer.Item(i).Port
-                            'End If
-                        Next
-                    End If
-                   
-
-                    'If myadress = "" Then
-                    '    myadress = "http://localhost:8000/ServiceModelSamples/service"
-                    '    MyPort = "8000"
-                    '    MessageBox.Show("Aucune adresse par défaut n'a été trouvée, le système se connectera à l'adresse suivante: " & myadress, "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                    'End If
+                If ListServer.Count = 0 Then 'Aucun serveur trouvé dans le fichier de config
+                    'myadress = "http://localhost:8000/ServiceModelSamples/service"
+                    'MyPort = "8000"
+                    'MessageBox.Show("Aucune adresse par défaut n'a été trouvée, le système se connectera à l'adresse suivante: " & myadress, "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
+                    MessageBox.Show("Aucun serveur n'a été trouvé dans le fichier de config, l'application ne peut se lancer, veuillez en ajouter un manuellement dans le fichier", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Me.Close()
+                Else 'on ajoute la liste des serveurs dans le menu Connexion
+                    'Page de connexion
+                    Do While FlagStart = False
+                        PageConnexion()
+                    Loop
 
-                Catch ex As Exception
-                    MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml, vérifiez que toutes les balises requisent soient présentes: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
+                    If My.Settings.ViewProperty = False Then
+                        MemCanvas = Canvas2
+                        StackPanel3.Children.RemoveAt(1)
+                        Canvas1.MaxHeight = StackPanel3.Height
+                        TabControl1.MaxHeight = 500
+                    End If
 
-            Else 'on utilise le fichier app.config
-                MessageBox.Show("Aucun fichier de config n'a été trouvée, le système se base donc sur le fichier app.config", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
-                myService = myChannelFactory.CreateChannel()
-                IsConnect = True
-
-                'Affichage des éléments 
-                Try
                     AffDriver()
                     AffDevice()
                     AffZone()
                     AffUser()
 
-                    CanvasUser = CanvasRight
+                End If
 
-                Catch ex As Exception
-                    IsConnect = False
-                    MessageBox.Show("Erreur Lors de la connexion au serveur: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
 
+                'If myadress = "" Then
+                '    myadress = "http://localhost:8000/ServiceModelSamples/service"
+                '    MyPort = "8000"
+                '    MessageBox.Show("Aucune adresse par défaut n'a été trouvée, le système se connectera à l'adresse suivante: " & myadress, "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                'End If
+                'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
+
+            Catch ex As Exception
+                MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml, vérifiez que toutes les balises requisent soient présentes: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
+
+        Else 'on utilise le fichier app.config
+            MessageBox.Show("Le fichier de config n'a pas été trouvée, impossible de lancer l'application admin", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Me.Close()
+            'MessageBox.Show("Aucun fichier de config n'a été trouvée, le système se base donc sur le fichier app.config", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
+            'myService = myChannelFactory.CreateChannel()
+            'IsConnect = True
+
+            ''Affichage des éléments 
+            'Try
+            '    AffDriver()
+            '    AffDevice()
+            '    AffZone()
+            '    AffUser()
+
+            '    CanvasUser = CanvasRight
+
+            'Catch ex As Exception
+            '    IsConnect = False
+            '    MessageBox.Show("Erreur Lors de la connexion au serveur: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            'End Try
+
+        End If
+    End Sub
+
+    Private Sub PageConnexion()
+        Dim frm As New Window3
+
+        frm.Owner = Me
+        frm.ShowDialog()
+        If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+            Connect_Srv(frm.CbServer.SelectedIndex)
+            If myService.VerifLogin(frm.TxtUsername.Text, frm.TxtPassword.Password) = False Then
+                MessageBox.Show("Le username ou le password sont erroné, impossible veuillez réessayer", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Else
+                frm.Close()
+                FlagStart = True
             End If
-        Catch ex As Exception
-            myChannelFactory.Abort()
-            IsConnect = False
-        End Try
+        Else
+            Me.Close()
+        End If
+    End Sub
 
-    
+    Private Sub MenuPropriete_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuPropriete.Click
+        If StackPanel3.Children.Count = 2 Then Exit Sub
+        StackPanel3.Children.Add(MemCanvas)
+        Canvas1.MaxHeight = StackPanel3.Height - 200
+        TabControl1.MaxHeight = 300
+        My.Settings.ViewProperty = True
+        My.Settings.Save()
+    End Sub
+
+    Private Sub BtnCloseProperties_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCloseProperties.Click
+        MemCanvas = Canvas2
+        StackPanel3.Children.RemoveAt(1)
+        Canvas1.MaxHeight = StackPanel3.Height
+        TabControl1.MaxHeight = 500
+        My.Settings.ViewProperty = False
+        My.Settings.Save()
     End Sub
 End Class

@@ -91,18 +91,18 @@
         <Image Margin="69,121,0,216" Name="ImgZone" Stretch="Fill" HorizontalAlignment="Left" Width="150" Source="/HoMIDomAdminWpf;component/Images/Defaut-128.png" />
         <GroupBox Header="Devices" Height="191" Margin="16,0,12,12" Name="GroupBox1" VerticalAlignment="Bottom">
             <Grid>
-                <ListBox Margin="162.5,22,177.5,11" Name="ListBxDevice" />
+                <ListBox Margin="162.5,22,177.5,11" Name="ListBxDevice" ToolTip="Double cliquer sur un élément pour voir ses informations" />
                 <ListBox HorizontalAlignment="Left" Margin="3,22,0,13" Name="ListBxDispo" Width="122" />
                 <Button Height="21" HorizontalAlignment="Left" Margin="133,38,0,0" Name="BtnAjout" VerticalAlignment="Top" Width="22">&gt;&gt;</Button>
                 <Button Height="21" HorizontalAlignment="Left" Margin="133,64,0,0" Name="BtnDel" VerticalAlignment="Top" Width="22">&lt;&lt;</Button>
                 <Label Height="24" HorizontalAlignment="Left" Margin="4,2,0,0" Name="Label5" VerticalAlignment="Top" Width="111" Foreground="White">Devices Disponibles:</Label>
                 <Label Height="24" Margin="0,2,180.5,0" Name="Label6" VerticalAlignment="Top" Foreground="White" HorizontalAlignment="Right" Width="119">Devices Sélectionnés:</Label>
-                <CheckBox Height="15" HorizontalAlignment="Right" Margin="0,22,56,0" Name="ChkVisible" VerticalAlignment="Top" Width="102" Foreground="White">Visible</CheckBox>
-                <Label Height="23" HorizontalAlignment="Right" Margin="0,44,91,0" Name="Label7" VerticalAlignment="Top" Width="68" Foreground="White">Position X:</Label>
-                <TextBox Height="19" HorizontalAlignment="Right" Margin="0,66,17,0" Name="TxtX" VerticalAlignment="Top" Width="141">0</TextBox>
-                <Label Foreground="White" Height="23" HorizontalAlignment="Right" Margin="0,0,90,62" Name="Label8" VerticalAlignment="Bottom" Width="68">Position Y:</Label>
-                <TextBox Height="19" HorizontalAlignment="Right" Margin="0,0,16,44" Name="TxtY" VerticalAlignment="Bottom" Width="141">0</TextBox>
-                <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,0,16,9" Name="BtnOkDev" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="88.75">Ok</Button>
+                <CheckBox Height="15" HorizontalAlignment="Right" Margin="0,22,56,0" Name="ChkVisible" VerticalAlignment="Top" Width="102" Foreground="White" Visibility="Hidden">Visible</CheckBox>
+                <Label Height="23" HorizontalAlignment="Right" Margin="0,44,91,0" Name="Label7" VerticalAlignment="Top" Width="68" Foreground="White" Visibility="Hidden">Position X:</Label>
+                <TextBox Height="19" HorizontalAlignment="Right" Margin="0,66,17,0" Name="TxtX" VerticalAlignment="Top" Width="141" Visibility="Hidden">0</TextBox>
+                <Label Foreground="White" Height="23" HorizontalAlignment="Right" Margin="0,0,90,62" Name="Label8" VerticalAlignment="Bottom" Width="68" Visibility="Hidden">Position Y:</Label>
+                <TextBox Height="19" HorizontalAlignment="Right" Margin="0,0,16,44" Name="TxtY" VerticalAlignment="Bottom" Width="141" Visibility="Hidden">0</TextBox>
+                <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,0,16,9" Name="BtnOkDev" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="88.75" Visibility="Hidden">Ok</Button>
             </Grid>
         </GroupBox>
         <Label Foreground="White" Height="24" HorizontalAlignment="Left" Margin="16,2,0,0" Name="Label4" VerticalAlignment="Top" Width="42">Icon:</Label>
