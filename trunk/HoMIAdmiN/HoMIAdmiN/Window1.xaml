@@ -105,6 +105,7 @@
                     </MenuItem> 
                     <MenuItem Header="?" Foreground="WhiteSmoke">
                         <MenuItem Header="A propos" Name="MenuPropos" />
+                        <MenuItem Header="Test" Name="MenuTest" />
                     </MenuItem>
                 </Menu>
 
