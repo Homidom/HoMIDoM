@@ -36,8 +36,10 @@ Module Service
                 Console.WriteLine(Now & "ERREUR: Le fichier de config ou la balise portsoap n'ont pas été trouvé !")
             End If
 
-
+            
             Dim baseAddress As Uri = New Uri("http://localhost:" & PortSOAP & "/ServiceModelSamples/service")
+            Dim fileServerAddress As Uri = New Uri("http://localhost:" & PortSOAP & "/ServiceModelSamples/fileServer")
+
             Console.WriteLine(Now & " Adresss SOAP: " & baseAddress.ToString)
 
             Using host As New ServiceHost(GetType(Server), baseAddress)
@@ -65,7 +67,13 @@ Module Service
                     Console.WriteLine(Now & "ERREUR: Erreur lors du lancement du service SOAP: " & ex.Message)
                 End Try
 
-                Console.ReadLine()
+                Using hostFileServer As New ServiceHost(GetType(HoMIDom.FileServer), fileServerAddress)
+                    hostFileServer.Open()
+                    Console.WriteLine("Démarrage du serveur de fichiers OK")
+
+                    Console.ReadLine()
+                    hostFileServer.Close()
+                End Using
                 host.Close()
             End Using
         Catch ex As Exception
