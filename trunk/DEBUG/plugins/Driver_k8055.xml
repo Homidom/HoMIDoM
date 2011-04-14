@@ -6,7 +6,10 @@ Driver_k8055
 </name>
 </assembly>
 <members>
-<member name="P:Driver_k8055.My.Resources.Resources.ResourceManager">
+<member name="T:Driver_k8055.Driver_k8055">
+	<summary>Driver Velleman k8055, le device doit dans son adresse 1 indiqué sa carte et son numéro de relais séparé par un x, exemple pour le relais 1 de la carte 1: 1x1</summary>
+	<remarks>Nécessite la dll k8055d.dll</remarks>
+</member><member name="P:Driver_k8055.My.Resources.Resources.ResourceManager">
 	<summary>
   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
 </summary>

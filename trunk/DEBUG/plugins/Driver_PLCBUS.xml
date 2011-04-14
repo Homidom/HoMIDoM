@@ -20,28 +20,39 @@ Driver_PLCBUS
   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
 </summary>
 </member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Start">
-	<summary>Démarrer le du driver PLCBUS</summary>
+	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Stop">
-	<summary>Arrêter le du driver PLCBUS</summary>
+	<summary>Arrêter le du driver</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Restart">
-	<summary>Re-Démarrer le du driver PLCBUSm</summary>
+	<summary>Re-Démarrer le du driver</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Read(System.Object)">
-	<summary>Intérroger un device PLCBUS</summary>
+	<summary>Intérroger un device</summary>
 	<param name="Objet">Objet représetant le device à interroger</param>
 	<remarks></remarks>
 </member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Write(System.Object,System.String,System.Object,System.Object)">
-	<summary>Commander un device PLCBUS</summary>
+	<summary>Commander un device</summary>
 	<param name="Objet">Objet représetant le device à interroger</param>
 	<param name="Commande">La commande à passer</param>
 	<param name="Parametre1"></param>
 	<param name="Parametre2"></param>
 	<remarks></remarks>
-</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.#ctor">
-	<summary>Creation d'un objet de type PLCBUS</summary>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.DeleteDevice(System.String)">
+	<summary>Fonction lancée lors de la suppression d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
 	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.NewDevice(System.String)">
+	<summary>Fonction lancée lors de l'ajout d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.#ctor">
+	<summary>Creation d'un objet de type</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.TimerTick">
+	<summary>Si refresh &gt;0 gestion du timer</summary>
+	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
 </member><member name="M:Driver_PLCBUS.Driver_PLCBUS.ouvrir(System.String)">
 	<summary>Ouvrir le port PLCBUS</summary>
 	<param name="numero">Nom/Numero du port COM: COM2</param>
@@ -78,6 +89,9 @@ Driver_PLCBUS
 </member><member name="M:Driver_PLCBUS.Driver_PLCBUS.traitement(System.String,System.String,System.String)">
 	<summary>Traite les paquets reçus</summary>
 	<remarks></remarks>
+</member><member name="T:Driver_PLCBUS.Driver_PLCBUS">
+	<summary>Class Driver_PLCBUS, permet de ommander et recevoir des ordres avec les périphériques PLCBUS via un 1141 ou 1141+</summary>
+	<remarks>Pour la version USB, necessite l'installation du driver</remarks>
 </member>
 </members>
 </doc>

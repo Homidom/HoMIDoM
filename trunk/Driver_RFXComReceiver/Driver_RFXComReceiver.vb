@@ -1,6 +1,4 @@
 ﻿Imports HoMIDom
-Imports System.Xml
-Imports System.Xml.Serialization
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports STRGS = Microsoft.VisualBasic.Strings
@@ -11,15 +9,15 @@ Imports System.Net.Sockets
 Imports System.Threading
 Imports System.Globalization
 
-' Driver RFXCOM REVEICER COM/USB(COM Virtuel)/Ethernet
-' Pour la version USB, necessite l'installation du driver USB RFXCOM
 ' Auteur : David
 ' Date : 22/01/2011
 
+''' <summary>Class Driver_RFXComReceiver, permet de communiquer avec la Zibase Ethernet</summary>
+''' <remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
 <Serializable()> Public Class Driver_RFXComReceiver
     Implements HoMIDom.HoMIDom.IDriver
 
-#Region "Variable Driver"
+#Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "3B808B6C-25B3-11E0-A6DB-36D2DED72085"
@@ -50,7 +48,7 @@ Imports System.Globalization
     'Dim _lastetat As Boolean = True
 #End Region
 
-#Region "Déclaration"
+#Region "Variables Internes"
     Private WithEvents port As New System.IO.Ports.SerialPort
     Private port_name As String = ""
     'Liste des commandes
@@ -102,7 +100,7 @@ Imports System.Globalization
     Private BufferIn(8192) As Byte
 #End Region
 
-#Region "Fonctions génériques"
+#Region "Propriétés génériques"
     Public Property Server() As HoMIDom.HoMIDom.Server Implements HoMIDom.HoMIDom.IDriver.Server
         Get
             Return _Server
@@ -224,10 +222,7 @@ Imports System.Globalization
             End If
         End Set
     End Property
-    Private Sub TimerTick()
-        'Si refresh >0 gestion du timer
-        'pas utilisé 
-    End Sub
+
     Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
         Get
             Return _Version
@@ -243,7 +238,10 @@ Imports System.Globalization
     End Property
 #End Region
 
-#Region "Fonctions du Driver"
+#Region "Fonctions génériques"
+
+    ''' <summary>Démarrer le du driver</summary>
+    ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         '_IsConnect = True
         Dim retour As String
@@ -286,6 +284,8 @@ Imports System.Globalization
         End Try
     End Sub
 
+    ''' <summary>Arrêter le du driver</summary>
+    ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Dim retour As String
         retour = fermer()
@@ -297,29 +297,49 @@ Imports System.Globalization
         End If
     End Sub
 
+    ''' <summary>Re-Démarrer le du driver</summary>
+    ''' <remarks></remarks>
     Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
         [Stop]()
         Start()
     End Sub
 
+    ''' <summary>Intérroger un device</summary>
+    ''' <param name="Objet">Objet représetant le device à interroger</param>
+    ''' <remarks>pas utilisé</remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         'pas utilisé
     End Sub
 
+    ''' <summary>Commander un device</summary>
+    ''' <param name="Objet">Objet représetant le device à interroger</param>
+    ''' <param name="Command">La commande à passer</param>
+    ''' <param name="Parametre1"></param>
+    ''' <param name="Parametre2"></param>
+    ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         'command pas utiliser car String, on utilise donc Parametre1 pour transmettre les commandes style MODEB32
         ecrire(&HF0, Parametre1)
     End Sub
 
+    ''' <summary>Fonction lancée lors de la suppression d'un device</summary>
+    ''' <param name="DeviceId">Objet représetant le device à interroger</param>
+    ''' <remarks></remarks>
     Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
 
     End Sub
 
+    ''' <summary>Fonction lancée lors de l'ajout d'un device</summary>
+    ''' <param name="DeviceId">Objet représetant le device à interroger</param>
+    ''' <remarks></remarks>
     Public Sub NewDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.NewDevice
 
     End Sub
 
+    ''' <summary>Creation d'un objet de type</summary>
+    ''' <remarks></remarks>
     Public Sub New()
+        'liste des devices compatibles
         _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
         _DeviceSupport.Add(ListeDevices.BAROMETRE.ToString)
         _DeviceSupport.Add(ListeDevices.BATTERIE.ToString)
@@ -344,18 +364,24 @@ Imports System.Globalization
         _DeviceSupport.Add(ListeDevices.VITESSEVENT.ToString)
         _DeviceSupport.Add(ListeDevices.VOLET.ToString)
     End Sub
+
+    ''' <summary>Si refresh >0 gestion du timer</summary>
+    ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+    Private Sub TimerTick()
+
+    End Sub
+
 #End Region
 
-#Region "Fonctions propres au driver"
+#Region "Fonctions Internes"
 
+    ''' <summary>Ouvrir le port COM/ETHERNET</summary>
+    ''' <param name="numero">Nom/Numero du port COM/Adresse IP: COM2</param>
+    ''' <remarks></remarks>
     Private Function ouvrir(ByVal numero As String) As String
         'Forcer le . 
         Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
         My.Application.ChangeCulture("en-US")
-        'recuperation de la configuration
-        'tempsentrereponse = rfx_tpsentrereponse
-        'ignoreadresse = RFX_ignoreadresse
-        'lastetat = DOM_lastetat
         Try
             If Not _IsConnect Then
                 port_name = numero 'pour se rapeller du nom du port
@@ -398,6 +424,8 @@ Imports System.Globalization
         End Try
     End Function
 
+    ''' <summary>Lances les handlers sur le port</summary>
+    ''' <remarks></remarks>
     Private Function lancer() As String
         'lancer les handlers
         If tcp Then
@@ -422,6 +450,8 @@ Imports System.Globalization
         End If
     End Function
 
+    ''' <summary>Configurer le RFXCOM</summary>
+    ''' <remarks></remarks>
     Private Function configurer() As String
         'configurer le rfxcom
         Try
@@ -441,6 +471,8 @@ Imports System.Globalization
         End Try
     End Function
 
+    ''' <summary>Ferme la connexion au port</summary>
+    ''' <remarks></remarks>
     Private Function fermer() As String
         Try
             If _IsConnect Then
@@ -486,6 +518,10 @@ Imports System.Globalization
         Return True
     End Function
 
+    ''' <summary>ecrire sur le port</summary>
+    ''' <param name="commande">premier paquet à envoyer</param>
+    ''' <param name="commande2">deuxieme paquet à envoyer</param>
+    ''' <remarks></remarks>
     Public Function ecrire(ByVal commande As Byte, ByVal commande2 As Byte) As String
         Dim cmd() As Byte = {commande, commande2}
         Dim message As String = ""
@@ -543,6 +579,8 @@ Imports System.Globalization
         End Try
     End Function
 
+    ''' <summary>Executer lors de la reception d'une donnée sur le port</summary>
+    ''' <remarks></remarks>
     Private Sub DataReceived(ByVal sender As Object, ByVal e As SerialDataReceivedEventArgs)
         Try
             Dim count As Integer = 0
@@ -558,6 +596,8 @@ Imports System.Globalization
         End Try
     End Sub
 
+    ''' <summary>Executer lors de la reception d'une erreur sur le port</summary>
+    ''' <remarks></remarks>
     Private Sub ReadErrorEvent(ByVal sender As Object, ByVal ev As SerialErrorReceivedEventArgs)
         Try
             Dim count As Integer = 0
@@ -573,6 +613,8 @@ Imports System.Globalization
         End Try
     End Sub
 
+    ''' <summary>Executer lors de la reception d'une donnée sur le port IP</summary>
+    ''' <remarks></remarks>
     Private Sub TCPDataReceived(ByVal ar As IAsyncResult)
         Dim intCount As Integer
         Try
@@ -586,6 +628,8 @@ Imports System.Globalization
         End Try
     End Sub
 
+    ''' <summary>Traite les données IP recu</summary>
+    ''' <remarks></remarks>
     Private Sub ProcessNewTCPData(ByVal Bytes() As Byte, ByVal offset As Integer, ByVal count As Integer)
         Dim intIndex As Integer
         Try
@@ -597,6 +641,8 @@ Imports System.Globalization
         End Try
     End Sub
 
+    ''' <summary>xxx</summary>
+    ''' <remarks></remarks>
     Private Sub tmrRead_Elapsed(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmrRead.Elapsed
         Try
             If Not firstbyte Then
@@ -618,11 +664,12 @@ Imports System.Globalization
         End Try
     End Sub
 
+    ''' <summary>Rassemble un message complet pour ensuite l'envoyer à displaymess</summary>
+    ''' <param name="temp">Byte recu</param>
+    ''' <remarks></remarks>
     Public Sub ProcessReceivedChar(ByVal temp As Byte)
         Try
-            'rassemble un message complet pour le traiter ensuite avec displaymess
             'Dim temp As Byte
-            'temp = sComChar
 
             maxticks = 0
             If firstbyte Then
@@ -676,6 +723,8 @@ Imports System.Globalization
         End Try
     End Sub
 
+    ''' <summary>Decode le message pour l'envoyer aux bonnes fonctions de traitement</summary>
+    ''' <remarks></remarks>
     Public Sub display_mess()
         Try
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte cette boucle
@@ -782,7 +831,6 @@ Imports System.Globalization
 #End Region
 
 #Region "Process"
-
     'OK
     Private Sub processx(ByVal recbits As Byte)
         Try

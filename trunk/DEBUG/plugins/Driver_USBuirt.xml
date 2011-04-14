@@ -19,24 +19,52 @@ Driver_USBuirt
 	<summary>
   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
 </summary>
+</member><member name="M:Driver_USBuirt.Driver_USBUIRT.Start">
+	<summary>Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_USBuirt.Driver_USBUIRT.Stop">
+	<summary>Arrêter le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_USBuirt.Driver_USBUIRT.Restart">
+	<summary>Re-Démarrer le driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_USBuirt.Driver_USBUIRT.Read(System.Object)">
+	<summary>Intérroger un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<remarks>pas utilisé</remarks>
+</member><member name="M:Driver_USBuirt.Driver_USBUIRT.Write(System.Object,System.String,System.Object,System.Object)">
+	<summary>Commander un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<param name="Commande">La commande à passer</param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_USBuirt.Driver_USBUIRT.DeleteDevice(System.String)">
+	<summary>Fonction lancée lors de la suppression d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_USBuirt.Driver_USBUIRT.NewDevice(System.String)">
+	<summary>Fonction lancée lors de l'ajout d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_USBuirt.Driver_USBUIRT.#ctor">
+	<summary>Creation d'un objet de type</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_USBuirt.Driver_USBUIRT.TimerTick">
+	<summary>Si refresh &gt;0 gestion du timer</summary>
+	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
 </member><member name="M:Driver_USBuirt.Driver_USBUIRT.LearnCodeIR">
-	<summary>
- Apprendre un code IR
- </summary>
+	<summary>Apprendre un code IR</summary>
 	<returns>Retourne le code IR</returns>
 	<remarks></remarks>
 </member><member name="M:Driver_USBuirt.Driver_USBUIRT.SendCodeIR(System.String,System.Int32)">
-	<summary>
- Emet un code infrarouge
- </summary>
+	<summary>Emet un code infrarouge</summary>
 	<param name="ir_code"></param>
 	<param name="RepeatCount"></param>
 	<remarks></remarks>
 </member><member name="T:Driver_USBuirt.Driver_USBUIRT">
-	<summary>
- Class USBUIRT, permet d'apprendre des codes IR et de les restituer par la suite 
- </summary>
-	<remarks></remarks>
+	<summary>Class Driver_USBUIRT, permet d'apprendre des codes IR et de les restituer par la suite </summary>
+	<remarks>Nécessite la dll usbuirtmanagedwrapper</remarks>
 </member>
 </members>
 </doc>

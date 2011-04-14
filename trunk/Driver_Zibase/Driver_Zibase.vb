@@ -1,24 +1,19 @@
 ﻿Imports HoMIDom
-Imports System.Xml
-Imports System.Xml.Serialization
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports VB = Microsoft.VisualBasic
 Imports System.IO.Ports
-Imports System.Math
-Imports System.Net.Sockets
-Imports System.Threading
-Imports System.Globalization
 
-' Driver ZIBASE Ethernet
 ' Auteur : David
 ' Date : 10/02/2011
 
+''' <summary>Class Driver_Zibase, permet de communiquer avec la Zibase Ethernet</summary>
+''' <remarks>Nécessite la dll déceloppé par Planete Domotique zibase.dll</remarks>
 <Serializable()> Public Class Driver_Zibase
     Implements HoMIDom.HoMIDom.IDriver
 
-#Region "Variable Driver"
+#Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "9BC60A04-3569-11E0-B9A7-3F66DFD72085"
@@ -44,7 +39,11 @@ Imports System.Globalization
     Dim MyTimer As New Timers.Timer
 #End Region
 
-#Region "Fonctions génériques"
+#Region "Variables Internes"
+
+#End Region
+
+#Region "Propriétés génériques"
     Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
         Get
             Return _Com
@@ -53,13 +52,11 @@ Imports System.Globalization
             _Com = value
         End Set
     End Property
-
     Public ReadOnly Property Description() As String Implements HoMIDom.HoMIDom.IDriver.Description
         Get
             Return _Description
         End Get
     End Property
-
     Public ReadOnly Property DeviceSupport() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.DeviceSupport
         Get
             Return _DeviceSupport
@@ -76,7 +73,6 @@ Imports System.Globalization
     End Property
 
     Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
-
     Public Property Enable() As Boolean Implements HoMIDom.HoMIDom.IDriver.Enable
         Get
             Return _Enable
@@ -85,13 +81,11 @@ Imports System.Globalization
             _Enable = value
         End Set
     End Property
-
     Public ReadOnly Property ID() As String Implements HoMIDom.HoMIDom.IDriver.ID
         Get
             Return _ID
         End Get
     End Property
-
     Public Property IP_TCP() As String Implements HoMIDom.HoMIDom.IDriver.IP_TCP
         Get
             Return _IP_TCP
@@ -100,7 +94,6 @@ Imports System.Globalization
             _IP_TCP = value
         End Set
     End Property
-
     Public Property IP_UDP() As String Implements HoMIDom.HoMIDom.IDriver.IP_UDP
         Get
             Return _IP_UDP
@@ -109,25 +102,21 @@ Imports System.Globalization
             _IP_UDP = value
         End Set
     End Property
-
     Public ReadOnly Property IsConnect() As Boolean Implements HoMIDom.HoMIDom.IDriver.IsConnect
         Get
             Return _IsConnect
         End Get
     End Property
-
     Public ReadOnly Property Modele() As String Implements HoMIDom.HoMIDom.IDriver.Modele
         Get
             Return _Modele
         End Get
     End Property
-
     Public ReadOnly Property Nom() As String Implements HoMIDom.HoMIDom.IDriver.Nom
         Get
             Return _Nom
         End Get
     End Property
-
     Public Property Picture() As String Implements HoMIDom.HoMIDom.IDriver.Picture
         Get
             Return _Picture
@@ -136,7 +125,6 @@ Imports System.Globalization
             _Picture = value
         End Set
     End Property
-
     Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
@@ -145,7 +133,6 @@ Imports System.Globalization
             _Port_TCP = value
         End Set
     End Property
-
     Public Property Port_UDP() As String Implements HoMIDom.HoMIDom.IDriver.Port_UDP
         Get
             Return _Port_UDP
@@ -154,17 +141,11 @@ Imports System.Globalization
             _Port_UDP = value
         End Set
     End Property
-
     Public ReadOnly Property Protocol() As String Implements HoMIDom.HoMIDom.IDriver.Protocol
         Get
             Return _Protocol
         End Get
     End Property
-
-    Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
-
-    End Sub
-
     Public Property Refresh() As Integer Implements HoMIDom.HoMIDom.IDriver.Refresh
         Get
             Return _Refresh
@@ -173,12 +154,6 @@ Imports System.Globalization
             _Refresh = value
         End Set
     End Property
-
-    Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
-        [Stop]()
-        Start()
-    End Sub
-
     Public Property Server() As HoMIDom.HoMIDom.Server Implements HoMIDom.HoMIDom.IDriver.Server
         Get
             Return _Server
@@ -187,17 +162,11 @@ Imports System.Globalization
             _Server = value
         End Set
     End Property
-
-    Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
-        'cree l'objet
-        Try
-
-        Catch ex As Exception
-            ' Start = "ERREUR: " & ex.Message
-            _IsConnect = False
-        End Try
-    End Sub
-
+    Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
+        Get
+            Return _Version
+        End Get
+    End Property
     Public Property StartAuto() As Boolean Implements HoMIDom.HoMIDom.IDriver.StartAuto
         Get
             Return _StartAuto
@@ -206,38 +175,126 @@ Imports System.Globalization
             _StartAuto = value
         End Set
     End Property
-
-    Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
-
-    End Sub
-
-    Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
-        Get
-            Return _Version
-        End Get
-    End Property
-
-    Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-
-    End Sub
-
-    Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
-
-    End Sub
-
-    Public Sub NewDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.NewDevice
-
-    End Sub
-
-    Public Sub New()
-        _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
-        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
-        _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
-        _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
-    End Sub
 #End Region
 
-#Region "Fonctions propres au driver"
+#Region "Fonctions génériques"
+
+    ''' <summary>Démarrer le du driver</summary>
+    ''' <remarks></remarks>
+    Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
+        Try
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase Start", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Arrêter le du driver</summary>
+    ''' <remarks></remarks>
+    Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
+        Try
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase Stop", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Re-Démarrer le du driver</summary>
+    ''' <remarks></remarks>
+    Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
+        [Stop]()
+        Start()
+    End Sub
+
+    ''' <summary>Intérroger un device</summary>
+    ''' <param name="Objet">Objet représetant le device à interroger</param>
+    ''' <remarks>pas utilisé</remarks>
+    Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
+        Try
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase Read", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Commander un device</summary>
+    ''' <param name="Objet">Objet représetant le device à interroger</param>
+    ''' <param name="Command">La commande à passer</param>
+    ''' <param name="Parametre1"></param>
+    ''' <param name="Parametre2"></param>
+    ''' <remarks></remarks>
+    Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
+        Try
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase Write", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Fonction lancée lors de la suppression d'un device</summary>
+    ''' <param name="DeviceId">Objet représetant le device à interroger</param>
+    ''' <remarks></remarks>
+    Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
+        Try
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase DeleteDevice", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Fonction lancée lors de l'ajout d'un device</summary>
+    ''' <param name="DeviceId">Objet représetant le device à interroger</param>
+    ''' <remarks></remarks>
+    Public Sub NewDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.NewDevice
+        Try
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase NewDevice", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Creation d'un objet de type</summary>
+    ''' <remarks></remarks>
+    Public Sub New()
+        Try
+            'liste des devices compatibles
+            _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
+            _DeviceSupport.Add(ListeDevices.BAROMETRE.ToString)
+            _DeviceSupport.Add(ListeDevices.BATTERIE.ToString)
+            _DeviceSupport.Add(ListeDevices.COMPTEUR.ToString)
+            _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
+            _DeviceSupport.Add(ListeDevices.DETECTEUR.ToString)
+            _DeviceSupport.Add(ListeDevices.DIRECTIONVENT.ToString)
+            _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE.ToString)
+            _DeviceSupport.Add(ListeDevices.ENERGIETOTALE.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE.ToString)
+            _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
+            _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
+            _DeviceSupport.Add(ListeDevices.PLUIECOURANT.ToString)
+            _DeviceSupport.Add(ListeDevices.PLUIETOTAL.ToString)
+            _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
+            _DeviceSupport.Add(ListeDevices.TELECOMMANDE.ToString)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE.ToString)
+            _DeviceSupport.Add(ListeDevices.UV.ToString)
+            _DeviceSupport.Add(ListeDevices.VITESSEVENT.ToString)
+            _DeviceSupport.Add(ListeDevices.VOLET.ToString)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase New", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Si refresh >0 gestion du timer</summary>
+    ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+    Private Sub TimerTick()
+
+    End Sub
+
+#End Region
+
+#Region "Fonctions internes"
 
 #End Region
 

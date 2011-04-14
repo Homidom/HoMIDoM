@@ -19,10 +19,42 @@ Driver_Foobar
 	<summary>
   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
 </summary>
+</member><member name="M:Driver_Foobar.Driver_Foobar.Start">
+	<summary>Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Foobar.Driver_Foobar.Stop">
+	<summary>Arrêter le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Foobar.Driver_Foobar.Restart">
+	<summary>Re-Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Foobar.Driver_Foobar.Read(System.Object)">
+	<summary>Intérroger un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<remarks>pas utilisé</remarks>
+</member><member name="M:Driver_Foobar.Driver_Foobar.Write(System.Object,System.String,System.Object,System.Object)">
+	<summary>Commander un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<param name="Commande">La commande à passer</param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_Foobar.Driver_Foobar.DeleteDevice(System.String)">
+	<summary>Fonction lancée lors de la suppression d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Foobar.Driver_Foobar.NewDevice(System.String)">
+	<summary>Fonction lancée lors de l'ajout d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Foobar.Driver_Foobar.#ctor">
+	<summary>Creation d'un objet de type</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Foobar.Driver_Foobar.TimerTick">
+	<summary>Si refresh &gt;0 gestion du timer</summary>
+	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
 </member><member name="T:Driver_Foobar.Driver_Foobar">
-	<summary>
- Class Foobar le device doit donner par le biais de son adresse l'emplacement de l'executable de Foobar
- </summary>
+	<summary>Class Foobar le device doit donner par le biais de son adresse l'emplacement de l'executable de Foobar</summary>
 	<remarks></remarks>
 </member>
 </members>

@@ -15,7 +15,7 @@ Imports HoMIDom.HoMIDom.Server
 <Serializable()> Public Class Driver_OpenWebNet
     Implements HoMIDom.HoMIDom.IDriver
 
-#Region "Variable Driver"
+#Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "4A4774AA-34F7-11E0-B665-ADDADED72085"
@@ -39,14 +39,13 @@ Imports HoMIDom.HoMIDom.Server
     Dim _DeviceSupport As New ArrayList
     Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
-
-    'A ajouter dans les ppt du driver
-    Dim _tempsentrereponse As Integer = 1500
-    Dim _ignoreadresse As Boolean = False
-    Dim _lastetat As Boolean = True
 #End Region
 
-#Region "Fonctions génériques"
+#Region "Variables internes"
+
+#End Region
+
+#Region "Propriétés génériques"
     Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
         Get
             Return _Com
@@ -55,19 +54,16 @@ Imports HoMIDom.HoMIDom.Server
             _Com = value
         End Set
     End Property
-
     Public ReadOnly Property Description() As String Implements HoMIDom.HoMIDom.IDriver.Description
         Get
             Return _Description
         End Get
     End Property
-
     Public ReadOnly Property DeviceSupport() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.DeviceSupport
         Get
             Return _DeviceSupport
         End Get
     End Property
-
     Public Property Parametres() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.Parametres
         Get
             Return _Parametres
@@ -76,9 +72,7 @@ Imports HoMIDom.HoMIDom.Server
             _Parametres = value
         End Set
     End Property
-
     Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
-
     Public Property Enable() As Boolean Implements HoMIDom.HoMIDom.IDriver.Enable
         Get
             Return _Enable
@@ -87,13 +81,11 @@ Imports HoMIDom.HoMIDom.Server
             _Enable = value
         End Set
     End Property
-
     Public ReadOnly Property ID() As String Implements HoMIDom.HoMIDom.IDriver.ID
         Get
             Return _ID
         End Get
     End Property
-
     Public Property IP_TCP() As String Implements HoMIDom.HoMIDom.IDriver.IP_TCP
         Get
             Return _IP_TCP
@@ -102,7 +94,6 @@ Imports HoMIDom.HoMIDom.Server
             _IP_TCP = value
         End Set
     End Property
-
     Public Property IP_UDP() As String Implements HoMIDom.HoMIDom.IDriver.IP_UDP
         Get
             Return _IP_UDP
@@ -111,25 +102,21 @@ Imports HoMIDom.HoMIDom.Server
             _IP_UDP = value
         End Set
     End Property
-
     Public ReadOnly Property IsConnect() As Boolean Implements HoMIDom.HoMIDom.IDriver.IsConnect
         Get
             Return _IsConnect
         End Get
     End Property
-
     Public ReadOnly Property Modele() As String Implements HoMIDom.HoMIDom.IDriver.Modele
         Get
             Return _Modele
         End Get
     End Property
-
     Public ReadOnly Property Nom() As String Implements HoMIDom.HoMIDom.IDriver.Nom
         Get
             Return _Nom
         End Get
     End Property
-
     Public Property Picture() As String Implements HoMIDom.HoMIDom.IDriver.Picture
         Get
             Return _Picture
@@ -138,7 +125,6 @@ Imports HoMIDom.HoMIDom.Server
             _Picture = value
         End Set
     End Property
-
     Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
@@ -147,7 +133,6 @@ Imports HoMIDom.HoMIDom.Server
             _Port_TCP = value
         End Set
     End Property
-
     Public Property Port_UDP() As String Implements HoMIDom.HoMIDom.IDriver.Port_UDP
         Get
             Return _Port_UDP
@@ -156,17 +141,11 @@ Imports HoMIDom.HoMIDom.Server
             _Port_UDP = value
         End Set
     End Property
-
     Public ReadOnly Property Protocol() As String Implements HoMIDom.HoMIDom.IDriver.Protocol
         Get
             Return _Protocol
         End Get
     End Property
-
-    Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
-
-    End Sub
-
     Public Property Refresh() As Integer Implements HoMIDom.HoMIDom.IDriver.Refresh
         Get
             Return _Refresh
@@ -175,12 +154,6 @@ Imports HoMIDom.HoMIDom.Server
             _Refresh = value
         End Set
     End Property
-
-    Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
-        [Stop]()
-        Start()
-    End Sub
-
     Public Property Server() As HoMIDom.HoMIDom.Server Implements HoMIDom.HoMIDom.IDriver.Server
         Get
             Return _Server
@@ -189,11 +162,11 @@ Imports HoMIDom.HoMIDom.Server
             _Server = value
         End Set
     End Property
-
-    Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
-
-    End Sub
-
+    Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
+        Get
+            Return _Version
+        End Get
+    End Property
     Public Property StartAuto() As Boolean Implements HoMIDom.HoMIDom.IDriver.StartAuto
         Get
             Return _StartAuto
@@ -202,31 +175,107 @@ Imports HoMIDom.HoMIDom.Server
             _StartAuto = value
         End Set
     End Property
-
-    Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
-
-    End Sub
-
-    Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
-        Get
-            Return _Version
-        End Get
-    End Property
-
-    Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-
-    End Sub
-
-    Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
-
-    End Sub
-
-    Public Sub NewDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.NewDevice
-
-    End Sub
-
-    Public Sub New()
-        _DeviceSupport.Add(ListeDevices.APPAREIL)
-    End Sub
 #End Region
+
+#Region "Fonctions génériques"
+
+    ''' <summary>Démarrer le du driver</summary>
+    ''' <remarks></remarks>
+    Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
+        Try
+            _IsConnect = True
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "OpenWebNet", "Driver " & Me.Nom & " démarré")
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Start", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Arrêter le du driver</summary>
+    ''' <remarks></remarks>
+    Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
+        Try
+            _IsConnect = False
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "OpenWebNet", "Driver " & Me.Nom & " arrêté")
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Stop", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Re-Démarrer le du driver</summary>
+    ''' <remarks></remarks>
+    Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
+        [Stop]()
+        Start()
+    End Sub
+
+    ''' <summary>Intérroger un device</summary>
+    ''' <param name="Objet">Objet représetant le device à interroger</param>
+    ''' <remarks>pas utilisé</remarks>
+    Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
+        Try
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Read", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Commander un device</summary>
+    ''' <param name="Objet">Objet représetant le device à interroger</param>
+    ''' <param name="Command">La commande à passer</param>
+    ''' <param name="Parametre1"></param>
+    ''' <param name="Parametre2"></param>
+    ''' <remarks></remarks>
+    Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
+        Try
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Write", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Fonction lancée lors de la suppression d'un device</summary>
+    ''' <param name="DeviceId">Objet représetant le device à interroger</param>
+    ''' <remarks></remarks>
+    Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
+        Try
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet DeleteDevice", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Fonction lancée lors de l'ajout d'un device</summary>
+    ''' <param name="DeviceId">Objet représetant le device à interroger</param>
+    ''' <remarks></remarks>
+    Public Sub NewDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.NewDevice
+        Try
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet NewDevice", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Creation d'un objet de type</summary>
+    ''' <remarks></remarks>
+    Public Sub New()
+        Try
+            'liste des devices compatibles
+            _DeviceSupport.Add(ListeDevices.APPAREIL)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet New", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Si refresh >0 gestion du timer</summary>
+    ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+    Private Sub TimerTick()
+
+    End Sub
+
+#End Region
+
+#Region "Fonctions internes"
+
+#End Region
+
 End Class
