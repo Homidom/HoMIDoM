@@ -1,25 +1,19 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
-'Imports System.Xml
-'Imports System.Xml.Serialization
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports VB = Microsoft.VisualBasic
 Imports System.IO.Ports
-'Imports System.Math
-'Imports System.Net.Sockets
-'Imports System.Threading
-'Imports System.Globalization
 
-' Driver PLCBUS COM/USB(COM Virtuel)
-' Pour la version USB, necessite l'installation du driver
 ' Auteur : David
 ' Date : 10/02/2011
 
+''' <summary>Class Driver_PLCBUS, permet de ommander et recevoir des ordres avec les périphériques PLCBUS via un 1141 ou 1141+</summary>
+''' <remarks>Pour la version USB, necessite l'installation du driver</remarks>
 <Serializable()> Public Class Driver_PLCBUS
     Implements HoMIDom.HoMIDom.IDriver
 
-#Region "Variable Driver"
+#Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "5AEDF3A8-3568-11E0-9DEC-D164DFD72085"
@@ -44,13 +38,13 @@ Imports System.IO.Ports
     Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
 
-    'A ajouter dans les ppt du driver
+    'Ajoutés dans les ppt avancés dans New()
     Dim plcack As Boolean = True 'gestion des acks ?
     Dim plctriphase As Boolean = False 'installation en triphase
     Dim plcmodele As String = "1141" '"1141" ou "1141+" si modele 1141+, utilise le checksum plutot que H3 en fin de paquet
 #End Region
 
-#Region "Déclaration"
+#Region "Variables internes"
 
     Private WithEvents port As New System.IO.Ports.SerialPort
     Private ackreceived As Boolean = False
@@ -63,9 +57,11 @@ Imports System.IO.Ports
     Private firstbyte As Boolean = True
     Private bytecnt As Integer = 0
     Private recbuf(30) As Byte
+
 #End Region
 
-#Region "Fonctions génériques"
+#Region "Propriétés génériques"
+
     Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
         Get
             Return _Com
@@ -84,7 +80,6 @@ Imports System.IO.Ports
             Return _DeviceSupport
         End Get
     End Property
-
     Public Property Parametres() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.Parametres
         Get
             Return _Parametres
@@ -93,7 +88,6 @@ Imports System.IO.Ports
             _Parametres = value
         End Set
     End Property
-
     Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
     Public Property Enable() As Boolean Implements HoMIDom.HoMIDom.IDriver.Enable
         Get
@@ -197,11 +191,12 @@ Imports System.IO.Ports
             _StartAuto = value
         End Set
     End Property
+
 #End Region
 
-#Region "Fonctions du Driver"
+#Region "Fonctions génériques"
 
-    ''' <summary>Démarrer le du driver PLCBUS</summary>
+    ''' <summary>Démarrer le du driver</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Dim retour As String = ""
@@ -236,7 +231,7 @@ Imports System.IO.Ports
         End Try
     End Sub
 
-    ''' <summary>Arrêter le du driver PLCBUS</summary>
+    ''' <summary>Arrêter le du driver</summary>
     ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Dim retour As String
@@ -249,14 +244,14 @@ Imports System.IO.Ports
         End If
     End Sub
 
-    ''' <summary>Re-Démarrer le du driver PLCBUSm</summary>
+    ''' <summary>Re-Démarrer le du driver</summary>
     ''' <remarks></remarks>
     Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
         [Stop]()
         Start()
     End Sub
 
-    ''' <summary>Intérroger un device PLCBUS</summary>
+    ''' <summary>Intérroger un device</summary>
     ''' <param name="Objet">Objet représetant le device à interroger</param>
     ''' <remarks></remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
@@ -277,7 +272,7 @@ Imports System.IO.Ports
         End Try
     End Sub
 
-    ''' <summary>Commander un device PLCBUS</summary>
+    ''' <summary>Commander un device</summary>
     ''' <param name="Objet">Objet représetant le device à interroger</param>
     ''' <param name="Commande">La commande à passer</param>
     ''' <param name="Parametre1"></param>
@@ -297,116 +292,132 @@ Imports System.IO.Ports
         End Try
     End Sub
 
+    ''' <summary>Fonction lancée lors de la suppression d'un device</summary>
+    ''' <param name="DeviceId">Objet représetant le device à interroger</param>
+    ''' <remarks></remarks>
     Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
 
     End Sub
 
+    ''' <summary>Fonction lancée lors de l'ajout d'un device</summary>
+    ''' <param name="DeviceId">Objet représetant le device à interroger</param>
+    ''' <remarks></remarks>
     Public Sub NewDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.NewDevice
 
     End Sub
 
-    ''' <summary>Creation d'un objet de type PLCBUS</summary>
+    ''' <summary>Creation d'un objet de type</summary>
     ''' <remarks></remarks>
     Public Sub New()
-        'Paramétres avancés
-        Dim x As New HoMIDom.HoMIDom.Driver.Parametre
-        x.Nom = "ack"
-        x.Description = "Gestion du ack"
-        x.Valeur = True
-        _Parametres.Add(x)
-        x = New HoMIDom.HoMIDom.Driver.Parametre
-        x.Nom = "triphase"
-        x.Description = "Installation en triphase"
-        x.Valeur = False
-        _Parametres.Add(x)
-        x = New HoMIDom.HoMIDom.Driver.Parametre
-        x.Nom = "modele"
-        x.Description = "Modele de l'interface : 1141 ou 1141+"
-        x.Valeur = "1141"
-        _Parametres.Add(x)
+        Try
+            'Paramétres avancés
+            Dim x As New HoMIDom.HoMIDom.Driver.Parametre
+            x.Nom = "ack"
+            x.Description = "Gestion du ack"
+            x.Valeur = True
+            _Parametres.Add(x)
+            x = New HoMIDom.HoMIDom.Driver.Parametre
+            x.Nom = "triphase"
+            x.Description = "Installation en triphase"
+            x.Valeur = False
+            _Parametres.Add(x)
+            x = New HoMIDom.HoMIDom.Driver.Parametre
+            x.Nom = "modele"
+            x.Description = "Modele de l'interface : 1141 ou 1141+"
+            x.Valeur = "1141"
+            _Parametres.Add(x)
 
-        'Liste des devices compatibles
-        _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
-        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
-        _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
-        _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
-        _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
-        _DeviceSupport.Add(ListeDevices.VOLET.ToString)
+            'Liste des devices compatibles
+            _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
+            _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
+            _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
+            _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
+            _DeviceSupport.Add(ListeDevices.VOLET.ToString)
 
-        'dictionnaire Commande STRING -> INT
-        com_to_hex.Add("ALL_UNITS_OFF", 0)
-        com_to_hex.Add("ALL_LIGHTS_ON", 1)
-        com_to_hex.Add("ON", 2) 'data1 must be 100, data2 must be 0
-        com_to_hex.Add("OFF", 3) 'data1 must be 0, data2 must be 0
-        com_to_hex.Add("DIM", 4) 'light will dim until fade-stop func=11 is received /  data1 = Fade rate
-        com_to_hex.Add("BRIGHT", 5) 'light will bright until fade-stop func=11 is received /  data1 = Fade rate
-        com_to_hex.Add("ALL_LIGHTS_OFF", 6)
-        com_to_hex.Add("All_USER_LIGHTS_ON", 7)
-        com_to_hex.Add("All_USER_UNITS_OFF", 8)
-        com_to_hex.Add("All_USER_LIGHTS_OFF", 9)
-        com_to_hex.Add("BLINK", 10) 'data1=interval
-        com_to_hex.Add("FADE_STOP", 11)
-        com_to_hex.Add("PRESET_DIM", 12) 'data1=dim level, data2=rate
-        com_to_hex.Add("STATUS_ON", 13)
-        com_to_hex.Add("STATUS_OFF", 14)
-        com_to_hex.Add("STATUS_REQUEST", 15)
-        com_to_hex.Add("ReceiverMasterAddressSetup", 16) 'data1=New user code, data2=new home+unitcode
-        com_to_hex.Add("TransmitterMasterAddressSetup", 17) 'data1=New user code, data2=new home+unitcode
-        com_to_hex.Add("SceneAddressSetup", 18)
-        com_to_hex.Add("SceneAddressErase", 19)
-        com_to_hex.Add("AllSceneAddressErase", 20)
-        com_to_hex.Add("Reserved1", 21)
-        com_to_hex.Add("Reserved2", 22)
-        com_to_hex.Add("Reserved3", 23)
-        com_to_hex.Add("GetSignalStrength", 24) 'data1=signal strength
-        com_to_hex.Add("GetNoiseStrength", 25) 'data1=Noise strength
-        com_to_hex.Add("ReportSignalStrength", 26)
-        com_to_hex.Add("ReportNoiseStrength", 27)
-        com_to_hex.Add("GetAllIdPulse", 28)
-        com_to_hex.Add("GetOnlyOnIdPulse", 29)
-        com_to_hex.Add("ReportAllIdPulse3Phase", 30)
-        com_to_hex.Add("ReportOnlyOnIdPulse3Phase", 31)
+            'dictionnaire Commande STRING -> INT
+            com_to_hex.Add("ALL_UNITS_OFF", 0)
+            com_to_hex.Add("ALL_LIGHTS_ON", 1)
+            com_to_hex.Add("ON", 2) 'data1 must be 100, data2 must be 0
+            com_to_hex.Add("OFF", 3) 'data1 must be 0, data2 must be 0
+            com_to_hex.Add("DIM", 4) 'light will dim until fade-stop func=11 is received /  data1 = Fade rate
+            com_to_hex.Add("BRIGHT", 5) 'light will bright until fade-stop func=11 is received /  data1 = Fade rate
+            com_to_hex.Add("ALL_LIGHTS_OFF", 6)
+            com_to_hex.Add("All_USER_LIGHTS_ON", 7)
+            com_to_hex.Add("All_USER_UNITS_OFF", 8)
+            com_to_hex.Add("All_USER_LIGHTS_OFF", 9)
+            com_to_hex.Add("BLINK", 10) 'data1=interval
+            com_to_hex.Add("FADE_STOP", 11)
+            com_to_hex.Add("PRESET_DIM", 12) 'data1=dim level, data2=rate
+            com_to_hex.Add("STATUS_ON", 13)
+            com_to_hex.Add("STATUS_OFF", 14)
+            com_to_hex.Add("STATUS_REQUEST", 15)
+            com_to_hex.Add("ReceiverMasterAddressSetup", 16) 'data1=New user code, data2=new home+unitcode
+            com_to_hex.Add("TransmitterMasterAddressSetup", 17) 'data1=New user code, data2=new home+unitcode
+            com_to_hex.Add("SceneAddressSetup", 18)
+            com_to_hex.Add("SceneAddressErase", 19)
+            com_to_hex.Add("AllSceneAddressErase", 20)
+            com_to_hex.Add("Reserved1", 21)
+            com_to_hex.Add("Reserved2", 22)
+            com_to_hex.Add("Reserved3", 23)
+            com_to_hex.Add("GetSignalStrength", 24) 'data1=signal strength
+            com_to_hex.Add("GetNoiseStrength", 25) 'data1=Noise strength
+            com_to_hex.Add("ReportSignalStrength", 26)
+            com_to_hex.Add("ReportNoiseStrength", 27)
+            com_to_hex.Add("GetAllIdPulse", 28)
+            com_to_hex.Add("GetOnlyOnIdPulse", 29)
+            com_to_hex.Add("ReportAllIdPulse3Phase", 30)
+            com_to_hex.Add("ReportOnlyOnIdPulse3Phase", 31)
 
-        'dictionnaire Commande INT -> STRING
-        hex_to_com.Add(0, "ALL_UNITS_OFF")
-        hex_to_com.Add(1, "ALL_LIGHTS_ON")
-        hex_to_com.Add(2, "ON")
-        hex_to_com.Add(3, "OFF")
-        hex_to_com.Add(4, "DIM")
-        hex_to_com.Add(5, "BRIGHT")
-        hex_to_com.Add(6, "ALL_LIGHTS_OFF")
-        hex_to_com.Add(7, "All_USER_LIGHTS_ON")
-        hex_to_com.Add(8, "All_USER_UNITS_OFF")
-        hex_to_com.Add(9, "All_USER_LIGHTS_OFF")
-        hex_to_com.Add(10, "BLINK")
-        hex_to_com.Add(11, "FADE_STOP")
-        hex_to_com.Add(12, "PRESET_DIM")
-        hex_to_com.Add(13, "STATUS_ON")
-        hex_to_com.Add(14, "STATUS_OFF")
-        hex_to_com.Add(15, "STATUS_REQUEST")
-        hex_to_com.Add(16, "ReceiverMasterAddressSetup")
-        hex_to_com.Add(17, "TransmitterMasterAddressSetup")
-        hex_to_com.Add(18, "SceneAddressSetup")
-        hex_to_com.Add(19, "SceneAddressErase")
-        hex_to_com.Add(20, "AllSceneAddressErase")
-        hex_to_com.Add(24, "GetSignalStrength")
-        hex_to_com.Add(25, "GetNoiseStrength")
-        hex_to_com.Add(26, "ReportSignalStrength")
-        hex_to_com.Add(27, "ReportNoiseStrength")
-        hex_to_com.Add(28, "GetAllIdPulse")
-        hex_to_com.Add(29, "GetOnlyOnIdPulse")
-        hex_to_com.Add(30, "ReportAllIdPulse3Phase")
-        hex_to_com.Add(31, "ReportOnlyOnIdPulse3Phase")
+            'dictionnaire Commande INT -> STRING
+            hex_to_com.Add(0, "ALL_UNITS_OFF")
+            hex_to_com.Add(1, "ALL_LIGHTS_ON")
+            hex_to_com.Add(2, "ON")
+            hex_to_com.Add(3, "OFF")
+            hex_to_com.Add(4, "DIM")
+            hex_to_com.Add(5, "BRIGHT")
+            hex_to_com.Add(6, "ALL_LIGHTS_OFF")
+            hex_to_com.Add(7, "All_USER_LIGHTS_ON")
+            hex_to_com.Add(8, "All_USER_UNITS_OFF")
+            hex_to_com.Add(9, "All_USER_LIGHTS_OFF")
+            hex_to_com.Add(10, "BLINK")
+            hex_to_com.Add(11, "FADE_STOP")
+            hex_to_com.Add(12, "PRESET_DIM")
+            hex_to_com.Add(13, "STATUS_ON")
+            hex_to_com.Add(14, "STATUS_OFF")
+            hex_to_com.Add(15, "STATUS_REQUEST")
+            hex_to_com.Add(16, "ReceiverMasterAddressSetup")
+            hex_to_com.Add(17, "TransmitterMasterAddressSetup")
+            hex_to_com.Add(18, "SceneAddressSetup")
+            hex_to_com.Add(19, "SceneAddressErase")
+            hex_to_com.Add(20, "AllSceneAddressErase")
+            hex_to_com.Add(24, "GetSignalStrength")
+            hex_to_com.Add(25, "GetNoiseStrength")
+            hex_to_com.Add(26, "ReportSignalStrength")
+            hex_to_com.Add(27, "ReportNoiseStrength")
+            hex_to_com.Add(28, "GetAllIdPulse")
+            hex_to_com.Add(29, "GetOnlyOnIdPulse")
+            hex_to_com.Add(30, "ReportAllIdPulse3Phase")
+            hex_to_com.Add(31, "ReportOnlyOnIdPulse3Phase")
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS New", "Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Si refresh >0 gestion du timer</summary>
+    ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+    Private Sub TimerTick()
 
     End Sub
+
 #End Region
 
-#Region "Fonctions propres au driver"
+#Region "Fonctions internes"
 
     ''' <summary>Ouvrir le port PLCBUS</summary>
     ''' <param name="numero">Nom/Numero du port COM: COM2</param>
     ''' <remarks></remarks>
-    Public Function ouvrir(ByVal numero As String) As String
+    Private Function ouvrir(ByVal numero As String) As String
         Try
             'ouverture du port
             If Not _IsConnect Then
@@ -434,7 +445,7 @@ Imports System.IO.Ports
 
     ''' <summary>Fermer le port PLCBUS</summary>
     ''' <remarks></remarks>
-    Public Function fermer() As String
+    Private Function fermer() As String
         Try
             If _IsConnect Then
                 If (Not (port Is Nothing)) Then ' The COM port exists.

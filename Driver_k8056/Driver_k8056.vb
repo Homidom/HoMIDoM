@@ -3,13 +3,10 @@ Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports System.IO
 
-' Driver k8056
 ' Auteur : Seb
 ' Date : 10/02/2011
 
-''' <summary>
-''' Driver Velleman k8056, le device doit dans son adresse 1 indiqué sa carte et son numéro de relais séparé par un x, exemple pour le relais 1 de la carte 1: 1x1
-''' </summary>
+''' <summary>Driver Velleman k8056, le device doit dans son adresse 1 indiqué sa carte et son numéro de relais séparé par un x, exemple pour le relais 1 de la carte 1: 1x1</summary>
 ''' <remarks></remarks>
 <Serializable()> Public Class Driver_k8056
     Implements HoMIDom.HoMIDom.IDriver
@@ -363,4 +360,5 @@ Imports System.IO
     End Sub
 
 #End Region
+
 End Class

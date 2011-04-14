@@ -21,9 +21,7 @@ Namespace HoMIDom
     '** Historique (SebBergues): 12/01/2011: Création 
     '***********************************************
 
-    ''' <summary>
-    ''' Classe Server
-    ''' </summary>
+    ''' <summary>Classe Server</summary>
     ''' <remarks></remarks>
     <Serializable()> Public Class Server
         Implements HoMIDom.IHoMIDom 'implémente l'interface dans cette class
@@ -247,7 +245,6 @@ Namespace HoMIDom
         Private Shared _PortSOAP As String 'Port IP de connexion SOAP
         Dim TimerSecond As New Timers.Timer 'Timer à la seconde
         Private graphe As New graphes(_MonRepertoire + "\Images\Graphes\")
-
 #End Region
 
 #Region "Fonctions/Sub propres au serveur"
@@ -1469,7 +1466,8 @@ Namespace HoMIDom
 
         '*** FONCTIONS ******************************************
 
-        'Supprimer un device
+        ''' <summary>Supprimer un device de la config</summary>
+        ''' <param name="deviceId"></param>
         Public Function DeleteDevice(ByVal deviceId As String) As Integer Implements IHoMIDom.DeleteDevice
             Try
                 For i As Integer = 0 To _ListDevices.Count - 1
@@ -1480,8 +1478,10 @@ Namespace HoMIDom
                         Exit Function
                     End If
                 Next
+                Return 1
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDevice", "Exception : " & ex.Message)
+                Return -1
             End Try
         End Function
 
@@ -1492,11 +1492,14 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).Id = driverId Then
                         _ListDrivers.Item(i).removeat(i)
+                        DeleteDriver = 0
                         Exit Function
                     End If
                 Next
+                Return 1
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDriver", "Exception : " & ex.Message)
+                Return -1
             End Try
         End Function
 
@@ -1507,11 +1510,14 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListZones.Count - 1
                     If _ListZones.Item(i).Id = zoneId Then
                         _ListZones.RemoveAt(i)
+                        DeleteZone = 0
                         Exit Function
                     End If
                 Next
+                Return 1
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteZone", "Exception : " & ex.Message)
+                Return -1
             End Try
         End Function
 
@@ -1522,11 +1528,14 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListUsers.Count - 1
                     If _ListUsers.Item(i).Id = userId Then
                         _ListUsers.RemoveAt(i)
+                        DeleteUser = 0
                         Exit Function
                     End If
                 Next
+                Return 1
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteUser", "Exception : " & ex.Message)
+                Return -1
             End Try
         End Function
 
@@ -1556,7 +1565,7 @@ Namespace HoMIDom
                 Return _Longitude
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetLongitude", "Exception : " & ex.Message)
-                Return 0
+                Return -1
             End Try
         End Function
 
@@ -1576,7 +1585,7 @@ Namespace HoMIDom
                 Return _Latitude
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetLatitude", "Exception : " & ex.Message)
-                Return 0
+                Return -1
             End Try
         End Function
 
@@ -1601,338 +1610,362 @@ Namespace HoMIDom
             End Try
         End Function
 
-        ''' <summary>
-        ''' Retourne la valeur de correction de l'heure de coucher du soleil
-        ''' </summary>
+        ''' <summary>Retourne la valeur de correction de l'heure de coucher du soleil</summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function GetHeureCorrectionCoucher() As Integer Implements IHoMIDom.GetHeureCorrectionCoucher
-            Return _HeureCoucherSoleilCorrection
+            Try
+                Return _HeureCoucherSoleilCorrection
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHeureCorrectionCoucher", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Applique la valeur de correction de l'heure de coucher du soleil
-        ''' </summary>
+        ''' <summary>Applique la valeur de correction de l'heure de coucher du soleil</summary>
         ''' <param name="value"></param>
         ''' <remarks></remarks>
         Sub SetHeureCorrectionCoucher(ByVal value As Integer) Implements IHoMIDom.SetHeureCorrectionCoucher
-            _HeureCoucherSoleilCorrection = value
+            Try
+                _HeureCoucherSoleilCorrection = value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetHeureCorrectionCoucher", "Exception : " & ex.Message)
+            End Try
         End Sub
 
-        ''' <summary>
-        ''' Retourne la valeur de correction de l'heure de lever du soleil
-        ''' </summary>
+        ''' <summary>Retourne la valeur de correction de l'heure de lever du soleil</summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function GetHeureCorrectionLever() As Integer Implements IHoMIDom.GetHeureCorrectionLever
-            Return _HeureLeverSoleilCorrection
+            Try
+                Return _HeureLeverSoleilCorrection
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHeureCorrectionLever", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Applique la valeur de correction de l'heure de coucher du soleil
-        ''' </summary>
+        ''' <summary>Applique la valeur de correction de l'heure de coucher du soleil</summary>
         ''' <param name="value"></param>
         ''' <remarks></remarks>
         Sub SetHeureCorrectionLever(ByVal value As Integer) Implements IHoMIDom.SetHeureCorrectionLever
-            _HeureLeverSoleilCorrection = value
+            Try
+                _HeureLeverSoleilCorrection = value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetHeureCorrectionLever", "Exception : " & ex.Message)
+            End Try
         End Sub
 
-        ''' <summary>
-        ''' Arrête un driver par son Id
-        ''' </summary>
+        ''' <summary>Arrête un driver par son Id</summary>
         ''' <param name="DriverId"></param>
         ''' <remarks></remarks>
         Sub StopDriver(ByVal DriverId As String) Implements IHoMIDom.StopDriver
-            For i As Integer = 0 To _ListDrivers.Count - 1
-                If _ListDrivers.Item(i).id = DriverId Then
-                    _ListDrivers.Item(i).stop()
-                End If
-            Next
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).id = DriverId Then
+                        _ListDrivers.Item(i).stop()
+                    End If
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "StopDriver", "Exception : " & ex.Message)
+            End Try
         End Sub
 
-        ''' <summary>
-        ''' Démarre un driver par son id
-        ''' </summary>
+        ''' <summary>Démarre un driver par son id</summary>
         ''' <param name="DriverId"></param>
         ''' <remarks></remarks>
         Sub StartDriver(ByVal DriverId As String) Implements IHoMIDom.StartDriver
-            For i As Integer = 0 To _ListDrivers.Count - 1
-                If _ListDrivers.Item(i).id = DriverId Then
-                    _ListDrivers.Item(i).start()
-                End If
-            Next
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).id = DriverId Then
+                        _ListDrivers.Item(i).start()
+                    End If
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "StartDriver", "Exception : " & ex.Message)
+            End Try
         End Sub
 
-        ''' <summary>
-        ''' Retourne la liste de tous les devices
-        ''' </summary>
+        ''' <summary>Retourne la liste de tous les devices</summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function GetAllDevices() As List(Of TemplateDevice) Implements IHoMIDom.GetAllDevices
             Dim _list As New List(Of TemplateDevice)
-            For i As Integer = 0 To _ListDevices.Count - 1
-                Dim x As New TemplateDevice
-                Dim _listact As New List(Of String)
+            Try
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    Dim x As New TemplateDevice
+                    Dim _listact As New List(Of String)
 
-                With x
-                    .Name = _ListDevices.Item(i).name
-                    .ID = _ListDevices.Item(i).id
-                    Select Case UCase(_ListDevices.Item(i).type)
-                        Case "APPAREIL" : .Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
-                        Case "AUDIO" : .Type = Device.ListeDevices.AUDIO
-                        Case "BAROMETRE" : .Type = Device.ListeDevices.BAROMETRE  'pour stocker les valeur issu d'un barometre meteo ou web
-                        Case "BATTERIE" : .Type = Device.ListeDevices.BAROMETRE
-                        Case "COMPTEUR" : .Type = Device.ListeDevices.COMPTEUR  'compteur DS2423, RFXPower...
-                        Case "CONTACT" : .Type = Device.ListeDevices.CONTACT  'detecteur de contact : switch 1-wire
-                        Case "DETECTEUR" : .Type = Device.ListeDevices.DETECTEUR  'tous detecteurs : mouvement, obscurite...
-                        Case "DIRECTIONVENT" : .Type = Device.ListeDevices.DIRECTIONVENT
-                        Case "ENERGIEINSTANTANEE" : .Type = Device.ListeDevices.ENERGIEINSTANTANEE
-                        Case "ENERGIETOTALE" : .Type = Device.ListeDevices.ENERGIETOTALE
-                        Case "FREEBOX" : .Type = Device.ListeDevices.FREEBOX
-                        Case "GENERIQUEBOOLEEN" : .Type = Device.ListeDevices.GENERIQUEBOOLEEN
-                        Case "GENERIQUESTRING" : .Type = Device.ListeDevices.GENERIQUESTRING
-                        Case "GENERIQUEVALUE" : .Type = Device.ListeDevices.GENERIQUEVALUE
-                        Case "HUMIDITE" : .Type = Device.ListeDevices.HUMIDITE
-                        Case "LAMPE" : .Type = Device.ListeDevices.LAMPE
-                        Case "METEO" : .Type = Device.ListeDevices.METEO
-                        Case "MULTIMEDIA" : .Type = Device.ListeDevices.MULTIMEDIA
-                        Case "PLUIECOURANT" : .Type = Device.ListeDevices.PLUIECOURANT
-                        Case "PLUIETOTAL" : .Type = Device.ListeDevices.PLUIETOTAL
-                        Case "SWITCH" : .Type = Device.ListeDevices.SWITCH
-                        Case "TELECOMMANDE" : .Type = Device.ListeDevices.TELECOMMANDE
-                        Case "TEMPERATURE" : .Type = Device.ListeDevices.TEMPERATURE
-                        Case "TEMPERATURECONSIGNE" : .Type = Device.ListeDevices.TEMPERATURECONSIGNE
-                        Case "UV" : .Type = Device.ListeDevices.UV
-                        Case "VITESSEVENT" : .Type = Device.ListeDevices.VITESSEVENT
-                        Case "VOLET" : .Type = Device.ListeDevices.VOLET
-                    End Select
-                    .Description = _ListDevices.Item(i).description
-                    .Adresse1 = _ListDevices.Item(i).adresse1
-                    .Adresse2 = _ListDevices.Item(i).adresse2
-                    .DriverID = _ListDevices.Item(i).driverid
-                    .Picture = _ListDevices.Item(i).picture
-                    .Solo = _ListDevices.Item(i).solo
-                    .Refresh = _ListDevices.Item(i).refresh
-                    .Modele = _ListDevices.Item(i).modele
+                    With x
+                        .Name = _ListDevices.Item(i).name
+                        .ID = _ListDevices.Item(i).id
+                        Select Case UCase(_ListDevices.Item(i).type)
+                            Case "APPAREIL" : .Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
+                            Case "AUDIO" : .Type = Device.ListeDevices.AUDIO
+                            Case "BAROMETRE" : .Type = Device.ListeDevices.BAROMETRE  'pour stocker les valeur issu d'un barometre meteo ou web
+                            Case "BATTERIE" : .Type = Device.ListeDevices.BAROMETRE
+                            Case "COMPTEUR" : .Type = Device.ListeDevices.COMPTEUR  'compteur DS2423, RFXPower...
+                            Case "CONTACT" : .Type = Device.ListeDevices.CONTACT  'detecteur de contact : switch 1-wire
+                            Case "DETECTEUR" : .Type = Device.ListeDevices.DETECTEUR  'tous detecteurs : mouvement, obscurite...
+                            Case "DIRECTIONVENT" : .Type = Device.ListeDevices.DIRECTIONVENT
+                            Case "ENERGIEINSTANTANEE" : .Type = Device.ListeDevices.ENERGIEINSTANTANEE
+                            Case "ENERGIETOTALE" : .Type = Device.ListeDevices.ENERGIETOTALE
+                            Case "FREEBOX" : .Type = Device.ListeDevices.FREEBOX
+                            Case "GENERIQUEBOOLEEN" : .Type = Device.ListeDevices.GENERIQUEBOOLEEN
+                            Case "GENERIQUESTRING" : .Type = Device.ListeDevices.GENERIQUESTRING
+                            Case "GENERIQUEVALUE" : .Type = Device.ListeDevices.GENERIQUEVALUE
+                            Case "HUMIDITE" : .Type = Device.ListeDevices.HUMIDITE
+                            Case "LAMPE" : .Type = Device.ListeDevices.LAMPE
+                            Case "METEO" : .Type = Device.ListeDevices.METEO
+                            Case "MULTIMEDIA" : .Type = Device.ListeDevices.MULTIMEDIA
+                            Case "PLUIECOURANT" : .Type = Device.ListeDevices.PLUIECOURANT
+                            Case "PLUIETOTAL" : .Type = Device.ListeDevices.PLUIETOTAL
+                            Case "SWITCH" : .Type = Device.ListeDevices.SWITCH
+                            Case "TELECOMMANDE" : .Type = Device.ListeDevices.TELECOMMANDE
+                            Case "TEMPERATURE" : .Type = Device.ListeDevices.TEMPERATURE
+                            Case "TEMPERATURECONSIGNE" : .Type = Device.ListeDevices.TEMPERATURECONSIGNE
+                            Case "UV" : .Type = Device.ListeDevices.UV
+                            Case "VITESSEVENT" : .Type = Device.ListeDevices.VITESSEVENT
+                            Case "VOLET" : .Type = Device.ListeDevices.VOLET
+                        End Select
+                        .Description = _ListDevices.Item(i).description
+                        .Adresse1 = _ListDevices.Item(i).adresse1
+                        .Adresse2 = _ListDevices.Item(i).adresse2
+                        .DriverID = _ListDevices.Item(i).driverid
+                        .Picture = _ListDevices.Item(i).picture
+                        .Solo = _ListDevices.Item(i).solo
+                        .Refresh = _ListDevices.Item(i).refresh
+                        .Modele = _ListDevices.Item(i).modele
 
-                    _listact = ListMethod(_ListDevices.Item(i).id)
-                    If _listact.Count > 0 Then
-                        For n As Integer = 0 To _listact.Count - 1
-                            Dim a() As String = _listact.Item(n).Split("|")
-                            Dim p As New DeviceAction
-                            With p
-                                .Nom = a(0)
-                                If a.Length > 1 Then
-                                    For t As Integer = 1 To a.Length - 1
-                                        Dim pr As New DeviceAction.Parametre
-                                        Dim b() As String = a(t).Split(":")
-                                        With pr
-                                            .Nom = b(0)
-                                            .Type = b(1)
-                                        End With
-                                        p.Parametres.Add(pr)
-                                    Next
-                                End If
-                            End With
-                            .DeviceAction.Add(p)
-                        Next
-                    End If
-                    _listact = Nothing
+                        _listact = ListMethod(_ListDevices.Item(i).id)
+                        If _listact.Count > 0 Then
+                            For n As Integer = 0 To _listact.Count - 1
+                                Dim a() As String = _listact.Item(n).Split("|")
+                                Dim p As New DeviceAction
+                                With p
+                                    .Nom = a(0)
+                                    If a.Length > 1 Then
+                                        For t As Integer = 1 To a.Length - 1
+                                            Dim pr As New DeviceAction.Parametre
+                                            Dim b() As String = a(t).Split(":")
+                                            With pr
+                                                .Nom = b(0)
+                                                .Type = b(1)
+                                            End With
+                                            p.Parametres.Add(pr)
+                                        Next
+                                    End If
+                                End With
+                                .DeviceAction.Add(p)
+                            Next
+                        End If
+                        _listact = Nothing
 
-                    If .Type = (Device.ListeDevices.BAROMETRE) _
-                                    Or .Type = Device.ListeDevices.COMPTEUR _
-                                    Or .Type = Device.ListeDevices.ENERGIEINSTANTANEE _
-                                    Or .Type = Device.ListeDevices.ENERGIETOTALE _
-                                    Or .Type = Device.ListeDevices.GENERIQUEVALUE _
-                                    Or .Type = Device.ListeDevices.HUMIDITE _
-                                    Or .Type = Device.ListeDevices.PLUIECOURANT _
-                                    Or .Type = Device.ListeDevices.PLUIETOTAL _
-                                    Or .Type = Device.ListeDevices.TEMPERATURE _
-                                    Or .Type = Device.ListeDevices.TEMPERATURECONSIGNE _
-                                    Or .Type = Device.ListeDevices.VITESSEVENT _
-                                    Or .Type = Device.ListeDevices.UV _
-                                    Or .Type = Device.ListeDevices.VITESSEVENT _
-                                    Then
-                        .Correction = _ListDevices.Item(i).correction
-                        .Precision = _ListDevices.Item(i).precision
-                        .Formatage = _ListDevices.Item(i).formatage
-                        .Value = _ListDevices.Item(i).value
-                        .ValueDef = _ListDevices.Item(i).valuedef
-                        .ValueLast = _ListDevices.Item(i).valuelast
-                        .ValueMax = _ListDevices.Item(i).valuemax
-                        .ValueMin = _ListDevices.Item(i).valuemin
-                    End If
+                        If .Type = (Device.ListeDevices.BAROMETRE) _
+                                        Or .Type = Device.ListeDevices.COMPTEUR _
+                                        Or .Type = Device.ListeDevices.ENERGIEINSTANTANEE _
+                                        Or .Type = Device.ListeDevices.ENERGIETOTALE _
+                                        Or .Type = Device.ListeDevices.GENERIQUEVALUE _
+                                        Or .Type = Device.ListeDevices.HUMIDITE _
+                                        Or .Type = Device.ListeDevices.PLUIECOURANT _
+                                        Or .Type = Device.ListeDevices.PLUIETOTAL _
+                                        Or .Type = Device.ListeDevices.TEMPERATURE _
+                                        Or .Type = Device.ListeDevices.TEMPERATURECONSIGNE _
+                                        Or .Type = Device.ListeDevices.VITESSEVENT _
+                                        Or .Type = Device.ListeDevices.UV _
+                                        Or .Type = Device.ListeDevices.VITESSEVENT _
+                                        Then
+                            .Correction = _ListDevices.Item(i).correction
+                            .Precision = _ListDevices.Item(i).precision
+                            .Formatage = _ListDevices.Item(i).formatage
+                            .Value = _ListDevices.Item(i).value
+                            .ValueDef = _ListDevices.Item(i).valuedef
+                            .ValueLast = _ListDevices.Item(i).valuelast
+                            .ValueMax = _ListDevices.Item(i).valuemax
+                            .ValueMin = _ListDevices.Item(i).valuemin
+                        End If
 
-                    If .Type = Device.ListeDevices.METEO Then
-                        .ConditionActuel = _ListDevices.Item(i).ConditionActuel
-                        .ConditionJ1 = _ListDevices.Item(i).ConditionJ1
-                        .ConditionJ2 = _ListDevices.Item(i).ConditionActuel
-                        .ConditionJ3 = _ListDevices.Item(i).ConditionJ3
-                        .ConditionToday = _ListDevices.Item(i).ConditionToday
-                        .HumiditeActuel = _ListDevices.Item(i).HumiditeActuel
-                        .IconActuel = _ListDevices.Item(i).IconActuel
-                        .IconJ1 = _ListDevices.Item(i).IconJ1
-                        .IconJ2 = _ListDevices.Item(i).IconJ2
-                        .IconJ3 = _ListDevices.Item(i).IconJ3
-                        .IconToday = _ListDevices.Item(i).IconToday
-                        .JourJ1 = _ListDevices.Item(i).JourJ1
-                        .JourJ2 = _ListDevices.Item(i).JourJ2
-                        .JourJ3 = _ListDevices.Item(i).JourJ3
-                        .JourToday = _ListDevices.Item(i).JourToday
-                        .MaxJ1 = _ListDevices.Item(i).MaxJ1
-                        .MaxJ2 = _ListDevices.Item(i).MaxJ2
-                        .MaxJ3 = _ListDevices.Item(i).MaxJ3
-                        .MaxToday = _ListDevices.Item(i).MaxToday
-                        .MinJ1 = _ListDevices.Item(i).MinJ1
-                        .MinJ2 = _ListDevices.Item(i).MinJ2
-                        .MinJ3 = _ListDevices.Item(i).MinJ3
-                        .MinToday = _ListDevices.Item(i).MinToday
-                        .TemperatureActuel = _ListDevices.Item(i).TemperatureActuel
-                        .VentActuel = _ListDevices.Item(i).VentActuel
-                    End If
+                        If .Type = Device.ListeDevices.METEO Then
+                            .ConditionActuel = _ListDevices.Item(i).ConditionActuel
+                            .ConditionJ1 = _ListDevices.Item(i).ConditionJ1
+                            .ConditionJ2 = _ListDevices.Item(i).ConditionActuel
+                            .ConditionJ3 = _ListDevices.Item(i).ConditionJ3
+                            .ConditionToday = _ListDevices.Item(i).ConditionToday
+                            .HumiditeActuel = _ListDevices.Item(i).HumiditeActuel
+                            .IconActuel = _ListDevices.Item(i).IconActuel
+                            .IconJ1 = _ListDevices.Item(i).IconJ1
+                            .IconJ2 = _ListDevices.Item(i).IconJ2
+                            .IconJ3 = _ListDevices.Item(i).IconJ3
+                            .IconToday = _ListDevices.Item(i).IconToday
+                            .JourJ1 = _ListDevices.Item(i).JourJ1
+                            .JourJ2 = _ListDevices.Item(i).JourJ2
+                            .JourJ3 = _ListDevices.Item(i).JourJ3
+                            .JourToday = _ListDevices.Item(i).JourToday
+                            .MaxJ1 = _ListDevices.Item(i).MaxJ1
+                            .MaxJ2 = _ListDevices.Item(i).MaxJ2
+                            .MaxJ3 = _ListDevices.Item(i).MaxJ3
+                            .MaxToday = _ListDevices.Item(i).MaxToday
+                            .MinJ1 = _ListDevices.Item(i).MinJ1
+                            .MinJ2 = _ListDevices.Item(i).MinJ2
+                            .MinJ3 = _ListDevices.Item(i).MinJ3
+                            .MinToday = _ListDevices.Item(i).MinToday
+                            .TemperatureActuel = _ListDevices.Item(i).TemperatureActuel
+                            .VentActuel = _ListDevices.Item(i).VentActuel
+                        End If
 
-                    If .Type = Device.ListeDevices.MULTIMEDIA Then
-                        For j As Integer = 0 To _ListDevices.Item(i).listcommandname.count - 1
-                            .ListCommandName.Add(_ListDevices.Item(i).listcommandname.item(j))
-                            .ListCommandData.Add(_ListDevices.Item(i).ListCommandData.item(j))
-                            .ListCommandRepeat.Add(_ListDevices.Item(i).ListCommandRepeat.item(j))
-                        Next
-                    End If
-                End With
-                _list.Add(x)
-            Next
-            Return _list
+                        If .Type = Device.ListeDevices.MULTIMEDIA Then
+                            For j As Integer = 0 To _ListDevices.Item(i).listcommandname.count - 1
+                                .ListCommandName.Add(_ListDevices.Item(i).listcommandname.item(j))
+                                .ListCommandData.Add(_ListDevices.Item(i).ListCommandData.item(j))
+                                .ListCommandRepeat.Add(_ListDevices.Item(i).ListCommandRepeat.item(j))
+                            Next
+                        End If
+                    End With
+                    _list.Add(x)
+                Next
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllDevices", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Retourne la liste de tous les drivers
-        ''' </summary>
+        ''' <summary>Retourne la liste de tous les drivers</summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function GetAllDrivers() As List(Of TemplateDriver) Implements IHoMIDom.GetAllDrivers
             Dim _list As New List(Of TemplateDriver)
-            For i As Integer = 0 To _ListDrivers.Count - 1
-                Dim x As New TemplateDriver
-                With x
-                    .Nom = _ListDrivers.Item(i).nom
-                    .ID = _ListDrivers.Item(i).id
-                    .COM = _ListDrivers.Item(i).com
-                    .Description = _ListDrivers.Item(i).description
-                    .Enable = _ListDrivers.Item(i).enable
-                    .IP_TCP = _ListDrivers.Item(i).ip_tcp
-                    .IP_UDP = _ListDrivers.Item(i).ip_udp
-                    .IsConnect = _ListDrivers.Item(i).isconnect
-                    .Modele = _ListDrivers.Item(i).modele
-                    .Picture = _ListDrivers.Item(i).picture
-                    .Port_TCP = _ListDrivers.Item(i).port_tcp
-                    .Port_UDP = _ListDrivers.Item(i).port_udp
-                    .Protocol = _ListDrivers.Item(i).protocol
-                    .Refresh = _ListDrivers.Item(i).refresh
-                    .StartAuto = _ListDrivers.Item(i).startauto
-                    .Version = _ListDrivers.Item(i).version
-                    For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
-                        .DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
-                    Next
-                    For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
-                        Dim y As New Driver.Parametre
-                        y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
-                        y.Description = _ListDrivers.Item(i).Parametres.item(j).description
-                        y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
-                        .Parametres.Add(y)
-                    Next
-                    Dim _listactdrv As New ArrayList
-                    Dim _listactd As New List(Of String)
-                    For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
-                        _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
-                    Next
-                    If _listactd.Count > 0 Then
-                        For n As Integer = 0 To _listactd.Count - 1
-                            Dim a() As String = _listactd.Item(n).Split("|")
-                            Dim p As New DeviceAction
-                            With p
-                                .Nom = a(0)
-                                If a.Length > 1 Then
-                                    For t As Integer = 1 To a.Length - 1
-                                        Dim pr As New DeviceAction.Parametre
-                                        Dim b() As String = a(t).Split(":")
-                                        With pr
-                                            .Nom = b(0)
-                                            .Type = b(1)
-                                        End With
-                                        p.Parametres.Add(pr)
-                                    Next
-                                End If
-                            End With
-                            .DeviceAction.Add(p)
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    Dim x As New TemplateDriver
+                    With x
+                        .Nom = _ListDrivers.Item(i).nom
+                        .ID = _ListDrivers.Item(i).id
+                        .COM = _ListDrivers.Item(i).com
+                        .Description = _ListDrivers.Item(i).description
+                        .Enable = _ListDrivers.Item(i).enable
+                        .IP_TCP = _ListDrivers.Item(i).ip_tcp
+                        .IP_UDP = _ListDrivers.Item(i).ip_udp
+                        .IsConnect = _ListDrivers.Item(i).isconnect
+                        .Modele = _ListDrivers.Item(i).modele
+                        .Picture = _ListDrivers.Item(i).picture
+                        .Port_TCP = _ListDrivers.Item(i).port_tcp
+                        .Port_UDP = _ListDrivers.Item(i).port_udp
+                        .Protocol = _ListDrivers.Item(i).protocol
+                        .Refresh = _ListDrivers.Item(i).refresh
+                        .StartAuto = _ListDrivers.Item(i).startauto
+                        .Version = _ListDrivers.Item(i).version
+                        For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
+                            .DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
                         Next
-                    End If
+                        For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
+                            Dim y As New Driver.Parametre
+                            y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
+                            y.Description = _ListDrivers.Item(i).Parametres.item(j).description
+                            y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
+                            .Parametres.Add(y)
+                        Next
+                        Dim _listactdrv As New ArrayList
+                        Dim _listactd As New List(Of String)
+                        For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
+                            _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
+                        Next
+                        If _listactd.Count > 0 Then
+                            For n As Integer = 0 To _listactd.Count - 1
+                                Dim a() As String = _listactd.Item(n).Split("|")
+                                Dim p As New DeviceAction
+                                With p
+                                    .Nom = a(0)
+                                    If a.Length > 1 Then
+                                        For t As Integer = 1 To a.Length - 1
+                                            Dim pr As New DeviceAction.Parametre
+                                            Dim b() As String = a(t).Split(":")
+                                            With pr
+                                                .Nom = b(0)
+                                                .Type = b(1)
+                                            End With
+                                            p.Parametres.Add(pr)
+                                        Next
+                                    End If
+                                End With
+                                .DeviceAction.Add(p)
+                            Next
+                        End If
 
-                    _listactd = Nothing
-                    _listactdrv = Nothing
-                End With
-                _list.Add(x)
-            Next
-            Return _list
+                        _listactd = Nothing
+                        _listactdrv = Nothing
+                    End With
+                    _list.Add(x)
+                Next
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllDrivers", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Retourne la liste de tous les drivers
-        ''' </summary>
+        ''' <summary>Retourne la liste de toutes les zones</summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function GetAllZones() As List(Of Zone) Implements IHoMIDom.GetAllZones
-            Dim _list As New List(Of Zone)
-            For i As Integer = 0 To _ListZones.Count - 1
-                Dim x As New Zone
-                With x
-                    .Name = _ListZones.Item(i).name
-                    .ID = _ListZones.Item(i).id
-                    .Icon = _ListZones.Item(i).icon
-                    .Image = _ListZones.Item(i).Image
-                    For j As Integer = 0 To _ListZones.Item(i).ListDevice.count - 1
-                        .ListDevice.Add(_ListZones.Item(i).ListDevice.item(j))
-                    Next
-                End With
-                _list.Add(x)
-            Next
-            Return _list
+            Try
+                Dim _list As New List(Of Zone)
+                For i As Integer = 0 To _ListZones.Count - 1
+                    Dim x As New Zone
+                    With x
+                        .Name = _ListZones.Item(i).name
+                        .ID = _ListZones.Item(i).id
+                        .Icon = _ListZones.Item(i).icon
+                        .Image = _ListZones.Item(i).Image
+                        For j As Integer = 0 To _ListZones.Item(i).ListDevice.count - 1
+                            .ListDevice.Add(_ListZones.Item(i).ListDevice.item(j))
+                        Next
+                    End With
+                    _list.Add(x)
+                Next
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllZones", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Retourne la liste de tous les drivers
-        ''' </summary>
+        ''' <summary>Retourne la liste de tous les drivers</summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function GetAllUsers() As List(Of Users.User) Implements IHoMIDom.GetAllUsers
             Dim _list As New List(Of Users.User)
-            For i As Integer = 0 To _ListUsers.Count - 1
-                Dim x As New Users.User
-                With x
-                    .Adresse = _ListUsers.Item(i).Adresse
-                    .CodePostal = _ListUsers.Item(i).CodePostal
-                    .eMail = _ListUsers.Item(i).eMail
-                    .eMailAutre = _ListUsers.Item(i).eMailAutre
-                    .ID = _ListUsers.Item(i).ID
-                    .Image = _ListUsers.Item(i).Image
-                    .Nom = _ListUsers.Item(i).Nom
-                    .NumberIdentification = _ListUsers.Item(i).NumberIdentification
-                    .Password = _ListUsers.Item(i).Password
-                    .Prenom = _ListUsers.Item(i).Prenom
-                    .Profil = _ListUsers.Item(i).Profil
-                    .TelAutre = _ListUsers.Item(i).TelAutre
-                    .TelFixe = _ListUsers.Item(i).TelFixe
-                    .TelMobile = _ListUsers.Item(i).TelMobile
-                    .UserName = _ListUsers.Item(i).UserName
-                    .Ville = _ListUsers.Item(i).Ville
-                End With
-                _list.Add(x)
-            Next
-            Return _list
+            Try
+                For i As Integer = 0 To _ListUsers.Count - 1
+                    Dim x As New Users.User
+                    With x
+                        .Adresse = _ListUsers.Item(i).Adresse
+                        .CodePostal = _ListUsers.Item(i).CodePostal
+                        .eMail = _ListUsers.Item(i).eMail
+                        .eMailAutre = _ListUsers.Item(i).eMailAutre
+                        .ID = _ListUsers.Item(i).ID
+                        .Image = _ListUsers.Item(i).Image
+                        .Nom = _ListUsers.Item(i).Nom
+                        .NumberIdentification = _ListUsers.Item(i).NumberIdentification
+                        .Password = _ListUsers.Item(i).Password
+                        .Prenom = _ListUsers.Item(i).Prenom
+                        .Profil = _ListUsers.Item(i).Profil
+                        .TelAutre = _ListUsers.Item(i).TelAutre
+                        .TelFixe = _ListUsers.Item(i).TelFixe
+                        .TelMobile = _ListUsers.Item(i).TelMobile
+                        .UserName = _ListUsers.Item(i).UserName
+                        .Ville = _ListUsers.Item(i).Ville
+                    End With
+                    _list.Add(x)
+                Next
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllUsers", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
-        ''' <summary>
-        ''' ajouter un device à une zone
-        ''' </summary>
+        ''' <summary>ajouter un device à une zone</summary>
         ''' <param name="ZoneId"></param>
         ''' <param name="DeviceId"></param>
         ''' <param name="Visible"></param>
@@ -1943,19 +1976,20 @@ Namespace HoMIDom
         Function AddDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String, ByVal Visible As Boolean, Optional ByVal X As Double = 0, Optional ByVal Y As Double = 0) As String Implements IHoMIDom.AddDeviceToZone
             Dim _zone As Zone = ReturnZoneById(ZoneId)
             Dim _retour As String = ""
-
-            If _zone IsNot Nothing Then
-                Dim _dev As New Zone.Device_Zone("", Visible, X, Y)
-                _zone.ListDevice.Add(_dev)
-                _retour = "0"
-            End If
-
-            Return _retour
+            Try
+                If _zone IsNot Nothing Then
+                    Dim _dev As New Zone.Device_Zone("", Visible, X, Y)
+                    _zone.ListDevice.Add(_dev)
+                    _retour = "0"
+                End If
+                Return _retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddDeviceToZone", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 
-        ''' <summary>
-        ''' supprimer un device à une zone
-        ''' </summary>
+        ''' <summary>supprimer un device à une zone</summary>
         ''' <param name="ZoneId"></param>
         ''' <param name="DeviceId"></param>
         ''' <returns></returns>
@@ -1963,23 +1997,24 @@ Namespace HoMIDom
         Function DeleteDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String) As String Implements IHoMIDom.DeleteDeviceToZone
             Dim _zone As Zone = ReturnZoneById(ZoneId)
             Dim _retour As String = ""
-
-            If _zone IsNot Nothing Then
-                For i As Integer = 0 To _zone.ListDevice.Count - 1
-                    If _zone.ListDevice.Item(i).deviceid = DeviceId Then
-                        _zone.ListDevice.RemoveAt(i)
-                        Exit For
-                    End If
-                Next
-                _retour = "0"
-            End If
-
-            Return _retour
+            Try
+                If _zone IsNot Nothing Then
+                    For i As Integer = 0 To _zone.ListDevice.Count - 1
+                        If _zone.ListDevice.Item(i).DeviceID = DeviceId Then
+                            _zone.ListDevice.RemoveAt(i)
+                            Exit For
+                        End If
+                    Next
+                    _retour = "0"
+                End If
+                Return _retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDeviceToZone", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 
-        ''' <summary>
-        ''' renvoi le fichier log suivant une requête xml si besoin
-        ''' </summary>
+        ''' <summary>renvoi le fichier log suivant une requête xml si besoin</summary>
         ''' <param name="Requete"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
@@ -2004,20 +2039,21 @@ Namespace HoMIDom
                 Return retour
             Catch ex As Exception
                 ReturnLog = "Erreur lors de la récupération du log: " & ex.ToString
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnLog", "Exception : " & ex.Message)
             End Try
         End Function
 
-        ''' <summary>
-        ''' Sauvegarder la configuration
-        ''' </summary>
+        ''' <summary>Sauvegarder la configuration</summary>
         ''' <remarks></remarks>
         Public Sub SaveConfiguration() Implements IHoMIDom.SaveConfig
-            SaveConfig(_MonRepertoire & "\config\homidom.xml")
+            Try
+                SaveConfig(_MonRepertoire & "\config\homidom.xml")
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfiguration", "Exception : " & ex.Message)
+            End Try
         End Sub
 
-        ''' <summary>
-        ''' Sauvegarder ou créer un device
-        ''' </summary>
+        ''' <summary>Sauvegarder ou créer un device</summary>
         ''' <param name="deviceId"></param>
         ''' <param name="name"></param>
         ''' <param name="address1"></param>
@@ -2035,573 +2071,577 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Function SaveDevice(ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0) As String Implements IHoMIDom.SaveDevice
             Dim myID As String
-
-            If deviceId = "" Then 'C'est un nouveau device
-                myID = Api.GenerateGUID
-                'Suivant chaque type de device
-                Select Case UCase(type)
-                    Case "TEMPERATURE"
-                        Dim o As New Device.TEMPERATURE(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "HUMIDITE"
-                        Dim o As New Device.HUMIDITE(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "BATTERIE"
-                        Dim o As New Device.BATTERIE(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "TEMPERATURECONSIGNE"
-                        Dim o As New Device.TEMPERATURECONSIGNE(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "ENERGIETOTALE"
-                        Dim o As New Device.ENERGIETOTALE(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "ENERGIEINSTANTANEE"
-                        Dim o As New Device.ENERGIEINSTANTANEE(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "PLUIETOTAL"
-                        Dim o As New Device.PLUIETOTAL(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "PLUIECOURANT"
-                        Dim o As New Device.PLUIECOURANT(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "VITESSEVENT"
-                        Dim o As New Device.VITESSEVENT(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "DIRECTIONVENT"
-                        Dim o As New Device.DIRECTIONVENT(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "UV"
-                        Dim o As New Device.UV(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "APPAREIL"
-                        Dim o As New Device.APPAREIL(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "LAMPE"
-                        Dim o As New Device.LAMPE(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "CONTACT"
-                        Dim o As New Device.CONTACT(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "METEO"
-                        Dim o As New Device.METEO(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "AUDIO"
-                        Dim o As New Device.AUDIO(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "MULTIMEDIA"
-                        Dim o As New Device.MULTIMEDIA(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "FREEBOX"
-                        Dim o As New Device.FREEBOX(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "VOLET"
-                        Dim o As New Device.VOLET(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "BAROMETRE"
-                        Dim o As New Device.BAROMETRE(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "COMPTEUR"
-                        Dim o As New Device.COMPTEUR(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "DETECTEUR"
-                        Dim o As New Device.DETECTEUR(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "GENERIQUEBOOLEEN"
-                        Dim o As New Device.GENERIQUEBOOLEEN(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "GENERIQUESTRING"
-                        Dim o As New Device.GENERIQUESTRING(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "GENERIQUEVALUE"
-                        Dim o As New Device.GENERIQUEVALUE(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "SWITCH"
-                        Dim o As New Device.SWITCH(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                    Case "TELECOMMANDE"
-                        Dim o As New Device.TELECOMMANDE(Me)
-                        With o
-                            .ID = myID
-                            .Name = name
-                            .DateCreated = Now
-                            .Picture = image
-                            .Adresse1 = address1
-                            .Adresse2 = address2
-                            .Enable = enable
-                            .DriverID = driverid
-                            .Modele = modele
-                            .Refresh = refresh
-                            .Solo = solo
-                            .Description = description
-                            .LastChangeDuree = lastchangeduree
-                            AddHandler o.DeviceChanged, AddressOf DeviceChange
-                        End With
-                        _ListDevices.Add(o)
-                        o.Driver.newdevice(deviceId)
-                End Select
-
-            Else 'Device Existant
-                myID = deviceId
-                For i As Integer = 0 To _ListDevices.Count - 1
-                    If _ListDevices.Item(i).ID = deviceId Then
-                        _ListDevices.Item(i).name = name
-                        _ListDevices.Item(i).adresse1 = address1
-                        _ListDevices.Item(i).adresse2 = address2
-                        _ListDevices.Item(i).picture = image
-                        _ListDevices.Item(i).enable = enable
-                        _ListDevices.Item(i).driverid = driverid
-                        _ListDevices.Item(i).description = description
-                        _ListDevices.Item(i).modele = modele
-                        _ListDevices.Item(i).refresh = refresh
-                        _ListDevices.Item(i).solo = solo
-                        _ListDevices.Item(i).LastChangeDuree = lastchangeduree
-                        _ListDevices.Item(i).Driver.newdevice(deviceId)
-                    End If
-                Next
-            End If
-
-            'génration de l'event
-
-            Return myID
+            Try
+                If deviceId = "" Then 'C'est un nouveau device
+                    myID = Api.GenerateGUID
+                    'Suivant chaque type de device
+                    Select Case UCase(type)
+                        Case "TEMPERATURE"
+                            Dim o As New Device.TEMPERATURE(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "HUMIDITE"
+                            Dim o As New Device.HUMIDITE(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "BATTERIE"
+                            Dim o As New Device.BATTERIE(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "TEMPERATURECONSIGNE"
+                            Dim o As New Device.TEMPERATURECONSIGNE(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "ENERGIETOTALE"
+                            Dim o As New Device.ENERGIETOTALE(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "ENERGIEINSTANTANEE"
+                            Dim o As New Device.ENERGIEINSTANTANEE(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "PLUIETOTAL"
+                            Dim o As New Device.PLUIETOTAL(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "PLUIECOURANT"
+                            Dim o As New Device.PLUIECOURANT(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "VITESSEVENT"
+                            Dim o As New Device.VITESSEVENT(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "DIRECTIONVENT"
+                            Dim o As New Device.DIRECTIONVENT(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "UV"
+                            Dim o As New Device.UV(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "APPAREIL"
+                            Dim o As New Device.APPAREIL(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "LAMPE"
+                            Dim o As New Device.LAMPE(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "CONTACT"
+                            Dim o As New Device.CONTACT(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "METEO"
+                            Dim o As New Device.METEO(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "AUDIO"
+                            Dim o As New Device.AUDIO(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "MULTIMEDIA"
+                            Dim o As New Device.MULTIMEDIA(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "FREEBOX"
+                            Dim o As New Device.FREEBOX(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "VOLET"
+                            Dim o As New Device.VOLET(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "BAROMETRE"
+                            Dim o As New Device.BAROMETRE(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "COMPTEUR"
+                            Dim o As New Device.COMPTEUR(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "DETECTEUR"
+                            Dim o As New Device.DETECTEUR(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "GENERIQUEBOOLEEN"
+                            Dim o As New Device.GENERIQUEBOOLEEN(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "GENERIQUESTRING"
+                            Dim o As New Device.GENERIQUESTRING(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "GENERIQUEVALUE"
+                            Dim o As New Device.GENERIQUEVALUE(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "SWITCH"
+                            Dim o As New Device.SWITCH(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                        Case "TELECOMMANDE"
+                            Dim o As New Device.TELECOMMANDE(Me)
+                            With o
+                                .ID = myID
+                                .Name = name
+                                .DateCreated = Now
+                                .Picture = image
+                                .Adresse1 = address1
+                                .Adresse2 = address2
+                                .Enable = enable
+                                .DriverID = driverid
+                                .Modele = modele
+                                .Refresh = refresh
+                                .Solo = solo
+                                .Description = description
+                                .LastChangeDuree = lastchangeduree
+                                AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            End With
+                            _ListDevices.Add(o)
+                            o.Driver.newdevice(deviceId)
+                    End Select
+                Else 'Device Existant
+                    myID = deviceId
+                    For i As Integer = 0 To _ListDevices.Count - 1
+                        If _ListDevices.Item(i).ID = deviceId Then
+                            _ListDevices.Item(i).name = name
+                            _ListDevices.Item(i).adresse1 = address1
+                            _ListDevices.Item(i).adresse2 = address2
+                            _ListDevices.Item(i).picture = image
+                            _ListDevices.Item(i).enable = enable
+                            _ListDevices.Item(i).driverid = driverid
+                            _ListDevices.Item(i).description = description
+                            _ListDevices.Item(i).modele = modele
+                            _ListDevices.Item(i).refresh = refresh
+                            _ListDevices.Item(i).solo = solo
+                            _ListDevices.Item(i).LastChangeDuree = lastchangeduree
+                            _ListDevices.Item(i).Driver.newdevice(deviceId)
+                        End If
+                    Next
+                End If
+                'génération de l'event
+                Return myID
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDevice", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Fixer la valeur du port SOAP
-        ''' </summary>
+        ''' <summary>Fixer la valeur du port SOAP</summary>
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
         Public Sub SetPortSOAP(ByVal Value As Double) Implements IHoMIDom.SetPortSOAP
-            _PortSOAP = Value
+            Try
+                _PortSOAP = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetPortSOAP", "Exception : " & ex.Message)
+            End Try
         End Sub
 
-        ''' <summary>
-        ''' Retourne la valeur du port SOAP
-        ''' </summary>
-        ''' <returns></returns>
+        ''' <summary>Retourne la valeur du port SOAP</summary>
+        ''' <returns>Numero du port ou -1 si erreur</returns>
         ''' <remarks></remarks>
         Public Function GetPortSOAP() As Double Implements IHoMIDom.GetPortSOAP
-            Return _PortSOAP
+            Try
+                Return _PortSOAP
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetPortSOAP", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Sauvegarde ou créer un driver dans la config
-        ''' </summary>
+        ''' <summary>Sauvegarde ou créer un driver dans la config</summary>
         ''' <param name="driverId"></param>
         ''' <param name="name"></param>
         ''' <param name="enable"></param>
@@ -2617,36 +2657,36 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Function SaveDriver(ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String, Optional ByVal Parametres As ArrayList = Nothing) As String Implements IHoMIDom.SaveDriver
             Dim myID As String
-
-            'Driver Existant
-            myID = driverId
-            For i As Integer = 0 To _ListDrivers.Count - 1
-                If _ListDrivers.Item(i).id = driverId Then
-                    _ListDrivers.Item(i).Enable = enable
-                    _ListDrivers.Item(i).StartAuto = startauto
-                    If _ListDrivers.Item(i).IP_TCP <> "@" Then _ListDrivers.Item(i).IP_TCP = iptcp
-                    If _ListDrivers.Item(i).Port_TCP <> "@" Then _ListDrivers.Item(i).Port_TCP = porttcp
-                    If _ListDrivers.Item(i).IP_UDP <> "@" Then _ListDrivers.Item(i).IP_UDP = ipudp
-                    If _ListDrivers.Item(i).Port_UDP <> "@" Then _ListDrivers.Item(i).Port_UDP = portudp
-                    If _ListDrivers.Item(i).Com <> "@" Then _ListDrivers.Item(i).Com = com
-                    _ListDrivers.Item(i).Refresh = refresh
-                    _ListDrivers.Item(i).Picture = picture
-                    If Parametres IsNot Nothing Then
-                        For j As Integer = 0 To Parametres.Count - 1
-                            _ListDrivers.Item(i).parametres.item(j).valeur = Parametres.Item(j)
-                        Next
+            Try
+                'Driver Existant
+                myID = driverId
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).id = driverId Then
+                        _ListDrivers.Item(i).Enable = enable
+                        _ListDrivers.Item(i).StartAuto = startauto
+                        If _ListDrivers.Item(i).IP_TCP <> "@" Then _ListDrivers.Item(i).IP_TCP = iptcp
+                        If _ListDrivers.Item(i).Port_TCP <> "@" Then _ListDrivers.Item(i).Port_TCP = porttcp
+                        If _ListDrivers.Item(i).IP_UDP <> "@" Then _ListDrivers.Item(i).IP_UDP = ipudp
+                        If _ListDrivers.Item(i).Port_UDP <> "@" Then _ListDrivers.Item(i).Port_UDP = portudp
+                        If _ListDrivers.Item(i).Com <> "@" Then _ListDrivers.Item(i).Com = com
+                        _ListDrivers.Item(i).Refresh = refresh
+                        _ListDrivers.Item(i).Picture = picture
+                        If Parametres IsNot Nothing Then
+                            For j As Integer = 0 To Parametres.Count - 1
+                                _ListDrivers.Item(i).parametres.item(j).valeur = Parametres.Item(j)
+                            Next
+                        End If
                     End If
-                End If
-            Next
-
-            'génration de l'event
-
-            Return myID
+                Next
+                'génération de l'event
+                Return myID
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDriver", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 
-        ''' <summary>
-        ''' sauvegarde ou créer une zone dans la config
-        ''' </summary>
+        ''' <summary>sauvegarde ou créer une zone dans la config</summary>
         ''' <param name="zoneId"></param>
         ''' <param name="name"></param>
         ''' <param name="ListDevice"></param>
@@ -2656,33 +2696,36 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListDevice As List(Of Zone.Device_Zone) = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String Implements IHoMIDom.SaveZone
             Dim myID As String = ""
-
-            If zoneId = "" Then
-                Dim x As New Zone
-                With x
-                    x.ID = GenerateGUID()
-                    x.Name = name
-                    x.Icon = icon
-                    x.Image = image
-                    x.ListDevice = ListDevice
-                End With
-                myID = x.ID
-                _ListZones.Add(x)
-            Else
-                'zone Existante
-                myID = zoneId
-                For i As Integer = 0 To _ListZones.Count - 1
-                    If _ListZones.Item(i).id = zoneId Then
-                        _ListZones.Item(i).name = name
-                        _ListZones.Item(i).icon = icon
-                        _ListZones.Item(i).image = image
-                        _ListZones.Item(i).listdevice = ListDevice
-                    End If
-                Next
-            End If
-
-            'génration de l'event
-            Return myID
+            Try
+                If zoneId = "" Then
+                    Dim x As New Zone
+                    With x
+                        x.ID = GenerateGUID()
+                        x.Name = name
+                        x.Icon = icon
+                        x.Image = image
+                        x.ListDevice = ListDevice
+                    End With
+                    myID = x.ID
+                    _ListZones.Add(x)
+                Else
+                    'zone Existante
+                    myID = zoneId
+                    For i As Integer = 0 To _ListZones.Count - 1
+                        If _ListZones.Item(i).id = zoneId Then
+                            _ListZones.Item(i).name = name
+                            _ListZones.Item(i).icon = icon
+                            _ListZones.Item(i).image = image
+                            _ListZones.Item(i).listdevice = ListDevice
+                        End If
+                    Next
+                End If
+                'génération de l'event
+                Return myID
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveZone", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 
         ''' <summary>
@@ -2708,90 +2751,93 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Function SaveUser(ByVal userId As String, ByVal UserName As String, ByVal Password As String, ByVal Profil As Users.TypeProfil, ByVal Nom As String, ByVal Prenom As String, Optional ByVal NumberIdentification As String = "", Optional ByVal Image As String = "", Optional ByVal eMail As String = "", Optional ByVal eMailAutre As String = "", Optional ByVal TelFixe As String = "", Optional ByVal TelMobile As String = "", Optional ByVal TelAutre As String = "", Optional ByVal Adresse As String = "", Optional ByVal Ville As String = "", Optional ByVal CodePostal As String = "") As String Implements IHoMIDom.SaveUser
             Dim myID As String = ""
+            Try
+                If userId = "" Then
+                    For i As Integer = 0 To _ListUsers.Count - 1
+                        If _ListUsers.Item(i).username = UserName Then
+                            myID = "ERROR Username déjà utlisé"
+                            Return myID
+                        End If
+                    Next
+                    Dim x As New Users.User
+                    With x
+                        x.ID = GenerateGUID()
+                        x.Adresse = Adresse
+                        x.CodePostal = CodePostal
+                        x.eMail = eMail
+                        x.eMailAutre = eMailAutre
+                        x.Image = Image
+                        x.Nom = Nom
+                        x.NumberIdentification = NumberIdentification
+                        x.Password = EncryptTripleDES(Password, "homidom")
+                        x.Prenom = Prenom
+                        x.Profil = Profil
+                        x.TelAutre = TelAutre
+                        x.TelFixe = TelFixe
+                        x.TelMobile = TelMobile
+                        x.UserName = UserName
+                        x.Ville = Ville
+                    End With
+                    myID = x.ID
+                    _ListUsers.Add(x)
+                Else
+                    'user Existant
+                    myID = userId
+                    For i As Integer = 0 To _ListUsers.Count - 1
+                        If _ListUsers.Item(i).id = userId Then
+                            _ListUsers.Item(i).Adresse = Adresse
+                            _ListUsers.Item(i).CodePostal = CodePostal
+                            _ListUsers.Item(i).eMail = eMail
+                            _ListUsers.Item(i).eMailAutre = eMailAutre
+                            _ListUsers.Item(i).Image = Image
+                            _ListUsers.Item(i).Nom = Nom
+                            _ListUsers.Item(i).NumberIdentification = NumberIdentification
+                            _ListUsers.Item(i).Password = EncryptTripleDES(Password, "homidom")
+                            _ListUsers.Item(i).Prenom = Prenom
+                            _ListUsers.Item(i).Profil = Profil
+                            _ListUsers.Item(i).TelAutre = TelAutre
+                            _ListUsers.Item(i).TelFixe = TelFixe
+                            _ListUsers.Item(i).TelMobile = TelMobile
+                            _ListUsers.Item(i).UserName = UserName
+                            _ListUsers.Item(i).Ville = Ville
+                        End If
+                    Next
+                End If
 
-            If userId = "" Then
-                For i As Integer = 0 To _ListUsers.Count - 1
-                    If _ListUsers.Item(i).username = UserName Then
-                        myID = "ERROR Username déjà utlisé"
-                        Return myID
-                    End If
-                Next
-                Dim x As New Users.User
-                With x
-                    x.ID = GenerateGUID()
-                    x.Adresse = Adresse
-                    x.CodePostal = CodePostal
-                    x.eMail = eMail
-                    x.eMailAutre = eMailAutre
-                    x.Image = Image
-                    x.Nom = Nom
-                    x.NumberIdentification = NumberIdentification
-                    x.Password = EncryptTripleDES(Password, "homidom")
-                    x.Prenom = Prenom
-                    x.Profil = Profil
-                    x.TelAutre = TelAutre
-                    x.TelFixe = TelFixe
-                    x.TelMobile = TelMobile
-                    x.UserName = UserName
-                    x.Ville = Ville
-                End With
-                myID = x.ID
-                _ListUsers.Add(x)
-            Else
-                'user Existant
-                myID = userId
-                For i As Integer = 0 To _ListUsers.Count - 1
-                    If _ListUsers.Item(i).id = userId Then
-                        _ListUsers.Item(i).Adresse = Adresse
-                        _ListUsers.Item(i).CodePostal = CodePostal
-                        _ListUsers.Item(i).eMail = eMail
-                        _ListUsers.Item(i).eMailAutre = eMailAutre
-                        _ListUsers.Item(i).Image = Image
-                        _ListUsers.Item(i).Nom = Nom
-                        _ListUsers.Item(i).NumberIdentification = NumberIdentification
-                        _ListUsers.Item(i).Password = EncryptTripleDES(Password, "homidom")
-                        _ListUsers.Item(i).Prenom = Prenom
-                        _ListUsers.Item(i).Profil = Profil
-                        _ListUsers.Item(i).TelAutre = TelAutre
-                        _ListUsers.Item(i).TelFixe = TelFixe
-                        _ListUsers.Item(i).TelMobile = TelMobile
-                        _ListUsers.Item(i).UserName = UserName
-                        _ListUsers.Item(i).Ville = Ville
-                    End If
-                Next
-            End If
-
-            'génration de l'event
-            Return myID
+                'génération de l'event
+                Return myID
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveUser", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Vérifie le couple username password
-        ''' </summary>
+        ''' <summary>Vérifie le couple username password</summary>
         ''' <param name="Username"></param>
         ''' <param name="Password"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function VerifLogin(ByVal Username As String, ByVal Password As String) As Boolean Implements IHoMIDom.VerifLogin
             Dim retour As Boolean = False
-
-            For i As Integer = 0 To _ListUsers.Count - 1
-                If _ListUsers.Item(i).username = Username Then
-                    Dim a As String = EncryptTripleDES(Password, "homidom")
-                    Dim b As String = DecryptTripleDES(_ListUsers.Item(i).password, "homidom")
-                    If a = b Then
-                        Return True
-                        Exit For
+            Try
+                For i As Integer = 0 To _ListUsers.Count - 1
+                    If _ListUsers.Item(i).username = Username Then
+                        Dim a As String = EncryptTripleDES(Password, "homidom")
+                        Dim b As String = DecryptTripleDES(_ListUsers.Item(i).password, "homidom")
+                        If a = b Then
+                            Return True
+                            Exit For
+                        End If
                     End If
-                End If
-            Next
-
-            Return retour
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "VerifLogin", "Exception : " & ex.Message)
+                Return False
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Permet de changer de Password sur un user
-        ''' </summary>
+        ''' <summary>Permet de changer de Password sur un user</summary>
         ''' <param name="Username"></param>
         ''' <param name="OldPassword"></param>
         ''' <param name="Password"></param>
@@ -2799,46 +2845,53 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Function ChangePassword(ByVal Username As String, ByVal OldPassword As String, ByVal ConfirmNewPassword As String, ByVal Password As String) As Boolean Implements IHoMIDom.ChangePassword
             Dim retour As Boolean = False
-            For i As Integer = 0 To _ListUsers.Count - 1
-                If _ListUsers.Item(i).username = Username Then
-                    If _ListUsers.Item(i).password = OldPassword Then
-                        If ConfirmNewPassword = Password Then
-                            _ListUsers.Item(i).password = EncryptTripleDES(Password, "homidom")
-                            retour = True
-                            Exit For
+            Try
+                For i As Integer = 0 To _ListUsers.Count - 1
+                    If _ListUsers.Item(i).username = Username Then
+                        If _ListUsers.Item(i).password = OldPassword Then
+                            If ConfirmNewPassword = Password Then
+                                _ListUsers.Item(i).password = EncryptTripleDES(Password, "homidom")
+                                retour = True
+                                Exit For
+                            End If
                         End If
                     End If
-                End If
-            Next
-            Return retour
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ChangePassword", "Exception : " & ex.Message)
+                Return False
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Supprime une commande IR d'un device
-        ''' </summary>
+        ''' <summary>Supprime une commande IR d'un device</summary>
         ''' <param name="deviceId"></param>
         ''' <param name="CmdName"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function DeleteDeviceCommandIR(ByVal deviceId As String, ByVal CmdName As String) As Integer Implements IHoMIDom.DeleteDeviceCommandIR
-            For i As Integer = 0 To _ListDevices.Count - 1
-                If _ListDevices.Item(i).Id = deviceId Then
-                    For j As Integer = 0 To _ListDevices.Item(i).ListCommandname.count - 1
-                        If _ListDevices.Item(i).ListCommandname(j) = CmdName Then
-                            _ListDevices.Item(i).ListCommandname.removeat(j)
-                            _ListDevices.Item(i).ListCommanddata.removeat(j)
-                            _ListDevices.Item(i).ListCommandrepeat.removeat(j)
-                            'génération de l'event
-                            Exit Function
-                        End If
-                    Next
-                End If
-            Next
+            Try
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).Id = deviceId Then
+                        For j As Integer = 0 To _ListDevices.Item(i).ListCommandname.count - 1
+                            If _ListDevices.Item(i).ListCommandname(j) = CmdName Then
+                                _ListDevices.Item(i).ListCommandname.removeat(j)
+                                _ListDevices.Item(i).ListCommanddata.removeat(j)
+                                _ListDevices.Item(i).ListCommandrepeat.removeat(j)
+                                'génération de l'event
+                                Exit Function
+                            End If
+                        Next
+                    End If
+                Next
+                Return 0
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDeviceCommandIR", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Ajoute ou modifie une commande IR à un device
-        ''' </summary>
+        ''' <summary>Ajoute ou modifie une commande IR à un device</summary>
         ''' <param name="deviceId"></param>
         ''' <param name="CmdName"></param>
         ''' <param name="CmdData"></param>
@@ -2847,372 +2900,434 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Function SaveDeviceCommandIR(ByVal deviceId As String, ByVal CmdName As String, ByVal CmdData As String, ByVal CmdRepeat As String) As String Implements IHoMIDom.SaveDeviceCommandIR
             Dim flag As Boolean
-
-            'On vérifie avant que si la commande existe on la modifie
-            For i As Integer = 0 To _ListDevices.Count - 1
-                If _ListDevices.Item(i).id = deviceId Then
-                    For j As Integer = 0 To _ListDevices.Item(i).listcommandName.count - 1
-                        If _ListDevices.Item(i).listcommandname(j) = CmdName Then
-                            _ListDevices.Item(i).listcommanddata(j) = CmdData
-                            _ListDevices.Item(i).listcommandrepeat(j) = CmdRepeat
-                            flag = True
+            Try
+                'On vérifie avant que si la commande existe on la modifie
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).id = deviceId Then
+                        For j As Integer = 0 To _ListDevices.Item(i).listcommandName.count - 1
+                            If _ListDevices.Item(i).listcommandname(j) = CmdName Then
+                                _ListDevices.Item(i).listcommanddata(j) = CmdData
+                                _ListDevices.Item(i).listcommandrepeat(j) = CmdRepeat
+                                flag = True
+                            End If
+                        Next
+                        'sinon on la crée
+                        If flag = False Then
+                            _ListDevices.Item(i).listcommandname.add(CmdName)
+                            _ListDevices.Item(i).listcommanddata.add(CmdData)
+                            _ListDevices.Item(i).listcommandrepeat.add(CmdRepeat)
                         End If
-                    Next
-                    'sinon on la crée
-                    If flag = False Then
-                        _ListDevices.Item(i).listcommandname.add(CmdName)
-                        _ListDevices.Item(i).listcommanddata.add(CmdData)
-                        _ListDevices.Item(i).listcommandrepeat.add(CmdRepeat)
                     End If
-                End If
-            Next
-
-            Return 0
+                Next
+                Return 0
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDeviceCommandIR", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Commencer un apprentissage IR
-        ''' </summary>
+        ''' <summary>Commencer un apprentissage IR</summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function StartIrLearning() As String Implements IHoMIDom.StartIrLearning
             Dim retour As String = ""
-            For i As Integer = 0 To _ListDrivers.Count - 1
-                If _ListDrivers.Item(i).protocol = "IR" Then
-                    Dim x As Object = _ListDrivers.Item(i)
-                    retour = x.LearnCodeIR()
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "SERVEUR", "Apprentissage IR: " & retour)
-                End If
-            Next
-            Return retour
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).protocol = "IR" Then
+                        Dim x As Object = _ListDrivers.Item(i)
+                        retour = x.LearnCodeIR()
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "SERVEUR", "Apprentissage IR: " & retour)
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "StartIrLearning", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 
-        'retourne le device par son ID
+        ''' <summary>Retourne un device par son ID</summary>
+        ''' <param name="DeviceId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Function ReturnDeviceById(ByVal DeviceId As String) As TemplateDevice Implements IHoMIDom.ReturnDeviceByID
             Dim retour As New TemplateDevice
             Dim _listact As New List(Of String)
 
-            For i As Integer = 0 To _ListDevices.Count - 1
-                If _ListDevices.Item(i).ID = DeviceId Then
-                    retour.ID = _ListDevices.Item(i).id
-                    retour.Name = _ListDevices.Item(i).name
-                    Select Case UCase(_ListDevices.Item(i).type)
-                        Case "APPAREIL" : retour.Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
-                        Case "AUDIO" : retour.Type = Device.ListeDevices.AUDIO
-                        Case "BAROMETRE" : retour.Type = Device.ListeDevices.BAROMETRE  'pour stocker les valeur issu d'un barometre meteo ou web
-                        Case "BATTERIE" : retour.Type = Device.ListeDevices.BAROMETRE
-                        Case "COMPTEUR" : retour.Type = Device.ListeDevices.COMPTEUR  'compteur DS2423, RFXPower...
-                        Case "CONTACT" : retour.Type = Device.ListeDevices.CONTACT  'detecteur de contact : switch 1-wire
-                        Case "DETECTEUR" : retour.Type = Device.ListeDevices.DETECTEUR  'tous detecteurs : mouvement, obscurite...
-                        Case "DIRECTIONVENT" : retour.Type = Device.ListeDevices.DIRECTIONVENT
-                        Case "ENERGIEINSTANTANEE" : retour.Type = Device.ListeDevices.ENERGIEINSTANTANEE
-                        Case "ENERGIETOTALE" : retour.Type = Device.ListeDevices.ENERGIETOTALE
-                        Case "FREEBOX" : retour.Type = Device.ListeDevices.FREEBOX
-                        Case "GENERIQUEBOOLEEN" : retour.Type = Device.ListeDevices.GENERIQUEBOOLEEN
-                        Case "GENERIQUESTRING" : retour.Type = Device.ListeDevices.GENERIQUESTRING
-                        Case "GENERIQUEVALUE" : retour.Type = Device.ListeDevices.GENERIQUEVALUE
-                        Case "HUMIDITE" : retour.Type = Device.ListeDevices.HUMIDITE
-                        Case "LAMPE" : retour.Type = Device.ListeDevices.LAMPE
-                        Case "METEO" : retour.Type = Device.ListeDevices.METEO
-                        Case "MULTIMEDIA" : retour.Type = Device.ListeDevices.MULTIMEDIA
-                        Case "PLUIECOURANT" : retour.Type = Device.ListeDevices.PLUIECOURANT
-                        Case "PLUIETOTAL" : retour.Type = Device.ListeDevices.PLUIETOTAL
-                        Case "SWITCH" : retour.Type = Device.ListeDevices.SWITCH
-                        Case "TELECOMMANDE" : retour.Type = Device.ListeDevices.TELECOMMANDE
-                        Case "TEMPERATURE" : retour.Type = Device.ListeDevices.TEMPERATURE
-                        Case "TEMPERATURECONSIGNE" : retour.Type = Device.ListeDevices.TEMPERATURECONSIGNE
-                        Case "UV" : retour.Type = Device.ListeDevices.UV
-                        Case "VITESSEVENT" : retour.Type = Device.ListeDevices.VITESSEVENT
-                        Case "VOLET" : retour.Type = Device.ListeDevices.VOLET
-                    End Select
-                    retour.Description = _ListDevices.Item(i).description
-                    retour.Adresse1 = _ListDevices.Item(i).adresse1
-                    retour.Adresse2 = _ListDevices.Item(i).adresse2
-                    retour.DriverID = _ListDevices.Item(i).driverid
-                    retour.Picture = _ListDevices.Item(i).picture
-                    retour.Solo = _ListDevices.Item(i).solo
-                    retour.Refresh = _ListDevices.Item(i).refresh
-                    retour.Modele = _ListDevices.Item(i).modele
+            Try
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).ID = DeviceId Then
+                        retour.ID = _ListDevices.Item(i).id
+                        retour.Name = _ListDevices.Item(i).name
+                        Select Case UCase(_ListDevices.Item(i).type)
+                            Case "APPAREIL" : retour.Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
+                            Case "AUDIO" : retour.Type = Device.ListeDevices.AUDIO
+                            Case "BAROMETRE" : retour.Type = Device.ListeDevices.BAROMETRE  'pour stocker les valeur issu d'un barometre meteo ou web
+                            Case "BATTERIE" : retour.Type = Device.ListeDevices.BAROMETRE
+                            Case "COMPTEUR" : retour.Type = Device.ListeDevices.COMPTEUR  'compteur DS2423, RFXPower...
+                            Case "CONTACT" : retour.Type = Device.ListeDevices.CONTACT  'detecteur de contact : switch 1-wire
+                            Case "DETECTEUR" : retour.Type = Device.ListeDevices.DETECTEUR  'tous detecteurs : mouvement, obscurite...
+                            Case "DIRECTIONVENT" : retour.Type = Device.ListeDevices.DIRECTIONVENT
+                            Case "ENERGIEINSTANTANEE" : retour.Type = Device.ListeDevices.ENERGIEINSTANTANEE
+                            Case "ENERGIETOTALE" : retour.Type = Device.ListeDevices.ENERGIETOTALE
+                            Case "FREEBOX" : retour.Type = Device.ListeDevices.FREEBOX
+                            Case "GENERIQUEBOOLEEN" : retour.Type = Device.ListeDevices.GENERIQUEBOOLEEN
+                            Case "GENERIQUESTRING" : retour.Type = Device.ListeDevices.GENERIQUESTRING
+                            Case "GENERIQUEVALUE" : retour.Type = Device.ListeDevices.GENERIQUEVALUE
+                            Case "HUMIDITE" : retour.Type = Device.ListeDevices.HUMIDITE
+                            Case "LAMPE" : retour.Type = Device.ListeDevices.LAMPE
+                            Case "METEO" : retour.Type = Device.ListeDevices.METEO
+                            Case "MULTIMEDIA" : retour.Type = Device.ListeDevices.MULTIMEDIA
+                            Case "PLUIECOURANT" : retour.Type = Device.ListeDevices.PLUIECOURANT
+                            Case "PLUIETOTAL" : retour.Type = Device.ListeDevices.PLUIETOTAL
+                            Case "SWITCH" : retour.Type = Device.ListeDevices.SWITCH
+                            Case "TELECOMMANDE" : retour.Type = Device.ListeDevices.TELECOMMANDE
+                            Case "TEMPERATURE" : retour.Type = Device.ListeDevices.TEMPERATURE
+                            Case "TEMPERATURECONSIGNE" : retour.Type = Device.ListeDevices.TEMPERATURECONSIGNE
+                            Case "UV" : retour.Type = Device.ListeDevices.UV
+                            Case "VITESSEVENT" : retour.Type = Device.ListeDevices.VITESSEVENT
+                            Case "VOLET" : retour.Type = Device.ListeDevices.VOLET
+                        End Select
+                        retour.Description = _ListDevices.Item(i).description
+                        retour.Adresse1 = _ListDevices.Item(i).adresse1
+                        retour.Adresse2 = _ListDevices.Item(i).adresse2
+                        retour.DriverID = _ListDevices.Item(i).driverid
+                        retour.Picture = _ListDevices.Item(i).picture
+                        retour.Solo = _ListDevices.Item(i).solo
+                        retour.Refresh = _ListDevices.Item(i).refresh
+                        retour.Modele = _ListDevices.Item(i).modele
 
-                    _listact = ListMethod(_ListDevices.Item(i).id)
-                    _listact = _listact
-                    If _listact.Count > 0 Then
-                        For n As Integer = 0 To _listact.Count - 1
-                            Dim a() As String = _listact.Item(n).Split("|")
-                            Dim p As New DeviceAction
-                            With p
-                                .Nom = a(0)
-                                If a.Length > 1 Then
-                                    For t As Integer = 1 To a.Length - 1
-                                        Dim pr As New DeviceAction.Parametre
-                                        Dim b() As String = a(t).Split(":")
-                                        With pr
-                                            .Nom = b(0)
-                                            .Type = b(1)
-                                        End With
-                                        p.Parametres.Add(pr)
-                                    Next
-                                End If
-                            End With
-                            retour.DeviceAction.Add(p)
-                        Next
-                    End If
+                        _listact = ListMethod(_ListDevices.Item(i).id)
+                        _listact = _listact
+                        If _listact.Count > 0 Then
+                            For n As Integer = 0 To _listact.Count - 1
+                                Dim a() As String = _listact.Item(n).Split("|")
+                                Dim p As New DeviceAction
+                                With p
+                                    .Nom = a(0)
+                                    If a.Length > 1 Then
+                                        For t As Integer = 1 To a.Length - 1
+                                            Dim pr As New DeviceAction.Parametre
+                                            Dim b() As String = a(t).Split(":")
+                                            With pr
+                                                .Nom = b(0)
+                                                .Type = b(1)
+                                            End With
+                                            p.Parametres.Add(pr)
+                                        Next
+                                    End If
+                                End With
+                                retour.DeviceAction.Add(p)
+                            Next
+                        End If
 
-                    If retour.Type = Device.ListeDevices.BAROMETRE _
-                                    Or retour.Type = Device.ListeDevices.COMPTEUR _
-                                    Or retour.Type = Device.ListeDevices.ENERGIEINSTANTANEE _
-                                    Or retour.Type = Device.ListeDevices.ENERGIETOTALE _
-                                    Or retour.Type = Device.ListeDevices.GENERIQUEVALUE _
-                                    Or retour.Type = Device.ListeDevices.HUMIDITE _
-                                    Or retour.Type = Device.ListeDevices.PLUIECOURANT _
-                                    Or retour.Type = Device.ListeDevices.PLUIETOTAL _
-                                    Or retour.Type = Device.ListeDevices.TEMPERATURE _
-                                    Or retour.Type = Device.ListeDevices.TEMPERATURECONSIGNE _
-                                    Or retour.Type = Device.ListeDevices.VITESSEVENT _
-                                    Or retour.Type = Device.ListeDevices.UV _
-                                    Or retour.Type = Device.ListeDevices.VITESSEVENT _
-                                    Then
-                        retour.Correction = _ListDevices.Item(i).correction
-                        retour.Precision = _ListDevices.Item(i).precision
-                        retour.Formatage = _ListDevices.Item(i).formatage
-                        retour.Value = _ListDevices.Item(i).value
-                        retour.ValueDef = _ListDevices.Item(i).valuedef
-                        retour.ValueLast = _ListDevices.Item(i).valuelast
-                        retour.ValueMax = _ListDevices.Item(i).valuemax
-                        retour.ValueMin = _ListDevices.Item(i).valuemin
-                    End If
+                        If retour.Type = Device.ListeDevices.BAROMETRE _
+                                        Or retour.Type = Device.ListeDevices.COMPTEUR _
+                                        Or retour.Type = Device.ListeDevices.ENERGIEINSTANTANEE _
+                                        Or retour.Type = Device.ListeDevices.ENERGIETOTALE _
+                                        Or retour.Type = Device.ListeDevices.GENERIQUEVALUE _
+                                        Or retour.Type = Device.ListeDevices.HUMIDITE _
+                                        Or retour.Type = Device.ListeDevices.PLUIECOURANT _
+                                        Or retour.Type = Device.ListeDevices.PLUIETOTAL _
+                                        Or retour.Type = Device.ListeDevices.TEMPERATURE _
+                                        Or retour.Type = Device.ListeDevices.TEMPERATURECONSIGNE _
+                                        Or retour.Type = Device.ListeDevices.VITESSEVENT _
+                                        Or retour.Type = Device.ListeDevices.UV _
+                                        Or retour.Type = Device.ListeDevices.VITESSEVENT _
+                                        Then
+                            retour.Correction = _ListDevices.Item(i).correction
+                            retour.Precision = _ListDevices.Item(i).precision
+                            retour.Formatage = _ListDevices.Item(i).formatage
+                            retour.Value = _ListDevices.Item(i).value
+                            retour.ValueDef = _ListDevices.Item(i).valuedef
+                            retour.ValueLast = _ListDevices.Item(i).valuelast
+                            retour.ValueMax = _ListDevices.Item(i).valuemax
+                            retour.ValueMin = _ListDevices.Item(i).valuemin
+                        End If
 
-                    If retour.Type = Device.ListeDevices.METEO Then
-                        retour.ConditionActuel = _ListDevices.Item(i).ConditionActuel
-                        retour.ConditionJ1 = _ListDevices.Item(i).ConditionJ1
-                        retour.ConditionJ2 = _ListDevices.Item(i).ConditionActuel
-                        retour.ConditionJ3 = _ListDevices.Item(i).ConditionJ3
-                        retour.ConditionToday = _ListDevices.Item(i).ConditionToday
-                        retour.HumiditeActuel = _ListDevices.Item(i).HumiditeActuel
-                        retour.IconActuel = _ListDevices.Item(i).IconActuel
-                        retour.IconJ1 = _ListDevices.Item(i).IconJ1
-                        retour.IconJ2 = _ListDevices.Item(i).IconJ2
-                        retour.IconJ3 = _ListDevices.Item(i).IconJ3
-                        retour.IconToday = _ListDevices.Item(i).IconToday
-                        retour.JourJ1 = _ListDevices.Item(i).JourJ1
-                        retour.JourJ2 = _ListDevices.Item(i).JourJ2
-                        retour.JourJ3 = _ListDevices.Item(i).JourJ3
-                        retour.JourToday = _ListDevices.Item(i).JourToday
-                        retour.MaxJ1 = _ListDevices.Item(i).MaxJ1
-                        retour.MaxJ2 = _ListDevices.Item(i).MaxJ2
-                        retour.MaxJ3 = _ListDevices.Item(i).MaxJ3
-                        retour.MaxToday = _ListDevices.Item(i).MaxToday
-                        retour.MinJ1 = _ListDevices.Item(i).MinJ1
-                        retour.MinJ2 = _ListDevices.Item(i).MinJ2
-                        retour.MinJ3 = _ListDevices.Item(i).MinJ3
-                        retour.MinToday = _ListDevices.Item(i).MinToday
-                        retour.TemperatureActuel = _ListDevices.Item(i).TemperatureActuel
-                        retour.VentActuel = _ListDevices.Item(i).VentActuel
-                    End If
+                        If retour.Type = Device.ListeDevices.METEO Then
+                            retour.ConditionActuel = _ListDevices.Item(i).ConditionActuel
+                            retour.ConditionJ1 = _ListDevices.Item(i).ConditionJ1
+                            retour.ConditionJ2 = _ListDevices.Item(i).ConditionActuel
+                            retour.ConditionJ3 = _ListDevices.Item(i).ConditionJ3
+                            retour.ConditionToday = _ListDevices.Item(i).ConditionToday
+                            retour.HumiditeActuel = _ListDevices.Item(i).HumiditeActuel
+                            retour.IconActuel = _ListDevices.Item(i).IconActuel
+                            retour.IconJ1 = _ListDevices.Item(i).IconJ1
+                            retour.IconJ2 = _ListDevices.Item(i).IconJ2
+                            retour.IconJ3 = _ListDevices.Item(i).IconJ3
+                            retour.IconToday = _ListDevices.Item(i).IconToday
+                            retour.JourJ1 = _ListDevices.Item(i).JourJ1
+                            retour.JourJ2 = _ListDevices.Item(i).JourJ2
+                            retour.JourJ3 = _ListDevices.Item(i).JourJ3
+                            retour.JourToday = _ListDevices.Item(i).JourToday
+                            retour.MaxJ1 = _ListDevices.Item(i).MaxJ1
+                            retour.MaxJ2 = _ListDevices.Item(i).MaxJ2
+                            retour.MaxJ3 = _ListDevices.Item(i).MaxJ3
+                            retour.MaxToday = _ListDevices.Item(i).MaxToday
+                            retour.MinJ1 = _ListDevices.Item(i).MinJ1
+                            retour.MinJ2 = _ListDevices.Item(i).MinJ2
+                            retour.MinJ3 = _ListDevices.Item(i).MinJ3
+                            retour.MinToday = _ListDevices.Item(i).MinToday
+                            retour.TemperatureActuel = _ListDevices.Item(i).TemperatureActuel
+                            retour.VentActuel = _ListDevices.Item(i).VentActuel
+                        End If
 
-                    If retour.Type = Device.ListeDevices.MULTIMEDIA Then
-                        For j As Integer = 0 To _ListDevices.Item(i).listcommandname.count - 1
-                            retour.ListCommandName.Add(_ListDevices.Item(i).listcommandname.item(j))
-                            retour.ListCommandData.Add(_ListDevices.Item(i).ListCommandData.item(j))
-                            retour.ListCommandRepeat.Add(_ListDevices.Item(i).ListCommandRepeat.item(j))
-                        Next
+                        If retour.Type = Device.ListeDevices.MULTIMEDIA Then
+                            For j As Integer = 0 To _ListDevices.Item(i).listcommandname.count - 1
+                                retour.ListCommandName.Add(_ListDevices.Item(i).listcommandname.item(j))
+                                retour.ListCommandData.Add(_ListDevices.Item(i).ListCommandData.item(j))
+                                retour.ListCommandRepeat.Add(_ListDevices.Item(i).ListCommandRepeat.item(j))
+                            Next
+                        End If
+                        Exit For
                     End If
-                    Exit For
-                End If
-            Next
-            Return retour
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDeviceById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
+        ''' <summary>liste les méthodes d'un device depuis son ID</summary>
+        ''' <param name="DeviceId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Function ListMethod(ByVal DeviceId As String) As List(Of String) Implements IHoMIDom.ListMethod
             Dim _list As New List(Of String)
-            For i As Integer = 0 To _ListDevices.Count - 1
-                If _ListDevices.Item(i).ID = DeviceId Then
-                    For j As Integer = 0 To Api.ListMethod(_ListDevices.Item(i)).Count - 1
-                        _list.Add(Api.ListMethod(_ListDevices.Item(i)).Item(j).ToString)
-                    Next
-                End If
-            Next
-            Return _list
-        End Function
-
-        'retourne le driver par son ID
-        Public Function ReturnDriverById(ByVal DriverId As String) As TemplateDriver Implements IHoMIDom.ReturnDriverByID
-            Dim retour As New TemplateDriver
-            For i As Integer = 0 To _ListDrivers.Count - 1
-                If _ListDrivers.Item(i).ID = DriverId Then
-                    retour.Nom = _ListDrivers.Item(i).nom
-                    retour.ID = _ListDrivers.Item(i).id
-                    retour.COM = _ListDrivers.Item(i).com
-                    retour.Description = _ListDrivers.Item(i).description
-                    retour.Enable = _ListDrivers.Item(i).enable
-                    retour.IP_TCP = _ListDrivers.Item(i).ip_tcp
-                    retour.IP_UDP = _ListDrivers.Item(i).ip_udp
-                    retour.IsConnect = _ListDrivers.Item(i).isconnect
-                    retour.Modele = _ListDrivers.Item(i).modele
-                    retour.Picture = _ListDrivers.Item(i).picture
-                    retour.Port_TCP = _ListDrivers.Item(i).port_tcp
-                    retour.Port_UDP = _ListDrivers.Item(i).port_udp
-                    retour.Protocol = _ListDrivers.Item(i).protocol
-                    retour.Refresh = _ListDrivers.Item(i).refresh
-                    retour.StartAuto = _ListDrivers.Item(i).startauto
-                    retour.Version = _ListDrivers.Item(i).version
-
-                    For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
-                        retour.DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
-                    Next
-                    For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
-                        Dim y As New Driver.Parametre
-                        y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
-                        y.Description = _ListDrivers.Item(i).Parametres.item(j).description
-                        y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
-                        retour.Parametres.Add(y)
-                    Next
-
-                    Dim _listactdrv As New ArrayList
-                    Dim _listactd As New List(Of String)
-                    For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
-                        _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
-                    Next
-                    If _listactd.Count > 0 Then
-                        For n As Integer = 0 To _listactd.Count - 1
-                            Dim a() As String = _listactd.Item(n).Split("|")
-                            Dim p As New DeviceAction
-                            With p
-                                .Nom = a(0)
-                                If a.Length > 1 Then
-                                    For t As Integer = 1 To a.Length - 1
-                                        Dim pr As New DeviceAction.Parametre
-                                        Dim b() As String = a(t).Split(":")
-                                        With pr
-                                            .Nom = b(0)
-                                            .Type = b(1)
-                                        End With
-                                        p.Parametres.Add(pr)
-                                    Next
-                                End If
-                            End With
-                            retour.DeviceAction.Add(p)
+            Try
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).ID = DeviceId Then
+                        For j As Integer = 0 To Api.ListMethod(_ListDevices.Item(i)).Count - 1
+                            _list.Add(Api.ListMethod(_ListDevices.Item(i)).Item(j).ToString)
                         Next
                     End If
-
-                    _listactd = Nothing
-                    _listactdrv = Nothing
-                    Exit For
-                End If
-            Next
-            Return retour
+                Next
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ListMethod", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
-        'retourne le driver par son ID
+        ''' <summary>Retourne un driver par son ID</summary>
+        ''' <param name="DriverId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnDriverById(ByVal DriverId As String) As TemplateDriver Implements IHoMIDom.ReturnDriverByID
+            Dim retour As New TemplateDriver
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).ID = DriverId Then
+                        retour.Nom = _ListDrivers.Item(i).nom
+                        retour.ID = _ListDrivers.Item(i).id
+                        retour.COM = _ListDrivers.Item(i).com
+                        retour.Description = _ListDrivers.Item(i).description
+                        retour.Enable = _ListDrivers.Item(i).enable
+                        retour.IP_TCP = _ListDrivers.Item(i).ip_tcp
+                        retour.IP_UDP = _ListDrivers.Item(i).ip_udp
+                        retour.IsConnect = _ListDrivers.Item(i).isconnect
+                        retour.Modele = _ListDrivers.Item(i).modele
+                        retour.Picture = _ListDrivers.Item(i).picture
+                        retour.Port_TCP = _ListDrivers.Item(i).port_tcp
+                        retour.Port_UDP = _ListDrivers.Item(i).port_udp
+                        retour.Protocol = _ListDrivers.Item(i).protocol
+                        retour.Refresh = _ListDrivers.Item(i).refresh
+                        retour.StartAuto = _ListDrivers.Item(i).startauto
+                        retour.Version = _ListDrivers.Item(i).version
+
+                        For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
+                            retour.DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
+                        Next
+                        For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
+                            Dim y As New Driver.Parametre
+                            y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
+                            y.Description = _ListDrivers.Item(i).Parametres.item(j).description
+                            y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
+                            retour.Parametres.Add(y)
+                        Next
+
+                        Dim _listactdrv As New ArrayList
+                        Dim _listactd As New List(Of String)
+                        For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
+                            _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
+                        Next
+                        If _listactd.Count > 0 Then
+                            For n As Integer = 0 To _listactd.Count - 1
+                                Dim a() As String = _listactd.Item(n).Split("|")
+                                Dim p As New DeviceAction
+                                With p
+                                    .Nom = a(0)
+                                    If a.Length > 1 Then
+                                        For t As Integer = 1 To a.Length - 1
+                                            Dim pr As New DeviceAction.Parametre
+                                            Dim b() As String = a(t).Split(":")
+                                            With pr
+                                                .Nom = b(0)
+                                                .Type = b(1)
+                                            End With
+                                            p.Parametres.Add(pr)
+                                        Next
+                                    End If
+                                End With
+                                retour.DeviceAction.Add(p)
+                            Next
+                        End If
+
+                        _listactd = Nothing
+                        _listactdrv = Nothing
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDriverById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>Retourne un driver par son ID</summary>
+        ''' <param name="DriverId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Function ReturnDrvById(ByVal DriverId As String) As Object
             Dim retour As Object = Nothing
-            For i As Integer = 0 To _ListDrivers.Count - 1
-                If _ListDrivers.Item(i).ID = DriverId Then
-                    retour = _ListDrivers.Item(i)
-                    Exit For
-                End If
-            Next
-            Return retour
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).ID = DriverId Then
+                        retour = _ListDrivers.Item(i)
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDrvById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
+        ''' <summary>Retourne la liste des devices d'une zone depuis son ID</summary>
+        ''' <param name="ZoneId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Function GetDeviceInZone(ByVal zoneId) As List(Of TemplateDevice) Implements IHoMIDom.GetDeviceInZone
-            Return Nothing
+            Try
+                Return Nothing
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetDeviceInZone", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Retourne la zone par son ID
-        ''' </summary>
+        ''' <summary>Retourne la zone par son ID</summary>
         ''' <param name="ZoneId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnZoneById(ByVal ZoneId As String) As Zone Implements IHoMIDom.ReturnZoneByID
             Dim retour As Object = Nothing
-            For i As Integer = 0 To _ListZones.Count - 1
-                If _ListZones.Item(i).ID = ZoneId Then
-                    retour = _ListZones.Item(i)
-                    Exit For
-                End If
-            Next
-            Return retour
+            Try
+                For i As Integer = 0 To _ListZones.Count - 1
+                    If _ListZones.Item(i).ID = ZoneId Then
+                        retour = _ListZones.Item(i)
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnZoneById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Retourne un user par son ID
-        ''' </summary>
+        ''' <summary>Retourne un user par son ID</summary>
         ''' <param name="UserId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnUserById(ByVal UserId As String) As Users.User Implements IHoMIDom.ReturnUserById
             Dim retour As Object = Nothing
-            For i As Integer = 0 To _ListUsers.Count - 1
-                If _ListUsers.Item(i).ID = UserId Then
-                    retour = _ListUsers.Item(i)
-                    Exit For
-                End If
-            Next
-            Return retour
+            Try
+                For i As Integer = 0 To _ListUsers.Count - 1
+                    If _ListUsers.Item(i).ID = UserId Then
+                        retour = _ListUsers.Item(i)
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnUserById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Retourne le driver par son Nom
-        ''' </summary>
+        ''' <summary>Retourne le driver par son Nom</summary>
         ''' <param name="DriverNom"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnDriverByNom(ByVal DriverNom As String) As Object Implements IHoMIDom.ReturnDriverByNom
             Dim retour As Object = Nothing
-            For i As Integer = 0 To _ListDrivers.Count - 1
-                If _ListDrivers.Item(i).Nom = DriverNom.ToUpper() Then
-                    retour = _ListDrivers.Item(i)
-                    Exit For
-                End If
-            Next
-            Return retour
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).Nom = DriverNom.ToUpper() Then
+                        retour = _ListDrivers.Item(i)
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDriverByNom", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
-        ''' <summary>
-        ''' Retourne une liste de device par son Adresse1 et/ou type et/ou son driver, ex: "A1" "TEMPERATURE" "RFXCOM_RECEIVER"
-        ''' </summary>
+        ''' <summary>Retourne une liste de device par son Adresse1 et/ou type et/ou son driver, ex: "A1" "TEMPERATURE" "RFXCOM_RECEIVER"</summary>
         ''' <param name="DeviceAdresse"></param>
         ''' <param name="DeviceType"></param>
         ''' <param name="DriverID"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnDeviceByAdresse1TypeDriver(ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DriverID As String) As ArrayList Implements IHoMIDom.ReturnDeviceByAdresse1TypeDriver
-            Dim retour As Object = Nothing
-            Dim listresultat As New ArrayList
-            For i As Integer = 0 To _ListDevices.Count - 1
-                If (DeviceAdresse = "" Or _ListDevices.Item(i).Adresse1 = DeviceAdresse.ToUpper()) And (DeviceType = "" Or _ListDevices.Item(i).type = DeviceType.ToUpper()) And (DriverID = "" Or _ListDevices.Item(i).DriverID = DriverID.ToUpper()) Then
-                    retour = _ListDevices.Item(i)
-                    listresultat.Add(retour)
-                    retour = Nothing
-                End If
-            Next
-            Return listresultat
+            Try
+                Dim retour As Object = Nothing
+                Dim listresultat As New ArrayList
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If (DeviceAdresse = "" Or _ListDevices.Item(i).Adresse1 = DeviceAdresse.ToUpper()) And (DeviceType = "" Or _ListDevices.Item(i).type = DeviceType.ToUpper()) And (DriverID = "" Or _ListDevices.Item(i).DriverID = DriverID.ToUpper()) Then
+                        retour = _ListDevices.Item(i)
+                        listresultat.Add(retour)
+                        retour = Nothing
+                    End If
+                Next
+                Return listresultat
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDeviceByAdresse1TypeDriver", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
         ''' <summary>
         ''' Permet de télécharger un fichier
         ''' </summary>
-        ''' <param name="fileName"></param>
-        ''' <param name="buffer"></param>
+        ''' <param name="Fichier"></param>
+        ''' <param name="TablBytes"></param>
         ''' <remarks></remarks>
         Public Sub LoadDocument(ByVal Fichier As String, ByVal TablBytes() As Byte) Implements IHoMIDom.LoadDocument
-            Dim MonFichier As New System.IO.FileInfo(Fichier)
-            Dim MonFileStream As System.IO.FileStream = MonFichier.OpenRead()
-            Dim TableauDeBytes(MonFileStream.Length) As Byte
+            Try
+                Dim MonFichier As New System.IO.FileInfo(Fichier)
+                Dim MonFileStream As System.IO.FileStream = MonFichier.OpenRead()
+                Dim TableauDeBytes(MonFileStream.Length) As Byte
 
-            ' On charge le fichier dans un tableau de byte
-            MonFileStream.Read(TableauDeBytes, 0, MonFileStream.Length)
+                ' On charge le fichier dans un tableau de byte
+                MonFileStream.Read(TableauDeBytes, 0, MonFileStream.Length)
 
-            ' On ferme le stream
-            MonFileStream.Close()
-            TablBytes = TableauDeBytes
+                ' On ferme le stream
+                MonFileStream.Close()
+                TablBytes = TableauDeBytes
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadDocument", "Exception : " & ex.Message)
+            End Try
         End Sub
 
-        ''' <summary>
-        ''' Permet d'exécuter une commande Sub d'un Device
-        ''' </summary>
+        ''' <summary>Permet d'exécuter une commande Sub d'un Device</summary>
         ''' <param name="DeviceId"></param>
         ''' <param name="Action"></param>
         ''' <remarks></remarks>
@@ -3252,9 +3367,7 @@ Namespace HoMIDom
             End Try
         End Sub
 
-        ''' <summary>
-        ''' Permet d'exécuter une commande Sub d'un Driver
-        ''' </summary>
+        ''' <summary>Permet d'exécuter une commande Sub d'un Driver</summary>
         ''' <param name="DriverId"></param>
         ''' <param name="Action"></param>
         ''' <remarks></remarks>

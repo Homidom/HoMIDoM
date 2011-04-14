@@ -3,19 +3,15 @@ Imports HoMIDom.HoMIDom.Device
 Imports HoMIDom.HoMIDom.Server
 Imports UsbUirt
 
-' Driver USBUIRT
-' Nécessite la dll usbuirtmanagedwrapper
 ' Auteur : Seb
 ' Date : 10/02/2011
 
-''' <summary>
-''' Class USBUIRT, permet d'apprendre des codes IR et de les restituer par la suite 
-''' </summary>
-''' <remarks></remarks>
+''' <summary>Class Driver_USBUIRT, permet d'apprendre des codes IR et de les restituer par la suite </summary>
+''' <remarks>Nécessite la dll usbuirtmanagedwrapper</remarks>
 <Serializable()> Public Class Driver_USBUIRT
     Implements HoMIDom.HoMIDom.IDriver
 
-#Region "Variable Driver"
+#Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "74FD4E7C-34ED-11E0-8AC4-70CEDED72085"
@@ -46,7 +42,7 @@ Imports UsbUirt
     Dim _lastetat As Boolean = True
 #End Region
 
-#Region "Déclaration"
+#Region "Variables internes"
     'variables propres à ce driver
     <NonSerialized()> Dim mc As Controller 'var pour l'usb uirt
     <NonSerialized()> Private learn_code_modifier As LearnCodeModifier = LearnCodeModifier.ForceStruct
@@ -62,7 +58,8 @@ Imports UsbUirt
 
 #End Region
 
-#Region "Fonctions génériques"
+#Region "Propriétés génériques"
+
     Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
         Get
             Return _Com
@@ -71,19 +68,16 @@ Imports UsbUirt
             _Com = value
         End Set
     End Property
-
     Public ReadOnly Property Description() As String Implements HoMIDom.HoMIDom.IDriver.Description
         Get
             Return _Description
         End Get
     End Property
-
     Public ReadOnly Property DeviceSupport() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.DeviceSupport
         Get
             Return _DeviceSupport
         End Get
     End Property
-
     Public Property Parametres() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.Parametres
         Get
             Return _Parametres
@@ -92,9 +86,7 @@ Imports UsbUirt
             _Parametres = value
         End Set
     End Property
-
     Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
-
     Public Property Enable() As Boolean Implements HoMIDom.HoMIDom.IDriver.Enable
         Get
             Return _Enable
@@ -103,13 +95,11 @@ Imports UsbUirt
             _Enable = value
         End Set
     End Property
-
     Public ReadOnly Property ID() As String Implements HoMIDom.HoMIDom.IDriver.ID
         Get
             Return _ID
         End Get
     End Property
-
     Public Property IP_TCP() As String Implements HoMIDom.HoMIDom.IDriver.IP_TCP
         Get
             Return _IP_TCP
@@ -118,7 +108,6 @@ Imports UsbUirt
             _IP_TCP = value
         End Set
     End Property
-
     Public Property IP_UDP() As String Implements HoMIDom.HoMIDom.IDriver.IP_UDP
         Get
             Return _IP_UDP
@@ -127,25 +116,21 @@ Imports UsbUirt
             _IP_UDP = value
         End Set
     End Property
-
     Public ReadOnly Property IsConnect() As Boolean Implements HoMIDom.HoMIDom.IDriver.IsConnect
         Get
             Return _IsConnect
         End Get
     End Property
-
     Public ReadOnly Property Modele() As String Implements HoMIDom.HoMIDom.IDriver.Modele
         Get
             Return _Modele
         End Get
     End Property
-
     Public ReadOnly Property Nom() As String Implements HoMIDom.HoMIDom.IDriver.Nom
         Get
             Return _Nom
         End Get
     End Property
-
     Public Property Picture() As String Implements HoMIDom.HoMIDom.IDriver.Picture
         Get
             Return _Picture
@@ -154,7 +139,6 @@ Imports UsbUirt
             _Picture = value
         End Set
     End Property
-
     Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
@@ -163,7 +147,6 @@ Imports UsbUirt
             _Port_TCP = value
         End Set
     End Property
-
     Public Property Port_UDP() As String Implements HoMIDom.HoMIDom.IDriver.Port_UDP
         Get
             Return _Port_UDP
@@ -172,17 +155,11 @@ Imports UsbUirt
             _Port_UDP = value
         End Set
     End Property
-
     Public ReadOnly Property Protocol() As String Implements HoMIDom.HoMIDom.IDriver.Protocol
         Get
             Return _Protocol
         End Get
     End Property
-
-    Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
-
-    End Sub
-
     Public Property Refresh() As Integer Implements HoMIDom.HoMIDom.IDriver.Refresh
         Get
             Return _Refresh
@@ -191,12 +168,6 @@ Imports UsbUirt
             _Refresh = value
         End Set
     End Property
-
-    Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
-        [Stop]()
-        Start()
-    End Sub
-
     Public Property Server() As HoMIDom.HoMIDom.Server Implements HoMIDom.HoMIDom.IDriver.Server
         Get
             Return _Server
@@ -205,7 +176,26 @@ Imports UsbUirt
             _Server = value
         End Set
     End Property
+    Public Property StartAuto() As Boolean Implements HoMIDom.HoMIDom.IDriver.StartAuto
+        Get
+            Return _StartAuto
+        End Get
+        Set(ByVal value As Boolean)
+            _StartAuto = value
+        End Set
+    End Property
+    Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
+        Get
+            Return _Version
+        End Get
+    End Property
 
+#End Region
+
+#Region "Fonctions génériques"
+
+    ''' <summary>Démarrer le du driver</summary>
+    ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
             Me.mc = New Controller
@@ -215,60 +205,105 @@ Imports UsbUirt
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "USBUIRT", "Driver démarré")
         Catch ex As Exception
             _IsConnect = False
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUIRT", "Driver erreur lors du démarrage: " & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUirt Start", "Driver erreur lors du démarrage: " & ex.Message)
         End Try
     End Sub
 
-    Public Property StartAuto() As Boolean Implements HoMIDom.HoMIDom.IDriver.StartAuto
-        Get
-            Return _StartAuto
-        End Get
-        Set(ByVal value As Boolean)
-            _StartAuto = value
-        End Set
-    End Property
-
+    ''' <summary>Arrêter le du driver</summary>
+    ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
-        Me.mc = Nothing
-        _IsConnect = False
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "USBUIRT", "Driver arrêté")
+        Try
+            Me.mc = Nothing
+            _IsConnect = False
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "USBUIRT", "Driver arrêté")
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUirt Stop", ex.Message)
+        End Try
     End Sub
 
-    Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
-        Get
-            Return _Version
-        End Get
-    End Property
+    ''' <summary>Re-Démarrer le driver</summary>
+    ''' <remarks></remarks>
+    Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
+        [Stop]()
+        Start()
+    End Sub
 
+    ''' <summary>Intérroger un device</summary>
+    ''' <param name="Objet">Objet représetant le device à interroger</param>
+    ''' <remarks>pas utilisé</remarks>
+    Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
+        Try
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUirt Read", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Commander un device</summary>
+    ''' <param name="Objet">Objet représetant le device à interroger</param>
+    ''' <param name="Commande">La commande à passer</param>
+    ''' <param name="Parametre1"></param>
+    ''' <param name="Parametre2"></param>
+    ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-        If Objet.type = "MULTIMEDIA" Then
-            If Command() = "SendCodeIR" Then
-                SendCodeIR(Parametre1, Parametre2)
+        Try
+            If Objet.type = "MULTIMEDIA" Then
+                If Commande = "SendCodeIR" Then
+                    SendCodeIR(Parametre1, Parametre2)
+                Else
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "La commande " & Commande & " est inconnue pour ce driver")
+                End If
             Else
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "La commande " & Commande & " est inconnue pour ce driver")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUIRT", "Impossible d'envoyer un code IR pour un type de device autre que MULTIMEDIA")
             End If
-        Else
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUIRT", "Impossible d'envoyer un code IR pour un type de device autre que MULTIMEDIA")
-        End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUirt Write", ex.Message)
+        End Try
     End Sub
 
+    ''' <summary>Fonction lancée lors de la suppression d'un device</summary>
+    ''' <param name="DeviceId">Objet représetant le device à interroger</param>
+    ''' <remarks></remarks>
     Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
+        Try
 
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUirt DeleteDevice", ex.Message)
+        End Try
     End Sub
 
+    ''' <summary>Fonction lancée lors de l'ajout d'un device</summary>
+    ''' <param name="DeviceId">Objet représetant le device à interroger</param>
+    ''' <remarks></remarks>
     Public Sub NewDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.NewDevice
+        Try
 
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUirt NewDevice", ex.Message)
+        End Try
     End Sub
 
+    ''' <summary>Creation d'un objet de type</summary>
+    ''' <remarks></remarks>
     Public Sub New()
-        _DeviceSupport.Add(ListeDevices.MULTIMEDIA)
+        Try
+            'liste des devices compatibles
+            _DeviceSupport.Add(ListeDevices.MULTIMEDIA)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUirt New", ex.Message)
+        End Try
     End Sub
+
+    ''' <summary>Si refresh >0 gestion du timer</summary>
+    ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+    Private Sub TimerTick()
+
+    End Sub
+
 #End Region
 
-#Region "Fonctions propre au driver"
-    ''' <summary>
-    ''' Apprendre un code IR
-    ''' </summary>
+#Region "Fonctions internes"
+    ''' <summary>Apprendre un code IR</summary>
     ''' <returns>Retourne le code IR</returns>
     ''' <remarks></remarks>
     Public Function LearnCodeIR() As String
@@ -320,10 +355,7 @@ Imports UsbUirt
         Return wait_for_code
     End Function
 
-    '*****************************************************************************
-    ''' <summary>
-    ''' Emet un code infrarouge
-    ''' </summary>
+    ''' <summary>Emet un code infrarouge</summary>
     ''' <param name="ir_code"></param>
     ''' <param name="RepeatCount"></param>
     ''' <remarks></remarks>
@@ -336,7 +368,6 @@ Imports UsbUirt
         End Try
     End Sub
 
-    '*****************************************************************************
     'handler code recu
     Private Sub handler_mc_received(ByVal sender As Object, ByVal e As ReceivedEventArgs)
         _Server.Log(TypeLog.MESSAGE, TypeSource.DRIVER, "USBUIRT", "Code IR reçu: " & e.IRCode)
@@ -345,7 +376,6 @@ Imports UsbUirt
         RaiseEvent DriverEvent(_Nom, "CODE_RECU", e.IRCode)
     End Sub
 
-    '*****************************************************************************
     'handler en apprentissage
     Private Sub handler_mc_learning(ByVal sender As Object, ByVal e As LearningEventArgs)
         Try
@@ -355,7 +385,6 @@ Imports UsbUirt
         End Try
     End Sub
 
-    '*****************************************************************************
     'handler a appris
     Private Sub handler_mc_learning_completed(ByVal sender As Object, ByVal e As LearnCompletedEventArgs)
         args = e
@@ -363,4 +392,5 @@ Imports UsbUirt
         RaiseEvent DriverEvent(_Nom, "LEARN_TERMINE", e.Code)
     End Sub
 #End Region
+
 End Class

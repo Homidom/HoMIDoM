@@ -454,6 +454,9 @@ HoMIDom
 	<param name="sKey"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteDevice(System.String)">
+	<summary>Supprimer un device de la config</summary>
+	<param name="deviceId"></param>
 </member><member name="M:HoMIDom.HoMIDom.Server.DeleteDriver(System.String)">
 	<summary>Supprimer un driver de la config</summary>
 	<param name="driverId"></param>
@@ -481,69 +484,47 @@ HoMIDom
 	<summary>Retourne l'heure du serveur</summary>
 	<returns>String : heure du serveur</returns>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetHeureCorrectionCoucher">
-	<summary>
- Retourne la valeur de correction de l'heure de coucher du soleil
- </summary>
+	<summary>Retourne la valeur de correction de l'heure de coucher du soleil</summary>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SetHeureCorrectionCoucher(System.Int32)">
-	<summary>
- Applique la valeur de correction de l'heure de coucher du soleil
- </summary>
+	<summary>Applique la valeur de correction de l'heure de coucher du soleil</summary>
 	<param name="value"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetHeureCorrectionLever">
-	<summary>
- Retourne la valeur de correction de l'heure de lever du soleil
- </summary>
+	<summary>Retourne la valeur de correction de l'heure de lever du soleil</summary>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SetHeureCorrectionLever(System.Int32)">
-	<summary>
- Applique la valeur de correction de l'heure de coucher du soleil
- </summary>
+	<summary>Applique la valeur de correction de l'heure de coucher du soleil</summary>
 	<param name="value"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.StopDriver(System.String)">
-	<summary>
- Arrête un driver par son Id
- </summary>
+	<summary>Arrête un driver par son Id</summary>
 	<param name="DriverId"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.StartDriver(System.String)">
-	<summary>
- Démarre un driver par son id
- </summary>
+	<summary>Démarre un driver par son id</summary>
 	<param name="DriverId"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetAllDevices">
-	<summary>
- Retourne la liste de tous les devices
- </summary>
+	<summary>Retourne la liste de tous les devices</summary>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetAllDrivers">
-	<summary>
- Retourne la liste de tous les drivers
- </summary>
+	<summary>Retourne la liste de tous les drivers</summary>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetAllZones">
-	<summary>
- Retourne la liste de tous les drivers
- </summary>
+	<summary>Retourne la liste de toutes les zones</summary>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetAllUsers">
-	<summary>
- Retourne la liste de tous les drivers
- </summary>
+	<summary>Retourne la liste de tous les drivers</summary>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.AddDeviceToZone(System.String,System.String,System.Boolean,System.Double,System.Double)">
-	<summary>
- ajouter un device à une zone
- </summary>
+	<summary>ajouter un device à une zone</summary>
 	<param name="ZoneId"></param>
 	<param name="DeviceId"></param>
 	<param name="Visible"></param>
@@ -552,29 +533,21 @@ HoMIDom
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DeleteDeviceToZone(System.String,System.String)">
-	<summary>
- supprimer un device à une zone
- </summary>
+	<summary>supprimer un device à une zone</summary>
 	<param name="ZoneId"></param>
 	<param name="DeviceId"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ReturnLog(System.String)">
-	<summary>
- renvoi le fichier log suivant une requête xml si besoin
- </summary>
+	<summary>renvoi le fichier log suivant une requête xml si besoin</summary>
 	<param name="Requete"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SaveConfiguration">
-	<summary>
- Sauvegarder la configuration
- </summary>
+	<summary>Sauvegarder la configuration</summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SaveDevice(System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32)">
-	<summary>
- Sauvegarder ou créer un device
- </summary>
+	<summary>Sauvegarder ou créer un device</summary>
 	<param name="deviceId"></param>
 	<param name="name"></param>
 	<param name="address1"></param>
@@ -591,21 +564,15 @@ HoMIDom
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SetPortSOAP(System.Double)">
-	<summary>
- Fixer la valeur du port SOAP
- </summary>
+	<summary>Fixer la valeur du port SOAP</summary>
 	<param name="Value"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetPortSOAP">
-	<summary>
- Retourne la valeur du port SOAP
- </summary>
-	<returns></returns>
+	<summary>Retourne la valeur du port SOAP</summary>
+	<returns>Numero du port ou -1 si erreur</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SaveDriver(System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.Collections.ArrayList)">
-	<summary>
- Sauvegarde ou créer un driver dans la config
- </summary>
+	<summary>Sauvegarde ou créer un driver dans la config</summary>
 	<param name="driverId"></param>
 	<param name="name"></param>
 	<param name="enable"></param>
@@ -620,9 +587,7 @@ HoMIDom
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SaveZone(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Zone.Device_Zone},System.String,System.String)">
-	<summary>
- sauvegarde ou créer une zone dans la config
- </summary>
+	<summary>sauvegarde ou créer une zone dans la config</summary>
 	<param name="zoneId"></param>
 	<param name="name"></param>
 	<param name="ListDevice"></param>
@@ -653,34 +618,26 @@ HoMIDom
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.VerifLogin(System.String,System.String)">
-	<summary>
- Vérifie le couple username password
- </summary>
+	<summary>Vérifie le couple username password</summary>
 	<param name="Username"></param>
 	<param name="Password"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ChangePassword(System.String,System.String,System.String,System.String)">
-	<summary>
- Permet de changer de Password sur un user
- </summary>
+	<summary>Permet de changer de Password sur un user</summary>
 	<param name="Username"></param>
 	<param name="OldPassword"></param>
 	<param name="Password"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DeleteDeviceCommandIR(System.String,System.String)">
-	<summary>
- Supprime une commande IR d'un device
- </summary>
+	<summary>Supprime une commande IR d'un device</summary>
 	<param name="deviceId"></param>
 	<param name="CmdName"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SaveDeviceCommandIR(System.String,System.String,System.String,System.String)">
-	<summary>
- Ajoute ou modifie une commande IR à un device
- </summary>
+	<summary>Ajoute ou modifie une commande IR à un device</summary>
 	<param name="deviceId"></param>
 	<param name="CmdName"></param>
 	<param name="CmdData"></param>
@@ -688,52 +645,70 @@ HoMIDom
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.StartIrLearning">
-	<summary>
- Commencer un apprentissage IR
- </summary>
+	<summary>Commencer un apprentissage IR</summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDeviceById(System.String)">
+	<summary>Retourne un device par son ID</summary>
+	<param name="DeviceId"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ListMethod(System.String)">
+	<summary>liste les méthodes d'un device depuis son ID</summary>
+	<param name="DeviceId"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDriverById(System.String)">
+	<summary>Retourne un driver par son ID</summary>
+	<param name="DriverId"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDrvById(System.String)">
+	<summary>Retourne un driver par son ID</summary>
+	<param name="DriverId"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetDeviceInZone(System.Object)">
+	<summary>Retourne la liste des devices d'une zone depuis son ID</summary>
+	<param name="ZoneId"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ReturnZoneById(System.String)">
-	<summary>
- Retourne la zone par son ID
- </summary>
+	<summary>Retourne la zone par son ID</summary>
 	<param name="ZoneId"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ReturnUserById(System.String)">
-	<summary>
- Retourne un user par son ID
- </summary>
+	<summary>Retourne un user par son ID</summary>
 	<param name="UserId"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ReturnDriverByNom(System.String)">
-	<summary>
- Retourne le driver par son Nom
- </summary>
+	<summary>Retourne le driver par son Nom</summary>
 	<param name="DriverNom"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ReturnDeviceByAdresse1TypeDriver(System.String,System.String,System.String)">
-	<summary>
- Retourne une liste de device par son Adresse1 et/ou type et/ou son driver, ex: "A1" "TEMPERATURE" "RFXCOM_RECEIVER"
- </summary>
+	<summary>Retourne une liste de device par son Adresse1 et/ou type et/ou son driver, ex: "A1" "TEMPERATURE" "RFXCOM_RECEIVER"</summary>
 	<param name="DeviceAdresse"></param>
 	<param name="DeviceType"></param>
 	<param name="DriverID"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ExecuteDeviceCommand(System.String,HoMIDom.HoMIDom.DeviceAction)">
+</member><member name="M:HoMIDom.HoMIDom.Server.LoadDocument(System.String,System.Byte[])">
 	<summary>
- Permet d'exécuter une commande Sub d'un Device
+ Permet de télécharger un fichier
  </summary>
+	<param name="Fichier"></param>
+	<param name="TablBytes"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ExecuteDeviceCommand(System.String,HoMIDom.HoMIDom.DeviceAction)">
+	<summary>Permet d'exécuter une commande Sub d'un Device</summary>
 	<param name="DeviceId"></param>
 	<param name="Action"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ExecuteDriverCommand(System.String,HoMIDom.HoMIDom.DeviceAction)">
-	<summary>
- Permet d'exécuter une commande Sub d'un Driver
- </summary>
+	<summary>Permet d'exécuter une commande Sub d'un Driver</summary>
 	<param name="DriverId"></param>
 	<param name="Action"></param>
 	<remarks></remarks>
@@ -764,9 +739,7 @@ HoMIDom
 	<param name="NewFichier"></param>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Server">
-	<summary>
- Classe Server
- </summary>
+	<summary>Classe Server</summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Users.TypeProfil">
 	<summary>

@@ -2,11 +2,11 @@
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 
-' Driver k8055
-'Nécessite la dll k8055d.dll
 ' Auteur : Seb
 ' Date : 10/02/2011
 
+''' <summary>Driver Velleman k8055, le device doit dans son adresse 1 indiqué sa carte et son numéro de relais séparé par un x, exemple pour le relais 1 de la carte 1: 1x1</summary>
+''' <remarks>Nécessite la dll k8055d.dll</remarks>
 <Serializable()> Public Class Driver_k8055
     Implements HoMIDom.HoMIDom.IDriver
 
