@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Vérifiez les valeurs des attributs de l'assembly
 
-<Assembly: AssemblyTitle("Driver_RFID")> 
+<Assembly: AssemblyTitle("Driver_Mirror")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("cyberconseil")> 
-<Assembly: AssemblyProduct("Driver_RFID")> 
-<Assembly: AssemblyCopyright("Copyright © cyberconseil 2011")> 
+<Assembly: AssemblyCompany("")> 
+<Assembly: AssemblyProduct("Driver_Mirror")> 
+<Assembly: AssemblyCopyright("")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

@@ -10,9 +10,9 @@ Imports UsbLibrary
 ' Auteur : Seb
 ' Date : 10/02/2011
 
-''' <summary>Class Driver_RFID, permet de recevoir des infos du Mir:ror</summary>
+''' <summary>Class Driver_Mirror, permet de recevoir des infos du Mir:ror</summary>
 ''' <remarks>Nécessite la dll usblibrary</remarks>
-<Serializable()> Public Class Driver_RFID
+<Serializable()> Public Class Driver_Mirror
     Implements HoMIDom.HoMIDom.IDriver
 
 #Region "Variables génériques"
@@ -201,14 +201,14 @@ Imports UsbLibrary
             Me.usb1.CheckDevicePresent()
             If usb1 IsNot Nothing Then
                 '_IsConnect = True
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFID", "Driver démarré:" & IsConnect)
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Mirror", "Driver démarré:" & IsConnect)
             Else
                 _IsConnect = False
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFID", "Driver erreur lors du démarrage")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Mirror", "Driver erreur lors du démarrage")
             End If
         Catch ex As Exception
             _IsConnect = False
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFID Start", "Driver erreur lors du démarrage: " & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Mirror Start", "Driver erreur lors du démarrage: " & ex.Message)
         End Try
     End Sub
 
@@ -218,9 +218,9 @@ Imports UsbLibrary
         Try
             usb1 = Nothing
             _IsConnect = False
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFID", "Driver arrêté")
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Mirror", "Driver arrêté")
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFID Stop", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Mirror Stop", ex.Message)
         End Try
     End Sub
 
@@ -238,7 +238,7 @@ Imports UsbLibrary
         Try
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFID Read", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Mirror Read", ex.Message)
         End Try
     End Sub
 
@@ -252,7 +252,7 @@ Imports UsbLibrary
         Try
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUirt Write", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Mirror Write", ex.Message)
         End Try
     End Sub
 
@@ -263,7 +263,7 @@ Imports UsbLibrary
         Try
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFID DeleteDevice", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Mirror DeleteDevice", ex.Message)
         End Try
     End Sub
 
@@ -274,7 +274,7 @@ Imports UsbLibrary
         Try
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFID NewDevice", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Mirror NewDevice", ex.Message)
         End Try
     End Sub
 
@@ -286,7 +286,7 @@ Imports UsbLibrary
             _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
             _DeviceSupport.Add(ListeDevices.SWITCH)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFID New", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Mirror New", ex.Message)
         End Try
     End Sub
 
@@ -300,20 +300,20 @@ Imports UsbLibrary
 
 #Region "Fonctions internes"
     Private Sub usb_OnDeviceArrived(ByVal sender As Object, ByVal e As EventArgs)
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFID", "usb_OnDeviceArrived")
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Mirror", "usb_OnDeviceArrived")
     End Sub
 
     Private Sub usb_OnDeviceRemoved(ByVal sender As Object, ByVal e As EventArgs)
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFID", "usb_OnDeviceRemoved")
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Mirror", "usb_OnDeviceRemoved")
     End Sub
 
     Private Sub usb_OnSpecifiedDeviceArrived(ByVal sender As Object, ByVal e As EventArgs)
         _IsConnect = True
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFID", "Lecteur RFID détecté")
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Mirror", "Lecteur RFID détecté")
     End Sub
 
     Private Sub usb_OnSpecifiedDeviceRemoved(ByVal sender As Object, ByVal e As EventArgs)
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFID", "usb_OnSpecifiedDeviceRemoved")
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Mirror", "usb_OnSpecifiedDeviceRemoved")
     End Sub
 
     Private Sub usb_OnDataRecieved(ByVal sender As Object, ByVal args As DataRecievedEventArgs)
@@ -355,14 +355,14 @@ Imports UsbLibrary
             If mirrorData(2) = 1 Then
                 'dépot 
                 SetDevice(idZtamp, True)
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFID", "Puce RFID N°: " & idZtamp & " Value=True")
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Mirror", "Puce RFID N°: " & idZtamp & " Value=True")
             ElseIf mirrorData(2) = 2 Then
                 ' retrait 
                 SetDevice(idZtamp, False)
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFID", "Puce RFID N°: " & idZtamp & " Value=False")
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Mirror", "Puce RFID N°: " & idZtamp & " Value=False")
             End If
         Else
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFID", "Une erreur inconnue est survenue...")
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Mirror", "Une erreur inconnue est survenue...")
         End If
     End Sub
 
