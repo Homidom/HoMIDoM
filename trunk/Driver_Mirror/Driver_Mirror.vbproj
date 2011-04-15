@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CCD77A3B-B127-4EA4-8653-E810CA8243B2}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Driver_RFID</RootNamespace>
-    <AssemblyName>Driver_RFID</AssemblyName>
+    <RootNamespace>Driver_Mirror</RootNamespace>
+    <AssemblyName>Driver_Mirror</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -44,7 +44,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\DEBUG\Plugins\</OutputPath>
-    <DocumentationFile>Driver_RFID.xml</DocumentationFile>
+    <DocumentationFile>Driver_Mirror.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -54,7 +54,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>Driver_RFID.xml</DocumentationFile>
+    <DocumentationFile>Driver_Mirror.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -88,7 +88,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Driver_RFID.vb" />
+    <Compile Include="Driver_Mirror.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -127,7 +127,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HoMIDom\HoMIDom.vbproj">
       <Project>{1F0CE8B5-5BA9-4704-8B5E-52682635F803}</Project>
-      <Name>HoMIDom_dll</Name>
+      <Name>HoMIDom</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

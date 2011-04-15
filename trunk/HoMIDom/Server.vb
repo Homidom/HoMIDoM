@@ -26,6 +26,30 @@ Namespace HoMIDom
     <Serializable()> Public Class Server
         Implements HoMIDom.IHoMIDom 'implémente l'interface dans cette class
 
+#Region "Declaration des variables"
+        Private Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
+        Private Shared _ListImgDrivers As New ArrayList
+        Private Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
+        Private Shared _ListZones As New ArrayList 'Liste des zones
+        Private Shared _ListUsers As New ArrayList 'Liste des users
+        Private Shared _ListMacros As New ArrayList 'Liste des macros
+        Private Shared _listTriggers As New ArrayList 'Liste des triggers
+        Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
+        Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
+        Private _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application 'Application.StartupPath
+        Shared Soleil As New Soleil 'Déclaration class Soleil
+        Shared _Longitude As Double 'Longitude
+        Shared _Latitude As Double 'latitude
+        Private Shared _HeureLeverSoleil As DateTime 'heure du levé du soleil
+        Private Shared _HeureCoucherSoleil As DateTime 'heure du couché du soleil
+        Shared _HeureLeverSoleilCorrection As Integer 'correction à appliquer sur heure du levé du soleil
+        Shared _HeureCoucherSoleilCorrection As Integer 'correction à appliquer sur heure du couché du soleil
+        Private Shared _PortSOAP As String 'Port IP de connexion SOAP
+        Dim TimerSecond As New Timers.Timer 'Timer à la seconde
+        Private graphe As New graphes(_MonRepertoire + "\Images\Graphes\")
+#End Region
+
+
 #Region "Event"
         '********************************************************************
         'Gestion des Evènements
@@ -54,7 +78,24 @@ Namespace HoMIDom
 
                 If STRGS.Left(valeur, 4) <> "ERR:" Then 'si y a pas erreur d'acquisition
                     '--- Remplacement de , par .
-                    Parametres = STRGS.Replace(valeur, ",", ".")
+                    valeur = STRGS.Replace(valeur, ",", ".")
+
+                    '------------------------------------------------------------------------------------------------
+                    '    MACRO/Triggers
+                    '------------------------------------------------------------------------------------------------
+
+                    'Parcour des triggers pour vérifier si le device déclenche des macros
+                    For i = 0 To _listTriggers.Count - 1
+                        If _listTriggers.Item(i).Analyse(Device.ID) Then
+                            'on parcour la liste des macros associé à ce trigger et on les executent
+
+                        End If
+                    Next
+
+                    '------------------------------------------------------------------------------------------------
+                    '    HISTORIQUE
+                    '------------------------------------------------------------------------------------------------
+
                     '--- si c'est un nombre
                     If (IsNumeric(valeur) And IsNumeric(Device.Value) And IsNumeric(Device.ValueLast)) Then
                         '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
@@ -201,50 +242,35 @@ Namespace HoMIDom
         ''' <summary>Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi</summary>
         ''' <remarks></remarks>
         Sub TimerSecTick()
+            Dim secondes, minutes, heures As Integer
+            'on initialise l'heure pour etre sur de ne pas changer avant d'arriver à la fin de la fonction
+            secondes = Now.Second
+            minutes = Now.Minute
+            heures = Now.Hour
+
             'Action à effectuer toutes les secondes
 
             'Actions à effectuer toutes les minutes
-            If Now.Second = 1 Then
+            If secondes = 1 Then
 
             End If
 
             'Actions à effectuer toutes les heures
-            If Now.Minute = 59 And Now.Second = 59 Then
+            If minutes = 59 And secondes = 59 Then
 
             End If
 
             'Actions à effectuer à minuit
-            If Now.Hour = 0 And Now.Minute = 0 And Now.Second = 0 Then
+            If heures = 0 And minutes = 0 And secondes = 0 Then
                 MAJ_HeuresSoleil()
             End If
 
             'Actions à effectuer à midi
-            If Now.Hour = 12 And Now.Minute = 0 And Now.Second = 0 Then
+            If heures = 12 And minutes = 0 And secondes = 0 Then
                 MAJ_HeuresSoleil()
             End If
         End Sub
 
-#End Region
-
-#Region "Declaration des variables"
-        Private Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
-        Private Shared _ListImgDrivers As New ArrayList
-        Private Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
-        Private Shared _ListZones As New ArrayList 'Liste des zones
-        Private Shared _ListUsers As New ArrayList 'Liste des users
-        Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
-        Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
-        Private _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application 'Application.StartupPath
-        Shared Soleil As New Soleil 'Déclaration class Soleil
-        Shared _Longitude As Double 'Longitude
-        Shared _Latitude As Double 'latitude
-        Private Shared _HeureLeverSoleil As DateTime 'heure du levé du soleil
-        Private Shared _HeureCoucherSoleil As DateTime 'heure du couché du soleil
-        Shared _HeureLeverSoleilCorrection As Integer 'correction à appliquer sur heure du levé du soleil
-        Shared _HeureCoucherSoleilCorrection As Integer 'correction à appliquer sur heure du couché du soleil
-        Private Shared _PortSOAP As String 'Port IP de connexion SOAP
-        Dim TimerSecond As New Timers.Timer 'Timer à la seconde
-        Private graphe As New graphes(_MonRepertoire + "\Images\Graphes\")
 #End Region
 
 #Region "Fonctions/Sub propres au serveur"
@@ -1148,7 +1174,7 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub Devices_Stop()
             Try
-                'Cherche tous les drivers chargés
+                'Cherche tous les devices chargés
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Devices_Stop", "Arrêt des devices")
                 For Each _dev As Device.DeviceGenerique In _ListDevices
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Devices_Stop", " - " & _dev.Name & " arrété")

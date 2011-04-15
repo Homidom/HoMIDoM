@@ -122,7 +122,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HoMIDom\HoMIDom.vbproj">
       <Project>{1F0CE8B5-5BA9-4704-8B5E-52682635F803}</Project>
-      <Name>HoMIDom_dll</Name>
+      <Name>HoMIDom</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

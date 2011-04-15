@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.Driver_RFID.My.MySettings
+        Friend ReadOnly Property Settings() As Global.Driver_Mirror.My.MySettings
             Get
-                Return Global.Driver_RFID.My.MySettings.Default
+                Return Global.Driver_Mirror.My.MySettings.Default
             End Get
         End Property
     End Module

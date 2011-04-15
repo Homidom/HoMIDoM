@@ -102,6 +102,7 @@
     <Compile Include="Graphes.vb" />
     <Compile Include="IDriver.vb" />
     <Compile Include="IHoMIDom.vb" />
+    <Compile Include="macro.vb" />
     <Compile Include="Server.vb" />
     <Compile Include="Device.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

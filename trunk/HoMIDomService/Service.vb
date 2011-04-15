@@ -23,8 +23,7 @@ Module Service
     Sub Main()
         Try
             Console.WriteLine("******************************")
-            Console.WriteLine("DEMARRAGE DU SERVEUR**********")
-            Console.WriteLine("******************************")
+            Console.WriteLine("**** DEMARRAGE DU SERVEUR ****")
             Console.WriteLine(" ")
 
             'Démarrage du serviceWeb
@@ -45,8 +44,8 @@ Module Service
 
                 Console.WriteLine(Now & " ServiceWeb Démarré") ' & obj.PortTCP)
 
-                Console.WriteLine("******************************")
-                Console.WriteLine("SERVEUR DEMARRE **************")
+                Console.WriteLine("")
+                Console.WriteLine("****   SERVEUR DEMARRE    ****")
                 Console.WriteLine("******************************")
                 Console.WriteLine(" ")
 
@@ -88,33 +87,40 @@ Module Service
 
     Function LoadPort() As String
         Dim _portip As String = ""
+        Try
+            MyRep = MyRep & "\Config\homidom.xml"
 
-        MyRep = MyRep & "\Config\homidom.xml"
+            If File.Exists(MyRep) = True Then
+                Dim myxml As XML
+                Dim list As XmlNodeList
 
-        If File.Exists(MyRep) = True Then
-            Dim myxml As XML
-            Dim list As XmlNodeList
+                myxml = New XML(MyRep)
 
-            myxml = New XML(MyRep)
+                list = myxml.SelectNodes("/homidom/server")
+                If list.Count > 0 Then 'présence des paramètres du server
+                    For j As Integer = 0 To list.Item(0).Attributes.Count - 1
+                        Select Case list.Item(0).Attributes.Item(j).Name
+                            Case "portsoap"
+                                _portip = list.Item(0).Attributes.Item(j).Value
+                                Exit For
+                        End Select
+                    Next
+                Else
+                    _portip = ""
+                End If
 
-            list = myxml.SelectNodes("/homidom/server")
-            If list.Count > 0 Then 'présence des paramètres du server
-                For j As Integer = 0 To list.Item(0).Attributes.Count - 1
-                    Select Case list.Item(0).Attributes.Item(j).Name
-                        Case "portsoap"
-                            _portip = list.Item(0).Attributes.Item(j).Value
-                            Exit For
-                    End Select
-                Next
-            Else
-                _portip = ""
             End If
-
-        End If
-        Return _portip
+            Return _portip
+        Catch ex As Exception
+            MsgBox("Erreur lors du service: " & ex.Message, MsgBoxStyle.Critical, "ERREUR SERVICE LoadPort")
+            Console.WriteLine(Now & " ERREUR LoadPort : " & ex.Message & " : " & ex.ToString)
+            Console.ReadLine()
+            Return ""
+        End Try
     End Function
 
     Sub close()
+        myService.Stop()
         End
     End Sub
 
