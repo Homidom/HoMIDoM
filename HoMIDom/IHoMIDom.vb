@@ -14,15 +14,12 @@ Namespace HoMIDom
     '***********************************************
 
 
-
     ''' <summary>
     ''' Liste toutes les functions et propriétés accessibles par les clients
     ''' </summary>
     ''' <remarks></remarks>
     <ServiceContract(Namespace:="http://HoMIDom/")> Public Interface IHoMIDom
         '---- Subs --------------------------------------------
-
-        <OperationContract()> Sub LoadDocument(ByVal Fichier As String, ByVal TablBytes() As Byte)
 
         ''' <summary>
         ''' Retourne l'heure du serveur
