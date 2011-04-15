@@ -121,17 +121,21 @@ Partial Public Class uDriver
 
 
     Private Sub ImgDevice_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgDevice.MouseLeftButtonDown
-        Dim dlg As New Microsoft.Win32.OpenFileDialog()
-        dlg.Filter = "jpeg (*.jpg) |*.jpg;*.jpeg|(*.png) |*.png|(*.*) |*.*"
+        Try
+            Dim dlg As New Microsoft.Win32.OpenFileDialog()
+            dlg.Filter = "jpeg (*.jpg) |*.jpg;*.jpeg|(*.png) |*.png|(*.*) |*.*"
 
-        If dlg.ShowDialog() = True Then
-            Dim bmpImage As New BitmapImage()
-            bmpImage.BeginInit()
-            bmpImage.UriSource = New Uri(dlg.FileName, UriKind.Absolute)
-            bmpImage.EndInit()
-            ImgDevice.Source = bmpImage
-            ImgDevice.Tag = dlg.FileName
-        End If
+            If dlg.ShowDialog() = True Then
+                Dim bmpImage As New BitmapImage()
+                bmpImage.BeginInit()
+                bmpImage.UriSource = New Uri(dlg.FileName, UriKind.Absolute)
+                bmpImage.EndInit()
+                ImgDevice.Source = bmpImage
+                ImgDevice.Tag = dlg.FileName
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uDriver ImgDevice_MouseLeftButtonDown: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub UnloadControl(ByVal MyControl As Object)

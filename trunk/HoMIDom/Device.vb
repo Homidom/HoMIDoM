@@ -429,7 +429,13 @@ Namespace HoMIDom
             Inherits DeviceGenerique
 
             Protected _Value As Integer = 0
-            Protected _ValueLast As Double = 0
+            Protected _ValueLast As Integer = 0
+            Protected _ValueMin As Integer = -9999
+            Protected _ValueMax As Integer = 9999
+            Protected _ValueDef As Integer = 0
+            Protected _Precision As Double = 0
+            Protected _Correction As Double = 0
+            Protected _Formatage As String = ""
 
             'Contien l'avant derniere valeur
             Public Property ValueLast() As Double
@@ -438,6 +444,36 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As Double)
                     _ValueLast = value
+                End Set
+            End Property
+
+            'Precision de value
+            Public Property Precision() As Double
+                Get
+                    Return _Precision
+                End Get
+                Set(ByVal value As Double)
+                    _Precision = value
+                End Set
+            End Property
+
+            'Correction en +/-/*/div à effectuer sur la value
+            Public Property Correction() As Double
+                Get
+                    Return _Correction
+                End Get
+                Set(ByVal value As Double)
+                    _Correction = value
+                End Set
+            End Property
+
+            'Format de value 0.0 ou 0.00...
+            Public Property Formatage() As String
+                Get
+                    Return _Formatage
+                End Get
+                Set(ByVal value As String)
+                    _Formatage = value
                 End Set
             End Property
 

@@ -22,7 +22,6 @@ Module Service
 
     Sub Main()
         Try
-
             Console.WriteLine("******************************")
             Console.WriteLine("DEMARRAGE DU SERVEUR**********")
             Console.WriteLine("******************************")
@@ -36,7 +35,6 @@ Module Service
                 Console.WriteLine(Now & "ERREUR: Le fichier de config ou la balise portsoap n'ont pas été trouvé !")
             End If
 
-            
             Dim baseAddress As Uri = New Uri("http://localhost:" & PortSOAP & "/ServiceModelSamples/service")
             Dim fileServerAddress As Uri = New Uri("http://localhost:" & PortSOAP & "/ServiceModelSamples/fileServer")
 
@@ -58,8 +56,13 @@ Module Service
                 Try
                     'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
                     Dim myadress As String = "http://localhost:" & PortSOAP & "/ServiceModelSamples/service"
-                    myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
+                    Dim binding As New ServiceModel.BasicHttpBinding
+                    binding.MaxBufferPoolSize = 200000000
+                    binding.MaxReceivedMessageSize = 200000000
+                    'New System.ServiceModel.BasicHttpBinding
+                    myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
                     myService = myChannelFactory.CreateChannel()
+
                     'Démarrage du serveur pour charger la config
                     myService.Start()
                 Catch ex As Exception
@@ -77,7 +80,7 @@ Module Service
                 host.Close()
             End Using
         Catch ex As Exception
-            MsgBox("Erreur lors du service: " & ex.Message, MsgBoxStyle.Critical, "ERREUR SERVICE")
+            MsgBox("Erreur lors du service: " & ex.Message & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.Critical, "ERREUR SERVICE")
             Console.WriteLine(Now & " ERREUR " & ex.Message & " : " & ex.ToString)
             Console.ReadLine()
         End Try

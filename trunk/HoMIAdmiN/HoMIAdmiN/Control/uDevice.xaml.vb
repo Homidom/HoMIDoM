@@ -40,32 +40,32 @@ Partial Public Class uDevice
 
                 If x IsNot Nothing Then 'on a trouvé le device
                     TxtNom.Text = x.Name
-                    TxtDescript.Text = x.description
+                    TxtDescript.Text = x.Description
                     ChkEnable.IsChecked = x.Enable
                     ChKSolo.IsChecked = x.Solo
                     CbType.SelectedValue = x.Type.ToString
                     CbType.IsEnabled = False
 
                     For j As Integer = 0 To Window1.myService.GetAllDrivers.Count - 1 'Window1.Obj.Drivers.Count - 1
-                        If Window1.myService.GetAllDrivers.Item(j).ID = x.DriverId Then
+                        If Window1.myService.GetAllDrivers.Item(j).ID = x.DriverID Then
                             CbDriver.SelectedValue = Window1.myService.GetAllDrivers.Item(j).Nom
                             Exit For
                         End If
                     Next
 
-                    TxtAdresse1.Text = x.adresse1
-                    TxtAdresse2.Text = x.adresse2
-                    TxtModele.Text = x.modele
-                    TxtRefresh.Text = x.refresh
+                    TxtAdresse1.Text = x.Adresse1
+                    TxtAdresse2.Text = x.Adresse2
+                    TxtModele.Text = x.Modele
+                    TxtRefresh.Text = x.Refresh
                     TxtLastChangeDuree.Text = x.LastChangeDuree
 
-                    If x.Picture <> "" And File.Exists(x.picture) = True Then
+                    If x.Picture <> "" And File.Exists(x.Picture) = True Then
                         Dim bmpImage As New BitmapImage()
                         bmpImage.BeginInit()
-                        bmpImage.UriSource = New Uri(x.picture, UriKind.Absolute)
+                        bmpImage.UriSource = New Uri(x.Picture, UriKind.Absolute)
                         bmpImage.EndInit()
                         ImgDevice.Source = bmpImage
-                        ImgDevice.Tag = x.picture
+                        ImgDevice.Tag = x.Picture
                     End If
 
                     'Gestion si Device avec Value
@@ -124,39 +124,47 @@ Partial Public Class uDevice
 
     'Bouton Ok
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        If TxtNom.Text = "" Then
-            MessageBox.Show("Le nom du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        End If
-        If CbType.Text = "" Then
-            MessageBox.Show("Le type du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        End If
-        If CbDriver.Text = "" Then
-            MessageBox.Show("Le driver du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        End If
-        If TxtAdresse1.Text = "" Then
-            MessageBox.Show("L'adresse de base du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        End If
-
-        Dim _driverid As String = ""
-        For i As Integer = 0 To Window1.myService.GetAllDrivers.Count - 1 'Window1.Obj.Drivers.Count - 1
-            If Window1.myService.GetAllDrivers.Item(i).Nom = CbDriver.Text Then
-                _driverid = Window1.myService.GetAllDrivers.Item(i).ID
-                Exit For
+        Try
+            If TxtNom.Text = "" Then
+                MessageBox.Show("Le nom du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
             End If
-        Next
-        Window1.myService.SaveDevice(_DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
-        RaiseEvent CloseMe(Me)
+            If CbType.Text = "" Then
+                MessageBox.Show("Le type du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            If CbDriver.Text = "" Then
+                MessageBox.Show("Le driver du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            If TxtAdresse1.Text = "" Then
+                MessageBox.Show("L'adresse de base du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+
+            Dim _driverid As String = ""
+            For i As Integer = 0 To Window1.myService.GetAllDrivers.Count - 1 'Window1.Obj.Drivers.Count - 1
+                If Window1.myService.GetAllDrivers.Item(i).Nom = CbDriver.Text Then
+                    _driverid = Window1.myService.GetAllDrivers.Item(i).ID
+                    Exit For
+                End If
+            Next
+            Window1.myService.SaveDevice(_DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
+            RaiseEvent CloseMe(Me)
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uDevice BtnOK_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub TxtRefresh_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtRefresh.TextChanged
-        If TxtRefresh.Text <> "" And IsNumeric(TxtRefresh.Text) = False Then
-            MessageBox.Show("Veuillez saisir une valeur numérique")
-            TxtRefresh.Text = 0
-        End If
+        Try
+            If TxtRefresh.Text <> "" And IsNumeric(TxtRefresh.Text) = False Then
+                MessageBox.Show("Veuillez saisir une valeur numérique")
+                TxtRefresh.Text = 0
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uDevice TxtRefresh_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub CbType_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbType.MouseLeave
