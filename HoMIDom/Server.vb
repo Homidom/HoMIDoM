@@ -33,7 +33,8 @@ Namespace HoMIDom
         Private Shared _ListZones As New ArrayList 'Liste des zones
         Private Shared _ListUsers As New ArrayList 'Liste des users
         Private Shared _ListMacros As New ArrayList 'Liste des macros
-        Private Shared _listTriggers As New ArrayList 'Liste des triggers
+        Private Shared _listTriggers As New ArrayList 'Liste de tous les triggers
+        Private Shared _listTriggersCron As New ArrayList 'Liste des triggers au format cron
         Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
         Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
         Private _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application 'Application.StartupPath
@@ -71,10 +72,11 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub DeviceChange(ByVal Device As Object, ByVal [Property] As String, ByVal Parametres As Object)
             Dim retour As String
+            Dim listmacro As ArrayList
             Try
                 Dim valeur = Parametres
                 '--- on logue tout ce qui arrive en mode debug
-                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", "Historiser " & Device.name & " (" & [Property] & ") : " & valeur)
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", "Le device " & Device.name & " a changé : " & [Property] & " = " & valeur)
 
                 If STRGS.Left(valeur, 4) <> "ERR:" Then 'si y a pas erreur d'acquisition
                     '--- Remplacement de , par .
@@ -87,8 +89,14 @@ Namespace HoMIDom
                     'Parcour des triggers pour vérifier si le device déclenche des macros
                     For i = 0 To _listTriggers.Count - 1
                         If _listTriggers.Item(i).Analyse(Device.ID) Then
-                            'on parcour la liste des macros associé à ce trigger et on les executent
-
+                            'Device trouvé dans un trigger, on parcour la liste des macros associé à ce trigger et on les executent
+                            listmacro = _listTriggers.Item(i).Macro
+                            For j = 0 To listmacro.Count - 1
+                                'on cherche la macro et on la lance
+                                For k = 0 To _ListMacros.Count - 1
+                                    If _ListMacros.Item(k).ID = listmacro.Item(j).ToString Then _ListMacros.Item(k).Execute_avec_conditions()
+                                Next
+                            Next
                         End If
                     Next
 
@@ -242,31 +250,36 @@ Namespace HoMIDom
         ''' <summary>Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi</summary>
         ''' <remarks></remarks>
         Sub TimerSecTick()
-            Dim secondes, minutes, heures As Integer
-            'on initialise l'heure pour etre sur de ne pas changer avant d'arriver à la fin de la fonction
-            secondes = Now.Second
-            minutes = Now.Minute
-            heures = Now.Hour
+            Dim ladate As DateTime = Now 'on récupére la date/heure
 
-            'Action à effectuer toutes les secondes
+            '---- Action à effectuer toutes les secondes ----
+            'on checke si il y a cron à faire
+            For i = 0 To _listTriggersCron.Count() - 1
+                If _listTriggersCron.Item(i).prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss") Then
+                    _listTriggersCron.Item(i).maj_cron() 'reprogrammation du prochain shedule
+                    'lancement des actions
+                    'x = _listTriggersCron.Item(i).TriggerID
 
-            'Actions à effectuer toutes les minutes
-            If secondes = 1 Then
+                End If
+            Next
+
+            '---- Actions à effectuer toutes les minutes ----
+            If ladate.Second = 1 Then
 
             End If
 
-            'Actions à effectuer toutes les heures
-            If minutes = 59 And secondes = 59 Then
+            '---- Actions à effectuer toutes les heures ----
+            If ladate.Minute = 59 And ladate.Second = 59 Then
 
             End If
 
-            'Actions à effectuer à minuit
-            If heures = 0 And minutes = 0 And secondes = 0 Then
+            '---- Actions à effectuer à minuit ----
+            If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
                 MAJ_HeuresSoleil()
             End If
 
-            'Actions à effectuer à midi
-            If heures = 12 And minutes = 0 And secondes = 0 Then
+            '---- Actions à effectuer à midi ----
+            If ladate.Hour = 12 And ladate.Minute = 0 And ladate.Second = 0 Then
                 MAJ_HeuresSoleil()
             End If
         End Sub
@@ -1433,9 +1446,7 @@ Namespace HoMIDom
             Return Convert.ToBase64String(DESEncrypt.TransformFinalBlock(Buffer, 0, Buffer.Length))
         End Function
 
-        ''' <summary>
-        ''' Décrypter un string
-        ''' </summary>
+        ''' <summary>Décrypter un string</summary>
         ''' <param name="sOut"></param>
         ''' <param name="sKey"></param>
         ''' <returns></returns>
@@ -1458,18 +1469,14 @@ Namespace HoMIDom
         End Function
 
         Private Shared Function ScrambleKey(ByVal v_strKey As String) As String
-
             Dim sbKey As New System.Text.StringBuilder
             Dim intPtr As Integer
             For intPtr = 1 To v_strKey.Length
                 Dim intIn As Integer = v_strKey.Length - intPtr + 1
                 sbKey.Append(Mid(v_strKey, intIn, 1))
             Next
-
             Dim strKey As String = sbKey.ToString
-
             Return sbKey.ToString
-
         End Function
 
 #End Region
@@ -3447,6 +3454,8 @@ Namespace HoMIDom
         Public Sub start() Implements IHoMIDom.Start
             Try
                 Dim retour As String
+                Dim listcondition As ArrayList
+                Dim triggercrontemp As triggercron
 
                 '----- Démarre les connexions Sqlite ----- 
                 retour = sqlite_homidom.connect("homidom")
@@ -3474,12 +3483,31 @@ Namespace HoMIDom
 
                 '----- Démarre les drivers ----- 
                 Drivers_Start()
+
+                '----- Calcul les heures de lever et coucher du soleil ----- 
+                MAJ_HeuresSoleil()
+
+                '----- Crée l'arraylist des triggers de type cron depuis la liste des triggers ----- 
+                For i = 0 To _listTriggers.Count - 1
+                    'on récupére la liste des conditions du trigger
+                    listcondition = _listTriggers.Item(i)._Condition
+                    For j = 0 To listcondition.Count - 1
+                        'on vérifie si la condition est un cron
+                        If STRGS.Left(listcondition.Item(j).ToString, 5) = "cron_" Then
+                            triggercrontemp = New triggercron
+                            triggercrontemp.cron = listcondition.Item(j).ToString 'on récupére le cron du trigger
+                            triggercrontemp.TriggerID = _listTriggers.Item(i).ID 'on recupere son id
+                            triggercrontemp.maj_cron() 'on calcule la date de prochain execution
+                            _listTriggersCron.Add(triggercrontemp) 'on l'ajoute à la liste
+                        End If
+                    Next
+                Next
+
+                '----- Démarre le Timer -----
                 TimerSecond.Interval = 1000
                 AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
                 TimerSecond.Enabled = True
 
-                'Calcul les heures de lever et coucher du soleil
-                MAJ_HeuresSoleil()
 
 
 

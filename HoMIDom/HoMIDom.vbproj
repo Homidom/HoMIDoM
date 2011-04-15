@@ -59,11 +59,14 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NCrontab">
+      <HintPath>..\Dll_externes\NCrontab.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+    <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\System.Data.SQLite.DLL</HintPath>
+      <HintPath>..\Dll_externes\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel">
@@ -102,7 +105,7 @@
     <Compile Include="Graphes.vb" />
     <Compile Include="IDriver.vb" />
     <Compile Include="IHoMIDom.vb" />
-    <Compile Include="macro.vb" />
+    <Compile Include="Macro.vb" />
     <Compile Include="Server.vb" />
     <Compile Include="Device.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
