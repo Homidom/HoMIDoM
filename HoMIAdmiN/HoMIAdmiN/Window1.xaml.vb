@@ -19,7 +19,6 @@ Class Window1
     Dim FlagStart As Boolean = False
     Dim MemCanvas As Canvas
 
-
     Public Sub New()
         Try
             Dim spl As Window2 = New Window2

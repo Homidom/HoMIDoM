@@ -420,63 +420,6 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function ReturnLog(Optional ByVal Requete As String = "") As String
 
-        '---- Propriétés --------------------------------------
-        '''' <summary>
-        '''' Liste des devices
-        '''' </summary>
-        '''' <value></value>
-        '''' <returns></returns>
-        '''' <remarks></remarks>
-        'Property Devices() As ArrayList 'Liste des devices
-
-        '''' <summary>
-        '''' Liste des drivers
-        '''' </summary>
-        '''' <value></value>
-        '''' <returns></returns>
-        '''' <remarks></remarks>
-        'Property Drivers() As ArrayList 'Liste des drivers
-
-        '''' <summary>
-        '''' Liste des zones
-        '''' </summary>
-        '''' <value></value>
-        '''' <returns></returns>
-        '''' <remarks></remarks>
-        'Property Zones() As ArrayList 'Liste des zones
-
-        '''' <summary>
-        '''' Longitude du serveur pour calcul des heures de lever et coucher du soleil
-        '''' </summary>
-        '''' <value></value>
-        '''' <returns></returns>
-        '''' <remarks></remarks>
-        'Property Longitude() As Double 'Longitude
-
-        '''' <summary>
-        '''' Latitude du serveur pour calcul des heures de lever et coucher du soleil
-        '''' </summary>
-        '''' <value></value>
-        '''' <returns></returns>
-        '''' <remarks></remarks>
-        'Property Latitude() As Double 'Latitude
-
-        '''' <summary>
-        '''' Valeur de correction de l'heure de couché du soleil
-        '''' </summary>
-        '''' <value></value>
-        '''' <returns></returns>
-        '''' <remarks></remarks>
-        'Property HeureCorrectionCoucher() As Integer
-
-        '''' <summary>
-        '''' Valeur de correction de l'heure de levé du soleil
-        '''' </summary>
-        '''' <value></value>
-        '''' <returns></returns>
-        '''' <remarks></remarks>
-        'Property HeureCorrectionLever() As Integer
-
         '---- Variables ---------------------------------------
 
         '---- Events ---------------------------------------
