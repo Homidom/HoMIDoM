@@ -4,7 +4,7 @@
     Title="Window2" Height="300" Width="456" ResizeMode="NoResize" ShowInTaskbar="False" WindowStyle="None" WindowStartupLocation="CenterScreen">
     <Grid>
         <Label Content="Label" Height="47" HorizontalAlignment="Left" Margin="12,214,0,0" Name="Label1" VerticalAlignment="Top" Width="410" />
-        <Image Height="118" HorizontalAlignment="Left" Margin="0,40,0,0" Name="Image1" Stretch="Fill" VerticalAlignment="Top" Width="434" Source="/HoMIDomAdminWpf;component/Images/image003.jpg" />
+        <Image Height="118" HorizontalAlignment="Left" Margin="0,40,0,0" Name="Image1" Stretch="Fill" VerticalAlignment="Top" Width="434" Source="/HoMIAdmiN;component/Images/image003.jpg" />
         <Label Content="Label" Height="37" HorizontalAlignment="Left" Margin="12,180,0,0" Name="Label2" VerticalAlignment="Top" Width="408" FontStretch="Normal" FontWeight="Bold" FontSize="24" />
     </Grid>
 </Window>

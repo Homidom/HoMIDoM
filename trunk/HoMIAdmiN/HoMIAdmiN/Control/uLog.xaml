@@ -81,7 +81,7 @@
         <Button Height="24.293" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,12,105.746,0" Name="BtnRefresh" VerticalAlignment="Top" Width="87.169" Foreground="White">Rafraichir</Button>
         <TextBox Margin="14.29,62.5,12,36" Name="TxtLog" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
         <Label FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Height="46.25" Margin="286,0,349,0" Name="Label1" VerticalAlignment="Top">Log</Label>
-        <Image Height="53" HorizontalAlignment="Left" Margin="7,1,0,0" Name="ImgDevice" Source="/HoMIDomAdminWpf;component/Images/5250-128.png" Stretch="Fill" VerticalAlignment="Top" Width="53">
+        <Image Height="53" HorizontalAlignment="Left" Margin="7,1,0,0" Name="ImgDevice" Source="/HoMIAdmiN;component/Images/5250-128.png" Stretch="Fill" VerticalAlignment="Top" Width="53">
             <Image.LayoutTransform>
                 <RotateTransform Angle="-10" CenterX="0" CenterY="0" />
             </Image.LayoutTransform>
