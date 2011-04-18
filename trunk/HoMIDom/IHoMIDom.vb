@@ -46,6 +46,14 @@ Namespace HoMIDom
         <OperationContract()> Function ChangePassword(ByVal Username As String, ByVal OldPassword As String, ByVal ConfirmNewPassword As String, ByVal Password As String) As Boolean
 
         ''' <summary>
+        ''' Retourne un user par son username
+        ''' </summary>
+        ''' <param name="Username"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function ReturnUserByUsername(ByVal Username As String) As Users.User
+
+        ''' <summary>
         ''' 'Sauvegarde de la configuration
         ''' </summary>
         ''' <remarks></remarks>

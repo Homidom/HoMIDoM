@@ -370,7 +370,7 @@ Namespace HoMIDom
                                 End Select
                             Next
                         Else
-                            MsgBox("Il manque les paramètres du serveur dans le fichier de config !!")
+                            MsgBox("Il manque les paramètres du serveur dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur serveur")
                         End If
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du serveur chargés")
 
@@ -1090,7 +1090,7 @@ Namespace HoMIDom
                 writer.Close()
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde terminée")
             Catch ex As Exception
-                MsgBox("ERREUR SAVECONFIG " & ex.ToString)
+                MsgBox("ERREUR SAVECONFIG " & ex.ToString, MsgBoxStyle.Exclamation, "Erreur serveur")
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: " & ex.Message)
             End Try
 
@@ -1140,7 +1140,7 @@ Namespace HoMIDom
                     Next
                 Next
             Catch ex As Exception
-                MsgBox("Erreur lors du chargement des drivers: " & ex.Message)
+                MsgBox("Erreur lors du chargement des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Load", " Erreur lors du chargement des drivers: " & ex.Message)
             End Try
         End Sub
@@ -1160,7 +1160,7 @@ Namespace HoMIDom
                     End If
                 Next
             Catch ex As Exception
-                MsgBox("Erreur lors du démarrage des drivers: " & ex.Message)
+                MsgBox("Erreur lors du démarrage des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Start", " Erreur lors du démarrage des drivers: " & ex.Message)
             End Try
         End Sub
@@ -1178,7 +1178,7 @@ Namespace HoMIDom
                     End If
                 Next
             Catch ex As Exception
-                MsgBox("Erreur lors de l arret des drivers: " & ex.Message)
+                MsgBox("Erreur lors de l arret des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Stop", " Erreur lors de l'arret des drivers: " & ex.Message)
             End Try
         End Sub
@@ -1341,7 +1341,7 @@ Namespace HoMIDom
 
                 Next
             Catch ex As Exception
-                MsgBox("Erreur lors de l arret des drivers: " & ex.Message)
+                MsgBox("Erreur lors de l arret des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Devices_Stop", " Erreur lors de l'arret des devices: " & ex.Message)
             End Try
         End Sub
@@ -1498,6 +1498,22 @@ Namespace HoMIDom
         End Property
 
         '*** FONCTIONS ******************************************
+        ''' <summary>
+        ''' Retourne un user par son username
+        ''' </summary>
+        ''' <param name="Username"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnUserByUsername(ByVal Username As String) As Users.User Implements IHoMIDom.ReturnUserByUsername
+            Dim retour As Users.User = Nothing
+            For i As Integer = 0 To _ListUsers.Count - 1
+                If _ListUsers.Item(i).username = Username Then
+                    retour = _ListUsers.Item(i)
+                    Exit For
+                End If
+            Next
+            Return retour
+        End Function
 
         ''' <summary>Supprimer un device de la config</summary>
         ''' <param name="deviceId"></param>
@@ -1607,6 +1623,7 @@ Namespace HoMIDom
         Sub SetLongitude(ByVal value As Double) Implements IHoMIDom.SetLongitude
             Try
                 _Longitude = value
+                MAJ_HeuresSoleil()
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetLongitude", "Exception : " & ex.Message)
             End Try
@@ -1627,6 +1644,7 @@ Namespace HoMIDom
         Sub SetLatitude(ByVal value As Double) Implements IHoMIDom.SetLatitude
             Try
                 _Latitude = value
+                MAJ_HeuresSoleil()
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetLatitude", "Exception : " & ex.Message)
             End Try
@@ -1661,6 +1679,7 @@ Namespace HoMIDom
         Sub SetHeureCorrectionCoucher(ByVal value As Integer) Implements IHoMIDom.SetHeureCorrectionCoucher
             Try
                 _HeureCoucherSoleilCorrection = value
+                MAJ_HeuresSoleil()
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetHeureCorrectionCoucher", "Exception : " & ex.Message)
             End Try
@@ -1684,6 +1703,7 @@ Namespace HoMIDom
         Sub SetHeureCorrectionLever(ByVal value As Integer) Implements IHoMIDom.SetHeureCorrectionLever
             Try
                 _HeureLeverSoleilCorrection = value
+                MAJ_HeuresSoleil()
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetHeureCorrectionLever", "Exception : " & ex.Message)
             End Try
@@ -3337,29 +3357,6 @@ Namespace HoMIDom
             End Try
         End Function
 
-        ''' <summary>
-        ''' Permet de télécharger un fichier
-        ''' </summary>
-        ''' <param name="Fichier"></param>
-        ''' <param name="TablBytes"></param>
-        ''' <remarks></remarks>
-        Public Sub LoadDocument(ByVal Fichier As String, ByVal TablBytes() As Byte) Implements IHoMIDom.LoadDocument
-            Try
-                Dim MonFichier As New System.IO.FileInfo(Fichier)
-                Dim MonFileStream As System.IO.FileStream = MonFichier.OpenRead()
-                Dim TableauDeBytes(MonFileStream.Length) As Byte
-
-                ' On charge le fichier dans un tableau de byte
-                MonFileStream.Read(TableauDeBytes, 0, MonFileStream.Length)
-
-                ' On ferme le stream
-                MonFileStream.Close()
-                TablBytes = TableauDeBytes
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadDocument", "Exception : " & ex.Message)
-            End Try
-        End Sub
-
         ''' <summary>Permet d'exécuter une commande Sub d'un Device</summary>
         ''' <param name="DeviceId"></param>
         ''' <param name="Action"></param>
@@ -3396,7 +3393,7 @@ Namespace HoMIDom
                     End If
                 End If
             Catch ex As Exception
-                MsgBox("Erreur lors du test: " & ex.Message)
+                MsgBox("Erreur lors du traitemant du Sub ExecuteDeviceCommand: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
             End Try
         End Sub
 
@@ -3436,7 +3433,7 @@ Namespace HoMIDom
                     End If
                 End If
             Catch ex As Exception
-                MsgBox("Erreur lors du traitement de la commande ExecuteDriverCommand: " & ex.Message)
+                MsgBox("Erreur lors du traitement de la commande ExecuteDriverCommand: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
             End Try
         End Sub
 #End Region
@@ -3659,7 +3656,7 @@ Namespace HoMIDom
                     elelog.SetAttribute("time", Now)
                     elelog.SetAttribute("type", TypLog)
                     elelog.SetAttribute("source", Source)
-                    elelog.SetAttribute("fonction", Fonction)
+                    elelog.SetAttribute("fonction", HtmlEncode(Fonction))
                     elelog.SetAttribute("message", HtmlEncode(Message))
 
                     Dim root As XmlElement = xmldoc.Item("logs")
