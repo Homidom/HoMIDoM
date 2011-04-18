@@ -19,6 +19,7 @@ Class Window1
     Dim FlagStart As Boolean = False
     Dim MemCanvas As Canvas
 
+
     Public Sub New()
         Try
             Dim spl As Window2 = New Window2
@@ -595,10 +596,16 @@ Class Window1
     ''' </summary>
     ''' <param name="Index"></param>
     ''' <remarks></remarks>
-    Public Sub Connect_Srv(ByVal Index As Integer)
+    Public Sub Connect_Srv(ByVal Index As Integer, Optional ByVal IP As String = "", Optional ByVal Port As String = "")
         Try
-            myadress = "http://" & ListServer.Item(Index).Adresse & ":" & ListServer.Item(Index).Port & "/ServiceModelSamples/service"
-            MyPort = ListServer.Item(Index).Port
+            If Index = 0 Then
+                myadress = "http://" & IP & ":" & Port & "/ServiceModelSamples/service"
+                MyPort = Port
+            Else
+                myadress = "http://" & ListServer.Item(Index - 1).Adresse & ":" & ListServer.Item(Index - 1).Port & "/ServiceModelSamples/service"
+                MyPort = ListServer.Item(Index - 1).Port
+            End If
+
             Dim binding As New ServiceModel.BasicHttpBinding
             binding.MaxBufferPoolSize = 2000000
             binding.MaxReceivedMessageSize = 2000000
@@ -606,6 +613,17 @@ Class Window1
             myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
             myService = myChannelFactory.CreateChannel()
             IsConnect = True
+
+            If Index = 0 Then
+                Dim x As New ClServer
+                x.Adresse = IP
+                x.Port = Port
+                x.Nom = "Serveur" & ListServer.Count
+                If ListServer.Count = 0 Then
+                    x.Defaut = True
+                End If
+                ListServer.Add(x)
+            End If
 
             CanvasUser = CanvasRight
         Catch ex As Exception
@@ -625,69 +643,34 @@ Class Window1
                     Dim x As New XmlSerializer(ListServer.GetType)
                     ListServer = x.Deserialize(objStreamReader)
                     objStreamReader.Close()
-
-                    If ListServer.Count = 0 Then 'Aucun serveur trouvé dans le fichier de config
-                        'myadress = "http://localhost:8000/ServiceModelSamples/service"
-                        'MyPort = "8000"
-                        'MessageBox.Show("Aucune adresse par défaut n'a été trouvée, le système se connectera à l'adresse suivante: " & myadress, "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                        'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
-                        MessageBox.Show("Aucun serveur n'a été trouvé dans le fichier de config, l'application ne peut se lancer, veuillez en ajouter un manuellement dans le fichier", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                        Me.Close()
-                    Else 'on ajoute la liste des serveurs dans le menu Connexion
-                        'Page de connexion
-                        Do While FlagStart = False
-                            PageConnexion()
-                        Loop
-
-                        If My.Settings.ViewProperty = False Then
-                            MemCanvas = Canvas2
-                            StackPanel3.Children.RemoveAt(1)
-                            Canvas1.MaxHeight = StackPanel3.Height
-                            TabControl1.MaxHeight = 500
-                        End If
-
-                        AffDriver()
-                        AffDevice()
-                        AffZone()
-                        AffUser()
-
-                    End If
-
-
-                    'If myadress = "" Then
-                    '    myadress = "http://localhost:8000/ServiceModelSamples/service"
-                    '    MyPort = "8000"
-                    '    MessageBox.Show("Aucune adresse par défaut n'a été trouvée, le système se connectera à l'adresse suivante: " & myadress, "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                    'End If
-                    'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(New System.ServiceModel.BasicHttpBinding, New System.ServiceModel.EndpointAddress(myadress))
-
                 Catch ex As Exception
-                    MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml, vérifiez que toutes les balises requisent soient présentes: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                    MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml (" & Myfile & "), vérifiez que toutes les balises requisent soient présentes: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
                 End Try
 
-            Else 'on utilise le fichier app.config
-                MessageBox.Show("Le fichier de config n'a pas été trouvée, impossible de lancer l'application admin", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                Me.Close()
-                'MessageBox.Show("Aucun fichier de config n'a été trouvée, le système se base donc sur le fichier app.config", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
-                'myService = myChannelFactory.CreateChannel()
-                'IsConnect = True
-
-                ''Affichage des éléments 
-                'Try
-                '    AffDriver()
-                '    AffDevice()
-                '    AffZone()
-                '    AffUser()
-
-                '    CanvasUser = CanvasRight
-
-                'Catch ex As Exception
-                '    IsConnect = False
-                '    MessageBox.Show("Erreur Lors de la connexion au serveur: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
-                'End Try
-
+                If ListServer.Count = 0 Then 'Aucun serveur trouvé dans le fichier de config
+                    MessageBox.Show("Aucun serveur n'a été trouvé dans le fichier de config (" & Myfile & "), veuillez saisir manuellement les paramètres du serveur", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                End If
+                'on ajoute la liste des serveurs dans le menu Connexion
+            Else
+                MessageBox.Show("Le fichier de config xml de l'admin (" & Myfile & ") est absent, veuillez utiliser la connexion manuelle", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             End If
+
+            'Page de connexion
+            Do While FlagStart = False
+                PageConnexion()
+            Loop
+
+            If My.Settings.ViewProperty = False Then
+                MemCanvas = Canvas2
+                StackPanel3.Children.RemoveAt(1)
+                Canvas1.MaxHeight = StackPanel3.Height
+                TabControl1.MaxHeight = 500
+            End If
+
+            AffDriver()
+            AffDevice()
+            AffZone()
+            AffUser()
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub Window1_Loaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -696,11 +679,14 @@ Class Window1
     Private Sub PageConnexion()
         Try
             Dim frm As New Window3
-
             frm.Owner = Me
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-                Connect_Srv(frm.CbServer.SelectedIndex)
+                If frm.CbServer.SelectedIndex > 0 Then
+                    Connect_Srv(frm.CbServer.SelectedIndex)
+                Else
+                    Connect_Srv(frm.CbServer.SelectedIndex, frm.TxtIP.Text, frm.TxtPort.Text)
+                End If
                 If myService.VerifLogin(frm.TxtUsername.Text, frm.TxtPassword.Password) = False Then
                     MessageBox.Show("Le username ou le password sont erroné, impossible veuillez réessayer", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Else
@@ -708,7 +694,7 @@ Class Window1
                     FlagStart = True
                 End If
             Else
-                Me.Close()
+                End
             End If
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub PageConnexion: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)

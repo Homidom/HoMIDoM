@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Window3"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Window3" Height="254" Width="387" Name="WindowLogin" WindowStartupLocation="CenterOwner" WindowStyle="None" ShowInTaskbar="False" ResizeMode="NoResize">
+    Title="Window3" Height="254" Width="474" Name="WindowLogin" WindowStartupLocation="CenterOwner" WindowStyle="None" ShowInTaskbar="False" ResizeMode="NoResize">
 
     <Window.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
@@ -81,5 +81,9 @@
         <TextBox Height="23" HorizontalAlignment="Left" Margin="78,79,0,0" Name="TxtUsername" VerticalAlignment="Top" Width="185" />
         <PasswordBox Height="23" HorizontalAlignment="Left" Margin="78,109,0,0" Name="TxtPassword" VerticalAlignment="Top" Width="185" />
         <CheckBox Content="Se souvenir du mot de passe" Height="19" HorizontalAlignment="Left" Margin="78,138,0,0" Name="CheckBox1" VerticalAlignment="Top" Width="185" Foreground="White" />
+        <Label Content="IP:" Height="23" HorizontalAlignment="Left" Margin="298,49,0,0" Name="Label5" VerticalAlignment="Top" Width="28" Foreground="White" />
+        <Label Content="Port:" Foreground="White" Height="23" HorizontalAlignment="Left" Margin="298,73,0,0" Name="Label6" VerticalAlignment="Top" Width="37" />
+        <TextBox Height="20" HorizontalAlignment="Left" Margin="331,52,0,0" Name="TxtIP" VerticalAlignment="Top" Width="109" />
+        <TextBox Height="20" HorizontalAlignment="Left" Margin="331,76,0,0" Name="TxtPort" VerticalAlignment="Top" Width="109" />
     </Grid>
 </Window>

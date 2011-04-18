@@ -420,14 +420,6 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function ReturnLog(Optional ByVal Requete As String = "") As String
 
-        ''' <summary>
-        ''' Permet de télécharger un fichier
-        ''' </summary>
-        ''' <param name="Fichier"></param>
-        ''' <param name="TablBytes"></param>
-        ''' <remarks></remarks>
-        <OperationContract()> Sub LoadDocument(ByVal Fichier As String, ByVal TablBytes As Byte())
-
         '---- Propriétés --------------------------------------
         '''' <summary>
         '''' Liste des devices
