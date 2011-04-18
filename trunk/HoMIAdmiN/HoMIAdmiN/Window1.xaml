@@ -176,7 +176,7 @@
                     </RadialGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>
-            <StackPanel HorizontalAlignment="Right" Margin="0,7,507,3" Name="StackPanel1" Width="493" Orientation="Horizontal">
+            <StackPanel HorizontalAlignment="Left" Margin="0,7,0,3" Name="StackPanel1" Width="Auto" Orientation="Horizontal">
                 <Label Foreground="White" Height="23" Name="LblStatus" Width="Auto">#####</Label>
                 <Ellipse Height="20" Name="Ellipse1" Stroke="Black" Width="20" Fill="Cyan" />
                 <Label Foreground="White" Height="23" Name="LblConnect" Width="Auto">#####</Label>
