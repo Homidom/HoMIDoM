@@ -80,7 +80,7 @@
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
             <Label Height="46.25" Name="Label1" Width="105" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Driver</Label>
         </Border>
-        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIDomAdminWpf;component/Images/Defaut-128.png">
+        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Defaut-128.png">
             <Image.LayoutTransform >
                 <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
             </Image.LayoutTransform>

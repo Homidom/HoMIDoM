@@ -6,18 +6,7 @@ HoMIDom
 </name>
 </assembly>
 <members>
-<member name="M:HoMIDom.graphes.grapher_courbe(System.String,System.String,System.Int32,System.Int32)">
-	<summary>Créer un graphe de type Courbe simple</summary>
-	<param name="nomfichier">Nom du fichier : "test"</param>
-	<param name="largeur">largeur de l'image</param>
-	<param name="hauteur">hauteur de l'image</param>
-	<param name="titre">Titre du graphe</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.graphes.#ctor(System.String)">
-	<summary>initialisation de l'objet Graphes</summary>
-	<param name="chemin">Chemin ou enregistrer les graphes</param>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.TemplateDriver">
+<member name="T:HoMIDom.HoMIDom.TemplateDriver">
 	<summary>
  Template de Classe de type Driver pour le service web
  </summary>
@@ -384,6 +373,17 @@ HoMIDom
  </history>
  -----------------------------------------------------------------------------
 
+</member><member name="M:HoMIDom.graphes.grapher_courbe(System.String,System.String,System.Int32,System.Int32)">
+	<summary>Créer un graphe de type Courbe simple</summary>
+	<param name="nomfichier">Nom du fichier : "test"</param>
+	<param name="largeur">largeur de l'image</param>
+	<param name="hauteur">hauteur de l'image</param>
+	<param name="titre">Titre du graphe</param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.graphes.#ctor(System.String)">
+	<summary>initialisation de l'objet Graphes</summary>
+	<param name="chemin">Chemin ou enregistrer les graphes</param>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.DeviceAction">
 	<summary>
  Class template pour lister les actions possibles sur un device
@@ -447,9 +447,7 @@ HoMIDom
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DecryptTripleDES(System.String,System.String)">
-	<summary>
- Décrypter un string
- </summary>
+	<summary>Décrypter un string</summary>
 	<param name="sOut"></param>
 	<param name="sKey"></param>
 	<returns></returns>
@@ -873,10 +871,50 @@ HoMIDom
  Classe permettant le calcul des heures de lever et coucher du soleil
  </summary>
 	<remarks></remarks>
+</member><member name="T:HoMIDom.FileData">
+	<summary>
+ Classe de transfert de fichier en streaming
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.RequestFileData">
+	<summary>
+ Classe de demande de fichier
+ </summary>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.TemplateDevice">
 	<summary>
  Template de class de type Device pour le service web
  </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Macro.Execute_avec_conditions">
+	<summary>Execute une macro avec analyse des conditions</summary>
+	<remarks>lance les actions True ou False suivant le résultat des conditions</remarks>
+</member><member name="M:HoMIDom.HoMIDom.Macro.Execute_sans_conditions">
+	<summary>Execute une macro sans analyse des conditions</summary>
+	<remarks>lance les actions si TRUE</remarks>
+</member><member name="M:HoMIDom.HoMIDom.Macro.Analyse">
+	<summary>Analyse les conditions et renvoie le résultat</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Macro.Action(System.Collections.ArrayList)">
+	<summary>Execute les actions</summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Macro">
+	<summary>Class Macro, Défini le type pour les macros</summary>
+	<remarks>_condition contient un tableau des conditions à vérifier pour lancer les actions si TRUE ou si FALSE</remarks>
+</member><member name="M:HoMIDom.HoMIDom.trigger.Analyse(System.String)">
+	<summary>Analyse si un device fait parti des conditions</summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.trigger">
+	<summary>Class trigger, Défini le type pour les triggers Device/timers</summary>
+	<remarks>
+ _condition contien un tableau de DeviceID ou CRON : liste des déclencheurs du trigger
+ _macro contien un tableau de MacroID : liste des macros à lancer
+ </remarks>
+</member><member name="M:HoMIDom.HoMIDom.triggercron.maj_cron">
+	<summary>Converti un cron en prochaine date/heure d'execution</summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.triggercron">
+	<summary>Class triggercron,permet uniquement d'etre utiliser dans le timer interne au server</summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetTime">
 	<summary>
@@ -1225,6 +1263,13 @@ HoMIDom
  </summary>
 	<param name="Requete"></param>
 	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.LoadDocument(System.String,System.Byte[])">
+	<summary>
+ Permet de télécharger un fichier
+ </summary>
+	<param name="Fichier"></param>
+	<param name="TablBytes"></param>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.IHoMIDom">
 	<summary>

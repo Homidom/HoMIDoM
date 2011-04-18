@@ -35,7 +35,7 @@ Class Window1
             dt.Start()
 
             Dim MyRep As String = System.Environment.CurrentDirectory
-            Myfile = MyRep & "\HoMIDAdmiN_config.xml"
+            Myfile = MyRep & "\HoMIAdmiN_config.xml"
 
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)

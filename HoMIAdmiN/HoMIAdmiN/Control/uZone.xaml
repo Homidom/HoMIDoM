@@ -80,7 +80,7 @@
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
             <Label Height="46.25" Name="Label1" Width="105" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Zone</Label>
         </Border>
-        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgIcon" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIDomAdminWpf;component/Images/Defaut-128.png">
+        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgIcon" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Defaut-128.png">
             <Image.LayoutTransform >
                 <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
             </Image.LayoutTransform>
@@ -88,7 +88,7 @@
         <Label Height="24" HorizontalAlignment="Left" Margin="16,82,0,0" Name="Label2" VerticalAlignment="Top" Width="42" Foreground="White">Nom:</Label>
         <TextBox Height="22" Margin="69,84,211,0" Name="TxtName" VerticalAlignment="Top" Foreground="White" Background="DarkGray" />
         <Label Foreground="White" Height="24" HorizontalAlignment="Left" Margin="16,122,0,0" Name="Label3" VerticalAlignment="Top" Width="42">Image:</Label>
-        <Image Margin="69,121,0,216" Name="ImgZone" Stretch="Fill" HorizontalAlignment="Left" Width="150" Source="/HoMIDomAdminWpf;component/Images/Defaut-128.png" />
+        <Image Margin="69,121,0,216" Name="ImgZone" Stretch="Fill" HorizontalAlignment="Left" Width="150" Source="/HoMIAdmiN;component/Images/Defaut-128.png" />
         <GroupBox Header="Devices" Height="191" Margin="16,0,12,12" Name="GroupBox1" VerticalAlignment="Bottom">
             <Grid>
                 <ListBox Margin="162.5,22,177.5,11" Name="ListBxDevice" ToolTip="Double cliquer sur un élément pour voir ses informations" />

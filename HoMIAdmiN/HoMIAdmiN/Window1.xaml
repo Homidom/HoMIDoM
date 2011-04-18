@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Window1"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="HoMIAdmiN" Height="700" Width="1024" xmlns:my="http://www.codeplex.com/wpfpropertygrid" Icon="/HoMIDomAdminWpf;component/Images/homidom_icone_moyen.png" Name="Window1" WindowStartupLocation="CenterScreen">
+    Title="HoMIAdmiN" Height="700" Width="1024" xmlns:my="http://www.codeplex.com/wpfpropertygrid" Icon="/HoMIAdmiN;component/Images/homidom_icone_moyen.png" Name="Window1" WindowStartupLocation="CenterScreen">
     
     <Window.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
@@ -82,7 +82,7 @@
                 </Rectangle.Fill>
             </Rectangle>
 
-            <Image HorizontalAlignment="Right" Margin="0,8,6,9" Name="Image2" Stretch="Fill" Width="598" Source="/HoMIDomAdminWpf;component/Images/bandeau_1_950x60.jpg" />
+            <Image HorizontalAlignment="Right" Margin="0,8,6,9" Name="Image2" Stretch="Fill" Width="598" Source="/HoMIAdmiN;component/Images/bandeau_1_950x60.jpg" />
             <Label HorizontalAlignment="Left" Margin="1.667,0,0,24" Name="Label1" Width="170" Content="HoMIAdmiN" FontSize="20">
                 <Label.Foreground>
                     <LinearGradientBrush EndPoint="0.494,0.889" StartPoint="0.494,0.028">
@@ -163,7 +163,7 @@
             </StackPanel>
         </Grid>
         <Grid Margin="194,58,0,29.578" Name="Grid1" Background="Cyan">
-            <Image Margin="-6.668,0,0,-3.578" Name="Image1" Stretch="Fill" Source="/HoMIDomAdminWpf;component/Images/01.png" />
+            <Image Margin="-6.668,0,0,-3.578" Name="Image1" Stretch="Fill" Source="/HoMIAdmiN;component/Images/01.png" />
             <Canvas Margin="5,0,0,-3.578" Name="CanvasRight" Background="Transparent" />
         </Grid>
         <Grid Height="31" Name="GridBottom" VerticalAlignment="Bottom" Background="Black">
