@@ -77,7 +77,7 @@
         <Label Content="Connexion" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Height="46.25" Margin="106,-1,135,0" Name="Label2" VerticalAlignment="Top" />
         <Label Content="Username:" Height="23" HorizontalAlignment="Left" Margin="12,79,0,0" Name="Label3" VerticalAlignment="Top" Width="69" Foreground="White" />
         <Label Content="Password:" Height="23" HorizontalAlignment="Left" Margin="12,108,0,0" Name="Label4" VerticalAlignment="Top" Width="69" Foreground="White" />
-        <ComboBox Height="20" HorizontalAlignment="Left" Margin="78,53,0,0" Name="CbServer" VerticalAlignment="Top" Width="185" IsEditable="False" SelectedIndex="0" />
+        <ComboBox Height="20" HorizontalAlignment="Left" Margin="78,53,0,0" Name="CbServer" VerticalAlignment="Top" Width="185" IsEditable="False"  />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="78,79,0,0" Name="TxtUsername" VerticalAlignment="Top" Width="185" />
         <PasswordBox Height="23" HorizontalAlignment="Left" Margin="78,109,0,0" Name="TxtPassword" VerticalAlignment="Top" Width="185" />
         <CheckBox Content="Se souvenir du mot de passe" Height="19" HorizontalAlignment="Left" Margin="78,138,0,0" Name="CheckBox1" VerticalAlignment="Top" Width="185" Foreground="White" />
