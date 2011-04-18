@@ -143,6 +143,7 @@
                 Window1.ListServer.RemoveAt(ListBox1.SelectedIndex)
                 TxtAdr.Text = ""
                 TxtPort.Text = ""
+                TxtNom.Text = ""
                 CheckBox1.IsChecked = False
                 RefreshList()
             End If
