@@ -535,6 +535,7 @@ Class Window1
         End Try
     End Sub
 
+    'Permet de se connecter à un serveur dans le sous menu connexion
     Private Sub MenuConnexion(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
         Try
             Call Connect_Srv(sender.uid)
@@ -592,7 +593,7 @@ Class Window1
     End Sub
 
     ''' <summary>
-    ''' Sélection d'un serveur pour connexion dans le sous menu connexion
+    ''' Sélection d'un serveur pour connexion dans le sous menu connexion ou au démarrage
     ''' </summary>
     ''' <param name="Index"></param>
     ''' <remarks></remarks>
@@ -676,6 +677,10 @@ Class Window1
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Affiche la fenêtre de connexion
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Sub PageConnexion()
         Try
             Dim frm As New Window3

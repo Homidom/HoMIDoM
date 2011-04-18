@@ -25,6 +25,7 @@
                 My.Settings.Password = ""
                 My.Settings.Save()
             End If
+
             DialogResult = True
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub Login BtnOK_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -49,7 +50,7 @@
                 End If
                 CbServer.Items.Add(Window1.ListServer.Item(i).Nom)
                 If Window1.ListServer.Item(i).Defaut = True Then
-                    j = i
+                    j = i + 1
                 End If
             Next
             CbServer.SelectedIndex = j

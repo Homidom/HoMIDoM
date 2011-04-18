@@ -174,9 +174,14 @@ Window3
 	<remarks></remarks>
 </member><member name="M:WpfApplication1.Window1.Connect_Srv(System.Int32,System.String,System.String)">
 	<summary>
- Sélection d'un serveur pour connexion dans le sous menu connexion
+ Sélection d'un serveur pour connexion dans le sous menu connexion ou au démarrage
  </summary>
 	<param name="Index"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Window1.PageConnexion">
+	<summary>
+ Affiche la fenêtre de connexion
+ </summary>
 	<remarks></remarks>
 </member><member name="P:WpfApplication1.My.Resources.Resources.ResourceManager">
 	<summary>
