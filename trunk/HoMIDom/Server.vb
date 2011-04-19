@@ -745,9 +745,76 @@ Namespace HoMIDom
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun device trouvé dans le fichier de configuration")
                         End If
                         list = Nothing
+
+                        '******************************************
+                        'on va chercher les triggers
+                        'MANQUE LA GESTION DES TABLEAUX
+                        '******************************************
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des triggers")
+                        list = Nothing
+                        list = myxml.SelectNodes("/homidom/triggers/trigger")
+                        If list.Count > 0 Then 'présence des triggers
+                            For i As Integer = 0 To list.Count - 1
+                                Dim x As New Trigger
+                                For j1 As Integer = 0 To list.Item(i).Attributes.Count - 1
+                                    Select Case list.Item(i).Attributes.Item(j1).Name
+                                        Case "id"
+                                            x.ID = list.Item(i).Attributes.Item(j1).Value
+                                        Case "nom"
+                                            x.Nom = list.Item(i).Attributes.Item(j1).Value
+                                        Case "enable"
+                                            x.Enable = list.Item(i).Attributes.Item(j1).Value
+                                        Case "description"
+                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(0).Attributes.Item(j1).Value
+                                        Case "condition"
+                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Condition = list.Item(0).Attributes.Item(j1).Value
+                                        Case "prochainedateheure"
+                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Prochainedateheure = list.Item(0).Attributes.Item(j1).Value
+                                        Case Else
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au trigger est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
+                                    End Select
+                                Next
+                                _listTriggers.Add(x)
+                            Next
+                        Else
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Il manque les triggers dans le fichier de config !!")
+                        End If
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _listTriggers.Count & " Trigger(s) chargé(s)")
+                        list = Nothing
+
+                        '******************************************
+                        'on va chercher les maccros
+                        'MANQUE LA GESTION DES TABLEAUX
+                        '******************************************
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des macros")
+                        list = Nothing
+                        list = myxml.SelectNodes("/homidom/macros/macro")
+                        If list.Count > 0 Then 'présence des macros
+                            For i As Integer = 0 To list.Count - 1
+                                Dim x As New Macro
+                                For j1 As Integer = 0 To list.Item(i).Attributes.Count - 1
+                                    Select Case list.Item(i).Attributes.Item(j1).Name
+                                        Case "id"
+                                            x.Id = list.Item(i).Attributes.Item(j1).Value
+                                        Case "nom"
+                                            x.Nom = list.Item(i).Attributes.Item(j1).Value
+                                        Case "enable"
+                                            x.Enable = list.Item(i).Attributes.Item(j1).Value
+                                        Case "description"
+                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(0).Attributes.Item(j1).Value
+                                        Case Else
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant à la macro est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
+                                    End Select
+                                Next
+                                _ListMacros.Add(x)
+                            Next
+                        Else
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Il manque les macros dans le fichier de config !!")
+                        End If
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListMacros.Count & " Macro(s) chargée(s)")
+                        list = Nothing
+
                     Next
-
-
                 Else
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Fichier de configuration non trouvé")
                 End If
@@ -1097,7 +1164,59 @@ Namespace HoMIDom
                     writer.WriteEndElement()
                 Next
                 writer.WriteEndElement()
+
                 ''------------
+                ''Sauvegarde des triggers
+                ''------------
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des triggers")
+                writer.WriteStartElement("triggers")
+                For i As Integer = 0 To _listTriggers.Count - 1
+                    writer.WriteStartElement("trigger")
+                    writer.WriteStartAttribute("id")
+                    writer.WriteValue(_listTriggers.Item(i).id)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("nom")
+                    writer.WriteValue(_listTriggers.Item(i).nom)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("description")
+                    writer.WriteValue(_listTriggers.Item(i).description)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("enable")
+                    writer.WriteValue(_listTriggers.Item(i).enable)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("condition")
+                    writer.WriteValue(_listTriggers.Item(i).condition)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("dateprochaineheure")
+                    writer.WriteValue(_listTriggers.Item(i).dateprochaineheure)
+                    writer.WriteEndAttribute()
+                    writer.WriteEndElement()
+                Next
+                writer.WriteEndElement()
+
+                ''------------
+                ''Sauvegarde des macros
+                ''------------
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des macros")
+                writer.WriteStartElement("macros")
+                For i As Integer = 0 To _listTriggers.Count - 1
+                    writer.WriteStartElement("macro")
+                    writer.WriteStartAttribute("id")
+                    writer.WriteValue(_listTriggers.Item(i).id)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("nom")
+                    writer.WriteValue(_listTriggers.Item(i).nom)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("description")
+                    writer.WriteValue(_listTriggers.Item(i).description)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("enable")
+                    writer.WriteValue(_listTriggers.Item(i).enable)
+                    writer.WriteEndAttribute()
+                    writer.WriteEndElement()
+                Next
+                writer.WriteEndElement()
+                ''FIN DES ELEMENTS------------
 
                 writer.WriteEndDocument()
                 writer.Close()
@@ -1583,6 +1702,42 @@ Namespace HoMIDom
             End Try
         End Function
 
+        ''' <summary>Supprimer un trigger de la config</summary>
+        ''' <param name="triggerId"></param>
+        Public Function DeleteTrigger(ByVal triggerId As String) As Integer Implements IHoMIDom.DeleteTrigger
+            Try
+                For i As Integer = 0 To _Listtriggers.Count - 1
+                    If _listTriggers.Item(i).Id = triggerId Then
+                        _listTriggers.RemoveAt(i)
+                        DeleteTrigger = 0
+                        Exit Function
+                    End If
+                Next
+                Return 1
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteTrigger", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>Supprimer une macro de la config</summary>
+        ''' <param name="macroId"></param>
+        Public Function DeleteMacro(ByVal macroId As String) As Integer Implements IHoMIDom.DeleteMacro
+            Try
+                For i As Integer = 0 To _ListMacros.Count - 1
+                    If _ListMacros.Item(i).Id = macroId Then
+                        _ListMacros.RemoveAt(i)
+                        DeleteMacro = 0
+                        Exit Function
+                    End If
+                Next
+                Return 1
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteMacro", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
         ''' <summary>Supprime un user</summary>
         ''' <param name="userId"></param>
         Public Function DeleteUser(ByVal userId As String) As Integer Implements IHoMIDom.DeleteUser
@@ -1996,6 +2151,53 @@ Namespace HoMIDom
             End Try
         End Function
 
+        ''' <summary>Retourne la liste de toutes les macros</summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function GetAllMacros() As List(Of Macro) Implements IHoMIDom.GetAllMacros
+            Try
+                Dim _list As New List(Of Macro)
+                For i As Integer = 0 To _ListMacros.Count - 1
+                    Dim x As New Macro
+                    With x
+                        .Nom = _ListMacros.Item(i).nom
+                        .ID = _ListMacros.Item(i).id
+                        .Description = _ListMacros.Item(i).description
+                        .Enable = _ListMacros.Item(i).enable
+                    End With
+                    _list.Add(x)
+                Next
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllMacros", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>Retourne la liste de toutes les macros</summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function GetAllTriggers() As List(Of Trigger) Implements IHoMIDom.GetAllTriggers
+            Try
+                Dim _list As New List(Of Trigger)
+                For i As Integer = 0 To _listTriggers.Count - 1
+                    Dim x As New Trigger
+                    With x
+                        .Nom = _listTriggers.Item(i).nom
+                        .ID = _listTriggers.Item(i).id
+                        .Description = _listTriggers.Item(i).description
+                        .Enable = _listTriggers.Item(i).enable
+                        .Prochainedateheure = _listTriggers.Item(i).Prochainedateheure
+                        .Condition = _listTriggers.Item(i).condition
+                    End With
+                    _list.Add(x)
+                Next
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllTriggers", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
         ''' <summary>Retourne la liste de tous les drivers</summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
@@ -2795,6 +2997,103 @@ Namespace HoMIDom
         End Function
 
         ''' <summary>
+        ''' Permet de créer ou modifier une macro
+        ''' </summary>
+        ''' <param name="macroId"></param>
+        ''' <param name="nom"></param>
+        ''' <param name="enable"></param>
+        ''' <param name="description"></param>
+        ''' <param name="condition"></param>
+        ''' <param name="actiontrue"></param>
+        ''' <param name="actionfalse"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal condition As ArrayList = Nothing, Optional ByVal actiontrue As ArrayList = Nothing, Optional ByVal actionfalse As ArrayList = Nothing) As String Implements IHoMIDom.SaveMacro
+            Dim myID As String = ""
+            Try
+                If macroId = "" Then
+                    Dim x As New Macro
+                    With x
+                        x.ID = GenerateGUID()
+                        x.Nom = nom
+                        x.Enable = enable
+                        x.Description = description
+                        x.Condition = condition
+                        x.ActionTrue = actiontrue
+                        x.ActionFalse = actionfalse
+                    End With
+                    myID = x.ID
+                    _ListMacros.Add(x)
+                Else
+                    'zone Existante
+                    myID = macroId
+                    For i As Integer = 0 To _ListMacros.Count - 1
+                        If _ListMacros.Item(i).id = macroId Then
+                            _ListMacros.Item(i).nom = nom
+                            _ListMacros.Item(i).enable = enable
+                            _ListMacros.Item(i).description = description
+                            _ListMacros.Item(i).condition = condition
+                            _ListMacros.Item(i).actiontrue = actiontrue
+                            _ListMacros.Item(i).actionfalse = actionfalse
+                        End If
+                    Next
+                End If
+                'génération de l'event
+                Return myID
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveMacro", "Exception : " & ex.Message)
+                Return ""
+            End Try
+        End Function
+
+
+        ''' <summary>
+        ''' Permet de créer ou modifier un trigger
+        ''' </summary>
+        ''' <param name="triggerId"></param>
+        ''' <param name="nom"></param>
+        ''' <param name="enable"></param>
+        ''' <param name="description"></param>
+        ''' <param name="condition"></param>
+        ''' <param name="macro"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function SaveTrigger(ByVal triggerId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal condition As String = "", Optional ByVal macro As ArrayList = Nothing) As String Implements IHoMIDom.SaveTrigger
+            Dim myID As String = ""
+            Try
+                If triggerId = "" Then
+                    Dim x As New Trigger
+                    With x
+                        x.ID = GenerateGUID()
+                        x.Nom = nom
+                        x.Enable = enable
+                        x.Description = description
+                        x.Condition = condition
+                        x.Macro = macro
+                    End With
+                    myID = x.ID
+                    _listTriggers.Add(x)
+                Else
+                    'zone Existante
+                    myID = triggerId
+                    For i As Integer = 0 To _listTriggers.Count - 1
+                        If _listTriggers.Item(i).id = triggerId Then
+                            _listTriggers.Item(i).nom = nom
+                            _listTriggers.Item(i).enable = enable
+                            _listTriggers.Item(i).description = description
+                            _listTriggers.Item(i).condition = condition
+                            _listTriggers.Item(i).macro = macro
+                        End If
+                    Next
+                End If
+                'génération de l'event
+                Return myID
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTrigger", "Exception : " & ex.Message)
+                Return ""
+            End Try
+        End Function
+        ''' <summary>
         ''' Créer ou modifie un user par son ID
         ''' </summary>
         ''' <param name="userId"></param>
@@ -3302,6 +3601,46 @@ Namespace HoMIDom
                 Return retour
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnZoneById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>Retourne le trigger par son ID</summary>
+        ''' <param name="TriggerId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnTriggerById(ByVal TriggerId As String) As Trigger Implements IHoMIDom.ReturnTriggerById
+            Dim retour As Object = Nothing
+            Try
+                For i As Integer = 0 To _listTriggers.Count - 1
+                    If _listTriggers.Item(i).ID = TriggerId Then
+                        retour = _listTriggers.Item(i)
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnTriggerById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>Retourne la macro par son ID</summary>
+        ''' <param name="MacroId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnMacroById(ByVal MacroId As String) As Macro Implements IHoMIDom.ReturnMacroByID
+            Dim retour As Object = Nothing
+            Try
+                For i As Integer = 0 To _ListMacros.Count - 1
+                    If _ListMacros.Item(i).ID = MacroId Then
+                        retour = _ListMacros.Item(i)
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnMacroById", "Exception : " & ex.Message)
                 Return Nothing
             End Try
         End Function

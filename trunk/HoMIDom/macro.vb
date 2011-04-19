@@ -9,13 +9,13 @@ Namespace HoMIDom
     ''' <remarks>_condition contient un tableau des conditions à vérifier pour lancer les actions si TRUE ou si FALSE</remarks>
     Public Class Macro
 
-        Dim ID As String
-        Dim Nom As String
-        Dim Description As String
-        Dim Enable As Boolean
-        Dim Condition As ArrayList
-        Dim ActionTrue As ArrayList
-        Dim ActionFalse As ArrayList
+        Public ID As String
+        Public Nom As String
+        Public Description As String
+        Public Enable As Boolean
+        Public Condition As ArrayList
+        Public ActionTrue As ArrayList
+        Public ActionFalse As ArrayList
 
         Dim _Server As Server
         Dim _Device As Device
@@ -93,14 +93,14 @@ Namespace HoMIDom
     ''' _condition contient un string: DeviceID ou CRON : le déclencheur du trigger
     ''' _macro contient un tableau de string : MacroID : liste des macros à lancer
     ''' </remarks>
-    Public Class trigger
+    Public Class Trigger
 
         Public ID As String
         Public Nom As String
         Public Description As String
         Public Enable As Boolean
         Public Condition As String
-        Public prochainedateheure As DateTime 'la date/heure de prochaine execution utile uniquement pour un type CRON
+        Public Prochainedateheure As DateTime 'la date/heure de prochaine execution utile uniquement pour un type CRON
         Public Macro As ArrayList
 
         Public _Server As Server

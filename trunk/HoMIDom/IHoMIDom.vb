@@ -106,6 +106,16 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function GetAllZones() As List(Of Zone)
 
+        ''' <summary>Retourne la liste de toutes les macros</summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetAllMacros() As List(Of Macro)
+
+        ''' <summary>Retourne la liste de toutes les macros</summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetAllTriggers() As List(Of Trigger)
+
         ''' <summary>
         ''' Obtient la liste des users
         ''' </summary>
@@ -204,6 +214,22 @@ Namespace HoMIDom
         <OperationContract()> Function DeleteZone(ByVal zoneId As String) As Integer
 
         ''' <summary>
+        ''' Supprimer un trigger de la config
+        ''' </summary>
+        ''' <param name="triggerId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function DeleteTrigger(ByVal triggerId As String) As Integer
+
+        ''' <summary>
+        ''' Supprimer une macro de la config
+        ''' </summary>
+        ''' <param name="macroId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function DeleteMacro(ByVal macroId As String) As Integer
+
+        ''' <summary>
         ''' Supprime un user
         ''' </summary>
         ''' <param name="userId"></param>
@@ -234,6 +260,18 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         <OperationContract()> Function ReturnZoneByID(ByVal Id As String) As Zone
+
+        ''' <summary>Retourne le trigger par son ID</summary>
+        ''' <param name="TriggerId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function ReturnTriggerById(ByVal TriggerId As String) As Trigger
+
+        ''' <summary>Retourne la macro par son ID</summary>
+        ''' <param name="MacroId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function ReturnMacroById(ByVal MacroId As String) As Macro
 
         ''' <summary>
         ''' Retourne l'objet d'un user par son ID
@@ -328,6 +366,34 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         <OperationContract()> Function SaveUser(ByVal userId As String, ByVal UserName As String, ByVal Password As String, ByVal Profil As Users.TypeProfil, ByVal Nom As String, ByVal Prenom As String, Optional ByVal NumberIdentification As String = "", Optional ByVal Image As String = "", Optional ByVal eMail As String = "", Optional ByVal eMailAutre As String = "", Optional ByVal TelFixe As String = "", Optional ByVal TelMobile As String = "", Optional ByVal TelAutre As String = "", Optional ByVal Adresse As String = "", Optional ByVal Ville As String = "", Optional ByVal CodePostal As String = "") As String
+
+
+        ''' <summary>
+        ''' Permet de créer ou modifier une macro
+        ''' </summary>
+        ''' <param name="macroId"></param>
+        ''' <param name="nom"></param>
+        ''' <param name="enable"></param>
+        ''' <param name="description"></param>
+        ''' <param name="condition"></param>
+        ''' <param name="actiontrue"></param>
+        ''' <param name="actionfalse"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal condition As ArrayList = Nothing, Optional ByVal actiontrue As ArrayList = Nothing, Optional ByVal actionfalse As ArrayList = Nothing) As String
+
+        ''' <summary>
+        ''' Permet de créer ou modifier un trigger
+        ''' </summary>
+        ''' <param name="triggerId"></param>
+        ''' <param name="nom"></param>
+        ''' <param name="enable"></param>
+        ''' <param name="description"></param>
+        ''' <param name="condition"></param>
+        ''' <param name="macro"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function SaveTrigger(ByVal triggerId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal condition As String = "", Optional ByVal macro As ArrayList = Nothing) As String
 
         ''' <summary>
         ''' Commencer l'apprentissage d'un commande IR
