@@ -91,7 +91,7 @@ Namespace HoMIDom
     ''' <summary>Class trigger, Défini le type pour les triggers Device/timers</summary>
     ''' <remarks>
     ''' _condition contient un string: DeviceID ou CRON : le déclencheur du trigger
-    ''' _macro contient un tableau de MacroID : liste des macros à lancer
+    ''' _macro contient un tableau de string : MacroID : liste des macros à lancer
     ''' </remarks>
     Public Class trigger
 
@@ -146,39 +146,59 @@ Namespace HoMIDom
 
     End Class
 
-    ' ''' <summary>Class triggercron,permet uniquement d'etre utiliser dans le timer interne au server</summary>
-    ' ''' <remarks></remarks>
-    'Public Class triggercron
-    '    Public cron As String 'Le cron du trigger
-    '    Public prochainedateheure As DateTime 'la date/heure de prochaine execution
-    '    Public TriggerID As String 'l'id du trigger pour lancer les macros associés
+    ''' <summary>Class action, Défini les actions à réaliser depuis les macros...</summary>
+    ''' <remarks></remarks>
+    Public Class action
 
-    '    Public _Server As Server
+        Public ID As String
+        Public Nom As String
+        Public Description As String
+        Public Enable As Boolean
+        Public type As String
 
-    '    ''' <summary>Converti un cron en prochaine date/heure d'execution</summary>
-    '    ''' <remarks></remarks>
-    '    Public Sub maj_cron()
-    '        'convertit la condition au format cron "cron_ss#mm#hh#jj#MMM#JJJ" en dateTime
-    '        Try
-    '            Dim conditions = STRGS.Split(cron, "#")
+        Public _Server As Server
 
-    '            'Dim s = CrontabSchedule.Parse("0 17-19 * * *")
-    '            Dim s = CrontabSchedule.Parse(conditions(1) & " " & conditions(2) & " " & conditions(3) & " " & conditions(4) & " " & conditions(5))
-    '            'recupere le prochain shedule
-    '            Dim nextcron = s.GetNextOccurrence(DateAndTime.Now)
-    '            If (conditions(0) <> "*" And conditions(0) <> "") Then nextcron = nextcron.AddSeconds(conditions(0))
-    '            cron = nextcron.ToString("yyyy-MM-dd HH:mm:ss")
 
-    '            'recupere la liste des prochains shedule
-    '            'Dim nextcron = s.GetNextOccurrences(DateAndTime.Now, DateAndTime.Now.AddDays(1))
-    '            'For Each i In nextcron
-    '            '    MsgBox(i.ToString("yyyy-MM-dd HH:mm:ss"))
-    '            'Next
-    '        Catch ex As Exception
-    '            _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Trigger:cron_convertendate", ex.ToString)
-    '        End Try
-    '    End Sub
-    'End Class
+        ''' <summary>convertit la condition au format cron "cron_ss#mm#hh#jj#MMM#JJJ" en dateTime dans le champ prochainedateheure</summary>
+        ''' <remarks></remarks>
+        Public Sub execute(ByVal param As ArrayList)
+            Try
+
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Action:xxx", ex.ToString)
+            End Try
+        End Sub
+
+        ''' <summary>Envoi d'un email</summary>
+        ''' <remarks></remarks>
+        Public Class email
+            Public adresse As String 'adresse email
+            Public Sub execute(ByVal sujet As String, ByVal texte As String)
+                'envoi de l'email à adresse avec sujet et texte via les smtp définis dans le serveur
+
+            End Sub
+        End Class
+
+        ''' <summary>log dans les fichiers logs et base sqlite</summary>
+        ''' <remarks></remarks>
+        Public Class log
+            Public Sub execute(ByVal texte As String)
+                'envoi de l'email à adresse avec sujet et texte via les smtp définis dans le serveur
+
+            End Sub
+        End Class
+
+
+
+        Public Sub Send_email(ByVal adresse As String, ByVal sujet As String, ByVal texte As String)
+            'envoi de l'email à adresse avec sujet et texte via les smtp définis dans le serveur
+        End Sub
+        Public Sub Send_log(ByVal texte As String)
+
+        End Sub
+
+    End Class
+
 
 End Namespace
 
