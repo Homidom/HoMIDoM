@@ -34,7 +34,6 @@ Namespace HoMIDom
         Private Shared _ListUsers As New ArrayList 'Liste des users
         Private Shared _ListMacros As New ArrayList 'Liste des macros
         Private Shared _listTriggers As New ArrayList 'Liste de tous les triggers
-        Private Shared _listTriggersCron As New ArrayList 'Liste des triggers au format cron
         Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
         Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
         Private _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application 'Application.StartupPath
@@ -88,7 +87,7 @@ Namespace HoMIDom
 
                     'Parcour des triggers pour vérifier si le device déclenche des macros
                     For i = 0 To _listTriggers.Count - 1
-                        If _listTriggers.Item(i).Analyse(Device.ID) Then
+                        If _listTriggers.Item(i).Condition = Device.ID Then
                             'Device trouvé dans un trigger, on parcour la liste des macros associé à ce trigger et on les executent
                             listmacro = _listTriggers.Item(i).Macro
                             For j = 0 To listmacro.Count - 1
@@ -127,16 +126,25 @@ Namespace HoMIDom
                         End If
                     Else
                         '--- Valeur est autre chose qu'un nombre
-                        'log de la nouvelle valeur
-                        Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
                         '--- historise la valeur si ce n'est pas une simple info de config
                         If STRGS.Left(valeur, 4) <> "CFG:" Then
-                            retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (" & Device.ID & "," & [Property] & "," & Now.ToString() & "," & valeur & ")")
-                            If STRGS.Left(retour, 4) = "ERR:" Then
-                                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
+                            '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                            If Device.LastEtat And valeur.ToString = Device.ValueLast Then
+                                'log de "inchangé lastetat"
+                                Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (inchangé lastetat " & Device.ValueLast & ")")
+                            Else
+                                'log de la nouvelle valeur
+                                Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
+                                'Ajout dans la BDD
+                                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (" & Device.ID & "," & [Property] & "," & Now.ToString() & "," & valeur & ")")
+                                If STRGS.Left(retour, 4) = "ERR:" Then
+                                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
+                                End If
                             End If
+                        Else                            'log de la nouvelle valeur
+                            Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
                         End If
-                    End If
+                        End If
                 Else
                     'erreur d'acquisition
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur d'acquisition : " & Device.Name & " - " & valeur)
@@ -254,12 +262,16 @@ Namespace HoMIDom
 
             '---- Action à effectuer toutes les secondes ----
             'on checke si il y a cron à faire
-            For i = 0 To _listTriggersCron.Count() - 1
-                If _listTriggersCron.Item(i).prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss") Then
-                    _listTriggersCron.Item(i).maj_cron() 'reprogrammation du prochain shedule
-                    'lancement des actions
-                    'x = _listTriggersCron.Item(i).TriggerID
-
+            For i = 0 To _listTriggers.Count() - 1
+                If (_listTriggers.Item(i).prochainedateheure IsNot Nothing And _listTriggers.Item(i).prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) Then
+                    _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
+                    'lancement des macros associées
+                    For j = 0 To _listTriggers.Item(i).Macro.Count - 1
+                        'on cherche la macro et on la lance en testant ces conditions
+                        For k = 0 To _ListMacros.Count - 1
+                            If _ListMacros.Item(k).ID = _listTriggers.Item(i).Macro.Item(j).ToString Then _ListMacros.Item(k).Execute_avec_conditions()
+                        Next
+                    Next
                 End If
             Next
 
@@ -687,13 +699,14 @@ Namespace HoMIDom
                                     Or _Dev.Type = "ENERGIETOTALE" _
                                     Or _Dev.Type = "GENERIQUEVALUE" _
                                     Or _Dev.Type = "HUMIDITE" _
+                                    Or _Dev.Type = "LAMPE" _
                                     Or _Dev.Type = "PLUIECOURANT" _
                                     Or _Dev.Type = "PLUIETOTAL" _
                                     Or _Dev.Type = "TEMPERATURE" _
                                     Or _Dev.Type = "TEMPERATURECONSIGNE" _
                                     Or _Dev.Type = "VITESSEVENT" _
                                     Or _Dev.Type = "UV" _
-                                    Or _Dev.Type = "VITESSEVENT" _
+                                    Or _Dev.Type = "VOLET" _
                                     Then
                                         If (Not list.Item(j).Attributes.GetNamedItem("valuemin") Is Nothing) Then .ValueMin = list.Item(j).Attributes.GetNamedItem("valuemin").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("valuemax") Is Nothing) Then .ValueMax = list.Item(j).Attributes.GetNamedItem("valuemax").Value
@@ -3451,8 +3464,6 @@ Namespace HoMIDom
         Public Sub start() Implements IHoMIDom.Start
             Try
                 Dim retour As String
-                Dim listcondition As ArrayList
-                Dim triggercrontemp As triggercron
 
                 '----- Démarre les connexions Sqlite ----- 
                 retour = sqlite_homidom.connect("homidom")
@@ -3484,20 +3495,12 @@ Namespace HoMIDom
                 '----- Calcul les heures de lever et coucher du soleil ----- 
                 MAJ_HeuresSoleil()
 
-                '----- Crée l'arraylist des triggers de type cron depuis la liste des triggers ----- 
+                '----- Maj des triggers type CRON ----- 
                 For i = 0 To _listTriggers.Count - 1
-                    'on récupére la liste des conditions du trigger
-                    listcondition = _listTriggers.Item(i)._Condition
-                    For j = 0 To listcondition.Count - 1
-                        'on vérifie si la condition est un cron
-                        If STRGS.Left(listcondition.Item(j).ToString, 5) = "cron_" Then
-                            triggercrontemp = New triggercron
-                            triggercrontemp.cron = listcondition.Item(j).ToString 'on récupére le cron du trigger
-                            triggercrontemp.TriggerID = _listTriggers.Item(i).ID 'on recupere son id
-                            triggercrontemp.maj_cron() 'on calcule la date de prochain execution
-                            _listTriggersCron.Add(triggercrontemp) 'on l'ajoute à la liste
-                        End If
-                    Next
+                    'on vérifie si la condition est un cron
+                    If STRGS.Left(_listTriggers.Item(i).Condition, 5) = "cron_" Then
+                        _listTriggers.Item(i).maj_cron() 'on calcule la date de prochain execution
+                    End If
                 Next
 
                 '----- Démarre le Timer -----

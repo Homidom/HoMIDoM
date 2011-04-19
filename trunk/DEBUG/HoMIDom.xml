@@ -452,6 +452,13 @@ HoMIDom
 	<param name="sKey"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnUserByUsername(System.String)">
+	<summary>
+ Retourne un user par son username
+ </summary>
+	<param name="Username"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DeleteDevice(System.String)">
 	<summary>Supprimer un device de la config</summary>
 	<param name="deviceId"></param>
@@ -693,13 +700,6 @@ HoMIDom
 	<param name="DriverID"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.LoadDocument(System.String,System.Byte[])">
-	<summary>
- Permet de télécharger un fichier
- </summary>
-	<param name="Fichier"></param>
-	<param name="TablBytes"></param>
-	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ExecuteDeviceCommand(System.String,HoMIDom.HoMIDom.DeviceAction)">
 	<summary>Permet d'exécuter une commande Sub d'un Device</summary>
 	<param name="DeviceId"></param>
@@ -901,21 +901,15 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Macro">
 	<summary>Class Macro, Défini le type pour les macros</summary>
 	<remarks>_condition contient un tableau des conditions à vérifier pour lancer les actions si TRUE ou si FALSE</remarks>
-</member><member name="M:HoMIDom.HoMIDom.trigger.Analyse(System.String)">
-	<summary>Analyse si un device fait parti des conditions</summary>
+</member><member name="M:HoMIDom.HoMIDom.trigger.maj_cron">
+	<summary>convertit la condition au format cron "cron_ss#mm#hh#jj#MMM#JJJ" en dateTime dans le champ prochainedateheure</summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.trigger">
 	<summary>Class trigger, Défini le type pour les triggers Device/timers</summary>
 	<remarks>
- _condition contien un tableau de DeviceID ou CRON : liste des déclencheurs du trigger
- _macro contien un tableau de MacroID : liste des macros à lancer
+ _condition contient un string: DeviceID ou CRON : le déclencheur du trigger
+ _macro contient un tableau de MacroID : liste des macros à lancer
  </remarks>
-</member><member name="M:HoMIDom.HoMIDom.triggercron.maj_cron">
-	<summary>Converti un cron en prochaine date/heure d'execution</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.triggercron">
-	<summary>Class triggercron,permet uniquement d'etre utiliser dans le timer interne au server</summary>
-	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetTime">
 	<summary>
  Retourne l'heure du serveur
@@ -935,6 +929,13 @@ HoMIDom
  </summary>
 	<param name="Username"></param>
 	<param name="OldPassword"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnUserByUsername(System.String)">
+	<summary>
+ Retourne un user par son username
+ </summary>
+	<param name="Username"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveConfig">
@@ -1263,13 +1264,6 @@ HoMIDom
  </summary>
 	<param name="Requete"></param>
 	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.LoadDocument(System.String,System.Byte[])">
-	<summary>
- Permet de télécharger un fichier
- </summary>
-	<param name="Fichier"></param>
-	<param name="TablBytes"></param>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.IHoMIDom">
 	<summary>
