@@ -3946,6 +3946,7 @@ Namespace HoMIDom
             DEVICE = 4
             DRIVER = 5
             SOAP = 6
+            CLIENT = 7
         End Enum
 
         ''' <summary>Ecrit un log dans le fichier log au format xml</summary>
@@ -3954,7 +3955,7 @@ Namespace HoMIDom
         ''' <param name="Fonction"></param>
         ''' <param name="Message"></param>
         ''' <remarks></remarks>
-        Public Sub Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
+        Public Sub Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String) Implements IHoMIDom.Log
             Try
                 Dim Fichier As FileInfo
 

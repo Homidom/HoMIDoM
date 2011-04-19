@@ -382,6 +382,14 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal condition As ArrayList = Nothing, Optional ByVal actiontrue As ArrayList = Nothing, Optional ByVal actionfalse As ArrayList = Nothing) As String
 
+        ''' <summary>Ecrit un log dans le fichier log au format xml</summary>
+        ''' <param name="TypLog"></param>
+        ''' <param name="Source"></param>
+        ''' <param name="Fonction"></param>
+        ''' <param name="Message"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub Log(ByVal TypLog As HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String)
+
         ''' <summary>
         ''' Permet de créer ou modifier un trigger
         ''' </summary>
