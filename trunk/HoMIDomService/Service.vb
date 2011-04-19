@@ -66,13 +66,12 @@ Module Service
                     myService.Start()
                 Catch ex As Exception
                     myChannelFactory.Abort()
-                    Console.WriteLine(Now & "ERREUR: Erreur lors du lancement du service SOAP: " & ex.Message)
+                    Console.WriteLine(Now & " ERREUR: Erreur lors du lancement du service SOAP: " & ex.Message)
                 End Try
 
                 Using hostFileServer As New ServiceHost(GetType(HoMIDom.FileServer), fileServerAddress)
                     hostFileServer.Open()
-                    Console.WriteLine("Démarrage du serveur de fichiers OK")
-
+                    Console.WriteLine(Now & " Démarrage du serveur de fichiers OK")
                     Console.ReadLine()
                     hostFileServer.Close()
                 End Using
