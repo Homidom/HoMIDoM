@@ -1,4 +1,5 @@
-﻿Imports System
+﻿#Region "Imports"
+Imports System
 Imports System.IO
 Imports System.Xml
 Imports System.Xml.XPath
@@ -10,7 +11,7 @@ Imports System.ServiceModel.Description
 Imports System.Security.Cryptography
 Imports System.Text
 Imports System.Web.HttpUtility
-
+#End Region
 
 Namespace HoMIDom
 
@@ -18,7 +19,6 @@ Namespace HoMIDom
     '** CLASS SERVER
     '** version 1.0
     '** Date de création: 12/01/2011
-    '** Historique (SebBergues): 12/01/2011: Création 
     '***********************************************
 
     ''' <summary>Classe Server</summary>
@@ -51,8 +51,8 @@ Namespace HoMIDom
         Private Shared _PortSOAP As String 'Port IP de connexion SOAP
         Dim TimerSecond As New Timers.Timer 'Timer à la seconde
         Private graphe As New graphes(_MonRepertoire + "\Images\Graphes\")
+        Shared _DateTimeLastStart As Date = Now
 #End Region
-
 
 #Region "Event"
         '********************************************************************
@@ -149,7 +149,7 @@ Namespace HoMIDom
                             'log de la nouvelle valeur
                             Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
                         End If
-                        End If
+                    End If
                 Else
                     'erreur d'acquisition
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur d'acquisition : " & Device.Name & " - " & valeur)
@@ -305,20 +305,7 @@ Namespace HoMIDom
 
 #Region "Fonctions/Sub propres au serveur"
 
-        ''' <summary>Liste les type de devices par leur valeur d'Enum</summary>
-        ''' <param name="Index"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function ReturnSringFromEnumDevice(ByVal Index As Integer) As String
-            For Each value As Device.ListeDevices In [Enum].GetValues(GetType(Device.ListeDevices))
-                If value.GetHashCode = Index Then
-                    Return value.ToString
-                    Exit Function
-                End If
-            Next
-            Return ""
-        End Function
-
+#Region "Soleil"
         ''' <summary>Initialisation des heures du soleil</summary>
         ''' <remarks></remarks>
         Public Sub MAJ_HeuresSoleil()
@@ -335,7 +322,9 @@ Namespace HoMIDom
             Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Heure du lever : " & _HeureLeverSoleil)
             Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Heure du coucher : " & _HeureCoucherSoleil)
         End Sub
+#End Region
 
+#Region "Configuration"
         ''' <summary>Chargement de la config depuis le fichier XML</summary>
         ''' <param name="Fichier"></param>
         ''' <returns></returns>
@@ -808,7 +797,7 @@ Namespace HoMIDom
                                 For j1 As Integer = 0 To list.Item(i).Attributes.Count - 1
                                     Select Case list.Item(i).Attributes.Item(j1).Name
                                         Case "id"
-                                            x.Id = list.Item(i).Attributes.Item(j1).Value
+                                            x.ID = list.Item(i).Attributes.Item(j1).Value
                                         Case "nom"
                                             x.Nom = list.Item(i).Attributes.Item(j1).Value
                                         Case "enable"
@@ -1252,94 +1241,9 @@ Namespace HoMIDom
             End Try
 
         End Sub
+#End Region
 
-        ''' <summary>Charge les drivers, donc toutes les dll dans le sous répertoire "plugins"</summary>
-        ''' <remarks></remarks>
-        Public Sub Drivers_Load()
-            Try
-                Dim tx As String
-                Dim dll As Reflection.Assembly
-                Dim tp As Type
-                Dim Chm As String = _MonRepertoire & "\Plugins\" 'Emplacement par défaut des plugins
-
-                Dim strFileSize As String = ""
-                Dim di As New IO.DirectoryInfo(Chm)
-                Dim aryFi As IO.FileInfo() = di.GetFiles("*.dll")
-                Dim fi As IO.FileInfo
-
-                'Cherche tous les fichiers dll dans le répertoie plugin
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", "Chargement des DLL des drivers")
-                For Each fi In aryFi
-                    'chargement du plugin
-                    tx = fi.FullName   'emplacement de la dll
-                    'chargement de la dll
-                    dll = Reflection.Assembly.LoadFrom(tx)
-                    'Vérification de la présence de l'interface recherchée
-                    For Each tp In dll.GetTypes
-                        If tp.IsClass Then
-                            If tp.GetInterface("IDriver", True) IsNot Nothing Then
-                                'création de la référence au plugin
-                                'Dim obj As Object
-                                'obj = AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(tp.FullName, "IDriver")
-
-                                Dim i1 As IDriver
-                                i1 = DirectCast(dll.CreateInstance(tp.FullName), IDriver)
-                                i1 = CType(i1, IDriver)
-                                'i1 = dll.CreateInstance(tp.ToString)
-                                i1.Server = Me
-                                Dim pt As New Driver(Me, i1.ID)
-                                _ListDrivers.Add(i1)
-                                _ListImgDrivers.Add(pt)
-                                'i1.Start()
-                                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " chargé")
-                            End If
-                        End If
-                    Next
-                Next
-            Catch ex As Exception
-                MsgBox("Erreur lors du chargement des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Load", " Erreur lors du chargement des drivers: " & ex.Message)
-            End Try
-        End Sub
-
-        ''' <summary>Démarre tous les drivers dont la propriété StartAuto=True</summary>
-        ''' <remarks></remarks>
-        Public Sub Drivers_Start()
-            Try
-                'Cherche tous les drivers chargés
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", "Démarrage des drivers")
-                For Each driver In _ListDrivers
-                    If driver.Enable And driver.StartAuto Then
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", " - " & driver.Nom & " démarré")
-                        driver.start()
-                    Else
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", " - " & driver.Nom & " non démarré car non Auto")
-                    End If
-                Next
-            Catch ex As Exception
-                MsgBox("Erreur lors du démarrage des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Start", " Erreur lors du démarrage des drivers: " & ex.Message)
-            End Try
-        End Sub
-
-        ''' <summary>Arretes les drivers démarrés</summary>
-        ''' <remarks></remarks>
-        Public Sub Drivers_Stop()
-            Try
-                'Cherche tous les drivers chargés
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Stop", "Arrêt des drivers")
-                For Each driver In _ListDrivers
-                    If driver.Enable And driver.IsConnect Then
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Stop", " - " & driver.Nom & " démarré")
-                        driver.stop()
-                    End If
-                Next
-            Catch ex As Exception
-                MsgBox("Erreur lors de l arret des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Stop", " Erreur lors de l'arret des drivers: " & ex.Message)
-            End Try
-        End Sub
-
+#Region "Device"
         ''' <summary>Arretes les devices (Handlers)</summary>
         ''' <remarks></remarks>
         Public Sub Devices_Stop()
@@ -1503,6 +1407,22 @@ Namespace HoMIDom
             End Try
         End Sub
 
+        ''' <summary>Liste les type de devices par leur valeur d'Enum</summary>
+        ''' <param name="Index"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnSringFromEnumDevice(ByVal Index As Integer) As String
+            For Each value As Device.ListeDevices In [Enum].GetValues(GetType(Device.ListeDevices))
+                If value.GetHashCode = Index Then
+                    Return value.ToString
+                    Exit Function
+                End If
+            Next
+            Return ""
+        End Function
+#End Region
+
+#Region "Driver"
         ''' <summary>Retourne les propriétés d'un driver</summary>
         ''' <remarks></remarks>
         Public Function ReturnDriver(ByVal DriverId As String) As ArrayList
@@ -1578,6 +1498,96 @@ Namespace HoMIDom
             Next
         End Sub
 
+        ''' <summary>Charge les drivers, donc toutes les dll dans le sous répertoire "plugins"</summary>
+        ''' <remarks></remarks>
+        Public Sub Drivers_Load()
+            Try
+                Dim tx As String
+                Dim dll As Reflection.Assembly
+                Dim tp As Type
+                Dim Chm As String = _MonRepertoire & "\Plugins\" 'Emplacement par défaut des plugins
+
+                Dim strFileSize As String = ""
+                Dim di As New IO.DirectoryInfo(Chm)
+                Dim aryFi As IO.FileInfo() = di.GetFiles("*.dll")
+                Dim fi As IO.FileInfo
+
+                'Cherche tous les fichiers dll dans le répertoie plugin
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", "Chargement des DLL des drivers")
+                For Each fi In aryFi
+                    'chargement du plugin
+                    tx = fi.FullName   'emplacement de la dll
+                    'chargement de la dll
+                    dll = Reflection.Assembly.LoadFrom(tx)
+                    'Vérification de la présence de l'interface recherchée
+                    For Each tp In dll.GetTypes
+                        If tp.IsClass Then
+                            If tp.GetInterface("IDriver", True) IsNot Nothing Then
+                                'création de la référence au plugin
+                                'Dim obj As Object
+                                'obj = AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(tp.FullName, "IDriver")
+
+                                Dim i1 As IDriver
+                                i1 = DirectCast(dll.CreateInstance(tp.FullName), IDriver)
+                                i1 = CType(i1, IDriver)
+                                'i1 = dll.CreateInstance(tp.ToString)
+                                i1.Server = Me
+                                Dim pt As New Driver(Me, i1.ID)
+                                _ListDrivers.Add(i1)
+                                _ListImgDrivers.Add(pt)
+                                'i1.Start()
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " chargé")
+                            End If
+                        End If
+                    Next
+                Next
+            Catch ex As Exception
+                MsgBox("Erreur lors du chargement des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Load", " Erreur lors du chargement des drivers: " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>Démarre tous les drivers dont la propriété StartAuto=True</summary>
+        ''' <remarks></remarks>
+        Public Sub Drivers_Start()
+            Try
+                'Cherche tous les drivers chargés
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", "Démarrage des drivers")
+                For Each driver In _ListDrivers
+                    If driver.Enable And driver.StartAuto Then
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", " - " & driver.Nom & " démarré")
+                        driver.start()
+                    Else
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", " - " & driver.Nom & " non démarré car non Auto")
+                    End If
+                Next
+            Catch ex As Exception
+                MsgBox("Erreur lors du démarrage des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Start", " Erreur lors du démarrage des drivers: " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>Arretes les drivers démarrés</summary>
+        ''' <remarks></remarks>
+        Public Sub Drivers_Stop()
+            Try
+                'Cherche tous les drivers chargés
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Stop", "Arrêt des drivers")
+                For Each driver In _ListDrivers
+                    If driver.Enable And driver.IsConnect Then
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Stop", " - " & driver.Nom & " démarré")
+                        driver.stop()
+                    End If
+                Next
+            Catch ex As Exception
+                MsgBox("Erreur lors de l arret des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Stop", " Erreur lors de l'arret des drivers: " & ex.Message)
+            End Try
+        End Sub
+
+#End Region
+
+#Region "Cryptage"
         ''' <summary>
         ''' Crypter un string
         ''' </summary>
@@ -1635,10 +1645,11 @@ Namespace HoMIDom
             Dim strKey As String = sbKey.ToString
             Return sbKey.ToString
         End Function
+#End Region
 
 #End Region
 
-#Region "Interface Client"
+#Region "Interface Client via IHOMIDOM"
         '********************************************************************
         'Fonctions/Sub/Propriétés partagées en service web pour les clients
         '********************************************************************
@@ -1655,194 +1666,29 @@ Namespace HoMIDom
         End Property
 
         '*** FONCTIONS ******************************************
+#Region "Serveur"
         ''' <summary>
-        ''' Retourne un user par son username
+        ''' Retourne la date et heure du dernier démarrage du serveur
         ''' </summary>
-        ''' <param name="Username"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function ReturnUserByUsername(ByVal Username As String) As Users.User Implements IHoMIDom.ReturnUserByUsername
-            Dim retour As Users.User = Nothing
-            For i As Integer = 0 To _ListUsers.Count - 1
-                If _ListUsers.Item(i).username = Username Then
-                    retour = _ListUsers.Item(i)
-                    Exit For
-                End If
-            Next
-            Return retour
+        Public Function GetLastStartTime() As Date Implements IHoMIDom.GetLastStartTime
+            Return _DateTimeLastStart
         End Function
 
-        ''' <summary>Supprimer un device de la config</summary>
-        ''' <param name="deviceId"></param>
-        Public Function DeleteDevice(ByVal deviceId As String) As Integer Implements IHoMIDom.DeleteDevice
+        ''' <summary>Retourne l'heure du serveur</summary>
+        ''' <returns>String : heure du serveur</returns>
+        Public Function GetTime() As String Implements IHoMIDom.GetTime
             Try
-                For i As Integer = 0 To _ListDevices.Count - 1
-                    If _ListDevices.Item(i).Id = deviceId Then
-                        _ListDevices.Item(i).driver.deletedevice(deviceId)
-                        _ListDevices.RemoveAt(i)
-                        DeleteDevice = 0
-                        Exit Function
-                    End If
-                Next
-                Return 1
+                Return Now.ToLongTimeString
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDevice", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>Supprimer un driver de la config</summary>
-        ''' <param name="driverId"></param>
-        Public Function DeleteDriver(ByVal driverId As String) As Integer Implements IHoMIDom.DeleteDriver
-            Try
-                For i As Integer = 0 To _ListDrivers.Count - 1
-                    If _ListDrivers.Item(i).Id = driverId Then
-                        _ListDrivers.Item(i).removeat(i)
-                        DeleteDriver = 0
-                        Exit Function
-                    End If
-                Next
-                Return 1
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDriver", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>Supprimer une zone de la config</summary>
-        ''' <param name="zoneId"></param>
-        Public Function DeleteZone(ByVal zoneId As String) As Integer Implements IHoMIDom.DeleteZone
-            Try
-                For i As Integer = 0 To _ListZones.Count - 1
-                    If _ListZones.Item(i).Id = zoneId Then
-                        _ListZones.RemoveAt(i)
-                        DeleteZone = 0
-                        Exit Function
-                    End If
-                Next
-                Return 1
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteZone", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>Supprimer un trigger de la config</summary>
-        ''' <param name="triggerId"></param>
-        Public Function DeleteTrigger(ByVal triggerId As String) As Integer Implements IHoMIDom.DeleteTrigger
-            Try
-                For i As Integer = 0 To _Listtriggers.Count - 1
-                    If _listTriggers.Item(i).Id = triggerId Then
-                        _listTriggers.RemoveAt(i)
-                        DeleteTrigger = 0
-                        Exit Function
-                    End If
-                Next
-                Return 1
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteTrigger", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>Supprimer une macro de la config</summary>
-        ''' <param name="macroId"></param>
-        Public Function DeleteMacro(ByVal macroId As String) As Integer Implements IHoMIDom.DeleteMacro
-            Try
-                For i As Integer = 0 To _ListMacros.Count - 1
-                    If _ListMacros.Item(i).Id = macroId Then
-                        _ListMacros.RemoveAt(i)
-                        DeleteMacro = 0
-                        Exit Function
-                    End If
-                Next
-                Return 1
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteMacro", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>Supprime un user</summary>
-        ''' <param name="userId"></param>
-        Public Function DeleteUser(ByVal userId As String) As Integer Implements IHoMIDom.DeleteUser
-            Try
-                For i As Integer = 0 To _ListUsers.Count - 1
-                    If _ListUsers.Item(i).Id = userId Then
-                        _ListUsers.RemoveAt(i)
-                        DeleteUser = 0
-                        Exit Function
-                    End If
-                Next
-                Return 1
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteUser", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>Retourne l'heure du couché du soleil</summary>
-        Function GetHeureCoucherSoleil() As String Implements IHoMIDom.GetHeureCoucherSoleil
-            Try
-                Return _HeureCoucherSoleil
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHeureCoucherSoleil", "Exception : " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetTime", "Exception : " & ex.Message)
                 Return ""
             End Try
         End Function
+#End Region
 
-        ''' <summary>Retour l'heure de lever du soleil</summary>
-        Function GetHeureLeverSoleil() As String Implements IHoMIDom.GetHeureLeverSoleil
-            Try
-                Return _HeureLeverSoleil
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHeureLeverSoleil", "Exception : " & ex.Message)
-                Return ""
-            End Try
-        End Function
-
-        ''' <summary>Retourne la longitude du serveur</summary>
-        Function GetLongitude() As Double Implements IHoMIDom.GetLongitude
-            Try
-                Return _Longitude
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetLongitude", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>Applique une valeur de longitude au serveur</summary>
-        ''' <param name="value"></param>
-        Sub SetLongitude(ByVal value As Double) Implements IHoMIDom.SetLongitude
-            Try
-                _Longitude = value
-                MAJ_HeuresSoleil()
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetLongitude", "Exception : " & ex.Message)
-            End Try
-        End Sub
-
-        ''' <summary>Retourne la latitude du serveur</summary>
-        Function GetLatitude() As Double Implements IHoMIDom.GetLatitude
-            Try
-                Return _Latitude
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetLatitude", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>Applique une valeur de latitude du serveur</summary>
-        ''' <param name="value"></param>
-        Sub SetLatitude(ByVal value As Double) Implements IHoMIDom.SetLatitude
-            Try
-                _Latitude = value
-                MAJ_HeuresSoleil()
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetLatitude", "Exception : " & ex.Message)
-            End Try
-        End Sub
-
+#Region "SMTP"
         ''' <summary>Retourne l'adresse du serveur SMTP</summary>
         Public Function GetSMTPServeur() As String Implements IHoMIDom.GetSMTPServeur
             Try
@@ -1918,16 +1764,70 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetSMTPPassword", "Exception : " & ex.Message)
             End Try
         End Sub
-        ''' <summary>Retourne l'heure du serveur</summary>
-        ''' <returns>String : heure du serveur</returns>
-        Public Function GetTime() As String Implements IHoMIDom.GetTime
+#End Region
+
+#Region "Gestion Soleil"
+        ''' <summary>Retourne l'heure du couché du soleil</summary>
+        Function GetHeureCoucherSoleil() As String Implements IHoMIDom.GetHeureCoucherSoleil
             Try
-                Return Now.ToLongTimeString
+                Return _HeureCoucherSoleil
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetTime", "Exception : " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHeureCoucherSoleil", "Exception : " & ex.Message)
                 Return ""
             End Try
         End Function
+
+        ''' <summary>Retour l'heure de lever du soleil</summary>
+        Function GetHeureLeverSoleil() As String Implements IHoMIDom.GetHeureLeverSoleil
+            Try
+                Return _HeureLeverSoleil
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHeureLeverSoleil", "Exception : " & ex.Message)
+                Return ""
+            End Try
+        End Function
+
+        ''' <summary>Retourne la longitude du serveur</summary>
+        Function GetLongitude() As Double Implements IHoMIDom.GetLongitude
+            Try
+                Return _Longitude
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetLongitude", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>Applique une valeur de longitude au serveur</summary>
+        ''' <param name="value"></param>
+        Sub SetLongitude(ByVal value As Double) Implements IHoMIDom.SetLongitude
+            Try
+                _Longitude = value
+                MAJ_HeuresSoleil()
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetLongitude", "Exception : " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>Retourne la latitude du serveur</summary>
+        Function GetLatitude() As Double Implements IHoMIDom.GetLatitude
+            Try
+                Return _Latitude
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetLatitude", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>Applique une valeur de latitude du serveur</summary>
+        ''' <param name="value"></param>
+        Sub SetLatitude(ByVal value As Double) Implements IHoMIDom.SetLatitude
+            Try
+                _Latitude = value
+                MAJ_HeuresSoleil()
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetLatitude", "Exception : " & ex.Message)
+            End Try
+        End Sub
 
         ''' <summary>Retourne la valeur de correction de l'heure de coucher du soleil</summary>
         ''' <returns></returns>
@@ -1976,6 +1876,26 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetHeureCorrectionLever", "Exception : " & ex.Message)
             End Try
         End Sub
+#End Region
+
+#Region "Driver"
+        ''' <summary>Supprimer un driver de la config</summary>
+        ''' <param name="driverId"></param>
+        Public Function DeleteDriver(ByVal driverId As String) As Integer Implements IHoMIDom.DeleteDriver
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).Id = driverId Then
+                        _ListDrivers.Item(i).removeat(i)
+                        DeleteDriver = 0
+                        Exit Function
+                    End If
+                Next
+                Return 1
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDriver", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
 
         ''' <summary>Arrête un driver par son Id</summary>
         ''' <param name="DriverId"></param>
@@ -2006,6 +1926,303 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "StartDriver", "Exception : " & ex.Message)
             End Try
         End Sub
+
+        ''' <summary>Retourne la liste de tous les drivers</summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function GetAllDrivers() As List(Of TemplateDriver) Implements IHoMIDom.GetAllDrivers
+            Dim _list As New List(Of TemplateDriver)
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    Dim x As New TemplateDriver
+                    With x
+                        .Nom = _ListDrivers.Item(i).nom
+                        .ID = _ListDrivers.Item(i).id
+                        .COM = _ListDrivers.Item(i).com
+                        .Description = _ListDrivers.Item(i).description
+                        .Enable = _ListDrivers.Item(i).enable
+                        .IP_TCP = _ListDrivers.Item(i).ip_tcp
+                        .IP_UDP = _ListDrivers.Item(i).ip_udp
+                        .IsConnect = _ListDrivers.Item(i).isconnect
+                        .Modele = _ListDrivers.Item(i).modele
+                        .Picture = _ListDrivers.Item(i).picture
+                        .Port_TCP = _ListDrivers.Item(i).port_tcp
+                        .Port_UDP = _ListDrivers.Item(i).port_udp
+                        .Protocol = _ListDrivers.Item(i).protocol
+                        .Refresh = _ListDrivers.Item(i).refresh
+                        .StartAuto = _ListDrivers.Item(i).startauto
+                        .Version = _ListDrivers.Item(i).version
+                        For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
+                            .DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
+                        Next
+                        For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
+                            Dim y As New Driver.Parametre
+                            y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
+                            y.Description = _ListDrivers.Item(i).Parametres.item(j).description
+                            y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
+                            .Parametres.Add(y)
+                        Next
+                        Dim _listactdrv As New ArrayList
+                        Dim _listactd As New List(Of String)
+                        For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
+                            _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
+                        Next
+                        If _listactd.Count > 0 Then
+                            For n As Integer = 0 To _listactd.Count - 1
+                                Dim a() As String = _listactd.Item(n).Split("|")
+                                Dim p As New DeviceAction
+                                With p
+                                    .Nom = a(0)
+                                    If a.Length > 1 Then
+                                        For t As Integer = 1 To a.Length - 1
+                                            Dim pr As New DeviceAction.Parametre
+                                            Dim b() As String = a(t).Split(":")
+                                            With pr
+                                                .Nom = b(0)
+                                                .Type = b(1)
+                                            End With
+                                            p.Parametres.Add(pr)
+                                        Next
+                                    End If
+                                End With
+                                .DeviceAction.Add(p)
+                            Next
+                        End If
+
+                        _listactd = Nothing
+                        _listactdrv = Nothing
+                    End With
+                    _list.Add(x)
+                Next
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllDrivers", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>Sauvegarde ou créer un driver dans la config</summary>
+        ''' <param name="driverId"></param>
+        ''' <param name="name"></param>
+        ''' <param name="enable"></param>
+        ''' <param name="startauto"></param>
+        ''' <param name="iptcp"></param>
+        ''' <param name="porttcp"></param>
+        ''' <param name="ipudp"></param>
+        ''' <param name="portudp"></param>
+        ''' <param name="com"></param>
+        ''' <param name="refresh"></param>
+        ''' <param name="picture"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function SaveDriver(ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String, Optional ByVal Parametres As ArrayList = Nothing) As String Implements IHoMIDom.SaveDriver
+            Dim myID As String
+            Try
+                'Driver Existant
+                myID = driverId
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).id = driverId Then
+                        _ListDrivers.Item(i).Enable = enable
+                        _ListDrivers.Item(i).StartAuto = startauto
+                        If _ListDrivers.Item(i).IP_TCP <> "@" Then _ListDrivers.Item(i).IP_TCP = iptcp
+                        If _ListDrivers.Item(i).Port_TCP <> "@" Then _ListDrivers.Item(i).Port_TCP = porttcp
+                        If _ListDrivers.Item(i).IP_UDP <> "@" Then _ListDrivers.Item(i).IP_UDP = ipudp
+                        If _ListDrivers.Item(i).Port_UDP <> "@" Then _ListDrivers.Item(i).Port_UDP = portudp
+                        If _ListDrivers.Item(i).Com <> "@" Then _ListDrivers.Item(i).Com = com
+                        _ListDrivers.Item(i).Refresh = refresh
+                        _ListDrivers.Item(i).Picture = picture
+                        If Parametres IsNot Nothing Then
+                            For j As Integer = 0 To Parametres.Count - 1
+                                _ListDrivers.Item(i).parametres.item(j).valeur = Parametres.Item(j)
+                            Next
+                        End If
+                    End If
+                Next
+                'génération de l'event
+                Return myID
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDriver", "Exception : " & ex.Message)
+                Return ""
+            End Try
+        End Function
+
+        ''' <summary>Retourne un driver par son ID</summary>
+        ''' <param name="DriverId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnDriverById(ByVal DriverId As String) As TemplateDriver Implements IHoMIDom.ReturnDriverByID
+            Dim retour As New TemplateDriver
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).ID = DriverId Then
+                        retour.Nom = _ListDrivers.Item(i).nom
+                        retour.ID = _ListDrivers.Item(i).id
+                        retour.COM = _ListDrivers.Item(i).com
+                        retour.Description = _ListDrivers.Item(i).description
+                        retour.Enable = _ListDrivers.Item(i).enable
+                        retour.IP_TCP = _ListDrivers.Item(i).ip_tcp
+                        retour.IP_UDP = _ListDrivers.Item(i).ip_udp
+                        retour.IsConnect = _ListDrivers.Item(i).isconnect
+                        retour.Modele = _ListDrivers.Item(i).modele
+                        retour.Picture = _ListDrivers.Item(i).picture
+                        retour.Port_TCP = _ListDrivers.Item(i).port_tcp
+                        retour.Port_UDP = _ListDrivers.Item(i).port_udp
+                        retour.Protocol = _ListDrivers.Item(i).protocol
+                        retour.Refresh = _ListDrivers.Item(i).refresh
+                        retour.StartAuto = _ListDrivers.Item(i).startauto
+                        retour.Version = _ListDrivers.Item(i).version
+
+                        For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
+                            retour.DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
+                        Next
+                        For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
+                            Dim y As New Driver.Parametre
+                            y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
+                            y.Description = _ListDrivers.Item(i).Parametres.item(j).description
+                            y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
+                            retour.Parametres.Add(y)
+                        Next
+
+                        Dim _listactdrv As New ArrayList
+                        Dim _listactd As New List(Of String)
+                        For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
+                            _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
+                        Next
+                        If _listactd.Count > 0 Then
+                            For n As Integer = 0 To _listactd.Count - 1
+                                Dim a() As String = _listactd.Item(n).Split("|")
+                                Dim p As New DeviceAction
+                                With p
+                                    .Nom = a(0)
+                                    If a.Length > 1 Then
+                                        For t As Integer = 1 To a.Length - 1
+                                            Dim pr As New DeviceAction.Parametre
+                                            Dim b() As String = a(t).Split(":")
+                                            With pr
+                                                .Nom = b(0)
+                                                .Type = b(1)
+                                            End With
+                                            p.Parametres.Add(pr)
+                                        Next
+                                    End If
+                                End With
+                                retour.DeviceAction.Add(p)
+                            Next
+                        End If
+
+                        _listactd = Nothing
+                        _listactdrv = Nothing
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDriverById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>Retourne un driver par son ID</summary>
+        ''' <param name="DriverId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnDrvById(ByVal DriverId As String) As Object
+            Dim retour As Object = Nothing
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).ID = DriverId Then
+                        retour = _ListDrivers.Item(i)
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDrvById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>Retourne le driver par son Nom</summary>
+        ''' <param name="DriverNom"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnDriverByNom(ByVal DriverNom As String) As Object Implements IHoMIDom.ReturnDriverByNom
+            Dim retour As Object = Nothing
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).Nom = DriverNom.ToUpper() Then
+                        retour = _ListDrivers.Item(i)
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDriverByNom", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>Permet d'exécuter une commande Sub d'un Driver</summary>
+        ''' <param name="DriverId"></param>
+        ''' <param name="Action"></param>
+        ''' <remarks></remarks>
+        Sub ExecuteDriverCommand(ByVal DriverId As String, ByVal Action As DeviceAction) Implements IHoMIDom.ExecuteDriverCommand
+            Dim _retour As Object
+            Dim x As Object = Nothing
+
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).id = DriverId Then
+                        x = _ListDrivers.Item(i)
+                        Exit For
+                    End If
+                Next
+
+                If x IsNot Nothing Then
+
+                    If Action.Parametres.Count > 0 Then
+                        Select Case Action.Parametres.Count
+                            Case 1
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value)
+                            Case 2
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value)
+                            Case 3
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value, Action.Parametres.Item(2).Value)
+                            Case 4
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value, Action.Parametres.Item(2).Value, Action.Parametres.Item(3).Value)
+                            Case 5
+                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value, Action.Parametres.Item(2).Value, Action.Parametres.Item(3).Value, Action.Parametres.Item(4).Value)
+                        End Select
+                    Else
+                        CallByName(x, Action.Nom, CallType.Method)
+                    End If
+                End If
+            Catch ex As Exception
+                MsgBox("Erreur lors du traitement de la commande ExecuteDriverCommand: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
+            End Try
+        End Sub
+
+#End Region
+
+#Region "Device"
+        ''' <summary>Supprimer un device de la config</summary>
+        ''' <param name="deviceId"></param>
+        Public Function DeleteDevice(ByVal deviceId As String) As Integer Implements IHoMIDom.DeleteDevice
+            Try
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).Id = deviceId Then
+                        _ListDevices.Item(i).driver.deletedevice(deviceId)
+                        _ListDevices.RemoveAt(i)
+                        DeleteDevice = 0
+                        Exit Function
+                    End If
+                Next
+                Return 1
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDevice", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
 
         ''' <summary>Retourne la liste de tous les devices</summary>
         ''' <returns></returns>
@@ -2150,276 +2367,6 @@ Namespace HoMIDom
                 Return Nothing
             End Try
         End Function
-
-        ''' <summary>Retourne la liste de tous les drivers</summary>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Function GetAllDrivers() As List(Of TemplateDriver) Implements IHoMIDom.GetAllDrivers
-            Dim _list As New List(Of TemplateDriver)
-            Try
-                For i As Integer = 0 To _ListDrivers.Count - 1
-                    Dim x As New TemplateDriver
-                    With x
-                        .Nom = _ListDrivers.Item(i).nom
-                        .ID = _ListDrivers.Item(i).id
-                        .COM = _ListDrivers.Item(i).com
-                        .Description = _ListDrivers.Item(i).description
-                        .Enable = _ListDrivers.Item(i).enable
-                        .IP_TCP = _ListDrivers.Item(i).ip_tcp
-                        .IP_UDP = _ListDrivers.Item(i).ip_udp
-                        .IsConnect = _ListDrivers.Item(i).isconnect
-                        .Modele = _ListDrivers.Item(i).modele
-                        .Picture = _ListDrivers.Item(i).picture
-                        .Port_TCP = _ListDrivers.Item(i).port_tcp
-                        .Port_UDP = _ListDrivers.Item(i).port_udp
-                        .Protocol = _ListDrivers.Item(i).protocol
-                        .Refresh = _ListDrivers.Item(i).refresh
-                        .StartAuto = _ListDrivers.Item(i).startauto
-                        .Version = _ListDrivers.Item(i).version
-                        For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
-                            .DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
-                        Next
-                        For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
-                            Dim y As New Driver.Parametre
-                            y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
-                            y.Description = _ListDrivers.Item(i).Parametres.item(j).description
-                            y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
-                            .Parametres.Add(y)
-                        Next
-                        Dim _listactdrv As New ArrayList
-                        Dim _listactd As New List(Of String)
-                        For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
-                            _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
-                        Next
-                        If _listactd.Count > 0 Then
-                            For n As Integer = 0 To _listactd.Count - 1
-                                Dim a() As String = _listactd.Item(n).Split("|")
-                                Dim p As New DeviceAction
-                                With p
-                                    .Nom = a(0)
-                                    If a.Length > 1 Then
-                                        For t As Integer = 1 To a.Length - 1
-                                            Dim pr As New DeviceAction.Parametre
-                                            Dim b() As String = a(t).Split(":")
-                                            With pr
-                                                .Nom = b(0)
-                                                .Type = b(1)
-                                            End With
-                                            p.Parametres.Add(pr)
-                                        Next
-                                    End If
-                                End With
-                                .DeviceAction.Add(p)
-                            Next
-                        End If
-
-                        _listactd = Nothing
-                        _listactdrv = Nothing
-                    End With
-                    _list.Add(x)
-                Next
-                Return _list
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllDrivers", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
-
-        ''' <summary>Retourne la liste de toutes les zones</summary>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Function GetAllZones() As List(Of Zone) Implements IHoMIDom.GetAllZones
-            Try
-                Dim _list As New List(Of Zone)
-                For i As Integer = 0 To _ListZones.Count - 1
-                    Dim x As New Zone
-                    With x
-                        .Name = _ListZones.Item(i).name
-                        .ID = _ListZones.Item(i).id
-                        .Icon = _ListZones.Item(i).icon
-                        .Image = _ListZones.Item(i).Image
-                        For j As Integer = 0 To _ListZones.Item(i).ListDevice.count - 1
-                            .ListDevice.Add(_ListZones.Item(i).ListDevice.item(j))
-                        Next
-                    End With
-                    _list.Add(x)
-                Next
-                Return _list
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllZones", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
-
-        ''' <summary>Retourne la liste de toutes les macros</summary>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Function GetAllMacros() As List(Of Macro) Implements IHoMIDom.GetAllMacros
-            Try
-                Dim _list As New List(Of Macro)
-                For i As Integer = 0 To _ListMacros.Count - 1
-                    Dim x As New Macro
-                    With x
-                        .Nom = _ListMacros.Item(i).nom
-                        .ID = _ListMacros.Item(i).id
-                        .Description = _ListMacros.Item(i).description
-                        .Enable = _ListMacros.Item(i).enable
-                    End With
-                    _list.Add(x)
-                Next
-                Return _list
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllMacros", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
-
-        ''' <summary>Retourne la liste de toutes les macros</summary>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Function GetAllTriggers() As List(Of Trigger) Implements IHoMIDom.GetAllTriggers
-            Try
-                Dim _list As New List(Of Trigger)
-                For i As Integer = 0 To _listTriggers.Count - 1
-                    Dim x As New Trigger
-                    With x
-                        .Nom = _listTriggers.Item(i).nom
-                        .ID = _listTriggers.Item(i).id
-                        .Description = _listTriggers.Item(i).description
-                        .Enable = _listTriggers.Item(i).enable
-                        .Prochainedateheure = _listTriggers.Item(i).Prochainedateheure
-                        .Condition = _listTriggers.Item(i).condition
-                    End With
-                    _list.Add(x)
-                Next
-                Return _list
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllTriggers", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
-        ''' <summary>Retourne la liste de tous les drivers</summary>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Function GetAllUsers() As List(Of Users.User) Implements IHoMIDom.GetAllUsers
-            Dim _list As New List(Of Users.User)
-            Try
-                For i As Integer = 0 To _ListUsers.Count - 1
-                    Dim x As New Users.User
-                    With x
-                        .Adresse = _ListUsers.Item(i).Adresse
-                        .CodePostal = _ListUsers.Item(i).CodePostal
-                        .eMail = _ListUsers.Item(i).eMail
-                        .eMailAutre = _ListUsers.Item(i).eMailAutre
-                        .ID = _ListUsers.Item(i).ID
-                        .Image = _ListUsers.Item(i).Image
-                        .Nom = _ListUsers.Item(i).Nom
-                        .NumberIdentification = _ListUsers.Item(i).NumberIdentification
-                        .Password = _ListUsers.Item(i).Password
-                        .Prenom = _ListUsers.Item(i).Prenom
-                        .Profil = _ListUsers.Item(i).Profil
-                        .TelAutre = _ListUsers.Item(i).TelAutre
-                        .TelFixe = _ListUsers.Item(i).TelFixe
-                        .TelMobile = _ListUsers.Item(i).TelMobile
-                        .UserName = _ListUsers.Item(i).UserName
-                        .Ville = _ListUsers.Item(i).Ville
-                    End With
-                    _list.Add(x)
-                Next
-                Return _list
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllUsers", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
-
-        ''' <summary>ajouter un device à une zone</summary>
-        ''' <param name="ZoneId"></param>
-        ''' <param name="DeviceId"></param>
-        ''' <param name="Visible"></param>
-        ''' <param name="X"></param>
-        ''' <param name="Y"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Function AddDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String, ByVal Visible As Boolean, Optional ByVal X As Double = 0, Optional ByVal Y As Double = 0) As String Implements IHoMIDom.AddDeviceToZone
-            Dim _zone As Zone = ReturnZoneById(ZoneId)
-            Dim _retour As String = ""
-            Try
-                If _zone IsNot Nothing Then
-                    Dim _dev As New Zone.Device_Zone("", Visible, X, Y)
-                    _zone.ListDevice.Add(_dev)
-                    _retour = "0"
-                End If
-                Return _retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddDeviceToZone", "Exception : " & ex.Message)
-                Return ""
-            End Try
-        End Function
-
-        ''' <summary>supprimer un device à une zone</summary>
-        ''' <param name="ZoneId"></param>
-        ''' <param name="DeviceId"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Function DeleteDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String) As String Implements IHoMIDom.DeleteDeviceToZone
-            Dim _zone As Zone = ReturnZoneById(ZoneId)
-            Dim _retour As String = ""
-            Try
-                If _zone IsNot Nothing Then
-                    For i As Integer = 0 To _zone.ListDevice.Count - 1
-                        If _zone.ListDevice.Item(i).DeviceID = DeviceId Then
-                            _zone.ListDevice.RemoveAt(i)
-                            Exit For
-                        End If
-                    Next
-                    _retour = "0"
-                End If
-                Return _retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDeviceToZone", "Exception : " & ex.Message)
-                Return ""
-            End Try
-        End Function
-
-        ''' <summary>renvoi le fichier log suivant une requête xml si besoin</summary>
-        ''' <param name="Requete"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Function ReturnLog(Optional ByVal Requete As String = "") As String Implements IHoMIDom.ReturnLog
-            Try
-                Dim retour As String = ""
-                If Requete = "" Then
-                    Dim SR As New StreamReader(_MonRepertoire & "\logs\log.xml")
-                    retour = SR.ReadToEnd()
-                    retour = HtmlDecode(retour)
-                    SR.Close()
-                Else
-                    'creation d'une nouvelle instance du membre xmldocument
-                    Dim XmlDoc As XmlDocument = New XmlDocument()
-                    XmlDoc.Load(_MonRepertoire & "\logs\log.xml")
-                End If
-                If retour.Length > 8000 Then
-                    Dim retour2 As String = Mid(retour, retour.Length - 8001, 8000)
-                    retour = "Erreur, trop de ligne à traiter depuis le log seules les dernières lignes seront affichées, merci de consulter le fichier sur le serveur par en avoir la totalité!!" & vbCrLf & vbCrLf & retour2
-                    Return retour
-                End If
-                Return retour
-            Catch ex As Exception
-                ReturnLog = "Erreur lors de la récupération du log: " & ex.ToString
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnLog", "Exception : " & ex.Message)
-            End Try
-        End Function
-
-        ''' <summary>Sauvegarder la configuration</summary>
-        ''' <remarks></remarks>
-        Public Sub SaveConfiguration() Implements IHoMIDom.SaveConfig
-            Try
-                SaveConfig(_MonRepertoire & "\config\homidom.xml")
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfiguration", "Exception : " & ex.Message)
-            End Try
-        End Sub
 
         ''' <summary>Sauvegarder ou créer un device</summary>
         ''' <param name="deviceId"></param>
@@ -2986,349 +2933,6 @@ Namespace HoMIDom
             End Try
         End Function
 
-        ''' <summary>Fixer la valeur du port SOAP</summary>
-        ''' <param name="Value"></param>
-        ''' <remarks></remarks>
-        Public Sub SetPortSOAP(ByVal Value As Double) Implements IHoMIDom.SetPortSOAP
-            Try
-                _PortSOAP = Value
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetPortSOAP", "Exception : " & ex.Message)
-            End Try
-        End Sub
-
-        ''' <summary>Retourne la valeur du port SOAP</summary>
-        ''' <returns>Numero du port ou -1 si erreur</returns>
-        ''' <remarks></remarks>
-        Public Function GetPortSOAP() As Double Implements IHoMIDom.GetPortSOAP
-            Try
-                Return _PortSOAP
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetPortSOAP", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>Sauvegarde ou créer un driver dans la config</summary>
-        ''' <param name="driverId"></param>
-        ''' <param name="name"></param>
-        ''' <param name="enable"></param>
-        ''' <param name="startauto"></param>
-        ''' <param name="iptcp"></param>
-        ''' <param name="porttcp"></param>
-        ''' <param name="ipudp"></param>
-        ''' <param name="portudp"></param>
-        ''' <param name="com"></param>
-        ''' <param name="refresh"></param>
-        ''' <param name="picture"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function SaveDriver(ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String, Optional ByVal Parametres As ArrayList = Nothing) As String Implements IHoMIDom.SaveDriver
-            Dim myID As String
-            Try
-                'Driver Existant
-                myID = driverId
-                For i As Integer = 0 To _ListDrivers.Count - 1
-                    If _ListDrivers.Item(i).id = driverId Then
-                        _ListDrivers.Item(i).Enable = enable
-                        _ListDrivers.Item(i).StartAuto = startauto
-                        If _ListDrivers.Item(i).IP_TCP <> "@" Then _ListDrivers.Item(i).IP_TCP = iptcp
-                        If _ListDrivers.Item(i).Port_TCP <> "@" Then _ListDrivers.Item(i).Port_TCP = porttcp
-                        If _ListDrivers.Item(i).IP_UDP <> "@" Then _ListDrivers.Item(i).IP_UDP = ipudp
-                        If _ListDrivers.Item(i).Port_UDP <> "@" Then _ListDrivers.Item(i).Port_UDP = portudp
-                        If _ListDrivers.Item(i).Com <> "@" Then _ListDrivers.Item(i).Com = com
-                        _ListDrivers.Item(i).Refresh = refresh
-                        _ListDrivers.Item(i).Picture = picture
-                        If Parametres IsNot Nothing Then
-                            For j As Integer = 0 To Parametres.Count - 1
-                                _ListDrivers.Item(i).parametres.item(j).valeur = Parametres.Item(j)
-                            Next
-                        End If
-                    End If
-                Next
-                'génération de l'event
-                Return myID
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDriver", "Exception : " & ex.Message)
-                Return ""
-            End Try
-        End Function
-
-        ''' <summary>sauvegarde ou créer une zone dans la config</summary>
-        ''' <param name="zoneId"></param>
-        ''' <param name="name"></param>
-        ''' <param name="ListDevice"></param>
-        ''' <param name="icon"></param>
-        ''' <param name="image"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListDevice As List(Of Zone.Device_Zone) = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String Implements IHoMIDom.SaveZone
-            Dim myID As String = ""
-            Try
-                If zoneId = "" Then
-                    Dim x As New Zone
-                    With x
-                        x.ID = GenerateGUID()
-                        x.Name = name
-                        x.Icon = icon
-                        x.Image = image
-                        x.ListDevice = ListDevice
-                    End With
-                    myID = x.ID
-                    _ListZones.Add(x)
-                Else
-                    'zone Existante
-                    myID = zoneId
-                    For i As Integer = 0 To _ListZones.Count - 1
-                        If _ListZones.Item(i).id = zoneId Then
-                            _ListZones.Item(i).name = name
-                            _ListZones.Item(i).icon = icon
-                            _ListZones.Item(i).image = image
-                            _ListZones.Item(i).listdevice = ListDevice
-                        End If
-                    Next
-                End If
-                'génération de l'event
-                Return myID
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveZone", "Exception : " & ex.Message)
-                Return ""
-            End Try
-        End Function
-
-        ''' <summary>
-        ''' Permet de créer ou modifier une macro
-        ''' </summary>
-        ''' <param name="macroId"></param>
-        ''' <param name="nom"></param>
-        ''' <param name="enable"></param>
-        ''' <param name="description"></param>
-        ''' <param name="condition"></param>
-        ''' <param name="actiontrue"></param>
-        ''' <param name="actionfalse"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal condition As ArrayList = Nothing, Optional ByVal actiontrue As ArrayList = Nothing, Optional ByVal actionfalse As ArrayList = Nothing) As String Implements IHoMIDom.SaveMacro
-            Dim myID As String = ""
-            Try
-                If macroId = "" Then
-                    Dim x As New Macro
-                    With x
-                        x.ID = GenerateGUID()
-                        x.Nom = nom
-                        x.Enable = enable
-                        x.Description = description
-                        x.Condition = condition
-                        x.ActionTrue = actiontrue
-                        x.ActionFalse = actionfalse
-                    End With
-                    myID = x.ID
-                    _ListMacros.Add(x)
-                Else
-                    'zone Existante
-                    myID = macroId
-                    For i As Integer = 0 To _ListMacros.Count - 1
-                        If _ListMacros.Item(i).id = macroId Then
-                            _ListMacros.Item(i).nom = nom
-                            _ListMacros.Item(i).enable = enable
-                            _ListMacros.Item(i).description = description
-                            _ListMacros.Item(i).condition = condition
-                            _ListMacros.Item(i).actiontrue = actiontrue
-                            _ListMacros.Item(i).actionfalse = actionfalse
-                        End If
-                    Next
-                End If
-                'génération de l'event
-                Return myID
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveMacro", "Exception : " & ex.Message)
-                Return ""
-            End Try
-        End Function
-
-
-        ''' <summary>
-        ''' Permet de créer ou modifier un trigger
-        ''' </summary>
-        ''' <param name="triggerId"></param>
-        ''' <param name="nom"></param>
-        ''' <param name="enable"></param>
-        ''' <param name="description"></param>
-        ''' <param name="condition"></param>
-        ''' <param name="macro"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function SaveTrigger(ByVal triggerId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal condition As String = "", Optional ByVal macro As ArrayList = Nothing) As String Implements IHoMIDom.SaveTrigger
-            Dim myID As String = ""
-            Try
-                If triggerId = "" Then
-                    Dim x As New Trigger
-                    With x
-                        x.ID = GenerateGUID()
-                        x.Nom = nom
-                        x.Enable = enable
-                        x.Description = description
-                        x.Condition = condition
-                        x.Macro = macro
-                    End With
-                    myID = x.ID
-                    _listTriggers.Add(x)
-                Else
-                    'zone Existante
-                    myID = triggerId
-                    For i As Integer = 0 To _listTriggers.Count - 1
-                        If _listTriggers.Item(i).id = triggerId Then
-                            _listTriggers.Item(i).nom = nom
-                            _listTriggers.Item(i).enable = enable
-                            _listTriggers.Item(i).description = description
-                            _listTriggers.Item(i).condition = condition
-                            _listTriggers.Item(i).macro = macro
-                        End If
-                    Next
-                End If
-                'génération de l'event
-                Return myID
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTrigger", "Exception : " & ex.Message)
-                Return ""
-            End Try
-        End Function
-        ''' <summary>
-        ''' Créer ou modifie un user par son ID
-        ''' </summary>
-        ''' <param name="userId"></param>
-        ''' <param name="UserName"></param>
-        ''' <param name="Password"></param>
-        ''' <param name="Profil"></param>
-        ''' <param name="Nom"></param>
-        ''' <param name="Prenom"></param>
-        ''' <param name="NumberIdentification"></param>
-        ''' <param name="Image"></param>
-        ''' <param name="eMail"></param>
-        ''' <param name="eMailAutre"></param>
-        ''' <param name="TelFixe"></param>
-        ''' <param name="TelMobile"></param>
-        ''' <param name="TelAutre"></param>
-        ''' <param name="Adresse"></param>
-        ''' <param name="Ville"></param>
-        ''' <param name="CodePostal"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Function SaveUser(ByVal userId As String, ByVal UserName As String, ByVal Password As String, ByVal Profil As Users.TypeProfil, ByVal Nom As String, ByVal Prenom As String, Optional ByVal NumberIdentification As String = "", Optional ByVal Image As String = "", Optional ByVal eMail As String = "", Optional ByVal eMailAutre As String = "", Optional ByVal TelFixe As String = "", Optional ByVal TelMobile As String = "", Optional ByVal TelAutre As String = "", Optional ByVal Adresse As String = "", Optional ByVal Ville As String = "", Optional ByVal CodePostal As String = "") As String Implements IHoMIDom.SaveUser
-            Dim myID As String = ""
-            Try
-                If userId = "" Then
-                    For i As Integer = 0 To _ListUsers.Count - 1
-                        If _ListUsers.Item(i).username = UserName Then
-                            myID = "ERROR Username déjà utlisé"
-                            Return myID
-                        End If
-                    Next
-                    Dim x As New Users.User
-                    With x
-                        x.ID = GenerateGUID()
-                        x.Adresse = Adresse
-                        x.CodePostal = CodePostal
-                        x.eMail = eMail
-                        x.eMailAutre = eMailAutre
-                        x.Image = Image
-                        x.Nom = Nom
-                        x.NumberIdentification = NumberIdentification
-                        x.Password = EncryptTripleDES(Password, "homidom")
-                        x.Prenom = Prenom
-                        x.Profil = Profil
-                        x.TelAutre = TelAutre
-                        x.TelFixe = TelFixe
-                        x.TelMobile = TelMobile
-                        x.UserName = UserName
-                        x.Ville = Ville
-                    End With
-                    myID = x.ID
-                    _ListUsers.Add(x)
-                Else
-                    'user Existant
-                    myID = userId
-                    For i As Integer = 0 To _ListUsers.Count - 1
-                        If _ListUsers.Item(i).id = userId Then
-                            _ListUsers.Item(i).Adresse = Adresse
-                            _ListUsers.Item(i).CodePostal = CodePostal
-                            _ListUsers.Item(i).eMail = eMail
-                            _ListUsers.Item(i).eMailAutre = eMailAutre
-                            _ListUsers.Item(i).Image = Image
-                            _ListUsers.Item(i).Nom = Nom
-                            _ListUsers.Item(i).NumberIdentification = NumberIdentification
-                            _ListUsers.Item(i).Password = EncryptTripleDES(Password, "homidom")
-                            _ListUsers.Item(i).Prenom = Prenom
-                            _ListUsers.Item(i).Profil = Profil
-                            _ListUsers.Item(i).TelAutre = TelAutre
-                            _ListUsers.Item(i).TelFixe = TelFixe
-                            _ListUsers.Item(i).TelMobile = TelMobile
-                            _ListUsers.Item(i).UserName = UserName
-                            _ListUsers.Item(i).Ville = Ville
-                        End If
-                    Next
-                End If
-
-                'génération de l'event
-                Return myID
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveUser", "Exception : " & ex.Message)
-                Return ""
-            End Try
-        End Function
-
-        ''' <summary>Vérifie le couple username password</summary>
-        ''' <param name="Username"></param>
-        ''' <param name="Password"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function VerifLogin(ByVal Username As String, ByVal Password As String) As Boolean Implements IHoMIDom.VerifLogin
-            Dim retour As Boolean = False
-            Try
-                For i As Integer = 0 To _ListUsers.Count - 1
-                    If _ListUsers.Item(i).username = Username Then
-                        Dim a As String = EncryptTripleDES(Password, "homidom")
-                        Dim b As String = DecryptTripleDES(_ListUsers.Item(i).password, "homidom")
-                        If a = b Then
-                            Return True
-                            Exit For
-                        End If
-                    End If
-                Next
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "VerifLogin", "Exception : " & ex.Message)
-                Return False
-            End Try
-        End Function
-
-        ''' <summary>Permet de changer de Password sur un user</summary>
-        ''' <param name="Username"></param>
-        ''' <param name="OldPassword"></param>
-        ''' <param name="Password"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Function ChangePassword(ByVal Username As String, ByVal OldPassword As String, ByVal ConfirmNewPassword As String, ByVal Password As String) As Boolean Implements IHoMIDom.ChangePassword
-            Dim retour As Boolean = False
-            Try
-                For i As Integer = 0 To _ListUsers.Count - 1
-                    If _ListUsers.Item(i).username = Username Then
-                        If _ListUsers.Item(i).password = OldPassword Then
-                            If ConfirmNewPassword = Password Then
-                                _ListUsers.Item(i).password = EncryptTripleDES(Password, "homidom")
-                                retour = True
-                                Exit For
-                            End If
-                        End If
-                    End If
-                Next
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ChangePassword", "Exception : " & ex.Message)
-                Return False
-            End Try
-        End Function
-
         ''' <summary>Supprime une commande IR d'un device</summary>
         ''' <param name="deviceId"></param>
         ''' <param name="CmdName"></param>
@@ -3576,215 +3180,6 @@ Namespace HoMIDom
             End Try
         End Function
 
-        ''' <summary>Retourne un driver par son ID</summary>
-        ''' <param name="DriverId"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function ReturnDriverById(ByVal DriverId As String) As TemplateDriver Implements IHoMIDom.ReturnDriverByID
-            Dim retour As New TemplateDriver
-            Try
-                For i As Integer = 0 To _ListDrivers.Count - 1
-                    If _ListDrivers.Item(i).ID = DriverId Then
-                        retour.Nom = _ListDrivers.Item(i).nom
-                        retour.ID = _ListDrivers.Item(i).id
-                        retour.COM = _ListDrivers.Item(i).com
-                        retour.Description = _ListDrivers.Item(i).description
-                        retour.Enable = _ListDrivers.Item(i).enable
-                        retour.IP_TCP = _ListDrivers.Item(i).ip_tcp
-                        retour.IP_UDP = _ListDrivers.Item(i).ip_udp
-                        retour.IsConnect = _ListDrivers.Item(i).isconnect
-                        retour.Modele = _ListDrivers.Item(i).modele
-                        retour.Picture = _ListDrivers.Item(i).picture
-                        retour.Port_TCP = _ListDrivers.Item(i).port_tcp
-                        retour.Port_UDP = _ListDrivers.Item(i).port_udp
-                        retour.Protocol = _ListDrivers.Item(i).protocol
-                        retour.Refresh = _ListDrivers.Item(i).refresh
-                        retour.StartAuto = _ListDrivers.Item(i).startauto
-                        retour.Version = _ListDrivers.Item(i).version
-
-                        For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
-                            retour.DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
-                        Next
-                        For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
-                            Dim y As New Driver.Parametre
-                            y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
-                            y.Description = _ListDrivers.Item(i).Parametres.item(j).description
-                            y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
-                            retour.Parametres.Add(y)
-                        Next
-
-                        Dim _listactdrv As New ArrayList
-                        Dim _listactd As New List(Of String)
-                        For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
-                            _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
-                        Next
-                        If _listactd.Count > 0 Then
-                            For n As Integer = 0 To _listactd.Count - 1
-                                Dim a() As String = _listactd.Item(n).Split("|")
-                                Dim p As New DeviceAction
-                                With p
-                                    .Nom = a(0)
-                                    If a.Length > 1 Then
-                                        For t As Integer = 1 To a.Length - 1
-                                            Dim pr As New DeviceAction.Parametre
-                                            Dim b() As String = a(t).Split(":")
-                                            With pr
-                                                .Nom = b(0)
-                                                .Type = b(1)
-                                            End With
-                                            p.Parametres.Add(pr)
-                                        Next
-                                    End If
-                                End With
-                                retour.DeviceAction.Add(p)
-                            Next
-                        End If
-
-                        _listactd = Nothing
-                        _listactdrv = Nothing
-                        Exit For
-                    End If
-                Next
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDriverById", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
-
-        ''' <summary>Retourne un driver par son ID</summary>
-        ''' <param name="DriverId"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function ReturnDrvById(ByVal DriverId As String) As Object
-            Dim retour As Object = Nothing
-            Try
-                For i As Integer = 0 To _ListDrivers.Count - 1
-                    If _ListDrivers.Item(i).ID = DriverId Then
-                        retour = _ListDrivers.Item(i)
-                        Exit For
-                    End If
-                Next
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDrvById", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
-
-        ''' <summary>Retourne la liste des devices d'une zone depuis son ID</summary>
-        ''' <param name="ZoneId"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Function GetDeviceInZone(ByVal zoneId) As List(Of TemplateDevice) Implements IHoMIDom.GetDeviceInZone
-            Try
-                Return Nothing
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetDeviceInZone", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
-
-        ''' <summary>Retourne la zone par son ID</summary>
-        ''' <param name="ZoneId"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function ReturnZoneById(ByVal ZoneId As String) As Zone Implements IHoMIDom.ReturnZoneByID
-            Dim retour As Object = Nothing
-            Try
-                For i As Integer = 0 To _ListZones.Count - 1
-                    If _ListZones.Item(i).ID = ZoneId Then
-                        retour = _ListZones.Item(i)
-                        Exit For
-                    End If
-                Next
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnZoneById", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
-
-        ''' <summary>Retourne le trigger par son ID</summary>
-        ''' <param name="TriggerId"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function ReturnTriggerById(ByVal TriggerId As String) As Trigger Implements IHoMIDom.ReturnTriggerById
-            Dim retour As Object = Nothing
-            Try
-                For i As Integer = 0 To _listTriggers.Count - 1
-                    If _listTriggers.Item(i).ID = TriggerId Then
-                        retour = _listTriggers.Item(i)
-                        Exit For
-                    End If
-                Next
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnTriggerById", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
-
-        ''' <summary>Retourne la macro par son ID</summary>
-        ''' <param name="MacroId"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function ReturnMacroById(ByVal MacroId As String) As Macro Implements IHoMIDom.ReturnMacroByID
-            Dim retour As Object = Nothing
-            Try
-                For i As Integer = 0 To _ListMacros.Count - 1
-                    If _ListMacros.Item(i).ID = MacroId Then
-                        retour = _ListMacros.Item(i)
-                        Exit For
-                    End If
-                Next
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnMacroById", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
-
-        ''' <summary>Retourne un user par son ID</summary>
-        ''' <param name="UserId"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function ReturnUserById(ByVal UserId As String) As Users.User Implements IHoMIDom.ReturnUserById
-            Dim retour As Object = Nothing
-            Try
-                For i As Integer = 0 To _ListUsers.Count - 1
-                    If _ListUsers.Item(i).ID = UserId Then
-                        retour = _ListUsers.Item(i)
-                        Exit For
-                    End If
-                Next
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnUserById", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
-
-        ''' <summary>Retourne le driver par son Nom</summary>
-        ''' <param name="DriverNom"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function ReturnDriverByNom(ByVal DriverNom As String) As Object Implements IHoMIDom.ReturnDriverByNom
-            Dim retour As Object = Nothing
-            Try
-                For i As Integer = 0 To _ListDrivers.Count - 1
-                    If _ListDrivers.Item(i).Nom = DriverNom.ToUpper() Then
-                        retour = _ListDrivers.Item(i)
-                        Exit For
-                    End If
-                Next
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDriverByNom", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
-
         ''' <summary>Retourne une liste de device par son Adresse1 et/ou type et/ou son driver, ex: "A1" "TEMPERATURE" "RFXCOM_RECEIVER"</summary>
         ''' <param name="DeviceAdresse"></param>
         ''' <param name="DeviceType"></param>
@@ -3848,46 +3243,701 @@ Namespace HoMIDom
                 MsgBox("Erreur lors du traitemant du Sub ExecuteDeviceCommand: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
             End Try
         End Sub
+#End Region
 
-        ''' <summary>Permet d'exécuter une commande Sub d'un Driver</summary>
-        ''' <param name="DriverId"></param>
-        ''' <param name="Action"></param>
-        ''' <remarks></remarks>
-        Sub ExecuteDriverCommand(ByVal DriverId As String, ByVal Action As DeviceAction) Implements IHoMIDom.ExecuteDriverCommand
-            Dim _retour As Object
-            Dim x As Object = Nothing
-
+#Region "Zone"
+        ''' <summary>Supprimer une zone de la config</summary>
+        ''' <param name="zoneId"></param>
+        Public Function DeleteZone(ByVal zoneId As String) As Integer Implements IHoMIDom.DeleteZone
             Try
-                For i As Integer = 0 To _ListDrivers.Count - 1
-                    If _ListDrivers.Item(i).id = DriverId Then
-                        x = _ListDrivers.Item(i)
+                For i As Integer = 0 To _ListZones.Count - 1
+                    If _ListZones.Item(i).Id = zoneId Then
+                        _ListZones.RemoveAt(i)
+                        DeleteZone = 0
+                        Exit Function
+                    End If
+                Next
+                Return 1
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteZone", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>Retourne la liste de toutes les zones</summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function GetAllZones() As List(Of Zone) Implements IHoMIDom.GetAllZones
+            Try
+                Dim _list As New List(Of Zone)
+                For i As Integer = 0 To _ListZones.Count - 1
+                    Dim x As New Zone
+                    With x
+                        .Name = _ListZones.Item(i).name
+                        .ID = _ListZones.Item(i).id
+                        .Icon = _ListZones.Item(i).icon
+                        .Image = _ListZones.Item(i).Image
+                        For j As Integer = 0 To _ListZones.Item(i).ListDevice.count - 1
+                            .ListDevice.Add(_ListZones.Item(i).ListDevice.item(j))
+                        Next
+                    End With
+                    _list.Add(x)
+                Next
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllZones", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>ajouter un device à une zone</summary>
+        ''' <param name="ZoneId"></param>
+        ''' <param name="DeviceId"></param>
+        ''' <param name="Visible"></param>
+        ''' <param name="X"></param>
+        ''' <param name="Y"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function AddDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String, ByVal Visible As Boolean, Optional ByVal X As Double = 0, Optional ByVal Y As Double = 0) As String Implements IHoMIDom.AddDeviceToZone
+            Dim _zone As Zone = ReturnZoneById(ZoneId)
+            Dim _retour As String = ""
+            Try
+                If _zone IsNot Nothing Then
+                    Dim _dev As New Zone.Device_Zone("", Visible, X, Y)
+                    _zone.ListDevice.Add(_dev)
+                    _retour = "0"
+                End If
+                Return _retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddDeviceToZone", "Exception : " & ex.Message)
+                Return ""
+            End Try
+        End Function
+
+        ''' <summary>supprimer un device à une zone</summary>
+        ''' <param name="ZoneId"></param>
+        ''' <param name="DeviceId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function DeleteDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String) As String Implements IHoMIDom.DeleteDeviceToZone
+            Dim _zone As Zone = ReturnZoneById(ZoneId)
+            Dim _retour As String = ""
+            Try
+                If _zone IsNot Nothing Then
+                    For i As Integer = 0 To _zone.ListDevice.Count - 1
+                        If _zone.ListDevice.Item(i).DeviceID = DeviceId Then
+                            _zone.ListDevice.RemoveAt(i)
+                            Exit For
+                        End If
+                    Next
+                    _retour = "0"
+                End If
+                Return _retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDeviceToZone", "Exception : " & ex.Message)
+                Return ""
+            End Try
+        End Function
+
+        ''' <summary>sauvegarde ou créer une zone dans la config</summary>
+        ''' <param name="zoneId"></param>
+        ''' <param name="name"></param>
+        ''' <param name="ListDevice"></param>
+        ''' <param name="icon"></param>
+        ''' <param name="image"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListDevice As List(Of Zone.Device_Zone) = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String Implements IHoMIDom.SaveZone
+            Dim myID As String = ""
+            Try
+                If zoneId = "" Then
+                    Dim x As New Zone
+                    With x
+                        x.ID = GenerateGUID()
+                        x.Name = name
+                        x.Icon = icon
+                        x.Image = image
+                        x.ListDevice = ListDevice
+                    End With
+                    myID = x.ID
+                    _ListZones.Add(x)
+                Else
+                    'zone Existante
+                    myID = zoneId
+                    For i As Integer = 0 To _ListZones.Count - 1
+                        If _ListZones.Item(i).id = zoneId Then
+                            _ListZones.Item(i).name = name
+                            _ListZones.Item(i).icon = icon
+                            _ListZones.Item(i).image = image
+                            _ListZones.Item(i).listdevice = ListDevice
+                        End If
+                    Next
+                End If
+                'génération de l'event
+                Return myID
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveZone", "Exception : " & ex.Message)
+                Return ""
+            End Try
+        End Function
+
+        ''' <summary>Retourne la liste des devices d'une zone depuis son ID</summary>
+        ''' <param name="ZoneId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function GetDeviceInZone(ByVal zoneId) As List(Of TemplateDevice) Implements IHoMIDom.GetDeviceInZone
+            Try
+                Return Nothing
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetDeviceInZone", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>Retourne la zone par son ID</summary>
+        ''' <param name="ZoneId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnZoneById(ByVal ZoneId As String) As Zone Implements IHoMIDom.ReturnZoneByID
+            Dim retour As Object = Nothing
+            Try
+                For i As Integer = 0 To _ListZones.Count - 1
+                    If _ListZones.Item(i).ID = ZoneId Then
+                        retour = _ListZones.Item(i)
                         Exit For
                     End If
                 Next
-
-                If x IsNot Nothing Then
-
-                    If Action.Parametres.Count > 0 Then
-                        Select Case Action.Parametres.Count
-                            Case 1
-                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value)
-                            Case 2
-                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value)
-                            Case 3
-                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value, Action.Parametres.Item(2).Value)
-                            Case 4
-                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value, Action.Parametres.Item(2).Value, Action.Parametres.Item(3).Value)
-                            Case 5
-                                _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value, Action.Parametres.Item(2).Value, Action.Parametres.Item(3).Value, Action.Parametres.Item(4).Value)
-                        End Select
-                    Else
-                        CallByName(x, Action.Nom, CallType.Method)
-                    End If
-                End If
+                Return retour
             Catch ex As Exception
-                MsgBox("Erreur lors du traitement de la commande ExecuteDriverCommand: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnZoneById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+#End Region
+
+#Region "Macro"
+        ''' <summary>Supprimer une macro de la config</summary>
+        ''' <param name="macroId"></param>
+        Public Function DeleteMacro(ByVal macroId As String) As Integer Implements IHoMIDom.DeleteMacro
+            Try
+                For i As Integer = 0 To _ListMacros.Count - 1
+                    If _ListMacros.Item(i).Id = macroId Then
+                        _ListMacros.RemoveAt(i)
+                        DeleteMacro = 0
+                        Exit Function
+                    End If
+                Next
+                Return 1
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteMacro", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>Retourne la liste de toutes les macros</summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function GetAllMacros() As List(Of Macro) Implements IHoMIDom.GetAllMacros
+            Try
+                Dim _list As New List(Of Macro)
+                For i As Integer = 0 To _ListMacros.Count - 1
+                    Dim x As New Macro
+                    With x
+                        .Nom = _ListMacros.Item(i).nom
+                        .ID = _ListMacros.Item(i).id
+                        .Description = _ListMacros.Item(i).description
+                        .Enable = _ListMacros.Item(i).enable
+                    End With
+                    _list.Add(x)
+                Next
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllMacros", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Permet de créer ou modifier une macro
+        ''' </summary>
+        ''' <param name="macroId"></param>
+        ''' <param name="nom"></param>
+        ''' <param name="enable"></param>
+        ''' <param name="description"></param>
+        ''' <param name="condition"></param>
+        ''' <param name="actiontrue"></param>
+        ''' <param name="actionfalse"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal condition As ArrayList = Nothing, Optional ByVal actiontrue As ArrayList = Nothing, Optional ByVal actionfalse As ArrayList = Nothing) As String Implements IHoMIDom.SaveMacro
+            Dim myID As String = ""
+            Try
+                If macroId = "" Then
+                    Dim x As New Macro
+                    With x
+                        x.ID = GenerateGUID()
+                        x.Nom = nom
+                        x.Enable = enable
+                        x.Description = description
+                        x.Condition = condition
+                        x.ActionTrue = actiontrue
+                        x.ActionFalse = actionfalse
+                    End With
+                    myID = x.ID
+                    _ListMacros.Add(x)
+                Else
+                    'zone Existante
+                    myID = macroId
+                    For i As Integer = 0 To _ListMacros.Count - 1
+                        If _ListMacros.Item(i).id = macroId Then
+                            _ListMacros.Item(i).nom = nom
+                            _ListMacros.Item(i).enable = enable
+                            _ListMacros.Item(i).description = description
+                            _ListMacros.Item(i).condition = condition
+                            _ListMacros.Item(i).actiontrue = actiontrue
+                            _ListMacros.Item(i).actionfalse = actionfalse
+                        End If
+                    Next
+                End If
+                'génération de l'event
+                Return myID
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveMacro", "Exception : " & ex.Message)
+                Return ""
+            End Try
+        End Function
+
+        ''' <summary>Retourne la macro par son ID</summary>
+        ''' <param name="MacroId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnMacroById(ByVal MacroId As String) As Macro Implements IHoMIDom.ReturnMacroById
+            Dim retour As Object = Nothing
+            Try
+                For i As Integer = 0 To _ListMacros.Count - 1
+                    If _ListMacros.Item(i).ID = MacroId Then
+                        retour = _ListMacros.Item(i)
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnMacroById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+#End Region
+
+#Region "Trigger"
+        ''' <summary>Supprimer un trigger de la config</summary>
+        ''' <param name="triggerId"></param>
+        Public Function DeleteTrigger(ByVal triggerId As String) As Integer Implements IHoMIDom.DeleteTrigger
+            Try
+                For i As Integer = 0 To _listTriggers.Count - 1
+                    If _listTriggers.Item(i).Id = triggerId Then
+                        _listTriggers.RemoveAt(i)
+                        DeleteTrigger = 0
+                        Exit Function
+                    End If
+                Next
+                Return 1
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteTrigger", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>Retourne la liste de toutes les macros</summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function GetAllTriggers() As List(Of Trigger) Implements IHoMIDom.GetAllTriggers
+            Try
+                Dim _list As New List(Of Trigger)
+                For i As Integer = 0 To _listTriggers.Count - 1
+                    Dim x As New Trigger
+                    With x
+                        .Nom = _listTriggers.Item(i).nom
+                        .ID = _listTriggers.Item(i).id
+                        .Description = _listTriggers.Item(i).description
+                        .Enable = _listTriggers.Item(i).enable
+                        .Prochainedateheure = _listTriggers.Item(i).Prochainedateheure
+                        .Condition = _listTriggers.Item(i).condition
+                    End With
+                    _list.Add(x)
+                Next
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllTriggers", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Permet de créer ou modifier un trigger
+        ''' </summary>
+        ''' <param name="triggerId"></param>
+        ''' <param name="nom"></param>
+        ''' <param name="enable"></param>
+        ''' <param name="description"></param>
+        ''' <param name="condition"></param>
+        ''' <param name="macro"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function SaveTrigger(ByVal triggerId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal condition As String = "", Optional ByVal macro As ArrayList = Nothing) As String Implements IHoMIDom.SaveTrigger
+            Dim myID As String = ""
+            Try
+                If triggerId = "" Then
+                    Dim x As New Trigger
+                    With x
+                        x.ID = GenerateGUID()
+                        x.Nom = nom
+                        x.Enable = enable
+                        x.Description = description
+                        x.Condition = condition
+                        x.Macro = macro
+                    End With
+                    myID = x.ID
+                    _listTriggers.Add(x)
+                Else
+                    'zone Existante
+                    myID = triggerId
+                    For i As Integer = 0 To _listTriggers.Count - 1
+                        If _listTriggers.Item(i).id = triggerId Then
+                            _listTriggers.Item(i).nom = nom
+                            _listTriggers.Item(i).enable = enable
+                            _listTriggers.Item(i).description = description
+                            _listTriggers.Item(i).condition = condition
+                            _listTriggers.Item(i).macro = macro
+                        End If
+                    Next
+                End If
+                'génération de l'event
+                Return myID
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTrigger", "Exception : " & ex.Message)
+                Return ""
+            End Try
+        End Function
+
+        ''' <summary>Retourne le trigger par son ID</summary>
+        ''' <param name="TriggerId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnTriggerById(ByVal TriggerId As String) As Trigger Implements IHoMIDom.ReturnTriggerById
+            Dim retour As Object = Nothing
+            Try
+                For i As Integer = 0 To _listTriggers.Count - 1
+                    If _listTriggers.Item(i).ID = TriggerId Then
+                        retour = _listTriggers.Item(i)
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnTriggerById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+#End Region
+
+#Region "User"
+        ''' <summary>Supprime un user</summary>
+        ''' <param name="userId"></param>
+        Public Function DeleteUser(ByVal userId As String) As Integer Implements IHoMIDom.DeleteUser
+            Try
+                For i As Integer = 0 To _ListUsers.Count - 1
+                    If _ListUsers.Item(i).Id = userId Then
+                        _ListUsers.RemoveAt(i)
+                        DeleteUser = 0
+                        Exit Function
+                    End If
+                Next
+                Return 1
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteUser", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>Retourne la liste de tous les users</summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function GetAllUsers() As List(Of Users.User) Implements IHoMIDom.GetAllUsers
+            Dim _list As New List(Of Users.User)
+            Try
+                For i As Integer = 0 To _ListUsers.Count - 1
+                    Dim x As New Users.User
+                    With x
+                        .Adresse = _ListUsers.Item(i).Adresse
+                        .CodePostal = _ListUsers.Item(i).CodePostal
+                        .eMail = _ListUsers.Item(i).eMail
+                        .eMailAutre = _ListUsers.Item(i).eMailAutre
+                        .ID = _ListUsers.Item(i).ID
+                        .Image = _ListUsers.Item(i).Image
+                        .Nom = _ListUsers.Item(i).Nom
+                        .NumberIdentification = _ListUsers.Item(i).NumberIdentification
+                        .Password = _ListUsers.Item(i).Password
+                        .Prenom = _ListUsers.Item(i).Prenom
+                        .Profil = _ListUsers.Item(i).Profil
+                        .TelAutre = _ListUsers.Item(i).TelAutre
+                        .TelFixe = _ListUsers.Item(i).TelFixe
+                        .TelMobile = _ListUsers.Item(i).TelMobile
+                        .UserName = _ListUsers.Item(i).UserName
+                        .Ville = _ListUsers.Item(i).Ville
+                    End With
+                    _list.Add(x)
+                Next
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllUsers", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Retourne un user par son username
+        ''' </summary>
+        ''' <param name="Username"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnUserByUsername(ByVal Username As String) As Users.User Implements IHoMIDom.ReturnUserByUsername
+            Dim retour As Users.User = Nothing
+            For i As Integer = 0 To _ListUsers.Count - 1
+                If _ListUsers.Item(i).username = Username Then
+                    retour = _ListUsers.Item(i)
+                    Exit For
+                End If
+            Next
+            Return retour
+        End Function
+
+        ''' <summary>
+        ''' Créer ou modifie un user par son ID
+        ''' </summary>
+        ''' <param name="userId"></param>
+        ''' <param name="UserName"></param>
+        ''' <param name="Password"></param>
+        ''' <param name="Profil"></param>
+        ''' <param name="Nom"></param>
+        ''' <param name="Prenom"></param>
+        ''' <param name="NumberIdentification"></param>
+        ''' <param name="Image"></param>
+        ''' <param name="eMail"></param>
+        ''' <param name="eMailAutre"></param>
+        ''' <param name="TelFixe"></param>
+        ''' <param name="TelMobile"></param>
+        ''' <param name="TelAutre"></param>
+        ''' <param name="Adresse"></param>
+        ''' <param name="Ville"></param>
+        ''' <param name="CodePostal"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function SaveUser(ByVal userId As String, ByVal UserName As String, ByVal Password As String, ByVal Profil As Users.TypeProfil, ByVal Nom As String, ByVal Prenom As String, Optional ByVal NumberIdentification As String = "", Optional ByVal Image As String = "", Optional ByVal eMail As String = "", Optional ByVal eMailAutre As String = "", Optional ByVal TelFixe As String = "", Optional ByVal TelMobile As String = "", Optional ByVal TelAutre As String = "", Optional ByVal Adresse As String = "", Optional ByVal Ville As String = "", Optional ByVal CodePostal As String = "") As String Implements IHoMIDom.SaveUser
+            Dim myID As String = ""
+            Try
+                If userId = "" Then
+                    For i As Integer = 0 To _ListUsers.Count - 1
+                        If _ListUsers.Item(i).username = UserName Then
+                            myID = "ERROR Username déjà utlisé"
+                            Return myID
+                        End If
+                    Next
+                    Dim x As New Users.User
+                    With x
+                        x.ID = GenerateGUID()
+                        x.Adresse = Adresse
+                        x.CodePostal = CodePostal
+                        x.eMail = eMail
+                        x.eMailAutre = eMailAutre
+                        x.Image = Image
+                        x.Nom = Nom
+                        x.NumberIdentification = NumberIdentification
+                        x.Password = EncryptTripleDES(Password, "homidom")
+                        x.Prenom = Prenom
+                        x.Profil = Profil
+                        x.TelAutre = TelAutre
+                        x.TelFixe = TelFixe
+                        x.TelMobile = TelMobile
+                        x.UserName = UserName
+                        x.Ville = Ville
+                    End With
+                    myID = x.ID
+                    _ListUsers.Add(x)
+                Else
+                    'user Existant
+                    myID = userId
+                    For i As Integer = 0 To _ListUsers.Count - 1
+                        If _ListUsers.Item(i).id = userId Then
+                            _ListUsers.Item(i).Adresse = Adresse
+                            _ListUsers.Item(i).CodePostal = CodePostal
+                            _ListUsers.Item(i).eMail = eMail
+                            _ListUsers.Item(i).eMailAutre = eMailAutre
+                            _ListUsers.Item(i).Image = Image
+                            _ListUsers.Item(i).Nom = Nom
+                            _ListUsers.Item(i).NumberIdentification = NumberIdentification
+                            _ListUsers.Item(i).Password = EncryptTripleDES(Password, "homidom")
+                            _ListUsers.Item(i).Prenom = Prenom
+                            _ListUsers.Item(i).Profil = Profil
+                            _ListUsers.Item(i).TelAutre = TelAutre
+                            _ListUsers.Item(i).TelFixe = TelFixe
+                            _ListUsers.Item(i).TelMobile = TelMobile
+                            _ListUsers.Item(i).UserName = UserName
+                            _ListUsers.Item(i).Ville = Ville
+                        End If
+                    Next
+                End If
+
+                'génération de l'event
+                Return myID
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveUser", "Exception : " & ex.Message)
+                Return ""
+            End Try
+        End Function
+
+        ''' <summary>Vérifie le couple username password</summary>
+        ''' <param name="Username"></param>
+        ''' <param name="Password"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function VerifLogin(ByVal Username As String, ByVal Password As String) As Boolean Implements IHoMIDom.VerifLogin
+            Dim retour As Boolean = False
+            Try
+                For i As Integer = 0 To _ListUsers.Count - 1
+                    If _ListUsers.Item(i).username = Username Then
+                        Dim a As String = EncryptTripleDES(Password, "homidom")
+                        Dim b As String = DecryptTripleDES(_ListUsers.Item(i).password, "homidom")
+                        If a = b Then
+                            Return True
+                            Exit For
+                        End If
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "VerifLogin", "Exception : " & ex.Message)
+                Return False
+            End Try
+        End Function
+
+        ''' <summary>Permet de changer de Password sur un user</summary>
+        ''' <param name="Username"></param>
+        ''' <param name="OldPassword"></param>
+        ''' <param name="Password"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function ChangePassword(ByVal Username As String, ByVal OldPassword As String, ByVal ConfirmNewPassword As String, ByVal Password As String) As Boolean Implements IHoMIDom.ChangePassword
+            Dim retour As Boolean = False
+            Try
+                For i As Integer = 0 To _ListUsers.Count - 1
+                    If _ListUsers.Item(i).username = Username Then
+                        If _ListUsers.Item(i).password = OldPassword Then
+                            If ConfirmNewPassword = Password Then
+                                _ListUsers.Item(i).password = EncryptTripleDES(Password, "homidom")
+                                retour = True
+                                Exit For
+                            End If
+                        End If
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ChangePassword", "Exception : " & ex.Message)
+                Return False
+            End Try
+        End Function
+
+        ''' <summary>Retourne un user par son ID</summary>
+        ''' <param name="UserId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnUserById(ByVal UserId As String) As Users.User Implements IHoMIDom.ReturnUserById
+            Dim retour As Object = Nothing
+            Try
+                For i As Integer = 0 To _ListUsers.Count - 1
+                    If _ListUsers.Item(i).ID = UserId Then
+                        retour = _ListUsers.Item(i)
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnUserById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+#End Region
+
+#Region "Log"
+        ''' <summary>renvoi le fichier log suivant une requête xml si besoin</summary>
+        ''' <param name="Requete"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function ReturnLog(Optional ByVal Requete As String = "") As String Implements IHoMIDom.ReturnLog
+            Try
+                Dim retour As String = ""
+                If Requete = "" Then
+                    Dim SR As New StreamReader(_MonRepertoire & "\logs\log.xml")
+                    retour = SR.ReadToEnd()
+                    retour = HtmlDecode(retour)
+                    SR.Close()
+                Else
+                    'creation d'une nouvelle instance du membre xmldocument
+                    Dim XmlDoc As XmlDocument = New XmlDocument()
+                    XmlDoc.Load(_MonRepertoire & "\logs\log.xml")
+                End If
+                If retour.Length > 8000 Then
+                    Dim retour2 As String = Mid(retour, retour.Length - 8001, 8000)
+                    retour = "Erreur, trop de ligne à traiter depuis le log seules les dernières lignes seront affichées, merci de consulter le fichier sur le serveur par en avoir la totalité!!" & vbCrLf & vbCrLf & retour2
+                    Return retour
+                End If
+                Return retour
+            Catch ex As Exception
+                ReturnLog = "Erreur lors de la récupération du log: " & ex.ToString
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnLog", "Exception : " & ex.Message)
+            End Try
+        End Function
+#End Region
+
+#Region "Configuration"
+        ''' <summary>Sauvegarder la configuration</summary>
+        ''' <remarks></remarks>
+        Public Sub SaveConfiguration() Implements IHoMIDom.SaveConfig
+            Try
+                SaveConfig(_MonRepertoire & "\config\homidom.xml")
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfiguration", "Exception : " & ex.Message)
             End Try
         End Sub
+#End Region
+
+#Region "SOAP"
+        ''' <summary>Fixer la valeur du port SOAP</summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        Public Sub SetPortSOAP(ByVal Value As Double) Implements IHoMIDom.SetPortSOAP
+            Try
+                _PortSOAP = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetPortSOAP", "Exception : " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>Retourne la valeur du port SOAP</summary>
+        ''' <returns>Numero du port ou -1 si erreur</returns>
+        ''' <remarks></remarks>
+        Public Function GetPortSOAP() As Double Implements IHoMIDom.GetPortSOAP
+            Try
+                Return _PortSOAP
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetPortSOAP", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+#End Region
+
 #End Region
 
 #Region "Declaration de la classe Server"
