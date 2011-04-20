@@ -44,6 +44,10 @@ Namespace HoMIDom
         Private Shared _HeureCoucherSoleil As DateTime 'heure du couché du soleil
         Shared _HeureLeverSoleilCorrection As Integer 'correction à appliquer sur heure du levé du soleil
         Shared _HeureCoucherSoleilCorrection As Integer 'correction à appliquer sur heure du couché du soleil
+        Shared _SMTPServeur As String 'adresse du serveur SMTP
+        Shared _SMTPLogin As String 'login du serveur SMTP
+        Shared _SMTPassword As String 'password du serveur SMTP
+        Shared _SMTPmailEmetteur As String 'adresse mail de l'émetteur
         Private Shared _PortSOAP As String 'Port IP de connexion SOAP
         Dim TimerSecond As New Timers.Timer 'Timer à la seconde
         Private graphe As New graphes(_MonRepertoire + "\Images\Graphes\")
@@ -141,7 +145,8 @@ Namespace HoMIDom
                                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
                                 End If
                             End If
-                        Else                            'log de la nouvelle valeur
+                        Else
+                            'log de la nouvelle valeur
                             Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
                         End If
                         End If
@@ -463,7 +468,7 @@ Namespace HoMIDom
                                 _ListZones.Add(x)
                             Next
                         Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Il manque les zones dans le fichier de config !!")
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucune zone enregistrée dans le fichier de config")
                         End If
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListZones.Count & " Zone(s) chargée(s)")
 
@@ -742,7 +747,7 @@ Namespace HoMIDom
                             Next
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListDevices.Count & " devices(s) trouvé(s)")
                         Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun device trouvé dans le fichier de configuration")
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun device enregistré dans le fichier de config")
                         End If
                         list = Nothing
 
@@ -777,7 +782,7 @@ Namespace HoMIDom
                                 _listTriggers.Add(x)
                             Next
                         Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Il manque les triggers dans le fichier de config !!")
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun trigger enregistré dans le fichier de config")
                         End If
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _listTriggers.Count & " Trigger(s) chargé(s)")
                         list = Nothing
@@ -809,7 +814,7 @@ Namespace HoMIDom
                                 _ListMacros.Add(x)
                             Next
                         Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Il manque les macros dans le fichier de config !!")
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucune macro enregistrée dans le fichier de config")
                         End If
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListMacros.Count & " Macro(s) chargée(s)")
                         list = Nothing
@@ -1818,6 +1823,81 @@ Namespace HoMIDom
             End Try
         End Sub
 
+        ''' <summary>Retourne l'adresse du serveur SMTP</summary>
+        Public Function GetSMTPServeur() As String Implements IHoMIDom.GetSMTPServeur
+            Try
+                Return _SMTPServeur
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSMTPServeur", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>Fixe l'adresse du serveur SMTP</summary>
+        Public Sub SetSMTPServeur(ByVal Value As String) Implements IHoMIDom.SetSMTPServeur
+            Try
+                _SMTPServeur = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetSMTPServeur", "Exception : " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>Retourne le login du serveur SMTP</summary>
+        Public Function GetSMTPLogin() As String Implements IHoMIDom.GetSMTPLogin
+            Try
+                Return _SMTPLogin
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSMTPLogin", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>Fixe le login du serveur SMTP</summary>
+        Public Sub SetSMTPLogin(ByVal Value As String) Implements IHoMIDom.SetSMTPLogin
+            Try
+                _SMTPLogin = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetSMTPLogin", "Exception : " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>Retourne le password du serveur SMTP</summary>
+        Public Function GetSMTPPassword() As String Implements IHoMIDom.GetSMTPPassword
+            Try
+                Return _SMTPassword
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSMTPPassword", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>Fixe le password du serveur SMTP</summary>
+        Public Sub SetSMTPPassword(ByVal Value As String) Implements IHoMIDom.SetSMTPPassword
+            Try
+                _SMTPassword = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetSMTPPassword", "Exception : " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>Retourne l'adresse mail du serveur</summary>
+        Public Function GetSMTPMailServeur() As String Implements IHoMIDom.GetSMTPMailServeur
+            Try
+                Return _SMTPmailEmetteur
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSMTPMailServeur", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>Fixe le password du serveur SMTP</summary>
+        Public Sub SetSMTPMailServeur(ByVal Value As String) Implements IHoMIDom.SetSMTPMailServeur
+            Try
+                _SMTPmailEmetteur = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetSMTPPassword", "Exception : " & ex.Message)
+            End Try
+        End Sub
         ''' <summary>Retourne l'heure du serveur</summary>
         ''' <returns>String : heure du serveur</returns>
         Public Function GetTime() As String Implements IHoMIDom.GetTime
