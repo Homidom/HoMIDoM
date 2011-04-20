@@ -391,6 +391,62 @@ Namespace HoMIDom
         <OperationContract()> Sub Log(ByVal TypLog As HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String)
 
         ''' <summary>
+        ''' Retourne l'adresse SMTP du serveur
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetSMTPServeur() As String
+
+        ''' <summary>
+        ''' Fixe l'adresse SMTP du serveur
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetSMTPServeur(ByVal Value As String)
+
+        ''' <summary>
+        ''' Retourne le login du serveur SMTP
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetSMTPLogin() As String
+
+        ''' <summary>
+        ''' Fixe le login du serveur SMTP
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetSMTPLogin(ByVal Value As String)
+
+        ''' <summary>
+        ''' Retourne le password du serveur SMTP
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetSMTPPassword() As String
+
+        ''' <summary>
+        ''' Fixe le password du serveur SMTP
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetSMTPPassword(ByVal Value As String)
+
+        ''' <summary>
+        ''' Retourne l'adresse mail du serveur SMTP
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetSMTPMailServeur() As String
+
+        ''' <summary>
+        ''' Fixe l'adresse mail du serveur SMTP
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetSMTPMailServeur(ByVal Value As String)
+
+        ''' <summary>
         ''' Permet de créer ou modifier un trigger
         ''' </summary>
         ''' <param name="triggerId"></param>
