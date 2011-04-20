@@ -44,10 +44,10 @@ Namespace HoMIDom
         Private Shared _HeureCoucherSoleil As DateTime 'heure du couché du soleil
         Shared _HeureLeverSoleilCorrection As Integer 'correction à appliquer sur heure du levé du soleil
         Shared _HeureCoucherSoleilCorrection As Integer 'correction à appliquer sur heure du couché du soleil
-        Shared _SMTPServeur As String 'adresse du serveur SMTP
-        Shared _SMTPLogin As String 'login du serveur SMTP
-        Shared _SMTPassword As String 'password du serveur SMTP
-        Shared _SMTPmailEmetteur As String 'adresse mail de l'émetteur
+        Shared _SMTPServeur As String = "" 'adresse du serveur SMTP
+        Shared _SMTPLogin As String = "" 'login du serveur SMTP
+        Shared _SMTPassword As String = "" 'password du serveur SMTP
+        Shared _SMTPmailEmetteur As String = "" 'adresse mail de l'émetteur
         Private Shared _PortSOAP As String 'Port IP de connexion SOAP
         Dim TimerSecond As New Timers.Timer 'Timer à la seconde
         Private graphe As New graphes(_MonRepertoire + "\Images\Graphes\")
@@ -382,6 +382,14 @@ Namespace HoMIDom
                                         _HeureCoucherSoleilCorrection = list.Item(0).Attributes.Item(j).Value
                                     Case "portsoap"
                                         _PortSOAP = list.Item(0).Attributes.Item(j).Value
+                                    Case "smtpserver"
+                                        _SMTPServeur = list.Item(0).Attributes.Item(j).Value
+                                    Case "smtpmail"
+                                        _SMTPmailEmetteur = list.Item(0).Attributes.Item(j).Value
+                                    Case "smtplogin"
+                                        _SMTPLogin = list.Item(0).Attributes.Item(j).Value
+                                    Case "smtppassword"
+                                        _SMTPassword = list.Item(0).Attributes.Item(j).Value
                                     Case Else
                                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                 End Select
@@ -877,6 +885,18 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("heurecorrectioncoucher")
                 writer.WriteValue(_HeureCoucherSoleilCorrection)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("smtpserver")
+                writer.WriteValue(_SMTPServeur)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("smtpmail")
+                writer.WriteValue(_SMTPmailEmetteur)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("smtplogin")
+                writer.WriteValue(_SMTPLogin)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("smtppassword")
+                writer.WriteValue(_SMTPassword)
                 writer.WriteEndAttribute()
                 writer.WriteEndElement()
 

@@ -17,6 +17,10 @@
                 Window1.myService.SetLatitude(CDbl(TxtLat.Text.Replace(".", ",")))
                 Window1.myService.SetHeureCorrectionLever(CInt(HCL.Text))
                 Window1.myService.SetHeureCorrectionCoucher(CInt(HCC.Text))
+                Window1.myService.SetSMTPMailServeur(TxtMail.Text)
+                Window1.myService.SetSMTPServeur(TxtAdresse.Text)
+                Window1.myService.SetSMTPLogin(TxtLogin.Text)
+                Window1.myService.SetSMTPPassword(TxtPassword.Password)
             End If
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
@@ -45,6 +49,11 @@
                 TxtLong.Text = Window1.myService.GetLongitude
                 HCL.Text = Window1.myService.GetHeureCorrectionLever
                 HCC.Text = Window1.myService.GetHeureCorrectionCoucher
+
+                TxtAdresse.Text = Window1.myService.GetSMTPServeur
+                TxtMail.Text = Window1.myService.GetSMTPMailServeur
+                TxtLogin.Text = Window1.myService.GetSMTPLogin
+                TxtPassword.Password = Window1.myService.GetSMTPPassword
             End If
 
             RefreshList()
