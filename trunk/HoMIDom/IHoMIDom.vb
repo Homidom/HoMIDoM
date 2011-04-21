@@ -217,7 +217,7 @@ Namespace HoMIDom
         ''' <summary>
         ''' Obtient la liste des devices
         ''' </summary>
-        ''' <returns></returns>
+        ''' <returns>List de TemplateDevice</returns>
         ''' <remarks></remarks>
         <OperationContract()> Function GetAllDevices() As List(Of TemplateDevice)
 

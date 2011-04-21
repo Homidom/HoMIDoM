@@ -96,6 +96,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsFormsIntegration" />
     <Reference Include="WpfPropertyGrid">
       <HintPath>..\..\_LastVersionStable\WpfPropertyGrid.dll</HintPath>
     </Reference>
@@ -314,6 +315,13 @@
       <Name>HoMIDom</Name>
       <Private>True</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Lune.png" />
+    <Resource Include="Images\Soleil.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

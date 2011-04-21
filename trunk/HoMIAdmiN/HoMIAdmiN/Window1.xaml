@@ -68,21 +68,121 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-    </Window.Resources>
+
+        <ControlTemplate x:Key="OutlookTab" TargetType="{x:Type TabControl}">
+            <ControlTemplate.Resources>
+                <!-- To change the colour scheme of the Outlook Bar, change the colors of these brushes -->
+                <SolidColorBrush x:Key="LabelHighlightBrush" Color= "#FFFFFF" />
+                <SolidColorBrush x:Key="CaptionBrush" Color= "#15428B" />
+                <SolidColorBrush x:Key="BorderBrush" Color="#6593CF" />
+                <LinearGradientBrush x:Key="LabelBrush" StartPoint="0, 0" EndPoint="0,1">
+                    <GradientStop Color="#E3E3E3" Offset="0" />
+                    <GradientStop Color="#AFAFAF" Offset="1" />
+                </LinearGradientBrush>
+                <LinearGradientBrush x:Key="ButtonNormalBrush" StartPoint="0, 0" EndPoint="0,1">
+                    <GradientStop Color="#AAAAAA" Offset="0" />
+                    <GradientStop Color="#BBBBBB" Offset="0.40625" />
+                    <GradientStop Color="#CCCCCC" Offset="0.40625" />
+                    <GradientStop Color="#DDDDDD" Offset="1" />
+                </LinearGradientBrush>
+                <LinearGradientBrush x:Key="ButtonSelectedBrush" StartPoint="0, 0" EndPoint="0,1">
+                    <GradientStop Color="#FFD9AA" Offset="0" />
+                    <GradientStop Color="#FFBB6E" Offset="0.40625" />
+                    <GradientStop Color="#FFAB3F" Offset="0.40625" />
+                    <GradientStop Color="#FEE17A" Offset="1" />
+                </LinearGradientBrush>
+                <LinearGradientBrush x:Key="ButtonPressedBrush" StartPoint="0, 0" EndPoint="0,1">
+                    <GradientStop Color="#FFBD69" Offset="0" />
+                    <GradientStop Color="#FFAC42" Offset="0.40625" />
+                    <GradientStop Color="#FB8C3C" Offset="0.40625" />
+                    <GradientStop Color="#FED364" Offset="1" />
+                </LinearGradientBrush>
+                <LinearGradientBrush x:Key="ButtonHoverBrush" StartPoint="0, 0" EndPoint="0,1">
+                    <GradientStop Color="#FFFEE4" Offset="0" />
+                    <GradientStop Color="#FFE8A7" Offset="0.40625" />
+                    <GradientStop Color="#FFD767" Offset="0.40625" />
+                    <GradientStop Color="#FFE69E" Offset="1" />
+                </LinearGradientBrush>
+                <!-- This style sets the default template for a TabItem -->
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TabItem}">
+                                <!-- These triggers control the background and text colour of the Outlook bar buttons when the are selected and/or hovered over -->
+                                <ControlTemplate.Triggers>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsSelected" Value="False" />
+                                            <Condition Property="IsMouseOver" Value="False" />
+                                        </MultiTrigger.Conditions>
+                                        <MultiTrigger.Setters>
+                                            <Setter Property="Background" Value="{StaticResource ButtonNormalBrush}" />
+                                        </MultiTrigger.Setters>
+                                    </MultiTrigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsSelected" Value="False" />
+                                            <Condition Property="IsMouseOver" Value="True" />
+                                        </MultiTrigger.Conditions>
+                                        <MultiTrigger.Setters>
+                                            <Setter Property="Background" Value="{StaticResource ButtonHoverBrush}" />
+                                        </MultiTrigger.Setters>
+                                    </MultiTrigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="TextElement.Foreground" Value="Black" />
+                                        <Setter Property="Background" Value="{StaticResource ButtonSelectedBrush}" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="TextElement.Foreground" Value="{StaticResource CaptionBrush}" />
+                                    </Trigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsSelected" Value="True" />
+                                            <Condition Property="IsMouseOver" Value="True" />
+                                        </MultiTrigger.Conditions>
+                                        <MultiTrigger.Setters>
+                                            <Setter Property="Background" Value="{StaticResource ButtonPressedBrush}" />
+                                        </MultiTrigger.Setters>
+                                    </MultiTrigger>
+                                </ControlTemplate.Triggers>
+                                <!-- This defines the look of the individual TabItems -->
+                                <Grid Background="{TemplateBinding Background}" MinHeight="25" SnapsToDevicePixels="True">
+                                    <Line Stroke="{StaticResource BorderBrush}" VerticalAlignment="Top" Stretch="Fill" X2="1" SnapsToDevicePixels="True" />
+                                    <ContentPresenter Margin="5,0,5,0" TextBlock.FontFamily="Tahoma" TextBlock.FontSize="8pt" TextBlock.FontWeight="Bold" TextBlock.Foreground="{StaticResource CaptionBrush}" Content="{TemplateBinding Header}" VerticalAlignment="Center"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ControlTemplate.Resources>
+            <!-- This is the template for the TabControl itself -->
+            <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" SnapsToDevicePixels="True" >
+                <DockPanel>
+                    <!-- This is the host panel that contains the tab items -->
+                    <StackPanel DockPanel.Dock="Bottom" IsItemsHost="True" />
+                    <!-- This is the label that appears at the top of the TabControl -->
+                    <Grid DockPanel.Dock="Top" MinHeight="25" Background="{StaticResource ButtonNormalBrush}"  SnapsToDevicePixels="True">
+                        <TextBlock FontFamily="Tahoma" Foreground="{StaticResource CaptionBrush}" VerticalAlignment="Center" Margin="5,0" FontSize="18" FontWeight="Bold" >Menu</TextBlock>
+                        <Line Stroke="{StaticResource BorderBrush}" VerticalAlignment="Bottom" X2="1" Stretch="Fill"/>
+                    </Grid>
+                    <!-- This is the selected content pane that appears in the Outlook Bar -->
+                    <ContentPresenter Content="{TemplateBinding SelectedContent}" />
+                </DockPanel>
+            </Border>
+        </ControlTemplate>
+        </Window.Resources>
     
     <Grid>
-        <Grid Height="58" Name="GridTop" VerticalAlignment="Top" Background="Black">
+        <Grid Height="58" Name="GridTop" VerticalAlignment="Top">
             <Rectangle Height="5" Margin="0,0,0,-2" Name="MyLine" Stroke="Black" VerticalAlignment="Bottom" Grid.ColumnSpan="3">
                 <Rectangle.Fill>
                     <RadialGradientBrush GradientOrigin="0.5,0.5">
-                        <GradientStop Color="Black" Offset="0.0" />
+                        <GradientStop Color="Red" Offset="0.0" />
                         <GradientStop Color="DarkGray" Offset="0.5" />
-                        <GradientStop Color="Black" Offset="1.0" />
+                        <GradientStop Color="Red" Offset="1.0" />
                     </RadialGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>
-
-            <Image HorizontalAlignment="Right" Margin="0,8,6,9" Name="Image2" Stretch="Fill" Width="598" Source="/HoMIAdmiN;component/Images/bandeau_1_950x60.jpg" />
             <Label HorizontalAlignment="Left" Margin="1.667,0,0,24" Name="Label1" Width="170" Content="HoMIAdmiN" FontSize="20">
                 <Label.Foreground>
                     <LinearGradientBrush EndPoint="0.494,0.889" StartPoint="0.494,0.028">
@@ -101,7 +201,6 @@
                     <MenuItem Header="Affichage" Foreground="WhiteSmoke">
                         <MenuItem Header="Consulter Log" Name="MenuConsultLog" />
                         <MenuItem Header="PlayList" Name="MenuPlayList" />
-                        <MenuItem Header="Fenêtre Propriétés" Name="MenuPropriete" />
                     </MenuItem> 
                     <MenuItem Header="?" Foreground="WhiteSmoke">
                         <MenuItem Header="A propos" Name="MenuPropos" />
@@ -110,67 +209,74 @@
                 </Menu>
 
             </StackPanel>
+            <Image HorizontalAlignment="Right" Margin="0,0,6,0" Name="Image2" Stretch="Fill" Width="328" Source="/HoMIAdmiN;component/Images/Logo_817x203.png" />
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                    <GradientStop Color="Black" Offset="0" />
+                    <GradientStop Color="White" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
         </Grid>
         <Grid HorizontalAlignment="Left" Margin="0,58,0,29" Name="GridLeft" Width="193" Background="Black">
-            
-            
-            <StackPanel Height="573" HorizontalAlignment="Left" Margin="1,0,0,0" Name="StackPanel3" VerticalAlignment="Top" Width="187" >
-                <Canvas Height="Auto" Name="Canvas1" Background="Black" MinHeight="300" MaxHeight="370">
-                    <TabControl Canvas.Left="0" Canvas.Top="0" Height="Auto" Name="TabControl1" Width="186.036" MinHeight="250" MaxHeight="300">
-                        <TabControl.Background >
-                            <LinearGradientBrush EndPoint="0.494,0.889" StartPoint="0.494,0.028">
-                                <GradientStop Color="#22FFFFFF" Offset="0" />
-                                <GradientStop Color="#55FFFFFF" Offset="1" />
-                            </LinearGradientBrush>
-
-                        </TabControl.Background>
-                        <TabItem Header="Drivers" Name="TabItem1">
-                            <Grid Height="Auto">
-                                <TreeView Margin="6,6,3.334,38.341" Name="TreeViewDriver" Background="DimGray" Foreground="White" MinHeight="200" MaxHeight="370" />
-                                <Button Height="19" HorizontalAlignment="Left" Margin="5,0,0,9" Name="BtnStart" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" Width="53" Foreground="White">Start</Button>
-                                <Button Height="19" Margin="65,0,57,9" Name="BtnStop" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Foreground="White">Stop</Button>
+                     
+            <StackPanel Height="573" HorizontalAlignment="Left" Margin="1,0,0,0" Name="StackPanel3" VerticalAlignment="Top" Width="187">
+                <TabControl Canvas.Left="0" Canvas.Top="0" Height="571" Name="TabControl1" Width="186.036" MinHeight="250" Template="{StaticResource OutlookTab}" TabStripPlacement="Top" >
+                        <TabItem Header="Drivers" Name="TabItem1" IsSelected="True">
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <TreeView Margin="5,4,4,30" Name="TreeViewDriver" Background="DimGray" Foreground="White" MinHeight="200"  />
+                                <Button Height="19" HorizontalAlignment="Left" Margin="5,0,0,4" Name="BtnStart" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" Width="53" Foreground="White">Start</Button>
+                                <Button Height="19" Margin="0,0,57,4" Name="BtnStop" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Foreground="White" HorizontalAlignment="Right" Width="62">Stop</Button>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Devices">
-                            <Grid Height="Auto">
-                                <TreeView Margin="6,6,3.334,38.341" Name="TreeViewDevice" Background="DimGray" MinHeight="200" />
-                                <Button Height="19" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5,0,0,13" Name="BtnNewDevice" VerticalAlignment="Bottom" Width="62" Foreground="White">Nouveau</Button>
-                                <Button Foreground="White" Height="19" Template="{DynamicResource GlassButton}" Margin="0,0,40,13" Name="BtnDelDevice" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="62.036">Supprimer</Button>
-                            </Grid>
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <TreeView Margin="5,4,4,30" Name="TreeViewDevice" Background="DimGray" MinHeight="200" />
+                                <Button Height="19" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5,0,0,7" Name="BtnNewDevice" VerticalAlignment="Bottom" Width="62" Foreground="White">Nouveau</Button>
+                                <Button Foreground="White" Height="19" Template="{DynamicResource GlassButton}" Margin="0,0,45,7" Name="BtnDelDevice" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="62.036">Supprimer</Button>
+                            <Image Height="20" HorizontalAlignment="Left" Margin="149,368,0,0" Name="TplDevImg" Stretch="Fill" VerticalAlignment="Top" Width="20" Source="/HoMIAdmiN;component/Images/Defaut-128.png" Visibility="Hidden" />
+                        </Grid>
                         </TabItem>
                         <TabItem Header="Zones">
                             <Grid Height="Auto">
-                                <TreeView Margin="6,6,3.334,38.341" Name="TreeViewZone" Background="DimGray" MinHeight="200" />
-                                <Button Height="19" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5,0,0,13" Name="BtnNewZone" VerticalAlignment="Bottom" Width="62" Foreground="White">Nouveau</Button>
-                                <Button Foreground="White" Height="19" Template="{DynamicResource GlassButton}" Margin="0,0,40,13" Name="BtnDelZone" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="62.036">Supprimer</Button>
+                            <TreeView Margin="5,4,4,30" Name="TreeViewZone" Background="DimGray" MinHeight="200" />
+                                <Button Height="19" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5,0,0,6" Name="BtnNewZone" VerticalAlignment="Bottom" Width="62" Foreground="White">Nouveau</Button>
+                                <Button Foreground="White" Height="19" Template="{DynamicResource GlassButton}" Margin="0,0,40,6" Name="BtnDelZone" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="62.036">Supprimer</Button>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Utilisateurs">
                             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                                 <TreeView Background="DimGray" Margin="5,4,4,30" Name="TreeViewUsers" MinHeight="200" />
-                                <Button Foreground="White" Height="19" HorizontalAlignment="Left" Margin="4,0,0,4" Name="BtnNewUser" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Nouveau</Button>
-                                <Button Foreground="White" Height="19" Margin="72,0,41,4" Name="BtnDelUser" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom">Supprimer</Button>
+                                <Button Foreground="White" Height="19" HorizontalAlignment="Left" Margin="4,0,0,6" Name="BtnNewUser" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Nouveau</Button>
+                                <Button Foreground="White" Height="19" Margin="72,0,41,6" Name="BtnDelUser" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Supprimer</Button>
                             </Grid>
                         </TabItem>
-                    </TabControl>
-                </Canvas>
-                <Canvas Height="Auto" Name="Canvas2" Width="Auto" Background="Black">
-                    
-                    <my:PropertyGrid Height="240" Name="PropertyGrid1" VerticalAlignment="Bottom" FontSize="9" Canvas.Top="25" MinHeight="200" Width="177" />
-                    <Button Canvas.Left="160" Canvas.Top="3" Content="X" Template="{DynamicResource GlassButton}" Height="22" Name="BtnCloseProperties" Width="22" Foreground="White" />
-                    <Label Canvas.Left="1" Canvas.Top="5" Content="Propriétés" Height="28" Name="Label2" Width="153" Foreground="White" />
-                </Canvas> 
+                    <TabItem Header="Triggers">
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <TreeView Background="DimGray" Margin="5,4,4,30" Name="TreeViewTriggers" MinHeight="200" />
+                            <Button Foreground="White" Height="19" HorizontalAlignment="Left" Margin="4,0,0,6" Name="BtnNewTrigger" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Nouveau</Button>
+                            <Button Foreground="White" Height="19" Margin="72,0,41,6" Name="BtnDelTrigger" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Supprimer</Button>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Macros">
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <TreeView Background="DimGray" Margin="5,4,4,30" Name="TreeViewMacros" MinHeight="200" />
+                            <Button Foreground="White" Height="19" HorizontalAlignment="Left" Margin="4,0,0,6" Name="BtnNewMacro" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Nouveau</Button>
+                            <Button Foreground="White" Height="19" Margin="72,0,41,6" Name="BtnDelMacro" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Supprimer</Button>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+                
             </StackPanel>
         </Grid>
         <Grid Margin="194,58,0,29.578" Name="Grid1" Background="Cyan">
             <Image Margin="-6.668,0,0,-3.578" Name="Image1" Stretch="Fill" Source="/HoMIAdmiN;component/Images/01.png" />
-            <Canvas Margin="5,0,0,-3.578" Name="CanvasRight" Background="Transparent" />
+            <Canvas Margin="5,0,0,-3.578" Name="CanvasRight" Background="Transparent"></Canvas>
         </Grid>
         <Grid Height="31" Name="GridBottom" VerticalAlignment="Bottom" Background="Black">
             <Rectangle Height="5" Margin="0,0,0,0" Name="MyLine2" Stroke="Black" VerticalAlignment="Top" Grid.ColumnSpan="3">
                 <Rectangle.Fill>
                     <RadialGradientBrush GradientOrigin="0.5,0.5">
-                        <GradientStop Color="Black" Offset="0.0" />
+                        <GradientStop Color="Red" Offset="0.0" />
                         <GradientStop Color="DarkGray" Offset="0.5" />
                         <GradientStop Color="Black" Offset="1.0" />
                     </RadialGradientBrush>
@@ -180,7 +286,12 @@
                 <Label Foreground="White" Height="23" Name="LblStatus" Width="Auto">#####</Label>
                 <Ellipse Height="20" Name="Ellipse1" Stroke="Black" Width="20" Fill="Cyan" />
                 <Label Foreground="White" Height="23" Name="LblConnect" Width="Auto">#####</Label>
+                <Image Height="25"  Name="Image3" Stretch="Fill" VerticalAlignment="Top" Width="25" Source="/HoMIAdmiN;component/Images/Soleil.png" />
+                <Label Content="##:##" Height="23" Name="LHS" VerticalAlignment="Top" Width="Auto" Foreground="White" />
+                <Image Height="25"  Name="Image4" Stretch="Fill" VerticalAlignment="Top" Width="25" Source="/HoMIAdmiN;component/Images/Lune.png" />
+                <Label Content="##:##" Height="23" Name="LCS" VerticalAlignment="Top" Width="Auto" Foreground="White" />
             </StackPanel>
+            
         </Grid>
     </Grid>
 </Window>
