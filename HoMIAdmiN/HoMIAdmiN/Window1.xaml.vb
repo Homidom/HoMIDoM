@@ -18,6 +18,7 @@ Class Window1
     Dim myadress As String = ""
     Dim FlagStart As Boolean = False
     Dim MemCanvas As Canvas
+    Dim MyRep As String = System.Environment.CurrentDirectory
 
     Public Sub New()
         Try
@@ -34,7 +35,6 @@ Class Window1
             dt.Interval = New TimeSpan(0, 0, 1)
             dt.Start()
 
-            Dim MyRep As String = System.Environment.CurrentDirectory
             Myfile = MyRep & "\HoMIAdmiN_config.xml"
 
         Catch ex As Exception
@@ -51,6 +51,11 @@ Class Window1
                     Dim mytime As String = myService.GetTime
                     LblStatus.Content = Now.ToLongDateString & " " & mytime & " "
                     LblConnect.Content = "Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString()
+                    Dim mydate As Date
+                    mydate = myService.GetHeureLeverSoleil
+                    LHS.Content = mydate.ToShortTimeString
+                    mydate = myService.GetHeureCoucherSoleil
+                    LCS.Content = mydate.ToShortTimeString
 
                     Dim myBrush As New RadialGradientBrush()
                     myBrush.GradientOrigin = New Point(0.75, 0.25)
@@ -106,8 +111,35 @@ Class Window1
             If IsConnect = False Then Exit Sub
             For i As Integer = 0 To myService.GetAllZones.Count - 1
                 Dim newchild As New TreeViewItem
+                Dim stack As New StackPanel
+                Dim img As New Image
+                Dim uri As String = ""
+                Dim bmpImage As New BitmapImage()
+
+                stack.Orientation = Orientation.Horizontal
+
+                img.Height = 20
+                img.Width = 20
+
+                If myService.GetAllZones.Item(i).Image <> "" And File.Exists(myService.GetAllDevices.Item(i).Picture) = True Then
+                    uri = myService.GetAllZones.Item(i).Image
+                Else
+                    uri = MyRep & "\Images\icones\Defaut-128.png"
+                End If
+                bmpImage.BeginInit()
+                bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
+                bmpImage.EndInit()
+                img.Source = bmpImage
+
+                Dim label As New Label
+                label.Foreground = New SolidColorBrush(Colors.White)
+                label.Content = myService.GetAllZones.Item(i).Name
+
+                stack.Children.Add(img)
+                stack.Children.Add(label)
+
                 newchild.Foreground = New SolidColorBrush(Colors.White)
-                newchild.Header = myService.GetAllZones.Item(i).Name
+                newchild.Header = stack 'myService.GetAllZones.Item(i).Name
                 newchild.Uid = myService.GetAllZones.Item(i).ID
                 TreeViewZone.Items.Add(newchild)
             Next
@@ -123,8 +155,35 @@ Class Window1
             If IsConnect = False Then Exit Sub
             For i As Integer = 0 To myService.GetAllUsers.Count - 1
                 Dim newchild As New TreeViewItem
+                Dim stack As New StackPanel
+                Dim img As New Image
+                Dim uri As String = ""
+                Dim bmpImage As New BitmapImage()
+
+                stack.Orientation = Orientation.Horizontal
+
+                img.Height = 20
+                img.Width = 20
+
+                If myService.GetAllUsers.Item(i).Image <> "" And File.Exists(myService.GetAllDevices.Item(i).Picture) = True Then
+                    uri = myService.GetAllUsers.Item(i).Image
+                Else
+                    uri = MyRep & "\Images\icones\user.png"
+                End If
+                bmpImage.BeginInit()
+                bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
+                bmpImage.EndInit()
+                img.Source = bmpImage
+
+                Dim label As New Label
+                label.Foreground = New SolidColorBrush(Colors.White)
+                label.Content = myService.GetAllUsers.Item(i).UserName
+
+                stack.Children.Add(img)
+                stack.Children.Add(label)
+
                 newchild.Foreground = New SolidColorBrush(Colors.White)
-                newchild.Header = myService.GetAllUsers.Item(i).UserName
+                newchild.Header = stack 'myService.GetAllUsers.Item(i).UserName
                 newchild.Uid = myService.GetAllUsers.Item(i).ID
                 TreeViewUsers.Items.Add(newchild)
             Next
@@ -186,9 +245,36 @@ Class Window1
             If IsConnect = False Then Exit Sub
             For i As Integer = 0 To myService.GetAllDevices.Count - 1 'Obj.Devices.Count - 1
                 Dim newchild As New TreeViewItem
+                Dim stack As New StackPanel
+                Dim img As New Image
+                Dim uri As String = ""
+                Dim bmpImage As New BitmapImage()
+
+                stack.Orientation = Orientation.Horizontal
+
+                img.Height = 20
+                img.Width = 20
+
+                If myService.GetAllDevices.Item(i).Picture <> "" And File.Exists(myService.GetAllDevices.Item(i).Picture) = True Then
+                    uri = myService.GetAllDevices.Item(i).Picture
+                Else
+                    uri = MyRep & "\Images\Devices\Defaut-128.png"
+                End If
+                bmpImage.BeginInit()
+                bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
+                bmpImage.EndInit()
+                img.Source = bmpImage
+
+                Dim label As New Label
+                label.Foreground = New SolidColorBrush(Colors.White)
+                label.Content = myService.GetAllDevices.Item(i).Name
+
+                stack.Children.Add(img)
+                stack.Children.Add(label)
+
                 newchild.Foreground = New SolidColorBrush(Colors.White)
-                newchild.Header = myService.GetAllDevices.Item(i).Name 'Obj.Devices.Item(i).Name
-                newchild.Uid = myService.GetAllDevices.Item(i).ID 'Obj.Devices.Item(i).id
+                newchild.Header = stack
+                newchild.Uid = myService.GetAllDevices.Item(i).ID
                 TreeViewDevice.Items.Add(newchild)
             Next
         Catch ex As Exception
@@ -231,7 +317,7 @@ Class Window1
                 For i As Integer = 0 To myService.GetAllDrivers.Count - 1
                     If myService.GetAllDrivers.Item(i).ID = TreeViewDriver.SelectedItem.uid Then
                         Dim y As TemplateDriver = myService.GetAllDrivers.Item(i)
-                        PropertyGrid1.SelectedObject = y
+                        'PropertyGrid1.SelectedObject = y
 
                         Dim x As New uDriver(TreeViewDriver.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
@@ -261,7 +347,7 @@ Class Window1
             For i As Integer = 0 To myService.GetAllDrivers.Count - 1
                 If myService.GetAllDrivers.Item(i).ID = e.NewValue.uid Then
                     Dim x As TemplateDriver = myService.GetAllDrivers.Item(i)
-                    PropertyGrid1.SelectedObject = x
+                    'PropertyGrid1.SelectedObject = x
                     Exit Sub
                 End If
             Next
@@ -311,7 +397,7 @@ Class Window1
                 For i As Integer = 0 To myService.GetAllDevices.Count - 1
                     If myService.GetAllDevices.Item(i).ID = TreeViewDevice.SelectedItem.uid Then
                         Dim y As TemplateDevice = myService.GetAllDevices.Item(i)
-                        PropertyGrid1.SelectedObject = y
+                        'PropertyGrid1.SelectedObject = y
 
                         Dim x As New uDevice(uDevice.EAction.Modifier, TreeViewDevice.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
@@ -380,7 +466,7 @@ Class Window1
             If TreeViewZone.SelectedItem IsNot Nothing Then
                 For i As Integer = 0 To myService.GetAllZones.Count - 1
                     If myService.GetAllZones.Item(i).ID = TreeViewZone.SelectedItem.uid Then
-                        PropertyGrid1.SelectedObject = myService.GetAllZones.Item(i)
+                        'PropertyGrid1.SelectedObject = myService.GetAllZones.Item(i)
 
                         Dim x As New uZone(uDevice.EAction.Modifier, TreeViewZone.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
@@ -450,7 +536,7 @@ Class Window1
             If TreeViewUsers.SelectedItem IsNot Nothing Then
                 For i As Integer = 0 To myService.GetAllUsers.Count - 1
                     If myService.GetAllUsers.Item(i).ID = TreeViewUsers.SelectedItem.uid Then
-                        PropertyGrid1.SelectedObject = myService.GetAllUsers.Item(i)
+                        'PropertyGrid1.SelectedObject = myService.GetAllUsers.Item(i)
 
                         Dim x As New uUser(uDevice.EAction.Modifier, TreeViewUsers.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
@@ -660,12 +746,12 @@ Class Window1
                 PageConnexion()
             Loop
 
-            If My.Settings.ViewProperty = False Then
-                MemCanvas = Canvas2
-                StackPanel3.Children.RemoveAt(1)
-                Canvas1.MaxHeight = StackPanel3.Height
-                TabControl1.MaxHeight = 500
-            End If
+            'If My.Settings.ViewProperty = False Then
+            '    MemCanvas = Canvas2
+            '    StackPanel3.Children.RemoveAt(1)
+            '    Canvas1.MaxHeight = StackPanel3.Height
+            '    TabControl1.MaxHeight = 500
+            'End If
 
             AffDriver()
             AffDevice()
@@ -705,31 +791,31 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub MenuPropriete_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuPropriete.Click
-        Try
-            If StackPanel3.Children.Count = 2 Then Exit Sub
-            StackPanel3.Children.Add(MemCanvas)
-            Canvas1.MaxHeight = StackPanel3.Height - 200
-            TabControl1.MaxHeight = 300
-            My.Settings.ViewProperty = True
-            My.Settings.Save()
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MenuPropriete_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
+    'Private Sub MenuPropriete_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuPropriete.Click
+    '    Try
+    '        If StackPanel3.Children.Count = 2 Then Exit Sub
+    '        StackPanel3.Children.Add(MemCanvas)
+    '        Canvas1.MaxHeight = StackPanel3.Height - 200
+    '        TabControl1.MaxHeight = 300
+    '        My.Settings.ViewProperty = True
+    '        My.Settings.Save()
+    '    Catch ex As Exception
+    '        MessageBox.Show("ERREUR Sub MenuPropriete_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+    '    End Try
+    'End Sub
 
-    Private Sub BtnCloseProperties_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCloseProperties.Click
-        Try
-            MemCanvas = Canvas2
-            StackPanel3.Children.RemoveAt(1)
-            Canvas1.MaxHeight = StackPanel3.Height
-            TabControl1.MaxHeight = 500
-            My.Settings.ViewProperty = False
-            My.Settings.Save()
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub BtnCloseProperties_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
+    'Private Sub BtnCloseProperties_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCloseProperties.Click
+    '    Try
+    '        MemCanvas = Canvas2
+    '        StackPanel3.Children.RemoveAt(1)
+    '        Canvas1.MaxHeight = StackPanel3.Height
+    '        TabControl1.MaxHeight = 500
+    '        My.Settings.ViewProperty = False
+    '        My.Settings.Save()
+    '    Catch ex As Exception
+    '        MessageBox.Show("ERREUR Sub BtnCloseProperties_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+    '    End Try
+    'End Sub
 
     Private Sub MenuTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuTest.Click
         Try

@@ -6,13 +6,13 @@ HoMIAdmiN
 </name>
 </assembly>
 <members>
-<member name="M:WpfApplication1.uUser.InitializeComponent">
+<member name="M:WpfApplication1.uZone.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uUser">
+</member><member name="T:WpfApplication1.uZone">
 	<summary>
-uUser
+uZone
 </summary>
 </member><member name="M:WpfApplication1.uDevice.InitializeComponent">
 	<summary>
@@ -22,22 +22,6 @@ InitializeComponent
 	<summary>
 uDevice
 </summary>
-</member><member name="M:WpfApplication1.Window1.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.Window1">
-	<summary>
-Window1
-</summary>
-</member><member name="M:WpfApplication1.uConfigServer.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uConfigServer">
-	<summary>
-uConfigServer
-</summary>
 </member><member name="M:WpfApplication1.uTestDevice.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -45,54 +29,6 @@ InitializeComponent
 </member><member name="T:WpfApplication1.uTestDevice">
 	<summary>
 uTestDevice
-</summary>
-</member><member name="M:WpfApplication1.uZone.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uZone">
-	<summary>
-uZone
-</summary>
-</member><member name="M:WpfApplication1.Window3.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.Window3">
-	<summary>
-Window3
-</summary>
-</member><member name="M:WpfApplication1.uLog.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uLog">
-	<summary>
-uLog
-</summary>
-</member><member name="M:WpfApplication1.uPlaylist.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uPlaylist">
-	<summary>
-uPlaylist
-</summary>
-</member><member name="M:WpfApplication1.uDriver.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uDriver">
-	<summary>
-uDriver
-</summary>
-</member><member name="M:WpfApplication1.Window2.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.Window2">
-	<summary>
-Window2
 </summary>
 </member><member name="M:WpfApplication1.Application.InitializeComponent">
 	<summary>
@@ -105,6 +41,70 @@ Application Entry Point.
 </member><member name="T:WpfApplication1.Application">
 	<summary>
 Application
+</summary>
+</member><member name="M:WpfApplication1.uLog.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uLog">
+	<summary>
+uLog
+</summary>
+</member><member name="M:WpfApplication1.Window1.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.Window1">
+	<summary>
+Window1
+</summary>
+</member><member name="M:WpfApplication1.uDriver.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uDriver">
+	<summary>
+uDriver
+</summary>
+</member><member name="M:WpfApplication1.uUser.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uUser">
+	<summary>
+uUser
+</summary>
+</member><member name="M:WpfApplication1.Window2.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.Window2">
+	<summary>
+Window2
+</summary>
+</member><member name="M:WpfApplication1.uPlaylist.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uPlaylist">
+	<summary>
+uPlaylist
+</summary>
+</member><member name="M:WpfApplication1.uConfigServer.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uConfigServer">
+	<summary>
+uConfigServer
+</summary>
+</member><member name="M:WpfApplication1.Window3.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.Window3">
+	<summary>
+Window3
 </summary>
 </member><member name="P:WpfApplication1.ClServer.Nom">
 	<summary>
