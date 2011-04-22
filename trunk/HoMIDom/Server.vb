@@ -15,18 +15,13 @@ Imports System.Web.HttpUtility
 
 Namespace HoMIDom
 
-    '***********************************************
-    '** CLASS SERVER
-    '** version 1.0
-    '** Date de création: 12/01/2011
-    '***********************************************
-
     ''' <summary>Classe Server</summary>
     ''' <remarks></remarks>
     <Serializable()> Public Class Server
         Implements HoMIDom.IHoMIDom 'implémente l'interface dans cette class
 
 #Region "Declaration des variables"
+
         Private Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
         Private Shared _ListImgDrivers As New ArrayList
         Private Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
@@ -77,7 +72,7 @@ Namespace HoMIDom
             Dim retour As String
             Dim listmacro As ArrayList
             Try
-                Dim valeur = Parametres
+                Dim valeur As Object = Parametres
                 '--- on logue tout ce qui arrive en mode debug
                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", "Le device " & Device.name & " a changé : " & [Property] & " = " & valeur)
 
@@ -335,6 +330,7 @@ Namespace HoMIDom
                 Dim _file As String = Fichier & "homidom"
                 If File.Exists(_file & ".bak") = True Then File.Delete(_file & ".bak")
                 File.Copy(_file & ".xml", Mid(_file & ".xml", 1, Len(_file & ".xml") - 4) & ".bak")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
             End Try
@@ -845,6 +841,7 @@ Namespace HoMIDom
                     Dim _file As String = Fichier.Replace(".xml", "")
                     If File.Exists(_file & ".sav") = True Then File.Delete(_file & ".sav")
                     File.Copy(_file & ".xml", _file & ".sav")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création de sauvegarde (.sav) du fichier de config avant sauvegarde")
                 Catch ex As Exception
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
                 End Try
@@ -1647,11 +1644,291 @@ Namespace HoMIDom
         End Function
 #End Region
 
+#Region "Log"
+        Dim _File As String = _MonRepertoire & "\logs\log.xml" 'Représente le fichier log: ex"C:\homidom\log\log.xml"
+        Dim _MaxFileSize As Long = 5120 'en Koctets
+
+        ''' <summary>
+        ''' Permet de connaître le chemin du fichier log
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public ReadOnly Property FichierLog() As String
+            Get
+                Return _File
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' Retourne/Fixe la Taille max du fichier log en Ko
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property MaxFileSize() As Long
+            Get
+                Return _MaxFileSize
+            End Get
+            Set(ByVal value As Long)
+                _MaxFileSize = value
+            End Set
+        End Property
+
+        ''' <summary>Indique le type du Log: si c'est une erreur, une info, un message...</summary>
+        ''' <remarks></remarks>
+        Public Enum TypeLog
+            INFO = 1                    'divers
+            ACTION = 2                  'action lancé par un driver/device/trigger
+            MESSAGE = 3
+            VALEUR_CHANGE = 4           'Valeur ayant changé
+            VALEUR_INCHANGE = 5         'Valeur n'ayant pas changé
+            VALEUR_INCHANGE_PRECISION = 6 'Valeur n'ayant pas changé pour cause de precision
+            VALEUR_INCHANGE_LASTETAT = 7 'Valeur n'ayant pas changé pour cause de lastetat
+            ERREUR = 8                   'erreur générale
+            ERREUR_CRITIQUE = 9          'erreur critique demandant la fermeture du programme
+            DEBUG = 10                   'visible uniquement si Homidom est en mode debug
+        End Enum
+
+        ''' <summary>Indique la source du log si c'est le serveur, un script, un device...</summary>
+        ''' <remarks></remarks>
+        Public Enum TypeSource
+            SERVEUR = 1
+            SCRIPT = 2
+            TRIGGER = 3
+            DEVICE = 4
+            DRIVER = 5
+            SOAP = 6
+            CLIENT = 7
+        End Enum
+
+        ''' <summary>Ecrit un log dans le fichier log au format xml</summary>
+        ''' <param name="TypLog"></param>
+        ''' <param name="Source"></param>
+        ''' <param name="Fonction"></param>
+        ''' <param name="Message"></param>
+        ''' <remarks></remarks>
+        Public Sub Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String) Implements IHoMIDom.Log
+            Try
+                Dim Fichier As FileInfo
+
+                'Vérifie si le fichier log existe sinon le crée
+                If File.Exists(_File) Then
+                    Fichier = New FileInfo(_File)
+                    'Vérifie si le fichier est trop gros si oui, on l'archive
+                    If (Fichier.Length / 1000) > _MaxFileSize Then
+                        Dim filearchive As String
+                        filearchive = STRGS.Left(_File, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                        File.Move(_File, filearchive)
+                    End If
+                Else
+                    CreateNewFileLog(_File)
+                    Fichier = New FileInfo(_File)
+                End If
+
+                'on affiche dans la console
+                Console.WriteLine(Now & " " & TypLog & " " & Source & " " & Fonction & " " & Message)
+
+                Dim xmldoc As New XmlDocument()
+
+                'Ecrire le log
+                Try
+                    xmldoc.Load(_File) 'ouvre le fichier xml
+                    Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
+                    Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
+                    Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
+                    Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
+                    Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
+                    Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
+
+                    'on affecte les attributs à l'élément
+                    elelog.SetAttributeNode(atttime)
+                    elelog.SetAttributeNode(atttype)
+                    elelog.SetAttributeNode(attsrc)
+                    elelog.SetAttributeNode(attfct)
+                    elelog.SetAttributeNode(attmsg)
+
+                    'on affecte les valeur
+                    elelog.SetAttribute("time", Now)
+                    elelog.SetAttribute("type", TypLog)
+                    elelog.SetAttribute("source", Source)
+                    elelog.SetAttribute("fonction", HtmlEncode(Fonction))
+                    elelog.SetAttribute("message", HtmlEncode(Message))
+
+                    Dim root As XmlElement = xmldoc.Item("logs")
+                    root.AppendChild(elelog)
+
+                    'on enregistre le fichier xml
+                    xmldoc.Save(_File)
+
+                Catch ex As Exception 'Le fichier xml est corrompu ou comporte des caractères non supportés par xml
+                    Console.WriteLine(Now & " Impossible d'écrire dans le fichier log un nouveau fichier à été créé: " & ex.Message)
+                    Dim filearchive As String
+                    filearchive = STRGS.Left(_File, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                    File.Move(_File, filearchive)
+                    CreateNewFileLog(_File)
+                    Fichier = New FileInfo(_File)
+                    xmldoc.Load(_File) 'ouvre le fichier xml
+                    Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
+                    Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
+                    Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
+                    Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
+                    Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
+                    Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
+
+                    'on affecte les attributs à l'élément
+                    elelog.SetAttributeNode(atttime)
+                    elelog.SetAttributeNode(atttype)
+                    elelog.SetAttributeNode(attsrc)
+                    elelog.SetAttributeNode(attfct)
+                    elelog.SetAttributeNode(attmsg)
+
+                    'on affecte les valeur
+                    elelog.SetAttribute("time", Now)
+                    elelog.SetAttribute("type", TypLog)
+                    elelog.SetAttribute("source", Source)
+                    elelog.SetAttribute("fonction", Fonction)
+                    elelog.SetAttribute("message", HtmlEncode(Message))
+
+                    Dim root As XmlElement = xmldoc.Item("logs")
+                    root.AppendChild(elelog)
+
+                    'on enregistre le fichier xml
+                    xmldoc.Save(_File)
+                End Try
+
+                Fichier = Nothing
+            Catch ex As Exception
+                MsgBox("Erreur lors de l'écriture d'un log: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
+            End Try
+        End Sub
+
+        ''' <summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
+        ''' <param name="NewFichier"></param>
+        ''' <remarks></remarks>
+        Public Sub CreateNewFileLog(ByVal NewFichier As String)
+            Dim rw As XmlTextWriter = New XmlTextWriter(NewFichier, Nothing)
+            rw.WriteStartDocument()
+            rw.WriteStartElement("logs")
+            rw.WriteStartElement("log")
+            rw.WriteAttributeString("time", Now)
+            rw.WriteAttributeString("type", 0)
+            rw.WriteAttributeString("source", 0)
+            rw.WriteAttributeString("message", "Création du nouveau fichier log")
+            rw.WriteEndElement()
+            rw.WriteEndElement()
+            rw.WriteEndDocument()
+            rw.Close()
+        End Sub
+#End Region
+
+#Region "Declaration de la classe Server"
+
+        ''' <summary>Déclaration de la class Server</summary>
+        ''' <remarks></remarks>
+        Public Sub New()
+
+        End Sub
+
+        ''' <summary>Démarrage du serveur</summary>
+        ''' <remarks></remarks>
+        Public Sub start() Implements IHoMIDom.Start
+            Try
+                Dim retour As String
+
+                '----- Démarre les connexions Sqlite ----- 
+                retour = sqlite_homidom.connect("homidom")
+                If STRGS.Left(retour, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour)
+                    'on arrête tout
+                Else
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour)
+                End If
+
+                retour = sqlite_medias.connect("medias")
+                If STRGS.Left(retour, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Medias : " & retour)
+                    'on arrête tout
+                Else
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Medias : " & retour)
+                End If
+
+                '----- Charge les drivers ----- 
+                Drivers_Load()
+
+                '----- Chargement de la config ----- 
+                retour = LoadConfig(_MonRepertoire & "\Config\")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", retour)
+
+                '----- Démarre les drivers ----- 
+                Drivers_Start()
+
+                '----- Calcul les heures de lever et coucher du soleil ----- 
+                MAJ_HeuresSoleil()
+
+                '----- Maj des triggers type CRON ----- 
+                For i = 0 To _listTriggers.Count - 1
+                    'on vérifie si la condition est un cron
+                    If STRGS.Left(_listTriggers.Item(i).Condition, 5) = "cron_" Then
+                        _listTriggers.Item(i).maj_cron() 'on calcule la date de prochain execution
+                    End If
+                Next
+
+                '----- Démarre le Timer -----
+                TimerSecond.Interval = 1000
+                AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
+                TimerSecond.Enabled = True
+
+                'test avec graphe
+                graphe.grapher_courbe("test", "Temperature extérieure", 800, 400)
+
+            Catch ex As Exception
+                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Exception : " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>Arrêt du serveur</summary>
+        ''' <remarks></remarks>
+        Public Sub [stop]() Implements IHoMIDom.Stop
+            Try
+                Dim retour As String
+                TimerSecond.Enabled = False
+                TimerSecond.Dispose()
+
+                '----- Arrete les devices ----- 
+                Devices_Stop()
+                _ListDevices = Nothing
+
+                '----- Arrete les drivers ----- 
+                Drivers_Stop()
+                _ListDrivers = Nothing
+
+                '----- Arrete les connexions Sqlite -----
+                retour = sqlite_homidom.disconnect("homidom")
+                If STRGS.Left(retour, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Homidom : " & retour)
+                End If
+                retour = sqlite_medias.disconnect("medias")
+                If STRGS.Left(retour, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Medias : " & retour)
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Exception : " & ex.Message)
+            End Try
+        End Sub
+
+        Protected Overrides Sub Finalize()
+            'Mettre le Code pour l'arret
+            '[stop]()
+            MyBase.Finalize()
+        End Sub
+#End Region
+
 #End Region
 
 #Region "Interface Client via IHOMIDOM"
         '********************************************************************
-        'Fonctions/Sub/Propriétés partagées en service web pour les clients
+        'Fonctions/Sub/Propriétés partagées en service soap pour les clients
         '********************************************************************
 
         '**** PROPRIETES ***************************
@@ -1676,6 +1953,15 @@ Namespace HoMIDom
             Return _DateTimeLastStart
         End Function
 
+        ''' <summary>
+        ''' Retourne la version du serveur
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetServerVersion() As String Implements IHoMIDom.GetServerVersion
+            Return My.Application.Info.Version.ToString
+        End Function
+
         ''' <summary>Retourne l'heure du serveur</summary>
         ''' <returns>String : heure du serveur</returns>
         Public Function GetTime() As String Implements IHoMIDom.GetTime
@@ -1686,6 +1972,15 @@ Namespace HoMIDom
                 Return ""
             End Try
         End Function
+
+        ''' <summary>
+        ''' Permet d'envoyer un message d'un client vers le server
+        ''' </summary>
+        ''' <param name="Message"></param>
+        ''' <remarks></remarks>
+        Public Sub MessageToServer(ByVal Message As String) Implements IHoMIDom.MessageToServer
+            'traiter le message
+        End Sub
 #End Region
 
 #Region "SMTP"
@@ -3394,6 +3689,23 @@ Namespace HoMIDom
             End Try
         End Function
 
+        ''' <summary>
+        ''' Indique si la zone ne contient aucun device
+        ''' </summary>
+        ''' <param name="zoneId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ZoneIsEmpty(ByVal zoneId) As Boolean Implements IHoMIDom.ZoneIsEmpty
+            Dim retour As Boolean = True
+            Dim x As Zone = ReturnZoneById(zoneId)
+            If x IsNot Nothing Then
+                If x.ListDevice.Count > 0 Then
+                    retour = False
+                End If
+            End If
+            Return retour
+        End Function
+
         ''' <summary>Retourne la zone par son ID</summary>
         ''' <param name="ZoneId"></param>
         ''' <returns></returns>
@@ -3899,6 +4211,24 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnLog", "Exception : " & ex.Message)
             End Try
         End Function
+
+        ''' <summary>
+        ''' Fixe la taille max du fichier log en Ko avant d'en créer un nouveau
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        Public Sub SetMaxFileSizeLog(ByVal Value As Long) Implements IHoMIDom.SetMaxFileSizeLog
+            MaxFileSize = Value
+        End Sub
+
+        ''' <summary>
+        ''' Retourne la taille max du fichier log en Ko 
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetMaxFileSizeLog() As Long Implements IHoMIDom.GetMaxFileSizeLog
+            Return MaxFileSize
+        End Function
 #End Region
 
 #Region "Configuration"
@@ -3938,285 +4268,6 @@ Namespace HoMIDom
         End Function
 #End Region
 
-#End Region
-
-#Region "Declaration de la classe Server"
-
-        ''' <summary>Déclaration de la class Server</summary>
-        ''' <remarks></remarks>
-        Public Sub New()
-
-        End Sub
-
-        ''' <summary>Démarrage du serveur</summary>
-        ''' <remarks></remarks>
-        Public Sub start() Implements IHoMIDom.Start
-            Try
-                Dim retour As String
-
-                '----- Démarre les connexions Sqlite ----- 
-                retour = sqlite_homidom.connect("homidom")
-                If STRGS.Left(retour, 4) = "ERR:" Then
-                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour)
-                    'on arrête tout
-                Else
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour)
-                End If
-
-                retour = sqlite_medias.connect("medias")
-                If STRGS.Left(retour, 4) = "ERR:" Then
-                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Medias : " & retour)
-                    'on arrête tout
-                Else
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Medias : " & retour)
-                End If
-
-                '----- Charge les drivers ----- 
-                Drivers_Load()
-
-                '----- Chargement de la config ----- 
-                retour = LoadConfig(_MonRepertoire & "\Config\")
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", retour)
-
-                '----- Démarre les drivers ----- 
-                Drivers_Start()
-
-                '----- Calcul les heures de lever et coucher du soleil ----- 
-                MAJ_HeuresSoleil()
-
-                '----- Maj des triggers type CRON ----- 
-                For i = 0 To _listTriggers.Count - 1
-                    'on vérifie si la condition est un cron
-                    If STRGS.Left(_listTriggers.Item(i).Condition, 5) = "cron_" Then
-                        _listTriggers.Item(i).maj_cron() 'on calcule la date de prochain execution
-                    End If
-                Next
-
-                '----- Démarre le Timer -----
-                TimerSecond.Interval = 1000
-                AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
-                TimerSecond.Enabled = True
-
-
-
-
-                'test avec graphe
-                graphe.grapher_courbe("test", "Temperature extérieure", 800, 400)
-
-
-
-
-
-
-            Catch ex As Exception
-                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Exception : " & ex.Message)
-            End Try
-        End Sub
-
-        ''' <summary>Arrêt du serveur</summary>
-        ''' <remarks></remarks>
-        Public Sub [stop]() Implements IHoMIDom.Stop
-            Try
-                Dim retour As String
-                TimerSecond.Enabled = False
-                TimerSecond.Dispose()
-
-                '----- Arrete les devices ----- 
-                Devices_Stop()
-                _ListDevices = Nothing
-
-                '----- Arrete les drivers ----- 
-                Drivers_Stop()
-                _ListDrivers = Nothing
-
-                '----- Arrete les connexions Sqlite -----
-                retour = sqlite_homidom.disconnect("homidom")
-                If STRGS.Left(retour, 4) = "ERR:" Then
-                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Homidom : " & retour)
-                End If
-                retour = sqlite_medias.disconnect("medias")
-                If STRGS.Left(retour, 4) = "ERR:" Then
-                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Medias : " & retour)
-                End If
-            Catch ex As Exception
-                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Exception : " & ex.Message)
-            End Try
-        End Sub
-
-        Protected Overrides Sub Finalize()
-            'Mettre le Code pour l'arret
-            '[stop]()
-            MyBase.Finalize()
-        End Sub
-#End Region
-
-#Region "Log"
-        Dim _File As String = _MonRepertoire & "\logs\log.xml" 'Représente le fichier log: ex"C:\homidom\log\log.xml"
-        Dim _MaxFileSize As Long = 5120000 'en bytes
-
-        Public Property FichierLog() As String
-            Get
-                Return _File
-            End Get
-            Set(ByVal value As String)
-                _File = value
-            End Set
-        End Property
-
-        Public Property MaxFileSize() As Long
-            Get
-                Return _MaxFileSize
-            End Get
-            Set(ByVal value As Long)
-                _MaxFileSize = value
-            End Set
-        End Property
-
-        ''' <summary>Indique le type du Log: si c'est une erreur, une info, un message...</summary>
-        ''' <remarks></remarks>
-        Public Enum TypeLog
-            INFO = 1                    'divers
-            ACTION = 2                  'action lancé par un driver/device/trigger
-            MESSAGE = 3
-            VALEUR_CHANGE = 4           'Valeur ayant changé
-            VALEUR_INCHANGE = 5         'Valeur n'ayant pas changé
-            VALEUR_INCHANGE_PRECISION = 6 'Valeur n'ayant pas changé pour cause de precision
-            VALEUR_INCHANGE_LASTETAT = 7 'Valeur n'ayant pas changé pour cause de lastetat
-            ERREUR = 8                   'erreur générale
-            ERREUR_CRITIQUE = 9          'erreur critique demandant la fermeture du programme
-            DEBUG = 10                   'visible uniquement si Homidom est en mode debug
-        End Enum
-
-        ''' <summary>Indique la source du log si c'est le serveur, un script, un device...</summary>
-        ''' <remarks></remarks>
-        Public Enum TypeSource
-            SERVEUR = 1
-            SCRIPT = 2
-            TRIGGER = 3
-            DEVICE = 4
-            DRIVER = 5
-            SOAP = 6
-            CLIENT = 7
-        End Enum
-
-        ''' <summary>Ecrit un log dans le fichier log au format xml</summary>
-        ''' <param name="TypLog"></param>
-        ''' <param name="Source"></param>
-        ''' <param name="Fonction"></param>
-        ''' <param name="Message"></param>
-        ''' <remarks></remarks>
-        Public Sub Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String) Implements IHoMIDom.Log
-            Try
-                Dim Fichier As FileInfo
-
-                'Vérifie si le fichier log existe sinon le crée
-                If File.Exists(_File) Then
-                    Fichier = New FileInfo(_File)
-                    'Vérifie si le fichier est trop gros si oui, on l'archive
-                    If Fichier.Length > _MaxFileSize Then
-                        Dim filearchive As String
-                        filearchive = STRGS.Left(_File, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                        File.Move(_File, filearchive)
-                    End If
-                Else
-                    CreateNewFileLog(_File)
-                    Fichier = New FileInfo(_File)
-                End If
-
-                'on affiche dans la console
-                Console.WriteLine(Now & " " & TypLog & " " & Source & " " & Fonction & " " & Message)
-
-                Dim xmldoc As New XmlDocument()
-
-                'Ecrire le log
-                Try
-                    xmldoc.Load(_File) 'ouvre le fichier xml
-                    Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
-                    Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
-                    Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
-                    Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
-                    Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
-                    Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
-
-                    'on affecte les attributs à l'élément
-                    elelog.SetAttributeNode(atttime)
-                    elelog.SetAttributeNode(atttype)
-                    elelog.SetAttributeNode(attsrc)
-                    elelog.SetAttributeNode(attfct)
-                    elelog.SetAttributeNode(attmsg)
-
-                    'on affecte les valeur
-                    elelog.SetAttribute("time", Now)
-                    elelog.SetAttribute("type", TypLog)
-                    elelog.SetAttribute("source", Source)
-                    elelog.SetAttribute("fonction", HtmlEncode(Fonction))
-                    elelog.SetAttribute("message", HtmlEncode(Message))
-
-                    Dim root As XmlElement = xmldoc.Item("logs")
-                    root.AppendChild(elelog)
-
-                    'on enregistre le fichier xml
-                    xmldoc.Save(_File)
-
-                Catch ex As Exception 'Le fichier xml est corrompu ou comporte des caractères non supportés par xml
-                    Console.WriteLine(Now & " Impossible d'écrire dans le fichier log un nouveau fichier à été créé: " & ex.Message)
-                    Dim filearchive As String
-                    filearchive = STRGS.Left(_File, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                    File.Move(_File, filearchive)
-                    CreateNewFileLog(_File)
-                    Fichier = New FileInfo(_File)
-                    xmldoc.Load(_File) 'ouvre le fichier xml
-                    Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
-                    Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
-                    Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
-                    Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
-                    Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
-                    Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
-
-                    'on affecte les attributs à l'élément
-                    elelog.SetAttributeNode(atttime)
-                    elelog.SetAttributeNode(atttype)
-                    elelog.SetAttributeNode(attsrc)
-                    elelog.SetAttributeNode(attfct)
-                    elelog.SetAttributeNode(attmsg)
-
-                    'on affecte les valeur
-                    elelog.SetAttribute("time", Now)
-                    elelog.SetAttribute("type", TypLog)
-                    elelog.SetAttribute("source", Source)
-                    elelog.SetAttribute("fonction", Fonction)
-                    elelog.SetAttribute("message", HtmlEncode(Message))
-
-                    Dim root As XmlElement = xmldoc.Item("logs")
-                    root.AppendChild(elelog)
-
-                    'on enregistre le fichier xml
-                    xmldoc.Save(_File)
-                End Try
-
-                Fichier = Nothing
-            Catch ex As Exception
-                MsgBox("Erreur lors de l'écriture d'un log: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
-            End Try
-        End Sub
-
-        ''' <summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
-        ''' <param name="NewFichier"></param>
-        ''' <remarks></remarks>
-        Public Sub CreateNewFileLog(ByVal NewFichier As String)
-            Dim rw As XmlTextWriter = New XmlTextWriter(NewFichier, Nothing)
-            rw.WriteStartDocument()
-            rw.WriteStartElement("logs")
-            rw.WriteStartElement("log")
-            rw.WriteAttributeString("time", Now)
-            rw.WriteAttributeString("type", 0)
-            rw.WriteAttributeString("source", 0)
-            rw.WriteAttributeString("message", "Création du nouveau fichier log")
-            rw.WriteEndElement()
-            rw.WriteEndElement()
-            rw.WriteEndDocument()
-            rw.Close()
-        End Sub
 #End Region
 
     End Class

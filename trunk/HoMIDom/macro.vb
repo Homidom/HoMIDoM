@@ -8,17 +8,124 @@ Namespace HoMIDom
     ''' <summary>Class Macro, Défini le type pour les macros</summary>
     ''' <remarks>_condition contient un tableau des conditions à vérifier pour lancer les actions si TRUE ou si FALSE</remarks>
     Public Class Macro
-
-        Public ID As String
-        Public Nom As String
-        Public Description As String
-        Public Enable As Boolean
-        Public Condition As ArrayList
-        Public ActionTrue As ArrayList
-        Public ActionFalse As ArrayList
+        'Déclaration des variables
+        Dim _ID As String
+        Dim _Nom As String
+        Dim _Description As String
+        Dim _Enable As Boolean
+        Dim _Condition As ArrayList
+        Dim _ActionTrue As ArrayList
+        Dim _ActionFalse As ArrayList
 
         Dim _Server As Server
         Dim _Device As Device
+
+        'Propriétés
+
+        ''' <summary>
+        ''' ID de la macro
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property ID As String
+            Get
+                Return _ID
+            End Get
+            Set(ByVal value As String)
+                _ID = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Nom de la macro
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property Nom As String
+            Get
+                Return _Nom
+            End Get
+            Set(ByVal value As String)
+                _Nom = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Decription de la macro
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property Description As String
+            Get
+                Return _Description
+            End Get
+            Set(ByVal value As String)
+                _Description = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Active la macro
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property Enable As Boolean
+            Get
+                Return _Enable
+            End Get
+            Set(ByVal value As Boolean)
+                _Enable = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Liste des conditions de la macro
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property Condition As ArrayList
+            Get
+                Return _Condition
+            End Get
+            Set(ByVal value As ArrayList)
+                _Condition = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Liste des actions si les conditions de la macro macro est True
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property ActionTrue As ArrayList
+            Get
+                Return _ActionTrue
+            End Get
+            Set(ByVal value As ArrayList)
+                _ActionTrue = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Liste des actions si les conditions de la macro macro est False
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property ActionFalse As ArrayList
+            Get
+                Return _ActionFalse
+            End Get
+            Set(ByVal value As ArrayList)
+                _ActionFalse = value
+            End Set
+        End Property
 
         ''' <summary>Execute une macro avec analyse des conditions</summary>
         ''' <remarks>lance les actions True ou False suivant le résultat des conditions</remarks>
@@ -95,15 +202,106 @@ Namespace HoMIDom
     ''' </remarks>
     Public Class Trigger
 
-        Public ID As String
-        Public Nom As String
-        Public Description As String
-        Public Enable As Boolean
-        Public Condition As String
-        Public Prochainedateheure As DateTime 'la date/heure de prochaine execution utile uniquement pour un type CRON
+        'Declaration des variables
+        Dim _ID As String = ""
+        Dim _Nom As String = ""
+        Dim _Description As String = ""
+        Dim _Enable As Boolean = False
+        Dim _Condition As String = ""
+        Dim _Prochainedateheure As DateTime 'la date/heure de prochaine execution utile uniquement pour un type CRON
         Public Macro As ArrayList
-
         Public _Server As Server
+
+        'Propriétés
+        ''' <summary>
+        ''' ID du trigger
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property ID As String
+            Get
+                Return _ID
+            End Get
+            Set(ByVal value As String)
+                _ID = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Nom du trigger
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property Nom As String
+            Get
+                Return _Nom
+            End Get
+            Set(ByVal value As String)
+                _Nom = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Description du trigger
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property Description As String
+            Get
+                Return _Description
+            End Get
+            Set(ByVal value As String)
+                _Description = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Active de trigger
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property Enable As Boolean
+            Get
+                Return _Enable
+            End Get
+            Set(ByVal value As Boolean)
+                _Enable = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Condition du trigger
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property Condition As String
+            Get
+                Return _Condition
+            End Get
+            Set(ByVal value As String)
+                _Condition = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' DateHeure de la prochaine exécution
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property Prochainedateheure As DateTime
+            Get
+                Return _Prochainedateheure
+            End Get
+            Set(ByVal value As DateTime)
+                _Prochainedateheure = value
+            End Set
+        End Property
 
         ' ''' <summary>Analyse si un device fait parti des conditions</summary>
         ' ''' <remarks></remarks>
@@ -150,14 +348,12 @@ Namespace HoMIDom
     ''' <remarks></remarks>
     Public Class action
 
-        Public ID As String
-        Public Nom As String
-        Public Description As String
-        Public Enable As Boolean
-        Public type As String
-
+        Dim _ID As String
+        Dim _Nom As String
+        Dim _Description As String
+        Dim _Enable As Boolean
+        Dim _Type As String
         Public _Server As Server
-
 
         ''' <summary>convertit la condition au format cron "cron_ss#mm#hh#jj#MMM#JJJ" en dateTime dans le champ prochainedateheure</summary>
         ''' <remarks></remarks>

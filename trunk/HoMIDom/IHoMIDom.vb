@@ -5,15 +5,6 @@ Imports System.Linq
 
 Namespace HoMIDom
 
-    '***********************************************
-    '** INTERFACE SOAP HTTP
-    '** Liste toutes les functions et propriétés accessibles par les clients
-    '** version 1.0
-    '** Date de création: 12/01/2011
-    '** Historique (SebBergues): 12/01/2011: Création 
-    '***********************************************
-
-
     ''' <summary>
     ''' Liste toutes les functions et propriétés accessibles par les clients
     ''' </summary>
@@ -21,13 +12,25 @@ Namespace HoMIDom
     <ServiceContract(Namespace:="http://HoMIDom/")> Public Interface IHoMIDom
 
 #Region "Serveur"
-
+        ''' <summary>
+        ''' Retourne la version du serveur
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetServerVersion() As String
 
         ''' <summary>
         ''' Retourne l'heure du serveur
         ''' </summary>
         ''' <remarks></remarks>
         <OperationContract()> Function GetTime() As String
+
+        ''' <summary>
+        ''' Permet d'envoyer un message d'un client vers le server
+        ''' </summary>
+        ''' <param name="Message"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub MessageToServer(ByVal Message As String)
 
         ''' <summary>
         ''' 'Sauvegarde de la configuration
@@ -380,6 +383,14 @@ Namespace HoMIDom
 
 #Region "Zone"
         ''' <summary>
+        ''' Indique si la zone ne contient aucun device (exemple à vérifier avant de supprimer une zone)
+        ''' </summary>
+        ''' <param name="zoneId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function ZoneIsEmpty(ByVal zoneId) As Boolean
+
+        ''' <summary>
         ''' Supprimer une zone de la config
         ''' </summary>
         ''' <param name="zoneId"></param>
@@ -545,6 +556,19 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function ReturnLog(Optional ByVal Requete As String = "") As String
 
+        ''' <summary>
+        ''' Fixe la taille max du fichier log en Ko avant d'en créer un nouveau
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetMaxFileSizeLog(ByVal Value As Long)
+
+        ''' <summary>
+        ''' Retourne la taille max du fichier log en Ko
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetMaxFileSizeLog() As Long
 #End Region
 
 #Region "SMTP"

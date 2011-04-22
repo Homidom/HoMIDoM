@@ -109,7 +109,7 @@
         </GroupBox>
         <GroupBox Header="Paramètres du Serveur" Name="GroupBox2" Margin="5.5,187,5.5,166"></GroupBox>
         
-        <Label Height="37" Margin="14,0,25,0" Name="Label5" VerticalAlignment="Top" Foreground="DarkOrange" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic">Propriétés du serveur</Label>
+        <Label Height="37" Margin="14,0,22,0" Name="Label5" VerticalAlignment="Top" Foreground="DarkOrange" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic">Propriétés du serveur</Label>
         <Button Height="23" Template="{DynamicResource GlassButton}" Name="BtnOK" Foreground="White" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Margin="0,0,99,15" HorizontalAlignment="Right" Width="72">OK</Button>
         <Button Height="23" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,0,17,15" Name="BtnCancel" VerticalAlignment="Bottom" Width="72" Foreground="White">Fermer</Button>
         <Grid Margin="12,204,12,166">
