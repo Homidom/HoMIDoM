@@ -69,7 +69,7 @@ Module Service
                     Console.WriteLine(Now & " ERREUR: Erreur lors du lancement du service SOAP: " & ex.Message)
                 End Try
 
-                Using hostFileServer As New ServiceHost(GetType(HoMIDom.FileServer), fileServerAddress)
+                Using hostFileServer As New ServiceHost(GetType(HoMIDom.HoMIDom.FileServer), fileServerAddress)
                     hostFileServer.Open()
                     Console.WriteLine(Now & " Démarrage du serveur de fichiers OK")
                     Console.ReadLine()

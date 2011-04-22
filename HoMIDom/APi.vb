@@ -2,6 +2,11 @@
 
     Public Module Api
 
+        ''' <summary>
+        ''' Génère un ID unique
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Function GenerateGUID() As String
             Dim sGUID As String
             sGUID = System.Guid.NewGuid.ToString()

@@ -162,7 +162,7 @@
                     <StackPanel DockPanel.Dock="Bottom" IsItemsHost="True" />
                     <!-- This is the label that appears at the top of the TabControl -->
                     <Grid DockPanel.Dock="Top" MinHeight="25" Background="{StaticResource ButtonNormalBrush}"  SnapsToDevicePixels="True">
-                        <TextBlock FontFamily="Tahoma" Foreground="{StaticResource CaptionBrush}" VerticalAlignment="Center" Margin="5,0" FontSize="18" FontWeight="Bold" >Menu</TextBlock>
+                        <TextBlock FontFamily="Tahoma" Foreground="{StaticResource CaptionBrush}" VerticalAlignment="Center" Margin="5,0" FontSize="18" FontWeight="Bold" Name="TitleMenu" >Menu</TextBlock>
                         <Line Stroke="{StaticResource BorderBrush}" VerticalAlignment="Bottom" X2="1" Stretch="Fill"/>
                     </Grid>
                     <!-- This is the selected content pane that appears in the Outlook Bar -->
@@ -250,7 +250,7 @@
                                 <Button Foreground="White" Height="19" Margin="72,0,41,6" Name="BtnDelUser" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Supprimer</Button>
                             </Grid>
                         </TabItem>
-                    <TabItem Header="Triggers">
+                    <TabItem Header="Triggers" Name="TabItem2">
                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <TreeView Background="DimGray" Margin="5,4,4,30" Name="TreeViewTriggers" MinHeight="200" />
                             <Button Foreground="White" Height="19" HorizontalAlignment="Left" Margin="4,0,0,6" Name="BtnNewTrigger" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Nouveau</Button>
