@@ -5,6 +5,7 @@ Imports System.ServiceModel
 Imports System.IO
 Imports System.Xml.Serialization
 Imports System.Threading
+Imports System.Reflection.Assembly
 
 Class Window1
 
@@ -281,6 +282,7 @@ Class Window1
             MessageBox.Show("ERREUR Sub AffDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
 
     'Afficher la liste des scenes
     Public Sub AffScene()

@@ -60,9 +60,9 @@ Namespace My.Resources
             End Set
         End Property
         
-        Friend ReadOnly Property Defaut_128() As System.Drawing.Bitmap
+        Friend ReadOnly Property Defaut_Img() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("Defaut_128", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("Defaut_Img", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

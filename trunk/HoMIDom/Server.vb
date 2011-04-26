@@ -2337,7 +2337,7 @@ Namespace HoMIDom
                 Return myID
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDriver", "Exception : " & ex.Message)
-                Return ""
+                Return "-1"
             End Try
         End Function
 
@@ -2512,7 +2512,7 @@ Namespace HoMIDom
                         Exit Function
                     End If
                 Next
-                Return 1
+                Return 0
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDevice", "Exception : " & ex.Message)
                 Return -1
@@ -3224,7 +3224,7 @@ Namespace HoMIDom
                 Return myID
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDevice", "Exception : " & ex.Message)
-                Return ""
+                Return "-1"
             End Try
         End Function
 
@@ -3605,7 +3605,7 @@ Namespace HoMIDom
                 Return _retour
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddDeviceToZone", "Exception : " & ex.Message)
-                Return ""
+                Return "-1"
             End Try
         End Function
 
@@ -3630,7 +3630,7 @@ Namespace HoMIDom
                 Return _retour
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDeviceToZone", "Exception : " & ex.Message)
-                Return ""
+                Return "-1"
             End Try
         End Function
 
@@ -3815,7 +3815,7 @@ Namespace HoMIDom
                 Return myID
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveMacro", "Exception : " & ex.Message)
-                Return ""
+                Return "-1"
             End Try
         End Function
 
@@ -3927,7 +3927,7 @@ Namespace HoMIDom
                 Return myID
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTrigger", "Exception : " & ex.Message)
-                Return ""
+                Return "-1"
             End Try
         End Function
 
@@ -4104,7 +4104,7 @@ Namespace HoMIDom
                 Return myID
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveUser", "Exception : " & ex.Message)
-                Return ""
+                Return "-1"
             End Try
         End Function
 
