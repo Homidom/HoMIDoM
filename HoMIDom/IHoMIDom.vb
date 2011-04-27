@@ -431,7 +431,7 @@ Namespace HoMIDom
         ''' <param name="image"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListDevice As List(Of Zone.Device_Zone) = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String
+        <OperationContract()> Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListElement As List(Of Zone.Element_Zone) = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String
 
         ''' <summary>
         ''' Ajouter un device à une zone

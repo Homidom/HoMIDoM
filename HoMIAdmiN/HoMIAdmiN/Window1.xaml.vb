@@ -827,5 +827,25 @@ Class Window1
         End Try
     End Sub
 
+    Private Sub TreeViewDevice_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewDevice.SelectedItemChanged
+        If Mouse.LeftButton = MouseButtonState.Pressed Then
+            If TreeViewDevice.SelectedItem IsNot Nothing Then
+                Dim effects As DragDropEffects
+                Dim obj As New DataObject()
+                obj.SetData(GetType(String), TreeViewDevice.SelectedItem.uid)
+                effects = DragDrop.DoDragDrop(Me.TreeViewDevice, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+            End If
+        End If
+    End Sub
 
+    Private Sub TreeViewZone_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewZone.SelectedItemChanged
+        If Mouse.LeftButton = MouseButtonState.Pressed Then
+            If TreeViewZone.SelectedItem IsNot Nothing Then
+                Dim effects As DragDropEffects
+                Dim obj As New DataObject()
+                obj.SetData(GetType(String), TreeViewZone.SelectedItem.uid)
+                effects = DragDrop.DoDragDrop(Me.TreeViewZone, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+            End If
+        End If
+    End Sub
 End Class

@@ -452,8 +452,8 @@ Namespace HoMIDom
                                     For k As Integer = 0 To list.Item(i).ChildNodes.Count - 1
                                         If list.Item(i).ChildNodes.Item(k).Name = "device" Then
                                             For k1 As Integer = 0 To list.Item(i).ChildNodes.Item(k).ChildNodes.Count - 1
-                                                Dim _dev As New Zone.Device_Zone(list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(0).Value, list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(1).Value, list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(2).Value, list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(3).Value)
-                                                x.ListDevice.Add(_dev)
+                                                Dim _dev As New Zone.Element_Zone(list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(0).Value, list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(1).Value, list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(2).Value, list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(3).Value)
+                                                x.ListElement.Add(_dev)
                                             Next
                                         End If
                                     Next
@@ -3447,7 +3447,11 @@ Namespace HoMIDom
                         Exit For
                     End If
                 Next
-                Return retour
+                If retour.ID <> "" Then
+                    Return retour
+                Else
+                    Return Nothing
+                End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDeviceById", "Exception : " & ex.Message)
                 Return Nothing
@@ -3572,8 +3576,8 @@ Namespace HoMIDom
                         .ID = _ListZones.Item(i).id
                         .Icon = _ListZones.Item(i).icon
                         .Image = _ListZones.Item(i).Image
-                        For j As Integer = 0 To _ListZones.Item(i).ListDevice.count - 1
-                            .ListDevice.Add(_ListZones.Item(i).ListDevice.item(j))
+                        For j As Integer = 0 To _ListZones.Item(i).ListElement.count - 1
+                            .ListElement.Add(_ListZones.Item(i).ListElement.item(j))
                         Next
                     End With
                     _list.Add(x)
@@ -3598,8 +3602,8 @@ Namespace HoMIDom
             Dim _retour As String = ""
             Try
                 If _zone IsNot Nothing Then
-                    Dim _dev As New Zone.Device_Zone("", Visible, X, Y)
-                    _zone.ListDevice.Add(_dev)
+                    Dim _dev As New Zone.Element_Zone("", Visible, X, Y)
+                    _zone.ListElement.Add(_dev)
                     _retour = "0"
                 End If
                 Return _retour
@@ -3619,9 +3623,9 @@ Namespace HoMIDom
             Dim _retour As String = ""
             Try
                 If _zone IsNot Nothing Then
-                    For i As Integer = 0 To _zone.ListDevice.Count - 1
-                        If _zone.ListDevice.Item(i).DeviceID = DeviceId Then
-                            _zone.ListDevice.RemoveAt(i)
+                    For i As Integer = 0 To _zone.ListElement.Count - 1
+                        If _zone.ListElement.Item(i).ElementID = DeviceId Then
+                            _zone.ListElement.RemoveAt(i)
                             Exit For
                         End If
                     Next
@@ -3642,7 +3646,7 @@ Namespace HoMIDom
         ''' <param name="image"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListDevice As List(Of Zone.Device_Zone) = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String Implements IHoMIDom.SaveZone
+        Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListElement As List(Of Zone.Element_Zone) = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String Implements IHoMIDom.SaveZone
             Dim myID As String = ""
             Try
                 If zoneId = "" Then
@@ -3652,7 +3656,7 @@ Namespace HoMIDom
                         x.Name = name
                         x.Icon = icon
                         x.Image = image
-                        x.ListDevice = ListDevice
+                        x.ListElement = ListElement
                     End With
                     myID = x.ID
                     _ListZones.Add(x)
@@ -3664,7 +3668,7 @@ Namespace HoMIDom
                             _ListZones.Item(i).name = name
                             _ListZones.Item(i).icon = icon
                             _ListZones.Item(i).image = image
-                            _ListZones.Item(i).listdevice = ListDevice
+                            _ListZones.Item(i).listelement = ListElement
                         End If
                     Next
                 End If
@@ -3699,7 +3703,7 @@ Namespace HoMIDom
             Dim retour As Boolean = True
             Dim x As Zone = ReturnZoneById(zoneId)
             If x IsNot Nothing Then
-                If x.ListDevice.Count > 0 Then
+                If x.ListElement.Count > 0 Then
                     retour = False
                 End If
             End If
