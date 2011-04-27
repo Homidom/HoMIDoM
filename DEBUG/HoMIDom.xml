@@ -467,6 +467,13 @@ HoMIDom
  </summary>
 	<param name="Message"></param>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetByteFromImage(System.String)">
+	<summary>
+ Convert a file on a byte array.
+ </summary>
+	<param name="file"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetSMTPServeur">
 	<summary>Retourne l'adresse du serveur SMTP</summary>
 </member><member name="M:HoMIDom.HoMIDom.Server.SetSMTPServeur(System.String)">
@@ -919,6 +926,13 @@ HoMIDom
  Appliquer une correction sur l'heure de lever du soleil
  </summary>
 	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetByteFromImage(System.String)">
+	<summary>
+  Convert a file on a byte array.
+ </summary>
+	<param name="file"></param>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteUser(System.String)">
 	<summary>

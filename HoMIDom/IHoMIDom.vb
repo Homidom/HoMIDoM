@@ -140,6 +140,14 @@ Namespace HoMIDom
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
         <OperationContract()> Sub SetHeureCorrectionLever(ByVal Value As Integer)
+
+        ''' <summary>
+        '''  Convert a file on a byte array.
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetByteFromImage(ByVal file As String) As Byte()
 #End Region
 
 #Region "User"
