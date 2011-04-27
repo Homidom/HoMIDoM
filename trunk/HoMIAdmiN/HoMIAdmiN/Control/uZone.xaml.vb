@@ -7,8 +7,7 @@ Partial Public Class uZone
     Dim _Action As EAction 'Définit si modif ou création d'un device
     Dim _ZoneId As String 'Id de la zone à modifier
     Dim FlagNewCmd As Boolean
-    Dim _ListIdDispo As New List(Of Zone.Device_Zone)
-    Dim _ListIdSelect As New List(Of Zone.Device_Zone)
+    Dim _ListIdSelect As New List(Of Zone.Element_Zone)
 
     Public Enum EAction
         Nouveau
@@ -35,11 +34,6 @@ Partial Public Class uZone
         ImgIcon.Tag = " "
         ImgZone.Tag = " "
 
-        For i As Integer = 0 To Window1.myService.GetAllDevices.Count - 1
-            Dim x As New Zone.Device_Zone(Window1.myService.GetAllDevices.Item(i).ID, False, 0, 0)
-            _ListIdDispo.Add(x)
-        Next
-
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         If Action = EAction.Nouveau Then 'Nouvelle Zone
 
@@ -50,20 +44,9 @@ Partial Public Class uZone
             _ZoneId = ZoneId
             If x IsNot Nothing Then
                 TxtName.Text = x.Name
-                For j As Integer = 0 To x.ListDevice.Count - 1
-                    _ListIdSelect.Add(x.ListDevice.Item(j))
-
-                    For k As Integer = 0 To _ListIdDispo.Count - 1
-                        If _ListIdDispo.Item(k).DeviceID = x.ListDevice.Item(j).DeviceID Then
-                            _list.Add(k)
-                        End If
-                    Next
+                For j As Integer = 0 To x.ListElement.Count - 1
+                    _ListIdSelect.Add(x.ListElement.Item(j))
                 Next
-
-                For j As Integer = 0 To _list.Count - 1
-                    _ListIdDispo.RemoveAt(_list.Item(j))
-                Next
-
 
                 If File.Exists(x.image) = True And x.image <> "" And x.image <> " " Then
                     Dim bmpImage As New BitmapImage()
@@ -89,35 +72,35 @@ Partial Public Class uZone
     End Sub
 
     Private Sub RefreshLists()
-        ListBxDispo.Items.Clear()
         ListBxDevice.Items.Clear()
 
-        For i As Integer = 0 To _ListIdDispo.Count - 1
-            Dim x As TemplateDevice = Window1.myService.ReturnDeviceByID(_ListIdDispo.Item(i).DeviceID)
-            ListBxDispo.Items.Add(x.name)
-            x = Nothing
-        Next
-
         For i As Integer = 0 To _ListIdSelect.Count - 1
-            ListBxDevice.Items.Add(Window1.myService.ReturnDeviceByID(_ListIdSelect.Item(i).DeviceID).Name)
+            If Window1.myService.ReturnDeviceByID(_ListIdSelect.Item(i).ElementID) IsNot Nothing Then
+                ListBxDevice.Items.Add(Window1.myService.ReturnDeviceByID(_ListIdSelect.Item(i).ElementID).Name)
+            End If
+            If Window1.myService.ReturnZoneByID(_ListIdSelect.Item(i).ElementID) IsNot Nothing Then
+                ListBxDevice.Items.Add(Window1.myService.ReturnZoneByID(_ListIdSelect.Item(i).ElementID).Name)
+            End If
+            If Window1.myService.ReturnMacroById(_ListIdSelect.Item(i).ElementID) IsNot Nothing Then
+                ListBxDevice.Items.Add(Window1.myService.ReturnMacroById(_ListIdSelect.Item(i).ElementID).Nom)
+            End If
         Next
     End Sub
 
-    Private Sub BtnAjout_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnAjout.Click
-        If ListBxDispo.SelectedIndex < 0 Then
-            MessageBox.Show("Veuillez sélectionner un device", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-        Else
-            _ListIdSelect.Add(_ListIdDispo.Item(ListBxDispo.SelectedIndex))
-            _ListIdDispo.RemoveAt(ListBxDispo.SelectedIndex)
-        End If
-        RefreshLists()
+    Private Sub BtnAjout_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        'If ListBxDispo.SelectedIndex < 0 Then
+        '    MessageBox.Show("Veuillez sélectionner un élément", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+        'Else
+        '    _ListIdSelect.Add(_ListIdDispo.Item(ListBxDispo.SelectedIndex))
+        '    _ListIdDispo.RemoveAt(ListBxDispo.SelectedIndex)
+        'End If
+        'RefreshLists()
     End Sub
 
     Private Sub BtnDel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDel.Click
         If ListBxDevice.SelectedIndex < 0 Then
-            MessageBox.Show("Veuillez sélectionner un device", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            MessageBox.Show("Veuillez sélectionner un élément à supprimer", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
         Else
-            _ListIdDispo.Add(_ListIdSelect.Item(ListBxDevice.SelectedIndex))
             _ListIdSelect.RemoveAt(ListBxDevice.SelectedIndex)
         End If
 
@@ -141,6 +124,32 @@ Partial Public Class uZone
             MessageBox.Show("Veuillez saisir une valeur numérique")
             TxtY.Text = 0
             Exit Sub
+        End If
+    End Sub
+
+    Private Sub ListBxDevice_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles ListBxDevice.DragOver
+        If e.Data.GetDataPresent(GetType(String)) Then
+            e.Effects = DragDropEffects.Copy
+        Else
+            e.Effects = DragDropEffects.None
+        End If
+
+    End Sub
+
+    Private Sub ListBxDevice_Drop(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles ListBxDevice.Drop
+        If e.Data.GetDataPresent(GetType(String)) Then
+            e.Effects = DragDropEffects.Copy
+
+            Dim uri As String = e.Data.GetData(GetType(String)).ToString  'DirectCast(e.Data.GetData(GetType(TreeViewItem)), String)
+            If uri = _ZoneId Then
+                MessageBox.Show("Une zone ne peut être une sous zone à elle même !", "Zone", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            Dim y As New Zone.Element_Zone(uri, False, 0, 0)
+            _ListIdSelect.Add(y)
+            RefreshLists()
+        Else
+            e.Effects = DragDropEffects.None
         End If
     End Sub
 
@@ -204,7 +213,5 @@ Partial Public Class uZone
         End If
     End Sub
 
-    Private Sub ListBxDevice_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ListBxDevice.MouseDown
 
-    End Sub
 End Class

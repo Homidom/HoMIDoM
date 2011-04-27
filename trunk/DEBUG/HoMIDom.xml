@@ -649,15 +649,6 @@ HoMIDom
 	<param name="DeviceId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveZone(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Zone.Device_Zone},System.String,System.String)">
-	<summary>sauvegarde ou créer une zone dans la config</summary>
-	<param name="zoneId"></param>
-	<param name="name"></param>
-	<param name="ListDevice"></param>
-	<param name="icon"></param>
-	<param name="image"></param>
-	<returns></returns>
-	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetDeviceInZone(System.Object)">
 	<summary>Retourne la liste des devices d'une zone depuis son ID</summary>
 	<param name="ZoneId"></param>
@@ -1169,17 +1160,6 @@ HoMIDom
  Retourne l'objet d'une zone par son ID
  </summary>
 	<param name="Id"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveZone(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Zone.Device_Zone},System.String,System.String)">
-	<summary>
- Créer un nouveau zone ou sauvegarder la modif (si ID est complété)
- </summary>
-	<param name="zoneId"></param>
-	<param name="name"></param>
-	<param name="ListDevice"></param>
-	<param name="icon"></param>
-	<param name="image"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddDeviceToZone(System.String,System.String,System.Boolean,System.Double,System.Double)">
@@ -1742,42 +1722,42 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.ListDevice">
+</member><member name="P:HoMIDom.HoMIDom.Zone.ListElement">
 	<summary>
  Contient la liste des devices associés à la zone de type Device_Zone
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.Device_Zone.DeviceID">
+</member><member name="P:HoMIDom.HoMIDom.Zone.Element_Zone.ElementID">
 	<summary>
  ID du device
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.Device_Zone.Visible">
+</member><member name="P:HoMIDom.HoMIDom.Zone.Element_Zone.Visible">
 	<summary>
  Si le device doit être visible dans la zone
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.Device_Zone.X">
+</member><member name="P:HoMIDom.HoMIDom.Zone.Element_Zone.X">
 	<summary>
  Position X du Device dans la zone (pour la partie cliente)
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.Device_Zone.Y">
+</member><member name="P:HoMIDom.HoMIDom.Zone.Element_Zone.Y">
 	<summary>
  Position Y du Device dans la zone (pour la partie cliente)
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Zone.Device_Zone">
+</member><member name="T:HoMIDom.HoMIDom.Zone.Element_Zone">
 	<summary>
  Class Device_zone représente un device dans une zone
  </summary>

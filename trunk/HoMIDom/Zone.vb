@@ -14,7 +14,7 @@
     <Serializable()> Public Class Zone
         Dim _Id As String 'Id unique de la zone
         Dim _Name As String 'Libellé de la zone
-        Dim _ListDevice As New List(Of Device_Zone) 'Liste d'objet de type DeviceZone
+        Dim _ListElement As New List(Of Element_Zone) 'Liste d'objet de type DeviceZone
         Dim _Icon As String = "" 'Icon de la zone
         Dim _Image As String = "" 'Image de la zone
 
@@ -84,12 +84,12 @@
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Property ListDevice() As List(Of Device_Zone)
+        Public Property ListElement() As List(Of Element_Zone)
             Get
-                Return _ListDevice
+                Return _ListElement
             End Get
-            Set(ByVal value As List(Of Device_Zone))
-                _ListDevice = value
+            Set(ByVal value As List(Of Element_Zone))
+                _ListElement = value
             End Set
         End Property
 
@@ -97,8 +97,8 @@
         ''' Class Device_zone représente un device dans une zone
         ''' </summary>
         ''' <remarks></remarks>
-        <Serializable()> Public Class Device_Zone
-            Dim _DeviceID As String
+        <Serializable()> Public Class Element_Zone
+            Dim _ElementID As String
             Dim _Visible As Boolean = False
             Dim _X As Double = 0
             Dim _Y As Double = 0
@@ -109,12 +109,12 @@
             ''' <value></value>
             ''' <returns></returns>
             ''' <remarks></remarks>
-            Public Property DeviceID() As String
+            Public Property ElementID() As String
                 Get
-                    Return _DeviceID
+                    Return _ElementID
                 End Get
                 Set(ByVal value As String)
-                    _DeviceID = value
+                    _ElementID = value
                 End Set
             End Property
 
@@ -163,8 +163,8 @@
                 End Set
             End Property
 
-            Sub New(ByVal DeviceID As String, ByVal Visible As Boolean, ByVal X As Double, ByVal Y As Double)
-                _DeviceID = DeviceID
+            Sub New(ByVal ElementID As String, ByVal Visible As Boolean, ByVal X As Double, ByVal Y As Double)
+                _ElementID = ElementID
                 _Visible = Visible
                 _X = X
                 _Y = Y
