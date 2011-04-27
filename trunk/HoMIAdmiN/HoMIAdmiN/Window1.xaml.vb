@@ -3,6 +3,7 @@ Imports System.Runtime.Serialization.Formatters.Soap
 Imports HoMIDom.HoMIDom
 Imports System.ServiceModel
 Imports System.IO
+Imports System.Xml
 Imports System.Xml.Serialization
 Imports System.Threading
 Imports System.Reflection.Assembly
@@ -695,9 +696,11 @@ Class Window1
             End If
 
             Dim binding As New ServiceModel.BasicHttpBinding
-            binding.MaxBufferPoolSize = 2000000
-            binding.MaxReceivedMessageSize = 2000000
-            binding.MaxBufferSize = 2000000
+            binding.MaxBufferPoolSize = 5000000
+            binding.MaxReceivedMessageSize = 5000000
+            binding.MaxBufferSize = 5000000
+            binding.ReaderQuotas.MaxArrayLength = 5000000
+
             myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
             myService = myChannelFactory.CreateChannel()
             IsConnect = True
@@ -821,7 +824,7 @@ Class Window1
 
     Private Sub MenuTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuTest.Click
         Try
-
+            Image5.Source = ConvertArrayToImage(myService.GetByteFromImage("d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\Images\Graphes\test.png"))
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
         End Try
@@ -848,4 +851,17 @@ Class Window1
             End If
         End If
     End Sub
+
+    Public Function ConvertArrayToImage(ByVal value As Object) As Object
+        Dim ImgSource As BitmapImage = Nothing
+        Dim array As Byte() = TryCast(value, Byte())
+
+        If array IsNot Nothing Then
+            ImgSource = New BitmapImage()
+            ImgSource.BeginInit()
+            ImgSource.StreamSource = New MemoryStream(array)
+            ImgSource.EndInit()
+        End If
+        Return ImgSource
+    End Function
 End Class

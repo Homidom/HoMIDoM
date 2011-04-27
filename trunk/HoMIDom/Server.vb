@@ -1981,6 +1981,27 @@ Namespace HoMIDom
         Public Sub MessageToServer(ByVal Message As String) Implements IHoMIDom.MessageToServer
             'traiter le message
         End Sub
+
+        ''' <summary>
+        ''' Convert a file on a byte array.
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetByteFromImage(ByVal file As String) As Byte() Implements IHoMIDom.GetByteFromImage
+            Dim array As Byte()
+            Try
+                Using fs As New FileStream(file, FileMode.Open, FileAccess.Read)
+                    Dim reader As New BinaryReader(fs)
+                    array = reader.ReadBytes(CInt(fs.Length))
+                    reader.Close()
+                End Using
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetByteFromImage", ex.Message)
+            End Try
+            Return array
+        End Function
+
 #End Region
 
 #Region "SMTP"

@@ -270,7 +270,9 @@
         </Grid>
         <Grid Margin="194,58,0,29.578" Name="Grid1" Background="Cyan">
             <Image Margin="-6.668,0,0,-3.578" Name="Image1" Stretch="Fill" Source="/HoMIAdmiN;component/Images/01.png" />
-            <Canvas Margin="5,0,0,-3.578" Name="CanvasRight" Background="Transparent"></Canvas>
+            <Canvas Margin="5,0,0,-3.578" Name="CanvasRight" Background="Transparent">
+                <Image Canvas.Left="31" Canvas.Top="23" Height="367" Name="Image5" Stretch="Fill" Width="527" />
+            </Canvas>
         </Grid>
         <Grid Height="31" Name="GridBottom" VerticalAlignment="Bottom" Background="Black">
             <Rectangle Height="5" Margin="0,0,0,0" Name="MyLine2" Stroke="Black" VerticalAlignment="Top" Grid.ColumnSpan="3">

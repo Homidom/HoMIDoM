@@ -4,6 +4,7 @@ Imports System.Xml
 Imports System.Xml.XPath
 Imports System.ServiceModel
 Imports System.ServiceModel.Description
+Imports System.Xml.Serialization
 
 '***********************************************
 '** SERVICE HOMIDom - Simple exe qui sera ensuite convertit en service Windows
@@ -56,8 +57,10 @@ Module Service
                     'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
                     Dim myadress As String = "http://localhost:" & PortSOAP & "/ServiceModelSamples/service"
                     Dim binding As New ServiceModel.BasicHttpBinding
-                    binding.MaxBufferPoolSize = 200000000
-                    binding.MaxReceivedMessageSize = 200000000
+                    binding.MaxBufferPoolSize = 5000000
+                    binding.MaxReceivedMessageSize = 5000000
+                    binding.ReaderQuotas.MaxArrayLength = 5000000
+
                     'New System.ServiceModel.BasicHttpBinding
                     myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
                     myService = myChannelFactory.CreateChannel()
