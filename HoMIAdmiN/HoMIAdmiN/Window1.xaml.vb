@@ -700,6 +700,7 @@ Class Window1
             binding.MaxReceivedMessageSize = 5000000
             binding.MaxBufferSize = 5000000
             binding.ReaderQuotas.MaxArrayLength = 5000000
+            binding.ReaderQuotas.MaxStringContentLength = 5000000
 
             myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
             myService = myChannelFactory.CreateChannel()

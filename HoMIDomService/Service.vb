@@ -60,7 +60,7 @@ Module Service
                     binding.MaxBufferPoolSize = 5000000
                     binding.MaxReceivedMessageSize = 5000000
                     binding.ReaderQuotas.MaxArrayLength = 5000000
-
+                    binding.ReaderQuotas.MaxStringContentLength = 5000000
                     'New System.ServiceModel.BasicHttpBinding
                     myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
                     myService = myChannelFactory.CreateChannel()
