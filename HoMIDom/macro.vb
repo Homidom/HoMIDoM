@@ -2,6 +2,7 @@
 Imports HoMIDom.HoMIDom.Server
 Imports NCrontab
 Imports STRGS = Microsoft.VisualBasic.Strings
+Imports System.Net.Mail
 
 Namespace HoMIDom
 
@@ -384,11 +385,39 @@ Namespace HoMIDom
             End Sub
         End Class
 
-
-
         Public Sub Send_email(ByVal adresse As String, ByVal sujet As String, ByVal texte As String)
             'envoi de l'email à adresse avec sujet et texte via les smtp définis dans le serveur
+            Dim email As System.Net.Mail.MailMessage = New System.Net.Mail.MailMessage()
+            email.From = New MailAddress(_Server.GetSMTPMailServeur)
+            email.To.Add(adresse)
+            email.Subject = sujet
+            email.Body = texte
+            Dim mailSender As New System.Net.Mail.SmtpClient(_Server.GetSMTPServeur)
+            If _Server.GetSMTPLogin() <> "" Then
+                mailSender.Credentials = New Net.NetworkCredential(_Server.GetSMTPLogin, _Server.GetSMTPPassword)
+                '
+                'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate", "1")
+                'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername", mMailServerLogin)
+                'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword", mMailServerPassword)
+            End If
+            mailSender.Send(email)
+            email = Nothing
+            mailSender = Nothing
         End Sub
+
+        Public Sub Pause(ByVal Heure As Integer, ByVal Minute As Integer, ByVal Seconde As Integer, ByVal Milliseconde As Integer)
+            Dim t As DateTime = DateTime.Now
+            t = t.AddHours(Heure)
+            t = t.AddMinutes(Minute)
+            t = t.AddSeconds(Seconde)
+            t = t.AddMilliseconds(Milliseconde)
+            Do While DateTime.Now < t
+
+            Loop
+        End Sub
+
+
+
         Public Sub Send_log(ByVal texte As String)
 
         End Sub

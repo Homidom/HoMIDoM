@@ -474,6 +474,60 @@ HoMIDom
 	<param name="file"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteExtensionAudio(System.String)">
+	<summary>
+ Supprimer une extension Audio
+ </summary>
+	<param name="NomExtension"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.NewExtensionAudio(System.String,System.Boolean)">
+	<summary>
+ Ajouter une nouvelle extension audio
+ </summary>
+	<param name="NomExtension"></param>
+	<param name="Enable"></param>
+	<returns>-1 si déjà existant</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.EnableExtensionAudio(System.String,System.Boolean)">
+	<summary>
+ Active ou désactive une extension Audio
+ </summary>
+	<param name="NomExtension"></param>
+	<param name="Enable"></param>
+	<returns>-1 si Extension non trouvée</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteRepertoireAudio(System.String)">
+	<summary>
+ Supprimer un répertoire Audio
+ </summary>
+	<param name="NomRepertoire"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.NewRepertoireAudio(System.String,System.Boolean)">
+	<summary>
+ Ajouter un nouveau répertoire audio
+ </summary>
+	<param name="NomRepertoire"></param>
+	<param name="Enable"></param>
+	<returns>-1 si déjà existant</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.EnableRepertoireAudio(System.String,System.Boolean)">
+	<summary>
+ Active ou désactive un répertoire Audio
+ </summary>
+	<param name="NomRepertoire"></param>
+	<param name="Enable"></param>
+	<returns>-1 si répertoire non trouvé</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetAllRepertoiresAudio">
+	<summary>Retourne la liste de tous les répertoires audio</summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetAllExtensionsAudio">
+	<summary>Retourne la liste de toutes les extensions audio</summary>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetSMTPServeur">
 	<summary>Retourne l'adresse du serveur SMTP</summary>
 </member><member name="M:HoMIDom.HoMIDom.Server.SetSMTPServeur(System.String)">
@@ -807,6 +861,49 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Server">
 	<summary>Classe Server</summary>
 	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Extension">
+	<summary>
+ Nom de l'extension ex: .wma
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Enable">
+	<summary>
+ Si l'extension doit être prise en compte
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio.ExtensionAudio">
+	<summary>
+ Type d'extension Audio
+ </summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Repertoire">
+	<summary>
+ Chemin du répertoire
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Enable">
+	<summary>
+ Si le répertoire doit être pris en compte
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio.RepertoireAudio">
+	<summary>
+ Type Répertoire Audio
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio">
+	<summary>
+ Classe de gestion Audio
+ </summary>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Soleil">
 	<summary>
  Classe permettant le calcul des heures de lever et coucher du soleil
@@ -932,6 +1029,64 @@ HoMIDom
   Convert a file on a byte array.
  </summary>
 	<param name="file"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteExtensionAudio(System.String)">
+	<summary>
+ Supprimer une extension Audio
+ </summary>
+	<param name="NomExtension"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.NewExtensionAudio(System.String,System.Boolean)">
+	<summary>
+ Ajouter une nouvelle extension audio
+ </summary>
+	<param name="NomExtension"></param>
+	<param name="Enable"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.EnableExtensionAudio(System.String,System.Boolean)">
+	<summary>
+ Active ou désactive une extension Audio
+ </summary>
+	<param name="NomExtension"></param>
+	<param name="Enable"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteRepertoireAudio(System.String)">
+	<summary>
+ Supprimer un répertoire Audio
+ </summary>
+	<param name="NomRepertoire"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.NewRepertoireAudio(System.String,System.Boolean)">
+	<summary>
+ Ajouter un nouveau répertoire audio
+ </summary>
+	<param name="NomRepertoire"></param>
+	<param name="Enable"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.EnableRepertoireAudio(System.String,System.Boolean)">
+	<summary>
+ Active ou désactive un répertoire Audio
+ </summary>
+	<param name="NomRepertoire"></param>
+	<param name="Enable"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllRepertoiresAudio">
+	<summary>
+ Obtient la liste des répertoires audio
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllExtensionsAudio">
+	<summary>
+ Obtient la liste des extensions audio
+ </summary>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteUser(System.String)">

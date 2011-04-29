@@ -109,12 +109,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Control\uConfigAudio.xaml.vb">
+      <DependentUpon>uConfigAudio.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\uTriggerTimer.xaml.vb">
+      <DependentUpon>uTriggerTimer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Splash.xaml.vb">
       <DependentUpon>Splash.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowLogin.xaml.vb">
       <DependentUpon>WindowLogin.xaml</DependentUpon>
     </Compile>
+    <Page Include="Control\uConfigAudio.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Control\uTriggerTimer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Control\uUser.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
