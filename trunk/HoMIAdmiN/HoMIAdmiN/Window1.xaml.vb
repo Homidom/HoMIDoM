@@ -865,4 +865,17 @@ Class Window1
         End If
         Return ImgSource
     End Function
+
+    Private Sub MenuConfigAudio_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuConfigAudio.Click
+        Try
+            Dim x As New uConfigAudio
+            x.Uid = System.Guid.NewGuid.ToString()
+            AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Add(x)
+            CanvasRight.SetLeft(x, 50)
+            CanvasRight.SetTop(x, 8)
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub MenuConfigAudio: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
 End Class

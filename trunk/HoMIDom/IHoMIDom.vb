@@ -150,6 +150,74 @@ Namespace HoMIDom
         <OperationContract()> Function GetByteFromImage(ByVal file As String) As Byte()
 #End Region
 
+#Region "Audio"
+        ''' <summary>
+        ''' Supprimer une extension Audio
+        ''' </summary>
+        ''' <param name="NomExtension"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function DeleteExtensionAudio(ByVal NomExtension As String) As Integer
+
+        ''' <summary>
+        ''' Ajouter une nouvelle extension audio
+        ''' </summary>
+        ''' <param name="NomExtension"></param>
+        ''' <param name="Enable"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function NewExtensionAudio(ByVal NomExtension As String, Optional ByVal Enable As Boolean = False) As Integer
+
+        ''' <summary>
+        ''' Active ou désactive une extension Audio
+        ''' </summary>
+        ''' <param name="NomExtension"></param>
+        ''' <param name="Enable"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function EnableExtensionAudio(ByVal NomExtension As String, ByVal Enable As Boolean) As Integer
+
+        ''' <summary>
+        ''' Supprimer un répertoire Audio
+        ''' </summary>
+        ''' <param name="NomRepertoire"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function DeleteRepertoireAudio(ByVal NomRepertoire As String) As Integer
+
+        ''' <summary>
+        ''' Ajouter un nouveau répertoire audio
+        ''' </summary>
+        ''' <param name="NomRepertoire"></param>
+        ''' <param name="Enable"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function NewRepertoireAudio(ByVal NomRepertoire As String, Optional ByVal Enable As Boolean = False) As Integer
+
+        ''' <summary>
+        ''' Active ou désactive un répertoire Audio
+        ''' </summary>
+        ''' <param name="NomRepertoire"></param>
+        ''' <param name="Enable"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function EnableRepertoireAudio(ByVal NomRepertoire As String, ByVal Enable As Boolean) As Integer
+
+        ''' <summary>
+        ''' Obtient la liste des répertoires audio
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetAllRepertoiresAudio() As List(Of Audio.RepertoireAudio)
+
+        ''' <summary>
+        ''' Obtient la liste des extensions audio
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetAllExtensionsAudio() As List(Of Audio.ExtensionAudio)
+#End Region
+
 #Region "User"
         ''' <summary>
         ''' Supprime un user

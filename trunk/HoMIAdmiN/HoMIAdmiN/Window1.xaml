@@ -196,6 +196,7 @@
                     <MenuItem Header="Fichier" Foreground="WhiteSmoke">
                         <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig" />
                         <MenuItem Header="Configuration du Serveur" Name="MenuConfigSrv" />
+                        <MenuItem Header="Paramètres Audio du Serveur" Name="MenuConfigAudio" />
                         <MenuItem Header="Quitter" Name="MenuQuitter"/>
                     </MenuItem>
                     <MenuItem Header="Affichage" Foreground="WhiteSmoke">
