@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="uProgrammeTV"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="auto" Height="auto">
+    <DockPanel Height="Auto" Name="DockPanel1" Width="Auto">
+        <Canvas Height="66" Name="Canvas2" Width="Auto" DockPanel.Dock="Top" Background="Black">
+            <Canvas Canvas.Left="86" Canvas.Top="36" Height="24" Name="CanvasD" Width="510" Background="DarkGray" />
+            <Canvas Canvas.Left="0" Canvas.Top="1" Height="65" Name="Canvas3" Width="87" Background="Black" />
+            <Label Canvas.Left="382" Canvas.Top="0" Height="29" Name="LblDate" Width="228" Foreground="White" FontSize="16">Label</Label>
+            <Image Canvas.Left="344" Canvas.Top="6" Height="28" Name="BtnG" Stretch="Fill" Width="32" Source="/WpfApplication_Viewer;component/Images/BtnG.png" />
+            <Image Canvas.Left="616" Canvas.Top="6" Height="28" Name="BtnD"  Stretch="Fill" Width="32" Source="/WpfApplication_Viewer;component/Images/btnD.png" />
+        </Canvas>
+        <Canvas Height="38" Name="Canvas4" Width="auto" DockPanel.Dock="Bottom" Background="Black" VerticalAlignment="Bottom"></Canvas>
+        <Canvas Height="auto" Name="CanvasMiddle" Width="594" Background="Black" DockPanel.Dock="Right"></Canvas>
+        <Canvas Height="279" Name="Canvas1" Width="87" DockPanel.Dock="Left" Background="Black" Opacity="1" VerticalAlignment="Stretch"></Canvas>
+    </DockPanel>
+</UserControl>
