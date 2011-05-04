@@ -1,0 +1,9 @@
+﻿<UserControl x:Class="uScenes"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="709" Height="287"
+    xmlns:local="clr-namespace:HoMIDomWpfClient.UAniScrollViewer">
+    
+    <Grid Height="284" Name="Grid1" Width="710">
+        <local:AniScrollViewer x:Name="ScrollViewer1" Margin="0,0,1,1"  VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" Background="Transparent" />
+    </Grid>
+</UserControl>
