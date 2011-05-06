@@ -202,15 +202,22 @@ Namespace HoMIDom
     ''' _macro contient un tableau de string : MacroID : liste des macros à lancer
     ''' </remarks>
     Public Class Trigger
+        Public Enum TypeTrigger
+            TIMER = 0
+            DEVICE = 1
+        End Enum
 
         'Declaration des variables
         Dim _ID As String = ""
         Dim _Nom As String = ""
         Dim _Description As String = ""
+        Dim _Type As TypeTrigger
         Dim _Enable As Boolean = False
-        Dim _Condition As String = ""
+        Dim _ConditionTime As String = ""
+        Dim _ConditionDeviceId As String = ""
+        Dim _ConditionDeviceProperty As String = ""
         Dim _Prochainedateheure As DateTime 'la date/heure de prochaine execution utile uniquement pour un type CRON
-        Public Macro As ArrayList
+        Dim _ListMacro As ArrayList
         Public _Server As Server
 
         'Propriétés
@@ -260,6 +267,21 @@ Namespace HoMIDom
         End Property
 
         ''' <summary>
+        ''' Type du trigger 0=Time 1=Device
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property Type As TypeTrigger
+            Get
+                Return _Type
+            End Get
+            Set(ByVal value As TypeTrigger)
+                _Type = value
+            End Set
+        End Property
+
+        ''' <summary>
         ''' Active de trigger
         ''' </summary>
         ''' <value></value>
@@ -275,17 +297,47 @@ Namespace HoMIDom
         End Property
 
         ''' <summary>
-        ''' Condition du trigger
+        ''' Condition du trigger suivant Date/Time
         ''' </summary>
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Property Condition As String
+        Public Property ConditionTime As String
             Get
-                Return _Condition
+                Return _ConditionTime
             End Get
             Set(ByVal value As String)
-                _Condition = value
+                _ConditionTime = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Id du device de la condition
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property ConditionDeviceId As String
+            Get
+                Return _ConditionDeviceId
+            End Get
+            Set(ByVal value As String)
+                _ConditionDeviceId = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Nom de la Propriété du device à surveillé pour le trigger
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property ConditionDeviceProperty As String
+            Get
+                Return _ConditionDeviceProperty
+            End Get
+            Set(ByVal value As String)
+                _ConditionDeviceProperty = value
             End Set
         End Property
 
@@ -304,6 +356,20 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Liste des macros à déclencher
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property ListMacro As ArrayList
+            Get
+                Return _ListMacro
+            End Get
+            Set(ByVal value As ArrayList)
+                _ListMacro = value
+            End Set
+        End Property
         ' ''' <summary>Analyse si un device fait parti des conditions</summary>
         ' ''' <remarks></remarks>
         'Public Function Analyse(ByVal DeviceId As String) As Boolean
@@ -322,21 +388,21 @@ Namespace HoMIDom
             'convertit la condition au format cron "cron_ss#mm#hh#jj#MMM#JJJ" en dateTime
             Try
                 'on vérifie si la condition est un cron
-                If STRGS.Left(Condition, 5) = "cron_" Then
-                    Dim conditions = STRGS.Split(Condition, "#")
+                If STRGS.Left(_ConditionTime, 5) = "cron_" Then
+                    Dim conditions = STRGS.Split(_ConditionTime, "#")
                     'ex: CrontabSchedule.Parse("0 17-19 * * *")
                     Dim s = CrontabSchedule.Parse(conditions(1) & " " & conditions(2) & " " & conditions(3) & " " & conditions(4) & " " & conditions(5))
                     'recupere le prochain shedule
                     Dim nextcron = s.GetNextOccurrence(DateAndTime.Now)
                     If (conditions(0) <> "*" And conditions(0) <> "") Then nextcron = nextcron.AddSeconds(conditions(0))
-                    prochainedateheure = nextcron.ToString("yyyy-MM-dd HH:mm:ss")
+                    Prochainedateheure = nextcron.ToString("yyyy-MM-dd HH:mm:ss")
                     'recupere la liste des prochains shedule
                     'Dim nextcron = s.GetNextOccurrences(DateAndTime.Now, DateAndTime.Now.AddDays(1))
                     'For Each i In nextcron
                     '    MsgBox(i.ToString("yyyy-MM-dd HH:mm:ss"))
                     'Next
                 Else
-                    prochainedateheure = Nothing 'on le laisse à vide car Trigger type Device
+                    Prochainedateheure = Nothing 'on le laisse à vide car Trigger type Device
                 End If
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Trigger:cron_convertendate", ex.ToString)
@@ -423,6 +489,7 @@ Namespace HoMIDom
         End Sub
 
     End Class
+
 
 
 End Namespace
