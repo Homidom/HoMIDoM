@@ -766,8 +766,12 @@ Namespace HoMIDom
                                             x.Enable = list.Item(i).Attributes.Item(j1).Value
                                         Case "description"
                                             If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(0).Attributes.Item(j1).Value
-                                        Case "condition"
-                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Condition = list.Item(0).Attributes.Item(j1).Value
+                                        Case "conditiontime"
+                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionTime = list.Item(0).Attributes.Item(j1).Value
+                                        Case "conditiondeviceid"
+                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionTime = list.Item(0).Attributes.Item(j1).Value
+                                        Case "conditiondeviceproperty"
+                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionTime = list.Item(0).Attributes.Item(j1).Value
                                         Case "prochainedateheure"
                                             If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Prochainedateheure = list.Item(0).Attributes.Item(j1).Value
                                         Case Else
@@ -1302,6 +1306,18 @@ Namespace HoMIDom
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("enable")
                     writer.WriteValue(_listTriggers.Item(i).enable)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("type")
+                    writer.WriteValue(_listTriggers.Item(i).type)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("conditiontime")
+                    writer.WriteValue(_listTriggers.Item(i).conditiontime)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("conditiondeviceid")
+                    writer.WriteValue(_listTriggers.Item(i).conditiontime)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("conditiondeviceproperty")
+                    writer.WriteValue(_listTriggers.Item(i).conditiontime)
                     writer.WriteEndAttribute()
                     writer.WriteEndElement()
                 Next
@@ -4135,7 +4151,10 @@ Namespace HoMIDom
                         .Description = _listTriggers.Item(i).description
                         .Enable = _listTriggers.Item(i).enable
                         .Prochainedateheure = _listTriggers.Item(i).Prochainedateheure
-                        .Condition = _listTriggers.Item(i).condition
+                        .Type = _listTriggers.Item(i).type
+                        .ConditionTime = _listTriggers.Item(i).condition
+                        .ConditionDeviceId = _listTriggers.Item(i).ConditionDeviceId
+                        .ConditionDeviceProperty = _listTriggers.Item(i).ConditionDeviceProperty
                     End With
                     _list.Add(x)
                 Next
@@ -4157,7 +4176,7 @@ Namespace HoMIDom
         ''' <param name="macro"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveTrigger(ByVal triggerId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal condition As String = "", Optional ByVal macro As ArrayList = Nothing) As String Implements IHoMIDom.SaveTrigger
+        Public Function SaveTrigger(ByVal triggerId As String, ByVal nom As String, ByVal enable As Boolean, ByVal TypeTrigger As Trigger.TypeTrigger, Optional ByVal description As String = "", Optional ByVal conditiontimer As String = "", Optional ByVal deviceid As String = "", Optional ByVal deviceproperty As String = "", Optional ByVal macro As ArrayList = Nothing) As String Implements IHoMIDom.SaveTrigger
             Dim myID As String = ""
             Try
                 If triggerId = "" Then
@@ -4166,9 +4185,16 @@ Namespace HoMIDom
                         x.ID = GenerateGUID()
                         x.Nom = nom
                         x.Enable = enable
+                        Select Case TypeTrigger
+                            Case Trigger.TypeTrigger.TIMER
+                                x.ConditionTime = conditiontimer
+                            Case Trigger.TypeTrigger.DEVICE
+                                x.ConditionDeviceId = deviceid
+                                x.ConditionDeviceProperty = deviceproperty
+                        End Select
                         x.Description = description
-                        x.Condition = condition
-                        x.Macro = macro
+
+                        x.ListMacro = macro
                     End With
                     myID = x.ID
                     _listTriggers.Add(x)
@@ -4180,7 +4206,13 @@ Namespace HoMIDom
                             _listTriggers.Item(i).nom = nom
                             _listTriggers.Item(i).enable = enable
                             _listTriggers.Item(i).description = description
-                            _listTriggers.Item(i).condition = condition
+                            Select Case TypeTrigger
+                                Case Trigger.TypeTrigger.TIMER
+                                    _listTriggers.Item(i).ConditionTime = conditiontimer
+                                Case Trigger.TypeTrigger.DEVICE
+                                    _listTriggers.Item(i).ConditionDeviceId = deviceid
+                                    _listTriggers.Item(i).ConditionDeviceProperty = deviceproperty
+                            End Select
                             _listTriggers.Item(i).macro = macro
                         End If
                     Next
