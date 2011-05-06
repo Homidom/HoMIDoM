@@ -12,7 +12,7 @@ Imports System.Globalization
 ' Auteur : David
 ' Date : 22/01/2011
 
-''' <summary>Class Driver_RFXComReceiver, permet de communiquer avec la Zibase Ethernet</summary>
+''' <summary>Class Driver_RFXComReceiver, permet de communiquer avec un RFXCOM Ethernet ou USB</summary>
 ''' <remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
 <Serializable()> Public Class Driver_RFXComReceiver
     Implements HoMIDom.HoMIDom.IDriver
