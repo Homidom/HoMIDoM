@@ -6,7 +6,15 @@ HoMIAdmiN
 </name>
 </assembly>
 <members>
-<member name="M:WpfApplication1.uConfigAudio.InitializeComponent">
+<member name="M:WpfApplication1.uTriggerDevice.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uTriggerDevice">
+	<summary>
+uTriggerDevice
+</summary>
+</member><member name="M:WpfApplication1.uConfigAudio.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>

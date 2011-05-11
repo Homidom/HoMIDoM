@@ -295,10 +295,46 @@ Class Window1
 
     'Afficher la liste des triggers
     Public Sub AffTrigger()
-        'TreeViewTrigger.Nodes.Clear()
-        'For i As Integer = 0 To Obj.Triggers.Count - 1
-        '    TreeViewTrigger.Nodes.Add(Obj.Triggers.Item(i).ID, Obj.Triggers.Item(i).Name)
-        'Next
+        Try
+            TreeViewTriggers.Items.Clear()
+            If IsConnect = False Then Exit Sub
+            For i As Integer = 0 To myService.GetAllTriggers.Count - 1
+                Dim newchild As New TreeViewItem
+                Dim stack As New StackPanel
+                Dim img As New Image
+                Dim uri As String = ""
+                Dim bmpImage As New BitmapImage()
+
+                stack.Orientation = Orientation.Horizontal
+
+                img.Height = 20
+                img.Width = 20
+
+                'If myService.GetAllTriggers.Item(i).Picture <> "" And File.Exists(myService.GetAllDevices.Item(i).Picture) = True Then
+                '    uri = myService.GetAllDevices.Item(i).Picture
+                'Else
+                '    uri = MyRep & "\Images\Devices\Defaut-128.png"
+                'End If
+                'bmpImage.BeginInit()
+                'bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
+                'bmpImage.EndInit()
+                'img.Source = bmpImage
+
+                Dim label As New Label
+                label.Foreground = New SolidColorBrush(Colors.White)
+                label.Content = myService.GetAllTriggers.Item(i).Nom
+
+                stack.Children.Add(img)
+                stack.Children.Add(label)
+
+                newchild.Foreground = New SolidColorBrush(Colors.White)
+                newchild.Header = stack
+                newchild.Uid = myService.GetAllTriggers.Item(i).ID
+                TreeViewTriggers.Items.Add(newchild)
+            Next
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub Afftrigger: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'Afficher la liste des schedule
@@ -558,6 +594,74 @@ Class Window1
     End Sub
 #End Region
 
+#Region "Trigger"
+    Private Sub BtnNewTriggerDevice_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewTriggerDevice.Click
+        Try
+            Dim x As New uTriggerDevice(0, "")
+            x.Uid = System.Guid.NewGuid.ToString()
+            AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Add(x)
+            CanvasRight.SetLeft(x, 50)
+            CanvasRight.SetTop(x, 8)
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub BtnNewTriggerDevice_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub BtnNewTriggerTime_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewTriggerTime.Click
+        Try
+            Dim x As New uTriggerTimer(0, "")
+            x.Uid = System.Guid.NewGuid.ToString()
+            AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Add(x)
+            CanvasRight.SetLeft(x, 50)
+            CanvasRight.SetTop(x, 8)
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub BtnNewTriggerTime_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    'Modifier un device
+    Private Sub TreeViewTriggers_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewTriggers.MouseDoubleClick
+        Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible d'afficher le trigger car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
+            If TreeViewTriggers.SelectedItem.uid Is Nothing Then Exit Sub
+
+            If TreeViewTriggers.SelectedItem IsNot Nothing Then
+
+                For i As Integer = 0 To myService.GetAllTriggers.Count - 1
+                    If myService.GetAllTriggers.Item(i).ID = TreeViewTriggers.SelectedItem.uid Then
+                        Dim y As Trigger = myService.GetAllTriggers.Item(i)
+
+                        If myService.GetAllTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
+                            Dim x As New uTriggerTimer(uTriggerTimer.EAction.Modifier, TreeViewTriggers.SelectedItem.uid)
+                            x.Uid = System.Guid.NewGuid.ToString()
+                            AddHandler x.CloseMe, AddressOf UnloadControl
+                            CanvasRight.Children.Add(x)
+                            CanvasRight.SetLeft(x, 50)
+                            CanvasRight.SetTop(x, 5)
+                        Else
+                            Dim x As New uTriggerDevice(uTriggerDevice.EAction.Modifier, TreeViewTriggers.SelectedItem.uid)
+                            x.Uid = System.Guid.NewGuid.ToString()
+                            AddHandler x.CloseMe, AddressOf UnloadControl
+                            CanvasRight.Children.Add(x)
+                            CanvasRight.SetLeft(x, 50)
+                            CanvasRight.SetTop(x, 5)
+                        End If
+                        Exit Sub
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub TreeViewDevice_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+#End Region
+
     'Menu Save Config
     Private Sub MnuSaveConfig(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuSaveConfig.Click
         Try
@@ -582,6 +686,7 @@ Class Window1
                     AffDevice()
                     AffZone()
                     AffUser()
+                    AffTrigger()
                     Exit Sub
                 End If
             Next
@@ -763,6 +868,7 @@ Class Window1
             AffDevice()
             AffZone()
             AffUser()
+            AffTrigger()
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub Window1_Loaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -878,4 +984,7 @@ Class Window1
             MessageBox.Show("ERREUR Sub MenuConfigAudio: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
+
+
 End Class
