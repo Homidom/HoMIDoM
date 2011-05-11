@@ -301,6 +301,13 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Trigger.Type">
+	<summary>
+ Type du trigger 0=Time 1=Device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Trigger.Enable">
 	<summary>
  Active de trigger
@@ -308,9 +315,23 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Trigger.Condition">
+</member><member name="P:HoMIDom.HoMIDom.Trigger.ConditionTime">
 	<summary>
- Condition du trigger
+ Condition du trigger suivant Date/Time
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Trigger.ConditionDeviceId">
+	<summary>
+ Id du device de la condition
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Trigger.ConditionDeviceProperty">
+	<summary>
+ Nom de la Propriété du device à surveillé pour le trigger
  </summary>
 	<value></value>
 	<returns></returns>
@@ -318,6 +339,13 @@ HoMIDom
 </member><member name="P:HoMIDom.HoMIDom.Trigger.Prochainedateheure">
 	<summary>
  DateHeure de la prochaine exécution
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Trigger.ListMacro">
+	<summary>
+ Liste des macros à déclencher
  </summary>
 	<value></value>
 	<returns></returns>
@@ -342,6 +370,49 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.action">
 	<summary>Class action, Défini les actions à réaliser depuis les macros...</summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Extension">
+	<summary>
+ Nom de l'extension ex: .wma
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Enable">
+	<summary>
+ Si l'extension doit être prise en compte
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio.ExtensionAudio">
+	<summary>
+ Type d'extension Audio
+ </summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Repertoire">
+	<summary>
+ Chemin du répertoire
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Enable">
+	<summary>
+ Si le répertoire doit être pris en compte
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio.RepertoireAudio">
+	<summary>
+ Type Répertoire Audio
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio">
+	<summary>
+ Classe de gestion Audio
+ </summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DriversEvent(System.String,System.String,System.Object)">
 	<summary>Evenement provenant des drivers </summary>
@@ -759,18 +830,6 @@ HoMIDom
 	<summary>Retourne la liste de toutes les macros</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveTrigger(System.String,System.String,System.Boolean,System.String,System.String,System.Collections.ArrayList)">
-	<summary>
- Permet de créer ou modifier un trigger
- </summary>
-	<param name="triggerId"></param>
-	<param name="nom"></param>
-	<param name="enable"></param>
-	<param name="description"></param>
-	<param name="condition"></param>
-	<param name="macro"></param>
-	<returns></returns>
-	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ReturnTriggerById(System.String)">
 	<summary>Retourne le trigger par son ID</summary>
 	<param name="TriggerId"></param>
@@ -860,49 +919,6 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Server">
 	<summary>Classe Server</summary>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Extension">
-	<summary>
- Nom de l'extension ex: .wma
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Enable">
-	<summary>
- Si l'extension doit être prise en compte
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio.ExtensionAudio">
-	<summary>
- Type d'extension Audio
- </summary>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Repertoire">
-	<summary>
- Chemin du répertoire
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Enable">
-	<summary>
- Si le répertoire doit être pris en compte
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio.RepertoireAudio">
-	<summary>
- Type Répertoire Audio
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio">
-	<summary>
- Classe de gestion Audio
- </summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Soleil">
 	<summary>
@@ -1395,7 +1411,7 @@ HoMIDom
 	<param name="triggerId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTrigger(System.String,System.String,System.Boolean,System.String,System.String,System.Collections.ArrayList)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTrigger(System.String,System.String,System.Boolean,HoMIDom.HoMIDom.Trigger.TypeTrigger,System.String,System.String,System.String,System.String,System.Collections.ArrayList)">
 	<summary>
  Permet de créer ou modifier un trigger
  </summary>
@@ -1403,7 +1419,7 @@ HoMIDom
 	<param name="nom"></param>
 	<param name="enable"></param>
 	<param name="description"></param>
-	<param name="condition"></param>
+	<param name="conditiontimer"></param>
 	<param name="macro"></param>
 	<returns></returns>
 	<remarks></remarks>

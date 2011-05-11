@@ -217,7 +217,7 @@ Namespace HoMIDom
         Dim _ConditionDeviceId As String = ""
         Dim _ConditionDeviceProperty As String = ""
         Dim _Prochainedateheure As DateTime 'la date/heure de prochaine execution utile uniquement pour un type CRON
-        Dim _ListMacro As ArrayList
+        Dim _ListMacro As New ArrayList
         Public _Server As Server
 
         'Propriétés

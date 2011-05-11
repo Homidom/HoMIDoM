@@ -88,7 +88,7 @@ Namespace HoMIDom
 
                     'Parcour des triggers pour vérifier si le device déclenche des macros
                     For i = 0 To _listTriggers.Count - 1
-                        If _listTriggers.Item(i).Condition = Device.ID Then
+                        If _listTriggers.Item(i).Conditiondeviceid = Device.ID Then
                             'Device trouvé dans un trigger, on parcour la liste des macros associé à ce trigger et on les executent
                             listmacro = _listTriggers.Item(i).Macro
                             For j = 0 To listmacro.Count - 1
@@ -268,7 +268,7 @@ Namespace HoMIDom
                 If (_listTriggers.Item(i).prochainedateheure IsNot Nothing And _listTriggers.Item(i).prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) Then
                     _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
                     'lancement des macros associées
-                    For j = 0 To _listTriggers.Item(i).Macro.Count - 1
+                    For j = 0 To _listTriggers.Item(i).ListMacro.Count - 1
                         'on cherche la macro et on la lance en testant ces conditions
                         For k = 0 To _ListMacros.Count - 1
                             If _ListMacros.Item(k).ID = _listTriggers.Item(i).Macro.Item(j).ToString Then _ListMacros.Item(k).Execute_avec_conditions()
@@ -748,7 +748,6 @@ Namespace HoMIDom
 
                         '******************************************
                         'on va chercher les triggers
-                        'MANQUE LA GESTION DES TABLEAUX
                         '******************************************
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des triggers")
                         list = Nothing
@@ -764,19 +763,36 @@ Namespace HoMIDom
                                             x.Nom = list.Item(i).Attributes.Item(j1).Value
                                         Case "enable"
                                             x.Enable = list.Item(i).Attributes.Item(j1).Value
+                                        Case "type"
+                                            If list.Item(i).Attributes.Item(j1).Value = "0" Then
+                                                x.Type = Trigger.TypeTrigger.TIMER
+                                            Else
+                                                x.Type = Trigger.TypeTrigger.DEVICE
+                                            End If
                                         Case "description"
                                             If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(0).Attributes.Item(j1).Value
                                         Case "conditiontime"
                                             If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionTime = list.Item(0).Attributes.Item(j1).Value
                                         Case "conditiondeviceid"
-                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionTime = list.Item(0).Attributes.Item(j1).Value
+                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionDeviceId = list.Item(0).Attributes.Item(j1).Value
                                         Case "conditiondeviceproperty"
-                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionTime = list.Item(0).Attributes.Item(j1).Value
+                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionDeviceProperty = list.Item(0).Attributes.Item(j1).Value
                                         Case "prochainedateheure"
                                             If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Prochainedateheure = list.Item(0).Attributes.Item(j1).Value
                                         Case Else
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au trigger est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
                                     End Select
+                                    If list.Item(i).HasChildNodes = True Then
+                                        If list.Item(i).ChildNodes.Item(0).Name = "macros" And list.Item(i).ChildNodes.Item(0).HasChildNodes Then
+                                            For k = 0 To list.Item(i).ChildNodes.Item(0).ChildNodes.Count - 1
+                                                If list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k).Name = "macro" Then
+                                                    If list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k).Attributes.Count = 0 And list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k).Attributes.Item(0).Name = "id" Then
+                                                        x.ListMacro.Add(list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k).Attributes.Item(0).Value)
+                                                    End If
+                                                End If
+                                            Next
+                                        End If
+                                    End If
                                 Next
                                 _listTriggers.Add(x)
                             Next
@@ -787,7 +803,7 @@ Namespace HoMIDom
                         list = Nothing
 
                         '******************************************
-                        'on va chercher les maccros
+                        'on va chercher les macros
                         'MANQUE LA GESTION DES TABLEAUX
                         '******************************************
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des macros")
@@ -1278,12 +1294,38 @@ Namespace HoMIDom
                     writer.WriteStartAttribute("enable")
                     writer.WriteValue(_listTriggers.Item(i).enable)
                     writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("condition")
-                    writer.WriteValue(_listTriggers.Item(i).condition)
+                    writer.WriteStartAttribute("type")
+                    If _listTriggers.Item(i).type = Trigger.TypeTrigger.TIMER Then
+                        writer.WriteValue("0")
+                    Else
+                        writer.WriteValue("1")
+                    End If
                     writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("dateprochaineheure")
-                    writer.WriteValue(_listTriggers.Item(i).dateprochaineheure)
-                    writer.WriteEndAttribute()
+                    If _listTriggers.Item(i).type = Trigger.TypeTrigger.TIMER Then
+                        writer.WriteStartAttribute("conditiontime")
+                        writer.WriteValue(_listTriggers.Item(i).conditiontime)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("prochainedateheure")
+                        writer.WriteValue(_listTriggers.Item(i).prochainedateheure)
+                        writer.WriteEndAttribute()
+                    End If
+                    If _listTriggers.Item(i).type = Trigger.TypeTrigger.DEVICE Then
+                        writer.WriteStartAttribute("conditiondeviceid")
+                        writer.WriteValue(_listTriggers.Item(i).conditiondeviceid)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("conditiondeviceproperty")
+                        writer.WriteValue(_listTriggers.Item(i).conditiondeviceproperty)
+                        writer.WriteEndAttribute()
+                    End If
+                    writer.WriteStartElement("macros")
+                    For k = 0 To _listTriggers.Item(i).listmacro.count - 1
+                        writer.WriteStartElement("macro")
+                        writer.WriteStartAttribute("id")
+                        writer.WriteValue(_listTriggers.Item(i).listmacro.item(k).id)
+                        writer.WriteEndAttribute()
+                        writer.WriteEndElement()
+                    Next
+                    writer.WriteEndElement()
                     writer.WriteEndElement()
                 Next
                 writer.WriteEndElement()
@@ -1293,31 +1335,19 @@ Namespace HoMIDom
                 ''------------
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des macros")
                 writer.WriteStartElement("macros")
-                For i As Integer = 0 To _listTriggers.Count - 1
+                For i As Integer = 0 To _ListMacros.Count - 1
                     writer.WriteStartElement("macro")
                     writer.WriteStartAttribute("id")
-                    writer.WriteValue(_listTriggers.Item(i).id)
+                    writer.WriteValue(_ListMacros.Item(i).id)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("nom")
-                    writer.WriteValue(_listTriggers.Item(i).nom)
+                    writer.WriteValue(_ListMacros.Item(i).nom)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("description")
-                    writer.WriteValue(_listTriggers.Item(i).description)
+                    writer.WriteValue(_ListMacros.Item(i).description)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("enable")
-                    writer.WriteValue(_listTriggers.Item(i).enable)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("type")
-                    writer.WriteValue(_listTriggers.Item(i).type)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("conditiontime")
-                    writer.WriteValue(_listTriggers.Item(i).conditiontime)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("conditiondeviceid")
-                    writer.WriteValue(_listTriggers.Item(i).conditiontime)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("conditiondeviceproperty")
-                    writer.WriteValue(_listTriggers.Item(i).conditiontime)
+                    writer.WriteValue(_ListMacros.Item(i).enable)
                     writer.WriteEndAttribute()
                     writer.WriteEndElement()
                 Next
@@ -4152,7 +4182,7 @@ Namespace HoMIDom
                         .Enable = _listTriggers.Item(i).enable
                         .Prochainedateheure = _listTriggers.Item(i).Prochainedateheure
                         .Type = _listTriggers.Item(i).type
-                        .ConditionTime = _listTriggers.Item(i).condition
+                        .ConditionTime = _listTriggers.Item(i).conditiontime
                         .ConditionDeviceId = _listTriggers.Item(i).ConditionDeviceId
                         .ConditionDeviceProperty = _listTriggers.Item(i).ConditionDeviceProperty
                     End With
@@ -4187,19 +4217,20 @@ Namespace HoMIDom
                         x.Enable = enable
                         Select Case TypeTrigger
                             Case Trigger.TypeTrigger.TIMER
+                                x.Type = Trigger.TypeTrigger.TIMER
                                 x.ConditionTime = conditiontimer
                             Case Trigger.TypeTrigger.DEVICE
+                                x.Type = Trigger.TypeTrigger.DEVICE
                                 x.ConditionDeviceId = deviceid
                                 x.ConditionDeviceProperty = deviceproperty
                         End Select
                         x.Description = description
-
                         x.ListMacro = macro
                     End With
                     myID = x.ID
                     _listTriggers.Add(x)
                 Else
-                    'zone Existante
+                    'trigger Existante
                     myID = triggerId
                     For i As Integer = 0 To _listTriggers.Count - 1
                         If _listTriggers.Item(i).id = triggerId Then
@@ -4208,8 +4239,10 @@ Namespace HoMIDom
                             _listTriggers.Item(i).description = description
                             Select Case TypeTrigger
                                 Case Trigger.TypeTrigger.TIMER
+                                    _listTriggers.Item(i).type = HoMIDom.Trigger.TypeTrigger.TIMER
                                     _listTriggers.Item(i).ConditionTime = conditiontimer
                                 Case Trigger.TypeTrigger.DEVICE
+                                    _listTriggers.Item(i).type = HoMIDom.Trigger.TypeTrigger.DEVICE
                                     _listTriggers.Item(i).ConditionDeviceId = deviceid
                                     _listTriggers.Item(i).ConditionDeviceProperty = deviceproperty
                             End Select

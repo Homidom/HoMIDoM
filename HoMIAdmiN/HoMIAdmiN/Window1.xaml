@@ -222,7 +222,7 @@
                      
             <StackPanel Height="573" HorizontalAlignment="Left" Margin="1,0,0,0" Name="StackPanel3" VerticalAlignment="Top" Width="187">
                 <TabControl Canvas.Left="0" Canvas.Top="0" Height="571" Name="TabControl1" Width="186.036" MinHeight="250" Template="{StaticResource OutlookTab}" TabStripPlacement="Top" >
-                        <TabItem Header="Drivers" Name="TabItem1" IsSelected="True">
+                    <TabItem Header="Drivers" Name="TabItem1" IsSelected="True">
                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <TreeView Margin="5,4,4,30" Name="TreeViewDriver" Background="DimGray" Foreground="White" MinHeight="200"  />
                                 <Button Height="19" HorizontalAlignment="Left" Margin="5,0,0,4" Name="BtnStart" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" Width="53" Foreground="White">Start</Button>
@@ -251,11 +251,12 @@
                                 <Button Foreground="White" Height="19" Margin="72,0,41,6" Name="BtnDelUser" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Supprimer</Button>
                             </Grid>
                         </TabItem>
-                    <TabItem Header="Triggers" Name="TabItem2">
+                    <TabItem Header="Triggers" Name="TabItem2" >
                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                            <TreeView Background="DimGray" Margin="5,4,4,30" Name="TreeViewTriggers" MinHeight="200" />
-                            <Button Foreground="White" Height="19" HorizontalAlignment="Left" Margin="4,0,0,6" Name="BtnNewTrigger" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Nouveau</Button>
-                            <Button Foreground="White" Height="19" Margin="72,0,41,6" Name="BtnDelTrigger" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Supprimer</Button>
+                            <TreeView Background="DimGray" Margin="5,4,4,59" Name="TreeViewTriggers" MinHeight="200" />
+                            <Button Foreground="White" Height="19" HorizontalAlignment="Left" Margin="-1,0,0,6" Name="BtnNewTriggerDevice" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="124" Content="Nouveau TriggerDevice"></Button>
+                            <Button Foreground="White" Height="19" Margin="122,0,0,6" Name="BtnDelTrigger" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Supprimer</Button>
+                            <Button Content="Nouveau TriggerTime" Foreground="White" Height="19" HorizontalAlignment="Left" Margin="2,0,0,32" Name="BtnNewTriggerTime" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="112" />
                         </Grid>
                     </TabItem>
                     <TabItem Header="Macros">

@@ -594,7 +594,7 @@ Namespace HoMIDom
         ''' <param name="nom"></param>
         ''' <param name="enable"></param>
         ''' <param name="description"></param>
-        ''' <param name="condition"></param>
+        ''' <param name="conditiontimer"></param>
         ''' <param name="macro"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
