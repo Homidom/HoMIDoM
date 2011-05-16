@@ -109,6 +109,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Control\uMacro.xaml.vb">
+      <DependentUpon>uMacro.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Control\uTriggerDevice.xaml.vb">
       <DependentUpon>uTriggerDevice.xaml</DependentUpon>
     </Compile>
@@ -124,6 +127,10 @@
     <Compile Include="WindowLogin.xaml.vb">
       <DependentUpon>WindowLogin.xaml</DependentUpon>
     </Compile>
+    <Page Include="Control\uMacro.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Control\uTriggerDevice.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

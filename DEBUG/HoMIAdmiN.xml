@@ -22,6 +22,14 @@ InitializeComponent
 	<summary>
 uConfigAudio
 </summary>
+</member><member name="M:WpfApplication1.uMacro.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uMacro">
+	<summary>
+uMacro
+</summary>
 </member><member name="M:WpfApplication1.uTriggerTimer.InitializeComponent">
 	<summary>
 InitializeComponent

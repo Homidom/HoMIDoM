@@ -39,7 +39,6 @@
                 TxtNom.Text = x.Nom
                 ChkEnable.IsChecked = x.Enable
                 TxtDescription.Text = x.Description
-                MsgBox(x.ConditionDeviceId)
                 For i As Integer = 0 To _ListDeviceId.Count - 1
                     If _ListDeviceId.Item(i).ID = x.ConditionDeviceId Then
                         CbDevice.SelectedIndex = i
