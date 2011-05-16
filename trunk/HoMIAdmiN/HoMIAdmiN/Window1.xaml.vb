@@ -284,7 +284,6 @@ Class Window1
         End Try
     End Sub
 
-
     'Afficher la liste des scenes
     Public Sub AffScene()
         'TreeViewScene.Nodes.Clear()
@@ -987,4 +986,16 @@ Class Window1
 
 
 
+    Private Sub BtnNewMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewMacro.Click
+        Try
+            Dim x As New uMacro(0, "")
+            x.Uid = System.Guid.NewGuid.ToString()
+            AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Add(x)
+            CanvasRight.SetLeft(x, 50)
+            CanvasRight.SetTop(x, 8)
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub BtnNewMacro_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
 End Class

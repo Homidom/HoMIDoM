@@ -770,15 +770,15 @@ Namespace HoMIDom
                                                 x.Type = Trigger.TypeTrigger.DEVICE
                                             End If
                                         Case "description"
-                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(0).Attributes.Item(j1).Value
+                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(i).Attributes.Item(j1).Value
                                         Case "conditiontime"
-                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionTime = list.Item(0).Attributes.Item(j1).Value
+                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionTime = list.Item(i).Attributes.Item(j1).Value
                                         Case "conditiondeviceid"
-                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionDeviceId = list.Item(0).Attributes.Item(j1).Value
+                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionDeviceId = list.Item(i).Attributes.Item(j1).Value
                                         Case "conditiondeviceproperty"
-                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionDeviceProperty = list.Item(0).Attributes.Item(j1).Value
+                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionDeviceProperty = list.Item(i).Attributes.Item(j1).Value
                                         Case "prochainedateheure"
-                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Prochainedateheure = list.Item(0).Attributes.Item(j1).Value
+                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Prochainedateheure = list.Item(i).Attributes.Item(j1).Value
                                         Case Else
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au trigger est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
                                     End Select
