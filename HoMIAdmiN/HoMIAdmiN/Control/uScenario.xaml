@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="uScenario"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="400" Background="Black" MinWidth="400" MinHeight="200" Width="Auto" Name="uScenario">
+    <Grid>
+        <Canvas  Name="CanvasParent" Height="{Binding ElementName=uScenario, Path=ActualHeight}">
+            <StackPanel >
+                <StackPanel Name="StkHaut" Orientation="Horizontal">
+                    <Label Content="Actions:" Foreground="White" />
+                    <Image Source="/HoMIAdmiN;component/Images/blockdevice-icone-7594-128.png" Height="32" Width="32" ToolTip="Device" Name="ImgActDevice"></Image>
+                    <Image Source="/HoMIAdmiN;component/Images/e-mail-32.png" Height="32" Width="32" ToolTip="Mail" Name="ImgActMail"></Image>
+                    <Rectangle Width="50"/>
+                    <Image Name="ZoomPlus" Source="/HoMIAdmiN;component/Images/avant-zoom-128.png" Width="23" Height="23" />
+                    <Image Name="ZoomMoins" Source="/HoMIAdmiN;component/Images/arriere-zoom-128.png" Width="23" Height="23" />
+                  
+                </StackPanel>
+                 <ScrollViewer  Name="ScrollViewer1" VerticalAlignment="Top" Width="Auto" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True" MaxWidth="{Binding ElementName=uScenario, Path=ActualWidth}" MinWidth="{Binding ElementName=uScenario, Path=ActualWidth}" AllowDrop="True">
+                        <StackPanel Name="StackPanel2" >
+                        <StackPanel Height="26" HorizontalAlignment="Left"  Name="StckPnlLib" VerticalAlignment="Top" Orientation="Horizontal" Background="Black"  />
+                        <StackPanel Orientation="Horizontal">
+                            <Canvas Width="28"></Canvas>
+                            <StackPanel >
+                            <StackPanel Background="DarkGray" Height="22" HorizontalAlignment="Left"  Name="StckPnlLibTr" Orientation="Horizontal" VerticalAlignment="Top"   />
+                            <StackPanel HorizontalAlignment="Left"  Name="StackPanel1" VerticalAlignment="Top" MinHeight="100"  />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                    </ScrollViewer>
+                </StackPanel>
+        </Canvas>
+    </Grid>
+</UserControl>

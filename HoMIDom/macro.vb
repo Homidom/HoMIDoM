@@ -482,8 +482,6 @@ Namespace HoMIDom
             Loop
         End Sub
 
-
-
         Public Sub Send_log(ByVal texte As String)
 
         End Sub

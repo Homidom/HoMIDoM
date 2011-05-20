@@ -109,8 +109,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Control\Timeline\uAction.xaml.vb">
+      <DependentUpon>uAction.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\Timeline\WAction.xaml.vb">
+      <DependentUpon>WAction.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Control\uMacro.xaml.vb">
       <DependentUpon>uMacro.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\uScenario.xaml.vb">
+      <DependentUpon>uScenario.xaml</DependentUpon>
     </Compile>
     <Compile Include="Control\uTriggerDevice.xaml.vb">
       <DependentUpon>uTriggerDevice.xaml</DependentUpon>
@@ -127,9 +136,21 @@
     <Compile Include="WindowLogin.xaml.vb">
       <DependentUpon>WindowLogin.xaml</DependentUpon>
     </Compile>
+    <Page Include="Control\Timeline\uAction.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control\Timeline\WAction.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Control\uMacro.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Control\uScenario.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Control\uTriggerDevice.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -351,6 +372,19 @@
   <ItemGroup>
     <Resource Include="Images\Lune.png" />
     <Resource Include="Images\Soleil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\blockdevice-icone-7594-128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\supprimer32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\arriere-zoom-128.png" />
+    <Resource Include="Images\avant-zoom-128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\e-mail-32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
