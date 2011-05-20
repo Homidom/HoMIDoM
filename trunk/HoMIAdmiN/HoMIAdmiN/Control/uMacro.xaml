@@ -1,6 +1,6 @@
 ﻿<UserControl x:Class="uMacro"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="529" Height="529" DataContext="{Binding}">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="650" Height="529" DataContext="{Binding}" xmlns:my="clr-namespace:WpfApplication1">
 
     <UserControl.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
@@ -83,15 +83,22 @@
         <Label Content="Nom:" Height="22" HorizontalAlignment="Left" Margin="12,58,0,0" Name="Label2" VerticalAlignment="Top" Width="42" Foreground="White" />
         <TextBox Height="21" HorizontalAlignment="Left" Margin="73,58,0,0" Name="TxtNom" VerticalAlignment="Top" Width="218" />
         <Label Content="Description:" Foreground="White" Height="22" HorizontalAlignment="Left" Margin="6,84,0,0" Name="Label3" VerticalAlignment="Top" Width="67" />
-        <TextBox Height="21" HorizontalAlignment="Left" Margin="74,85,0,0" Name="TxtDescription" VerticalAlignment="Top" Width="436" />
-        <CheckBox Content="Enable" Height="17" HorizontalAlignment="Left" Margin="300,59,0,0" Name="ChkEnable" VerticalAlignment="Top" Width="86" Foreground="White" />
-        <ScrollViewer  Margin="10,118,0,0" Name="ScrollViewer1" VerticalAlignment="Top" Width="519" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" CanContentScroll="True">
-            <StackPanel>
+        <TextBox Height="21" HorizontalAlignment="Left" Margin="74,85,0,0" Name="TxtDescription" VerticalAlignment="Top" Width="349" />
+        <my:uScenario HorizontalAlignment="Left" Margin="0,125,0,0" x:Name="UScenario1" VerticalAlignment="Top" Height="376" Width="638" />
+        <!--<CheckBox Content="Enable" Height="17" HorizontalAlignment="Left" Margin="300,59,0,0" Name="ChkEnable" VerticalAlignment="Top" Width="86" Foreground="White" />
+        <Canvas Margin="10,118,0,0" >
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Actions:" Foreground="White" />
+                <Image Source="/HoMIAdmiN;component/Images/blockdevice-icone-7594-128.png" Height="32" Width="32" ToolTip="Device"></Image>
+            </StackPanel>
+        <ScrollViewer  Name="ScrollViewer1" VerticalAlignment="Top" Width="519" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" CanContentScroll="True">
+            <StackPanel Name="StackPanel2">
             <StackPanel Height="26" HorizontalAlignment="Left"  Name="StckPnlLib" VerticalAlignment="Top" Orientation="Horizontal" Background="Black"  />
             <StackPanel Background="DarkGray" Height="22" HorizontalAlignment="Left"  Name="StckPnlLibTr" Orientation="Horizontal" VerticalAlignment="Top"   />
-            <StackPanel Height="30" HorizontalAlignment="Left"  Name="StackPanel1" VerticalAlignment="Top" Background="Black" MinHeight="100"  />
+            <StackPanel Height="30" HorizontalAlignment="Left"  Name="StackPanel1" VerticalAlignment="Top" Background="Black" MinHeight="100" AllowDrop="True" />
             </StackPanel> 
         </ScrollViewer>
+        </Canvas>-->
     </Grid>
     
 </UserControl>

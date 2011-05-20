@@ -62,6 +62,14 @@ InitializeComponent
 	<summary>
 uTestDevice
 </summary>
+</member><member name="M:WpfApplication1.WActionDevice.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.WActionDevice">
+	<summary>
+WActionDevice
+</summary>
 </member><member name="M:WpfApplication1.Application.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -90,6 +98,38 @@ InitializeComponent
 	<summary>
 Window1
 </summary>
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+	<summary>
+CreateInstance
+</summary>
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+	<summary>
+GetPropertyValue
+</summary>
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+	<summary>
+SetPropertyValue
+</summary>
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+	<summary>
+CreateDelegate
+</summary>
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+	<summary>
+AddEventHandler
+</summary>
+</member><member name="T:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+	<summary>
+GeneratedInternalTypeHelper
+</summary>
+</member><member name="M:WpfApplication1.uScenario.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uScenario">
+	<summary>
+uScenario
+</summary>
 </member><member name="M:WpfApplication1.uDriver.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -97,6 +137,14 @@ InitializeComponent
 </member><member name="T:WpfApplication1.uDriver">
 	<summary>
 uDriver
+</summary>
+</member><member name="M:WpfApplication1.uAction.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uAction">
+	<summary>
+uAction
 </summary>
 </member><member name="M:WpfApplication1.uUser.InitializeComponent">
 	<summary>

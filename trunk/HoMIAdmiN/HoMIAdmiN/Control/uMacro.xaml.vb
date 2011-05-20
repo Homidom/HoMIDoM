@@ -21,48 +21,6 @@
         _Action = Action
         _MacroId = MacroId
 
-        Dim _time As DateTime
-        For j As Integer = 0 To 255
-            Dim x As New Label
-            x.Width = 60
-            x.Foreground = New SolidColorBrush(Colors.White)
-            x.Content = _time.ToLongTimeString
-            StckPnlLib.Children.Add(x)
-            _time = _time.AddSeconds(5)
-        Next
-
-        Dim y As New Canvas
-        y.Width = 28
-        y.Background = New SolidColorBrush(Colors.Transparent)
-        StckPnlLibTr.Children.Add(y)
-
-        Dim flag As Boolean
-        For j = 0 To 255
-            Dim y1 As New Canvas
-            y1.Width = 60
-            If flag = False Then
-                y1.Background = New SolidColorBrush(Colors.Transparent)
-                flag = True
-            Else
-                y1.Background = New SolidColorBrush(Colors.Transparent)
-                flag = False
-            End If
-            Dim R1 As New Rectangle
-            R1.Fill = New SolidColorBrush(Colors.White)
-            R1.Width = 3
-            R1.Height = 16
-            y1.Children.Add(R1)
-            For k = 1 To 4
-                Dim R2 As New Rectangle
-                R2.Fill = New SolidColorBrush(Colors.White)
-                R2.Width = 1
-                R2.Height = 8
-                y1.Children.Add(R2)
-                y1.SetLeft(R2, k * (60 / 5))
-            Next
-            StckPnlLibTr.Children.Add(y1)
-        Next
-
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         If _Action = EAction.Nouveau Then 'Nouveau Trigger
 
