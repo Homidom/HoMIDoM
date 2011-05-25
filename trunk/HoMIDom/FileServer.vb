@@ -3,7 +3,7 @@ Imports System.ServiceModel
 Imports System.Runtime.Serialization
 Imports System.Linq
 
-Namespace Homidom
+Namespace HoMIDom
 
     <ServiceContract(Namespace:="http://HoMIDom/")> Public Interface IFileServer
         <OperationContract()> Function Download(ByVal Fichier As RequestFileData) As FileData

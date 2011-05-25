@@ -28,7 +28,7 @@ Imports System.Globalization
     Dim _Protocol As String = "RF"
     Dim _IsConnect As Boolean = False
     Dim _IP_TCP As String = ""
-    Dim _Port_TCP As String = ""
+    Dim _Port_TCP As String = "10002"
     Dim _IP_UDP As String = ""
     Dim _Port_UDP As String = ""
     Dim _Com As String = ""
@@ -45,6 +45,81 @@ Imports System.Globalization
 #End Region
 
 #Region "Variables Internes"
+    Public Enum DEVICE_COMMAND As Integer
+        'Device values for output devices
+        All_Units_Off = 0
+        All_Lights_On = 1
+        UOn = 2
+        UOff = 3
+        UDim = 4
+        UBright = 5
+        All_Lights_Off = 6
+        Extended_Code = 7
+        Hail_Request = 8
+        Hail_Ack = 9
+        Preset_Dim1 = 10
+        Preset_Dim2 = 11
+        Ex_Data_Xfer = 12
+        Status_On = 13
+        Status_Off = 14
+        Status_Request = 15
+        Dim_To_Off = 16
+        No_Cmd = 17
+        Stat_Unknown = 17
+        Any_Cmd = 18
+        Value_Set = 19
+        Value_Increment = 20
+        Set_On = 21
+        Set_Off = 22
+        Set_Any = 23
+        Value_Decrement = 24
+    End Enum
+
+    'REMOTE commands
+    Public Enum SEC_REMOTE As Integer
+        None = 0
+        ArmAway = 1
+        ArmAwayMaxDelay = 2
+        ArmHome = 3
+        ArmHomeMaxDelay = 4
+        Disarm = 5
+        LightsOn = 6
+        LightsOff = 7
+        Panic = 8
+        LightsOn2 = 9
+        LightsOff2 = 10
+        Disabled = 11
+        BatteryLow = 12 'not used as device command, only used to display batt low for CO18 and SD18
+        StopPanic = 13
+        Alarm = 14
+        AnyValue = 999
+    End Enum
+
+    'states of gintXmitstate(ixmit):
+    Public Enum XmitState As Integer
+        Reconnect = -1      ' reconnecting TCP
+        OffLine = 0         ' xmitter not used
+        Initializing = 1    ' initializing transmitter
+        WaitInit = 2        ' wait for Ack on Init to Var length
+        WaitResetRF = 3     ' wait for Ack on Reset RF
+        WaitDisableX10 = 4  ' wait for Ack on Disable X10
+        WaitEnableKAKU = 5  ' wait for Ack on Enable KAKU
+        WaitEnableHAR = 6   ' wait for Ack on Enable Harrison
+        EndInit = 20        ' transmitter initialized
+        WaitAck = 21        ' wait for Ack, transmitter ready
+        Idle = 22           ' idle
+    End Enum
+
+    Public Enum XmitInitCmd As Byte
+        GetSWversion = &H30 ' return transmitter software version init RF
+        InitHS = &H33       ' init transmitter with use of HS
+        InitNoHS = &H37     ' init transmitter no handshake
+        EnableHar = &H3C    ' Enable Harrison
+        EnableARC = &H3D    ' Enable ARC RF
+        EnableFLA = &H3E    ' Enable Koppla or Flamingo RF
+        DisableX10 = &H3F   ' Disable X10 RF
+    End Enum
+
     Private WithEvents port As New System.IO.Ports.SerialPort
     Private port_name As String = ""
     'liste des variables de base
@@ -196,7 +271,6 @@ Imports System.Globalization
             End If
         End Set
     End Property
-
     Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
         Get
             Return _Version
@@ -360,21 +434,20 @@ Imports System.Globalization
             If Not _IsConnect Then
                 port_name = numero 'pour se rapeller du nom du port
                 If VB.Left(numero, 3) <> "COM" Then
-                    'RFXCOM est un modele ethernet
+                    'RFXMitter est un modele ethernet
                     tcp = True
-                    client = New TcpClient(numero, 10002)
+                    client = New TcpClient(numero, _Port_TCP)
                     _IsConnect = True
-                    Return ("Port IP " & port_name & " ouvert")
+                    Return ("Port IP " & port_name & ":" & _Port_TCP & " ouvert")
                 Else
-                    'RFXCOM est un modele usb
+                    'RFXMitter est un modele usb
                     tcp = False
                     port.PortName = port_name 'nom du port : COM1
-                    port.BaudRate = 38400 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
-                    port.Parity = IO.Ports.Parity.None 'pas de parité
-                    port.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
+                    port.BaudRate = 4800 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
+                    port.Parity = Parity.None 'pas de parité
+                    port.StopBits = StopBits.Two '2 bits d'arrêt par octet
                     port.DataBits = 8 'nombre de bit par octet
                     port.Encoding = System.Text.Encoding.GetEncoding(1252)  'Extended ASCII (8-bits)
-                    port.StopBits = StopBits.One
                     port.Handshake = Handshake.None
                     port.ReadBufferSize = CInt(8192)
                     port.ReceivedBytesThreshold = 1
@@ -424,7 +497,7 @@ Imports System.Globalization
         End If
     End Function
 
-    ''' <summary>Configurer le RFXCOM</summary>
+    ''' <summary>Configurer le RFXMitter</summary>
     ''' <remarks></remarks>
     Private Function configurer() As String
         'configurer le rfxcom
