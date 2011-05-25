@@ -6,7 +6,12 @@ HoMIDom
 </name>
 </assembly>
 <members>
-<member name="M:HoMIDom.HoMIDom.Sqlite.connect(System.String)">
+<member name="T:HoMIDom.HoMIDom.TemplateAction">
+	<summary>
+ Template Action
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.connect(System.String)">
 	<summary>
  Connection à une BDD Sqlite
  </summary>
@@ -244,23 +249,9 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Macro.Condition">
+</member><member name="P:HoMIDom.HoMIDom.Macro.ListActions">
 	<summary>
- Liste des conditions de la macro
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Macro.ActionTrue">
-	<summary>
- Liste des actions si les conditions de la macro macro est True
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Macro.ActionFalse">
-	<summary>
- Liste des actions si les conditions de la macro macro est False
+ Liste des actions de la macro macro est False
  </summary>
 	<value></value>
 	<returns></returns>
@@ -359,16 +350,23 @@ HoMIDom
  _condition contient un string: DeviceID ou CRON : le déclencheur du trigger
  _macro contient un tableau de string : MacroID : liste des macros à lancer
  </remarks>
-</member><member name="M:HoMIDom.HoMIDom.action.execute(System.Collections.ArrayList)">
-	<summary>convertit la condition au format cron "cron_ss#mm#hh#jj#MMM#JJJ" en dateTime dans le champ prochainedateheure</summary>
+</member><member name="T:HoMIDom.HoMIDom.Action.TypeAction">
+	<summary>
+ Enumération des types d'actions
+ </summary>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.action.email">
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionDevice">
+	<summary>
+ Action Device
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.email">
 	<summary>Envoi d'un email</summary>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.action.log">
+</member><member name="T:HoMIDom.HoMIDom.Action.log">
 	<summary>log dans les fichiers logs et base sqlite</summary>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.action">
+</member><member name="T:HoMIDom.HoMIDom.Action">
 	<summary>Class action, Défini les actions à réaliser depuis les macros...</summary>
 	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Extension">
@@ -803,19 +801,6 @@ HoMIDom
 	<param name="macroId"></param>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetAllMacros">
 	<summary>Retourne la liste de toutes les macros</summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveMacro(System.String,System.String,System.Boolean,System.String,System.Collections.ArrayList,System.Collections.ArrayList,System.Collections.ArrayList)">
-	<summary>
- Permet de créer ou modifier une macro
- </summary>
-	<param name="macroId"></param>
-	<param name="nom"></param>
-	<param name="enable"></param>
-	<param name="description"></param>
-	<param name="condition"></param>
-	<param name="actiontrue"></param>
-	<param name="actionfalse"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ReturnMacroById(System.String)">
@@ -1380,19 +1365,6 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnMacroById(System.String)">
 	<summary>Retourne la macro par son ID</summary>
 	<param name="MacroId"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveMacro(System.String,System.String,System.Boolean,System.String,System.Collections.ArrayList,System.Collections.ArrayList,System.Collections.ArrayList)">
-	<summary>
- Permet de créer ou modifier une macro
- </summary>
-	<param name="macroId"></param>
-	<param name="nom"></param>
-	<param name="enable"></param>
-	<param name="description"></param>
-	<param name="condition"></param>
-	<param name="actiontrue"></param>
-	<param name="actionfalse"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllTriggers">

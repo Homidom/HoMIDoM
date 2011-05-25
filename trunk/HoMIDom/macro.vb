@@ -8,18 +8,14 @@ Namespace HoMIDom
 
     ''' <summary>Class Macro, Défini le type pour les macros</summary>
     ''' <remarks>_condition contient un tableau des conditions à vérifier pour lancer les actions si TRUE ou si FALSE</remarks>
-    Public Class Macro
+    <Serializable()> Public Class Macro
         'Déclaration des variables
         Dim _ID As String
         Dim _Nom As String
         Dim _Description As String
         Dim _Enable As Boolean
-        Dim _Condition As ArrayList
-        Dim _ActionTrue As ArrayList
-        Dim _ActionFalse As ArrayList
-
+        Dim _ListActions As ArrayList
         Dim _Server As Server
-        Dim _Device As Device
 
         'Propriétés
 
@@ -84,81 +80,51 @@ Namespace HoMIDom
         End Property
 
         ''' <summary>
-        ''' Liste des conditions de la macro
+        ''' Liste des actions de la macro macro est False
         ''' </summary>
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Property Condition As ArrayList
+        Public Property ListActions As ArrayList
             Get
-                Return _Condition
+                Return _ListActions
             End Get
             Set(ByVal value As ArrayList)
-                _Condition = value
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Liste des actions si les conditions de la macro macro est True
-        ''' </summary>
-        ''' <value></value>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Property ActionTrue As ArrayList
-            Get
-                Return _ActionTrue
-            End Get
-            Set(ByVal value As ArrayList)
-                _ActionTrue = value
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Liste des actions si les conditions de la macro macro est False
-        ''' </summary>
-        ''' <value></value>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Property ActionFalse As ArrayList
-            Get
-                Return _ActionFalse
-            End Get
-            Set(ByVal value As ArrayList)
-                _ActionFalse = value
+                _ListActions = value
             End Set
         End Property
 
         ''' <summary>Execute une macro avec analyse des conditions</summary>
         ''' <remarks>lance les actions True ou False suivant le résultat des conditions</remarks>
         Public Sub Execute_avec_conditions()
-            Try
-                _Server.Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Macro:Execute_avec_conditions", "Execution avec tests des conditions de " & Nom)
-                'analyse des conditions
-                If Analyse() = True Then
-                    'actionsTRUE
-                    If ActionTrue.Count <> 0 Then
-                        Action(ActionTrue)
-                    End If
-                ElseIf ActionFalse.Count <> 0 Then
-                    Action(ActionFalse)
-                End If
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:Execute_avec_conditions", ex.ToString)
-            End Try
+            'Try
+            '    _Server.Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Macro:Execute_avec_conditions", "Execution avec tests des conditions de " & Nom)
+            '    'analyse des conditions
+            '    If Analyse() = True Then
+            '        'actionsTRUE
+            '        If ActionTrue.Count <> 0 Then
+            '            Action(ActionTrue)
+            '        End If
+            '    ElseIf ActionFalse.Count <> 0 Then
+            '        Action(ActionFalse)
+            '    End If
+            'Catch ex As Exception
+            '    _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:Execute_avec_conditions", ex.ToString)
+            'End Try
         End Sub
 
         ''' <summary>Execute une macro sans analyse des conditions</summary>
         ''' <remarks>lance les actions si TRUE</remarks>
         Public Sub Execute_sans_conditions()
-            Try
-                _Server.Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Macro:Execute_sans_conditions", "Execution sans tests des conditions de " & Nom)
-                'on ne teste pas, on lance direct les actions de True
-                If ActionTrue.Count <> 0 Then
-                    Action(ActionTrue)
-                End If
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:Execute_sans_conditions", ex.ToString)
-            End Try
+            'Try
+            '    _Server.Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Macro:Execute_sans_conditions", "Execution sans tests des conditions de " & Nom)
+            '    'on ne teste pas, on lance direct les actions de True
+            '    If ActionTrue.Count <> 0 Then
+            '        Action(ActionTrue)
+            '    End If
+            'Catch ex As Exception
+            '    _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:Execute_sans_conditions", ex.ToString)
+            'End Try
         End Sub
 
         ''' <summary>Analyse les conditions et renvoie le résultat</summary>
@@ -413,24 +379,69 @@ Namespace HoMIDom
 
     ''' <summary>Class action, Défini les actions à réaliser depuis les macros...</summary>
     ''' <remarks></remarks>
-    Public Class action
-
-        Dim _ID As String
-        Dim _Nom As String
-        Dim _Description As String
-        Dim _Enable As Boolean
-        Dim _Type As String
+    <Serializable()> Public Class Action
         Public _Server As Server
 
-        ''' <summary>convertit la condition au format cron "cron_ss#mm#hh#jj#MMM#JJJ" en dateTime dans le champ prochainedateheure</summary>
+        ''' <summary>
+        ''' Enumération des types d'actions
+        ''' </summary>
         ''' <remarks></remarks>
-        Public Sub execute(ByVal param As ArrayList)
-            Try
+        Public Enum TypeAction
+            ActionDevice = 0
+        End Enum
 
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Action:xxx", ex.ToString)
-            End Try
-        End Sub
+        ''' <summary>
+        ''' Action Device
+        ''' </summary>
+        ''' <remarks></remarks>
+        <Serializable()> Public Class ActionDevice
+            Dim _IdDevice As String
+            Dim _Method As String
+            Dim _Parametres As New ArrayList
+            Dim _Timing As DateTime
+
+            Public Property Timing As DateTime
+                Get
+                    Return _Timing
+                End Get
+                Set(ByVal value As DateTime)
+                    _Timing = value
+                End Set
+            End Property
+
+            Public Property IdDevice As String
+                Get
+                    Return _IdDevice
+                End Get
+                Set(ByVal value As String)
+                    _IdDevice = value
+                End Set
+            End Property
+
+            Public Property Method As String
+                Get
+                    Return _Method
+                End Get
+                Set(ByVal value As String)
+                    _Method = value
+                End Set
+            End Property
+
+            Public Property Parametres As ArrayList
+                Get
+                    Return _Parametres
+                End Get
+                Set(ByVal value As ArrayList)
+                    _Parametres = value
+                End Set
+            End Property
+
+            Public ReadOnly Property TypeAction As TypeAction
+                Get
+                    Return TypeAction.ActionDevice
+                End Get
+            End Property
+        End Class
 
         ''' <summary>Envoi d'un email</summary>
         ''' <remarks></remarks>
@@ -469,17 +480,6 @@ Namespace HoMIDom
             mailSender.Send(email)
             email = Nothing
             mailSender = Nothing
-        End Sub
-
-        Public Sub Pause(ByVal Heure As Integer, ByVal Minute As Integer, ByVal Seconde As Integer, ByVal Milliseconde As Integer)
-            Dim t As DateTime = DateTime.Now
-            t = t.AddHours(Heure)
-            t = t.AddMinutes(Minute)
-            t = t.AddSeconds(Seconde)
-            t = t.AddMilliseconds(Milliseconde)
-            Do While DateTime.Now < t
-
-            Loop
         End Sub
 
         Public Sub Send_log(ByVal texte As String)

@@ -826,6 +826,33 @@ Namespace HoMIDom
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant à la macro est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
                                     End Select
                                 Next
+                                If list.Item(i).HasChildNodes Then
+                                    For j2 As Integer = 0 To list.Item(i).ChildNodes.Count - 1
+                                        If list.Item(i).ChildNodes.Item(j2).Name = "action" Then
+                                            Dim _Act As Object = Nothing
+                                            Select Case list.Item(i).ChildNodes.Item(j2).Attributes.Item(0).Value
+                                                Case 0
+                                                    Dim o As New Action.ActionDevice
+                                                    _Act = o
+                                                    o = Nothing
+                                            End Select
+                                            For j3 As Integer = 0 To list.Item(i).ChildNodes.Item(j2).Attributes.Count - 1
+                                                Select Case list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Name
+                                                    Case "timing"
+                                                        _Act.timing = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j2).Value
+                                                    Case "iddevice"
+                                                        _Act.iddevice = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j2).Value
+                                                    Case "method"
+                                                        _Act.method = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j2).Value
+                                                    Case "parametres"
+                                                        Dim a() As Object = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j2).Value.Split("|")
+                                                        _Act.parametres = a
+                                                End Select
+                                            Next
+                                            x.ListActions.Add(_Act)
+                                        End If
+                                    Next
+                                End If
                                 _ListMacros.Add(x)
                             Next
                         Else
@@ -1349,6 +1376,32 @@ Namespace HoMIDom
                     writer.WriteStartAttribute("enable")
                     writer.WriteValue(_ListMacros.Item(i).enable)
                     writer.WriteEndAttribute()
+                    For j As Integer = 0 To _ListMacros.Item(i).ListActions.count - 1
+                        writer.WriteStartElement("action")
+                        writer.WriteStartAttribute("typeaction")
+                        writer.WriteValue(_ListMacros.Item(i).listactions.item(j).TypeAction.ToString)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("timing")
+                        writer.WriteValue(_ListMacros.Item(i).listactions.item(j).timing)
+                        writer.WriteEndAttribute()
+                        Select Case _ListMacros.Item(i).listactions.item(j).TypeAction
+                            Case Action.TypeAction.ActionDevice
+                                writer.WriteStartAttribute("iddevice")
+                                writer.WriteValue(_ListMacros.Item(i).listactions.item(j).IdDevice)
+                                writer.WriteEndAttribute()
+                                writer.WriteStartAttribute("method")
+                                writer.WriteValue(_ListMacros.Item(i).listactions.item(j).Method)
+                                writer.WriteEndAttribute()
+                                Dim a As String = ""
+                                For k As Integer = 0 To _ListMacros.Item(i).listactions.item(j).parametres.count - 1
+                                    a = a & _ListMacros.Item(i).listactions.item(j).parametres.item(k) & "|"
+                                Next
+                                writer.WriteStartAttribute("parametres")
+                                writer.WriteValue(a)
+                                writer.WriteEndAttribute()
+                        End Select
+                            writer.WriteEndElement()
+                    Next
                     writer.WriteEndElement()
                 Next
                 writer.WriteEndElement()
@@ -4089,7 +4142,7 @@ Namespace HoMIDom
         ''' <param name="actionfalse"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal condition As ArrayList = Nothing, Optional ByVal actiontrue As ArrayList = Nothing, Optional ByVal actionfalse As ArrayList = Nothing) As String Implements IHoMIDom.SaveMacro
+        Public Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal listactions As List(Of TemplateAction) = Nothing) As String Implements IHoMIDom.SaveMacro
             Dim myID As String = ""
             Try
                 If macroId = "" Then
@@ -4099,9 +4152,18 @@ Namespace HoMIDom
                         x.Nom = nom
                         x.Enable = enable
                         x.Description = description
-                        x.Condition = condition
-                        x.ActionTrue = actiontrue
-                        x.ActionFalse = actionfalse
+                        Dim tabl As New ArrayList
+                        For i As Integer = 0 To listactions.Count - 1
+                            Select Case listactions.Item(i).TypeAction
+                                Case Action.TypeAction.ActionDevice
+                                    Dim o As New Action.ActionDevice
+                                    o.IdDevice = listactions.Item(i).IdDevice
+                                    o.Method = listactions.Item(i).Action
+                                    o.Parametres = listactions.Item(i).Parametres
+                                    tabl.Add(o)
+                            End Select
+                        Next
+                        x.ListActions = tabl
                     End With
                     myID = x.ID
                     _ListMacros.Add(x)
@@ -4113,9 +4175,7 @@ Namespace HoMIDom
                             _ListMacros.Item(i).nom = nom
                             _ListMacros.Item(i).enable = enable
                             _ListMacros.Item(i).description = description
-                            _ListMacros.Item(i).condition = condition
-                            _ListMacros.Item(i).actiontrue = actiontrue
-                            _ListMacros.Item(i).actionfalse = actionfalse
+                            _ListMacros.Item(i).listactions = listactions
                         End If
                     Next
                 End If

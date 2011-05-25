@@ -564,7 +564,7 @@ Namespace HoMIDom
         ''' <param name="actionfalse"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal condition As ArrayList = Nothing, Optional ByVal actiontrue As ArrayList = Nothing, Optional ByVal actionfalse As ArrayList = Nothing) As String
+        <OperationContract()> Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal listactions As List(Of TemplateAction) = Nothing) As String
 #End Region
 
 #Region "Trigger"

@@ -1,5 +1,5 @@
 ﻿Public Class uAction
-    Dim _TypeAction As Integer
+    Dim _TypeAction As HoMIDom.HoMIDom.Action.TypeAction
     Dim _Libelle As String
     Dim _Action As String
     Dim _IDdevice As String
@@ -26,7 +26,7 @@
 
     Private Sub Rectangle1_MouseLeftButtonDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Rectangle1.MouseLeftButtonDown
         Select Case _TypeAction
-            Case 0 'Action Device
+            Case HoMIDom.HoMIDom.Action.TypeAction.ActionDevice 'Action Device
                 Dim frm As New WActionDevice
                 If IDDevice <> "" Then
                     frm.ID = IDDevice

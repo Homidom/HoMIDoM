@@ -85,6 +85,7 @@
         <Label Content="Description:" Foreground="White" Height="22" HorizontalAlignment="Left" Margin="6,84,0,0" Name="Label3" VerticalAlignment="Top" Width="67" />
         <TextBox Height="21" HorizontalAlignment="Left" Margin="74,85,0,0" Name="TxtDescription" VerticalAlignment="Top" Width="349" />
         <my:uScenario HorizontalAlignment="Left" Margin="0,125,0,0" x:Name="UScenario1" VerticalAlignment="Top" Height="376" Width="638" />
+        <CheckBox Content="Enable" Height="19" HorizontalAlignment="Left" Margin="317,60,0,0" Name="cEnable" VerticalAlignment="Top" Width="70" Foreground="White" />
         <!--<CheckBox Content="Enable" Height="17" HorizontalAlignment="Left" Margin="300,59,0,0" Name="ChkEnable" VerticalAlignment="Top" Width="86" Foreground="White" />
         <Canvas Margin="10,118,0,0" >
             <StackPanel Orientation="Horizontal">
