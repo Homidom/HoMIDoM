@@ -94,7 +94,7 @@ Driver_RFXComReceiver
 	<summary>Decode le message pour l'envoyer aux bonnes fonctions de traitement</summary>
 	<remarks></remarks>
 </member><member name="T:Driver_RFXComReceiver.Driver_RFXComReceiver">
-	<summary>Class Driver_RFXComReceiver, permet de communiquer avec la Zibase Ethernet</summary>
+	<summary>Class Driver_RFXComReceiver, permet de communiquer avec un RFXCOM Ethernet ou USB</summary>
 	<remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
 </member>
 </members>

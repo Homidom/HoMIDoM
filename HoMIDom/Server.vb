@@ -2174,10 +2174,11 @@ Namespace HoMIDom
                     array = reader.ReadBytes(CInt(fs.Length))
                     reader.Close()
                 End Using
+                Return array
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetByteFromImage", ex.Message)
+                Return Nothing
             End Try
-            Return array
         End Function
 
 #End Region
@@ -3998,7 +3999,7 @@ Namespace HoMIDom
         ''' <summary>sauvegarde ou créer une zone dans la config</summary>
         ''' <param name="zoneId"></param>
         ''' <param name="name"></param>
-        ''' <param name="ListDevice"></param>
+        ''' <param name="ListElement"></param>
         ''' <param name="icon"></param>
         ''' <param name="image"></param>
         ''' <returns></returns>
@@ -4137,9 +4138,7 @@ Namespace HoMIDom
         ''' <param name="nom"></param>
         ''' <param name="enable"></param>
         ''' <param name="description"></param>
-        ''' <param name="condition"></param>
-        ''' <param name="actiontrue"></param>
-        ''' <param name="actionfalse"></param>
+        ''' <param name="listactions"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal listactions As List(Of TemplateAction) = Nothing) As String Implements IHoMIDom.SaveMacro
@@ -4262,7 +4261,10 @@ Namespace HoMIDom
         ''' <param name="nom"></param>
         ''' <param name="enable"></param>
         ''' <param name="description"></param>
-        ''' <param name="condition"></param>
+        ''' <param name="conditiontimer"></param>
+        ''' <param name="deviceid"></param>
+        ''' <param name="deviceproperty"></param>
+        ''' <param name="TypeTrigger"></param>
         ''' <param name="macro"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>

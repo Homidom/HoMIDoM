@@ -28,7 +28,7 @@ Imports System.Globalization
     Dim _Protocol As String = "RF"
     Dim _IsConnect As Boolean = False
     Dim _IP_TCP As String = ""
-    Dim _Port_TCP As String = ""
+    Dim _Port_TCP As String = "10001"
     Dim _IP_UDP As String = ""
     Dim _Port_UDP As String = ""
     Dim _Com As String = ""
@@ -42,10 +42,6 @@ Imports System.Globalization
     Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
 
-    'A ajouter dans les ppt du driver
-    'Dim _tempsentrereponse As Integer = 1500
-    'Dim _ignoreadresse As Boolean = False
-    'Dim _lastetat As Boolean = True
 #End Region
 
 #Region "Variables Internes"
@@ -222,7 +218,6 @@ Imports System.Globalization
             End If
         End Set
     End Property
-
     Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
         Get
             Return _Version
@@ -388,19 +383,18 @@ Imports System.Globalization
                 If VB.Left(numero, 3) <> "COM" Then
                     'RFXCOM est un modele ethernet
                     tcp = True
-                    client = New TcpClient(numero, 10001)
+                    client = New TcpClient(numero, _Port_TCP)
                     _IsConnect = True
-                    Return ("Port IP " & port_name & " ouvert")
+                    Return ("Port IP " & port_name & ":" & _Port_TCP & " ouvert")
                 Else
                     'RFXCOM est un modele usb
                     tcp = False
                     port.PortName = port_name 'nom du port : COM1
                     port.BaudRate = 38400 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
-                    port.Parity = IO.Ports.Parity.None 'pas de parité
-                    port.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
+                    port.Parity = Parity.None 'pas de parité
+                    port.StopBits = StopBits.One 'un bit d'arrêt par octet
                     port.DataBits = 8 'nombre de bit par octet
                     port.Encoding = System.Text.Encoding.GetEncoding(1252)  'Extended ASCII (8-bits)
-                    port.StopBits = StopBits.One
                     port.Handshake = Handshake.None
                     port.ReadBufferSize = CInt(8192)
                     port.ReceivedBytesThreshold = 1
