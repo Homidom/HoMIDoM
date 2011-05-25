@@ -286,10 +286,36 @@ Class Window1
 
     'Afficher la liste des scenes
     Public Sub AffScene()
-        'TreeViewScene.Nodes.Clear()
-        'For i As Integer = 0 To Obj.Scripts.Count - 1
-        '    TreeViewScene.Nodes.Add(Obj.Scripts.Item(i).ID, Obj.Scripts.Item(i).Name)
-        'Next
+        Try
+            TreeViewMacros.Items.Clear()
+            If IsConnect = False Then Exit Sub
+            For i As Integer = 0 To myService.GetAllMacros.Count - 1
+                Dim newchild As New TreeViewItem
+                Dim stack As New StackPanel
+                Dim img As New Image
+                Dim uri As String = ""
+                Dim bmpImage As New BitmapImage()
+
+                stack.Orientation = Orientation.Horizontal
+
+                img.Height = 20
+                img.Width = 20
+
+                Dim label As New Label
+                label.Foreground = New SolidColorBrush(Colors.White)
+                label.Content = myService.GetAllMacros.Item(i).Nom
+
+                stack.Children.Add(img)
+                stack.Children.Add(label)
+
+                newchild.Foreground = New SolidColorBrush(Colors.White)
+                newchild.Header = stack
+                newchild.Uid = myService.GetAllMacros.Item(i).ID
+                TreeViewMacros.Items.Add(newchild)
+            Next
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub AffScene: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'Afficher la liste des triggers
@@ -308,16 +334,6 @@ Class Window1
 
                 img.Height = 20
                 img.Width = 20
-
-                'If myService.GetAllTriggers.Item(i).Picture <> "" And File.Exists(myService.GetAllDevices.Item(i).Picture) = True Then
-                '    uri = myService.GetAllDevices.Item(i).Picture
-                'Else
-                '    uri = MyRep & "\Images\Devices\Defaut-128.png"
-                'End If
-                'bmpImage.BeginInit()
-                'bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
-                'bmpImage.EndInit()
-                'img.Source = bmpImage
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
@@ -686,6 +702,7 @@ Class Window1
                     AffZone()
                     AffUser()
                     AffTrigger()
+                    AffScene()
                     Exit Sub
                 End If
             Next
@@ -868,6 +885,7 @@ Class Window1
             AffZone()
             AffUser()
             AffTrigger()
+            AffScene()
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub Window1_Loaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try

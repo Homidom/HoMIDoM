@@ -22,24 +22,61 @@
         _MacroId = MacroId
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        If _Action = EAction.Nouveau Then 'Nouveau Trigger
+        If _Action = EAction.Nouveau Then 'Nouvelle macro
 
-        Else 'Modifier Trigger
+        Else 'Modifier Macro
+            Dim x As HoMIDom.HoMIDom.Macro = Window1.myService.ReturnMacroById(MacroId)
 
+            If x IsNot Nothing Then
+                TxtNom.Text = x.Nom
+                TxtDescription.Text = x.Description
+                cEnable.IsChecked = x.Enable
+                UScenario1.Items = x.ListActions
+            End If
         End If
     End Sub
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        'If TxtNom.Text = "" Or CbDevice.SelectedIndex < 0 Then
-        '    MessageBox.Show("Le nom du trigger ou le device sont obligatoires!", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-        '    Exit Sub
-        'End If
+        If TxtNom.Text = "" Then
+            MessageBox.Show("Le nom de la macro est obligatoire!", "Macro", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Exit Sub
+        End If
 
-        'If _Action = EAction.Nouveau Then
-        '    Window1.myService.SaveTrigger("", TxtNom.Text, ChkEnable.IsChecked, HoMIDom.HoMIDom.Trigger.TypeTrigger.DEVICE, TxtDescription.Text, "", _ListDeviceId(CbDevice.SelectedIndex).id, CbProperty.Text, _ListMacro)
-        'Else
-        '    Window1.myService.SaveTrigger(_TriggerId, TxtNom.Text, ChkEnable.IsChecked, HoMIDom.HoMIDom.Trigger.TypeTrigger.DEVICE, TxtDescription.Text, "", _ListDeviceId(CbDevice.SelectedIndex).id, CbProperty.Text, _ListMacro)
-        'End If
+        If _Action = EAction.Nouveau Then
+            Dim tabl As New ArrayList
+            Dim tabl2 As New List(Of HoMIDom.HoMIDom.TemplateAction)
+
+            tabl = UScenario1.Items
+            For i As Integer = 0 To tabl.Count - 1
+                Select Case tabl.Item(i).TypeAction
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionDevice
+                        Dim o As New HoMIDom.HoMIDom.TemplateAction
+                        o.Timing = tabl.Item(i).timing
+                        o.IdDevice = tabl.Item(i).IdDevice
+                        o.Action = tabl.Item(i).Method
+                        o.Parametres = tabl.Item(i).Parametres
+                        tabl2.Add(o)
+                End Select
+            Next
+            Window1.myService.SaveMacro("", TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl2)
+        Else
+            Dim tabl As New ArrayList
+            Dim tabl2 As New List(Of HoMIDom.HoMIDom.TemplateAction)
+            tabl = UScenario1.Items
+            For i As Integer = 0 To tabl.Count - 1
+                Select Case tabl.Item(i).TypeAction
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionDevice
+                        Dim o As New HoMIDom.HoMIDom.TemplateAction
+                        o.Timing = tabl.Item(i).Timing
+                        o.IdDevice = tabl.Item(i).IdDevice
+                        o.Action = tabl.Item(i).Action
+                        o.Parametres = tabl.Item(i).Parametres
+                        tabl2.Add(o)
+                End Select
+            Next
+            Window1.myService.SaveMacro(_MacroId, TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl2)
+        End If
+        RaiseEvent CloseMe(Me)
     End Sub
 
 End Class
