@@ -27,7 +27,7 @@ Namespace HoMIDom
                     SQLconnect.ConnectionString = "Data Source=./bdd/" & dbname & ".db;"
                     SQLconnect.Open()
                     bdd_name = dbname
-                    Return "Connecté à la base sqlite " & dbname
+                    Return "Connecté"
                 Else
                     Return "ERR: base sqlite " & dbname & " non trouvé"
                 End If
@@ -45,7 +45,7 @@ Namespace HoMIDom
         Public Function disconnect() As String
             Try
                 SQLconnect.Close()
-                Return "Deconnecté de " & bdd_name
+                Return "Deconnecté"
             Catch ex As Exception
                 Return "ERR: Erreur lors de la déconnexion de la base " & bdd_name
             End Try
@@ -63,7 +63,7 @@ Namespace HoMIDom
                 'on vérifie si on est connecté à la BDD
                 If SQLconnect.State = ConnectionState.Open Then
                     'on vérifie si la commande n'est pas vide
-                    If commande Is Nothing And commande <> "" Then
+                    If commande IsNot Nothing And commande <> "" Then
                         SQLcommand = SQLconnect.CreateCommand
                         SQLcommand.CommandText = commande
                         'lock pour etre sur de ne pas faire deux operations en meme temps
@@ -73,13 +73,13 @@ Namespace HoMIDom
                         SQLcommand.Dispose()
                         Return "Commande éxécutée avec succés : " & commande
                     Else
-                        Return "ERR: Non connecté à la BDD " & bdd_name
+                        Return "ERR: La commande est vide"
                     End If
                 Else
-                    Return "ERR: La commande est vide"
+                    Return "ERR: Non connecté à la BDD " & bdd_name
                 End If
             Catch ex As Exception
-                Return "ERR: Erreur lors de la query " & commande
+                Return "ERR: Erreur lors de la query " & commande & "  --> " & ex.ToString
             End Try
         End Function
 
