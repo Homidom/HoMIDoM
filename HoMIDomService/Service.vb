@@ -41,6 +41,7 @@ Module Service
             Console.WriteLine(Now & " Adresss SOAP: " & baseAddress.ToString)
 
             Using host As New ServiceHost(GetType(Server), baseAddress)
+
                 host.Open()
 
                 Console.WriteLine(Now & " ServiceWeb Démarré") ' & obj.PortTCP)

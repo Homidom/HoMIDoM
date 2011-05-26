@@ -1107,11 +1107,11 @@ Namespace HoMIDom
             End Sub
 
             'Contien l'avant derniere valeur
-            Public Property ValueLast() As Double
+            Public Property ValueLast() As String
                 Get
                     Return _ValueLast
                 End Get
-                Set(ByVal value As Double)
+                Set(ByVal value As String)
                     _ValueLast = value
                 End Set
             End Property
