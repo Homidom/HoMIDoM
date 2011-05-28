@@ -512,7 +512,7 @@ Class Window1
         End Try
     End Sub
 
-    'Modiifer une zone
+    'Modifier une zone
     Private Sub TreeViewZone_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewZone.MouseDoubleClick
         Try
             If TreeViewZone.SelectedItem.uid Is Nothing Then Exit Sub
@@ -673,6 +673,41 @@ Class Window1
             End If
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub TreeViewDevice_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+#End Region
+
+#Region "Macro"
+    'Nouvelle macro
+    Private Sub BtnNewMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewMacro.Click
+        Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible d'afficher la macro car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
+            Dim x As New uMacro(uMacro.EAction.Nouveau, "")
+            x.Uid = System.Guid.NewGuid.ToString()
+            AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Add(x)
+            CanvasRight.SetLeft(x, 50)
+            CanvasRight.SetTop(x, 8)
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub BtnNewMacro_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    'Modifier macro
+    Private Sub TreeViewMacros_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewMacros.MouseDoubleClick
+        Try
+            Dim x As New uMacro(uMacro.EAction.Modifier, TreeViewMacros.SelectedItem.uid)
+            x.Uid = System.Guid.NewGuid.ToString()
+            AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Add(x)
+            CanvasRight.SetLeft(x, 50)
+            CanvasRight.SetTop(x, 8)
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub TreeViewMacros_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 #End Region
@@ -1004,16 +1039,4 @@ Class Window1
 
 
 
-    Private Sub BtnNewMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewMacro.Click
-        Try
-            Dim x As New uMacro(0, "")
-            x.Uid = System.Guid.NewGuid.ToString()
-            AddHandler x.CloseMe, AddressOf UnloadControl
-            CanvasRight.Children.Add(x)
-            CanvasRight.SetLeft(x, 50)
-            CanvasRight.SetTop(x, 8)
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub BtnNewMacro_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
 End Class
