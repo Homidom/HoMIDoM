@@ -14,7 +14,7 @@ Namespace HoMIDom
         Dim _Nom As String
         Dim _Description As String
         Dim _Enable As Boolean
-        Dim _ListActions As ArrayList
+        Dim _ListActions As New ArrayList
         Dim _Server As Server
 
         'Propriétés

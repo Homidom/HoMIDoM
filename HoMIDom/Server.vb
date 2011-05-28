@@ -815,7 +815,6 @@ Namespace HoMIDom
 
                         '******************************************
                         'on va chercher les macros
-                        'MANQUE LA GESTION DES TABLEAUX
                         '******************************************
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des macros")
                         list = Nothing
@@ -842,7 +841,7 @@ Namespace HoMIDom
                                         If list.Item(i).ChildNodes.Item(j2).Name = "action" Then
                                             Dim _Act As Object = Nothing
                                             Select Case list.Item(i).ChildNodes.Item(j2).Attributes.Item(0).Value
-                                                Case 0
+                                                Case "ActionDevice"
                                                     Dim o As New Action.ActionDevice
                                                     _Act = o
                                                     o = Nothing
@@ -850,14 +849,22 @@ Namespace HoMIDom
                                             For j3 As Integer = 0 To list.Item(i).ChildNodes.Item(j2).Attributes.Count - 1
                                                 Select Case list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Name
                                                     Case "timing"
-                                                        _Act.timing = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j2).Value
+                                                        _Act.timing = CDate(list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value)
                                                     Case "iddevice"
-                                                        _Act.iddevice = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j2).Value
+                                                        _Act.iddevice = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
                                                     Case "method"
-                                                        _Act.method = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j2).Value
+                                                        _Act.method = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
                                                     Case "parametres"
-                                                        Dim a() As Object = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j2).Value.Split("|")
-                                                        _Act.parametres = a
+                                                        Dim b As String = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                                        Dim a() As String = b.Split("|")
+                                                        Dim c As New ArrayList
+                                                        For cnt1 As Integer = 0 To a.Count - 1
+                                                            c.Add(a(cnt1))
+                                                        Next
+                                                        _Act.parametres = c
+                                                        b = Nothing
+                                                        a = Nothing
+                                                        c = Nothing
                                                 End Select
                                             Next
                                             x.ListActions.Add(_Act)
@@ -2058,7 +2065,7 @@ Namespace HoMIDom
                 '----- Maj des triggers type CRON ----- 
                 For i = 0 To _listTriggers.Count - 1
                     'on vérifie si la condition est un cron
-                    If STRGS.Left(_listTriggers.Item(i).Condition, 5) = "cron_" Then
+                    If _listTriggers.Item(i).type = Trigger.TypeTrigger.TIMER Then
                         _listTriggers.Item(i).maj_cron() 'on calcule la date de prochain execution
                     End If
                 Next
@@ -4167,6 +4174,7 @@ Namespace HoMIDom
                             Select Case listactions.Item(i).TypeAction
                                 Case Action.TypeAction.ActionDevice
                                     Dim o As New Action.ActionDevice
+                                    o.Timing = listactions.Item(i).Timing
                                     o.IdDevice = listactions.Item(i).IdDevice
                                     o.Method = listactions.Item(i).Action
                                     o.Parametres = listactions.Item(i).Parametres
@@ -4178,14 +4186,26 @@ Namespace HoMIDom
                     myID = x.ID
                     _ListMacros.Add(x)
                 Else
-                    'zone Existante
+                    'macro Existante
                     myID = macroId
                     For i As Integer = 0 To _ListMacros.Count - 1
                         If _ListMacros.Item(i).id = macroId Then
                             _ListMacros.Item(i).nom = nom
                             _ListMacros.Item(i).enable = enable
                             _ListMacros.Item(i).description = description
-                            _ListMacros.Item(i).listactions = listactions
+                            Dim tabl As New ArrayList
+                            For j As Integer = 0 To listactions.Count - 1
+                                Select Case listactions.Item(j).TypeAction
+                                    Case Action.TypeAction.ActionDevice
+                                        Dim o As New Action.ActionDevice
+                                        o.Timing = listactions.Item(j).Timing
+                                        o.IdDevice = listactions.Item(j).IdDevice
+                                        o.Method = listactions.Item(j).Action
+                                        o.Parametres = listactions.Item(j).Parametres
+                                        tabl.Add(o)
+                                End Select
+                            Next
+                            _ListMacros.Item(i).ListActions = tabl
                         End If
                     Next
                 End If
@@ -4202,7 +4222,7 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnMacroById(ByVal MacroId As String) As Macro Implements IHoMIDom.ReturnMacroById
-            Dim retour As Object = Nothing
+            Dim retour As Macro = Nothing
             Try
                 For i As Integer = 0 To _ListMacros.Count - 1
                     If _ListMacros.Item(i).ID = MacroId Then
