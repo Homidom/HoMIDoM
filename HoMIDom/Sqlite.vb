@@ -55,17 +55,25 @@ Namespace HoMIDom
         ''' Requete sans résultat
         ''' </summary>
         ''' <param name="commande">ex : DELETE FROM contact where Contact_id=10</param>
+        ''' <param name="params">Liste es paramètres utilisés dans la query sous forme @parameter0, @parameter1 etc</param>
         ''' <returns>String si OK, String "ERR:..." si erreur</returns>
         ''' <remarks></remarks>
-        Public Function nonquery(ByVal commande As String) As String
+        Public Function nonquery(ByVal commande As String, ByVal ParamArray params() As String)
             Dim SQLcommand As SQLiteCommand
             Try
                 'on vérifie si on est connecté à la BDD
                 If SQLconnect.State = ConnectionState.Open Then
                     'on vérifie si la commande n'est pas vide
-                    If commande IsNot Nothing And commande <> "" Then
+                    If Not String.IsNullOrEmpty(commande) Then
                         SQLcommand = SQLconnect.CreateCommand
                         SQLcommand.CommandText = commande
+
+                        If params IsNot Nothing Then
+                            For p = 0 To params.Length - 1
+                                SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
+                            Next
+                        End If
+
                         'lock pour etre sur de ne pas faire deux operations en meme temps
                         SyncLock lock
                             SQLcommand.ExecuteNonQuery()
@@ -90,7 +98,7 @@ Namespace HoMIDom
         ''' <param name="resultat">Arralist contenant la liste des résultats</param>
         ''' <returns>String si OK, String "ERR:..." si erreur</returns>
         ''' <remarks></remarks>
-        Public Function query(ByVal commande As String, ByRef resultat As DataTable) As String
+        Public Function query(ByVal commande As String, ByRef resultat As DataTable, ByVal ParamArray params() As String) As String
             Dim SQLcommand As SQLiteCommand
             Dim SQLreader As SQLiteDataReader
             Dim resultattemp As New DataTable
@@ -102,6 +110,12 @@ Namespace HoMIDom
                     If commande Is Nothing And commande <> "" Then
                         SQLcommand = SQLconnect.CreateCommand
                         SQLcommand.CommandText = commande
+
+                        If params IsNot Nothing Then
+                            For p = 0 To params.Length - 1
+                                SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
+                            Next
+                        End If
                         'lock pour etre sur de ne pas faire deux operations en meme temps
                         SyncLock lock
                             SQLreader = SQLcommand.ExecuteReader()
