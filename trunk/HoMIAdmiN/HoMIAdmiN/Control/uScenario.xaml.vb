@@ -43,16 +43,16 @@
             For i As Integer = 0 To value.Count - 1
                 Dim x As New uAction
                 x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
+                x.Span = Span
+                x.Zoom = Zoom
                 AddHandler x.DeleteAction, AddressOf DeleteAction
                 AddHandler x.ChangeAction, AddressOf ChangeAction
                 x.Width = StckPnlLib.ActualWidth
                 x.TypeAction = value.Item(i).typeaction
                 x.Timing = value.Item(i).timing
                 x.IDDevice = value.Item(i).iddevice
-                x.Action = value.Item(i).method
+                x.Action = value.Item(i).action
                 x.Parametres = value.Item(i).parametres
-                x.Span = Span
-                x.Zoom = Zoom
                 _ListAction.Add(x)
                 StackPanel1.Children.Add(x)
             Next

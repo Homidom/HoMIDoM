@@ -304,6 +304,7 @@ Imports System.Globalization
     ''' <remarks>pas utilisé</remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         'pas utilisé
+        If _Enable = False Then Exit Sub
     End Sub
 
     ''' <summary>Commander un device</summary>
@@ -313,6 +314,7 @@ Imports System.Globalization
     ''' <param name="Parametre2"></param>
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
+        If _Enable = False Then Exit Sub
         'command pas utiliser car String, on utilise donc Parametre1 pour transmettre les commandes style MODEB32
         ecrire(&HF0, Parametre1)
     End Sub

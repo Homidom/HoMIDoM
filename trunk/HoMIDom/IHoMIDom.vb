@@ -550,7 +550,7 @@ Namespace HoMIDom
         ''' <param name="MacroId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ReturnMacroById(ByVal MacroId As String) As Macro
+        <OperationContract()> Function ReturnMacroById(ByVal MacroId As String) As TemplateMacro
 
         ''' <summary>
         ''' Permet de créer ou modifier une macro

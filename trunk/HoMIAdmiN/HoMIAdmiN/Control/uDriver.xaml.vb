@@ -60,6 +60,7 @@ Partial Public Class uDriver
                     Label14.Visibility = Windows.Visibility.Visible
                     TxtParam.Visibility = Windows.Visibility.Visible
                     CbParam.Visibility = Windows.Visibility.Visible
+                    BtnOkParam.Visibility = Windows.Visibility.Visible
                     CbParam.Items.Clear()
                     For k As Integer = 0 To x.Parametres.Count - 1
                         CbParam.Items.Add(x.Parametres.Item(k).Nom)
@@ -70,6 +71,7 @@ Partial Public Class uDriver
                     Label14.Visibility = Windows.Visibility.Hidden
                     TxtParam.Visibility = Windows.Visibility.Hidden
                     CbParam.Visibility = Windows.Visibility.Hidden
+                    BtnOkParam.Visibility = Windows.Visibility.Hidden
                 End If
                 TxtNom.Text = x.Nom
                 TxtDescript.Text = x.Description

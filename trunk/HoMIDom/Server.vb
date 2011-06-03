@@ -121,8 +121,12 @@ Namespace HoMIDom
                                     'log de la nouvelle valeur
                                     Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
                                     'On historise la nouvellevaleur
+<<<<<<< .mine
+                                    retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('@parameter0','@parameter1','@parameter2','@parameter3')", Device.ID, [Property], Now.ToString(), valeur)
+=======
                                     'retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('" & Device.ID & "','" & [Property] & "','" & Now.ToString() & "','" & valeur & "')")
                                     retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
+>>>>>>> .r165
                                     If STRGS.Left(retour, 4) = "ERR:" Then
                                         Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
                                     End If
@@ -140,8 +144,12 @@ Namespace HoMIDom
                                     'log de la nouvelle valeur
                                     Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
                                     'Ajout dans la BDD
+<<<<<<< .mine
+                                    retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('@parameter0','@parameter1','@parameter2','@parameter3')", Device.ID, [Property], Now.ToString(), valeur)
+=======
                                     'retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('" & Device.ID & "','" & [Property] & "','" & Now.ToString() & "','" & valeur & "')")
                                     retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
+>>>>>>> .r165
                                     If STRGS.Left(retour, 4) = "ERR:" Then
                                         Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
                                     End If
@@ -155,8 +163,12 @@ Namespace HoMIDom
                         'C'est une autre propriété, on logue directement et stocke la modif
                         Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (" & [Property] & ")")
                         'Ajout dans la BDD
+<<<<<<< .mine
+                        retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('@parameter0','@parameter1','@parameter2','@parameter3')", Device.ID, [Property], Now.ToString(), valeur)
+=======
                         'retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('" & Device.ID & "','" & [Property] & "','" & Now.ToString() & "','" & valeur & "')")
                         retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
+>>>>>>> .r165
                         If STRGS.Left(retour, 4) = "ERR:" Then
                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
                         End If
@@ -1731,7 +1743,6 @@ Namespace HoMIDom
                                 Dim pt As New Driver(Me, i1.ID)
                                 _ListDrivers.Add(i1)
                                 _ListImgDrivers.Add(pt)
-                                'i1.Start()
                                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " chargé")
                             End If
                         End If
@@ -2037,7 +2048,7 @@ Namespace HoMIDom
 
                 '----- Démarre les connexions Sqlite ----- 
                 retour = sqlite_homidom.connect("homidom")
-                If STRGS.Left(retour, 4) = "ERR:" Then
+                If retour.StartsWith("ERR:") Then
                     Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour)
                     'on arrête tout
                 Else
@@ -2045,7 +2056,7 @@ Namespace HoMIDom
                 End If
 
                 retour = sqlite_medias.connect("medias")
-                If STRGS.Left(retour, 4) = "ERR:" Then
+                If retour.StartsWith("ERR:") Then
                     Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Medias : " & retour)
                     'on arrête tout
                 Else
@@ -4142,6 +4153,12 @@ Namespace HoMIDom
                         .ID = _ListMacros.Item(i).id
                         .Description = _ListMacros.Item(i).description
                         .Enable = _ListMacros.Item(i).enable
+                        For j = 0 To _ListMacros.Item(i).ListActions.count - 1
+                            Select Case _ListMacros.Item(i).ListActions.item(j).TypeAction
+                                Case Action.TypeAction.ActionDevice
+
+                            End Select
+                        Next
                     End With
                     _list.Add(x)
                 Next
@@ -4224,12 +4241,27 @@ Namespace HoMIDom
         ''' <param name="MacroId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function ReturnMacroById(ByVal MacroId As String) As Macro Implements IHoMIDom.ReturnMacroById
-            Dim retour As Macro = Nothing
+        Public Function ReturnMacroById(ByVal MacroId As String) As TemplateMacro Implements IHoMIDom.ReturnMacroById
+            Dim retour As New TemplateMacro
             Try
                 For i As Integer = 0 To _ListMacros.Count - 1
                     If _ListMacros.Item(i).ID = MacroId Then
-                        retour = _ListMacros.Item(i)
+                        retour.ID = _ListMacros.Item(i).id
+                        retour.Nom = _ListMacros.Item(i).nom
+                        retour.Description = _ListMacros.Item(i).description
+                        retour.Enable = _ListMacros.Item(i).enable
+                        For j As Integer = 0 To _ListMacros.Item(i).listactions.count - 1
+                            Dim x As New TemplateAction
+                            Select Case _ListMacros.Item(i).listactions.item(j).typeaction
+                                Case Action.TypeAction.ActionDevice
+                                    x.TypeAction = _ListMacros.Item(i).listactions.item(j).typeaction
+                                    x.Timing = _ListMacros.Item(i).listactions.item(j).timing
+                                    x.IdDevice = _ListMacros.Item(i).listactions.item(j).iddevice
+                                    x.Action = _ListMacros.Item(i).listactions.item(j).method
+                                    x.Parametres = _ListMacros.Item(i).listactions.item(j).parametres
+                            End Select
+                            retour.ListActions.Add(x)
+                        Next
                         Exit For
                     End If
                 Next

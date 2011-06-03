@@ -210,7 +210,7 @@ Imports VB = Microsoft.VisualBasic
     ''' <remarks>pas utilisé</remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
-
+            If _Enable = False Then Exit Sub
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Virtuel Read", ex.Message)
         End Try
@@ -224,7 +224,7 @@ Imports VB = Microsoft.VisualBasic
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
-
+            If _Enable = False Then Exit Sub
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Virtuel Write", ex.Message)
         End Try

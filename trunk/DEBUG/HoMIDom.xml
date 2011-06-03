@@ -7,7 +7,7 @@ HoMIDom
 </assembly>
 <members>
 <member name="M:HoMIDom.HoMIDom.Sqlite.connect(System.String)">
-	<summary>
+	<summary>          
  Connection à une BDD Sqlite
  </summary>
 	<param name="dbname">Nom de la base de donnée : homidom / media</param>
@@ -15,30 +15,31 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Sqlite.disconnect">
 	<summary>
- DeConnection à une BDD Sqlite
+ DeConnection à une BDD Sqlite 
  </summary>
 	<returns>String si OK, String "ERR:..." si erreur</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.nonquery(System.String)">
-	<summary>
- Requete sans résultat
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.nonquery(System.String,System.String[])">
+	<summary>          
+ Requete sans résultat          
  </summary>
 	<param name="commande">ex : DELETE FROM contact where Contact_id=10</param>
+	<param name="params">Liste es paramètres utilisés dans la query sous forme @parameter0, @parameter1 etc</param>
 	<returns>String si OK, String "ERR:..." si erreur</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.query(System.String,System.Data.DataTable@)">
-	<summary>
- Requete avec résultat
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.query(System.String,System.Data.DataTable@,System.String[])">
+	<summary>          
+ Requete avec résultat          
  </summary>
 	<param name="commande">ex : SELECT * FROM contact</param>
 	<param name="resultat">Arralist contenant la liste des résultats</param>
 	<returns>String si OK, String "ERR:..." si erreur</returns>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Sqlite">
-	<summary>
- Classe de gestion des base de données sqlite
- </summary>
-	<remarks></remarks>
+	<summary>      
+ Classe de gestion des base de données sqlite     
+ </summary>   
+    ''' <remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Api.GenerateGUID">
 	<summary>
  Génère un ID unique
@@ -200,6 +201,41 @@ HoMIDom
 </member><member name="M:HoMIDom.graphes.#ctor(System.String)">
 	<summary>initialisation de l'objet Graphes</summary>
 	<param name="chemin">Chemin ou enregistrer les graphes</param>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateMacro.ID">
+	<summary>
+ ID de la macro
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateMacro.Nom">
+	<summary>
+ Nom de la macro
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateMacro.Description">
+	<summary>
+ Decription de la macro
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateMacro.Enable">
+	<summary>
+ Active la macro
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateMacro.ListActions">
+	<summary>
+ Liste des actions de la macro macro est False
+ </summary>
+	<value></value>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.TemplateDevice">
 	<summary>
