@@ -233,7 +233,7 @@ Imports UsbUirt
     ''' <remarks>pas utilisé</remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
-
+            If _Enable = False Then Exit Sub
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUirt Read", ex.Message)
         End Try
@@ -247,6 +247,7 @@ Imports UsbUirt
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
+            If _Enable = False Then Exit Sub
             If Objet.type = "MULTIMEDIA" Then
                 If Commande = "SendCodeIR" Then
                     SendCodeIR(Parametre1, Parametre2)

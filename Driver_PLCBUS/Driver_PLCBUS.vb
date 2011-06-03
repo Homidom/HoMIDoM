@@ -256,6 +256,7 @@ Imports System.IO.Ports
     ''' <remarks></remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
+            If _Enable = False Then Exit Sub
             If (Objet.adresse1.ToString.Length > 1) Then
                 'c'est une adresse std on fait un status request
                 ecrire(Objet.adresse1, "STATUS_REQUEST")
@@ -283,6 +284,7 @@ Imports System.IO.Ports
         'Parametre2 = data2
         Dim sendtwice As Boolean = False
         Try
+            If _Enable = False Then Exit Sub
             If Parametre1 Is Nothing Then Parametre1 = 0
             If Parametre2 Is Nothing Then Parametre2 = 0
             If Objet.type = "APPAREIL" Or Objet.type = "LAMPE" Then sendtwice = True

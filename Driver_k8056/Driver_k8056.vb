@@ -166,7 +166,7 @@ Imports System.IO
     End Property
 
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
-
+        If _Enable = False Then Exit Sub
     End Sub
 
     Public Property Refresh() As Integer Implements HoMIDom.HoMIDom.IDriver.Refresh
@@ -233,6 +233,7 @@ Imports System.IO
 
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
+            If _Enable = False Then Exit Sub
             If Objet.type = "APPAREIL" Then
                 Dim tabl() As String = Objet.adresse1.split("x")
                 Select Case UCase(Commande)

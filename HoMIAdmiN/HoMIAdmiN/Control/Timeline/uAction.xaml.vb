@@ -52,7 +52,7 @@
         End Get
         Set(ByVal value As DateTime)
             _Timing = value
-            Dim j As Double = (_Timing.Hour * 60 * 60) + (_Timing.Minute * 60) + _Timing.Second
+            Dim j As Double = (_Timing.Hour * 3600) + (_Timing.Minute * 60) + _Timing.Second
             j = (Span * j) / zoom
             Fond.SetLeft(Rectangle1, j)
             Fond.SetLeft(ImgDelete, j + 160)
