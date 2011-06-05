@@ -58,18 +58,6 @@ Namespace HoMIDom
             End Try
         End Function
 
-<<<<<<< .mine
-        ''' <summary>          
-        ''' Requete sans résultat          
-        ''' </summary>          
-        ''' <param name="commande">ex : DELETE FROM contact where Contact_id=10</param>          
-        ''' <param name="params">Liste es paramètres utilisés dans la query sous forme @parameter0, @parameter1 etc</param>          
-        ''' <returns>String si OK, String "ERR:..." si erreur</returns>          
-        ''' <remarks></remarks>          
-        ''' 
-        Public Function nonquery(ByVal commande As String, ByVal ParamArray params() As String)
-
-=======
         ''' <summary>
         ''' Requete sans résultat
         ''' </summary>
@@ -78,38 +66,21 @@ Namespace HoMIDom
         ''' <returns>String si OK, String "ERR:..." si erreur</returns>
         ''' <remarks></remarks>
         Public Function nonquery(ByVal commande As String, ByVal ParamArray params() As String)
->>>>>>> .r165
             Dim SQLcommand As SQLiteCommand
 
             Try
                 'on vérifie si on est connecté à la BDD       
                 If SQLconnect.State = ConnectionState.Open Then
-<<<<<<< .mine
-                    'on vérifie si la commande n'est pas vide        
-                    If Not String.IsNullOrEmpty(commande) Then
-=======
                     'on vérifie si la commande n'est pas vide
                     If Not String.IsNullOrEmpty(commande) Then
->>>>>>> .r165
                         SQLcommand = SQLconnect.CreateCommand
                         SQLcommand.CommandText = commande
-<<<<<<< .mine
                         If params IsNot Nothing Then
                             For p = 0 To params.Length - 1
                                 SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
                             Next
                         End If
                         'lock pour etre sur de ne pas faire deux operations en meme temps      
-=======
-
-                        If params IsNot Nothing Then
-                            For p = 0 To params.Length - 1
-                                SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
-                            Next
-                        End If
-
-                        'lock pour etre sur de ne pas faire deux operations en meme temps
->>>>>>> .r165
                         SyncLock lock
                             SQLcommand.ExecuteNonQuery()
                         End SyncLock
@@ -126,7 +97,6 @@ Namespace HoMIDom
             End Try
         End Function
 
-<<<<<<< .mine
         ''' <summary>          
         ''' Requete avec résultat          
         ''' </summary>          
@@ -136,16 +106,6 @@ Namespace HoMIDom
         ''' <remarks></remarks>          
         ''' 
         Public Function query(ByVal commande As String, ByRef resultat As DataTable, ByVal ParamArray params() As String) As String
-=======
-        ''' <summary>
-        ''' Requete avec résultat
-        ''' </summary>
-        ''' <param name="commande">ex : SELECT * FROM contact</param>
-        ''' <param name="resultat">Arralist contenant la liste des résultats</param>
-        ''' <returns>String si OK, String "ERR:..." si erreur</returns>
-        ''' <remarks></remarks>
-        Public Function query(ByVal commande As String, ByRef resultat As DataTable, ByVal ParamArray params() As String) As String
->>>>>>> .r165
             Dim SQLcommand As SQLiteCommand
             Dim SQLreader As SQLiteDataReader
             Dim resultattemp As New DataTable
@@ -158,14 +118,6 @@ Namespace HoMIDom
                     If commande Is Nothing And commande <> "" Then
                         SQLcommand = SQLconnect.CreateCommand
                         SQLcommand.CommandText = commande
-<<<<<<< .mine
-                        If params IsNot Nothing Then
-                            For p = 0 To params.Length - 1
-                                SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
-                            Next
-                        End If
-                        'lock pour etre sur de ne pas faire deux operations en meme temps      
-=======
 
                         If params IsNot Nothing Then
                             For p = 0 To params.Length - 1
@@ -173,7 +125,6 @@ Namespace HoMIDom
                             Next
                         End If
                         'lock pour etre sur de ne pas faire deux operations en meme temps
->>>>>>> .r165
                         SyncLock lock
                             SQLreader = SQLcommand.ExecuteReader()
                         End SyncLock

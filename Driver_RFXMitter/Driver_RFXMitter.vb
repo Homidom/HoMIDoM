@@ -389,16 +389,14 @@ Imports System.Globalization
     ''' <param name="Parametre2"></param>
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-<<<<<<< .mine
         If _Enable = False Then Exit Sub
-        ecrire(&HF0, Parametre1)
-=======
+        'suivant le protocole, on lance la bonne fonction
+
+
+
+
 
         'ecrire(&HF0, Parametre1)
-
-
-
->>>>>>> .r165
     End Sub
 
     ''' <summary>Fonction lancée lors de la suppression d'un device</summary>
@@ -615,7 +613,7 @@ Imports System.Globalization
     ''' <summary>ecrire sur le port</summary>
     ''' <param name="commande">premier paquet à envoyer</param>
     ''' <remarks></remarks>
-    Public Function ecrire(ByVal commande() As Byte) As String
+    Private Function ecrire(ByVal commande() As Byte) As String
         Dim message As String = ""
         Try
             If tcp Then
@@ -793,60 +791,17 @@ Imports System.Globalization
         End Try
     End Sub
 
-    ''' <summary>Rassemble un message complet pour ensuite l'envoyer à displaymess</summary>
+    ''' <summary>Traite chaque byte reçu</summary>
     ''' <param name="temp">Byte recu</param>
     ''' <remarks></remarks>
-    Public Sub ProcessReceivedChar(ByVal temp As Byte)
+    Private Sub ProcessReceivedChar(ByVal temp As Byte)
         Try
-            'Dim temp As Byte
-
-            maxticks = 0
-            If firstbyte Then
-                firstbyte = False
-                bytecnt = 0
+            If temp = Protocol Then
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter ProcessReceivedChar", "ACK => " & VB.Right("0" & Hex(temp), 2))
             End If
-            'WriteLog(VB.Right("0" & Hex(temp), 2))
-            If Not waitforack Then
-                If vresponse = True Then  'display version?
-                    recbuf(bytecnt) = temp
-                    If (bytecnt = 3) Then mess = True
-                Else
-                    If bytecnt = 15 Then
-                        recbuf(bytecnt - 1) = temp
-                        mess = True
-                    ElseIf bytecnt = 0 Then
-                        recbits = temp And &H7F
-                        If (temp And &H80) = 0 Then slave = False Else slave = True
-                        If (recbits And &H7) = 0 Then recbytes = ((recbits And &H7F) >> 3) Else recbytes = ((recbits And &H7F) >> 3) + 1
-                    ElseIf bytecnt = recbytes Then
-                        recbuf(bytecnt - 1) = temp
-                        bytecnt -= 1
-                        mess = True
-                    Else
-                        recbuf(bytecnt - 1) = temp
-                    End If
-                End If
-                bytecnt += 1
-            Else
-                mess = True
-            End If
-            If mess Then
-                'gestion pour ne pas gérer deux fois le même paquet car la norme veut que les paquets soient envoyé deux fois de suite
-                Dim xxx As String = ""
-                For i As Integer = 0 To bytecnt
-                    'If Not domos_svc.Serv_DOMOS Then Exit Sub 'si on quitte Domos on quitte cette fonction
-                    xxx = xxx & (VB.Right("0" & Hex(recbuf(i)), 2))
-                Next
-                If recbuf_last <> xxx Or nblast >= 2 Then 'nouveau paquet ou c'est la troisieme fois qu'on le recoit 
-                    display_mess()
-                    recbuf_last = xxx
-                    nblast = 1
-                Else 'c'est la deuxieme paquet indentique qu'on recoit, on l'ignore
-                    nblast = 2
-                    firstbyte = True
-                    mess = False
-                End If
-            End If
+            mess = True
+            ack = True
+            mess = False
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ProcessReceivedChar", ex.Message)
         End Try
@@ -854,7 +809,7 @@ Imports System.Globalization
 
     ''' <summary>Decode le message pour l'envoyer aux bonnes fonctions de traitement</summary>
     ''' <remarks></remarks>
-    Public Sub display_mess()
+    Private Sub display_mess()
         Try
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte cette boucle
 
@@ -863,6 +818,144 @@ Imports System.Globalization
         End Try
     End Sub
 #End Region
+
+#Region "Fonctions ecriture protocoles"
+
+    'Home Easy : Chacon
+    'adresse du type 00-00-00-00-0 ou 0 (pour les Heaters)
+    'commande ON, OFF, DIM, GROUP_ON, GROUP_OFF, GROUP_DIM, HEATER_ON, HEATER_OFF
+    Private Sub protocol_chacon(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean, ByVal dimlevel As Integer)
+        Dim kar(5) As Byte
+        Dim adressetab As String() = adresse.Split("-")
+        If europe Then kar(0) = 34 Else kar(0) = 33
+        kar(1) = CByte(adressetab(0))
+        kar(2) = CByte(adressetab(1))
+        kar(3) = CByte(adressetab(2))
+        kar(4) = CByte(adressetab(3))
+        Select Case adressetab(3)
+            Case 0
+                kar(4) = 0
+            Case 1
+                kar(4) = &H40
+            Case 2
+                kar(4) = &H80
+            Case 3
+                kar(4) = &HC0
+        End Select
+        kar(4) = kar(4) Or CByte(adressetab(4))
+
+        Select Case commande
+            Case "ON"
+                kar(4) = kar(4) Or &H10
+                kar(5) = 0
+            Case "OFF"
+                kar(5) = 0
+            Case "GROUP_ON"
+                kar(4) = kar(4) Or &H30
+                kar(5) = 0
+            Case "GROUP_OFF"
+                kar(4) = kar(4) Or &H20
+                kar(5) = 0
+            Case "DIM"
+                kar(5) = CByte(dimlevel) << 4
+            Case "GROUP_DIM"
+                kar(4) = kar(4) Or &H20
+                kar(5) = CByte(dimlevel) << 4
+            Case "HEATER_ON"
+                Dim kar2(2) As Byte
+                kar2(0) = 12
+                kar2(1) = CByte(adresse) << 3
+                kar2(1) = kar(1) Or &H4
+                kar2(2) = &HD0
+                kar = kar2
+            Case "HEATER_OFF"
+                Dim kar2(2) As Byte
+                kar2(0) = 12
+                kar2(1) = CByte(adresse) << 3
+                kar2(1) = kar(1) Or &H4
+                kar2(2) = &HB0
+                kar = kar2
+        End Select
+        ecrirecommande(kar)
+
+    End Sub
+
+    'X10
+    'adresse du type A1 
+    'commande ON, OFF, BRIGHT, DIM, ALL_LIGHT_ON, ALL_LIGHT_OFF
+    Private Sub protocol_x10(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean, ByVal dimlevel As Integer)
+        Dim kar(4) As Byte
+        Dim temp As Byte
+
+        'getunit from adresse
+        Select Case adresse.Substring(0, 1)
+            Case "A" : temp = &H60
+            Case "B" : temp = &H70
+            Case "C" : temp = &H40
+            Case "D" : temp = &H50
+            Case "E" : temp = &H80
+            Case "F" : temp = &H90
+            Case "G" : temp = &HA0
+            Case "H" : temp = &HB0
+            Case "I" : temp = &HE0
+            Case "J" : temp = &HF0
+            Case "K" : temp = &HC0
+            Case "L" : temp = &HD0
+            Case "M" : temp = &H0
+            Case "N" : temp = &H10
+            Case "O" : temp = &H20
+            Case "P" : temp = &H30
+            Case Else : temp = &H60 'unexpected character force A
+        End Select
+        currentunit = temp
+        If Int(adresse.Substring(1, adresse.Length - 1)) > 8 Then currentunit = currentunit Or &H4
+
+        'get Device from adresse
+        Dim dev As Integer
+        dev = Int(adresse.Substring(1, adresse.Length - 1))
+        If dev > 8 Then dev = dev - 8
+        Select Case dev
+            Case 1 : temp = 0
+            Case 2 : temp = &H10
+            Case 3 : temp = &H8
+            Case 4 : temp = &H18
+            Case 5 : temp = &H40
+            Case 6 : temp = &H50
+            Case 7 : temp = &H48
+            Case 8 : temp = &H58
+        End Select
+        currentdevice = temp
+
+        Select Case commande
+            Case "ON"
+                kar(1) = currentunit
+                kar(3) = currentdevice
+            Case "OFF"
+                kar(1) = currentunit
+                kar(3) = currentdevice Or &H20
+            Case "BRIGHT"
+                kar(1) = currentunit And &HF0
+                kar(3) = &H88
+            Case "DIM"
+                kar(1) = currentunit And &HF0
+                kar(3) = &H98
+            Case "ALL_LIGHT_ON"
+                kar(1) = currentunit And &HF0
+                kar(3) = &H90
+            Case "ALL_LIGHT_OFF"
+                kar(1) = currentunit And &HF0
+                kar(3) = &H80
+        End Select
+        kar(0) = &H20
+        kar(2) = &HFF - kar(1)
+        kar(4) = &HFF - kar(3)
+
+        ecrirecommande(kar)
+    End Sub
+
+
+#End Region
+
 
 #Region "Write"
 

@@ -121,12 +121,8 @@ Namespace HoMIDom
                                     'log de la nouvelle valeur
                                     Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
                                     'On historise la nouvellevaleur
-<<<<<<< .mine
-                                    retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('@parameter0','@parameter1','@parameter2','@parameter3')", Device.ID, [Property], Now.ToString(), valeur)
-=======
                                     'retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('" & Device.ID & "','" & [Property] & "','" & Now.ToString() & "','" & valeur & "')")
                                     retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
->>>>>>> .r165
                                     If STRGS.Left(retour, 4) = "ERR:" Then
                                         Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
                                     End If
@@ -144,12 +140,8 @@ Namespace HoMIDom
                                     'log de la nouvelle valeur
                                     Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
                                     'Ajout dans la BDD
-<<<<<<< .mine
-                                    retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('@parameter0','@parameter1','@parameter2','@parameter3')", Device.ID, [Property], Now.ToString(), valeur)
-=======
                                     'retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('" & Device.ID & "','" & [Property] & "','" & Now.ToString() & "','" & valeur & "')")
                                     retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
->>>>>>> .r165
                                     If STRGS.Left(retour, 4) = "ERR:" Then
                                         Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
                                     End If
@@ -163,12 +155,8 @@ Namespace HoMIDom
                         'C'est une autre propriété, on logue directement et stocke la modif
                         Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (" & [Property] & ")")
                         'Ajout dans la BDD
-<<<<<<< .mine
-                        retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('@parameter0','@parameter1','@parameter2','@parameter3')", Device.ID, [Property], Now.ToString(), valeur)
-=======
                         'retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('" & Device.ID & "','" & [Property] & "','" & Now.ToString() & "','" & valeur & "')")
                         retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
->>>>>>> .r165
                         If STRGS.Left(retour, 4) = "ERR:" Then
                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
                         End If
