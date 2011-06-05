@@ -953,6 +953,90 @@ Imports System.Globalization
         ecrirecommande(kar)
     End Sub
 
+    'ARC
+    'adresse du type A1 
+    'commande ON, OFF, GROUP_ON, GROUP_OFF, CHIME
+    Private Sub protocol_arc(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean)
+        Dim kar(3) As Byte
+        Dim ch As Integer
+
+        kar(0) = 24
+        Select Case commande
+            Case "ON"
+                kar(1) = &H54
+                ch = Int(adresse.Substring(1, adresse.Length - 1)) - 1
+                kar(2) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
+                ch = Asc(adresse.Substring(0, 1)) - &H41
+                kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
+                ecrirecommande(kar)
+                kar(1) = &H55
+                ch = Int(adresse.Substring(1, adresse.Length - 1)) - 1
+                kar(2) = &H80 Or ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or &H7
+                ch = Asc(adresse.Substring(0, 1)) - &H41
+                kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
+                ecrirecommande(kar)
+            Case "OFF"
+                kar(1) = &H14
+                ch = Int(adresse.Substring(1, adresse.Length - 1)) - 1
+                kar(2) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
+                ch = Asc(adresse.Substring(0, 1)) - &H41
+                kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
+                ecrirecommande(kar)
+                kar(1) = &H55
+                ch = Int(adresse.Substring(1, adresse.Length - 1)) - 1
+                kar(2) = &H80 Or ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or &H7
+                ch = Asc(adresse.Substring(0, 1)) - &H41
+                kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
+                ecrirecommande(kar)
+            Case "GROUP_ON"
+                kar(1) = &H54
+                kar(2) = &HFF
+                ch = Asc(adresse.Substring(0, 1)) - &H41
+                kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
+                ecrirecommande(kar)
+                kar(1) = &H55
+                kar(2) = &HFF
+                ch = Asc(adresse.Substring(0, 1)) - &H41
+                kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
+                ecrirecommande(kar)
+            Case "GROUP_OFF"
+                kar(1) = &H14
+                kar(2) = &HFF
+                ch = Asc(adresse.Substring(0, 1)) - &H41
+                kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
+                ecrirecommande(kar)
+                kar(1) = &H55
+                kar(2) = &HFF
+                ch = Asc(adresse.Substring(0, 1)) - &H41
+                kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
+                ecrirecommande(kar)
+            Case "CHIME"
+                kar(1) = &H55
+                kar(2) = &H15
+                ch = Asc(adresse.Substring(0, 1)) - &H41
+                kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
+                ecrirecommande(kar)
+                ecrirecommande(kar)
+        End Select
+    End Sub
+
+    'Waveman
+    'adresse du type A1 
+    'commande ON, OFF
+    Private Sub protocol_waveman(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean)
+        Dim kar(3) As Byte
+        Dim xlate As Byte() = {&H0, &H1, &H4, &H5, &H10, &H11, &H14, &H15, &H40, &H41, &H44, &H45, &H50, &H51, &H54, &H55}
+        kar(0) = 24
+
+        Select Case commande
+            Case "ON" : kar(1) = &H54
+            Case "OFF" : kar(1) = &H0
+        End Select
+        kar(2) = xlate(Int(adresse.Substring(1, adresse.Length - 1)) - 1)
+        kar(3) = xlate(Asc(adresse.Substring(0, 1)) - &H41)
+        ecrirecommande(kar)
+    End Sub
+
 
 #End Region
 
