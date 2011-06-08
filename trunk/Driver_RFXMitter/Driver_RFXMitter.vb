@@ -389,14 +389,30 @@ Imports System.Globalization
     ''' <param name="Parametre2"></param>
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-        If _Enable = False Then Exit Sub
-        'suivant le protocole, on lance la bonne fonction
+        Try
+            If _Enable = False Then Exit Sub
+            'suivant le protocole, on lance la bonne fonction
+
+            'CHACON / X10 / ARC / WAVEMAN
+            Select Case Objet.Modele.ToString.ToUpper
+                Case "CHACON"
+
+                Case "X10"
+
+                Case "ARC"
+
+                Case "WAVEMAN"
+
+                Case Else
+
+            End Select
 
 
 
-
-
-        'ecrire(&HF0, Parametre1)
+            'ecrire(&HF0, Parametre1)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter WRITE", ex.Message)
+        End Try
     End Sub
 
     ''' <summary>Fonction lancée lors de la suppression d'un device</summary>
@@ -825,216 +841,231 @@ Imports System.Globalization
     'adresse du type 00-00-00-00-0 ou 0 (pour les Heaters)
     'commande ON, OFF, DIM, GROUP_ON, GROUP_OFF, GROUP_DIM, HEATER_ON, HEATER_OFF
     Private Sub protocol_chacon(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean, ByVal dimlevel As Integer)
-        Dim kar(5) As Byte
-        Dim adressetab As String() = adresse.Split("-")
-        If europe Then kar(0) = 34 Else kar(0) = 33
-        kar(1) = CByte(adressetab(0))
-        kar(2) = CByte(adressetab(1))
-        kar(3) = CByte(adressetab(2))
-        kar(4) = CByte(adressetab(3))
-        Select Case adressetab(3)
-            Case 0
-                kar(4) = 0
-            Case 1
-                kar(4) = &H40
-            Case 2
-                kar(4) = &H80
-            Case 3
-                kar(4) = &HC0
-        End Select
-        kar(4) = kar(4) Or CByte(adressetab(4))
+        Try
+            Dim kar(5) As Byte
+            Dim adressetab As String() = adresse.Split("-")
+            If europe Then kar(0) = 34 Else kar(0) = 33
+            kar(1) = CByte(adressetab(0))
+            kar(2) = CByte(adressetab(1))
+            kar(3) = CByte(adressetab(2))
+            kar(4) = CByte(adressetab(3))
+            Select Case adressetab(3)
+                Case 0
+                    kar(4) = 0
+                Case 1
+                    kar(4) = &H40
+                Case 2
+                    kar(4) = &H80
+                Case 3
+                    kar(4) = &HC0
+            End Select
+            kar(4) = kar(4) Or CByte(adressetab(4))
 
-        Select Case commande
-            Case "ON"
-                kar(4) = kar(4) Or &H10
-                kar(5) = 0
-            Case "OFF"
-                kar(5) = 0
-            Case "GROUP_ON"
-                kar(4) = kar(4) Or &H30
-                kar(5) = 0
-            Case "GROUP_OFF"
-                kar(4) = kar(4) Or &H20
-                kar(5) = 0
-            Case "DIM"
-                kar(5) = CByte(dimlevel) << 4
-            Case "GROUP_DIM"
-                kar(4) = kar(4) Or &H20
-                kar(5) = CByte(dimlevel) << 4
-            Case "HEATER_ON"
-                Dim kar2(2) As Byte
-                kar2(0) = 12
-                kar2(1) = CByte(adresse) << 3
-                kar2(1) = kar(1) Or &H4
-                kar2(2) = &HD0
-                kar = kar2
-            Case "HEATER_OFF"
-                Dim kar2(2) As Byte
-                kar2(0) = 12
-                kar2(1) = CByte(adresse) << 3
-                kar2(1) = kar(1) Or &H4
-                kar2(2) = &HB0
-                kar = kar2
-        End Select
-        ecrirecommande(kar)
-
+            Select Case commande
+                Case "ON"
+                    kar(4) = kar(4) Or &H10
+                    kar(5) = 0
+                Case "OFF"
+                    kar(5) = 0
+                Case "GROUP_ON"
+                    kar(4) = kar(4) Or &H30
+                    kar(5) = 0
+                Case "GROUP_OFF"
+                    kar(4) = kar(4) Or &H20
+                    kar(5) = 0
+                Case "DIM"
+                    kar(5) = CByte(dimlevel) << 4
+                Case "GROUP_DIM"
+                    kar(4) = kar(4) Or &H20
+                    kar(5) = CByte(dimlevel) << 4
+                Case "HEATER_ON"
+                    Dim kar2(2) As Byte
+                    kar2(0) = 12
+                    kar2(1) = CByte(adresse) << 3
+                    kar2(1) = kar(1) Or &H4
+                    kar2(2) = &HD0
+                    kar = kar2
+                Case "HEATER_OFF"
+                    Dim kar2(2) As Byte
+                    kar2(0) = 12
+                    kar2(1) = CByte(adresse) << 3
+                    kar2(1) = kar(1) Or &H4
+                    kar2(2) = &HB0
+                    kar = kar2
+            End Select
+            ecrirecommande(kar)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ECRIRE CHACON", ex.Message)
+        End Try
     End Sub
 
     'X10
     'adresse du type A1 
     'commande ON, OFF, BRIGHT, DIM, ALL_LIGHT_ON, ALL_LIGHT_OFF
     Private Sub protocol_x10(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean, ByVal dimlevel As Integer)
-        Dim kar(4) As Byte
-        Dim temp As Byte
+        Try
+            Dim kar(4) As Byte
+            Dim temp As Byte
 
-        'getunit from adresse
-        Select Case adresse.Substring(0, 1)
-            Case "A" : temp = &H60
-            Case "B" : temp = &H70
-            Case "C" : temp = &H40
-            Case "D" : temp = &H50
-            Case "E" : temp = &H80
-            Case "F" : temp = &H90
-            Case "G" : temp = &HA0
-            Case "H" : temp = &HB0
-            Case "I" : temp = &HE0
-            Case "J" : temp = &HF0
-            Case "K" : temp = &HC0
-            Case "L" : temp = &HD0
-            Case "M" : temp = &H0
-            Case "N" : temp = &H10
-            Case "O" : temp = &H20
-            Case "P" : temp = &H30
-            Case Else : temp = &H60 'unexpected character force A
-        End Select
-        currentunit = temp
-        If Int(adresse.Substring(1, adresse.Length - 1)) > 8 Then currentunit = currentunit Or &H4
+            'getunit from adresse
+            Select Case adresse.Substring(0, 1)
+                Case "A" : temp = &H60
+                Case "B" : temp = &H70
+                Case "C" : temp = &H40
+                Case "D" : temp = &H50
+                Case "E" : temp = &H80
+                Case "F" : temp = &H90
+                Case "G" : temp = &HA0
+                Case "H" : temp = &HB0
+                Case "I" : temp = &HE0
+                Case "J" : temp = &HF0
+                Case "K" : temp = &HC0
+                Case "L" : temp = &HD0
+                Case "M" : temp = &H0
+                Case "N" : temp = &H10
+                Case "O" : temp = &H20
+                Case "P" : temp = &H30
+                Case Else : temp = &H60 'unexpected character force A
+            End Select
+            currentunit = temp
+            If Int(adresse.Substring(1, adresse.Length - 1)) > 8 Then currentunit = currentunit Or &H4
 
-        'get Device from adresse
-        Dim dev As Integer
-        dev = Int(adresse.Substring(1, adresse.Length - 1))
-        If dev > 8 Then dev = dev - 8
-        Select Case dev
-            Case 1 : temp = 0
-            Case 2 : temp = &H10
-            Case 3 : temp = &H8
-            Case 4 : temp = &H18
-            Case 5 : temp = &H40
-            Case 6 : temp = &H50
-            Case 7 : temp = &H48
-            Case 8 : temp = &H58
-        End Select
-        currentdevice = temp
+            'get Device from adresse
+            Dim dev As Integer
+            dev = Int(adresse.Substring(1, adresse.Length - 1))
+            If dev > 8 Then dev = dev - 8
+            Select Case dev
+                Case 1 : temp = 0
+                Case 2 : temp = &H10
+                Case 3 : temp = &H8
+                Case 4 : temp = &H18
+                Case 5 : temp = &H40
+                Case 6 : temp = &H50
+                Case 7 : temp = &H48
+                Case 8 : temp = &H58
+            End Select
+            currentdevice = temp
 
-        Select Case commande
-            Case "ON"
-                kar(1) = currentunit
-                kar(3) = currentdevice
-            Case "OFF"
-                kar(1) = currentunit
-                kar(3) = currentdevice Or &H20
-            Case "BRIGHT"
-                kar(1) = currentunit And &HF0
-                kar(3) = &H88
-            Case "DIM"
-                kar(1) = currentunit And &HF0
-                kar(3) = &H98
-            Case "ALL_LIGHT_ON"
-                kar(1) = currentunit And &HF0
-                kar(3) = &H90
-            Case "ALL_LIGHT_OFF"
-                kar(1) = currentunit And &HF0
-                kar(3) = &H80
-        End Select
-        kar(0) = &H20
-        kar(2) = &HFF - kar(1)
-        kar(4) = &HFF - kar(3)
+            Select Case commande
+                Case "ON"
+                    kar(1) = currentunit
+                    kar(3) = currentdevice
+                Case "OFF"
+                    kar(1) = currentunit
+                    kar(3) = currentdevice Or &H20
+                Case "BRIGHT"
+                    kar(1) = currentunit And &HF0
+                    kar(3) = &H88
+                Case "DIM"
+                    kar(1) = currentunit And &HF0
+                    kar(3) = &H98
+                Case "ALL_LIGHT_ON"
+                    kar(1) = currentunit And &HF0
+                    kar(3) = &H90
+                Case "ALL_LIGHT_OFF"
+                    kar(1) = currentunit And &HF0
+                    kar(3) = &H80
+            End Select
+            kar(0) = &H20
+            kar(2) = &HFF - kar(1)
+            kar(4) = &HFF - kar(3)
 
-        ecrirecommande(kar)
+            ecrirecommande(kar)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ECRIRE X10", ex.Message)
+        End Try
     End Sub
 
     'ARC
     'adresse du type A1 
     'commande ON, OFF, GROUP_ON, GROUP_OFF, CHIME
     Private Sub protocol_arc(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean)
-        Dim kar(3) As Byte
-        Dim ch As Integer
+        Try
+            Dim kar(3) As Byte
+            Dim ch As Integer
 
-        kar(0) = 24
-        Select Case commande
-            Case "ON"
-                kar(1) = &H54
-                ch = Int(adresse.Substring(1, adresse.Length - 1)) - 1
-                kar(2) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
-                ch = Asc(adresse.Substring(0, 1)) - &H41
-                kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
-                ecrirecommande(kar)
-                kar(1) = &H55
-                ch = Int(adresse.Substring(1, adresse.Length - 1)) - 1
-                kar(2) = &H80 Or ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or &H7
-                ch = Asc(adresse.Substring(0, 1)) - &H41
-                kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
-                ecrirecommande(kar)
-            Case "OFF"
-                kar(1) = &H14
-                ch = Int(adresse.Substring(1, adresse.Length - 1)) - 1
-                kar(2) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
-                ch = Asc(adresse.Substring(0, 1)) - &H41
-                kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
-                ecrirecommande(kar)
-                kar(1) = &H55
-                ch = Int(adresse.Substring(1, adresse.Length - 1)) - 1
-                kar(2) = &H80 Or ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or &H7
-                ch = Asc(adresse.Substring(0, 1)) - &H41
-                kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
-                ecrirecommande(kar)
-            Case "GROUP_ON"
-                kar(1) = &H54
-                kar(2) = &HFF
-                ch = Asc(adresse.Substring(0, 1)) - &H41
-                kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
-                ecrirecommande(kar)
-                kar(1) = &H55
-                kar(2) = &HFF
-                ch = Asc(adresse.Substring(0, 1)) - &H41
-                kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
-                ecrirecommande(kar)
-            Case "GROUP_OFF"
-                kar(1) = &H14
-                kar(2) = &HFF
-                ch = Asc(adresse.Substring(0, 1)) - &H41
-                kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
-                ecrirecommande(kar)
-                kar(1) = &H55
-                kar(2) = &HFF
-                ch = Asc(adresse.Substring(0, 1)) - &H41
-                kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
-                ecrirecommande(kar)
-            Case "CHIME"
-                kar(1) = &H55
-                kar(2) = &H15
-                ch = Asc(adresse.Substring(0, 1)) - &H41
-                kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
-                ecrirecommande(kar)
-                ecrirecommande(kar)
-        End Select
+            kar(0) = 24
+            Select Case commande
+                Case "ON"
+                    kar(1) = &H54
+                    ch = Int(adresse.Substring(1, adresse.Length - 1)) - 1
+                    kar(2) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
+                    ch = Asc(adresse.Substring(0, 1)) - &H41
+                    kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
+                    ecrirecommande(kar)
+                    kar(1) = &H55
+                    ch = Int(adresse.Substring(1, adresse.Length - 1)) - 1
+                    kar(2) = &H80 Or ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or &H7
+                    ch = Asc(adresse.Substring(0, 1)) - &H41
+                    kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
+                    ecrirecommande(kar)
+                Case "OFF"
+                    kar(1) = &H14
+                    ch = Int(adresse.Substring(1, adresse.Length - 1)) - 1
+                    kar(2) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
+                    ch = Asc(adresse.Substring(0, 1)) - &H41
+                    kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
+                    ecrirecommande(kar)
+                    kar(1) = &H55
+                    ch = Int(adresse.Substring(1, adresse.Length - 1)) - 1
+                    kar(2) = &H80 Or ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or &H7
+                    ch = Asc(adresse.Substring(0, 1)) - &H41
+                    kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
+                    ecrirecommande(kar)
+                Case "GROUP_ON"
+                    kar(1) = &H54
+                    kar(2) = &HFF
+                    ch = Asc(adresse.Substring(0, 1)) - &H41
+                    kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
+                    ecrirecommande(kar)
+                    kar(1) = &H55
+                    kar(2) = &HFF
+                    ch = Asc(adresse.Substring(0, 1)) - &H41
+                    kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
+                    ecrirecommande(kar)
+                Case "GROUP_OFF"
+                    kar(1) = &H14
+                    kar(2) = &HFF
+                    ch = Asc(adresse.Substring(0, 1)) - &H41
+                    kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
+                    ecrirecommande(kar)
+                    kar(1) = &H55
+                    kar(2) = &HFF
+                    ch = Asc(adresse.Substring(0, 1)) - &H41
+                    kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
+                    ecrirecommande(kar)
+                Case "CHIME"
+                    kar(1) = &H55
+                    kar(2) = &H15
+                    ch = Asc(adresse.Substring(0, 1)) - &H41
+                    kar(3) = ((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1)
+                    ecrirecommande(kar)
+                    ecrirecommande(kar)
+            End Select
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ECRIRE ARC", ex.Message)
+        End Try
     End Sub
 
     'Waveman
     'adresse du type A1 
     'commande ON, OFF
     Private Sub protocol_waveman(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean)
-        Dim kar(3) As Byte
-        Dim xlate As Byte() = {&H0, &H1, &H4, &H5, &H10, &H11, &H14, &H15, &H40, &H41, &H44, &H45, &H50, &H51, &H54, &H55}
-        kar(0) = 24
+        Try
+            Dim kar(3) As Byte
+            Dim xlate As Byte() = {&H0, &H1, &H4, &H5, &H10, &H11, &H14, &H15, &H40, &H41, &H44, &H45, &H50, &H51, &H54, &H55}
+            kar(0) = 24
 
-        Select Case commande
-            Case "ON" : kar(1) = &H54
-            Case "OFF" : kar(1) = &H0
-        End Select
-        kar(2) = xlate(Int(adresse.Substring(1, adresse.Length - 1)) - 1)
-        kar(3) = xlate(Asc(adresse.Substring(0, 1)) - &H41)
-        ecrirecommande(kar)
+            Select Case commande
+                Case "ON" : kar(1) = &H54
+                Case "OFF" : kar(1) = &H0
+            End Select
+            kar(2) = xlate(Int(adresse.Substring(1, adresse.Length - 1)) - 1)
+            kar(3) = xlate(Asc(adresse.Substring(0, 1)) - &H41)
+            ecrirecommande(kar)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ECRIRE WAVEMAN", ex.Message)
+        End Try
     End Sub
 
 
