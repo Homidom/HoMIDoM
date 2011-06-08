@@ -161,6 +161,8 @@ Imports System.Globalization
     Private ack As Boolean = False
     Private ack_ok As Boolean = True
 
+    Dim adressetoint() As String = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "0A", "0B", "0C", "0D", "0E", "0F", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "1A", "1B", "1C", "1D", "1E", "1F", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "2A", "2B", "2C", "2D", "2E", "2F", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "3A", "3B", "3C", "3D", "3E", "3F", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "4A", "4B", "4C", "4D", "4E", "4F", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "5A", "5B", "5C", "5D", "5E", "5F", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "6A", "6B", "6C", "6D", "6E", "6F", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "7A", "7B", "7C", "7D", "7E", "7F", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "8A", "8B", "8C", "8D", "8E", "8F", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "9A", "9B", "9C", "9D", "9E", "9F", "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "AA", "AB", "AC", "AD", "AE", "AF", "B0", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "BA", "BB", "BC", "BD", "BE", "BF", "C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "CA", "CB", "CC", "CD", "CE", "CF", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "DA", "DB", "DC", "DD", "DE", "DF", "E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "EA", "EB", "EC", "ED", "EE", "EF", "F0", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "FA", "FB", "FC", "FD", "FE", "FF"}
+
 #End Region
 
 #Region "Propriétés génériques"
@@ -392,27 +394,27 @@ Imports System.Globalization
         Try
             If _Enable = False Then Exit Sub
             'suivant le protocole, on lance la bonne fonction
-
             'CHACON / X10 / ARC / WAVEMAN
-            Select Case Objet.Modele.ToString.ToUpper
+            Select Case UCase(Objet.modele)
                 Case "CHACON"
-
+                    If IsNothing(Parametre1) Then
+                        protocol_chacon(Objet.adresse1, Command, True)
+                    Else
+                        protocol_chacon(Objet.adresse1, Command, True, Parametre1)
+                    End If
                 Case "X10"
-
+                    protocol_x10(Objet.adresse1, Command)
                 Case "ARC"
-
+                    protocol_arc(Objet.adresse1, Command)
                 Case "WAVEMAN"
-
+                    protocol_waveman(Objet.Adresse1, Command)
                 Case Else
-
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter WRITE", "Protocole non géré : " & Objet.Modele.ToString.ToUpper)
             End Select
-
-
-
-            'ecrire(&HF0, Parametre1)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter WRITE", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter WRITE", ex.ToString)
         End Try
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXMitter WRITE", "Device " & Objet.Name & " <-- " & Command)
     End Sub
 
     ''' <summary>Fonction lancée lors de la suppression d'un device</summary>
@@ -442,30 +444,9 @@ Imports System.Globalization
 
         'liste des devices compatibles
         _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
-        _DeviceSupport.Add(ListeDevices.BAROMETRE.ToString)
-        _DeviceSupport.Add(ListeDevices.BATTERIE.ToString)
-        _DeviceSupport.Add(ListeDevices.COMPTEUR.ToString)
-        _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
-        _DeviceSupport.Add(ListeDevices.DETECTEUR.ToString)
-        _DeviceSupport.Add(ListeDevices.DIRECTIONVENT.ToString)
-        _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE.ToString)
-        _DeviceSupport.Add(ListeDevices.ENERGIETOTALE.ToString)
-        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
-        _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
-        _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE.ToString)
-        _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
         _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
-        _DeviceSupport.Add(ListeDevices.PLUIECOURANT.ToString)
-        _DeviceSupport.Add(ListeDevices.PLUIETOTAL.ToString)
         _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
-        _DeviceSupport.Add(ListeDevices.TELECOMMANDE.ToString)
-        _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
-        _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE.ToString)
-        _DeviceSupport.Add(ListeDevices.UV.ToString)
-        _DeviceSupport.Add(ListeDevices.VITESSEVENT.ToString)
         _DeviceSupport.Add(ListeDevices.VOLET.ToString)
-
-
     End Sub
 
     ''' <summary>Si refresh >0 gestion du timer</summary>
@@ -812,7 +793,7 @@ Imports System.Globalization
     ''' <remarks></remarks>
     Private Sub ProcessReceivedChar(ByVal temp As Byte)
         Try
-            If temp = Protocol Then
+            If temp = protocolsynchro Then
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter ProcessReceivedChar", "ACK => " & VB.Right("0" & Hex(temp), 2))
             End If
             mess = True
@@ -840,16 +821,21 @@ Imports System.Globalization
     'Home Easy : Chacon
     'adresse du type 00-00-00-00-0 ou 0 (pour les Heaters)
     'commande ON, OFF, DIM, GROUP_ON, GROUP_OFF, GROUP_DIM, HEATER_ON, HEATER_OFF
-    Private Sub protocol_chacon(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean, ByVal dimlevel As Integer)
+    Private Sub protocol_chacon(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean, Optional ByVal dimlevel As Integer = 0)
         Try
             Dim kar(5) As Byte
             Dim adressetab As String() = adresse.Split("-")
             If europe Then kar(0) = 34 Else kar(0) = 33
-            kar(1) = CByte(adressetab(0))
-            kar(2) = CByte(adressetab(1))
-            kar(3) = CByte(adressetab(2))
-            kar(4) = CByte(adressetab(3))
-            Select Case adressetab(3)
+            'kar(1) = CByte(adressetab(0))
+            'kar(2) = CByte(adressetab(1))
+            'kar(3) = CByte(adressetab(2))
+            'kar(4) = CByte(adressetab(3))
+            kar(1) = CByte(Array.IndexOf(adressetoint, adressetab(0)))
+            kar(2) = CByte(Array.IndexOf(adressetoint, adressetab(1)))
+            kar(3) = CByte(Array.IndexOf(adressetoint, adressetab(2)))
+            kar(4) = CByte(Array.IndexOf(adressetoint, adressetab(3)))
+
+            Select Case Array.IndexOf(adressetoint, adressetab(3))
                 Case 0
                     kar(4) = 0
                 Case 1
@@ -859,7 +845,8 @@ Imports System.Globalization
                 Case 3
                     kar(4) = &HC0
             End Select
-            kar(4) = kar(4) Or CByte(adressetab(4))
+            'kar(4) = kar(4) Or CByte(adressetab(4))
+            kar(4) = kar(4) Or CByte(Array.IndexOf(adressetoint, adressetab(4)))
 
             Select Case commande
                 Case "ON"
@@ -895,14 +882,14 @@ Imports System.Globalization
             End Select
             ecrirecommande(kar)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ECRIRE CHACON", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ECRIRE CHACON", ex.ToString)
         End Try
     End Sub
 
     'X10
     'adresse du type A1 
     'commande ON, OFF, BRIGHT, DIM, ALL_LIGHT_ON, ALL_LIGHT_OFF
-    Private Sub protocol_x10(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean, ByVal dimlevel As Integer)
+    Private Sub protocol_x10(ByVal adresse As String, ByVal commande As String)
         Try
             Dim kar(4) As Byte
             Dim temp As Byte
@@ -979,7 +966,7 @@ Imports System.Globalization
     'ARC
     'adresse du type A1 
     'commande ON, OFF, GROUP_ON, GROUP_OFF, CHIME
-    Private Sub protocol_arc(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean)
+    Private Sub protocol_arc(ByVal adresse As String, ByVal commande As String)
         Try
             Dim kar(3) As Byte
             Dim ch As Integer
@@ -1050,7 +1037,7 @@ Imports System.Globalization
     'Waveman
     'adresse du type A1 
     'commande ON, OFF
-    Private Sub protocol_waveman(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean)
+    Private Sub protocol_waveman(ByVal adresse As String, ByVal commande As String)
         Try
             Dim kar(3) As Byte
             Dim xlate As Byte() = {&H0, &H1, &H4, &H5, &H10, &H11, &H14, &H15, &H40, &H41, &H44, &H45, &H50, &H51, &H54, &H55}
@@ -1071,10 +1058,9 @@ Imports System.Globalization
 
 #End Region
 
-
 #Region "Write"
 
-    Public Sub WriteLog(ByVal message As String)
+    Private Sub WriteLog(ByVal message As String)
         Try
             'utilise la fonction de base pour loguer un event
             If STRGS.InStr(message, "DBG:") > 0 Then
@@ -1089,7 +1075,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Public Sub WriteRetour(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
+    Private Sub WriteRetour(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
         Try
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
 
