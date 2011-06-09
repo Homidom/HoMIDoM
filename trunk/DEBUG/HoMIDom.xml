@@ -20,8 +20,8 @@ HoMIDom
 	<returns>String si OK, String "ERR:..." si erreur</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Sqlite.nonquery(System.String,System.String[])">
-	<summary>          
- Requete sans résultat          
+	<summary>
+ Requete sans résultat
  </summary>
 	<param name="commande">ex : DELETE FROM contact where Contact_id=10</param>
 	<param name="params">Liste es paramètres utilisés dans la query sous forme @parameter0, @parameter1 etc</param>
