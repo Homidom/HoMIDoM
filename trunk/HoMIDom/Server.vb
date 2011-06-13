@@ -49,6 +49,7 @@ Namespace HoMIDom
         Shared _DateTimeLastStart As Date = Now
         Private Shared _ListExtensionAudio As New ArrayList 'Liste des extensions audio
         Private Shared _ListRepertoireAudio As New ArrayList 'Liste des répertoires audio
+        Private Shared Etat_server As Boolean = False 'etat du serveur : true = démarré
 #End Region
 
 #Region "Event"
@@ -62,7 +63,13 @@ Namespace HoMIDom
         ''' <param name="Parametre"></param>
         ''' <remarks></remarks>
         Public Sub DriversEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object)
+            Try
+                If Etat_server Then
 
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DriversEvent", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>Evenement provenant des devices</summary>
@@ -74,102 +81,99 @@ Namespace HoMIDom
             Dim retour As String
             Dim listmacro As ArrayList
             Try
-                Dim valeur As Object = Parametres
-                '--- on logue tout ce qui arrive en mode debug
-                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", "Le device " & Device.name & " a changé : " & [Property] & " = " & valeur)
+                If Etat_server Then
+                    Dim valeur As Object = Parametres
+                    '--- on logue tout ce qui arrive en mode debug
+                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", "Le device " & Device.name & " a changé : " & [Property] & " = " & valeur)
 
-                If STRGS.Left(valeur, 4) <> "ERR:" Then 'si y a pas erreur d'acquisition
-                    '--- Remplacement de , par .
-                    valeur = STRGS.Replace(valeur, ",", ".")
+                    If STRGS.Left(valeur, 4) <> "ERR:" Then 'si y a pas erreur d'acquisition
+                        '--- Remplacement de , par .
+                        valeur = STRGS.Replace(valeur, ",", ".")
 
-                    '------------------------------------------------------------------------------------------------
-                    '    MACRO/Triggers
-                    '------------------------------------------------------------------------------------------------
+                        '------------------------------------------------------------------------------------------------
+                        '    MACRO/Triggers
+                        '------------------------------------------------------------------------------------------------
 
-                    'Parcour des triggers pour vérifier si le device déclenche des macros
-                    For i = 0 To _listTriggers.Count - 1
-                        If _listTriggers.Item(i).Conditiondeviceid = Device.ID Then
-                            'Device trouvé dans un trigger, on parcour la liste des macros associé à ce trigger et on les executent
-                            listmacro = _listTriggers.Item(i).Macro
-                            For j = 0 To listmacro.Count - 1
-                                'on cherche la macro et on la lance
-                                For k = 0 To _ListMacros.Count - 1
-                                    If _ListMacros.Item(k).ID = listmacro.Item(j).ToString Then _ListMacros.Item(k).Execute_avec_conditions()
+                        'Parcour des triggers pour vérifier si le device déclenche des macros
+                        For i = 0 To _listTriggers.Count - 1
+                            If _listTriggers.Item(i).Conditiondeviceid = Device.ID Then
+                                'Device trouvé dans un trigger, on parcour la liste des macros associé à ce trigger et on les executent
+                                listmacro = _listTriggers.Item(i).Macro
+                                For j = 0 To listmacro.Count - 1
+                                    'on cherche la macro et on la lance
+                                    For k = 0 To _ListMacros.Count - 1
+                                        If _ListMacros.Item(k).ID = listmacro.Item(j).ToString Then _ListMacros.Item(k).Execute_avec_conditions()
+                                    Next
                                 Next
-                            Next
-                        End If
-                    Next
-
-                    '------------------------------------------------------------------------------------------------
-                    '    HISTORIQUE
-                    '------------------------------------------------------------------------------------------------
-
-                    '--- si on teste la value (et non les autres propriétés d'un device) et si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
-                    If [Property] = "Value" Then
-                        '--- si c'est un nombre
-                        If (IsNumeric(valeur) And IsNumeric(Device.Value) And IsNumeric(Device.ValueLast)) Then
-                            '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
-                            If Device.LastEtat And valeur.ToString = Device.ValueLast Then
-                                'log de "inchangé lastetat"
-                                Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (inchangé lastetat " & Device.ValueLast & ")")
-                            Else
-                                '--- on vérifie que la valeur a changé de plus de composants_precision sinon inchangé
-                                If (CDbl(valeur) + CDbl(Device.Precision)) >= CDbl(Device.Value) And (CDbl(valeur) - CDbl(Device.Precision)) <= CDbl(Device.Value) Then
-                                    'log de "inchangé précision"
-                                    Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (inchangé precision " & Device.ValueLast & ")")
-                                Else
-                                    'log de la nouvelle valeur
-                                    Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
-                                    'On historise la nouvellevaleur
-                                    'retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('" & Device.ID & "','" & [Property] & "','" & Now.ToString() & "','" & valeur & "')")
-                                    retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
-                                    If STRGS.Left(retour, 4) = "ERR:" Then
-                                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
-                                    End If
-                                End If
                             End If
-                        Else
-                            '--- Valeur est autre chose qu'un nombre
-                            '--- historise la valeur si ce n'est pas une simple info de config
-                            If STRGS.Left(valeur, 4) <> "CFG:" Then
+                        Next
+
+                        '------------------------------------------------------------------------------------------------
+                        '    HISTORIQUE
+                        '------------------------------------------------------------------------------------------------
+
+                        '--- si on teste la value (et non les autres propriétés d'un device) et si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                        If [Property] = "Value" Then
+                            '--- si c'est un nombre
+                            If (IsNumeric(valeur) And IsNumeric(Device.Value) And IsNumeric(Device.ValueLast)) Then
                                 '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
                                 If Device.LastEtat And valeur.ToString = Device.ValueLast Then
                                     'log de "inchangé lastetat"
                                     Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (inchangé lastetat " & Device.ValueLast & ")")
                                 Else
-                                    'log de la nouvelle valeur
-                                    Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
-                                    'Ajout dans la BDD
-                                    'retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('" & Device.ID & "','" & [Property] & "','" & Now.ToString() & "','" & valeur & "')")
-                                    retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
-                                    If STRGS.Left(retour, 4) = "ERR:" Then
-                                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
+                                    '--- on vérifie que la valeur a changé de plus de composants_precision sinon inchangé
+                                    If (CDbl(valeur) + CDbl(Device.Precision)) >= CDbl(Device.Value) And (CDbl(valeur) - CDbl(Device.Precision)) <= CDbl(Device.Value) Then
+                                        'log de "inchangé précision"
+                                        Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (inchangé precision " & Device.ValueLast & ")")
+                                    Else
+                                        'log de la nouvelle valeur
+                                        Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
+                                        'On historise la nouvellevaleur
+                                        retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
+                                        If STRGS.Left(retour, 4) = "ERR:" Then
+                                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
+                                        End If
                                     End If
                                 End If
                             Else
-                                'log de la nouvelle valeur
-                                Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
+                                '--- Valeur est autre chose qu'un nombre
+                                '--- historise la valeur si ce n'est pas une simple info de config
+                                If STRGS.Left(valeur, 4) <> "CFG:" Then
+                                    '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                                    If Device.LastEtat And valeur.ToString = Device.ValueLast Then
+                                        'log de "inchangé lastetat"
+                                        Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (inchangé lastetat " & Device.ValueLast & ")")
+                                    Else
+                                        'log de la nouvelle valeur
+                                        Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
+                                        'Ajout dans la BDD
+                                        retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
+                                        If STRGS.Left(retour, 4) = "ERR:" Then
+                                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
+                                        End If
+                                    End If
+                                Else
+                                    'log de la nouvelle valeur
+                                    Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
+                                End If
+                            End If
+                        Else
+                            'C'est une autre propriété, on logue directement et stocke la modif
+                            Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (" & [Property] & ")")
+                            'Ajout dans la BDD
+                            retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
+                            If STRGS.Left(retour, 4) = "ERR:" Then
+                                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
                             End If
                         End If
                     Else
-                        'C'est une autre propriété, on logue directement et stocke la modif
-                        Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (" & [Property] & ")")
-                        'Ajout dans la BDD
-                        'retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES ('" & Device.ID & "','" & [Property] & "','" & Now.ToString() & "','" & valeur & "')")
-                        retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
-                        If STRGS.Left(retour, 4) = "ERR:" Then
-                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
-                        End If
+                        'erreur d'acquisition
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur d'acquisition : " & Device.Name & " - " & valeur)
                     End If
-                Else
-                    'erreur d'acquisition
-                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur d'acquisition : " & Device.Name & " - " & valeur)
                 End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Exception : " & ex.Message)
             End Try
-
-
 
 
             ''on verifie si un composant correspond à cette adresse
@@ -278,38 +282,46 @@ Namespace HoMIDom
 
             '---- Action à effectuer toutes les secondes ----
             'on checke si il y a cron à faire
-            For i = 0 To _listTriggers.Count() - 1
-                If (_listTriggers.Item(i).prochainedateheure IsNot Nothing And _listTriggers.Item(i).prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) Then
-                    _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
-                    'lancement des macros associées
-                    For j = 0 To _listTriggers.Item(i).ListMacro.Count - 1
-                        'on cherche la macro et on la lance en testant ces conditions
-                        For k = 0 To _ListMacros.Count - 1
-                            If _ListMacros.Item(k).ID = _listTriggers.Item(i).Macro.Item(j).ToString Then _ListMacros.Item(k).Execute_avec_conditions()
+            Try
+                For i = 0 To _listTriggers.Count() - 1
+                    If (_listTriggers.Item(i).prochainedateheure IsNot Nothing And _listTriggers.Item(i).prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) Then
+                        _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
+                        'lancement des macros associées
+                        For j = 0 To _listTriggers.Item(i).ListMacro.Count - 1
+                            'on cherche la macro et on la lance en testant ces conditions
+                            For k = 0 To _ListMacros.Count - 1
+                                If _ListMacros.Item(k).ID = _listTriggers.Item(i).Macro.Item(j).ToString Then _ListMacros.Item(k).Execute_avec_conditions()
+                            Next
                         Next
-                    Next
+                    End If
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick TriggerTimer", "Exception : " & ex.Message)
+            End Try
+
+            Try
+                '---- Actions à effectuer toutes les minutes ----
+                If ladate.Second = 1 Then
+
                 End If
-            Next
 
-            '---- Actions à effectuer toutes les minutes ----
-            If ladate.Second = 1 Then
+                '---- Actions à effectuer toutes les heures ----
+                If ladate.Minute = 59 And ladate.Second = 59 Then
 
-            End If
+                End If
 
-            '---- Actions à effectuer toutes les heures ----
-            If ladate.Minute = 59 And ladate.Second = 59 Then
+                '---- Actions à effectuer à minuit ----
+                If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
+                    MAJ_HeuresSoleil()
+                End If
 
-            End If
-
-            '---- Actions à effectuer à minuit ----
-            If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
-                MAJ_HeuresSoleil()
-            End If
-
-            '---- Actions à effectuer à midi ----
-            If ladate.Hour = 12 And ladate.Minute = 0 And ladate.Second = 0 Then
-                MAJ_HeuresSoleil()
-            End If
+                '---- Actions à effectuer à midi ----
+                If ladate.Hour = 12 And ladate.Minute = 0 And ladate.Second = 0 Then
+                    MAJ_HeuresSoleil()
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception : " & ex.Message)
+            End Try
         End Sub
 
 #End Region
@@ -320,18 +332,20 @@ Namespace HoMIDom
         ''' <summary>Initialisation des heures du soleil</summary>
         ''' <remarks></remarks>
         Public Sub MAJ_HeuresSoleil()
-
             Dim dtSunrise As Date
             Dim dtSolarNoon As Date
             Dim dtSunset As Date
+            Try
+                Soleil.CalculateSolarTimes(_Latitude, _Longitude, Date.Now, dtSunrise, dtSolarNoon, dtSunset)
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Initialisation des heures du soleil")
+                _HeureCoucherSoleil = DateAdd(DateInterval.Minute, _HeureCoucherSoleilCorrection, dtSunset)
+                _HeureLeverSoleil = DateAdd(DateInterval.Minute, _HeureLeverSoleilCorrection, dtSunrise)
 
-            Soleil.CalculateSolarTimes(_Latitude, _Longitude, Date.Now, dtSunrise, dtSolarNoon, dtSunset)
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Initialisation des heures du soleil")
-            _HeureCoucherSoleil = DateAdd(DateInterval.Minute, _HeureCoucherSoleilCorrection, dtSunset)
-            _HeureLeverSoleil = DateAdd(DateInterval.Minute, _HeureLeverSoleilCorrection, dtSunrise)
-
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Heure du lever : " & _HeureLeverSoleil)
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Heure du coucher : " & _HeureCoucherSoleil)
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Heure du lever : " & _HeureLeverSoleil)
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Heure du coucher : " & _HeureCoucherSoleil)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Exception : " & ex.Message)
+            End Try
         End Sub
 #End Region
 
@@ -2080,6 +2094,8 @@ Namespace HoMIDom
                 'test avec graphe
                 graphe.grapher_courbe("test", "Temperature extérieure", 800, 400)
 
+                'Change l'etat du server
+                Etat_server = True
             Catch ex As Exception
                 Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Exception : " & ex.Message)
             End Try
@@ -2090,6 +2106,10 @@ Namespace HoMIDom
         Public Sub [stop]() Implements IHoMIDom.Stop
             Try
                 Dim retour As String
+
+                'on change l'etat du server pour ne plus lancer de traitement
+                Etat_server = False
+
                 TimerSecond.Enabled = False
                 TimerSecond.Dispose()
 
@@ -2116,9 +2136,13 @@ Namespace HoMIDom
         End Sub
 
         Protected Overrides Sub Finalize()
-            'Mettre le Code pour l'arret
-            '[stop]()
-            MyBase.Finalize()
+            Try
+                'Mettre le Code pour l'arret
+                ' [stop]()
+                MyBase.Finalize()
+            Catch ex As Exception
+                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Finalize", "Exception : " & ex.Message)
+            End Try
         End Sub
 #End Region
 
@@ -2142,18 +2166,14 @@ Namespace HoMIDom
 
         '*** FONCTIONS ******************************************
 #Region "Serveur"
-        ''' <summary>
-        ''' Retourne la date et heure du dernier démarrage du serveur
-        ''' </summary>
+        ''' <summary>Retourne la date et heure du dernier démarrage du serveur</summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetLastStartTime() As Date Implements IHoMIDom.GetLastStartTime
             Return _DateTimeLastStart
         End Function
 
-        ''' <summary>
-        ''' Retourne la version du serveur
-        ''' </summary>
+        ''' <summary>Retourne la version du serveur</summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetServerVersion() As String Implements IHoMIDom.GetServerVersion
@@ -2171,18 +2191,16 @@ Namespace HoMIDom
             End Try
         End Function
 
-        ''' <summary>
-        ''' Permet d'envoyer un message d'un client vers le server
-        ''' </summary>
+        ''' <summary>Permet d'envoyer un message d'un client vers le server</summary>
         ''' <param name="Message"></param>
         ''' <remarks></remarks>
         Public Sub MessageToServer(ByVal Message As String) Implements IHoMIDom.MessageToServer
             'traiter le message
+
+
         End Sub
 
-        ''' <summary>
-        ''' Convert a file on a byte array.
-        ''' </summary>
+        ''' <summary>Convert a file on a byte array.</summary>
         ''' <param name="file"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
@@ -2204,9 +2222,7 @@ Namespace HoMIDom
 #End Region
 
 #Region "Audio"
-        ''' <summary>
-        ''' Supprimer une extension Audio
-        ''' </summary>
+        ''' <summary>Supprimer une extension Audio</summary>
         ''' <param name="NomExtension"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>

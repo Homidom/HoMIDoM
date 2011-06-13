@@ -394,13 +394,19 @@ Imports System.Globalization
         Try
             If _Enable = False Then Exit Sub
             'suivant le protocole, on lance la bonne fonction
-            'CHACON / X10 / ARC / WAVEMAN
+            'HOMEEASY / HOMEEASYUS / X10 / ARC / WAVEMAN
             Select Case UCase(Objet.modele)
-                Case "CHACON"
+                Case "HOMEEASY"
                     If IsNothing(Parametre1) Then
                         protocol_chacon(Objet.adresse1, Command, True)
                     Else
                         protocol_chacon(Objet.adresse1, Command, True, Parametre1)
+                    End If
+                Case "HOMEEASYUS"
+                    If IsNothing(Parametre1) Then
+                        protocol_chacon(Objet.adresse1, Command, False)
+                    Else
+                        protocol_chacon(Objet.adresse1, Command, False, Parametre1)
                     End If
                 Case "X10"
                     protocol_x10(Objet.adresse1, Command)
@@ -818,14 +824,23 @@ Imports System.Globalization
 
 #Region "Fonctions ecriture protocoles"
 
-    'Home Easy : Chacon
-    'adresse du type 00-00-00-00-0 ou 0 (pour les Heaters)
-    'commande ON, OFF, DIM, GROUP_ON, GROUP_OFF, GROUP_DIM, HEATER_ON, HEATER_OFF
+    ''' <summary>Gestion du protocole CHACON - HomeEasy</summary>
+    ''' <param name="adresse">Adresse du type 00-00-00-00-0 ou 0 (pour les Heaters)</param>
+    ''' <param name="commande">commande ON, OFF, DIM, GROUP_ON, GROUP_OFF, GROUP_DIM, HEATER_ON, HEATER_OFF</param>
+    ''' <param name="europe">Type Europe ou US ?</param>
+    ''' <param name="dimlevel">Niveau du Dim</param>
+    ''' <remarks></remarks>
     Private Sub protocol_chacon(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean, Optional ByVal dimlevel As Integer = 0)
         Try
+
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Chacon", "1")
+
             Dim kar(5) As Byte
             Dim adressetab As String() = adresse.Split("-")
             If europe Then kar(0) = 34 Else kar(0) = 33
+
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Chacon", "2")
+
             'kar(1) = CByte(adressetab(0))
             'kar(2) = CByte(adressetab(1))
             'kar(3) = CByte(adressetab(2))
@@ -834,6 +849,9 @@ Imports System.Globalization
             kar(2) = CByte(Array.IndexOf(adressetoint, adressetab(1)))
             kar(3) = CByte(Array.IndexOf(adressetoint, adressetab(2)))
             kar(4) = CByte(Array.IndexOf(adressetoint, adressetab(3)))
+
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Chacon", "3")
+
 
             Select Case Array.IndexOf(adressetoint, adressetab(3))
                 Case 0
@@ -847,6 +865,9 @@ Imports System.Globalization
             End Select
             'kar(4) = kar(4) Or CByte(adressetab(4))
             kar(4) = kar(4) Or CByte(Array.IndexOf(adressetoint, adressetab(4)))
+
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Chacon", "4")
+
 
             Select Case commande
                 Case "ON"
@@ -880,15 +901,20 @@ Imports System.Globalization
                     kar2(2) = &HB0
                     kar = kar2
             End Select
+
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Chacon", "5")
+
+
             ecrirecommande(kar)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ECRIRE CHACON", ex.ToString)
         End Try
     End Sub
 
-    'X10
-    'adresse du type A1 
-    'commande ON, OFF, BRIGHT, DIM, ALL_LIGHT_ON, ALL_LIGHT_OFF
+    ''' <summary>Gestion du protocole X10 RF</summary>
+    ''' <param name="adresse">Adresse du type A1</param>
+    ''' <param name="commande">commande ON, OFF, BRIGHT, DIM, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
+    ''' <remarks></remarks>
     Private Sub protocol_x10(ByVal adresse As String, ByVal commande As String)
         Try
             Dim kar(4) As Byte
@@ -963,9 +989,10 @@ Imports System.Globalization
         End Try
     End Sub
 
-    'ARC
-    'adresse du type A1 
-    'commande ON, OFF, GROUP_ON, GROUP_OFF, CHIME
+    ''' <summary>Gestion du protocole ARC</summary>
+    ''' <param name="adresse">Adresse du type A1</param>
+    ''' <param name="commande">commande ON, OFF, GROUP_ON, GROUP_OFF, CHIME</param>
+    ''' <remarks></remarks>
     Private Sub protocol_arc(ByVal adresse As String, ByVal commande As String)
         Try
             Dim kar(3) As Byte
@@ -1034,9 +1061,10 @@ Imports System.Globalization
         End Try
     End Sub
 
-    'Waveman
-    'adresse du type A1 
-    'commande ON, OFF
+    ''' <summary>Gestion du protocole WAVEMAN</summary>
+    ''' <param name="adresse">Adresse du type A1</param>
+    ''' <param name="commande">commande ON, OFF</param>
+    ''' <remarks></remarks>
     Private Sub protocol_waveman(ByVal adresse As String, ByVal commande As String)
         Try
             Dim kar(3) As Byte
