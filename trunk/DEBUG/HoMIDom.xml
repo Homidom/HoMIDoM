@@ -833,7 +833,7 @@ HoMIDom
 	<summary>Retourne la liste de toutes les macros</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveMacro(System.String,System.String,System.Boolean,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.TemplateAction})">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveMacro(System.String,System.String,System.Boolean,System.String,System.Collections.ArrayList)">
 	<summary>
  Permet de créer ou modifier une macro
  </summary>
@@ -1434,7 +1434,7 @@ HoMIDom
 	<param name="MacroId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveMacro(System.String,System.String,System.Boolean,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.TemplateAction})">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveMacro(System.String,System.String,System.Boolean,System.String,System.Collections.ArrayList)">
 	<summary>
  Permet de créer ou modifier une macro
  </summary>

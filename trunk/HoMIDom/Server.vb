@@ -4157,12 +4157,7 @@ Namespace HoMIDom
                         .ID = _ListMacros.Item(i).id
                         .Description = _ListMacros.Item(i).description
                         .Enable = _ListMacros.Item(i).enable
-                        For j = 0 To _ListMacros.Item(i).ListActions.count - 1
-                            Select Case _ListMacros.Item(i).ListActions.item(j).TypeAction
-                                Case Action.TypeAction.ActionDevice
-
-                            End Select
-                        Next
+                        .ListActions = _ListMacros.Item(i).ListActions
                     End With
                     _list.Add(x)
                 Next
@@ -4183,7 +4178,7 @@ Namespace HoMIDom
         ''' <param name="listactions"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal listactions As List(Of TemplateAction) = Nothing) As String Implements IHoMIDom.SaveMacro
+        Public Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal listactions As ArrayList = Nothing) As String Implements IHoMIDom.SaveMacro
             Dim myID As String = ""
             Try
                 If macroId = "" Then
@@ -4193,19 +4188,19 @@ Namespace HoMIDom
                         x.Nom = nom
                         x.Enable = enable
                         x.Description = description
-                        Dim tabl As New ArrayList
-                        For i As Integer = 0 To listactions.Count - 1
-                            Select Case listactions.Item(i).TypeAction
-                                Case Action.TypeAction.ActionDevice
-                                    Dim o As New Action.ActionDevice
-                                    o.Timing = listactions.Item(i).Timing
-                                    o.IdDevice = listactions.Item(i).IdDevice
-                                    o.Method = listactions.Item(i).Action
-                                    o.Parametres = listactions.Item(i).Parametres
-                                    tabl.Add(o)
-                            End Select
-                        Next
-                        x.ListActions = tabl
+                        'Dim tabl As New ArrayList
+                        'For i As Integer = 0 To listactions.Count - 1
+                        '    Select Case listactions.Item(i).TypeAction
+                        '        Case Action.TypeAction.ActionDevice
+                        '            Dim o As New Action.ActionDevice
+                        '            o.Timing = listactions.Item(i).Timing
+                        '            o.IdDevice = listactions.Item(i).IdDevice
+                        '            o.Method = listactions.Item(i).Action
+                        '            o.Parametres = listactions.Item(i).Parametres
+                        '            tabl.Add(o)
+                        '    End Select
+                        'Next
+                        x.ListActions = listactions
                     End With
                     myID = x.ID
                     _ListMacros.Add(x)
@@ -4217,19 +4212,19 @@ Namespace HoMIDom
                             _ListMacros.Item(i).nom = nom
                             _ListMacros.Item(i).enable = enable
                             _ListMacros.Item(i).description = description
-                            Dim tabl As New ArrayList
-                            For j As Integer = 0 To listactions.Count - 1
-                                Select Case listactions.Item(j).TypeAction
-                                    Case Action.TypeAction.ActionDevice
-                                        Dim o As New Action.ActionDevice
-                                        o.Timing = listactions.Item(j).Timing
-                                        o.IdDevice = listactions.Item(j).IdDevice
-                                        o.Method = listactions.Item(j).Action
-                                        o.Parametres = listactions.Item(j).Parametres
-                                        tabl.Add(o)
-                                End Select
-                            Next
-                            _ListMacros.Item(i).ListActions = tabl
+                            'Dim tabl As New ArrayList
+                            'For j As Integer = 0 To listactions.Count - 1
+                            '    Select Case listactions.Item(j).TypeAction
+                            '        Case Action.TypeAction.ActionDevice
+                            '            Dim o As New Action.ActionDevice
+                            '            o.Timing = listactions.Item(j).Timing
+                            '            o.IdDevice = listactions.Item(j).IdDevice
+                            '            o.Method = listactions.Item(j).Action
+                            '            o.Parametres = listactions.Item(j).Parametres
+                            '            tabl.Add(o)
+                            '    End Select
+                            'Next
+                            _ListMacros.Item(i).ListActions = listactions
                         End If
                     Next
                 End If
@@ -4245,27 +4240,12 @@ Namespace HoMIDom
         ''' <param name="MacroId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function ReturnMacroById(ByVal MacroId As String) As TemplateMacro Implements IHoMIDom.ReturnMacroById
-            Dim retour As New TemplateMacro
+        Public Function ReturnMacroById(ByVal MacroId As String) As Object Implements IHoMIDom.ReturnMacroById
+            Dim retour As Object = Nothing
             Try
                 For i As Integer = 0 To _ListMacros.Count - 1
                     If _ListMacros.Item(i).ID = MacroId Then
-                        retour.ID = _ListMacros.Item(i).id
-                        retour.Nom = _ListMacros.Item(i).nom
-                        retour.Description = _ListMacros.Item(i).description
-                        retour.Enable = _ListMacros.Item(i).enable
-                        For j As Integer = 0 To _ListMacros.Item(i).listactions.count - 1
-                            Dim x As New TemplateAction
-                            Select Case _ListMacros.Item(i).listactions.item(j).typeaction
-                                Case Action.TypeAction.ActionDevice
-                                    x.TypeAction = _ListMacros.Item(i).listactions.item(j).typeaction
-                                    x.Timing = _ListMacros.Item(i).listactions.item(j).timing
-                                    x.IdDevice = _ListMacros.Item(i).listactions.item(j).iddevice
-                                    x.Action = _ListMacros.Item(i).listactions.item(j).method
-                                    x.Parametres = _ListMacros.Item(i).listactions.item(j).parametres
-                            End Select
-                            retour.ListActions.Add(x)
-                        Next
+                        retour = _ListMacros.Item(i)
                         Exit For
                     End If
                 Next

@@ -24,22 +24,9 @@
 
     Public Property Items As ArrayList
         Get
-            Dim Tabl As New ArrayList
-            For i As Integer = 0 To _ListAction.Count - 1
-                Select Case _ListAction.Item(i).typeaction
-                    Case 0
-                        Dim x As New HoMIDom.HoMIDom.Action.ActionDevice
-                        x.Timing = _ListAction.Item(i).timing
-                        x.IdDevice = _ListAction.Item(i).iddevice
-                        x.Method = _ListAction.Item(i).action
-                        x.Parametres = _ListAction.Item(i).parametres
-                        Tabl.Add(x)
-                End Select
-            Next
-            Return Tabl
+            Return _ListAction
         End Get
         Set(ByVal value As ArrayList)
-            Dim tabl As New ArrayList
             For i As Integer = 0 To value.Count - 1
                 Dim x As New uAction
                 x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
@@ -48,11 +35,7 @@
                 AddHandler x.DeleteAction, AddressOf DeleteAction
                 AddHandler x.ChangeAction, AddressOf ChangeAction
                 x.Width = StckPnlLib.ActualWidth
-                x.TypeAction = value.Item(i).typeaction
-                x.Timing = value.Item(i).timing
-                x.IDDevice = value.Item(i).iddevice
-                x.Action = value.Item(i).action
-                x.Parametres = value.Item(i).parametres
+                x.ObjAction = value.Item(i)
                 _ListAction.Add(x)
                 StackPanel1.Children.Add(x)
             Next

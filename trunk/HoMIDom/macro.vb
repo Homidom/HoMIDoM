@@ -446,7 +446,7 @@ Namespace HoMIDom
 
         ''' <summary>Envoi d'un email</summary>
         ''' <remarks></remarks>
-        Public Class email
+        <Serializable()> Public Class email
             Public adresse As String 'adresse email
             Public Sub execute(ByVal sujet As String, ByVal texte As String)
                 'envoi de l'email à adresse avec sujet et texte via les smtp définis dans le serveur
