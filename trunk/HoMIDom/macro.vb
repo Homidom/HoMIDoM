@@ -388,6 +388,7 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Enum TypeAction
             ActionDevice = 0
+            ActionMail = 1
         End Enum
 
         ''' <summary>

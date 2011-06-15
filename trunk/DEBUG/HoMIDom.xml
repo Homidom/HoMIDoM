@@ -547,37 +547,27 @@ HoMIDom
 	<summary>Arrêt du serveur</summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetLastStartTime">
-	<summary>
- Retourne la date et heure du dernier démarrage du serveur
- </summary>
+	<summary>Retourne la date et heure du dernier démarrage du serveur</summary>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetServerVersion">
-	<summary>
- Retourne la version du serveur
- </summary>
+	<summary>Retourne la version du serveur</summary>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetTime">
 	<summary>Retourne l'heure du serveur</summary>
 	<returns>String : heure du serveur</returns>
 </member><member name="M:HoMIDom.HoMIDom.Server.MessageToServer(System.String)">
-	<summary>
- Permet d'envoyer un message d'un client vers le server
- </summary>
+	<summary>Permet d'envoyer un message d'un client vers le server</summary>
 	<param name="Message"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetByteFromImage(System.String)">
-	<summary>
- Convert a file on a byte array.
- </summary>
+	<summary>Convert a file on a byte array.</summary>
 	<param name="file"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DeleteExtensionAudio(System.String)">
-	<summary>
- Supprimer une extension Audio
- </summary>
+	<summary>Supprimer une extension Audio</summary>
 	<param name="NomExtension"></param>
 	<returns></returns>
 	<remarks></remarks>
