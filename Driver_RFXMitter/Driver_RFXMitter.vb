@@ -162,6 +162,8 @@ Imports System.Globalization
     Private ack_ok As Boolean = True
 
     Dim adressetoint() As String = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "0A", "0B", "0C", "0D", "0E", "0F", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "1A", "1B", "1C", "1D", "1E", "1F", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "2A", "2B", "2C", "2D", "2E", "2F", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "3A", "3B", "3C", "3D", "3E", "3F", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "4A", "4B", "4C", "4D", "4E", "4F", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "5A", "5B", "5C", "5D", "5E", "5F", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "6A", "6B", "6C", "6D", "6E", "6F", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "7A", "7B", "7C", "7D", "7E", "7F", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "8A", "8B", "8C", "8D", "8E", "8F", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "9A", "9B", "9C", "9D", "9E", "9F", "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "AA", "AB", "AC", "AD", "AE", "AF", "B0", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "BA", "BB", "BC", "BD", "BE", "BF", "C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "CA", "CB", "CC", "CD", "CE", "CF", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "DA", "DB", "DC", "DD", "DE", "DF", "E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "EA", "EB", "EC", "ED", "EE", "EF", "F0", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "FA", "FB", "FC", "FD", "FE", "FF"}
+    Dim adressetoint2() As String = {"0", "1", "2", "3"}
+     Dim unittoint() As String = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"}
 
 #End Region
 
@@ -393,34 +395,36 @@ Imports System.Globalization
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
             If _Enable = False Then Exit Sub
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXMitter WRITE", "Device " & Objet.Name & " <-- " & Command)
             'suivant le protocole, on lance la bonne fonction
             'HOMEEASY / HOMEEASYUS / X10 / ARC / WAVEMAN
             Select Case UCase(Objet.modele)
+                'Case "HOMEEASY"
+                '    If IsNothing(Parametre1) Then
+                '        protocol_chacon(Objet.adresse1, Command, True)
+                '    Else
+                '        protocol_chacon(Objet.adresse1, Command, True, Parametre1)
+                '    End If
+                'Case "HOMEEASYUS"
+                '    If IsNothing(Parametre1) Then
+                '        protocol_chacon(Objet.adresse1, Command, False)
+                '    Else
+                '        protocol_chacon(Objet.adresse1, Command, False, Parametre1)
+                '    End If
                 Case "HOMEEASY"
-                    If IsNothing(Parametre1) Then
-                        protocol_chacon(Objet.adresse1, Command, True)
-                    Else
-                        protocol_chacon(Objet.adresse1, Command, True, Parametre1)
-                    End If
-                Case "HOMEEASYUS"
-                    If IsNothing(Parametre1) Then
-                        protocol_chacon(Objet.adresse1, Command, False)
-                    Else
-                        protocol_chacon(Objet.adresse1, Command, False, Parametre1)
-                    End If
+                    protocol_chacon(Objet.adresse1, Command, False)
                 Case "X10"
-                    protocol_x10(Objet.adresse1, Command)
+                        protocol_x10(Objet.adresse1, Command)
                 Case "ARC"
-                    protocol_arc(Objet.adresse1, Command)
+                        protocol_arc(Objet.adresse1, Command)
                 Case "WAVEMAN"
-                    protocol_waveman(Objet.Adresse1, Command)
+                        protocol_waveman(Objet.Adresse1, Command)
                 Case Else
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter WRITE", "Protocole non géré : " & Objet.Modele.ToString.ToUpper)
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter WRITE", "Protocole non géré : " & Objet.Modele.ToString.ToUpper)
             End Select
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter WRITE", ex.ToString)
         End Try
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXMitter WRITE", "Device " & Objet.Name & " <-- " & Command)
     End Sub
 
     ''' <summary>Fonction lancée lors de la suppression d'un device</summary>
@@ -705,7 +709,7 @@ Imports System.Globalization
         For intIndex = 1 To intEnd
             message = message + VB.Right("0" & Hex(kar(intIndex)), 2)
         Next
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", message)
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter Ecrirecommande", message)
         ack = False
     End Sub
 
@@ -825,87 +829,66 @@ Imports System.Globalization
 #Region "Fonctions ecriture protocoles"
 
     ''' <summary>Gestion du protocole CHACON - HomeEasy</summary>
-    ''' <param name="adresse">Adresse du type 00-00-00-00-0 ou 0 (pour les Heaters)</param>
+    ''' <param name="adresse">Adresse du type 00-00-00-0 ou 0 (pour les Heaters)</param>
     ''' <param name="commande">commande ON, OFF, DIM, GROUP_ON, GROUP_OFF, GROUP_DIM, HEATER_ON, HEATER_OFF</param>
     ''' <param name="europe">Type Europe ou US ?</param>
     ''' <param name="dimlevel">Niveau du Dim</param>
     ''' <remarks></remarks>
     Private Sub protocol_chacon(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean, Optional ByVal dimlevel As Integer = 0)
         Try
-
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Chacon", "1")
-
-            Dim kar(5) As Byte
-            Dim adressetab As String() = adresse.Split("-")
-            If europe Then kar(0) = 34 Else kar(0) = 33
-
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Chacon", "2")
-
-            'kar(1) = CByte(adressetab(0))
-            'kar(2) = CByte(adressetab(1))
-            'kar(3) = CByte(adressetab(2))
-            'kar(4) = CByte(adressetab(3))
-            kar(1) = CByte(Array.IndexOf(adressetoint, adressetab(0)))
-            kar(2) = CByte(Array.IndexOf(adressetoint, adressetab(1)))
-            kar(3) = CByte(Array.IndexOf(adressetoint, adressetab(2)))
-            kar(4) = CByte(Array.IndexOf(adressetoint, adressetab(3)))
-
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Chacon", "3")
-
-
-            Select Case Array.IndexOf(adressetoint, adressetab(3))
-                Case 0
-                    kar(4) = 0
-                Case 1
-                    kar(4) = &H40
-                Case 2
-                    kar(4) = &H80
-                Case 3
-                    kar(4) = &HC0
-            End Select
-            'kar(4) = kar(4) Or CByte(adressetab(4))
-            kar(4) = kar(4) Or CByte(Array.IndexOf(adressetoint, adressetab(4)))
-
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Chacon", "4")
-
-
-            Select Case commande
-                Case "ON"
-                    kar(4) = kar(4) Or &H10
-                    kar(5) = 0
-                Case "OFF"
-                    kar(5) = 0
-                Case "GROUP_ON"
-                    kar(4) = kar(4) Or &H30
-                    kar(5) = 0
-                Case "GROUP_OFF"
-                    kar(4) = kar(4) Or &H20
-                    kar(5) = 0
-                Case "DIM"
-                    kar(5) = CByte(dimlevel) << 4
-                Case "GROUP_DIM"
-                    kar(4) = kar(4) Or &H20
-                    kar(5) = CByte(dimlevel) << 4
-                Case "HEATER_ON"
-                    Dim kar2(2) As Byte
-                    kar2(0) = 12
-                    kar2(1) = CByte(adresse) << 3
-                    kar2(1) = kar(1) Or &H4
-                    kar2(2) = &HD0
-                    kar = kar2
-                Case "HEATER_OFF"
-                    Dim kar2(2) As Byte
-                    kar2(0) = 12
-                    kar2(1) = CByte(adresse) << 3
-                    kar2(1) = kar(1) Or &H4
-                    kar2(2) = &HB0
-                    kar = kar2
-            End Select
-
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Chacon", "5")
-
-
-            ecrirecommande(kar)
+            If commande <> "HEATER_ON" And commande <> "HEATER_OFF" Then
+                Dim kar(5) As Byte
+                Dim adressetab As String() = adresse.Split("-")
+                If europe Then kar(0) = 34 Else kar(0) = 33
+                kar(1) = CByte(Array.IndexOf(adressetoint, adressetab(0)))
+                kar(2) = CByte(Array.IndexOf(adressetoint, adressetab(1)))
+                kar(3) = CByte(Array.IndexOf(adressetoint, adressetab(2)))
+                Select Case Array.IndexOf(adressetoint2, adressetab(3))
+                    Case 0 : kar(4) = 0
+                    Case 1 : kar(4) = &H40
+                    Case 2 : kar(4) = &H80
+                    Case 3 : kar(4) = &HC0
+                End Select
+                Select Case commande
+                    Case "ON"
+                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(4)))
+                        kar(4) = kar(4) Or &H10
+                        kar(5) = 0
+                    Case "OFF"
+                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(4)))
+                        kar(5) = 0
+                    Case "GROUP_ON"
+                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(4)))
+                        kar(4) = kar(4) Or &H30
+                        kar(5) = 0
+                    Case "GROUP_OFF"
+                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(4)))
+                        kar(4) = kar(4) Or &H20
+                        kar(5) = 0
+                    Case "DIM"
+                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(4)))
+                        kar(5) = CByte(dimlevel) << 4
+                    Case "GROUP_DIM"
+                        kar(4) = kar(4) Or &H20
+                        kar(5) = CByte(dimlevel) << 4
+                End Select
+                ecrirecommande(kar)
+            Else
+                Dim kar(2) As Byte
+                Select Case commande
+                    Case "HEATER_ON"
+                        kar(0) = 12
+                        kar(1) = CByte(adresse) << 3
+                        kar(1) = kar(1) Or &H4
+                        kar(2) = &HD0
+                    Case "HEATER_OFF"
+                        kar(0) = 12
+                        kar(1) = CByte(adresse) << 3
+                        kar(1) = kar(1) Or &H4
+                        kar(2) = &HB0
+                End Select
+                ecrirecommande(kar)
+            End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ECRIRE CHACON", ex.ToString)
         End Try
