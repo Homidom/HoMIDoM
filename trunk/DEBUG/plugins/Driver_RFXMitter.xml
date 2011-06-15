@@ -6,20 +6,7 @@ Driver_RFXMitter
 </name>
 </assembly>
 <members>
-<member name="P:Driver_RFXMitter.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_RFXMitter.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_RFXMitter.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.Start">
+<member name="M:Driver_RFXMitter.Driver_RFXMitter.Start">
 	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_RFXMitter.Driver_RFXMitter.Stop">
@@ -66,10 +53,9 @@ Driver_RFXMitter
 </member><member name="M:Driver_RFXMitter.Driver_RFXMitter.fermer">
 	<summary>Ferme la connexion au port</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.ecrire(System.Byte,System.Byte)">
+</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.ecrire(System.Byte[])">
 	<summary>ecrire sur le port</summary>
 	<param name="commande">premier paquet à envoyer</param>
-	<param name="commande2">deuxieme paquet à envoyer</param>
 	<remarks></remarks>
 </member><member name="M:Driver_RFXMitter.Driver_RFXMitter.DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
 	<summary>Executer lors de la reception d'une donnée sur le port</summary>
@@ -87,15 +73,50 @@ Driver_RFXMitter
 	<summary>xxx</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_RFXMitter.Driver_RFXMitter.ProcessReceivedChar(System.Byte)">
-	<summary>Rassemble un message complet pour ensuite l'envoyer à displaymess</summary>
+	<summary>Traite chaque byte reçu</summary>
 	<param name="temp">Byte recu</param>
 	<remarks></remarks>
 </member><member name="M:Driver_RFXMitter.Driver_RFXMitter.display_mess">
 	<summary>Decode le message pour l'envoyer aux bonnes fonctions de traitement</summary>
 	<remarks></remarks>
+</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.protocol_chacon(System.String,System.String,System.Boolean,System.Int32)">
+	<summary>Gestion du protocole CHACON - HomeEasy</summary>
+	<param name="adresse">Adresse du type 00-00-00-0 ou 0 (pour les Heaters)</param>
+	<param name="commande">commande ON, OFF, DIM, GROUP_ON, GROUP_OFF, GROUP_DIM, HEATER_ON, HEATER_OFF</param>
+	<param name="europe">Type Europe ou US ?</param>
+	<param name="dimlevel">Niveau du Dim</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.protocol_x10(System.String,System.String)">
+	<summary>Gestion du protocole X10 RF</summary>
+	<param name="adresse">Adresse du type A1</param>
+	<param name="commande">commande ON, OFF, BRIGHT, DIM, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.protocol_arc(System.String,System.String)">
+	<summary>Gestion du protocole ARC</summary>
+	<param name="adresse">Adresse du type A1</param>
+	<param name="commande">commande ON, OFF, GROUP_ON, GROUP_OFF, CHIME</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.protocol_waveman(System.String,System.String)">
+	<summary>Gestion du protocole WAVEMAN</summary>
+	<param name="adresse">Adresse du type A1</param>
+	<param name="commande">commande ON, OFF</param>
+	<remarks></remarks>
 </member><member name="T:Driver_RFXMitter.Driver_RFXMitter">
 	<summary>Class Driver_RFXMitter, permet de communiquer avec le RFXMitter Ethernet/COM</summary>
 	<remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
+</member><member name="P:Driver_RFXMitter.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_RFXMitter.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_RFXMitter.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member>
 </members>
 </doc>
