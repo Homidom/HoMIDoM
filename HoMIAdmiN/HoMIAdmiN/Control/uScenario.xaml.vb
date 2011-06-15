@@ -94,7 +94,12 @@
             AddHandler x.DeleteAction, AddressOf DeleteAction
             AddHandler x.ChangeAction, AddressOf ChangeAction
             x.Width = StckPnlLib.ActualWidth
-            x.TypeAction = 0
+            Select Case uri
+                Case "ImgActDevice"
+                    x.TypeAction = 0
+                Case "ImgActMail"
+                    x.TypeAction = 1
+            End Select
             x.Span = Span
             x.Zoom = Zoom
             _ListAction.Add(x)
@@ -200,5 +205,12 @@
         _Zoom += 5
         If _Zoom > 100 Then _Zoom = 100
         Afficher()
+    End Sub
+
+    Private Sub ImgActMail_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActMail.MouseLeftButtonDown
+        Dim effects As DragDropEffects
+        Dim obj As New DataObject()
+        obj.SetData(GetType(String), "ImgActMail")
+        effects = DragDrop.DoDragDrop(Me.ImgActDevice, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 End Class

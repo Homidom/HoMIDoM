@@ -43,6 +43,8 @@
                     frm.Close()
                     RaiseEvent ChangeAction(Me.Uid)
                 End If
+            Case HoMIDom.HoMIDom.Action.TypeAction.ActionMail
+
         End Select
     End Sub
 
