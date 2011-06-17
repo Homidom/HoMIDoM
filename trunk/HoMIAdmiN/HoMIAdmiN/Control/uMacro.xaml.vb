@@ -44,36 +44,11 @@
 
         If _Action = EAction.Nouveau Then
             Dim tabl As New ArrayList
-            'Dim tabl2 As New List(Of HoMIDom.HoMIDom.TemplateAction)
 
             tabl = UScenario1.Items
-            'For i As Integer = 0 To tabl.Count - 1
-            '    Select Case tabl.Item(i).TypeAction
-            '        Case HoMIDom.HoMIDom.Action.TypeAction.ActionDevice
-            '            Dim o As New HoMIDom.HoMIDom.TemplateAction
-            '            o.Timing = tabl.Item(i).timing
-            '            o.IdDevice = tabl.Item(i).IdDevice
-            '            o.Action = tabl.Item(i).Method
-            '            o.Parametres = tabl.Item(i).Parametres
-            '            tabl2.Add(o)
-            '    End Select
-            'Next
             Window1.myService.SaveMacro("", TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
         Else
             Dim tabl As New ArrayList
-            'Dim tabl2 As New List(Of HoMIDom.HoMIDom.TemplateAction)
-            'tabl = UScenario1.Items
-            'For i As Integer = 0 To tabl.Count - 1
-            '    Select Case tabl.Item(i).TypeAction
-            '        Case HoMIDom.HoMIDom.Action.TypeAction.ActionDevice
-            '            Dim o As New HoMIDom.HoMIDom.TemplateAction
-            '            o.Timing = tabl.Item(i).Timing
-            '            o.IdDevice = tabl.Item(i).IdDevice
-            '            o.Action = tabl.Item(i).method
-            '            o.Parametres = tabl.Item(i).Parametres
-            '            tabl2.Add(o)
-            '    End Select
-            'Next
             Window1.myService.SaveMacro(_MacroId, TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
         End If
         RaiseEvent CloseMe(Me)

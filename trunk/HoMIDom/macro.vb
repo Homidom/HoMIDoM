@@ -444,6 +444,69 @@ Namespace HoMIDom
             End Property
         End Class
 
+        ''' <summary>
+        ''' Action Mail
+        ''' </summary>
+        ''' <remarks></remarks>
+        <Serializable()> Public Class ActionMail
+            Dim _To As String
+            Dim _Sujet As String
+            Dim _Message As String
+            Dim _Timing As DateTime
+            Dim _UserId As String
+
+            Public Property Timing As DateTime
+                Get
+                    Return _Timing
+                End Get
+                Set(ByVal value As DateTime)
+                    _Timing = value
+                End Set
+            End Property
+
+            Public Property [To] As String
+                Get
+                    Return _to
+                End Get
+                Set(ByVal value As String)
+                    _to = value
+                End Set
+            End Property
+
+            Public Property Sujet As String
+                Get
+                    Return _sujet
+                End Get
+                Set(ByVal value As String)
+                    _Sujet = value
+                End Set
+            End Property
+
+            Public Property Message As String
+                Get
+                    Return _Message
+                End Get
+                Set(ByVal value As String)
+                    _Message = value
+                End Set
+            End Property
+
+            Public Property UserId As String
+                Get
+                    Return _UserId
+                End Get
+                Set(ByVal value As String)
+                    _UserId = value
+                End Set
+            End Property
+
+            Public ReadOnly Property TypeAction As TypeAction
+                Get
+                    Return TypeAction.ActionMail
+                End Get
+            End Property
+        End Class
+
         ''' <summary>Envoi d'un email</summary>
         ''' <remarks></remarks>
         <Serializable()> Public Class email
