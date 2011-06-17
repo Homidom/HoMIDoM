@@ -6,85 +6,13 @@ HoMIDomWpfClient
 </name>
 </assembly>
 <members>
-<member name="M:HoMIDomWpfClient.uMeteos.InitializeComponent">
+<member name="M:HoMIDomWpfClient.uModules.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIDomWpfClient.uMeteos">
+</member><member name="T:HoMIDomWpfClient.uModules">
 	<summary>
-uMeteos
-</summary>
-</member><member name="M:HoMIDomWpfClient.uNotes.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uNotes">
-	<summary>
-uNotes
-</summary>
-</member><member name="M:HoMIDomWpfClient.uScene.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uScene">
-	<summary>
-uScene
-</summary>
-</member><member name="M:HoMIDomWpfClient.DayBoxControl.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.DayBoxControl">
-	<summary>
-DayBoxControl
-</summary>
-</member><member name="M:HoMIDomWpfClient.uCalendar.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uCalendar">
-	<summary>
-uCalendar
-</summary>
-</member><member name="M:HoMIDomWpfClient.uContact.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uContact">
-	<summary>
-uContact
-</summary>
-</member><member name="M:HoMIDomWpfClient.uInternet.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uInternet">
-	<summary>
-uInternet
-</summary>
-</member><member name="M:HoMIDomWpfClient.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
-	<summary>
-CreateInstance
-</summary>
-</member><member name="M:HoMIDomWpfClient.XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
-	<summary>
-GetPropertyValue
-</summary>
-</member><member name="M:HoMIDomWpfClient.XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
-	<summary>
-SetPropertyValue
-</summary>
-</member><member name="M:HoMIDomWpfClient.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
-	<summary>
-CreateDelegate
-</summary>
-</member><member name="M:HoMIDomWpfClient.XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
-	<summary>
-AddEventHandler
-</summary>
-</member><member name="T:HoMIDomWpfClient.XamlGeneratedNamespace.GeneratedInternalTypeHelper">
-	<summary>
-GeneratedInternalTypeHelper
+uModules
 </summary>
 </member><member name="M:HoMIDomWpfClient.DayBoxAppointmentControl.InitializeComponent">
 	<summary>
@@ -94,38 +22,6 @@ InitializeComponent
 	<summary>
 DayBoxAppointmentControl
 </summary>
-</member><member name="M:HoMIDomWpfClient.Window1.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.Window1">
-	<summary>
-Window1
-</summary>
-</member><member name="M:HoMIDomWpfClient.uModules.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uModules">
-	<summary>
-uModules
-</summary>
-</member><member name="M:HoMIDomWpfClient.uProgramTV.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uProgramTV">
-	<summary>
-uProgramTV
-</summary>
-</member><member name="M:HoMIDomWpfClient.uCtrlImgMnu.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uCtrlImgMnu">
-	<summary>
-uCtrlImgMnu
-</summary>
 </member><member name="M:HoMIDomWpfClient.uModule.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -133,22 +29,6 @@ InitializeComponent
 </member><member name="T:HoMIDomWpfClient.uModule">
 	<summary>
 uModule
-</summary>
-</member><member name="M:HoMIDomWpfClient.uScenes.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uScenes">
-	<summary>
-uScenes
-</summary>
-</member><member name="M:HoMIDomWpfClient.MonthView.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.MonthView">
-	<summary>
-MonthView
 </summary>
 </member><member name="M:HoMIDomWpfClient.uCalc.InitializeComponent">
 	<summary>
@@ -158,14 +38,6 @@ InitializeComponent
 	<summary>
 uCalc
 </summary>
-</member><member name="M:HoMIDomWpfClient.uProgrammeTV.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uProgrammeTV">
-	<summary>
-uProgrammeTV
-</summary>
 </member><member name="M:HoMIDomWpfClient.uMeteo.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -173,6 +45,78 @@ InitializeComponent
 </member><member name="T:HoMIDomWpfClient.uMeteo">
 	<summary>
 uMeteo
+</summary>
+</member><member name="M:HoMIDomWpfClient.uCalendar.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIDomWpfClient.uCalendar">
+	<summary>
+uCalendar
+</summary>
+</member><member name="M:HoMIDomWpfClient.MonthView.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIDomWpfClient.MonthView">
+	<summary>
+MonthView
+</summary>
+</member><member name="M:HoMIDomWpfClient.Window1.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIDomWpfClient.Window1">
+	<summary>
+Window1
+</summary>
+</member><member name="M:HoMIDomWpfClient.uInternet.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIDomWpfClient.uInternet">
+	<summary>
+uInternet
+</summary>
+</member><member name="M:HoMIDomWpfClient.uHorloge.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIDomWpfClient.uHorloge">
+	<summary>
+uHorloge
+</summary>
+</member><member name="M:HoMIDomWpfClient.uScene.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIDomWpfClient.uScene">
+	<summary>
+uScene
+</summary>
+</member><member name="M:HoMIDomWpfClient.uScenes.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIDomWpfClient.uScenes">
+	<summary>
+uScenes
+</summary>
+</member><member name="M:HoMIDomWpfClient.DayBoxControl.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIDomWpfClient.DayBoxControl">
+	<summary>
+DayBoxControl
+</summary>
+</member><member name="M:HoMIDomWpfClient.uCtrlImgMnu.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIDomWpfClient.uCtrlImgMnu">
+	<summary>
+uCtrlImgMnu
 </summary>
 </member><member name="M:HoMIDomWpfClient.Application.InitializeComponent">
 	<summary>
@@ -186,13 +130,45 @@ Application Entry Point.
 	<summary>
 Application
 </summary>
-</member><member name="M:HoMIDomWpfClient.uHorloge.InitializeComponent">
+</member><member name="M:HoMIDomWpfClient.uContact.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIDomWpfClient.uHorloge">
+</member><member name="T:HoMIDomWpfClient.uContact">
 	<summary>
-uHorloge
+uContact
+</summary>
+</member><member name="M:HoMIDomWpfClient.uNotes.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIDomWpfClient.uNotes">
+	<summary>
+uNotes
+</summary>
+</member><member name="M:HoMIDomWpfClient.uMeteos.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIDomWpfClient.uMeteos">
+	<summary>
+uMeteos
+</summary>
+</member><member name="M:HoMIDomWpfClient.uProgramTV.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIDomWpfClient.uProgramTV">
+	<summary>
+uProgramTV
+</summary>
+</member><member name="M:HoMIDomWpfClient.uProgrammeTV.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIDomWpfClient.uProgrammeTV">
+	<summary>
+uProgrammeTV
 </summary>
 </member><member name="M:HoMIDomWpfClient.WeekOfDaysControls.InitializeComponent">
 	<summary>
@@ -202,6 +178,15 @@ InitializeComponent
 	<summary>
 WeekOfDaysControls
 </summary>
+</member><member name="T:HoMIDomWpfClient.Appointment">
+	<summary>
+ This class is actually a stripped-down version of the actual Appointment class, which was generated using the 
+ Linq-to-SQL Designer (essentially a Linq ORM to the Appointments table in the db)
+ </summary>
+	<remarks>Obviously, you should use your own appointment object/classes, and change the code-behind in MonthView.xaml.vb to
+ support a List(Of T) where T is whatever the System.Type is for your appointment class.
+ </remarks>
+	<author>Kirk Davis, February 2009 (in like, 4 hours, and it shows!)</author>
 </member><member name="P:HoMIDomWpfClient.My.Resources.Resources.ResourceManager">
 	<summary>
   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
@@ -215,32 +200,6 @@ WeekOfDaysControls
 	<summary>
   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
 </summary>
-</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.Application">
-	<summary>
- Retourne l'objet application pour l'application en cours d'exécution
- </summary>
-</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.Computer">
-	<summary>
- Retourne les informations relatives à l'ordinateur hôte.
- </summary>
-</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.User">
-	<summary>
- Retourne les informations relatives à l'utilisateur actuel. Si vous souhaitez exécuter l'application avec les 
- informations d'identification de l'utilisateur Windows, appelez My.User.InitializeWithWindowsUser().
- </summary>
-</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.Log">
-	<summary>
- Retourne le journal de l'application. L'écouteur peut être configuré par le fichier de configuration de l'application.
- </summary>
-</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.Windows">
-	<summary>
- Retourne la collection de fenêtres définie dans le projet.
- </summary>
-</member><member name="T:HoMIDomWpfClient.My.MyWpfExtension">
-	<summary>
- Module utilisé pour définir les propriétés qui sont disponibles dans l'espace de noms My pour WPF
- </summary>
-	<remarks></remarks>
 </member><member name="M:HoMIDomWpfClient.clsXML.#ctor(System.String)">
  -----------------------------------------------------------------------------
  <summary>
@@ -570,15 +529,32 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="T:HoMIDomWpfClient.Appointment">
+</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.Application">
 	<summary>
- This class is actually a stripped-down version of the actual Appointment class, which was generated using the 
- Linq-to-SQL Designer (essentially a Linq ORM to the Appointments table in the db)
+ Retourne l'objet application pour l'application en cours d'exécution
  </summary>
-	<remarks>Obviously, you should use your own appointment object/classes, and change the code-behind in MonthView.xaml.vb to
- support a List(Of T) where T is whatever the System.Type is for your appointment class.
- </remarks>
-	<author>Kirk Davis, February 2009 (in like, 4 hours, and it shows!)</author>
+</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.Computer">
+	<summary>
+ Retourne les informations relatives à l'ordinateur hôte.
+ </summary>
+</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.User">
+	<summary>
+ Retourne les informations relatives à l'utilisateur actuel. Si vous souhaitez exécuter l'application avec les 
+ informations d'identification de l'utilisateur Windows, appelez My.User.InitializeWithWindowsUser().
+ </summary>
+</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.Log">
+	<summary>
+ Retourne le journal de l'application. L'écouteur peut être configuré par le fichier de configuration de l'application.
+ </summary>
+</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.Windows">
+	<summary>
+ Retourne la collection de fenêtres définie dans le projet.
+ </summary>
+</member><member name="T:HoMIDomWpfClient.My.MyWpfExtension">
+	<summary>
+ Module utilisé pour définir les propriétés qui sont disponibles dans l'espace de noms My pour WPF
+ </summary>
+	<remarks></remarks>
 </member>
 </members>
 </doc>

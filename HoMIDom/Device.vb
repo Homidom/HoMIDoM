@@ -661,6 +661,15 @@ Namespace HoMIDom
                 End Set
             End Property
 
+            Public Sub SetFichierAudio(ByVal File As String)
+                Try
+                    If _Enable = False Then Exit Sub
+                    _Fichier = File
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " SetFichierAudio " & File & " : " & ex.Message)
+                End Try
+            End Sub
+
             Private Sub touche(ByVal commande As String)
                 Try
                     If _Enable = False Then Exit Sub
@@ -671,7 +680,7 @@ Namespace HoMIDom
                 End Try
             End Sub
 
-            Public Sub Play()
+            Public Sub Play(ByVal Fichier As String)
                 touche("PlayAudio")
             End Sub
 

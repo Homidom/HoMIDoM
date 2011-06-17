@@ -1,9 +1,12 @@
-﻿Public Class uScenario
+﻿Imports HoMIDom.HoMIDom
+
+Public Class uScenario
     Dim Span As Integer 'Espacement correspondant à 1 seconde
     Dim _Duree As Integer = 15
     Dim _Zoom As Integer = 1
     Dim _ListAction As New ArrayList 'liste des actions
 
+    'Duree max du timeline
     Public Property Duree As Integer
         Get
             Return _Duree
@@ -13,6 +16,7 @@
         End Set
     End Property
 
+    'Zoom du timeline
     Public Property Zoom As Integer
         Get
             Return _Zoom
@@ -22,6 +26,7 @@
         End Set
     End Property
 
+    'Items (actions du timeline)
     Public Property Items As ArrayList
         Get
             Return _ListAction
@@ -29,13 +34,13 @@
         Set(ByVal value As ArrayList)
             For i As Integer = 0 To value.Count - 1
                 Dim x As New uAction
+                x.ObjAction = value.Item(i)
                 x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
                 x.Span = Span
                 x.Zoom = Zoom
                 AddHandler x.DeleteAction, AddressOf DeleteAction
                 AddHandler x.ChangeAction, AddressOf ChangeAction
                 x.Width = StckPnlLib.ActualWidth
-                x.ObjAction = value.Item(i)
                 _ListAction.Add(x)
                 StackPanel1.Children.Add(x)
             Next
@@ -79,9 +84,11 @@
             x.Width = StckPnlLib.ActualWidth
             Select Case uri
                 Case "ImgActDevice"
-                    x.TypeAction = 0
+                    Dim y As New Action.ActionDevice
+                    x.ObjAction = y
                 Case "ImgActMail"
-                    x.TypeAction = 1
+                    Dim y As New Action.ActionDevice
+                    x.ObjAction = y
             End Select
             x.Span = Span
             x.Zoom = Zoom
@@ -92,6 +99,7 @@
         End If
     End Sub
 
+    'Supprimer une action
     Private Sub DeleteAction(ByVal Id As String)
         For i As Integer = 0 To StackPanel1.Children.Count - 1
             If StackPanel1.Children.Item(i).Uid = Id Then
@@ -102,10 +110,11 @@
         Next
     End Sub
 
+    'Mise à jour d'une action
     Private Sub ChangeAction(ByVal Id As String)
         For i As Integer = 0 To StackPanel1.Children.Count - 1
             Dim x As uAction = StackPanel1.Children.Item(i)
-            Dim j As Double = x.Timing.Minute + (x.Timing.Hour * 60)
+            Dim j As Double = x.ObjAction.Timing.Minute + (x.ObjAction.Timing.Hour * 60)
             If j > Duree Then Duree = j + 5
         Next
         Afficher()
@@ -121,6 +130,7 @@
         ScrollViewer1.MaxHeight = uScenario.ActualHeight - 34
     End Sub
 
+    'Afficher les éléments du timeline
     Private Sub Afficher()
         If StckPnlLib IsNot Nothing Then StckPnlLib.Children.Clear()
         If StckPnlLibTr IsNot Nothing Then StckPnlLibTr.Children.Clear()
@@ -178,12 +188,14 @@
         End If
     End Sub
 
+    'Zoom avant
     Private Sub ZoomPlus_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ZoomPlus.MouseDown
         _Zoom -= 5
         If _Zoom <= 0 Then _Zoom = 1
         Afficher()
     End Sub
 
+    'Zoom arrière
     Private Sub ZoomMoins_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ZoomMoins.MouseDown
         _Zoom += 5
         If _Zoom > 100 Then _Zoom = 100

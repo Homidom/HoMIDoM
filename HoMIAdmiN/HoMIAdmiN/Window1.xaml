@@ -194,21 +194,20 @@
             <StackPanel HorizontalAlignment="Left" Margin="12,27,0,6" Name="StackPanel2" Width="380" Orientation="Horizontal">
                 <Menu Height="25.004" HorizontalAlignment="Left"  Name="Menu1" VerticalAlignment="Bottom" Width="Auto" Background="Transparent" Foreground="Black">
                     <MenuItem Header="Fichier" Foreground="WhiteSmoke" Background="Black">
-                        <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig" Background="DarkGray" Foreground="White" />
-                        <MenuItem Header="Configuration du Serveur" Name="MenuConfigSrv" Background="DarkGray" Foreground="White" />
-                        <MenuItem Header="Paramètres Audio du Serveur" Name="MenuConfigAudio" Background="DarkGray" Foreground="White" />
-                        <MenuItem Header="Quitter" Name="MenuQuitter" Background="DarkGray" Foreground="White" />
+                        <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig"  />
+                        <MenuItem Header="Configuration du Serveur" Name="MenuConfigSrv"  />
+                        <MenuItem Header="Paramètres Audio du Serveur" Name="MenuConfigAudio"  />
+                        <MenuItem Header="Quitter" Name="MenuQuitter"  />
                     </MenuItem>
                     <MenuItem Header="Affichage" Foreground="WhiteSmoke">
-                        <MenuItem Header="Consulter Log" Name="MenuConsultLog" Background="DarkGray" Foreground="White" />
-                        <MenuItem Header="PlayList" Name="MenuPlayList" Background="DarkGray" Foreground="White" />
+                        <MenuItem Header="Consulter Log" Name="MenuConsultLog"  />
+                        <MenuItem Header="PlayList" Name="MenuPlayList"  />
                     </MenuItem> 
                     <MenuItem Header="?" Foreground="WhiteSmoke">
-                        <MenuItem Header="A propos" Name="MenuPropos" Background="DarkGray" Foreground="White" />
+                        <MenuItem Header="A propos" Name="MenuPropos" />
                         <MenuItem Header="Test" Name="MenuTest" />
                     </MenuItem>
                 </Menu>
-
             </StackPanel>
             <Image HorizontalAlignment="Right" Margin="0,0,6,0" Name="Image2" Stretch="Fill" Width="328" Source="/HoMIAdmiN;component/Images/Logo_817x203.png" />
             <Grid.Background>

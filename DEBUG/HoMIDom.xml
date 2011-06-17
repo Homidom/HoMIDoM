@@ -391,6 +391,11 @@ HoMIDom
  Action Device
  </summary>
 	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionMail">
+	<summary>
+ Action Mail
+ </summary>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.email">
 	<summary>Envoi d'un email</summary>
 	<remarks></remarks>
