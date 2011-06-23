@@ -69,16 +69,7 @@
         </ControlTemplate>
     </UserControl.Resources>
     
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30*" />
-            <RowDefinition Height="457*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*" />
-            <ColumnDefinition Width="224*" />
-            <ColumnDefinition Width="273*" />
-        </Grid.ColumnDefinitions>
+    <Grid Name="Grid1">
         <Grid.Background >
             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                 <GradientStop Color="Gray" Offset="0.0" />
@@ -86,33 +77,32 @@
                 <GradientStop Color="Black" Offset="1.0" />
             </LinearGradientBrush>
         </Grid.Background>
-        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Grid.ColumnSpan="3" Grid.RowSpan="2">
+        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
             <Label Height="46.25" Name="Label1" Width="105" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">PlayList</Label>
         </Border>
-        <Image Height="60" HorizontalAlignment="Left" Margin="6,23,0,0" Name="ImgIcon" Stretch="Fill" VerticalAlignment="Top" Width="60" Grid.Column="1" Grid.RowSpan="2">
-            <Image.LayoutTransform >
-                <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
-            </Image.LayoutTransform>
-        </Image>
-        <Label Height="24" HorizontalAlignment="Left" Margin="65,11.25,0,0" Name="Label2" VerticalAlignment="Top" Width="42" Foreground="White" Grid.Column="1" Grid.Row="1">Nom:</Label>
-        <TextBox Height="22" Margin="121,16.25,154,0" Name="TxtName" VerticalAlignment="Top" Foreground="White" Background="DarkGray" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="1" />
-        <Image Margin="11,86,63,0" Name="ImgPochette" Stretch="Uniform" Grid.Column="1" Grid.Row="1" Height="151" VerticalAlignment="Top" />
-        <Label Foreground="White" HorizontalAlignment="Left" Margin="11,2,0,4" Name="Label4" Width="42" Grid.Column="1">Icon:</Label>
-        <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,11,12,0" Name="BtnOK" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Grid.Column="2" Grid.RowSpan="2">Ok</Button>
-        <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,8,12,0" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Grid.Column="2" Grid.Row="1">Fermer</Button>
-        <TextBox Background="DarkGray" Foreground="White" Height="22" Margin="121,50,12,0" VerticalAlignment="Top" Name="NomRep" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="1" />
-        <Label Foreground="White" Height="24" HorizontalAlignment="Left" Margin="35,50,0,0" VerticalAlignment="Top" Width="72" Grid.Column="1" Grid.Row="1">Répertoire :</Label>
-        <ListBox Margin="171,85,12,222" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="1" Name="ListFileAudio" />
-        <ListBox Height="176" Margin="54,0,12,27" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="1" Name="ListFilePList" />
-        <Button Height="21" HorizontalAlignment="Left" Margin="11,0,0,180" VerticalAlignment="Bottom" Width="22" Grid.Column="1" Grid.Row="1" Name="ButtonUp" >Up</Button>
-          <Button Height="21" HorizontalAlignment="Left" Margin="11,0,0,140" VerticalAlignment="Bottom" Width="22" Grid.Column="1" Grid.Row="1" Name="ButtonDown" >Do</Button>
-      <Button Height="21" HorizontalAlignment="Left" Margin="11,0,0,96" VerticalAlignment="Bottom" Width="22" Grid.Column="1" Grid.Row="1" Name="ButtonPlus">+</Button>
-        <Button Height="21" HorizontalAlignment="Left" Margin="11,0,0,49" VerticalAlignment="Bottom" Width="22" Grid.Column="1" Grid.Row="1" Name="ButtonMoins">-</Button>
-        <Label Foreground="White" Grid.Column="1" HorizontalAlignment="Left" Margin="11,0,0,236" Name="TitleLengthLabel" Width="50" Grid.Row="1" Height="23.626" VerticalAlignment="Bottom">Durée :</Label>
-        <TextBox Background="DarkGray" Foreground="White" Grid.Column="1" Margin="65,0,72,238" Name="TitleLength" Grid.Row="1" Height="21.626" VerticalAlignment="Bottom" />
-        <Label Foreground="White" Grid.Column="1" HorizontalAlignment="Left" Margin="11,239,0,261" Name="TitleGenreLabel" Width="50" Grid.Row="1">Genre :</Label>
-        <TextBox Background="DarkGray" Foreground="White" Grid.Column="1" Margin="65,241,72,261" Name="TitleGenre" Grid.Row="1" />
-        <Label Foreground="White" Grid.Column="1" HorizontalAlignment="Left" Margin="11,0,0,212" Name="TitleYearLabel" Width="50" Height="24" Grid.Row="1" VerticalAlignment="Bottom">Année :</Label>
-        <TextBox Background="DarkGray" Foreground="White" Grid.Column="1" Margin="65,0,72,214" Name="TitleYear" Height="22" Grid.Row="1" VerticalAlignment="Bottom" />
+        <Label Height="24" HorizontalAlignment="Left" Margin="170,76,0,0" Name="Label2" VerticalAlignment="Top" Width="42" Foreground="White" Content="Nom :"></Label>
+        <TextBox Height="22" Margin="213,78,123,0" Name="TxtName" VerticalAlignment="Top" Foreground="White" Background="DarkGray" />
+        <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,23,12,0" Name="BtnOK" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Ok</Button>
+        <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,54,12,0" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Fermer</Button>
+        <ComboBox Background="DarkGray" Foreground="gray" Height="23" HorizontalAlignment="Left" Margin="213,110,0,0" Name="NomRep" VerticalAlignment="Top" Width="277" />
+        <ListBox Height="147" Margin="12,0,12,47" VerticalAlignment="Bottom" Name="ListFilePList" ItemsSource="{Binding}" />
+        <Button Height="21" HorizontalAlignment="Left" Margin="357,0,0,201" VerticalAlignment="Bottom" Width="22" Name="ButtonUp">Up</Button>
+        <Button Height="21" HorizontalAlignment="Left" Margin="417,0,0,201" VerticalAlignment="Bottom" Width="22" Name="ButtonDown">Do</Button>
+        <Button Height="21" HorizontalAlignment="Left" Margin="87,0,0,201" VerticalAlignment="Bottom" Width="22" Name="ButtonPlus">+</Button>
+        <Button Height="21" HorizontalAlignment="Left" Margin="238,0,0,201" VerticalAlignment="Bottom" Width="22" Name="ButtonMoins">-</Button>
+        <Image Height="128" HorizontalAlignment="Left" Margin="10,5,0,0" Name="ImgPochette" Stretch="Fill" VerticalAlignment="Top" Width="128" Source="/HoMIAdmiN;component/Images/homidom_icone_moyen.png" />
+        <ListView Height="185" HorizontalAlignment="Left" Margin="12,141,0,0" Name="ListFileAudio" VerticalAlignment="Top" Width="478" ItemsSource="{Binding}" FontWeight="Bold">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="N°"    DisplayMemberBinding="{Binding Path=Track}" Width="25" />
+                    <GridViewColumn Header="Titre" DisplayMemberBinding="{Binding Path=Titre}" Width="235"/>
+                    <GridViewColumn Header="Durée" DisplayMemberBinding="{Binding Path=Durée}" Width="70" />
+                    <GridViewColumn Header="Genre" DisplayMemberBinding="{Binding Path=Genre}" Width="70" />
+                    <GridViewColumn Header="Année" DisplayMemberBinding="{Binding Path=Année}" Width="70" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Label Content="Répertoire : " Foreground="White" Height="24" HorizontalAlignment="Left" Margin="143,109,0,0" Name="Label3" VerticalAlignment="Top" Width="77" />
+        <TextBox Height="22" Margin="12,524,12,0" Name="TxtTest" VerticalAlignment="Top" Foreground="White" />
     </Grid>
 </UserControl>
