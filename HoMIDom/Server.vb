@@ -862,6 +862,10 @@ Namespace HoMIDom
                                                     Dim o As New Action.ActionDevice
                                                     _Act = o
                                                     o = Nothing
+                                                Case "ActionMail"
+                                                    Dim o As New Action.ActionMail
+                                                    _Act = o
+                                                    o = Nothing
                                             End Select
                                             For j3 As Integer = 0 To list.Item(i).ChildNodes.Item(j2).Attributes.Count - 1
                                                 Select Case list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Name
@@ -871,6 +875,12 @@ Namespace HoMIDom
                                                         _Act.iddevice = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
                                                     Case "method"
                                                         _Act.method = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                                    Case "userid"
+                                                        _Act.userid = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                                    Case "sujet"
+                                                        _Act.sujet = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                                    Case "message"
+                                                        _Act.message = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
                                                     Case "parametres"
                                                         Dim b As String = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
                                                         Dim a() As String = b.Split("|")
@@ -963,6 +973,77 @@ Namespace HoMIDom
                 Return " Erreur de chargement de la config: " & ex.Message
             End Try
         End Function
+
+        Private Sub LoadAction(ByVal list As XmlNode, ByVal ListAction As ArrayList)
+            If list.HasChildNodes Then
+                For j2 As Integer = 0 To list.ChildNodes.Count - 1
+                    If list.ChildNodes.Item(j2).Name = "action" Then
+                        Dim _Act As Object = Nothing
+                        Select Case list.ChildNodes.Item(j2).Attributes.Item(0).Value
+                            Case "ActionDevice"
+                                Dim o As New Action.ActionDevice
+                                _Act = o
+                                o = Nothing
+                            Case "ActionMail"
+                                Dim o As New Action.ActionMail
+                                _Act = o
+                                o = Nothing
+                            Case "ActionIf"
+                                Dim o As New Action.ActionIf
+                                _Act = o
+                                o = Nothing
+                        End Select
+                        For j3 As Integer = 0 To list.ChildNodes.Item(j2).Attributes.Count - 1
+                            Select Case list.ChildNodes.Item(j2).Attributes.Item(j3).Name
+                                Case "timing"
+                                    _Act.timing = CDate(list.ChildNodes.Item(j2).Attributes.Item(j3).Value)
+                                Case "iddevice"
+                                    _Act.iddevice = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                Case "method"
+                                    _Act.method = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                Case "userid"
+                                    _Act.userid = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                Case "sujet"
+                                    _Act.sujet = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                Case "message"
+                                    _Act.message = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                Case "parametres"
+                                    Dim b As String = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Dim a() As String = b.Split("|")
+                                    Dim c As New ArrayList
+                                    For cnt1 As Integer = 0 To a.Count - 1
+                                        c.Add(a(cnt1))
+                                    Next
+                                    _Act.parametres = c
+                                    b = Nothing
+                                    a = Nothing
+                                    c = Nothing
+                            End Select
+                        Next
+                        ' Case "condition"
+
+                        '    Case "then"
+                        'LoadAction(list.ChildNodes.Item(j2).Attributes.Item(j3), _Act.ListTrue)
+                        '    Case "else"
+                        'LoadAction(list.ChildNodes.Item(j2).Attributes.Item(j3), _Act.ListFalse)
+                        If list.ChildNodes.Item(j2).HasChildNodes Then
+                            For j3 As Integer = 0 To list.ChildNodes.Item(j2).ChildNodes.Count - 1
+                                If list.ChildNodes.Item(j2).ChildNodes.Item(j3).Name = "condition" Then
+
+                                End If
+                                If list.ChildNodes.Item(j2).ChildNodes.Item(j3).Name = "then" Then
+
+                                End If
+                                If list.ChildNodes.Item(j2).ChildNodes.Item(j3).Name = "else" Then
+
+                                End If
+                            Next
+                        End If
+                        ListAction.Add(_Act)
+                    End If
+                Next
+            End If
+        End Sub
 
         ''' <summary>Sauvegarde de la config dans le fichier XML</summary>
         ''' <remarks></remarks>
@@ -1411,32 +1492,7 @@ Namespace HoMIDom
                     writer.WriteStartAttribute("enable")
                     writer.WriteValue(_ListMacros.Item(i).enable)
                     writer.WriteEndAttribute()
-                    For j As Integer = 0 To _ListMacros.Item(i).ListActions.count - 1
-                        writer.WriteStartElement("action")
-                        writer.WriteStartAttribute("typeaction")
-                        writer.WriteValue(_ListMacros.Item(i).listactions.item(j).TypeAction.ToString)
-                        writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("timing")
-                        writer.WriteValue(_ListMacros.Item(i).listactions.item(j).timing)
-                        writer.WriteEndAttribute()
-                        Select Case _ListMacros.Item(i).listactions.item(j).TypeAction
-                            Case Action.TypeAction.ActionDevice
-                                writer.WriteStartAttribute("iddevice")
-                                writer.WriteValue(_ListMacros.Item(i).listactions.item(j).IdDevice)
-                                writer.WriteEndAttribute()
-                                writer.WriteStartAttribute("method")
-                                writer.WriteValue(_ListMacros.Item(i).listactions.item(j).Method)
-                                writer.WriteEndAttribute()
-                                Dim a As String = ""
-                                For k As Integer = 0 To _ListMacros.Item(i).listactions.item(j).parametres.count - 1
-                                    a = a & _ListMacros.Item(i).listactions.item(j).parametres.item(k) & "|"
-                                Next
-                                writer.WriteStartAttribute("parametres")
-                                writer.WriteValue(a)
-                                writer.WriteEndAttribute()
-                        End Select
-                            writer.WriteEndElement()
-                    Next
+                    WriteListAction(writer, _ListMacros.Item(i).ListActions)
                     writer.WriteEndElement()
                 Next
                 writer.WriteEndElement()
@@ -1451,6 +1507,90 @@ Namespace HoMIDom
             End Try
 
         End Sub
+
+        ''' <summary>
+        ''' Ecris les actions dans le fichier de config
+        ''' </summary>
+        ''' <param name="writer"></param>
+        ''' <param name="ListActions"></param>
+        ''' <remarks></remarks>
+        Private Sub WriteListAction(ByVal writer As XmlTextWriter, ByVal ListActions As ArrayList)
+            For j As Integer = 0 To ListActions.Count - 1
+                writer.WriteStartElement("action")
+                writer.WriteStartAttribute("typeaction")
+                writer.WriteValue(ListActions.Item(j).TypeAction.ToString)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("timing")
+                writer.WriteValue(ListActions.Item(j).timing)
+                writer.WriteEndAttribute()
+                Select Case ListActions.Item(j).TypeAction
+                    Case Action.TypeAction.ActionDevice
+                        writer.WriteStartAttribute("iddevice")
+                        writer.WriteValue(ListActions.Item(j).IdDevice)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("method")
+                        writer.WriteValue(ListActions.Item(j).Method)
+                        writer.WriteEndAttribute()
+                        Dim a As String = ""
+                        For k As Integer = 0 To ListActions.Item(j).parametres.count - 1
+                            a = a & ListActions.Item(j).parametres.item(k) & "|"
+                        Next
+                        writer.WriteStartAttribute("parametres")
+                        writer.WriteValue(a)
+                        writer.WriteEndAttribute()
+                    Case Action.TypeAction.ActionMail
+                        writer.WriteStartAttribute("userid")
+                        writer.WriteValue(ListActions.Item(j).UserId)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("sujet")
+                        writer.WriteValue(ListActions.Item(j).Sujet)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("message")
+                        writer.WriteValue(ListActions.Item(j).Sujet)
+                        writer.WriteEndAttribute()
+                    Case Action.TypeAction.ActionIf
+                        writer.WriteStartElement("conditions")
+                        For i2 As Integer = 0 To ListActions.Item(j).Conditions.count - 1
+                            writer.WriteStartElement("condition")
+                            writer.WriteStartAttribute("typecondition")
+                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Type.ToString)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("datetime")
+                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).DateTime)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("iddevice")
+                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).IdDevice)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("propertydevice")
+                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).propertydevice)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("value")
+                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Value)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("condition")
+                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Condition.ToString)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("operateur")
+                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Operateur.ToString)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("formatncalc")
+                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).FormatNCalc)
+                            writer.WriteEndAttribute()
+                            writer.WriteEndElement()
+                        Next
+                        writer.WriteEndElement()
+                        writer.WriteStartElement("then")
+                        WriteListAction(writer, ListActions.Item(j).ListThen)
+                        writer.WriteEndElement()
+                        writer.WriteStartElement("else")
+                        WriteListAction(writer, ListActions.Item(j).ListElse)
+                        writer.WriteEndElement()
+                End Select
+                writer.WriteEndElement()
+            Next
+        End Sub
+
+
 #End Region
 
 #Region "Device"

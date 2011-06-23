@@ -389,6 +389,38 @@ Namespace HoMIDom
         Public Enum TypeAction
             ActionDevice = 0
             ActionMail = 1
+            ActionIf = 2
+        End Enum
+
+        ''' <summary>
+        ''' Enumération des types  de signe (<,=,<>...)
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Enum TypeSigne
+            Egal = 0
+            Inferieur = 1
+            InferieurEgal = 2
+            Superieur = 3
+            SuperieurEgal = 4
+            Different = 5
+        End Enum
+
+        ''' <summary>
+        ''' Enumération des types d'operateur
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Enum TypeOperateur
+            [AND] = 0
+            [OR] = 1
+        End Enum
+
+        ''' <summary>
+        ''' Enumération des types de conditions
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Enum TypeCondition
+            DateTime = 0
+            Device = 1
         End Enum
 
         ''' <summary>
@@ -449,7 +481,6 @@ Namespace HoMIDom
         ''' </summary>
         ''' <remarks></remarks>
         <Serializable()> Public Class ActionMail
-            Dim _To As String
             Dim _Sujet As String
             Dim _Message As String
             Dim _Timing As DateTime
@@ -464,18 +495,9 @@ Namespace HoMIDom
                 End Set
             End Property
 
-            Public Property [To] As String
-                Get
-                    Return _to
-                End Get
-                Set(ByVal value As String)
-                    _to = value
-                End Set
-            End Property
-
             Public Property Sujet As String
                 Get
-                    Return _sujet
+                    Return _Sujet
                 End Get
                 Set(ByVal value As String)
                     _Sujet = value
@@ -503,6 +525,144 @@ Namespace HoMIDom
             Public ReadOnly Property TypeAction As TypeAction
                 Get
                     Return TypeAction.ActionMail
+                End Get
+            End Property
+        End Class
+
+        ''' <summary>
+        ''' Action If
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Class ActionIf
+            Dim _Sujet As String
+            Dim _Conditions As New List(Of Condition)
+            Dim _ListTrue As New ArrayList
+            Dim _ListFalse As New ArrayList
+            Dim _Timing As DateTime
+
+            Public Property Timing As DateTime
+                Get
+                    Return _Timing
+                End Get
+                Set(ByVal value As DateTime)
+                    _Timing = value
+                End Set
+            End Property
+
+            Public Property Conditions As List(Of Condition)
+                Get
+                    Return _Conditions
+                End Get
+                Set(ByVal value As List(Of Condition))
+                    _Conditions = value
+                End Set
+            End Property
+
+            Public Property ListTrue As ArrayList
+                Get
+                    Return _ListTrue
+                End Get
+                Set(ByVal value As ArrayList)
+                    _ListTrue = value
+                End Set
+            End Property
+
+            Public Property ListFalse As ArrayList
+                Get
+                    Return _ListFalse
+                End Get
+                Set(ByVal value As ArrayList)
+                    _ListFalse = value
+                End Set
+            End Property
+
+            Public ReadOnly Property TypeAction As TypeAction
+                Get
+                    Return TypeAction.ActionIf
+                End Get
+            End Property
+        End Class
+
+        ''' <summary>
+        ''' Condition pour action If
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Class Condition
+            Dim _Type As TypeCondition
+            Dim _DateTime As String
+            Dim _IdDevice As String
+            Dim _PropertyDevice As String
+            Dim _Value As Object
+            Dim _Condition As TypeSigne
+            Dim _Operateur As TypeOperateur
+            Dim _FormatNCalc As String
+
+            Public Property Type As TypeCondition
+                Get
+                    Return _Type
+                End Get
+                Set(ByVal value As TypeCondition)
+                    _Type = value
+                End Set
+            End Property
+
+            Public Property DateTime As String
+                Get
+                    Return _DateTime
+                End Get
+                Set(ByVal value As String)
+                    _DateTime = value
+                End Set
+            End Property
+
+            Public Property IdDevice As String
+                Get
+                    Return _IdDevice
+                End Get
+                Set(ByVal value As String)
+                    _IdDevice = value
+                End Set
+            End Property
+
+            Public Property PropertyDevice As String
+                Get
+                    Return _PropertyDevice
+                End Get
+                Set(ByVal value As String)
+                    _PropertyDevice = value
+                End Set
+            End Property
+
+            Public Property Value As Object
+                Get
+                    Return _Value
+                End Get
+                Set(ByVal value As Object)
+                    _Value = value
+                End Set
+            End Property
+
+            Public Property Condition As TypeSigne
+                Get
+                    Return _Condition
+                End Get
+                Set(ByVal value As TypeSigne)
+                    _Condition = value
+                End Set
+            End Property
+
+            Public Property Operateur As TypeOperateur
+                Get
+                    Return _Operateur
+                End Get
+                Set(ByVal value As TypeOperateur)
+                    _Operateur = value
+                End Set
+            End Property
+
+            Public ReadOnly Property FormatNCalc As String
+                Get
+                    Return _FormatNCalc
                 End Get
             End Property
         End Class

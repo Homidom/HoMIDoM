@@ -6,7 +6,7 @@ Public Class uScenario
     Dim _Zoom As Integer = 1
     Dim _ListAction As New ArrayList 'liste des actions
 
-    'Duree max du timeline
+    'Duree max du timeline en minutes
     Public Property Duree As Integer
         Get
             Return _Duree
@@ -37,11 +37,11 @@ Public Class uScenario
                 x.ObjAction = value.Item(i)
                 x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
                 x.Span = Span
-                x.Zoom = Zoom
+                x.Zoom = _Zoom
                 AddHandler x.DeleteAction, AddressOf DeleteAction
                 AddHandler x.ChangeAction, AddressOf ChangeAction
-                x.Width = StckPnlLib.ActualWidth
-                _ListAction.Add(x)
+                x.Width = (_Duree * 3600) + 100
+                _ListAction.Add(value.Item(i))
                 StackPanel1.Children.Add(x)
             Next
         End Set
@@ -56,10 +56,11 @@ Public Class uScenario
         Afficher()
     End Sub
 
+    'Ajouter action device
     Private Sub Image1_MouseLeftButtonDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActDevice.MouseLeftButtonDown
         Dim effects As DragDropEffects
         Dim obj As New DataObject()
-        obj.SetData(GetType(String), "ImgActDevice")
+        obj.SetData(GetType(String), "ACTIONDEVICE")
         effects = DragDrop.DoDragDrop(Me.ImgActDevice, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 
@@ -81,18 +82,18 @@ Public Class uScenario
             x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
             AddHandler x.DeleteAction, AddressOf DeleteAction
             AddHandler x.ChangeAction, AddressOf ChangeAction
-            x.Width = StckPnlLib.ActualWidth
+            x.Width = (_Duree * 3600) + 100 'StckPnlLib.ActualWidth
             Select Case uri
-                Case "ImgActDevice"
+                Case "ACTIONDEVICE"
                     Dim y As New Action.ActionDevice
                     x.ObjAction = y
-                Case "ImgActMail"
-                    Dim y As New Action.ActionDevice
+                Case "ACTIONMAIL"
+                    Dim y As New Action.ActionMail
                     x.ObjAction = y
             End Select
             x.Span = Span
-            x.Zoom = Zoom
-            _ListAction.Add(x)
+            x.Zoom = _Zoom
+            _ListAction.Add(x.ObjAction)
             StackPanel1.Children.Add(x)
         Else
             e.Effects = DragDropEffects.None
@@ -137,7 +138,7 @@ Public Class uScenario
 
         Dim _time As DateTime
         Dim t As Double = _Duree * 60 / _Zoom
-        For j As Integer = 0 To t
+        For j As Integer = 0 To t 'ajout des labels temps
             Dim x As New Label
             x.FontSize = 10
             x.HorizontalContentAlignment = HorizontalAlignment.Center
@@ -147,7 +148,7 @@ Public Class uScenario
             StckPnlLib.Children.Add(x)
             _time = _time.AddSeconds(5 * _Zoom)
         Next
-        Dim x2 As New Label
+        Dim x2 As New Label 'ajout d'un label vide à la fin du timeline pour avoir un espace 
         x2.Width = 60
         StckPnlLib.Children.Add(x2)
 
@@ -180,9 +181,11 @@ Public Class uScenario
             StckPnlLibTr.Children.Add(y1)
         Next
 
+        'On affecte la valeur du Zoom à chaque action
         If StackPanel1 IsNot Nothing Then
             For i As Integer = 0 To StackPanel1.Children.Count - 1
                 Dim x As uAction = StackPanel1.Children.Item(i)
+                x.Width = (_Duree * 3600) + 100
                 x.Zoom = _Zoom
             Next
         End If
@@ -202,10 +205,11 @@ Public Class uScenario
         Afficher()
     End Sub
 
+    'Ajouter action mail
     Private Sub ImgActMail_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActMail.MouseLeftButtonDown
         Dim effects As DragDropEffects
         Dim obj As New DataObject()
-        obj.SetData(GetType(String), "ImgActMail")
-        effects = DragDrop.DoDragDrop(Me.ImgActDevice, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+        obj.SetData(GetType(String), "ACTIONMAIL")
+        effects = DragDrop.DoDragDrop(Me.ImgActMail, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 End Class

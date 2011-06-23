@@ -386,6 +386,16 @@ HoMIDom
  Enumération des types d'actions
  </summary>
 	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.TypeOperateur">
+	<summary>
+ Enumération des types d'operateur
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.TypeCondition">
+	<summary>
+ Enumération des types de conditions
+ </summary>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.ActionDevice">
 	<summary>
  Action Device
@@ -394,6 +404,16 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Action.ActionMail">
 	<summary>
  Action Mail
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionIf">
+	<summary>
+ Action If
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.Condition">
+	<summary>
+ Condition pour action If
  </summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.email">
