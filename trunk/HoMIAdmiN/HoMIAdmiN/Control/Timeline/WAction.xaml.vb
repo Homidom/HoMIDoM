@@ -2,7 +2,6 @@
 
 Public Class WActionParametrage
     Dim _ObjAction As Object
-    Public _Action As String = ""
     Public _Parametres As New ArrayList
 
     Public Property ObjAction As Object
@@ -14,33 +13,35 @@ Public Class WActionParametrage
         End Set
     End Property
 
-    Public Property Action As String
-        Get
-            Return _Action
-        End Get
-        Set(ByVal value As String)
-            _Action = value
-            For i As Integer = 0 To Cb2.Items.Count - 1
-                If Cb2.Items(i) = _Action Then
-                    Cb2.SelectedIndex = i
-                    Exit For
-                End If
-            Next
-        End Set
-    End Property
+    Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOk.Click
 
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Button1.Click
-        If Cb1.Text <> "" Then
-            'ID = Window1.myService.GetAllDevices.Item(Cb1.SelectedIndex).ID
-        End If
-        If Cb1.Text <> "" Then
-            'Action = Cb2.Text
-        End If
-        _ObjAction.timing = New System.DateTime(Now.Year, Now.Month, Now.Day, TxtHr.Text, TxtMn.Text, TxtSc.Text)
-
-        _Parametres.Clear()
-        If TxtValue.Visibility = Visibility.Visible Then
-            _Parametres.Add(TxtValue.Text)
+        Dim _typ As Action.TypeAction
+        If _ObjAction IsNot Nothing Then
+            _typ = _ObjAction.TypeAction
+            Select Case _typ
+                Case HoMIDom.HoMIDom.Action.TypeAction.ActionDevice
+                    If Cb1.SelectedIndex < 0 Or Cb2.SelectedIndex < 0 Or TxtValue.Text = "" Then
+                        MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        Exit Sub
+                    End If
+                    Dim obj As Action.ActionDevice = _ObjAction
+                    obj.IdDevice = Window1.myService.GetAllDevices.Item(Cb1.SelectedIndex).ID
+                    obj.Method = Cb2.Text
+                    obj.Parametres.Clear()
+                    obj.Parametres.Add(TxtValue.Text)
+                    _ObjAction = obj
+                Case HoMIDom.HoMIDom.Action.TypeAction.ActionMail
+                    If Cb1.SelectedIndex < 0 Or Txt2.Text = "" Or TxtValue.Text = "" Then
+                        MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        Exit Sub
+                    End If
+                    Dim obj As Action.ActionMail = _ObjAction
+                    obj.UserId = Window1.myService.GetAllUsers.Item(Cb1.SelectedIndex).ID
+                    obj.Sujet = Txt2.Text
+                    obj.Message = TxtValue.Text
+                    _ObjAction = obj
+            End Select
+            _ObjAction.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, TxtHr.Text, TxtMn.Text, TxtSc.Text)
         End If
 
         DialogResult = True
@@ -74,49 +75,56 @@ Public Class WActionParametrage
                     Lbl2.Content = "Action:"
                     Lbl2.Visibility = Visibility.Visible
                     Cb2.Visibility = Windows.Visibility.Visible
+                    Txt2.Visibility = Windows.Visibility.Hidden
+                    TxtValue.Height = 21
 
                     For i As Integer = 0 To Window1.myService.GetAllDevices.Count - 1
                         Cb1.Items.Add(Window1.myService.GetAllDevices.Item(i).Name)
                     Next
-                    Dim a As String = Window1.myService.ReturnDeviceByID(obj.IdDevice).Name
-                    For i As Integer = 0 To Cb1.Items.Count - 1
-                        If a = Cb1.Items(i) Then
-                            Cb1.SelectedIndex = i
-                            Exit For
-                        End If
-                    Next
-                    For i As Integer = 0 To Cb2.Items.Count - 1
-                        If obj.Method = Cb2.Items(i) Then
-                            Cb2.SelectedIndex = i
-                            Exit For
-                        End If
-                    Next
-
-                    'Select Case obj.Parametres.Count
-                    'Case 1
-                    TxtValue.Text = obj.Parametres.Item(0)
-                    'End Select
-
+                    Dim a As String = ""
+                    If obj.IdDevice IsNot Nothing Then
+                        a = Window1.myService.ReturnDeviceByID(obj.IdDevice).Name
+                        For i As Integer = 0 To Cb1.Items.Count - 1
+                            If a = Cb1.Items(i) Then
+                                Cb1.SelectedIndex = i
+                                Exit For
+                            End If
+                        Next
+                        For i As Integer = 0 To Cb2.Items.Count - 1
+                            If obj.Method = Cb2.Items(i) Then
+                                Cb2.SelectedIndex = i
+                                Exit For
+                            End If
+                        Next
+                        TxtValue.Text = obj.Parametres.Item(0)
+                    End If
                 Case HoMIDom.HoMIDom.Action.TypeAction.ActionMail
                     Dim obj As Action.ActionMail = _ObjAction
 
                     'Mise en forme graphique
                     Lbl1.Content = "User:"
-                    Lbl2.Visibility = Visibility.Hidden
+                    Lbl2.Content = "Sujet:"
+                    Txt2.Text = ""
                     Cb2.Visibility = Windows.Visibility.Hidden
+                    Txt2.Visibility = Windows.Visibility.Visible
+                    TxtValue.Text = ""
+                    TxtValue.Height = 80
 
                     For i As Integer = 0 To Window1.myService.GetAllUsers.Count - 1
                         Cb1.Items.Add(Window1.myService.GetAllUsers.Item(i).Nom & " " & Window1.myService.GetAllUsers.Item(i).Prenom)
                     Next
-                    Dim _user As Users.User = Window1.myService.ReturnUserById(obj.UserId)
-                    Dim a As String = _user.Nom & " " & _user.Prenom
-                    For i As Integer = 0 To Cb1.Items.Count - 1
-                        If a = Cb1.Items(i) Then
-                            Cb1.SelectedIndex = i
-                            Exit For
-                        End If
-                    Next
-
+                    If obj.UserId IsNot Nothing Then
+                        Dim _user As Users.User = Window1.myService.ReturnUserById(obj.UserId)
+                        Dim a As String = _user.Nom & " " & _user.Prenom
+                        For i As Integer = 0 To Cb1.Items.Count - 1
+                            If a = Cb1.Items(i) Then
+                                Cb1.SelectedIndex = i
+                                Exit For
+                            End If
+                        Next
+                        Txt2.Text = obj.Sujet
+                        TxtValue.Text = obj.Message
+                    End If
 
             End Select
 

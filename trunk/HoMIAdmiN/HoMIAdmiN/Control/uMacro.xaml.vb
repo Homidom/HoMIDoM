@@ -44,11 +44,11 @@
 
         If _Action = EAction.Nouveau Then
             Dim tabl As New ArrayList
-
             tabl = UScenario1.Items
             Window1.myService.SaveMacro("", TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
         Else
             Dim tabl As New ArrayList
+            tabl = UScenario1.Items
             Window1.myService.SaveMacro(_MacroId, TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
         End If
         RaiseEvent CloseMe(Me)

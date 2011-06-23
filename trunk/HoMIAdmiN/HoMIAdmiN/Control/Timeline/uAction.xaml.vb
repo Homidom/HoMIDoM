@@ -17,19 +17,19 @@ Public Class uAction
         End Get
         Set(ByVal value As Integer)
             _Zoom = value
-            Dim j As Double = (_ObjAction.Timing.Minute * 60) + _ObjAction.Timing.Second
-            j = (Span * j) / Zoom
-            Fond.SetLeft(Rectangle1, j)
-            Fond.SetLeft(ImgDelete, j + 160)
+            Dim j As Double = (_ObjAction.Timing.Hour * 3600) + (_ObjAction.Timing.Minute * 60) + _ObjAction.Timing.Second
+            j = (Span * j) / _Zoom
+            Me.Fond.SetLeft(Rectangle1, j)
+            Me.Fond.SetLeft(ImgDelete, j + 160)
         End Set
     End Property
 
     'Paramétrage de l'action 
     Private Sub Rectangle1_MouseLeftButtonDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Rectangle1.MouseLeftButtonDown
-        Dim frm As New WActionParametrage(_ObjAction)
+        Dim frm As New WActionParametrage(ObjAction)
         frm.ShowDialog()
         If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-            _ObjAction = frm.ObjAction
+            ObjAction = frm.ObjAction
             frm.Close()
             RaiseEvent ChangeAction(Me.Uid)
         End If
@@ -38,8 +38,8 @@ Public Class uAction
 
     'Mise à jour de la position de l'action dans le timeline suite à sa valeur de timing
     Sub Refresh_Position()
-        Dim j As Double = (ObjAction.Timing.Hour * 3600) + (ObjAction.Timing.Minute * 60) + ObjAction.Timing.Second
-        j = (Span * j) / Zoom
+        Dim j As Double = (_ObjAction.Timing.Hour * 3600) + (_ObjAction.Timing.Minute * 60) + _ObjAction.Timing.Second
+        j = (Span * j) / _Zoom
         Fond.SetLeft(Rectangle1, j)
         Fond.SetLeft(ImgDelete, j + 160)
     End Sub
@@ -57,13 +57,14 @@ Public Class uAction
                     Case Action.TypeAction.ActionDevice
                         Dim x As HoMIDom.HoMIDom.Action.ActionDevice
                         x = _ObjAction
-                        Label1.Content = Window1.myService.ReturnDeviceByID(x.IdDevice).Name
-                        Label2.Content = x.Method
+                        If x.IdDevice IsNot Nothing Then Label1.Content = Window1.myService.ReturnDeviceByID(x.IdDevice).Name
+                        If x.Method IsNot Nothing Then Label2.Content = x.Method
                     Case Action.TypeAction.ActionMail
                         Dim x As HoMIDom.HoMIDom.Action.ActionMail
                         x = _ObjAction
-                        Label1.Content = "Mail {" & x.To & "}"
-                        Label2.Content = x.Sujet
+                        Label1.Content = "Mail "
+                        If x.UserId IsNot Nothing Then Label1.Content = Label1.Content & "{" & Window1.myService.ReturnUserById(x.UserId).Nom & "}"
+                        If x.Sujet IsNot Nothing Then Label2.Content = x.Sujet
                 End Select
                 Refresh_Position()
             End If

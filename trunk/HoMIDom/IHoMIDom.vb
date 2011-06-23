@@ -544,13 +544,13 @@ Namespace HoMIDom
         ''' <summary>Retourne la liste de toutes les macros</summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice))> Function GetAllMacros() As List(Of Macro)
+        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf))> Function GetAllMacros() As List(Of Macro)
 
         ''' <summary>Retourne la macro par son ID</summary>
         ''' <param name="MacroId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice))> Function ReturnMacroById(ByVal MacroId As String) As Object 'TemplateMacro
+        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf))> Function ReturnMacroById(ByVal MacroId As String) As Object 'TemplateMacro
 
         ''' <summary>
         ''' Permet de créer ou modifier une macro
@@ -562,7 +562,7 @@ Namespace HoMIDom
         ''' <param name="listactions"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice))> Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal listactions As ArrayList = Nothing) As String
+        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf))> Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal listactions As ArrayList = Nothing) As String
 #End Region
 
 #Region "Trigger"
