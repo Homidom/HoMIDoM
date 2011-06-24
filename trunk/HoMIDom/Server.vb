@@ -853,51 +853,7 @@ Namespace HoMIDom
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant à la macro est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
                                     End Select
                                 Next
-                                If list.Item(i).HasChildNodes Then
-                                    For j2 As Integer = 0 To list.Item(i).ChildNodes.Count - 1
-                                        If list.Item(i).ChildNodes.Item(j2).Name = "action" Then
-                                            Dim _Act As Object = Nothing
-                                            Select Case list.Item(i).ChildNodes.Item(j2).Attributes.Item(0).Value
-                                                Case "ActionDevice"
-                                                    Dim o As New Action.ActionDevice
-                                                    _Act = o
-                                                    o = Nothing
-                                                Case "ActionMail"
-                                                    Dim o As New Action.ActionMail
-                                                    _Act = o
-                                                    o = Nothing
-                                            End Select
-                                            For j3 As Integer = 0 To list.Item(i).ChildNodes.Item(j2).Attributes.Count - 1
-                                                Select Case list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Name
-                                                    Case "timing"
-                                                        _Act.timing = CDate(list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value)
-                                                    Case "iddevice"
-                                                        _Act.iddevice = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
-                                                    Case "method"
-                                                        _Act.method = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
-                                                    Case "userid"
-                                                        _Act.userid = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
-                                                    Case "sujet"
-                                                        _Act.sujet = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
-                                                    Case "message"
-                                                        _Act.message = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
-                                                    Case "parametres"
-                                                        Dim b As String = list.Item(i).ChildNodes.Item(j2).Attributes.Item(j3).Value
-                                                        Dim a() As String = b.Split("|")
-                                                        Dim c As New ArrayList
-                                                        For cnt1 As Integer = 0 To a.Count - 1
-                                                            c.Add(a(cnt1))
-                                                        Next
-                                                        _Act.parametres = c
-                                                        b = Nothing
-                                                        a = Nothing
-                                                        c = Nothing
-                                                End Select
-                                            Next
-                                            x.ListActions.Add(_Act)
-                                        End If
-                                    Next
-                                End If
+                                LoadAction(list.Item(i), x.ListActions)
                                 _ListMacros.Add(x)
                             Next
                         Else
@@ -1020,22 +976,39 @@ Namespace HoMIDom
                                     c = Nothing
                             End Select
                         Next
-                        ' Case "condition"
-
-                        '    Case "then"
-                        'LoadAction(list.ChildNodes.Item(j2).Attributes.Item(j3), _Act.ListTrue)
-                        '    Case "else"
-                        'LoadAction(list.ChildNodes.Item(j2).Attributes.Item(j3), _Act.ListFalse)
                         If list.ChildNodes.Item(j2).HasChildNodes Then
                             For j3 As Integer = 0 To list.ChildNodes.Item(j2).ChildNodes.Count - 1
-                                If list.ChildNodes.Item(j2).ChildNodes.Item(j3).Name = "condition" Then
-
+                                If list.ChildNodes.Item(j2).ChildNodes.Item(j3).Name = "conditions" Then
+                                    For j4 As Integer = 0 To list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Count - 1
+                                        Dim Condi As New Action.Condition
+                                        For j5 As Integer = 0 To list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Count - 1
+                                            Select Case list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Name
+                                                Case "typecondition"
+                                                    Condi.Type = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                                Case "datetime"
+                                                    Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                                Case "iddevice"
+                                                    Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                                Case "propertydevice"
+                                                    Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                                Case "value"
+                                                    Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                                Case "condition"
+                                                    Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                                Case "operateur"
+                                                    Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                                Case "formatncalc"
+                                                    Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                            End Select
+                                        Next
+                                        _Act.Conditions.add(Condi)
+                                    Next
                                 End If
                                 If list.ChildNodes.Item(j2).ChildNodes.Item(j3).Name = "then" Then
-
+                                    LoadAction(list.ChildNodes.Item(j2).ChildNodes.Item(j3), _Act.ListTrue)
                                 End If
                                 If list.ChildNodes.Item(j2).ChildNodes.Item(j3).Name = "else" Then
-
+                                    LoadAction(list.ChildNodes.Item(j2).ChildNodes.Item(j3), _Act.ListFalse)
                                 End If
                             Next
                         End If
