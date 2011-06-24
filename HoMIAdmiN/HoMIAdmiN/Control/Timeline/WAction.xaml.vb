@@ -66,6 +66,9 @@ Public Class WActionParametrage
         Dim _typ As Action.TypeAction
         If _ObjAction IsNot Nothing Then
             _typ = _ObjAction.TypeAction
+            Me.Height = 250
+            Me.Width = 500
+            TabControl1.Visibility = Windows.Visibility.Hidden
             Select Case _typ
                 Case HoMIDom.HoMIDom.Action.TypeAction.ActionDevice
                     Dim obj As Action.ActionDevice = _ObjAction
@@ -125,7 +128,17 @@ Public Class WActionParametrage
                         Txt2.Text = obj.Sujet
                         TxtValue.Text = obj.Message
                     End If
-
+                Case HoMIDom.HoMIDom.Action.TypeAction.ActionIf
+                    Me.Height = 650
+                    Me.Width = 667
+                    TabControl1.Visibility = Windows.Visibility.Visible
+                    Cb2.Visibility = Windows.Visibility.Hidden
+                    Cb1.Visibility = Windows.Visibility.Hidden
+                    Txt2.Visibility = Windows.Visibility.Hidden
+                    TxtValue.Visibility = Windows.Visibility.Hidden
+                    Lbl1.Visibility = Windows.Visibility.Hidden
+                    Lbl2.Visibility = Windows.Visibility.Hidden
+                    LblValue.Visibility = Windows.Visibility.Hidden
             End Select
 
             Dim t1 As Integer

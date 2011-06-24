@@ -494,6 +494,13 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.SaveConfig(System.String)">
 	<summary>Sauvegarde de la config dans le fichier XML</summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.WriteListAction(System.Xml.XmlTextWriter,System.Collections.ArrayList)">
+	<summary>
+ Ecris les actions dans le fichier de config
+ </summary>
+	<param name="writer"></param>
+	<param name="ListActions"></param>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.Devices_Stop">
 	<summary>Arretes les devices (Handlers)</summary>
 	<remarks></remarks>
