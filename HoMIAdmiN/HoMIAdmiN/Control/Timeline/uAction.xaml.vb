@@ -65,6 +65,11 @@ Public Class uAction
                         Label1.Content = "Mail "
                         If x.UserId IsNot Nothing Then Label1.Content = Label1.Content & "{" & Window1.myService.ReturnUserById(x.UserId).Nom & "}"
                         If x.Sujet IsNot Nothing Then Label2.Content = x.Sujet
+                    Case Action.TypeAction.ActionIf
+                        Dim x As HoMIDom.HoMIDom.Action.ActionIf
+                        Label1.Content = "If"
+                        x = _ObjAction
+                        Label2.Content = ""
                 End Select
                 Refresh_Position()
             End If

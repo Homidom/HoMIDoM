@@ -97,7 +97,18 @@
         <TextBox Height="21" HorizontalAlignment="Left" Margin="22,63,0,0" Name="Txt2" VerticalAlignment="Top" Width="199" Visibility="Hidden" />
         <TabControl Height="452" HorizontalAlignment="Left" Margin="22,147,0,0" Name="TabControl1" VerticalAlignment="Top" Width="611">
             <TabItem Header="Condition" Name="TabItem1">
-                <Grid Height="434" />
+                <Grid Background="Black">
+                    <StackPanel Height="394" HorizontalAlignment="Left" Margin="5,12,0,0" Name="StackPanel1" VerticalAlignment="Top" Width="Auto" Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal" >
+                            <Image Name="BtnCondiTime" Source="/HoMIAdmiN;component/Images/horloge-128.png" Height="24" Width="24" Margin="3" />
+                            <Image Name="BtnCondiDevice" Source="/HoMIAdmiN;component/Images/blockdevice-icone-7594-128.png" Width="24" Height="24" Margin="3" />
+                            
+                        </StackPanel>
+                        <Rectangle Height="20" />
+                        <StackPanel Name="StkCondition" Orientation="Vertical" CanVerticallyScroll="True" CanHorizontallyScroll="True" Background="DarkGray" >
+                        </StackPanel>
+                    </StackPanel> 
+                </Grid>
             </TabItem>
             <TabItem Header="Then">
                 <my:uScenario Height="417" x:Name="UScenario1" Width="593" />

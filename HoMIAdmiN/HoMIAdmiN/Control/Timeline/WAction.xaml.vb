@@ -3,6 +3,7 @@
 Public Class WActionParametrage
     Dim _ObjAction As Object
     Public _Parametres As New ArrayList
+    Dim _ListuConditions As New List(Of uCondition)
 
     Public Property ObjAction As Object
         Get
@@ -14,13 +15,12 @@ Public Class WActionParametrage
     End Property
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOk.Click
-
         Dim _typ As Action.TypeAction
         If _ObjAction IsNot Nothing Then
             _typ = _ObjAction.TypeAction
             Select Case _typ
                 Case HoMIDom.HoMIDom.Action.TypeAction.ActionDevice
-                    If Cb1.SelectedIndex < 0 Or Cb2.SelectedIndex < 0 Or TxtValue.Text = "" Then
+                    If Cb1.SelectedIndex < 0 Or Cb2.SelectedIndex < 0 Or (TxtValue.Visibility = Windows.Visibility.Visible And TxtValue.Text = "") Then
                         MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                         Exit Sub
                     End If
@@ -39,6 +39,28 @@ Public Class WActionParametrage
                     obj.UserId = Window1.myService.GetAllUsers.Item(Cb1.SelectedIndex).ID
                     obj.Sujet = Txt2.Text
                     obj.Message = TxtValue.Text
+                    _ObjAction = obj
+                Case HoMIDom.HoMIDom.Action.TypeAction.ActionIf
+                    Dim obj As Action.ActionIf = _ObjAction
+
+                    obj.Conditions.Clear()
+                    For j As Integer = 0 To _ListuConditions.Count - 1
+                        Dim _condi As New Action.Condition
+                        _condi.Type = _ListuConditions.Item(j).TypeCondition
+                        _condi.Operateur = _ListuConditions.Item(j).Operateur
+                        _condi.Condition = _ListuConditions.Item(j).Signe
+                        If _condi.Type = Action.TypeCondition.DateTime Then
+                            _condi.DateTime = _ListuConditions.Item(j).DateTime
+                        End If
+                        If _condi.Type = Action.TypeCondition.Device Then
+                            _condi.IdDevice = _ListuConditions.Item(j).IdDevice
+                            _condi.PropertyDevice = _ListuConditions.Item(j).PropertyDevice
+                            _condi.Value = _ListuConditions.Item(j).Value
+                        End If
+                        obj.Conditions.Add(_condi)
+                    Next
+                    obj.ListTrue = UScenario1.Items
+                    obj.ListFalse = UScenario2.Items
                     _ObjAction = obj
             End Select
             _ObjAction.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, TxtHr.Text, TxtMn.Text, TxtSc.Text)
@@ -139,6 +161,29 @@ Public Class WActionParametrage
                     Lbl1.Visibility = Windows.Visibility.Hidden
                     Lbl2.Visibility = Windows.Visibility.Hidden
                     LblValue.Visibility = Windows.Visibility.Hidden
+
+                    Dim obj As Action.ActionIf = _ObjAction
+
+                    StkCondition.Children.Clear()
+                    For i As Integer = 0 To obj.Conditions.Count - 1
+                        Dim x As New uCondition
+                        x.TypeCondition = obj.Conditions.Item(i).Type
+                        x.Operateur = obj.Conditions.Item(i).Operateur
+                        x.Signe = obj.Conditions.Item(i).Condition
+                        If x.TypeCondition = Action.TypeCondition.DateTime Then
+                            x.DateTime = obj.Conditions.Item(i).DateTime
+                        End If
+                        If x.TypeCondition = Action.TypeCondition.Device Then
+                            x.IdDevice = obj.Conditions.Item(i).IdDevice
+                            x.PropertyDevice = obj.Conditions.Item(i).PropertyDevice
+                            x.Value = obj.Conditions.Item(i).Value
+                        End If
+                        _ListuConditions.Add(x)
+                        StkCondition.Children.Add(x)
+                    Next
+
+                    UScenario1.Items = obj.ListTrue
+                    UScenario2.Items = obj.ListFalse
             End Select
 
             Dim t1 As Integer
@@ -234,4 +279,52 @@ Public Class WActionParametrage
     End Sub
 
 #End Region
+
+#Region "Gestion Condition"
+
+    Private Sub BtnCondiTime_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnCondiTime.MouseLeftButtonDown
+        Dim x As New uCondition
+        x.TypeCondition = Action.TypeCondition.DateTime
+        AddHandler x.DeleteCondition, AddressOf DeleteCondition
+        AddHandler x.UpCondition, AddressOf UpCondition
+        StkCondition.Children.Add(x)
+        _ListuConditions.Add(x)
+    End Sub
+
+    Private Sub BtnCondiDevice_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnCondiDevice.MouseLeftButtonDown
+        Dim x As New uCondition
+        x.TypeCondition = Action.TypeCondition.Device
+        AddHandler x.DeleteCondition, AddressOf DeleteCondition
+        AddHandler x.UpCondition, AddressOf UpCondition
+        StkCondition.Children.Add(x)
+        _ListuConditions.Add(x)
+    End Sub
+
+    Private Sub DeleteCondition(ByVal uid As String)
+        For i As Integer = 0 To StkCondition.Children.Count - 1
+            If StkCondition.Children.Item(i).Uid = uid Then
+                StkCondition.Children.RemoveAt(i)
+                _ListuConditions.RemoveAt(i)
+                Exit For
+            End If
+        Next
+    End Sub
+
+    Private Sub UpCondition(ByVal uid As String)
+        For i As Integer = 0 To StkCondition.Children.Count - 1
+            If StkCondition.Children.Item(i).Uid = uid Then
+                'on verifi si c'est le 1er car on peu plus monter
+                If i = 0 Then Exit Sub
+                Dim x As Object = StkCondition.Children.Item(i - 1)
+                StkCondition.Children.Item(i - 1) = StkCondition.Children.Item(i)
+                StkCondition.Children.Item(i) = x
+                _ListuConditions.Item(i - 1) = _ListuConditions.Item(i)
+                _ListuConditions.Item(i) = x
+                Exit For
+            End If
+        Next
+    End Sub
+#End Region
+
+
 End Class

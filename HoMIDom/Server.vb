@@ -931,91 +931,119 @@ Namespace HoMIDom
         End Function
 
         Private Sub LoadAction(ByVal list As XmlNode, ByVal ListAction As ArrayList)
-            If list.HasChildNodes Then
-                For j2 As Integer = 0 To list.ChildNodes.Count - 1
-                    If list.ChildNodes.Item(j2).Name = "action" Then
-                        Dim _Act As Object = Nothing
-                        Select Case list.ChildNodes.Item(j2).Attributes.Item(0).Value
-                            Case "ActionDevice"
-                                Dim o As New Action.ActionDevice
-                                _Act = o
-                                o = Nothing
-                            Case "ActionMail"
-                                Dim o As New Action.ActionMail
-                                _Act = o
-                                o = Nothing
-                            Case "ActionIf"
-                                Dim o As New Action.ActionIf
-                                _Act = o
-                                o = Nothing
-                        End Select
-                        For j3 As Integer = 0 To list.ChildNodes.Item(j2).Attributes.Count - 1
-                            Select Case list.ChildNodes.Item(j2).Attributes.Item(j3).Name
-                                Case "timing"
-                                    _Act.timing = CDate(list.ChildNodes.Item(j2).Attributes.Item(j3).Value)
-                                Case "iddevice"
-                                    _Act.iddevice = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
-                                Case "method"
-                                    _Act.method = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
-                                Case "userid"
-                                    _Act.userid = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
-                                Case "sujet"
-                                    _Act.sujet = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
-                                Case "message"
-                                    _Act.message = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
-                                Case "parametres"
-                                    Dim b As String = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
-                                    Dim a() As String = b.Split("|")
-                                    Dim c As New ArrayList
-                                    For cnt1 As Integer = 0 To a.Count - 1
-                                        c.Add(a(cnt1))
-                                    Next
-                                    _Act.parametres = c
-                                    b = Nothing
-                                    a = Nothing
-                                    c = Nothing
+            Try
+
+                If list.HasChildNodes Then
+                    For j2 As Integer = 0 To list.ChildNodes.Count - 1
+                        If list.ChildNodes.Item(j2).Name = "action" Then
+                            Dim _Act As Object = Nothing
+                            Select Case list.ChildNodes.Item(j2).Attributes.Item(0).Value
+                                Case "ActionDevice"
+                                    Dim o As New Action.ActionDevice
+                                    _Act = o
+                                    o = Nothing
+                                Case "ActionMail"
+                                    Dim o As New Action.ActionMail
+                                    _Act = o
+                                    o = Nothing
+                                Case "ActionIf"
+                                    Dim o As New Action.ActionIf
+                                    _Act = o
+                                    o = Nothing
                             End Select
-                        Next
-                        If list.ChildNodes.Item(j2).HasChildNodes Then
-                            For j3 As Integer = 0 To list.ChildNodes.Item(j2).ChildNodes.Count - 1
-                                If list.ChildNodes.Item(j2).ChildNodes.Item(j3).Name = "conditions" Then
-                                    For j4 As Integer = 0 To list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Count - 1
-                                        Dim Condi As New Action.Condition
-                                        For j5 As Integer = 0 To list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Count - 1
-                                            Select Case list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Name
-                                                Case "typecondition"
-                                                    Condi.Type = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
-                                                Case "datetime"
-                                                    Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
-                                                Case "iddevice"
-                                                    Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
-                                                Case "propertydevice"
-                                                    Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
-                                                Case "value"
-                                                    Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
-                                                Case "condition"
-                                                    Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
-                                                Case "operateur"
-                                                    Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
-                                                Case "formatncalc"
-                                                    Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
-                                            End Select
+                            For j3 As Integer = 0 To list.ChildNodes.Item(j2).Attributes.Count - 1
+                                Select Case list.ChildNodes.Item(j2).Attributes.Item(j3).Name
+                                    Case "timing"
+                                        _Act.timing = CDate(list.ChildNodes.Item(j2).Attributes.Item(j3).Value)
+                                    Case "iddevice"
+                                        _Act.iddevice = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "method"
+                                        _Act.method = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "userid"
+                                        _Act.userid = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "sujet"
+                                        _Act.sujet = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "message"
+                                        _Act.message = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "parametres"
+                                        Dim b As String = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                        Dim a() As String = b.Split("|")
+                                        Dim c As New ArrayList
+                                        For cnt1 As Integer = 0 To a.Count - 1
+                                            c.Add(a(cnt1))
                                         Next
-                                        _Act.Conditions.add(Condi)
-                                    Next
-                                End If
-                                If list.ChildNodes.Item(j2).ChildNodes.Item(j3).Name = "then" Then
-                                    LoadAction(list.ChildNodes.Item(j2).ChildNodes.Item(j3), _Act.ListTrue)
-                                End If
-                                If list.ChildNodes.Item(j2).ChildNodes.Item(j3).Name = "else" Then
-                                    LoadAction(list.ChildNodes.Item(j2).ChildNodes.Item(j3), _Act.ListFalse)
-                                End If
+                                        _Act.parametres = c
+                                        b = Nothing
+                                        a = Nothing
+                                        c = Nothing
+                                End Select
                             Next
+                            If list.ChildNodes.Item(j2).HasChildNodes Then
+                                For j3 As Integer = 0 To list.ChildNodes.Item(j2).ChildNodes.Count - 1
+                                    If list.ChildNodes.Item(j2).ChildNodes.Item(j3).Name = "conditions" Then
+                                        For j4 As Integer = 0 To list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Count - 1
+                                            Dim Condi As New Action.Condition
+                                            For j5 As Integer = 0 To list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Count - 1
+                                                Select Case list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Name
+                                                    Case "typecondition"
+                                                        Select Case list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                                            Case Action.TypeCondition.DateTime.ToString
+                                                                Condi.Type = Action.TypeCondition.DateTime
+                                                            Case Action.TypeCondition.Device.ToString
+                                                                Condi.Type = Action.TypeCondition.Device
+                                                        End Select
+                                                    Case "datetime"
+                                                        Condi.DateTime = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                                    Case "iddevice"
+                                                        Condi.IdDevice = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                                    Case "propertydevice"
+                                                        Condi.PropertyDevice = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                                    Case "value"
+                                                        Condi.Value = list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                                    Case "condition"
+                                                        Select Case list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                                            Case Action.TypeSigne.Different.ToString
+                                                                Condi.Condition = Action.TypeSigne.Different
+                                                            Case Action.TypeSigne.Egal.ToString
+                                                                Condi.Condition = Action.TypeSigne.Egal
+                                                            Case Action.TypeSigne.Inferieur.ToString
+                                                                Condi.Condition = Action.TypeSigne.Inferieur
+                                                            Case Action.TypeSigne.InferieurEgal.ToString
+                                                                Condi.Condition = Action.TypeSigne.InferieurEgal
+                                                            Case Action.TypeSigne.Superieur.ToString
+                                                                Condi.Condition = Action.TypeSigne.Superieur
+                                                            Case Action.TypeSigne.SuperieurEgal.ToString
+                                                                Condi.Condition = Action.TypeSigne.SuperieurEgal
+                                                        End Select
+                                                    Case "operateur"
+                                                        Select Case list.ChildNodes.Item(j2).ChildNodes.Item(j3).ChildNodes.Item(j4).Attributes.Item(j5).Value
+                                                            Case Action.TypeOperateur.NONE.ToString
+                                                                Condi.Operateur = Action.TypeOperateur.NONE
+                                                            Case Action.TypeOperateur.AND.ToString
+                                                                Condi.Operateur = Action.TypeOperateur.AND
+                                                            Case Action.TypeOperateur.OR.ToString
+                                                                Condi.Operateur = Action.TypeOperateur.OR
+                                                        End Select
+                                                End Select
+                                            Next
+                                            _Act.Conditions.add(Condi)
+                                        Next
+                                    End If
+                                    If list.ChildNodes.Item(j2).ChildNodes.Item(j3).Name = "then" Then
+                                        LoadAction(list.ChildNodes.Item(j2).ChildNodes.Item(j3), _Act.ListTrue)
+                                    End If
+                                    If list.ChildNodes.Item(j2).ChildNodes.Item(j3).Name = "else" Then
+                                        LoadAction(list.ChildNodes.Item(j2).ChildNodes.Item(j3), _Act.ListFalse)
+                                    End If
+                                Next
+                            End If
+                            ListAction.Add(_Act)
                         End If
-                        ListAction.Add(_Act)
-                    End If
-                Next
-            End If
+                    Next
+                End If
+            Catch ex As Exception
+                MsgBox(ex.ToString)
+            End Try
         End Sub
 
         ''' <summary>Sauvegarde de la config dans le fichier XML</summary>
@@ -1528,18 +1556,22 @@ Namespace HoMIDom
                             writer.WriteStartAttribute("typecondition")
                             writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Type.ToString)
                             writer.WriteEndAttribute()
-                            writer.WriteStartAttribute("datetime")
-                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).DateTime)
-                            writer.WriteEndAttribute()
-                            writer.WriteStartAttribute("iddevice")
-                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).IdDevice)
-                            writer.WriteEndAttribute()
-                            writer.WriteStartAttribute("propertydevice")
-                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).propertydevice)
-                            writer.WriteEndAttribute()
-                            writer.WriteStartAttribute("value")
-                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Value)
-                            writer.WriteEndAttribute()
+                            If ListActions.Item(j).conditions.item(i2).Type = Action.TypeCondition.DateTime Then
+                                writer.WriteStartAttribute("datetime")
+                                writer.WriteValue(ListActions.Item(j).Conditions.item(i2).DateTime)
+                                writer.WriteEndAttribute()
+                            End If
+                            If ListActions.Item(j).conditions.item(i2).Type = Action.TypeCondition.Device Then
+                                writer.WriteStartAttribute("iddevice")
+                                writer.WriteValue(ListActions.Item(j).Conditions.item(i2).IdDevice)
+                                writer.WriteEndAttribute()
+                                writer.WriteStartAttribute("propertydevice")
+                                writer.WriteValue(ListActions.Item(j).Conditions.item(i2).propertydevice)
+                                writer.WriteEndAttribute()
+                                writer.WriteStartAttribute("value")
+                                writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Value.ToString)
+                                writer.WriteEndAttribute()
+                            End If
                             writer.WriteStartAttribute("condition")
                             writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Condition.ToString)
                             writer.WriteEndAttribute()
@@ -1553,10 +1585,10 @@ Namespace HoMIDom
                         Next
                         writer.WriteEndElement()
                         writer.WriteStartElement("then")
-                        WriteListAction(writer, ListActions.Item(j).ListThen)
+                        WriteListAction(writer, ListActions.Item(j).ListTrue)
                         writer.WriteEndElement()
                         writer.WriteStartElement("else")
-                        WriteListAction(writer, ListActions.Item(j).ListElse)
+                        WriteListAction(writer, ListActions.Item(j).ListFalse)
                         writer.WriteEndElement()
                 End Select
                 writer.WriteEndElement()

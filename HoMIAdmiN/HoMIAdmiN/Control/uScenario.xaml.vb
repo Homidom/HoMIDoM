@@ -90,6 +90,9 @@ Public Class uScenario
                 Case "ACTIONMAIL"
                     Dim y As New Action.ActionMail
                     x.ObjAction = y
+                Case "ACTIONIF"
+                    Dim y As New Action.ActionIf
+                    x.ObjAction = y
             End Select
             x.Span = Span
             x.Zoom = _Zoom
@@ -122,8 +125,8 @@ Public Class uScenario
     End Sub
 
     Private Sub uScenario_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles uScenario.Loaded
-        ScrollViewer1.MinHeight = uScenario.ActualHeight - 34
-        ScrollViewer1.MaxHeight = uScenario.ActualHeight - 34
+        ScrollViewer1.MinHeight = uScenario.Height - 34
+        ScrollViewer1.MaxHeight = uScenario.Height - 34
     End Sub
 
     Private Sub uScenario_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles uScenario.SizeChanged
@@ -211,5 +214,13 @@ Public Class uScenario
         Dim obj As New DataObject()
         obj.SetData(GetType(String), "ACTIONMAIL")
         effects = DragDrop.DoDragDrop(Me.ImgActMail, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+    End Sub
+
+    'Ajouter action if
+    Private Sub ImgActIf_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActIf.MouseLeftButtonDown
+        Dim effects As DragDropEffects
+        Dim obj As New DataObject()
+        obj.SetData(GetType(String), "ACTIONIF")
+        effects = DragDrop.DoDragDrop(Me.ImgActIf, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 End Class
