@@ -410,8 +410,10 @@ Namespace HoMIDom
         ''' </summary>
         ''' <remarks></remarks>
         Public Enum TypeOperateur
-            [AND] = 0
-            [OR] = 1
+            NONE = 0
+            [AND] = 1
+            [OR] = 2
+
         End Enum
 
         ''' <summary>
@@ -421,6 +423,7 @@ Namespace HoMIDom
         Public Enum TypeCondition
             DateTime = 0
             Device = 1
+            Parenthese = 2
         End Enum
 
         ''' <summary>
@@ -595,7 +598,7 @@ Namespace HoMIDom
             Dim _Value As Object
             Dim _Condition As TypeSigne
             Dim _Operateur As TypeOperateur
-            Dim _FormatNCalc As String
+            Dim _FormatNCalc As String = " "
 
             Public Property Type As TypeCondition
                 Get

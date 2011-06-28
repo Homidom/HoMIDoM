@@ -109,6 +109,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Control\Condition\uCondition.xaml.vb">
+      <DependentUpon>uCondition.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Control\Timeline\uAction.xaml.vb">
       <DependentUpon>uAction.xaml</DependentUpon>
     </Compile>
@@ -136,6 +139,10 @@
     <Compile Include="WindowLogin.xaml.vb">
       <DependentUpon>WindowLogin.xaml</DependentUpon>
     </Compile>
+    <Page Include="Control\Condition\uCondition.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Control\Timeline\uAction.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -385,6 +392,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\e-mail-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\horloge-128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\fleche-vers-le-haut-icone-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\If01.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
