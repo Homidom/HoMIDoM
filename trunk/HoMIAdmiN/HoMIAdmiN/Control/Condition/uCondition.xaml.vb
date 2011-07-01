@@ -4,7 +4,7 @@ Public Class uCondition
     Dim _TypeCondition As Action.TypeCondition
     Dim _Operateur As Action.TypeOperateur
     Dim _Signe As Action.TypeSigne
-    Dim _DateTime As String = "00#00#00" '#jj#MMM#JJJ
+    Dim _DateTime As String = "0#0#0#0#0#0000000" '#jj#MMM#JJJ
     Dim _IdDevice As String
     Dim _PropertyDevice As String
     Dim _Value As Object
@@ -62,7 +62,15 @@ Public Class uCondition
             CbSeconde.SelectedIndex = a(0)
             CbMinute.SelectedIndex = a(1)
             CbHeure.SelectedIndex = a(2)
-            'CbJour.SelectedIndex = _DateTime.Day
+            CbJour.SelectedIndex = a(3)
+            CbMois.SelectedIndex = a(4)
+            Chk1.IsChecked = Mid(a(5), 1, 1)
+            Chk2.IsChecked = Mid(a(5), 2, 1)
+            Chk3.IsChecked = Mid(a(5), 3, 1)
+            Chk4.IsChecked = Mid(a(5), 4, 1)
+            Chk5.IsChecked = Mid(a(5), 5, 1)
+            Chk6.IsChecked = Mid(a(5), 6, 1)
+            Chk7.IsChecked = Mid(a(5), 7, 1)
         End Set
     End Property
 
@@ -114,38 +122,6 @@ Public Class uCondition
         RaiseEvent DeleteCondition(Me.Uid)
     End Sub
 
-    'Private Sub CbOperateur_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbOperateur.SelectionChanged
-    '    _Operateur = CbOperateur.SelectedIndex
-    'End Sub
-
-    'Private Sub CbSigne1_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbSigne1.SelectionChanged
-    '    _Signe = CbSigne1.SelectedIndex
-    'End Sub
-
-    'Private Sub CbSigne2_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbSigne2.SelectionChanged
-    '    _Signe = CbSigne2.SelectedIndex
-    'End Sub
-
-    'Private Sub CbSeconde_DropDownClosed(ByVal sender As Object, ByVal e As System.EventArgs) Handles CbSeconde.DropDownClosed
-    '    If CbSeconde.Text <> "" Then _DateTime = CbSeconde.Text & "#" & CbMinute.Text & "#" & CbHeure.Text
-    'End Sub
-
-    'Private Sub CbSeconde_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbSeconde.SelectionChanged
-    '    If CbSeconde.Text <> "" Then _DateTime = CbSeconde.Text & "#" & CbMinute.Text & "#" & CbHeure.Text
-    'End Sub
-
-    'Private Sub CbMinute_DropDownClosed(ByVal sender As Object, ByVal e As System.EventArgs) Handles CbMinute.DropDownClosed
-    '    If CbMinute.Text <> "" Then _DateTime = CbSeconde.Text & "#" & CbMinute.Text & "#" & CbHeure.Text
-    'End Sub
-
-    'Private Sub CbMinute_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbMinute.SelectionChanged
-    '    If CbMinute.Text <> "" Then _DateTime = CbSeconde.Text & "#" & CbMinute.Text & "#" & CbHeure.Text
-    'End Sub
-
-    'Private Sub CbHeure_DropDownClosed(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CbHeure.DropDownClosed
-    '    If CbHeure.Text <> "" Then _DateTime = CbSeconde.Text & "#" & CbMinute.Text & "#" & CbHeure.Text
-    'End Sub
-
     Private Sub CbDevice_DropDownClosed(ByVal sender As Object, ByVal e As System.EventArgs) Handles CbDevice.DropDownClosed
         CbPropertyDevice.Items.Clear()
         Select Case Window1.myService.GetAllDevices.Item(CbDevice.SelectedIndex).Type
@@ -196,7 +172,42 @@ Public Class uCondition
     Private Sub uCondition_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Me.MouseLeave
         _Operateur = CbOperateur.SelectedIndex
         If _TypeCondition = Action.TypeCondition.DateTime Then
-            _DateTime = CbSeconde.Text & "#" & CbMinute.Text & "#" & CbHeure.Text
+            _DateTime = CbSeconde.Text & "#" & CbMinute.Text & "#" & CbHeure.Text & "#" & CbJour.Text & "#" & CbMois.Text & "#"
+            If Chk1.IsChecked Then
+                _DateTime &= "1"
+            Else
+                _DateTime &= "0"
+            End If
+            If Chk2.IsChecked Then
+                _DateTime &= "1"
+            Else
+                _DateTime &= "0"
+            End If
+            If Chk3.IsChecked Then
+                _DateTime &= "1"
+            Else
+                _DateTime &= "0"
+            End If
+            If Chk4.IsChecked Then
+                _DateTime &= "1"
+            Else
+                _DateTime &= "0"
+            End If
+            If Chk5.IsChecked Then
+                _DateTime &= "1"
+            Else
+                _DateTime &= "0"
+            End If
+            If Chk6.IsChecked Then
+                _DateTime &= "1"
+            Else
+                _DateTime &= "0"
+            End If
+            If Chk7.IsChecked Then
+                _DateTime &= "1"
+            Else
+                _DateTime &= "0"
+            End If
             _Signe = CbSigne1.SelectedIndex
         Else
             If CbDevice.SelectedIndex >= 0 Then

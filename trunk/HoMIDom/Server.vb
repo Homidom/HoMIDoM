@@ -11,6 +11,8 @@ Imports System.ServiceModel.Description
 Imports System.Security.Cryptography
 Imports System.Text
 Imports System.Web.HttpUtility
+Imports System.Threading
+Imports System.Net.Mail
 #End Region
 
 Namespace HoMIDom
@@ -39,10 +41,10 @@ Namespace HoMIDom
         Private Shared _HeureCoucherSoleil As DateTime 'heure du couché du soleil
         Shared _HeureLeverSoleilCorrection As Integer 'correction à appliquer sur heure du levé du soleil
         Shared _HeureCoucherSoleilCorrection As Integer 'correction à appliquer sur heure du couché du soleil
-        Shared _SMTPServeur As String = "" 'adresse du serveur SMTP
+        Shared _SMTPServeur As String = "smtp.homidom.fr" 'adresse du serveur SMTP
         Shared _SMTPLogin As String = "" 'login du serveur SMTP
         Shared _SMTPassword As String = "" 'password du serveur SMTP
-        Shared _SMTPmailEmetteur As String = "" 'adresse mail de l'émetteur
+        Shared _SMTPmailEmetteur As String = "homidom@mail.com" 'adresse mail de l'émetteur
         Private Shared _PortSOAP As String 'Port IP de connexion SOAP
         Dim TimerSecond As New Timers.Timer 'Timer à la seconde
         Private graphe As New graphes(_MonRepertoire + "\Images\Graphes\")
@@ -79,7 +81,7 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub DeviceChange(ByVal Device As Object, ByVal [Property] As String, ByVal Parametres As Object)
             Dim retour As String
-            Dim listmacro As ArrayList
+
             Try
                 If Etat_server Then
                     Dim valeur As Object = Parametres
@@ -96,14 +98,11 @@ Namespace HoMIDom
 
                         'Parcour des triggers pour vérifier si le device déclenche des macros
                         For i = 0 To _listTriggers.Count - 1
-                            If _listTriggers.Item(i).Conditiondeviceid = Device.ID Then
-                                'Device trouvé dans un trigger, on parcour la liste des macros associé à ce trigger et on les executent
-                                listmacro = _listTriggers.Item(i).Macro
-                                For j = 0 To listmacro.Count - 1
-                                    'on cherche la macro et on la lance
-                                    For k = 0 To _ListMacros.Count - 1
-                                        If _ListMacros.Item(k).ID = listmacro.Item(j).ToString Then _ListMacros.Item(k).Execute_avec_conditions()
-                                    Next
+                            If _listTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE And _listTriggers.Item(i).Enable = True And Device.id = _listTriggers.Item(i).ConditionDeviceId And _listTriggers.Item(i).ConditionDeviceProperty = [Property] Then 'c'est un trigger type device + enable + device concerné
+                                For j As Integer = 0 To _listTriggers.Item(i).ListMacro.count - 1
+                                    Dim _m As Macro = ReturnMacroById(_listTriggers.Item(i).ListMacro.item(j))
+                                    If _m IsNot Nothing Then _m.Execute()
+                                    _m = Nothing
                                 Next
                             End If
                         Next
@@ -284,14 +283,14 @@ Namespace HoMIDom
             'on checke si il y a cron à faire
             Try
                 For i = 0 To _listTriggers.Count() - 1
-                    If (_listTriggers.Item(i).prochainedateheure IsNot Nothing And _listTriggers.Item(i).prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) Then
+                    If (_listTriggers.Item(i).prochainedateheure IsNot Nothing And _listTriggers.Item(i).prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) And _listTriggers.Item(i).enable = True Then
                         _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
                         'lancement des macros associées
                         For j = 0 To _listTriggers.Item(i).ListMacro.Count - 1
                             'on cherche la macro et on la lance en testant ces conditions
-                            For k = 0 To _ListMacros.Count - 1
-                                If _ListMacros.Item(k).ID = _listTriggers.Item(i).Macro.Item(j).ToString Then _ListMacros.Item(k).Execute_avec_conditions()
-                            Next
+                            Dim _m As Macro = ReturnMacroById(_listTriggers.Item(i).ListMacro.item(j))
+                            If _m IsNot Nothing Then _m.Execute()
+                            _m = Nothing
                         Next
                     End If
                 Next
@@ -932,7 +931,6 @@ Namespace HoMIDom
 
         Private Sub LoadAction(ByVal list As XmlNode, ByVal ListAction As ArrayList)
             Try
-
                 If list.HasChildNodes Then
                     For j2 As Integer = 0 To list.ChildNodes.Count - 1
                         If list.ChildNodes.Item(j2).Name = "action" Then
@@ -950,6 +948,10 @@ Namespace HoMIDom
                                     Dim o As New Action.ActionIf
                                     _Act = o
                                     o = Nothing
+                                Case "ActionMacro"
+                                    Dim o As New Action.ActionMacro
+                                    _Act = o
+                                    o = Nothing
                             End Select
                             For j3 As Integer = 0 To list.ChildNodes.Item(j2).Attributes.Count - 1
                                 Select Case list.ChildNodes.Item(j2).Attributes.Item(j3).Name
@@ -957,6 +959,8 @@ Namespace HoMIDom
                                         _Act.timing = CDate(list.ChildNodes.Item(j2).Attributes.Item(j3).Value)
                                     Case "iddevice"
                                         _Act.iddevice = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "idmacro"
+                                        _Act.idmacro = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                     Case "method"
                                         _Act.method = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                     Case "userid"
@@ -1042,7 +1046,7 @@ Namespace HoMIDom
                     Next
                 End If
             Catch ex As Exception
-                MsgBox(ex.ToString)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadAction", ex.ToString)
             End Try
         End Sub
 
@@ -1539,6 +1543,10 @@ Namespace HoMIDom
                         writer.WriteStartAttribute("parametres")
                         writer.WriteValue(a)
                         writer.WriteEndAttribute()
+                    Case Action.TypeAction.ActionMacro
+                        writer.WriteStartAttribute("idmacro")
+                        writer.WriteValue(ListActions.Item(j).IdMacro)
+                        writer.WriteEndAttribute()
                     Case Action.TypeAction.ActionMail
                         writer.WriteStartAttribute("userid")
                         writer.WriteValue(ListActions.Item(j).UserId)
@@ -1577,9 +1585,6 @@ Namespace HoMIDom
                             writer.WriteEndAttribute()
                             writer.WriteStartAttribute("operateur")
                             writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Operateur.ToString)
-                            writer.WriteEndAttribute()
-                            writer.WriteStartAttribute("formatncalc")
-                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).FormatNCalc)
                             writer.WriteEndAttribute()
                             writer.WriteEndElement()
                         Next
@@ -2289,6 +2294,252 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Finalize", "Exception : " & ex.Message)
             End Try
         End Sub
+#End Region
+
+#Region "Macro"
+        Private Sub Execute(ByVal Id As String)
+            Try
+                Dim mymacro As New Macro
+                mymacro = ReturnMacroById(Id)
+                If mymacro IsNot Nothing Then
+                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Macro:Action", "Lancement de la macro " & mymacro.Nom)
+                    For i = 0 To mymacro.ListActions.Count - 1
+                        Dim _Action As New ThreadAction(mymacro.ListActions.Item(i), Me)
+                        Dim x As New Thread(AddressOf _Action.Execute)
+                        x.Start()
+                    Next
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:Action", ex.ToString)
+            End Try
+        End Sub
+
+        Private Class ThreadAction
+            Dim _Action As Object
+            Dim _Server As Server
+
+            Sub New(ByVal Action As Object, ByVal Server As Server)
+                _Action = Action
+                _Server = Server
+            End Sub
+
+            Public Sub Execute()
+                Try
+
+                    'Traite le timing avant execution
+                    Dim t As DateTime = DateTime.Now
+                    t = t.AddHours(_Action.timing.Hour)
+                    t = t.AddMinutes(_Action.timing.Minute)
+                    t = t.AddSeconds(_Action.timing.Second)
+                    Do While DateTime.Now < t
+                        'ATTENDRE
+                    Loop
+
+                    Select Case _Action.TypeAction
+                        Case HoMIDom.Action.TypeAction.ActionDevice
+                            Dim x As New HoMIDom.Action.ActionDevice
+                            Try
+                                Dim y As Object = Nothing
+                                x = _Action
+                                For i As Integer = 0 To _ListDevices.Count - 1
+                                    If _ListDevices.Item(i).id = x.IdDevice Then
+                                        y = _ListDevices.Item(i)
+                                        Exit For
+                                    End If
+                                Next
+                                If x.Parametres.Count = 0 Then
+                                    Dim retour = CallByName(y, x.Method, CallType.Method)
+                                Else
+                                    Dim retour = CallByName(y, x.Method, CallType.Method, x.Parametres.Item(0))
+                                End If
+                                _Server.Log(TypeLog.DEBUG, TypeSource.SCRIPT, "Execute Action", "Device: " & y.name & " method: " & x.Method)
+
+                            Catch ex As Exception
+                                _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Erreur Execute Action Device", ex.ToString)
+                            End Try
+                            x = Nothing
+                        Case HoMIDom.Action.TypeAction.ActionMail
+                            Try
+                                'envoi de l'email à adresse avec sujet et texte via les smtp définis dans le serveur
+                                Dim email As System.Net.Mail.MailMessage = New System.Net.Mail.MailMessage()
+                                Dim x As New HoMIDom.Action.ActionMail
+                                x = _Action
+                                Dim _From As String = _Server.GetSMTPMailServeur
+                                Dim _To As String = _Server.ReturnUserById(x.UserId).eMail
+                                If _From <> "" Or _To <> "" Then
+                                    email.From = New MailAddress(_From)
+                                    email.To.Add(_To)
+                                    email.Subject = x.Sujet
+                                    email.Body = x.Message
+                                    Dim mailSender As New System.Net.Mail.SmtpClient(_Server.GetSMTPServeur)
+                                    If _Server.GetSMTPLogin() <> "" Then
+                                        mailSender.Credentials = New Net.NetworkCredential(_Server.GetSMTPLogin, _Server.GetSMTPPassword)
+                                        '
+                                        'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate", "1")
+                                        'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername", mMailServerLogin)
+                                        'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword", mMailServerPassword)
+                                    End If
+                                    mailSender.Send(email)
+                                    mailSender = Nothing
+                                    _Server.Log(TypeLog.DEBUG, TypeSource.SCRIPT, "Execute Action Mail", "Mail Sujet: " & x.Sujet & " message: " & x.Message)
+                                Else
+                                    _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Erreur Execute Action Mail", "Erreur l'une des deux adresses n'est pas renseignée, From:" & _From & " To:" & _To)
+                                End If
+                                email = Nothing
+                                x = Nothing
+                            Catch ex As Exception
+                                _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Erreur Execute Action Mail", "Erreur: " & ex.ToString)
+                            End Try
+                        Case HoMIDom.Action.TypeAction.ActionMacro
+                            Dim x As New HoMIDom.Action.ActionMacro
+                            x = _Action
+                            _Server.RunMacro(x.IdMacro)
+                        Case HoMIDom.Action.TypeAction.ActionIf
+                            Dim Resultat As Boolean
+                            Dim x As New HoMIDom.Action.ActionIf
+                            x = _Action
+                            Resultat = _Server.EvalCondition(x.Conditions)
+                            If Resultat = True Then
+                                For i As Integer = 0 To x.ListTrue.Count - 1
+                                    Dim _Action As New ThreadAction(x.ListTrue.Item(i), _Server)
+                                    Dim y As New Thread(AddressOf _Action.Execute)
+                                    y.Start()
+                                Next
+                            Else
+                                For i As Integer = 0 To x.ListFalse.Count - 1
+                                    Dim _Action As New ThreadAction(x.ListFalse.Item(i), _Server)
+                                    Dim y As New Thread(AddressOf _Action.Execute)
+                                    y.Start()
+                                Next
+                            End If
+                    End Select
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Execute Action", ex.ToString)
+                End Try
+            End Sub
+
+        End Class
+
+        Public Function EvalCondition(ByVal Conditions As List(Of Action.Condition)) As Boolean
+            Dim _ResultFinal As Boolean = False
+
+            For i As Integer = 0 To Conditions.Count - 1
+                Dim _Result As Boolean = False
+                Select Case Conditions.Item(i).Type
+                    Case Action.TypeCondition.DateTime
+                        Dim retour As Object = Nothing
+                        Dim a() As String '0:ss 1:mm 2:hh 3:dd 4:mm 5:jj
+                        a = Conditions.Item(i).DateTime.Split("#")
+
+                        Dim b(6) As Boolean
+                        b(0) = Mid(a(5), 1, 1)
+                        b(1) = Mid(a(5), 2, 1)
+                        b(2) = Mid(a(5), 3, 1)
+                        b(3) = Mid(a(5), 4, 1)
+                        b(4) = Mid(a(5), 5, 1)
+                        b(5) = Mid(a(5), 6, 1)
+                        b(6) = Mid(a(5), 7, 1)
+
+                        If (Now.DayOfWeek = DayOfWeek.Monday And b(0) = True) Or (Now.DayOfWeek = DayOfWeek.Tuesday And b(1) = True) Or (Now.DayOfWeek = DayOfWeek.Wednesday And b(2) = True) Or (Now.DayOfWeek = DayOfWeek.Thursday And b(3) = True) Or (Now.DayOfWeek = DayOfWeek.Friday And b(4) = True) Or (Now.DayOfWeek = DayOfWeek.Saturday And b(5) = True) Or (Now.DayOfWeek = DayOfWeek.Sunday And b(6) = True) Then
+                            Dim mydate As System.DateTime
+                            If a(3) = "0" And a(4) = "0" Then
+                                mydate = New System.DateTime(Now.Year, Now.Month, Now.Day, a(2), a(1), a(0))
+                            Else
+                                mydate = New System.DateTime(Now.Year, a(4), a(3), a(2), a(1), a(0))
+                            End If
+                            Select Case Conditions.Item(i).Condition
+                                Case Action.TypeSigne.Different
+                                    If Now <> mydate Then
+                                        _Result = True
+                                    Else
+                                        _Result = False
+                                    End If
+                                Case Action.TypeSigne.Egal
+                                    If Now = mydate Then
+                                        _Result = True
+                                    Else
+                                        _Result = False
+                                    End If
+                                Case Action.TypeSigne.Inferieur
+                                    If Now < mydate Then
+                                        _Result = True
+                                    Else
+                                        _Result = False
+                                    End If
+                                Case Action.TypeSigne.InferieurEgal
+                                    If Now <= mydate Then
+                                        _Result = True
+                                    Else
+                                        _Result = False
+                                    End If
+                                Case Action.TypeSigne.Superieur
+                                    If Now > mydate Then
+                                        _Result = True
+                                    Else
+                                        _Result = False
+                                    End If
+                                Case Action.TypeSigne.SuperieurEgal
+                                    If Now >= mydate Then
+                                        _Result = True
+                                    Else
+                                        _Result = False
+                                    End If
+                            End Select
+                        End If
+                    Case Action.TypeCondition.Device
+                        Dim retour As Object
+                        Dim Args = Nothing
+                        retour = CallByName(ReturnDeviceById(Conditions.Item(i).IdDevice), Conditions.Item(i).PropertyDevice, Args)
+
+                        Select Case Conditions.Item(i).Condition
+                            Case Action.TypeSigne.Different
+                                If retour <> Conditions.Item(i).Value Then
+                                    _Result = True
+                                Else
+                                    _Result = False
+                                End If
+                            Case Action.TypeSigne.Egal
+                                If retour = Conditions.Item(i).Value Then
+                                    _Result = True
+                                Else
+                                    _Result = False
+                                End If
+                            Case Action.TypeSigne.Inferieur
+                                If retour < Conditions.Item(i).Value Then
+                                    _Result = True
+                                Else
+                                    _Result = False
+                                End If
+                            Case Action.TypeSigne.InferieurEgal
+                                If retour <= Conditions.Item(i).Value Then
+                                    _Result = True
+                                Else
+                                    _Result = False
+                                End If
+                            Case Action.TypeSigne.Superieur
+                                If retour > Conditions.Item(i).Value Then
+                                    _Result = True
+                                Else
+                                    _Result = False
+                                End If
+                            Case Action.TypeSigne.SuperieurEgal
+                                If retour >= Conditions.Item(i).Value Then
+                                    _Result = True
+                                Else
+                                    _Result = False
+                                End If
+                        End Select
+                End Select
+                Select Case Conditions.Item(i).Operateur
+                    Case Action.TypeOperateur.AND
+                        _ResultFinal = _ResultFinal And _Result
+                    Case Action.TypeOperateur.OR
+                        _ResultFinal = _ResultFinal Or _Result
+                End Select
+            Next
+
+            Return _ResultFinal
+        End Function
 #End Region
 
 #End Region
@@ -4333,18 +4584,6 @@ Namespace HoMIDom
                         x.Nom = nom
                         x.Enable = enable
                         x.Description = description
-                        'Dim tabl As New ArrayList
-                        'For i As Integer = 0 To listactions.Count - 1
-                        '    Select Case listactions.Item(i).TypeAction
-                        '        Case Action.TypeAction.ActionDevice
-                        '            Dim o As New Action.ActionDevice
-                        '            o.Timing = listactions.Item(i).Timing
-                        '            o.IdDevice = listactions.Item(i).IdDevice
-                        '            o.Method = listactions.Item(i).Action
-                        '            o.Parametres = listactions.Item(i).Parametres
-                        '            tabl.Add(o)
-                        '    End Select
-                        'Next
                         x.ListActions = listactions
                     End With
                     myID = x.ID
@@ -4357,18 +4596,6 @@ Namespace HoMIDom
                             _ListMacros.Item(i).nom = nom
                             _ListMacros.Item(i).enable = enable
                             _ListMacros.Item(i).description = description
-                            'Dim tabl As New ArrayList
-                            'For j As Integer = 0 To listactions.Count - 1
-                            '    Select Case listactions.Item(j).TypeAction
-                            '        Case Action.TypeAction.ActionDevice
-                            '            Dim o As New Action.ActionDevice
-                            '            o.Timing = listactions.Item(j).Timing
-                            '            o.IdDevice = listactions.Item(j).IdDevice
-                            '            o.Method = listactions.Item(j).Action
-                            '            o.Parametres = listactions.Item(j).Parametres
-                            '            tabl.Add(o)
-                            '    End Select
-                            'Next
                             _ListMacros.Item(i).ListActions = listactions
                         End If
                     Next
@@ -4385,7 +4612,7 @@ Namespace HoMIDom
         ''' <param name="MacroId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function ReturnMacroById(ByVal MacroId As String) As Object Implements IHoMIDom.ReturnMacroById
+        Public Function ReturnMacroById(ByVal MacroId As String) As Macro Implements IHoMIDom.ReturnMacroById
             Dim retour As Object = Nothing
             Try
                 For i As Integer = 0 To _ListMacros.Count - 1
@@ -4400,6 +4627,10 @@ Namespace HoMIDom
                 Return Nothing
             End Try
         End Function
+
+        Public Sub RunMacro(ByVal Id As String) Implements IHoMIDom.RunMacro
+            Execute(Id)
+        End Sub
 #End Region
 
 #Region "Trigger"

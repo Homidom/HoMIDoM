@@ -12,7 +12,8 @@
                     <Label Content="Actions:" Foreground="White" />
                     <Image Source="/HoMIAdmiN;component/Images/blockdevice-icone-7594-128.png" Height="32" Width="32" ToolTip="Device" Name="ImgActDevice"></Image>
                     <Image Source="/HoMIAdmiN;component/Images/e-mail-32.png" Height="32" Width="32" ToolTip="Mail" Name="ImgActMail"></Image>
-                    <Image Source="/HoMIAdmiN;component/Images/If01.png" Height="32" Width="32" ToolTip="If" Name="ImgActIf"></Image>
+                    <Image Source="/HoMIAdmiN;component/Images/workflow.png" Height="32" Width="32" ToolTip="If" Name="ImgActIf"></Image>
+                    <Image Source="/HoMIAdmiN;component/Images/script-128.png" Height="32" Width="32" ToolTip="Macro" Name="ImgActMacro"></Image>
                     <Rectangle Width="50"/>
                     <Image Name="ZoomPlus" Source="/HoMIAdmiN;component/Images/avant-zoom-128.png" Width="23" Height="23" />
                     <Image Name="ZoomMoins" Source="/HoMIAdmiN;component/Images/arriere-zoom-128.png" Width="23" Height="23" />

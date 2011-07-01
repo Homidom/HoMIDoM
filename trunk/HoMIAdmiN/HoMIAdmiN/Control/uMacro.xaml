@@ -86,6 +86,7 @@
         <TextBox Height="21" HorizontalAlignment="Left" Margin="74,85,0,0" Name="TxtDescription" VerticalAlignment="Top" Width="349" />
         <my:uScenario HorizontalAlignment="Left" Margin="0,125,0,0" x:Name="UScenario1" VerticalAlignment="Top" Height="376" Width="638" />
         <CheckBox Content="Enable" Height="19" HorizontalAlignment="Left" Margin="317,60,0,0" Name="cEnable" VerticalAlignment="Top" Width="70" Foreground="White" />
+        <Button Content="Tester" Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,72,12,0" Name="BtnTest" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" />
         <!--<CheckBox Content="Enable" Height="17" HorizontalAlignment="Left" Margin="300,59,0,0" Name="ChkEnable" VerticalAlignment="Top" Width="86" Foreground="White" />
         <Canvas Margin="10,118,0,0" >
             <StackPanel Orientation="Horizontal">

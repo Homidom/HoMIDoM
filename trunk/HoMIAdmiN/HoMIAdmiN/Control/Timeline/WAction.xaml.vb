@@ -28,7 +28,15 @@ Public Class WActionParametrage
                     obj.IdDevice = Window1.myService.GetAllDevices.Item(Cb1.SelectedIndex).ID
                     obj.Method = Cb2.Text
                     obj.Parametres.Clear()
-                    obj.Parametres.Add(TxtValue.Text)
+                    If TxtValue.Text <> "" Then obj.Parametres.Add(TxtValue.Text)
+                    _ObjAction = obj
+                Case HoMIDom.HoMIDom.Action.TypeAction.ActionMacro
+                    If Cb1.SelectedIndex < 0 Then
+                        MessageBox.Show("Veuillez sélectionner une macro !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        Exit Sub
+                    End If
+                    Dim obj As Action.ActionMacro = _ObjAction
+                    obj.IdMacro = Window1.myService.GetAllMacros.Item(Cb1.SelectedIndex).ID
                     _ObjAction = obj
                 Case HoMIDom.HoMIDom.Action.TypeAction.ActionMail
                     If Cb1.SelectedIndex < 0 Or Txt2.Text = "" Or TxtValue.Text = "" Then
@@ -70,11 +78,13 @@ Public Class WActionParametrage
     End Sub
 
     Private Sub Cb1_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles Cb1.SelectionChanged
-        If Cb1.SelectedIndex >= 0 Then
-            Cb2.Items.Clear()
-            For i As Integer = 0 To Window1.myService.GetAllDevices.Item(Cb1.SelectedIndex).DeviceAction.Count - 1
-                Cb2.Items.Add(Window1.myService.GetAllDevices.Item(Cb1.SelectedIndex).DeviceAction.Item(i).Nom)
-            Next
+        If _ObjAction.TypeAction = Action.TypeAction.ActionDevice Then
+            If Cb1.SelectedIndex >= 0 Then
+                Cb2.Items.Clear()
+                For i As Integer = 0 To Window1.myService.GetAllDevices.Item(Cb1.SelectedIndex).DeviceAction.Count - 1
+                    Cb2.Items.Add(Window1.myService.GetAllDevices.Item(Cb1.SelectedIndex).DeviceAction.Item(i).Nom)
+                Next
+            End If
         End If
     End Sub
 
@@ -123,12 +133,37 @@ Public Class WActionParametrage
                         Next
                         TxtValue.Text = obj.Parametres.Item(0)
                     End If
+                Case HoMIDom.HoMIDom.Action.TypeAction.ActionMacro
+                    Dim obj As Action.ActionMacro = _ObjAction
+
+                    'Mise en forme graphique
+                    Lbl1.Content = "Macro:"
+                    Lbl2.Visibility = Visibility.Hidden
+                    LblValue.Visibility = Windows.Visibility.Hidden
+                    Cb2.Visibility = Windows.Visibility.Hidden
+                    Txt2.Visibility = Windows.Visibility.Hidden
+                    TxtValue.Visibility = Windows.Visibility.Hidden
+
+                    For i As Integer = 0 To Window1.myService.GetAllMacros.Count - 1
+                        Cb1.Items.Add(Window1.myService.GetAllMacros.Item(i).Nom)
+                    Next
+                    Dim a As String = ""
+                    If obj.IdMacro IsNot Nothing Then
+                        a = Window1.myService.ReturnMacroById(obj.IdMacro).Nom
+                        For i As Integer = 0 To Cb1.Items.Count - 1
+                            If a = Cb1.Items(i) Then
+                                Cb1.SelectedIndex = i
+                                Exit For
+                            End If
+                        Next
+                    End If
                 Case HoMIDom.HoMIDom.Action.TypeAction.ActionMail
                     Dim obj As Action.ActionMail = _ObjAction
 
                     'Mise en forme graphique
                     Lbl1.Content = "User:"
                     Lbl2.Content = "Sujet:"
+                    LblValue.Content = "Message:"
                     Txt2.Text = ""
                     Cb2.Visibility = Windows.Visibility.Hidden
                     Txt2.Visibility = Windows.Visibility.Visible
@@ -167,6 +202,7 @@ Public Class WActionParametrage
                     StkCondition.Children.Clear()
                     For i As Integer = 0 To obj.Conditions.Count - 1
                         Dim x As New uCondition
+                        x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
                         x.TypeCondition = obj.Conditions.Item(i).Type
                         x.Operateur = obj.Conditions.Item(i).Operateur
                         x.Signe = obj.Conditions.Item(i).Condition
@@ -178,6 +214,8 @@ Public Class WActionParametrage
                             x.PropertyDevice = obj.Conditions.Item(i).PropertyDevice
                             x.Value = obj.Conditions.Item(i).Value
                         End If
+                        AddHandler x.UpCondition, AddressOf UpCondition
+                        AddHandler x.DeleteCondition, AddressOf DeleteCondition
                         _ListuConditions.Add(x)
                         StkCondition.Children.Add(x)
                     Next
@@ -285,6 +323,7 @@ Public Class WActionParametrage
     Private Sub BtnCondiTime_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnCondiTime.MouseLeftButtonDown
         Dim x As New uCondition
         x.TypeCondition = Action.TypeCondition.DateTime
+        x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
         AddHandler x.DeleteCondition, AddressOf DeleteCondition
         AddHandler x.UpCondition, AddressOf UpCondition
         StkCondition.Children.Add(x)
@@ -294,6 +333,7 @@ Public Class WActionParametrage
     Private Sub BtnCondiDevice_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnCondiDevice.MouseLeftButtonDown
         Dim x As New uCondition
         x.TypeCondition = Action.TypeCondition.Device
+        x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
         AddHandler x.DeleteCondition, AddressOf DeleteCondition
         AddHandler x.UpCondition, AddressOf UpCondition
         StkCondition.Children.Add(x)
@@ -311,15 +351,18 @@ Public Class WActionParametrage
     End Sub
 
     Private Sub UpCondition(ByVal uid As String)
-        For i As Integer = 0 To StkCondition.Children.Count - 1
-            If StkCondition.Children.Item(i).Uid = uid Then
-                'on verifi si c'est le 1er car on peu plus monter
+        For i As Integer = 0 To _StkCondition.Children.Count - 1
+            If _StkCondition.Children.Item(i).Uid = uid Then
                 If i = 0 Then Exit Sub
-                Dim x As Object = StkCondition.Children.Item(i - 1)
-                StkCondition.Children.Item(i - 1) = StkCondition.Children.Item(i)
-                StkCondition.Children.Item(i) = x
+                'on verifi si c'est le 1er car on peu plus monter
+                Dim x As Object = _ListuConditions.Item(i - 1)
                 _ListuConditions.Item(i - 1) = _ListuConditions.Item(i)
                 _ListuConditions.Item(i) = x
+
+                StkCondition.Children.Clear()
+                For j As Integer = 0 To _ListuConditions.Count - 1
+                    StkCondition.Children.Add(_ListuConditions.Item(j))
+                Next
                 Exit For
             End If
         Next

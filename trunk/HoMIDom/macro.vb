@@ -3,6 +3,7 @@ Imports HoMIDom.HoMIDom.Server
 Imports NCrontab
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports System.Net.Mail
+Imports System.Threading
 
 Namespace HoMIDom
 
@@ -15,7 +16,6 @@ Namespace HoMIDom
         Dim _Description As String
         Dim _Enable As Boolean
         Dim _ListActions As New ArrayList
-        Dim _Server As Server
 
         'Propriétés
 
@@ -126,40 +126,9 @@ Namespace HoMIDom
             '    _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:Execute_sans_conditions", ex.ToString)
             'End Try
         End Sub
-
-        ''' <summary>Analyse les conditions et renvoie le résultat</summary>
-        ''' <remarks></remarks>
-        Public Function Analyse() As Boolean
-            Try
-                _Server.Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Macro:Analyse", "Analyse des conditions de : " & Nom)
-
-
-                'Ajouter le code Ncalc ou autre
-
-
-                Return True
-
-
-
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:analyse", ex.ToString)
-                Return False
-            End Try
-        End Function
-
-        ''' <summary>Execute les actions</summary>
-        ''' <remarks></remarks>
-        Public Sub Action(ByVal listeactions As ArrayList)
-            Try
-                For i = 0 To listeactions.Count - 1
-                    _Server.Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Macro:Action", "Execution de l'action : " & listeactions.Item(i))
-
-
-                Next
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:Action", ex.ToString)
-            End Try
+        Public Sub Execute()
         End Sub
+
     End Class
 
     ''' <summary>Class trigger, Défini le type pour les triggers Device/timers</summary>
@@ -390,6 +359,7 @@ Namespace HoMIDom
             ActionDevice = 0
             ActionMail = 1
             ActionIf = 2
+            ActionMacro = 3
         End Enum
 
         ''' <summary>
@@ -584,6 +554,55 @@ Namespace HoMIDom
                     Return TypeAction.ActionIf
                 End Get
             End Property
+
+            Public ReadOnly Property FormatNCalc As String
+                Get
+                    Dim _FormatNCalc As String = " "
+                    For i As Integer = 0 To _Conditions.Count - 1
+                        Select Case _Conditions.Item(i).Type
+                            Case TypeCondition.DateTime
+
+                            Case TypeCondition.Device
+
+                        End Select
+                    Next
+                    Return _FormatNCalc
+                End Get
+            End Property
+
+        End Class
+
+        ''' <summary>
+        ''' Action macro
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Class ActionMacro
+            Dim _IdMacro As String
+            Dim _Timing As DateTime
+
+            Public Property Timing As DateTime
+                Get
+                    Return _Timing
+                End Get
+                Set(ByVal value As DateTime)
+                    _Timing = value
+                End Set
+            End Property
+
+            Public Property IdMacro As String
+                Get
+                    Return _IdMacro
+                End Get
+                Set(ByVal value As String)
+                    _IdMacro = value
+                End Set
+            End Property
+
+            Public ReadOnly Property TypeAction As TypeAction
+                Get
+                    Return TypeAction.ActionMacro
+                End Get
+            End Property
         End Class
 
         ''' <summary>
@@ -598,7 +617,6 @@ Namespace HoMIDom
             Dim _Value As Object
             Dim _Condition As TypeSigne
             Dim _Operateur As TypeOperateur
-            Dim _FormatNCalc As String = " "
 
             Public Property Type As TypeCondition
                 Get
@@ -663,12 +681,9 @@ Namespace HoMIDom
                 End Set
             End Property
 
-            Public ReadOnly Property FormatNCalc As String
-                Get
-                    Return _FormatNCalc
-                End Get
-            End Property
         End Class
+
+
 
         ''' <summary>Envoi d'un email</summary>
         ''' <remarks></remarks>
