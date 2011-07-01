@@ -83,7 +83,7 @@ Public Class uScenario
             AddHandler x.DeleteAction, AddressOf DeleteAction
             AddHandler x.ChangeAction, AddressOf ChangeAction
             x.Width = (_Duree * 3600) + 100 'StckPnlLib.ActualWidth
-            Select Case uri
+            Select Case UCase(uri)
                 Case "ACTIONDEVICE"
                     Dim y As New Action.ActionDevice
                     x.ObjAction = y
@@ -92,6 +92,9 @@ Public Class uScenario
                     x.ObjAction = y
                 Case "ACTIONIF"
                     Dim y As New Action.ActionIf
+                    x.ObjAction = y
+                Case "ACTIONMACRO"
+                    Dim y As New Action.ActionMacro
                     x.ObjAction = y
             End Select
             x.Span = Span
@@ -222,5 +225,13 @@ Public Class uScenario
         Dim obj As New DataObject()
         obj.SetData(GetType(String), "ACTIONIF")
         effects = DragDrop.DoDragDrop(Me.ImgActIf, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+    End Sub
+
+    'Ajouter action macro
+    Private Sub ImgActMacro_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActMacro.MouseLeftButtonDown
+        Dim effects As DragDropEffects
+        Dim obj As New DataObject()
+        obj.SetData(GetType(String), "ACTIONMACRO")
+        effects = DragDrop.DoDragDrop(Me.ImgActMacro, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 End Class

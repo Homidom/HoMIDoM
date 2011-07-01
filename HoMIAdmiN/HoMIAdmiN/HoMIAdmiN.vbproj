@@ -402,5 +402,9 @@
   <ItemGroup>
     <Resource Include="Images\If01.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\script-128.png" />
+    <Resource Include="Images\workflow.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

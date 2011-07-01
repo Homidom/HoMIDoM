@@ -51,25 +51,32 @@ Public Class uAction
         End Get
         Set(ByVal value As Object)
             _ObjAction = value
+
             If _ObjAction IsNot Nothing Then
-                Dim i As HoMIDom.HoMIDom.Action.TypeAction = _ObjAction.TypeAction
+                Dim i As Action.TypeAction = _ObjAction.TypeAction
                 Select Case i
                     Case Action.TypeAction.ActionDevice
-                        Dim x As HoMIDom.HoMIDom.Action.ActionDevice
+                        Dim x As Action.ActionDevice
                         x = _ObjAction
+                        Label1.Content = "Device"
                         If x.IdDevice IsNot Nothing Then Label1.Content = Window1.myService.ReturnDeviceByID(x.IdDevice).Name
                         If x.Method IsNot Nothing Then Label2.Content = x.Method
                     Case Action.TypeAction.ActionMail
-                        Dim x As HoMIDom.HoMIDom.Action.ActionMail
+                        Dim x As Action.ActionMail
                         x = _ObjAction
                         Label1.Content = "Mail "
                         If x.UserId IsNot Nothing Then Label1.Content = Label1.Content & "{" & Window1.myService.ReturnUserById(x.UserId).Nom & "}"
                         If x.Sujet IsNot Nothing Then Label2.Content = x.Sujet
                     Case Action.TypeAction.ActionIf
-                        Dim x As HoMIDom.HoMIDom.Action.ActionIf
+                        Dim x As Action.ActionIf
                         Label1.Content = "If"
                         x = _ObjAction
                         Label2.Content = ""
+                    Case Action.TypeAction.ActionMacro
+                        Dim x As Action.ActionMacro
+                        Label1.Content = "Macro"
+                        x = _ObjAction
+                        If x.IdMacro IsNot Nothing Then Label2.Content = Window1.myService.ReturnMacroById(x.IdMacro).Nom
                 End Select
                 Refresh_Position()
             End If

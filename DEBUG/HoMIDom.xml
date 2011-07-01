@@ -293,12 +293,6 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Macro.Execute_sans_conditions">
 	<summary>Execute une macro sans analyse des conditions</summary>
 	<remarks>lance les actions si TRUE</remarks>
-</member><member name="M:HoMIDom.HoMIDom.Macro.Analyse">
-	<summary>Analyse les conditions et renvoie le résultat</summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Macro.Action(System.Collections.ArrayList)">
-	<summary>Execute les actions</summary>
-	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Macro">
 	<summary>Class Macro, Défini le type pour les macros</summary>
 	<remarks>_condition contient un tableau des conditions à vérifier pour lancer les actions si TRUE ou si FALSE</remarks>
@@ -409,6 +403,11 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Action.ActionIf">
 	<summary>
  Action If
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionMacro">
+	<summary>
+ Action macro
  </summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.Condition">
@@ -1456,6 +1455,12 @@ HoMIDom
  </summary>
 	<param name="macroId"></param>
 	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.RunMacro(System.String)">
+	<summary>
+ Execute une macro
+ </summary>
+	<param name="Id"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllMacros">
 	<summary>Retourne la liste de toutes les macros</summary>

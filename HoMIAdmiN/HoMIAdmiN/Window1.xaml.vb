@@ -305,6 +305,12 @@ Class Window1
                 label.Foreground = New SolidColorBrush(Colors.White)
                 label.Content = myService.GetAllMacros.Item(i).Nom
 
+                uri = MyRep & "\Images\Icones\script-128.png"
+                bmpImage.BeginInit()
+                bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
+                bmpImage.EndInit()
+                img.Source = bmpImage
+
                 stack.Children.Add(img)
                 stack.Children.Add(label)
 
@@ -338,6 +344,12 @@ Class Window1
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
                 label.Content = myService.GetAllTriggers.Item(i).Nom
+
+                uri = MyRep & "\Images\Icones\drapeau-vert-32.png"
+                bmpImage.BeginInit()
+                bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
+                bmpImage.EndInit()
+                img.Source = bmpImage
 
                 stack.Children.Add(img)
                 stack.Children.Add(label)

@@ -191,6 +191,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Jour: " Width="58" />
                         <ComboBox SelectedIndex="0" Margin="3" Width="40" Name="CbJour">
+                            <ComboBoxItem Content="0" />
                             <ComboBoxItem Content="1" />
                             <ComboBoxItem Content="2" />
                             <ComboBoxItem Content="3" />
@@ -227,6 +228,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Mois: " Width="58" />
                         <ComboBox SelectedIndex="0" Margin="3" Width="40" Name="CbMois">
+                            <ComboBoxItem Content="0" />
                             <ComboBoxItem Content="1" />
                             <ComboBoxItem Content="2" />
                             <ComboBoxItem Content="3" />
@@ -241,8 +243,17 @@
                             <ComboBoxItem Content="12" />
                         </ComboBox>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Journée: " Width="58" />
+                        <CheckBox Content="Lun" Margin="1" Foreground="White" Name="Chk1" />
+                        <CheckBox Content="Mar" Margin="1" Foreground="White" Name="Chk2" />
+                        <CheckBox Content="Mer" Margin="1" Foreground="White" Name="Chk3" />
+                        <CheckBox Content="Jeu" Margin="1" Foreground="White" Name="Chk4" />
+                        <CheckBox Content="Ven" Margin="1" Foreground="White" Name="Chk5" />
+                        <CheckBox Content="Sam" Margin="1" Foreground="White" Name="Chk6" />
+                        <CheckBox Content="Dim" Margin="1" Foreground="White" Name="Chk7" />
+                    </StackPanel>
                 </StackPanel>
-                <Label Content="Label" Height="25" Name="Label1" Width="98" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Name="StkDevice">
                 <Label Content="Device:" />
