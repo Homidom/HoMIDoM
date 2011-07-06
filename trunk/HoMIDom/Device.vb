@@ -1624,14 +1624,14 @@ Namespace HoMIDom
             End Sub
 
             'Ouvrir/Fermer % Volet
-            Public Sub [DIM](ByVal Variation As Integer)
+            Public Sub [OUVERTURE](ByVal Variation As Integer)
                 If Variation < 0 Then
                     Variation = 0
                 ElseIf Variation > 100 Then
                     Variation = 100
                 End If
                 If _Enable = False Then Exit Sub
-                Driver.Write(Me, "DIM", Variation)
+                Driver.Write(Me, "OUVERTURE", Variation)
             End Sub
 
         End Class

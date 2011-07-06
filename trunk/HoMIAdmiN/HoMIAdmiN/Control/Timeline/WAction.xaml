@@ -93,7 +93,14 @@
             </Grid>
         </GroupBox>
         <Label Content="Valeur:" FontFamily="Tahoma" FontSize="14" Foreground="Orange" Height="25" HorizontalAlignment="Left" Margin="17,85,0,0" Name="LblValue" VerticalAlignment="Top" />
-        <TextBox Height="21" HorizontalAlignment="Left" Margin="22,109,0,0" Name="TxtValue" VerticalAlignment="Top" Width="199" />
+        <TextBox Height="21" HorizontalAlignment="Left" Margin="22,109,0,0" Name="TxtValue" VerticalAlignment="Top" Width="199">
+            <TextBox.ContextMenu>
+                <ContextMenu >
+                    
+                </ContextMenu>
+                    
+            </TextBox.ContextMenu>
+        </TextBox>
         <TextBox Height="21" HorizontalAlignment="Left" Margin="22,63,0,0" Name="Txt2" VerticalAlignment="Top" Width="199" Visibility="Hidden" />
         <TabControl Height="452" HorizontalAlignment="Left" Margin="22,147,0,0" Name="TabControl1" VerticalAlignment="Top" Width="611">
             <TabItem Header="Condition" Name="TabItem1">
