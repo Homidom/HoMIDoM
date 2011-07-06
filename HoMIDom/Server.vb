@@ -2353,7 +2353,6 @@ Namespace HoMIDom
                                     Dim retour = CallByName(y, x.Method, CallType.Method, x.Parametres.Item(0))
                                 End If
                                 _Server.Log(TypeLog.DEBUG, TypeSource.SCRIPT, "Execute Action", "Device: " & y.name & " method: " & x.Method)
-
                             Catch ex As Exception
                                 _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Erreur Execute Action Device", ex.ToString)
                             End Try
