@@ -97,14 +97,11 @@ Namespace HoMIDom
             End Try
         End Function
 
-        ''' <summary>          
-        ''' Requete avec résultat          
-        ''' </summary>          
+        ''' <summary>Requete avec résultat</summary>          
         ''' <param name="commande">ex : SELECT * FROM contact</param>          
         ''' <param name="resultat">Arralist contenant la liste des résultats</param>          
         ''' <returns>String si OK, String "ERR:..." si erreur</returns>          
         ''' <remarks></remarks>          
-        ''' 
         Public Function query(ByVal commande As String, ByRef resultat As DataTable, ByVal ParamArray params() As String) As String
             Dim SQLcommand As SQLiteCommand
             Dim SQLreader As SQLiteDataReader

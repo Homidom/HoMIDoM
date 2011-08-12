@@ -363,7 +363,7 @@ Namespace HoMIDom
         End Enum
 
         ''' <summary>
-        ''' Enumération des types  de signe (<,=,<>...)
+        ''' Enumération des types  de signe (inferieur,egal,different...)
         ''' </summary>
         ''' <remarks></remarks>
         Public Enum TypeSigne
