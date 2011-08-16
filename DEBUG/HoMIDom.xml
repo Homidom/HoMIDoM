@@ -28,9 +28,7 @@ HoMIDom
 	<returns>String si OK, String "ERR:..." si erreur</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Sqlite.query(System.String,System.Data.DataTable@,System.String[])">
-	<summary>          
- Requete avec résultat          
- </summary>
+	<summary>Requete avec résultat</summary>
 	<param name="commande">ex : SELECT * FROM contact</param>
 	<param name="resultat">Arralist contenant la liste des résultats</param>
 	<returns>String si OK, String "ERR:..." si erreur</returns>
@@ -378,6 +376,11 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Action.TypeAction">
 	<summary>
  Enumération des types d'actions
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.TypeSigne">
+	<summary>
+ Enumération des types  de signe (inferieur,egal,different...)
  </summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.TypeOperateur">
@@ -840,12 +843,12 @@ HoMIDom
 	<param name="image"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetDeviceInZone(System.Object)">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetDeviceInZone(System.String)">
 	<summary>Retourne la liste des devices d'une zone depuis son ID</summary>
 	<param name="ZoneId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ZoneIsEmpty(System.Object)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ZoneIsEmpty(System.String)">
 	<summary>
  Indique si la zone ne contient aucun device
  </summary>
@@ -1385,7 +1388,7 @@ HoMIDom
  </summary>
 	<param name="DriverId"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ZoneIsEmpty(System.Object)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ZoneIsEmpty(System.String)">
 	<summary>
  Indique si la zone ne contient aucun device (exemple à vérifier avant de supprimer une zone)
  </summary>
@@ -1405,7 +1408,7 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetDeviceInZone(System.Object)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetDeviceInZone(System.String)">
 	<summary>
  Retourne la liste des devices d'une zone (par son id)
  </summary>

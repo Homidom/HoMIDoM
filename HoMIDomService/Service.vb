@@ -58,10 +58,15 @@ Module Service
                     'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
                     Dim myadress As String = "http://localhost:" & PortSOAP & "/ServiceModelSamples/service"
                     Dim binding As New ServiceModel.BasicHttpBinding
+
                     binding.MaxBufferPoolSize = 5000000
                     binding.MaxReceivedMessageSize = 5000000
                     binding.ReaderQuotas.MaxArrayLength = 5000000
                     binding.ReaderQuotas.MaxStringContentLength = 5000000
+                    binding.SendTimeout = TimeSpan.FromMinutes(60)
+                    binding.CloseTimeout = TimeSpan.FromMinutes(60)
+                    binding.OpenTimeout = TimeSpan.FromMinutes(60)
+                    binding.ReceiveTimeout = TimeSpan.FromMinutes(60)
                     'New System.ServiceModel.BasicHttpBinding
                     myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
                     myService = myChannelFactory.CreateChannel()

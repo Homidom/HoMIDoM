@@ -260,7 +260,7 @@
                     </TabItem>
                     <TabItem Header="Macros">
                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                            <TreeView Background="DimGray" Margin="5,4,4,30" Name="TreeViewMacros" MinHeight="200" />
+                            <TreeView Background="DimGray" Margin="5,4,4,30" Name="TreeViewMacros" MinHeight="200" AllowDrop="False" />
                             <Button Foreground="White" Height="19" HorizontalAlignment="Left" Margin="4,0,0,6" Name="BtnNewMacro" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Nouveau</Button>
                             <Button Foreground="White" Height="19" Margin="72,0,41,6" Name="BtnDelMacro" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="62">Supprimer</Button>
                         </Grid>

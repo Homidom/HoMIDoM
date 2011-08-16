@@ -46,6 +46,13 @@
                 TxtNom.Text = x.Nom
                 ChkEnable.IsChecked = x.Enable
                 TxtDescription.Text = x.Description
+                _ListMacro = x.ListMacro
+
+                If _ListMacro IsNot Nothing Then
+                    For i As Integer = 0 To _ListMacro.Count - 1
+                        ListBox1.Items.Add(Window1.myService.ReturnMacroById(_ListMacro.Item(i)).Nom)
+                    Next
+                End If
 
                 Dim cron As String = x.ConditionTime
                 If cron.StartsWith("_cron") Then
@@ -66,7 +73,7 @@
                 End If
             End If
 
-        End If
+            End If
     End Sub
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
@@ -134,4 +141,25 @@
             Window1.myService.SaveTrigger(_TriggerId, TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
         End If
     End Sub
+
+    Private Sub ListBox1_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles ListBox1.DragOver
+        If e.Data.GetDataPresent(GetType(String)) Then
+            e.Effects = DragDropEffects.Copy
+        Else
+            e.Effects = DragDropEffects.None
+        End If
+    End Sub
+
+    Private Sub ListBox1_Drop(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles ListBox1.Drop
+        If e.Data.GetDataPresent(GetType(String)) Then
+            e.Effects = DragDropEffects.Copy
+
+            Dim uri As String = e.Data.GetData(GetType(String)).ToString
+            _ListMacro.Add(uri)
+            ListBox1.Items.Add(Window1.myService.ReturnMacroById(uri).Nom)
+        Else
+            e.Effects = DragDropEffects.None
+        End If
+    End Sub
+
 End Class

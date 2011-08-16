@@ -464,7 +464,7 @@ Namespace HoMIDom
         ''' <param name="zoneId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ZoneIsEmpty(ByVal zoneId) As Boolean
+        <OperationContract()> Function ZoneIsEmpty(ByVal zoneId As String) As Boolean
 
         ''' <summary>
         ''' Supprimer une zone de la config
@@ -487,7 +487,7 @@ Namespace HoMIDom
         ''' <param name="zoneId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetDeviceInZone(ByVal zoneId) As List(Of TemplateDevice)
+        <OperationContract()> Function GetDeviceInZone(ByVal zoneId As String) As List(Of TemplateDevice)
 
         ''' <summary>
         ''' Retourne l'objet d'une zone par son ID
