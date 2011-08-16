@@ -111,7 +111,7 @@
         <TextBox Background="DarkGray" Foreground="White" Margin="69,0,0,62" Name="TxtVille" Height="22" VerticalAlignment="Bottom" Width="223" HorizontalAlignment="Left" TabIndex="13" />
         <Label Foreground="White" HorizontalAlignment="Left" Margin="2,0,0,32" Name="Label16" Width="73" Height="24" VerticalAlignment="Bottom">Code Postal:</Label>
         <TextBox Background="DarkGray" Foreground="White" Margin="69,0,0,33" Name="TxtCodePostal" Height="22" VerticalAlignment="Bottom" Width="223" HorizontalAlignment="Left" TabIndex="14" />
-        <ComboBox Height="21" Margin="69,224,0,0" Name="ComboProfil" VerticalAlignment="Top" Background="DarkGray" Foreground="White" SelectedIndex="0" Width="223" HorizontalAlignment="Left" TabIndex="5">
+        <ComboBox Height="21" Margin="69,224,0,0" Name="ComboProfil" VerticalAlignment="Top" Foreground="Black" SelectedIndex="0" Width="223" HorizontalAlignment="Left" TabIndex="5" Background="White">
             <ComboBoxItem>Invité</ComboBoxItem>
             <ComboBoxItem>Client</ComboBoxItem>
             <ComboBoxItem>Administrateur</ComboBoxItem>

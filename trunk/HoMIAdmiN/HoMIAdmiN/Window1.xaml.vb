@@ -98,6 +98,21 @@ Class Window1
     'Menu Quitter
     Private Sub Quitter(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuQuitter.Click
         Try
+            Dim retour As MessageBoxResult
+            retour = MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "Admin", MessageBoxButton.YesNo, MessageBoxImage.Question)
+
+            If retour = MessageBoxResult.Yes Then
+                Try
+                    If IsConnect = False Then
+                        MessageBox.Show("Impossible d'enregistrer la configuration car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                    Else
+                        myService.SaveConfig()
+                    End If
+                Catch ex As Exception
+                    MessageBox.Show("ERREUR Sub Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                End Try
+            End If
+
             Me.Close()
             End
         Catch ex As Exception
@@ -584,6 +599,16 @@ Class Window1
     Private Sub BtnDelUser_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelUser.Click
         Try
             If TreeViewUsers.SelectedItem IsNot Nothing And TreeViewUsers.SelectedItem.uid IsNot Nothing Then
+                Dim cntAdmin As Integer = 0
+                For i As Integer = 0 To Window1.myService.GetAllUsers.Count - 1
+                    If Window1.myService.GetAllUsers.Item(i).Profil = Users.TypeProfil.admin Then
+                        cntAdmin += 1
+                    End If
+                Next
+                If cntAdmin <= 1 Then
+                    MessageBox.Show("Impossible de supprimer cet utilisateur car il n'existe qu'un profil Administrateur!")
+                    Exit Sub
+                End If
                 If MessageBox.Show("Etes vous sur de supprimer ce user: " & TreeViewUsers.SelectedItem.header & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
                     Window1.myService.DeleteUser(TreeViewUsers.SelectedItem.uid)
                     AffUser()
@@ -722,13 +747,14 @@ Class Window1
             MessageBox.Show("ERREUR Sub TreeViewMacros_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
 #End Region
 
     'Menu Save Config
     Private Sub MnuSaveConfig(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuSaveConfig.Click
         Try
             If IsConnect = False Then
-                MessageBox.Show("Impossible d'afficher le log car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                MessageBox.Show("Impossible d'enregistrer la config car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
                 Exit Sub
             End If
 
@@ -869,6 +895,10 @@ Class Window1
             binding.MaxBufferSize = 5000000
             binding.ReaderQuotas.MaxArrayLength = 5000000
             binding.ReaderQuotas.MaxStringContentLength = 5000000
+            binding.SendTimeout = TimeSpan.FromMinutes(60)
+            binding.CloseTimeout = TimeSpan.FromMinutes(60)
+            binding.OpenTimeout = TimeSpan.FromMinutes(60)
+            binding.ReceiveTimeout = TimeSpan.FromMinutes(60)
 
             myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
             myService = myChannelFactory.CreateChannel()
@@ -1049,6 +1079,14 @@ Class Window1
         End Try
     End Sub
 
-
-
+    Private Sub TreeViewMacros_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewMacros.SelectedItemChanged
+        If Mouse.LeftButton = MouseButtonState.Pressed Then
+            If TreeViewMacros.SelectedItem IsNot Nothing Then
+                Dim effects As DragDropEffects
+                Dim obj As New DataObject()
+                obj.SetData(GetType(String), TreeViewMacros.SelectedItem.uid)
+                effects = DragDrop.DoDragDrop(Me.TreeViewMacros, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+            End If
+        End If
+    End Sub
 End Class

@@ -88,4 +88,38 @@
             CbServer.ToolTip = Window1.ListServer.Item(CbServer.SelectedIndex - 1).Adresse & " : " & Window1.ListServer.Item(CbServer.SelectedIndex - 1).Port
         End If
     End Sub
+
+    Private Sub TxtPassword_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles TxtPassword.KeyDown
+        If e.Key = Key.Enter And TxtPassword.Password <> "" Then
+            Try
+                If TxtUsername.Text = "" Or TxtPassword.Password = "" Then
+                    MessageBox.Show("Le username ou le password doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+                If CbServer.SelectedIndex = 0 And (TxtIP.Text = "" Or TxtPort.Text = "") Then
+                    MessageBox.Show("L'adresse IP et le port du serveur doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+                If CbServer.SelectedIndex = 0 Then
+                    MessageBox.Show("Vous avez sélectionné une connexion manuelle, si celle-ci est effective elle sera ajoutée automatiquement dans votre liste avec le nom ServeurX (X sera le nombre de serveur déjà paramétré)!", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
+                End If
+
+                If CheckBox1.IsChecked = True Then
+                    My.Settings.SavePassword = True
+                    My.Settings.Password = TxtPassword.Password
+                    My.Settings.UserPassword = TxtUsername.Text
+                    My.Settings.Save()
+                Else
+                    My.Settings.SavePassword = False
+                    My.Settings.UserPassword = ""
+                    My.Settings.Password = ""
+                    My.Settings.Save()
+                End If
+
+                DialogResult = True
+            Catch ex As Exception
+                MessageBox.Show("ERREUR Sub Login TxtPassword_KeyDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
+        End If
+    End Sub
 End Class

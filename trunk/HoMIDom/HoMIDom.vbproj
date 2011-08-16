@@ -59,6 +59,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\Dll_externes\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="NCrontab">
       <HintPath>..\Dll_externes\NCrontab.dll</HintPath>
     </Reference>
