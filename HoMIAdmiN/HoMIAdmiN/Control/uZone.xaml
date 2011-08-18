@@ -101,7 +101,7 @@
                 <Label Height="23" HorizontalAlignment="Right" Margin="0,44,91,0" Name="Label7" VerticalAlignment="Top" Width="68" Foreground="White" Visibility="Hidden" Grid.Column="1">Position X:</Label>
                 <TextBox Height="19" HorizontalAlignment="Right" Margin="0,66,17,0" Name="TxtX" VerticalAlignment="Top" Width="141" Visibility="Hidden" Grid.Column="1">0</TextBox>
                 <Label Foreground="White" Height="23" HorizontalAlignment="Right" Margin="0,0,90,62" Name="Label8" VerticalAlignment="Bottom" Width="68" Visibility="Hidden" Grid.Column="1">Position Y:</Label>
-                <TextBox Height="19" HorizontalAlignment="Right" Margin="0,0,16,44" Name="TxtY" VerticalAlignment="Bottom" Width="141" Visibility="Hidden" Grid.Column="1">0</TextBox>
+                <TextBox Height="19" HorizontalAlignment="Right" Margin="0,0,17,44" Name="TxtY" VerticalAlignment="Bottom" Width="140" Visibility="Hidden" Grid.Column="1">0</TextBox>
                 <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,0,16,9" Name="BtnOkDev" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="75" Visibility="Hidden" Grid.Column="1">Ok</Button>
             </Grid>
         </GroupBox>
