@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Window3"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Window3" Height="254" Width="474" Name="WindowLogin" WindowStartupLocation="CenterOwner" WindowStyle="None" ShowInTaskbar="False" ResizeMode="NoResize">
+    Title="Window3" Name="WindowLogin" WindowStartupLocation="CenterScreen" WindowStyle="None" ShowInTaskbar="False" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
 
     <Window.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
@@ -70,20 +70,36 @@
         </ControlTemplate>
     </Window.Resources>
 
-    <Grid Background="DarkGray">
-        <Button Content="Ok" Height="26" HorizontalAlignment="Left" Template="{DynamicResource GlassButton}" Margin="93,177,0,0" Name="BtnOK" VerticalAlignment="Top" Width="79" Foreground="White" />
-        <Button Content="Annuler" Height="27" HorizontalAlignment="Left" Margin="187,177,0,0" Template="{DynamicResource GlassButton}" Name="BtnCancel" VerticalAlignment="Top" Width="76" Foreground="White" />
-        <Label Content="Serveur:" Height="23" HorizontalAlignment="Left" Margin="12,50,0,0" Name="Label1" VerticalAlignment="Top" Width="69" Foreground="White" />
-        <Label Content="Connexion" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Height="46.25" Margin="106,-1,135,0" Name="Label2" VerticalAlignment="Top" />
-        <Label Content="Username:" Height="23" HorizontalAlignment="Left" Margin="12,79,0,0" Name="Label3" VerticalAlignment="Top" Width="69" Foreground="White" />
-        <Label Content="Password:" Height="23" HorizontalAlignment="Left" Margin="12,108,0,0" Name="Label4" VerticalAlignment="Top" Width="69" Foreground="White" />
-        <ComboBox Height="20" HorizontalAlignment="Left" Margin="78,53,0,0" Name="CbServer" VerticalAlignment="Top" Width="185" IsEditable="False"  />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="78,79,0,0" Name="TxtUsername" VerticalAlignment="Top" Width="185" />
-        <PasswordBox Height="23" HorizontalAlignment="Left" Margin="78,109,0,0" Name="TxtPassword" VerticalAlignment="Top" Width="185" />
-        <CheckBox Content="Se souvenir du mot de passe" Height="19" HorizontalAlignment="Left" Margin="78,138,0,0" Name="CheckBox1" VerticalAlignment="Top" Width="185" Foreground="White" />
-        <Label Content="IP:" Height="23" HorizontalAlignment="Left" Margin="298,49,0,0" Name="Label5" VerticalAlignment="Top" Width="28" Foreground="White" />
-        <Label Content="Port:" Foreground="White" Height="23" HorizontalAlignment="Left" Margin="298,73,0,0" Name="Label6" VerticalAlignment="Top" Width="37" />
-        <TextBox Height="20" HorizontalAlignment="Left" Margin="331,52,0,0" Name="TxtIP" VerticalAlignment="Top" Width="109" />
-        <TextBox Height="20" HorizontalAlignment="Left" Margin="331,76,0,0" Name="TxtPort" VerticalAlignment="Top" Width="109" />
+    <Grid>
+    <StackPanel Background="DarkGray">
+        <Label Content="Connexion" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Margin="2" Name="Label2" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <StackPanel >
+        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal">
+            <Label Content="Serveur:" Margin="1" Name="Label1" Foreground="White" />
+            <ComboBox Name="CbServer" IsEditable="False" MinWidth="100" />
+                    <Label Content="IP:" Name="Label5" Foreground="White" Margin=" 1" />
+                    <TextBox Height="20" Margin="1" Name="TxtIP" MinWidth="50" />
+                    <Label Content="Port:" Foreground="White" Margin="1" Name="Label6" />
+                    <TextBox Margin="1" Name="TxtPort" MinWidth="50" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Content="Username:" Margin="1" Name="Label3" Foreground="White" MinWidth=" 70"/>
+            <TextBox Margin="1" Name="TxtUsername" Width="200" />
+            </StackPanel> 
+            <StackPanel Orientation="Horizontal" >
+            <Label Content="Password:" Margin="1" Name="Label4" Foreground="White" MinWidth=" 70"/>
+            <PasswordBox Margin="1" Name="TxtPassword" Width="200" />
+            </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <CheckBox Content="Se souvenir du mot de passe" Margin="2" Name="CheckBox1" Foreground="White" />
+                </StackPanel>
+            </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="3">
+            <Button Content="Ok" Template="{DynamicResource GlassButton}" Margin="2" Name="BtnOK" Width="79" Foreground="White" Height="25" />
+            <Button Content="Annuler" Margin="2" Template="{DynamicResource GlassButton}" Name="BtnCancel" Width="79" Foreground="White" Height="25" />
+        </StackPanel>
+    </StackPanel>
     </Grid>
 </Window>
