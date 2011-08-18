@@ -1,0 +1,10 @@
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\Plugins\Driver_Mirror.dll
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\Plugins\Driver_Mirror.pdb
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\Plugins\Driver_Mirror.xml
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_Mirror\obj\Debug\ResolveAssemblyReference.cache
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_Mirror\obj\Debug\Driver_Mirror.Resources.resources
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_Mirror\obj\Debug\GenerateResource.read.1.tlog
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_Mirror\obj\Debug\GenerateResource.write.1.tlog
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_Mirror\obj\Debug\Driver_Mirror.dll
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_Mirror\obj\Debug\Driver_Mirror.xml
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_Mirror\obj\Debug\Driver_Mirror.pdb
