@@ -1,0 +1,499 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+WpfApplication_Viewer
+</name>
+</assembly>
+<members>
+<member name="M:WpfApplication1.uMeteos.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uMeteos">
+	<summary>
+uMeteos
+</summary>
+</member><member name="M:WpfApplication1.Application.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="M:WpfApplication1.Application.Main">
+	<summary>
+Application Entry Point.
+</summary>
+</member><member name="T:WpfApplication1.Application">
+	<summary>
+Application
+</summary>
+</member><member name="M:WpfApplication1.uInternet.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uInternet">
+	<summary>
+uInternet
+</summary>
+</member><member name="M:WpfApplication1.uNotes.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uNotes">
+	<summary>
+uNotes
+</summary>
+</member><member name="M:WpfApplication1.uProgrammeTV.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uProgrammeTV">
+	<summary>
+uProgrammeTV
+</summary>
+</member><member name="M:WpfApplication1.uModule.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uModule">
+	<summary>
+uModule
+</summary>
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+	<summary>
+CreateInstance
+</summary>
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+	<summary>
+GetPropertyValue
+</summary>
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+	<summary>
+SetPropertyValue
+</summary>
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+	<summary>
+CreateDelegate
+</summary>
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+	<summary>
+AddEventHandler
+</summary>
+</member><member name="T:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+	<summary>
+GeneratedInternalTypeHelper
+</summary>
+</member><member name="M:WpfApplication1.uCalc.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uCalc">
+	<summary>
+uCalc
+</summary>
+</member><member name="M:WpfApplication1.Window1.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.Window1">
+	<summary>
+Window1
+</summary>
+</member><member name="M:WpfApplication1.uContact.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uContact">
+	<summary>
+uContact
+</summary>
+</member><member name="M:WpfApplication1.uModules.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uModules">
+	<summary>
+uModules
+</summary>
+</member><member name="M:WpfApplication1.uCtrlImgMnu.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uCtrlImgMnu">
+	<summary>
+uCtrlImgMnu
+</summary>
+</member><member name="M:WpfApplication1.uMeteo.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uMeteo">
+	<summary>
+uMeteo
+</summary>
+</member><member name="M:WpfApplication1.clsXML.#ctor(System.String)">
+ -----------------------------------------------------------------------------
+ <summary>
+ Constructeur de la classe
+ </summary>
+	<param name="leFichier"></param>
+	<remarks>
+ leFichier doit obligatoirement être un fichier existant
+ </remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:WpfApplication1.clsXML.#ctor">
+ -----------------------------------------------------------------------------
+ <summary>
+ Constructeur de la classe
+ </summary>
+	<remarks>
+ Ne nécessite pas de fichier xml existant
+ </remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="P:WpfApplication1.clsXML.leFichier">
+ -----------------------------------------------------------------------------
+ <summary>
+ définit/retourne le nom du fichier
+ </summary>
+	<value>Un fichier .xml existant</value>
+	<remarks>
+ Veillez à indiquer un fichier XML existant!
+ </remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:WpfApplication1.clsXML.SelectValue(System.String)">
+	<summary>
+ Retourne la valeur du premier noeud correspondant à la requête XPath.
+ Cette fonction devrait être la plus utilisée car elle permet de retourner le résultat de n'importe quelle requête XPath.
+ Quelques exemples qui montrent la puissance de XPath :
+ /cd/piste[5]/titre/text() renvoie le titre de la piste 5
+ /cd/piste[@numero='3']/titre renvoie le titre de la piste dont l'attribut numéro est '3'
+ /cd[artiste='Pink Floyd'][3]/piste[5]/titre renvoie le titre de la 5ème piste du 3ème CD ayant "Pink Floyd" comme artiste.
+ /cd[artiste='Pink Floyd' and id='PF004']/piste[2]/duree renvoie la durée de la seconde piste du CD de Pink Floyd ayant l'ID 'PF004'
+ </summary>
+	<param name="query">Une requête XPath de sélection</param>
+	<returns>Une chaine de caractère contenant la valeur du noeud</returns>
+	<remarks></remarks>
+	<history>
+     [Gabriel]   06/06/2009  Created
+ </history>
+</member><member name="M:WpfApplication1.clsXML.SetNode(System.String,System.Xml.XmlNode,System.Int32)">
+	<summary>
+ Remplace le premier noeud correspondant à la requête XPath par un nouveau.
+ </summary>
+	<param name="xpath">Une requête XPath de sélection</param>
+	<param name="node">Un noeud (XmlNode)</param>
+	<remarks></remarks>
+	<history>
+     [Gabriel]   06/06/2009  Created
+ </history>
+</member><member name="M:WpfApplication1.clsXML.SelectFirstNode(System.String)">
+	<summary>
+ Retourne le premier noeud correspondant à la requête XPath, Nothing si aucun noeud n'est trouvé
+ </summary>
+	<param name="xpath">La requête XPath</param>
+	<returns>Un noeud (XmlNode)</returns>
+	<remarks></remarks>
+	<history>
+     [Gabriel]   06/06/2009  Created
+ </history>
+</member><member name="M:WpfApplication1.clsXML.SelectNodes(System.String)">
+	<summary>
+ Retourne la liste des noeuds correspondants à la requête XPath ou Nothing si rien n'est trouvé
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<returns>Une liste de noeuds (XmlNodeList)</returns>
+	<remarks></remarks>
+	<history>
+     [Gabriel]   06/06/2009  Created
+ </history>
+</member><member name="M:WpfApplication1.clsXML.getElementValue(System.String,System.Int32)">
+ -----------------------------------------------------------------------------
+ <summary>
+ Objectif : Renvoie la valeur du n-ème élément pointé par la requête XPath
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="index">L'index de l'élément</param>
+	<returns>Chaine de caractères</returns>
+	<remarks>
+ Utilisation |
+ exemple 1 : getElementValue("/polygone/point", 2) renvoie la valeur du 2ème "point" de "polygone" |
+ exemple 2 : getElementValue("/polygone/point[2]") renvoie la même chose
+ </remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:WpfApplication1.clsXML.setElementValue(System.String,System.String,System.Int32)">
+ -----------------------------------------------------------------------------
+ <summary>
+ Ecrit la valeur pour le n-ième élément pointé par la requête path
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="valeur">La valeur à écrire</param>
+	<param name="index">L'index de l'élément dans lequel écrire</param>
+	<remarks>
+ Utilisation |
+ exemple 1 : setElementValue("/polygone/point", "30;40", 5) spécifie que le 5ème élément "point" de "polygone" aura comme valeur "(30;40)" |
+ exemple 2 : setElementValue("/polygone/point[5]", "30;40") fait exactement la même chose.
+ </remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:WpfApplication1.clsXML.addElement(System.String,System.String,System.String,System.Int32)">
+ -----------------------------------------------------------------------------
+ <summary>
+ Ajoute un element pointé par le n-ième noeud de la requête XPath
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="nom">Le nom de l'élément à ajouter</param>
+	<param name="valeur">La valeur de l'élément à ajouter</param>
+	<param name="index">L'index de l'élément parent dans lequel on ajoute l'élément enfant "nom"</param>
+	<remarks>
+ Utilisation |
+ exemple 1 : addElement("/cd/piste", "titre", "54 Cymru beats", 5) ajoute un élément enfant "titre" au 5ème élément "piste", sa valeur sera "54 Cymru beats" |
+ exemple 2 : addElement("/cd/piste[5]", "titre", "54 Cymru beats") fait exactement la même chose.
+ </remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:WpfApplication1.clsXML.deleteElement(System.String,System.String,System.Int32)">
+ -----------------------------------------------------------------------------
+ <summary>
+ supprime le n-ième element pointé par la requête XPath
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="nom">Le nom de l'élément à supprimer</param>
+	<param name="index">L'index de l'élément à supprimer</param>
+	<remarks>
+ Utilisation |
+ exemple : deleteElement("/cd", "piste", 3) supprime le 3ème élément "piste"
+ </remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:WpfApplication1.clsXML.deleteElement(System.String)">
+ -----------------------------------------------------------------------------
+ <summary>
+ supprime le 1er élément pointé par la requête XPath
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<remarks>
+ Utilisation |
+ exemple 1 : deleteElement("/cd/piste[3]) supprime le 3ème élément "piste"
+ exemple 2 : deleteElement("/cd/piste) supprime la première piste uniquement
+ </remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:WpfApplication1.clsXML.addAttribute(System.String,System.String,System.String,System.Int32)">
+ -----------------------------------------------------------------------------
+ <summary>
+ Ajoute un attribut "nom" de valeur "valeur" n-ième élément pointé par la requête XPath
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="nom">Le nom de l'attribut à ajouter</param>
+	<param name="valeur">La valeur de l'attribut à ajouter</param>
+	<param name="index">L'index de l'élément auquel on ajoute l'attribut</param>
+	<remarks>
+ Utilisation |
+ exemple 1 : addAttribute("/cd/piste","numero", "3", 5) ajoute l'attribut "numero" de valeur "3" au 5ème élément "piste" du "cd"
+ exemple 2 : addAttribute("/cd/piste[5]","numero", "3") fait la même chose.
+ </remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:WpfApplication1.clsXML.setAttribute(System.String,System.String,System.String,System.Int32)">
+ -----------------------------------------------------------------------------
+ <summary>
+ Affecte à l'attribut "nom" la valeur "valeur" au n-ième élément pointé par la requête "path"
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="nom">Le nom de l'attribut à affecter</param>
+	<param name="valeur">La nouvelle valeur de l'attribut</param>
+	<param name="index">L'index de l'élément auquel on affecte la nouvelle valeur de l'attribut</param>
+	<remarks>
+ Utilisation |
+ exemple 1 : setAttribute("/cd/piste","numero", "3", 5) définit l'attribut "numero" du 5ème élément "piste" de "cd" à la valeur "3"
+ exemple 2 : setAttribute("/cd/piste[5]","numero", "3") fait exactement la même chose
+ </remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:WpfApplication1.clsXML.getAttribute(System.String,System.String,System.String,System.Int32)">
+ -----------------------------------------------------------------------------
+ <summary>
+ Retourne la valeur de l'attribut "nom" du n-ième élément pointé par la requête "XPath"
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="nom">Le nom de l'attribut dont la valeur sera retournée</param>
+	<param name="index">L'index de l'élément auquel appartient l'attribut</param>
+	<returns>La valeur de l'attribut sélectionné</returns>
+	<remarks>
+ Utilisation |
+ exemple 1 : getAttribute("/cd/piste","numero", 5) retourne la valeur de l'attribut "numero" du 5ème élément "piste" de "cd"
+ exemple 2 : getAttribute("/cd/piste[5]","numero") fait la même chose.
+ </remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:WpfApplication1.clsXML.createRoot(System.String,System.String)">
+ -----------------------------------------------------------------------------
+ <summary>
+ Ajoute l'element racine "nom"
+ </summary>
+	<param name="nom">Le nom de l'élément racine qui sera créé</param>
+	<remarks>
+ Utilisation | exemple : createRoot("Bibliothèque")
+ </remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:WpfApplication1.clsXML.createNewFile(System.String)">
+
+ -----------------------------------------------------------------------------
+ <summary>
+ Crée un nouveau fichier vierge
+ </summary>
+	<param name="nomFichier">[Chemin et ] Nom du fichier</param>
+	<remarks>
+ Veiller à ce que le fichier n'existe pas déjà sous peine d'écrasement de l'existant
+ </remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:WpfApplication1.clsXML.getFormatedXMLString">
+ -----------------------------------------------------------------------------
+ <summary>
+ Permet de renvoyer sous forme de chaine le contenu du fichier XML.
+ </summary>
+	<returns>Une chaine de caractères</returns>
+	<remarks>
+ Le document contient des retours à la ligne pour une meilleure lecture
+ </remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:WpfApplication1.clsXML.getIndexOfElementContaining(System.String,System.String)">
+ -----------------------------------------------------------------------------
+ <summary>
+ Renvoie l'index de l'élément pointé par XPath et de valeur valeur, -1 si pas trouvé
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="valeur">La valeur à rechercher</param>
+	<returns>Un entier</returns>
+	<remarks>
+	</remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="M:WpfApplication1.clsXML.countElements(System.String)">
+ -----------------------------------------------------------------------------
+ <summary>
+ Renvoie le nombre d'éléments pointés par XPath
+ </summary>
+	<param name="xpath"></param>
+	<returns>Un entier</returns>
+	<remarks>
+	</remarks>
+	<history>
+ 	[Gabriel]	10/05/2005	Created
+     [Gabriel]   06/06/2009  Updated
+ </history>
+ -----------------------------------------------------------------------------
+
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Application">
+	<summary>
+ Retourne l'objet application pour l'application en cours d'exécution
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Computer">
+	<summary>
+ Retourne les informations relatives à l'ordinateur hôte.
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.User">
+	<summary>
+ Retourne les informations relatives à l'utilisateur actuel. Si vous souhaitez exécuter l'application avec les 
+ informations d'identification de l'utilisateur Windows, appelez My.User.InitializeWithWindowsUser().
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Log">
+	<summary>
+ Retourne le journal de l'application. L'écouteur peut être configuré par le fichier de configuration de l'application.
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Windows">
+	<summary>
+ Retourne la collection de fenêtres définie dans le projet.
+ </summary>
+</member><member name="T:WpfApplication1.My.MyWpfExtension">
+	<summary>
+ Module utilisé pour définir les propriétés qui sont disponibles dans l'espace de noms My pour WPF
+ </summary>
+	<remarks></remarks>
+</member><member name="T:WpfApplication1.Appointment">
+	<summary>
+ This class is actually a stripped-down version of the actual Appointment class, which was generated using the 
+ Linq-to-SQL Designer (essentially a Linq ORM to the Appointments table in the db)
+ </summary>
+	<remarks>Obviously, you should use your own appointment object/classes, and change the code-behind in MonthView.xaml.vb to
+ support a List(Of T) where T is whatever the System.Type is for your appointment class.
+ </remarks>
+	<author>Kirk Davis, February 2009 (in like, 4 hours, and it shows!)</author>
+</member>
+</members>
+</doc>
