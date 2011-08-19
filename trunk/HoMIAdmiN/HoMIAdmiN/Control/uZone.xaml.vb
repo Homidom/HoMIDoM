@@ -57,13 +57,13 @@ Partial Public Class uZone
                     ImgZone.Tag = x.image
                 End If
 
-                If File.Exists(x.image) = True And x.icon <> "" And x.icon <> " " Then
+                If File.Exists(x.Icon) = True And x.Icon <> "" And x.Icon <> " " Then
                     Dim bmpImage As New BitmapImage()
                     bmpImage.BeginInit()
-                    bmpImage.UriSource = New Uri(x.icon, UriKind.Absolute)
+                    bmpImage.UriSource = New Uri(x.Icon, UriKind.Absolute)
                     bmpImage.EndInit()
                     ImgIcon.Source = bmpImage
-                    ImgIcon.Tag = x.icon
+                    ImgIcon.Tag = x.Icon
                 End If
             End If
         End If
