@@ -3,6 +3,32 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     StartupUri="Window1.xaml">
     <Application.Resources>
+
+        <DrawingBrush x:Key="MyGridBrushResource"
+                  Viewport="0,0,20,20"
+                  ViewportUnits="Absolute"
+                  TileMode="Tile">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <DrawingGroup.Children>
+                        <GeometryDrawing Geometry="M0,0 L1,0 1,1 0,1z" Brush="#00AA00" />
+                        <GeometryDrawing Brush="DarkSlateGray">
+                            <GeometryDrawing.Geometry>
+                                <GeometryGroup>
+                                    <RectangleGeometry Rect="0,0,1,0.01" />
+                                    <RectangleGeometry Rect="0,0.01,0.01,1" />
+                                </GeometryGroup>
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup.Children>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+
+        <LinearGradientBrush x:Key="FrameBackground" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Offset="1.0" Color="SlateGray" />
+            <GradientStop Offset="0.0" Color="LightSlateGray" />
+        </LinearGradientBrush>
         
     </Application.Resources>
 </Application>

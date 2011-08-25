@@ -6,29 +6,13 @@ HoMIDomWPFClient
 </name>
 </assembly>
 <members>
-<member name="M:WpfApplication1.uMeteos.InitializeComponent">
+<member name="M:WpfApplication1.uModule.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uMeteos">
+</member><member name="T:WpfApplication1.uModule">
 	<summary>
-uMeteos
-</summary>
-</member><member name="M:WpfApplication1.uNotes.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uNotes">
-	<summary>
-uNotes
-</summary>
-</member><member name="M:WpfApplication1.WConfig.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.WConfig">
-	<summary>
-WConfig
+uModule
 </summary>
 </member><member name="M:WpfApplication1.uContact.InitializeComponent">
 	<summary>
@@ -38,46 +22,6 @@ InitializeComponent
 	<summary>
 uContact
 </summary>
-</member><member name="M:WpfApplication1.keyboard.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.keyboard">
-	<summary>
-keyboard
-</summary>
-</member><member name="M:WpfApplication1.uInternet.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uInternet">
-	<summary>
-uInternet
-</summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
-	<summary>
-CreateInstance
-</summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
-	<summary>
-GetPropertyValue
-</summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
-	<summary>
-SetPropertyValue
-</summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
-	<summary>
-CreateDelegate
-</summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
-	<summary>
-AddEventHandler
-</summary>
-</member><member name="T:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper">
-	<summary>
-GeneratedInternalTypeHelper
-</summary>
 </member><member name="M:WpfApplication1.Window1.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -85,46 +29,6 @@ InitializeComponent
 </member><member name="T:WpfApplication1.Window1">
 	<summary>
 Window1
-</summary>
-</member><member name="M:WpfApplication1.uModules.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uModules">
-	<summary>
-uModules
-</summary>
-</member><member name="M:WpfApplication1.FrmConfigChaine.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.FrmConfigChaine">
-	<summary>
-FrmConfigChaine
-</summary>
-</member><member name="M:WpfApplication1.uCtrlImgMnu.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uCtrlImgMnu">
-	<summary>
-uCtrlImgMnu
-</summary>
-</member><member name="M:WpfApplication1.uModule.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uModule">
-	<summary>
-uModule
-</summary>
-</member><member name="M:WpfApplication1.uProgrammeTV.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uProgrammeTV">
-	<summary>
-uProgrammeTV
 </summary>
 </member><member name="M:WpfApplication1.FrmDetailProgram.InitializeComponent">
 	<summary>
@@ -134,13 +38,13 @@ InitializeComponent
 	<summary>
 FrmDetailProgram
 </summary>
-</member><member name="M:WpfApplication1.uMeteo.InitializeComponent">
+</member><member name="M:WpfApplication1.keyboard.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uMeteo">
+</member><member name="T:WpfApplication1.keyboard">
 	<summary>
-uMeteo
+keyboard
 </summary>
 </member><member name="M:WpfApplication1.Application.InitializeComponent">
 	<summary>
@@ -154,84 +58,87 @@ Application Entry Point.
 	<summary>
 Application
 </summary>
-</member><member name="P:WpfApplication1.My.Resources.Resources.ResourceManager">
+</member><member name="M:WpfApplication1.uMeteo.InitializeComponent">
 	<summary>
-  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+InitializeComponent
 </summary>
-</member><member name="P:WpfApplication1.My.Resources.Resources.Culture">
+</member><member name="T:WpfApplication1.uMeteo">
 	<summary>
-  Remplace la propriété CurrentUICulture du thread actuel pour toutes
-  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+uMeteo
 </summary>
-</member><member name="T:WpfApplication1.My.Resources.Resources">
+</member><member name="M:WpfApplication1.uModules.InitializeComponent">
 	<summary>
-  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+InitializeComponent
 </summary>
-</member><member name="M:WpfApplication1.Window1.LoadConfig(System.String)">
-	<summary>Chargement de la config depuis le fichier XML</summary>
-	<param name="Fichier"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:WpfApplication1.Window1.SaveConfig(System.String)">
-	<summary>Sauvegarde de la config dans le fichier XML</summary>
-	<remarks></remarks>
-</member><member name="P:WpfApplication1.Window1.FichierLog">
+</member><member name="T:WpfApplication1.uModules">
 	<summary>
- Permet de connaître le chemin du fichier log
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:WpfApplication1.Window1.MaxFileSize">
+uModules
+</summary>
+</member><member name="M:WpfApplication1.uNotes.InitializeComponent">
 	<summary>
- Retourne/Fixe la Taille max du fichier log en Ko
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:WpfApplication1.Window1.TypeLog">
-	<summary>Indique le type du Log: si c'est une erreur, une info, un message...</summary>
-	<remarks></remarks>
-</member><member name="T:WpfApplication1.Window1.TypeSource">
-	<summary>Indique la source du log si c'est le serveur, un script, un device...</summary>
-	<remarks></remarks>
-</member><member name="M:WpfApplication1.Window1.Log(WpfApplication1.Window1.TypeLog,WpfApplication1.Window1.TypeSource,System.String,System.String)">
-	<summary>Ecrit un log dans le fichier log au format xml</summary>
-	<param name="TypLog"></param>
-	<param name="Source"></param>
-	<param name="Fonction"></param>
-	<param name="Message"></param>
-	<remarks></remarks>
-</member><member name="M:WpfApplication1.Window1.CreateNewFileLog(System.String)">
-	<summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
-	<param name="NewFichier"></param>
-	<remarks></remarks>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.Application">
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uNotes">
 	<summary>
- Retourne l'objet application pour l'application en cours d'exécution
- </summary>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.Computer">
+uNotes
+</summary>
+</member><member name="M:WpfApplication1.uMeteos.InitializeComponent">
 	<summary>
- Retourne les informations relatives à l'ordinateur hôte.
- </summary>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.User">
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uMeteos">
 	<summary>
- Retourne les informations relatives à l'utilisateur actuel. Si vous souhaitez exécuter l'application avec les 
- informations d'identification de l'utilisateur Windows, appelez My.User.InitializeWithWindowsUser().
- </summary>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.Log">
+uMeteos
+</summary>
+</member><member name="M:WpfApplication1.uInternet.InitializeComponent">
 	<summary>
- Retourne le journal de l'application. L'écouteur peut être configuré par le fichier de configuration de l'application.
- </summary>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.Windows">
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uInternet">
 	<summary>
- Retourne la collection de fenêtres définie dans le projet.
- </summary>
-</member><member name="T:WpfApplication1.My.MyWpfExtension">
+uInternet
+</summary>
+</member><member name="M:WpfApplication1.FrmConfigChaine.InitializeComponent">
 	<summary>
- Module utilisé pour définir les propriétés qui sont disponibles dans l'espace de noms My pour WPF
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.FrmConfigChaine">
+	<summary>
+FrmConfigChaine
+</summary>
+</member><member name="M:WpfApplication1.uProgrammeTV.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uProgrammeTV">
+	<summary>
+uProgrammeTV
+</summary>
+</member><member name="M:WpfApplication1.uCtrlImgMnu.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uCtrlImgMnu">
+	<summary>
+uCtrlImgMnu
+</summary>
+</member><member name="M:WpfApplication1.WConfig.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.WConfig">
+	<summary>
+WConfig
+</summary>
+</member><member name="T:WpfApplication1.Appointment">
+	<summary>
+ This class is actually a stripped-down version of the actual Appointment class, which was generated using the 
+ Linq-to-SQL Designer (essentially a Linq ORM to the Appointments table in the db)
  </summary>
-	<remarks></remarks>
+	<remarks>Obviously, you should use your own appointment object/classes, and change the code-behind in MonthView.xaml.vb to
+ support a List(Of T) where T is whatever the System.Type is for your appointment class.
+ </remarks>
+	<author>Kirk Davis, February 2009 (in like, 4 hours, and it shows!)</author>
 </member><member name="M:WpfApplication1.clsXML.#ctor(System.String)">
  -----------------------------------------------------------------------------
  <summary>
@@ -561,15 +468,84 @@ Application
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="T:WpfApplication1.Appointment">
+</member><member name="M:WpfApplication1.Window1.LoadConfig(System.String)">
+	<summary>Chargement de la config depuis le fichier XML</summary>
+	<param name="Fichier"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Window1.SaveConfig(System.String)">
+	<summary>Sauvegarde de la config dans le fichier XML</summary>
+	<remarks></remarks>
+</member><member name="P:WpfApplication1.Window1.FichierLog">
 	<summary>
- This class is actually a stripped-down version of the actual Appointment class, which was generated using the 
- Linq-to-SQL Designer (essentially a Linq ORM to the Appointments table in the db)
+ Permet de connaître le chemin du fichier log
  </summary>
-	<remarks>Obviously, you should use your own appointment object/classes, and change the code-behind in MonthView.xaml.vb to
- support a List(Of T) where T is whatever the System.Type is for your appointment class.
- </remarks>
-	<author>Kirk Davis, February 2009 (in like, 4 hours, and it shows!)</author>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:WpfApplication1.Window1.MaxFileSize">
+	<summary>
+ Retourne/Fixe la Taille max du fichier log en Ko
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:WpfApplication1.Window1.TypeLog">
+	<summary>Indique le type du Log: si c'est une erreur, une info, un message...</summary>
+	<remarks></remarks>
+</member><member name="T:WpfApplication1.Window1.TypeSource">
+	<summary>Indique la source du log si c'est le serveur, un script, un device...</summary>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Window1.Log(WpfApplication1.Window1.TypeLog,WpfApplication1.Window1.TypeSource,System.String,System.String)">
+	<summary>Ecrit un log dans le fichier log au format xml</summary>
+	<param name="TypLog"></param>
+	<param name="Source"></param>
+	<param name="Fonction"></param>
+	<param name="Message"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Window1.CreateNewFileLog(System.String)">
+	<summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
+	<param name="NewFichier"></param>
+	<remarks></remarks>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Application">
+	<summary>
+ Retourne l'objet application pour l'application en cours d'exécution
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Computer">
+	<summary>
+ Retourne les informations relatives à l'ordinateur hôte.
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.User">
+	<summary>
+ Retourne les informations relatives à l'utilisateur actuel. Si vous souhaitez exécuter l'application avec les 
+ informations d'identification de l'utilisateur Windows, appelez My.User.InitializeWithWindowsUser().
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Log">
+	<summary>
+ Retourne le journal de l'application. L'écouteur peut être configuré par le fichier de configuration de l'application.
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Windows">
+	<summary>
+ Retourne la collection de fenêtres définie dans le projet.
+ </summary>
+</member><member name="T:WpfApplication1.My.MyWpfExtension">
+	<summary>
+ Module utilisé pour définir les propriétés qui sont disponibles dans l'espace de noms My pour WPF
+ </summary>
+	<remarks></remarks>
+</member><member name="P:WpfApplication1.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:WpfApplication1.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:WpfApplication1.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
 </member>
 </members>
 </doc>

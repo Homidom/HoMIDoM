@@ -33,6 +33,7 @@ Imports System.Windows.Media.TextFormatting
 Imports System.Windows.Navigation
 Imports System.Windows.Shapes
 Imports System.Windows.Shell
+Imports WpfApplication1.Designer
 Imports WpfApplication1.UAniScrollViewer
 
 
