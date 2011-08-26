@@ -5,7 +5,7 @@ Imports System.Data
 Imports Ionic.Zip
 Imports HoMIDom.HoMIDom
 Imports System.Windows.Threading
-
+Imports HoMIDom.HoMIDom.Server
 
 Public Class ServiceTV
 
@@ -17,6 +17,7 @@ Public Class ServiceTV
     Dim _findownload As Boolean = False
     Dim _Active As Boolean = False
     Dim dt As DispatcherTimer = New DispatcherTimer()
+    Dim MyWindow As Window1
 
     Public Property Enable As Boolean
         Get
@@ -25,7 +26,7 @@ Public Class ServiceTV
         Set(ByVal value As Boolean)
             _Active = value
             If _Active = True Then
-                WriteLog("Chargement des chaines sélectionnées")
+                MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "GuideTV", "Chargement des chaines sélectionnées")
                 ChargeChaineFromDB()
                 Dim Thread1 As New System.Threading.Thread(AddressOf DownloadXMLTV)
                 Thread1.Start()
@@ -39,13 +40,13 @@ Public Class ServiceTV
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         Try
             If Now.Hour = 3 And Now.Minute = 0 And Now.Second = 0 Then
-                WriteLog("Chargement des chaines sélectionnées")
+                MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "Chargement des chaines sélectionnées")
                 ChargeChaineFromDB()
                 Dim Thread1 As New System.Threading.Thread(AddressOf DownloadXMLTV)
                 Thread1.Start()
             End If
         Catch ex As Exception
-            WriteLog("Erreur Service TV - dispatcherTimer_Tick:" & ex.Message)
+            MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "Erreur Service TV - dispatcherTimer_Tick:" & ex.Message)
         End Try
     End Sub
 
@@ -384,7 +385,7 @@ Public Class ServiceTV
                 MyChaine.Add(vChaine)
             End While
         Else
-            WriteLog("ChargeChaineFromDB: aucune chaine à charger depuis la DB!")
+            MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "ChargeChaineFromDB: aucune chaine à charger depuis la DB!")
         End If
         SQLcommand.Dispose()
         SQLconnect.Close()
@@ -399,10 +400,10 @@ Public Class ServiceTV
 
         Do While flag = False
             If My.Computer.Network.IsAvailable = True Then
-                WriteLog(" Téléchargement du fichier XMLTV sur internet au format zip")
+                MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", " Téléchargement du fichier XMLTV sur internet au format zip")
                 If File.Exists(System.Environment.CurrentDirectory & "\data\complet.zip") Then File.Delete(System.Environment.CurrentDirectory & "\data\complet.zip")
                 My.Computer.Network.DownloadFile("http://xmltv.myftp.org/download/complet.zip", System.Environment.CurrentDirectory & "\data\complet.zip")
-                WriteLog(" fin du téléchargement du fichier")
+                MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", " fin du téléchargement du fichier")
                 Dim t As DateTime = DateTime.Now
                 Do While DateTime.Now < t.AddSeconds(5)
                 Loop
@@ -410,7 +411,7 @@ Public Class ServiceTV
                 t = DateTime.Now
                 Do While DateTime.Now < t.AddSeconds(5)
                 Loop
-                WriteLog(" Décompression du fichier effectué")
+                MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", " Décompression du fichier effectué")
                 t = DateTime.Now
                 Do While DateTime.Now < t.AddSeconds(5)
                 Loop
@@ -423,7 +424,7 @@ Public Class ServiceTV
 
     'Permet de lister les programmes pour les chaines sélectionnées dans la base de données
     Public Sub ProgrammeFromXMLToDB()
-        WriteLog("Chargement du fichier XML dans la base de données")
+        MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "Chargement du fichier XML dans la base de données")
         Try
             MyXML = New XML(System.Environment.CurrentDirectory & "\data\complet.xml")
             timestart = Now.ToShortTimeString
@@ -500,9 +501,9 @@ Public Class ServiceTV
             SQLcommand.Dispose()
             SQLconnect.Close()
             MyXML = Nothing
-            WriteLog("Fin du chargement des programmes - start:" & timestart & " fin:" & Now.ToShortTimeString)
+            MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "Fin du chargement des programmes - start:" & timestart & " fin:" & Now.ToShortTimeString)
         Catch e As Exception
-            WriteLog("ChargeProgrammesFromXMLToDB Erreur: " & e.Message)
+            MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "ChargeProgrammesFromXMLToDB Erreur: " & e.Message)
         End Try
     End Sub
 
@@ -537,7 +538,7 @@ Public Class ServiceTV
                 MyProgramme.Add(vProgramme)
             End While
         Else
-            WriteLog("ChargeProgrammesFromDB Erreur: aucun programme à charger depuis la DB! ")
+            MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "ChargeProgrammesFromDB Erreur: aucun programme à charger depuis la DB! ")
         End If
         SQLcommand.Dispose()
         SQLconnect.Close()
@@ -566,15 +567,16 @@ Public Class ServiceTV
                 Next
             End Using
         Catch ex1 As Exception
-            WriteLog("UnzipFile Erreur: " & ex1.Message)
+            MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "UnzipFile Erreur: " & ex1.Message)
         End Try
     End Sub
 #End Region
 
-    Sub New()
+    Sub New(ByVal Window As Window1)
         'Timer pour afficher la date & heure et levé/couché soleil
         AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
         dt.Interval = New TimeSpan(0, 0, 1)
+        MyWindow = Window
     End Sub
 
 End Class

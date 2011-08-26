@@ -198,7 +198,6 @@ Partial Public Class uMeteo
 
         Catch ex As Exception
             MessageBox.Show("Erreur GetMeteo: " & ex.ToString, "erreur")
-            WriteLog("Erreur GetMeteo: " & ex.ToString)
         End Try
     End Sub
 

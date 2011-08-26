@@ -307,3 +307,6 @@ d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\HoMIDomWPF\WpfApplication_Viewer\ob
 d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\HoMIDomWPF\WpfApplication_Viewer\obj\Debug\Resources\DesignerItem.baml
 d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\HoMIDomWPF\WpfApplication_Viewer\obj\Debug\Resources\ResizeRotateChrome.baml
 d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\HoMIDomWPF\WpfApplication_Viewer\obj\Debug\UserControls\SizeChrome.baml
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\HoMIDomWPF\WpfApplication_Viewer\obj\Debug\WDesigner.baml
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\HoMIDomWPF\WpfApplication_Viewer\obj\Debug\WDesigner.g.vb
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\HoMIDomWPF\WpfApplication_Viewer\obj\Debug\Resources\SizeChrome.baml
