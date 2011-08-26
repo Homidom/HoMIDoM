@@ -49,7 +49,7 @@ Class Window1
     Dim _ImageBackGroundDefault As String
     Dim _ListMnu As New List(Of uCtrlImgMnu)
     'Service TV
-    Dim _ServiceTV As New ServiceTV
+    Dim _ServiceTV As New ServiceTV(Me)
 
 #End Region
 
@@ -197,9 +197,7 @@ Class Window1
             InitializeComponent()
 
             'Chargement des paramètres
-            Log(TypeLog.INFO, TypeSource.CLIENT, "LOADCONFIG", "Message: " & LoadConfig(_MonRepertoire))
-
-            WriteLog("Lancement de l'application")
+            Log(TypeLog.INFO, TypeSource.CLIENT, "LOADCONFIG", "Message: " & LoadConfig(_MonRepertoire & "\Config\"))
 
             ' Create StackPanel and set child elements to horizontal orientation
             imgStackPnl.HorizontalAlignment = HorizontalAlignment.Left
@@ -250,7 +248,6 @@ Class Window1
             frmMere = Me
         Catch ex As Exception
             MessageBox.Show("Erreur: " & ex.Message)
-            WriteLog("Erreur: " & ex.Message)
         End Try
     End Sub
 
@@ -330,7 +327,7 @@ Class Window1
                     Else
                         MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
                     End If
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du client WPF chargés")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du Serveur HomeSeer chargés")
 
                     '******************************************
                     'on va chercher les paramètres tactile
@@ -350,7 +347,7 @@ Class Window1
                     Else
                         MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
                     End If
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du client WPF chargés")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres tactiles chargés")
 
                     '******************************************
                     'on va chercher les paramètres interface
@@ -372,7 +369,7 @@ Class Window1
                     Else
                         MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
                     End If
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du client WPF chargés")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres de l'interface chargés")
 
                     '******************************************
                     'on va chercher les menus
@@ -417,7 +414,7 @@ Class Window1
                     Else
                         'MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
                     End If
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du client WPF chargés")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Menus chargés")
 
                     '**************
                 Next
@@ -555,7 +552,7 @@ Class Window1
 #End Region
 
 #Region "Log"
-    Dim _File As String = _MonRepertoire & "\log.xml" 'Représente le fichier log: ex"C:\homidom\log\log.xml"
+    Dim _File As String = _MonRepertoire & "\logs\logClientWPF.xml" 'Représente le fichier log: ex"C:\homidom\log\log.xml"
     Dim _MaxFileSize As Long = 5120 'en Koctets
 
     ''' <summary>
@@ -745,14 +742,14 @@ Class Window1
                     _Password = list(i).Attributes.Item(2).Value
                 Next
             Catch ex As Exception
-                WriteLog("Erreur lors du chargement des paramètres de connexion: " & ex.Message)
+                Log(TypeLog.INFO, TypeSource.CLIENT, "ConnectToHS", "Erreur lors du chargement des paramètres de connexion: " & ex.Message)
             End Try
 
             Dim hsapp As HomeSeer2.application = New HomeSeer2.application
             hsapp.SetHost(_Serveur) '("seb-serveur-002:81")
             Dim rval As String = hsapp.Connect(_Login, _Password) '("sebastien", "clarisse1705")
             If rval <> "" Then
-                WriteLog("State: Unable to connect to HomeSeer, is it running? You need to be on the same subnet as HomeSeer")
+                Log(TypeLog.INFO, TypeSource.CLIENT, "ConnectToHS", "State: Unable to connect to HomeSeer, is it running? You need to be on the same subnet as HomeSeer")
                 rval = hsapp.Connect(_Login, _Password) '("sebastien", "clarisse1705")
                 If rval <> "" Then
                     IsHSConnect = False
@@ -768,7 +765,7 @@ Class Window1
                     hs = hsapp.GetHSRef
                 End If
             Else
-                WriteLog("State: Connect to HomeSeer")
+                Log(TypeLog.INFO, TypeSource.CLIENT, "ConnectToHS", "State: Connect to HomeSeer")
                 IsHSConnect = True
                 hs = hsapp.GetHSRef
             End If
@@ -819,7 +816,7 @@ Class Window1
             _ListMnu.Add(ctrl)
             imgStackPnl.Children.Add(ctrl)
         Catch ex As Exception
-            WriteLog("Erreur NewBtnMnu: " & ex.Message)
+            Log(TypeLog.INFO, TypeSource.CLIENT, "NewBtnMnu", "Erreur NewBtnMnu: " & ex.Message)
         End Try
     End Sub
 
@@ -844,7 +841,7 @@ Class Window1
                 End If
             End If
         Catch ex As Exception
-            WriteLog("DispatcherTimer: " & ex.Message)
+            Log(TypeLog.INFO, TypeSource.CLIENT, "DispatcherTimer", "DispatcherTimer: " & ex.Message)
         End Try
     End Sub
 
@@ -968,7 +965,7 @@ Class Window1
             Me.Cursor = Cursors.Arrow
         Catch ex As Exception
             MessageBox.Show("Erreur: " & ex.ToString, "Erreur")
-            WriteLog("Erreur: " & ex.Message)
+            Log(TypeLog.INFO, TypeSource.CLIENT, "IconMnuDoubleClick", "Erreur: " & ex.Message)
         End Try
     End Sub
 
@@ -981,9 +978,9 @@ Class Window1
             If IsHSConnect = True Then hsapp.Disconnect()
             Canvas1.Children.Clear()
             End
-            WriteLog("Fermeture de l'application")
+            Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermeture de l'application")
         Catch ex As Exception
-            WriteLog("Erreur Lors de la fermeture: " & ex.Message)
+            Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Erreur Lors de la fermeture: " & ex.Message)
         End Try
     End Sub
 
@@ -1003,8 +1000,8 @@ Class Window1
 
     'Bouton Quitter
     Private Sub BtnQuit_Click_1(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnQuit.Click
-        SaveConfig(_MonRepertoire & "\homidomWPF.xml")
-        WriteLog("Fermeture de l'application")
+        SaveConfig(_MonRepertoire & "\config\homidomWPF.xml")
+        Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
         End
     End Sub
 

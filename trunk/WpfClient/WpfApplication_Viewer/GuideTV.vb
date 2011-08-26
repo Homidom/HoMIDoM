@@ -3,12 +3,14 @@ Imports System.IO.Compression
 Imports System.Xml
 Imports System.Xml.XPath
 Imports System.Data.SQLite
+Imports HoMIDom.HoMIDom.Server
 
 Module GuideTV
     Public MyChaine As New List(Of sChaine)
     Public MyProgramme As New List(Of sProgramme)
     Dim MyXML As clsXML
     Dim timestart As String
+    Dim MyWindow As Window1
 
 #Region "Strucure"
     Public Structure sProgramme
@@ -466,7 +468,7 @@ Module GuideTV
         SQLcommand.Dispose()
         SQLconnect.Close()
         MyXML = Nothing
-        WriteLog("Fin du chargement des programmes - start:" & timestart & " fin:" & Now.ToShortTimeString)
+        MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "GuideTV", "Fin du chargement des programmes - start:" & timestart & " fin:" & Now.ToShortTimeString)
     End Sub
 
     'Charge les programmes depuis la base de données en mémoire
