@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="uMeteo"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Margin="20">
+    
+    <Grid>
+          
+            <StackPanel >
+            <StackPanel.Background>
+                <ImageBrush ImageSource="C:\ehome\images\Panel01.png" Stretch="Fill" />
+            </StackPanel.Background>
+            <StackPanel Orientation="Horizontal">
+                    <Label FontSize="14" Foreground="White" Height="25" Margin="3" Name="Lbl" VerticalAlignment="Top" Width="188">Label</Label>
+                    <Image Height="60" HorizontalAlignment="Right" Margin="3" Name="Ico" Stretch="Fill" VerticalAlignment="Top" Width="60" />        
+                </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Width="200" Height="Auto" Margin="3" Name="LblTemps" VerticalAlignment="Top" FontSize="14" Foreground="White">?</Label>
+                <Label Height="54" HorizontalAlignment="Right" Margin="3" Name="LblTemp" VerticalAlignment="Top" Width="64" Foreground="White" FontSize="34">00°</Label>
+            </StackPanel>
+                <StackPanel >
+                    <Label Height="21" Margin="2" Name="Lbl0Min" VerticalAlignment="Top" Foreground="White">Min: #</Label>
+                    <Label Foreground="White" Height="21" Margin="2" Name="Lbl0Max" VerticalAlignment="Top">Max: #</Label>
+                    <Label Foreground="White" Height="21" Margin="2" Name="LblHum" VerticalAlignment="Top">Humidité: #</Label>
+                    <Label Foreground="White" Height="21" Margin="2" Name="LblVent" VerticalAlignment="Top">Vent: #</Label>
+                </StackPanel>
+            <StackPanel Margin="2">
+                <StackPanel Background="DarkGray" Orientation="Horizontal" Margin="1">
+                    <Label Height="28" HorizontalAlignment="Left" Margin="2" Name="Day0" VerticalAlignment="Top" Width="119" Foreground="White">###</Label>        
+                    <Image Height="23" HorizontalAlignment="Right" Margin="2" Name="ImgD0" Stretch="Fill" VerticalAlignment="Top" Width="23" />
+                    <Label HorizontalAlignment="Right" Margin="2" Name="MaxD0" Width="34" Foreground="White">##°</Label>
+                    <Label Foreground="LightBlue" Height="26" HorizontalAlignment="Right" Margin="2" Name="MinD0" VerticalAlignment="Top" Width="34">##°</Label>
+                </StackPanel>
+                <StackPanel Background="Gray" Orientation="Horizontal" Margin="1">
+                    <Label HorizontalAlignment="Left" Margin="2" Name="Day1" Width="119" Foreground="White">###</Label>
+                    <Image HorizontalAlignment="Right" Margin="2" Name="ImgD1" Stretch="Fill" Width="23" />
+                    <Label Foreground="White" HorizontalAlignment="Right" Margin="2" Name="MaxD1" Width="34">##°</Label>
+                    <Label Foreground="LightBlue" HorizontalAlignment="Right" Margin="2" Name="MinD1" Width="34">##°</Label>
+                </StackPanel>
+                <StackPanel Background="DarkGray" Orientation="Horizontal" Margin="1">
+                <Label Height="28" HorizontalAlignment="Left" Margin="2" Name="Day2" VerticalAlignment="Top" Width="119" Foreground="White">###</Label>
+                <Image Height="23" HorizontalAlignment="Right" Margin="2" Name="ImgD2" Stretch="Fill" VerticalAlignment="Top" Width="23" />
+                <Label HorizontalAlignment="Right" Margin="2" Name="MaxD2" Width="34" Foreground="White">##°</Label>
+                <Label Foreground="LightBlue" Height="26" HorizontalAlignment="Right" Margin="2" Name="MinD2" VerticalAlignment="Top" Width="34">##°</Label>
+            </StackPanel>
+                <StackPanel Background="Gray" Orientation="Horizontal" Margin="1">
+                <Label HorizontalAlignment="Left" Margin="2" Name="Day3" Width="119" Foreground="White">###</Label>
+                <Image HorizontalAlignment="Right" Margin="2" Name="ImgD3" Stretch="Fill" Width="23" />
+                <Label Foreground="White" HorizontalAlignment="Right" Margin="2" Name="MaxD3" Width="34">##°</Label>
+                <Label Foreground="LightBlue" HorizontalAlignment="Right" Margin="2" Name="MinD3" Width="34">##°</Label>
+            </StackPanel>
+                </StackPanel>
+            <Rectangle Margin="10" />
+              
+            
+        </StackPanel>
+                      
+        </Grid>
+    </UserControl>
