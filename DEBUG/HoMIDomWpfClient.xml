@@ -2,183 +2,167 @@
 <doc>
 <assembly>
 <name>
-HoMIDomWpfClient
+HoMIDomWPFClient
 </name>
 </assembly>
 <members>
-<member name="M:HoMIDomWpfClient.uModules.InitializeComponent">
+<member name="M:WpfApplication1.uModule.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIDomWpfClient.uModules">
-	<summary>
-uModules
-</summary>
-</member><member name="M:HoMIDomWpfClient.DayBoxAppointmentControl.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.DayBoxAppointmentControl">
-	<summary>
-DayBoxAppointmentControl
-</summary>
-</member><member name="M:HoMIDomWpfClient.uModule.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uModule">
+</member><member name="T:WpfApplication1.uModule">
 	<summary>
 uModule
 </summary>
-</member><member name="M:HoMIDomWpfClient.uCalc.InitializeComponent">
+</member><member name="M:WpfApplication1.WDesigner.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIDomWpfClient.uCalc">
+</member><member name="T:WpfApplication1.WDesigner">
 	<summary>
-uCalc
+WDesigner
 </summary>
-</member><member name="M:HoMIDomWpfClient.uMeteo.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uMeteo">
-	<summary>
-uMeteo
-</summary>
-</member><member name="M:HoMIDomWpfClient.uCalendar.InitializeComponent">
+</member><member name="M:WpfApplication1.uContact.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIDomWpfClient.uCalendar">
-	<summary>
-uCalendar
-</summary>
-</member><member name="M:HoMIDomWpfClient.MonthView.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.MonthView">
-	<summary>
-MonthView
-</summary>
-</member><member name="M:HoMIDomWpfClient.Window1.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.Window1">
-	<summary>
-Window1
-</summary>
-</member><member name="M:HoMIDomWpfClient.uInternet.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uInternet">
-	<summary>
-uInternet
-</summary>
-</member><member name="M:HoMIDomWpfClient.uHorloge.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uHorloge">
-	<summary>
-uHorloge
-</summary>
-</member><member name="M:HoMIDomWpfClient.uScene.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uScene">
-	<summary>
-uScene
-</summary>
-</member><member name="M:HoMIDomWpfClient.uScenes.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uScenes">
-	<summary>
-uScenes
-</summary>
-</member><member name="M:HoMIDomWpfClient.DayBoxControl.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.DayBoxControl">
-	<summary>
-DayBoxControl
-</summary>
-</member><member name="M:HoMIDomWpfClient.uCtrlImgMnu.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uCtrlImgMnu">
-	<summary>
-uCtrlImgMnu
-</summary>
-</member><member name="M:HoMIDomWpfClient.Application.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="M:HoMIDomWpfClient.Application.Main">
-	<summary>
-Application Entry Point.
-</summary>
-</member><member name="T:HoMIDomWpfClient.Application">
-	<summary>
-Application
-</summary>
-</member><member name="M:HoMIDomWpfClient.uContact.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIDomWpfClient.uContact">
+</member><member name="T:WpfApplication1.uContact">
 	<summary>
 uContact
 </summary>
-</member><member name="M:HoMIDomWpfClient.uNotes.InitializeComponent">
+</member><member name="M:WpfApplication1.Window1.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIDomWpfClient.uNotes">
+</member><member name="T:WpfApplication1.Window1">
+	<summary>
+Window1
+</summary>
+</member><member name="M:WpfApplication1.FrmDetailProgram.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.FrmDetailProgram">
+	<summary>
+FrmDetailProgram
+</summary>
+</member><member name="M:WpfApplication1.keyboard.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.keyboard">
+	<summary>
+keyboard
+</summary>
+</member><member name="M:WpfApplication1.Application.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="M:WpfApplication1.Application.Main">
+	<summary>
+Application Entry Point.
+</summary>
+</member><member name="T:WpfApplication1.Application">
+	<summary>
+Application
+</summary>
+</member><member name="M:WpfApplication1.uMeteo.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uMeteo">
+	<summary>
+uMeteo
+</summary>
+</member><member name="M:WpfApplication1.uModules.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uModules">
+	<summary>
+uModules
+</summary>
+</member><member name="M:WpfApplication1.uNotes.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uNotes">
 	<summary>
 uNotes
 </summary>
-</member><member name="M:HoMIDomWpfClient.uMeteos.InitializeComponent">
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+	<summary>
+CreateInstance
+</summary>
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+	<summary>
+GetPropertyValue
+</summary>
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+	<summary>
+SetPropertyValue
+</summary>
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+	<summary>
+CreateDelegate
+</summary>
+</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+	<summary>
+AddEventHandler
+</summary>
+</member><member name="T:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+	<summary>
+GeneratedInternalTypeHelper
+</summary>
+</member><member name="M:WpfApplication1.uMeteos.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIDomWpfClient.uMeteos">
+</member><member name="T:WpfApplication1.uMeteos">
 	<summary>
 uMeteos
 </summary>
-</member><member name="M:HoMIDomWpfClient.uProgramTV.InitializeComponent">
+</member><member name="M:WpfApplication1.uInternet.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIDomWpfClient.uProgramTV">
+</member><member name="T:WpfApplication1.uInternet">
 	<summary>
-uProgramTV
+uInternet
 </summary>
-</member><member name="M:HoMIDomWpfClient.uProgrammeTV.InitializeComponent">
+</member><member name="M:WpfApplication1.FrmConfigChaine.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIDomWpfClient.uProgrammeTV">
+</member><member name="T:WpfApplication1.FrmConfigChaine">
+	<summary>
+FrmConfigChaine
+</summary>
+</member><member name="M:WpfApplication1.uProgrammeTV.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uProgrammeTV">
 	<summary>
 uProgrammeTV
 </summary>
-</member><member name="M:HoMIDomWpfClient.WeekOfDaysControls.InitializeComponent">
+</member><member name="M:WpfApplication1.uCtrlImgMnu.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIDomWpfClient.WeekOfDaysControls">
+</member><member name="T:WpfApplication1.uCtrlImgMnu">
 	<summary>
-WeekOfDaysControls
+uCtrlImgMnu
 </summary>
-</member><member name="T:HoMIDomWpfClient.Appointment">
+</member><member name="M:WpfApplication1.WConfig.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.WConfig">
+	<summary>
+WConfig
+</summary>
+</member><member name="T:WpfApplication1.Appointment">
 	<summary>
  This class is actually a stripped-down version of the actual Appointment class, which was generated using the 
  Linq-to-SQL Designer (essentially a Linq ORM to the Appointments table in the db)
@@ -187,20 +171,7 @@ WeekOfDaysControls
  support a List(Of T) where T is whatever the System.Type is for your appointment class.
  </remarks>
 	<author>Kirk Davis, February 2009 (in like, 4 hours, and it shows!)</author>
-</member><member name="P:HoMIDomWpfClient.My.Resources.Resources.ResourceManager">
-	<summary>
-  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
-</summary>
-</member><member name="P:HoMIDomWpfClient.My.Resources.Resources.Culture">
-	<summary>
-  Remplace la propriété CurrentUICulture du thread actuel pour toutes
-  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
-</summary>
-</member><member name="T:HoMIDomWpfClient.My.Resources.Resources">
-	<summary>
-  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
-</summary>
-</member><member name="M:HoMIDomWpfClient.clsXML.#ctor(System.String)">
+</member><member name="M:WpfApplication1.clsXML.#ctor(System.String)">
  -----------------------------------------------------------------------------
  <summary>
  Constructeur de la classe
@@ -215,7 +186,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:HoMIDomWpfClient.clsXML.#ctor">
+</member><member name="M:WpfApplication1.clsXML.#ctor">
  -----------------------------------------------------------------------------
  <summary>
  Constructeur de la classe
@@ -229,7 +200,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="P:HoMIDomWpfClient.clsXML.leFichier">
+</member><member name="P:WpfApplication1.clsXML.leFichier">
  -----------------------------------------------------------------------------
  <summary>
  définit/retourne le nom du fichier
@@ -244,7 +215,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:HoMIDomWpfClient.clsXML.SelectValue(System.String)">
+</member><member name="M:WpfApplication1.clsXML.SelectValue(System.String)">
 	<summary>
  Retourne la valeur du premier noeud correspondant à la requête XPath.
  Cette fonction devrait être la plus utilisée car elle permet de retourner le résultat de n'importe quelle requête XPath.
@@ -260,7 +231,7 @@ WeekOfDaysControls
 	<history>
      [Gabriel]   06/06/2009  Created
  </history>
-</member><member name="M:HoMIDomWpfClient.clsXML.SetNode(System.String,System.Xml.XmlNode,System.Int32)">
+</member><member name="M:WpfApplication1.clsXML.SetNode(System.String,System.Xml.XmlNode,System.Int32)">
 	<summary>
  Remplace le premier noeud correspondant à la requête XPath par un nouveau.
  </summary>
@@ -270,7 +241,7 @@ WeekOfDaysControls
 	<history>
      [Gabriel]   06/06/2009  Created
  </history>
-</member><member name="M:HoMIDomWpfClient.clsXML.SelectFirstNode(System.String)">
+</member><member name="M:WpfApplication1.clsXML.SelectFirstNode(System.String)">
 	<summary>
  Retourne le premier noeud correspondant à la requête XPath, Nothing si aucun noeud n'est trouvé
  </summary>
@@ -280,7 +251,7 @@ WeekOfDaysControls
 	<history>
      [Gabriel]   06/06/2009  Created
  </history>
-</member><member name="M:HoMIDomWpfClient.clsXML.SelectNodes(System.String)">
+</member><member name="M:WpfApplication1.clsXML.SelectNodes(System.String)">
 	<summary>
  Retourne la liste des noeuds correspondants à la requête XPath ou Nothing si rien n'est trouvé
  </summary>
@@ -290,7 +261,7 @@ WeekOfDaysControls
 	<history>
      [Gabriel]   06/06/2009  Created
  </history>
-</member><member name="M:HoMIDomWpfClient.clsXML.getElementValue(System.String,System.Int32)">
+</member><member name="M:WpfApplication1.clsXML.getElementValue(System.String,System.Int32)">
  -----------------------------------------------------------------------------
  <summary>
  Objectif : Renvoie la valeur du n-ème élément pointé par la requête XPath
@@ -310,7 +281,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:HoMIDomWpfClient.clsXML.setElementValue(System.String,System.String,System.Int32)">
+</member><member name="M:WpfApplication1.clsXML.setElementValue(System.String,System.String,System.Int32)">
  -----------------------------------------------------------------------------
  <summary>
  Ecrit la valeur pour le n-ième élément pointé par la requête path
@@ -330,7 +301,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:HoMIDomWpfClient.clsXML.addElement(System.String,System.String,System.String,System.Int32)">
+</member><member name="M:WpfApplication1.clsXML.addElement(System.String,System.String,System.String,System.Int32)">
  -----------------------------------------------------------------------------
  <summary>
  Ajoute un element pointé par le n-ième noeud de la requête XPath
@@ -351,7 +322,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:HoMIDomWpfClient.clsXML.deleteElement(System.String,System.String,System.Int32)">
+</member><member name="M:WpfApplication1.clsXML.deleteElement(System.String,System.String,System.Int32)">
  -----------------------------------------------------------------------------
  <summary>
  supprime le n-ième element pointé par la requête XPath
@@ -370,7 +341,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:HoMIDomWpfClient.clsXML.deleteElement(System.String)">
+</member><member name="M:WpfApplication1.clsXML.deleteElement(System.String)">
  -----------------------------------------------------------------------------
  <summary>
  supprime le 1er élément pointé par la requête XPath
@@ -388,7 +359,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:HoMIDomWpfClient.clsXML.addAttribute(System.String,System.String,System.String,System.Int32)">
+</member><member name="M:WpfApplication1.clsXML.addAttribute(System.String,System.String,System.String,System.Int32)">
  -----------------------------------------------------------------------------
  <summary>
  Ajoute un attribut "nom" de valeur "valeur" n-ième élément pointé par la requête XPath
@@ -409,7 +380,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:HoMIDomWpfClient.clsXML.setAttribute(System.String,System.String,System.String,System.Int32)">
+</member><member name="M:WpfApplication1.clsXML.setAttribute(System.String,System.String,System.String,System.Int32)">
  -----------------------------------------------------------------------------
  <summary>
  Affecte à l'attribut "nom" la valeur "valeur" au n-ième élément pointé par la requête "path"
@@ -430,7 +401,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:HoMIDomWpfClient.clsXML.getAttribute(System.String,System.String,System.String,System.Int32)">
+</member><member name="M:WpfApplication1.clsXML.getAttribute(System.String,System.String,System.String,System.Int32)">
  -----------------------------------------------------------------------------
  <summary>
  Retourne la valeur de l'attribut "nom" du n-ième élément pointé par la requête "XPath"
@@ -451,7 +422,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:HoMIDomWpfClient.clsXML.createRoot(System.String,System.String)">
+</member><member name="M:WpfApplication1.clsXML.createRoot(System.String,System.String)">
  -----------------------------------------------------------------------------
  <summary>
  Ajoute l'element racine "nom"
@@ -466,7 +437,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:HoMIDomWpfClient.clsXML.createNewFile(System.String)">
+</member><member name="M:WpfApplication1.clsXML.createNewFile(System.String)">
 
  -----------------------------------------------------------------------------
  <summary>
@@ -482,7 +453,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:HoMIDomWpfClient.clsXML.getFormatedXMLString">
+</member><member name="M:WpfApplication1.clsXML.getFormatedXMLString">
  -----------------------------------------------------------------------------
  <summary>
  Permet de renvoyer sous forme de chaine le contenu du fichier XML.
@@ -497,7 +468,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:HoMIDomWpfClient.clsXML.getIndexOfElementContaining(System.String,System.String)">
+</member><member name="M:WpfApplication1.clsXML.getIndexOfElementContaining(System.String,System.String)">
  -----------------------------------------------------------------------------
  <summary>
  Renvoie l'index de l'élément pointé par XPath et de valeur valeur, -1 si pas trouvé
@@ -514,7 +485,7 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:HoMIDomWpfClient.clsXML.countElements(System.String)">
+</member><member name="M:WpfApplication1.clsXML.countElements(System.String)">
  -----------------------------------------------------------------------------
  <summary>
  Renvoie le nombre d'éléments pointés par XPath
@@ -529,32 +500,84 @@ WeekOfDaysControls
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.Application">
+</member><member name="M:WpfApplication1.Window1.LoadConfig(System.String)">
+	<summary>Chargement de la config depuis le fichier XML</summary>
+	<param name="Fichier"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Window1.SaveConfig(System.String)">
+	<summary>Sauvegarde de la config dans le fichier XML</summary>
+	<remarks></remarks>
+</member><member name="P:WpfApplication1.Window1.FichierLog">
+	<summary>
+ Permet de connaître le chemin du fichier log
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:WpfApplication1.Window1.MaxFileSize">
+	<summary>
+ Retourne/Fixe la Taille max du fichier log en Ko
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:WpfApplication1.Window1.TypeLog">
+	<summary>Indique le type du Log: si c'est une erreur, une info, un message...</summary>
+	<remarks></remarks>
+</member><member name="T:WpfApplication1.Window1.TypeSource">
+	<summary>Indique la source du log si c'est le serveur, un script, un device...</summary>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Window1.Log(WpfApplication1.Window1.TypeLog,WpfApplication1.Window1.TypeSource,System.String,System.String)">
+	<summary>Ecrit un log dans le fichier log au format xml</summary>
+	<param name="TypLog"></param>
+	<param name="Source"></param>
+	<param name="Fonction"></param>
+	<param name="Message"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Window1.CreateNewFileLog(System.String)">
+	<summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
+	<param name="NewFichier"></param>
+	<remarks></remarks>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Application">
 	<summary>
  Retourne l'objet application pour l'application en cours d'exécution
  </summary>
-</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.Computer">
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Computer">
 	<summary>
  Retourne les informations relatives à l'ordinateur hôte.
  </summary>
-</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.User">
+</member><member name="P:WpfApplication1.My.MyWpfExtension.User">
 	<summary>
  Retourne les informations relatives à l'utilisateur actuel. Si vous souhaitez exécuter l'application avec les 
  informations d'identification de l'utilisateur Windows, appelez My.User.InitializeWithWindowsUser().
  </summary>
-</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.Log">
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Log">
 	<summary>
  Retourne le journal de l'application. L'écouteur peut être configuré par le fichier de configuration de l'application.
  </summary>
-</member><member name="P:HoMIDomWpfClient.My.MyWpfExtension.Windows">
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Windows">
 	<summary>
  Retourne la collection de fenêtres définie dans le projet.
  </summary>
-</member><member name="T:HoMIDomWpfClient.My.MyWpfExtension">
+</member><member name="T:WpfApplication1.My.MyWpfExtension">
 	<summary>
  Module utilisé pour définir les propriétés qui sont disponibles dans l'espace de noms My pour WPF
  </summary>
 	<remarks></remarks>
+</member><member name="P:WpfApplication1.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:WpfApplication1.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:WpfApplication1.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
 </member>
 </members>
 </doc>
