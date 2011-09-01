@@ -12,8 +12,6 @@ Imports System.Xml.Serialization
 '** Par défaut le service est lancé sur le port 8000
 '** version 1.0
 '** Date de création: 14/01/2011
-'** Historique (SebBergues): 14/01/2011: Création 
-'** Historique (SebBergues) : 21/01/2011: Ajout de la gestion de la config
 '***********************************************
 
 Module Service

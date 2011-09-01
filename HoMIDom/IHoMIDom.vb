@@ -604,7 +604,7 @@ Namespace HoMIDom
         ''' <param name="macro"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function SaveTrigger(ByVal triggerId As String, ByVal nom As String, ByVal enable As Boolean, ByVal TypeTrigger As Trigger.TypeTrigger, Optional ByVal description As String = "", Optional ByVal conditiontimer As String = "", Optional ByVal deviceid As String = "", Optional ByVal deviceproperty As String = "", Optional ByVal macro As ArrayList = Nothing) As String
+        <OperationContract()> Function SaveTrigger(ByVal triggerId As String, ByVal nom As String, ByVal enable As Boolean, ByVal TypeTrigger As Trigger.TypeTrigger, Optional ByVal description As String = "", Optional ByVal conditiontimer As String = "", Optional ByVal deviceid As String = "", Optional ByVal deviceproperty As String = "", Optional ByVal macro As List(Of String) = Nothing) As String
 #End Region
 
 #Region "Divers"

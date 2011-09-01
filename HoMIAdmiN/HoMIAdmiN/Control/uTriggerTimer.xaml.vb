@@ -8,7 +8,7 @@
 
     Dim _Action As EAction
     Dim _TriggerId As String
-    Dim _ListMacro As New ArrayList
+    Dim _ListMacro As New List(Of String)
 
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
         RaiseEvent CloseMe(Me)
@@ -26,9 +26,11 @@
         For i As Integer = 0 To 23
             CbHeure.Items.Add(i)
         Next
+        CbJour.Items.Add("")
         For i As Integer = 1 To 31
             CbJour.Items.Add(i)
         Next
+        CbMois.Items.Add("")
         For i As Integer = 1 To 12
             CbMois.Items.Add(i)
         Next

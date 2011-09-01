@@ -129,8 +129,6 @@
     </Compile>
     <Compile Include="Soleil.vb" />
     <Compile Include="Sqlite.vb" />
-    <Compile Include="TemplateAction.vb" />
-    <Compile Include="TemplateMacro.vb" />
     <Compile Include="TplDevice.vb" />
     <Compile Include="TplDriver.vb" />
     <Compile Include="Users.vb" />

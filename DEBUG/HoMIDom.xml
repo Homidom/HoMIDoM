@@ -200,41 +200,6 @@ HoMIDom
 	<summary>initialisation de l'objet Graphes</summary>
 	<param name="chemin">Chemin ou enregistrer les graphes</param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateMacro.ID">
-	<summary>
- ID de la macro
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateMacro.Nom">
-	<summary>
- Nom de la macro
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateMacro.Description">
-	<summary>
- Decription de la macro
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateMacro.Enable">
-	<summary>
- Active la macro
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateMacro.ListActions">
-	<summary>
- Liste des actions de la macro macro est False
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.TemplateDevice">
 	<summary>
  Template de class de type Device pour le service web
@@ -890,7 +855,7 @@ HoMIDom
 	<summary>Retourne la liste de toutes les macros</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveTrigger(System.String,System.String,System.Boolean,HoMIDom.HoMIDom.Trigger.TypeTrigger,System.String,System.String,System.String,System.String,System.Collections.ArrayList)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveTrigger(System.String,System.String,System.Boolean,HoMIDom.HoMIDom.Trigger.TypeTrigger,System.String,System.String,System.String,System.String,System.Collections.Generic.List{System.String})">
 	<summary>
  Permet de créer ou modifier un trigger
  </summary>
@@ -1501,7 +1466,7 @@ HoMIDom
 	<param name="triggerId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTrigger(System.String,System.String,System.Boolean,HoMIDom.HoMIDom.Trigger.TypeTrigger,System.String,System.String,System.String,System.String,System.Collections.ArrayList)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTrigger(System.String,System.String,System.Boolean,HoMIDom.HoMIDom.Trigger.TypeTrigger,System.String,System.String,System.String,System.String,System.Collections.Generic.List{System.String})">
 	<summary>
  Permet de créer ou modifier un trigger
  </summary>
@@ -1599,11 +1564,6 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.IHoMIDom">
 	<summary>
  Liste toutes les functions et propriétés accessibles par les clients
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.TemplateAction">
-	<summary>
- Template Action
  </summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.XML.#ctor(System.String)">

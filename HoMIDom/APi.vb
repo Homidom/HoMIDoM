@@ -8,7 +8,7 @@
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GenerateGUID() As String
-            Dim sGUID As String
+            Dim sGUID As String = ""
             sGUID = System.Guid.NewGuid.ToString()
             GenerateGUID = sGUID
         End Function
