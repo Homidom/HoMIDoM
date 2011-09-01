@@ -59,26 +59,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HoMIDom.dll" size="219648">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HoMIDom.dll" size="218112">
       <assemblyIdentity name="HoMIDom" version="0.1.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>ObF2/BTgR7XmR+ErPyohM6l3yyU=</dsig:DigestValue>
+        <dsig:DigestValue>VvKOUbOgyecBV2pzbJ/6PDSNczs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HoMIDomWPFClient.exe" size="650752">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HoMIDomWPFClient.exe" size="649728">
       <assemblyIdentity name="HoMIDomWPFClient" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>m35aRlYtdCqu59XpDexV7ULXzFE=</dsig:DigestValue>
+        <dsig:DigestValue>SRH6aSbaD2l65grEyC1RsizrAyo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

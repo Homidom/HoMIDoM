@@ -152,7 +152,7 @@ Namespace HoMIDom
         Dim _ConditionDeviceId As String = ""
         Dim _ConditionDeviceProperty As String = ""
         Dim _Prochainedateheure As DateTime 'la date/heure de prochaine execution utile uniquement pour un type CRON
-        Dim _ListMacro As New ArrayList
+        Dim _ListMacro As New List(Of String)
         Public _Server As Server
 
         'Propriétés
@@ -243,6 +243,7 @@ Namespace HoMIDom
             End Get
             Set(ByVal value As String)
                 _ConditionTime = value
+                maj_cron()
             End Set
         End Property
 
@@ -297,11 +298,11 @@ Namespace HoMIDom
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Property ListMacro As ArrayList
+        Public Property ListMacro As List(Of String)
             Get
                 Return _ListMacro
             End Get
-            Set(ByVal value As ArrayList)
+            Set(ByVal value As List(Of String))
                 _ListMacro = value
             End Set
         End Property
@@ -331,11 +332,6 @@ Namespace HoMIDom
                     Dim nextcron = s.GetNextOccurrence(DateAndTime.Now)
                     If (conditions(0) <> "*" And conditions(0) <> "") Then nextcron = nextcron.AddSeconds(conditions(0))
                     Prochainedateheure = nextcron.ToString("yyyy-MM-dd HH:mm:ss")
-                    'recupere la liste des prochains shedule
-                    'Dim nextcron = s.GetNextOccurrences(DateAndTime.Now, DateAndTime.Now.AddDays(1))
-                    'For Each i In nextcron
-                    '    MsgBox(i.ToString("yyyy-MM-dd HH:mm:ss"))
-                    'Next
                 Else
                     Prochainedateheure = Nothing 'on le laisse à vide car Trigger type Device
                 End If

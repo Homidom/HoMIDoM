@@ -285,14 +285,17 @@ Namespace HoMIDom
             'on checke si il y a cron à faire
             Try
                 For i = 0 To _listTriggers.Count() - 1
-                    If (_listTriggers.Item(i).prochainedateheure IsNot Nothing And _listTriggers.Item(i).prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) And _listTriggers.Item(i).enable = True Then
+                    If (_listTriggers.Item(i).prochainedateheure IsNot Nothing And _listTriggers.Item(i).prochainedateheure = DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) And _listTriggers.Item(i).enable = True Then
                         _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
                         'lancement des macros associées
                         For j = 0 To _listTriggers.Item(i).ListMacro.Count - 1
                             'on cherche la macro et on la lance en testant ces conditions
                             Dim _m As Macro = ReturnMacroById(_listTriggers.Item(i).ListMacro.item(j))
-                            If _m IsNot Nothing Then _m.Execute()
-                            _m = Nothing
+                            If _m IsNot Nothing Then
+                                _m.Execute()
+                            Else
+                                _m = Nothing
+                            End If
                         Next
                     End If
                 Next
@@ -1472,7 +1475,7 @@ Namespace HoMIDom
                     For k = 0 To _listTriggers.Item(i).listmacro.count - 1
                         writer.WriteStartElement("macro")
                         writer.WriteStartAttribute("id")
-                        writer.WriteValue(_listTriggers.Item(i).listmacro.item(k).id)
+                        writer.WriteValue(_listTriggers.Item(i).listmacro.item(k))
                         writer.WriteEndAttribute()
                         writer.WriteEndElement()
                     Next
@@ -1865,7 +1868,7 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub Drivers_Load()
             Try
-                Dim tx As String
+                Dim tx As String = ""
                 Dim dll As Reflection.Assembly
                 Dim tp As Type
                 Dim Chm As String = _MonRepertoire & "\Plugins\" 'Emplacement par défaut des plugins
@@ -1887,9 +1890,6 @@ Namespace HoMIDom
                         If tp.IsClass Then
                             If tp.GetInterface("IDriver", True) IsNot Nothing Then
                                 'création de la référence au plugin
-                                'Dim obj As Object
-                                'obj = AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(tp.FullName, "IDriver")
-
                                 Dim i1 As IDriver
                                 i1 = DirectCast(dll.CreateInstance(tp.FullName), IDriver)
                                 i1 = CType(i1, IDriver)
@@ -1899,6 +1899,7 @@ Namespace HoMIDom
                                 _ListDrivers.Add(i1)
                                 _ListImgDrivers.Add(pt)
                                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " chargé")
+                                i1 = Nothing
                             End If
                         End If
                     Next
@@ -2199,7 +2200,7 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub start() Implements IHoMIDom.Start
             Try
-                Dim retour As String
+                Dim retour As String = ""
 
                 '----- Démarre les connexions Sqlite ----- 
                 retour = sqlite_homidom.connect("homidom")
@@ -5067,7 +5068,7 @@ Namespace HoMIDom
         ''' <param name="macro"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveTrigger(ByVal triggerId As String, ByVal nom As String, ByVal enable As Boolean, ByVal TypeTrigger As Trigger.TypeTrigger, Optional ByVal description As String = "", Optional ByVal conditiontimer As String = "", Optional ByVal deviceid As String = "", Optional ByVal deviceproperty As String = "", Optional ByVal macro As ArrayList = Nothing) As String Implements IHoMIDom.SaveTrigger
+        Public Function SaveTrigger(ByVal triggerId As String, ByVal nom As String, ByVal enable As Boolean, ByVal TypeTrigger As Trigger.TypeTrigger, Optional ByVal description As String = "", Optional ByVal conditiontimer As String = "", Optional ByVal deviceid As String = "", Optional ByVal deviceproperty As String = "", Optional ByVal macro As List(Of String) = Nothing) As String Implements IHoMIDom.SaveTrigger
             Dim myID As String = ""
             Try
                 If triggerId = "" Then
@@ -5090,6 +5091,7 @@ Namespace HoMIDom
                     End With
                     myID = x.ID
                     _listTriggers.Add(x)
+                    x = Nothing
                 Else
                     'trigger Existante
                     myID = triggerId
@@ -5107,7 +5109,7 @@ Namespace HoMIDom
                                     _listTriggers.Item(i).ConditionDeviceId = deviceid
                                     _listTriggers.Item(i).ConditionDeviceProperty = deviceproperty
                             End Select
-                            _listTriggers.Item(i).macro = macro
+                            _listTriggers.Item(i).ListMacro = macro
                         End If
                     Next
                 End If

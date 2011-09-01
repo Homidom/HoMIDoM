@@ -9,7 +9,7 @@
     Dim _Action As EAction
     Dim _TriggerId As String
     Dim _ListDeviceId As New ArrayList
-    Dim _ListMacro As New ArrayList
+    Dim _ListMacro As New List(Of String)
 
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
         RaiseEvent CloseMe(Me)
@@ -122,7 +122,7 @@
 
             Dim uri As String = e.Data.GetData(GetType(String)).ToString
             _ListMacro.Add(uri)
-            ListBox1.Items.Add(Window1.myService.ReturnMacroById(Uid).Nom)
+            ListBox1.Items.Add(Window1.myService.ReturnMacroById(uri).Nom)
         Else
             e.Effects = DragDropEffects.None
         End If
