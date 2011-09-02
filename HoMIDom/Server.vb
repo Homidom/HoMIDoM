@@ -37,17 +37,17 @@ Namespace HoMIDom
         Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
         Private _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application 'Application.StartupPath
         Shared Soleil As New Soleil 'Déclaration class Soleil
-        Shared _Longitude As Double 'Longitude
-        Shared _Latitude As Double 'latitude
+        Shared _Longitude As Double = 0 'Longitude
+        Shared _Latitude As Double = 0 'latitude
         Private Shared _HeureLeverSoleil As DateTime 'heure du levé du soleil
         Private Shared _HeureCoucherSoleil As DateTime 'heure du couché du soleil
-        Shared _HeureLeverSoleilCorrection As Integer 'correction à appliquer sur heure du levé du soleil
-        Shared _HeureCoucherSoleilCorrection As Integer 'correction à appliquer sur heure du couché du soleil
+        Shared _HeureLeverSoleilCorrection As Integer = 0 'correction à appliquer sur heure du levé du soleil
+        Shared _HeureCoucherSoleilCorrection As Integer = 0 'correction à appliquer sur heure du couché du soleil
         Shared _SMTPServeur As String = "smtp.homidom.fr" 'adresse du serveur SMTP
         Shared _SMTPLogin As String = "" 'login du serveur SMTP
         Shared _SMTPassword As String = "" 'password du serveur SMTP
         Shared _SMTPmailEmetteur As String = "homidom@mail.com" 'adresse mail de l'émetteur
-        Private Shared _PortSOAP As String 'Port IP de connexion SOAP
+        Private Shared _PortSOAP As String = "" 'Port IP de connexion SOAP
         Dim TimerSecond As New Timers.Timer 'Timer à la seconde
         Private graphe As New graphes(_MonRepertoire + "\Images\Graphes\")
         Shared _DateTimeLastStart As Date = Now
@@ -82,7 +82,7 @@ Namespace HoMIDom
         ''' <param name="Parametres"></param>
         ''' <remarks></remarks>
         Public Sub DeviceChange(ByVal Device As Object, ByVal [Property] As String, ByVal Parametres As Object)
-            Dim retour As String
+            Dim retour As String = ""
 
             Try
                 If Etat_server Then
@@ -99,7 +99,7 @@ Namespace HoMIDom
                         '------------------------------------------------------------------------------------------------
 
                         'Parcour des triggers pour vérifier si le device déclenche des macros
-                        For i = 0 To _listTriggers.Count - 1
+                        For i As Integer = 0 To _listTriggers.Count - 1
                             If _listTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE And _listTriggers.Item(i).Enable = True And Device.id = _listTriggers.Item(i).ConditionDeviceId And _listTriggers.Item(i).ConditionDeviceProperty = [Property] Then 'c'est un trigger type device + enable + device concerné
                                 For j As Integer = 0 To _listTriggers.Item(i).ListMacro.count - 1
                                     Dim _m As Macro = ReturnMacroById(_listTriggers.Item(i).ListMacro.item(j))
@@ -284,18 +284,20 @@ Namespace HoMIDom
             '---- Action à effectuer toutes les secondes ----
             'on checke si il y a cron à faire
             Try
-                For i = 0 To _listTriggers.Count() - 1
-                    If _listTriggers.Item(i).prochainedateheure IsNot Nothing And _listTriggers.Item(i).prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss") And _listTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER And _listTriggers.Item(i).enable = True Then
-                        _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
-                        'lancement des macros associées
-                        For j = 0 To _listTriggers.Item(i).ListMacro.Count - 1
-                            'on cherche la macro et on la lance en testant ces conditions
-                            Dim _m As Macro = ReturnMacroById(_listTriggers.Item(i).ListMacro.item(j))
-                            If _m IsNot Nothing Then
-                                _m.Execute()
-                            End If
-                            _m = Nothing
-                        Next
+                For i As Integer = 0 To _listTriggers.Count() - 1
+                    If _listTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
+                        If _listTriggers.Item(i).prochainedateheure IsNot Nothing And _listTriggers.Item(i).prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss") And _listTriggers.Item(i).enable = True Then
+                            _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
+                            'lancement des macros associées
+                            For j As Integer = 0 To _listTriggers.Item(i).ListMacro.Count - 1
+                                'on cherche la macro et on la lance en testant ces conditions
+                                Dim _m As Macro = ReturnMacroById(_listTriggers.Item(i).ListMacro.item(j))
+                                If _m IsNot Nothing Then
+                                    _m.Execute()
+                                End If
+                                _m = Nothing
+                            Next
+                        End If
                     End If
                 Next
             Catch ex As Exception
@@ -322,6 +324,8 @@ Namespace HoMIDom
                 If ladate.Hour = 12 And ladate.Minute = 0 And ladate.Second = 0 Then
                     MAJ_HeuresSoleil()
                 End If
+
+                ladate = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception : " & ex.Message)
             End Try
@@ -364,6 +368,7 @@ Namespace HoMIDom
                 If File.Exists(_file & ".bak") = True Then File.Delete(_file & ".bak")
                 File.Copy(_file & ".xml", Mid(_file & ".xml", 1, Len(_file & ".xml") - 4) & ".bak")
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
+                _file = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
             End Try
@@ -1893,17 +1898,23 @@ Namespace HoMIDom
                                 Dim i1 As IDriver
                                 i1 = DirectCast(dll.CreateInstance(tp.FullName), IDriver)
                                 i1 = CType(i1, IDriver)
-                                'i1 = dll.CreateInstance(tp.ToString)
                                 i1.Server = Me
                                 Dim pt As New Driver(Me, i1.ID)
                                 _ListDrivers.Add(i1)
                                 _ListImgDrivers.Add(pt)
                                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " chargé")
                                 i1 = Nothing
+                                pt = Nothing
                             End If
                         End If
                     Next
                 Next
+
+                dll = Nothing
+                Chm = Nothing
+                di = Nothing
+                aryFi = Nothing
+                fi = Nothing
             Catch ex As Exception
                 MsgBox("Erreur lors du chargement des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Load", " Erreur lors du chargement des drivers: " & ex.Message)
@@ -2200,10 +2211,8 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub start() Implements IHoMIDom.Start
             Try
-                Dim retour As String = ""
-
                 '----- Démarre les connexions Sqlite ----- 
-                retour = sqlite_homidom.connect("homidom")
+                Dim retour As String = sqlite_homidom.connect("homidom")
                 If retour.StartsWith("ERR:") Then
                     Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour)
                     'on arrête tout
@@ -4735,6 +4744,7 @@ Namespace HoMIDom
                         Next
                     End With
                     _list.Add(x)
+                    x = Nothing
                 Next
                 Return _list
             Catch ex As Exception
