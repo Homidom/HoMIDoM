@@ -126,7 +126,16 @@ Namespace HoMIDom
             '    _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:Execute_sans_conditions", ex.ToString)
             'End Try
         End Sub
+
         Public Sub Execute()
+            For i As Integer = 0 To _ListActions.Count - 1
+                Select Case _ListActions.Item(i).TypeAction
+                    Case Action.TypeAction.ActionDevice
+                    Case Action.TypeAction.ActionIf
+                    Case Action.TypeAction.ActionMacro
+                    Case Action.TypeAction.ActionMail
+                End Select
+            Next
         End Sub
 
     End Class
@@ -242,8 +251,13 @@ Namespace HoMIDom
                 Return _ConditionTime
             End Get
             Set(ByVal value As String)
-                _ConditionTime = value
-                maj_cron()
+                If _ConditionTime <> value Then
+                    _ConditionTime = value
+                Else
+                    _ConditionTime = value
+                End If
+
+
             End Set
         End Property
 
@@ -324,16 +338,17 @@ Namespace HoMIDom
             'convertit la condition au format cron "cron_ss#mm#hh#jj#MMM#JJJ" en dateTime
             Try
                 'on vérifie si la condition est un cron
-                If STRGS.Left(_ConditionTime, 5) = "cron_" Then
-                    Dim conditions = STRGS.Split(_ConditionTime, "#")
+                If STRGS.Left(_ConditionTime, 5) = "_cron" Then
+                    Dim conditions() As String = STRGS.Split(_ConditionTime, "#")
                     'ex: CrontabSchedule.Parse("0 17-19 * * *")
+                    Exit Sub 'SINON BUG !!!!!??????
                     Dim s = CrontabSchedule.Parse(conditions(1) & " " & conditions(2) & " " & conditions(3) & " " & conditions(4) & " " & conditions(5))
                     'recupere le prochain shedule
                     Dim nextcron = s.GetNextOccurrence(DateAndTime.Now)
                     If (conditions(0) <> "*" And conditions(0) <> "") Then nextcron = nextcron.AddSeconds(conditions(0))
                     Prochainedateheure = nextcron.ToString("yyyy-MM-dd HH:mm:ss")
                 Else
-                    Prochainedateheure = Nothing 'on le laisse à vide car Trigger type Device
+                    'Prochainedateheure = Nothing 'on le laisse à vide car Trigger type Device
                 End If
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Trigger:cron_convertendate", ex.ToString)

@@ -285,7 +285,7 @@ Namespace HoMIDom
             'on checke si il y a cron à faire
             Try
                 For i = 0 To _listTriggers.Count() - 1
-                    If (_listTriggers.Item(i).prochainedateheure IsNot Nothing And _listTriggers.Item(i).prochainedateheure = DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss")) And _listTriggers.Item(i).enable = True Then
+                    If _listTriggers.Item(i).prochainedateheure IsNot Nothing And _listTriggers.Item(i).prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss") And _listTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER And _listTriggers.Item(i).enable = True Then
                         _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
                         'lancement des macros associées
                         For j = 0 To _listTriggers.Item(i).ListMacro.Count - 1
@@ -293,9 +293,8 @@ Namespace HoMIDom
                             Dim _m As Macro = ReturnMacroById(_listTriggers.Item(i).ListMacro.item(j))
                             If _m IsNot Nothing Then
                                 _m.Execute()
-                            Else
-                                _m = Nothing
                             End If
+                            _m = Nothing
                         Next
                     End If
                 Next
@@ -787,6 +786,7 @@ Namespace HoMIDom
                         If list.Count > 0 Then 'présence des triggers
                             For i As Integer = 0 To list.Count - 1
                                 Dim x As New Trigger
+                                x._Server = Me
                                 For j1 As Integer = 0 To list.Item(i).Attributes.Count - 1
                                     Select Case list.Item(i).Attributes.Item(j1).Name
                                         Case "id"
@@ -930,7 +930,7 @@ Namespace HoMIDom
                 Return " Chargement de la configuration terminée"
 
             Catch ex As Exception
-                Return " Erreur de chargement de la config: " & ex.Message
+                Return " Erreur de chargement de la config: " & ex.ToString
             End Try
         End Function
 
