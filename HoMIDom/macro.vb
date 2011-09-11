@@ -145,7 +145,7 @@ Namespace HoMIDom
     ''' _condition contient un string: DeviceID ou CRON : le déclencheur du trigger
     ''' _macro contient un tableau de string : MacroID : liste des macros à lancer
     ''' </remarks>
-    Public Class Trigger
+    <Serializable()> Public Class Trigger
         Public Enum TypeTrigger
             TIMER = 0
             DEVICE = 1
@@ -253,11 +253,10 @@ Namespace HoMIDom
             Set(ByVal value As String)
                 If _ConditionTime <> value Then
                     _ConditionTime = value
+                    maj_cron()
                 Else
                     _ConditionTime = value
                 End If
-
-
             End Set
         End Property
 
@@ -340,8 +339,8 @@ Namespace HoMIDom
                 'on vérifie si la condition est un cron
                 If STRGS.Left(_ConditionTime, 5) = "_cron" Then
                     Dim conditions() As String = STRGS.Split(_ConditionTime, "#")
+                    conditions(0) = Mid(conditions(0), 6, Len(conditions(0)) - 5)
                     'ex: CrontabSchedule.Parse("0 17-19 * * *")
-                    Exit Sub 'SINON BUG !!!!!??????
                     Dim s = CrontabSchedule.Parse(conditions(1) & " " & conditions(2) & " " & conditions(3) & " " & conditions(4) & " " & conditions(5))
                     'recupere le prochain shedule
                     Dim nextcron = s.GetNextOccurrence(DateAndTime.Now)

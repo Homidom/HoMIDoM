@@ -33,7 +33,12 @@
         If _Action = EAction.Nouveau Then 'Nouveau Trigger
 
         Else 'Modifier Trigger
-            Dim x As HoMIDom.HoMIDom.Trigger = Window1.myService.ReturnTriggerById(_TriggerId)
+            Dim x As HoMIDom.HoMIDom.Trigger = Nothing ' Window1.myService.ReturnTriggerById(_TriggerId)
+            For k As Integer = 0 To Window1.myService.GetAllTriggers.Count - 1
+                If Window1.myService.GetAllTriggers.Item(k).ID = _TriggerId Then
+                    x = Window1.myService.GetAllTriggers.Item(k)
+                End If
+            Next
 
             If x IsNot Nothing Then
                 TxtNom.Text = x.Nom
@@ -127,4 +132,57 @@
             e.Effects = DragDropEffects.None
         End If
     End Sub
+
+    Private Sub Image1_ImageFailed(ByVal sender As System.Object, ByVal e As System.Windows.ExceptionRoutedEventArgs) Handles Image1.ImageFailed
+        If ListBox1.SelectedIndex < 0 Then
+            MessageBox.Show("Aucune macro sélectionnée, veuillez en choisir une à supprimer!", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Exit Sub
+        Else
+            Dim i As Integer = ListBox1.SelectedIndex
+            _ListMacro.RemoveAt(i)
+            ListBox1.Items.Clear()
+            For j As Integer = 0 To _ListMacro.Count - 1
+                ListBox1.Items.Add(Window1.myService.ReturnMacroById(_ListMacro(j)).Nom)
+            Next
+            i = Nothing
+        End If
+    End Sub
+
+
+    Private Sub UpMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles UpMacro.Click
+        If ListBox1.SelectedIndex <= 0 Then
+            MessageBox.Show("Aucune macro sélectionnée ou celle-ci est déjà en 1ère position, veuillez en choisir une déplacer!", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Exit Sub
+        Else
+            Dim i As Integer = ListBox1.SelectedIndex
+            Dim a As String = _ListMacro(i - 1)
+            Dim b As String = _ListMacro(i)
+
+            _ListMacro(i - 1) = b
+            _ListMacro(i) = a
+            ListBox1.Items.Clear()
+            For j As Integer = 0 To _ListMacro.Count - 1
+                ListBox1.Items.Add(Window1.myService.ReturnMacroById(_ListMacro(j)).Nom)
+            Next
+        End If
+    End Sub
+
+    Private Sub DownMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles DownMacro.Click
+        If ListBox1.SelectedIndex < 0 Or ListBox1.SelectedIndex = ListBox1.Items.Count - 1 Then
+            MessageBox.Show("Aucune macro sélectionnée ou celle-ci est déjà en dernière position, veuillez en choisir une déplacer!", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Exit Sub
+        Else
+            Dim i As Integer = ListBox1.SelectedIndex
+            Dim a As String = _ListMacro(i + 1)
+            Dim b As String = _ListMacro(i)
+
+            _ListMacro(i + 1) = b
+            _ListMacro(i) = a
+            ListBox1.Items.Clear()
+            For j As Integer = 0 To _ListMacro.Count - 1
+                ListBox1.Items.Add(Window1.myService.ReturnMacroById(_ListMacro(j)).Nom)
+            Next
+        End If
+    End Sub
+
 End Class

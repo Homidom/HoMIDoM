@@ -103,7 +103,9 @@ Namespace HoMIDom
                             If _listTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE And _listTriggers.Item(i).Enable = True And Device.id = _listTriggers.Item(i).ConditionDeviceId And _listTriggers.Item(i).ConditionDeviceProperty = [Property] Then 'c'est un trigger type device + enable + device concerné
                                 For j As Integer = 0 To _listTriggers.Item(i).ListMacro.count - 1
                                     Dim _m As Macro = ReturnMacroById(_listTriggers.Item(i).ListMacro.item(j))
-                                    If _m IsNot Nothing Then _m.Execute()
+                                    If _m IsNot Nothing Then
+                                        _m.Execute()
+                                    End If
                                     _m = Nothing
                                 Next
                             End If
@@ -819,18 +821,18 @@ Namespace HoMIDom
                                         Case Else
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au trigger est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
                                     End Select
-                                    If list.Item(i).HasChildNodes = True Then
-                                        If list.Item(i).ChildNodes.Item(0).Name = "macros" And list.Item(i).ChildNodes.Item(0).HasChildNodes Then
-                                            For k = 0 To list.Item(i).ChildNodes.Item(0).ChildNodes.Count - 1
-                                                If list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k).Name = "macro" Then
-                                                    If list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k).Attributes.Count = 0 And list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k).Attributes.Item(0).Name = "id" Then
-                                                        x.ListMacro.Add(list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k).Attributes.Item(0).Value)
-                                                    End If
-                                                End If
-                                            Next
-                                        End If
-                                    End If
                                 Next
+                                If list.Item(i).HasChildNodes = True Then
+                                    If list.Item(i).ChildNodes.Item(0).Name = "macros" And list.Item(i).ChildNodes.Item(0).HasChildNodes Then
+                                        For k9 As Integer = 0 To list.Item(i).ChildNodes.Item(0).ChildNodes.Count - 1
+                                            If list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k9).Name = "macro" Then
+                                                If list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k9).Attributes.Count > 0 And list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k9).Attributes.Item(0).Name = "id" Then
+                                                    x.ListMacro.Add(list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k9).Attributes.Item(0).Value)
+                                                End If
+                                            End If
+                                        Next
+                                    End If
+                                End If
                                 _listTriggers.Add(x)
                             Next
                         Else
@@ -5054,6 +5056,7 @@ Namespace HoMIDom
                         .ConditionTime = _listTriggers.Item(i).conditiontime
                         .ConditionDeviceId = _listTriggers.Item(i).ConditionDeviceId
                         .ConditionDeviceProperty = _listTriggers.Item(i).ConditionDeviceProperty
+                        .ListMacro = _listTriggers.Item(i).listmacro
                     End With
                     _list.Add(x)
                 Next
@@ -5136,11 +5139,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnTriggerById(ByVal TriggerId As String) As Trigger Implements IHoMIDom.ReturnTriggerById
-            Dim retour As Object = Nothing
+            Dim retour As Trigger = Nothing
             Try
                 For i As Integer = 0 To _listTriggers.Count - 1
                     If _listTriggers.Item(i).ID = TriggerId Then
                         retour = _listTriggers.Item(i)
+                        retour = retour
                         Exit For
                     End If
                 Next
