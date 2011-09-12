@@ -52,7 +52,7 @@ Namespace HoMIDom
         ''' <summary>Class de déclaration du Device Générique</summary>
         ''' <remarks></remarks>
         <Serializable()> Public MustInherit Class DeviceGenerique
-            Protected _Server As Server
+            <NonSerialized()> Protected _Server As Server
             Protected _ID As String = ""
             Protected _Name As String = ""
             Protected _Enable As Boolean = False

@@ -558,7 +558,7 @@ Namespace HoMIDom
         ''' <param name="MacroId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro))> Function ReturnMacroById(ByVal MacroId As String) As Macro 'TemplateMacro
+        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro))> Function ReturnMacroById(ByVal MacroId As String) As Macro
 
         ''' <summary>
         ''' Permet de créer ou modifier une macro

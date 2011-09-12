@@ -16,6 +16,7 @@ Namespace HoMIDom
         Dim _Description As String
         Dim _Enable As Boolean
         Dim _ListActions As New ArrayList
+        <NonSerialized()> Dim _Server As Server
 
         'Propriétés
 
@@ -94,50 +95,17 @@ Namespace HoMIDom
             End Set
         End Property
 
-        ''' <summary>Execute une macro avec analyse des conditions</summary>
-        ''' <remarks>lance les actions True ou False suivant le résultat des conditions</remarks>
-        Public Sub Execute_avec_conditions()
-            'Try
-            '    _Server.Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Macro:Execute_avec_conditions", "Execution avec tests des conditions de " & Nom)
-            '    'analyse des conditions
-            '    If Analyse() = True Then
-            '        'actionsTRUE
-            '        If ActionTrue.Count <> 0 Then
-            '            Action(ActionTrue)
-            '        End If
-            '    ElseIf ActionFalse.Count <> 0 Then
-            '        Action(ActionFalse)
-            '    End If
-            'Catch ex As Exception
-            '    _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:Execute_avec_conditions", ex.ToString)
-            'End Try
-        End Sub
-
-        ''' <summary>Execute une macro sans analyse des conditions</summary>
-        ''' <remarks>lance les actions si TRUE</remarks>
-        Public Sub Execute_sans_conditions()
-            'Try
-            '    _Server.Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Macro:Execute_sans_conditions", "Execution sans tests des conditions de " & Nom)
-            '    'on ne teste pas, on lance direct les actions de True
-            '    If ActionTrue.Count <> 0 Then
-            '        Action(ActionTrue)
-            '    End If
-            'Catch ex As Exception
-            '    _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:Execute_sans_conditions", ex.ToString)
-            'End Try
-        End Sub
-
-        Public Sub Execute()
+        Public Sub Execute(ByVal Server As Server)
+            _Server = Server
             For i As Integer = 0 To _ListActions.Count - 1
-                Select Case _ListActions.Item(i).TypeAction
-                    Case Action.TypeAction.ActionDevice
-                    Case Action.TypeAction.ActionIf
-                    Case Action.TypeAction.ActionMacro
-                    Case Action.TypeAction.ActionMail
-                End Select
+                Dim _action As New ThreadAction(_Server, _ListActions.Item(i))
+                Dim y As New Thread(AddressOf _action.Execute)
+                y.Name = "Traitement du script"
+                y.Start()
+                y.Priority = ThreadPriority.Normal
+                y = Nothing
             Next
         End Sub
-
     End Class
 
     ''' <summary>Class trigger, Défini le type pour les triggers Device/timers</summary>
@@ -146,6 +114,7 @@ Namespace HoMIDom
     ''' _macro contient un tableau de string : MacroID : liste des macros à lancer
     ''' </remarks>
     <Serializable()> Public Class Trigger
+
         Public Enum TypeTrigger
             TIMER = 0
             DEVICE = 1
@@ -162,7 +131,7 @@ Namespace HoMIDom
         Dim _ConditionDeviceProperty As String = ""
         Dim _Prochainedateheure As DateTime 'la date/heure de prochaine execution utile uniquement pour un type CRON
         Dim _ListMacro As New List(Of String)
-        Public _Server As Server
+        <NonSerialized()> Public _Server As Server
 
         'Propriétés
         ''' <summary>
@@ -359,7 +328,7 @@ Namespace HoMIDom
     ''' <summary>Class action, Défini les actions à réaliser depuis les macros...</summary>
     ''' <remarks></remarks>
     <Serializable()> Public Class Action
-        Public _Server As Server
+        <NonSerialized()> Public _Server As Server
 
         ''' <summary>
         ''' Enumération des types d'actions
@@ -517,7 +486,6 @@ Namespace HoMIDom
         ''' </summary>
         ''' <remarks></remarks>
         Public Class ActionIf
-            Dim _Sujet As String
             Dim _Conditions As New List(Of Condition)
             Dim _ListTrue As New ArrayList
             Dim _ListFalse As New ArrayList
@@ -693,18 +661,6 @@ Namespace HoMIDom
 
         End Class
 
-
-
-        ''' <summary>Envoi d'un email</summary>
-        ''' <remarks></remarks>
-        <Serializable()> Public Class email
-            Public adresse As String 'adresse email
-            Public Sub execute(ByVal sujet As String, ByVal texte As String)
-                'envoi de l'email à adresse avec sujet et texte via les smtp définis dans le serveur
-
-            End Sub
-        End Class
-
         ''' <summary>log dans les fichiers logs et base sqlite</summary>
         ''' <remarks></remarks>
         Public Class log
@@ -713,26 +669,6 @@ Namespace HoMIDom
 
             End Sub
         End Class
-
-        Public Sub Send_email(ByVal adresse As String, ByVal sujet As String, ByVal texte As String)
-            'envoi de l'email à adresse avec sujet et texte via les smtp définis dans le serveur
-            Dim email As System.Net.Mail.MailMessage = New System.Net.Mail.MailMessage()
-            email.From = New MailAddress(_Server.GetSMTPMailServeur)
-            email.To.Add(adresse)
-            email.Subject = sujet
-            email.Body = texte
-            Dim mailSender As New System.Net.Mail.SmtpClient(_Server.GetSMTPServeur)
-            If _Server.GetSMTPLogin() <> "" Then
-                mailSender.Credentials = New Net.NetworkCredential(_Server.GetSMTPLogin, _Server.GetSMTPPassword)
-                '
-                'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate", "1")
-                'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername", mMailServerLogin)
-                'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword", mMailServerPassword)
-            End If
-            mailSender.Send(email)
-            email = Nothing
-            mailSender = Nothing
-        End Sub
 
         Public Sub Send_log(ByVal texte As String)
 

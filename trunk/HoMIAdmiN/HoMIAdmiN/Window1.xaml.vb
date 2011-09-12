@@ -53,6 +53,7 @@ Class Window1
                     Dim mytime As String = myService.GetTime
                     LblStatus.Content = Now.ToLongDateString & " " & mytime & " "
                     LblConnect.Content = "Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString()
+
                     Dim mydate As Date
                     mydate = myService.GetHeureLeverSoleil
                     LHS.Content = mydate.ToShortTimeString
@@ -770,12 +771,21 @@ Class Window1
             For i As Integer = 0 To CanvasRight.Children.Count - 1
                 If CanvasRight.Children.Item(i).Uid = MyControl.uid Then
                     CanvasRight.Children.RemoveAt(i)
-                    AffDriver()
-                    AffDevice()
-                    AffZone()
-                    AffUser()
-                    AffTrigger()
-                    AffScene()
+
+                    Select Case MyControl.Tag
+                        Case "DRIVER"
+                            AffDriver()
+                        Case "DEVICE"
+                            AffDevice()
+                        Case "ZONE"
+                            AffZone()
+                        Case "USER"
+                            AffUser()
+                        Case "TRIGGER"
+                            AffTrigger()
+                        Case "MACRO"
+                            AffScene()
+                    End Select
                     Exit Sub
                 End If
             Next

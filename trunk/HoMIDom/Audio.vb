@@ -4,13 +4,13 @@ Namespace HoMIDom
     ''' Classe de gestion Audio
     ''' </summary>
     ''' <remarks></remarks>
-    Public Class Audio
+    <Serializable()> Public Class Audio
 
         ''' <summary>
         ''' Type d'extension Audio
         ''' </summary>
         ''' <remarks></remarks>
-        Public Class ExtensionAudio
+        <Serializable()> Public Class ExtensionAudio
             Dim _Extension As String
             Dim _Enable As String
 
@@ -49,7 +49,7 @@ Namespace HoMIDom
         ''' Type Répertoire Audio
         ''' </summary>
         ''' <remarks></remarks>
-        Public Class RepertoireAudio
+        <Serializable()> Public Class RepertoireAudio
             Dim _Repertoire As String
             Dim _Enable As String
 

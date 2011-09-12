@@ -6,7 +6,12 @@ HoMIDom
 </name>
 </assembly>
 <members>
-<member name="M:HoMIDom.HoMIDom.Sqlite.connect(System.String)">
+<member name="T:HoMIDom.ThreadAction">
+	<summary>
+ Execute chaque Action
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.connect(System.String)">
 	<summary>          
  Connection à une BDD Sqlite
  </summary>
@@ -189,14 +194,14 @@ HoMIDom
  Classe Users pour gérer les utilisateurs
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.graphes.grapher_courbe(System.String,System.String,System.Int32,System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.graphes.grapher_courbe(System.String,System.String,System.Int32,System.Int32)">
 	<summary>Créer un graphe de type Courbe simple</summary>
 	<param name="nomfichier">Nom du fichier : "test"</param>
 	<param name="largeur">largeur de l'image</param>
 	<param name="hauteur">hauteur de l'image</param>
 	<param name="titre">Titre du graphe</param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.graphes.#ctor(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.graphes.#ctor(System.String)">
 	<summary>initialisation de l'objet Graphes</summary>
 	<param name="chemin">Chemin ou enregistrer les graphes</param>
 	<remarks></remarks>
@@ -250,12 +255,6 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Macro.Execute_avec_conditions">
-	<summary>Execute une macro avec analyse des conditions</summary>
-	<remarks>lance les actions True ou False suivant le résultat des conditions</remarks>
-</member><member name="M:HoMIDom.HoMIDom.Macro.Execute_sans_conditions">
-	<summary>Execute une macro sans analyse des conditions</summary>
-	<remarks>lance les actions si TRUE</remarks>
 </member><member name="T:HoMIDom.HoMIDom.Macro">
 	<summary>Class Macro, Défini le type pour les macros</summary>
 	<remarks>_condition contient un tableau des conditions à vérifier pour lancer les actions si TRUE ou si FALSE</remarks>
@@ -382,9 +381,6 @@ HoMIDom
 	<summary>
  Condition pour action If
  </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.email">
-	<summary>Envoi d'un email</summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.log">
 	<summary>log dans les fichiers logs et base sqlite</summary>
