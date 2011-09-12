@@ -1,6 +1,6 @@
 ﻿<UserControl x:Class="uTriggerDevice"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="529" Height="529" DataContext="{Binding}">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="529" Height="529" DataContext="{Binding}" Tag="TRIGGER">
 
     <UserControl.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">

@@ -27,12 +27,12 @@ Namespace HoMIDom
 #Region "Declaration des variables"
 
         Private Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
-        Private Shared _ListImgDrivers As New ArrayList
+        Private Shared _ListImgDrivers As New List(Of Driver)
         Private Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
-        Private Shared _ListZones As New ArrayList 'Liste des zones
-        Private Shared _ListUsers As New ArrayList 'Liste des users
-        Private Shared _ListMacros As New ArrayList 'Liste des macros
-        Private Shared _listTriggers As New ArrayList 'Liste de tous les triggers
+        Private Shared _ListZones As New List(Of Zone) 'Liste des zones
+        Private Shared _ListUsers As New List(Of Users.User) 'Liste des users
+        Private Shared _ListMacros As New List(Of Macro) 'Liste des macros
+        Private Shared _listTriggers As New List(Of Trigger) 'Liste de tous les triggers
         Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
         Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
         Private _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application 'Application.StartupPath
@@ -51,8 +51,8 @@ Namespace HoMIDom
         Dim TimerSecond As New Timers.Timer 'Timer à la seconde
         Private graphe As New graphes(_MonRepertoire + "\Images\Graphes\")
         Shared _DateTimeLastStart As Date = Now
-        Private Shared _ListExtensionAudio As New ArrayList 'Liste des extensions audio
-        Private Shared _ListRepertoireAudio As New ArrayList 'Liste des répertoires audio
+        Private Shared _ListExtensionAudio As New List(Of Audio.ExtensionAudio) 'Liste des extensions audio
+        Private Shared _ListRepertoireAudio As New List(Of Audio.RepertoireAudio) 'Liste des répertoires audio
         Private Shared Etat_server As Boolean = False 'etat du serveur : true = démarré
 #End Region
 
@@ -86,13 +86,13 @@ Namespace HoMIDom
 
             Try
                 If Etat_server Then
-                    Dim valeur As Object = Parametres
+                    Dim valeur As String = Parametres
                     '--- on logue tout ce qui arrive en mode debug
                     Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", "Le device " & Device.name & " a changé : " & [Property] & " = " & valeur)
 
-                    If STRGS.Left(valeur, 4) <> "ERR:" Then 'si y a pas erreur d'acquisition
+                    If Mid(valeur, 1, 4) <> "ERR:" Then 'si y a pas erreur d'acquisition
                         '--- Remplacement de , par .
-                        valeur = STRGS.Replace(valeur, ",", ".")
+                        valeur = valeur.Replace(",", ".")
 
                         '------------------------------------------------------------------------------------------------
                         '    MACRO/Triggers
@@ -100,14 +100,14 @@ Namespace HoMIDom
 
                         'Parcour des triggers pour vérifier si le device déclenche des macros
                         For i As Integer = 0 To _listTriggers.Count - 1
-                            If _listTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE And _listTriggers.Item(i).Enable = True And Device.id = _listTriggers.Item(i).ConditionDeviceId And _listTriggers.Item(i).ConditionDeviceProperty = [Property] Then 'c'est un trigger type device + enable + device concerné
-                                For j As Integer = 0 To _listTriggers.Item(i).ListMacro.count - 1
-                                    Dim _m As Macro = ReturnMacroById(_listTriggers.Item(i).ListMacro.item(j))
-                                    If _m IsNot Nothing Then
-                                        _m.Execute()
-                                    End If
-                                    _m = Nothing
-                                Next
+                            If _listTriggers.Item(i).Enable = True Then
+                                If _listTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE And Device.id = _listTriggers.Item(i).ConditionDeviceId And _listTriggers.Item(i).ConditionDeviceProperty = [Property] Then 'c'est un trigger type device + enable + device concerné
+                                    For j As Integer = 0 To _listTriggers.Item(i).ListMacro.count - 1
+                                        Dim _m As Macro = ReturnMacroById(_listTriggers.Item(i).ListMacro.item(j))
+                                        If _m IsNot Nothing Then _m.Execute(Me)
+                                        _m = Nothing
+                                    Next
+                                End If
                             End If
                         Next
 
@@ -288,17 +288,17 @@ Namespace HoMIDom
             Try
                 For i As Integer = 0 To _listTriggers.Count() - 1
                     If _listTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
-                        If _listTriggers.Item(i).prochainedateheure IsNot Nothing And _listTriggers.Item(i).prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss") And _listTriggers.Item(i).enable = True Then
-                            _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
-                            'lancement des macros associées
-                            For j As Integer = 0 To _listTriggers.Item(i).ListMacro.Count - 1
-                                'on cherche la macro et on la lance en testant ces conditions
-                                Dim _m As Macro = ReturnMacroById(_listTriggers.Item(i).ListMacro.item(j))
-                                If _m IsNot Nothing Then
-                                    _m.Execute()
-                                End If
-                                _m = Nothing
-                            Next
+                        If _listTriggers.Item(i).enable = True Then
+                            If _listTriggers.Item(i).Prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss") Then
+                                _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
+                                'lancement des macros associées
+                                For j As Integer = 0 To _listTriggers.Item(i).ListMacro.Count - 1
+                                    'on cherche la macro et on la lance en testant ces conditions
+                                    Dim _m As Macro = ReturnMacroById(_listTriggers.Item(i).ListMacro.Item(j))
+                                    If _m IsNot Nothing Then _m.Execute(Me)
+                                    _m = Nothing
+                                Next
+                            End If
                         End If
                     End If
                 Next
@@ -2139,7 +2139,7 @@ Namespace HoMIDom
 
                     'on enregistre le fichier xml
                     xmldoc.Save(_File)
-
+                    xmldoc = Nothing
                 Catch ex As Exception 'Le fichier xml est corrompu ou comporte des caractères non supportés par xml
                     Console.WriteLine(Now & " Impossible d'écrire dans le fichier log un nouveau fichier à été créé: " & ex.Message)
                     Dim filearchive As String
@@ -2174,6 +2174,7 @@ Namespace HoMIDom
 
                     'on enregistre le fichier xml
                     xmldoc.Save(_File)
+                    xmldoc = Nothing
                 End Try
 
                 Fichier = Nothing
@@ -2958,7 +2959,6 @@ Namespace HoMIDom
                 Return Now.ToLongTimeString
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetTime", "Exception : " & ex.Message)
-                Return ""
             End Try
         End Function
 
@@ -3345,9 +3345,8 @@ Namespace HoMIDom
             Try
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).Id = driverId Then
-                        _ListDrivers.Item(i).removeat(i)
-                        DeleteDriver = 0
-                        Exit Function
+                        _ListDrivers.RemoveAt(i)
+                        Exit For
                     End If
                 Next
                 Return 1
@@ -4704,7 +4703,7 @@ Namespace HoMIDom
                     End If
                 End If
             Catch ex As Exception
-                MsgBox("Erreur lors du traitemant du Sub ExecuteDeviceCommand: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
+                Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "Erreur lors du traitemant du Sub ExecuteDeviceCommand: " & ex.Message)
             End Try
         End Sub
 #End Region
@@ -4999,7 +4998,7 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnMacroById(ByVal MacroId As String) As Macro Implements IHoMIDom.ReturnMacroById
-            Dim retour As Object = Nothing
+            Dim retour As Macro = Nothing
             Try
                 For i As Integer = 0 To _ListMacros.Count - 1
                     If _ListMacros.Item(i).ID = MacroId Then
@@ -5010,7 +5009,6 @@ Namespace HoMIDom
                 Return retour
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnMacroById", "Exception : " & ex.Message)
-                Return Nothing
             End Try
         End Function
 

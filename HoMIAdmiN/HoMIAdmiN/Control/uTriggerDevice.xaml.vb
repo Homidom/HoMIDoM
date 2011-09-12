@@ -33,12 +33,13 @@
         If _Action = EAction.Nouveau Then 'Nouveau Trigger
 
         Else 'Modifier Trigger
-            Dim x As HoMIDom.HoMIDom.Trigger = Nothing ' Window1.myService.ReturnTriggerById(_TriggerId)
-            For k As Integer = 0 To Window1.myService.GetAllTriggers.Count - 1
-                If Window1.myService.GetAllTriggers.Item(k).ID = _TriggerId Then
-                    x = Window1.myService.GetAllTriggers.Item(k)
-                End If
-            Next
+            Dim x As HoMIDom.HoMIDom.Trigger = Window1.myService.ReturnTriggerById(_TriggerId)
+
+            'For k As Integer = 0 To Window1.myService.GetAllTriggers.Count - 1
+            '    If Window1.myService.GetAllTriggers.Item(k).ID = _TriggerId Then
+            '        x = Window1.myService.GetAllTriggers.Item(k)
+            '    End If
+            'Next
 
             If x IsNot Nothing Then
                 TxtNom.Text = x.Nom
