@@ -123,6 +123,8 @@ Public Class uCondition
     End Sub
 
     Private Sub CbDevice_DropDownClosed(ByVal sender As Object, ByVal e As System.EventArgs) Handles CbDevice.DropDownClosed
+        If CbDevice.SelectedIndex < 0 Then Exit Sub
+
         CbPropertyDevice.Items.Clear()
         Select Case Window1.myService.GetAllDevices.Item(CbDevice.SelectedIndex).Type
             Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
@@ -170,6 +172,7 @@ Public Class uCondition
     End Sub
 
     Private Sub uCondition_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Me.MouseLeave
+        If CbOperateur.SelectedIndex < 0 Then Exit Sub
         _Operateur = CbOperateur.SelectedIndex
         If _TypeCondition = Action.TypeCondition.DateTime Then
             _DateTime = CbSeconde.Text & "#" & CbMinute.Text & "#" & CbHeure.Text & "#" & CbJour.Text & "#" & CbMois.Text & "#"

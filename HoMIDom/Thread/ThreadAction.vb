@@ -26,16 +26,16 @@ Public Class ThreadAction
                 Dim y As New HoMIDom.DeviceAction
                 y.Nom = x.Method
 
-                'If x.Parametres IsNot Nothing Then
-                '    If x.Parametres.Item(0) IsNot Nothing Then
-                '        If x.Parametres.Item(0).Value IsNot Nothing Then
-                '            Dim y2 As New HoMIDom.DeviceAction.Parametre
-                '            y2.Value = x.Parametres.Item(0)
-                '            y.Parametres.Add(y2)
-                '        End If
-                '    End If
-                'End If
-                '_Server.ExecuteDeviceCommand(x.IdDevice, y)
+                If x.Parametres IsNot Nothing Then
+                    If x.Parametres.Item(0) IsNot Nothing Then
+                        If x.Parametres.Item(0) IsNot Nothing Then
+                            Dim y2 As New HoMIDom.DeviceAction.Parametre
+                            y2.Value = x.Parametres.Item(0)
+                            y.Parametres.Add(y2)
+                        End If
+                    End If
+                End If
+                _Server.ExecuteDeviceCommand(x.IdDevice, y)
 
             Case Action.TypeAction.ActionIf
                 Dim x As Action.ActionIf = _Action

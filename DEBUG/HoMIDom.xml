@@ -6,12 +6,7 @@ HoMIDom
 </name>
 </assembly>
 <members>
-<member name="T:HoMIDom.ThreadAction">
-	<summary>
- Execute chaque Action
- </summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.connect(System.String)">
+<member name="M:HoMIDom.HoMIDom.Sqlite.connect(System.String)">
 	<summary>          
  Connection à une BDD Sqlite
  </summary>
@@ -204,6 +199,11 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.graphes.#ctor(System.String)">
 	<summary>initialisation de l'objet Graphes</summary>
 	<param name="chemin">Chemin ou enregistrer les graphes</param>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.ThreadAction">
+	<summary>
+ Execute chaque Action
+ </summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.TemplateDevice">
 	<summary>

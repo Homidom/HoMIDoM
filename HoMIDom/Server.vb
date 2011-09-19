@@ -4685,7 +4685,7 @@ Namespace HoMIDom
 
                 If x IsNot Nothing Then
 
-                    If Action.Parametres.Count > 0 Then
+                    If Action.Parametres IsNot Nothing And Action.Parametres.Count > 0 Then
                         Select Case Action.Parametres.Count
                             Case 1
                                 _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value)
