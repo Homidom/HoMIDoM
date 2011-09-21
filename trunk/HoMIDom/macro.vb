@@ -97,14 +97,18 @@ Namespace HoMIDom
 
         Public Sub Execute(ByVal Server As Server)
             _Server = Server
-            For i As Integer = 0 To _ListActions.Count - 1
-                Dim _action As New ThreadAction(_Server, _ListActions.Item(i))
-                Dim y As New Thread(AddressOf _action.Execute)
-                y.Name = "Traitement du script"
-                y.Start()
-                y.Priority = ThreadPriority.Normal
-                y = Nothing
-            Next
+            Try
+
+                For i As Integer = 0 To _ListActions.Count - 1
+                    Dim _action As New ThreadAction(_Server, _ListActions.Item(i))
+                    Dim y As New Thread(AddressOf _action.Execute)
+                    y.Name = "Traitement du script"
+                    y.Start()
+                    y = Nothing
+                Next
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Execute macro", ex.ToString)
+            End Try
         End Sub
     End Class
 
@@ -115,6 +119,10 @@ Namespace HoMIDom
     ''' </remarks>
     <Serializable()> Public Class Trigger
 
+        ''' <summary>
+        ''' Type de trigger TIME ou DEVICE
+        ''' </summary>
+        ''' <remarks></remarks>
         Public Enum TypeTrigger
             TIMER = 0
             DEVICE = 1

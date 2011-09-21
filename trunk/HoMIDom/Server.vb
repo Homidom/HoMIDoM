@@ -1603,10 +1603,10 @@ Namespace HoMIDom
                         Next
                         writer.WriteEndElement()
                         writer.WriteStartElement("then")
-                        WriteListAction(writer, ListActions.Item(j).ListTrue)
+                        If ListActions.Item(j).ListTrue IsNot Nothing Then WriteListAction(writer, ListActions.Item(j).ListTrue)
                         writer.WriteEndElement()
                         writer.WriteStartElement("else")
-                        WriteListAction(writer, ListActions.Item(j).ListFalse)
+                        If ListActions.Item(j).ListFalse IsNot Nothing Then WriteListAction(writer, ListActions.Item(j).ListFalse)
                         writer.WriteEndElement()
                 End Select
                 writer.WriteEndElement()
@@ -2179,7 +2179,7 @@ Namespace HoMIDom
 
                 Fichier = Nothing
             Catch ex As Exception
-                MsgBox("Erreur lors de l'écriture d'un log: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
+                Console.WriteLine("Erreur lors de l'écriture d'un log: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
             End Try
         End Sub
 

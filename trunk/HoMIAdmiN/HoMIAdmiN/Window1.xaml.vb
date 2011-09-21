@@ -52,7 +52,11 @@ Class Window1
                 Try
                     Dim mytime As String = myService.GetTime
                     LblStatus.Content = Now.ToLongDateString & " " & mytime & " "
-                    LblConnect.Content = "Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString()
+                    Dim tool As New ToolTip
+                    tool.Content = "Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString()
+                    LblConnect.Content = Mid("Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString(), 1, 64) & "..."
+                    LblConnect.ToolTip = tool
+                    tool = Nothing
 
                     Dim mydate As Date
                     mydate = myService.GetHeureLeverSoleil
@@ -219,6 +223,7 @@ Class Window1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 stack.Orientation = Orientation.Horizontal
+                stack.HorizontalAlignment = HorizontalAlignment.Left
 
                 Dim Elipse As New Ellipse
                 Elipse.Width = 9
@@ -246,7 +251,7 @@ Class Window1
                 stack.Children.Add(label)
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
-                newchild.Header = stack 'myService.GetAllDrivers.Item(i).Nom
+                newchild.Header = stack
                 newchild.Uid = myService.GetAllDrivers.Item(i).ID
                 TreeViewDriver.Items.Add(newchild)
 
@@ -404,10 +409,10 @@ Class Window1
                         Dim x As New uDriver(TreeViewDriver.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
                         AddHandler x.CloseMe, AddressOf UnloadControl
+                        CanvasRight.Children.Clear()
                         CanvasRight.Children.Add(x)
                         CanvasRight.SetLeft(x, 50)
                         CanvasRight.SetTop(x, 5)
-
                         Exit Sub
                     End If
                 Next
@@ -417,6 +422,7 @@ Class Window1
             MessageBox.Show("ERREUR Sub TreeViewDriver_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
     Private Sub TreeViewDriver_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewDriver.SelectedItemChanged
         Try
             If IsConnect = False Then
@@ -484,6 +490,7 @@ Class Window1
                         Dim x As New uDevice(uDevice.EAction.Modifier, TreeViewDevice.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
                         AddHandler x.CloseMe, AddressOf UnloadControl
+                        CanvasRight.Children.Clear()
                         CanvasRight.Children.Add(x)
                         CanvasRight.SetLeft(x, 50)
                         CanvasRight.SetTop(x, 5)
@@ -502,6 +509,7 @@ Class Window1
             Dim x As New uDevice(uDevice.EAction.Nouveau, "")
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
             CanvasRight.SetLeft(x, 50)
             CanvasRight.SetTop(x, 5)
@@ -523,6 +531,7 @@ Class Window1
             MessageBox.Show("ERREUR Sub BtnDelDevice_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
 #End Region
 
 #Region "Zones"
@@ -532,6 +541,7 @@ Class Window1
             Dim x As New uZone(uDevice.EAction.Nouveau, "")
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
             CanvasRight.SetLeft(x, 50)
             CanvasRight.SetTop(x, 5)
@@ -553,6 +563,7 @@ Class Window1
                         Dim x As New uZone(uDevice.EAction.Modifier, TreeViewZone.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
                         AddHandler x.CloseMe, AddressOf UnloadControl
+                        CanvasRight.Children.Clear()
                         CanvasRight.Children.Add(x)
                         CanvasRight.SetLeft(x, 50)
                         CanvasRight.SetTop(x, 5)
@@ -588,6 +599,7 @@ Class Window1
             Dim x As New uUser(uDevice.EAction.Nouveau, "")
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
             CanvasRight.SetLeft(x, 50)
             CanvasRight.SetTop(x, 5)
@@ -633,6 +645,7 @@ Class Window1
                         Dim x As New uUser(uDevice.EAction.Modifier, TreeViewUsers.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
                         AddHandler x.CloseMe, AddressOf UnloadControl
+                        CanvasRight.Children.Clear()
                         CanvasRight.Children.Add(x)
                         CanvasRight.SetLeft(x, 50)
                         CanvasRight.SetTop(x, 5)
@@ -653,6 +666,7 @@ Class Window1
             Dim x As New uTriggerDevice(0, "")
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
             CanvasRight.SetLeft(x, 50)
             CanvasRight.SetTop(x, 8)
@@ -666,6 +680,7 @@ Class Window1
             Dim x As New uTriggerTimer(0, "")
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
             CanvasRight.SetLeft(x, 50)
             CanvasRight.SetTop(x, 8)
@@ -674,7 +689,7 @@ Class Window1
         End Try
     End Sub
 
-    'Modifier un device
+    'Modifier un trigger
     Private Sub TreeViewTriggers_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewTriggers.MouseDoubleClick
         Try
             If IsConnect = False Then
@@ -694,6 +709,7 @@ Class Window1
                             Dim x As New uTriggerTimer(uTriggerTimer.EAction.Modifier, TreeViewTriggers.SelectedItem.uid)
                             x.Uid = System.Guid.NewGuid.ToString()
                             AddHandler x.CloseMe, AddressOf UnloadControl
+                            CanvasRight.Children.Clear()
                             CanvasRight.Children.Add(x)
                             CanvasRight.SetLeft(x, 50)
                             CanvasRight.SetTop(x, 5)
@@ -701,6 +717,7 @@ Class Window1
                             Dim x As New uTriggerDevice(uTriggerDevice.EAction.Modifier, TreeViewTriggers.SelectedItem.uid)
                             x.Uid = System.Guid.NewGuid.ToString()
                             AddHandler x.CloseMe, AddressOf UnloadControl
+                            CanvasRight.Children.Clear()
                             CanvasRight.Children.Add(x)
                             CanvasRight.SetLeft(x, 50)
                             CanvasRight.SetTop(x, 5)
@@ -711,6 +728,21 @@ Class Window1
             End If
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub TreeViewDevice_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub BtnDelTrigger_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelTrigger.Click
+        Try
+            If TreeViewTriggers.SelectedItem IsNot Nothing And TreeViewTriggers.SelectedItem.uid IsNot Nothing Then
+                If MessageBox.Show("Etes vous sur de supprimer ce trigger: " & myService.ReturnTriggerById(TreeViewTriggers.SelectedItem.uid).Nom & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                    Window1.myService.DeleteTrigger(TreeViewTriggers.SelectedItem.uid)
+                    AffTrigger()
+                End If
+            Else
+                MessageBox.Show("Veuillez sélectionner un trigger à supprimer!")
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub BtnDelTrigger_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 #End Region
@@ -727,6 +759,7 @@ Class Window1
             Dim x As New uMacro(uMacro.EAction.Nouveau, "")
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
             CanvasRight.SetLeft(x, 50)
             CanvasRight.SetTop(x, 8)
@@ -741,6 +774,7 @@ Class Window1
             Dim x As New uMacro(uMacro.EAction.Modifier, TreeViewMacros.SelectedItem.uid)
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
             CanvasRight.SetLeft(x, 50)
             CanvasRight.SetTop(x, 8)
@@ -749,6 +783,21 @@ Class Window1
         End Try
     End Sub
 
+    'supprimer macro
+    Private Sub BtnDelMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelMacro.Click
+        Try
+            If TreeViewMacros.SelectedItem IsNot Nothing And TreeViewMacros.SelectedItem.uid IsNot Nothing Then
+                If MessageBox.Show("Etes vous sur de supprimer cette macro: " & myService.ReturnMacroById(TreeViewMacros.SelectedItem.uid).Nom & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                    Window1.myService.DeleteMacro(TreeViewMacros.SelectedItem.uid)
+                    AffScene()
+                End If
+            Else
+                MessageBox.Show("Veuillez sélectionner une macro à supprimer!")
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub BtnDelMacro_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
 #End Region
 
     'Menu Save Config
@@ -800,6 +849,7 @@ Class Window1
             Dim x As New uConfigServer
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
             CanvasRight.SetLeft(x, 50)
             CanvasRight.SetTop(x, 8)
@@ -819,6 +869,7 @@ Class Window1
             Dim x As New uLog
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
             CanvasRight.SetLeft(x, 50)
             CanvasRight.SetTop(x, 50)
@@ -861,6 +912,7 @@ Class Window1
             Dim x As New uPlaylist
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
             CanvasRight.SetLeft(x, 10)
             CanvasRight.SetTop(x, 5)
@@ -1034,11 +1086,11 @@ Class Window1
     'End Sub
 
     Private Sub MenuTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuTest.Click
-        Try
-            Image5.Source = ConvertArrayToImage(myService.GetByteFromImage("d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\Images\Graphes\test.png"))
-        Catch ex As Exception
-            MessageBox.Show(ex.ToString)
-        End Try
+        'Try
+        '    Image5.Source = ConvertArrayToImage(myService.GetByteFromImage("d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\Images\Graphes\test.png"))
+        'Catch ex As Exception
+        '    MessageBox.Show(ex.ToString)
+        'End Try
     End Sub
 
     Private Sub TreeViewDevice_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewDevice.SelectedItemChanged
@@ -1081,6 +1133,7 @@ Class Window1
             Dim x As New uConfigAudio
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
             CanvasRight.SetLeft(x, 50)
             CanvasRight.SetTop(x, 8)
@@ -1099,4 +1152,8 @@ Class Window1
             End If
         End If
     End Sub
+
+
+
+
 End Class
