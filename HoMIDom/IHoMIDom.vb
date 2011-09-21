@@ -536,7 +536,7 @@ Namespace HoMIDom
         ''' <summary>
         ''' Supprimer une macro de la config
         ''' </summary>
-        ''' <param name="macroId"></param>
+        ''' <param name="macroId">Id de la macro à supprimer</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         <OperationContract()> Function DeleteMacro(ByVal macroId As String) As Integer
@@ -548,26 +548,25 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Sub RunMacro(ByVal Id As String)
 
-
         ''' <summary>Retourne la liste de toutes les macros</summary>
-        ''' <returns></returns>
+        ''' <returns>Retourne une List de type Macro</returns>
         ''' <remarks></remarks>
         <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro))> Function GetAllMacros() As List(Of Macro)
 
         ''' <summary>Retourne la macro par son ID</summary>
-        ''' <param name="MacroId"></param>
-        ''' <returns></returns>
+        ''' <param name="MacroId">Id de la macro</param>
+        ''' <returns>Objet de type Macro</returns>
         ''' <remarks></remarks>
         <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro))> Function ReturnMacroById(ByVal MacroId As String) As Macro
 
         ''' <summary>
         ''' Permet de créer ou modifier une macro
         ''' </summary>
-        ''' <param name="macroId"></param>
-        ''' <param name="nom"></param>
-        ''' <param name="enable"></param>
-        ''' <param name="description"></param>
-        ''' <param name="listactions"></param>
+        ''' <param name="macroId">Id de la macro à modifier, mettre une valeur null si c'est une macro à créer</param>
+        ''' <param name="nom">Nom de la macro</param>
+        ''' <param name="enable">Activation/désactivation de la macro</param>
+        ''' <param name="description">Description de la macro</param>
+        ''' <param name="listactions">List des actions associées à la macro</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro))> Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal listactions As ArrayList = Nothing) As String

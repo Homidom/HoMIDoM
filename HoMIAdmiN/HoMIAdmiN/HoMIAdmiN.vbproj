@@ -415,5 +415,19 @@
   <ItemGroup>
     <Resource Include="Images\bullet-fleche-vers-le-bas-32.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\lecture-48.png" />
+    <Resource Include="Images\stop-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ajouter-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ajouter-la-brique-32.png" />
+    <Resource Include="Images\temps-ajouter-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\tree-48.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

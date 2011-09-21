@@ -200,7 +200,7 @@ HoMIDom
 	<summary>initialisation de l'objet Graphes</summary>
 	<param name="chemin">Chemin ou enregistrer les graphes</param>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.ThreadAction">
+</member><member name="T:HoMIDom.HoMIDom.ThreadAction">
 	<summary>
  Execute chaque Action
  </summary>
@@ -258,6 +258,11 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Macro">
 	<summary>Class Macro, Défini le type pour les macros</summary>
 	<remarks>_condition contient un tableau des conditions à vérifier pour lancer les actions si TRUE ou si FALSE</remarks>
+</member><member name="T:HoMIDom.HoMIDom.Trigger.TypeTrigger">
+	<summary>
+ Type de trigger TIME ou DEVICE
+ </summary>
+	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Trigger.ID">
 	<summary>
  ID du trigger
@@ -1417,7 +1422,7 @@ HoMIDom
 	<summary>
  Supprimer une macro de la config
  </summary>
-	<param name="macroId"></param>
+	<param name="macroId">Id de la macro à supprimer</param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.RunMacro(System.String)">
@@ -1428,22 +1433,22 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllMacros">
 	<summary>Retourne la liste de toutes les macros</summary>
-	<returns></returns>
+	<returns>Retourne une List de type Macro</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnMacroById(System.String)">
 	<summary>Retourne la macro par son ID</summary>
-	<param name="MacroId"></param>
-	<returns></returns>
+	<param name="MacroId">Id de la macro</param>
+	<returns>Objet de type Macro</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveMacro(System.String,System.String,System.Boolean,System.String,System.Collections.ArrayList)">
 	<summary>
  Permet de créer ou modifier une macro
  </summary>
-	<param name="macroId"></param>
-	<param name="nom"></param>
-	<param name="enable"></param>
-	<param name="description"></param>
-	<param name="listactions"></param>
+	<param name="macroId">Id de la macro à modifier, mettre une valeur null si c'est une macro à créer</param>
+	<param name="nom">Nom de la macro</param>
+	<param name="enable">Activation/désactivation de la macro</param>
+	<param name="description">Description de la macro</param>
+	<param name="listactions">List des actions associées à la macro</param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllTriggers">
