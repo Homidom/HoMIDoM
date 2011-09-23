@@ -51,10 +51,12 @@
             Dim tabl As New ArrayList
             tabl = UScenario1.Items
             _MacroId = Window1.myService.SaveMacro("", TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
+            RaiseEvent CloseMe(Me)
         Else
             Dim tabl As New ArrayList
             tabl = UScenario1.Items
             _MacroId = Window1.myService.SaveMacro(_MacroId, TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
+            RaiseEvent CloseMe(Me)
         End If
         RaiseEvent CloseMe(Me)
     End Sub

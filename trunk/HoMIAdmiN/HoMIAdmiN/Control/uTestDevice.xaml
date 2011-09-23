@@ -68,17 +68,13 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </UserControl.Resources>
-    
-    <Grid>
-        <Grid.Background >
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="Gray" Offset="0.0" />
-                <GradientStop Color="DarkGray" Offset="0.6" />
-                <GradientStop Color="Black" Offset="1.0" />
-            </LinearGradientBrush>
-        </Grid.Background>
+
+    <Grid Background="#636060">
+        
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
-            <Label Height="46.25" Name="Label1" Width="168" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Test Device</Label>
+            <StackPanel >
+                <Label Name="Label1" HorizontalAlignment="Center"  VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Test Device</Label>
+            </StackPanel>
         </Border>
         <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,43.25,12,0" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Fermer</Button>
         <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,12,12,0" Name="BtnTest" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Tester</Button>

@@ -69,14 +69,7 @@
         </ControlTemplate>
     </UserControl.Resources>
 
-    <Grid Margin="1">
-        <Grid.Background >
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="DarkGray" Offset="0.0" />
-                <GradientStop Color="DarkGray" Offset="0.5" />
-                <GradientStop Color="Black" Offset="1.0" />
-            </LinearGradientBrush>
-        </Grid.Background>
+    <Grid Margin="1" Background="#636060">
         <Border Name="Border1" BorderThickness="2" BorderBrush="Gray">
 
         </Border>
@@ -108,8 +101,9 @@
             </Grid>
         </GroupBox>
         <GroupBox Header="Paramètres du Serveur" Name="GroupBox2" Margin="5.5,187,5.5,166"></GroupBox>
-        
-        <Label Height="37" Margin="14,0,22,0" Name="Label5" VerticalAlignment="Top" Foreground="DarkOrange" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic">Propriétés du serveur</Label>
+        <StackPanel >
+        <Label Name="Label5" VerticalAlignment="Top" Foreground="DarkOrange" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic">Propriétés du serveur</Label>
+        </StackPanel>
         <Button Height="23" Template="{DynamicResource GlassButton}" Name="BtnOK" Foreground="White" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Margin="0,0,99,15" HorizontalAlignment="Right" Width="72">OK</Button>
         <Button Height="23" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,0,17,15" Name="BtnCancel" VerticalAlignment="Bottom" Width="72" Foreground="White">Fermer</Button>
         <Grid Margin="12,204,12,166">

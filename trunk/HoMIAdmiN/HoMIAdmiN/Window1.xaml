@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Window1"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="HoMIAdmiN - HoMIDoM" Height="700" MinWidth="1024" xmlns:my="http://www.codeplex.com/wpfpropertygrid" Icon="/HoMIAdmiN;component/Images/homidom_icone_moyen.png" Name="Window1" WindowStartupLocation="CenterScreen" Background="#FF312D2D" >
+    Height="700" MinWidth="1024" xmlns:my="http://www.codeplex.com/wpfpropertygrid" Icon="/HoMIAdmiN;component/Images/homidom_icone_moyen.png" Name="Window1" WindowStartupLocation="CenterScreen" Background="#FF312D2D" >
     
     <Window.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">

@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="uLog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="740" Height="485">
+    
     <UserControl.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
             <ControlTemplate.Resources>
@@ -68,21 +69,16 @@
         </ControlTemplate>
     </UserControl.Resources>
 
-    <Grid Height="485">
-        <Grid.Background >
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="Gray" Offset="0.0" />
-                <GradientStop Color="DarkGray" Offset="0.6" />
-                <GradientStop Color="Black" Offset="1.0" />
-            </LinearGradientBrush>
-        </Grid.Background>
+    <Grid Height="485" Background="#636060">
         <Border Name="Border1" BorderThickness="2" BorderBrush="Gray">
            
         </Border>
         <Button Height="24.293" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,7,12,0" Name="BtnClose" VerticalAlignment="Top" Width="87.169" Foreground="White">Fermer</Button>
         <Button Height="24.293" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,7,105.746,0" Name="BtnRefresh" VerticalAlignment="Top" Width="87.169" Foreground="White">Rafraichir</Button>
         <TextBox Margin="14.29,62.5,12,36" Name="TxtLog" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
-        <Label FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Height="46.25" Margin="286,0,349,0" Name="Label1" VerticalAlignment="Top">Log</Label>
+        <StackPanel >
+            <Label FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Name="Label1" VerticalAlignment="Top" HorizontalAlignment="Center">Log</Label>
+        </StackPanel>
         <TextBox Height="24" Name="TxtFile" Width="143" Margin="585,36,12,425" />
         <Label Content="Taille max du fichier Log (Ko):" Name="Label2" Margin="417,36,164,425" Foreground="White" />
         <Image Height="53" HorizontalAlignment="Left" Margin="7,1,0,0" Name="ImgDevice" Source="/HoMIAdmiN;component/Images/5250-128.png" Stretch="Fill" VerticalAlignment="Top" Width="53">

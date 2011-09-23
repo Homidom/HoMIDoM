@@ -98,9 +98,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="WpfPropertyGrid">
-      <HintPath>..\..\_LastVersionStable\WpfPropertyGrid.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="Application.xaml">

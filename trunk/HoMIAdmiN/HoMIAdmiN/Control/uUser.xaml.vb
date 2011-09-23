@@ -24,6 +24,7 @@ Partial Public Class uUser
         End If
 
         Window1.myService.SaveUser(_UserId, TxtUsername.Text, TxtPassword.Password, ComboProfil.SelectedIndex, TxtNom.Text, TxtPrenom.Text, TxtIden.Text, ImgIcon.Tag, TxteMail.Text, TxteMailAutre.Text, TxtTelFixe.Text, TxtTelMobile.Text, TxtTelAutre.Text, TxtAdresse.Text, TxtVille.Text, TxtCodePostal.Text)
+        RaiseEvent CloseMe(Me)
     End Sub
 
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click

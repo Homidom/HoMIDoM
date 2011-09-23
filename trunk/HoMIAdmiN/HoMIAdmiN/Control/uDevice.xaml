@@ -1,6 +1,6 @@
 ﻿<UserControl x:Class="uDevice"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="654.379" Height="Auto" Tag="DEVICE">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="654.379" Height="Auto" Tag="DEVICE" Margin="5">
 
     <UserControl.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
@@ -69,16 +69,11 @@
         </ControlTemplate>
     </UserControl.Resources>
 
-    <Grid Margin="1" Width="625.493" Visibility="Visible" Height="569">
-        <Grid.Background >
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="Gray" Offset="0.0" />
-                <GradientStop Color="DarkGray" Offset="0.6" />
-                <GradientStop Color="Black" Offset="1.0" />
-            </LinearGradientBrush>
-        </Grid.Background>
+    <Grid Margin="1" Width="625.493" Visibility="Visible" Height="569" Background="#636060">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Height="567" Margin="0,0,0,25">
-            <Label Height="46.25" Name="Label1" Width="105" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Device</Label>
+            <StackPanel >
+                <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Device</Label>
+            </StackPanel>
         </Border>
         <Image Height="60" HorizontalAlignment="Left" Margin="17,-1,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Defaut-128.png">
             <Image.LayoutTransform >

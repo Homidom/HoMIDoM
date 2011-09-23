@@ -4965,6 +4965,7 @@ Namespace HoMIDom
                 If macroId = "" Then
                     Dim x As New Macro
                     With x
+                        x._Server = Me
                         x.ID = GenerateGUID()
                         x.Nom = nom
                         x.Enable = enable
@@ -5085,6 +5086,7 @@ Namespace HoMIDom
                 If triggerId = "" Then
                     Dim x As New Trigger
                     With x
+                        x._Server = Me
                         x.ID = GenerateGUID()
                         x.Nom = nom
                         x.Enable = enable
@@ -5097,8 +5099,13 @@ Namespace HoMIDom
                                 x.ConditionDeviceId = deviceid
                                 x.ConditionDeviceProperty = deviceproperty
                         End Select
-                        x.Description = description
-                        x.ListMacro = macro
+                        If description <> "" Then x.Description = description
+                        If macro IsNot Nothing Then
+                            If macro.Count > 0 Then
+                                x.ListMacro = macro
+                            End If
+                        End If
+
                     End With
                     myID = x.ID
                     _listTriggers.Add(x)
@@ -5120,14 +5127,14 @@ Namespace HoMIDom
                                     _listTriggers.Item(i).ConditionDeviceId = deviceid
                                     _listTriggers.Item(i).ConditionDeviceProperty = deviceproperty
                             End Select
-                            _listTriggers.Item(i).ListMacro = macro
+                            If macro IsNot Nothing Then _listTriggers.Item(i).ListMacro = macro
                         End If
                     Next
                 End If
                 'génération de l'event
                 Return myID
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTrigger", "Exception : " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTrigger", "Exception : " & ex.Message & vbCrLf & ex.ToString)
                 Return "-1"
             End Try
         End Function

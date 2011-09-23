@@ -20,6 +20,7 @@ Partial Public Class uZone
             Exit Sub
         End If
         Window1.myService.SaveZone(_ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag, ImgZone.Tag)
+        RaiseEvent CloseMe(Me)
     End Sub
 
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
