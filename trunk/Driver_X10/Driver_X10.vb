@@ -1,13 +1,15 @@
-﻿Imports Microsoft.VisualBasic﻿
+﻿Imports HoMIDom
+Imports HoMIDom.HoMIDom.Server
+Imports HoMIDom.HoMIDom.Device
+Imports STRGS = Microsoft.VisualBasic.Strings
+Imports VB = Microsoft.VisualBasic
 Imports Microsoft.VisualBasic.Strings
 Imports System.IO.Ports
 Imports System.Math
 Imports System.Net.Sockets
 Imports System.Threading
 Imports System.Globalization
-Imports HoMIDom
-Imports HoMIDom.HoMIDom.Server
-Imports HoMIDom.HoMIDom.Device
+
 
 Public Class Driver_x10
     Implements HoMIDom.HoMIDom.IDriver
@@ -674,8 +676,7 @@ Public Class Driver_x10
 
         Dim X10_Recieved_Trame As String
         Dim X10_Send_Command As String
-        Dim Trame As String 'Trame envoyé depuis le CM11 en binaire
-        Dim Junk As String
+        Dim Trame As String = "" 'Trame envoyé depuis le CM11 en binaire
         Dim j As Integer
         Dim tablS(14) As String
         Dim GClk_DimStatDev As String 'Dim status of the monitored devices
@@ -776,13 +777,18 @@ Public Class Driver_x10
             Exit Function
         End If
 
-        If Bin2dbl(GClk_Date) > 365 Then Exit Function
-        GClk_Date = Jour2Date(Bin2Int(GClk_Date))
+        If Bin2dbl(GClk_Date) > 365 Then
+            X10_GetClock = ""
+            ' Exit Function
+        Else
+            GClk_Date = Jour2Date(Bin2Int(GClk_Date))
 
-        'Battery timer ********************************************
-        GClK_Battery = Bin2dbl(GClK_Battery)
+            'Battery timer ********************************************
+            GClK_Battery = Bin2dbl(GClK_Battery)
 
-        X10_GetClock = "Battery: " & GClK_Battery & " - House: " & GetHouse(GClk_MonitHC) & " Add: " & GetAdd(GClk_AdrDev) & " - firmware: " & GClk_FirmwareRev & " - " & GClk_Day & " " & GClk_Date & " " & GClk_Hour & ":" & GClk_Minute & ":" & GClk_Second
+            X10_GetClock = "Battery: " & GClK_Battery & " - House: " & GetHouse(GClk_MonitHC) & " Add: " & GetAdd(GClk_AdrDev) & " - firmware: " & GClk_FirmwareRev & " - " & GClk_Day & " " & GClk_Date & " " & GClk_Hour & ":" & GClk_Minute & ":" & GClk_Second
+
+        End If
     End Function
 
 
@@ -812,6 +818,7 @@ Public Class Driver_x10
             Case "1101" : GetFunction = "14"    'Status on
             Case "1110" : GetFunction = "15"    'Status off
             Case "1111" : GetFunction = "16"    'Status request
+            Case Else : GetFunction = ""
         End Select
     End Function
 
@@ -840,6 +847,7 @@ Public Class Driver_x10
             Case "1000" : GetDevice = "14"
             Case "0100" : GetDevice = "15"
             Case "1100" : GetDevice = "16"
+            Case Else : GetDevice = ""
         End Select
     End Function
 
@@ -868,6 +876,7 @@ Public Class Driver_x10
             Case "1000" : GetHouse = "N"
             Case "0100" : GetHouse = "O"
             Case "1100" : GetHouse = "P"
+            Case Else : GetHouse = ""
         End Select
     End Function
 

@@ -2843,8 +2843,6 @@ Namespace HoMIDom
             Dim i As Integer
             Dim a As String
             Dim b As String
-            Dim j As Integer
-            Dim flag As Boolean
             Dim SQLconnect As New SQLiteConnection()
             Dim SQLcommand As SQLiteCommand
             SQLconnect.ConnectionString = "Data Source= " & _MonRepertoire & "\bdd\guidetv.db;"
@@ -2959,6 +2957,7 @@ Namespace HoMIDom
                 Return Now.ToLongTimeString
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetTime", "Exception : " & ex.Message)
+                Return Nothing
             End Try
         End Function
 
@@ -5010,6 +5009,7 @@ Namespace HoMIDom
                 Return retour
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnMacroById", "Exception : " & ex.Message)
+                Return Nothing
             End Try
         End Function
 

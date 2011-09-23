@@ -185,19 +185,37 @@
                     </Label.Foreground>
                 </Label>
                <Menu HorizontalAlignment="Left" Name="Menu1" Background="Transparent" Foreground="Black" FontSize="11">
+<<<<<<< .mine
+                    <MenuItem Header="Fichier" Foreground="WhiteSmoke">
+                        <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig" Foreground="Black"  />
+                        <MenuItem Header="Configuration du Serveur" Name="MenuConfigSrv" Foreground="Black"  />
+                        <MenuItem Header="Paramètres Audio du Serveur" Name="MenuConfigAudio" Foreground="Black"  />
+                        <MenuItem Header="Quitter" Name="MenuQuitter" Foreground="Black"  />
+=======
                     <MenuItem Header="Fichier" Foreground="GhostWhite">
                     <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig" Foreground="Black"/>
                     <MenuItem Header="Configuration du Serveur" Name="MenuConfigSrv"  Foreground="Black"/>
                     <MenuItem Header="Paramètres Audio du Serveur" Name="MenuConfigAudio"  Foreground="Black"/>
                     <MenuItem Header="Quitter" Name="MenuQuitter"  Foreground="Black"/>
+>>>>>>> .r211
                     </MenuItem>
                     <MenuItem Header="Affichage" Foreground="WhiteSmoke">
+<<<<<<< .mine
+                        <MenuItem Header="Consulter Log" Name="MenuConsultLog" Foreground="Black"  />
+                        <MenuItem Header="PlayList" Name="MenuPlayList" Foreground="Black"  />
+=======
                     <MenuItem Header="Consulter Log" Name="MenuConsultLog"  Foreground="Black"/>
                     <MenuItem Header="PlayList" Name="MenuPlayList" Foreground="Black" />
+>>>>>>> .r211
                     </MenuItem>
                     <MenuItem Header="?" Foreground="WhiteSmoke">
+<<<<<<< .mine
+                        <MenuItem Header="A propos" Name="MenuPropos" Foreground="Black"  />
+                        <MenuItem Header="Test" Name="MenuTest" Foreground="Black"  />
+=======
                     <MenuItem Header="A propos" Name="MenuPropos" Foreground="Black"/>
                     <MenuItem Header="Test" Name="MenuTest" Foreground="Black"/>
+>>>>>>> .r211
                     </MenuItem>
                 </Menu>
          </StackPanel>
