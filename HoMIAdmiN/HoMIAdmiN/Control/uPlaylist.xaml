@@ -68,17 +68,12 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </UserControl.Resources>
-    
-    <Grid Name="Grid1">
-        <Grid.Background >
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="Gray" Offset="0.0" />
-                <GradientStop Color="DarkGray" Offset="0.6" />
-                <GradientStop Color="Black" Offset="1.0" />
-            </LinearGradientBrush>
-        </Grid.Background>
+
+    <Grid Name="Grid1" Background="#636060">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
-            <Label Height="46.25" Name="Label1" Width="105" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">PlayList</Label>
+            <StackPanel >
+            <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">PlayList</Label>
+            </StackPanel>
         </Border>
         <Label Height="24" HorizontalAlignment="Left" Margin="170,76,0,0" Name="Label2" VerticalAlignment="Top" Width="42" Foreground="White" Content="Nom :"></Label>
         <TextBox Height="22" Margin="213,78,123,0" Name="TxtName" VerticalAlignment="Top" Foreground="White" Background="DarkGray" />

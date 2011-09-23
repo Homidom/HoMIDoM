@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="404" Height="523">
 
     <UserControl.Resources>
+          
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
             <ControlTemplate.Resources>
                 <Storyboard x:Key="Timeline1">
@@ -69,27 +70,22 @@
         </ControlTemplate>
     </UserControl.Resources>
 
-    <Grid Margin="1">
-        <Grid.Background >
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="DarkGray" Offset="0.0" />
-                <GradientStop Color="DarkGray" Offset="0.5" />
-                <GradientStop Color="Black" Offset="1.0" />
-            </LinearGradientBrush>
-        </Grid.Background>
+    <Grid Margin="1" Background="#636060">
+        
         <Border Name="Border1" BorderThickness="2" BorderBrush="Gray">
             
         </Border>
-        <GroupBox Header="Liste des répertoires Audio à scanner" Name="GroupBox1" Margin="6.5,37,6.5,0" Height="145" VerticalAlignment="Top">
+        <GroupBox Header="Liste des répertoires Audio à scanner" Name="GroupBox1" Margin="6.5,37,6.5,0" Height="145" VerticalAlignment="Top" Foreground="DarkOrange">
             <Grid>
                 <Button Height="23" Margin="238,0,0,5" Name="BtnNewRepertoire" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Foreground="White" HorizontalAlignment="Left" Width="59">Nouveau</Button>
                 <Button Height="23" Margin="0,0,10,6" Name="BtnDelRepertoireAudio" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Width="64" Foreground="White">Supprimer</Button>
                 <ListBox HorizontalAlignment="Left" Margin="6,8,0,35" Name="ListBox1" Width="361" />
             </Grid>
         </GroupBox>
-        <GroupBox Header="Liste des extensions Audio à prendre en compte lors du scan" Name="GroupBox2" Margin="5.5,187,5.5,166"></GroupBox>
-        
-        <Label Height="37" Margin="14,0,22,0" Name="Label5" VerticalAlignment="Top" Foreground="DarkOrange" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic">Propriétés Audio du serveur</Label>
+        <GroupBox Header="Liste des extensions Audio à prendre en compte lors du scan" Name="GroupBox2" Margin="5.5,187,5.5,166" Foreground="DarkOrange"></GroupBox>
+        <StackPanel >
+            <Label Name="Label5" VerticalAlignment="Top" Foreground="DarkOrange" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic">Propriétés Audio du serveur</Label>
+        </StackPanel>
         <Button Height="23" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,0,17,15" Name="BtnCancel" VerticalAlignment="Bottom" Width="72" Foreground="White">Fermer</Button>
         <Button Content="Ok" Foreground="White" Height="23" Name="BtnOk" Template="{DynamicResource GlassButton}" Width="72" Margin="235,483,95,15" />
         <Grid Margin="12,204,12,166">

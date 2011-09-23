@@ -1,6 +1,6 @@
 ﻿<UserControl x:Class="uZone"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="502" Height="487" Tag="ZONE">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="502" Height="487" Tag="ZONE" Margin="20">
 
     <UserControl.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
@@ -68,17 +68,12 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </UserControl.Resources>
-    
-    <Grid>
-        <Grid.Background >
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="Gray" Offset="0.0" />
-                <GradientStop Color="DarkGray" Offset="0.6" />
-                <GradientStop Color="Black" Offset="1.0" />
-            </LinearGradientBrush>
-        </Grid.Background>
+
+    <Grid Background="#636060">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
-            <Label Height="46.25" Name="Label1" Width="105" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Zone</Label>
+            <StackPanel >
+                <Label HorizontalAlignment="Center" Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Zone</Label>
+            </StackPanel>
         </Border>
         <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgIcon" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Defaut-128.png">
             <Image.LayoutTransform >

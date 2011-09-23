@@ -1,6 +1,6 @@
 ﻿<UserControl x:Class="uDriver"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="654.379" Height="550">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="654.379" Height="550" Margin="20">
 
     <UserControl.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
@@ -69,71 +69,130 @@
         </ControlTemplate>
     </UserControl.Resources>
 
-    <Grid Margin="1" Height="548.75" Width="625.493" Visibility="Visible">
-        <Grid.Background >
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="Gray" Offset="0.0" />
-                <GradientStop Color="DarkGray" Offset="0.6" />
-                <GradientStop Color="Black" Offset="1.0" />
-            </LinearGradientBrush>
-        </Grid.Background>
+    <Grid Margin="1" Height="548.75" Width="625.493" Visibility="Visible" Background="#636060">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
-            <Label Height="46.25" Name="Label1" Width="105" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Driver</Label>
+            <StackPanel >
+            <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Driver</Label>
+            </StackPanel>
         </Border>
         <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Defaut-128.png">
             <Image.LayoutTransform >
                 <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
             </Image.LayoutTransform>
-                   </Image> 
-        <Label HorizontalAlignment="Left" Margin="16,71.681,0,0" Name="Label2" Width="53" Foreground="White" Height="22.5" VerticalAlignment="Top">Nom:</Label>
-        <TextBox Height="22" HorizontalAlignment="Left" Margin="17,90.018,0,0" Name="TxtNom" VerticalAlignment="Top" Width="215" Foreground="White" Background="DarkGray" BorderBrush="Black" IsEnabled="False" />
-        <CheckBox Height="18" Margin="265,93.352,258,0" Name="ChkEnable" VerticalAlignment="Top" Foreground="White" IsChecked="False">Enable</CheckBox>
-        <Label Foreground="White" HorizontalAlignment="Left" Margin="15,110.022,0,0" Name="Label3" Width="76" Height="22" VerticalAlignment="Top">Descriptions:</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="17,130.026,0,0" Name="TxtDescript" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" IsEnabled="False" />
-        <Label Foreground="White" HorizontalAlignment="Left" Margin="14,150,0,0" Name="Label6" Width="62" Height="22.5" VerticalAlignment="Top">Protocol:</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Margin="17,170,0,0" Name="TxtProtocol" Width="215" Height="21.978" VerticalAlignment="Top" IsEnabled="False" />
-        <Label Foreground="White" Margin="276.493,231.895,287,0" Name="Label8" Height="23.75" VerticalAlignment="Top">Modele:</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="276.493,253.895,200,273.105" Name="TxtModele" IsEnabled="False" />
-        <Label Foreground="White" Margin="118.507,232,0,0" Name="Label9" Height="23.645" VerticalAlignment="Top" HorizontalAlignment="Left" Width="125.493">Refresh (ms):</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="0,254.279,423.575,271.721" Name="TxtRefresh" HorizontalAlignment="Right" Width="83.411">0</TextBox>
+                   </Image>
+
+        <StackPanel Margin="16,71.681,0,22">
+            <Label HorizontalAlignment="Left"  Name="Label2" Foreground="White" VerticalAlignment="Top">Nom:</Label>
+            <StackPanel Orientation="Horizontal" >
+                <TextBox Height="22" HorizontalAlignment="Left" Name="TxtNom" VerticalAlignment="Top" Width="215" Foreground="Black" Background="DarkGray" BorderBrush="Black" IsEnabled="False" SelectionBrush="DarkGray" />
+                <CheckBox Margin="4" Name="ChkEnable" VerticalAlignment="Top" Foreground="White" IsChecked="False">Enable</CheckBox>
+                <CheckBox Foreground="White" HorizontalAlignment="Right" IsChecked="False" Margin="4" Name="CbStartAuto" VerticalAlignment="Top" >StartAuto</CheckBox>
+            </StackPanel>
+            <Label Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" Content="Description:"></Label>
+            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="Black" Name="TxtDescript" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" IsEnabled="False" />
+            <StackPanel Orientation="Horizontal" >
+                <Label Foreground="White" HorizontalAlignment="Left" Name="Label6" Width="215" VerticalAlignment="Top">Protocol:</Label>
+                <Rectangle Width="10" />
+                <Label Content="Paramètres avancés:" Foreground="White" HorizontalAlignment="Right" Name="Label14" VerticalAlignment="Top" Visibility="Visible" Width="125.493" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="Black" HorizontalAlignment="Left" Name="TxtProtocol" Width="215" Height="22" VerticalAlignment="Top" IsEnabled="False" />
+                <Rectangle Width="10" />
+                <ComboBox Height="22" HorizontalAlignment="Left" Name="CbParam" VerticalAlignment="Top" Width="148" Background="White" AllowDrop="True" Foreground="Black"></ComboBox>
+                <Label Content="=" Foreground="White" HorizontalAlignment="Right" Name="Label15" VerticalAlignment="Top" Visibility="Visible" Width="24" />
+                <TextBox Height="21" HorizontalAlignment="Right" Name="TxtParam" VerticalAlignment="Top" Width="144" Background="White" AllowDrop="True" Foreground="Black" />
+                <Rectangle Width="15"/>
+                <Button Content="Ok" Foreground="White" Height="25" HorizontalAlignment="Right" Name="BtnOkParam" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="28" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Foreground="White" HorizontalAlignment="Left" Name="Label4" VerticalAlignment="Top" Visibility="Visible" Width="150">Adresse IP:</Label>
+                <Rectangle Width="10" />
+                <Label Foreground="White" Name="Label5" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="70">Port IP:</Label>
+                <Rectangle Width="10" />
+                <Label Foreground="White" Name="Label7" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="150">Adresse UDP:</Label>
+                <Rectangle Width="10" />
+                <Label Foreground="White" HorizontalAlignment="Right" Name="Label16" VerticalAlignment="Top" Visibility="Visible">Port UDP:</Label>
+               </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtAdrTCP" VerticalAlignment="Top" Visibility="Visible" Width="150"></TextBox>
+                <Rectangle Width="10" />
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtPortTCP" VerticalAlignment="Top" Visibility="Visible" Width="70" HorizontalAlignment="Left"></TextBox>
+                <Rectangle Width="10" />
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtAdrUDP" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Right" Width="150"></TextBox>
+                <Rectangle Width="10" />
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Right" Name="TxtPortUDP" VerticalAlignment="Top" Visibility="Visible" Width="70"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Foreground="White"  HorizontalAlignment="Left"  Name="Label10" VerticalAlignment="Top" Width="84">Port COM:</Label>
+                <Rectangle Width="10" />
+                <Label Foreground="White"  Name="Label9" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84">Refresh (ms):</Label>
+                <Rectangle Width="10" />
+                <Label Width="49" Foreground="White" Name="Label11" VerticalAlignment="Top">Version:</Label>
+                <Rectangle Width="10" />
+                <Label Foreground="White" Name="Label8" VerticalAlignment="Top" Width="100">Modele:</Label>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtCom" Width="84">0</TextBox>
+                <Rectangle Width="10" />
+                <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtRefresh" HorizontalAlignment="Right" Width="84">0</TextBox>
+                <Rectangle Width="10" />
+                <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="Black" Name="TxtVersion" Width="49" HorizontalAlignment="Left" IsEnabled="False">0</TextBox>
+                <Rectangle Width="10" />
+                <TextBox Height="22" Background="DarkGray" Width="100 " BorderBrush="Black" Foreground="Black" Name="TxtModele" IsEnabled="False" />
+            </StackPanel>
+            <Rectangle Height="10" />
+            <StackPanel Orientation="Horizontal" >
+                <Label HorizontalAlignment="Left" Name="Label12" VerticalAlignment="Bottom" Width="110" Foreground="White">Fonctions avancées:</Label>
+                <Button Height="23" HorizontalAlignment="Left" Name="BtnAv" VerticalAlignment="Bottom" Width="22" Template="{DynamicResource GlassButton}" Foreground="White">&gt;&gt;</Button>
+            </StackPanel>
+            <Rectangle Height="10" />
+            <GroupBox Header="Fonctions Avancées" Margin="3" Name="GroupBox1" VerticalAlignment="Top" Visibility="Hidden">
+                <Grid>
+                    <StackPanel Margin="10,10,0,0">
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Foreground="White" HorizontalAlignment="Left"  Name="Label13" VerticalAlignment="Top" Width="62">Fonction:</Label>
+                            <ComboBox Height="20" HorizontalAlignment="Left" Name="CbCmd" VerticalAlignment="Top" Width="211" />
+                        </StackPanel>
+                        <Rectangle Height="20" />
+                        <StackPanel >
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Foreground="White" HorizontalAlignment="Left" Name="LblP1" VerticalAlignment="Top" Visibility="Hidden" Width="100">##########:</Label>
+                                <TextBox Width="215" Height="20" Name="TxtP1" VerticalAlignment="Top" Visibility="Hidden" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Foreground="White" HorizontalAlignment="Left" Name="LblP2" Visibility="Hidden" Width="100"  VerticalAlignment="Top">##########:</Label>
+                                <TextBox Name="TxtP2" Visibility="Hidden" Height="20.723" Width="215" VerticalAlignment="Top" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Foreground="White" HorizontalAlignment="Left"  Name="LblP3" Visibility="Hidden" Width="100">##########:</Label>
+                                <TextBox Width="215" Name="TxtP3" Visibility="Hidden" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Foreground="White"  HorizontalAlignment="Left"  Name="LblP4" VerticalAlignment="Bottom" Visibility="Hidden" Width="100">##########:</Label>
+                                <TextBox Height="20" Width="215" Name="TxtP4" VerticalAlignment="Bottom" Visibility="Hidden" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Foreground="White" HorizontalAlignment="Left" Name="LblP5" VerticalAlignment="Bottom" Visibility="Hidden" Width="100">##########:</Label>
+                                <TextBox Height="20" Width="215" Name="TxtP5" VerticalAlignment="Bottom" Visibility="Hidden" />
+                            </StackPanel>
+                            <Rectangle Height="10" />
+                        </StackPanel>
+                    </StackPanel>
+                                 
+                    <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,10,29,0" Name="BtnTest" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Tester</Button>
+                </Grid>
+            </GroupBox>
+
+        </StackPanel>
+                
+               
         <Button Height="25" HorizontalAlignment="Right" Margin="0,42.5,20,0" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Foreground="White">Fermer</Button>
         <Button Height="25" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Margin="0,11.25,20,0" Name="BtnOK" VerticalAlignment="Top" Width="88.75" Foreground="White">Ok</Button>
-        <CheckBox Foreground="White" Height="18" HorizontalAlignment="Right" IsChecked="False" Margin="0,93.018,195,0" Name="CbStartAuto" VerticalAlignment="Top" Width="102.493">StartAuto</CheckBox>
-        <Label Foreground="White" Height="24" HorizontalAlignment="Left" Margin="13,187,0,0" Name="Label4" VerticalAlignment="Top" Visibility="Visible" Width="78">Adresse IP:</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Margin="14,211,0,0" Name="TxtAdrTCP" VerticalAlignment="Top" Visibility="Visible" Width="150"></TextBox>
-        <Label Foreground="White" Height="24" Margin="173,187,0,0" Name="Label5" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="125.493">Port IP:</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Margin="174,211,0,0" Name="TxtPortTCP" VerticalAlignment="Top" Visibility="Visible" Width="70" HorizontalAlignment="Left"></TextBox>
-        <Label Foreground="White" Height="24" Margin="260,187,0,0" Name="Label7" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="78">Adresse UDP:</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Margin="0,211,214,0" Name="TxtAdrUDP" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Right" Width="150.493"></TextBox>
-        <Label Foreground="White" Height="24" HorizontalAlignment="Right" Margin="0,187,80,0" Name="Label16" VerticalAlignment="Top" Visibility="Visible" Width="125.493">Port UDP:</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Right" Margin="0,211,134,0" Name="TxtPortUDP" VerticalAlignment="Top" Visibility="Visible" Width="70"></TextBox>
-        <Label Foreground="White" Height="23.645" HorizontalAlignment="Left" Margin="16,232.051,0,0" Name="Label10" VerticalAlignment="Top" Width="125.493">Port COM:</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Margin="17,255.051,0,271.721" Name="TxtCom" Width="83.411">0</TextBox>
-        <Label Foreground="White" Height="23.645" Margin="213,232,287,0" Name="Label11" VerticalAlignment="Top">Version:</Label>
-        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="222,253.895,0,272.105" Name="TxtVersion" Width="40" HorizontalAlignment="Left" IsEnabled="False">0</TextBox>
-        <Label Height="24" HorizontalAlignment="Left" Margin="18,0,0,240" Name="Label12" VerticalAlignment="Bottom" Width="110" Foreground="White">Fonctions avancées:</Label>
-        <Button Height="23" HorizontalAlignment="Left" Margin="134,0,0,242" Name="BtnAv" VerticalAlignment="Bottom" Width="22">&gt;&gt;</Button>
-        <GroupBox Header="Fonctions Avancées" Height="229" Margin="16,0,12,12" Name="GroupBox1" VerticalAlignment="Bottom" Visibility="Hidden">
-            <Grid>
-                <Label Foreground="White" Height="22" HorizontalAlignment="Left" Margin="10,10,0,0" Name="Label13" VerticalAlignment="Top" Width="62">Fonction:</Label>
-                <ComboBox Height="20" HorizontalAlignment="Left" Margin="70,12,0,0" Name="CbCmd" VerticalAlignment="Top" Width="211" />
-                <Label Foreground="White" Height="23" HorizontalAlignment="Left" Margin="26,45,0,0" Name="LblP1" VerticalAlignment="Top" Visibility="Hidden" Width="76">##########:</Label>
-                <TextBox Height="20" Margin="106,49,271.493,0" Name="TxtP1" VerticalAlignment="Top" Visibility="Hidden" />
-                <Label Foreground="White" HorizontalAlignment="Left" Margin="26,71,0,0" Name="LblP2" Visibility="Hidden" Width="76" Height="23.723" VerticalAlignment="Top">##########:</Label>
-                <TextBox Margin="106,75,271.493,0" Name="TxtP2" Visibility="Hidden" Height="20.723" VerticalAlignment="Top" />
-                <Label Foreground="White" HorizontalAlignment="Left" Margin="26,97,0,90" Name="LblP3" Visibility="Hidden" Width="76">##########:</Label>
-                <TextBox Margin="106,101,271.493,89" Name="TxtP3" Visibility="Hidden" />
-                <Label Foreground="White" Height="23" HorizontalAlignment="Left" Margin="26,0,0,64" Name="LblP4" VerticalAlignment="Bottom" Visibility="Hidden" Width="76">##########:</Label>
-                <TextBox Height="20" Margin="106,0,271.493,63" Name="TxtP4" VerticalAlignment="Bottom" Visibility="Hidden" />
-                <Label Foreground="White" Height="23" HorizontalAlignment="Left" Margin="26,0,0,39" Name="LblP5" VerticalAlignment="Bottom" Visibility="Hidden" Width="76">##########:</Label>
-                <TextBox Height="20" Margin="106,0,271.493,38" Name="TxtP5" VerticalAlignment="Bottom" Visibility="Hidden" />
-                <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,10,29,0" Name="BtnTest" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Tester</Button>
-            </Grid>
-        </GroupBox>
-        <Label Content="Paramètres avancés:" Foreground="White" Height="24" HorizontalAlignment="Right" Margin="0,150,240,0" Name="Label14" VerticalAlignment="Top" Visibility="Visible" Width="125.493" />
-        <ComboBox Height="22" HorizontalAlignment="Left" Margin="263,170,0,0" Name="CbParam" VerticalAlignment="Top" Width="148" Background="White" AllowDrop="True" Foreground="Black"></ComboBox>
-        <TextBox Height="21" HorizontalAlignment="Right" Margin="0,169,48,0" Name="TxtParam" VerticalAlignment="Top" Width="144" Background="White" AllowDrop="True" Foreground="Black" />
-        <Label Content="=" Foreground="White" Height="24" HorizontalAlignment="Right" Margin="0,168,192,0" Name="Label15" VerticalAlignment="Top" Visibility="Visible" Width="24" />
-        <Button Content="Ok" Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,168,18,0" Name="BtnOkParam" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="28" />
+             
+        
+        
+        
+        
+        
     </Grid>
 </UserControl>

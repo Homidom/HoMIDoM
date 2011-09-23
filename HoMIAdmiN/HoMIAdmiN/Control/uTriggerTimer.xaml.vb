@@ -89,69 +89,81 @@
     End Sub
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        If TxtNom.Text = "" Then
-            MessageBox.Show("Le nom du trigger est obligatoire!", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        End If
+        Try
+            If TxtNom.Text = "" Then
+                MessageBox.Show("Le nom du trigger est obligatoire!", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
 
-        Dim _myconditiontime As String = "_cron"
-        _myconditiontime &= CbSeconde.Text & "#"
-        _myconditiontime &= CbMinute.Text & "#"
-        _myconditiontime &= CbHeure.Text & "#"
-        _myconditiontime &= CbJour.Text & "#"
-        _myconditiontime &= CbMois.Text & "#"
+            Dim _myconditiontime As String = "_cron"
+            If CbSeconde.Text = "" Then CbSeconde.Text = "*"
+            If CbMinute.Text = "" Then CbMinute.Text = "*"
+            If CbHeure.Text = "" Then CbHeure.Text = "*"
+            If CbJour.Text = "" Then CbJour.Text = "*"
+            If CbMois.Text = "" Then CbMois.Text = "*"
 
-        Dim _prepajr As String = ""
-        If CheckBox1.IsChecked = True Then _prepajr = "1"
-        If CheckBox2.IsChecked = True Then
-            If _prepajr <> "" Then
-                _prepajr &= ",2"
-            Else
-                _prepajr = "2"
-            End If
-        End If
-        If CheckBox3.IsChecked = True Then
-            If _prepajr <> "" Then
-                _prepajr &= ",3"
-            Else
-                _prepajr = "3"
-            End If
-        End If
-        If CheckBox4.IsChecked = True Then
-            If _prepajr <> "" Then
-                _prepajr &= ",4"
-            Else
-                _prepajr = "4"
-            End If
-        End If
-        If CheckBox5.IsChecked = True Then
-            If _prepajr <> "" Then
-                _prepajr &= ",5"
-            Else
-                _prepajr = "5"
-            End If
-        End If
-        If CheckBox6.IsChecked = True Then
-            If _prepajr <> "" Then
-                _prepajr &= ",6"
-            Else
-                _prepajr = "6"
-            End If
-        End If
-        If CheckBox7.IsChecked = True Then
-            If _prepajr <> "" Then
-                _prepajr &= ",0"
-            Else
-                _prepajr = "0"
-            End If
-        End If
-        _myconditiontime &= _prepajr
+            _myconditiontime &= CbSeconde.Text & "#"
+            _myconditiontime &= CbMinute.Text & "#"
+            _myconditiontime &= CbHeure.Text & "#"
+            _myconditiontime &= CbJour.Text & "#"
+            _myconditiontime &= CbMois.Text & "#"
 
-        If _Action = EAction.Nouveau Then
-            Window1.myService.SaveTrigger("", TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
-        Else
-            Window1.myService.SaveTrigger(_TriggerId, TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
-        End If
+            Dim _prepajr As String = ""
+            If CheckBox1.IsChecked = True Then _prepajr = "1"
+            If CheckBox2.IsChecked = True Then
+                If _prepajr <> "" Then
+                    _prepajr &= ",2"
+                Else
+                    _prepajr = "2"
+                End If
+            End If
+            If CheckBox3.IsChecked = True Then
+                If _prepajr <> "" Then
+                    _prepajr &= ",3"
+                Else
+                    _prepajr = "3"
+                End If
+            End If
+            If CheckBox4.IsChecked = True Then
+                If _prepajr <> "" Then
+                    _prepajr &= ",4"
+                Else
+                    _prepajr = "4"
+                End If
+            End If
+            If CheckBox5.IsChecked = True Then
+                If _prepajr <> "" Then
+                    _prepajr &= ",5"
+                Else
+                    _prepajr = "5"
+                End If
+            End If
+            If CheckBox6.IsChecked = True Then
+                If _prepajr <> "" Then
+                    _prepajr &= ",6"
+                Else
+                    _prepajr = "6"
+                End If
+            End If
+            If CheckBox7.IsChecked = True Then
+                If _prepajr <> "" Then
+                    _prepajr &= ",0"
+                Else
+                    _prepajr = "0"
+                End If
+            End If
+            _myconditiontime &= _prepajr
+
+            If _Action = EAction.Nouveau Then
+                Window1.myService.SaveTrigger("", TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
+                RaiseEvent CloseMe(Me)
+            Else
+                Window1.myService.SaveTrigger(_TriggerId, TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
+                RaiseEvent CloseMe(Me)
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub ListBox1_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles ListBox1.DragOver

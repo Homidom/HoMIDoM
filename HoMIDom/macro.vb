@@ -16,7 +16,7 @@ Namespace HoMIDom
         Dim _Description As String
         Dim _Enable As Boolean
         Dim _ListActions As New ArrayList
-        <NonSerialized()> Dim _Server As Server
+        <NonSerialized()> Public _Server As Server
 
         'Propriétés
 
@@ -131,7 +131,7 @@ Namespace HoMIDom
         'Declaration des variables
         Dim _ID As String = ""
         Dim _Nom As String = ""
-        Dim _Description As String = ""
+        Dim _Description As String = " "
         Dim _Type As TypeTrigger
         Dim _Enable As Boolean = False
         Dim _ConditionTime As String = ""
@@ -229,8 +229,10 @@ Namespace HoMIDom
             End Get
             Set(ByVal value As String)
                 If _ConditionTime <> value Then
-                    _ConditionTime = value
-                    maj_cron()
+                    If ConditionTime <> value Then
+                        _ConditionTime = value
+                        maj_cron()
+                    End If
                 Else
                     _ConditionTime = value
                 End If
