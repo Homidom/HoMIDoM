@@ -185,19 +185,19 @@
                     </Label.Foreground>
                 </Label>
                <Menu HorizontalAlignment="Left" Name="Menu1" Background="Transparent" Foreground="Black" FontSize="11">
-                    <MenuItem Header="Fichier" Foreground="WhiteSmoke" Background="Black">
-                        <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig"  />
-                        <MenuItem Header="Configuration du Serveur" Name="MenuConfigSrv"  />
-                        <MenuItem Header="Paramètres Audio du Serveur" Name="MenuConfigAudio"  />
-                        <MenuItem Header="Quitter" Name="MenuQuitter"  />
+                    <MenuItem Header="Fichier" Foreground="GhostWhite">
+                    <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig" Foreground="Black"/>
+                    <MenuItem Header="Configuration du Serveur" Name="MenuConfigSrv"  Foreground="Black"/>
+                    <MenuItem Header="Paramètres Audio du Serveur" Name="MenuConfigAudio"  Foreground="Black"/>
+                    <MenuItem Header="Quitter" Name="MenuQuitter"  Foreground="Black"/>
                     </MenuItem>
                     <MenuItem Header="Affichage" Foreground="WhiteSmoke">
-                        <MenuItem Header="Consulter Log" Name="MenuConsultLog"  />
-                        <MenuItem Header="PlayList" Name="MenuPlayList"  />
+                    <MenuItem Header="Consulter Log" Name="MenuConsultLog"  Foreground="Black"/>
+                    <MenuItem Header="PlayList" Name="MenuPlayList" Foreground="Black" />
                     </MenuItem>
                     <MenuItem Header="?" Foreground="WhiteSmoke">
-                        <MenuItem Header="A propos" Name="MenuPropos" />
-                        <MenuItem Header="Test" Name="MenuTest" />
+                    <MenuItem Header="A propos" Name="MenuPropos" Foreground="Black"/>
+                    <MenuItem Header="Test" Name="MenuTest" Foreground="Black"/>
                     </MenuItem>
                 </Menu>
          </StackPanel>
