@@ -209,12 +209,12 @@
             <Label Foreground="White" Height="23" Name="LblStatus" >#####</Label>
             <Ellipse Height="20" Name="Ellipse1" Stroke="Black" Width="20" Fill="Cyan" />
             <Label Foreground="White" Height="23" Name="LblConnect" >#####</Label>
+            <Rectangle Width="25"/>
             <Image Height="25"  Name="Image3" Stretch="Fill" VerticalAlignment="Top" Width="25" Source="/HoMIAdmiN;component/Images/Soleil.png" />
             <Label Content="##:##" Height="23" Name="LHS" VerticalAlignment="Top" Foreground="White" />
             <Image Height="25"  Name="Image4" Stretch="Fill" VerticalAlignment="Top" Width="25" Source="/HoMIAdmiN;component/Images/Lune.png" />
             <Label Content="##:##" Height="23" Name="LCS" VerticalAlignment="Top" Foreground="White" />
         </StackPanel>
-
         <StackPanel Height="573" HorizontalAlignment="Left" Margin="1" Name="StackPanel3" Width="187" DockPanel.Dock="Left">
             <TabControl Canvas.Left="0" Canvas.Top="0" Height="571" Name="TabControl1" Width="186.036" MinHeight="250" Template="{StaticResource OutlookTab}" TabStripPlacement="Top" >
                 <TabItem Header="Drivers" Name="TabItem1" IsSelected="True">
