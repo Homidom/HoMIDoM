@@ -81,7 +81,7 @@
             </Image.LayoutTransform>
                    </Image>
 
-        <StackPanel Margin="16,71.681,0,22">
+        <StackPanel Margin="16,71.681,0,22" Name="Stk1">
             <Label HorizontalAlignment="Left"  Name="Label2" Foreground="White" VerticalAlignment="Top">Nom:</Label>
             <StackPanel Orientation="Horizontal" >
                 <TextBox Height="22" HorizontalAlignment="Left" Name="TxtNom" VerticalAlignment="Top" Width="215" Foreground="Black" Background="DarkGray" BorderBrush="Black" IsEnabled="False" SelectionBrush="DarkGray" />

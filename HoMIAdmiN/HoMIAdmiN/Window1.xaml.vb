@@ -457,7 +457,11 @@ Class Window1
     Private Sub BtnStart_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnStart.Click
         Try
             If TreeViewDriver.SelectedItem IsNot Nothing Then
-                myService.StartDriver(TreeViewDriver.SelectedItem.uid)
+                If myService.ReturnDriverByID(TreeViewDriver.SelectedItem.uid).Enable = True Then
+                    myService.StartDriver(TreeViewDriver.SelectedItem.uid)
+                Else
+                    MessageBox.Show("Le driver ne peut être démarré car sa propriété Enable est à False!", "Avertissement", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                End If
             Else
                 MessageBox.Show("Veuillez sélectionner un Driver!")
             End If

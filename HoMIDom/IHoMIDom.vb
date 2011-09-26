@@ -519,7 +519,7 @@ Namespace HoMIDom
         ''' <param name="Y"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function AddDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String, ByVal Visible As Boolean, Optional ByVal X As Double = 0, Optional ByVal Y As Double = 0) As String
+        <OperationContract()> Function AddDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String, ByVal Visible As Boolean) As String
 
         ''' <summary>
         ''' Supprimer un device à une zone

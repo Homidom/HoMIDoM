@@ -45,6 +45,18 @@
             Dim j As Integer = 0
             CbServer.Items.Add("Connexion manuelle")
             For i As Integer = 0 To Window1.ListServer.Count - 1
+                Dim x As New uCtrlImgMnu
+                x.Text = Window1.ListServer.Item(i).Nom
+                x.Adresse = Window1.ListServer.Item(i).Adresse
+                x.Port = Window1.ListServer.Item(i).Port
+                If Window1.ListServer.Item(i).Defaut = True Then
+                    x.IsSelect = True
+                End If
+                x.Tag = i
+                AddHandler x.click, AddressOf IconMnuDoubleClick
+                Site.Children.Add(x)
+                x = Nothing
+
                 If Window1.ListServer.Item(i).Nom = "" Then
                     Window1.ListServer.Item(i).Nom = "Serveur par défaut"
                 End If
@@ -58,6 +70,22 @@
             MessageBox.Show("ERREUR Sub Login Window3_Loaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
+    'Clic sur un menu de la barre du bas
+    Private Sub IconMnuDoubleClick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+            For i As Integer = 0 To Site.Children.Count - 1
+                Dim x As uCtrlImgMnu
+                x = Site.Children.Item(i)
+                If x.Tag <> sender.tag Then
+                    x.IsSelect = False
+                End If
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString, "Erreur")
+        End Try
+    End Sub
+
 
     Private Sub TxtUsername_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles TxtUsername.KeyDown
         Try
@@ -121,5 +149,9 @@
                 MessageBox.Show("ERREUR Sub Login TxtPassword_KeyDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
             End Try
         End If
+    End Sub
+
+    Private Sub NewSite_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewSite.Click
+
     End Sub
 End Class

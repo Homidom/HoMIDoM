@@ -115,6 +115,9 @@
     <Compile Include="Control\Timeline\WAction.xaml.vb">
       <DependentUpon>WAction.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\uCtrlImgMnu.xaml.vb">
+      <DependentUpon>uCtrlImgMnu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Control\uMacro.xaml.vb">
       <DependentUpon>uMacro.xaml</DependentUpon>
     </Compile>
@@ -147,6 +150,10 @@
     <Page Include="Control\Timeline\WAction.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control\uCtrlImgMnu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Control\uMacro.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -425,6 +432,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\tree-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\home-128.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
