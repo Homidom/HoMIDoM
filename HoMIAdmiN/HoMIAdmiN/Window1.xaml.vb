@@ -106,7 +106,7 @@ Class Window1
     Private Sub Quitter(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuQuitter.Click
         Try
             Dim retour As MessageBoxResult
-            retour = MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "Admin", MessageBoxButton.YesNo, MessageBoxImage.Question)
+            retour = MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question)
 
             If retour = MessageBoxResult.Yes Then
                 Try
@@ -446,6 +446,7 @@ Class Window1
         Try
             If TreeViewDriver.SelectedItem IsNot Nothing Then
                 myService.StopDriver(TreeViewDriver.SelectedItem.uid)
+                AffDriver()
             Else
                 MessageBox.Show("Veuillez sélectionner un Driver!")
             End If
@@ -459,6 +460,7 @@ Class Window1
             If TreeViewDriver.SelectedItem IsNot Nothing Then
                 If myService.ReturnDriverByID(TreeViewDriver.SelectedItem.uid).Enable = True Then
                     myService.StartDriver(TreeViewDriver.SelectedItem.uid)
+                    AffDriver()
                 Else
                     MessageBox.Show("Le driver ne peut être démarré car sa propriété Enable est à False!", "Avertissement", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 End If

@@ -80,11 +80,11 @@
                     </StackPanel>
                 </ScrollViewer>
                 <StackPanel Orientation="Horizontal" Name="StkButton" HorizontalAlignment="Right">
-                    <Button Margin="2" Name="NewSite" Height="20" Width="20" Template="{DynamicResource GlassButton}"> 
+                    <Button Margin="2" Name="NewSite" Height="20" Width="20" Template="{DynamicResource GlassButton}" ToolTip="Ajouter un serveur"> 
                         <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
                     </Button>
                     <Button Margin="2" Name="DelSite" Height="20" Width="20" Template="{DynamicResource GlassButton}">
-                        <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
+                        <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" ToolTip="Supprimer un serveur" />
                     </Button>
                 </StackPanel>
 
