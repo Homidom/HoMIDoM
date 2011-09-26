@@ -70,11 +70,25 @@
         </ControlTemplate>
     </Window.Resources>
 
-    <Grid>
-    <StackPanel Background="DarkGray">
+    <Grid Background="#636060">
+    <StackPanel >
         <Label Content="Connexion" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Margin="2" Name="Label2" HorizontalAlignment="Center" VerticalAlignment="Center" />
         <StackPanel >
-        <StackPanel Orientation="Horizontal">
+                <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Center" HorizontalScrollBarVisibility="Auto">
+                    <StackPanel Name="Site" Orientation="Horizontal" >
+                       
+                    </StackPanel>
+                </ScrollViewer>
+                <StackPanel Orientation="Horizontal" Name="StkButton" HorizontalAlignment="Right">
+                    <Button Margin="2" Name="NewSite" Height="20" Width="20" Template="{DynamicResource GlassButton}"> 
+                        <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
+                    </Button>
+                    <Button Margin="2" Name="DelSite" Height="20" Width="20" Template="{DynamicResource GlassButton}">
+                        <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
         <StackPanel Orientation="Horizontal">
             <Label Content="Serveur:" Margin="1" Name="Label1" Foreground="White" />
             <ComboBox Name="CbServer" IsEditable="False" MinWidth="100" />
@@ -84,7 +98,7 @@
                     <TextBox Margin="1" Name="TxtPort" MinWidth="50" />
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" >
+                    <StackPanel Orientation="Horizontal" >
                 <Label Content="Username:" Margin="1" Name="Label3" Foreground="White" MinWidth=" 70"/>
             <TextBox Margin="1" Name="TxtUsername" Width="200" />
             </StackPanel> 

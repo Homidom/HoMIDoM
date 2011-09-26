@@ -16,7 +16,7 @@ Imports System.IO.Ports
 #Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
-    Dim _ID As String = "9BC60A04-3569-11E0-B9A7-3F66DFD72085"
+    Dim _ID As String = "0A94F22A-E824-11E0-B989-175F4824019B"
     Dim _Nom As String = "ZIBASE"
     Dim _Enable As String = False
     Dim _Description As String = "Zibase Ethernet"

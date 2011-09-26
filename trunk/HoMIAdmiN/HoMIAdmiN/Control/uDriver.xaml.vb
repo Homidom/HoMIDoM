@@ -87,6 +87,12 @@ Partial Public Class uDriver
                 TxtVersion.Text = x.Version
                 TxtModele.Text = x.Modele
 
+                If x.DeviceAction.Count = 0 Then
+                    Label12.Visibility = Windows.Visibility.Hidden
+                    BtnAv.Visibility = Windows.Visibility.Hidden
+                    GroupBox1.Visibility = Windows.Visibility.Hidden
+                End If
+
                 If x.Picture <> "" And File.Exists(x.Picture) = True Then
                     Dim bmpImage As New BitmapImage()
                     bmpImage.BeginInit()

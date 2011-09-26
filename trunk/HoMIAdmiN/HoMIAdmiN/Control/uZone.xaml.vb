@@ -105,27 +105,8 @@ Partial Public Class uZone
             _ListIdSelect.RemoveAt(ListBxDevice.SelectedIndex)
         End If
 
-        TxtX.Text = "0"
-        TxtY.Text = "0"
         ChkVisible.IsChecked = False
-
         RefreshLists()
-    End Sub
-
-    Private Sub TxtX_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtX.TextChanged
-        If TxtX.Text <> "" And IsNumeric(TxtX.Text) = False Then
-            MessageBox.Show("Veuillez saisir une valeur numérique")
-            TxtX.Text = 0
-            Exit Sub
-        End If
-    End Sub
-
-    Private Sub TxtY_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtY.TextChanged
-        If TxtY.Text <> "" And IsNumeric(TxtY.Text) = False Then
-            MessageBox.Show("Veuillez saisir une valeur numérique")
-            TxtY.Text = 0
-            Exit Sub
-        End If
     End Sub
 
     Private Sub ListBxDevice_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles ListBxDevice.DragOver
@@ -146,7 +127,7 @@ Partial Public Class uZone
                 MessageBox.Show("Une zone ne peut être une sous zone à elle même !", "Zone", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
-            Dim y As New Zone.Element_Zone(uri, False, 0, 0)
+            Dim y As New Zone.Element_Zone(uri, False)
             _ListIdSelect.Add(y)
             RefreshLists()
         Else
@@ -158,15 +139,9 @@ Partial Public Class uZone
         If ListBxDevice.SelectedIndex < 0 Then Exit Sub
 
         ChkVisible.Visibility = Windows.Visibility.Visible
-        TxtX.Visibility = Windows.Visibility.Visible
-        TxtY.Visibility = Windows.Visibility.Visible
         BtnOkDev.Visibility = Windows.Visibility.Visible
-        Label7.Visibility = Windows.Visibility.Visible
-        Label8.Visibility = Windows.Visibility.Visible
 
         ChkVisible.IsChecked = _ListIdSelect.Item(ListBxDevice.SelectedIndex).Visible
-        TxtX.Text = _ListIdSelect.Item(ListBxDevice.SelectedIndex).X
-        TxtY.Text = _ListIdSelect.Item(ListBxDevice.SelectedIndex).Y
     End Sub
 
     Private Sub BtnOkDev_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkDev.Click
@@ -174,15 +149,8 @@ Partial Public Class uZone
             MessageBox.Show("Veuillez sélectionner un device", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
         Else
             _ListIdSelect(ListBxDevice.SelectedIndex).Visible = ChkVisible.IsChecked
-            _ListIdSelect(ListBxDevice.SelectedIndex).X = TxtX.Text
-            _ListIdSelect(ListBxDevice.SelectedIndex).Y = TxtY.Text
-
             ChkVisible.Visibility = Windows.Visibility.Hidden
-            TxtX.Visibility = Windows.Visibility.Hidden
-            TxtY.Visibility = Windows.Visibility.Hidden
             BtnOkDev.Visibility = Windows.Visibility.Hidden
-            Label7.Visibility = Windows.Visibility.Hidden
-            Label8.Visibility = Windows.Visibility.Hidden
         End If
     End Sub
 

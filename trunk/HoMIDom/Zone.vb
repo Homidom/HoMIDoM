@@ -100,8 +100,6 @@
         <Serializable()> Public Class Element_Zone
             Dim _ElementID As String
             Dim _Visible As Boolean = False
-            Dim _X As Double = 0
-            Dim _Y As Double = 0
 
             ''' <summary>
             ''' ID du device
@@ -133,41 +131,9 @@
                 End Set
             End Property
 
-            ''' <summary>
-            ''' Position X du Device dans la zone (pour la partie cliente)
-            ''' </summary>
-            ''' <value></value>
-            ''' <returns></returns>
-            ''' <remarks></remarks>
-            Public Property X() As Double
-                Get
-                    Return _X
-                End Get
-                Set(ByVal value As Double)
-                    _X = value
-                End Set
-            End Property
-
-            ''' <summary>
-            ''' Position Y du Device dans la zone (pour la partie cliente)
-            ''' </summary>
-            ''' <value></value>
-            ''' <returns></returns>
-            ''' <remarks></remarks>
-            Public Property Y() As Double
-                Get
-                    Return _Y
-                End Get
-                Set(ByVal value As Double)
-                    _Y = value
-                End Set
-            End Property
-
-            Sub New(ByVal ElementID As String, ByVal Visible As Boolean, ByVal X As Double, ByVal Y As Double)
+            Sub New(ByVal ElementID As String, ByVal Visible As Boolean)
                 _ElementID = ElementID
                 _Visible = Visible
-                _X = X
-                _Y = Y
             End Sub
         End Class
     End Class

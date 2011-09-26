@@ -490,9 +490,9 @@ Namespace HoMIDom
                                 Next
                                 If list.Item(i).HasChildNodes = True Then
                                     For k As Integer = 0 To list.Item(i).ChildNodes.Count - 1
-                                        If list.Item(i).ChildNodes.Item(k).Name = "device" Then
+                                        If list.Item(i).ChildNodes.Item(k).Name = "element" Then
                                             For k1 As Integer = 0 To list.Item(i).ChildNodes.Item(k).ChildNodes.Count - 1
-                                                Dim _dev As New Zone.Element_Zone(list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(0).Value, list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(1).Value, list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(2).Value, list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(3).Value)
+                                                Dim _dev As New Zone.Element_Zone(list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(0).Value, list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(1).Value)
                                                 x.ListElement.Add(_dev)
                                             Next
                                         End If
@@ -1213,12 +1213,6 @@ Namespace HoMIDom
                             writer.WriteEndAttribute()
                             writer.WriteStartAttribute("visible")
                             writer.WriteValue(_ListZones.Item(i).ListElement.item(j).visible)
-                            writer.WriteEndAttribute()
-                            writer.WriteStartAttribute("X")
-                            writer.WriteValue(_ListZones.Item(i).ListElement.item(j).x)
-                            writer.WriteEndAttribute()
-                            writer.WriteStartAttribute("Y")
-                            writer.WriteValue(_ListZones.Item(i).ListElement.item(j).y)
                             writer.WriteEndAttribute()
                             writer.WriteEndElement()
                         Next
@@ -3695,6 +3689,7 @@ Namespace HoMIDom
                     With x
                         .Name = _ListDevices.Item(i).name
                         .ID = _ListDevices.Item(i).id
+                        .Enable = _ListDevices.Item(i).enable
                         Select Case UCase(_ListDevices.Item(i).type)
                             Case "APPAREIL" : .Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
                             Case "AUDIO" : .Type = Device.ListeDevices.AUDIO
@@ -4486,6 +4481,7 @@ Namespace HoMIDom
                     If _ListDevices.Item(i).ID = DeviceId Then
                         retour.ID = _ListDevices.Item(i).id
                         retour.Name = _ListDevices.Item(i).name
+                        retour.Enable = _ListDevices.Item(i).enable
                         Select Case UCase(_ListDevices.Item(i).type)
                             Case "APPAREIL" : retour.Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
                             Case "AUDIO" : retour.Type = Device.ListeDevices.AUDIO
@@ -4761,12 +4757,12 @@ Namespace HoMIDom
         ''' <param name="Y"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function AddDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String, ByVal Visible As Boolean, Optional ByVal X As Double = 0, Optional ByVal Y As Double = 0) As String Implements IHoMIDom.AddDeviceToZone
+        Function AddDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String, ByVal Visible As Boolean) As String Implements IHoMIDom.AddDeviceToZone
             Dim _zone As Zone = ReturnZoneById(ZoneId)
             Dim _retour As String = ""
             Try
                 If _zone IsNot Nothing Then
-                    Dim _dev As New Zone.Element_Zone("", Visible, X, Y)
+                    Dim _dev As New Zone.Element_Zone("", Visible)
                     _zone.ListElement.Add(_dev)
                     _retour = "0"
                 End If

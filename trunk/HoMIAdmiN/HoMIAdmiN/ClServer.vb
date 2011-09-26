@@ -9,6 +9,7 @@
     Dim _Adresse As String
     Dim _Defaut As Boolean
     Dim _Port As Double
+    Dim _Icon As String
 
     ''' <summary>
     ''' Nom du serveur
@@ -62,6 +63,15 @@
         End Get
         Set(ByVal value As Double)
             _Port = value
+        End Set
+    End Property
+
+    Public Property Icon As String
+        Get
+            Return _Icon
+        End Get
+        Set(ByVal value As String)
+            _Icon = value
         End Set
     End Property
 End Class

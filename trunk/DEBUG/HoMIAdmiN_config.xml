@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfClServer xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ArrayOfClServer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ClServer>
     <Nom>serveur par défaut</Nom>
     <Adresse>localhost</Adresse>
     <Defaut>true</Defaut>
+    <Port>8000</Port>
+  </ClServer>
+  <ClServer>
+    <Nom>Serveur de Test</Nom>
+    <Adresse>192.168.1.1</Adresse>
+    <Defaut>false</Defaut>
     <Port>8000</Port>
   </ClServer>
 </ArrayOfClServer>
