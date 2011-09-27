@@ -861,15 +861,6 @@ Class Window1
         End Try
     End Sub
 
-    'Permet de se connecter à un serveur dans le sous menu connexion
-    Private Sub MenuConnexion(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
-        Try
-            Call Connect_Srv(sender.uid)
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MenuConnexion: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
     ''' <summary>
     ''' Menu à propose
     ''' </summary>
@@ -924,15 +915,10 @@ Class Window1
     ''' </summary>
     ''' <param name="Index"></param>
     ''' <remarks></remarks>
-    Public Sub Connect_Srv(ByVal Index As Integer, Optional ByVal IP As String = "", Optional ByVal Port As String = "")
+    Public Sub Connect_Srv(ByVal Name As String, ByVal IP As String, ByVal Port As String)
         Try
-            If Index = 0 Then
-                myadress = "http://" & IP & ":" & Port & "/ServiceModelSamples/service"
-                MyPort = Port
-            Else
-                myadress = "http://" & ListServer.Item(Index - 1).Adresse & ":" & ListServer.Item(Index - 1).Port & "/ServiceModelSamples/service"
-                MyPort = ListServer.Item(Index - 1).Port
-            End If
+            myadress = "http://" & IP & ":" & Port & "/ServiceModelSamples/service"
+            MyPort = Port
 
             Dim binding As New ServiceModel.BasicHttpBinding
             binding.MaxBufferPoolSize = 5000000
@@ -948,17 +934,6 @@ Class Window1
             myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
             myService = myChannelFactory.CreateChannel()
             IsConnect = True
-
-            If Index = 0 Then
-                Dim x As New ClServer
-                x.Adresse = IP
-                x.Port = Port
-                x.Nom = "Serveur" & ListServer.Count
-                If ListServer.Count = 0 Then
-                    x.Defaut = True
-                End If
-                ListServer.Add(x)
-            End If
 
             CanvasUser = CanvasRight
         Catch ex As Exception
@@ -995,13 +970,6 @@ Class Window1
                 PageConnexion()
             Loop
 
-            'If My.Settings.ViewProperty = False Then
-            '    MemCanvas = Canvas2
-            '    StackPanel3.Children.RemoveAt(1)
-            '    Canvas1.MaxHeight = StackPanel3.Height
-            '    TabControl1.MaxHeight = 500
-            'End If
-
             AffDriver()
             AffDevice()
             AffZone()
@@ -1023,11 +991,7 @@ Class Window1
             frm.Owner = Me
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-                If frm.CbServer.SelectedIndex > 0 Then
-                    Connect_Srv(frm.CbServer.SelectedIndex)
-                Else
-                    Connect_Srv(frm.CbServer.SelectedIndex, frm.TxtIP.Text, frm.TxtPort.Text)
-                End If
+                Connect_Srv(frm.TxtName.Text, frm.TxtIP.Text, frm.TxtPort.Text)
                 If myService.VerifLogin(frm.TxtUsername.Text, frm.TxtPassword.Password) = False Then
                     MessageBox.Show("Le username ou le password sont erroné, impossible veuillez réessayer", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Else

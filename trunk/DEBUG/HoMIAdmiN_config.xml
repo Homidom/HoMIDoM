@@ -5,10 +5,24 @@
     <Adresse>localhost</Adresse>
     <Defaut>true</Defaut>
     <Port>8000</Port>
+    <Icon>C:\Documents and Settings\SPATTE\Bureau\piece.png</Icon>
   </ClServer>
   <ClServer>
-    <Nom>Serveur de Test</Nom>
-    <Adresse>192.168.1.1</Adresse>
+    <Nom>Serveur2</Nom>
+    <Adresse>localhost</Adresse>
+    <Defaut>false</Defaut>
+    <Port>8000</Port>
+    <Icon>d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\Images\Icones\home-128.png</Icon>
+  </ClServer>
+  <ClServer>
+    <Nom>Serveur4</Nom>
+    <Adresse>123</Adresse>
+    <Defaut>false</Defaut>
+    <Port>123</Port>
+  </ClServer>
+  <ClServer>
+    <Nom>Serveur3</Nom>
+    <Adresse>localhost</Adresse>
     <Defaut>false</Defaut>
     <Port>8000</Port>
   </ClServer>

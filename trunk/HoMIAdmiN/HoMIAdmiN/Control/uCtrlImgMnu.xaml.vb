@@ -4,11 +4,19 @@ Partial Public Class uCtrlImgMnu
 
     Dim vText As String
     Dim vimage As String
-    Dim vDown As DateTime
     Dim _Defaut As Boolean
     Dim _Adresse As String
     Dim _Port As String
     Dim _IsSelect As Boolean = False
+
+    Public Property Defaut As Boolean
+        Get
+            Return _Defaut
+        End Get
+        Set(ByVal value As Boolean)
+            _Defaut = value
+        End Set
+    End Property
 
     Public Property Adresse As String
         Get
@@ -77,11 +85,8 @@ Partial Public Class uCtrlImgMnu
     End Sub
 
     Private Sub Image_MouseLeftButtonUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Image.MouseLeftButtonUp
-        Dim vDiff As TimeSpan = Now - vDown
-        If vDiff.Seconds < 1 Then
-            RaiseEvent click(Me, e)
-            IsSelect = True
-        End If
+        RaiseEvent click(Me, e)
+        IsSelect = True
     End Sub
 
     Public Function ConvertArrayToImage(ByVal value As Object) As Object
@@ -98,8 +103,9 @@ Partial Public Class uCtrlImgMnu
     End Function
 
     Public Event click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
+    Public Event Rightclick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
 
-    Private Sub Image_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Image.PreviewMouseDown
-        vDown = Now
+    Private Sub Image_MouseRightButtonDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Image.MouseRightButtonDown
+        RaiseEvent Rightclick(Me, e)
     End Sub
 End Class

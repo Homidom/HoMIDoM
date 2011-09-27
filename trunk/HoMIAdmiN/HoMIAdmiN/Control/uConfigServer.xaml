@@ -71,24 +71,39 @@
 
     <Grid Margin="1" Background="#636060">
         <Border Name="Border1" BorderThickness="2" BorderBrush="Gray">
-
+            <StackPanel >
+                <Label Name="Label5" VerticalAlignment="Top" Foreground="DarkOrange" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic">Propriétés du serveur</Label>
+            </StackPanel>
         </Border>
-        <GroupBox Header="Liste des serveurs" Name="GroupBox1" Margin="6.5,37,6.5,0" Height="145" VerticalAlignment="Top">
-            <Grid>
-                <Label Foreground="White" Margin="136,30,145,0" Name="Label6" Height="27" VerticalAlignment="Top">Adresse Serveur:</Label>
-                <CheckBox Margin="140,0,78,33" Name="CheckBox1" Foreground="White" Height="15.723" VerticalAlignment="Bottom">Serveur par défaut</CheckBox>
-                <Button Height="23" Margin="168,0,0,5" Name="BtnNewServer" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Foreground="White" HorizontalAlignment="Left" Width="59">Nouveau</Button>
-                <Button Height="23" HorizontalAlignment="Right" Margin="0,0,80,5" Name="BtnSaveServer" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="64" Foreground="White">Enregistrer</Button>
-                <Button Height="23" Margin="0,0,10,6" Name="BtnDelServer" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Width="64" Foreground="White">Supprimer</Button>
-                <Label Foreground="White" Height="27" Margin="136,49,145,0" Name="Label7" VerticalAlignment="Top">Port Serveur:</Label>
-                <TextBox Height="19" Margin="0,52,60,0" Name="TxtPort" VerticalAlignment="Top" HorizontalAlignment="Right" Width="87" />
-                <ListBox HorizontalAlignment="Left" Margin="6,8,0,11" Name="ListBox1" Width="124" />
-                <TextBox Height="19" Margin="0,30,10,0" Name="TxtAdr" VerticalAlignment="Top" HorizontalAlignment="Right" Width="137" />
-                <Label Content="Nom du Serveur:" Foreground="White" Height="27" Margin="136,8,145,0" Name="Label9" VerticalAlignment="Top" />
-                <TextBox Height="19" HorizontalAlignment="Right" Margin="0,8,10,0" Name="TxtNom" VerticalAlignment="Top" Width="137" />
-            </Grid>
+
+        <GroupBox Header="Paramètres du Serveur" Name="GroupBox2" Margin="5.5,50,0,314">
+                            <StackPanel >
+                    <StackPanel Orientation="Horizontal" >
+                        <Label Foreground="White" Height="28" HorizontalAlignment="Left" Name="Label8" VerticalAlignment="Top" Width="67">Port SOAP:</Label>
+                        <TextBox Height="21" HorizontalAlignment="Left" Name="TxtSOAP" VerticalAlignment="Top" Width="79" ToolTip="Permet de modifier le port SOAP du serveur à son prochain démarrage" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" >
+                        <Label HorizontalAlignment="Left" Name="Label1" Width="67" Foreground="White" VerticalAlignment="Top">Longitude:</Label>
+                        <TextBox Name="TxtLong" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="107" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" >
+                        <Label Foreground="White" HorizontalAlignment="Left"  Name="Label2" Width="67">Latitude:</Label>
+                        <TextBox Name="TxtLat" HorizontalAlignment="Left" Width="107" Height="20" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" >
+                        <Label Foreground="White" Name="Label3" VerticalAlignment="Bottom">Correction Heure Lever Soleil:</Label>
+                        <TextBox Name="HCL" Width="25" Height="19.723" VerticalAlignment="Bottom">0</TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" >
+                        <Label Foreground="White" Name="Label4" VerticalAlignment="Bottom">Correction Heure Coucher Soleil:</Label>
+                        <TextBox Height="20" Width="25" Name="HCC" VerticalAlignment="Bottom" Text="0"></TextBox>
+                    </StackPanel>
+                </StackPanel>
+            
         </GroupBox>
-        <GroupBox Header="Paramètres SMTP" Name="GroupBox3" Width="389" Margin="6,361,6,44">
+        <Button Height="23" Template="{DynamicResource GlassButton}" Name="BtnOK" Foreground="White" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Margin="0,0,99,144" HorizontalAlignment="Right" Width="72">OK</Button>
+        <Button Height="23" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,0,17,144" Name="BtnCancel" VerticalAlignment="Bottom" Width="72" Foreground="White">Fermer</Button>
+        <GroupBox Header="Paramètres SMTP" Name="GroupBox3" Width="389" Margin="6,213,7,194">
             <Grid Height="94">
                 <Label Content="Adresse Mail:" Height="25" HorizontalAlignment="Left" Margin="8,0,0,0" Name="Label10" VerticalAlignment="Top" Width="83" Foreground="White" />
                 <Label Content="Adresse SMTP:" Height="23" HorizontalAlignment="Left" Margin="8,19,0,0" Name="Label11" VerticalAlignment="Top" Width="82" Foreground="White" />
@@ -100,23 +115,5 @@
                 <PasswordBox Height="20" HorizontalAlignment="Left" Margin="98,66,0,0" Name="TxtPassword" VerticalAlignment="Top" Width="158" />
             </Grid>
         </GroupBox>
-        <GroupBox Header="Paramètres du Serveur" Name="GroupBox2" Margin="5.5,187,5.5,166"></GroupBox>
-        <StackPanel >
-        <Label Name="Label5" VerticalAlignment="Top" Foreground="DarkOrange" FontSize="24" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic">Propriétés du serveur</Label>
-        </StackPanel>
-        <Button Height="23" Template="{DynamicResource GlassButton}" Name="BtnOK" Foreground="White" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Margin="0,0,99,15" HorizontalAlignment="Right" Width="72">OK</Button>
-        <Button Height="23" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,0,17,15" Name="BtnCancel" VerticalAlignment="Bottom" Width="72" Foreground="White">Fermer</Button>
-        <Grid Margin="12,204,12,166">
-            <Label HorizontalAlignment="Left" Margin="14,30,0,0" Name="Label1" Width="67" Foreground="White" Height="28" VerticalAlignment="Top">Longitude:</Label>
-            <Label Foreground="White" HorizontalAlignment="Left" Margin="14,50,0,62" Name="Label2" Width="67">Latitude:</Label>
-            <Label Foreground="White" Margin="14,0,191,47" Name="Label3" Height="23.723" VerticalAlignment="Bottom">Correction Heure Lever Soleil:</Label>
-            <Label Foreground="White" Margin="14,0,191,21" Name="Label4" Height="24" VerticalAlignment="Bottom">Correction Heure Coucher Soleil:</Label>
-            <TextBox Margin="80,32,0,0" Name="TxtLong" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="107" />
-            <TextBox Margin="80,52,0,67" Name="TxtLat" HorizontalAlignment="Left" Width="107" Height="20" />
-            <Label Foreground="White" Height="28" HorizontalAlignment="Left" Margin="13,2,0,0" Name="Label8" VerticalAlignment="Top" Width="67">Port SOAP:</Label>
-            <TextBox Height="20" Margin="187,0,164,25" Name="HCC" VerticalAlignment="Bottom" Text="0"></TextBox>
-            <TextBox Height="21" HorizontalAlignment="Left" Margin="80,3,0,0" Name="TxtSOAP" VerticalAlignment="Top" Width="79" ToolTip="Permet de modifier le port SOAP du serveur à son prochain démarrage" />
-            <TextBox Margin="187,0,164,51" Name="HCL" Height="19.723" VerticalAlignment="Bottom">0</TextBox>
-        </Grid>
     </Grid>
 </UserControl>

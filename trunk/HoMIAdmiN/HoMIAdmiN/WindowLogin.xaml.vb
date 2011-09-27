@@ -6,12 +6,9 @@
                 MessageBox.Show("Le username ou le password doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
-            If CbServer.SelectedIndex = 0 And (TxtIP.Text = "" Or TxtPort.Text = "") Then
+            If TxtIP.Text = "" Or TxtPort.Text = "" Then
                 MessageBox.Show("L'adresse IP et le port du serveur doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
-            End If
-            If CbServer.SelectedIndex = 0 Then
-                MessageBox.Show("Vous avez sélectionné une connexion manuelle, si celle-ci est effective elle sera ajoutée automatiquement dans votre liste avec le nom ServeurX (X sera le nombre de serveur déjà paramétré)!", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
             End If
 
             If CheckBox1.IsChecked = True Then
@@ -41,35 +38,70 @@
     End Sub
 
     Private Sub Window3_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
+        ShowSrv()
+    End Sub
+
+    Private Sub ShowSrv()
+        If Site.Children.Count > 0 Then Site.Children.Clear()
+
         Try
-            Dim j As Integer = 0
-            CbServer.Items.Add("Connexion manuelle")
+            Dim j As Integer
+
             For i As Integer = 0 To Window1.ListServer.Count - 1
                 Dim x As New uCtrlImgMnu
                 x.Text = Window1.ListServer.Item(i).Nom
                 x.Adresse = Window1.ListServer.Item(i).Adresse
                 x.Port = Window1.ListServer.Item(i).Port
+                x.Defaut = Window1.ListServer.Item(i).Defaut
+                x.Icon = Window1.ListServer.Item(i).Icon
                 If Window1.ListServer.Item(i).Defaut = True Then
                     x.IsSelect = True
+                    TxtName.Text = x.Text
+                    TxtIP.Text = x.Adresse
+                    TxtPort.Text = x.Port
+                    ChkDefaut.IsChecked = True
                 End If
                 x.Tag = i
+                j = i
                 AddHandler x.click, AddressOf IconMnuDoubleClick
+                AddHandler x.Rightclick, AddressOf IconMnuRightClick
                 Site.Children.Add(x)
                 x = Nothing
-
-                If Window1.ListServer.Item(i).Nom = "" Then
-                    Window1.ListServer.Item(i).Nom = "Serveur par défaut"
-                End If
-                CbServer.Items.Add(Window1.ListServer.Item(i).Nom)
-                If Window1.ListServer.Item(i).Defaut = True Then
-                    j = i + 1
-                End If
             Next
-            CbServer.SelectedIndex = j
+
+            Dim y As New uCtrlImgMnu
+            y.Text = "Connexion Manuelle"
+            y.Adresse = ""
+            y.Port = ""
+            y.Tag = j + 1
+            AddHandler y.click, AddressOf IconMnuDoubleClick
+            AddHandler y.Rightclick, AddressOf IconMnuRightClick
+            Site.Children.Add(y)
+            y = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Login Window3_Loaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("ERREUR Sub ShowSrv: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
+    Private Sub IconMnuRightClick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+            Dim dlg As New Microsoft.Win32.OpenFileDialog()
+            dlg.Filter = "(*.png) |*.png|(*.*) |*.*"
+            If dlg.ShowDialog() = True Then
+                sender.Icon = dlg.FileName
+                For i As Integer = 0 To Window1.ListServer.Count - 1
+                    If Window1.ListServer.Item(i).Nom = sender.text Then
+                        Window1.ListServer.Item(i).Icon = sender.icon
+                    End If
+                Next
+            Else
+
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString, "Erreur")
+        End Try
+    End Sub
+
 
     'Clic sur un menu de la barre du bas
     Private Sub IconMnuDoubleClick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
@@ -79,13 +111,28 @@
                 x = Site.Children.Item(i)
                 If x.Tag <> sender.tag Then
                     x.IsSelect = False
+                Else
+                    TxtName.Text = x.Text
+                    TxtIP.Text = x.Adresse
+                    TxtPort.Text = x.Port
+                    ChkDefaut.IsChecked = x.Defaut
+                    If TxtName.Text = "Connexion Manuelle" Then
+                        TxtName.IsEnabled = False
+                        DelSite.Visibility = Windows.Visibility.Hidden
+                        NewSite.Visibility = Windows.Visibility.Hidden
+                        ChkDefaut.Visibility = Windows.Visibility.Hidden
+                    Else
+                        TxtName.IsEnabled = True
+                        DelSite.Visibility = Windows.Visibility.Visible
+                        NewSite.Visibility = Windows.Visibility.Visible
+                        ChkDefaut.Visibility = Windows.Visibility.Visible
+                    End If
                 End If
             Next
         Catch ex As Exception
             MessageBox.Show("Erreur: " & ex.ToString, "Erreur")
         End Try
     End Sub
-
 
     Private Sub TxtUsername_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles TxtUsername.KeyDown
         Try
@@ -98,25 +145,6 @@
         End Try
     End Sub
 
-    Private Sub CbServer_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbServer.SelectionChanged
-        If CbServer.SelectedIndex = 0 Then
-            Label5.Visibility = Windows.Visibility.Visible
-            Label6.Visibility = Windows.Visibility.Visible
-            TxtIP.Visibility = Windows.Visibility.Visible
-            TxtPort.Visibility = Windows.Visibility.Visible
-            TxtIP.Text = ""
-            TxtPort.Text = ""
-            Me.Width = 475
-        Else
-            Label5.Visibility = Windows.Visibility.Hidden
-            Label6.Visibility = Windows.Visibility.Hidden
-            TxtIP.Visibility = Windows.Visibility.Hidden
-            TxtPort.Visibility = Windows.Visibility.Hidden
-            Me.Width = 390
-            CbServer.ToolTip = Window1.ListServer.Item(CbServer.SelectedIndex - 1).Adresse & " : " & Window1.ListServer.Item(CbServer.SelectedIndex - 1).Port
-        End If
-    End Sub
-
     Private Sub TxtPassword_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles TxtPassword.KeyDown
         If e.Key = Key.Enter And TxtPassword.Password <> "" Then
             Try
@@ -124,12 +152,9 @@
                     MessageBox.Show("Le username ou le password doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     Exit Sub
                 End If
-                If CbServer.SelectedIndex = 0 And (TxtIP.Text = "" Or TxtPort.Text = "") Then
+                If TxtIP.Text = "" Or TxtPort.Text = "" Then
                     MessageBox.Show("L'adresse IP et le port du serveur doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     Exit Sub
-                End If
-                If CbServer.SelectedIndex = 0 Then
-                    MessageBox.Show("Vous avez sélectionné une connexion manuelle, si celle-ci est effective elle sera ajoutée automatiquement dans votre liste avec le nom ServeurX (X sera le nombre de serveur déjà paramétré)!", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
                 End If
 
                 If CheckBox1.IsChecked = True Then
@@ -152,6 +177,54 @@
     End Sub
 
     Private Sub NewSite_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewSite.Click
+        Dim flagnew As Boolean
 
+        For i As Integer = 0 To Window1.ListServer.Count - 1
+            If Window1.ListServer.Item(i).Nom = TxtName.Text Then
+                Window1.ListServer.Item(i).Adresse = TxtIP.Text
+                Window1.ListServer.Item(i).Port = TxtPort.Text
+                Window1.ListServer.Item(i).Defaut = ChkDefaut.IsChecked
+                flagnew = True
+            End If
+        Next
+
+        If flagnew = False Then
+            If TxtName.Text = "" Or TxtName.Text = " " Or TxtIP.Text = "" Or TxtIP.Text = " " Or TxtPort.Text = "" Or TxtPort.Text = " " Then
+                MessageBox.Show("Le nom, l'adresse et le port du serveur ne peuvent être vide!", "Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                Exit Sub
+            End If
+            Dim x As New ClServer
+            x.Nom = TxtName.Text
+            x.Adresse = TxtIP.Text
+            x.Port = TxtPort.Text
+            x.Defaut = ChkDefaut.IsChecked
+
+            Window1.ListServer.Add(x)
+        End If
+
+        If ChkDefaut.IsChecked = True Then
+            For i As Integer = 0 To Window1.ListServer.Count - 1
+                If Window1.ListServer.Item(i).Nom <> TxtName.Text And Window1.ListServer.Item(i).Defaut = True Then
+                    Window1.ListServer.Item(i).Defaut = False
+                End If
+            Next
+        End If
+
+        ShowSrv()
+    End Sub
+
+    Private Sub DelSite_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles DelSite.Click
+        If TxtName.Text = "Connexion Manuelle" Then
+            MessageBox.Show("Vous ne pouvez pas supprimer ce serveur!", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Exit Sub
+        End If
+        For i As Integer = 0 To Window1.ListServer.Count - 1
+            If Window1.ListServer.Item(i).Nom = TxtName.Text Then
+                Window1.ListServer.RemoveAt(i)
+                Exit For
+            End If
+        Next
+
+        ShowSrv()
     End Sub
 End Class
