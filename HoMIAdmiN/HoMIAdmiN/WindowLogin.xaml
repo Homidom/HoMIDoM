@@ -74,36 +74,42 @@
     <StackPanel >
         <Label Content="Connexion" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Margin="2" Name="Label2" HorizontalAlignment="Center" VerticalAlignment="Center" />
         <StackPanel >
-                <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Center" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Center" HorizontalScrollBarVisibility="Auto" MaxWidth="250" Margin="3">
                     <StackPanel Name="Site" Orientation="Horizontal" >
                        
                     </StackPanel>
                 </ScrollViewer>
-                <StackPanel Orientation="Horizontal" Name="StkButton" HorizontalAlignment="Right">
-                    <Button Margin="2" Name="NewSite" Height="20" Width="20" Template="{DynamicResource GlassButton}" ToolTip="Ajouter un serveur"> 
-                        <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
-                    </Button>
-                    <Button Margin="2" Name="DelSite" Height="20" Width="20" Template="{DynamicResource GlassButton}">
-                        <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" ToolTip="Supprimer un serveur" />
-                    </Button>
-                </StackPanel>
-
                 <StackPanel Orientation="Horizontal">
-        <StackPanel Orientation="Horizontal">
-            <Label Content="Serveur:" Margin="1" Name="Label1" Foreground="White" />
-            <ComboBox Name="CbServer" IsEditable="False" MinWidth="100" />
-                    <Label Content="IP:" Name="Label5" Foreground="White" Margin=" 1" />
-                    <TextBox Height="20" Margin="1" Name="TxtIP" MinWidth="50" />
-                    <Label Content="Port:" Foreground="White" Margin="1" Name="Label6" />
-                    <TextBox Margin="1" Name="TxtPort" MinWidth="50" />
-                </StackPanel>
+                <StackPanel >
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Content="Nom:" Width="70" Margin="1" Name="Label1" Foreground="White" />
+                            <TextBox Name="TxtName" Width="150"/>
+                            <Button Margin="2" Name="NewSite" Height="20" Width="20" Template="{DynamicResource GlassButton}" ToolTip="Ajouter/Modifier un serveur">
+                                <Image Source="/HoMIAdmiN;component/Images/apply-48.png" />
+                            </Button>
+                            <Button Margin="2" Name="DelSite" Height="20" Width="20" Template="{DynamicResource GlassButton}">
+                                <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" ToolTip="Supprimer un serveur" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Content="IP:" Width="70" Name="Label5" Foreground="White" Margin=" 1" />
+                            <TextBox Height="20" Margin="1" Name="TxtIP" Width="150" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Content="Port:" Width="70" Foreground="White" Margin="1" Name="Label6" />
+                            <TextBox Margin="1" Name="TxtPort" Width="50" />
+                            <Rectangle Width="10" />
+                            <CheckBox  Margin="2" Name="ChkDefaut" Foreground="White" Content="Serveur par défaut" />
+                        </StackPanel>
+                       <Rectangle Height="20" />
+                    </StackPanel>
             </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                <Label Content="Username:" Margin="1" Name="Label3" Foreground="White" MinWidth=" 70"/>
+                <Label Content="Username:" Margin="1" Name="Label3" Foreground="White" Width=" 70"/>
             <TextBox Margin="1" Name="TxtUsername" Width="200" />
             </StackPanel> 
             <StackPanel Orientation="Horizontal" >
-            <Label Content="Password:" Margin="1" Name="Label4" Foreground="White" MinWidth=" 70"/>
+            <Label Content="Password:" Margin="1" Name="Label4" Foreground="White" Width=" 70"/>
             <PasswordBox Margin="1" Name="TxtPassword" Width="200" />
             </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

@@ -174,9 +174,10 @@
         </Window.Resources>
 
     <DockPanel HorizontalAlignment="Left" VerticalAlignment="Top" Height="660" Width="1002">
-       
+          
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top" >
-               <Label HorizontalAlignment="Left" Name="Label1" Content="HoMIAdmiN" FontSize="18">
+            <StackPanel Orientation="Horizontal" >
+                <Label HorizontalAlignment="Left" Name="Label1" Content="HoMIAdmiN" FontSize="18">
                     <Label.Foreground>
                         <LinearGradientBrush EndPoint="0.494,0.889" StartPoint="0.494,0.028">
                             <GradientStop Color="#CCFFFFFF" Offset="0" />
@@ -184,6 +185,7 @@
                         </LinearGradientBrush>
                     </Label.Foreground>
                 </Label>
+            </StackPanel>
                <Menu HorizontalAlignment="Left" Name="Menu1" Background="Transparent" Foreground="Black" FontSize="11">
                     <MenuItem Header="Fichier" Foreground="GhostWhite">
                     <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig" Foreground="Black"/>
