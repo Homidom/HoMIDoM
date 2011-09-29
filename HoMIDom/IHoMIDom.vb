@@ -515,8 +515,6 @@ Namespace HoMIDom
         ''' <param name="ZoneId"></param>
         ''' <param name="DeviceId"></param>
         ''' <param name="Visible"></param>
-        ''' <param name="X"></param>
-        ''' <param name="Y"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         <OperationContract()> Function AddDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String, ByVal Visible As Boolean) As String
