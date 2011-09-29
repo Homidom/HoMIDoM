@@ -8,9 +8,9 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal"> 
-               <Label Name="LblTitre" Content="Condition" />
+               <Label Name="LblTitre" Content="Condition" Foreground="White" />
                 <Rectangle Width="235" />
-                <Label Content="Operateur:" />
+                <Label Content="Operateur:" Foreground="White" />
                 <ComboBox Name="CbOperateur" SelectedIndex="0" Margin="4">
                     <ComboBoxItem Content="NONE" />
                     <ComboBoxItem Content="AND" />
@@ -20,7 +20,7 @@
                 <Image Name="BtnDelete" Width="24" Height="24" Margin="3" Source="/HoMIAdmiN;component/Images/supprimer32.png" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Name="StkTime">
-                <Label Content="Date &amp; Heure" Height="24" />
+                <Label Content="Date &amp; Heure" Height="24" Foreground="White" />
                 <ComboBox Name="CbSigne1" SelectedIndex="0" Margin="3" Height="22">
                     <ComboBoxItem Content="=" />
                     <ComboBoxItem Content="&lt;" />
@@ -31,7 +31,7 @@
                 </ComboBox>
                 <StackPanel Margin="3" >
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Seconde: " Width="58" /> 
+                        <Label Content="Seconde: " Width="58" Foreground="White" /> 
                         <ComboBox SelectedIndex="0" Margin="3" Width="40" Name="CbSeconde">
                             <ComboBoxItem Content="0" />
                             <ComboBoxItem Content="1" />
@@ -96,7 +96,7 @@
                         </ComboBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Minute: " Width="58" />
+                        <Label Content="Minute: " Width="58" Foreground="White" />
                         <ComboBox SelectedIndex="0" Margin="3" Width="40" Name="CbMinute">
                             <ComboBoxItem Content="0" />
                             <ComboBoxItem Content="1" />
@@ -161,7 +161,7 @@
                         </ComboBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Heure: " Width="58" />
+                        <Label Content="Heure: " Width="58" Foreground="White" />
                         <ComboBox SelectedIndex="0" Margin="3" Width="40" Name="CbHeure">
                             <ComboBoxItem Content="0" />
                             <ComboBoxItem Content="1" />
@@ -190,7 +190,7 @@
                         </ComboBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Jour: " Width="58" />
+                        <Label Content="Jour: " Width="58" Foreground="White" />
                         <ComboBox SelectedIndex="0" Margin="3" Width="40" Name="CbJour">
                             <ComboBoxItem Content="0" />
                             <ComboBoxItem Content="1" />
@@ -227,7 +227,7 @@
                         </ComboBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Mois: " Width="58" />
+                        <Label Content="Mois: " Width="58" Foreground="White" />
                         <ComboBox SelectedIndex="0" Margin="3" Width="40" Name="CbMois">
                             <ComboBoxItem Content="0" />
                             <ComboBoxItem Content="1" />
@@ -245,7 +245,7 @@
                         </ComboBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Journée: " Width="58" />
+                        <Label Content="Journée: " Width="58" Foreground="White" />
                         <CheckBox Content="Lun" Margin="1" Foreground="White" Name="Chk1" />
                         <CheckBox Content="Mar" Margin="1" Foreground="White" Name="Chk2" />
                         <CheckBox Content="Mer" Margin="1" Foreground="White" Name="Chk3" />
@@ -257,9 +257,9 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Name="StkDevice">
-                <Label Content="Device:" />
+                <Label Content="Device:" Foreground="White" />
                 <ComboBox Height="23" Name="CbDevice" Width="163" />
-                <Label Content="Propriété:" />
+                <Label Content="Propriété:" Foreground="White" />
                 <ComboBox Name="CbPropertyDevice" Width="118" Height="23" />
                 <ComboBox Name="CbSigne2" SelectedIndex="0" Margin="3" Height="22">
                     <ComboBoxItem Content="=" />

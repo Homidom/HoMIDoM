@@ -107,7 +107,8 @@
                     <StackPanel Orientation="Horizontal" >
                 <Label Content="Username:" Margin="1" Name="Label3" Foreground="White" Width=" 70"/>
             <TextBox Margin="1" Name="TxtUsername" Width="200" />
-            </StackPanel> 
+                    <Rectangle Width="5" />
+                </StackPanel> 
             <StackPanel Orientation="Horizontal" >
             <Label Content="Password:" Margin="1" Name="Label4" Foreground="White" Width=" 70"/>
             <PasswordBox Margin="1" Name="TxtPassword" Width="200" />

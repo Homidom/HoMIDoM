@@ -19,22 +19,6 @@
             ' Cet appel est requis par le concepteur.
             InitializeComponent()
 
-            For i As Integer = 0 To 59
-                CbMinute.Items.Add(i)
-                CbSeconde.Items.Add(i)
-            Next
-            CbHeure.Items.Add("*")
-            For i As Integer = 0 To 23
-                CbHeure.Items.Add(i)
-            Next
-            CbJour.Items.Add("*")
-            For i As Integer = 1 To 31
-                CbJour.Items.Add(i)
-            Next
-            CbMois.Items.Add("*")
-            For i As Integer = 1 To 12
-                CbMois.Items.Add(i)
-            Next
 
             _Action = Action
             _TriggerId = TriggerId
@@ -44,12 +28,6 @@
 
             Else 'Modifier Trigger
                 Dim x As HoMIDom.HoMIDom.Trigger = Window1.myService.ReturnTriggerById(_TriggerId)
-
-                'For k As Integer = 0 To Window1.myService.GetAllTriggers.Count - 1
-                '    If Window1.myService.GetAllTriggers.Item(k).ID = _TriggerId Then
-                '        x = Window1.myService.GetAllTriggers.Item(k)
-                '    End If
-                'Next
 
                 If x IsNot Nothing Then
                     TxtNom.Text = x.Nom
@@ -67,11 +45,32 @@
                     If cron.StartsWith("_cron") Then
                         cron = Mid(cron, 6, Len(cron) - 5)
                         Dim c() As String = cron.Split("#")
-                        CbSeconde.Text = c(0)
-                        CbMinute.Text = c(1)
-                        CbHeure.Text = c(2)
-                        CbJour.Text = c(3)
-                        CbMois.Text = c(4)
+                        If c(0) = "*" Then
+                            TxtSc.Text = ""
+                        Else
+                            TxtSc.Text = c(0)
+                        End If
+                        If c(1) = "*" Then
+                            TxtMn.Text = ""
+                        Else
+                            TxtMn.Text = c(1)
+                        End If
+                        If c(2) = "*" Then
+                            TxtHr.Text = ""
+                        Else
+                            TxtHr.Text = c(2)
+                        End If
+                        If c(3) = "*" Then
+                            TxtJr.Text = ""
+                        Else
+                            TxtJr.Text = c(3)
+                        End If
+                        If c(4) = "*" Then
+                            TxtMs.Text = ""
+                        Else
+                            TxtMs.Text = c(4)
+                        End If
+
                         If InStr(c(5), "1") Then CheckBox1.IsChecked = True
                         If InStr(c(5), "2") Then CheckBox2.IsChecked = True
                         If InStr(c(5), "3") Then CheckBox3.IsChecked = True
@@ -96,17 +95,17 @@
             End If
 
             Dim _myconditiontime As String = "_cron"
-            If CbSeconde.Text = "" Then CbSeconde.Text = "*"
-            If CbMinute.Text = "" Then CbMinute.Text = "*"
-            If CbHeure.Text = "" Then CbHeure.Text = "*"
-            If CbJour.Text = "" Then CbJour.Text = "*"
-            If CbMois.Text = "" Then CbMois.Text = "*"
+            If TxtSc.Text = "" Then TxtSc.Text = "*"
+            If TxtMn.Text = "" Then TxtMn.Text = "*"
+            If TxtHr.Text = "" Then TxtHr.Text = "*"
+            If TxtJr.Text = "" Then TxtJr.Text = "*"
+            If TxtMs.Text = "" Then TxtMs.Text = "*"
 
-            _myconditiontime &= CbSeconde.Text & "#"
-            _myconditiontime &= CbMinute.Text & "#"
-            _myconditiontime &= CbHeure.Text & "#"
-            _myconditiontime &= CbJour.Text & "#"
-            _myconditiontime &= CbMois.Text & "#"
+            _myconditiontime &= TxtSc.Text & "#"
+            _myconditiontime &= TxtMn.Text & "#"
+            _myconditiontime &= TxtHr.Text & "#"
+            _myconditiontime &= TxtJr.Text & "#"
+            _myconditiontime &= TxtMs.Text & "#"
 
             Dim _prepajr As String = ""
             If CheckBox1.IsChecked = True Then _prepajr = "1"
@@ -236,4 +235,167 @@
             Next
         End If
     End Sub
+
+#Region "Gestion Date/time"
+    Private Sub BtnPHr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPHr.Click
+        Dim i As Integer
+        If TxtHr.Text = "" Then
+            i = 0
+            TxtHr.Text = Format(i, "00")
+        Else
+            i = TxtHr.Text
+            i += 1
+            If i > 23 Then TxtHr.Text = ""
+        End If
+    End Sub
+
+    Private Sub BtnPMn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPMn.Click
+        Dim i As Integer
+        If TxtMn.Text = "" Then
+            i = 0
+            TxtMn.Text = Format(i, "00")
+        Else
+            i = TxtMn.Text
+            i += 1
+            If i > 23 Then TxtMn.Text = ""
+        End If
+    End Sub
+
+    Private Sub BtnPSc_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPSc.Click
+        Dim i As Integer
+        If TxtSc.Text = "" Then
+            i = 0
+            TxtSc.Text = Format(i, "00")
+        Else
+            i = TxtSc.Text
+            i += 1
+            If i > 59 Then TxtSc.Text = ""
+        End If
+    End Sub
+
+    Private Sub BtnMHr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMHr.Click
+        Dim i As Integer
+        If TxtHr.Text = "" Then
+            i = 23
+            TxtHr.Text = Format(i, "00")
+        Else
+            i = TxtHr.Text
+            i -= 1
+            If i < 0 Then TxtHr.Text = ""
+        End If
+    End Sub
+
+    Private Sub BtnMMn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMMn.Click
+        Dim i As Integer
+        If TxtMn.Text = "" Then
+            i = 23
+            TxtMn.Text = Format(i, "00")
+        Else
+            i = TxtMn.Text
+            i -= 1
+            If i < 0 Then TxtMn.Text = ""
+        End If
+
+    End Sub
+
+    Private Sub BtnMSec_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMSec.Click
+        Dim i As Integer
+        If TxtSc.Text = "" Then
+            i = 59
+            TxtSc.Text = Format(i, "00")
+        Else
+            i = TxtSc.Text
+            i -= 1
+            If i < 0 Then TxtSc.Text = ""
+        End If
+    End Sub
+
+    Private Sub BtnPJr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPJr.Click
+        Dim i As Integer
+        If TxtJr.Text = "" Then
+            i = 1
+            TxtJr.Text = Format(i, "00")
+        Else
+            i = TxtJr.Text
+            i += 1
+            If i > 31 Then TxtJr.Text = ""
+        End If
+    End Sub
+
+    Private Sub BtnPMs_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPMs.Click
+        Dim i As Integer
+        If TxtMs.Text = "" Then
+            i = 1
+            TxtMs.Text = Format(i, "00")
+        Else
+            i = TxtMs.Text
+            i += 1
+            If i > 12 Then TxtMs.Text = ""
+        End If
+    End Sub
+
+    Private Sub BtnMJr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMJr.Click
+        Dim i As Integer
+        If TxtJr.Text = "" Then
+            i = 31
+            TxtJr.Text = Format(i, "00")
+        Else
+            i = TxtJr.Text
+            i -= 1
+            If i < 1 Then TxtJr.Text = ""
+        End If
+    End Sub
+
+    Private Sub BtnMMs_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMMs.Click
+        Dim i As Integer
+        If TxtMs.Text = "" Then
+            i = 12
+            TxtMs.Text = Format(i, "00")
+        Else
+            i = TxtMs.Text
+            i -= 1
+            If i < 1 Then TxtMs.Text = ""
+        End If
+    End Sub
+
+    Private Sub TxtHr_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHr.TextChanged
+        If TxtHr.Text <> "" Then
+            If IsNumeric(TxtHr.Text) = False Then
+                TxtHr.Text = "00"
+            End If
+        End If
+    End Sub
+
+    Private Sub TxtMn_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMn.TextChanged
+        If TxtMn.Text <> "" Then
+            If IsNumeric(TxtMn.Text) = False Then
+                TxtMn.Text = "00"
+            End If
+        End If
+    End Sub
+
+    Private Sub TxtSc_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtSc.TextChanged
+        If TxtSc.Text <> "" Then
+            If IsNumeric(TxtSc.Text) = False Then
+                TxtSc.Text = "00"
+            End If
+        End If
+    End Sub
+
+    Private Sub TxtJr_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtJr.TextChanged
+        If TxtJr.Text <> "" Then
+            If IsNumeric(TxtJr.Text) = False Then
+                TxtJr.Text = "01"
+            End If
+        End If
+    End Sub
+
+    Private Sub TxtMs_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMs.TextChanged
+        If TxtMs.Text <> "" Then
+            If IsNumeric(TxtMs.Text) = False Then
+                TxtMs.Text = "01"
+            End If
+        End If
+    End Sub
+#End Region
 End Class
