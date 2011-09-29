@@ -913,7 +913,9 @@ Class Window1
     ''' <summary>
     ''' Sélection d'un serveur pour connexion dans le sous menu connexion ou au démarrage
     ''' </summary>
-    ''' <param name="Index"></param>
+    ''' <param name="Name"></param>
+    ''' <param name="IP"></param>
+    ''' <param name="Port"></param>
     ''' <remarks></remarks>
     Public Sub Connect_Srv(ByVal Name As String, ByVal IP As String, ByVal Port As String)
         Try
