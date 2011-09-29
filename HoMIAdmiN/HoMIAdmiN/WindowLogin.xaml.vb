@@ -94,8 +94,6 @@
                         Window1.ListServer.Item(i).Icon = sender.icon
                     End If
                 Next
-            Else
-
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur: " & ex.ToString, "Erreur")

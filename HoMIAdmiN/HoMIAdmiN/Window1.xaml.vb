@@ -935,6 +935,18 @@ Class Window1
             myService = myChannelFactory.CreateChannel()
             IsConnect = True
 
+            LblSrv.Content = "Serveur courant: " & Name
+            For i As Integer = 0 To ListServer.Count - 1
+                If ListServer.Item(i).Nom = Name Then
+                    If File.Exists(ListServer.Item(i).Icon) Then
+                        Dim bmpImage As New BitmapImage()
+                        bmpImage.BeginInit()
+                        bmpImage.UriSource = New Uri(ListServer.Item(i).Icon, UriKind.Absolute)
+                        bmpImage.EndInit()
+                        ImgSrv.Source = bmpImage
+                    End If
+                End If
+            Next
             CanvasUser = CanvasRight
         Catch ex As Exception
             myChannelFactory.Abort()

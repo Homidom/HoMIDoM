@@ -18,7 +18,7 @@
                 <Label Canvas.Left="22" Canvas.Top="-1" Content="###############" Height="23" Name="Label1" Width="Auto" />
                 <Label Canvas.Left="24" Canvas.Top="20" Content="###############" Height="23" Name="Label2" Width="Auto" FontSize="9" Foreground="Black" />
               </Canvas>
-            <Image Canvas.Left="160" Canvas.Top="10" Height="27" Name="ImgDelete" Stretch="Fill" Width="25" Source="/HoMIAdmiN;component/Images/supprimer32.png" />
+            <Image Canvas.Left="160" Canvas.Top="10" Height="27" Name="ImgDelete" Stretch="Fill" Width="25" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
         </Canvas>
     </Grid>
 </UserControl>

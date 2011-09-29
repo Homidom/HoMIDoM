@@ -72,40 +72,56 @@
     <Grid Background="#636060">
         <StackPanel >
             <Label HorizontalAlignment="Center"  Content="Trigger Device" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Name="Label1" />
+            <Rectangle Height="20" />
+            <StackPanel Orientation="Horizontal" >
+                <Label Content="Nom:" HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Width="67" Foreground="White" />
+                <TextBox Height="21" HorizontalAlignment="Left"  Name="TxtNom" VerticalAlignment="Top" Width="218" />
+                <CheckBox Content="Enable" HorizontalAlignment="Left" Margin="3" Name="ChkEnable" VerticalAlignment="Top" Foreground="White" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Content="Description:" Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" Width="67" />
+                <TextBox Height="21" HorizontalAlignment="Left" Name="TxtDescription" VerticalAlignment="Top" Width="436" />
+            </StackPanel>
+            <Rectangle Height="20" />
+            <StackPanel Orientation="Horizontal" >
+                <StackPanel >
+                    <Label Content="Device:" FontSize="14" Foreground="Orange" />
+                    <StackPanel >
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Content="Device:" HorizontalAlignment="Left"  Name="Label4" VerticalAlignment="Top" Width="59" Foreground="White" />
+                            <ComboBox Height="22" HorizontalAlignment="Left"  Name="CbDevice" VerticalAlignment="Top" Width="174" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Content="Propriété:" Foreground="White"  HorizontalAlignment="Left"  Name="Label5" VerticalAlignment="Top" Width="59" />
+                            <ComboBox Height="22" HorizontalAlignment="Left"  Name="CbProperty" VerticalAlignment="Top" Width="174" />
+                        </StackPanel>
+                    </StackPanel>
+
+                </StackPanel>
+                <Rectangle Width="20" />
+                <StackPanel >
+                    <Label Content="Macro(s):" FontSize="14" Foreground="Orange" />
+                    <StackPanel >
+                        <StackPanel Orientation="Horizontal" >
+                            <Button Name="DeleteMacro" Template="{DynamicResource GlassButton}" ToolTip="Supprimer" Margin="2">
+                                <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" Name="Image1" />
+                            </Button>
+                            <Button Name="UpMacro" Template="{DynamicResource GlassButton}" ToolTip="Monter la macro" Margin="2">
+                                <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/fleche-vers-le-haut-icone-32.png"  />
+                            </Button>
+                            <Button Name="DownMacro" Template="{DynamicResource GlassButton}" ToolTip="Descendre la macro" Margin="2">
+                                <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                            </Button>
+                        </StackPanel>
+                        <ListBox Height="211" HorizontalAlignment="Left" Margin="9,4,0,0" Name="ListBox1" VerticalAlignment="Top" Width="205" AllowDrop="True" />
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
         </StackPanel>
+        
         <Button Content="Fermer" Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,41,12,0" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" />
         <Button Content="Ok" Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,10,12,0" Name="BtnOK" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" />
-        <Label Content="Nom:" Height="22" HorizontalAlignment="Left" Margin="12,58,0,0" Name="Label2" VerticalAlignment="Top" Width="42" Foreground="White" />
-        <TextBox Height="21" HorizontalAlignment="Left" Margin="73,58,0,0" Name="TxtNom" VerticalAlignment="Top" Width="218" />
-        <Label Content="Description:" Foreground="White" Height="22" HorizontalAlignment="Left" Margin="6,84,0,0" Name="Label3" VerticalAlignment="Top" Width="67" />
-        <TextBox Height="21" HorizontalAlignment="Left" Margin="74,85,0,0" Name="TxtDescription" VerticalAlignment="Top" Width="436" />
-        <CheckBox Content="Enable" Height="17" HorizontalAlignment="Left" Margin="300,59,0,0" Name="ChkEnable" VerticalAlignment="Top" Width="86" Foreground="White" />
-        <GroupBox Header="Condition" Height="273" HorizontalAlignment="Left" Margin="13,112,0,0" Name="GroupBox1" VerticalAlignment="Top" Width="254">
-            <Grid>
-                <Label Content="Device:" Height="25" HorizontalAlignment="Left" Margin="8,8,0,0" Name="Label4" VerticalAlignment="Top" Width="51" Foreground="White" />
-                <ComboBox Height="22" HorizontalAlignment="Left" Margin="66,11,0,0" Name="CbDevice" VerticalAlignment="Top" Width="174" />
-                <Label Content="Propriété:" Foreground="White" Height="25" HorizontalAlignment="Left" Margin="8,35,0,0" Name="Label5" VerticalAlignment="Top" Width="59" />
-                <ComboBox Height="22" HorizontalAlignment="Left" Margin="66,38,0,0" Name="CbProperty" VerticalAlignment="Top" Width="174" />
-            </Grid>
-        </GroupBox>
-        <GroupBox Header="Macros" Height="273" HorizontalAlignment="Left" Margin="281,112,0,0" Name="GroupBox2" VerticalAlignment="Top" Width="236">
-            <Grid>
-                <StackPanel >
-                    <StackPanel Orientation="Horizontal" >
-                        <Button Name="DeleteMacro" Template="{DynamicResource GlassButton}" ToolTip="Supprimer" Margin="2">
-                            <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" Name="Image1" />
-                        </Button>
-                        <Button Name="UpMacro" Template="{DynamicResource GlassButton}" ToolTip="Monter la macro" Margin="2">
-                            <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/fleche-vers-le-haut-icone-32.png"  />
-                        </Button>
-                        <Button Name="DownMacro" Template="{DynamicResource GlassButton}" ToolTip="Descendre la macro" Margin="2">
-                            <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
-                        </Button>
-                    </StackPanel>
-                    <ListBox Height="211" HorizontalAlignment="Left" Margin="9,4,0,0" Name="ListBox1" VerticalAlignment="Top" Width="205" AllowDrop="True" />
-                </StackPanel>
-            </Grid>
-        </GroupBox>
+       
     </Grid>
     
 </UserControl>

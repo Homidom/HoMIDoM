@@ -110,7 +110,9 @@ Public Class WActionParametrage
                     Lbl2.Content = "Action:"
                     Lbl2.Visibility = Visibility.Visible
                     Cb2.Visibility = Windows.Visibility.Visible
+                    Cb2.Height = 20
                     Txt2.Visibility = Windows.Visibility.Hidden
+                    Txt2.Height = 0
                     TxtValue.Height = 21
 
                     For i As Integer = 0 To Window1.myService.GetAllDevices.Count - 1
@@ -141,7 +143,9 @@ Public Class WActionParametrage
                     Lbl2.Visibility = Visibility.Hidden
                     LblValue.Visibility = Windows.Visibility.Hidden
                     Cb2.Visibility = Windows.Visibility.Hidden
+                    Cb2.Height = 0
                     Txt2.Visibility = Windows.Visibility.Hidden
+                    Txt2.Height = 20
                     TxtValue.Visibility = Windows.Visibility.Hidden
 
                     For i As Integer = 0 To Window1.myService.GetAllMacros.Count - 1
@@ -166,7 +170,9 @@ Public Class WActionParametrage
                     LblValue.Content = "Message:"
                     Txt2.Text = ""
                     Cb2.Visibility = Windows.Visibility.Hidden
+                    Cb2.Height = 0
                     Txt2.Visibility = Windows.Visibility.Visible
+                    Txt2.Height = 20
                     TxtValue.Text = ""
                     TxtValue.Height = 80
 
@@ -188,10 +194,14 @@ Public Class WActionParametrage
                 Case HoMIDom.HoMIDom.Action.TypeAction.ActionIf
                     Me.Height = 650
                     Me.Width = 667
+                    StkProperty.Height = 0
+                    StkProperty.Width = 0
                     TabControl1.Visibility = Windows.Visibility.Visible
                     Cb2.Visibility = Windows.Visibility.Hidden
+                    Cb2.Height = 0
                     Cb1.Visibility = Windows.Visibility.Hidden
                     Txt2.Visibility = Windows.Visibility.Hidden
+                    Txt2.Height = 0
                     TxtValue.Visibility = Windows.Visibility.Hidden
                     Lbl1.Visibility = Windows.Visibility.Hidden
                     Lbl2.Visibility = Windows.Visibility.Hidden

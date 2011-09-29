@@ -7,23 +7,4 @@
     <Port>8000</Port>
     <Icon>C:\Documents and Settings\SPATTE\Bureau\piece.png</Icon>
   </ClServer>
-  <ClServer>
-    <Nom>Serveur2</Nom>
-    <Adresse>localhost</Adresse>
-    <Defaut>false</Defaut>
-    <Port>8000</Port>
-    <Icon>d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\Images\Icones\home-128.png</Icon>
-  </ClServer>
-  <ClServer>
-    <Nom>Serveur4</Nom>
-    <Adresse>123</Adresse>
-    <Defaut>false</Defaut>
-    <Port>123</Port>
-  </ClServer>
-  <ClServer>
-    <Nom>Serveur3</Nom>
-    <Adresse>localhost</Adresse>
-    <Defaut>false</Defaut>
-    <Port>8000</Port>
-  </ClServer>
 </ArrayOfClServer>

@@ -185,6 +185,8 @@
                         </LinearGradientBrush>
                     </Label.Foreground>
                 </Label>
+                                
+                
             </StackPanel>
                <Menu HorizontalAlignment="Left" Name="Menu1" Background="Transparent" Foreground="Black" FontSize="11">
                     <MenuItem Header="Fichier" Foreground="GhostWhite">
@@ -207,18 +209,26 @@
                    </Menu>
          </StackPanel>
       
-        <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" >
-            <Label Foreground="White" Height="23" Name="LblStatus" >#####</Label>
+        <StackPanel Height="27" DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Orientation="Horizontal" >
+            <Label Foreground="White" Name="LblStatus" >#####</Label>
             <Ellipse Height="20" Name="Ellipse1" Stroke="Black" Width="20" Fill="Cyan" />
-            <Label Foreground="White" Height="23" Name="LblConnect" >#####</Label>
+            <Label Foreground="White" Name="LblConnect" >#####</Label>
             <Rectangle Width="25"/>
-            <Image Height="25"  Name="Image3" Stretch="Fill" VerticalAlignment="Top" Width="25" Source="/HoMIAdmiN;component/Images/Soleil.png" />
-            <Label Content="##:##" Height="23" Name="LHS" VerticalAlignment="Top" Foreground="White" />
-            <Image Height="25"  Name="Image4" Stretch="Fill" VerticalAlignment="Top" Width="25" Source="/HoMIAdmiN;component/Images/Lune.png" />
-            <Label Content="##:##" Height="23" Name="LCS" VerticalAlignment="Top" Foreground="White" />
+            <Image Height="20"  Name="Image3" Stretch="Fill" Width="20" Source="/HoMIAdmiN;component/Images/Soleil.png" />
+            <Label Content="##:##" Name="LHS" Foreground="White" />
+            <Image Height="20"  Name="Image4" Stretch="Fill" VerticalAlignment="Top" Width="20" Source="/HoMIAdmiN;component/Images/Lune.png" />
+            <Label Content="##:##" Name="LCS" Foreground="White" />
+            <Rectangle Width="20" />
+            <Image Name="ImgSrv" Margin="2" Height="25" Width="25" Source="/HoMIAdmiN;component/Images/home-128.png">
+                <Image.LayoutTransform >
+                    <RotateTransform CenterX="0" CenterY="0" Angle="-5" />
+                </Image.LayoutTransform>
+            </Image>
+            <Label Content="Serveur courant: ?" Foreground=" White" Name="LblSrv"/>
         </StackPanel>
-        <StackPanel Height="573" HorizontalAlignment="Left" Margin="1" Name="StackPanel3" Width="187" DockPanel.Dock="Left">
-            <TabControl Canvas.Left="0" Canvas.Top="0" Height="571" Name="TabControl1" Width="186.036" MinHeight="250" Template="{StaticResource OutlookTab}" TabStripPlacement="Top" >
+        
+        <StackPanel HorizontalAlignment="Left" Margin="1" Name="StackPanel3" DockPanel.Dock="Left">
+            <TabControl Name="TabControl1" Width="187" Template="{StaticResource OutlookTab}" TabStripPlacement="Top" >
                 <TabItem Header="Drivers" Name="TabItem1" IsSelected="True">
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <StackPanel >
@@ -314,11 +324,11 @@
             </TabControl>
         </StackPanel>
 
-        <StackPanel DockPanel.Dock="Right" />
+        <StackPanel DockPanel.Dock="Right" Width="5"/>
         
         <Canvas Name="CanvasRight" >
             <Canvas.Background>
-                <ImageBrush ImageSource="/HoMIAdmiN;component/Images/01.png" />
+                <ImageBrush ImageSource="/HoMIAdmiN;component/Images/01.png" Stretch="UniformToFill" />
             </Canvas.Background>
          </Canvas>            
         
