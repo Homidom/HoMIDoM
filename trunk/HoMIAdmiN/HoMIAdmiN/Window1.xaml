@@ -229,7 +229,7 @@
         
         <StackPanel HorizontalAlignment="Left" Margin="1" Name="StackPanel3" DockPanel.Dock="Left">
             <TabControl Name="TabControl1" Width="187" Template="{StaticResource OutlookTab}" TabStripPlacement="Top" >
-                <TabItem Header="Drivers" Name="TabItem1" IsSelected="True">
+                <TabItem Header="Drivers" Name="TabItem1" IsSelected="True" >
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <StackPanel >
                             <TreeView Margin="5" Name="TreeViewDriver" Background="DimGray" Foreground="White" MinHeight="350"  />

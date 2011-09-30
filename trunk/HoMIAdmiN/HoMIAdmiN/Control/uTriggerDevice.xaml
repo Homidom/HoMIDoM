@@ -74,25 +74,25 @@
             <Label HorizontalAlignment="Center"  Content="Trigger Device" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Name="Label1" />
             <Rectangle Height="20" />
             <StackPanel Orientation="Horizontal" >
-                <Label Content="Nom:" HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Width="67" Foreground="White" />
-                <TextBox Height="21" HorizontalAlignment="Left"  Name="TxtNom" VerticalAlignment="Top" Width="218" />
-                <CheckBox Content="Enable" HorizontalAlignment="Left" Margin="3" Name="ChkEnable" VerticalAlignment="Top" Foreground="White" />
+                <Label Content="Nom :" HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Width="77" Foreground="White" Height="26" Margin="1" />
+                <TextBox Height="25" HorizontalAlignment="Left"  Name="TxtNom" VerticalAlignment="Top" Width="218" />
+                <CheckBox Content="Enable" Margin="5" Name="ChkEnable" Foreground="White" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                <Label Content="Description:" Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" Width="67" />
-                <TextBox Height="21" HorizontalAlignment="Left" Name="TxtDescription" VerticalAlignment="Top" Width="436" />
+                <Label Content="Description :" Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" Width="77" Height="28" Margin="1" />
+                <TextBox Height="25" Name="TxtDescription" Width="411" />
             </StackPanel>
             <Rectangle Height="20" />
             <StackPanel Orientation="Horizontal" >
                 <StackPanel >
-                    <Label Content="Device:" FontSize="14" Foreground="Orange" />
+                    <Label Content="Device :" FontSize="14" Foreground="Orange" />
                     <StackPanel >
                         <StackPanel Orientation="Horizontal" >
-                            <Label Content="Device:" HorizontalAlignment="Left"  Name="Label4" VerticalAlignment="Top" Width="59" Foreground="White" />
+                            <Label Content="Device :" HorizontalAlignment="Left"  Name="Label4" VerticalAlignment="Top" Width="77" Foreground="White" />
                             <ComboBox Height="22" HorizontalAlignment="Left"  Name="CbDevice" VerticalAlignment="Top" Width="174" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
-                            <Label Content="Propriété:" Foreground="White"  HorizontalAlignment="Left"  Name="Label5" VerticalAlignment="Top" Width="59" />
+                            <Label Content="Propriété :" Foreground="White"  HorizontalAlignment="Left"  Name="Label5" VerticalAlignment="Top" Width="77" />
                             <ComboBox Height="22" HorizontalAlignment="Left"  Name="CbProperty" VerticalAlignment="Top" Width="174" />
                         </StackPanel>
                     </StackPanel>

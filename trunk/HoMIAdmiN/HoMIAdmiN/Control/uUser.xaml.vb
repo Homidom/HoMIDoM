@@ -14,12 +14,12 @@ Partial Public Class uUser
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         If TxtPassword.Password <> TxtConfirm.Password Then
-            MessageBox.Show("Le mot de passe est différent après confirmation!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            MessageBox.Show("Le mot de passe est différent après confirmation !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         End If
 
         If TxtUsername.Text = "" Or TxtPassword.Password = "" Or ComboProfil.SelectedIndex < 0 Or TxtNom.Text = "" Or TxtPrenom.Text = "" Then
-            MessageBox.Show("Le username, le mot de passe, le profil, le nom et prénom sont obligatoires!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            MessageBox.Show("Le username, le mot de passe, le profil, le nom et prénom sont obligatoires !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         End If
 

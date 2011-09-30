@@ -610,10 +610,11 @@ Class Window1
                     End If
                 Next
                 If cntAdmin <= 1 Then
-                    MessageBox.Show("Impossible de supprimer cet utilisateur car il n'existe qu'un profil Administrateur!")
+                    MessageBox.Show("Impossible de supprimer cet utilisateur car il n'existe qu'un profil Administrateur !")
                     Exit Sub
                 End If
-                If MessageBox.Show("Etes vous sur de supprimer ce user: " & TreeViewUsers.SelectedItem.header & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                'If MessageBox.Show("Etes vous sur de supprimer ce user : " & TreeViewUsers.SelectedItem & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                If MessageBox.Show("Etes vous sur de supprimer ce user: ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
                     Window1.myService.DeleteUser(TreeViewUsers.SelectedItem.uid)
                     AffUser()
                 End If

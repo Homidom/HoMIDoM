@@ -436,8 +436,5 @@
   <ItemGroup>
     <Resource Include="Images\home-128.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\apply-48.png" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
