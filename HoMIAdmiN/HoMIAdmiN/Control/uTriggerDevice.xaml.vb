@@ -154,7 +154,7 @@
 
     Private Sub UpMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles UpMacro.Click
         If ListBox1.SelectedIndex <= 0 Then
-            MessageBox.Show("Aucune macro sélectionnée ou celle-ci est déjà en 1ère position, veuillez en choisir une déplacer!", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            MessageBox.Show("Aucune macro sélectionnée ou celle-ci est déjà en 1ère position, veuillez en choisir une à déplacer !", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         Else
             Dim i As Integer = ListBox1.SelectedIndex
@@ -172,7 +172,7 @@
 
     Private Sub DownMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles DownMacro.Click
         If ListBox1.SelectedIndex < 0 Or ListBox1.SelectedIndex = ListBox1.Items.Count - 1 Then
-            MessageBox.Show("Aucune macro sélectionnée ou celle-ci est déjà en dernière position, veuillez en choisir une déplacer!", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            MessageBox.Show("Aucune macro sélectionnée ou celle-ci est déjà en dernière position, veuillez en choisir une à déplacer !", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         Else
             Dim i As Integer = ListBox1.SelectedIndex

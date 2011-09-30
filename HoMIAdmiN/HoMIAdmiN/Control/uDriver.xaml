@@ -71,7 +71,7 @@
 
     <Grid Margin="1" Height="548.75" Width="625.493" Visibility="Visible" Background="#636060">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
-            <StackPanel >
+            <StackPanel Height="553">
             <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Driver</Label>
             </StackPanel>
         </Border>
@@ -142,11 +142,11 @@
             </StackPanel>
             <Rectangle Height="10" />
             <StackPanel Orientation="Horizontal" >
-                <Label HorizontalAlignment="Left" Name="Label12" VerticalAlignment="Bottom" Width="110" Foreground="White">Fonctions avancées:</Label>
-                <Button Height="23" HorizontalAlignment="Left" Name="BtnAv" VerticalAlignment="Bottom" Width="22" Template="{DynamicResource GlassButton}" Foreground="White">&gt;&gt;</Button>
+                <Label HorizontalAlignment="Left" Name="Label12" VerticalAlignment="Bottom" Width="119" Foreground="White" Height="26">Fonctions avancées : </Label>
+                <Button Height="23" Name="BtnAv" Width="22" Template="{DynamicResource GlassButton}" Foreground="White">&gt;&gt;</Button>
             </StackPanel>
             <Rectangle Height="10" />
-            <GroupBox Header="Fonctions Avancées" Margin="3" Name="GroupBox1" VerticalAlignment="Top" Visibility="Hidden">
+            <GroupBox Header="Fonctions Avancées" Margin="3" Name="GroupBox1" Visibility="Hidden">
                 <Grid>
                     <StackPanel Margin="10,10,0,0">
                         <StackPanel Orientation="Horizontal" >

@@ -80,9 +80,9 @@
                 <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
             </Image.LayoutTransform>
         </Image>
-        <Label Height="24" HorizontalAlignment="Left" Margin="16,82,0,0" Name="Label2" VerticalAlignment="Top" Width="42" Foreground="White">Nom:</Label>
+        <Label Height="24" HorizontalAlignment="Left" Margin="16,82,0,0" Name="Label2" VerticalAlignment="Top" Width="42" Foreground="White" Content="Nom :"></Label>
         <TextBox Height="22" Margin="69,84,211,0" Name="TxtName" VerticalAlignment="Top" Foreground="White" Background="DarkGray" />
-        <Label Foreground="White" Height="24" HorizontalAlignment="Left" Margin="16,122,0,0" Name="Label3" VerticalAlignment="Top" Width="42">Image:</Label>
+        <Label Foreground="White" Height="33" HorizontalAlignment="Left" Margin="16,122,0,0" Name="Label3" VerticalAlignment="Top" Width="55" Content="Image :"></Label>
         <Image Margin="69,121,0,216" Name="ImgZone" Stretch="Fill" HorizontalAlignment="Left" Width="150" Source="/HoMIAdmiN;component/Images/Defaut-128.png" />
         <GroupBox Header="Eléments appartenant à la zone" Height="191" Margin="16,0,12,12" Name="GroupBox1" VerticalAlignment="Bottom" ToolTip="Glisser un élément (device, macro ou zone) dans la liste ci-dessous">
             <Grid>

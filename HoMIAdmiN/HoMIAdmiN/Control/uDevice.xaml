@@ -69,7 +69,7 @@
         </ControlTemplate>
     </UserControl.Resources>
 
-    <Grid Margin="1" Width="625.493" Visibility="Visible" Height="569" Background="#636060">
+    <Grid Margin="1" Width="602" Visibility="Visible" Height="602" Background="#636060">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Height="567" Margin="0,0,0,25">
             <StackPanel >
                 <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Device</Label>
@@ -157,11 +157,11 @@
             <GroupBox Header="Commandes" Height="124.323" Margin="15,0,63.327,23.331" Name="GroupBox1" VerticalAlignment="Bottom" Visibility="Hidden" Width="480">
                 <Grid Height="110.033">
                     <ListBox HorizontalAlignment="Left" Margin="6,9.719,0,6" Name="ListCmd" Width="122.894" />
-                    <Label Height="22.22" HorizontalAlignment="Left" Margin="138.875,9.999,0,0" Name="Label16" VerticalAlignment="Top" Width="39.996" Foreground="White">Nom:</Label>
+                    <Label Height="34" HorizontalAlignment="Left" Margin="131,9.999,0,0" Name="Label16" VerticalAlignment="Top" Width="48" Foreground="White" Content="Nom :"></Label>
                     <TextBox Height="18.887" Margin="176.649,13.332,183.315,0" Name="TxtCmdName" VerticalAlignment="Top" />
-                    <Label Foreground="White" Height="22.22" HorizontalAlignment="Right" Margin="0,11.332,132.209,0" Name="Label17" VerticalAlignment="Top" Width="45.551">Repeat:</Label>
-                    <TextBox Margin="0,13.332,93.324,0" Name="TxtCmdRepeat" Height="18.931" HorizontalAlignment="Right" VerticalAlignment="Top" Width="33.244" />
-                    <Label Foreground="White" HorizontalAlignment="Left" Margin="138.875,37.774,0,49.995" Name="Label18" Width="39.996">Data:</Label>
+                    <Label Foreground="White" Height="33" HorizontalAlignment="Right" Margin="0,11.332,120,0" Name="Label17" VerticalAlignment="Top" Width="58" Content="Repeat :"></Label>
+                    <TextBox Margin="0,13.332,89,0" Name="TxtCmdRepeat" Height="18.931" HorizontalAlignment="Right" VerticalAlignment="Top" Width="33.244" />
+                    <Label Foreground="White" HorizontalAlignment="Right" Margin="0,42,289,35" Name="Label18" Width="48" Content="Data :"></Label>
                     <TextBox Margin="176.649,41.151,72.215,38.885" Name="TxtCmdData" />
                     <Button Height="26.664" HorizontalAlignment="Left" Margin="132,0,0,6" Name="BtnNewCmd" VerticalAlignment="Bottom" Width="67">Nouveau</Button>
                     <Button Height="26.664" Margin="0,0,201,6" Name="BtnSaveCmd" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="67">Enregistrer</Button>
