@@ -13,4 +13,43 @@
   <log time="24/09/2011 00:28:58" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
   <log time="24/09/2011 00:28:58" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 24/09/2011 07:49:00" />
   <log time="24/09/2011 00:28:58" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 24/09/2011 19:55:02" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Start" message="Connexion &amp;#224; la BDD Homidom : Connect&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Start" message="Connexion &amp;#224; la BDD Medias : Connect&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Load" message="Chargement des DLL des drivers" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Load" message=" - Foobar charg&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Load" message=" - K8055 charg&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Load" message=" - K8056 charg&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Load" message=" - MeteoGoogle charg&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Load" message=" - RFID charg&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Load" message=" - OpenWebNet charg&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Load" message=" - PLCBUS charg&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Load" message=" - RFXCom_receiver charg&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Load" message=" - RFXMitter charg&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Load" message=" - USBuirt charg&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Load" message=" - Virtuel charg&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Load" message=" - X10 charg&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Load" message=" - ZIBASE charg&amp;#233;" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="LoadConfig" message="Cr&amp;#233;ation du backup (.bak) du fichier de config avant chargement" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: D:\Domotique\Homidom\DEBUG\Config\homidom.xml" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="LoadConfig" message=" Erreur de chargement de la config: System.InvalidCastException: La conversion de la cha&amp;#238;ne &amp;quot;49.364016&amp;quot; en type &amp;#39;Double&amp;#39; n&amp;#39;est pas valide. ---&amp;gt; System.FormatException: Le format de la cha&amp;#238;ne d&amp;#39;entr&amp;#233;e est incorrect.&#xD;&#xA;   &amp;#224; Microsoft.VisualBasic.CompilerServices.Conversions.ParseDouble(String Value, NumberFormatInfo NumberFormat)&#xD;&#xA;   &amp;#224; Microsoft.VisualBasic.CompilerServices.Conversions.ToDouble(String Value, NumberFormatInfo NumberFormat)&#xD;&#xA;   --- Fin de la trace de la pile d&amp;#39;exception interne ---&#xD;&#xA;   &amp;#224; Microsoft.VisualBasic.CompilerServices.Conversions.ToDouble(String Value, NumberFormatInfo NumberFormat)&#xD;&#xA;   &amp;#224; HoMIDom.HoMIDom.Server.LoadConfig(String Fichier) dans D:\Domotique\Homidom\HoMIDom\Server.vb:ligne 401" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Start" message="D&amp;#233;marrage des drivers" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Start" message=" - Foobar non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Start" message=" - K8055 non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Start" message=" - K8056 non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Start" message=" - MeteoGoogle non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Start" message=" - RFID non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Start" message=" - OpenWebNet non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Start" message=" - PLCBUS non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Start" message=" - RFXCom_receiver non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Start" message=" - RFXMitter non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Start" message=" - USBuirt non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Start" message=" - Virtuel non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Start" message=" - X10 non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="Drivers_Start" message=" - ZIBASE non d&amp;#233;marr&amp;#233; car non Auto" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 03/10/2011 07:45:00" />
+  <log time="03/10/2011 23:59:29" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 03/10/2011 19:51:58" />
+  <log time="04/10/2011 00:00:00" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Initialisation des heures du soleil" />
+  <log time="04/10/2011 00:00:00" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du lever : 04/10/2011 07:45:00" />
+  <log time="04/10/2011 00:00:00" type="1" source="1" fonction="MAJ_HeuresSoleil" message="Heure du coucher : 04/10/2011 19:51:40" />
 </logs>
