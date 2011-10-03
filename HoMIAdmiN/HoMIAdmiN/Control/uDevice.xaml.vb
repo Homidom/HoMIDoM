@@ -98,6 +98,13 @@ Partial Public Class uDevice
                         Label13.Visibility = Windows.Visibility.Visible
                         Label14.Visibility = Windows.Visibility.Visible
                         Label15.Visibility = Windows.Visibility.Visible
+                    Else
+                        TxtCorrection.Height = 0
+                        TxtFormatage.Height = 0
+                        TxtPrecision.Height = 0
+                        TxtValueMax.Height = 0
+                        TxtValueMin.Height = 0
+                        TxtValDef.Height = 0
                     End If
 
                     If x.Type = ListeDevices.MULTIMEDIA Then
@@ -109,6 +116,7 @@ Partial Public Class uDevice
                         x = Nothing
                     Else
                         GroupBox1.Visibility = Windows.Visibility.Hidden
+                        GroupBox1.Height = 0
                     End If
                 End If
             End If
