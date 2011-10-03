@@ -13,7 +13,6 @@ Namespace HoMIDom
     ''' 
     Public Class Sqlite
 
-
         Private SQLconnect As New SQLiteConnection()
         Private Shared lock As New Object
         Public bdd_name As String = ""
@@ -112,7 +111,7 @@ Namespace HoMIDom
                 'on vérifie si on est connecté à la BDD   
                 If SQLconnect.State = ConnectionState.Open Then
                     'on vérifie si la commande n'est pas vide  
-                    If commande Is Nothing And commande <> "" Then
+                    If commande IsNot Nothing And commande <> "" Then
                         SQLcommand = SQLconnect.CreateCommand
                         SQLcommand.CommandText = commande
 
@@ -129,21 +128,20 @@ Namespace HoMIDom
                         If SQLreader.HasRows = True Then
                             'lecture de la premiere ligne       
                             SQLreader.Read()
-                            resultattemp.NewRow() ' on créé une premiere ligne dans le datatble      
+
                             For i = 0 To SQLreader.FieldCount - 1 'pour chaque colonne, on va créer la même dans le datable 
-                                x = New DataColumn
-                                x.ColumnName = "colonne_i"
+                                x = New DataColumn("col_" & i)
                                 resultattemp.Columns.Add(x)
-                                resultattemp(0).Item(i) = SQLreader(i) 'on affete la valeur      
                             Next
 
-                            'lecture de la suite des lignes   
-                            Dim j As Integer = 1
+                            'lecture des lignes   
+                            Dim j As Integer = 0
                             While SQLreader.Read()
-                                resultattemp.NewRow()
+                                Dim row As DataRow = resultattemp.NewRow() ' on créé une premiere ligne dans le datatble      
                                 For i = 0 To SQLreader.FieldCount - 1
-                                    resultattemp(j).Item(i) = SQLreader(i)
+                                    row.Item(i) = SQLreader(i)
                                 Next
+                                resultattemp.Rows.Add(row)
                                 j = j + 1
                             End While
                             resultat = resultattemp
@@ -152,7 +150,7 @@ Namespace HoMIDom
                             Return "Commande éxécutée avec succés mais pas de résultat : " & commande
                         End If
                         SQLreader.Close()
-                        SQLcommand.Dispose()
+                        'SQLcommand.Dispose()
                     Else
                         Return "ERR: La commande est vide"
                     End If
@@ -160,7 +158,7 @@ Namespace HoMIDom
                     Return "ERR: Non connecté à la BDD " & bdd_name
                 End If
             Catch ex As Exception
-                Return "ERR: Erreur lors de la query " & commande
+                Return "ERR: Erreur lors de la query " & commande & " Erreur: " & ex.ToString
             End Try
         End Function
     End Class

@@ -113,7 +113,7 @@
                                 <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
                             </Button>
                         </StackPanel>
-                        <ListBox Height="211" HorizontalAlignment="Left" Margin="9,4,0,0" Name="ListBox1" VerticalAlignment="Top" Width="205" AllowDrop="True" />
+                        <ListBox Height="182" HorizontalAlignment="Left" Margin="9,4,0,0" Name="ListBox1" VerticalAlignment="Top" Width="205" AllowDrop="True" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

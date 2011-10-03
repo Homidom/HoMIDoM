@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Window1"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Height="700" MinWidth="1024" xmlns:my="http://www.codeplex.com/wpfpropertygrid" Icon="/HoMIAdmiN;component/Images/homidom_icone_moyen.png" Name="Window1" WindowStartupLocation="CenterScreen" Background="#FF312D2D" >
+    Height="700" MinWidth="1024" Icon="/HoMIAdmiN;component/Images/homidom_icone_moyen.png" Name="Window1" WindowStartupLocation="CenterScreen" Background="#FF312D2D" WindowState="Normal" WindowStyle="SingleBorderWindow">
     
     <Window.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
@@ -232,7 +232,7 @@
                 <TabItem Header="Drivers" Name="TabItem1" IsSelected="True" >
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <StackPanel >
-                            <TreeView Margin="5" Name="TreeViewDriver" Background="DimGray" Foreground="White" MinHeight="350"  />
+                            <TreeView Margin="5" Name="TreeViewDriver" Background="DimGray" Foreground="White" Height="300"  />
                             <StackPanel Orientation="Horizontal" >
                                 <Button Height="22" Width="22" HorizontalAlignment="Left" Margin="5" Name="BtnStart" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" Foreground="White" ToolTip="Démarrer le driver">
                                     <Image Source="/HoMIAdmiN;component/Images/lecture-48.png" />
@@ -246,7 +246,7 @@
                 </TabItem>
                 <TabItem Header="Devices">
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <TreeView Margin="5,4,4,30" Name="TreeViewDevice" Background="DimGray" MinHeight="200" />
+                        <TreeView Margin="5,4,4,30" Name="TreeViewDevice" Background="DimGray" Height="300" />
                         <StackPanel Orientation="Horizontal" >
                             <Button Height="22" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5" Name="BtnNewDevice" VerticalAlignment="Bottom" Width="22" Foreground="White" ToolTip="Nouveau Device">
                                 <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
@@ -261,7 +261,7 @@
                 <TabItem Header="Zones">
                     <Grid Height="Auto">
                         <StackPanel >
-                            <TreeView Margin="5" Name="TreeViewZone" Background="DimGray" MinHeight="350" />
+                            <TreeView Margin="5" Name="TreeViewZone" Background="DimGray" Height="300" />
                             <StackPanel Orientation="Horizontal" >
                                 <Button Height="22" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5" Name="BtnNewZone" Width="22" ToolTip="Nouvelle zone">
                                     <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
@@ -276,7 +276,7 @@
                 <TabItem Header="Utilisateurs">
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <StackPanel >
-                            <TreeView Background="DimGray" Margin="5" Name="TreeViewUsers" MinHeight="350" />
+                            <TreeView Background="DimGray" Margin="5" Name="TreeViewUsers" Height="300" />
                             <StackPanel Orientation="Horizontal" >
                                 <Button Height="22" Margin="5" Name="BtnNewUser" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Nouveau User">
                                     <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
@@ -291,7 +291,7 @@
                 <TabItem Header="Triggers" Name="TabItem2" >
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <StackPanel >
-                            <TreeView Background="DimGray" Margin="5" Name="TreeViewTriggers" MinHeight="350" />
+                            <TreeView Background="DimGray" Margin="5" Name="TreeViewTriggers" Height="300" />
                             <StackPanel Orientation="Horizontal" >
                                 <Button Height="22" Margin="5" Name="BtnNewTriggerDevice" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Ajouter un nouveau Trigger Device">
                                     <Image Source="/HoMIAdmiN;component/Images/ajouter-la-brique-32.png" />
@@ -309,7 +309,7 @@
                 <TabItem Header="Macros">
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <StackPanel >
-                            <TreeView Background="DimGray" Margin="5" Name="TreeViewMacros" MinHeight="350" AllowDrop="False" />
+                            <TreeView Background="DimGray" Margin="5" Name="TreeViewMacros" Height="300" AllowDrop="False" />
                             <StackPanel Orientation="Horizontal" >
                                 <Button Height="22" Margin="5" Name="BtnNewMacro" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Nouvelle macro">
                                     <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
@@ -317,6 +317,19 @@
                                 <Button Height="22" Margin="5" Name="BtnDelMacro" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Supprimer Macro">
                                     <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
                                 </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Historisation">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <StackPanel >
+                            <ListBox Background="DimGray" Margin="5" Name="ListHisto" Height="300" AllowDrop="False"/>
+                            <StackPanel Orientation="Horizontal" >
+                                <Button Height="22" Margin="5" Name="BtnGenereGraph" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Générer">
+                                    <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
+                                </Button>
+                                
                             </StackPanel>
                         </StackPanel>
                     </Grid>

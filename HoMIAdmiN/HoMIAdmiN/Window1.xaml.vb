@@ -7,6 +7,7 @@ Imports System.Xml
 Imports System.Xml.Serialization
 Imports System.Threading
 Imports System.Reflection.Assembly
+Imports System.Data
 
 Class Window1
 
@@ -395,6 +396,30 @@ Class Window1
         'Next
     End Sub
 
+    'Afficher la liste des historisations
+    Public Sub AffHisto()
+        Try
+
+
+            ListHisto.Items.Clear()
+            Dim x As New List(Of String)
+            x = myService.GetAllListHisto
+
+            If x IsNot Nothing Then
+                For i As Integer = 0 To x.Count - 1
+                    Dim y As New CheckBox
+                    Dim a() As String = x(i).Split("|")
+                    'Dim b As String = myService.ReturnDeviceByID(a(1)).Name
+                    'If b = "" Then b = "?"
+                    y.Content = a(0) '& " {" & b & "}"
+                    y.Foreground = New SolidColorBrush(Colors.White)
+                    ListHisto.Items.Add(y)
+                Next
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString)
+        End Try
+    End Sub
 #End Region
 
 #Region "Drivers"
@@ -991,6 +1016,7 @@ Class Window1
             AffUser()
             AffTrigger()
             AffScene()
+            AffHisto()
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub Window1_Loaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1048,6 +1074,11 @@ Class Window1
     'End Sub
 
     Private Sub MenuTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuTest.Click
+        Dim x As New uHisto
+        x.Uid = System.Guid.NewGuid.ToString()
+        AddHandler x.CloseMe, AddressOf UnloadControl
+        CanvasRight.Children.Clear()
+        CanvasRight.Children.Add(x)
         'Try
         '    Image5.Source = ConvertArrayToImage(myService.GetByteFromImage("d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\Images\Graphes\test.png"))
         'Catch ex As Exception

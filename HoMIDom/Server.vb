@@ -33,7 +33,7 @@ Namespace HoMIDom
         Private Shared _ListUsers As New List(Of Users.User) 'Liste des users
         Private Shared _ListMacros As New List(Of Macro) 'Liste des macros
         Private Shared _listTriggers As New List(Of Trigger) 'Liste de tous les triggers
-        Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
+        <NonSerialized()> Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
         Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
         Private _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application 'Application.StartupPath
         Shared Soleil As New Soleil 'Déclaration class Soleil
@@ -2983,6 +2983,40 @@ Namespace HoMIDom
             End Try
         End Function
 
+#End Region
+
+#Region "Historisation"
+        Private Function ReturnDB() As List(Of String)
+            If sqlite_homidom.bdd_name = "" Then
+                Dim retour2 As String = sqlite_homidom.connect("homidom")
+                If retour2.StartsWith("ERR:") Then
+                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour2)
+                Else
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour2)
+                End If
+            End If
+            Dim result As New DataTable
+            result.TableName = "ListHisto"
+            Dim retour As String
+            Dim commande As String = "select distinct source, device_id from historiques;"
+            retour = sqlite_homidom.query(commande, result, "")
+            If UCase(Mid(retour, 1, 3)) <> "ERR" Then
+                If result IsNot Nothing Then
+                    Dim _list As New List(Of String)
+                    For i As Integer = 0 To result.Rows.Count - 1
+                        Dim a As String = result.Rows.Item(i).Item(0).ToString & "|" & result.Rows.Item(i).Item(1).ToString
+                        _list.Add(a)
+                    Next
+                    Return _list
+                End If
+            Else
+                Return Nothing
+            End If
+        End Function
+
+        Public Function GetAllListHisto() As List(Of String) Implements IHoMIDom.GetAllListHisto
+            Return ReturnDB()
+        End Function
 #End Region
 
 #Region "Audio"
