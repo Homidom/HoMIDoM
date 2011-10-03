@@ -85,7 +85,7 @@
                             <Label Content="Nom:" Width="70" Margin="1" Name="Label1" Foreground="White" />
                             <TextBox Name="TxtName" Width="150"/>
                             <Button Margin="2" Name="NewSite" Height="20" Width="20" Template="{DynamicResource GlassButton}" ToolTip="Ajouter/Modifier un serveur">
-                                <Image Source="/HoMIAdmiN;component/Images/apply-48.png" />
+                                <Image Source="/HoMIAdmiN;component/Images/save-icone-48.png" ToolTip="Appliquer"/>
                             </Button>
                             <Button Margin="2" Name="DelSite" Height="20" Width="20" Template="{DynamicResource GlassButton}">
                                 <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" ToolTip="Supprimer un serveur" />

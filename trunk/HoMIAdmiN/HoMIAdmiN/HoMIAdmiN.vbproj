@@ -98,6 +98,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="ZedGraph, Version=5.1.5.28844, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dll_externes\ZedGraph.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="Application.xaml">
@@ -117,6 +121,9 @@
     </Compile>
     <Compile Include="Control\uCtrlImgMnu.xaml.vb">
       <DependentUpon>uCtrlImgMnu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\uHisto.xaml.vb">
+      <DependentUpon>uHisto.xaml</DependentUpon>
     </Compile>
     <Compile Include="Control\uMacro.xaml.vb">
       <DependentUpon>uMacro.xaml</DependentUpon>
@@ -154,6 +161,10 @@
     <Page Include="Control\uCtrlImgMnu.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Control\uHisto.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Control\uMacro.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -435,6 +446,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\home-128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\apply-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\save-icone-48.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

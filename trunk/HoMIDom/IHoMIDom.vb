@@ -2,6 +2,7 @@
 Imports System.ServiceModel
 Imports System.Runtime.Serialization
 Imports System.Linq
+Imports System.Data
 
 Namespace HoMIDom
 
@@ -148,6 +149,15 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         <OperationContract()> Function GetByteFromImage(ByVal file As String) As Byte()
+#End Region
+
+#Region "Historisation"
+        ''' <summary>
+        ''' Retourne la liste des sources histo (source et id)
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetAllListHisto() As List(Of String)
 #End Region
 
 #Region "Audio"

@@ -90,6 +90,14 @@ Application Entry Point.
 	<summary>
 Application
 </summary>
+</member><member name="M:WpfApplication1.uHisto.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uHisto">
+	<summary>
+uHisto
+</summary>
 </member><member name="M:WpfApplication1.uLog.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -283,6 +291,14 @@ Window3
  </summary>
 	<param name="sender"></param>
 	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Window1.Connect_Srv(System.String,System.String,System.String)">
+	<summary>
+ Sélection d'un serveur pour connexion dans le sous menu connexion ou au démarrage
+ </summary>
+	<param name="Name"></param>
+	<param name="IP"></param>
+	<param name="Port"></param>
 	<remarks></remarks>
 </member><member name="M:WpfApplication1.Window1.PageConnexion">
 	<summary>
