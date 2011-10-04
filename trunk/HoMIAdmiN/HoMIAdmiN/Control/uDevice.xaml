@@ -147,22 +147,34 @@
                         <Rectangle Width="10" />
                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtFormatage" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="214.5" Visibility="Hidden" />
                     </StackPanel>
-                    <GroupBox Header="Commandes" Height="124.323" Margin="15,0,63.327,23.331" Name="GroupBox1" VerticalAlignment="Bottom" Visibility="Hidden" Width="480">
-                        <Grid Height="110.033">
-                            <ListBox HorizontalAlignment="Left" Margin="6,9.719,0,6" Name="ListCmd" Width="122.894" />
-                            <Label Height="34" HorizontalAlignment="Left" Margin="131,9.999,0,0" Name="Label16" VerticalAlignment="Top" Width="48" Foreground="White" Content="Nom :"></Label>
-                            <TextBox Height="18.887" Margin="176.649,13.332,183.315,0" Name="TxtCmdName" VerticalAlignment="Top" />
-                            <Label Foreground="White" Height="33" HorizontalAlignment="Right" Margin="0,11.332,120,0" Name="Label17" VerticalAlignment="Top" Width="58" Content="Repeat :"></Label>
-                            <TextBox Margin="0,13.332,89,0" Name="TxtCmdRepeat" Height="18.931" HorizontalAlignment="Right" VerticalAlignment="Top" Width="33.244" />
-                            <Label Foreground="White" HorizontalAlignment="Right" Margin="0,42,289,35" Name="Label18" Width="48" Content="Data :"></Label>
-                            <TextBox Margin="176.649,41.151,72.215,38.885" Name="TxtCmdData" />
-                            <Button Height="26.664" HorizontalAlignment="Left" Margin="132,0,0,6" Name="BtnNewCmd" VerticalAlignment="Bottom" Width="67">Nouveau</Button>
-                            <Button Height="26.664" Margin="0,0,201,6" Name="BtnSaveCmd" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="67">Enregistrer</Button>
-                            <Button Height="26.664" Margin="268,0,0,6.666" Name="BtnDelCmd" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="67.425">Supprimer</Button>
-                            <Button Height="26.664" HorizontalAlignment="Left" Margin="334,0,0,6.666" Name="BtnTstCmd" VerticalAlignment="Bottom" Width="67">Tester</Button>
-                            <Button Height="26.664" HorizontalAlignment="Right" Margin="0,0,0,7" Name="BtnLearn" VerticalAlignment="Bottom" Width="67">Apprendre</Button>
-                        </Grid>
-                    </GroupBox>
+                    <Rectangle Height="10" />
+                    <StackPanel Name="StkCde">
+                        <Label Content="Commandes" Foreground="White" />
+                        <StackPanel Orientation="Horizontal" >
+                            <ListBox HorizontalAlignment="Left" Margin="1" Height="100" Name="ListCmd" Width="122.894" />
+                            <Rectangle Width="15" />
+                            <StackPanel >
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label HorizontalAlignment="Left" Name="Label16" Foreground="White" Content="Nom :" />
+                                    <TextBox Height="21" Width="150" Name="TxtCmdName"  />
+                                    <Label Foreground="White" HorizontalAlignment="Right" Name="Label17"  Content="Repeat :"/>
+                                    <TextBox Name="TxtCmdRepeat" Height="21" HorizontalAlignment="Right" VerticalAlignment="Top" Width="33.244" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Foreground="White" HorizontalAlignment="Right" Name="Label18" Content="Data :" />
+                                    <TextBox Width="240" Height="41" Name="TxtCmdData" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Button Height="26.664" Margin="1" HorizontalAlignment="Left" Name="BtnNewCmd" VerticalAlignment="Bottom" Width="67">Nouveau</Button>
+                                    <Button Height="26.664" Margin="1" Name="BtnSaveCmd" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="67">Enregistrer</Button>
+                                    <Button Height="26.664" Margin="1" Name="BtnDelCmd" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="67">Supprimer</Button>
+                                    <Button Height="26.664" HorizontalAlignment="Left" Margin="1" Name="BtnTstCmd" VerticalAlignment="Bottom" Width="67">Tester</Button>
+                                    <Button Height="26.664" HorizontalAlignment="Right" Margin="1" Name="BtnLearn" VerticalAlignment="Bottom" Width="67">Apprendre</Button>
+                                </StackPanel>
+
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
 
             </StackPanel>

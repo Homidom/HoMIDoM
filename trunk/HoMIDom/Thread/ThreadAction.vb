@@ -1,5 +1,6 @@
 ﻿Imports HoMIDom.HoMIDom
 Imports System.Net.Mail
+Imports System.Threading
 
 Namespace HoMIDom
 
@@ -44,11 +45,155 @@ Namespace HoMIDom
                     Dim flag As Boolean = False
 
                     For i As Integer = 0 To x.Conditions.Count - 1
+                        Dim result As Boolean
+
                         If x.Conditions.Item(i).Type = Action.TypeCondition.Device Then
-                            'x.Conditions.Item(i).DateTime
+                            Dim retour As Object = CallByName(_Server.ReturnDeviceById(x.Conditions.Item(i).IdDevice), x.Conditions.Item(i).PropertyDevice, CallType.Get)
+                            Select Case x.Conditions.Item(i).Condition
+                                Case Action.TypeSigne.Egal
+                                    If retour = x.Conditions.Item(i).Value Then
+                                        result = True
+                                    Else
+                                        result = False
+                                    End If
+                                Case Action.TypeSigne.Different
+                                    If retour <> x.Conditions.Item(i).Value Then
+                                        result = True
+                                    Else
+                                        result = False
+                                    End If
+                                Case Action.TypeSigne.Inferieur
+                                    If retour < x.Conditions.Item(i).Value Then
+                                        result = True
+                                    Else
+                                        result = False
+                                    End If
+                                Case Action.TypeSigne.InferieurEgal
+                                    If retour <= x.Conditions.Item(i).Value Then
+                                        result = True
+                                    Else
+                                        result = False
+                                    End If
+                                Case Action.TypeSigne.Superieur
+                                    If retour > x.Conditions.Item(i).Value Then
+                                        result = True
+                                    Else
+                                        result = False
+                                    End If
+                                Case Action.TypeSigne.SuperieurEgal
+                                    If retour > x.Conditions.Item(i).Value Then
+                                        result = True
+                                    Else
+                                        result = False
+                                    End If
+                            End Select
+                            If i = 0 Then
+                                flag = result
+                            Else
+                                Select Case x.Conditions.Item(i).Operateur
+                                    Case Action.TypeOperateur.AND
+                                        flag = flag And result
+                                    Case Action.TypeOperateur.OR
+                                        flag = flag Or result
+                                    Case Action.TypeOperateur.NONE
+                                        flag = result
+                                End Select
+                            End If
+                        End If
+
+                        If x.Conditions.Item(i).Type = Action.TypeCondition.DateTime Then
+                            Dim _tim() As String = x.Conditions.Item(i).DateTime.Split("#")
+                            'On travail juste sur une heure
+                            If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And _tim(3) = "*" And _tim(4) = "*" And _tim(5) = "" Then
+
+                            End If
+                            'On travail sur une heure + date
+                            If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And (_tim(3) <> "*" Or _tim(4) <> "*") And _tim(5) = "" Then
+
+                            End If
+                            'On travail sur une heure + jour
+                            If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And (_tim(3) = "*" And _tim(4) = "*") And _tim(5) <> "" Then
+
+                            End If
+                            'On travail sur une date
+                            If (_tim(0) = "*" And _tim(1) = "*" And _tim(2) = "*") And (_tim(3) <> "*" Or _tim(4) <> "*") And _tim(5) = "" Then
+
+                            End If
+                            'On travail sur un jour
+                            If (_tim(0) = "*" And _tim(1) = "*" And _tim(2) = "*") And _tim(3) = "*" And _tim(4) = "*" And _tim(5) <> "" Then
+
+                            End If
+                            'Dim a1 As DateTime = CDate(x.Conditions.Item(i).DateTime)
+
+                            'Select Case x.Conditions.Item(i).Condition
+                            '    Case Action.TypeSigne.Egal
+                            '        If DateDiff(DateInterval.Second, Now, a1) = 0 Then
+                            '            result = True
+                            '        Else
+                            '            result = False
+                            '        End If
+                            '    Case Action.TypeSigne.Different
+                            '        If DateDiff(DateInterval.Second, Now, a1) <> 0 Then
+                            '            result = True
+                            '        Else
+                            '            result = False
+                            '        End If
+                            '    Case Action.TypeSigne.Inferieur
+                            '        If DateDiff(DateInterval.Second, Now, a1) < 0 Then
+                            '            result = True
+                            '        Else
+                            '            result = False
+                            '        End If
+                            '    Case Action.TypeSigne.InferieurEgal
+                            '        If DateDiff(DateInterval.Second, Now, a1) <= 0 Then
+                            '            result = True
+                            '        Else
+                            '            result = False
+                            '        End If
+                            '    Case Action.TypeSigne.Superieur
+                            '        If DateDiff(DateInterval.Second, Now, a1) > 0 Then
+                            '            result = True
+                            '        Else
+                            '            result = False
+                            '        End If
+                            '    Case Action.TypeSigne.SuperieurEgal
+                            '        If DateDiff(DateInterval.Second, Now, a1) >= 0 Then
+                            '            result = True
+                            '        Else
+                            '            result = False
+                            '        End If
+                            'End Select
+                            'If i = 0 Then
+                            '    flag = result
+                            'Else
+                            '    Select Case x.Conditions.Item(i).Operateur
+                            '        Case Action.TypeOperateur.AND
+                            '            flag = flag And result
+                            '        Case Action.TypeOperateur.OR
+                            '            flag = flag Or result
+                            '        Case Action.TypeOperateur.NONE
+                            '            flag = result
+                            '    End Select
+                            'End If
                         End If
                     Next
-
+                    If flag = True Then
+                        For i As Integer = 0 To x.ListTrue.Count - 1
+                            Dim _action As New ThreadAction(_Server, x.ListTrue.Item(i))
+                            Dim y As New Thread(AddressOf _action.Execute)
+                            y.Name = "Traitement du script"
+                            y.Start()
+                            y = Nothing
+                        Next
+                    Else
+                        For i As Integer = 0 To x.ListFalse.Count - 1
+                            Dim _action As New ThreadAction(_Server, x.ListFalse.Item(i))
+                            Dim y As New Thread(AddressOf _action.Execute)
+                            y.Name = "Traitement du script"
+                            y.Start()
+                            y = Nothing
+                        Next
+                    End If
                 Case Action.TypeAction.ActionMacro
                     Dim x As Action.ActionMacro = _Action
                     Dim y As Macro = _Server.ReturnMacroById(x.IdMacro)

@@ -12,6 +12,8 @@ Namespace HoMIDom
     ''' <remarks></remarks>
     <ServiceContract(Namespace:="http://HoMIDom/")> Public Interface IHoMIDom
 
+
+
 #Region "Serveur"
         ''' <summary>
         ''' Retourne la version du serveur
@@ -157,7 +159,9 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetAllListHisto() As List(Of String)
+        <OperationContract()> Function GetAllListHisto() As List(Of Historisation)
+
+        <OperationContract()> Function GetHisto(ByVal Source As String, ByVal idDevice As String) As List(Of Historisation)
 #End Region
 
 #Region "Audio"

@@ -33,67 +33,67 @@ Partial Public Class uModules
         imgStackPnl.VerticalAlignment = VerticalAlignment.Center
         imgStackPnl.Orientation = Orientation.Horizontal
 
-        If IsHSConnect = True Then
-            'Creation  du menu
-            Try
-                Dim en As Scheduler.clsDeviceEnumeration
-                en = hs.GetDeviceEnumerator()
-                Dim dv As Scheduler.Classes.DeviceClass
-                Dim hcuc As String
-                Dim myxml As clsXML = New clsXML("C:\ehome\config\wehome_config.xml")
-                Dim list As XmlNodeList = myxml.SelectNodes("/wehome/module/element")
-                Dim status As String() = {"0", "1", "On", "Off", "Dim", "Dim", "", "", "", "", "", "", "", "", "", "", "", "Unknown"}
+        'If IsHSConnect = True Then
+        '    'Creation  du menu
+        '    Try
+        '        Dim en As Scheduler.clsDeviceEnumeration
+        '        en = hs.GetDeviceEnumerator()
+        '        Dim dv As Scheduler.Classes.DeviceClass
+        '        Dim hcuc As String
+        '        Dim myxml As clsXML = New clsXML("C:\ehome\config\wehome_config.xml")
+        '        Dim list As XmlNodeList = myxml.SelectNodes("/wehome/module/element")
+        '        Dim status As String() = {"0", "1", "On", "Off", "Dim", "Dim", "", "", "", "", "", "", "", "", "", "", "", "Unknown"}
 
-                Do While Not en.Finished
-                    dv = en.GetNext
-                    hcuc = dv.hc & dv.dc
-                    Try
-                        For i As Integer = 0 To list.Count - 1
-                            If hcuc = (list(i).Attributes.Item(0).Value) Then 'Adresse
-                                'Creation  du menu
-                                Dim ctrl As uModule = New uModule
-                                ctrl.Label = dv.Name
-                                ctrl.Adresse = hcuc
-                                ctrl.Icon = list(i).Attributes.Item(2).Value
-                                ctrl.HasString = list(i).Attributes.Item(3).Value
-                                ctrl.HasValue = list(i).Attributes.Item(4).Value
-                                ctrl.DeviceString = hs.DeviceString(hcuc)
-                                ctrl.DeviceValue = hs.DeviceValue(hcuc)
-                                ctrl.TypeDevice = list(i).Attributes.Item(1).Value
-                                ctrl.Status = hs.DeviceStatus(hcuc)
-                                imgStackPnl.Children.Add(ctrl)
-                            End If
-                        Next
-                    Catch ex As Exception
-                        MsgBox("Error chargement des macros: " & ex.ToString)
-                    End Try
-                Loop
-                list = Nothing
+        '        Do While Not en.Finished
+        '            dv = en.GetNext
+        '            hcuc = dv.hc & dv.dc
+        '            Try
+        '                For i As Integer = 0 To list.Count - 1
+        '                    If hcuc = (list(i).Attributes.Item(0).Value) Then 'Adresse
+        '                        'Creation  du menu
+        '                        Dim ctrl As uModule = New uModule
+        '                        ctrl.Label = dv.Name
+        '                        ctrl.Adresse = hcuc
+        '                        ctrl.Icon = list(i).Attributes.Item(2).Value
+        '                        ctrl.HasString = list(i).Attributes.Item(3).Value
+        '                        ctrl.HasValue = list(i).Attributes.Item(4).Value
+        '                        ctrl.DeviceString = hs.DeviceString(hcuc)
+        '                        ctrl.DeviceValue = hs.DeviceValue(hcuc)
+        '                        ctrl.TypeDevice = list(i).Attributes.Item(1).Value
+        '                        ctrl.Status = hs.DeviceStatus(hcuc)
+        '                        imgStackPnl.Children.Add(ctrl)
+        '                    End If
+        '                Next
+        '            Catch ex As Exception
+        '                MsgBox("Error chargement des macros: " & ex.ToString)
+        '            End Try
+        '        Loop
+        'List = Nothing
 
-                'Creation  du menu
-                Try
-                    myxml = New clsXML("C:\ehome\config\wehome_config.xml")
-                    list = myxml.SelectNodes("/wehome/scene/element")
-                    For i As Integer = 0 To list.Count - 1
-                        'Creation  du menu
-                        Dim ctrl As uModule = New uModule
-                        ctrl.Label = list(i).Attributes.Item(0).Value
-                        ctrl.Script = list(i).Attributes.Item(1).Value
-                        ctrl.Fonction = list(i).Attributes.Item(2).Value
-                        ctrl.Command = list(i).Attributes.Item(3).Value
-                        ctrl.Icon = list(i).Attributes.Item(4).Value
-                        ctrl.TypeDevice = uModule.eTypeDevice.Macro
-                        imgStackPnl.Children.Add(ctrl)
-                    Next
-                Catch ex As Exception
-                    MsgBox("Error chargement des macros: " & ex.ToString)
-                End Try
-            Catch ex As Exception
-                MsgBox("Error chargement des macros et devices: " & ex.ToString)
-            End Try
-        Else
-            MessageBox.Show("Impossible d'afficher les modules, vous n'êtes pas connecté à HomeSeer")
-        End If
+        ''Creation  du menu
+        'Try
+        '    myxml = New clsXML("C:\ehome\config\wehome_config.xml")
+        '    List = myxml.SelectNodes("/wehome/scene/element")
+        '    For i As Integer = 0 To List.Count - 1
+        '        'Creation  du menu
+        '        Dim ctrl As uModule = New uModule
+        '        ctrl.Label = List(i).Attributes.Item(0).Value
+        '        ctrl.Script = List(i).Attributes.Item(1).Value
+        '        ctrl.Fonction = List(i).Attributes.Item(2).Value
+        '        ctrl.Command = List(i).Attributes.Item(3).Value
+        '        ctrl.Icon = List(i).Attributes.Item(4).Value
+        '        ctrl.TypeDevice = uModule.eTypeDevice.Macro
+        '        imgStackPnl.Children.Add(ctrl)
+        '    Next
+        'Catch ex As Exception
+        '    MsgBox("Error chargement des macros: " & ex.ToString)
+        'End Try
+        '    Catch ex As Exception
+        '    MsgBox("Error chargement des macros et devices: " & ex.ToString)
+        'End Try
+        'Else
+        'MessageBox.Show("Impossible d'afficher les modules, vous n'êtes pas connecté à HomeSeer")
+        'End If
         ScrollViewer1.Content = imgStackPnl
 
     End Sub

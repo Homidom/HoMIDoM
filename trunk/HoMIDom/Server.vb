@@ -398,9 +398,9 @@ Namespace HoMIDom
                             For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                                 Select Case list.Item(0).Attributes.Item(j).Name
                                     Case "longitude"
-                                        _Longitude = list.Item(0).Attributes.Item(j).Value
+                                        _Longitude = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
                                     Case "latitude"
-                                        _Latitude = list.Item(0).Attributes.Item(j).Value
+                                        _Latitude = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
                                     Case "heurecorrectionlever"
                                         _HeureLeverSoleilCorrection = list.Item(0).Attributes.Item(j).Value
                                     Case "heurecorrectioncoucher"
@@ -2986,7 +2986,7 @@ Namespace HoMIDom
 #End Region
 
 #Region "Historisation"
-        Private Function ReturnDB() As List(Of String)
+        Public Function GetAllListHisto() As List(Of Historisation) Implements IHoMIDom.GetAllListHisto
             If sqlite_homidom.bdd_name = "" Then
                 Dim retour2 As String = sqlite_homidom.connect("homidom")
                 If retour2.StartsWith("ERR:") Then
@@ -2995,6 +2995,7 @@ Namespace HoMIDom
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour2)
                 End If
             End If
+
             Dim result As New DataTable
             result.TableName = "ListHisto"
             Dim retour As String
@@ -3002,9 +3003,11 @@ Namespace HoMIDom
             retour = sqlite_homidom.query(commande, result, "")
             If UCase(Mid(retour, 1, 3)) <> "ERR" Then
                 If result IsNot Nothing Then
-                    Dim _list As New List(Of String)
+                    Dim _list As New List(Of Historisation)
                     For i As Integer = 0 To result.Rows.Count - 1
-                        Dim a As String = result.Rows.Item(i).Item(0).ToString & "|" & result.Rows.Item(i).Item(1).ToString
+                        Dim a As New Historisation
+                        a.Nom = result.Rows.Item(i).Item(0).ToString
+                        a.IdDevice = result.Rows.Item(i).Item(1).ToString
                         _list.Add(a)
                     Next
                     Return _list
@@ -3014,8 +3017,42 @@ Namespace HoMIDom
             End If
         End Function
 
-        Public Function GetAllListHisto() As List(Of String) Implements IHoMIDom.GetAllListHisto
-            Return ReturnDB()
+        Public Function GetHisto(ByVal Source As String, ByVal idDevice As String) As List(Of Historisation) Implements IHoMIDom.GetHisto
+            Try
+
+                If sqlite_homidom.bdd_name = "" Then
+                    Dim retour2 As String = sqlite_homidom.connect("homidom")
+                    If retour2.StartsWith("ERR:") Then
+                        Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour2)
+                    Else
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour2)
+                    End If
+                End If
+
+                Dim result As New DataTable("HistoDB")
+                Dim retour As String
+                Dim commande As String = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' ;"
+                Dim _list As New List(Of Historisation)
+
+                retour = sqlite_homidom.query(commande, result, "")
+                If UCase(Mid(retour, 1, 3)) <> "ERR" Then
+                    If result IsNot Nothing Then
+                        For i As Integer = 0 To result.Rows.Count - 1
+                            Dim a As New Historisation
+                            a.Nom = result.Rows.Item(i).Item(2).ToString
+                            a.IdDevice = result.Rows.Item(i).Item(1).ToString
+                            a.DateTime = CDate(result.Rows.Item(i).Item(3).ToString)
+                            a.Value = result.Rows.Item(i).Item(4).ToString
+                            _list.Add(a)
+                        Next
+                        Return _list
+                    End If
+                Else
+                    Return Nothing
+                End If
+            Catch ex As Exception
+                MsgBox(ex.ToString)
+            End Try
         End Function
 #End Region
 
