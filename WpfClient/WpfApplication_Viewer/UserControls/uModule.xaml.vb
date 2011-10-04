@@ -233,14 +233,14 @@ Partial Public Class uModule
         Try
             If _TypeDevice = eTypeDevice.Macro Then Exit Sub
             If _TypeDevice < eTypeDevice.Audio Then
-                Status = hs.DeviceStatus(_Adresse)
-                If _TypeDevice = eTypeDevice.OnOffVariation Then
-                    Dim i As Integer = hs.DeviceValue(Adresse)
-                    LblPercent.Content = i & "%"
-                    If _DimValue <> i Then _DimValue = i
-                End If
+                'Status = hs.DeviceStatus(_Adresse)
+                'If _TypeDevice = eTypeDevice.OnOffVariation Then
+                '    Dim i As Integer = hs.DeviceValue(Adresse)
+                '    LblPercent.Content = i & "%"
+                '    If _DimValue <> i Then _DimValue = i
+                'End If
             Else
-                _DeviceString = hs.DeviceString(Adresse)
+                '_DeviceString = hs.DeviceString(Adresse)
                 If _TypeDevice = eTypeDevice.Audio Then LblStatus.Content = "STATUS: " & _DeviceString
                 If _TypeDevice = eTypeDevice.Temperature Then LblStatus.Content = "TEMPERATURE: " & _DeviceString & " °C"
             End If
@@ -255,14 +255,14 @@ Partial Public Class uModule
 
     Private Sub BtnOFF_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOFF.Click
         If TypeDevice = eTypeDevice.OnOff Or TypeDevice = eTypeDevice.OnOffVariation Then
-            hs.ExecX10(_Adresse, "off", 0, 0)
+            'hs.ExecX10(_Adresse, "off", 0, 0)
             _DimValue = 0
         End If
     End Sub
 
     Private Sub BtnON_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnON.Click
         If TypeDevice = eTypeDevice.OnOff Or TypeDevice = eTypeDevice.OnOffVariation Then
-            hs.ExecX10(_Adresse, "on", 0, 0)
+            'hs.ExecX10(_Adresse, "on", 0, 0)
             _DimValue = 100
         End If
     End Sub
@@ -272,32 +272,32 @@ Partial Public Class uModule
 
     Private Sub BtnStop_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnStop.MouseDown
         Dim s
-        s = hs.RunEx("Multiroom.vb", "", "SDB|stop|a")
+        's = hs.RunEx("Multiroom.vb", "", "SDB|stop|a")
     End Sub
 
     Private Sub BtnPlay_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnPlay.MouseDown
         Dim s
-        s = hs.RunEx("Multiroom.vb", "", "SDB|play|http://streaming.radio.rtl.fr/rtl-1-44-96")
+        's = hs.RunEx("Multiroom.vb", "", "SDB|play|http://streaming.radio.rtl.fr/rtl-1-44-96")
     End Sub
 
     Private Sub BtnPause_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnPause.MouseDown
         Dim s
-        s = hs.RunEx("Multiroom.vb", "", "SDB|pause|a")
+        's = hs.RunEx("Multiroom.vb", "", "SDB|pause|a")
     End Sub
 
     Private Sub BtnMute_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnMute.MouseDown
         Dim s
-        s = hs.RunEx("Multiroom.vb", "", "SDB|VOLUME MUTE|a")
+        's = hs.RunEx("Multiroom.vb", "", "SDB|VOLUME MUTE|a")
     End Sub
 
     Private Sub BtnVolumDown_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnVolumDown.MouseDown
         Dim s
-        s = hs.RunEx("Multiroom.vb", "", "SDB|VOLUME DOWN|a")
+        's = hs.RunEx("Multiroom.vb", "", "SDB|VOLUME DOWN|a")
     End Sub
 
     Private Sub BtnVolumUp_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnVolumUp.MouseDown
         Dim s
-        s = hs.RunEx("Multiroom.vb", "", "SDB|VOLUME UP|a")
+        's = hs.RunEx("Multiroom.vb", "", "SDB|VOLUME UP|a")
     End Sub
 #End Region
 
@@ -306,16 +306,16 @@ Partial Public Class uModule
     Private Sub BtnPlus_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPlus.Click
         _DimValue += 10
         If _DimValue > 100 Then _DimValue = 100
-        hs.ExecX10(_Adresse, "ddim", _DimValue, 0)
+        'hs.ExecX10(_Adresse, "ddim", _DimValue, 0)
     End Sub
 
     Private Sub BtnMoins_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMoins.Click
         _DimValue -= 10
         If _DimValue < 0 Then _DimValue = 0
         If _DimValue > 0 Then
-            hs.ExecX10(_Adresse, "ddim", _DimValue, 0)
+            'hs.ExecX10(_Adresse, "ddim", _DimValue, 0)
         Else
-            hs.ExecX10(_Adresse, "off", 0, 0)
+            'hs.ExecX10(_Adresse, "off", 0, 0)
         End If
     End Sub
 #End Region
@@ -323,30 +323,30 @@ Partial Public Class uModule
 #Region "Volet"
 
     Private Sub Volet0_Click(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Volet0.MouseDown
-        hs.ExecX10(_Adresse, "off", 0, 0)
+        'hs.ExecX10(_Adresse, "off", 0, 0)
     End Sub
 
     Private Sub Volet25_Click(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Volet25.MouseDown
-        hs.ExecX10(_Adresse, "extended", 10, 3)
+        'hs.ExecX10(_Adresse, "extended", 10, 3)
     End Sub
 
     Private Sub Volet50_Click(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Volet50.MouseDown
-        hs.ExecX10(_Adresse, "extended", 16, 3)
+        'hs.ExecX10(_Adresse, "extended", 16, 3)
     End Sub
 
     Private Sub Volet75_Click(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Volet75.MouseDown
-        hs.ExecX10(_Adresse, "extended", 20, 3)
+        'hs.ExecX10(_Adresse, "extended", 20, 3)
     End Sub
 
     Private Sub Volet100_Click(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Volet100.MouseDown
-        hs.ExecX10(_Adresse, "on", 0, 0)
+        'hs.ExecX10(_Adresse, "on", 0, 0)
     End Sub
 #End Region
 
 #Region "Macro"
     Private Sub BtnRun_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnRun.Click
         Dim s
-        s = hs.RunEx(_Script, _Fonction, _Command)
+        's = hs.RunEx(_Script, _Fonction, _Command)
     End Sub
 #End Region
 End Class

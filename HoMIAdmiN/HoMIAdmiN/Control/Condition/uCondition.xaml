@@ -5,6 +5,74 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="192" d:DesignWidth="539" Margin="6" Background="Gray">
+
+    <UserControl.Resources>
+        <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
+            <ControlTemplate.Resources>
+                <Storyboard x:Key="Timeline1">
+                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="glow" Storyboard.TargetProperty="(UIElement.Opacity)">
+                        <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="1"/>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+                <Storyboard x:Key="Timeline2">
+                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="glow" Storyboard.TargetProperty="(UIElement.Opacity)">
+                        <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+            </ControlTemplate.Resources>
+            <Border BorderBrush="#FFFFFFFF" BorderThickness="1,1,1,1" CornerRadius="4,4,4,4">
+                <Border x:Name="border" Background="#7F000000" BorderBrush="#FF000000" BorderThickness="1,1,1,1" CornerRadius="4,4,4,4">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.507*"/>
+                            <RowDefinition Height="0.493*"/>
+                        </Grid.RowDefinitions>
+                        <Border Opacity="0" HorizontalAlignment="Stretch" x:Name="glow" Width="Auto" Grid.RowSpan="2" CornerRadius="4,4,4,4">
+                            <Border.Background>
+                                <RadialGradientBrush>
+                                    <RadialGradientBrush.RelativeTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="1.702" ScaleY="2.243"/>
+                                            <SkewTransform AngleX="0" AngleY="0"/>
+                                            <RotateTransform Angle="0"/>
+                                            <TranslateTransform X="-0.368" Y="-0.152"/>
+                                        </TransformGroup>
+                                    </RadialGradientBrush.RelativeTransform>
+                                    <GradientStop Color="#B28DBDFF" Offset="0"/>
+                                    <GradientStop Color="#008DBDFF" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Width="Auto" Grid.RowSpan="2"/>
+                        <Border HorizontalAlignment="Stretch" Margin="0,0,0,0" x:Name="shine" Width="Auto" CornerRadius="4,4,0,0">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.494,0.889" StartPoint="0.494,0.028">
+                                    <GradientStop Color="#99FFFFFF" Offset="0"/>
+                                    <GradientStop Color="#33FFFFFF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" TargetName="shine" Value="0.4"/>
+                    <Setter Property="Background" TargetName="border" Value="#CC000000"/>
+                    <Setter Property="Visibility" TargetName="glow" Value="Hidden"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource Timeline1}"/>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard x:Name="Timeline2_BeginStoryboard" Storyboard="{StaticResource Timeline2}"/>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </UserControl.Resources>
+
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal"> 
@@ -29,230 +97,86 @@
                     <ComboBoxItem Content="&gt;=" />
                     <ComboBoxItem Content="&lt;&gt;" />
                 </ComboBox>
-                <StackPanel Margin="3" >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Seconde: " Width="58" Foreground="White" /> 
-                        <ComboBox SelectedIndex="0" Margin="3" Width="40" Name="CbSeconde">
-                            <ComboBoxItem Content="0" />
-                            <ComboBoxItem Content="1" />
-                            <ComboBoxItem Content="2" />
-                            <ComboBoxItem Content="3" />
-                            <ComboBoxItem Content="4" />
-                            <ComboBoxItem Content="5" />
-                            <ComboBoxItem Content="6" />
-                            <ComboBoxItem Content="7" />
-                            <ComboBoxItem Content="8" />
-                            <ComboBoxItem Content="9" />
-                            <ComboBoxItem Content="10" />
-                            <ComboBoxItem Content="11" />
-                            <ComboBoxItem Content="12" />
-                            <ComboBoxItem Content="13" />
-                            <ComboBoxItem Content="14" />
-                            <ComboBoxItem Content="15" />
-                            <ComboBoxItem Content="16" />
-                            <ComboBoxItem Content="17" />
-                            <ComboBoxItem Content="18" />
-                            <ComboBoxItem Content="19" />
-                            <ComboBoxItem Content="20" />
-                            <ComboBoxItem Content="21" />
-                            <ComboBoxItem Content="22" />
-                            <ComboBoxItem Content="23" />
-                            <ComboBoxItem Content="24" />
-                            <ComboBoxItem Content="25" />
-                            <ComboBoxItem Content="26" />
-                            <ComboBoxItem Content="27" />
-                            <ComboBoxItem Content="28" />
-                            <ComboBoxItem Content="29" />
-                            <ComboBoxItem Content="30" />
-                            <ComboBoxItem Content="31" />
-                            <ComboBoxItem Content="32" />
-                            <ComboBoxItem Content="33" />
-                            <ComboBoxItem Content="34" />
-                            <ComboBoxItem Content="35" />
-                            <ComboBoxItem Content="36" />
-                            <ComboBoxItem Content="37" />
-                            <ComboBoxItem Content="38" />
-                            <ComboBoxItem Content="39" />
-                            <ComboBoxItem Content="40" />
-                            <ComboBoxItem Content="41" />
-                            <ComboBoxItem Content="42" />
-                            <ComboBoxItem Content="43" />
-                            <ComboBoxItem Content="44" />
-                            <ComboBoxItem Content="45" />
-                            <ComboBoxItem Content="46" />
-                            <ComboBoxItem Content="47" />
-                            <ComboBoxItem Content="48" />
-                            <ComboBoxItem Content="49" />
-                            <ComboBoxItem Content="50" />
-                            <ComboBoxItem Content="51" />
-                            <ComboBoxItem Content="52" />
-                            <ComboBoxItem Content="53" />
-                            <ComboBoxItem Content="54" />
-                            <ComboBoxItem Content="55" />
-                            <ComboBoxItem Content="56" />
-                            <ComboBoxItem Content="57" />
-                            <ComboBoxItem Content="58" />
-                            <ComboBoxItem Content="59" />
-                        </ComboBox>
+                <StackPanel Margin="5">
+                    <StackPanel >
+                        <CheckBox Name="ChkHeure" Content="Suivant une heure" IsChecked="True" Foreground="White" />
+                        <CheckBox Name="ChkDate" Content="Suivant une date" Foreground="White"/>
+                        <CheckBox Name="ChkJour" Content="Suivant un jour" Foreground="White"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Minute: " Width="58" Foreground="White" />
-                        <ComboBox SelectedIndex="0" Margin="3" Width="40" Name="CbMinute">
-                            <ComboBoxItem Content="0" />
-                            <ComboBoxItem Content="1" />
-                            <ComboBoxItem Content="2" />
-                            <ComboBoxItem Content="3" />
-                            <ComboBoxItem Content="4" />
-                            <ComboBoxItem Content="5" />
-                            <ComboBoxItem Content="6" />
-                            <ComboBoxItem Content="7" />
-                            <ComboBoxItem Content="8" />
-                            <ComboBoxItem Content="9" />
-                            <ComboBoxItem Content="10" />
-                            <ComboBoxItem Content="11" />
-                            <ComboBoxItem Content="12" />
-                            <ComboBoxItem Content="13" />
-                            <ComboBoxItem Content="14" />
-                            <ComboBoxItem Content="15" />
-                            <ComboBoxItem Content="16" />
-                            <ComboBoxItem Content="17" />
-                            <ComboBoxItem Content="18" />
-                            <ComboBoxItem Content="19" />
-                            <ComboBoxItem Content="20" />
-                            <ComboBoxItem Content="21" />
-                            <ComboBoxItem Content="22" />
-                            <ComboBoxItem Content="23" />
-                            <ComboBoxItem Content="24" />
-                            <ComboBoxItem Content="25" />
-                            <ComboBoxItem Content="26" />
-                            <ComboBoxItem Content="27" />
-                            <ComboBoxItem Content="28" />
-                            <ComboBoxItem Content="29" />
-                            <ComboBoxItem Content="30" />
-                            <ComboBoxItem Content="31" />
-                            <ComboBoxItem Content="32" />
-                            <ComboBoxItem Content="33" />
-                            <ComboBoxItem Content="34" />
-                            <ComboBoxItem Content="35" />
-                            <ComboBoxItem Content="36" />
-                            <ComboBoxItem Content="37" />
-                            <ComboBoxItem Content="38" />
-                            <ComboBoxItem Content="39" />
-                            <ComboBoxItem Content="40" />
-                            <ComboBoxItem Content="41" />
-                            <ComboBoxItem Content="42" />
-                            <ComboBoxItem Content="43" />
-                            <ComboBoxItem Content="44" />
-                            <ComboBoxItem Content="45" />
-                            <ComboBoxItem Content="46" />
-                            <ComboBoxItem Content="47" />
-                            <ComboBoxItem Content="48" />
-                            <ComboBoxItem Content="49" />
-                            <ComboBoxItem Content="50" />
-                            <ComboBoxItem Content="51" />
-                            <ComboBoxItem Content="52" />
-                            <ComboBoxItem Content="53" />
-                            <ComboBoxItem Content="54" />
-                            <ComboBoxItem Content="55" />
-                            <ComboBoxItem Content="56" />
-                            <ComboBoxItem Content="57" />
-                            <ComboBoxItem Content="58" />
-                            <ComboBoxItem Content="59" />
-                        </ComboBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Heure: " Width="58" Foreground="White" />
-                        <ComboBox SelectedIndex="0" Margin="3" Width="40" Name="CbHeure">
-                            <ComboBoxItem Content="0" />
-                            <ComboBoxItem Content="1" />
-                            <ComboBoxItem Content="2" />
-                            <ComboBoxItem Content="3" />
-                            <ComboBoxItem Content="4" />
-                            <ComboBoxItem Content="5" />
-                            <ComboBoxItem Content="6" />
-                            <ComboBoxItem Content="7" />
-                            <ComboBoxItem Content="8" />
-                            <ComboBoxItem Content="9" />
-                            <ComboBoxItem Content="10" />
-                            <ComboBoxItem Content="11" />
-                            <ComboBoxItem Content="12" />
-                            <ComboBoxItem Content="13" />
-                            <ComboBoxItem Content="14" />
-                            <ComboBoxItem Content="15" />
-                            <ComboBoxItem Content="16" />
-                            <ComboBoxItem Content="17" />
-                            <ComboBoxItem Content="18" />
-                            <ComboBoxItem Content="19" />
-                            <ComboBoxItem Content="20" />
-                            <ComboBoxItem Content="21" />
-                            <ComboBoxItem Content="22" />
-                            <ComboBoxItem Content="23" />
-                        </ComboBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Jour: " Width="58" Foreground="White" />
-                        <ComboBox SelectedIndex="0" Margin="3" Width="40" Name="CbJour">
-                            <ComboBoxItem Content="0" />
-                            <ComboBoxItem Content="1" />
-                            <ComboBoxItem Content="2" />
-                            <ComboBoxItem Content="3" />
-                            <ComboBoxItem Content="4" />
-                            <ComboBoxItem Content="5" />
-                            <ComboBoxItem Content="6" />
-                            <ComboBoxItem Content="7" />
-                            <ComboBoxItem Content="8" />
-                            <ComboBoxItem Content="9" />
-                            <ComboBoxItem Content="10" />
-                            <ComboBoxItem Content="11" />
-                            <ComboBoxItem Content="12" />
-                            <ComboBoxItem Content="13" />
-                            <ComboBoxItem Content="14" />
-                            <ComboBoxItem Content="15" />
-                            <ComboBoxItem Content="16" />
-                            <ComboBoxItem Content="17" />
-                            <ComboBoxItem Content="18" />
-                            <ComboBoxItem Content="19" />
-                            <ComboBoxItem Content="20" />
-                            <ComboBoxItem Content="21" />
-                            <ComboBoxItem Content="22" />
-                            <ComboBoxItem Content="23" />
-                            <ComboBoxItem Content="24" />
-                            <ComboBoxItem Content="25" />
-                            <ComboBoxItem Content="26" />
-                            <ComboBoxItem Content="27" />
-                            <ComboBoxItem Content="28" />
-                            <ComboBoxItem Content="29" />
-                            <ComboBoxItem Content="30" />
-                            <ComboBoxItem Content="31" />
-                        </ComboBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Mois: " Width="58" Foreground="White" />
-                        <ComboBox SelectedIndex="0" Margin="3" Width="40" Name="CbMois">
-                            <ComboBoxItem Content="0" />
-                            <ComboBoxItem Content="1" />
-                            <ComboBoxItem Content="2" />
-                            <ComboBoxItem Content="3" />
-                            <ComboBoxItem Content="4" />
-                            <ComboBoxItem Content="5" />
-                            <ComboBoxItem Content="6" />
-                            <ComboBoxItem Content="7" />
-                            <ComboBoxItem Content="8" />
-                            <ComboBoxItem Content="9" />
-                            <ComboBoxItem Content="10" />
-                            <ComboBoxItem Content="11" />
-                            <ComboBoxItem Content="12" />
-                        </ComboBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Journée: " Width="58" Foreground="White" />
-                        <CheckBox Content="Lun" Margin="1" Foreground="White" Name="Chk1" />
-                        <CheckBox Content="Mar" Margin="1" Foreground="White" Name="Chk2" />
-                        <CheckBox Content="Mer" Margin="1" Foreground="White" Name="Chk3" />
-                        <CheckBox Content="Jeu" Margin="1" Foreground="White" Name="Chk4" />
-                        <CheckBox Content="Ven" Margin="1" Foreground="White" Name="Chk5" />
-                        <CheckBox Content="Sam" Margin="1" Foreground="White" Name="Chk6" />
-                        <CheckBox Content="Dim" Margin="1" Foreground="White" Name="Chk7" />
+                    <StackPanel Orientation="Horizontal" >
+                        <StackPanel Name="Stk1">
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Content="Hr" HorizontalAlignment="Center" Margin="1" Name="LblH" VerticalAlignment="Top" Width="35" Foreground="White" HorizontalContentAlignment="Center" />
+                                <Label Content="Mn" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LBLM" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" />
+                                <Label Content="Ss" Foreground="White" HorizontalAlignment="Center"  Margin="1" Name="LBLS" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <Button HorizontalAlignment="Left" Margin="1" Name="BtnPHr" Width="35" Height="24" VerticalAlignment="Top" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                                </Button>
+                                <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnPMn" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                                </Button>
+                                <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnPSc" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                                </Button>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBox FontSize="20" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="1" Name="TxtHr" Text="00" VerticalAlignment="Top" Width="35" Background="Black" Foreground="White" />
+                                <TextBox HorizontalAlignment="Left" Margin="1" Name="TxtMn" VerticalAlignment="Top" Width="35" Text="00" FontSize="20" HorizontalContentAlignment="Center" Background="Black" Foreground="White" />
+                                <TextBox FontSize="20" HorizontalAlignment="Left" Margin="1" Name="TxtSc" Text="00" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" Background="Black" Foreground="White" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMHr" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                                </Button>
+                                <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMMn" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                                </Button>
+                                <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMSec" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                        <Rectangle Width="20"/>
+                        <StackPanel Name="stk2" Visibility="Hidden">
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Content="Jr" HorizontalAlignment="Center" Margin="1" Name="LblJour" VerticalAlignment="Top" Width="35" Foreground="White" HorizontalContentAlignment="Center" />
+                                <Label Content="Ms" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LblMois" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <Button HorizontalAlignment="Left" Margin="1" Name="BtnPJr" Width="35" Height="24" VerticalAlignment="Top" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                                </Button>
+                                <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnPMs" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                                </Button>
+
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal ">
+                                <TextBox FontSize="20" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="1" Name="TxtJr" Text="00" VerticalAlignment="Top" Width="35" Background="Black" Foreground="White" />
+                                <TextBox HorizontalAlignment="Left" Margin="1" Name="TxtMs" VerticalAlignment="Top" Width="35" Text="00" FontSize="20" HorizontalContentAlignment="Center" Background="Black" Foreground="White" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMJr" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                                </Button>
+                                <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMMs" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                                </Button>
+
+                            </StackPanel>
+                        </StackPanel>
+                        <Rectangle Width="20"/>
+                        <StackPanel Name="stk3" Margin="2" Visibility="Hidden">
+                            <CheckBox Content="Lundi" Height="15" HorizontalAlignment="Left"  Name="Chk1" VerticalAlignment="Top"  Foreground="White" />
+                            <CheckBox Content="Mardi" Height="15" HorizontalAlignment="Left"  Name="Chk2" VerticalAlignment="Top"  Foreground="White" />
+                            <CheckBox Content="Mercredi" Height="15" HorizontalAlignment="Left"  Name="Chk3" VerticalAlignment="Top"  Foreground="White" />
+                            <CheckBox Content="Jeudi" Height="15" HorizontalAlignment="Left"  Name="Chk4" VerticalAlignment="Top"  Foreground="White" />
+                            <CheckBox Content="Vendredi" Height="15" HorizontalAlignment="Left"  Name="Chk5" VerticalAlignment="Top"  Foreground="White" />
+                            <CheckBox Content="Samedi" Height="15" HorizontalAlignment="Left"  Name="Chk6" VerticalAlignment="Top"  Foreground="White" />
+                            <CheckBox Content="Dimanche" Height="15" HorizontalAlignment="Left"  Name="Chk7" VerticalAlignment="Top"  Foreground="White" />
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

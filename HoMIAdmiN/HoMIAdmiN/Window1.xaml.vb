@@ -134,6 +134,7 @@ Class Window1
         Try
             TreeViewZone.Items.Clear()
             If IsConnect = False Then Exit Sub
+            CntZone.Content = myService.GetAllZones.Count & " Zone(s)"
             For i As Integer = 0 To myService.GetAllZones.Count - 1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
@@ -178,6 +179,7 @@ Class Window1
         Try
             TreeViewUsers.Items.Clear()
             If IsConnect = False Then Exit Sub
+            CntUser.Content = myService.GetAllUsers.Count & " User(s)"
             For i As Integer = 0 To myService.GetAllUsers.Count - 1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
@@ -222,6 +224,7 @@ Class Window1
         Try
             TreeViewDriver.Items.Clear()
             If IsConnect = False Then Exit Sub
+            CntDriver.Content = myService.GetAllDrivers.Count & " Driver(s)"
             For i As Integer = 0 To myService.GetAllDrivers.Count - 1 'Obj.Drivers.Count - 1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
@@ -269,6 +272,7 @@ Class Window1
         Try
             TreeViewDevice.Items.Clear()
             If IsConnect = False Then Exit Sub
+            CntDevice.Content = myService.GetAllDevices.Count & " Device(s)"
             For i As Integer = 0 To myService.GetAllDevices.Count - 1 'Obj.Devices.Count - 1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
@@ -313,6 +317,7 @@ Class Window1
         Try
             TreeViewMacros.Items.Clear()
             If IsConnect = False Then Exit Sub
+            CntMacro.Content = myService.GetAllMacros.Count & " Macro(s)"
             For i As Integer = 0 To myService.GetAllMacros.Count - 1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
@@ -353,6 +358,7 @@ Class Window1
         Try
             TreeViewTriggers.Items.Clear()
             If IsConnect = False Then Exit Sub
+            CntTrigger.Content = myService.GetAllTriggers.Count & " Trigger(s)"
             For i As Integer = 0 To myService.GetAllTriggers.Count - 1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
@@ -399,25 +405,25 @@ Class Window1
     'Afficher la liste des historisations
     Public Sub AffHisto()
         Try
-
-
             ListHisto.Items.Clear()
-            Dim x As New List(Of String)
+            Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
             x = myService.GetAllListHisto
 
             If x IsNot Nothing Then
                 For i As Integer = 0 To x.Count - 1
                     Dim y As New CheckBox
-                    Dim a() As String = x(i).Split("|")
-                    'Dim b As String = myService.ReturnDeviceByID(a(1)).Name
-                    'If b = "" Then b = "?"
-                    y.Content = a(0) '& " {" & b & "}"
+                    Dim a As Historisation = x.Item(i)
+                    Dim b As String = myService.ReturnDeviceByID(a.IdDevice).Name
+                    If b = "" Then b = "?"
+                    y.Content = a.Nom & " {" & b & "}"
+                    y.Tag = a.Nom
+                    y.Uid = a.IdDevice
                     y.Foreground = New SolidColorBrush(Colors.White)
                     ListHisto.Items.Add(y)
                 Next
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+
         End Try
     End Sub
 #End Region
@@ -1074,11 +1080,11 @@ Class Window1
     'End Sub
 
     Private Sub MenuTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuTest.Click
-        Dim x As New uHisto
-        x.Uid = System.Guid.NewGuid.ToString()
-        AddHandler x.CloseMe, AddressOf UnloadControl
-        CanvasRight.Children.Clear()
-        CanvasRight.Children.Add(x)
+        'Dim x As New uHisto
+        'x.Uid = System.Guid.NewGuid.ToString()
+        'AddHandler x.CloseMe, AddressOf UnloadControl
+        'CanvasRight.Children.Clear()
+        'CanvasRight.Children.Add(x)
         'Try
         '    Image5.Source = ConvertArrayToImage(myService.GetByteFromImage("d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\Images\Graphes\test.png"))
         'Catch ex As Exception
@@ -1146,7 +1152,75 @@ Class Window1
         End If
     End Sub
 
+    Private Sub BtnGenereGraph_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereGraph.Click
+        Dim myPane As New ZedGraph.GraphPane
+        Dim ListColor As New List(Of System.Drawing.Color)
+        Dim idxcolor As Integer = -1
 
 
+        ListColor.Add(System.Drawing.Color.Blue)
+        ListColor.Add(System.Drawing.Color.Red)
+        ListColor.Add(System.Drawing.Color.Green)
+        ListColor.Add(System.Drawing.Color.Yellow)
+        ListColor.Add(System.Drawing.Color.Orange)
+        ListColor.Add(System.Drawing.Color.Violet)
+        ListColor.Add(System.Drawing.Color.DarkBlue)
+        ListColor.Add(System.Drawing.Color.DarkRed)
+        ListColor.Add(System.Drawing.Color.DarkGreen)
+        ListColor.Add(System.Drawing.Color.Turquoise)
+        ListColor.Add(System.Drawing.Color.DarkOrange)
+        ListColor.Add(System.Drawing.Color.DarkViolet)
 
+        For i As Integer = 0 To ListHisto.Items.Count - 1
+            Dim chk As CheckBox = ListHisto.Items(i)
+
+            If chk.IsChecked = True Then
+                Dim _listhisto As New List(Of Historisation)
+                _listhisto = myService.GetHisto(chk.Tag, chk.Uid)
+
+                Dim listpoint As New ZedGraph.PointPairList
+                For j As Integer = 0 To _listhisto.Count - 1
+                    If IsNumeric(_listhisto.Item(j).Value) = False Then
+                        listpoint = Nothing
+                        Exit For
+                    End If
+                    listpoint.Add(New ZedGraph.PointPair(_listhisto.Item(j).DateTime.ToOADate, _listhisto.Item(j).Value))
+                Next
+
+                Dim courbe As ZedGraph.LineItem
+                idxcolor += 1
+                If idxcolor = ListColor.Count - 1 Then idxcolor = 0
+
+                courbe = myPane.AddCurve(chk.Content, listpoint, ListColor(idxcolor), ZedGraph.SymbolType.None)
+                courbe.Line.Width = 1
+                'courbe.Line.Fill = New ZedGraph.Fill(System.Drawing.Color.FromArgb(150, 250, 220, 220))
+
+            End If
+
+
+            'Mypane
+            'myPane.Rect = New System.Drawing.RectangleF(0, 0, largeur, hauteur)
+            'myPane.Title.FontSpec.FontColor = Color.DodgerBlue
+            'myPane.Legend.IsVisible = True 'on affiche la légende ou non
+            myPane.Chart.Fill = New ZedGraph.Fill(System.Drawing.Color.FromArgb(240, 245, 250), System.Drawing.Color.FromArgb(210, 230, 240), -90) 'fond dégradé
+
+            'Axe X
+            myPane.XAxis.Type = ZedGraph.AxisType.Date
+            myPane.XAxis.Scale.Format = "dd-MM-yy HH:mm" '"dd-MMM-yy HH:mm:ss"
+            myPane.XAxis.MajorGrid.Color = System.Drawing.Color.LightGray
+            myPane.XAxis.MajorGrid.PenWidth = 1
+            myPane.XAxis.MajorGrid.IsVisible = True
+
+            'Axe Y
+            myPane.YAxis.MajorGrid.Color = System.Drawing.Color.LightGray
+            myPane.YAxis.MajorGrid.PenWidth = 1
+            myPane.YAxis.MajorGrid.IsVisible = True
+
+            Dim x As New uHisto(myPane)
+            x.Uid = System.Guid.NewGuid.ToString()
+            AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
+            CanvasRight.Children.Add(x)
+        Next
+    End Sub
 End Class

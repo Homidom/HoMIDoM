@@ -245,7 +245,12 @@
         Else
             i = TxtHr.Text
             i += 1
-            If i > 23 Then TxtHr.Text = ""
+            If i > 23 Then
+                TxtHr.Text = ""
+            Else
+                TxtHr.Text = i
+            End If
+
         End If
     End Sub
 
@@ -257,7 +262,12 @@
         Else
             i = TxtMn.Text
             i += 1
-            If i > 23 Then TxtMn.Text = ""
+            If i > 23 Then
+                TxtMn.Text = ""
+            Else
+                TxtMn.Text = i
+            End If
+
         End If
     End Sub
 
@@ -269,7 +279,12 @@
         Else
             i = TxtSc.Text
             i += 1
-            If i > 59 Then TxtSc.Text = ""
+            If i > 59 Then
+                TxtSc.Text = ""
+            Else
+                TxtSc.Text = i
+            End If
+
         End If
     End Sub
 
@@ -281,7 +296,12 @@
         Else
             i = TxtHr.Text
             i -= 1
-            If i < 0 Then TxtHr.Text = ""
+            If i < 0 Then
+                TxtHr.Text = ""
+            Else
+                TxtHr.Text = i
+            End If
+
         End If
     End Sub
 
@@ -293,7 +313,12 @@
         Else
             i = TxtMn.Text
             i -= 1
-            If i < 0 Then TxtMn.Text = ""
+            If i < 0 Then
+                TxtMn.Text = ""
+            Else
+                TxtMn.Text = i
+            End If
+
         End If
 
     End Sub
@@ -306,7 +331,12 @@
         Else
             i = TxtSc.Text
             i -= 1
-            If i < 0 Then TxtSc.Text = ""
+            If i < 0 Then
+                TxtSc.Text = ""
+            Else
+                TxtSc.Text = i
+            End If
+
         End If
     End Sub
 
@@ -318,7 +348,11 @@
         Else
             i = TxtJr.Text
             i += 1
-            If i > 31 Then TxtJr.Text = ""
+            If i > 31 Then
+                TxtJr.Text = ""
+            Else
+                TxtJr.Text = i
+            End If
         End If
     End Sub
 
@@ -330,7 +364,12 @@
         Else
             i = TxtMs.Text
             i += 1
-            If i > 12 Then TxtMs.Text = ""
+            If i > 12 Then
+                TxtMs.Text = ""
+            Else
+                TxtMs.Text = i
+            End If
+
         End If
     End Sub
 
@@ -342,7 +381,12 @@
         Else
             i = TxtJr.Text
             i -= 1
-            If i < 1 Then TxtJr.Text = ""
+            If i < 1 Then
+                TxtJr.Text = ""
+            Else
+                TxtJr.Text = i
+            End If
+
         End If
     End Sub
 
@@ -354,7 +398,12 @@
         Else
             i = TxtMs.Text
             i -= 1
-            If i < 1 Then TxtMs.Text = ""
+            If i < 1 Then
+                TxtMs.Text = ""
+            Else
+                TxtMs.Text = i
+            End If
+
         End If
     End Sub
 

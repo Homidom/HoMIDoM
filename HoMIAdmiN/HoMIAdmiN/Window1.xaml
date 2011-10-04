@@ -216,7 +216,7 @@
             <Rectangle Width="25"/>
             <Image Height="20"  Name="Image3" Stretch="Fill" Width="20" Source="/HoMIAdmiN;component/Images/Soleil.png" />
             <Label Content="##:##" Name="LHS" Foreground="White" />
-            <Image Height="20"  Name="Image4" Stretch="Fill" VerticalAlignment="Top" Width="20" Source="/HoMIAdmiN;component/Images/Lune.png" />
+            <Image Height="20"  Name="Image4" Stretch="Fill" Width="20" Source="/HoMIAdmiN;component/Images/Lune.png" />
             <Label Content="##:##" Name="LCS" Foreground="White" />
             <Rectangle Width="20" />
             <Image Name="ImgSrv" Margin="2" Height="25" Width="25" Source="/HoMIAdmiN;component/Images/home-128.png">
@@ -230,8 +230,8 @@
         <StackPanel HorizontalAlignment="Left" Margin="1" Name="StackPanel3" DockPanel.Dock="Left">
             <TabControl Name="TabControl1" Width="187" Template="{StaticResource OutlookTab}" TabStripPlacement="Top" >
                 <TabItem Header="Drivers" Name="TabItem1" IsSelected="True" >
-                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <StackPanel >
+                    <StackPanel >
+                        <StackPanel VerticalAlignment="Top">
                             <TreeView Margin="5" Name="TreeViewDriver" Background="DimGray" Foreground="White" Height="300"  />
                             <StackPanel Orientation="Horizontal" >
                                 <Button Height="22" Width="22" HorizontalAlignment="Left" Margin="5" Name="BtnStart" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" Foreground="White" ToolTip="Démarrer le driver">
@@ -240,13 +240,15 @@
                                 <Button Height="22" Margin="5" Name="BtnStop" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Foreground="White" HorizontalAlignment="Right" Width="22" ToolTip="Arrêter le driver">
                                     <Image Source="/HoMIAdmiN;component/Images/stop-48.png" />
                                 </Button>
+                                <Rectangle Width="10" />
+                                <Label Margin="5" Name="CntDriver" Content="0 Driver(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
                             </StackPanel>
                         </StackPanel>
-                    </Grid>
+                    </StackPanel >
                 </TabItem>
                 <TabItem Header="Devices">
-                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <TreeView Margin="5,4,4,30" Name="TreeViewDevice" Background="DimGray" Height="300" />
+                    <StackPanel >
+                        <TreeView Margin="4" Name="TreeViewDevice" Background="DimGray" Height="300" />
                         <StackPanel Orientation="Horizontal" >
                             <Button Height="22" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5" Name="BtnNewDevice" VerticalAlignment="Bottom" Width="22" Foreground="White" ToolTip="Nouveau Device">
                                 <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
@@ -254,13 +256,14 @@
                             <Button Foreground="White" Height="22" Template="{DynamicResource GlassButton}" Margin="5" Name="BtnDelDevice" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="22" ToolTip="Supprimer un Device">
                                 <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
                             </Button>
+                            <Rectangle Width="10" />
+                            <Label Margin="5" Name="CntDevice" Content="0 Device(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
                             <Image Height="22" Margin="5" Name="TplDevImg" Stretch="Fill" Width="22" Source="/HoMIAdmiN;component/Images/Defaut-128.png" Visibility="Hidden" />
                         </StackPanel>
-                    </Grid>
+                    </StackPanel>
                 </TabItem>
                 <TabItem Header="Zones">
-                    <Grid Height="Auto">
-                        <StackPanel >
+                      <StackPanel VerticalAlignment="Top">
                             <TreeView Margin="5" Name="TreeViewZone" Background="DimGray" Height="300" />
                             <StackPanel Orientation="Horizontal" >
                                 <Button Height="22" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5" Name="BtnNewZone" Width="22" ToolTip="Nouvelle zone">
@@ -269,12 +272,14 @@
                                 <Button Height="22" Template="{DynamicResource GlassButton}" Margin="5" Name="BtnDelZone" Width="22" ToolTip="Supprimer une zone">
                                     <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
                                 </Button>
+                                <Rectangle Width="10" />
+                                <Label Margin="5" Name="CntZone" Content="0 Zone(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
                             </StackPanel>
                         </StackPanel>
-                    </Grid>
+                   
                 </TabItem>
                 <TabItem Header="Utilisateurs">
-                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <StackPanel VerticalAlignment="Top">
                         <StackPanel >
                             <TreeView Background="DimGray" Margin="5" Name="TreeViewUsers" Height="300" />
                             <StackPanel Orientation="Horizontal" >
@@ -284,13 +289,16 @@
                                 <Button Height="22" Margin="5" Name="BtnDelUser" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Supprimer User">
                                     <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
                                 </Button>
+                                <Rectangle Width="10" />
+                                <Label Margin="5" Name="CntUser" Content="0 User(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
+
                             </StackPanel>
                         </StackPanel>
-                    </Grid>
+                    </StackPanel >
                 </TabItem>
                 <TabItem Header="Triggers" Name="TabItem2" >
-                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <StackPanel >
+                    <StackPanel >
+                        <StackPanel VerticalAlignment="Top">
                             <TreeView Background="DimGray" Margin="5" Name="TreeViewTriggers" Height="300" />
                             <StackPanel Orientation="Horizontal" >
                                 <Button Height="22" Margin="5" Name="BtnNewTriggerDevice" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Ajouter un nouveau Trigger Device">
@@ -302,13 +310,15 @@
                                 <Button Foreground="White" Height="22" Margin="5" Name="BtnDelTrigger" Template="{DynamicResource GlassButton}" Width="22">
                                     <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" ToolTip="Supprimer" />
                                 </Button>
+                                <Rectangle Width="10" />
+                                <Label Margin="5" Name="CntTrigger" Content="0 Trigger(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
                             </StackPanel>
                         </StackPanel>
-                    </Grid>
+                    </StackPanel >
                 </TabItem>
                 <TabItem Header="Macros">
-                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <StackPanel >
+                    <StackPanel >
+                        <StackPanel VerticalAlignment="Top">
                             <TreeView Background="DimGray" Margin="5" Name="TreeViewMacros" Height="300" AllowDrop="False" />
                             <StackPanel Orientation="Horizontal" >
                                 <Button Height="22" Margin="5" Name="BtnNewMacro" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Nouvelle macro">
@@ -317,9 +327,11 @@
                                 <Button Height="22" Margin="5" Name="BtnDelMacro" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Supprimer Macro">
                                     <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
                                 </Button>
+                                <Rectangle Width="10" />
+                                <Label Margin="5" Name="CntMacro" Content="0 Macro(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
                             </StackPanel>
                         </StackPanel>
-                    </Grid>
+                    </StackPanel >
                 </TabItem>
                 <TabItem Header="Historisation">
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -327,7 +339,7 @@
                             <ListBox Background="DimGray" Margin="5" Name="ListHisto" Height="300" AllowDrop="False"/>
                             <StackPanel Orientation="Horizontal" >
                                 <Button Height="22" Margin="5" Name="BtnGenereGraph" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Générer">
-                                    <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
+                                    <Image Source="/HoMIAdmiN;component/Images/curve-32.png" />
                                 </Button>
                                 
                             </StackPanel>

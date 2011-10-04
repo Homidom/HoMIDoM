@@ -231,11 +231,10 @@ Class Window1
             ''Connexion à HomeSeer
             ConnectToHS()
 
-
-            If IsHSConnect = True Then
-                LblLeve.Content = Mid(hs.Sunrise, 1, 5)
-                LblCouche.Content = Mid(hs.Sunset, 1, 5)
-            End If
+            'If IsHSConnect = True Then
+            '    LblLeve.Content = Mid(hs.Sunrise, 1, 5)
+            '    LblCouche.Content = Mid(hs.Sunset, 1, 5)
+            'End If
             If IsConnect = True Then
                 Dim mydate As Date
                 mydate = myService.GetHeureLeverSoleil
@@ -732,46 +731,46 @@ Class Window1
 #Region "Connexion"
     'Connexion au serveur HomeSeer
     Private Sub ConnectToHS()
-        If My.Computer.Network.IsAvailable = True Then
-            Try
-                myxml = New clsXML("C:\ehome\config\wehome_config.xml")
-                list = myxml.SelectNodes("/wehome/connect/element")
-                For i As Integer = 0 To list.Count - 1
-                    _Serveur = list(i).Attributes.Item(0).Value
-                    _Login = list(i).Attributes.Item(1).Value
-                    _Password = list(i).Attributes.Item(2).Value
-                Next
-            Catch ex As Exception
-                Log(TypeLog.INFO, TypeSource.CLIENT, "ConnectToHS", "Erreur lors du chargement des paramètres de connexion: " & ex.Message)
-            End Try
+        'If My.Computer.Network.IsAvailable = True Then
+        '    Try
+        '        myxml = New clsXML("C:\ehome\config\wehome_config.xml")
+        '        list = myxml.SelectNodes("/wehome/connect/element")
+        '        For i As Integer = 0 To list.Count - 1
+        '            _Serveur = list(i).Attributes.Item(0).Value
+        '            _Login = list(i).Attributes.Item(1).Value
+        '            _Password = list(i).Attributes.Item(2).Value
+        '        Next
+        '    Catch ex As Exception
+        '        Log(TypeLog.INFO, TypeSource.CLIENT, "ConnectToHS", "Erreur lors du chargement des paramètres de connexion: " & ex.Message)
+        '    End Try
 
-            Dim hsapp As HomeSeer2.application = New HomeSeer2.application
-            hsapp.SetHost(_Serveur) '("seb-serveur-002:81")
-            Dim rval As String = hsapp.Connect(_Login, _Password) '("sebastien", "clarisse1705")
-            If rval <> "" Then
-                Log(TypeLog.INFO, TypeSource.CLIENT, "ConnectToHS", "State: Unable to connect to HomeSeer, is it running? You need to be on the same subnet as HomeSeer")
-                rval = hsapp.Connect(_Login, _Password) '("sebastien", "clarisse1705")
-                If rval <> "" Then
-                    IsHSConnect = False
-                    rval = hsapp.Connect(_Login, _Password) '("sebastien", "clarisse1705")
-                    If rval <> "" Then
-                        IsHSConnect = False
-                    Else
-                        IsHSConnect = True
-                        hs = hsapp.GetHSRef
-                    End If
-                Else
-                    IsHSConnect = True
-                    hs = hsapp.GetHSRef
-                End If
-            Else
-                Log(TypeLog.INFO, TypeSource.CLIENT, "ConnectToHS", "State: Connect to HomeSeer")
-                IsHSConnect = True
-                hs = hsapp.GetHSRef
-            End If
-        Else
-            IsHSConnect = False
-        End If
+        '    Dim hsapp As HomeSeer2.application = New HomeSeer2.application
+        '    hsapp.SetHost(_Serveur) '("seb-serveur-002:81")
+        '    Dim rval As String = hsapp.Connect(_Login, _Password) '("sebastien", "clarisse1705")
+        '    If rval <> "" Then
+        '        Log(TypeLog.INFO, TypeSource.CLIENT, "ConnectToHS", "State: Unable to connect to HomeSeer, is it running? You need to be on the same subnet as HomeSeer")
+        '        rval = hsapp.Connect(_Login, _Password) '("sebastien", "clarisse1705")
+        '        If rval <> "" Then
+        '            IsHSConnect = False
+        '            rval = hsapp.Connect(_Login, _Password) '("sebastien", "clarisse1705")
+        '            If rval <> "" Then
+        '                IsHSConnect = False
+        '            Else
+        '                IsHSConnect = True
+        '                hs = hsapp.GetHSRef
+        '            End If
+        '        Else
+        '            IsHSConnect = True
+        '            hs = hsapp.GetHSRef
+        '        End If
+        '    Else
+        '        Log(TypeLog.INFO, TypeSource.CLIENT, "ConnectToHS", "State: Connect to HomeSeer")
+        '        IsHSConnect = True
+        '        hs = hsapp.GetHSRef
+        '    End If
+        'Else
+        '    IsHSConnect = False
+        'End If
     End Sub
 
     'Connexion au serveur Homdidom
@@ -825,21 +824,21 @@ Class Window1
         Try
             'ConnectToHomeSeer()
             LblTime.Content = Now.ToLongDateString & " " & Now.ToShortTimeString
-            If IsHSConnect = True Then
-                LblLeve.Content = Mid(hs.Sunrise, 1, 5)
-                LblCouche.Content = Mid(hs.Sunset, 1, 5)
-                LblTemp.Content = "INT: " & hs.DeviceString("T3") & "°C / EXT: " & hs.DeviceString("T2") & "°C"
+            'If IsHSConnect = True Then
+            '    LblLeve.Content = Mid(hs.Sunrise, 1, 5)
+            '    LblCouche.Content = Mid(hs.Sunset, 1, 5)
+            '    LblTemp.Content = "INT: " & hs.DeviceString("T3") & "°C / EXT: " & hs.DeviceString("T2") & "°C"
+            'Else
+            If IsConnect = True Then
+                Dim mydate As Date
+                mydate = myService.GetHeureLeverSoleil
+                LblLeve.Content = mydate.ToShortTimeString
+                mydate = myService.GetHeureCoucherSoleil
+                LblCouche.Content = mydate.ToShortTimeString
             Else
-                If IsConnect = True Then
-                    Dim mydate As Date
-                    mydate = myService.GetHeureLeverSoleil
-                    LblLeve.Content = mydate.ToShortTimeString
-                    mydate = myService.GetHeureCoucherSoleil
-                    LblCouche.Content = mydate.ToShortTimeString
-                Else
-                    LblTemp.Content = "?"
-                End If
+                LblTemp.Content = "?"
             End If
+            ' End If
         Catch ex As Exception
             Log(TypeLog.INFO, TypeSource.CLIENT, "DispatcherTimer", "DispatcherTimer: " & ex.Message)
         End Try
@@ -975,9 +974,9 @@ Class Window1
 
     Private Sub Window1_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
         Try
-            If IsHSConnect = True Then hsapp.Disconnect()
-            Canvas1.Children.Clear()
-            End
+            'If IsHSConnect = True Then hsapp.Disconnect()
+            'Canvas1.Children.Clear()
+            'End
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermeture de l'application")
         Catch ex As Exception
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Erreur Lors de la fermeture: " & ex.Message)

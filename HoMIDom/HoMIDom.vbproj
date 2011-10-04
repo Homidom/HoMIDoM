@@ -104,6 +104,7 @@
     <Compile Include="Driver.vb" />
     <Compile Include="FileServer.vb" />
     <Compile Include="Graphes.vb" />
+    <Compile Include="Historisation.vb" />
     <Compile Include="IDriver.vb" />
     <Compile Include="IHoMIDom.vb" />
     <Compile Include="Macro.vb" />

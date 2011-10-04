@@ -6,6 +6,6 @@ Public Class hsclass
     End Sub
 
     Public Sub New()
-        hsapp.RegisterEventCB(4, Me)
+        'hsapp.RegisterEventCB(4, Me)
     End Sub
 End Class

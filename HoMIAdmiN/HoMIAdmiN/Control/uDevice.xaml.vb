@@ -108,15 +108,13 @@ Partial Public Class uDevice
                     End If
 
                     If x.Type = ListeDevices.MULTIMEDIA Then
-                        GroupBox1.Visibility = Windows.Visibility.Visible
                         ListCmd.Items.Clear()
                         For i As Integer = 0 To x.ListCommandName.Count - 1
                             ListCmd.Items.Add(x.ListCommandName(i))
                         Next
                         x = Nothing
                     Else
-                        GroupBox1.Visibility = Windows.Visibility.Hidden
-                        GroupBox1.Height = 0
+                        StkCde.Height = 0
                     End If
                 End If
             End If
@@ -217,9 +215,9 @@ Partial Public Class uDevice
             End If
 
             If CbType.SelectedValue = "MULTIMEDIA" Then
-                GroupBox1.Visibility = Windows.Visibility.Visible
+
             Else
-                GroupBox1.Visibility = Windows.Visibility.Hidden
+                StkCde.Height = 0
             End If
         End If
     End Sub

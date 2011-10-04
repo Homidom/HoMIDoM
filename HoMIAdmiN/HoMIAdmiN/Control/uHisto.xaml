@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-              >
+            Margin="10"  >
     
         <UserControl.Resources>
             <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
@@ -79,7 +79,6 @@
                     <Label HorizontalAlignment="Center" Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Historisation</Label>
                 <StackPanel HorizontalAlignment="Right">
                     <StackPanel>
-                        <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="2" Name="BtnOK" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Ok</Button>
                         <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="2" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Fermer</Button>
                     </StackPanel>
                     </StackPanel>
