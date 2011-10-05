@@ -155,31 +155,41 @@ Partial Public Class uZone
     End Sub
 
     Private Sub ImgZone_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgZone.MouseLeftButtonDown
-        Dim dlg As New Microsoft.Win32.OpenFileDialog()
-        dlg.Filter = "jpeg (*.jpg) |*.jpg;*.jpeg|(*.png) |*.png|(*.*) |*.*"
-
-        If dlg.ShowDialog() = True Then
-            Dim bmpImage As New BitmapImage()
-            bmpImage.BeginInit()
-            bmpImage.UriSource = New Uri(dlg.FileName, UriKind.Absolute)
-            bmpImage.EndInit()
-            ImgZone.Source = bmpImage
-            ImgZone.Tag = dlg.FileName
-        End If
+        Try
+            Dim frm As New WindowImg
+            frm.ShowDialog()
+            If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+                Dim retour As String = frm.FileName
+                If retour <> "" Then
+                    ImgZone.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(retour))
+                    ImgZone.Tag = retour
+                End If
+                frm.Close()
+            Else
+                frm.Close()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub ImgZone_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub ImgIcon_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgIcon.MouseLeftButtonDown
-        Dim dlg As New Microsoft.Win32.OpenFileDialog()
-        dlg.Filter = "jpeg (*.jpg) |*.jpg;*.jpeg|(*.png) |*.png|(*.*) |*.*"
-
-        If dlg.ShowDialog() = True Then
-            Dim bmpImage As New BitmapImage()
-            bmpImage.BeginInit()
-            bmpImage.UriSource = New Uri(dlg.FileName, UriKind.Absolute)
-            bmpImage.EndInit()
-            ImgIcon.Source = bmpImage
-            ImgIcon.Tag = dlg.FileName
-        End If
+        Try
+            Dim frm As New WindowImg
+            frm.ShowDialog()
+            If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+                Dim retour As String = frm.FileName
+                If retour <> "" Then
+                    ImgIcon.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(retour))
+                    ImgIcon.Tag = retour
+                End If
+                frm.Close()
+            Else
+                frm.Close()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub ImgIcon_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
 

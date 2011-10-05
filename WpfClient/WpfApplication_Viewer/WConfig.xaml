@@ -122,19 +122,9 @@
                             <Label Content="Port:" MinWidth=" 35" />
                             <TextBox Name="TxtPort" Width="191" />
                         </StackPanel>
-                        <Label Content=" HomeSeer"/>
-                        <StackPanel Orientation="Horizontal" >
-                            <Label Content="Adresse:" MinWidth=" 60"/>
-                            <TextBox Name="txtAdrss" Width="191" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
-                            <Label Content="Login:" MinWidth=" 60" />
-                            <TextBox Name="TxtLogin" Width="191" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
-                            <Label Content="Password:" MinWidth=" 60" />
-                            <TextBox Name="TxtPassword" Width="191" />
-                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" ></StackPanel>
+                        <StackPanel Orientation="Horizontal" ></StackPanel>
+                        <StackPanel Orientation="Horizontal" ></StackPanel>
                     </StackPanel>
                 </GroupBox >
 

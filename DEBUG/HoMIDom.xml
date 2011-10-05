@@ -566,6 +566,12 @@ HoMIDom
 	<param name="file"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetListOfImage">
+	<summary>
+ Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DeleteExtensionAudio(System.String)">
 	<summary>Supprimer une extension Audio</summary>
 	<param name="NomExtension"></param>
@@ -1084,6 +1090,12 @@ HoMIDom
   Convert a file on a byte array.
  </summary>
 	<param name="file"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetListOfImage">
+	<summary>
+ Retourne la liste de tous les fichiers image présent sur le serveur
+ </summary>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllListHisto">

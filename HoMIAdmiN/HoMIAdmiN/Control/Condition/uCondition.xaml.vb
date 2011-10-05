@@ -4,7 +4,7 @@ Public Class uCondition
     Dim _TypeCondition As Action.TypeCondition
     Dim _Operateur As Action.TypeOperateur
     Dim _Signe As Action.TypeSigne
-    Dim _DateTime As String = "0#0#0#0#0#0000000" '#jj#MMM#JJJ
+    Dim _DateTime As String = "0#0#0#0#0#0000000#0#0" '#jj#MMM#JJJ
     Dim _IdDevice As String
     Dim _PropertyDevice As String
     Dim _Value As Object
@@ -59,6 +59,7 @@ Public Class uCondition
         Set(ByVal value As String)
             _DateTime = value
             Dim a() As String = _DateTime.Split("#")
+
             If a(0) = "*" Then
                 TxtSc.Text = ""
             Else
@@ -117,6 +118,10 @@ Public Class uCondition
                     ChkJour.IsChecked = True
                     stk3.Visibility = Windows.Visibility.Visible
                 End If
+            End If
+            If a.Count > 7 Then
+                If a(6) = "1" Then ChkLeveS.IsChecked = True
+                If a(7) = "1" Then ChkCoucheS.IsChecked = True
             End If
         End Set
     End Property
@@ -226,17 +231,31 @@ Public Class uCondition
         If _TypeCondition = Action.TypeCondition.DateTime Then
 
             Dim _myconditiontime As String = ""
-            If TxtSc.Text = "" Then TxtSc.Text = "*"
-            If TxtMn.Text = "" Then TxtMn.Text = "*"
-            If TxtHr.Text = "" Then TxtHr.Text = "*"
-            If TxtJr.Text = "" Then TxtJr.Text = "*"
-            If TxtMs.Text = "" Then TxtMs.Text = "*"
-
-            _myconditiontime &= TxtSc.Text & "#"
-            _myconditiontime &= TxtMn.Text & "#"
-            _myconditiontime &= TxtHr.Text & "#"
-            _myconditiontime &= TxtJr.Text & "#"
-            _myconditiontime &= TxtMs.Text & "#"
+            If TxtSc.Text = "" Then
+                _myconditiontime &= "*#"
+            Else
+                _myconditiontime &= TxtSc.Text & "#"
+            End If
+            If TxtMn.Text = "" Then
+                _myconditiontime &= "*#"
+            Else
+                _myconditiontime &= TxtMn.Text & "#"
+            End If
+            If TxtHr.Text = "" Then
+                _myconditiontime &= "*#"
+            Else
+                _myconditiontime &= TxtHr.Text & "#"
+            End If
+            If TxtJr.Text = "" Then
+                _myconditiontime &= "*#"
+            Else
+                _myconditiontime &= TxtJr.Text & "#"
+            End If
+            If TxtMs.Text = "" Then
+                _myconditiontime &= "*#"
+            Else
+                _myconditiontime &= TxtMs.Text & "#"
+            End If
 
             Dim _prepajr As String = ""
             If Chk1.IsChecked = True Then _prepajr = "1"
@@ -282,7 +301,19 @@ Public Class uCondition
                     _prepajr = "0"
                 End If
             End If
-            _myconditiontime &= _prepajr
+            _myconditiontime &= _prepajr & "#"
+
+            If ChkLeveS.IsChecked = True Then
+                _myconditiontime &= "1#"
+            Else
+                _myconditiontime &= "0#"
+            End If
+            If ChkCoucheS.IsChecked = True Then
+                _myconditiontime &= "1"
+            Else
+                _myconditiontime &= "0"
+            End If
+
             _DateTime = _myconditiontime
             _Signe = CbSigne1.SelectedIndex
         Else
@@ -359,7 +390,7 @@ Public Class uCondition
         Else
             i = TxtMn.Text
             i += 1
-            If i > 23 Then
+            If i > 59 Then
                 TxtMn.Text = ""
             Else
                 TxtMn.Text = i
@@ -405,7 +436,7 @@ Public Class uCondition
     Private Sub BtnMMn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMMn.Click
         Dim i As Integer
         If TxtMn.Text = "" Then
-            i = 23
+            i = 59
             TxtMn.Text = Format(i, "00")
         Else
             i = TxtMn.Text
@@ -547,6 +578,7 @@ Public Class uCondition
 
     Private Sub ChkDate_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChkDate.Click
         If ChkDate.IsChecked = True Then
+            If CbSigne1.Visibility = Windows.Visibility.Hidden Then CbSigne1.Visibility = Windows.Visibility.Visible
             stk2.Visibility = Windows.Visibility.Visible
             stk3.Visibility = Windows.Visibility.Hidden
             ChkJour.IsChecked = False
@@ -566,12 +598,18 @@ Public Class uCondition
 
     Private Sub ChkJour_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChkJour.Click
         If ChkJour.IsChecked = True Then
+            If ChkHeure.IsChecked = False Then
+                CbSigne1.SelectedIndex = 0
+                CbSigne1.Visibility = Windows.Visibility.Hidden
+            End If
+
             stk2.Visibility = Windows.Visibility.Hidden
             stk3.Visibility = Windows.Visibility.Visible
             ChkDate.IsChecked = False
             TxtMs.Text = ""
             TxtJr.Text = ""
         Else
+            CbSigne1.Visibility = Windows.Visibility.Visible
             stk3.Visibility = Windows.Visibility.Hidden
             Chk1.IsChecked = False
             Chk2.IsChecked = False
@@ -586,11 +624,62 @@ Public Class uCondition
     Private Sub ChkHeure_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChkHeure.Click
         If ChkHeure.IsChecked = True Then
             Stk1.Visibility = Windows.Visibility.Visible
+            If CbSigne1.Visibility = Windows.Visibility.Hidden Then CbSigne1.Visibility = Windows.Visibility.Visible
         Else
             Stk1.Visibility = Windows.Visibility.Hidden
             TxtHr.Text = ""
             TxtMn.Text = ""
             TxtSc.Text = ""
+        End If
+    End Sub
+
+    Private Sub ChkLeveS_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChkLeveS.Checked
+        If ChkLeveS.IsChecked = True Then
+            If CbSigne1.Visibility = Windows.Visibility.Hidden Then CbSigne1.Visibility = Windows.Visibility.Visible
+            Stk1.Visibility = Windows.Visibility.Hidden
+            stk2.Visibility = Windows.Visibility.Hidden
+            stk3.Visibility = Windows.Visibility.Hidden
+            ChkHeure.IsChecked = False
+            ChkDate.IsChecked = False
+            ChkJour.IsChecked = False
+            TxtHr.Text = ""
+            TxtMn.Text = ""
+            TxtSc.Text = ""
+            TxtMs.Text = ""
+            TxtJr.Text = ""
+            Chk1.IsChecked = False
+            Chk2.IsChecked = False
+            Chk3.IsChecked = False
+            Chk4.IsChecked = False
+            Chk5.IsChecked = False
+            Chk6.IsChecked = False
+            Chk7.IsChecked = False
+            ChkCoucheS.IsChecked = False
+        End If
+    End Sub
+
+    Private Sub ChkCoucheS_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChkCoucheS.Checked
+        If ChkCoucheS.IsChecked = True Then
+            If CbSigne1.Visibility = Windows.Visibility.Hidden Then CbSigne1.Visibility = Windows.Visibility.Visible
+            Stk1.Visibility = Windows.Visibility.Hidden
+            stk2.Visibility = Windows.Visibility.Hidden
+            stk3.Visibility = Windows.Visibility.Hidden
+            ChkHeure.IsChecked = False
+            ChkDate.IsChecked = False
+            ChkJour.IsChecked = False
+            TxtHr.Text = ""
+            TxtMn.Text = ""
+            TxtSc.Text = ""
+            TxtMs.Text = ""
+            TxtJr.Text = ""
+            Chk1.IsChecked = False
+            Chk2.IsChecked = False
+            Chk3.IsChecked = False
+            Chk4.IsChecked = False
+            Chk5.IsChecked = False
+            Chk6.IsChecked = False
+            Chk7.IsChecked = False
+            ChkLeveS.IsChecked = False
         End If
     End Sub
 End Class
