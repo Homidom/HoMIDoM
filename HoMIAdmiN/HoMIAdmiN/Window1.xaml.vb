@@ -7,7 +7,6 @@ Imports System.Xml
 Imports System.Xml.Serialization
 Imports System.Threading
 Imports System.Reflection.Assembly
-Imports System.Data
 
 Class Window1
 
