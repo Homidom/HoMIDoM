@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="192" d:DesignWidth="539" Margin="6" Background="Gray">
+              d:DesignWidth="539" Margin="6" Background="Gray">
 
     <UserControl.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
@@ -102,6 +102,8 @@
                         <CheckBox Name="ChkHeure" Content="Suivant une heure" IsChecked="True" Foreground="White" />
                         <CheckBox Name="ChkDate" Content="Suivant une date" Foreground="White"/>
                         <CheckBox Name="ChkJour" Content="Suivant un jour" Foreground="White"/>
+                        <CheckBox Name="ChkLeveS" Content="Suivant heure du levé du soleil" Foreground="White"/>
+                        <CheckBox Name="ChkCoucheS" Content="Suivant heure du couché du soleil" Foreground="White"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                         <StackPanel Name="Stk1">

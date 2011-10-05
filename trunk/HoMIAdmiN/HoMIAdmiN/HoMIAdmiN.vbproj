@@ -140,8 +140,12 @@
     <Compile Include="Control\uTriggerTimer.xaml.vb">
       <DependentUpon>uTriggerTimer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Fonctions.vb" />
     <Compile Include="Splash.xaml.vb">
       <DependentUpon>Splash.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowImg.xaml.vb">
+      <DependentUpon>WindowImg.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowLogin.xaml.vb">
       <DependentUpon>WindowLogin.xaml</DependentUpon>
@@ -252,6 +256,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WindowImg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WindowLogin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -347,7 +355,9 @@
     <Resource Include="Images\Back_03.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Defaut-128.png" />
+    <Resource Include="Images\Defaut-128.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icone.ico" />

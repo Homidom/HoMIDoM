@@ -95,20 +95,42 @@
             End If
 
             Dim _myconditiontime As String = "_cron"
-            If TxtSc.Text = "" Then TxtSc.Text = "*"
-            If TxtMn.Text = "" Then TxtMn.Text = "*"
-            If TxtHr.Text = "" Then TxtHr.Text = "*"
-            If TxtJr.Text = "" Then TxtJr.Text = "*"
-            If TxtMs.Text = "" Then TxtMs.Text = "*"
+            If TxtSc.Text = "" Then
+                _myconditiontime &= "*#"
+            Else
+                _myconditiontime &= TxtSc.Text & "#"
+            End If
+            If TxtMn.Text = "" Then
+                _myconditiontime &= "*#"
+            Else
+                _myconditiontime &= TxtMn.Text & "#"
+            End If
+            If TxtHr.Text = "" Then
+                _myconditiontime &= "*#"
+            Else
+                _myconditiontime &= TxtHr.Text & "#"
+            End If
+            If TxtJr.Text = "" Then
+                _myconditiontime &= "*#"
+            Else
+                _myconditiontime &= TxtJr.Text & "#"
+            End If
+            If TxtMs.Text = "" Then
+                _myconditiontime &= "*#"
+            Else
+                _myconditiontime &= TxtMs.Text & "#"
+            End If
 
-            _myconditiontime &= TxtSc.Text & "#"
-            _myconditiontime &= TxtMn.Text & "#"
-            _myconditiontime &= TxtHr.Text & "#"
-            _myconditiontime &= TxtJr.Text & "#"
-            _myconditiontime &= TxtMs.Text & "#"
 
             Dim _prepajr As String = ""
-            If CheckBox1.IsChecked = True Then _prepajr = "1"
+            If CheckBox7.IsChecked = True Then _prepajr = "0"
+            If CheckBox1.IsChecked = True Then
+                If _prepajr <> "" Then
+                    _prepajr &= ",1"
+                Else
+                    _prepajr = "1"
+                End If
+            End If
             If CheckBox2.IsChecked = True Then
                 If _prepajr <> "" Then
                     _prepajr &= ",2"
@@ -142,13 +164,6 @@
                     _prepajr &= ",6"
                 Else
                     _prepajr = "6"
-                End If
-            End If
-            If CheckBox7.IsChecked = True Then
-                If _prepajr <> "" Then
-                    _prepajr &= ",0"
-                Else
-                    _prepajr = "0"
                 End If
             End If
             _myconditiontime &= _prepajr
@@ -262,7 +277,7 @@
         Else
             i = TxtMn.Text
             i += 1
-            If i > 23 Then
+            If i > 59 Then
                 TxtMn.Text = ""
             Else
                 TxtMn.Text = i
@@ -308,7 +323,7 @@
     Private Sub BtnMMn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMMn.Click
         Dim i As Integer
         If TxtMn.Text = "" Then
-            i = 23
+            i = 59
             TxtMn.Text = Format(i, "00")
         Else
             i = TxtMn.Text

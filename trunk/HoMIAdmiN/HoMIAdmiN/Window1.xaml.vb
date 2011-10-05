@@ -1114,19 +1114,6 @@ Class Window1
         End If
     End Sub
 
-    Public Function ConvertArrayToImage(ByVal value As Object) As Object
-        Dim ImgSource As BitmapImage = Nothing
-        Dim array As Byte() = TryCast(value, Byte())
-
-        If array IsNot Nothing Then
-            ImgSource = New BitmapImage()
-            ImgSource.BeginInit()
-            ImgSource.StreamSource = New MemoryStream(array)
-            ImgSource.EndInit()
-        End If
-        Return ImgSource
-    End Function
-
     Private Sub MenuConfigAudio_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuConfigAudio.Click
         Try
             Dim x As New uConfigAudio

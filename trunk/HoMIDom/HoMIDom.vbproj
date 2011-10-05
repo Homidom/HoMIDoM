@@ -107,6 +107,7 @@
     <Compile Include="Historisation.vb" />
     <Compile Include="IDriver.vb" />
     <Compile Include="IHoMIDom.vb" />
+    <Compile Include="ImageFile.vb" />
     <Compile Include="Macro.vb" />
     <Compile Include="Server.vb" />
     <Compile Include="Device.vb" />

@@ -14,9 +14,6 @@ Public Class WConfig
         'Frm.EnableServiceTV = ChkServiceTV.IsChecked
         Frm.IP = TxtIP.Text
         Frm.PortSOAP = TxtPort.Text
-        Frm.HSAdresse = txtAdrss.Text
-        Frm.HSLogin = TxtLogin.Text
-        Frm.HSPassword = TxtPassword.Text
         Frm.ListMnu = MyListMnu
         'RaiseEvent CloseControl(Me.Uid)
         DialogResult = True
@@ -43,9 +40,6 @@ Public Class WConfig
         'ChkServiceTV.IsChecked =F My.Settings.EnableServiceTV
         TxtIP.Text = Frm.IP
         TxtPort.Text = Frm.PortSOAP
-        txtAdrss.Text = Frm.HSAdresse
-        TxtLogin.Text = Frm.HSLogin
-        TxtPassword.Text = Frm.HSPassword
 
         For i As Integer = 0 To Frm.ListMnu.Count - 1
             Dim x As uCtrlImgMnu = Frm.ListMnu.Item(i)

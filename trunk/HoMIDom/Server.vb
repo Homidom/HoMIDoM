@@ -481,9 +481,17 @@ Namespace HoMIDom
                                         Case "name"
                                             x.Name = list.Item(i).Attributes.Item(j).Value
                                         Case "icon"
-                                            If list.Item(i).Attributes.Item(j).Value <> Nothing Then x.Icon = list.Item(0).Attributes.Item(j).Value
+                                            If list.Item(i).Attributes.Item(j).Value <> Nothing Then
+                                                x.Icon = list.Item(0).Attributes.Item(j).Value
+                                            Else
+                                                x.Icon = _MonRepertoire & "\images\zones\icon\Defaut.png"
+                                            End If
                                         Case "image"
-                                            If list.Item(i).Attributes.Item(j).Value <> Nothing Then x.Image = list.Item(0).Attributes.Item(j).Value
+                                            If list.Item(i).Attributes.Item(j).Value <> Nothing Then
+                                                x.Image = list.Item(0).Attributes.Item(j).Value
+                                            Else
+                                                x.Image = _MonRepertoire & "\images\zones\image\defaut.jpg"
+                                            End If
                                         Case Else
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
@@ -531,7 +539,11 @@ Namespace HoMIDom
                                         Case "numberidentification"
                                             x.NumberIdentification = list.Item(i).Attributes.Item(j).Value
                                         Case "image"
-                                            x.Image = list.Item(i).Attributes.Item(j).Value
+                                            If list.Item(i).Attributes.Item(j).Value <> Nothing Then
+                                                x.Image = list.Item(0).Attributes.Item(j).Value
+                                            Else
+                                                x.Image = _MonRepertoire & "\images\users\defaut.png"
+                                            End If
                                         Case "email"
                                             x.eMail = list.Item(i).Attributes.Item(j).Value
                                         Case "emailautre"
@@ -725,7 +737,13 @@ Namespace HoMIDom
                                     If (Not list.Item(j).Attributes.GetNamedItem("lastchangeduree") Is Nothing) Then .LastChangeDuree = list.Item(j).Attributes.GetNamedItem("lastchangeduree").Value
                                     If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
                                     If (Not list.Item(j).Attributes.GetNamedItem("modele") Is Nothing) Then .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("picture") Is Nothing) Then .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("picture") Is Nothing) Then
+                                        If list.Item(j).Attributes.GetNamedItem("picture").Value <> Nothing Then
+                                            .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
+                                        Else
+                                            .Picture = _MonRepertoire & "\images\Devices\defaut.png"
+                                        End If
+                                    End If
                                     If (Not list.Item(j).Attributes.GetNamedItem("solo") Is Nothing) Then .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
                                     If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = list.Item(j).Attributes.GetNamedItem("value").Value
                                     If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = list.Item(j).Attributes.GetNamedItem("valuelast").Value
@@ -2983,6 +3001,29 @@ Namespace HoMIDom
             End Try
         End Function
 
+        ''' <summary>
+        ''' Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetListOfImage() As List(Of ImageFile) Implements IHoMIDom.GetListOfImage
+            Dim _list As New List(Of ImageFile)
+
+            Dim dirInfo As New System.IO.DirectoryInfo(_MonRepertoire & "\images\")
+            Dim file As System.IO.FileInfo
+            Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.*g", System.IO.SearchOption.AllDirectories)
+
+            If (files IsNot Nothing) Then
+                For Each file In files
+                    Dim x As New ImageFile
+                    x.Path = file.FullName
+                    x.FileName = file.Name
+                    _list.Add(x)
+                Next
+            End If
+
+            Return _list
+        End Function
 #End Region
 
 #Region "Historisation"

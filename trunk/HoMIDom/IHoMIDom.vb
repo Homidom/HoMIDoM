@@ -151,6 +151,13 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         <OperationContract()> Function GetByteFromImage(ByVal file As String) As Byte()
+
+        ''' <summary>
+        ''' Retourne la liste de tous les fichiers image présent sur le serveur
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetListOfImage() As List(Of ImageFile)
 #End Region
 
 #Region "Historisation"
