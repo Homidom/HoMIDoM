@@ -15,8 +15,8 @@
         Dim _Id As String 'Id unique de la zone
         Dim _Name As String 'Libellé de la zone
         Dim _ListElement As New List(Of Element_Zone) 'Liste d'objet de type DeviceZone
-        Dim _Icon As String = "" 'System.Environment.CurrentDirectory & "\images\zones\defaut.png" 'Icon de la zone
-        Dim _Image As String = "" 'System.Environment.CurrentDirectory & "\images\zones\defaut.png" 'Image de la zone
+        Dim _Icon As String = "" 'Icon de la zone
+        Dim _Image As String = "" 'Image de la zone
 
         ''' <summary>
         ''' Identification unique de la zone

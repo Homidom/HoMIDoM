@@ -39,6 +39,7 @@ Public Class WindowImg
             Try
                 img.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Path))
                 lbl.Content = x.Path
+                lbl.Foreground = New SolidColorBrush(Colors.White)
                 stk.Tag = x.Path
                 stk.Children.Add(img)
                 stk.Children.Add(lbl)
