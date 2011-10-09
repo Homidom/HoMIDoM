@@ -36,7 +36,7 @@ Partial Public Class uDevice
             If Action = EAction.Nouveau Then 'Nouveau Device
                 ImgDevice.Tag = " "
             Else 'Modification d'un Device
-                Dim x As HoMIDom.HoMIDom.TemplateDevice = Window1.myService.ReturnDeviceByID(DeviceId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
+                Dim x As HoMIDom.HoMIDom.TemplateDevice = Window1.myService.ReturnDeviceByID(DeviceId)
 
                 If x IsNot Nothing Then 'on a trouvé le device
                     TxtNom.Text = x.Name

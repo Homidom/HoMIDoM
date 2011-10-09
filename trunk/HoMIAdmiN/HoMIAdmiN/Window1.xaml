@@ -73,7 +73,7 @@
             <ControlTemplate.Resources>
                 <!-- To change the colour scheme of the Outlook Bar, change the colors of these brushes -->
                 <SolidColorBrush x:Key="LabelHighlightBrush" Color= "#FFFFFF" />
-                <SolidColorBrush x:Key="CaptionBrush" Color= "#DDDDDD" />
+                <SolidColorBrush x:Key="CaptionBrush" Color= "#FF4444" />
                 <SolidColorBrush x:Key="BorderBrush" Color="#C0C0C0" />
                 <LinearGradientBrush x:Key="LabelBrush" StartPoint="0, 0" EndPoint="0,1">
                     <GradientStop Color="#E3E3E3" Offset="0" />

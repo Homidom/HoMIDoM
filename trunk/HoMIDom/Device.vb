@@ -6,16 +6,13 @@ Namespace HoMIDom
     '** CLASS DEVICE
     '** version 1.1
     '** Date de création: 12/01/2011
-    '** Historique (SebBergues): 12/01/2011: Création 
-    '** Historique (Davidinfo): 17/01/2011: Ajout de classes generiques + ajout _formatage
-    '** Historique (SebBergues: 19/01/2011: Ecriture ou lecture via Read/Write + ajout proriété Solo
     '***********************************************
 
     ''' <summary>Class Device, définie tous différents types de devices</summary>
     ''' <remarks></remarks>
-    Public Class Device
+    <Serializable()> Public Class Device
 
-        Dim _Server As Server
+        <NonSerialized()> Dim _Server As Server
 
         ''' <summary>Indique la liste des devices gérés</summary>
         ''' <remarks></remarks>
@@ -858,7 +855,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "FREEBOX"
-                _Adresse1 = " http://hd1.freebox.fr/pub/remote_control ?key="
+                _Adresse1 = "http://hd1.freebox.fr/pub/remote_control ?key="
             End Sub
 
             'redefinition de read pour ne rien faire :)
@@ -867,17 +864,21 @@ Namespace HoMIDom
             End Sub
 
             Private Function Sendhttp(ByVal cmd As String) As String
-                Dim URL As String = Adresse1 & cmd
-                Dim request As WebRequest = WebRequest.Create(URL)
-                Dim response As WebResponse = request.GetResponse()
-                Dim reader As StreamReader = New StreamReader(response.GetResponseStream())
-                Dim str As String = reader.ReadToEnd
-                'Do While str.Length > 0
-                '    Console.WriteLine(str)
-                '    str = reader.ReadLine()
-                'Loop
-                reader.Close()
-                Return str
+                Try
+                    Dim URL As String = Adresse1 & cmd
+                    Dim request As WebRequest = WebRequest.Create(URL)
+                    Dim response As WebResponse = request.GetResponse()
+                    Dim reader As StreamReader = New StreamReader(response.GetResponseStream())
+                    Dim str As String = reader.ReadToEnd
+                    'Do While str.Length > 0
+                    '    Console.WriteLine(str)
+                    '    str = reader.ReadLine()
+                    'Loop
+                    reader.Close()
+                    Return str
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "FREEBOX SendHttp", "Erreur: " & ex.ToString)
+                End Try
             End Function
 
             'function generique pour toutes les touches appelé par les fonctions touchexxx

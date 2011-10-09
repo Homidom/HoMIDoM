@@ -39,7 +39,8 @@ Module Service
             Console.WriteLine(Now & " Adresss SOAP: " & baseAddress.ToString)
 
             Using host As New ServiceHost(GetType(Server), baseAddress)
-
+                host.CloseTimeout = TimeSpan.FromMinutes(60)
+                host.OpenTimeout = TimeSpan.FromMinutes(60)
                 host.Open()
 
                 Console.WriteLine(Now & " ServiceWeb Démarré") ' & obj.PortTCP)
@@ -52,10 +53,12 @@ Module Service
                 'Connexion au serveur
                 Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
 
+
                 Try
                     'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
                     Dim myadress As String = "http://localhost:" & PortSOAP & "/ServiceModelSamples/service"
                     Dim binding As New ServiceModel.BasicHttpBinding
+                    Dim Context As OperationContext = OperationContext.Current
 
                     binding.MaxBufferPoolSize = 5000000
                     binding.MaxReceivedMessageSize = 5000000
@@ -67,7 +70,9 @@ Module Service
                     binding.ReceiveTimeout = TimeSpan.FromMinutes(60)
                     'New System.ServiceModel.BasicHttpBinding
                     myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
+
                     myService = myChannelFactory.CreateChannel()
+
 
                     'Démarrage du serveur pour charger la config
                     myService.Start()
