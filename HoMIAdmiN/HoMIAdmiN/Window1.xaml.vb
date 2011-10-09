@@ -307,7 +307,7 @@ Class Window1
                 TreeViewDevice.Items.Add(newchild)
             Next
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub AffDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("ERREUR Sub AffDevice: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -431,6 +431,10 @@ Class Window1
 
     Private Sub TreeViewDriver_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewDriver.MouseDoubleClick
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
 
             If TreeViewDriver.SelectedItem IsNot Nothing Then
                 For i As Integer = 0 To myService.GetAllDrivers.Count - 1
@@ -474,6 +478,11 @@ Class Window1
 
     Private Sub BtnStop_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnStop.Click
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             If TreeViewDriver.SelectedItem IsNot Nothing Then
                 myService.StopDriver(TreeViewDriver.SelectedItem.uid)
                 AffDriver()
@@ -487,6 +496,11 @@ Class Window1
 
     Private Sub BtnStart_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnStart.Click
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             If TreeViewDriver.SelectedItem IsNot Nothing Then
                 If myService.ReturnDriverByID(TreeViewDriver.SelectedItem.uid).Enable = True Then
                     myService.StartDriver(TreeViewDriver.SelectedItem.uid)
@@ -537,6 +551,11 @@ Class Window1
     'Bouton nouveau Device
     Private Sub BtnNewDevice_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewDevice.Click
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             Dim x As New uDevice(uDevice.EAction.Nouveau, "")
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
@@ -550,6 +569,11 @@ Class Window1
     'Bouton supprimer device
     Private Sub BtnDelDevice_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelDevice.Click
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             If TreeViewDevice.SelectedItem IsNot Nothing Then
                 Window1.myService.DeleteDevice(TreeViewDevice.SelectedItem.uid)
                 AffDevice()
@@ -567,6 +591,11 @@ Class Window1
     'Bouton nouvelle zone
     Private Sub BtnNewZone_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewZone.Click
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             Dim x As New uZone(uDevice.EAction.Nouveau, "")
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
@@ -580,6 +609,11 @@ Class Window1
     'Modifier une zone
     Private Sub TreeViewZone_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewZone.MouseDoubleClick
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             If TreeViewZone.SelectedItem.uid Is Nothing Then Exit Sub
 
             If TreeViewZone.SelectedItem IsNot Nothing Then
@@ -603,6 +637,11 @@ Class Window1
     'bouton supprimer une zone
     Private Sub BtnDelZone_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelZone.Click
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             If TreeViewZone.SelectedItem IsNot Nothing Then
                 Window1.myService.DeleteZone(TreeViewZone.SelectedItem.uid)
                 AffZone()
@@ -619,6 +658,11 @@ Class Window1
     'Bouton Nouveau user
     Private Sub BtnNewUser_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewUser.Click
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             Dim x As New uUser(uDevice.EAction.Nouveau, "")
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
@@ -632,6 +676,11 @@ Class Window1
     'Bouton supprimer un user
     Private Sub BtnDelUser_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelUser.Click
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             If TreeViewUsers.SelectedItem IsNot Nothing And TreeViewUsers.SelectedItem.uid IsNot Nothing Then
                 Dim cntAdmin As Integer = 0
                 For i As Integer = 0 To Window1.myService.GetAllUsers.Count - 1
@@ -659,6 +708,11 @@ Class Window1
     'Sélection d'un user
     Private Sub TreeViewUsers_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewUsers.MouseDoubleClick
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             If TreeViewUsers.SelectedItem IsNot Nothing Then
                 For i As Integer = 0 To myService.GetAllUsers.Count - 1
                     If myService.GetAllUsers.Item(i).ID = TreeViewUsers.SelectedItem.uid Then
@@ -681,6 +735,11 @@ Class Window1
 #Region "Trigger"
     Private Sub BtnNewTriggerDevice_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewTriggerDevice.Click
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             Dim x As New uTriggerDevice(0, "")
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
@@ -693,6 +752,11 @@ Class Window1
 
     Private Sub BtnNewTriggerTime_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewTriggerTime.Click
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             Dim x As New uTriggerTimer(0, "")
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
@@ -743,6 +807,11 @@ Class Window1
 
     Private Sub BtnDelTrigger_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelTrigger.Click
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             If TreeViewTriggers.SelectedItem IsNot Nothing Then
                 If TreeViewTriggers.SelectedItem.uid IsNot Nothing Then
                     If MessageBox.Show("Etes vous sur de supprimer ce trigger: " & myService.ReturnTriggerById(TreeViewTriggers.SelectedItem.uid).Nom & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
@@ -783,6 +852,11 @@ Class Window1
     'Modifier macro
     Private Sub TreeViewMacros_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewMacros.MouseDoubleClick
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             Dim x As New uMacro(uMacro.EAction.Modifier, TreeViewMacros.SelectedItem.uid)
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
@@ -796,6 +870,11 @@ Class Window1
     'supprimer macro
     Private Sub BtnDelMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelMacro.Click
         Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
             If TreeViewMacros.SelectedItem IsNot Nothing Then
                 If TreeViewMacros.SelectedItem.uid IsNot Nothing Then
                     If MessageBox.Show("Etes vous sur de supprimer cette macro: " & myService.ReturnMacroById(TreeViewMacros.SelectedItem.uid).Nom & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
@@ -1052,31 +1131,7 @@ Class Window1
         End Try
     End Sub
 
-    'Private Sub MenuPropriete_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuPropriete.Click
-    '    Try
-    '        If StackPanel3.Children.Count = 2 Then Exit Sub
-    '        StackPanel3.Children.Add(MemCanvas)
-    '        Canvas1.MaxHeight = StackPanel3.Height - 200
-    '        TabControl1.MaxHeight = 300
-    '        My.Settings.ViewProperty = True
-    '        My.Settings.Save()
-    '    Catch ex As Exception
-    '        MessageBox.Show("ERREUR Sub MenuPropriete_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-    '    End Try
-    'End Sub
-
-    'Private Sub BtnCloseProperties_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCloseProperties.Click
-    '    Try
-    '        MemCanvas = Canvas2
-    '        StackPanel3.Children.RemoveAt(1)
-    '        Canvas1.MaxHeight = StackPanel3.Height
-    '        TabControl1.MaxHeight = 500
-    '        My.Settings.ViewProperty = False
-    '        My.Settings.Save()
-    '    Catch ex As Exception
-    '        MessageBox.Show("ERREUR Sub BtnCloseProperties_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-    '    End Try
-    'End Sub
+    
 
     Private Sub MenuTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuTest.Click
         'Dim x As New uHisto

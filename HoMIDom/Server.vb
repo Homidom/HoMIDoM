@@ -19,6 +19,8 @@ Imports System.Data
 
 Namespace HoMIDom
 
+
+
     ''' <summary>Classe Server</summary>
     ''' <remarks></remarks>
     <Serializable()> Public Class Server
@@ -55,6 +57,7 @@ Namespace HoMIDom
         Private Shared _ListRepertoireAudio As New List(Of Audio.RepertoireAudio) 'Liste des répertoires audio
         Private Shared Etat_server As Boolean = False 'etat du serveur : true = démarré
 #End Region
+
 
 #Region "Event"
         '********************************************************************
@@ -102,8 +105,8 @@ Namespace HoMIDom
                         For i As Integer = 0 To _listTriggers.Count - 1
                             If _listTriggers.Item(i).Enable = True Then
                                 If _listTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE And Device.id = _listTriggers.Item(i).ConditionDeviceId And _listTriggers.Item(i).ConditionDeviceProperty = [Property] Then 'c'est un trigger type device + enable + device concerné
-                                    For j As Integer = 0 To _listTriggers.Item(i).ListMacro.count - 1
-                                        Dim _m As Macro = ReturnMacroById(_listTriggers.Item(i).ListMacro.item(j))
+                                    For j As Integer = 0 To _listTriggers.Item(i).ListMacro.Count - 1
+                                        Dim _m As Macro = ReturnMacroById(_listTriggers.Item(i).ListMacro.Item(j))
                                         If _m IsNot Nothing Then _m.Execute(Me)
                                         _m = Nothing
                                     Next
@@ -288,7 +291,7 @@ Namespace HoMIDom
             Try
                 For i As Integer = 0 To _listTriggers.Count() - 1
                     If _listTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
-                        If _listTriggers.Item(i).enable = True Then
+                        If _listTriggers.Item(i).Enable = True Then
                             If _listTriggers.Item(i).Prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss") Then
                                 _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
                                 'lancement des macros associées
@@ -3860,6 +3863,8 @@ Namespace HoMIDom
                                     End If
                                 End With
                                 .DeviceAction.Add(p)
+                                a = Nothing
+                                p = Nothing
                             Next
                         End If
                         _listact = Nothing
@@ -4718,11 +4723,13 @@ Namespace HoMIDom
                         Exit For
                     End If
                 Next
+
                 If retour.ID <> "" Then
                     Return retour
                 Else
                     Return Nothing
                 End If
+
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDeviceById", "Exception : " & ex.Message)
                 Return Nothing

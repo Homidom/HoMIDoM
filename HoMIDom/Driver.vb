@@ -8,7 +8,7 @@
 
     <Serializable()> Public Class Driver
         Dim _ID As String
-        Dim _Server As Server
+        <NonSerialized()> Dim _Server As Server
 
         Public ReadOnly Property DeviceSupport() As ArrayList
             Get
