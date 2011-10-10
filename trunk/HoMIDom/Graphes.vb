@@ -8,10 +8,10 @@ Imports HoMIDom.HoMIDom.Server
 
 Namespace HoMIDom
 
-    <Serializable()> Public Class graphes
-        Private zg As New ZedGraphControl
-        Private _repertoire As String = ""
-        <NonSerialized()> Dim _Server As HoMIDom.Server
+    Public Class graphes
+        Dim zg As New ZedGraphControl
+        Dim _repertoire As String = ""
+        Dim _Server As HoMIDom.Server
 
         ''' <summary>Créer un graphe de type Courbe simple</summary>
         ''' <param name="nomfichier">Nom du fichier : "test"</param>

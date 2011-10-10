@@ -8,6 +8,16 @@ Partial Public Class uCtrlImgMnu
     Dim _Adresse As String
     Dim _Port As String
     Dim _IsSelect As Boolean = False
+    Dim _Id As String
+
+    Public Property ID As String
+        Get
+            Return _Id
+        End Get
+        Set(ByVal value As String)
+            _Id = value
+        End Set
+    End Property
 
     Public Property Defaut As Boolean
         Get

@@ -34,6 +34,7 @@ Imports HoMIDom.HoMIDom.Device
     Dim _DeviceSupport As New ArrayList
     Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
+    Dim _idsrv As String
 
     'A ajouter dans les ppt du driver
     Dim _tempsentrereponse As Integer = 1500
@@ -65,6 +66,12 @@ Imports HoMIDom.HoMIDom.Device
 #End Region
 
 #Region "Fonctions génériques"
+    Public WriteOnly Property IdSrv As String Implements HoMIDom.HoMIDom.IDriver.IdSrv
+        Set(ByVal value As String)
+            _idsrv = value
+        End Set
+    End Property
+
     Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
         Get
             Return _Com

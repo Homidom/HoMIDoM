@@ -15,6 +15,23 @@ Namespace HoMIDom
 
 
 #Region "Serveur"
+
+        ''' <summary>
+        ''' Retourne l'Id du serveur pour SOAP
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetIdServer() As String
+
+        ''' <summary>
+        ''' Fixe l'Id du serveur pour SOAP
+        ''' </summary>
+        ''' <param name="IdSrv"></param>
+        ''' <param name="Value"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function SetIdServer(ByVal IdSrv As String, ByVal Value As String) As String
+
         ''' <summary>
         ''' Retourne la version du serveur
         ''' </summary>
@@ -39,7 +56,7 @@ Namespace HoMIDom
         ''' 'Sauvegarde de la configuration
         ''' </summary>
         ''' <remarks></remarks>
-        <OperationContract()> Sub SaveConfig()
+        <OperationContract()> Sub SaveConfig(ByVal IdSrv As String)
 
         ''' <summary>
         ''' Démarre le service et charge la config
@@ -51,14 +68,14 @@ Namespace HoMIDom
         ''' Arrête le service et charge la config
         ''' </summary>
         ''' <remarks></remarks>
-        <OperationContract()> Sub [Stop]()
+        <OperationContract()> Sub [Stop](ByVal idSrv As String)
 
         ''' <summary>
         ''' Fixe la valeur de port SOAP
         ''' </summary>
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub SetPortSOAP(ByVal Value As Double)
+        <OperationContract()> Sub SetPortSOAP(ByVal IdSrv As String, ByVal Value As Double)
 
         ''' <summary>
         ''' Retourne la valeur de port SOAP
@@ -100,7 +117,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub SetLongitude(ByVal Value As Double)
+        <OperationContract()> Sub SetLongitude(ByVal IdSrv As String, ByVal Value As Double)
 
         ''' <summary>
         ''' Obtenir la valeur de latitude
@@ -114,7 +131,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub SetLatitude(ByVal Value As Double)
+        <OperationContract()> Sub SetLatitude(ByVal IdSrv As String, ByVal Value As Double)
 
         ''' <summary>
         ''' Obtenir la correction sur l'heure du coucher du soleil
@@ -128,7 +145,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub SetHeureCorrectionCoucher(ByVal Value As Integer)
+        <OperationContract()> Sub SetHeureCorrectionCoucher(ByVal IdSrv As String, ByVal Value As Integer)
 
         ''' <summary>
         ''' Obtenir la correction sur l'heure de lever du soleil
@@ -142,7 +159,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub SetHeureCorrectionLever(ByVal Value As Integer)
+        <OperationContract()> Sub SetHeureCorrectionLever(ByVal IdSrv As String, ByVal Value As Integer)
 
         ''' <summary>
         '''  Convert a file on a byte array.
@@ -166,9 +183,9 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetAllListHisto() As List(Of Historisation)
+        <OperationContract()> Function GetAllListHisto(ByVal IdSrv As String) As List(Of Historisation)
 
-        <OperationContract()> Function GetHisto(ByVal Source As String, ByVal idDevice As String) As List(Of Historisation)
+        <OperationContract()> Function GetHisto(ByVal IdSrv As String, ByVal Source As String, ByVal idDevice As String) As List(Of Historisation)
 #End Region
 
 #Region "Audio"
@@ -178,7 +195,7 @@ Namespace HoMIDom
         ''' <param name="NomExtension"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function DeleteExtensionAudio(ByVal NomExtension As String) As Integer
+        <OperationContract()> Function DeleteExtensionAudio(ByVal IdSrv As String, ByVal NomExtension As String) As Integer
 
         ''' <summary>
         ''' Ajouter une nouvelle extension audio
@@ -187,7 +204,7 @@ Namespace HoMIDom
         ''' <param name="Enable"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function NewExtensionAudio(ByVal NomExtension As String, Optional ByVal Enable As Boolean = False) As Integer
+        <OperationContract()> Function NewExtensionAudio(ByVal IdSrv As String, ByVal NomExtension As String, Optional ByVal Enable As Boolean = False) As Integer
 
         ''' <summary>
         ''' Active ou désactive une extension Audio
@@ -196,7 +213,7 @@ Namespace HoMIDom
         ''' <param name="Enable"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function EnableExtensionAudio(ByVal NomExtension As String, ByVal Enable As Boolean) As Integer
+        <OperationContract()> Function EnableExtensionAudio(ByVal IdSrv As String, ByVal NomExtension As String, ByVal Enable As Boolean) As Integer
 
         ''' <summary>
         ''' Supprimer un répertoire Audio
@@ -204,7 +221,7 @@ Namespace HoMIDom
         ''' <param name="NomRepertoire"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function DeleteRepertoireAudio(ByVal NomRepertoire As String) As Integer
+        <OperationContract()> Function DeleteRepertoireAudio(ByVal IdSrv As String, ByVal NomRepertoire As String) As Integer
 
         ''' <summary>
         ''' Ajouter un nouveau répertoire audio
@@ -213,7 +230,7 @@ Namespace HoMIDom
         ''' <param name="Enable"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function NewRepertoireAudio(ByVal NomRepertoire As String, Optional ByVal Enable As Boolean = False) As Integer
+        <OperationContract()> Function NewRepertoireAudio(ByVal IdSrv As String, ByVal NomRepertoire As String, Optional ByVal Enable As Boolean = False) As Integer
 
         ''' <summary>
         ''' Active ou désactive un répertoire Audio
@@ -222,21 +239,21 @@ Namespace HoMIDom
         ''' <param name="Enable"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function EnableRepertoireAudio(ByVal NomRepertoire As String, ByVal Enable As Boolean) As Integer
+        <OperationContract()> Function EnableRepertoireAudio(ByVal IdSrv As String, ByVal NomRepertoire As String, ByVal Enable As Boolean) As Integer
 
         ''' <summary>
         ''' Obtient la liste des répertoires audio
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetAllRepertoiresAudio() As List(Of Audio.RepertoireAudio)
+        <OperationContract()> Function GetAllRepertoiresAudio(ByVal IdSrv As String) As List(Of Audio.RepertoireAudio)
 
         ''' <summary>
         ''' Obtient la liste des extensions audio
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetAllExtensionsAudio() As List(Of Audio.ExtensionAudio)
+        <OperationContract()> Function GetAllExtensionsAudio(ByVal IdSrv As String) As List(Of Audio.ExtensionAudio)
 #End Region
 
 #Region "User"
@@ -246,7 +263,7 @@ Namespace HoMIDom
         ''' <param name="userId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function DeleteUser(ByVal userId As String) As Integer
+        <OperationContract()> Function DeleteUser(ByVal IdSrv As String, ByVal userId As String) As Integer
 
         ''' <summary>
         ''' Vérifie le couple username + login  renvoi true si ok
@@ -264,7 +281,7 @@ Namespace HoMIDom
         ''' <param name="OldPassword"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ChangePassword(ByVal Username As String, ByVal OldPassword As String, ByVal ConfirmNewPassword As String, ByVal Password As String) As Boolean
+        <OperationContract()> Function ChangePassword(ByVal IdSrv As String, ByVal Username As String, ByVal OldPassword As String, ByVal ConfirmNewPassword As String, ByVal Password As String) As Boolean
 
         ''' <summary>
         ''' Retourne un user par son username
@@ -272,14 +289,14 @@ Namespace HoMIDom
         ''' <param name="Username"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ReturnUserByUsername(ByVal Username As String) As Users.User
+        <OperationContract()> Function ReturnUserByUsername(ByVal IdSrv As String, ByVal Username As String) As Users.User
 
         ''' <summary>
         ''' Obtient la liste des users
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetAllUsers() As List(Of Users.User)
+        <OperationContract()> Function GetAllUsers(ByVal IdSrv As String) As List(Of Users.User)
 
         ''' <summary>
         ''' Retourne l'objet d'un user par son ID
@@ -287,7 +304,7 @@ Namespace HoMIDom
         ''' <param name="UserId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ReturnUserById(ByVal UserId As String) As Users.User
+        <OperationContract()> Function ReturnUserById(ByVal IdSrv As String, ByVal UserId As String) As Users.User
 
         ''' <summary>
         ''' Créer ou modifier un user
@@ -310,7 +327,7 @@ Namespace HoMIDom
         ''' <param name="CodePostal"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function SaveUser(ByVal userId As String, ByVal UserName As String, ByVal Password As String, ByVal Profil As Users.TypeProfil, ByVal Nom As String, ByVal Prenom As String, Optional ByVal NumberIdentification As String = "", Optional ByVal Image As String = "", Optional ByVal eMail As String = "", Optional ByVal eMailAutre As String = "", Optional ByVal TelFixe As String = "", Optional ByVal TelMobile As String = "", Optional ByVal TelAutre As String = "", Optional ByVal Adresse As String = "", Optional ByVal Ville As String = "", Optional ByVal CodePostal As String = "") As String
+        <OperationContract()> Function SaveUser(ByVal IdSrv As String, ByVal userId As String, ByVal UserName As String, ByVal Password As String, ByVal Profil As Users.TypeProfil, ByVal Nom As String, ByVal Prenom As String, Optional ByVal NumberIdentification As String = "", Optional ByVal Image As String = "", Optional ByVal eMail As String = "", Optional ByVal eMailAutre As String = "", Optional ByVal TelFixe As String = "", Optional ByVal TelMobile As String = "", Optional ByVal TelAutre As String = "", Optional ByVal Adresse As String = "", Optional ByVal Ville As String = "", Optional ByVal CodePostal As String = "") As String
 #End Region
 
 #Region "Device"
@@ -319,7 +336,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns>List de TemplateDevice</returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetAllDevices() As List(Of TemplateDevice)
+        <OperationContract()> Function GetAllDevices(ByVal IdSrv As String) As List(Of TemplateDevice)
 
         ''' <summary>
         ''' Execute une commande (COMMAND) d'un device (DeviceID) associés à des paramètres (Param)
@@ -327,7 +344,7 @@ Namespace HoMIDom
         ''' <param name="DeviceId"></param>
         ''' <param name="Action"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub ExecuteDeviceCommand(ByVal DeviceId As String, ByVal Action As DeviceAction)
+        <OperationContract()> Sub ExecuteDeviceCommand(ByVal IdSrv As String, ByVal DeviceId As String, ByVal Action As DeviceAction)
 
         ''' <summary>
         ''' Supprimer un device
@@ -335,7 +352,7 @@ Namespace HoMIDom
         ''' <param name="deviceId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function DeleteDevice(ByVal deviceId As String) As Integer
+        <OperationContract()> Function DeleteDevice(ByVal IdSrv As String, ByVal deviceId As String) As Integer
 
         ''' <summary>
         ''' Supprime une commande IR d'un device
@@ -344,7 +361,7 @@ Namespace HoMIDom
         ''' <param name="CmdName"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function DeleteDeviceCommandIR(ByVal deviceId As String, ByVal CmdName As String) As Integer
+        <OperationContract()> Function DeleteDeviceCommandIR(ByVal IdSrv As String, ByVal deviceId As String, ByVal CmdName As String) As Integer
 
         ''' <summary>
         ''' Retourne l'objet d'un device par son ID
@@ -352,7 +369,7 @@ Namespace HoMIDom
         ''' <param name="Id"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ReturnDeviceByID(ByVal Id As String) As TemplateDevice
+        <OperationContract()> Function ReturnDeviceByID(ByVal IdSrv As String, ByVal Id As String) As TemplateDevice
 
         ''' <summary>
         ''' Retourne une liste de device suivant l'addresse1 et/ou son type et/ou le driver
@@ -362,7 +379,7 @@ Namespace HoMIDom
         ''' <param name="DeviceDriver"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ReturnDeviceByAdresse1TypeDriver(ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DeviceDriver As String) As ArrayList
+        <OperationContract()> Function ReturnDeviceByAdresse1TypeDriver(ByVal IdSrv As String, ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DeviceDriver As String) As ArrayList
 
         ''' <summary>
         ''' Créer un nouveau device ou sauvegarder la modif (si ID est complété)
@@ -382,7 +399,7 @@ Namespace HoMIDom
         ''' <param name="lastchangeduree"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function SaveDevice(ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0) As String
+        <OperationContract()> Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0) As String
 
         ''' <summary>
         ''' 'Ajouter ou modifier une commande IR à un device (utilisé pour usbuirt)
@@ -393,14 +410,14 @@ Namespace HoMIDom
         ''' <param name="CmdRepeat"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function SaveDeviceCommandIR(ByVal deviceId As String, ByVal CmdName As String, ByVal CmdData As String, ByVal CmdRepeat As String) As String
+        <OperationContract()> Function SaveDeviceCommandIR(ByVal IdSrv As String, ByVal deviceId As String, ByVal CmdName As String, ByVal CmdData As String, ByVal CmdRepeat As String) As String
 
         ''' <summary>
         ''' Commencer l'apprentissage d'un commande IR
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function StartIrLearning() As String
+        <OperationContract()> Function StartIrLearning(ByVal IdSrv As String) As String
 #End Region
 
 #Region "Driver"
@@ -409,7 +426,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetAllDrivers() As List(Of TemplateDriver)
+        <OperationContract()> Function GetAllDrivers(ByVal IdSrv As String) As List(Of TemplateDriver)
 
         ''' <summary>
         ''' Execute une commande (COMMAND) d'un driver (DriverID) associés à des paramètres (Param)
@@ -417,7 +434,7 @@ Namespace HoMIDom
         ''' <param name="DriverId"></param>
         ''' <param name="Action"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub ExecuteDriverCommand(ByVal DriverId As String, ByVal Action As DeviceAction)
+        <OperationContract()> Sub ExecuteDriverCommand(ByVal IdSrv As String, ByVal DriverId As String, ByVal Action As DeviceAction)
 
         ''' <summary>
         ''' Retourne l'objet d'un driver par son ID
@@ -425,7 +442,7 @@ Namespace HoMIDom
         ''' <param name="Id"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ReturnDriverByID(ByVal Id As String) As TemplateDriver
+        <OperationContract()> Function ReturnDriverByID(ByVal IdSrv As String, ByVal Id As String) As TemplateDriver
 
         ''' <summary>
         ''' Supprimer un driver de la config
@@ -433,7 +450,7 @@ Namespace HoMIDom
         ''' <param name="driverId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function DeleteDriver(ByVal driverId As String) As Integer
+        <OperationContract()> Function DeleteDriver(ByVal IdSrv As String, ByVal driverId As String) As Integer
 
         ''' <summary>
         ''' Retourne l'objet d'un driver par son nom
@@ -441,7 +458,7 @@ Namespace HoMIDom
         ''' <param name="name"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ReturnDriverByNom(ByVal name As String) As Object
+        <OperationContract()> Function ReturnDriverByNom(ByVal IdSrv As String, ByVal name As String) As Object
 
         ''' <summary>
         ''' Créer un nouveau driver ou sauvegarder la modif (si ID est complété)
@@ -460,7 +477,7 @@ Namespace HoMIDom
         ''' <param name="Parametres"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function SaveDriver(ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String, Optional ByVal Parametres As ArrayList = Nothing) As String
+        <OperationContract()> Function SaveDriver(ByVal IdSrv As String, ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String, Optional ByVal Parametres As ArrayList = Nothing) As String
 
 
         ''' <summary>
@@ -468,14 +485,14 @@ Namespace HoMIDom
         ''' </summary>
         ''' <param name="DriverId"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub StopDriver(ByVal DriverId As String)
+        <OperationContract()> Sub StopDriver(ByVal IdSrv As String, ByVal DriverId As String)
 
         ''' <summary>
         ''' Démarrer un driver
         ''' </summary>
         ''' <param name="DriverId"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub StartDriver(ByVal DriverId As String)
+        <OperationContract()> Sub StartDriver(ByVal IdSrv As String, ByVal DriverId As String)
 #End Region
 
 #Region "Zone"
@@ -485,7 +502,7 @@ Namespace HoMIDom
         ''' <param name="zoneId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ZoneIsEmpty(ByVal zoneId As String) As Boolean
+        <OperationContract()> Function ZoneIsEmpty(ByVal IdSrv As String, ByVal zoneId As String) As Boolean
 
         ''' <summary>
         ''' Supprimer une zone de la config
@@ -493,14 +510,14 @@ Namespace HoMIDom
         ''' <param name="zoneId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function DeleteZone(ByVal zoneId As String) As Integer
+        <OperationContract()> Function DeleteZone(ByVal IdSrv As String, ByVal zoneId As String) As Integer
 
         ''' <summary>
         ''' Obtient la liste des zones
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetAllZones() As List(Of Zone)
+        <OperationContract()> Function GetAllZones(ByVal IdSrv As String) As List(Of Zone)
 
         ''' <summary>
         ''' Retourne la liste des devices d'une zone (par son id)
@@ -508,7 +525,7 @@ Namespace HoMIDom
         ''' <param name="zoneId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetDeviceInZone(ByVal zoneId As String) As List(Of TemplateDevice)
+        <OperationContract()> Function GetDeviceInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of TemplateDevice)
 
         ''' <summary>
         ''' Retourne l'objet d'une zone par son ID
@@ -516,7 +533,7 @@ Namespace HoMIDom
         ''' <param name="Id"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ReturnZoneByID(ByVal Id As String) As Zone
+        <OperationContract()> Function ReturnZoneByID(ByVal IdSrv As String, ByVal Id As String) As Zone
 
         ''' <summary>
         ''' Créer un nouveau zone ou sauvegarder la modif (si ID est complété)
@@ -528,7 +545,7 @@ Namespace HoMIDom
         ''' <param name="image"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function SaveZone(ByVal zoneId As String, ByVal name As String, Optional ByVal ListElement As List(Of Zone.Element_Zone) = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String
+        <OperationContract()> Function SaveZone(ByVal IdSrv As String, ByVal zoneId As String, ByVal name As String, Optional ByVal ListElement As List(Of Zone.Element_Zone) = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String
 
         ''' <summary>
         ''' Ajouter un device à une zone
@@ -538,7 +555,7 @@ Namespace HoMIDom
         ''' <param name="Visible"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function AddDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String, ByVal Visible As Boolean) As String
+        <OperationContract()> Function AddDeviceToZone(ByVal IdSrv As String, ByVal ZoneId As String, ByVal DeviceId As String, ByVal Visible As Boolean) As String
 
         ''' <summary>
         ''' Supprimer un device à une zone
@@ -548,7 +565,7 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
 
-        <OperationContract()> Function DeleteDeviceToZone(ByVal ZoneId As String, ByVal DeviceId As String) As String
+        <OperationContract()> Function DeleteDeviceToZone(ByVal IdSrv As String, ByVal ZoneId As String, ByVal DeviceId As String) As String
 #End Region
 
 #Region "Macro"
@@ -558,25 +575,25 @@ Namespace HoMIDom
         ''' <param name="macroId">Id de la macro à supprimer</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function DeleteMacro(ByVal macroId As String) As Integer
+        <OperationContract()> Function DeleteMacro(ByVal IdSrv As String, ByVal macroId As String) As Integer
 
         ''' <summary>
         ''' Execute une macro
         ''' </summary>
         ''' <param name="Id"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub RunMacro(ByVal Id As String)
+        <OperationContract()> Sub RunMacro(ByVal IdSrv As String, ByVal Id As String)
 
         ''' <summary>Retourne la liste de toutes les macros</summary>
         ''' <returns>Retourne une List de type Macro</returns>
         ''' <remarks></remarks>
-        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro))> Function GetAllMacros() As List(Of Macro)
+        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro))> Function GetAllMacros(ByVal IdSrv As String) As List(Of Macro)
 
         ''' <summary>Retourne la macro par son ID</summary>
         ''' <param name="MacroId">Id de la macro</param>
         ''' <returns>Objet de type Macro</returns>
         ''' <remarks></remarks>
-        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro))> Function ReturnMacroById(ByVal MacroId As String) As Macro
+        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro))> Function ReturnMacroById(ByVal IdSrv As String, ByVal MacroId As String) As Macro
 
         ''' <summary>
         ''' Permet de créer ou modifier une macro
@@ -588,20 +605,20 @@ Namespace HoMIDom
         ''' <param name="listactions">List des actions associées à la macro</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro))> Function SaveMacro(ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal listactions As ArrayList = Nothing) As String
+        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro))> Function SaveMacro(ByVal IdSrv As String, ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal listactions As ArrayList = Nothing) As String
 #End Region
 
 #Region "Trigger"
         ''' <summary>Retourne la liste de toutes les triggers</summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetAllTriggers() As List(Of Trigger)
+        <OperationContract()> Function GetAllTriggers(ByVal IdSrv As String) As List(Of Trigger)
 
         ''' <summary>Retourne le trigger par son ID</summary>
         ''' <param name="TriggerId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ReturnTriggerById(ByVal TriggerId As String) As Trigger
+        <OperationContract()> Function ReturnTriggerById(ByVal IdSrv As String, ByVal TriggerId As String) As Trigger
 
         ''' <summary>
         ''' Supprimer un trigger de la config
@@ -609,7 +626,7 @@ Namespace HoMIDom
         ''' <param name="triggerId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function DeleteTrigger(ByVal triggerId As String) As Integer
+        <OperationContract()> Function DeleteTrigger(ByVal IdSrv As String, ByVal triggerId As String) As Integer
 
         ''' <summary>
         ''' Permet de créer ou modifier un trigger
@@ -622,7 +639,7 @@ Namespace HoMIDom
         ''' <param name="macro"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function SaveTrigger(ByVal triggerId As String, ByVal nom As String, ByVal enable As Boolean, ByVal TypeTrigger As Trigger.TypeTrigger, Optional ByVal description As String = "", Optional ByVal conditiontimer As String = "", Optional ByVal deviceid As String = "", Optional ByVal deviceproperty As String = "", Optional ByVal macro As List(Of String) = Nothing) As String
+        <OperationContract()> Function SaveTrigger(ByVal IdSrv As String, ByVal triggerId As String, ByVal nom As String, ByVal enable As Boolean, ByVal TypeTrigger As Trigger.TypeTrigger, Optional ByVal description As String = "", Optional ByVal conditiontimer As String = "", Optional ByVal deviceid As String = "", Optional ByVal deviceproperty As String = "", Optional ByVal macro As List(Of String) = Nothing) As String
 #End Region
 
 #Region "Divers"
@@ -677,56 +694,56 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetSMTPServeur() As String
+        <OperationContract()> Function GetSMTPServeur(ByVal IdSrv As String) As String
 
         ''' <summary>
         ''' Fixe l'adresse SMTP du serveur
         ''' </summary>
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub SetSMTPServeur(ByVal Value As String)
+        <OperationContract()> Sub SetSMTPServeur(ByVal IdSrv As String, ByVal Value As String)
 
         ''' <summary>
         ''' Retourne le login du serveur SMTP
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetSMTPLogin() As String
+        <OperationContract()> Function GetSMTPLogin(ByVal IdSrv As String) As String
 
         ''' <summary>
         ''' Fixe le login du serveur SMTP
         ''' </summary>
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub SetSMTPLogin(ByVal Value As String)
+        <OperationContract()> Sub SetSMTPLogin(ByVal IdSrv As String, ByVal Value As String)
 
         ''' <summary>
         ''' Retourne le password du serveur SMTP
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetSMTPPassword() As String
+        <OperationContract()> Function GetSMTPPassword(ByVal IdSrv As String) As String
 
         ''' <summary>
         ''' Fixe le password du serveur SMTP
         ''' </summary>
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub SetSMTPPassword(ByVal Value As String)
+        <OperationContract()> Sub SetSMTPPassword(ByVal IdSrv As String, ByVal Value As String)
 
         ''' <summary>
         ''' Retourne l'adresse mail du serveur SMTP
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetSMTPMailServeur() As String
+        <OperationContract()> Function GetSMTPMailServeur(ByVal IdSrv As String) As String
 
         ''' <summary>
         ''' Fixe l'adresse mail du serveur SMTP
         ''' </summary>
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub SetSMTPMailServeur(ByVal Value As String)
+        <OperationContract()> Sub SetSMTPMailServeur(ByVal IdSrv As String, ByVal Value As String)
 #End Region
 
     End Interface

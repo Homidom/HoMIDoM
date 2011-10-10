@@ -12,6 +12,7 @@
 
         Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object)
 
+        WriteOnly Property IdSrv As String
         Property Server() As Server
         ReadOnly Property ID() As String 'Identification unique du driver
         ReadOnly Property Nom() As String

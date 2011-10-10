@@ -36,6 +36,8 @@ Imports VB = Microsoft.VisualBasic
     Dim _Device As HoMIDom.HoMIDom.Device
     Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
+    Dim _IdSrv As String
+
 #End Region
 
 #Region "Variables Internes"
@@ -43,6 +45,12 @@ Imports VB = Microsoft.VisualBasic
 #End Region
 
 #Region "Propriétés génériques"
+    Public WriteOnly Property IdSrv As String Implements HoMIDom.HoMIDom.IDriver.IdSrv
+        Set(ByVal value As String)
+            _IdSrv = value
+        End Set
+    End Property
+
     Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
         Get
             Return _Com

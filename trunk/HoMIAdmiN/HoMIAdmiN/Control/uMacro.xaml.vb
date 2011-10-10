@@ -26,7 +26,7 @@
             If _Action = EAction.Nouveau Then 'Nouvelle macro
 
             Else 'Modifier Macro
-                Dim x As HoMIDom.HoMIDom.Macro = Window1.myService.ReturnMacroById(MacroId)
+                Dim x As HoMIDom.HoMIDom.Macro = Window1.myService.ReturnMacroById(IdSrv, MacroId)
 
                 If x IsNot Nothing Then
                     TxtNom.Text = x.Nom
@@ -50,12 +50,12 @@
         If _Action = EAction.Nouveau Then
             Dim tabl As New ArrayList
             tabl = UScenario1.Items
-            _MacroId = Window1.myService.SaveMacro("", TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
+            _MacroId = Window1.myService.SaveMacro(IdSrv, "", TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
             RaiseEvent CloseMe(Me)
         Else
             Dim tabl As New ArrayList
             tabl = UScenario1.Items
-            _MacroId = Window1.myService.SaveMacro(_MacroId, TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
+            _MacroId = Window1.myService.SaveMacro(IdSrv, _MacroId, TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
             RaiseEvent CloseMe(Me)
         End If
         RaiseEvent CloseMe(Me)
@@ -63,7 +63,7 @@
 
     Private Sub BtnTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTest.Click
         If _MacroId <> "" Then
-            Window1.myService.RunMacro(_MacroId)
+            Window1.myService.RunMacro(IdSrv, _MacroId)
         End If
     End Sub
 End Class

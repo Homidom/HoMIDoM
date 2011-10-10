@@ -25,7 +25,7 @@ Public Class WActionParametrage
                         Exit Sub
                     End If
                     Dim obj As Action.ActionDevice = _ObjAction
-                    obj.IdDevice = Window1.myService.GetAllDevices.Item(Cb1.SelectedIndex).ID
+                    obj.IdDevice = Window1.myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).ID
                     obj.Method = Cb2.Text
                     obj.Parametres.Clear()
                     If TxtValue.Text <> "" Then obj.Parametres.Add(TxtValue.Text)
@@ -36,7 +36,7 @@ Public Class WActionParametrage
                         Exit Sub
                     End If
                     Dim obj As Action.ActionMacro = _ObjAction
-                    obj.IdMacro = Window1.myService.GetAllMacros.Item(Cb1.SelectedIndex).ID
+                    obj.IdMacro = Window1.myService.GetAllMacros(IdSrv).Item(Cb1.SelectedIndex).ID
                     _ObjAction = obj
                 Case HoMIDom.HoMIDom.Action.TypeAction.ActionMail
                     If Cb1.SelectedIndex < 0 Or Txt2.Text = "" Or TxtValue.Text = "" Then
@@ -44,7 +44,7 @@ Public Class WActionParametrage
                         Exit Sub
                     End If
                     Dim obj As Action.ActionMail = _ObjAction
-                    obj.UserId = Window1.myService.GetAllUsers.Item(Cb1.SelectedIndex).ID
+                    obj.UserId = Window1.myService.GetAllUsers(IdSrv).Item(Cb1.SelectedIndex).ID
                     obj.Sujet = Txt2.Text
                     obj.Message = TxtValue.Text
                     _ObjAction = obj
@@ -81,8 +81,8 @@ Public Class WActionParametrage
         If _ObjAction.TypeAction = Action.TypeAction.ActionDevice Then
             If Cb1.SelectedIndex >= 0 Then
                 Cb2.Items.Clear()
-                For i As Integer = 0 To Window1.myService.GetAllDevices.Item(Cb1.SelectedIndex).DeviceAction.Count - 1
-                    Cb2.Items.Add(Window1.myService.GetAllDevices.Item(Cb1.SelectedIndex).DeviceAction.Item(i).Nom)
+                For i As Integer = 0 To Window1.myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).DeviceAction.Count - 1
+                    Cb2.Items.Add(Window1.myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).DeviceAction.Item(i).Nom)
                 Next
             End If
         End If
@@ -115,12 +115,12 @@ Public Class WActionParametrage
                     Txt2.Height = 0
                     TxtValue.Height = 21
 
-                    For i As Integer = 0 To Window1.myService.GetAllDevices.Count - 1
-                        Cb1.Items.Add(Window1.myService.GetAllDevices.Item(i).Name)
+                    For i As Integer = 0 To Window1.myService.GetAllDevices(IdSrv).Count - 1
+                        Cb1.Items.Add(Window1.myService.GetAllDevices(IdSrv).Item(i).Name)
                     Next
                     Dim a As String = ""
                     If obj.IdDevice IsNot Nothing Then
-                        a = Window1.myService.ReturnDeviceByID(obj.IdDevice).Name
+                        a = Window1.myService.ReturnDeviceByID(IdSrv, obj.IdDevice).Name
                         For i As Integer = 0 To Cb1.Items.Count - 1
                             If a = Cb1.Items(i) Then
                                 Cb1.SelectedIndex = i
@@ -148,12 +148,12 @@ Public Class WActionParametrage
                     Txt2.Height = 20
                     TxtValue.Visibility = Windows.Visibility.Hidden
 
-                    For i As Integer = 0 To Window1.myService.GetAllMacros.Count - 1
-                        Cb1.Items.Add(Window1.myService.GetAllMacros.Item(i).Nom)
+                    For i As Integer = 0 To Window1.myService.GetAllMacros(IdSrv).Count - 1
+                        Cb1.Items.Add(Window1.myService.GetAllMacros(IdSrv).Item(i).Nom)
                     Next
                     Dim a As String = ""
                     If obj.IdMacro IsNot Nothing Then
-                        a = Window1.myService.ReturnMacroById(obj.IdMacro).Nom
+                        a = Window1.myService.ReturnMacroById(IdSrv, obj.IdMacro).Nom
                         For i As Integer = 0 To Cb1.Items.Count - 1
                             If a = Cb1.Items(i) Then
                                 Cb1.SelectedIndex = i
@@ -176,11 +176,11 @@ Public Class WActionParametrage
                     TxtValue.Text = ""
                     TxtValue.Height = 80
 
-                    For i As Integer = 0 To Window1.myService.GetAllUsers.Count - 1
-                        Cb1.Items.Add(Window1.myService.GetAllUsers.Item(i).Nom & " " & Window1.myService.GetAllUsers.Item(i).Prenom)
+                    For i As Integer = 0 To Window1.myService.GetAllUsers(IdSrv).Count - 1
+                        Cb1.Items.Add(Window1.myService.GetAllUsers(IdSrv).Item(i).Nom & " " & Window1.myService.GetAllUsers(IdSrv).Item(i).Prenom)
                     Next
                     If obj.UserId IsNot Nothing Then
-                        Dim _user As Users.User = Window1.myService.ReturnUserById(obj.UserId)
+                        Dim _user As Users.User = Window1.myService.ReturnUserById(IdSrv, obj.UserId)
                         Dim a As String = _user.Nom & " " & _user.Prenom
                         For i As Integer = 0 To Cb1.Items.Count - 1
                             If a = Cb1.Items(i) Then
@@ -253,12 +253,12 @@ Public Class WActionParametrage
         If Cb1.SelectedIndex < 0 Then Exit Sub
 
         Dim Idx As Integer = Cb2.SelectedIndex
-        For j As Integer = 0 To Window1.myService.GetAllDevices.Item(Cb1.SelectedIndex).DeviceAction.Item(Idx).Parametres.Count - 1
+        For j As Integer = 0 To Window1.myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).DeviceAction.Item(Idx).Parametres.Count - 1
             Select Case j
                 Case 0
-                    LblValue.Content = Window1.myService.GetAllDevices.Item(Cb1.SelectedIndex).DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                    LblValue.Content = Window1.myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
                     LblValue.Visibility = Windows.Visibility.Visible
-                    TxtValue.ToolTip = Window1.myService.GetAllDevices.Item(Cb1.SelectedIndex).DeviceAction.Item(Idx).Parametres.Item(j).Type
+                    TxtValue.ToolTip = Window1.myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).DeviceAction.Item(Idx).Parametres.Item(j).Type
                     TxtValue.Visibility = Windows.Visibility.Visible
             End Select
         Next

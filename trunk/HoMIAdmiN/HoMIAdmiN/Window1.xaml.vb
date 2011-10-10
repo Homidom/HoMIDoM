@@ -113,7 +113,7 @@ Class Window1
                     If IsConnect = False Then
                         MessageBox.Show("Impossible d'enregistrer la configuration car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
                     Else
-                        myService.SaveConfig()
+                        myService.SaveConfig(IdSrv)
                     End If
                 Catch ex As Exception
                     MessageBox.Show("ERREUR Sub Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -133,8 +133,8 @@ Class Window1
         Try
             TreeViewZone.Items.Clear()
             If IsConnect = False Then Exit Sub
-            CntZone.Content = myService.GetAllZones.Count & " Zone(s)"
-            For i As Integer = 0 To myService.GetAllZones.Count - 1
+            CntZone.Content = myService.GetAllZones(IdSrv).Count & " Zone(s)"
+            For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -146,8 +146,8 @@ Class Window1
                 img.Height = 20
                 img.Width = 20
 
-                If myService.GetAllZones.Item(i).Image <> "" And File.Exists(myService.GetAllDevices.Item(i).Picture) = True Then
-                    uri = myService.GetAllZones.Item(i).Image
+                If myService.GetAllZones(IdSrv).Item(i).Image <> "" And File.Exists(myService.GetAllDevices(IdSrv).Item(i).Picture) = True Then
+                    uri = myService.GetAllZones(IdSrv).Item(i).Image
                 Else
                     uri = MyRep & "\Images\icones\Defaut-128.png"
                 End If
@@ -158,14 +158,14 @@ Class Window1
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
-                label.Content = myService.GetAllZones.Item(i).Name
+                label.Content = myService.GetAllZones(IdSrv).Item(i).Name
 
                 stack.Children.Add(img)
                 stack.Children.Add(label)
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack 'myService.GetAllZones.Item(i).Name
-                newchild.Uid = myService.GetAllZones.Item(i).ID
+                newchild.Uid = myService.GetAllZones(IdSrv).Item(i).ID
                 TreeViewZone.Items.Add(newchild)
             Next
         Catch ex As Exception
@@ -178,8 +178,8 @@ Class Window1
         Try
             TreeViewUsers.Items.Clear()
             If IsConnect = False Then Exit Sub
-            CntUser.Content = myService.GetAllUsers.Count & " User(s)"
-            For i As Integer = 0 To myService.GetAllUsers.Count - 1
+            CntUser.Content = myService.GetAllUsers(IdSrv).Count & " User(s)"
+            For i As Integer = 0 To myService.GetAllUsers(IdSrv).Count - 1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -191,8 +191,8 @@ Class Window1
                 img.Height = 20
                 img.Width = 20
 
-                If myService.GetAllUsers.Item(i).Image <> "" And File.Exists(myService.GetAllDevices.Item(i).Picture) = True Then
-                    uri = myService.GetAllUsers.Item(i).Image
+                If myService.GetAllUsers(IdSrv).Item(i).Image <> "" And File.Exists(myService.GetAllDevices(IdSrv).Item(i).Picture) = True Then
+                    uri = myService.GetAllUsers(IdSrv).Item(i).Image
                 Else
                     uri = MyRep & "\Images\icones\user.png"
                 End If
@@ -203,14 +203,14 @@ Class Window1
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
-                label.Content = myService.GetAllUsers.Item(i).UserName
+                label.Content = myService.GetAllUsers(IdSrv).Item(i).UserName
 
                 stack.Children.Add(img)
                 stack.Children.Add(label)
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack 'myService.GetAllUsers.Item(i).UserName
-                newchild.Uid = myService.GetAllUsers.Item(i).ID
+                newchild.Uid = myService.GetAllUsers(IdSrv).Item(i).ID
                 TreeViewUsers.Items.Add(newchild)
             Next
         Catch ex As Exception
@@ -223,8 +223,8 @@ Class Window1
         Try
             TreeViewDriver.Items.Clear()
             If IsConnect = False Then Exit Sub
-            CntDriver.Content = myService.GetAllDrivers.Count & " Driver(s)"
-            For i As Integer = 0 To myService.GetAllDrivers.Count - 1 'Obj.Drivers.Count - 1
+            CntDriver.Content = myService.GetAllDrivers(IdSrv).Count & " Driver(s)"
+            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1 'Obj.Drivers.Count - 1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 stack.Orientation = Orientation.Horizontal
@@ -236,7 +236,7 @@ Class Window1
                 Dim myBrush As New RadialGradientBrush()
                 myBrush.GradientOrigin = New Point(0.75, 0.25)
 
-                If myService.GetAllDrivers.Item(i).IsConnect = True Then
+                If myService.GetAllDrivers(IdSrv).Item(i).IsConnect = True Then
                     myBrush.GradientStops.Add(New GradientStop(Colors.LightGreen, 0.0))
                     myBrush.GradientStops.Add(New GradientStop(Colors.Green, 0.5))
                     myBrush.GradientStops.Add(New GradientStop(Colors.DarkGreen, 1.0))
@@ -250,14 +250,14 @@ Class Window1
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
-                label.Content = myService.GetAllDrivers.Item(i).Nom
+                label.Content = myService.GetAllDrivers(IdSrv).Item(i).Nom
 
                 stack.Children.Add(Elipse)
                 stack.Children.Add(label)
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
-                newchild.Uid = myService.GetAllDrivers.Item(i).ID
+                newchild.Uid = myService.GetAllDrivers(IdSrv).Item(i).ID
                 TreeViewDriver.Items.Add(newchild)
 
             Next
@@ -271,21 +271,22 @@ Class Window1
         Try
             TreeViewDevice.Items.Clear()
             If IsConnect = False Then Exit Sub
-            CntDevice.Content = myService.GetAllDevices.Count & " Device(s)"
-            For i As Integer = 0 To myService.GetAllDevices.Count - 1 'Obj.Devices.Count - 1
+
+            CntDevice.Content = myService.GetAllDevices(IdSrv).Count & " Device(s)"
+            For i As Integer = 0 To myService.GetAllDevices(IdSrv).Count - 1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
                 Dim uri As String = ""
                 Dim bmpImage As New BitmapImage()
-
+                Dim x As TemplateDevice = myService.GetAllDevices(IdSrv).Item(i)
                 stack.Orientation = Orientation.Horizontal
 
                 img.Height = 20
                 img.Width = 20
 
-                If myService.GetAllDevices.Item(i).Picture <> "" And File.Exists(myService.GetAllDevices.Item(i).Picture) = True Then
-                    uri = myService.GetAllDevices.Item(i).Picture
+                If x.Picture <> "" And File.Exists(x.Picture) = True Then
+                    uri = x.Picture
                 Else
                     uri = MyRep & "\Images\Devices\Defaut-128.png"
                 End If
@@ -296,14 +297,14 @@ Class Window1
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
-                label.Content = myService.GetAllDevices.Item(i).Name
+                label.Content = x.Name
 
                 stack.Children.Add(img)
                 stack.Children.Add(label)
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
-                newchild.Uid = myService.GetAllDevices.Item(i).ID
+                newchild.Uid = x.ID
                 TreeViewDevice.Items.Add(newchild)
             Next
         Catch ex As Exception
@@ -316,8 +317,8 @@ Class Window1
         Try
             TreeViewMacros.Items.Clear()
             If IsConnect = False Then Exit Sub
-            CntMacro.Content = myService.GetAllMacros.Count & " Macro(s)"
-            For i As Integer = 0 To myService.GetAllMacros.Count - 1
+            CntMacro.Content = myService.GetAllMacros(IdSrv).Count & " Macro(s)"
+            For i As Integer = 0 To myService.GetAllMacros(IdSrv).Count - 1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -331,7 +332,7 @@ Class Window1
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
-                label.Content = myService.GetAllMacros.Item(i).Nom
+                label.Content = myService.GetAllMacros(IdSrv).Item(i).Nom
 
                 uri = MyRep & "\Images\Icones\script-128.png"
                 bmpImage.BeginInit()
@@ -344,7 +345,7 @@ Class Window1
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
-                newchild.Uid = myService.GetAllMacros.Item(i).ID
+                newchild.Uid = myService.GetAllMacros(IdSrv).Item(i).ID
                 TreeViewMacros.Items.Add(newchild)
             Next
         Catch ex As Exception
@@ -357,8 +358,8 @@ Class Window1
         Try
             TreeViewTriggers.Items.Clear()
             If IsConnect = False Then Exit Sub
-            CntTrigger.Content = myService.GetAllTriggers.Count & " Trigger(s)"
-            For i As Integer = 0 To myService.GetAllTriggers.Count - 1
+            CntTrigger.Content = myService.GetAllTriggers(IdSrv).Count & " Trigger(s)"
+            For i As Integer = 0 To myService.GetAllTriggers(IdSrv).Count - 1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -372,7 +373,7 @@ Class Window1
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
-                label.Content = myService.GetAllTriggers.Item(i).Nom
+                label.Content = myService.GetAllTriggers(IdSrv).Item(i).Nom
 
                 uri = MyRep & "\Images\Icones\drapeau-vert-32.png"
                 bmpImage.BeginInit()
@@ -385,7 +386,7 @@ Class Window1
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
-                newchild.Uid = myService.GetAllTriggers.Item(i).ID
+                newchild.Uid = myService.GetAllTriggers(IdSrv).Item(i).ID
                 TreeViewTriggers.Items.Add(newchild)
             Next
         Catch ex As Exception
@@ -406,13 +407,13 @@ Class Window1
         Try
             ListHisto.Items.Clear()
             Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
-            x = myService.GetAllListHisto
+            x = myService.GetAllListHisto(IdSrv)
 
             If x IsNot Nothing Then
                 For i As Integer = 0 To x.Count - 1
                     Dim y As New CheckBox
                     Dim a As Historisation = x.Item(i)
-                    Dim b As String = myService.ReturnDeviceByID(a.IdDevice).Name
+                    Dim b As String = myService.ReturnDeviceByID(IdSrv, a.IdDevice).Name
                     If b = "" Then b = "?"
                     y.Content = a.Nom & " {" & b & "}"
                     y.Tag = a.Nom
@@ -437,9 +438,9 @@ Class Window1
             End If
 
             If TreeViewDriver.SelectedItem IsNot Nothing Then
-                For i As Integer = 0 To myService.GetAllDrivers.Count - 1
-                    If myService.GetAllDrivers.Item(i).ID = TreeViewDriver.SelectedItem.uid Then
-                        Dim y As TemplateDriver = myService.GetAllDrivers.Item(i)
+                For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
+                    If myService.GetAllDrivers(IdSrv).Item(i).ID = TreeViewDriver.SelectedItem.uid Then
+                        Dim y As TemplateDriver = myService.GetAllDrivers(IdSrv).Item(i)
 
                         Dim x As New uDriver(TreeViewDriver.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
@@ -465,9 +466,9 @@ Class Window1
 
             If e.NewValue Is Nothing Then Exit Sub
 
-            For i As Integer = 0 To myService.GetAllDrivers.Count - 1
-                If myService.GetAllDrivers.Item(i).ID = e.NewValue.uid Then
-                    Dim x As TemplateDriver = myService.GetAllDrivers.Item(i)
+            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
+                If myService.GetAllDrivers(IdSrv).Item(i).ID = e.NewValue.uid Then
+                    Dim x As TemplateDriver = myService.GetAllDrivers(IdSrv).Item(i)
                     Exit Sub
                 End If
             Next
@@ -484,7 +485,7 @@ Class Window1
             End If
 
             If TreeViewDriver.SelectedItem IsNot Nothing Then
-                myService.StopDriver(TreeViewDriver.SelectedItem.uid)
+                myService.StopDriver(IdSrv, TreeViewDriver.SelectedItem.uid)
                 AffDriver()
             Else
                 MessageBox.Show("Veuillez sélectionner un Driver!")
@@ -502,8 +503,8 @@ Class Window1
             End If
 
             If TreeViewDriver.SelectedItem IsNot Nothing Then
-                If myService.ReturnDriverByID(TreeViewDriver.SelectedItem.uid).Enable = True Then
-                    myService.StartDriver(TreeViewDriver.SelectedItem.uid)
+                If myService.ReturnDriverByID(IdSrv, TreeViewDriver.SelectedItem.uid).Enable = True Then
+                    myService.StartDriver(IdSrv, TreeViewDriver.SelectedItem.uid)
                     AffDriver()
                 Else
                     MessageBox.Show("Le driver ne peut être démarré car sa propriété Enable est à False!", "Avertissement", MessageBoxButton.OK, MessageBoxImage.Exclamation)
@@ -530,9 +531,9 @@ Class Window1
 
             If TreeViewDevice.SelectedItem IsNot Nothing Then
 
-                For i As Integer = 0 To myService.GetAllDevices.Count - 1
-                    If myService.GetAllDevices.Item(i).ID = TreeViewDevice.SelectedItem.uid Then
-                        Dim y As TemplateDevice = myService.GetAllDevices.Item(i)
+                For i As Integer = 0 To myService.GetAllDevices(IdSrv).Count - 1
+                    If myService.GetAllDevices(IdSrv).Item(i).ID = TreeViewDevice.SelectedItem.uid Then
+                        Dim y As TemplateDevice = myService.GetAllDevices(IdSrv).Item(i)
 
                         Dim x As New uDevice(uDevice.EAction.Modifier, TreeViewDevice.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
@@ -575,7 +576,7 @@ Class Window1
             End If
 
             If TreeViewDevice.SelectedItem IsNot Nothing Then
-                Window1.myService.DeleteDevice(TreeViewDevice.SelectedItem.uid)
+                Window1.myService.DeleteDevice(IdSrv, TreeViewDevice.SelectedItem.uid)
                 AffDevice()
             Else
                 MessageBox.Show("Veuillez sélectionner un Device à supprimer!")
@@ -617,8 +618,8 @@ Class Window1
             If TreeViewZone.SelectedItem.uid Is Nothing Then Exit Sub
 
             If TreeViewZone.SelectedItem IsNot Nothing Then
-                For i As Integer = 0 To myService.GetAllZones.Count - 1
-                    If myService.GetAllZones.Item(i).ID = TreeViewZone.SelectedItem.uid Then
+                For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
+                    If myService.GetAllZones(IdSrv).Item(i).ID = TreeViewZone.SelectedItem.uid Then
 
                         Dim x As New uZone(uDevice.EAction.Modifier, TreeViewZone.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
@@ -643,7 +644,7 @@ Class Window1
             End If
 
             If TreeViewZone.SelectedItem IsNot Nothing Then
-                Window1.myService.DeleteZone(TreeViewZone.SelectedItem.uid)
+                Window1.myService.DeleteZone(IdSrv, TreeViewZone.SelectedItem.uid)
                 AffZone()
             Else
                 MessageBox.Show("Veuillez sélectionner une Zone à supprimer!")
@@ -683,8 +684,8 @@ Class Window1
 
             If TreeViewUsers.SelectedItem IsNot Nothing And TreeViewUsers.SelectedItem.uid IsNot Nothing Then
                 Dim cntAdmin As Integer = 0
-                For i As Integer = 0 To Window1.myService.GetAllUsers.Count - 1
-                    If Window1.myService.GetAllUsers.Item(i).Profil = Users.TypeProfil.admin Then
+                For i As Integer = 0 To Window1.myService.GetAllUsers(IdSrv).Count - 1
+                    If Window1.myService.GetAllUsers(IdSrv).Item(i).Profil = Users.TypeProfil.admin Then
                         cntAdmin += 1
                     End If
                 Next
@@ -694,7 +695,7 @@ Class Window1
                 End If
                 'If MessageBox.Show("Etes vous sur de supprimer ce user : " & TreeViewUsers.SelectedItem & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
                 If MessageBox.Show("Etes vous sur de supprimer ce user: ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
-                    Window1.myService.DeleteUser(TreeViewUsers.SelectedItem.uid)
+                    Window1.myService.DeleteUser(IdSrv, TreeViewUsers.SelectedItem.uid)
                     AffUser()
                 End If
             Else
@@ -714,8 +715,8 @@ Class Window1
             End If
 
             If TreeViewUsers.SelectedItem IsNot Nothing Then
-                For i As Integer = 0 To myService.GetAllUsers.Count - 1
-                    If myService.GetAllUsers.Item(i).ID = TreeViewUsers.SelectedItem.uid Then
+                For i As Integer = 0 To myService.GetAllUsers(IdSrv).Count - 1
+                    If myService.GetAllUsers(IdSrv).Item(i).ID = TreeViewUsers.SelectedItem.uid Then
 
                         Dim x As New uUser(uDevice.EAction.Modifier, TreeViewUsers.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
@@ -779,11 +780,11 @@ Class Window1
 
             If TreeViewTriggers.SelectedItem IsNot Nothing Then
 
-                For i As Integer = 0 To myService.GetAllTriggers.Count - 1
-                    If myService.GetAllTriggers.Item(i).ID = TreeViewTriggers.SelectedItem.uid Then
-                        Dim y As Trigger = myService.GetAllTriggers.Item(i)
+                For i As Integer = 0 To myService.GetAllTriggers(IdSrv).Count - 1
+                    If myService.GetAllTriggers(IdSrv).Item(i).ID = TreeViewTriggers.SelectedItem.uid Then
+                        Dim y As Trigger = myService.GetAllTriggers(IdSrv).Item(i)
 
-                        If myService.GetAllTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
+                        If myService.GetAllTriggers(IdSrv).Item(i).Type = Trigger.TypeTrigger.TIMER Then
                             Dim x As New uTriggerTimer(uTriggerTimer.EAction.Modifier, TreeViewTriggers.SelectedItem.uid)
                             x.Uid = System.Guid.NewGuid.ToString()
                             AddHandler x.CloseMe, AddressOf UnloadControl
@@ -814,8 +815,8 @@ Class Window1
 
             If TreeViewTriggers.SelectedItem IsNot Nothing Then
                 If TreeViewTriggers.SelectedItem.uid IsNot Nothing Then
-                    If MessageBox.Show("Etes vous sur de supprimer ce trigger: " & myService.ReturnTriggerById(TreeViewTriggers.SelectedItem.uid).Nom & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
-                        Window1.myService.DeleteTrigger(TreeViewTriggers.SelectedItem.uid)
+                    If MessageBox.Show("Etes vous sur de supprimer ce trigger: " & myService.ReturnTriggerById(IdSrv, TreeViewTriggers.SelectedItem.uid).Nom & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                        Window1.myService.DeleteTrigger(IdSrv, TreeViewTriggers.SelectedItem.uid)
                         AffTrigger()
                     Else
                         MessageBox.Show("Veuillez sélectionner un trigger à supprimer!")
@@ -877,8 +878,8 @@ Class Window1
 
             If TreeViewMacros.SelectedItem IsNot Nothing Then
                 If TreeViewMacros.SelectedItem.uid IsNot Nothing Then
-                    If MessageBox.Show("Etes vous sur de supprimer cette macro: " & myService.ReturnMacroById(TreeViewMacros.SelectedItem.uid).Nom & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
-                        Window1.myService.DeleteMacro(TreeViewMacros.SelectedItem.uid)
+                    If MessageBox.Show("Etes vous sur de supprimer cette macro: " & myService.ReturnMacroById(IdSrv, TreeViewMacros.SelectedItem.uid).Nom & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                        Window1.myService.DeleteMacro(IdSrv, TreeViewMacros.SelectedItem.uid)
                         AffScene()
                     End If
                 Else
@@ -901,7 +902,7 @@ Class Window1
                 Exit Sub
             End If
 
-            myService.SaveConfig()
+            myService.SaveConfig(IdSrv)
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub MnuSaveConfig: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1131,8 +1132,6 @@ Class Window1
         End Try
     End Sub
 
-    
-
     Private Sub MenuTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuTest.Click
         'Dim x As New uHisto
         'x.Uid = System.Guid.NewGuid.ToString()
@@ -1217,7 +1216,7 @@ Class Window1
 
             If chk.IsChecked = True Then
                 Dim _listhisto As New List(Of Historisation)
-                _listhisto = myService.GetHisto(chk.Tag, chk.Uid)
+                _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
 
                 Dim listpoint As New ZedGraph.PointPairList
                 For j As Integer = 0 To _listhisto.Count - 1

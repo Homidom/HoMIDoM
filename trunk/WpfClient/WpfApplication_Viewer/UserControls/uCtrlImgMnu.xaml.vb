@@ -115,7 +115,7 @@ Partial Public Class uCtrlImgMnu
             _Parametres = value
             If _type = TypeOfMnu.Zone Then
                 If _Parametres(0) <> "" Then
-                    Image.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(Parametres(0)).Icon))
+                    Image.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(IdSrv, Parametres(0)).Icon))
                 End If
             End If
         End Set

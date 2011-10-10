@@ -47,14 +47,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HoMIDom.dll" size="221696">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HoMIDom.dll" size="225280">
       <assemblyIdentity name="HoMIDom" version="0.1.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>mnE0f2eeCHQzYLe1zrlIwK6gHJc=</dsig:DigestValue>
+        <dsig:DigestValue>Q4UA3s5BUQwaWOXpRByYV/K4fPo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -66,7 +66,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>IhVjWsNLt/f+r+AaVOyuXnu0jnw=</dsig:DigestValue>
+        <dsig:DigestValue>djN3Tij/O0RiTWzawAssmqHoj18=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

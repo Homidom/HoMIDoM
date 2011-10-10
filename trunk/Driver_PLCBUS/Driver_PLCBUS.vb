@@ -37,6 +37,7 @@ Imports System.IO.Ports
     Dim _DeviceSupport As New ArrayList
     Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
+    Public _IdSrv As String
 
     'Ajoutés dans les ppt avancés dans New()
     Dim plcack As Boolean = True 'gestion des acks ?
@@ -61,6 +62,12 @@ Imports System.IO.Ports
 #End Region
 
 #Region "Propriétés génériques"
+
+    Public WriteOnly Property IdSrv As String Implements HoMIDom.HoMIDom.IDriver.IdSrv
+        Set(ByVal value As String)
+            _IdSrv = value
+        End Set
+    End Property
 
     Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
         Get
@@ -820,7 +827,7 @@ Imports System.IO.Ports
 
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(adresse, "", Me._ID)
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID)
                 'un device trouvé on maj la value
                 If (listedevices.Count = 1) Then
                     'correction valeur pour correspondre au type de value

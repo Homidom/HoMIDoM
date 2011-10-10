@@ -24,8 +24,8 @@
         _TriggerId = TriggerId
 
 
-        For i As Integer = 0 To Window1.myService.GetAllDevices.Count - 1
-            _ListDeviceId.Add(Window1.myService.GetAllDevices.Item(i))
+        For i As Integer = 0 To Window1.myService.GetAllDevices(IdSrv).Count - 1
+            _ListDeviceId.Add(Window1.myService.GetAllDevices(IdSrv).Item(i))
             CbDevice.Items.Add(_ListDeviceId.Item(i).Name)
         Next
 
@@ -33,7 +33,7 @@
         If _Action = EAction.Nouveau Then 'Nouveau Trigger
 
         Else 'Modifier Trigger
-            Dim x As HoMIDom.HoMIDom.Trigger = Window1.myService.ReturnTriggerById(_TriggerId)
+            Dim x As HoMIDom.HoMIDom.Trigger = Window1.myService.ReturnTriggerById(IdSrv, _TriggerId)
 
             'For k As Integer = 0 To Window1.myService.GetAllTriggers.Count - 1
             '    If Window1.myService.GetAllTriggers.Item(k).ID = _TriggerId Then
@@ -56,7 +56,7 @@
 
                 If _ListMacro IsNot Nothing Then
                     For i As Integer = 0 To _ListMacro.Count - 1
-                        ListBox1.Items.Add(Window1.myService.ReturnMacroById(_ListMacro.Item(i)).Nom)
+                        ListBox1.Items.Add(Window1.myService.ReturnMacroById(IdSrv, _ListMacro.Item(i)).Nom)
                     Next
                 End If
             End If
@@ -71,10 +71,10 @@
         End If
 
         If _Action = EAction.Nouveau Then
-            Window1.myService.SaveTrigger("", TxtNom.Text, ChkEnable.IsChecked, HoMIDom.HoMIDom.Trigger.TypeTrigger.DEVICE, TxtDescription.Text, "", _ListDeviceId(CbDevice.SelectedIndex).id, CbProperty.Text, _ListMacro)
+            Window1.myService.SaveTrigger(IdSrv, "", TxtNom.Text, ChkEnable.IsChecked, HoMIDom.HoMIDom.Trigger.TypeTrigger.DEVICE, TxtDescription.Text, "", _ListDeviceId(CbDevice.SelectedIndex).id, CbProperty.Text, _ListMacro)
             RaiseEvent CloseMe(Me)
         Else
-            Window1.myService.SaveTrigger(_TriggerId, TxtNom.Text, ChkEnable.IsChecked, HoMIDom.HoMIDom.Trigger.TypeTrigger.DEVICE, TxtDescription.Text, "", _ListDeviceId(CbDevice.SelectedIndex).id, CbProperty.Text, _ListMacro)
+            Window1.myService.SaveTrigger(IdSrv,_TriggerId, TxtNom.Text, ChkEnable.IsChecked, HoMIDom.HoMIDom.Trigger.TypeTrigger.DEVICE, TxtDescription.Text, "", _ListDeviceId(CbDevice.SelectedIndex).id, CbProperty.Text, _ListMacro)
             RaiseEvent CloseMe(Me)
         End If
     End Sub
@@ -130,7 +130,7 @@
 
             Dim uri As String = e.Data.GetData(GetType(String)).ToString
             _ListMacro.Add(uri)
-            ListBox1.Items.Add(Window1.myService.ReturnMacroById(uri).Nom)
+            ListBox1.Items.Add(Window1.myService.ReturnMacroById(IdSrv, uri).Nom)
         Else
             e.Effects = DragDropEffects.None
         End If
@@ -145,7 +145,7 @@
             _ListMacro.RemoveAt(i)
             ListBox1.Items.Clear()
             For j As Integer = 0 To _ListMacro.Count - 1
-                ListBox1.Items.Add(Window1.myService.ReturnMacroById(_ListMacro(j)).Nom)
+                ListBox1.Items.Add(Window1.myService.ReturnMacroById(IdSrv, _ListMacro(j)).Nom)
             Next
             i = Nothing
         End If
@@ -165,7 +165,7 @@
             _ListMacro(i) = a
             ListBox1.Items.Clear()
             For j As Integer = 0 To _ListMacro.Count - 1
-                ListBox1.Items.Add(Window1.myService.ReturnMacroById(_ListMacro(j)).Nom)
+                ListBox1.Items.Add(Window1.myService.ReturnMacroById(IdSrv, _ListMacro(j)).Nom)
             Next
         End If
     End Sub
@@ -183,7 +183,7 @@
             _ListMacro(i) = a
             ListBox1.Items.Clear()
             For j As Integer = 0 To _ListMacro.Count - 1
-                ListBox1.Items.Add(Window1.myService.ReturnMacroById(_ListMacro(j)).Nom)
+                ListBox1.Items.Add(Window1.myService.ReturnMacroById(IdSrv, _ListMacro(j)).Nom)
             Next
         End If
     End Sub

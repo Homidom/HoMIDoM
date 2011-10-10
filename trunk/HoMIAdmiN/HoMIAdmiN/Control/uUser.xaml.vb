@@ -42,7 +42,7 @@ Partial Public Class uUser
         If Action = EAction.Nouveau Then 'Nouveau user
 
         Else 'Modifier zone
-            Dim x As Users.User = Window1.myService.ReturnUserById(UserId)
+            Dim x As Users.User = Window1.myService.ReturnUserById(IdSrv, UserId)
             _UserId = UserId
             If x IsNot Nothing Then
                 TxtUsername.Text = x.UserName

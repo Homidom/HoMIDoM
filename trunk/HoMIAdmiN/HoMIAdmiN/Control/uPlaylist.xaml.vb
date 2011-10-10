@@ -36,9 +36,9 @@ Public Class uPlaylist
         End Try
 
         ' Creation de la liste des repertoires audios
-        For cpt1 = 0 To Window1.myService.GetAllRepertoiresAudio.Count - 1
+        For cpt1 = 0 To Window1.myService.GetAllRepertoiresAudio(IdSrv).Count - 1
             ' Repertoire actif
-            If Window1.myService.GetAllRepertoiresAudio.Item(cpt1).Enable = True Then NomRep.Items.Add(Window1.myService.GetAllRepertoiresAudio.Item(cpt1).Repertoire)
+            If Window1.myService.GetAllRepertoiresAudio(IdSrv).Item(cpt1).Enable = True Then NomRep.Items.Add(Window1.myService.GetAllRepertoiresAudio(IdSrv).Item(cpt1).Repertoire)
         Next
 
     End Sub
@@ -181,12 +181,12 @@ Public Class uPlaylist
         Dim di As New DirectoryInfo(PathRep)
 
         ' Pour chacune des extensions
-        For cpt2 = 0 To Window1.myService.GetAllExtensionsAudio.Count - 1
+        For cpt2 = 0 To Window1.myService.GetAllExtensionsAudio(IdSrv).Count - 1
 
             Dim _extension As String
             Dim _extensionenable As String = True
-            _extension = Window1.myService.GetAllExtensionsAudio.Item(cpt2).Extension
-            _extensionenable = Window1.myService.GetAllExtensionsAudio.Item(cpt2).Enable
+            _extension = Window1.myService.GetAllExtensionsAudio(IdSrv).Item(cpt2).Extension
+            _extensionenable = Window1.myService.GetAllExtensionsAudio(IdSrv).Item(cpt2).Enable
 
             ' Recupere la liste des fichiers du repertoire si l'extension est active
             If _extensionenable Then ' Extension active 

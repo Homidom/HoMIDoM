@@ -6,20 +6,7 @@ Driver_Foobar
 </name>
 </assembly>
 <members>
-<member name="P:Driver_Foobar.My.Resources.Resources.ResourceManager">
-	<summary>
-  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
-</summary>
-</member><member name="P:Driver_Foobar.My.Resources.Resources.Culture">
-	<summary>
-  Remplace la propriété CurrentUICulture du thread actuel pour toutes
-  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
-</summary>
-</member><member name="T:Driver_Foobar.My.Resources.Resources">
-	<summary>
-  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
-</summary>
-</member><member name="M:Driver_Foobar.Driver_Foobar.Start">
+<member name="M:Driver_Foobar.Driver_Foobar.Start">
 	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_Foobar.Driver_Foobar.Stop">
@@ -56,6 +43,19 @@ Driver_Foobar
 </member><member name="T:Driver_Foobar.Driver_Foobar">
 	<summary>Class Foobar le device doit donner par le biais de son adresse l'emplacement de l'executable de Foobar</summary>
 	<remarks></remarks>
+</member><member name="P:Driver_Foobar.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:Driver_Foobar.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:Driver_Foobar.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
 </member>
 </members>
 </doc>

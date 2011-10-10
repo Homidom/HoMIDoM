@@ -132,8 +132,8 @@ Public Class uCondition
         End Get
         Set(ByVal value As String)
             _IdDevice = value
-            For i As Integer = 0 To Window1.myService.GetAllDevices.Count - 1
-                If Window1.myService.GetAllDevices.Item(i).ID = _IdDevice Then
+            For i As Integer = 0 To Window1.myService.GetAllDevices(IdSrv).Count - 1
+                If Window1.myService.GetAllDevices(IdSrv).Item(i).ID = _IdDevice Then
                     CbDevice.SelectedIndex = i
                     Exit For
                 End If
@@ -178,7 +178,7 @@ Public Class uCondition
         If CbDevice.SelectedIndex < 0 Then Exit Sub
 
         CbPropertyDevice.Items.Clear()
-        Select Case Window1.myService.GetAllDevices.Item(CbDevice.SelectedIndex).Type
+        Select Case Window1.myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).Type
             Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
                 CbPropertyDevice.Items.Add("Value")
             Case 17
@@ -218,8 +218,8 @@ Public Class uCondition
         InitializeComponent()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        For i As Integer = 0 To Window1.myService.GetAllDevices.Count - 1
-            CbDevice.Items.Add(Window1.myService.GetAllDevices.Item(i).Name)
+        For i As Integer = 0 To Window1.myService.GetAllDevices(IdSrv).Count - 1
+            CbDevice.Items.Add(Window1.myService.GetAllDevices(IdSrv).Item(i).Name)
         Next
 
     End Sub
@@ -318,7 +318,7 @@ Public Class uCondition
             _Signe = CbSigne1.SelectedIndex
         Else
             If CbDevice.SelectedIndex >= 0 Then
-                _IdDevice = Window1.myService.GetAllDevices.Item(CbDevice.SelectedIndex).ID
+                _IdDevice = Window1.myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).ID
                 _PropertyDevice = CbPropertyDevice.Text
                 _Signe = CbSigne2.SelectedIndex
                 _Value = TxtValue.Text
@@ -330,7 +330,7 @@ Public Class uCondition
 
     Private Sub CbDevice_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbDevice.SelectionChanged
         CbPropertyDevice.Items.Clear()
-        Select Case Window1.myService.GetAllDevices.Item(CbDevice.SelectedIndex).Type
+        Select Case Window1.myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).Type
             Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
                 CbPropertyDevice.Items.Add("Value")
             Case 17
