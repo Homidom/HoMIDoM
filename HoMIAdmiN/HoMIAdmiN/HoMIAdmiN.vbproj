@@ -144,6 +144,7 @@
     <Compile Include="Splash.xaml.vb">
       <DependentUpon>Splash.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Variables.vb" />
     <Compile Include="WindowImg.xaml.vb">
       <DependentUpon>WindowImg.xaml</DependentUpon>
     </Compile>

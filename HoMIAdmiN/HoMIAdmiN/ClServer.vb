@@ -10,6 +10,16 @@
     Dim _Defaut As Boolean
     Dim _Port As Double
     Dim _Icon As String
+    Dim _Id As String
+
+    Public Property Id As String
+        Get
+            Return _Id
+        End Get
+        Set(ByVal value As String)
+            _Id = value
+        End Set
+    End Property
 
     ''' <summary>
     ''' Nom du serveur

@@ -6,7 +6,20 @@ Driver_RFXMitter
 </name>
 </assembly>
 <members>
-<member name="M:Driver_RFXMitter.Driver_RFXMitter.Start">
+<member name="P:Driver_RFXMitter.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_RFXMitter.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_RFXMitter.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.Start">
 	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_RFXMitter.Driver_RFXMitter.Stop">
@@ -104,19 +117,6 @@ Driver_RFXMitter
 </member><member name="T:Driver_RFXMitter.Driver_RFXMitter">
 	<summary>Class Driver_RFXMitter, permet de communiquer avec le RFXMitter Ethernet/COM</summary>
 	<remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
-</member><member name="P:Driver_RFXMitter.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_RFXMitter.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_RFXMitter.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
 </member>
 </members>
 </doc>

@@ -92,6 +92,10 @@
                             </Button>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
+                            <Label Content="ID:" Width="70" Name="Label15" Foreground="White" Margin=" 1" />
+                            <TextBox Height="20" Margin="1" Name="TxtID" Width="150" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" >
                             <Label Content="IP:" Width="70" Name="Label5" Foreground="White" Margin=" 1" />
                             <TextBox Height="20" Margin="1" Name="TxtIP" Width="150" />
                         </StackPanel>

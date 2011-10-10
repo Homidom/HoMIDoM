@@ -9,6 +9,7 @@
     <Serializable()> Public Class Driver
         Dim _ID As String
         <NonSerialized()> Dim _Server As Server
+        <NonSerialized()> Dim _IdSrv As String
 
         Public ReadOnly Property DeviceSupport() As ArrayList
             Get
@@ -168,9 +169,10 @@
             End Get
         End Property
 
-        Public Sub New(ByVal Serveur As Server, ByVal DriverId As String)
+        Public Sub New(ByVal Serveur As Server, ByVal SrvId As String, ByVal DriverId As String)
             _Server = Serveur
             _ID = DriverId
+            _IdSrv = SrvId
         End Sub
 
         Public Class Parametre

@@ -17,7 +17,7 @@ Partial Public Class uDriver
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             _DriverId = DriverId
 
-            x = Window1.myService.ReturnDriverByID(DriverId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
+            x = Window1.myService.ReturnDriverByID(IdSrv, DriverId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
 
             If x IsNot Nothing Then 'on a trouvé le device
                 If x.IP_TCP = "@" Then
@@ -116,7 +116,7 @@ Partial Public Class uDriver
 
     'Bouton Ok
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        Window1.myService.SaveDriver(_DriverId, TxtNom.Text, ChkEnable.IsChecked, CbStartAuto.IsChecked, TxtAdrTCP.Text, TxtPortTCP.Text, TxtAdrUDP.Text, TxtPortUDP.Text, TxtCom.Text, TxtRefresh.Text, ImgDevice.Tag, _ListParam)
+        Window1.myService.SaveDriver(IdSrv, _DriverId, TxtNom.Text, ChkEnable.IsChecked, CbStartAuto.IsChecked, TxtAdrTCP.Text, TxtPortTCP.Text, TxtAdrUDP.Text, TxtPortUDP.Text, TxtCom.Text, TxtRefresh.Text, ImgDevice.Tag, _ListParam)
         RaiseEvent CloseMe(Me)
     End Sub
 
@@ -258,7 +258,7 @@ Partial Public Class uDriver
                 a.Parametres.Add(y)
             End If
 
-            Window1.myService.ExecuteDriverCommand(_DriverId, a)
+            Window1.myService.ExecuteDriverCommand(IdSrv, _DriverId, a)
         Catch ex As Exception
             MessageBox.Show("Erreur lors du test: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try

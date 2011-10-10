@@ -48,10 +48,10 @@ Public Class WConfig
         MyListMnu = Frm.ListMnu
 
         If myService IsNot Nothing Then
-            For i As Integer = 0 To myService.GetAllZones.Count - 1
+            For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
                 Dim x As New MenuItem
-                x.Header = myService.GetAllZones.Item(i).Name
-                x.Uid = myService.GetAllZones.Item(i).ID
+                x.Header = myService.GetAllZones(IdSrv).Item(i).Name
+                x.Uid = myService.GetAllZones(IdSrv).Item(i).ID
                 AddHandler x.Click, AddressOf MenuZone_Click
                 MnuAddZone.Items.Add(x)
             Next
@@ -122,7 +122,7 @@ Public Class WConfig
             If Frm.ListMnu.Item(ListMnu.SelectedIndex).Type <> uCtrlImgMnu.TypeOfMnu.Zone Then
                 StkImage.Visibility = Windows.Visibility.Visible
             Else
-                ImgMnu.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(MyListMnu.Item(ListMnu.SelectedIndex).Parametres(0)).Icon))
+                ImgMnu.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(IdSrv, MyListMnu.Item(ListMnu.SelectedIndex).Parametres(0)).Icon))
                 StkImage.Visibility = Windows.Visibility.Hidden
             End If
             TxtImage.Text = MyListMnu.Item(ListMnu.SelectedIndex).Icon
@@ -244,7 +244,7 @@ Public Class WConfig
     Private Sub MenuZone_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
         TxtName.Text = sender.Header
         LblType.Content = uCtrlImgMnu.TypeOfMnu.Zone.ToString
-        ImgMnu.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(sender.uid).Icon))
+        ImgMnu.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(IdSrv, sender.uid).Icon))
         TxtParam.Text = sender.uid
         StkImage.Visibility = Windows.Visibility.Hidden
         StkParam.Visibility = Windows.Visibility.Hidden

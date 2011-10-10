@@ -451,6 +451,13 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.TimerSecTick">
 	<summary>Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi</summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.VerifIdSrv(System.String)">
+	<summary>
+ Vérifie si l'IDsrv est correct, retourne True si ok
+ </summary>
+	<param name="Value"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.MAJ_HeuresSoleil">
 	<summary>Initialisation des heures du soleil</summary>
 	<remarks></remarks>
@@ -543,8 +550,21 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.start">
 	<summary>Démarrage du serveur</summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.stop">
+</member><member name="M:HoMIDom.HoMIDom.Server.stop(System.String)">
 	<summary>Arrêt du serveur</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetIdServer">
+	<summary>
+ Retourne l'Id du serveur pour SOAP
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetIdServer(System.String,System.String)">
+	<summary>
+ Fixe l'Id du serveur pour SOAP
+ </summary>
+	<param name="Value"></param>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetLastStartTime">
 	<summary>Retourne la date et heure du dernier démarrage du serveur</summary>
@@ -572,12 +592,12 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.DeleteExtensionAudio(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteExtensionAudio(System.String,System.String)">
 	<summary>Supprimer une extension Audio</summary>
 	<param name="NomExtension"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.NewExtensionAudio(System.String,System.Boolean)">
+</member><member name="M:HoMIDom.HoMIDom.Server.NewExtensionAudio(System.String,System.String,System.Boolean)">
 	<summary>
  Ajouter une nouvelle extension audio
  </summary>
@@ -585,7 +605,7 @@ HoMIDom
 	<param name="Enable"></param>
 	<returns>-1 si déjà existant</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.EnableExtensionAudio(System.String,System.Boolean)">
+</member><member name="M:HoMIDom.HoMIDom.Server.EnableExtensionAudio(System.String,System.String,System.Boolean)">
 	<summary>
  Active ou désactive une extension Audio
  </summary>
@@ -593,14 +613,14 @@ HoMIDom
 	<param name="Enable"></param>
 	<returns>-1 si Extension non trouvée</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.DeleteRepertoireAudio(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteRepertoireAudio(System.String,System.String)">
 	<summary>
  Supprimer un répertoire Audio
  </summary>
 	<param name="NomRepertoire"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.NewRepertoireAudio(System.String,System.Boolean)">
+</member><member name="M:HoMIDom.HoMIDom.Server.NewRepertoireAudio(System.String,System.String,System.Boolean)">
 	<summary>
  Ajouter un nouveau répertoire audio
  </summary>
@@ -608,7 +628,7 @@ HoMIDom
 	<param name="Enable"></param>
 	<returns>-1 si déjà existant</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.EnableRepertoireAudio(System.String,System.Boolean)">
+</member><member name="M:HoMIDom.HoMIDom.Server.EnableRepertoireAudio(System.String,System.String,System.Boolean)">
 	<summary>
  Active ou désactive un répertoire Audio
  </summary>
@@ -616,29 +636,29 @@ HoMIDom
 	<param name="Enable"></param>
 	<returns>-1 si répertoire non trouvé</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetAllRepertoiresAudio">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetAllRepertoiresAudio(System.String)">
 	<summary>Retourne la liste de tous les répertoires audio</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetAllExtensionsAudio">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetAllExtensionsAudio(System.String)">
 	<summary>Retourne la liste de toutes les extensions audio</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetSMTPServeur">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetSMTPServeur(System.String)">
 	<summary>Retourne l'adresse du serveur SMTP</summary>
-</member><member name="M:HoMIDom.HoMIDom.Server.SetSMTPServeur(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SetSMTPServeur(System.String,System.String)">
 	<summary>Fixe l'adresse du serveur SMTP</summary>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetSMTPLogin">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetSMTPLogin(System.String)">
 	<summary>Retourne le login du serveur SMTP</summary>
-</member><member name="M:HoMIDom.HoMIDom.Server.SetSMTPLogin(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SetSMTPLogin(System.String,System.String)">
 	<summary>Fixe le login du serveur SMTP</summary>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetSMTPPassword">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetSMTPPassword(System.String)">
 	<summary>Retourne le password du serveur SMTP</summary>
-</member><member name="M:HoMIDom.HoMIDom.Server.SetSMTPPassword(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SetSMTPPassword(System.String,System.String)">
 	<summary>Fixe le password du serveur SMTP</summary>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetSMTPMailServeur">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetSMTPMailServeur(System.String)">
 	<summary>Retourne l'adresse mail du serveur</summary>
-</member><member name="M:HoMIDom.HoMIDom.Server.SetSMTPMailServeur(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SetSMTPMailServeur(System.String,System.String)">
 	<summary>Fixe le password du serveur SMTP</summary>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetHeureCoucherSoleil">
 	<summary>Retourne l'heure du couché du soleil</summary>
@@ -646,19 +666,19 @@ HoMIDom
 	<summary>Retour l'heure de lever du soleil</summary>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetLongitude">
 	<summary>Retourne la longitude du serveur</summary>
-</member><member name="M:HoMIDom.HoMIDom.Server.SetLongitude(System.Double)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SetLongitude(System.String,System.Double)">
 	<summary>Applique une valeur de longitude au serveur</summary>
 	<param name="value"></param>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetLatitude">
 	<summary>Retourne la latitude du serveur</summary>
-</member><member name="M:HoMIDom.HoMIDom.Server.SetLatitude(System.Double)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SetLatitude(System.String,System.Double)">
 	<summary>Applique une valeur de latitude du serveur</summary>
 	<param name="value"></param>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetHeureCorrectionCoucher">
 	<summary>Retourne la valeur de correction de l'heure de coucher du soleil</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SetHeureCorrectionCoucher(System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SetHeureCorrectionCoucher(System.String,System.Int32)">
 	<summary>Applique la valeur de correction de l'heure de coucher du soleil</summary>
 	<param name="value"></param>
 	<remarks></remarks>
@@ -666,26 +686,26 @@ HoMIDom
 	<summary>Retourne la valeur de correction de l'heure de lever du soleil</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SetHeureCorrectionLever(System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SetHeureCorrectionLever(System.String,System.Int32)">
 	<summary>Applique la valeur de correction de l'heure de coucher du soleil</summary>
 	<param name="value"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.DeleteDriver(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteDriver(System.String,System.String)">
 	<summary>Supprimer un driver de la config</summary>
 	<param name="driverId"></param>
-</member><member name="M:HoMIDom.HoMIDom.Server.StopDriver(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.StopDriver(System.String,System.String)">
 	<summary>Arrête un driver par son Id</summary>
 	<param name="DriverId"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.StartDriver(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.StartDriver(System.String,System.String)">
 	<summary>Démarre un driver par son id</summary>
 	<param name="DriverId"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetAllDrivers">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetAllDrivers(System.String)">
 	<summary>Retourne la liste de tous les drivers</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveDriver(System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.Collections.ArrayList)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveDriver(System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.Collections.ArrayList)">
 	<summary>Sauvegarde ou créer un driver dans la config</summary>
 	<param name="driverId"></param>
 	<param name="name"></param>
@@ -700,34 +720,34 @@ HoMIDom
 	<param name="picture"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDriverById(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDriverById(System.String,System.String)">
 	<summary>Retourne un driver par son ID</summary>
 	<param name="DriverId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDrvById(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDrvById(System.String,System.String)">
 	<summary>Retourne un driver par son ID</summary>
 	<param name="DriverId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDriverByNom(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDriverByNom(System.String,System.String)">
 	<summary>Retourne le driver par son Nom</summary>
 	<param name="DriverNom"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ExecuteDriverCommand(System.String,HoMIDom.HoMIDom.DeviceAction)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ExecuteDriverCommand(System.String,System.String,HoMIDom.HoMIDom.DeviceAction)">
 	<summary>Permet d'exécuter une commande Sub d'un Driver</summary>
 	<param name="DriverId"></param>
 	<param name="Action"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.DeleteDevice(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteDevice(System.String,System.String)">
 	<summary>Supprimer un device de la config</summary>
 	<param name="deviceId"></param>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetAllDevices">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetAllDevices(System.String)">
 	<summary>Retourne la liste de tous les devices</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveDevice(System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32)">
 	<summary>Sauvegarder ou créer un device</summary>
 	<param name="deviceId"></param>
 	<param name="name"></param>
@@ -744,13 +764,13 @@ HoMIDom
 	<param name="lastchangeduree"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.DeleteDeviceCommandIR(System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteDeviceCommandIR(System.String,System.String,System.String)">
 	<summary>Supprime une commande IR d'un device</summary>
 	<param name="deviceId"></param>
 	<param name="CmdName"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveDeviceCommandIR(System.String,System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveDeviceCommandIR(System.String,System.String,System.String,System.String,System.String)">
 	<summary>Ajoute ou modifie une commande IR à un device</summary>
 	<param name="deviceId"></param>
 	<param name="CmdName"></param>
@@ -758,11 +778,11 @@ HoMIDom
 	<param name="CmdRepeat"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.StartIrLearning">
+</member><member name="M:HoMIDom.HoMIDom.Server.StartIrLearning(System.String)">
 	<summary>Commencer un apprentissage IR</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDeviceById(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDeviceById(System.String,System.String)">
 	<summary>Retourne un device par son ID</summary>
 	<param name="DeviceId"></param>
 	<returns></returns>
@@ -772,39 +792,39 @@ HoMIDom
 	<param name="DeviceId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDeviceByAdresse1TypeDriver(System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDeviceByAdresse1TypeDriver(System.String,System.String,System.String,System.String)">
 	<summary>Retourne une liste de device par son Adresse1 et/ou type et/ou son driver, ex: "A1" "TEMPERATURE" "RFXCOM_RECEIVER"</summary>
 	<param name="DeviceAdresse"></param>
 	<param name="DeviceType"></param>
 	<param name="DriverID"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ExecuteDeviceCommand(System.String,HoMIDom.HoMIDom.DeviceAction)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ExecuteDeviceCommand(System.String,System.String,HoMIDom.HoMIDom.DeviceAction)">
 	<summary>Permet d'exécuter une commande Sub d'un Device</summary>
 	<param name="DeviceId"></param>
 	<param name="Action"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.DeleteZone(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteZone(System.String,System.String)">
 	<summary>Supprimer une zone de la config</summary>
 	<param name="zoneId"></param>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetAllZones">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetAllZones(System.String)">
 	<summary>Retourne la liste de toutes les zones</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.AddDeviceToZone(System.String,System.String,System.Boolean)">
+</member><member name="M:HoMIDom.HoMIDom.Server.AddDeviceToZone(System.String,System.String,System.String,System.Boolean)">
 	<summary>ajouter un device à une zone</summary>
 	<param name="ZoneId"></param>
 	<param name="DeviceId"></param>
 	<param name="Visible"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.DeleteDeviceToZone(System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteDeviceToZone(System.String,System.String,System.String)">
 	<summary>supprimer un device à une zone</summary>
 	<param name="ZoneId"></param>
 	<param name="DeviceId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveZone(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Zone.Element_Zone},System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveZone(System.String,System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Zone.Element_Zone},System.String,System.String)">
 	<summary>sauvegarde ou créer une zone dans la config</summary>
 	<param name="zoneId"></param>
 	<param name="name"></param>
@@ -813,31 +833,31 @@ HoMIDom
 	<param name="image"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetDeviceInZone(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetDeviceInZone(System.String,System.String)">
 	<summary>Retourne la liste des devices d'une zone depuis son ID</summary>
 	<param name="ZoneId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ZoneIsEmpty(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ZoneIsEmpty(System.String,System.String)">
 	<summary>
  Indique si la zone ne contient aucun device
  </summary>
 	<param name="zoneId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ReturnZoneById(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnZoneById(System.String,System.String)">
 	<summary>Retourne la zone par son ID</summary>
 	<param name="ZoneId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.DeleteMacro(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteMacro(System.String,System.String)">
 	<summary>Supprimer une macro de la config</summary>
 	<param name="macroId"></param>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetAllMacros">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetAllMacros(System.String)">
 	<summary>Retourne la liste de toutes les macros</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveMacro(System.String,System.String,System.Boolean,System.String,System.Collections.ArrayList)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveMacro(System.String,System.String,System.String,System.Boolean,System.String,System.Collections.ArrayList)">
 	<summary>
  Permet de créer ou modifier une macro
  </summary>
@@ -848,19 +868,19 @@ HoMIDom
 	<param name="listactions"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ReturnMacroById(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnMacroById(System.String,System.String)">
 	<summary>Retourne la macro par son ID</summary>
 	<param name="MacroId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.DeleteTrigger(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteTrigger(System.String,System.String)">
 	<summary>Supprimer un trigger de la config</summary>
 	<param name="triggerId"></param>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetAllTriggers">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetAllTriggers(System.String)">
 	<summary>Retourne la liste de toutes les macros</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveTrigger(System.String,System.String,System.Boolean,HoMIDom.HoMIDom.Trigger.TypeTrigger,System.String,System.String,System.String,System.String,System.Collections.Generic.List{System.String})">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveTrigger(System.String,System.String,System.String,System.Boolean,HoMIDom.HoMIDom.Trigger.TypeTrigger,System.String,System.String,System.String,System.String,System.Collections.Generic.List{System.String})">
 	<summary>
  Permet de créer ou modifier un trigger
  </summary>
@@ -875,26 +895,26 @@ HoMIDom
 	<param name="macro"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ReturnTriggerById(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnTriggerById(System.String,System.String)">
 	<summary>Retourne le trigger par son ID</summary>
 	<param name="TriggerId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.DeleteUser(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteUser(System.String,System.String)">
 	<summary>Supprime un user</summary>
 	<param name="userId"></param>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetAllUsers">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetAllUsers(System.String)">
 	<summary>Retourne la liste de tous les users</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ReturnUserByUsername(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnUserByUsername(System.String,System.String)">
 	<summary>
  Retourne un user par son username
  </summary>
 	<param name="Username"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveUser(System.String,System.String,System.String,HoMIDom.HoMIDom.Users.TypeProfil,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveUser(System.String,System.String,System.String,System.String,HoMIDom.HoMIDom.Users.TypeProfil,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Créer ou modifie un user par son ID
  </summary>
@@ -922,14 +942,14 @@ HoMIDom
 	<param name="Password"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ChangePassword(System.String,System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ChangePassword(System.String,System.String,System.String,System.String,System.String)">
 	<summary>Permet de changer de Password sur un user</summary>
 	<param name="Username"></param>
 	<param name="OldPassword"></param>
 	<param name="Password"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ReturnUserById(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnUserById(System.String,System.String)">
 	<summary>Retourne un user par son ID</summary>
 	<param name="UserId"></param>
 	<returns></returns>
@@ -951,10 +971,10 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveConfiguration">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveConfiguration(System.String)">
 	<summary>Sauvegarder la configuration</summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SetPortSOAP(System.Double)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SetPortSOAP(System.String,System.Double)">
 	<summary>Fixer la valeur du port SOAP</summary>
 	<param name="Value"></param>
 	<remarks></remarks>
@@ -975,6 +995,20 @@ HoMIDom
  Template de Classe de type Driver pour le service web
  </summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetIdServer">
+	<summary>
+ Retourne l'Id du serveur pour SOAP
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetIdServer(System.String,System.String)">
+	<summary>
+ Fixe l'Id du serveur pour SOAP
+ </summary>
+	<param name="IdSrv"></param>
+	<param name="Value"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetServerVersion">
 	<summary>
  Retourne la version du serveur
@@ -992,7 +1026,7 @@ HoMIDom
  </summary>
 	<param name="Message"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveConfig">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveConfig(System.String)">
 	<summary>
  'Sauvegarde de la configuration
  </summary>
@@ -1002,12 +1036,12 @@ HoMIDom
  Démarre le service et charge la config
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Stop">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Stop(System.String)">
 	<summary>
  Arrête le service et charge la config
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetPortSOAP(System.Double)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetPortSOAP(System.String,System.Double)">
 	<summary>
  Fixe la valeur de port SOAP
  </summary>
@@ -1043,7 +1077,7 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetLongitude(System.Double)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetLongitude(System.String,System.Double)">
 	<summary>
  Appliquer une valeur de longitude
  </summary>
@@ -1055,7 +1089,7 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetLatitude(System.Double)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetLatitude(System.String,System.Double)">
 	<summary>
  Appliquer la valeur de latitude
  </summary>
@@ -1067,7 +1101,7 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetHeureCorrectionCoucher(System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetHeureCorrectionCoucher(System.String,System.Int32)">
 	<summary>
  Appliquer une correction sur l'heure du coucher du soleil
  </summary>
@@ -1079,7 +1113,7 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetHeureCorrectionLever(System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetHeureCorrectionLever(System.String,System.Int32)">
 	<summary>
  Appliquer une correction sur l'heure de lever du soleil
  </summary>
@@ -1098,20 +1132,20 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllListHisto">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllListHisto(System.String)">
 	<summary>
  Retourne la liste des sources histo (source et id)
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteExtensionAudio(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteExtensionAudio(System.String,System.String)">
 	<summary>
  Supprimer une extension Audio
  </summary>
 	<param name="NomExtension"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.NewExtensionAudio(System.String,System.Boolean)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.NewExtensionAudio(System.String,System.String,System.Boolean)">
 	<summary>
  Ajouter une nouvelle extension audio
  </summary>
@@ -1119,7 +1153,7 @@ HoMIDom
 	<param name="Enable"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.EnableExtensionAudio(System.String,System.Boolean)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.EnableExtensionAudio(System.String,System.String,System.Boolean)">
 	<summary>
  Active ou désactive une extension Audio
  </summary>
@@ -1127,14 +1161,14 @@ HoMIDom
 	<param name="Enable"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteRepertoireAudio(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteRepertoireAudio(System.String,System.String)">
 	<summary>
  Supprimer un répertoire Audio
  </summary>
 	<param name="NomRepertoire"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.NewRepertoireAudio(System.String,System.Boolean)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.NewRepertoireAudio(System.String,System.String,System.Boolean)">
 	<summary>
  Ajouter un nouveau répertoire audio
  </summary>
@@ -1142,7 +1176,7 @@ HoMIDom
 	<param name="Enable"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.EnableRepertoireAudio(System.String,System.Boolean)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.EnableRepertoireAudio(System.String,System.String,System.Boolean)">
 	<summary>
  Active ou désactive un répertoire Audio
  </summary>
@@ -1150,19 +1184,19 @@ HoMIDom
 	<param name="Enable"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllRepertoiresAudio">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllRepertoiresAudio(System.String)">
 	<summary>
  Obtient la liste des répertoires audio
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllExtensionsAudio">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllExtensionsAudio(System.String)">
 	<summary>
  Obtient la liste des extensions audio
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteUser(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteUser(System.String,System.String)">
 	<summary>
  Supprime un user
  </summary>
@@ -1177,7 +1211,7 @@ HoMIDom
 	<param name="Password"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ChangePassword(System.String,System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ChangePassword(System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Permet de changer le mot de passe d'un user
  </summary>
@@ -1185,27 +1219,27 @@ HoMIDom
 	<param name="OldPassword"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnUserByUsername(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnUserByUsername(System.String,System.String)">
 	<summary>
  Retourne un user par son username
  </summary>
 	<param name="Username"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllUsers">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllUsers(System.String)">
 	<summary>
  Obtient la liste des users
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnUserById(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnUserById(System.String,System.String)">
 	<summary>
  Retourne l'objet d'un user par son ID
  </summary>
 	<param name="UserId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveUser(System.String,System.String,System.String,HoMIDom.HoMIDom.Users.TypeProfil,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveUser(System.String,System.String,System.String,System.String,HoMIDom.HoMIDom.Users.TypeProfil,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Créer ou modifier un user
  </summary>
@@ -1227,27 +1261,27 @@ HoMIDom
 	<param name="CodePostal"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllDevices">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllDevices(System.String)">
 	<summary>
  Obtient la liste des devices
  </summary>
 	<returns>List de TemplateDevice</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExecuteDeviceCommand(System.String,HoMIDom.HoMIDom.DeviceAction)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExecuteDeviceCommand(System.String,System.String,HoMIDom.HoMIDom.DeviceAction)">
 	<summary>
  Execute une commande (COMMAND) d'un device (DeviceID) associés à des paramètres (Param)
  </summary>
 	<param name="DeviceId"></param>
 	<param name="Action"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDevice(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDevice(System.String,System.String)">
 	<summary>
  Supprimer un device
  </summary>
 	<param name="deviceId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDeviceCommandIR(System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDeviceCommandIR(System.String,System.String,System.String)">
 	<summary>
  Supprime une commande IR d'un device
  </summary>
@@ -1255,14 +1289,14 @@ HoMIDom
 	<param name="CmdName"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDeviceByID(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDeviceByID(System.String,System.String)">
 	<summary>
  Retourne l'objet d'un device par son ID
  </summary>
 	<param name="Id"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDeviceByAdresse1TypeDriver(System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDeviceByAdresse1TypeDriver(System.String,System.String,System.String,System.String)">
 	<summary>
  Retourne une liste de device suivant l'addresse1 et/ou son type et/ou le driver
  </summary>
@@ -1271,7 +1305,7 @@ HoMIDom
 	<param name="DeviceDriver"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDevice(System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32)">
 	<summary>
  Créer un nouveau device ou sauvegarder la modif (si ID est complété)
  </summary>
@@ -1290,7 +1324,7 @@ HoMIDom
 	<param name="lastchangeduree"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDeviceCommandIR(System.String,System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDeviceCommandIR(System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  'Ajouter ou modifier une commande IR à un device (utilisé pour usbuirt)
  </summary>
@@ -1300,47 +1334,47 @@ HoMIDom
 	<param name="CmdRepeat"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StartIrLearning">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StartIrLearning(System.String)">
 	<summary>
  Commencer l'apprentissage d'un commande IR
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllDrivers">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllDrivers(System.String)">
 	<summary>
  Obtient la liste des drivers
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExecuteDriverCommand(System.String,HoMIDom.HoMIDom.DeviceAction)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExecuteDriverCommand(System.String,System.String,HoMIDom.HoMIDom.DeviceAction)">
 	<summary>
  Execute une commande (COMMAND) d'un driver (DriverID) associés à des paramètres (Param)
  </summary>
 	<param name="DriverId"></param>
 	<param name="Action"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDriverByID(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDriverByID(System.String,System.String)">
 	<summary>
  Retourne l'objet d'un driver par son ID
  </summary>
 	<param name="Id"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDriver(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDriver(System.String,System.String)">
 	<summary>
  Supprimer un driver de la config
  </summary>
 	<param name="driverId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDriverByNom(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDriverByNom(System.String,System.String)">
 	<summary>
  Retourne l'objet d'un driver par son nom
  </summary>
 	<param name="name"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDriver(System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.Collections.ArrayList)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDriver(System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.Collections.ArrayList)">
 	<summary>
  Créer un nouveau driver ou sauvegarder la modif (si ID est complété)
  </summary>
@@ -1358,53 +1392,53 @@ HoMIDom
 	<param name="Parametres"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StopDriver(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StopDriver(System.String,System.String)">
 	<summary>
  Arrêter un driver
  </summary>
 	<param name="DriverId"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StartDriver(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StartDriver(System.String,System.String)">
 	<summary>
  Démarrer un driver
  </summary>
 	<param name="DriverId"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ZoneIsEmpty(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ZoneIsEmpty(System.String,System.String)">
 	<summary>
  Indique si la zone ne contient aucun device (exemple à vérifier avant de supprimer une zone)
  </summary>
 	<param name="zoneId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteZone(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteZone(System.String,System.String)">
 	<summary>
  Supprimer une zone de la config
  </summary>
 	<param name="zoneId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllZones">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllZones(System.String)">
 	<summary>
  Obtient la liste des zones
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetDeviceInZone(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetDeviceInZone(System.String,System.String)">
 	<summary>
  Retourne la liste des devices d'une zone (par son id)
  </summary>
 	<param name="zoneId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnZoneByID(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnZoneByID(System.String,System.String)">
 	<summary>
  Retourne l'objet d'une zone par son ID
  </summary>
 	<param name="Id"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveZone(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Zone.Element_Zone},System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveZone(System.String,System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Zone.Element_Zone},System.String,System.String)">
 	<summary>
  Créer un nouveau zone ou sauvegarder la modif (si ID est complété)
  </summary>
@@ -1415,7 +1449,7 @@ HoMIDom
 	<param name="image"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddDeviceToZone(System.String,System.String,System.Boolean)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddDeviceToZone(System.String,System.String,System.String,System.Boolean)">
 	<summary>
  Ajouter un device à une zone
  </summary>
@@ -1424,7 +1458,7 @@ HoMIDom
 	<param name="Visible"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDeviceToZone(System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDeviceToZone(System.String,System.String,System.String)">
 	<summary>
  Supprimer un device à une zone
  </summary>
@@ -1432,29 +1466,29 @@ HoMIDom
 	<param name="DeviceId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteMacro(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteMacro(System.String,System.String)">
 	<summary>
  Supprimer une macro de la config
  </summary>
 	<param name="macroId">Id de la macro à supprimer</param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.RunMacro(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.RunMacro(System.String,System.String)">
 	<summary>
  Execute une macro
  </summary>
 	<param name="Id"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllMacros">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllMacros(System.String)">
 	<summary>Retourne la liste de toutes les macros</summary>
 	<returns>Retourne une List de type Macro</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnMacroById(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnMacroById(System.String,System.String)">
 	<summary>Retourne la macro par son ID</summary>
 	<param name="MacroId">Id de la macro</param>
 	<returns>Objet de type Macro</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveMacro(System.String,System.String,System.Boolean,System.String,System.Collections.ArrayList)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveMacro(System.String,System.String,System.String,System.Boolean,System.String,System.Collections.ArrayList)">
 	<summary>
  Permet de créer ou modifier une macro
  </summary>
@@ -1465,23 +1499,23 @@ HoMIDom
 	<param name="listactions">List des actions associées à la macro</param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllTriggers">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllTriggers(System.String)">
 	<summary>Retourne la liste de toutes les triggers</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnTriggerById(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnTriggerById(System.String,System.String)">
 	<summary>Retourne le trigger par son ID</summary>
 	<param name="TriggerId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteTrigger(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteTrigger(System.String,System.String)">
 	<summary>
  Supprimer un trigger de la config
  </summary>
 	<param name="triggerId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTrigger(System.String,System.String,System.Boolean,HoMIDom.HoMIDom.Trigger.TypeTrigger,System.String,System.String,System.String,System.String,System.Collections.Generic.List{System.String})">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTrigger(System.String,System.String,System.String,System.Boolean,HoMIDom.HoMIDom.Trigger.TypeTrigger,System.String,System.String,System.String,System.String,System.Collections.Generic.List{System.String})">
 	<summary>
  Permet de créer ou modifier un trigger
  </summary>
@@ -1528,49 +1562,49 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPServeur">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPServeur(System.String)">
 	<summary>
  Retourne l'adresse SMTP du serveur
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPServeur(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPServeur(System.String,System.String)">
 	<summary>
  Fixe l'adresse SMTP du serveur
  </summary>
 	<param name="Value"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPLogin">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPLogin(System.String)">
 	<summary>
  Retourne le login du serveur SMTP
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPLogin(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPLogin(System.String,System.String)">
 	<summary>
  Fixe le login du serveur SMTP
  </summary>
 	<param name="Value"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPPassword">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPPassword(System.String)">
 	<summary>
  Retourne le password du serveur SMTP
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPPassword(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPPassword(System.String,System.String)">
 	<summary>
  Fixe le password du serveur SMTP
  </summary>
 	<param name="Value"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPMailServeur">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPMailServeur(System.String)">
 	<summary>
  Retourne l'adresse mail du serveur SMTP
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPMailServeur(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPMailServeur(System.String,System.String)">
 	<summary>
  Fixe l'adresse mail du serveur SMTP
  </summary>

@@ -19,7 +19,7 @@ Partial Public Class uZone
             MessageBox.Show("Le nom de la zone est obligatoire!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         End If
-        Window1.myService.SaveZone(_ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag, ImgZone.Tag)
+        Window1.myService.SaveZone(IdSrv, _ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag, ImgZone.Tag)
         RaiseEvent CloseMe(Me)
     End Sub
 
@@ -39,7 +39,7 @@ Partial Public Class uZone
         If Action = EAction.Nouveau Then 'Nouvelle Zone
 
         Else 'Modifier zone
-            Dim x As Zone = Window1.myService.ReturnZoneByID(ZoneId)
+            Dim x As Zone = Window1.myService.ReturnZoneByID(IdSrv, ZoneId)
             Dim _list As New List(Of Integer)
 
             _ZoneId = ZoneId
@@ -76,14 +76,14 @@ Partial Public Class uZone
         ListBxDevice.Items.Clear()
 
         For i As Integer = 0 To _ListIdSelect.Count - 1
-            If Window1.myService.ReturnDeviceByID(_ListIdSelect.Item(i).ElementID) IsNot Nothing Then
-                ListBxDevice.Items.Add(Window1.myService.ReturnDeviceByID(_ListIdSelect.Item(i).ElementID).Name)
+            If Window1.myService.ReturnDeviceByID(IdSrv, _ListIdSelect.Item(i).ElementID) IsNot Nothing Then
+                ListBxDevice.Items.Add(Window1.myService.ReturnDeviceByID(IdSrv, _ListIdSelect.Item(i).ElementID).Name)
             End If
-            If Window1.myService.ReturnZoneByID(_ListIdSelect.Item(i).ElementID) IsNot Nothing Then
-                ListBxDevice.Items.Add(Window1.myService.ReturnZoneByID(_ListIdSelect.Item(i).ElementID).Name)
+            If Window1.myService.ReturnZoneByID(IdSrv, _ListIdSelect.Item(i).ElementID) IsNot Nothing Then
+                ListBxDevice.Items.Add(Window1.myService.ReturnZoneByID(IdSrv, _ListIdSelect.Item(i).ElementID).Name)
             End If
-            If Window1.myService.ReturnMacroById(_ListIdSelect.Item(i).ElementID) IsNot Nothing Then
-                ListBxDevice.Items.Add(Window1.myService.ReturnMacroById(_ListIdSelect.Item(i).ElementID).Nom)
+            If Window1.myService.ReturnMacroById(IdSrv, _ListIdSelect.Item(i).ElementID) IsNot Nothing Then
+                ListBxDevice.Items.Add(Window1.myService.ReturnMacroById(IdSrv, _ListIdSelect.Item(i).ElementID).Nom)
             End If
         Next
     End Sub

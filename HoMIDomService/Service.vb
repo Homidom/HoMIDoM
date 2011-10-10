@@ -5,6 +5,7 @@ Imports System.Xml.XPath
 Imports System.ServiceModel
 Imports System.ServiceModel.Description
 Imports System.Xml.Serialization
+Imports System.ServiceModel.Channels
 
 '***********************************************
 '** SERVICE HOMIDom - Simple exe qui sera ensuite convertit en service Windows
@@ -18,6 +19,7 @@ Module Service
 
     Dim myService As HoMIDom.HoMIDom.IHoMIDom
     Dim MyRep As String = System.Environment.CurrentDirectory
+    Dim _IdSrv As String
 
     Sub Main()
         Try
@@ -41,10 +43,10 @@ Module Service
             Using host As New ServiceHost(GetType(Server), baseAddress)
                 host.CloseTimeout = TimeSpan.FromMinutes(60)
                 host.OpenTimeout = TimeSpan.FromMinutes(60)
+                AddHandler host.Faulted, AddressOf HostFaulted
+                AddHandler host.UnknownMessageReceived, AddressOf HostUnknown
                 host.Open()
-
                 Console.WriteLine(Now & " ServiceWeb Démarré") ' & obj.PortTCP)
-
                 Console.WriteLine("")
                 Console.WriteLine("****   SERVEUR DEMARRE    ****")
                 Console.WriteLine("******************************")
@@ -52,7 +54,6 @@ Module Service
 
                 'Connexion au serveur
                 Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
-
 
                 Try
                     'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
@@ -68,14 +69,13 @@ Module Service
                     binding.CloseTimeout = TimeSpan.FromMinutes(60)
                     binding.OpenTimeout = TimeSpan.FromMinutes(60)
                     binding.ReceiveTimeout = TimeSpan.FromMinutes(60)
-                    'New System.ServiceModel.BasicHttpBinding
                     myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
 
                     myService = myChannelFactory.CreateChannel()
 
-
                     'Démarrage du serveur pour charger la config
                     myService.Start()
+
                 Catch ex As Exception
                     myChannelFactory.Abort()
                     Console.WriteLine(Now & " ERREUR: Erreur lors du lancement du service SOAP: " & ex.Message)
@@ -96,6 +96,16 @@ Module Service
         End Try
     End Sub
 
+    Sub HostFaulted(ByVal sender As Object, ByVal e As System.EventArgs)
+        Console.WriteLine(Now & " Le serveur s'est mis en erreur")
+        MsgBox(Now & " Le serveur s'est mis en erreur")
+    End Sub
+
+    Sub HostUnknown(ByVal sender As Object, ByVal e As System.ServiceModel.UnknownMessageReceivedEventArgs)
+        Console.WriteLine(Now & " Le serveur a reçu un message inconnu:" & e.Message.ToString)
+        MsgBox(Now & " Le serveur a reçu un message inconnu:" & e.Message.ToString)
+    End Sub
+
     Function LoadPort() As String
         Dim _portip As String = ""
         Try
@@ -113,7 +123,8 @@ Module Service
                         Select Case list.Item(0).Attributes.Item(j).Name
                             Case "portsoap"
                                 _portip = list.Item(0).Attributes.Item(j).Value
-                                Exit For
+                            Case "idsrv"
+                                _IdSrv = list.Item(0).Attributes.Item(j).Value
                         End Select
                     Next
                 Else
@@ -131,7 +142,7 @@ Module Service
     End Function
 
     Sub close()
-        myService.Stop()
+        myService.Stop(_IdSrv)
         End
     End Sub
 

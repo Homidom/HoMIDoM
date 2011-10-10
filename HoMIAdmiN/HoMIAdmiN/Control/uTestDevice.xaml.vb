@@ -38,7 +38,7 @@ Partial Public Class uTestDevice
                 x.Parametres.Add(y)
             End If
 
-            Window1.myService.ExecuteDeviceCommand(_DeviceId, x)
+            Window1.myService.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
         Catch ex As Exception
             MessageBox.Show("Erreur lors du test: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -52,7 +52,7 @@ Partial Public Class uTestDevice
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         _DeviceId = DeviceId
 
-        _Device = Window1.myService.ReturnDeviceByID(_DeviceId)
+        _Device = Window1.myService.ReturnDeviceByID(IdSrv, _DeviceId)
 
         If _Device IsNot Nothing Then
 

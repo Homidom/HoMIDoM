@@ -37,6 +37,7 @@ Imports System.IO.Ports
     Dim _DeviceSupport As New ArrayList
     Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
+    Dim _IdSrv As String
 #End Region
 
 #Region "Variables Internes"
@@ -44,6 +45,12 @@ Imports System.IO.Ports
 #End Region
 
 #Region "Propriétés génériques"
+    Public WriteOnly Property IdSrv As String Implements HoMIDom.HoMIDom.IDriver.IdSrv
+        Set(ByVal value As String)
+            _IdSrv = value
+        End Set
+    End Property
+
     Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
         Get
             Return _Com

@@ -41,6 +41,7 @@ Imports System.Globalization
     Dim _DeviceSupport As New ArrayList
     Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
+    Dim _IdSrv As String
 
 #End Region
 
@@ -97,6 +98,12 @@ Imports System.Globalization
 #End Region
 
 #Region "Propriétés génériques"
+    Public WriteOnly Property IdSrv As String Implements HoMIDom.HoMIDom.IDriver.IdSrv
+        Set(ByVal value As String)
+            _IdSrv = value
+        End Set
+    End Property
+
     Public Property Server() As HoMIDom.HoMIDom.Server Implements HoMIDom.HoMIDom.IDriver.Server
         Get
             Return _Server
@@ -2792,7 +2799,7 @@ Imports System.Globalization
             If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(adresse, "", Me._ID)
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, adresse, "", Me._ID)
                 If (listedevices.Count >= 1) Then
                     'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
                     WriteLog(listedevices.Item(0)._Name & " (" & adresse & ") : Battery Empty")
@@ -2824,7 +2831,7 @@ Imports System.Globalization
             If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(adresse, type, Me._ID)
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID)
                 If (listedevices.Count = 1) Then
                     'un device trouvé on maj la value
                     listedevices.Item(0).Value = valeur

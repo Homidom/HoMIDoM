@@ -38,7 +38,7 @@ Namespace HoMIDom
                             End If
                         End If
                     End If
-                    _Server.ExecuteDeviceCommand(x.IdDevice, y)
+                    _Server.ExecuteDeviceCommand(_IdSrv, x.IdDevice, y)
 
                 Case Action.TypeAction.ActionIf
                     Dim x As Action.ActionIf = _Action
@@ -48,7 +48,7 @@ Namespace HoMIDom
                         Dim result As Boolean
 
                         If x.Conditions.Item(i).Type = Action.TypeCondition.Device Then
-                            Dim retour As Object = CallByName(_Server.ReturnDeviceById(x.Conditions.Item(i).IdDevice), x.Conditions.Item(i).PropertyDevice, CallType.Get)
+                            Dim retour As Object = CallByName(_Server.ReturnDeviceById(_IdSrv, x.Conditions.Item(i).IdDevice), x.Conditions.Item(i).PropertyDevice, CallType.Get)
                             Select Case x.Conditions.Item(i).Condition
                                 Case Action.TypeSigne.Egal
                                     If retour = x.Conditions.Item(i).Value Then
@@ -288,12 +288,12 @@ Namespace HoMIDom
                     End If
                 Case Action.TypeAction.ActionMacro
                     Dim x As Action.ActionMacro = _Action
-                    Dim y As Macro = _Server.ReturnMacroById(x.IdMacro)
+                    Dim y As Macro = _Server.ReturnMacroById(_IdSrv, x.IdMacro)
                     y.Execute(_Server)
 
                 Case Action.TypeAction.ActionMail
                     Dim x As Action.ActionMail = _Action
-                    Send_email(_Server.ReturnUserById(x.UserId).eMail, x.Sujet, x.Message)
+                    Send_email(_Server.ReturnUserById(_IdSrv, x.UserId).eMail, x.Sujet, x.Message)
 
             End Select
         End Sub
@@ -304,19 +304,19 @@ Namespace HoMIDom
         End Sub
 
         Public Sub Send_email(ByVal adresse As String, ByVal sujet As String, ByVal texte As String)
-            If adresse <> "" And sujet <> "" And texte <> "" And _Server.GetSMTPServeur <> "" Then
+            If adresse <> "" And sujet <> "" And texte <> "" And _Server.GetSMTPServeur(_IdSrv) <> "" Then
                 Try
 
                     'envoi de l'email à adresse avec sujet et texte via les smtp définis dans le serveur
                     Dim email As System.Net.Mail.MailMessage = New System.Net.Mail.MailMessage()
-                    email.From = New MailAddress(_Server.GetSMTPMailServeur)
+                    email.From = New MailAddress(_Server.GetSMTPMailServeur(_IdSrv))
                     email.To.Add(adresse)
                     email.Subject = sujet
                     email.Body = texte
-                    Dim mailSender As New System.Net.Mail.SmtpClient(_Server.GetSMTPServeur)
+                    Dim mailSender As New System.Net.Mail.SmtpClient(_Server.GetSMTPServeur(_IdSrv))
 
-                    If _Server.GetSMTPLogin() <> "" Then
-                        mailSender.Credentials = New Net.NetworkCredential(_Server.GetSMTPLogin, _Server.GetSMTPPassword)
+                    If _Server.GetSMTPLogin(_IdSrv) <> "" Then
+                        mailSender.Credentials = New Net.NetworkCredential(_Server.GetSMTPLogin(_IdSrv), _Server.GetSMTPPassword(_IdSrv))
                         '
                         'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate", "1")
                         'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername", mMailServerLogin)

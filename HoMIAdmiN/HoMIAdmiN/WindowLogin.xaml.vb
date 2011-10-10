@@ -10,6 +10,10 @@
                 MessageBox.Show("L'adresse IP et le port du serveur doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
+            If TxtID.Text = "" Or TxtID.Text = " " Then
+                MessageBox.Show("L'ID du serveur doit être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
 
             If CheckBox1.IsChecked = True Then
                 My.Settings.SavePassword = True
@@ -23,6 +27,7 @@
                 My.Settings.Save()
             End If
 
+            IdSrv = TxtID.Text
             DialogResult = True
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub Login BtnOK_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -54,12 +59,14 @@
                 x.Port = Window1.ListServer.Item(i).Port
                 x.Defaut = Window1.ListServer.Item(i).Defaut
                 x.Icon = Window1.ListServer.Item(i).Icon
+                x.ID = Window1.ListServer.Item(i).Id
                 If Window1.ListServer.Item(i).Defaut = True Then
                     x.IsSelect = True
                     TxtName.Text = x.Text
                     TxtIP.Text = x.Adresse
                     TxtPort.Text = x.Port
                     ChkDefaut.IsChecked = True
+                    TxtID.Text = x.ID
                 End If
                 x.Tag = i
                 j = i
@@ -73,6 +80,7 @@
             y.Text = "Connexion Manuelle"
             y.Adresse = ""
             y.Port = ""
+            y.ID = ""
             y.Tag = j + 1
             AddHandler y.click, AddressOf IconMnuDoubleClick
             AddHandler y.Rightclick, AddressOf IconMnuRightClick
@@ -113,6 +121,7 @@
                     TxtName.Text = x.Text
                     TxtIP.Text = x.Adresse
                     TxtPort.Text = x.Port
+                    TxtID.Text = x.ID
                     ChkDefaut.IsChecked = x.Defaut
                     If TxtName.Text = "Connexion Manuelle" Then
                         TxtName.IsEnabled = False
@@ -182,13 +191,14 @@
                 Window1.ListServer.Item(i).Adresse = TxtIP.Text
                 Window1.ListServer.Item(i).Port = TxtPort.Text
                 Window1.ListServer.Item(i).Defaut = ChkDefaut.IsChecked
+                Window1.ListServer.Item(i).Id = TxtID.Text
                 flagnew = True
             End If
         Next
 
         If flagnew = False Then
-            If TxtName.Text = "" Or TxtName.Text = " " Or TxtIP.Text = "" Or TxtIP.Text = " " Or TxtPort.Text = "" Or TxtPort.Text = " " Then
-                MessageBox.Show("Le nom, l'adresse et le port du serveur ne peuvent être vide!", "Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            If TxtName.Text = "" Or TxtName.Text = " " Or TxtIP.Text = "" Or TxtIP.Text = " " Or TxtPort.Text = "" Or TxtPort.Text = " " Or TxtID.Text = "" Or TxtID.Text = " " Then
+                MessageBox.Show("Le nom, l'ID, l'adresse et le port du serveur ne peuvent être vide!", "Admin", MessageBoxButton.OK, MessageBoxImage.Error)
                 Exit Sub
             End If
             Dim x As New ClServer
@@ -196,6 +206,7 @@
             x.Adresse = TxtIP.Text
             x.Port = TxtPort.Text
             x.Defaut = ChkDefaut.IsChecked
+            x.Id = TxtID.Text
 
             Window1.ListServer.Add(x)
         End If

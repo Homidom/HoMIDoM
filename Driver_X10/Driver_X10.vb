@@ -38,6 +38,7 @@ Public Class Driver_x10
     Dim _DeviceSupport As New ArrayList
     Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
+    Dim _IdSrv As String
 #End Region
 
 #Region "Variables Internes"
@@ -75,6 +76,12 @@ Public Class Driver_x10
 #End Region
 
 #Region "Propriétés génériques"
+    Public WriteOnly Property IdSrv As String Implements HoMIDom.HoMIDom.IDriver.IdSrv
+        Set(ByVal value As String)
+            _IdSrv = value
+        End Set
+    End Property
+
     Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
         Get
             Return _Com
@@ -539,13 +546,13 @@ Public Class Driver_x10
 
             If Recieved_DeviceCode <> "" And Recieved_HouseCode <> "" And Recieved_Function <> "" Then
                 Dim _add As String = Recieved_HouseCode & Recieved_DeviceCode
-                For i As Integer = 0 To _Server.GetAllDevices.Count - 1
-                    If _Server.GetAllDevices.Item(i).Adresse1 = _add And _Server.GetAllDevices.Item(i).DriverID = _ID Then
+                For i As Integer = 0 To _Server.GetAllDevices(_IdSrv).Count - 1
+                    If _Server.GetAllDevices(_IdSrv).Item(i).Adresse1 = _add And _Server.GetAllDevices(_IdSrv).Item(i).DriverID = _ID Then
                         Select Case Recieved_Function
                             Case "3"
-                                _Server.GetAllDevices.Item(i).Value = True
+                                _Server.GetAllDevices(_IdSrv).Item(i).Value = True
                             Case "4"
-                                _Server.GetAllDevices.Item(i).Value = False
+                                _Server.GetAllDevices(_IdSrv).Item(i).Value = False
 
                         End Select
                     End If
