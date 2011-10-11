@@ -140,32 +140,26 @@ Class Window1
                 Dim img As New Image
                 Dim uri As String = ""
                 Dim bmpImage As New BitmapImage()
-
+                Dim x As Zone = myService.GetAllZones(IdSrv).Item(i)
                 stack.Orientation = Orientation.Horizontal
 
                 img.Height = 20
                 img.Width = 20
 
-                If myService.GetAllZones(IdSrv).Item(i).Image <> "" And File.Exists(myService.GetAllDevices(IdSrv).Item(i).Picture) = True Then
-                    uri = myService.GetAllZones(IdSrv).Item(i).Image
-                Else
-                    uri = MyRep & "\Images\icones\Defaut-128.png"
+                If x.Icon <> "" Then
+                    img.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Icon))
                 End If
-                bmpImage.BeginInit()
-                bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
-                bmpImage.EndInit()
-                img.Source = bmpImage
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
-                label.Content = myService.GetAllZones(IdSrv).Item(i).Name
+                label.Content = x.Name
 
                 stack.Children.Add(img)
                 stack.Children.Add(label)
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
-                newchild.Header = stack 'myService.GetAllZones.Item(i).Name
-                newchild.Uid = myService.GetAllZones(IdSrv).Item(i).ID
+                newchild.Header = stack
+                newchild.Uid = x.ID
                 TreeViewZone.Items.Add(newchild)
             Next
         Catch ex As Exception
@@ -1118,6 +1112,10 @@ Class Window1
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Connect_Srv(frm.TxtName.Text, frm.TxtIP.Text, frm.TxtPort.Text)
+                If myService.GetIdServer(IdSrv) = "99" Then
+                    MessageBox.Show("L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
                 If myService.VerifLogin(frm.TxtUsername.Text, frm.TxtPassword.Password) = False Then
                     MessageBox.Show("Le username ou le password sont erroné, impossible veuillez réessayer", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Else

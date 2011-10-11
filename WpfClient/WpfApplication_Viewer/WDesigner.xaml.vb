@@ -47,4 +47,7 @@ Public Class WDesigner
         End If
     End Sub
 
+    Private Sub DesignerCanvas_MouseRightButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles DesignerCanvas.MouseRightButtonDown
+
+    End Sub
 End Class

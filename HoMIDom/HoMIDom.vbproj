@@ -100,7 +100,6 @@
   <ItemGroup>
     <Compile Include="APi.vb" />
     <Compile Include="Audio.vb" />
-    <Compile Include="CustomUserNameValidator.vb" />
     <Compile Include="DeviceAction.vb" />
     <Compile Include="Driver.vb" />
     <Compile Include="FileServer.vb" />

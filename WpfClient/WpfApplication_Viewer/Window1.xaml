@@ -77,7 +77,7 @@
             <StackPanel Height="30" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Height="23" HorizontalAlignment="Right" Margin="3" Name="BtnQuit" Content="X" Width="23"  VerticalAlignment="Bottom" Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" />
             </StackPanel> 
-            <Rectangle Height="25" DockPanel.Dock="Bottom"/>
+            <Rectangle Height="130" DockPanel.Dock="Bottom"/>
             <Rectangle Width="50" DockPanel.Dock="Right"/>
             <Image Stretch="Fill" Name="ImgBackground" />
     </DockPanel>

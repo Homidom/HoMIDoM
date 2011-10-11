@@ -17,32 +17,140 @@ Namespace HoMIDom
         ''' <summary>Indique la liste des devices gérés</summary>
         ''' <remarks></remarks>
         Public Enum ListeDevices
-            APPAREIL = 1 'modules pour diriger un appareil  ON/OFF
+            ''' <summary>
+            ''' modules pour diriger un appareil  ON/OFF
+            ''' </summary>
+            ''' <remarks></remarks>
+            APPAREIL = 1 '
+            ''' <summary>
+            ''' module de type audio
+            ''' </summary>
+            ''' <remarks></remarks>
             AUDIO = 2
-            BAROMETRE = 3 'pour stocker les valeur issu d'un barometre meteo ou web
+            ''' <summary>
+            ''' pour stocker les valeur issu d'un barometre meteo ou web
+            ''' </summary>
+            ''' <remarks></remarks>
+            BAROMETRE = 3
+            ''' <summary>
+            ''' Pour stocker les valeurs issu d'une batterie
+            ''' </summary>
+            ''' <remarks></remarks>
             BATTERIE = 4
-            COMPTEUR = 5 'compteur DS2423, RFXPower...
-            CONTACT = 6 'detecteur de contact : switch 1-wire
-            DETECTEUR = 7 'tous detecteurs : mouvement, obscurite...
+            ''' <summary>
+            ''' compteur DS2423, RFXPower...
+            ''' </summary>
+            ''' <remarks></remarks>
+            COMPTEUR = 5
+            ''' <summary>
+            ''' detecteur de contact : switch 1-wire
+            ''' </summary>
+            ''' <remarks></remarks>
+            CONTACT = 6
+            ''' <summary>
+            ''' tous detecteurs : mouvement, obscurite...
+            ''' </summary>
+            ''' <remarks></remarks>
+            DETECTEUR = 7
+            ''' <summary>
+            ''' module donnant la direction du vent
+            ''' </summary>
+            ''' <remarks></remarks>
             DIRECTIONVENT = 8
+            ''' <summary>
+            ''' Valeur de consommation d'energie instantanée
+            ''' </summary>
+            ''' <remarks></remarks>
             ENERGIEINSTANTANEE = 9
+            ''' <summary>
+            ''' Valeur de consommation d'energie totale
+            ''' </summary>
+            ''' <remarks></remarks>
             ENERGIETOTALE = 10
+            ''' <summary>
+            ''' FreeBox
+            ''' </summary>
+            ''' <remarks></remarks>
             FREEBOX = 11
+            ''' <summary>
+            ''' Générique Boolean
+            ''' </summary>
+            ''' <remarks></remarks>
             GENERIQUEBOOLEEN = 12
+            ''' <summary>
+            ''' Générique de type String
+            ''' </summary>
+            ''' <remarks></remarks>
             GENERIQUESTRING = 13
+            ''' <summary>
+            ''' Générique de type numérique
+            ''' </summary>
+            ''' <remarks></remarks>
             GENERIQUEVALUE = 14
+            ''' <summary>
+            ''' Capteur d'humidité
+            ''' </summary>
+            ''' <remarks></remarks>
             HUMIDITE = 15
+            ''' <summary>
+            ''' Module de type lampe avec variation
+            ''' </summary>
+            ''' <remarks></remarks>
             LAMPE = 16
+            ''' <summary>
+            ''' Station meteo (physique ou web)
+            ''' </summary>
+            ''' <remarks></remarks>
             METEO = 17
+            ''' <summary>
+            ''' Multimedia
+            ''' </summary>
+            ''' <remarks></remarks>
             MULTIMEDIA = 18
+            ''' <summary>
+            ''' Valeur de pluie courante
+            ''' </summary>
+            ''' <remarks></remarks>
             PLUIECOURANT = 19
+            ''' <summary>
+            ''' Valeur de pluie totale
+            ''' </summary>
+            ''' <remarks></remarks>
             PLUIETOTAL = 20
+            ''' <summary>
+            ''' Interrupteur
+            ''' </summary>
+            ''' <remarks></remarks>
             SWITCH = 21
+            ''' <summary>
+            ''' Telecommande
+            ''' </summary>
+            ''' <remarks></remarks>
             TELECOMMANDE = 22
+            ''' <summary>
+            ''' Capteur de température
+            ''' </summary>
+            ''' <remarks></remarks>
             TEMPERATURE = 23
+            ''' <summary>
+            ''' Température de consigne (ex: thermostat)
+            ''' </summary>
+            ''' <remarks></remarks>
             TEMPERATURECONSIGNE = 24
+            ''' <summary>
+            ''' Indice UV soleil
+            ''' </summary>
+            ''' <remarks></remarks>
             UV = 25
+            ''' <summary>
+            ''' Vitesse du vent
+            ''' </summary>
+            ''' <remarks></remarks>
             VITESSEVENT = 26
+            ''' <summary>
+            ''' Volet roulant
+            ''' </summary>
+            ''' <remarks></remarks>
             VOLET = 27
         End Enum
 

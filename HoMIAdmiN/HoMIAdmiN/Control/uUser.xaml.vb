@@ -13,18 +13,22 @@ Partial Public Class uUser
     End Enum
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        If TxtPassword.Password <> TxtConfirm.Password Then
-            MessageBox.Show("Le mot de passe est différent après confirmation !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        End If
+        Try
+            If TxtPassword.Password <> TxtConfirm.Password Then
+                MessageBox.Show("Le mot de passe est différent après confirmation !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
 
-        If TxtUsername.Text = "" Or TxtPassword.Password = "" Or ComboProfil.SelectedIndex < 0 Or TxtNom.Text = "" Or TxtPrenom.Text = "" Then
-            MessageBox.Show("Le username, le mot de passe, le profil, le nom et prénom sont obligatoires !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        End If
+            If TxtUsername.Text = "" Or TxtPassword.Password = "" Or ComboProfil.SelectedIndex < 0 Or TxtNom.Text = "" Or TxtPrenom.Text = "" Then
+                MessageBox.Show("Le username, le mot de passe, le profil, le nom et prénom sont obligatoires !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
 
-        Window1.myService.SaveUser(_UserId, TxtUsername.Text, TxtPassword.Password, ComboProfil.SelectedIndex, TxtNom.Text, TxtPrenom.Text, TxtIden.Text, ImgIcon.Tag, TxteMail.Text, TxteMailAutre.Text, TxtTelFixe.Text, TxtTelMobile.Text, TxtTelAutre.Text, TxtAdresse.Text, TxtVille.Text, TxtCodePostal.Text)
-        RaiseEvent CloseMe(Me)
+            Window1.myService.SaveUser(IdSrv, _UserId, TxtUsername.Text, TxtPassword.Password, ComboProfil.SelectedIndex, TxtNom.Text, TxtPrenom.Text, TxtIden.Text, ImgIcon.Tag, TxteMail.Text, TxteMailAutre.Text, TxtTelFixe.Text, TxtTelMobile.Text, TxtTelAutre.Text, TxtAdresse.Text, TxtVille.Text, TxtCodePostal.Text)
+            RaiseEvent CloseMe(Me)
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de l'enregistrement du user, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
@@ -61,12 +65,8 @@ Partial Public Class uUser
                 TxtVille.Text = x.Ville
                 TxtCodePostal.Text = x.CodePostal
 
-                If File.Exists(x.Image) = True And x.Image <> "" And x.Image <> " " Then
-                    Dim bmpImage As New BitmapImage()
-                    bmpImage.BeginInit()
-                    bmpImage.UriSource = New Uri(x.Image, UriKind.Absolute)
-                    bmpImage.EndInit()
-                    ImgIcon.Source = bmpImage
+                If x.Image <> "" And x.Image <> " " Then
+                    ImgIcon.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Image))
                     ImgIcon.Tag = x.Image
                 End If
             End If

@@ -62,6 +62,12 @@ Namespace HoMIDom
         Dim _IconJ3 As String = ""
         Dim _ConditionJ3 As String = ""
 
+        ''' <summary>
+        ''' Nom du device
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Name() As String
             Get
                 Return _Name
@@ -70,6 +76,13 @@ Namespace HoMIDom
                 _Name = value
             End Set
         End Property
+
+        ''' <summary>
+        ''' ID du device
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property ID() As String
             Get
                 Return _ID
@@ -79,7 +92,13 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Activation du Device
+
+        ''' <summary>
+        ''' Activation/désactivation du device
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Enable() As Boolean
             Get
                 Return _Enable
@@ -89,7 +108,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Id du driver affect
+        ''' <summary>
+        ''' ID du driver associé au device
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property DriverID() As String
             Get
                 Return _DriverId
@@ -99,7 +123,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Description qui peut être le modèle du device ou autre chose
+        ''' <summary>
+        ''' Description qui peut être le modèle du device ou autre chose
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Description() As String
             Get
                 Return _Description
@@ -109,7 +138,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
+        ''' <summary>
+        ''' Type de device TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Type() As Device.ListeDevices
             Get
                 Return _Type
@@ -119,7 +153,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Adresse par défaut (pour le X10 par exemple)
+        ''' <summary>
+        ''' Adresse par défaut (pour le X10 par exemple)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Adresse1() As String
             Get
                 Return _Adresse1
@@ -129,7 +168,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Adresse supplémentaire si besoin (cas du RFXCOM)
+        ''' <summary>
+        ''' Adresse supplémentaire si besoin (cas du RFXCOM)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Adresse2() As String
             Get
                 Return _Adresse2
@@ -139,7 +183,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Date et heure de création du device
+        ''' <summary>
+        ''' Date et heure de création du device
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property DateCreated() As Date
             Get
                 Return _DateCreated
@@ -149,7 +198,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Date et heure de la derniere modification de Value
+        ''' <summary>
+        ''' Date et heure de la derniere modification de Value
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property LastChange() As Date
             Get
                 Return _LastChange
@@ -159,7 +213,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Si Lastchanged+LastchangeDuree< Now alors le composant a un problème car il n'a pas emis depuis au moins lastchangedduree.
+        ''' <summary>
+        ''' Si Lastchanged+LastchangeDuree< Now alors le composant a un problème car il n'a pas emis depuis au moins lastchangedduree.
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property LastChangeDuree() As Integer
             Get
                 Return _LastChangeDuree
@@ -169,7 +228,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Modèle du composant
+        ''' <summary>
+        ''' Modèle du device
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Modele() As String
             Get
                 Return _Modele
@@ -179,7 +243,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Adresse de son image
+        ''' <summary>
+        ''' Adresse de son image
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns>Chemin complet du fichier image situé sur le serveur </returns>
+        ''' <remarks></remarks>
         Public Property Picture() As String
             Get
                 Return _Picture
@@ -189,7 +258,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Si le device est solo ou s'il contient plusieurs I/O
+        ''' <summary>
+        ''' Si le device est solo ou s'il contient plusieurs I/O
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Solo() As Boolean
             Get
                 Return _Solo
@@ -199,7 +273,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'si =true, on ne prend pas en comtpe les modifications style 19.1 19 19.1 19...
+        ''' <summary>
+        ''' si =true, on ne prend pas en comtpe les modifications style 19.1 19 19.1 19...
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property LastEtat() As Boolean
             Get
                 Return _LastEtat
@@ -209,6 +288,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' List des actions associées au Device
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property DeviceAction() As List(Of DeviceAction)
             Get
                 Return _DeviceAction
@@ -218,6 +303,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Valeur de rafraichissement du device
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Refresh() As Double
             Get
                 Return _Refresh
@@ -227,6 +318,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Valeur du device
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Value() As Object
             Get
                 Return _Value
@@ -236,7 +333,13 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Contien l'avant derniere valeur
+
+        ''' <summary>
+        ''' Contien l'avant derniere valeur
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property ValueLast() As Double
             Get
                 Return _ValueLast
@@ -246,7 +349,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Valeur minimale que value peut avoir 
+        ''' <summary>
+        ''' Valeur minimale que value peut avoir
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property ValueMin() As Double
             Get
                 Return _ValueMin
@@ -256,7 +364,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Valeur maximale que value peut avoir 
+        ''' <summary>
+        ''' Valeur maximale que value peut avoir 
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property ValueMax() As Double
             Get
                 Return _ValueMax
@@ -266,7 +379,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Valeur par défaut de Value au démarrage du Device, si Vide = Value
+        ''' <summary>
+        ''' Valeur par défaut de Value au démarrage du Device, si Vide = Value
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property ValueDef() As Double
             Get
                 Return _ValueDef
@@ -276,7 +394,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Precision de value
+        ''' <summary>
+        ''' Precision de value
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Precision() As Double
             Get
                 Return _Precision
@@ -286,7 +409,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Correction en +/-/*/div à effectuer sur la value
+        ''' <summary>
+        ''' Correction en +/-/*/div à effectuer sur la value
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Correction() As Double
             Get
                 Return _Correction
@@ -296,7 +424,12 @@ Namespace HoMIDom
             End Set
         End Property
 
-        'Format de value 0.0 ou 0.00...
+        ''' <summary>
+        ''' Format de value 0.0 ou 0.00...
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Formatage() As String
             Get
                 Return _Formatage
@@ -306,6 +439,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Condition actuelle (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property ConditionActuel() As String
             Get
                 Return _ConditionActuel
@@ -315,6 +454,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Temperature actuelle (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property TemperatureActuel() As String
             Get
                 Return _TempActuel
@@ -324,6 +469,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Humidité actuelle (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property HumiditeActuel() As String
             Get
                 Return _HumActuel
@@ -333,6 +484,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Icon de la meteo actuelle (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property IconActuel() As String
             Get
                 Return _IconActuel
@@ -342,6 +499,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Vitesse du vent actuelle (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property VentActuel() As String
             Get
                 Return _VentActuel
@@ -351,6 +514,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Nom du jour actuel (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property JourToday() As String
             Get
                 Return _JourToday
@@ -360,6 +529,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Temperature minimale du jour actuel (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property MinToday() As String
             Get
                 Return _MinToday
@@ -369,6 +544,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Temperature maximale du jour actuel (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property MaxToday() As String
             Get
                 Return _MaxToday
@@ -378,6 +559,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Icon de la meteo du jour actuel (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property IconToday() As String
             Get
                 Return _IconToday
@@ -387,6 +574,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Condition météorologique du jour actuel (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property ConditionToday() As String
             Get
                 Return _ConditionToday
@@ -396,6 +589,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Nom du jour + 1 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property JourJ1() As String
             Get
                 Return _JourJ1
@@ -405,6 +604,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Température minimale à J+1 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property MinJ1() As String
             Get
                 Return _MinJ1
@@ -414,6 +619,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Température maximale à J+1 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property MaxJ1() As String
             Get
                 Return _MaxJ1
@@ -423,6 +634,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Icon de la météo à J+1 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property IconJ1() As String
             Get
                 Return _IconJ1
@@ -432,6 +649,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Condition météorologique à J+1 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property ConditionJ1() As String
             Get
                 Return _ConditionJ1
@@ -441,6 +664,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Nom du jour + 2 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property JourJ2() As String
             Get
                 Return _JourJ2
@@ -450,6 +679,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Température minimale à J+2 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property MinJ2() As String
             Get
                 Return _MinJ2
@@ -459,6 +694,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Température maximale à J+2 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property MaxJ2() As String
             Get
                 Return _MaxJ2
@@ -468,6 +709,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Icon de la météo à J+2 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property IconJ2() As String
             Get
                 Return _IconJ2
@@ -477,6 +724,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Condition météorologique à J+2 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property ConditionJ2() As String
             Get
                 Return _ConditionJ2
@@ -486,6 +739,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Nom du jour à j+3 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property JourJ3() As String
             Get
                 Return _JourJ3
@@ -495,6 +754,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Température minimale à j+3 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property MinJ3() As String
             Get
                 Return _MinJ3
@@ -504,6 +769,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Température maximale à j+3 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property MaxJ3() As String
             Get
                 Return _MaxJ3
@@ -513,6 +784,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Icon de la meteo à j+3 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property IconJ3() As String
             Get
                 Return _IconJ3
@@ -522,6 +799,12 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Condition météorologique à j+3 (device meteo)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property ConditionJ3() As String
             Get
                 Return _ConditionJ3
@@ -531,8 +814,20 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Liste des noms des commandes IR (device IR)
+        ''' </summary>
+        ''' <remarks></remarks>
         Public ListCommandName As New List(Of String)
+        ''' <summary>
+        ''' Liste des données IR (device IR)
+        ''' </summary>
+        ''' <remarks></remarks>
         Public ListCommandData As New List(Of String)
+        ''' <summary>
+        ''' Liste des valeurs de nombre de fois à envoyer la commande IR (device IR)
+        ''' </summary>
+        ''' <remarks></remarks>
         Public ListCommandRepeat As New List(Of String)
 
     End Class

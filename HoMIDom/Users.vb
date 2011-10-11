@@ -11,8 +11,20 @@
         ''' </summary>
         ''' <remarks></remarks>
         Public Enum TypeProfil
+            ''' <summary>
+            ''' Invité
+            ''' </summary>
+            ''' <remarks></remarks>
             invite = 0
+            ''' <summary>
+            ''' Utilisateur (actions limitées)
+            ''' </summary>
+            ''' <remarks></remarks>
             user = 1
+            ''' <summary>
+            ''' Administrateur
+            ''' </summary>
+            ''' <remarks></remarks>
             admin = 2
         End Enum
 

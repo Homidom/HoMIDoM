@@ -15,12 +15,16 @@ Partial Public Class uZone
     End Enum
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        If TxtName.Text = "" Then
-            MessageBox.Show("Le nom de la zone est obligatoire!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        End If
-        Window1.myService.SaveZone(IdSrv, _ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag, ImgZone.Tag)
-        RaiseEvent CloseMe(Me)
+        Try
+            If TxtName.Text = "" Then
+                MessageBox.Show("Le nom de la zone est obligatoire!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            Window1.myService.SaveZone(IdSrv, _ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag, ImgZone.Tag)
+            RaiseEvent CloseMe(Me)
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de l'enregistrement de la zone, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
@@ -49,21 +53,13 @@ Partial Public Class uZone
                     _ListIdSelect.Add(x.ListElement.Item(j))
                 Next
 
-                If File.Exists(x.image) = True And x.image <> "" And x.image <> " " Then
-                    Dim bmpImage As New BitmapImage()
-                    bmpImage.BeginInit()
-                    bmpImage.UriSource = New Uri(x.image, UriKind.Absolute)
-                    bmpImage.EndInit()
-                    ImgZone.Source = bmpImage
-                    ImgZone.Tag = x.image
+                If x.Image <> "" And x.Image <> " " Then
+                    ImgZone.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Image))
+                    ImgZone.Tag = x.Image
                 End If
 
                 If File.Exists(x.Icon) = True And x.Icon <> "" And x.Icon <> " " Then
-                    Dim bmpImage As New BitmapImage()
-                    bmpImage.BeginInit()
-                    bmpImage.UriSource = New Uri(x.Icon, UriKind.Absolute)
-                    bmpImage.EndInit()
-                    ImgIcon.Source = bmpImage
+                    ImgIcon.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Icon))
                     ImgIcon.Tag = x.Icon
                 End If
             End If

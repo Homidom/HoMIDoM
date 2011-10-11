@@ -18,6 +18,8 @@ Partial Public Class uCtrlImgMnu
     Dim _type As TypeOfMnu = 0
     Dim _Parametres As New List(Of String)
     Dim _Defaut As Boolean
+    Dim _Idelement As String
+    Dim _Visible As Boolean
 
     Public Property Id As String
         Get
@@ -34,13 +36,22 @@ Partial Public Class uCtrlImgMnu
         End Get
         Set(ByVal value As String)
             vImage = value
-            If File.Exists(value) Then
+            If File.Exists(value) And _type <> TypeOfMnu.Zone Then
                 Dim bmpImage As New BitmapImage()
                 bmpImage.BeginInit()
                 bmpImage.UriSource = New Uri(vImage, UriKind.Absolute)
                 bmpImage.EndInit()
                 Image.Source = bmpImage
             End If
+        End Set
+    End Property
+
+    Public Property Visible As Boolean
+        Get
+            Return _Visible
+        End Get
+        Set(ByVal value As Boolean)
+            _Visible = value
         End Set
     End Property
 
@@ -107,17 +118,24 @@ Partial Public Class uCtrlImgMnu
         Return ImgSource
     End Function
 
+    Public Property IDElement As String
+        Get
+            Return _Idelement
+        End Get
+        Set(ByVal value As String)
+            _Idelement = value
+            If _type = TypeOfMnu.Zone And IsConnect = True And _Idelement <> "" Then
+                Image.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(IdSrv, _Idelement).Icon))
+            End If
+        End Set
+    End Property
+
     Public Property Parametres As List(Of String)
         Get
             Return _Parametres
         End Get
         Set(ByVal value As List(Of String))
             _Parametres = value
-            If _type = TypeOfMnu.Zone Then
-                If _Parametres(0) <> "" Then
-                    Image.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(IdSrv, Parametres(0)).Icon))
-                End If
-            End If
         End Set
     End Property
 

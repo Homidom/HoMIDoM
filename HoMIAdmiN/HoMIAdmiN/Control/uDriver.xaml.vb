@@ -93,12 +93,8 @@ Partial Public Class uDriver
                     GroupBox1.Visibility = Windows.Visibility.Hidden
                 End If
 
-                If x.Picture <> "" And File.Exists(x.Picture) = True Then
-                    Dim bmpImage As New BitmapImage()
-                    bmpImage.BeginInit()
-                    bmpImage.UriSource = New Uri(x.Picture, UriKind.Absolute)
-                    bmpImage.EndInit()
-                    ImgDevice.Source = bmpImage
+                If x.Picture <> "" And x.Picture <> " " Then
+                    ImgDevice.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Picture))
                     ImgDevice.Tag = x.Picture
                 End If
 

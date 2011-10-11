@@ -214,6 +214,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UserControls\uZone.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -249,6 +253,9 @@
     </Compile>
     <Compile Include="UserControls\keyboard.xaml.vb">
       <DependentUpon>keyboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\uZone.xaml.vb">
+      <DependentUpon>uZone.xaml</DependentUpon>
     </Compile>
     <Compile Include="WConfig.xaml.vb">
       <DependentUpon>WConfig.xaml</DependentUpon>

@@ -42,23 +42,27 @@
     End Sub
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        If TxtNom.Text = "" Then
-            MessageBox.Show("Le nom de la macro est obligatoire!", "Macro", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        End If
+        Try
+            If TxtNom.Text = "" Then
+                MessageBox.Show("Le nom de la macro est obligatoire!", "Macro", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
 
-        If _Action = EAction.Nouveau Then
-            Dim tabl As New ArrayList
-            tabl = UScenario1.Items
-            _MacroId = Window1.myService.SaveMacro(IdSrv, "", TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
+            If _Action = EAction.Nouveau Then
+                Dim tabl As New ArrayList
+                tabl = UScenario1.Items
+                _MacroId = Window1.myService.SaveMacro(IdSrv, "", TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
+                RaiseEvent CloseMe(Me)
+            Else
+                Dim tabl As New ArrayList
+                tabl = UScenario1.Items
+                _MacroId = Window1.myService.SaveMacro(IdSrv, _MacroId, TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
+                RaiseEvent CloseMe(Me)
+            End If
             RaiseEvent CloseMe(Me)
-        Else
-            Dim tabl As New ArrayList
-            tabl = UScenario1.Items
-            _MacroId = Window1.myService.SaveMacro(IdSrv, _MacroId, TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
-            RaiseEvent CloseMe(Me)
-        End If
-        RaiseEvent CloseMe(Me)
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de l'enregistrement de la macro, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTest.Click
