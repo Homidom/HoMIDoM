@@ -147,8 +147,7 @@
                                     <MenuItem Name="MnuAdd" Header="Ajouter" >
                                         <MenuItem Name="MnuAddInternet" Header="Page Internet"/>
                                         <MenuItem Name="MnuAddMeteo" Header="Meteo"/>
-                                        <MenuItem Name="MnuAddZone" Header="Zones"/>
-                                    </MenuItem> 
+                                       </MenuItem> 
                                     <MenuItem Header="Supprimer" Name="MenuItem1" />
                                 </ContextMenu> 
                             </ListBox.ContextMenu>
@@ -168,6 +167,9 @@
                             <Label Content="Type: " MinWidth="50"/>
                             <Label Name="LblType" Content="##"/>
                         </StackPanel>
+                            <StackPanel Orientation="Horizontal" Name="StkVisible">
+                                <CheckBox Name="ChkVisible" Content="Visible" Margin="2"/>
+                            </StackPanel>
                             <StackPanel Name="StkImage" Orientation="Horizontal" VerticalAlignment="Top">
                                 <Label Content="Image: " MinWidth="50"/>
                                 <TextBox Name="TxtImage" Width=" 150" />

@@ -204,8 +204,37 @@ Class Window1
             imgStackPnl.VerticalAlignment = VerticalAlignment.Center
             imgStackPnl.Orientation = Orientation.Horizontal
 
+            ConnectToHomidom()
+
             'Creation  du menu
-            If ListMnu.Count = 0 Then NewBtnMnu("Paramètres", uCtrlImgMnu.TypeOfMnu.Config, , True, , )
+            If ListMnu.Count = 0 Then
+                NewBtnMnu("Paramètres", uCtrlImgMnu.TypeOfMnu.Config, , True, , )
+            End If
+
+            If IsConnect = True Then
+                Dim cntNewZone As Integer = 0
+                For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
+                    Dim x As Zone = myService.GetAllZones(IdSrv).Item(i)
+                    If ListMnu.Count = 0 Then
+                        NewBtnMnu(x.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , x.ID)
+                        cntNewZone += 1
+                    Else
+                        Dim flagexist As Boolean = False
+                        For j As Integer = 0 To ListMnu.Count - 1
+                            If ListMnu.Item(j).IDElement = x.ID Then
+                                flagexist = True
+                            End If
+                        Next
+                        If flagexist = False Then
+                            NewBtnMnu(x.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , x.ID, True)
+                            cntNewZone += 1
+                        End If
+                    End If
+                Next
+                If cntNewZone > 0 Then
+                    MessageBox.Show(cntNewZone & " nouvelle(s) zone(s) ajoutée(s)")
+                End If
+            End If
             'NewBtnMnu("Journal", uCtrlImgMnu.TypeOfMnu.Internet, , , , "/parametres-icone-3667-128.png")
             'NewBtnMnu("Programme TV", "1", "C:\ehome\images\125_tv.png")
             'NewBtnMnu("Contacts", "2", "C:\ehome\images\contact2.png")
@@ -229,7 +258,8 @@ Class Window1
             dt.Start()
 
             ''Connexion à HomeSeer
-            ConnectToHS()
+            'ConnectToHS()
+
 
             'If IsHSConnect = True Then
             '    LblLeve.Content = Mid(hs.Sunrise, 1, 5)
@@ -246,7 +276,7 @@ Class Window1
             myxml = Nothing
             frmMere = Me
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message)
+            MessageBox.Show("Erreur: " & ex.ToString)
         End Try
     End Sub
 
@@ -381,6 +411,8 @@ Class Window1
                             Dim _MnuIcon As String = ""
                             Dim _MnuParam As New List(Of String)
                             Dim _Mnudefaut As Boolean
+                            Dim _MnuIDElement As String = ""
+                            Dim _MnuVisible As Boolean = False
 
                             For k As Integer = 0 To list.Item(j).Attributes.Count - 1
                                 Select Case list.Item(j).Attributes.Item(k).Name
@@ -401,6 +433,10 @@ Class Window1
                                         End Select
                                     Case "icon"
                                         _MnuIcon = list.Item(j).Attributes.Item(k).Value
+                                    Case "idelement"
+                                        _MnuIDElement = list.Item(j).Attributes.Item(k).Value
+                                    Case "visible"
+                                        _MnuVisible = list.Item(j).Attributes.Item(k).Value
                                     Case Else
                                         Dim a As String = list.Item(j).Attributes.Item(k).Name
                                         If a.Contains("parametre") Then
@@ -408,7 +444,7 @@ Class Window1
                                         End If
                                 End Select
                             Next
-                            NewBtnMnu(_MnuNom, _MnuType, _MnuParam, _Mnudefaut, , _MnuIcon)
+                            NewBtnMnu(_MnuNom, _MnuType, _MnuParam, _Mnudefaut, , _MnuIcon, _MnuIDElement, _MnuVisible)
                         Next
                     Else
                         'MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
@@ -522,9 +558,19 @@ Class Window1
                 writer.WriteStartAttribute("type")
                 writer.WriteValue(ListMnu.Item(i).Type.ToString)
                 writer.WriteEndAttribute()
-                writer.WriteStartAttribute("icon")
-                writer.WriteValue(ListMnu.Item(i).Icon)
-                writer.WriteEndAttribute()
+                If ListMnu.Item(i).Type <> uCtrlImgMnu.TypeOfMnu.Zone Then
+                    writer.WriteStartAttribute("icon")
+                    writer.WriteValue(ListMnu.Item(i).Icon)
+                    writer.WriteEndAttribute()
+                End If
+                If ListMnu.Item(i).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
+                    writer.WriteStartAttribute("idelement")
+                    writer.WriteValue(ListMnu.Item(i).IDElement)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("visible")
+                    writer.WriteValue(ListMnu.Item(i).Visible)
+                    writer.WriteEndAttribute()
+                End If
                 If ListMnu.Item(i).Parametres IsNot Nothing Then
                     For j As Integer = 0 To ListMnu.Item(i).Parametres.Count - 1
                         writer.WriteStartAttribute("parametre" & j)
@@ -801,21 +847,29 @@ Class Window1
 #End Region
 
     'Creation  du menu
-    Private Sub NewBtnMnu(ByVal Label As String, ByVal type As uCtrlImgMnu.TypeOfMnu, Optional ByVal Parametres As List(Of String) = Nothing, Optional ByVal Defaut As Boolean = False, Optional ByVal Tag As String = "", Optional ByVal Icon As String = "")
+    Private Sub NewBtnMnu(ByVal Label As String, ByVal type As uCtrlImgMnu.TypeOfMnu, Optional ByVal Parametres As List(Of String) = Nothing, Optional ByVal Defaut As Boolean = False, Optional ByVal Tag As String = "", Optional ByVal Icon As String = "", Optional ByVal IdElement As String = "", Optional ByVal Visible As Boolean = False)
         Try
             Dim ctrl As New uCtrlImgMnu
             ctrl.Type = type
             ctrl.Defaut = Defaut
             ctrl.Id = HoMIDom.HoMIDom.Api.GenerateGUID
             ctrl.Text = Label
-            ctrl.Tag = Name
+            ctrl.Tag = Tag
             ctrl.Icon = Icon
             ctrl.Parametres = Parametres
+            ctrl.IDElement = IdElement
+            ctrl.Visible = Visible
             AddHandler ctrl.click, AddressOf IconMnuDoubleClick
             _ListMnu.Add(ctrl)
-            imgStackPnl.Children.Add(ctrl)
+            If type = uCtrlImgMnu.TypeOfMnu.Zone Then
+                If Visible = True Then imgStackPnl.Children.Add(ctrl)
+            Else
+                imgStackPnl.Children.Add(ctrl)
+            End If
+
         Catch ex As Exception
             Log(TypeLog.INFO, TypeSource.CLIENT, "NewBtnMnu", "Erreur NewBtnMnu: " & ex.Message)
+            MessageBox.Show("Erreur lors de la création du bouton menu: " & ex.ToString)
         End Try
     End Sub
 
@@ -869,7 +923,11 @@ Class Window1
                             imgStackPnl.Children.Clear()
                             For i As Integer = 0 To ListMnu.Count - 1
                                 AddHandler ListMnu.Item(i).click, AddressOf IconMnuDoubleClick
-                                imgStackPnl.Children.Add(ListMnu.Item(i))
+                                If ListMnu.Item(i).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
+                                    If ListMnu.Item(i).Visible = True Then imgStackPnl.Children.Add(ListMnu.Item(i))
+                                Else
+                                    imgStackPnl.Children.Add(ListMnu.Item(i))
+                                End If
                             Next
                             x.Close()
                         Else
@@ -881,7 +939,9 @@ Class Window1
                         x.Width = Canvas1.ActualWidth
                         x.Height = Canvas1.ActualHeight
                     Case uCtrlImgMnu.TypeOfMnu.Zone
-
+                        Dim x As New uZone(y.IDElement, Canvas1.ActualHeight, Canvas1.ActualWidth)
+                        Canvas1.Children.Add(x)
+                        x.ImgBackGround.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(IdSrv, y.IDElement).Image))
                         'Case 0 'Actualités
                         '    Dim x As New uInternet("http://fr.news.yahoo.com/")
                         '    Canvas1.Children.Add(x)
@@ -1010,5 +1070,9 @@ Class Window1
             x.Width = Canvas1.ActualWidth
             x.Height = e.NewSize.Height
         Next
+    End Sub
+
+    Private Sub Window1_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
+
     End Sub
 End Class

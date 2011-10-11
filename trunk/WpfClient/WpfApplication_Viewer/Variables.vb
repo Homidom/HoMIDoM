@@ -1,7 +1,7 @@
 ﻿Module Variables
     Public myService As HoMIDom.HoMIDom.IHoMIDom
     Public IsConnect As Boolean
-    Public IdSrv As String
+    Public IdSrv As String = "123456789"
 
     Public frmMere As Window
 

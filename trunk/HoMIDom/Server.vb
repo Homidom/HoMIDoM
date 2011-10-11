@@ -521,10 +521,8 @@ Namespace HoMIDom
                                 If list.Item(i).HasChildNodes = True Then
                                     For k As Integer = 0 To list.Item(i).ChildNodes.Count - 1
                                         If list.Item(i).ChildNodes.Item(k).Name = "element" Then
-                                            For k1 As Integer = 0 To list.Item(i).ChildNodes.Item(k).ChildNodes.Count - 1
-                                                Dim _dev As New Zone.Element_Zone(list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(0).Value, list.Item(i).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(1).Value)
-                                                x.ListElement.Add(_dev)
-                                            Next
+                                            Dim _dev As New Zone.Element_Zone(list.Item(i).ChildNodes.Item(k).Attributes(0).Value, list.Item(i).ChildNodes.Item(k).Attributes(1).Value)
+                                            x.ListElement.Add(_dev)
                                         End If
                                     Next
                                 End If
@@ -2983,7 +2981,11 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function GetIdServer() As String Implements IHoMIDom.GetIdServer
+        Public Function GetIdServer(ByVal IdSrv As String) As String Implements IHoMIDom.GetIdServer
+            If VerifIdSrv(IdSrv) = False Then
+                Return "99"
+                Exit Function
+            End If
             Return _IdSrv
         End Function
 
@@ -3618,10 +3620,11 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).Id = driverId Then
                         _ListDrivers.RemoveAt(i)
+                        Return 0
                         Exit For
                     End If
                 Next
-                Return 1
+                Return -1
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDriver", "Exception : " & ex.Message)
                 Return -1
@@ -3990,7 +3993,7 @@ Namespace HoMIDom
                         Exit Function
                     End If
                 Next
-                Return 0
+                Return -1
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDevice", "Exception : " & ex.Message)
                 Return -1
@@ -4739,13 +4742,14 @@ Namespace HoMIDom
                                 _ListDevices.Item(i).ListCommandname.removeat(j)
                                 _ListDevices.Item(i).ListCommanddata.removeat(j)
                                 _ListDevices.Item(i).ListCommandrepeat.removeat(j)
+                                Return 0
                                 'génération de l'event
                                 Exit Function
                             End If
                         Next
                     End If
                 Next
-                Return 0
+                Return -1
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDeviceCommandIR", "Exception : " & ex.Message)
                 Return -1
@@ -5085,7 +5089,7 @@ Namespace HoMIDom
                         Exit Function
                     End If
                 Next
-                Return 1
+                Return -1
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteZone", "Exception : " & ex.Message)
                 Return -1
@@ -5137,12 +5141,12 @@ Namespace HoMIDom
             End If
 
             Dim _zone As Zone = ReturnZoneById(_IdSrv, ZoneId)
-            Dim _retour As String = ""
+            Dim _retour As String = -1
             Try
                 If _zone IsNot Nothing Then
                     Dim _dev As New Zone.Element_Zone("", Visible)
                     _zone.ListElement.Add(_dev)
-                    _retour = "0"
+                    _retour = 0
                 End If
                 Return _retour
             Catch ex As Exception
@@ -5163,7 +5167,7 @@ Namespace HoMIDom
             End If
 
             Dim _zone As Zone = ReturnZoneById(_IdSrv, ZoneId)
-            Dim _retour As String = ""
+            Dim _retour As String = -1
             Try
                 If _zone IsNot Nothing Then
                     For i As Integer = 0 To _zone.ListElement.Count - 1
@@ -5172,7 +5176,7 @@ Namespace HoMIDom
                             Exit For
                         End If
                     Next
-                    _retour = "0"
+                    _retour = 0
                 End If
                 Return _retour
             Catch ex As Exception
@@ -5321,7 +5325,7 @@ Namespace HoMIDom
                         Exit Function
                     End If
                 Next
-                Return 1
+                Return -1
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteMacro", "Exception : " & ex.Message)
                 Return -1
@@ -5458,7 +5462,7 @@ Namespace HoMIDom
                         Exit Function
                     End If
                 Next
-                Return 1
+                Return -1
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteTrigger", "Exception : " & ex.Message)
                 Return -1
@@ -5622,7 +5626,7 @@ Namespace HoMIDom
                         Exit Function
                     End If
                 Next
-                Return 1
+                Return -1
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteUser", "Exception : " & ex.Message)
                 Return -1

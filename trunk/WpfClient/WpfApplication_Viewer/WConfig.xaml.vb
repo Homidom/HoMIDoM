@@ -47,15 +47,6 @@ Public Class WConfig
         Next
         MyListMnu = Frm.ListMnu
 
-        If myService IsNot Nothing Then
-            For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
-                Dim x As New MenuItem
-                x.Header = myService.GetAllZones(IdSrv).Item(i).Name
-                x.Uid = myService.GetAllZones(IdSrv).Item(i).ID
-                AddHandler x.Click, AddressOf MenuZone_Click
-                MnuAddZone.Items.Add(x)
-            Next
-        End If
     End Sub
 
     Private Sub SliderFriction_ValueChanged(ByVal sender As System.Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of System.Double)) Handles SliderFriction.ValueChanged
@@ -105,6 +96,7 @@ Public Class WConfig
             TxtImage.Text = MyListMnu.Item(ListMnu.SelectedIndex).Icon
             StkProperty.Visibility = Windows.Visibility.Visible
             StkImage.Visibility = Windows.Visibility.Visible
+
             If TxtImage.Text <> "" Then
                 If File.Exists(TxtImage.Text) Then
                     Dim bmpImage As New BitmapImage()
@@ -121,9 +113,16 @@ Public Class WConfig
             LblType.Content = MyListMnu.Item(ListMnu.SelectedIndex).Type.ToString
             If Frm.ListMnu.Item(ListMnu.SelectedIndex).Type <> uCtrlImgMnu.TypeOfMnu.Zone Then
                 StkImage.Visibility = Windows.Visibility.Visible
+                Button1.Visibility = Windows.Visibility.Visible
+                TxtName.IsReadOnly = False
+                ChkVisible.Visibility = Windows.Visibility.Hidden
             Else
-                ImgMnu.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(IdSrv, MyListMnu.Item(ListMnu.SelectedIndex).Parametres(0)).Icon))
+                ImgMnu.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(IdSrv, MyListMnu.Item(ListMnu.SelectedIndex).IDElement).Icon))
+                Button1.Visibility = Windows.Visibility.Hidden
                 StkImage.Visibility = Windows.Visibility.Hidden
+                TxtName.IsReadOnly = True
+                ChkVisible.IsChecked = MyListMnu.Item(ListMnu.SelectedIndex).Visible
+                ChkVisible.Visibility = Windows.Visibility.Visible
             End If
             TxtImage.Text = MyListMnu.Item(ListMnu.SelectedIndex).Icon
             If Frm.ListMnu.Item(ListMnu.SelectedIndex).Type = uCtrlImgMnu.TypeOfMnu.Internet Then
@@ -165,9 +164,14 @@ Public Class WConfig
             Case -1
                 If ListMnu.SelectedIndex < 0 Then Exit Sub
                 MyListMnu.Item(ListMnu.SelectedIndex).Text = TxtName.Text
-                MyListMnu.Item(ListMnu.SelectedIndex).Icon = TxtImage.Text
+                If MyListMnu.Item(ListMnu.SelectedIndex).Type <> uCtrlImgMnu.TypeOfMnu.Zone Then
+                    MyListMnu.Item(ListMnu.SelectedIndex).Icon = TxtImage.Text
+                End If
                 If MyListMnu.Item(ListMnu.SelectedIndex).Type = uCtrlImgMnu.TypeOfMnu.Internet Then
                     MyListMnu.Item(ListMnu.SelectedIndex).Parametres.Item(0) = TxtParam.Text
+                End If
+                If MyListMnu.Item(ListMnu.SelectedIndex).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
+                    MyListMnu.Item(ListMnu.SelectedIndex).Visible = ChkVisible.IsChecked
                 End If
             Case 1 'New Internet
                 If TxtParam.Text = "" Then
@@ -179,6 +183,7 @@ Public Class WConfig
                 x.Type = uCtrlImgMnu.TypeOfMnu.Internet
                 x.Icon = TxtImage.Text
                 x.Parametres.Add(TxtParam.Text)
+                x.Visible = ChkVisible.IsChecked
                 MyListMnu.Add(x)
                 ListMnu.Items.Add(TxtName.Text)
             Case 2 'New Meteo
@@ -188,14 +193,15 @@ Public Class WConfig
                 x.Icon = TxtImage.Text
                 MyListMnu.Add(x)
                 ListMnu.Items.Add(TxtName.Text)
-            Case 3 'New zone
-                Dim x As New uCtrlImgMnu
-                x.Text = TxtName.Text
-                x.Type = uCtrlImgMnu.TypeOfMnu.Zone
-                x.Icon = TxtImage.Text
-                x.Parametres.Add(TxtParam.Text)
-                MyListMnu.Add(x)
-                ListMnu.Items.Add(TxtName.Text)
+                'Case 3 'New zone
+                '    Dim x As New uCtrlImgMnu
+                '    x.Text = TxtName.Text
+                '    x.Type = uCtrlImgMnu.TypeOfMnu.Zone
+                '    'x.Icon = TxtImage.Text
+                '    'x.Parametres.Add(TxtParam.Text)
+
+                '    MyListMnu.Add(x)
+                '    ListMnu.Items.Add(TxtName.Text)
         End Select
         StkProperty.Visibility = Windows.Visibility.Hidden
     End Sub
@@ -210,6 +216,8 @@ Public Class WConfig
         TxtImage.Text = ""
         LblParam.Content = "Url: "
         TxtParam.Text = ""
+        TxtName.IsReadOnly = False
+        ChkVisible.Visibility = Windows.Visibility.Hidden
         StkImage.Visibility = Windows.Visibility.Visible
         StkParam.Visibility = Windows.Visibility.Visible
         StkProperty.Visibility = Windows.Visibility.Visible
@@ -227,6 +235,8 @@ Public Class WConfig
         TxtName.Text = ""
         LblType.Content = uCtrlImgMnu.TypeOfMnu.Meteo.ToString
         TxtImage.Text = ""
+        TxtName.IsReadOnly = False
+        ChkVisible.Visibility = Windows.Visibility.Hidden
         StkImage.Visibility = Windows.Visibility.Visible
         StkParam.Visibility = Windows.Visibility.Hidden
         StkProperty.Visibility = Windows.Visibility.Visible
@@ -236,20 +246,13 @@ Public Class WConfig
     'Supprimer un menu
     Private Sub MenuItem1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem1.Click
         If ListMnu.SelectedIndex < 0 Then Exit Sub
+        If MyListMnu.Item(ListMnu.SelectedIndex).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
+            MessageBox.Show("Une zone ne peut être supprimée, veuillez sélectionner sa propriété visible pour la cacher dans les menus")
+            Exit Sub
+        End If
         MyListMnu.RemoveAt(ListMnu.SelectedIndex)
         ListMnu.Items.RemoveAt(ListMnu.SelectedIndex)
         StkProperty.Visibility = Windows.Visibility.Hidden
-    End Sub
-
-    Private Sub MenuZone_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
-        TxtName.Text = sender.Header
-        LblType.Content = uCtrlImgMnu.TypeOfMnu.Zone.ToString
-        ImgMnu.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(IdSrv, sender.uid).Icon))
-        TxtParam.Text = sender.uid
-        StkImage.Visibility = Windows.Visibility.Hidden
-        StkParam.Visibility = Windows.Visibility.Hidden
-        StkProperty.Visibility = Windows.Visibility.Visible
-        FlagNewMnu = 3
     End Sub
 
     Private Sub BtnUP_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnUP.Click

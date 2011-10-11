@@ -95,6 +95,11 @@ Namespace HoMIDom
             End Set
         End Property
 
+        ''' <summary>
+        ''' Exécuter la macro
+        ''' </summary>
+        ''' <param name="Server"></param>
+        ''' <remarks></remarks>
         Public Sub Execute(ByVal Server As Server)
             _Server = Server
             Try
@@ -124,7 +129,15 @@ Namespace HoMIDom
         ''' </summary>
         ''' <remarks></remarks>
         Public Enum TypeTrigger
+            ''' <summary>
+            ''' Trigger sur une date/heure
+            ''' </summary>
+            ''' <remarks></remarks>
             TIMER = 0
+            ''' <summary>
+            ''' Trigger suivant une propriété d'un device
+            ''' </summary>
+            ''' <remarks></remarks>
             DEVICE = 1
         End Enum
 
@@ -345,9 +358,25 @@ Namespace HoMIDom
         ''' </summary>
         ''' <remarks></remarks>
         Public Enum TypeAction
+            ''' <summary>
+            ''' Action de type Device
+            ''' </summary>
+            ''' <remarks></remarks>
             ActionDevice = 0
+            ''' <summary>
+            ''' Action de type envoyer un mail
+            ''' </summary>
+            ''' <remarks></remarks>
             ActionMail = 1
+            ''' <summary>
+            ''' Action de type If Then/else
+            ''' </summary>
+            ''' <remarks></remarks>
             ActionIf = 2
+            ''' <summary>
+            ''' Action de type lancer une macro
+            ''' </summary>
+            ''' <remarks></remarks>
             ActionMacro = 3
         End Enum
 
@@ -356,11 +385,35 @@ Namespace HoMIDom
         ''' </summary>
         ''' <remarks></remarks>
         Public Enum TypeSigne
+            ''' <summary>
+            ''' Egal
+            ''' </summary>
+            ''' <remarks></remarks>
             Egal = 0
+            ''' <summary>
+            ''' Inférieur
+            ''' </summary>
+            ''' <remarks></remarks>
             Inferieur = 1
+            ''' <summary>
+            ''' Inférieur ou égal
+            ''' </summary>
+            ''' <remarks></remarks>
             InferieurEgal = 2
+            ''' <summary>
+            ''' Supérieur
+            ''' </summary>
+            ''' <remarks></remarks>
             Superieur = 3
+            ''' <summary>
+            ''' Supérieur ou égal
+            ''' </summary>
+            ''' <remarks></remarks>
             SuperieurEgal = 4
+            ''' <summary>
+            ''' Différent de
+            ''' </summary>
+            ''' <remarks></remarks>
             Different = 5
         End Enum
 
@@ -369,8 +422,20 @@ Namespace HoMIDom
         ''' </summary>
         ''' <remarks></remarks>
         Public Enum TypeOperateur
+            ''' <summary>
+            ''' Aucun
+            ''' </summary>
+            ''' <remarks></remarks>
             NONE = 0
+            ''' <summary>
+            ''' AND
+            ''' </summary>
+            ''' <remarks></remarks>
             [AND] = 1
+            ''' <summary>
+            ''' OR
+            ''' </summary>
+            ''' <remarks></remarks>
             [OR] = 2
 
         End Enum
@@ -380,8 +445,20 @@ Namespace HoMIDom
         ''' </summary>
         ''' <remarks></remarks>
         Public Enum TypeCondition
+            ''' <summary>
+            ''' Condition du type Date et heure
+            ''' </summary>
+            ''' <remarks></remarks>
             DateTime = 0
+            ''' <summary>
+            ''' Condition portant sur une propriété d'un device
+            ''' </summary>
+            ''' <remarks></remarks>
             Device = 1
+            ''' <summary>
+            ''' Parenthèse (non utilisé)
+            ''' </summary>
+            ''' <remarks></remarks>
             Parenthese = 2
         End Enum
 
