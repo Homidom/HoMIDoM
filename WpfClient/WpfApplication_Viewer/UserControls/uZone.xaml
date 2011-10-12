@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="uZone"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Width="711" Height="313">
+
+    <!--<UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="HoMIDomWPFClient;component/Resources/DesignerItem.xaml"/>
+                <ResourceDictionary Source="HoMIDomWPFClient;component/Resources/SizeChrome.xaml"/>
+                <ResourceDictionary Source="HoMIDomWPFClient;component/Resources/ResizeRotateChrome.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>-->
+
+    <Grid Name="Grid1">
+        <Image Name="ImgBackGround" > </Image>
+        <Canvas Name="DesignerCanvas" />
+    </Grid>
+</UserControl>
