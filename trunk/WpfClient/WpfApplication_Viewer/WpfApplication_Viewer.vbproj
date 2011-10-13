@@ -132,6 +132,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Dictionary1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\DesignerItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -144,13 +148,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\SizeChrome.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="uContact.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\uCtrlElement.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -214,13 +218,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\uZone.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="WConfig.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="WDesigner.xaml">
       <SubType>Designer</SubType>
@@ -245,6 +245,9 @@
     <Compile Include="ResizeThumb.vb" />
     <Compile Include="RotateThumb.vb" />
     <Compile Include="ServiceTV.vb" />
+    <Compile Include="UserControls\uCtrlElement.xaml.vb">
+      <DependentUpon>uCtrlElement.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\FrmConfigChaine.xaml.vb">
       <DependentUpon>FrmConfigChaine.xaml</DependentUpon>
     </Compile>
@@ -253,9 +256,6 @@
     </Compile>
     <Compile Include="UserControls\keyboard.xaml.vb">
       <DependentUpon>keyboard.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\uZone.xaml.vb">
-      <DependentUpon>uZone.xaml</DependentUpon>
     </Compile>
     <Compile Include="WConfig.xaml.vb">
       <DependentUpon>WConfig.xaml</DependentUpon>
@@ -294,7 +294,6 @@
     <Compile Include="clsXML.vb" />
     <Compile Include="Fonctions.vb" />
     <Compile Include="GuideTV.vb" />
-    <Compile Include="hsclass.vb" />
     <Compile Include="My Project\AssemblyInfo.vb">
       <SubType>Code</SubType>
     </Compile>

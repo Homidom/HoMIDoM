@@ -19,7 +19,11 @@ Imports System.Xml.Serialization
 Imports HoMIDom.HoMIDom
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports System.Web.HttpUtility
+Imports System.Windows.Controls.Primitives
+Imports WpfApplication1.Designer
+Imports WpfApplication1.Designer.ResizeRotateAdorner
 #End Region
+
 
 Class Window1
 
@@ -48,6 +52,8 @@ Class Window1
     Dim _ShowTemperature As Boolean
     Dim _ImageBackGroundDefault As String
     Dim _ListMnu As New List(Of uCtrlImgMnu)
+    Dim _Design As Boolean = False
+    Dim mybuttonstyle As Style
     'Service TV
     Dim _ServiceTV As New ServiceTV(Me)
 
@@ -195,6 +201,10 @@ Class Window1
         Try
             ' Cet appel est requis par le Concepteur Windows Form.
             InitializeComponent()
+            Dim mystyles As New ResourceDictionary()
+            mystyles.Source = New Uri("/HoMIDomWPFClient;component/Resources/DesignerItem.xaml",
+                    UriKind.RelativeOrAbsolute)
+            mybuttonstyle = mystyles("DesignerItemStyle")
 
             'Chargement des paramètres
             Log(TypeLog.INFO, TypeSource.CLIENT, "LOADCONFIG", "Message: " & LoadConfig(_MonRepertoire & "\Config\"))
@@ -906,6 +916,8 @@ Class Window1
                 Canvas1.Children.Clear()
             End If
 
+            ImageBackGround = _ImageBackGroundDefault
+
             Dim y As uCtrlImgMnu = sender
 
             If y IsNot Nothing Then
@@ -939,9 +951,8 @@ Class Window1
                         x.Width = Canvas1.ActualWidth
                         x.Height = Canvas1.ActualHeight
                     Case uCtrlImgMnu.TypeOfMnu.Zone
-                        Dim x As New uZone(y.IDElement, Canvas1.ActualHeight, Canvas1.ActualWidth)
-                        Canvas1.Children.Add(x)
-                        x.ImgBackGround.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(IdSrv, y.IDElement).Image))
+                        'Dim x As New uZone(y.IDElement, Canvas1.ActualHeight, Canvas1.ActualWidth)
+                        ShowZone(y.IDElement)
                         'Case 0 'Actualités
                         '    Dim x As New uInternet("http://fr.news.yahoo.com/")
                         '    Canvas1.Children.Add(x)
@@ -1064,6 +1075,27 @@ Class Window1
         End
     End Sub
 
+    Private Sub Canvas1_MouseRightButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Canvas1.MouseRightButtonDown
+        'If _Design = False Then
+        '    _Design = True
+        'Else
+        '    _Design = False
+        'End If
+
+        'If _Design = True Then
+        '    For Each child As Control In Canvas1.Children
+        '        Selector.SetIsSelected(child, True)
+        '    Next
+        'Else
+        '    Dim a As String = ""
+        '    For Each child As Control In Canvas1.Children
+        '        Selector.SetIsSelected(child, False)
+        '        a &= child.Name & " : Left=" & Canvas1.GetLeft(child) & " Top=" & Canvas1.GetTop(child) & " Width=" & child.Width & " Height=" & child.Height & " Angle=" & child.RenderTransform.GetValue(RotateTransform.AngleProperty) & vbCrLf
+        '    Next
+        '    MsgBox(a)
+        'End If
+    End Sub
+
     Private Sub Canvas1_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles Canvas1.SizeChanged
         For i As Integer = 0 To Canvas1.Children.Count - 1
             Dim x As Object = Canvas1.Children.Item(i)
@@ -1074,5 +1106,73 @@ Class Window1
 
     Private Sub Window1_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
 
+    End Sub
+
+    Private Sub ShowZone(ByVal IdZone As String)
+
+        Dim _zone As Zone
+
+        If IsConnect = True Then
+            _zone = myService.ReturnZoneByID(IdSrv, IdZone)
+            ImgBackground.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Image))
+            For i As Integer = 0 To _zone.ListElement.Count - 1
+                Dim z As Zone.Element_Zone = myService.ReturnZoneByID(IdSrv, IdZone).ListElement.Item(i)
+                If z.Visible = True Then
+                    Dim w As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, z.ElementID)
+                    If w IsNot Nothing Then
+
+                        'Ajouter un nouveau Control
+                        Dim x As New ContentControl
+                        x.Width = 80
+                        x.Height = 100
+                        x.Style = mybuttonstyle
+                        x.Tag = True
+
+                        Dim y As New uCtrlElement
+                        y.Id = z.ElementID
+                        y.IsHitTestVisible = True 'True:bouge pas False:Bouge
+                        AddHandler y.PreviewMouseDown, AddressOf Dbleclk
+                        x.Content = y
+                        Canvas1.Children.Add(x)
+                        Canvas1.SetLeft(x, (100 * i))
+                        Canvas1.SetTop(x, 100)
+                    End If
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub Dbleclk(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs)
+
+    End Sub
+
+
+    Private Sub RdB1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk1.Click
+        If Chk1.IsChecked = True Then
+            For Each child As Control In Canvas1.Children
+                Selector.SetIsSelected(child, True)
+            Next
+        Else
+            Dim a As String = ""
+            For Each child As Control In Canvas1.Children
+                Selector.SetIsSelected(child, False)
+                a &= child.Name & " : Left=" & Canvas1.GetLeft(child) & " Top=" & Canvas1.GetTop(child) & " Width=" & child.Width & " Height=" & child.Height & " Angle=" & child.RenderTransform.GetValue(RotateTransform.AngleProperty) & vbCrLf
+            Next
+            MsgBox(a)
+        End If
+    End Sub
+
+    Private Sub Chk2_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk2.Click
+        If Chk2.IsChecked = True Then
+            For Each child As ContentControl In Canvas1.Children
+                Dim lbl As uCtrlElement = child.Content
+                lbl.IsHitTestVisible = False
+            Next
+        Else
+            For Each child As ContentControl In Canvas1.Children
+                Dim lbl As uCtrlElement = child.Content
+                lbl.IsHitTestVisible = True
+            Next
+        End If
     End Sub
 End Class
