@@ -1261,4 +1261,5 @@ Class Window1
             CanvasRight.Children.Add(x)
         Next
     End Sub
+
 End Class

@@ -1,25 +1,22 @@
 ﻿#Region "Imports"
 Imports System
 Imports System.IO
+Imports System.Data
 Imports System.Xml
 Imports System.Xml.XPath
 Imports System.Xml.Serialization
 Imports System.Reflection
-Imports STRGS = Microsoft.VisualBasic.Strings
 Imports System.ServiceModel
 Imports System.ServiceModel.Description
 Imports System.Security.Cryptography
 Imports System.Text
 Imports System.Web.HttpUtility
 Imports System.Threading
-Imports System.Net.Mail
 Imports System.Data.SQLite
-Imports System.Data
+Imports System.Net.Mail
 #End Region
 
 Namespace HoMIDom
-
-
 
     ''' <summary>Classe Server</summary>
     ''' <remarks></remarks>
@@ -137,7 +134,7 @@ Namespace HoMIDom
                                         Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
                                         'On historise la nouvellevaleur
                                         retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
-                                        If STRGS.Left(retour, 4) = "ERR:" Then
+                                        If Mid(retour, 1, 4) = "ERR:" Then
                                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
                                         End If
                                     End If
@@ -145,7 +142,7 @@ Namespace HoMIDom
                             Else
                                 '--- Valeur est autre chose qu'un nombre
                                 '--- historise la valeur si ce n'est pas une simple info de config
-                                If STRGS.Left(valeur, 4) <> "CFG:" Then
+                                If Mid(retour, 1, 4) <> "CFG:" Then
                                     '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
                                     If Device.LastEtat And valeur.ToString = Device.ValueLast Then
                                         'log de "inchangé lastetat"
@@ -155,7 +152,7 @@ Namespace HoMIDom
                                         Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur)
                                         'Ajout dans la BDD
                                         retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
-                                        If STRGS.Left(retour, 4) = "ERR:" Then
+                                        If Mid(retour, 1, 4) = "ERR:" Then
                                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
                                         End If
                                     End If
@@ -169,7 +166,7 @@ Namespace HoMIDom
                             Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (" & [Property] & ")")
                             'Ajout dans la BDD
                             retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
-                            If STRGS.Left(retour, 4) = "ERR:" Then
+                            If Mid(retour, 1, 4) = "ERR:" Then
                                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
                             End If
                         End If
@@ -181,105 +178,6 @@ Namespace HoMIDom
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Exception : " & ex.Message)
             End Try
-
-
-            ''on verifie si un composant correspond à cette adresse
-            'tabletmp = domos_svc.table_composants.Select("composants_adresse = '" & adresse.ToString & "' AND composants_modele_norme = 'RFX'")
-            'If tabletmp.GetUpperBound(0) >= 0 Then
-            '    '--- On attend au moins x seconde entre deux receptions ou si valeur<>valeurlastetat (donc pas le meme composant)
-            '    'If (DateTime.Now - Date.Parse(tabletmp(0)("composants_etatdate"))).TotalMilliseconds > tempsentrereponse Or valeur <> valeurlast Then
-            '    If (DateTime.Now - Date.Parse(tabletmp(0)("composants_etatdate"))).TotalMilliseconds > tempsentrereponse Then
-            '        If VB.Left(valeur, 4) <> "ERR:" Then 'si y a pas erreur d'acquisition
-            '            '--- Remplacement de , par .
-            '            valeur = STRGS.Replace(valeur, ",", ".")
-            '            '--- Correction si besoin ---
-            '            If (tabletmp(0)("composants_correction") <> "" And tabletmp(0)("composants_correction") <> "0") Then
-            '                valeur = valeur + CDbl(tabletmp(0)("composants_correction"))
-            '            End If
-            '            '--- comparaison du relevé avec le dernier etat ---
-            '            '--- si la valeur a changé ou autre chose qu'un nombre (ON, OFF, ALERT...) --- 
-            '            If valeur.ToString <> tabletmp(0)("composants_etat").ToString() Or Not IsNumeric(valeur) Then
-            '                'si nombre alors 
-            '                If (IsNumeric(valeur) And IsNumeric(tabletmp(0)("lastetat")) And IsNumeric(tabletmp(0)("composants_etat"))) Then
-            '                    'on vérifie que la valeur a changé par rapport a l'avant dernier etat (lastetat) si lastetat (table config)
-            '                    If lastetat And valeur.ToString = tabletmp(0)("lastetat").ToString() Then
-            '                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString & " (inchangé lastetat " & tabletmp(0)("lastetat").ToString() & ")")
-            '                        '--- Modification de la date dans la base SQL ---
-            '                        dateheure = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
-            '                        Err = domos_svc.mysql.mysql_nonquery("UPDATE composants SET composants_etatdate='" & dateheure & "' WHERE composants_id='" & tabletmp(0)("composants_id") & "'")
-            '                        If Err <> "" Then WriteLog("ERR: inchange lastetat " & Err)
-            '                    Else
-            '                        'on vérifie que la valeur a changé de plus de composants_precision sinon inchangé
-            '                        'If (valeur + CDbl(tabletmp(0)("composants_precision"))).ToString >= tabletmp(0)("composants_etat").ToString() And (valeur - CDbl(tabletmp(0)("composants_precision"))).ToString <= tabletmp(0)("composants_etat").ToString() Then
-            '                        If (CDbl(valeur) + CDbl(tabletmp(0)("composants_precision"))) >= CDbl(tabletmp(0)("composants_etat")) And (CDbl(valeur) - CDbl(tabletmp(0)("composants_precision"))) <= CDbl(tabletmp(0)("composants_etat")) Then
-            '                            'log de "inchangé précision"
-            '                            _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString & " (inchangé precision " & tabletmp(0)("composants_etat").ToString & "+-" & tabletmp(0)("composants_precision").ToString & ")")
-            '                            '--- Modification de la date dans la base SQL ---
-            '                            dateheure = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
-            '                            Err = domos_svc.mysql.mysql_nonquery("UPDATE composants SET composants_etatdate='" & dateheure & "' WHERE composants_id='" & tabletmp(0)("composants_id") & "'")
-            '                            If Err <> "" Then WriteLog("ERR: inchange precision " & Err)
-            '                        Else
-            '                            _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString)
-
-            '                            '  --- modification de l'etat du composant dans la table en memoire ---
-            '                            tabletmp(0)("lastetat") = tabletmp(0)("composants_etat") 'on garde l'ancien etat en memoire pour le test de lastetat
-            '                            tabletmp(0)("composants_etat") = valeur.ToString
-            '                            tabletmp(0)("composants_etatdate") = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
-            '                        End If
-            '                    End If
-            '                Else
-            '                    'si la valeur a changer et = ON ou OFF on logue sinon debug
-            '                    If valeur.ToString = tabletmp(0)("composants_etat").ToString() And (valeur.ToString = "ON" Or valeur.ToString = "OFF") Then
-            '                        WriteLog("DBG: inchange ON-OFF: " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString)
-            '                    Else
-            '                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString)
-            '                    End If
-            '                    '  --- modification de l'etat du composant dans la table en memoire ---
-            '                    If VB.Left(valeur, 4) <> "CFG:" Then
-            '                        tabletmp(0)("lastetat") = tabletmp(0)("composants_etat") 'on garde l'ancien etat en memoire pour le test de lastetat
-            '                        tabletmp(0)("composants_etat") = valeur.ToString
-            '                        tabletmp(0)("composants_etatdate") = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
-            '                    End If
-            '                End If
-            '            Else
-            '                'la valeur n'a pas changé, on log en 7 et on maj la date dans la base sql
-            '                _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DRIVER, "RFXCOM_RECEIVER " & tabletmp(0)("composants_nom").ToString() & " : " & tabletmp(0)("composants_adresse").ToString() & " : " & valeur.ToString & " (inchangé " & tabletmp(0)("composants_etat").ToString() & ")")
-            '                '--- Modification de la date dans la base SQL ---
-            '                dateheure = DateAndTime.Now.Year.ToString() & "-" & DateAndTime.Now.Month.ToString() & "-" & DateAndTime.Now.Day.ToString() & " " & STRGS.Left(DateAndTime.Now.TimeOfDay.ToString(), 8)
-            '                Err = domos_svc.mysql.mysql_nonquery("UPDATE composants SET composants_etatdate='" & dateheure & "' WHERE composants_id='" & tabletmp(0)("composants_id") & "'")
-            '                If Err <> "" Then WriteLog("ERR: inchange : " & Err)
-            '            End If
-            '        Else
-            '            'erreur d'acquisition ou battery
-            '            If InStr(LCase(valeur), "battery") > 0 Then
-            '                WriteLog("ERR: " & tabletmp(0)("composants_nom").ToString() & " : " & valeur.ToString)
-            '            Else
-            '                WriteLog("ERR: " & tabletmp(0)("composants_nom").ToString() & " : " & valeur.ToString)
-            '            End If
-            '        End If
-            '    Else
-            '        WriteLog("DBG: IGNORE : Etat recu il y a moins de " & domos_svc.rfx_tpsentrereponse & " msec : " & adresse.ToString & " : " & valeur.ToString)
-            '    End If
-            'ElseIf Not domos_svc.RFX_ignoreadresse Then
-            '    'erreur d'adresse composant
-            '    If adresse <> adresselast Then
-            '        tabletmp = domos_svc.table_composants_bannis.Select("composants_bannis_adresse = '" & adresse.ToString & "' AND composants_bannis_norme = 'RFX'")
-            '        If tabletmp.GetUpperBound(0) >= 0 Then
-            '            'on logue en debug car c'est une adresse bannie
-            '            WriteLog("DBG: IGNORE : Adresse Bannie : " & adresse.ToString & " : " & valeur.ToString)
-            '        Else
-            '            WriteLog("ERR: Adresse composant : " & adresse.ToString & " : " & valeur.ToString)
-            '        End If
-            '    Else
-            '        'on logue en debug car c'est la même adresse non trouvé depuis le dernier message
-            '        WriteLog("DBG: IGNORE : Adresse composant : " & adresse.ToString & " : " & valeur.ToString)
-            '    End If
-            'Else
-            '    WriteLog("DBG: IGNORE : Adresse composant : " & adresse.ToString & " : " & valeur.ToString)
-            'End If
-            'adresselast = adresse
-            'valeurlast = valeur
-
         End Sub
 
         ''' <summary>Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi</summary>
@@ -288,27 +186,9 @@ Namespace HoMIDom
             Dim ladate As DateTime = Now 'on récupére la date/heure
 
             '---- Action à effectuer toutes les secondes ----
-            'on checke si il y a cron à faire
-            Try
-                For i As Integer = 0 To _listTriggers.Count() - 1
-                    If _listTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
-                        If _listTriggers.Item(i).Enable = True Then
-                            If _listTriggers.Item(i).Prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss") Then
-                                _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
-                                'lancement des macros associées
-                                For j As Integer = 0 To _listTriggers.Item(i).ListMacro.Count - 1
-                                    'on cherche la macro et on la lance en testant ces conditions
-                                    Dim _m As Macro = ReturnMacroById(_IdSrv, _listTriggers.Item(i).ListMacro.Item(j))
-                                    If _m IsNot Nothing Then _m.Execute(Me)
-                                    _m = Nothing
-                                Next
-                            End If
-                        End If
-                    End If
-                Next
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick TriggerTimer", "Exception : " & ex.Message)
-            End Try
+            Dim thr As New Thread(AddressOf VerifTimeDevice)
+            thr.IsBackground = True
+            thr.Start()
 
             Try
                 '---- Actions à effectuer toutes les minutes ----
@@ -337,6 +217,29 @@ Namespace HoMIDom
             End Try
         End Sub
 
+        Private Sub VerifTimeDevice()
+            'on checke si il y a cron à faire
+            Try
+                For i As Integer = 0 To _listTriggers.Count() - 1
+                    If _listTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
+                        If _listTriggers.Item(i).Enable = True Then
+                            If _listTriggers.Item(i).Prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss") Then
+                                _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
+                                'lancement des macros associées
+                                For j As Integer = 0 To _listTriggers.Item(i).ListMacro.Count - 1
+                                    'on cherche la macro et on la lance en testant ces conditions
+                                    Dim _m As Macro = ReturnMacroById(_IdSrv, _listTriggers.Item(i).ListMacro.Item(j))
+                                    If _m IsNot Nothing Then _m.Execute(Me)
+                                    _m = Nothing
+                                Next
+                            End If
+                        End If
+                    End If
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick TriggerTimer", "Exception : " & ex.Message)
+            End Try
+        End Sub
 #End Region
 
 #Region "Fonctions/Sub propres au serveur"
@@ -2133,7 +2036,7 @@ Namespace HoMIDom
                     'Vérifie si le fichier est trop gros si oui, on l'archive
                     If (Fichier.Length / 1000) > _MaxFileSize Then
                         Dim filearchive As String
-                        filearchive = STRGS.Left(_File, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                        filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
                         File.Move(_File, filearchive)
                     End If
                 Else
@@ -2179,7 +2082,7 @@ Namespace HoMIDom
                 Catch ex As Exception 'Le fichier xml est corrompu ou comporte des caractères non supportés par xml
                     Console.WriteLine(Now & " Impossible d'écrire dans le fichier log un nouveau fichier à été créé: " & ex.Message)
                     Dim filearchive As String
-                    filearchive = STRGS.Left(_File, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                    filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
                     File.Move(_File, filearchive)
                     CreateNewFileLog(_File)
                     Fichier = New FileInfo(_File)
@@ -2329,11 +2232,11 @@ Namespace HoMIDom
 
                 '----- Arrete les connexions Sqlite -----
                 retour = sqlite_homidom.disconnect("homidom")
-                If STRGS.Left(retour, 4) = "ERR:" Then
+                If Mid(retour, 1, 4) = "ERR:" Then
                     Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Homidom : " & retour)
                 End If
                 retour = sqlite_medias.disconnect("medias")
-                If STRGS.Left(retour, 4) = "ERR:" Then
+                If Mid(retour, 1, 4) = "ERR:" Then
                     Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Medias : " & retour)
                 End If
             Catch ex As Exception
@@ -3048,14 +2951,18 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetByteFromImage(ByVal file As String) As Byte() Implements IHoMIDom.GetByteFromImage
-            Dim array As Byte()
+            Dim array As Byte() = Nothing
             Try
                 Using fs As New FileStream(file, FileMode.Open, FileAccess.Read)
                     Dim reader As New BinaryReader(fs)
-                    array = reader.ReadBytes(CInt(fs.Length))
-                    reader.Close()
+                    If reader IsNot Nothing Then
+                        array = reader.ReadBytes(CInt(fs.Length))
+                        reader.Close()
+                        reader = Nothing
+                    End If
                 End Using
                 Return array
+                array = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetByteFromImage", ex.Message)
                 Return Nothing
@@ -3138,10 +3045,11 @@ Namespace HoMIDom
                     Else
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour2)
                     End If
+                    retour2 = Nothing
                 End If
 
                 Dim result As New DataTable("HistoDB")
-                Dim retour As String
+                Dim retour As String = ""
                 Dim commande As String = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' ;"
                 Dim _list As New List(Of Historisation)
 
@@ -3156,13 +3064,17 @@ Namespace HoMIDom
                             a.Value = result.Rows.Item(i).Item(4).ToString
                             _list.Add(a)
                         Next
+                        result = Nothing
                         Return _list
+                        _list = Nothing
                     End If
                 Else
+                    result = Nothing
+                    _list = Nothing
                     Return Nothing
                 End If
             Catch ex As Exception
-                MsgBox(ex.ToString)
+                MsgBox("ERREUR: " & ex.ToString)
             End Try
         End Function
 #End Region
@@ -4873,6 +4785,9 @@ Namespace HoMIDom
                         retour.Adresse1 = _ListDevices.Item(i).adresse1
                         retour.Adresse2 = _ListDevices.Item(i).adresse2
                         retour.DriverID = _ListDevices.Item(i).driverid
+                        If _ListDevices.Item(i).picture = " " Then
+                            retour.Picture = ""
+                        End If
                         retour.Picture = _ListDevices.Item(i).picture
                         retour.Solo = _ListDevices.Item(i).solo
                         retour.Refresh = _ListDevices.Item(i).refresh

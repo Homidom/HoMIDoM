@@ -305,9 +305,11 @@ Namespace HoMIDom
             'Adresse de son image
             Public Property Picture() As String
                 Get
+                    If _Picture = " " Then _Picture = ""
                     Return _Picture
                 End Get
                 Set(ByVal value As String)
+                    If value = " " Then value = ""
                     _Picture = value
                 End Set
             End Property

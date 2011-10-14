@@ -166,6 +166,7 @@
                     Return _Image
                 End Get
                 Set(ByVal value As String)
+                    If _Image = " " Then _Image = ""
                     _Image = value
                 End Set
             End Property
