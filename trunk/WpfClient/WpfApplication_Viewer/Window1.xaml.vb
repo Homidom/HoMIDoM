@@ -1123,8 +1123,8 @@ Class Window1
 
                         'Ajouter un nouveau Control
                         Dim x As New ContentControl
-                        x.Width = 80
-                        x.Height = 100
+                        x.Width = 140
+                        x.Height = 80
                         x.Style = mybuttonstyle
                         x.Tag = True
 
@@ -1134,7 +1134,7 @@ Class Window1
                         AddHandler y.PreviewMouseDown, AddressOf Dbleclk
                         x.Content = y
                         Canvas1.Children.Add(x)
-                        Canvas1.SetLeft(x, (100 * i))
+                        Canvas1.SetLeft(x, (150 * i) + 30)
                         Canvas1.SetTop(x, 100)
                     End If
                 End If
@@ -1143,7 +1143,7 @@ Class Window1
     End Sub
 
     Private Sub Dbleclk(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs)
-
+        'MessageBox.Show("OK")
     End Sub
 
 

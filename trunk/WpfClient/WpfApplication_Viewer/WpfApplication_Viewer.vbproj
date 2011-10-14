@@ -240,6 +240,7 @@
       <DependentUpon>Application.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="cElement.vb" />
     <Compile Include="DesignerItemDecorator.vb" />
     <Compile Include="MoveThumb.vb" />
     <Compile Include="ResizeThumb.vb" />

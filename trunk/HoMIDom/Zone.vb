@@ -44,6 +44,7 @@
                 Return _Image
             End Get
             Set(ByVal value As String)
+                If value = " " Then value = ""
                 _Image = value
             End Set
         End Property
@@ -59,6 +60,7 @@
                 Return _Icon
             End Get
             Set(ByVal value As String)
+                If value = " " Then value = ""
                 _Icon = value
             End Set
         End Property
