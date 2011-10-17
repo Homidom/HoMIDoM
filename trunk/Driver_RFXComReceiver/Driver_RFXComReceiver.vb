@@ -2834,7 +2834,13 @@ Imports System.Globalization
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID)
                 If (listedevices.Count = 1) Then
                     'un device trouvé on maj la value
-                    listedevices.Item(0).Value = valeur
+                    If valeur = "ON" Then
+                        listedevices.Item(0).Value = True
+                    ElseIf valeur = "OFF" Then
+                        listedevices.Item(0).Value = False
+                    Else
+                        listedevices.Item(0).Value = valeur
+                    End If
                 ElseIf (listedevices.Count > 1) Then
                     WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
                 Else

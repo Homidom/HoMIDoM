@@ -465,7 +465,7 @@ Namespace HoMIDom
                         _Value = tmp
                         RaiseEvent DeviceChanged(Me, "Value", _Value)
                     Else
-                        _Server.Log(Server.TypeLog.VALEUR_INCHANGE, Server.TypeSource.SERVEUR, "DeviceChange", _Name & " : " & _Adresse1 & " : " & _Value)
+                        _Server.Log(Server.TypeLog.VALEUR_INCHANGE, Server.TypeSource.SERVEUR, "DeviceValue Inchangé", _Name & " : " & _Adresse1 & " : " & _Value)
                     End If
                 End Set
             End Property
@@ -477,7 +477,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique
 
             Protected _Value As Boolean = False
-            Protected _ValueLast As Double = 0
+            Protected _ValueLast As Boolean = False
 
             'Contien l'avant derniere valeur
             Public Property ValueLast() As Double
@@ -545,31 +545,31 @@ Namespace HoMIDom
             Protected _Formatage As String = ""
 
             'Contien l'avant derniere valeur
-            Public Property ValueLast() As Double
+            Public Property ValueLast() As Integer
                 Get
                     Return _ValueLast
                 End Get
-                Set(ByVal value As Double)
+                Set(ByVal value As Integer)
                     _ValueLast = value
                 End Set
             End Property
 
             'Precision de value
-            Public Property Precision() As Double
+            Public Property Precision() As Integer
                 Get
                     Return _Precision
                 End Get
-                Set(ByVal value As Double)
+                Set(ByVal value As Integer)
                     _Precision = value
                 End Set
             End Property
 
             'Correction en +/-/*/div à effectuer sur la value
-            Public Property Correction() As Double
+            Public Property Correction() As Integer
                 Get
                     Return _Correction
                 End Get
-                Set(ByVal value As Double)
+                Set(ByVal value As Integer)
                     _Correction = value
                 End Set
             End Property
