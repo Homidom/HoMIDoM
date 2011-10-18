@@ -289,9 +289,12 @@ Class Window1
                 bmpImage.EndInit()
                 img.Source = bmpImage
 
+                Dim tl As New ToolTip
+                tl.Content = x.Name
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
                 label.Content = x.Name
+                label.ToolTip = tl
 
                 stack.Children.Add(img)
                 stack.Children.Add(label)
@@ -521,9 +524,8 @@ Class Window1
                 Exit Sub
             End If
 
-            If TreeViewDevice.SelectedItem.uid Is Nothing Then Exit Sub
-
             If TreeViewDevice.SelectedItem IsNot Nothing Then
+                If TreeViewDevice.SelectedItem.uid Is Nothing Then Exit Sub
 
                 For i As Integer = 0 To myService.GetAllDevices(IdSrv).Count - 1
                     If myService.GetAllDevices(IdSrv).Item(i).ID = TreeViewDevice.SelectedItem.uid Then
@@ -609,9 +611,9 @@ Class Window1
                 Exit Sub
             End If
 
-            If TreeViewZone.SelectedItem.uid Is Nothing Then Exit Sub
-
             If TreeViewZone.SelectedItem IsNot Nothing Then
+                If TreeViewZone.SelectedItem.uid Is Nothing Then Exit Sub
+
                 For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
                     If myService.GetAllZones(IdSrv).Item(i).ID = TreeViewZone.SelectedItem.uid Then
 
@@ -770,9 +772,8 @@ Class Window1
                 Exit Sub
             End If
 
-            If TreeViewTriggers.SelectedItem.uid Is Nothing Then Exit Sub
-
             If TreeViewTriggers.SelectedItem IsNot Nothing Then
+                If TreeViewTriggers.SelectedItem.uid Is Nothing Then Exit Sub
 
                 For i As Integer = 0 To myService.GetAllTriggers(IdSrv).Count - 1
                     If myService.GetAllTriggers(IdSrv).Item(i).ID = TreeViewTriggers.SelectedItem.uid Then
@@ -851,12 +852,13 @@ Class Window1
                 MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
                 Exit Sub
             End If
-
-            Dim x As New uMacro(uMacro.EAction.Modifier, TreeViewMacros.SelectedItem.uid)
-            x.Uid = System.Guid.NewGuid.ToString()
-            AddHandler x.CloseMe, AddressOf UnloadControl
-            CanvasRight.Children.Clear()
-            CanvasRight.Children.Add(x)
+            If TreeViewMacros.SelectedItem IsNot Nothing Then
+                Dim x As New uMacro(uMacro.EAction.Modifier, TreeViewMacros.SelectedItem.uid)
+                x.Uid = System.Guid.NewGuid.ToString()
+                AddHandler x.CloseMe, AddressOf UnloadControl
+                CanvasRight.Children.Clear()
+                CanvasRight.Children.Add(x)
+            End If
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub TreeViewMacros_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
