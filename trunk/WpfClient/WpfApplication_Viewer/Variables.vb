@@ -2,7 +2,7 @@
     Public myService As HoMIDom.HoMIDom.IHoMIDom
     Public IsConnect As Boolean
     Public IdSrv As String = "123456789"
-
+    Public _ListElement As New List(Of cElement)
     Public frmMere As Window
 
     'Ecriture dans le fichier log

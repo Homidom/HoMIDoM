@@ -456,5 +456,8 @@
     <Resource Include="Images\fleche-bas.png" />
     <Resource Include="Images\fleche-haut.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\script-128.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

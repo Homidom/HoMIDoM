@@ -100,8 +100,8 @@
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Height="25" Name="StkTop">
                 <Label Margin="1" Name="LblTime" FontSize="10" Foreground="White" FlowDirection="RightToLeft">Label</Label>
                 <StackPanel >
-                    <CheckBox  Name="Chk1" Content="Resize" Foreground="White" />
-                    <CheckBox  Name="Chk2" Content="Move" Foreground="White" />
+                    <CheckBox  Name="Chk1" Content="Mode Design" Foreground="White" />
+                    <CheckBox  Name="Chk2" Content="Move" Foreground="White" Visibility="Hidden" />
                     </StackPanel>
                 <Rectangle Width="100" />
                 <Image Margin="1" Name="ImageLeve" Stretch="Fill" Tag="Soleil" HorizontalAlignment="Right" Width="20"  Height="20" Source="/HoMIDomWPFClient;component/Images/01.png" />

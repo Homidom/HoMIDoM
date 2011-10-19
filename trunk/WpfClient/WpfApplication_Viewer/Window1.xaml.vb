@@ -54,6 +54,7 @@ Class Window1
     Dim _ListMnu As New List(Of uCtrlImgMnu)
     Dim _Design As Boolean = False
     Dim mybuttonstyle As Style
+    Dim _CurrentIdZone As String
     'Service TV
     Dim _ServiceTV As New ServiceTV(Me)
 
@@ -461,6 +462,38 @@ Class Window1
                     End If
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Menus chargés")
 
+                    '******************************************
+                    'on va chercher les éléments
+                    '******************************************
+                    list = myxml.SelectNodes("/homidom/elements/element")
+                    If list.Count > 0 Then 'présence des éléments
+                        For j As Integer = 0 To list.Count - 1
+                            Dim x As New cElement
+
+                            For k As Integer = 0 To list.Item(j).Attributes.Count - 1
+                                Select Case list.Item(j).Attributes.Item(k).Name
+                                    Case "id"
+                                        x.ID = list.Item(j).Attributes.Item(k).Value
+                                    Case "zoneid"
+                                        x.ZoneId = list.Item(j).Attributes.Item(k).Value
+                                    Case "x"
+                                        x.X = list.Item(j).Attributes.Item(k).Value
+                                    Case "y"
+                                        x.Y = list.Item(j).Attributes.Item(k).Value
+                                    Case "width"
+                                        x.Width = list.Item(j).Attributes.Item(k).Value
+                                    Case "height"
+                                        x.Height = list.Item(j).Attributes.Item(k).Value
+                                    Case "angle"
+                                        x.Angle = list.Item(j).Attributes.Item(k).Value
+                                End Select
+                            Next
+                            _ListElement.Add(x)
+                        Next
+                    Else
+                        'MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
+                    End If
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Eléments chargés")
                     '**************
                 Next
             End If
@@ -474,6 +507,7 @@ Class Window1
             Return " Chargement de la configuration terminée"
 
         Catch ex As Exception
+            MsgBox("ERREUR LOADCONFIG " & ex.ToString, MsgBoxStyle.Exclamation, "Erreur serveur")
             Return " Erreur de chargement de la config: " & ex.Message
         End Try
     End Function
@@ -588,6 +622,37 @@ Class Window1
                         writer.WriteEndAttribute()
                     Next
                 End If
+                writer.WriteEndElement()
+            Next
+            writer.WriteEndElement()
+
+            ''------------
+            ''Sauvegarde des elements
+            ''------------
+            writer.WriteStartElement("elements")
+            For i As Integer = 0 To _ListElement.Count - 1
+                writer.WriteStartElement("element")
+                writer.WriteStartAttribute("id")
+                writer.WriteValue(_ListElement.Item(i).ID)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("zoneid")
+                writer.WriteValue(_ListElement.Item(i).ZoneId)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("x")
+                writer.WriteValue(_ListElement.Item(i).X)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("y")
+                writer.WriteValue(_ListElement.Item(i).Y)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("width")
+                writer.WriteValue(_ListElement.Item(i).Width)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("height")
+                writer.WriteValue(_ListElement.Item(i).Height)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("angle")
+                writer.WriteValue(_ListElement.Item(i).Angle)
+                writer.WriteEndAttribute()
                 writer.WriteEndElement()
             Next
             writer.WriteEndElement()
@@ -1109,37 +1174,94 @@ Class Window1
     End Sub
 
     Private Sub ShowZone(ByVal IdZone As String)
+        Try
+            Dim _zone As Zone
+            Dim _flagnew As Boolean
+            Dim _flagTrouv As Boolean = False
 
-        Dim _zone As Zone
+            If IsConnect = True Then
+                _CurrentIdZone = IdZone
 
-        If IsConnect = True Then
-            _zone = myService.ReturnZoneByID(IdSrv, IdZone)
-            ImgBackground.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Image))
-            For i As Integer = 0 To _zone.ListElement.Count - 1
-                Dim z As Zone.Element_Zone = myService.ReturnZoneByID(IdSrv, IdZone).ListElement.Item(i)
-                If z.Visible = True Then
-                    Dim w As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, z.ElementID)
-                    If w IsNot Nothing Then
+                _zone = myService.ReturnZoneByID(IdSrv, IdZone)
+                ImgBackground.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Image))
 
-                        'Ajouter un nouveau Control
-                        Dim x As New ContentControl
-                        x.Width = 140
-                        x.Height = 80
-                        x.Style = mybuttonstyle
-                        x.Tag = True
-
-                        Dim y As New uCtrlElement
-                        y.Id = z.ElementID
-                        y.IsHitTestVisible = True 'True:bouge pas False:Bouge
-                        AddHandler y.PreviewMouseDown, AddressOf Dbleclk
-                        x.Content = y
-                        Canvas1.Children.Add(x)
-                        Canvas1.SetLeft(x, (150 * i) + 30)
-                        Canvas1.SetTop(x, 100)
-                    End If
+                If _ListElement.Count = 0 Then
+                    _flagnew = True
+                    MsgBox("new")
                 End If
-            Next
-        End If
+
+
+                For i As Integer = 0 To _zone.ListElement.Count - 1
+                    Dim z As Zone.Element_Zone = myService.ReturnZoneByID(IdSrv, IdZone).ListElement.Item(i)
+                    If z.Visible = True Then
+                        For j As Integer = 0 To _ListElement.Count - 1
+                            If _ListElement.Item(j).ID = z.ElementID And _ListElement.Item(j).ZoneId = IdZone Then
+
+
+                                'Ajouter un nouveau Control
+                                Dim x As New ContentControl
+                                Dim Trg As New TransformGroup
+                                Dim Rot As New RotateTransform(_ListElement.Item(j).Angle)
+
+                                Trg.Children.Add(Rot)
+                                x.Width = _ListElement.Item(j).Width
+                                x.Height = _ListElement.Item(j).Height
+                                x.RenderTransform = Trg
+                                x.Style = mybuttonstyle
+                                x.Tag = True
+                                x.Uid = z.ElementID
+
+                                Dim y As New uCtrlElement
+                                y.Id = z.ElementID
+                                y.IsHitTestVisible = True 'True:bouge pas False:Bouge
+                                AddHandler y.PreviewMouseDown, AddressOf Dbleclk
+                                x.Content = y
+                                Canvas1.Children.Add(x)
+                                Canvas1.SetLeft(x, _ListElement.Item(j).X)
+                                Canvas1.SetTop(x, _ListElement.Item(j).Y)
+
+                                _flagTrouv = True
+                            End If
+                        Next
+
+                        If _flagnew = True Or _flagTrouv = False Then
+
+                            'Ajouter un nouveau Control
+                            Dim x As New ContentControl
+                            x.Width = 140
+                            x.Height = 80
+                            x.Style = mybuttonstyle
+                            x.Tag = True
+                            x.Uid = z.ElementID
+
+                            'Ajoute l'élément dans la liste
+                            Dim elmt As New cElement
+                            elmt.ID = z.ElementID
+                            elmt.ZoneId = IdZone
+                            elmt.Width = x.Width
+                            elmt.Height = x.Height
+                            elmt.Angle = 0
+                            elmt.X = (150 * i) + 30
+                            elmt.Y = 100
+                            _ListElement.Add(elmt)
+
+                            Dim y As New uCtrlElement
+                            y.Id = z.ElementID
+                            y.IsHitTestVisible = True 'True:bouge pas False:Bouge
+                            AddHandler y.PreviewMouseDown, AddressOf Dbleclk
+                            x.Content = y
+                            Canvas1.Children.Add(x)
+                            Canvas1.SetLeft(x, (150 * i) + 30)
+                            Canvas1.SetTop(x, 100)
+                        End If
+
+                    End If
+                    _flagTrouv = False
+                Next
+            End If
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
     End Sub
 
     Private Sub Dbleclk(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs)
@@ -1148,18 +1270,56 @@ Class Window1
 
 
     Private Sub RdB1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk1.Click
-        If Chk1.IsChecked = True Then
-            For Each child As Control In Canvas1.Children
-                Selector.SetIsSelected(child, True)
-            Next
-        Else
-            Dim a As String = ""
-            For Each child As Control In Canvas1.Children
-                Selector.SetIsSelected(child, False)
-                a &= child.Name & " : Left=" & Canvas1.GetLeft(child) & " Top=" & Canvas1.GetTop(child) & " Width=" & child.Width & " Height=" & child.Height & " Angle=" & child.RenderTransform.GetValue(RotateTransform.AngleProperty) & vbCrLf
-            Next
-            MsgBox(a)
-        End If
+        Try
+
+
+            If Chk1.IsChecked = True Then
+                For Each child As ContentControl In Canvas1.Children
+                    Selector.SetIsSelected(child, True)
+
+                    Dim lbl As uCtrlElement = child.Content
+                    lbl.IsHitTestVisible = False
+                Next
+            Else
+                Dim a As String = ""
+                For Each child As ContentControl In Canvas1.Children
+                    Selector.SetIsSelected(child, False)
+
+                    'a &= child.Name & " : Left=" & Canvas1.GetLeft(child) & " Top=" & Canvas1.GetTop(child) & " Width=" & child.Width & " Height=" & child.Height & " Angle=" & child.RenderTransform.GetValue(RotateTransform.AngleProperty) & vbCrLf
+                    For j As Integer = 0 To _ListElement.Count - 1
+                        If _ListElement.Item(j).ID = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                            _ListElement.Item(j).X = Canvas1.GetLeft(child)
+                            _ListElement.Item(j).Y = Canvas1.GetTop(child)
+                            _ListElement.Item(j).Width = child.Width
+                            _ListElement.Item(j).Height = child.Height
+
+                            If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
+                                Dim gt As TransformGroup = child.RenderTransform '.GetValue(RotateTransform.AngleProperty)
+                                For k = 0 To gt.Children.Count - 1
+                                    If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
+                                        Dim rt As RotateTransform = gt.Children.Item(k)
+                                        If rt IsNot Nothing Then
+                                            _ListElement.Item(j).Angle = rt.Angle 'child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                                        End If
+                                        Exit For
+                                    End If
+                                Next
+                            End If
+                            If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
+                                _ListElement.Item(j).Angle = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                            End If
+                        End If
+                    Next
+
+                    Dim lbl As uCtrlElement = child.Content
+                    lbl.IsHitTestVisible = True
+
+                Next
+                'MsgBox(a)
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString)
+        End Try
     End Sub
 
     Private Sub Chk2_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk2.Click
