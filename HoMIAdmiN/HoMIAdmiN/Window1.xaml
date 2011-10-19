@@ -173,7 +173,7 @@
         
         </Window.Resources>
 
-    <DockPanel HorizontalAlignment="Left" VerticalAlignment="Top" Height="660" Width="1002">
+    <DockPanel MinHeight="660" MinWidth="1002">
           
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top" >
             <StackPanel Orientation="Horizontal" >
@@ -208,8 +208,8 @@
                 
                    </Menu>
          </StackPanel>
-      
-        <StackPanel MaxHeight="27" DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Orientation="Horizontal" >
+
+        <StackPanel Height="27" DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Orientation="Horizontal" >
             <Label Foreground="White" Name="LblStatus" VerticalAlignment="Stretch">#####</Label>
             <Ellipse Height="20" Name="Ellipse1" Stroke="Black" Width="20" Fill="Cyan" />
             <Label Foreground="White" Name="LblConnect" VerticalAlignment="Stretch">#####</Label>
@@ -226,7 +226,7 @@
             </Image>
             <Label Content="Serveur courant: ?" Foreground=" White" Name="LblSrv"/>
         </StackPanel>
-        
+
         <StackPanel HorizontalAlignment="Left" Margin="1" Name="StackPanel3" DockPanel.Dock="Left">
             <TabControl Name="TabControl1" Width="187" Template="{StaticResource OutlookTab}" TabStripPlacement="Top" >
                 <TabItem Header="Drivers" Name="TabItem1" IsSelected="True" >
@@ -349,9 +349,9 @@
             </TabControl>
         </StackPanel>
 
-        <StackPanel DockPanel.Dock="Right" Width="5"/>
+        <!--<StackPanel DockPanel.Dock="Right" Width="5"/>-->
         
-        <Canvas Name="CanvasRight" >
+        <Canvas Name="CanvasRight" Margin="5">
             <Canvas.Background>
                 <ImageBrush ImageSource="/HoMIAdmiN;component/Images/01.png" Stretch="UniformToFill" />
             </Canvas.Background>

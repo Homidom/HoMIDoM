@@ -289,11 +289,14 @@ Class Window1
                 bmpImage.EndInit()
                 img.Source = bmpImage
 
+                Dim drv As String = x.Name
+                drv &= " (" & myService.ReturnDriverByID(IdSrv, x.DriverID).Nom & ")"
+
                 Dim tl As New ToolTip
-                tl.Content = x.Name
+                tl.Content = drv
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
-                label.Content = x.Name
+                label.Content = drv
                 label.ToolTip = tl
 
                 stack.Children.Add(img)

@@ -323,6 +323,10 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub BtnRead_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnRead.Click
+        If Window1.myService.ReturnDeviceByID(IdSrv, _DeviceId).Enable = False Then
+            MessageBox.Show("Vous ne pouvez pas exécuter de commandes car le device n'est pas activé (propriété Enable)!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Exit Sub
+        End If
 
         Try
             Dim y As New uTestDevice(_DeviceId)

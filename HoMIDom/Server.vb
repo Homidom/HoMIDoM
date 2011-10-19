@@ -4964,12 +4964,7 @@ Namespace HoMIDom
             Dim x As Object = Nothing
 
             Try
-                For i As Integer = 0 To _ListDevices.Count - 1
-                    If _ListDevices.Item(i).id = DeviceId Then
-                        x = _ListDevices.Item(i)
-                        Exit For
-                    End If
-                Next
+                x = ReturnDeviceById(_IdSrv, DeviceId)
 
                 If x IsNot Nothing Then
 
