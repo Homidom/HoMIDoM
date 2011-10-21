@@ -34,7 +34,6 @@ Namespace HoMIDom
         Private Shared _listTriggers As New List(Of Trigger) 'Liste de tous les triggers
         <NonSerialized()> Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
         Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
-        Private _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application 'Application.StartupPath
         Shared Soleil As New Soleil 'Déclaration class Soleil
         Shared _Longitude As Double = 0 'Longitude
         Shared _Latitude As Double = 0 'latitude
@@ -5119,6 +5118,10 @@ Namespace HoMIDom
             End If
 
             Dim myID As String = ""
+
+            If icon = "" Then icon = _MonRepertoire & "\images\zones\icon\defaut.png"
+            If image = "" Then image = _MonRepertoire & "\images\zones\image\defaut.jpg"
+
             Try
                 If zoneId = "" Then
                     Dim x As New Zone

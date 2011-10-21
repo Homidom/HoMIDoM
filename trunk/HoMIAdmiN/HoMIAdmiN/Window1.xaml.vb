@@ -21,6 +21,7 @@ Class Window1
     Dim FlagStart As Boolean = False
     Dim MemCanvas As Canvas
     Dim MyRep As String = System.Environment.CurrentDirectory
+    Dim _CurrentMnu As Integer
 
     Public Sub New()
         Try
@@ -41,6 +42,7 @@ Class Window1
 
             Myfile = MyRep & "\HoMIAdmiN_config.xml"
 
+            ErazeMnu()
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -59,6 +61,7 @@ Class Window1
                     LblConnect.Content = Mid("Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString(), 1, 64) & "..."
                     LblConnect.ToolTip = tool
                     tool = Nothing
+                    mytime = ""
 
                     Dim mydate As Date
                     mydate = myService.GetHeureLeverSoleil
@@ -72,6 +75,7 @@ Class Window1
                     myBrush.GradientStops.Add(New GradientStop(Colors.Green, 0.5))
                     myBrush.GradientStops.Add(New GradientStop(Colors.DarkGreen, 1.0))
                     Ellipse1.Fill = myBrush
+
                 Catch ex As Exception
                     IsConnect = False
                     LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString & " "
@@ -131,7 +135,7 @@ Class Window1
     'Afficher la liste des zones
     Public Sub AffZone()
         Try
-            TreeViewZone.Items.Clear()
+            TreeViewG.Items.Clear()
             If IsConnect = False Then Exit Sub
             CntZone.Content = myService.GetAllZones(IdSrv).Count & " Zone(s)"
             For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
@@ -160,7 +164,7 @@ Class Window1
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
                 newchild.Uid = x.ID
-                TreeViewZone.Items.Add(newchild)
+                TreeViewG.Items.Add(newchild)
             Next
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffZone: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -170,7 +174,7 @@ Class Window1
     'Afficher la liste des users
     Public Sub AffUser()
         Try
-            TreeViewUsers.Items.Clear()
+            TreeViewG.Items.Clear()
             If IsConnect = False Then Exit Sub
             CntUser.Content = myService.GetAllUsers(IdSrv).Count & " User(s)"
             For i As Integer = 0 To myService.GetAllUsers(IdSrv).Count - 1
@@ -205,7 +209,7 @@ Class Window1
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack 'myService.GetAllUsers.Item(i).UserName
                 newchild.Uid = myService.GetAllUsers(IdSrv).Item(i).ID
-                TreeViewUsers.Items.Add(newchild)
+                TreeViewG.Items.Add(newchild)
             Next
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffUser: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -215,7 +219,7 @@ Class Window1
     'Afficher la liste des drivers
     Public Sub AffDriver()
         Try
-            TreeViewDriver.Items.Clear()
+            TreeViewG.Items.Clear()
             If IsConnect = False Then Exit Sub
             CntDriver.Content = myService.GetAllDrivers(IdSrv).Count & " Driver(s)"
             For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1 'Obj.Drivers.Count - 1
@@ -252,7 +256,7 @@ Class Window1
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
                 newchild.Uid = myService.GetAllDrivers(IdSrv).Item(i).ID
-                TreeViewDriver.Items.Add(newchild)
+                TreeViewG.Items.Add(newchild)
 
             Next
         Catch ex As Exception
@@ -263,7 +267,7 @@ Class Window1
     'Afficher la liste des devices
     Public Sub AffDevice()
         Try
-            TreeViewDevice.Items.Clear()
+            TreeViewG.Items.Clear()
             If IsConnect = False Then Exit Sub
 
             CntDevice.Content = myService.GetAllDevices(IdSrv).Count & " Device(s)"
@@ -305,7 +309,7 @@ Class Window1
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
                 newchild.Uid = x.ID
-                TreeViewDevice.Items.Add(newchild)
+                TreeViewG.Items.Add(newchild)
             Next
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffDevice: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -315,7 +319,7 @@ Class Window1
     'Afficher la liste des scenes
     Public Sub AffScene()
         Try
-            TreeViewMacros.Items.Clear()
+            TreeViewG.Items.Clear()
             If IsConnect = False Then Exit Sub
             CntMacro.Content = myService.GetAllMacros(IdSrv).Count & " Macro(s)"
             For i As Integer = 0 To myService.GetAllMacros(IdSrv).Count - 1
@@ -346,7 +350,7 @@ Class Window1
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
                 newchild.Uid = myService.GetAllMacros(IdSrv).Item(i).ID
-                TreeViewMacros.Items.Add(newchild)
+                TreeViewG.Items.Add(newchild)
             Next
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffScene: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -356,7 +360,7 @@ Class Window1
     'Afficher la liste des triggers
     Public Sub AffTrigger()
         Try
-            TreeViewTriggers.Items.Clear()
+            TreeViewG.Items.Clear()
             If IsConnect = False Then Exit Sub
             CntTrigger.Content = myService.GetAllTriggers(IdSrv).Count & " Trigger(s)"
             For i As Integer = 0 To myService.GetAllTriggers(IdSrv).Count - 1
@@ -387,7 +391,7 @@ Class Window1
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
                 newchild.Uid = myService.GetAllTriggers(IdSrv).Item(i).ID
-                TreeViewTriggers.Items.Add(newchild)
+                TreeViewG.Items.Add(newchild)
             Next
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub Afftrigger: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -405,7 +409,7 @@ Class Window1
     'Afficher la liste des historisations
     Public Sub AffHisto()
         Try
-            ListHisto.Items.Clear()
+            TreeViewG.Items.Clear()
             Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
             x = myService.GetAllListHisto(IdSrv)
 
@@ -419,7 +423,7 @@ Class Window1
                     y.Tag = a.Nom
                     y.Uid = a.IdDevice
                     y.Foreground = New SolidColorBrush(Colors.White)
-                    ListHisto.Items.Add(y)
+                    TreeViewG.Items.Add(y)
                 Next
             End If
         Catch ex As Exception
@@ -429,54 +433,6 @@ Class Window1
 #End Region
 
 #Region "Drivers"
-
-    Private Sub TreeViewDriver_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewDriver.MouseDoubleClick
-        Try
-            If IsConnect = False Then
-                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                Exit Sub
-            End If
-
-            If TreeViewDriver.SelectedItem IsNot Nothing Then
-                For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
-                    If myService.GetAllDrivers(IdSrv).Item(i).ID = TreeViewDriver.SelectedItem.uid Then
-                        Dim y As TemplateDriver = myService.GetAllDrivers(IdSrv).Item(i)
-
-                        Dim x As New uDriver(TreeViewDriver.SelectedItem.uid)
-                        x.Uid = System.Guid.NewGuid.ToString()
-                        AddHandler x.CloseMe, AddressOf UnloadControl
-                        CanvasRight.Children.Clear()
-                        CanvasRight.Children.Add(x)
-                        Exit Sub
-                    End If
-                Next
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub TreeViewDriver_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    Private Sub TreeViewDriver_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewDriver.SelectedItemChanged
-        Try
-            If IsConnect = False Then
-                MessageBox.Show("Impossible d'afficher le driver car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                Exit Sub
-            End If
-
-            If e.NewValue Is Nothing Then Exit Sub
-
-            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
-                If myService.GetAllDrivers(IdSrv).Item(i).ID = e.NewValue.uid Then
-                    Dim x As TemplateDriver = myService.GetAllDrivers(IdSrv).Item(i)
-                    Exit Sub
-                End If
-            Next
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub TreeViewDriver_SelectedItemChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
     Private Sub BtnStop_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnStop.Click
         Try
             If IsConnect = False Then
@@ -484,8 +440,8 @@ Class Window1
                 Exit Sub
             End If
 
-            If TreeViewDriver.SelectedItem IsNot Nothing Then
-                myService.StopDriver(IdSrv, TreeViewDriver.SelectedItem.uid)
+            If TreeViewG.SelectedItem IsNot Nothing Then
+                myService.StopDriver(IdSrv, TreeViewG.SelectedItem.uid)
                 AffDriver()
             Else
                 MessageBox.Show("Veuillez sélectionner un Driver!")
@@ -502,9 +458,9 @@ Class Window1
                 Exit Sub
             End If
 
-            If TreeViewDriver.SelectedItem IsNot Nothing Then
-                If myService.ReturnDriverByID(IdSrv, TreeViewDriver.SelectedItem.uid).Enable = True Then
-                    myService.StartDriver(IdSrv, TreeViewDriver.SelectedItem.uid)
+            If TreeViewG.SelectedItem IsNot Nothing Then
+                If myService.ReturnDriverByID(IdSrv, TreeViewG.SelectedItem.uid).Enable = True Then
+                    myService.StartDriver(IdSrv, TreeViewG.SelectedItem.uid)
                     AffDriver()
                 Else
                     MessageBox.Show("Le driver ne peut être démarré car sa propriété Enable est à False!", "Avertissement", MessageBoxButton.OK, MessageBoxImage.Exclamation)
@@ -519,35 +475,6 @@ Class Window1
 #End Region
 
 #Region "Devices"
-    'Modifier un device
-    Private Sub TreeViewDevice_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewDevice.MouseDoubleClick
-        Try
-            If IsConnect = False Then
-                MessageBox.Show("Impossible d'afficher le device car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                Exit Sub
-            End If
-
-            If TreeViewDevice.SelectedItem IsNot Nothing Then
-                If TreeViewDevice.SelectedItem.uid Is Nothing Then Exit Sub
-
-                For i As Integer = 0 To myService.GetAllDevices(IdSrv).Count - 1
-                    If myService.GetAllDevices(IdSrv).Item(i).ID = TreeViewDevice.SelectedItem.uid Then
-                        Dim y As TemplateDevice = myService.GetAllDevices(IdSrv).Item(i)
-
-                        Dim x As New uDevice(uDevice.EAction.Modifier, TreeViewDevice.SelectedItem.uid)
-                        x.Uid = System.Guid.NewGuid.ToString()
-                        AddHandler x.CloseMe, AddressOf UnloadControl
-                        CanvasRight.Children.Clear()
-                        CanvasRight.Children.Add(x)
-                        Exit Sub
-                    End If
-                Next
-            End If
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub TreeViewDevice_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
     'Bouton nouveau Device
     Private Sub BtnNewDevice_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewDevice.Click
         Try
@@ -574,8 +501,8 @@ Class Window1
                 Exit Sub
             End If
 
-            If TreeViewDevice.SelectedItem IsNot Nothing Then
-                Window1.myService.DeleteDevice(IdSrv, TreeViewDevice.SelectedItem.uid)
+            If TreeViewG.SelectedItem IsNot Nothing Then
+                Window1.myService.DeleteDevice(IdSrv, TreeViewG.SelectedItem.uid)
                 AffDevice()
             Else
                 MessageBox.Show("Veuillez sélectionner un Device à supprimer!")
@@ -606,34 +533,6 @@ Class Window1
         End Try
     End Sub
 
-    'Modifier une zone
-    Private Sub TreeViewZone_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewZone.MouseDoubleClick
-        Try
-            If IsConnect = False Then
-                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                Exit Sub
-            End If
-
-            If TreeViewZone.SelectedItem IsNot Nothing Then
-                If TreeViewZone.SelectedItem.uid Is Nothing Then Exit Sub
-
-                For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
-                    If myService.GetAllZones(IdSrv).Item(i).ID = TreeViewZone.SelectedItem.uid Then
-
-                        Dim x As New uZone(uDevice.EAction.Modifier, TreeViewZone.SelectedItem.uid)
-                        x.Uid = System.Guid.NewGuid.ToString()
-                        AddHandler x.CloseMe, AddressOf UnloadControl
-                        CanvasRight.Children.Clear()
-                        CanvasRight.Children.Add(x)
-                        Exit Sub
-                    End If
-                Next
-            End If
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub TreeViewZone_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
     'bouton supprimer une zone
     Private Sub BtnDelZone_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelZone.Click
         Try
@@ -642,8 +541,8 @@ Class Window1
                 Exit Sub
             End If
 
-            If TreeViewZone.SelectedItem IsNot Nothing Then
-                Window1.myService.DeleteZone(IdSrv, TreeViewZone.SelectedItem.uid)
+            If TreeViewG.SelectedItem IsNot Nothing Then
+                Window1.myService.DeleteZone(IdSrv, TreeViewG.SelectedItem.uid)
                 AffZone()
             Else
                 MessageBox.Show("Veuillez sélectionner une Zone à supprimer!")
@@ -681,7 +580,7 @@ Class Window1
                 Exit Sub
             End If
 
-            If TreeViewUsers.SelectedItem IsNot Nothing And TreeViewUsers.SelectedItem.uid IsNot Nothing Then
+            If TreeViewG.SelectedItem IsNot Nothing And TreeViewG.SelectedItem.uid IsNot Nothing Then
                 Dim cntAdmin As Integer = 0
                 For i As Integer = 0 To Window1.myService.GetAllUsers(IdSrv).Count - 1
                     If Window1.myService.GetAllUsers(IdSrv).Item(i).Profil = Users.TypeProfil.admin Then
@@ -694,7 +593,7 @@ Class Window1
                 End If
                 'If MessageBox.Show("Etes vous sur de supprimer ce user : " & TreeViewUsers.SelectedItem & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
                 If MessageBox.Show("Etes vous sur de supprimer ce user: ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
-                    Window1.myService.DeleteUser(IdSrv, TreeViewUsers.SelectedItem.uid)
+                    Window1.myService.DeleteUser(IdSrv, TreeViewG.SelectedItem.uid)
                     AffUser()
                 End If
             Else
@@ -705,31 +604,6 @@ Class Window1
         End Try
     End Sub
 
-    'Sélection d'un user
-    Private Sub TreeViewUsers_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewUsers.MouseDoubleClick
-        Try
-            If IsConnect = False Then
-                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                Exit Sub
-            End If
-
-            If TreeViewUsers.SelectedItem IsNot Nothing Then
-                For i As Integer = 0 To myService.GetAllUsers(IdSrv).Count - 1
-                    If myService.GetAllUsers(IdSrv).Item(i).ID = TreeViewUsers.SelectedItem.uid Then
-
-                        Dim x As New uUser(uDevice.EAction.Modifier, TreeViewUsers.SelectedItem.uid)
-                        x.Uid = System.Guid.NewGuid.ToString()
-                        AddHandler x.CloseMe, AddressOf UnloadControl
-                        CanvasRight.Children.Clear()
-                        CanvasRight.Children.Add(x)
-                        Exit Sub
-                    End If
-                Next
-            End If
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub TreeViewUsers_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
 #End Region
 
 #Region "Trigger"
@@ -767,42 +641,6 @@ Class Window1
         End Try
     End Sub
 
-    'Modifier un trigger
-    Private Sub TreeViewTriggers_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewTriggers.MouseDoubleClick
-        Try
-            If IsConnect = False Then
-                MessageBox.Show("Impossible d'afficher le trigger car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                Exit Sub
-            End If
-
-            If TreeViewTriggers.SelectedItem IsNot Nothing Then
-                If TreeViewTriggers.SelectedItem.uid Is Nothing Then Exit Sub
-
-                For i As Integer = 0 To myService.GetAllTriggers(IdSrv).Count - 1
-                    If myService.GetAllTriggers(IdSrv).Item(i).ID = TreeViewTriggers.SelectedItem.uid Then
-                        Dim y As Trigger = myService.GetAllTriggers(IdSrv).Item(i)
-
-                        If myService.GetAllTriggers(IdSrv).Item(i).Type = Trigger.TypeTrigger.TIMER Then
-                            Dim x As New uTriggerTimer(uTriggerTimer.EAction.Modifier, TreeViewTriggers.SelectedItem.uid)
-                            x.Uid = System.Guid.NewGuid.ToString()
-                            AddHandler x.CloseMe, AddressOf UnloadControl
-                            CanvasRight.Children.Clear()
-                            CanvasRight.Children.Add(x)
-                        Else
-                            Dim x As New uTriggerDevice(uTriggerDevice.EAction.Modifier, TreeViewTriggers.SelectedItem.uid)
-                            x.Uid = System.Guid.NewGuid.ToString()
-                            AddHandler x.CloseMe, AddressOf UnloadControl
-                            CanvasRight.Children.Clear()
-                            CanvasRight.Children.Add(x)
-                        End If
-                        Exit Sub
-                    End If
-                Next
-            End If
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub TreeViewDevice_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
 
     Private Sub BtnDelTrigger_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelTrigger.Click
         Try
@@ -811,10 +649,10 @@ Class Window1
                 Exit Sub
             End If
 
-            If TreeViewTriggers.SelectedItem IsNot Nothing Then
-                If TreeViewTriggers.SelectedItem.uid IsNot Nothing Then
-                    If MessageBox.Show("Etes vous sur de supprimer ce trigger: " & myService.ReturnTriggerById(IdSrv, TreeViewTriggers.SelectedItem.uid).Nom & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
-                        Window1.myService.DeleteTrigger(IdSrv, TreeViewTriggers.SelectedItem.uid)
+            If TreeViewG.SelectedItem IsNot Nothing Then
+                If TreeViewG.SelectedItem.uid IsNot Nothing Then
+                    If MessageBox.Show("Etes vous sur de supprimer ce trigger: " & myService.ReturnTriggerById(IdSrv, TreeViewG.SelectedItem.uid).Nom & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                        Window1.myService.DeleteTrigger(IdSrv, TreeViewG.SelectedItem.uid)
                         AffTrigger()
                     Else
                         MessageBox.Show("Veuillez sélectionner un trigger à supprimer!")
@@ -848,24 +686,6 @@ Class Window1
         End Try
     End Sub
 
-    'Modifier macro
-    Private Sub TreeViewMacros_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewMacros.MouseDoubleClick
-        Try
-            If IsConnect = False Then
-                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                Exit Sub
-            End If
-            If TreeViewMacros.SelectedItem IsNot Nothing Then
-                Dim x As New uMacro(uMacro.EAction.Modifier, TreeViewMacros.SelectedItem.uid)
-                x.Uid = System.Guid.NewGuid.ToString()
-                AddHandler x.CloseMe, AddressOf UnloadControl
-                CanvasRight.Children.Clear()
-                CanvasRight.Children.Add(x)
-            End If
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub TreeViewMacros_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
 
     'supprimer macro
     Private Sub BtnDelMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelMacro.Click
@@ -875,10 +695,10 @@ Class Window1
                 Exit Sub
             End If
 
-            If TreeViewMacros.SelectedItem IsNot Nothing Then
-                If TreeViewMacros.SelectedItem.uid IsNot Nothing Then
-                    If MessageBox.Show("Etes vous sur de supprimer cette macro: " & myService.ReturnMacroById(IdSrv, TreeViewMacros.SelectedItem.uid).Nom & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
-                        Window1.myService.DeleteMacro(IdSrv, TreeViewMacros.SelectedItem.uid)
+            If TreeViewG.SelectedItem IsNot Nothing Then
+                If TreeViewG.SelectedItem.uid IsNot Nothing Then
+                    If MessageBox.Show("Etes vous sur de supprimer cette macro: " & myService.ReturnMacroById(IdSrv, TreeViewG.SelectedItem.uid).Nom & " ?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                        Window1.myService.DeleteMacro(IdSrv, TreeViewG.SelectedItem.uid)
                         AffScene()
                     End If
                 Else
@@ -910,27 +730,23 @@ Class Window1
     'Décharger une fenêtre suivant son Id
     Public Sub UnloadControl(ByVal MyControl As Object)
         Try
-            For i As Integer = 0 To CanvasRight.Children.Count - 1
-                If CanvasRight.Children.Item(i).Uid = MyControl.uid Then
-                    CanvasRight.Children.RemoveAt(i)
-
-                    Select Case MyControl.Tag
-                        Case "DRIVER"
-                            AffDriver()
-                        Case "DEVICE"
-                            AffDevice()
-                        Case "ZONE"
-                            AffZone()
-                        Case "USER"
-                            AffUser()
-                        Case "TRIGGER"
-                            AffTrigger()
-                        Case "MACRO"
-                            AffScene()
-                    End Select
-                    Exit Sub
-                End If
-            Next
+            CanvasRight.Children.Clear()
+            Select Case _CurrentMnu
+                Case 0
+                    AffDriver()
+                Case 1
+                    AffDevice()
+                Case 2
+                    AffZone()
+                Case 3
+                    AffUser()
+                Case 4
+                    AffTrigger()
+                Case 5
+                    AffScene()
+                Case 6
+                    AffHisto()
+            End Select
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub UnloadControl: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -972,7 +788,7 @@ Class Window1
     End Sub
 
     ''' <summary>
-    ''' Menu à propose
+    ''' Menu à propos
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
@@ -1094,13 +910,6 @@ Class Window1
                 PageConnexion()
             Loop
 
-            AffDriver()
-            AffDevice()
-            AffZone()
-            AffUser()
-            AffTrigger()
-            AffScene()
-            AffHisto()
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub Window1_Loaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1126,6 +935,7 @@ Class Window1
                 Else
                     frm.Close()
                     FlagStart = True
+                    frm = Nothing
                 End If
             Else
                 End
@@ -1133,41 +943,6 @@ Class Window1
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub PageConnexion: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
-    End Sub
-
-    Private Sub MenuTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuTest.Click
-        'Dim x As New uHisto
-        'x.Uid = System.Guid.NewGuid.ToString()
-        'AddHandler x.CloseMe, AddressOf UnloadControl
-        'CanvasRight.Children.Clear()
-        'CanvasRight.Children.Add(x)
-        'Try
-        '    Image5.Source = ConvertArrayToImage(myService.GetByteFromImage("d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\Images\Graphes\test.png"))
-        'Catch ex As Exception
-        '    MessageBox.Show(ex.ToString)
-        'End Try
-    End Sub
-
-    Private Sub TreeViewDevice_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewDevice.SelectedItemChanged
-        If Mouse.LeftButton = MouseButtonState.Pressed Then
-            If TreeViewDevice.SelectedItem IsNot Nothing Then
-                Dim effects As DragDropEffects
-                Dim obj As New DataObject()
-                obj.SetData(GetType(String), TreeViewDevice.SelectedItem.uid)
-                effects = DragDrop.DoDragDrop(Me.TreeViewDevice, obj, DragDropEffects.Copy Or DragDropEffects.Move)
-            End If
-        End If
-    End Sub
-
-    Private Sub TreeViewZone_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewZone.SelectedItemChanged
-        If Mouse.LeftButton = MouseButtonState.Pressed Then
-            If TreeViewZone.SelectedItem IsNot Nothing Then
-                Dim effects As DragDropEffects
-                Dim obj As New DataObject()
-                obj.SetData(GetType(String), TreeViewZone.SelectedItem.uid)
-                effects = DragDrop.DoDragDrop(Me.TreeViewZone, obj, DragDropEffects.Copy Or DragDropEffects.Move)
-            End If
-        End If
     End Sub
 
     Private Sub MenuConfigAudio_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuConfigAudio.Click
@@ -1182,17 +957,6 @@ Class Window1
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub MenuConfigAudio: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
-    End Sub
-
-    Private Sub TreeViewMacros_SelectedItemChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Object)) Handles TreeViewMacros.SelectedItemChanged
-        If Mouse.LeftButton = MouseButtonState.Pressed Then
-            If TreeViewMacros.SelectedItem IsNot Nothing Then
-                Dim effects As DragDropEffects
-                Dim obj As New DataObject()
-                obj.SetData(GetType(String), TreeViewMacros.SelectedItem.uid)
-                effects = DragDrop.DoDragDrop(Me.TreeViewMacros, obj, DragDropEffects.Copy Or DragDropEffects.Move)
-            End If
-        End If
     End Sub
 
     Private Sub BtnGenereGraph_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereGraph.Click
@@ -1214,8 +978,8 @@ Class Window1
         ListColor.Add(System.Drawing.Color.DarkOrange)
         ListColor.Add(System.Drawing.Color.DarkViolet)
 
-        For i As Integer = 0 To ListHisto.Items.Count - 1
-            Dim chk As CheckBox = ListHisto.Items(i)
+        For i As Integer = 0 To TreeViewG.Items.Count - 1
+            Dim chk As CheckBox = TreeViewG.Items(i)
 
             If chk.IsChecked = True Then
                 Dim _listhisto As New List(Of Historisation)
@@ -1267,4 +1031,193 @@ Class Window1
         Next
     End Sub
 
+#Region "BtnMnu"
+
+    Private Sub MnuDriver_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuDriver.Click
+        _CurrentMnu = 0
+        ErazeMnu()
+        StkMnu0.Height = Double.NaN
+        AffDriver()
+    End Sub
+
+    Private Sub MnuDevice_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuDevice.Click
+        _CurrentMnu = 1
+        ErazeMnu()
+        StkMnu1.Height = Double.NaN
+        AffDevice()
+    End Sub
+
+    Private Sub MnuZone_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuZone.Click
+        _CurrentMnu = 2
+        ErazeMnu()
+        StkMnu2.Height = Double.NaN
+        AffZone()
+    End Sub
+
+    Private Sub MnuUser_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuUser.Click
+        _CurrentMnu = 3
+        ErazeMnu()
+        StkMnu3.Height = Double.NaN
+        AffUser()
+    End Sub
+
+    Private Sub MnuTrigger_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuTrigger.Click
+        _CurrentMnu = 4
+        ErazeMnu()
+        StkMnu4.Height = Double.NaN
+        AffTrigger()
+    End Sub
+
+    Private Sub MnuMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuMacro.Click
+        _CurrentMnu = 5
+        ErazeMnu()
+        StkMnu5.Height = Double.NaN
+        AffScene()
+    End Sub
+
+    Private Sub MnuHisto_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuHisto.Click
+        _CurrentMnu = 6
+        ErazeMnu()
+        StkMnu6.Height = Double.NaN
+        AffHisto()
+    End Sub
+
+    Private Sub TreeViewG_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewG.MouseDoubleClick
+        Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
+            Select Case _CurrentMnu
+                Case 0 'driver
+                    If TreeViewG.SelectedItem IsNot Nothing Then
+                        For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
+                            If myService.GetAllDrivers(IdSrv).Item(i).ID = TreeViewG.SelectedItem.uid Then
+                                Dim y As TemplateDriver = myService.GetAllDrivers(IdSrv).Item(i)
+
+                                Dim x As New uDriver(TreeViewG.SelectedItem.uid)
+                                x.Uid = System.Guid.NewGuid.ToString()
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                CanvasRight.Children.Clear()
+                                CanvasRight.Children.Add(x)
+                                Exit Sub
+                            End If
+                        Next
+                    End If
+                Case 1 'device
+                    If TreeViewG.SelectedItem IsNot Nothing Then
+                        If TreeViewG.SelectedItem.uid Is Nothing Then Exit Sub
+
+                        Dim _dev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, TreeViewG.SelectedItem.uid)
+                        If _dev IsNot Nothing Then
+                            Dim x As New uDevice(uDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
+                            x.Uid = System.Guid.NewGuid.ToString()
+                            AddHandler x.CloseMe, AddressOf UnloadControl
+                            CanvasRight.Children.Clear()
+                            CanvasRight.Children.Add(x)
+                        End If
+                        _dev = Nothing
+                    End If
+                Case 2 'zone
+                    If TreeViewG.SelectedItem IsNot Nothing Then
+                        If TreeViewG.SelectedItem.uid Is Nothing Then Exit Sub
+
+                        Dim _zone As Zone = myService.ReturnZoneByID(IdSrv, TreeViewG.SelectedItem.uid)
+
+                        If _zone IsNot Nothing Then
+                            Dim x As New uZone(uDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
+                            x.Uid = System.Guid.NewGuid.ToString()
+                            AddHandler x.CloseMe, AddressOf UnloadControl
+                            CanvasRight.Children.Clear()
+                            CanvasRight.Children.Add(x)
+                            _zone = Nothing
+                        End If
+
+                    End If
+                Case 3 'user
+                    If TreeViewG.SelectedItem IsNot Nothing Then
+
+                        Dim _user As Users.User = myService.ReturnUserById(IdSrv, TreeViewG.SelectedItem.uid)
+
+                        If _user IsNot Nothing Then
+                            Dim x As New uUser(uDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
+                            x.Uid = System.Guid.NewGuid.ToString()
+                            AddHandler x.CloseMe, AddressOf UnloadControl
+                            CanvasRight.Children.Clear()
+                            CanvasRight.Children.Add(x)
+                            _user = Nothing
+                        End If
+                    End If
+                Case 4 'trigger
+                    If TreeViewG.SelectedItem IsNot Nothing Then
+                        If TreeViewG.SelectedItem.uid Is Nothing Then Exit Sub
+
+                        Dim _Trig As Trigger = myService.ReturnTriggerById(IdSrv, TreeViewG.SelectedItem.uid)
+
+                        If _Trig IsNot Nothing Then
+                            If _Trig.Type = Trigger.TypeTrigger.TIMER Then
+                                Dim x As New uTriggerTimer(uTriggerTimer.EAction.Modifier, TreeViewG.SelectedItem.uid)
+                                x.Uid = System.Guid.NewGuid.ToString()
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                CanvasRight.Children.Clear()
+                                CanvasRight.Children.Add(x)
+                            Else
+                                Dim x As New uTriggerDevice(uTriggerDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
+                                x.Uid = System.Guid.NewGuid.ToString()
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                CanvasRight.Children.Clear()
+                                CanvasRight.Children.Add(x)
+                            End If
+                            _Trig = Nothing
+                        End If
+
+                    End If
+                Case 5 'macros
+                    If TreeViewG.SelectedItem IsNot Nothing Then
+                        Dim x As New uMacro(uMacro.EAction.Modifier, TreeViewG.SelectedItem.uid)
+                        x.Uid = System.Guid.NewGuid.ToString()
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        CanvasRight.Children.Clear()
+                        CanvasRight.Children.Add(x)
+                    End If
+                Case 6 'histo
+
+            End Select
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub TreeViewG_SelectedItemChanged(ByVal sender As System.Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of System.Object)) Handles TreeViewG.SelectedItemChanged
+        Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Exit Sub
+            End If
+
+            If Mouse.LeftButton = MouseButtonState.Pressed Then
+                If TreeViewG.SelectedItem IsNot Nothing Then
+                    Dim effects As DragDropEffects
+                    Dim obj As New DataObject()
+                    obj.SetData(GetType(String), TreeViewG.SelectedItem.uid)
+                    effects = DragDrop.DoDragDrop(Me.TreeViewG, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+                End If
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub TreeViewG_SelectedItemChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+#End Region
+
+    Private Sub ErazeMnu()
+        StkMnu0.Height = 0
+        StkMnu1.Height = 0
+        StkMnu2.Height = 0
+        StkMnu3.Height = 0
+        StkMnu4.Height = 0
+        StkMnu5.Height = 0
+        StkMnu6.Height = 0
+    End Sub
 End Class

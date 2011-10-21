@@ -20,7 +20,17 @@ Partial Public Class uZone
                 MessageBox.Show("Le nom de la zone est obligatoire!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
-            Window1.myService.SaveZone(IdSrv, _ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag, ImgZone.Tag)
+
+            If _ZoneId = "" Then
+                For i As Integer = 0 To Window1.myService.GetAllZones(IdSrv).Count - 1
+                    If Window1.myService.GetAllZones(IdSrv).Item(i).Name = TxtName.Text Then
+                        MessageBox.Show("Le nom de cette zone est déjà utilisée, veuillez en choisir un autre!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        Exit Sub
+                    End If
+                Next
+            End If
+
+            Window1.myService.SaveZone(IdSrv, _ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag.ToString, ImgZone.Tag.ToString)
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'enregistrement de la zone, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -36,8 +46,8 @@ Partial Public Class uZone
         ' Cet appel est requis par le Concepteur Windows Form.
         InitializeComponent()
 
-        ImgIcon.Tag = " "
-        ImgZone.Tag = " "
+        ImgIcon.Tag = ""
+        ImgZone.Tag = ""
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         If Action = EAction.Nouveau Then 'Nouvelle Zone
@@ -58,7 +68,7 @@ Partial Public Class uZone
                     ImgZone.Tag = x.Image
                 End If
 
-                If File.Exists(x.Icon) = True And x.Icon <> "" And x.Icon <> " " Then
+                If x.Icon <> "" And x.Icon <> "" And x.Icon <> " " Then
                     ImgIcon.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Icon))
                     ImgIcon.Tag = x.Icon
                 End If

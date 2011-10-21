@@ -6,224 +6,153 @@ Imports System.Net
 
 Partial Public Class uMeteo
 
-    Dim _Ville As String
-    Dim _Code As String
+    Dim _Id As String
 
-    Public Property Ville() As String
+    Public Property ID As String
         Get
-            Return _Ville
+            Return _Id
         End Get
         Set(ByVal value As String)
-            _Ville = value
-            Lbl.Content = value
+            _Id = value
         End Set
     End Property
 
-    Public Property Code() As String
-        Get
-            Return _Code
-        End Get
-        Set(ByVal value As String)
-            _Code = value
-        End Set
-    End Property
 
     Private Sub GetMeteo2()
-        Try
-            'Si internet n'est pas disponible on ne mets pas à jour les informations
-            If My.Computer.Network.IsAvailable = False Then
-                LblTemps.Content = "MAJ impossible"
-                Exit Sub
+
+        If IsConnect = True Then
+            If _Id <> "" Then
+                Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _Id)
+                Lbl.Content = _dev.Name
+                LblTemps.Content = _dev.ConditionActuel
+                LblTemp.Content = _dev.TemperatureActuel & "°"
+                LblHum.Content = _dev.HumiditeActuel
+                LblVent.Content = _dev.VentActuel
+                Day0.Content = _dev.JourToday
+                Day1.Content = _dev.JourJ1
+                Day2.Content = _dev.JourJ2
+                Day3.Content = _dev.JourJ3
+                Lbl0Min.Content = "Min: " & _dev.MinToday & "°"
+                MinD0.Content = _dev.MinToday & "°"
+                MinD1.Content = _dev.MinJ1 & "°"
+                MinD2.Content = _dev.MinJ2 & "°"
+                MinD3.Content = _dev.MinJ3 & "°"
+                MaxD0.Content = _dev.MaxToday & "°"
+                Lbl0Max.Content = "Max: " & _dev.MaxToday & "°"
+                MaxD1.Content = _dev.MaxJ1 & "°"
+                MaxD2.Content = _dev.MaxJ2 & "°"
+                MaxD3.Content = _dev.MaxJ3 & "°"
+
+                Dim bmpImage As New BitmapImage()
+                bmpImage.BeginInit()
+                If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconActuel & ".png") = True Then
+                    bmpImage.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconActuel & ".png", UriKind.Absolute)
+                Else
+                    bmpImage.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
+                End If
+                bmpImage.EndInit()
+                Ico.Source = bmpImage
+
+                Dim bmpImage2 As New BitmapImage()
+                bmpImage2.BeginInit()
+                If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconToday & ".png") = True Then
+                    bmpImage2.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconToday & ".png", UriKind.Absolute)
+                Else
+                    bmpImage2.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
+                End If
+                bmpImage2.EndInit()
+                ImgD0.Source = bmpImage2
+
+                Dim bmpImage3 As New BitmapImage()
+                bmpImage3.BeginInit()
+                If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ1 & ".png") = True Then
+                    bmpImage3.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ1 & ".png", UriKind.Absolute)
+                Else
+                    bmpImage3.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
+                End If
+                bmpImage3.EndInit()
+                ImgD1.Source = bmpImage3
+
+                Dim bmpImage4 As New BitmapImage()
+                bmpImage4.BeginInit()
+                If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ2 & ".png") = True Then
+                    bmpImage4.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ2 & ".png", UriKind.Absolute)
+                Else
+                    bmpImage4.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
+                End If
+                bmpImage4.EndInit()
+                ImgD2.Source = bmpImage4
+
+                Dim bmpImage5 As New BitmapImage()
+                bmpImage5.BeginInit()
+                If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ3 & ".png") = True Then
+                    bmpImage5.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ3 & ".png", UriKind.Absolute)
+                Else
+                    bmpImage5.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
+                End If
+                bmpImage5.EndInit()
+                ImgD3.Source = bmpImage5
             End If
+        End If
 
-            'Dim GoogleRequest As HttpWebRequest
-            'Dim GoogleResponse As HttpWebResponse = Nothing
-            Dim doc As New XmlDocument
-            Dim nodes As XmlNodeList
 
-            ' Create a new XmlDocument   
-            doc = New XmlDocument()
+        '                    Case "icon"
 
-            Dim url As New Uri("http://www.google.com/ig/api?weather=" & _Code & "&hl=fr")
-            Dim Request As HttpWebRequest = CType(HttpWebRequest.Create(url), System.Net.HttpWebRequest)
-            Request.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7"
-            Dim response As Net.HttpWebResponse = CType(Request.GetResponse(), Net.HttpWebResponse)
 
-            doc.Load(response.GetResponseStream)
-            nodes = doc.SelectNodes("/xml_api_reply/weather/current_conditions")
-            For Each node As XmlNode In nodes
 
-                If node.HasChildNodes = True Then
-                    For j As Integer = 0 To node.ChildNodes.Count - 1
-                        Dim bmpImage As New BitmapImage()
-                        bmpImage.BeginInit()
-                        Dim a As String = node.ChildNodes.Item(j).Name.ToString
-                        If node.ChildNodes.Item(j).Attributes.Count > 0 Then
-                            Dim b As String = node.ChildNodes.Item(j).Attributes(0).Value
-                            Select Case a
-                                Case "condition"
-                                    LblTemps.Content = b
-                                Case "temp_c"
-                                    LblTemp.Content = b & "°"
-                                Case "humidity"
-                                    LblHum.Content = b
-                                Case "icon"
 
-                                    If File.Exists("C:\ehome\images\meteo\google\" & ExtractFile(b) & ".png") = True Then
-                                        bmpImage.UriSource = New Uri("C:\ehome\images\meteo\google\" & ExtractFile(b) & ".png", UriKind.Absolute)
-                                    Else
-                                        bmpImage.UriSource = New Uri("C:\ehome\images\meteo\na.png", UriKind.Absolute)
-                                    End If
-                                    bmpImage.EndInit()
-                                    Ico.Source = bmpImage
-                                Case "wind_condition"
-                                    LblVent.Content = b
-                            End Select
-                        End If
-                    Next
-                End If
-            Next
 
-            nodes = doc.SelectNodes("/xml_api_reply/weather/forecast_conditions")
-            Dim idx As Byte = 0
-            For Each node As XmlNode In nodes
-                If node.HasChildNodes = True Then
-                    For j As Integer = 0 To node.ChildNodes.Count - 1
-                        Dim a As String = node.ChildNodes.Item(j).Name
-                        If node.ChildNodes.Item(j).Attributes.Count > 0 Then
-                            Dim b As String = node.ChildNodes.Item(j).Attributes(0).Value
-                            Select Case a
-                                Case "day_of_week"
-                                    Select Case idx
-                                        Case 0
-                                            Day0.Content = b
-                                        Case 1
-                                            Day1.Content = b
-                                        Case 2
-                                            Day2.Content = b
-                                        Case 3
-                                            Day3.Content = b
-                                    End Select
-                                Case "low"
-                                    Select Case idx
-                                        Case 0
-                                            Lbl0Min.Content = "Min: " & b & "°"
-                                            MinD0.Content = b & "°"
-                                        Case 1
-                                            MinD1.Content = b & "°"
-                                        Case 2
-                                            MinD2.Content = b & "°"
-                                        Case 3
-                                            MinD3.Content = b & "°"
-                                    End Select
-                                Case "high"
-                                    Select Case idx
-                                        Case 0
-                                            MaxD0.Content = b & "°"
-                                            Lbl0Max.Content = "Max: " & b & "°"
-                                        Case 1
-                                            MaxD1.Content = b & "°"
-                                        Case 2
-                                            MaxD2.Content = b & "°"
-                                        Case 3
-                                            MaxD3.Content = b & "°"
-                                    End Select
-                                Case "icon"
-                                    Select Case idx
-                                        Case 0
-                                            Dim bmpImage As New BitmapImage()
-                                            bmpImage.BeginInit()
-                                            Dim c As String = ExtractFile(b)
-                                            If File.Exists("C:\ehome\images\meteo\google\" & c & ".png") = True Then
-                                                bmpImage.UriSource = New Uri("C:\ehome\images\meteo\google\" & c & ".png", UriKind.Absolute)
-                                            Else
-                                                bmpImage.UriSource = New Uri("C:\ehome\images\meteo\na.png", UriKind.Absolute)
-                                            End If
-                                            bmpImage.EndInit()
-                                            ImgD0.Source = bmpImage
-                                        Case 1
-                                            Dim bmpImage As New BitmapImage()
-                                            bmpImage.BeginInit()
-                                            Dim c As String = ExtractFile(b)
-                                            If File.Exists("C:\ehome\images\meteo\google\" & c & ".png") = True Then
-                                                bmpImage.UriSource = New Uri("C:\ehome\images\meteo\google\" & c & ".png", UriKind.Absolute)
-                                            Else
-                                                bmpImage.UriSource = New Uri("C:\ehome\images\meteo\na.png", UriKind.Absolute)
-                                            End If
-                                            bmpImage.EndInit()
-                                            ImgD1.Source = bmpImage
-                                        Case 2
-                                            Dim bmpImage As New BitmapImage()
-                                            bmpImage.BeginInit()
-                                            Dim c As String = ExtractFile(b)
-                                            If File.Exists("C:\ehome\images\meteo\google\" & c & ".png") = True Then
-                                                bmpImage.UriSource = New Uri("C:\ehome\images\meteo\google\" & c & ".png", UriKind.Absolute)
-                                            Else
-                                                bmpImage.UriSource = New Uri("C:\ehome\images\meteo\na.png", UriKind.Absolute)
-                                            End If
-                                            bmpImage.EndInit()
-                                            ImgD2.Source = bmpImage
-                                        Case 3
-                                            Dim bmpImage As New BitmapImage()
-                                            bmpImage.BeginInit()
-                                            Dim c As String = ExtractFile(b)
-                                            If File.Exists("C:\ehome\images\meteo\google\" & c & ".png") = True Then
-                                                bmpImage.UriSource = New Uri("C:\ehome\images\meteo\google\" & c & ".png", UriKind.Absolute)
-                                            Else
-                                                bmpImage.UriSource = New Uri("C:\ehome\images\meteo\na.png", UriKind.Absolute)
-                                            End If
-                                            bmpImage.EndInit()
-                                            ImgD3.Source = bmpImage
-                                    End Select
-                                Case "condition"
-                                    'Select Case idx
-                                    '    Case 0
-                                    '        objet.ConditionToday = b
-                                    '    Case 1
-                                    '        objet.ConditionJ1 = b
-                                    '    Case 2
-                                    '        objet.ConditionJ2 = b
-                                    '    Case 3
-                                    '        objet.ConditionJ3 = b
-                                    'End Select
-                            End Select
-                        End If
-                    Next
-                    idx += 1
-                End If
-            Next
+        '                        Case "icon"
+        'Select Case idx
+        '    Case 0
+        '        Dim bmpImage As New BitmapImage()
+        '        bmpImage.BeginInit()
+        '        Dim c As String = ExtractFile(b)
+        '        If File.Exists("C:\ehome\images\meteo\google\" & c & ".png") = True Then
+        '            bmpImage.UriSource = New Uri("C:\ehome\images\meteo\google\" & c & ".png", UriKind.Absolute)
+        '        Else
+        '            bmpImage.UriSource = New Uri("C:\ehome\images\meteo\na.png", UriKind.Absolute)
+        '        End If
+        '        bmpImage.EndInit()
+        '        ImgD0.Source = bmpImage
+        '    Case 1
+        '        Dim bmpImage As New BitmapImage()
+        '        bmpImage.BeginInit()
+        '        Dim c As String = ExtractFile(b)
+        '        If File.Exists("C:\ehome\images\meteo\google\" & c & ".png") = True Then
+        '            bmpImage.UriSource = New Uri("C:\ehome\images\meteo\google\" & c & ".png", UriKind.Absolute)
+        '        Else
+        '            bmpImage.UriSource = New Uri("C:\ehome\images\meteo\na.png", UriKind.Absolute)
+        '        End If
+        '        bmpImage.EndInit()
+        '        ImgD1.Source = bmpImage
+        '    Case 2
+        '        Dim bmpImage As New BitmapImage()
+        '        bmpImage.BeginInit()
+        '        Dim c As String = ExtractFile(b)
+        '        If File.Exists("C:\ehome\images\meteo\google\" & c & ".png") = True Then
+        '            bmpImage.UriSource = New Uri("C:\ehome\images\meteo\google\" & c & ".png", UriKind.Absolute)
+        '        Else
+        '            bmpImage.UriSource = New Uri("C:\ehome\images\meteo\na.png", UriKind.Absolute)
+        '        End If
+        '        bmpImage.EndInit()
+        '        ImgD2.Source = bmpImage
+        '    Case 3
+        '        Dim bmpImage As New BitmapImage()
+        '        bmpImage.BeginInit()
+        '        Dim c As String = ExtractFile(b)
+        '        If File.Exists("C:\ehome\images\meteo\google\" & c & ".png") = True Then
+        '            bmpImage.UriSource = New Uri("C:\ehome\images\meteo\google\" & c & ".png", UriKind.Absolute)
+        '        Else
+        '            bmpImage.UriSource = New Uri("C:\ehome\images\meteo\na.png", UriKind.Absolute)
+        '        End If
+        '        bmpImage.EndInit()
+        '        ImgD3.Source = bmpImage
+        'End Select
 
-            doc = Nothing
-            nodes = Nothing
 
-        Catch ex As Exception
-            MessageBox.Show("Erreur GetMeteo: " & ex.ToString, "erreur")
-        End Try
     End Sub
 
-    Private Function ExtractFile(ByVal File As String) As String
-        Try
-            Dim result As String = ""
-            Dim j As Integer = Len(File)
-            Dim tmp As Integer = 0
-
-            For i As Integer = 1 To Len(File)
-                If Mid(File, i, 1) = "/" Then
-                    tmp = i
-                End If
-            Next
-
-            If tmp > 0 Then
-                result = Mid(File, tmp + 1, j - tmp)
-            End If
-
-            result = result.Replace(".gif", "")
-            Return result
-        Catch ex As Exception
-            MessageBox.Show("Erreur ExtractFile: " & ex.ToString, "Erreur")
-            Return Nothing
-        End Try
-    End Function
 
     Private Function TraduireJour(ByVal Jour As String) As String
         TraduireJour = "?"
@@ -245,12 +174,11 @@ Partial Public Class uMeteo
         End Select
     End Function
 
-    Public Sub New(ByVal mVille As String, ByVal mCode As String)
+    Public Sub New(ByVal ID As String)
 
         ' Cet appel est requis par le Concepteur Windows Form.
         InitializeComponent()
-        _Ville = mVille
-        _Code = mCode
+        _Id = ID
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         Dim dt As DispatcherTimer = New DispatcherTimer()
@@ -1219,6 +1147,6 @@ Partial Public Class uMeteo
     End Function
 
     Private Sub uMeteo_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
-        If _Code <> "" Then GetMeteo2()
+        If _Id <> "" Then GetMeteo2()
     End Sub
 End Class

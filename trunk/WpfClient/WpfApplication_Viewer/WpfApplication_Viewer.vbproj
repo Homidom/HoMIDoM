@@ -132,6 +132,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="CtrlDevice\uOnOff.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CtrlDevice\uVariateur.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dictionary1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -222,10 +230,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="WDesigner.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Window1.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -241,6 +245,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="cElement.vb" />
+    <Compile Include="CtrlDevice\uOnOff.xaml.vb">
+      <DependentUpon>uOnOff.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CtrlDevice\uVariateur.xaml.vb">
+      <DependentUpon>uVariateur.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DesignerItemDecorator.vb" />
     <Compile Include="MoveThumb.vb" />
     <Compile Include="ResizeThumb.vb" />
@@ -260,9 +270,6 @@
     </Compile>
     <Compile Include="WConfig.xaml.vb">
       <DependentUpon>WConfig.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WDesigner.xaml.vb">
-      <DependentUpon>WDesigner.xaml</DependentUpon>
     </Compile>
     <Compile Include="Window1.xaml.vb">
       <DependentUpon>Window1.xaml</DependentUpon>
@@ -458,6 +465,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\script-128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\bullet-fleche-vers-le-haut-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\bullet-fleche-vers-le-bas-32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
