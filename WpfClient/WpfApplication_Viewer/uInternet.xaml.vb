@@ -49,4 +49,9 @@ Partial Public Class uInternet
     Private Sub uInternet_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles Me.SizeChanged
         x.Height = Me.Height - 30
     End Sub
+
+    Protected Overrides Sub Finalize()
+        x.Dispose()
+        MyBase.Finalize()
+    End Sub
 End Class

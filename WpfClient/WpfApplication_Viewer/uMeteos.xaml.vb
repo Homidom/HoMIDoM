@@ -33,10 +33,11 @@ Partial Public Class uMeteos
 
         'Creation  du menu
         Try
-            Dim myxml As clsXML = New clsXML("C:\ehome\config\wehome_config.xml")
-            Dim list As XmlNodeList = myxml.SelectNodes("/wehome/meteo/element")
-            For i As Integer = 0 To list.Count - 1
-                NewBtnMnu(list(i).Attributes.Item(0).Value, list(i).Attributes.Item(1).Value)
+            For i As Integer = 0 To myService.GetAllDevices(IdSrv).Count - 1
+                If myService.GetAllDevices(IdSrv).Item(i).Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO Then
+                    NewBtnMnu(myService.GetAllDevices(IdSrv).Item(i).ID)
+                End If
+
             Next
         Catch ex As Exception
             MsgBox("Error updating meteo: " & ex.Message)
@@ -45,9 +46,9 @@ Partial Public Class uMeteos
         ScrollViewer1.Content = imgStackPnl
     End Sub
 
-    Private Sub NewBtnMnu(ByVal Nom As String, ByVal Code As String)
+    Private Sub NewBtnMnu(ByVal id As String)
         'Creation  du menu
-        Dim ctrl As New uMeteo(Nom, Code)
+        Dim ctrl As New uMeteo(id)
         imgStackPnl.Children.Add(ctrl)
     End Sub
 

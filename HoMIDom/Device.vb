@@ -21,7 +21,7 @@ Namespace HoMIDom
             ''' modules pour diriger un appareil  ON/OFF
             ''' </summary>
             ''' <remarks></remarks>
-            APPAREIL = 1 '
+            APPAREIL = 1
             ''' <summary>
             ''' module de type audio
             ''' </summary>

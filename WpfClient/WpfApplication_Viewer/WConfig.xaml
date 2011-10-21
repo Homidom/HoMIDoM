@@ -1,7 +1,7 @@
 ﻿<Window x:Class="WConfig"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WConfig" MinHeight="300" MinWidth="300" Topmost="False">
+    Title="Configurer le client" MinHeight="300" MinWidth="300" Topmost="False">
    
     <Window.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">

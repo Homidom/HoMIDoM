@@ -28,8 +28,6 @@ Imports WpfApplication1.Designer.ResizeRotateAdorner
 Class Window1
 
 #Region "Data"
-    Private _MonRepertoire As String = System.Environment.CurrentDirectory 'représente le répertoire de l'application 'Application.StartupPath
-
     ' Used when manually scrolling.
     Private scrollTarget As Point
     Private scrollStartPoint As Point
@@ -202,6 +200,8 @@ Class Window1
         Try
             ' Cet appel est requis par le Concepteur Windows Form.
             InitializeComponent()
+            ' _MonRepertoire = System.Environment.CurrentDirectory 'représente le répertoire de l'application 
+
             Dim mystyles As New ResourceDictionary()
             mystyles.Source = New Uri("/HoMIDomWPFClient;component/Resources/DesignerItem.xaml",
                     UriKind.RelativeOrAbsolute)
@@ -507,7 +507,7 @@ Class Window1
             Return " Chargement de la configuration terminée"
 
         Catch ex As Exception
-            MsgBox("ERREUR LOADCONFIG " & ex.ToString, MsgBoxStyle.Exclamation, "Erreur serveur")
+            MsgBox("ERREUR LOADCONFIG " & ex.ToString, MsgBoxStyle.Exclamation, "Erreur Client WPF")
             Return " Erreur de chargement de la config: " & ex.Message
         End Try
     End Function
@@ -663,7 +663,7 @@ Class Window1
             writer.Close()
             Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde terminée")
         Catch ex As Exception
-            MsgBox("ERREUR SAVECONFIG " & ex.ToString, MsgBoxStyle.Exclamation, "Erreur serveur")
+            MsgBox("ERREUR SAVECONFIG " & ex.ToString, MsgBoxStyle.Exclamation, "Erreur Client WPF")
             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: " & ex.Message)
         End Try
 
@@ -1104,15 +1104,17 @@ Class Window1
         End Try
     End Sub
 
+    'Element demande afficher zone
+    Private Sub ElementShowZone(ByVal Zoneid As String)
+        ShowZone(Zoneid)
+    End Sub
+
     Protected Overrides Sub Finalize()
         MyBase.Finalize()
     End Sub
 
     Private Sub Window1_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
         Try
-            'If IsHSConnect = True Then hsapp.Disconnect()
-            'Canvas1.Children.Clear()
-            'End
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermeture de l'application")
         Catch ex As Exception
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Erreur Lors de la fermeture: " & ex.Message)
@@ -1135,39 +1137,20 @@ Class Window1
 
     'Bouton Quitter
     Private Sub BtnQuit_Click_1(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnQuit.Click
+        If Chk1.IsChecked = True Then Chk1.IsChecked = False
+
         SaveConfig(_MonRepertoire & "\config\homidomWPF.xml")
         Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
         End
     End Sub
 
-    Private Sub Canvas1_MouseRightButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Canvas1.MouseRightButtonDown
-        'If _Design = False Then
-        '    _Design = True
-        'Else
-        '    _Design = False
-        'End If
-
-        'If _Design = True Then
-        '    For Each child As Control In Canvas1.Children
-        '        Selector.SetIsSelected(child, True)
-        '    Next
-        'Else
-        '    Dim a As String = ""
-        '    For Each child As Control In Canvas1.Children
-        '        Selector.SetIsSelected(child, False)
-        '        a &= child.Name & " : Left=" & Canvas1.GetLeft(child) & " Top=" & Canvas1.GetTop(child) & " Width=" & child.Width & " Height=" & child.Height & " Angle=" & child.RenderTransform.GetValue(RotateTransform.AngleProperty) & vbCrLf
-        '    Next
-        '    MsgBox(a)
-        'End If
-    End Sub
-
-    Private Sub Canvas1_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles Canvas1.SizeChanged
-        For i As Integer = 0 To Canvas1.Children.Count - 1
-            Dim x As Object = Canvas1.Children.Item(i)
-            x.Width = Canvas1.ActualWidth
-            x.Height = e.NewSize.Height
-        Next
-    End Sub
+    'Private Sub Canvas1_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles Canvas1.SizeChanged
+    '    For i As Integer = 0 To Canvas1.Children.Count - 1
+    '        Dim x As Object = Canvas1.Children.Item(i)
+    '        x.Width = Canvas1.ActualWidth
+    '        x.Height = e.NewSize.Height
+    '    Next
+    'End Sub
 
     Private Sub Window1_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
 
@@ -1178,16 +1161,19 @@ Class Window1
             Dim _zone As Zone
             Dim _flagnew As Boolean
             Dim _flagTrouv As Boolean = False
+            Dim _Left As Double = 0
+            Dim _Top As Double = 20
+            Dim _idx As Integer = 0
 
             If IsConnect = True Then
                 _CurrentIdZone = IdZone
+                If Canvas1.Children.Count > 0 Then Canvas1.Children.Clear()
 
                 _zone = myService.ReturnZoneByID(IdSrv, IdZone)
                 ImgBackground.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Image))
 
-                If _ListElement.Count = 0 Then
+                If _ListElement.Count = 0 Then 'C'est la première fois que les élements sont affichés
                     _flagnew = True
-                    MsgBox("new")
                 End If
 
 
@@ -1215,6 +1201,7 @@ Class Window1
                                 y.Id = z.ElementID
                                 y.IsHitTestVisible = True 'True:bouge pas False:Bouge
                                 AddHandler y.PreviewMouseDown, AddressOf Dbleclk
+                                AddHandler y.ShowZone, AddressOf ElementShowZone
                                 x.Content = y
                                 Canvas1.Children.Add(x)
                                 Canvas1.SetLeft(x, _ListElement.Item(j).X)
@@ -1229,10 +1216,16 @@ Class Window1
                             'Ajouter un nouveau Control
                             Dim x As New ContentControl
                             x.Width = 140
-                            x.Height = 80
+                            x.Height = 60
                             x.Style = mybuttonstyle
                             x.Tag = True
                             x.Uid = z.ElementID
+
+                            If _idx = 5 Then
+                                _idx = 0
+                                _Top += 70
+                            End If
+                            _Left = (150 * _idx) + 40
 
                             'Ajoute l'élément dans la liste
                             Dim elmt As New cElement
@@ -1241,8 +1234,8 @@ Class Window1
                             elmt.Width = x.Width
                             elmt.Height = x.Height
                             elmt.Angle = 0
-                            elmt.X = (150 * i) + 30
-                            elmt.Y = 100
+                            elmt.X = _Left
+                            elmt.Y = _Top
                             _ListElement.Add(elmt)
 
                             Dim y As New uCtrlElement
@@ -1251,8 +1244,10 @@ Class Window1
                             AddHandler y.PreviewMouseDown, AddressOf Dbleclk
                             x.Content = y
                             Canvas1.Children.Add(x)
-                            Canvas1.SetLeft(x, (150 * i) + 30)
-                            Canvas1.SetTop(x, 100)
+                            Canvas1.SetLeft(x, _Left)
+                            Canvas1.SetTop(x, _Top)
+
+                            _idx += 1
                         End If
 
                     End If
@@ -1271,9 +1266,8 @@ Class Window1
 
     Private Sub RdB1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk1.Click
         Try
-
-
             If Chk1.IsChecked = True Then
+                Design = True
                 For Each child As ContentControl In Canvas1.Children
                     Selector.SetIsSelected(child, True)
 
@@ -1281,6 +1275,7 @@ Class Window1
                     lbl.IsHitTestVisible = False
                 Next
             Else
+                Design = False
                 Dim a As String = ""
                 For Each child As ContentControl In Canvas1.Children
                     Selector.SetIsSelected(child, False)
@@ -1288,8 +1283,8 @@ Class Window1
                     'a &= child.Name & " : Left=" & Canvas1.GetLeft(child) & " Top=" & Canvas1.GetTop(child) & " Width=" & child.Width & " Height=" & child.Height & " Angle=" & child.RenderTransform.GetValue(RotateTransform.AngleProperty) & vbCrLf
                     For j As Integer = 0 To _ListElement.Count - 1
                         If _ListElement.Item(j).ID = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
-                            _ListElement.Item(j).X = Canvas1.GetLeft(child)
-                            _ListElement.Item(j).Y = Canvas1.GetTop(child)
+                            _ListElement.Item(j).X = CType(Canvas1.GetLeft(child), Double)
+                            _ListElement.Item(j).Y = CType(Canvas1.GetTop(child), Double)
                             _ListElement.Item(j).Width = child.Width
                             _ListElement.Item(j).Height = child.Height
 
@@ -1322,17 +1317,4 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub Chk2_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk2.Click
-        If Chk2.IsChecked = True Then
-            For Each child As ContentControl In Canvas1.Children
-                Dim lbl As uCtrlElement = child.Content
-                lbl.IsHitTestVisible = False
-            Next
-        Else
-            For Each child As ContentControl In Canvas1.Children
-                Dim lbl As uCtrlElement = child.Content
-                lbl.IsHitTestVisible = True
-            Next
-        End If
-    End Sub
 End Class

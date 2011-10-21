@@ -227,131 +227,108 @@
             <Label Content="Serveur courant: ?" Foreground=" White" Name="LblSrv"/>
         </StackPanel>
 
-        <StackPanel HorizontalAlignment="Left" Margin="1" Name="StackPanel3" DockPanel.Dock="Left">
-            <TabControl Name="TabControl1" Width="187" Template="{StaticResource OutlookTab}" TabStripPlacement="Top" >
-                <TabItem Header="Drivers" Name="TabItem1" IsSelected="True" >
-                    <StackPanel >
-                        <StackPanel VerticalAlignment="Top">
-                            <TreeView Margin="5" Name="TreeViewDriver" Background="DimGray" Foreground="White" Height="300"  />
-                            <StackPanel Orientation="Horizontal" >
-                                <Button Height="22" Width="22" HorizontalAlignment="Left" Margin="5" Name="BtnStart" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" Foreground="White" ToolTip="Démarrer le driver">
-                                    <Image Source="/HoMIAdmiN;component/Images/lecture-48.png" />
-                                </Button>
-                                <Button Height="22" Margin="5" Name="BtnStop" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Foreground="White" HorizontalAlignment="Right" Width="22" ToolTip="Arrêter le driver">
-                                    <Image Source="/HoMIAdmiN;component/Images/stop-48.png" />
-                                </Button>
-                                <Rectangle Width="10" />
-                                <Label Margin="5" Name="CntDriver" Content="0 Driver(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
-                            </StackPanel>
-                        </StackPanel>
-                    </StackPanel >
-                </TabItem>
-                <TabItem Header="Devices">
-                    <StackPanel >
-                        <TreeView Margin="4" Name="TreeViewDevice" Background="DimGray" Height="300" />
-                        <StackPanel Orientation="Horizontal" >
-                            <Button Height="22" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5" Name="BtnNewDevice" VerticalAlignment="Bottom" Width="22" Foreground="White" ToolTip="Nouveau Device">
-                                <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
-                            </Button>
-                            <Button Foreground="White" Height="22" Template="{DynamicResource GlassButton}" Margin="5" Name="BtnDelDevice" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="22" ToolTip="Supprimer un Device">
-                                <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
-                            </Button>
-                            <Rectangle Width="10" />
-                            <Label Margin="5" Name="CntDevice" Content="0 Device(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
-                            <Image Height="22" Margin="5" Name="TplDevImg" Stretch="Fill" Width="22" Source="/HoMIAdmiN;component/Images/Defaut-128.png" Visibility="Hidden" />
-                        </StackPanel>
-                    </StackPanel>
-                </TabItem>
-                <TabItem Header="Zones">
-                      <StackPanel VerticalAlignment="Top">
-                            <TreeView Margin="5" Name="TreeViewZone" Background="DimGray" Height="300" />
-                            <StackPanel Orientation="Horizontal" >
-                                <Button Height="22" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5" Name="BtnNewZone" Width="22" ToolTip="Nouvelle zone">
-                                    <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
-                                </Button>
-                                <Button Height="22" Template="{DynamicResource GlassButton}" Margin="5" Name="BtnDelZone" Width="22" ToolTip="Supprimer une zone">
-                                    <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
-                                </Button>
-                                <Rectangle Width="10" />
-                                <Label Margin="5" Name="CntZone" Content="0 Zone(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
-                            </StackPanel>
-                        </StackPanel>
-                   
-                </TabItem>
-                <TabItem Header="Utilisateurs">
-                    <StackPanel VerticalAlignment="Top">
-                        <StackPanel >
-                            <TreeView Background="DimGray" Margin="5" Name="TreeViewUsers" Height="300" />
-                            <StackPanel Orientation="Horizontal" >
-                                <Button Height="22" Margin="5" Name="BtnNewUser" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Nouveau User">
-                                    <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
-                                </Button>
-                                <Button Height="22" Margin="5" Name="BtnDelUser" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Supprimer User">
-                                    <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
-                                </Button>
-                                <Rectangle Width="10" />
-                                <Label Margin="5" Name="CntUser" Content="0 User(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
+                    <DockPanel >
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuDriver" ToolTip="Gérer les drivers">
+                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/driver-128.png" />
+                    </Button>
+                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuDevice" ToolTip="Gérer les devices">
+                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/light.png" />
+                    </Button>
+                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuZone" ToolTip="Gérer les Zones">
+                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/home-128.png" />
+                    </Button>
+                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuUser" ToolTip="Gérer les users">
+                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/user.png" />
+                    </Button>
+                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuTrigger" ToolTip="Gérer les triggers">
+                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/drapeau-vert-32.png" />
+                    </Button>
+                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuMacro" ToolTip="Gérer les Macros">
+                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/script-128.png" />
+                    </Button>
+                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuHisto" ToolTip="Historique">
+                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/curve-32.png" />
+                    </Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Name="StkMnu0" DockPanel.Dock="Bottom">
+                    <Button Height="22" Width="22" HorizontalAlignment="Left" Margin="5" Name="BtnStart" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" Foreground="White" ToolTip="Démarrer le driver">
+                        <Image Source="/HoMIAdmiN;component/Images/lecture-48.png" />
+                    </Button>
+                    <Button Height="22" Margin="5" Name="BtnStop" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Foreground="White" HorizontalAlignment="Right" Width="22" ToolTip="Arrêter le driver">
+                        <Image Source="/HoMIAdmiN;component/Images/stop-48.png" />
+                    </Button>
+                    <Rectangle Width="10" />
+                    <Label Margin="5" Name="CntDriver" Content="0 Driver(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Name="StkMnu1" DockPanel.Dock="Bottom">
+                    <Button Height="22" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5" Name="BtnNewDevice" VerticalAlignment="Bottom" Width="22" Foreground="White" ToolTip="Nouveau Device">
+                        <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
+                    </Button>
+                    <Button Foreground="White" Height="22" Template="{DynamicResource GlassButton}" Margin="5" Name="BtnDelDevice" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="22" ToolTip="Supprimer un Device">
+                        <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
+                    </Button>
+                    <Rectangle Width="10" />
+                    <Label Margin="5" Name="CntDevice" Content="0 Device(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
+                    <Image Height="22" Margin="5" Name="TplDevImg" Stretch="Fill" Width="22" Source="/HoMIAdmiN;component/Images/Defaut-128.png" Visibility="Hidden" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Name="StkMnu2" DockPanel.Dock="Bottom">
+                    <Button Height="22" Template="{DynamicResource GlassButton}" HorizontalAlignment="Left" Margin="5" Name="BtnNewZone" Width="22" ToolTip="Nouvelle zone">
+                        <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
+                    </Button>
+                    <Button Height="22" Template="{DynamicResource GlassButton}" Margin="5" Name="BtnDelZone" Width="22" ToolTip="Supprimer une zone">
+                        <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
+                    </Button>
+                    <Rectangle Width="10" />
+                    <Label Margin="5" Name="CntZone" Content="0 Zone(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Name="StkMnu3" DockPanel.Dock="Bottom">
+                    <Button Height="22" Margin="5" Name="BtnNewUser" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Nouveau User">
+                        <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
+                    </Button>
+                    <Button Height="22" Margin="5" Name="BtnDelUser" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Supprimer User">
+                        <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
+                    </Button>
+                    <Rectangle Width="10" />
+                    <Label Margin="5" Name="CntUser" Content="0 User(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
 
-                            </StackPanel>
-                        </StackPanel>
-                    </StackPanel >
-                </TabItem>
-                <TabItem Header="Triggers" Name="TabItem2" >
-                    <StackPanel >
-                        <StackPanel VerticalAlignment="Top">
-                            <TreeView Background="DimGray" Margin="5" Name="TreeViewTriggers" Height="300" />
-                            <StackPanel Orientation="Horizontal" >
-                                <Button Height="22" Margin="5" Name="BtnNewTriggerDevice" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Ajouter un nouveau Trigger Device">
-                                    <Image Source="/HoMIAdmiN;component/Images/ajouter-la-brique-32.png" />
-                                </Button>
-                                <Button Height="22" Margin="5" Name="BtnNewTriggerTime" Template="{DynamicResource GlassButton}" Width="22" >
-                                    <Image Source="/HoMIAdmiN;component/Images/temps-ajouter-32.png" ToolTip="Ajouter un nouveau Trigger Timer" />
-                                </Button>
-                                <Button Foreground="White" Height="22" Margin="5" Name="BtnDelTrigger" Template="{DynamicResource GlassButton}" Width="22">
-                                    <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" ToolTip="Supprimer" />
-                                </Button>
-                                <Rectangle Width="10" />
-                                <Label Margin="5" Name="CntTrigger" Content="0 Trigger(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
-                            </StackPanel>
-                        </StackPanel>
-                    </StackPanel >
-                </TabItem>
-                <TabItem Header="Macros">
-                    <StackPanel >
-                        <StackPanel VerticalAlignment="Top">
-                            <TreeView Background="DimGray" Margin="5" Name="TreeViewMacros" Height="300" AllowDrop="False" />
-                            <StackPanel Orientation="Horizontal" >
-                                <Button Height="22" Margin="5" Name="BtnNewMacro" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Nouvelle macro">
-                                    <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
-                                </Button>
-                                <Button Height="22" Margin="5" Name="BtnDelMacro" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Supprimer Macro">
-                                    <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
-                                </Button>
-                                <Rectangle Width="10" />
-                                <Label Margin="5" Name="CntMacro" Content="0 Macro(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
-                            </StackPanel>
-                        </StackPanel>
-                    </StackPanel >
-                </TabItem>
-                <TabItem Header="Historisation">
-                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <StackPanel >
-                            <ListBox Background="DimGray" Margin="5" Name="ListHisto" Height="300" AllowDrop="False"/>
-                            <StackPanel Orientation="Horizontal" >
-                                <Button Height="22" Margin="5" Name="BtnGenereGraph" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Générer">
-                                    <Image Source="/HoMIAdmiN;component/Images/curve-32.png" />
-                                </Button>
-                                
-                            </StackPanel>
-                        </StackPanel>
-                    </Grid>
-                </TabItem>
-            </TabControl>
-        </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Name="StkMnu4" DockPanel.Dock="Bottom">
+                    <Button Height="22" Margin="5" Name="BtnNewTriggerDevice" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Ajouter un nouveau Trigger Device">
+                        <Image Source="/HoMIAdmiN;component/Images/ajouter-la-brique-32.png" />
+                    </Button>
+                    <Button Height="22" Margin="5" Name="BtnNewTriggerTime" Template="{DynamicResource GlassButton}" Width="22" >
+                        <Image Source="/HoMIAdmiN;component/Images/temps-ajouter-32.png" ToolTip="Ajouter un nouveau Trigger Timer" />
+                    </Button>
+                    <Button Foreground="White" Height="22" Margin="5" Name="BtnDelTrigger" Template="{DynamicResource GlassButton}" Width="22">
+                        <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" ToolTip="Supprimer" />
+                    </Button>
+                    <Rectangle Width="10" />
+                    <Label Margin="5" Name="CntTrigger" Content="0 Trigger(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Name="StkMnu5" DockPanel.Dock="Bottom">
+                    <Button Height="22" Margin="5" Name="BtnNewMacro" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Nouvelle macro">
+                        <Image Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
+                    </Button>
+                    <Button Height="22" Margin="5" Name="BtnDelMacro" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Supprimer Macro">
+                        <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
+                    </Button>
+                    <Rectangle Width="10" />
+                    <Label Margin="5" Name="CntMacro" Content="0 Macro(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Name="StkMnu6" DockPanel.Dock="Bottom">
+                    <Button Height="22" Margin="5" Name="BtnGenereGraph" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Générer">
+                        <Image Source="/HoMIAdmiN;component/Images/curve-32.png" />
+                    </Button>
 
-        <!--<StackPanel DockPanel.Dock="Right" Width="5"/>-->
+                </StackPanel>
+                <TreeView Margin="3" Name="TreeViewG" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
+
+            </DockPanel>
         
-        <Canvas Name="CanvasRight" Margin="5">
+
+       
+        <Canvas Name="CanvasRight" Margin="5" >
             <Canvas.Background>
                 <ImageBrush ImageSource="/HoMIAdmiN;component/Images/01.png" Stretch="UniformToFill" />
             </Canvas.Background>

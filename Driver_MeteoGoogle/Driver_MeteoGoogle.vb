@@ -335,7 +335,7 @@ Imports System.Threading
                                 Case "humidity"
                                     objet.HumiditeActuel = b
                                 Case "icon"
-                                    objet.IconActuel = b
+                                    objet.IconActuel = ExtractFile(b)
                                 Case "wind_condition"
                                     objet.VentActuel = b
                             End Select
@@ -389,13 +389,13 @@ Imports System.Threading
                                 Case "icon"
                                     Select Case idx
                                         Case 0
-                                            objet.IconToday = b
+                                            objet.IconToday = ExtractFile(b)
                                         Case 1
-                                            objet.IconJ1 = b
+                                            objet.IconJ1 = ExtractFile(b)
                                         Case 2
-                                            objet.IconJ2 = b
+                                            objet.IconJ2 = ExtractFile(b)
                                         Case 3
-                                            objet.IconJ3 = b
+                                            objet.IconJ3 = ExtractFile(b)
                                     End Select
                                 Case "condition"
                                     Select Case idx
@@ -425,6 +425,30 @@ Imports System.Threading
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GOOGLEMETEO", "Erreur Lors de la MaJ de " & objet.name & " : " & ex.Message)
         End Try
     End Sub
+
+    Private Function ExtractFile(ByVal File As String) As String
+        Try
+            Dim result As String = ""
+            Dim j As Integer = Len(File)
+            Dim tmp As Integer = 0
+
+            For i As Integer = 1 To Len(File)
+                If Mid(File, i, 1) = "/" Then
+                    tmp = i
+                End If
+            Next
+
+            If tmp > 0 Then
+                result = Mid(File, tmp + 1, j - tmp)
+            End If
+
+            result = result.Replace(".gif", "")
+            Return result
+        Catch ex As Exception
+            Return Nothing
+        End Try
+    End Function
+
 
     Private Function TraduireJour(ByVal Jour As String) As String
         TraduireJour = "?"

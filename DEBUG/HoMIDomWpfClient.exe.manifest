@@ -54,19 +54,19 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>SsgMTZE5Y+R/zRf6wiV4ID3sRDs=</dsig:DigestValue>
+        <dsig:DigestValue>p8K6/1RtVATI3+hUQtiv/kC60XQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HoMIDomWPFClient.exe" size="666112">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HoMIDomWPFClient.exe" size="676864">
       <assemblyIdentity name="HoMIDomWPFClient" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>ZiHuf0goR/TK/vRSPhUj76pe5Us=</dsig:DigestValue>
+        <dsig:DigestValue>saYP2ShTYEIiRdqQXk/EBgsHjf4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

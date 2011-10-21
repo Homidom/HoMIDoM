@@ -530,5 +530,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\drapeau-vert-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\light.png" />
+    <Resource Include="Images\macro.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
