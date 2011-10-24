@@ -1115,7 +1115,14 @@ Imports System.Globalization
                 ElseIf (listedevices.Count > 1) Then
                     WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
                 Else
-                    WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
+                    'on vérifie si le device est configuré en RFXReceiver
+                    listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, "3B808B6C-25B3-11E0-A6DB-36D2DED72085")
+                    If (listedevices.Count = 1) Then
+                        'un device trouvé on maj la value
+                        listedevices.Item(0).Value = valeur
+                    Else
+                        WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
+                    End If
 
 
                     'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
