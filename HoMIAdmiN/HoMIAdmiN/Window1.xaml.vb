@@ -14,6 +14,7 @@ Class Window1
     Public Shared CanvasUser As Canvas
     Public Shared myService As HoMIDom.HoMIDom.IHoMIDom
     Public Shared ListServer As New List(Of ClServer)
+
     Dim Myfile As String
     Dim MyPort As String = ""
     Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
@@ -30,9 +31,12 @@ Class Window1
             Dim spl As Window2 = New Window2
             spl.Show()
             Thread.Sleep(1000)
+
             ' Cet appel est requis par le Concepteur Windows Form.
             InitializeComponent()
+
             spl.Close()
+            spl = Nothing
 
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             Dim dt As DispatcherTimer = New DispatcherTimer()
@@ -56,12 +60,16 @@ Class Window1
                 Try
                     Dim mytime As String = myService.GetTime
                     LblStatus.Content = Now.ToLongDateString & " " & mytime & " "
-                    Dim tool As New ToolTip
-                    tool.Content = "Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString()
-                    LblConnect.Content = Mid("Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString(), 1, 64) & "..."
-                    LblConnect.ToolTip = tool
-                    tool = Nothing
                     mytime = ""
+
+                    If LblConnect.ToolTip Is Nothing Then
+                        Dim tool As New ToolTip
+                        tool.Content = "Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString()
+                        LblConnect.ToolTip = tool
+                        tool = Nothing
+                    End If
+                    
+                    LblConnect.Content = Mid("Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString(), 1, 64) & "..."
 
                     Dim mydate As Date
                     mydate = myService.GetHeureLeverSoleil
@@ -75,19 +83,21 @@ Class Window1
                     myBrush.GradientStops.Add(New GradientStop(Colors.Green, 0.5))
                     myBrush.GradientStops.Add(New GradientStop(Colors.DarkGreen, 1.0))
                     Ellipse1.Fill = myBrush
+                    myBrush = Nothing
 
                 Catch ex As Exception
                     IsConnect = False
                     LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString & " "
                     LblConnect.Content = "Serveur non connecté"
+                    LblConnect.ToolTip = Nothing
 
                     Dim myBrush As New RadialGradientBrush()
                     myBrush.GradientOrigin = New Point(0.75, 0.25)
                     myBrush.GradientStops.Add(New GradientStop(Colors.Yellow, 0.0))
                     myBrush.GradientStops.Add(New GradientStop(Colors.Red, 0.5))
                     myBrush.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
-
                     Ellipse1.Fill = myBrush
+                    myBrush = Nothing
                 End Try
             Else
                 LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString & "      "
@@ -98,8 +108,8 @@ Class Window1
                 myBrush.GradientStops.Add(New GradientStop(Colors.Yellow, 0.0))
                 myBrush.GradientStops.Add(New GradientStop(Colors.Red, 0.5))
                 myBrush.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
-
                 Ellipse1.Fill = myBrush
+                myBrush = Nothing
             End If
         Catch ex As Exception
             MessageBox.Show("ERREUR dispatcherTimer_Tick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -138,34 +148,35 @@ Class Window1
             TreeViewG.Items.Clear()
             If IsConnect = False Then Exit Sub
             CntZone.Content = myService.GetAllZones(IdSrv).Count & " Zone(s)"
-            For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
+
+            For Each zon In myService.GetAllZones(IdSrv)
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
                 Dim uri As String = ""
                 Dim bmpImage As New BitmapImage()
-                Dim x As Zone = myService.GetAllZones(IdSrv).Item(i)
                 stack.Orientation = Orientation.Horizontal
 
                 img.Height = 20
                 img.Width = 20
 
-                If x.Icon <> "" Then
-                    img.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Icon))
+                If zon.Icon <> "" Then
+                    img.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(zon.Icon))
                 End If
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
-                label.Content = x.Name
+                label.Content = zon.Name
 
                 stack.Children.Add(img)
                 stack.Children.Add(label)
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
-                newchild.Uid = x.ID
+                newchild.Uid = zon.ID
                 TreeViewG.Items.Add(newchild)
             Next
+
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffZone: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -177,7 +188,8 @@ Class Window1
             TreeViewG.Items.Clear()
             If IsConnect = False Then Exit Sub
             CntUser.Content = myService.GetAllUsers(IdSrv).Count & " User(s)"
-            For i As Integer = 0 To myService.GetAllUsers(IdSrv).Count - 1
+
+            For Each Usr In myService.GetAllUsers(IdSrv)
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -189,8 +201,8 @@ Class Window1
                 img.Height = 20
                 img.Width = 20
 
-                If myService.GetAllUsers(IdSrv).Item(i).Image <> "" And File.Exists(myService.GetAllDevices(IdSrv).Item(i).Picture) = True Then
-                    uri = myService.GetAllUsers(IdSrv).Item(i).Image
+                If Usr.Image <> "" And File.Exists(Usr.Image) = True Then
+                    uri = Usr.Image
                 Else
                     uri = MyRep & "\Images\icones\user.png"
                 End If
@@ -201,16 +213,17 @@ Class Window1
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
-                label.Content = myService.GetAllUsers(IdSrv).Item(i).UserName
+                label.Content = Usr.UserName
 
                 stack.Children.Add(img)
                 stack.Children.Add(label)
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
-                newchild.Header = stack 'myService.GetAllUsers.Item(i).UserName
-                newchild.Uid = myService.GetAllUsers(IdSrv).Item(i).ID
+                newchild.Header = stack
+                newchild.Uid = Usr.ID
                 TreeViewG.Items.Add(newchild)
             Next
+
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffUser: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -222,7 +235,8 @@ Class Window1
             TreeViewG.Items.Clear()
             If IsConnect = False Then Exit Sub
             CntDriver.Content = myService.GetAllDrivers(IdSrv).Count & " Driver(s)"
-            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1 'Obj.Drivers.Count - 1
+
+            For Each Drv In myService.GetAllDrivers(IdSrv)
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 stack.Orientation = Orientation.Horizontal
@@ -231,10 +245,11 @@ Class Window1
                 Dim Elipse As New Ellipse
                 Elipse.Width = 9
                 Elipse.Height = 9
+
                 Dim myBrush As New RadialGradientBrush()
                 myBrush.GradientOrigin = New Point(0.75, 0.25)
 
-                If myService.GetAllDrivers(IdSrv).Item(i).IsConnect = True Then
+                If Drv.IsConnect = True Then
                     myBrush.GradientStops.Add(New GradientStop(Colors.LightGreen, 0.0))
                     myBrush.GradientStops.Add(New GradientStop(Colors.Green, 0.5))
                     myBrush.GradientStops.Add(New GradientStop(Colors.DarkGreen, 1.0))
@@ -243,20 +258,23 @@ Class Window1
                     myBrush.GradientStops.Add(New GradientStop(Colors.Red, 0.5))
                     myBrush.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
                 End If
-
                 Elipse.Fill = myBrush
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
-                label.Content = myService.GetAllDrivers(IdSrv).Item(i).Nom
+                label.Content = Drv.Nom
 
                 stack.Children.Add(Elipse)
                 stack.Children.Add(label)
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
-                newchild.Uid = myService.GetAllDrivers(IdSrv).Item(i).ID
+                newchild.Uid = Drv.ID
                 TreeViewG.Items.Add(newchild)
+            Next
+
+            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1 'Obj.Drivers.Count - 1
+                
 
             Next
         Catch ex As Exception
@@ -271,30 +289,32 @@ Class Window1
             If IsConnect = False Then Exit Sub
 
             CntDevice.Content = myService.GetAllDevices(IdSrv).Count & " Device(s)"
-            For i As Integer = 0 To myService.GetAllDevices(IdSrv).Count - 1
+
+            For Each Dev In myService.GetAllDevices(IdSrv)
+
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
                 Dim uri As String = ""
                 Dim bmpImage As New BitmapImage()
-                Dim x As TemplateDevice = myService.GetAllDevices(IdSrv).Item(i)
                 stack.Orientation = Orientation.Horizontal
 
                 img.Height = 20
                 img.Width = 20
 
-                If x.Picture <> "" And File.Exists(x.Picture) = True Then
-                    uri = x.Picture
+                If Dev.Picture <> "" And File.Exists(Dev.Picture) = True Then
+                    uri = Dev.Picture
                 Else
                     uri = MyRep & "\Images\Devices\Defaut-128.png"
                 End If
+
                 bmpImage.BeginInit()
                 bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
                 bmpImage.EndInit()
                 img.Source = bmpImage
 
-                Dim drv As String = x.Name
-                drv &= " (" & myService.ReturnDriverByID(IdSrv, x.DriverID).Nom & ")"
+                Dim drv As String = Dev.Name
+                drv &= " (" & myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom & ")"
 
                 Dim tl As New ToolTip
                 tl.Content = drv
@@ -308,7 +328,7 @@ Class Window1
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
-                newchild.Uid = x.ID
+                newchild.Uid = Dev.ID
                 TreeViewG.Items.Add(newchild)
             Next
         Catch ex As Exception
@@ -322,7 +342,8 @@ Class Window1
             TreeViewG.Items.Clear()
             If IsConnect = False Then Exit Sub
             CntMacro.Content = myService.GetAllMacros(IdSrv).Count & " Macro(s)"
-            For i As Integer = 0 To myService.GetAllMacros(IdSrv).Count - 1
+
+            For Each Mac In myService.GetAllMacros(IdSrv)
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -336,7 +357,7 @@ Class Window1
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
-                label.Content = myService.GetAllMacros(IdSrv).Item(i).Nom
+                label.Content = Mac.Nom
 
                 uri = MyRep & "\Images\Icones\script-128.png"
                 bmpImage.BeginInit()
@@ -349,9 +370,10 @@ Class Window1
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
-                newchild.Uid = myService.GetAllMacros(IdSrv).Item(i).ID
+                newchild.Uid = Mac.ID
                 TreeViewG.Items.Add(newchild)
             Next
+
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffScene: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -363,7 +385,8 @@ Class Window1
             TreeViewG.Items.Clear()
             If IsConnect = False Then Exit Sub
             CntTrigger.Content = myService.GetAllTriggers(IdSrv).Count & " Trigger(s)"
-            For i As Integer = 0 To myService.GetAllTriggers(IdSrv).Count - 1
+
+            For Each Trig In myService.GetAllTriggers(IdSrv)
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -377,7 +400,7 @@ Class Window1
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
-                label.Content = myService.GetAllTriggers(IdSrv).Item(i).Nom
+                label.Content = Trig.Nom
 
                 uri = MyRep & "\Images\Icones\drapeau-vert-32.png"
                 bmpImage.BeginInit()
@@ -390,9 +413,10 @@ Class Window1
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
-                newchild.Uid = myService.GetAllTriggers(IdSrv).Item(i).ID
+                newchild.Uid = Trig.ID
                 TreeViewG.Items.Add(newchild)
             Next
+
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub Afftrigger: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1089,101 +1113,63 @@ Class Window1
                 Exit Sub
             End If
 
-            Select Case _CurrentMnu
-                Case 0 'driver
-                    If TreeViewG.SelectedItem IsNot Nothing Then
-                        For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
-                            If myService.GetAllDrivers(IdSrv).Item(i).ID = TreeViewG.SelectedItem.uid Then
-                                Dim y As TemplateDriver = myService.GetAllDrivers(IdSrv).Item(i)
+            If TreeViewG.SelectedItem IsNot Nothing Then
+                If TreeViewG.SelectedItem.uid Is Nothing Then Exit Sub
 
-                                Dim x As New uDriver(TreeViewG.SelectedItem.uid)
-                                x.Uid = System.Guid.NewGuid.ToString()
-                                AddHandler x.CloseMe, AddressOf UnloadControl
-                                CanvasRight.Children.Clear()
-                                CanvasRight.Children.Add(x)
-                                Exit Sub
-                            End If
-                        Next
-                    End If
-                Case 1 'device
-                    If TreeViewG.SelectedItem IsNot Nothing Then
-                        If TreeViewG.SelectedItem.uid Is Nothing Then Exit Sub
-
-                        Dim _dev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, TreeViewG.SelectedItem.uid)
-                        If _dev IsNot Nothing Then
-                            Dim x As New uDevice(uDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
-                            x.Uid = System.Guid.NewGuid.ToString()
-                            AddHandler x.CloseMe, AddressOf UnloadControl
-                            CanvasRight.Children.Clear()
-                            CanvasRight.Children.Add(x)
-                        End If
-                        _dev = Nothing
-                    End If
-                Case 2 'zone
-                    If TreeViewG.SelectedItem IsNot Nothing Then
-                        If TreeViewG.SelectedItem.uid Is Nothing Then Exit Sub
-
-                        Dim _zone As Zone = myService.ReturnZoneByID(IdSrv, TreeViewG.SelectedItem.uid)
-
-                        If _zone IsNot Nothing Then
-                            Dim x As New uZone(uDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
-                            x.Uid = System.Guid.NewGuid.ToString()
-                            AddHandler x.CloseMe, AddressOf UnloadControl
-                            CanvasRight.Children.Clear()
-                            CanvasRight.Children.Add(x)
-                            _zone = Nothing
-                        End If
-
-                    End If
-                Case 3 'user
-                    If TreeViewG.SelectedItem IsNot Nothing Then
-
-                        Dim _user As Users.User = myService.ReturnUserById(IdSrv, TreeViewG.SelectedItem.uid)
-
-                        If _user IsNot Nothing Then
-                            Dim x As New uUser(uDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
-                            x.Uid = System.Guid.NewGuid.ToString()
-                            AddHandler x.CloseMe, AddressOf UnloadControl
-                            CanvasRight.Children.Clear()
-                            CanvasRight.Children.Add(x)
-                            _user = Nothing
-                        End If
-                    End If
-                Case 4 'trigger
-                    If TreeViewG.SelectedItem IsNot Nothing Then
-                        If TreeViewG.SelectedItem.uid Is Nothing Then Exit Sub
-
+                Select Case _CurrentMnu
+                    Case 0 'driver
+                        Dim x As New uDriver(TreeViewG.SelectedItem.uid)
+                        x.Uid = System.Guid.NewGuid.ToString()
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        CanvasRight.Children.Clear()
+                        CanvasRight.Children.Add(x)
+                    Case 1 'device
+                        Dim x As New uDevice(uDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
+                        x.Uid = System.Guid.NewGuid.ToString()
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        CanvasRight.Children.Clear()
+                        CanvasRight.Children.Add(x)
+                    Case 2 'zone
+                        Dim x As New uZone(uDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
+                        x.Uid = System.Guid.NewGuid.ToString()
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        CanvasRight.Children.Clear()
+                        CanvasRight.Children.Add(x)
+                    Case 3 'user
+                        Dim x As New uUser(uDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
+                        x.Uid = System.Guid.NewGuid.ToString()
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        CanvasRight.Children.Clear()
+                        CanvasRight.Children.Add(x)
+                    Case 4 'trigger
                         Dim _Trig As Trigger = myService.ReturnTriggerById(IdSrv, TreeViewG.SelectedItem.uid)
 
-                        If _Trig IsNot Nothing Then
-                            If _Trig.Type = Trigger.TypeTrigger.TIMER Then
-                                Dim x As New uTriggerTimer(uTriggerTimer.EAction.Modifier, TreeViewG.SelectedItem.uid)
-                                x.Uid = System.Guid.NewGuid.ToString()
-                                AddHandler x.CloseMe, AddressOf UnloadControl
-                                CanvasRight.Children.Clear()
-                                CanvasRight.Children.Add(x)
-                            Else
-                                Dim x As New uTriggerDevice(uTriggerDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
-                                x.Uid = System.Guid.NewGuid.ToString()
-                                AddHandler x.CloseMe, AddressOf UnloadControl
-                                CanvasRight.Children.Clear()
-                                CanvasRight.Children.Add(x)
+                            If _Trig IsNot Nothing Then
+                                If _Trig.Type = Trigger.TypeTrigger.TIMER Then
+                                    Dim x As New uTriggerTimer(uTriggerTimer.EAction.Modifier, TreeViewG.SelectedItem.uid)
+                                    x.Uid = System.Guid.NewGuid.ToString()
+                                    AddHandler x.CloseMe, AddressOf UnloadControl
+                                    CanvasRight.Children.Clear()
+                                    CanvasRight.Children.Add(x)
+                                Else
+                                    Dim x As New uTriggerDevice(uTriggerDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
+                                    x.Uid = System.Guid.NewGuid.ToString()
+                                    AddHandler x.CloseMe, AddressOf UnloadControl
+                                    CanvasRight.Children.Clear()
+                                    CanvasRight.Children.Add(x)
+                                End If
+                                _Trig = Nothing
                             End If
-                            _Trig = Nothing
-                        End If
-
-                    End If
-                Case 5 'macros
-                    If TreeViewG.SelectedItem IsNot Nothing Then
+                    Case 5 'macros
                         Dim x As New uMacro(uMacro.EAction.Modifier, TreeViewG.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         CanvasRight.Children.Clear()
                         CanvasRight.Children.Add(x)
-                    End If
-                Case 6 'histo
+                    Case 6 'histo
 
-            End Select
+                End Select
+            End If
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try

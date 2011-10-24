@@ -900,6 +900,11 @@ HoMIDom
  Type Répertoire Audio
  </summary>
 	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio.FilePlayList">
+	<summary>
+ Class Fichier Audio
+ </summary>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Audio">
 	<summary>
  Classe de gestion Audio
