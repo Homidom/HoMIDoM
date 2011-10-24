@@ -23,6 +23,8 @@ Namespace HoMIDom
             Dim dEquationOfTime As Double
             Dim dSolarDeclination As Double
 
+            dLongitude = dLongitude * -1
+
             If dtDesiredDate.IsDaylightSavingTime Then
                 lDaySavings = 60
             Else

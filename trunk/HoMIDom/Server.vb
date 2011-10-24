@@ -2,6 +2,7 @@
 Imports System
 Imports System.IO
 Imports System.Data
+Imports System.Data.Linq
 Imports System.Xml
 Imports System.Xml.XPath
 Imports System.Xml.Serialization
@@ -14,6 +15,7 @@ Imports System.Web.HttpUtility
 Imports System.Threading
 Imports System.Data.SQLite
 Imports System.Net.Mail
+Imports taglib
 #End Region
 
 Namespace HoMIDom
@@ -33,7 +35,7 @@ Namespace HoMIDom
         Private Shared _ListMacros As New List(Of Macro) 'Liste des macros
         Private Shared _listTriggers As New List(Of Trigger) 'Liste de tous les triggers
         <NonSerialized()> Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
-        Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
+        <NonSerialized()> Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
         Shared Soleil As New Soleil 'Déclaration class Soleil
         Shared _Longitude As Double = 0 'Longitude
         Shared _Latitude As Double = 0 'latitude
@@ -51,8 +53,9 @@ Namespace HoMIDom
         Shared _DateTimeLastStart As Date = Now
         Private Shared _ListExtensionAudio As New List(Of Audio.ExtensionAudio) 'Liste des extensions audio
         Private Shared _ListRepertoireAudio As New List(Of Audio.RepertoireAudio) 'Liste des répertoires audio
+        Private _ListTagAudio As New List(Of Audio.FilePlayList) ' Liste des tags des fichiers audio 
         Private Shared Etat_server As Boolean = False 'etat du serveur : true = démarré
-
+        Dim fsw As FileSystemWatcher
 #End Region
 
 
@@ -298,8 +301,8 @@ Namespace HoMIDom
             'Copy du fichier de config avant chargement
             Try
                 Dim _file As String = Fichier & "homidom"
-                If File.Exists(_file & ".bak") = True Then File.Delete(_file & ".bak")
-                File.Copy(_file & ".xml", Mid(_file & ".xml", 1, Len(_file & ".xml") - 4) & ".bak")
+                If IO.File.Exists(_file & ".bak") = True Then IO.File.Delete(_file & ".bak")
+                IO.File.Copy(_file & ".xml", Mid(_file & ".xml", 1, Len(_file & ".xml") - 4) & ".bak")
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
                 _file = Nothing
             Catch ex As Exception
@@ -1020,8 +1023,8 @@ Namespace HoMIDom
                 ''Copy du fichier de config avant sauvegarde
                 Try
                     Dim _file As String = Fichier.Replace(".xml", "")
-                    If File.Exists(_file & ".sav") = True Then File.Delete(_file & ".sav")
-                    File.Copy(_file & ".xml", _file & ".sav")
+                    If IO.File.Exists(_file & ".sav") = True Then IO.File.Delete(_file & ".sav")
+                    IO.File.Copy(_file & ".xml", _file & ".sav")
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création de sauvegarde (.sav) du fichier de config avant sauvegarde")
                 Catch ex As Exception
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
@@ -2039,13 +2042,13 @@ Namespace HoMIDom
                 Dim Fichier As FileInfo
 
                 'Vérifie si le fichier log existe sinon le crée
-                If File.Exists(_File) Then
+                If IO.File.Exists(_File) Then
                     Fichier = New FileInfo(_File)
                     'Vérifie si le fichier est trop gros si oui, on l'archive
                     If (Fichier.Length / 1000) > _MaxFileSize Then
                         Dim filearchive As String
                         filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                        File.Move(_File, filearchive)
+                        IO.File.Move(_File, filearchive)
                     End If
                 Else
                     CreateNewFileLog(_File)
@@ -2091,7 +2094,7 @@ Namespace HoMIDom
                     Console.WriteLine(Now & " Impossible d'écrire dans le fichier log un nouveau fichier à été créé: " & ex.Message)
                     Dim filearchive As String
                     filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                    File.Move(_File, filearchive)
+                    IO.File.Move(_File, filearchive)
                     CreateNewFileLog(_File)
                     Fichier = New FileInfo(_File)
                     xmldoc.Load(_File) 'ouvre le fichier xml
@@ -2209,6 +2212,42 @@ Namespace HoMIDom
 
                 'Change l'etat du server
                 Etat_server = True
+
+                'test biblio
+                '
+                ' Create a FileSystemWatcher object passing it the folder to watch.
+                '
+                'fsw = New FileSystemWatcher("C:\homidom")
+                '
+                ' Assign event procedures to the events to watch.
+                '
+                'AddHandler fsw.Created, AddressOf OnChanged
+                'AddHandler fsw.Changed, AddressOf OnChanged
+                'AddHandler fsw.Deleted, AddressOf OnChanged
+                'AddHandler fsw.Renamed, AddressOf OnRenamed
+
+                'With fsw
+                '.EnableRaisingEvents = True
+                '.IncludeSubdirectories = True
+                '
+                ' Specif the event to watch for.
+                '
+                '.WaitForChanged(WatcherChangeTypes.Created Or _
+                '                WatcherChangeTypes.Changed Or _
+                '                WatcherChangeTypes.Deleted Or _
+                '                WatcherChangeTypes.Renamed)
+                '
+                ' Watch certain file types.
+                '
+                '.Filter = "*.txt"
+                '
+                ' Specify file change notifications.
+                '
+                '.NotifyFilter = (NotifyFilters.LastAccess Or _
+                '                 NotifyFilters.LastWrite Or _
+                '                 NotifyFilters.FileName Or _
+                '                 NotifyFilters.DirectoryName)
+                'End With
             Catch ex As Exception
                 Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Exception : " & ex.Message)
             End Try
@@ -2865,6 +2904,72 @@ Namespace HoMIDom
             process.Start()
         End Function
 #End Region
+#End Region
+
+#Region "Bibliotheques"
+        Public Sub SearchTag()
+            For i As Integer = 0 To _ListRepertoireAudio.Count - 1
+                '  Dim x As New Thread(AddressOf FileTagRepload(_ListRepertoireAudio.Item(i).Repertoire))
+            Next
+        End Sub
+
+        Public Class ThreadSearchTag
+            Dim _Repertoire As String
+            Dim _mylist As New List(Of Audio.FilePlayList)
+            Sub New(ByVal Repertoire As String)
+                _Repertoire = Repertoire
+            End Sub
+
+            ''' <summary>Fonction de chargement des tags des fichiers audio des repertoires contenus dans la liste active </summary>
+            ''' <remarks>Recupere les fichiers Audios selon les extensions actives</remarks>
+            'Sub FileTagRepload()
+
+            '    'Efface le tableau actuel
+            '    _ListTagAudio.Clear()
+
+            '    ' Créér une reference du dossier
+            '    Dim di As New DirectoryInfo(_Repertoire)
+
+            '    ' Pour chacune des extensions
+            '    For cpt2 = 0 To _ListExtensionAudio.Count - 1
+
+            '        Dim _extension As String = _ListExtensionAudio.Item(cpt2).Extension
+            '        Dim _extensionenable As Boolean = _ListExtensionAudio.Item(cpt2).Enable
+
+            '        ' Recupere la liste des fichiers du repertoire si l'extension est active
+            '        If _extensionenable Then ' Extension active 
+            '            ' Recuperation des fichiers du repertoire
+            '            Dim fiArr As FileInfo() = di.GetFiles("*" & _extension, SearchOption.TopDirectoryOnly)
+
+            '            ' Boucle sur tous les fichiers du repertoire
+            '            For i = 0 To fiArr.Length - 1
+            '                Dim X As TagLib.File
+            '                ' Recupere les tags du fichier Audio 
+            '                X = TagLib.File.Create(fiArr(i).FullName)
+            '                Dim a As New Audio.FilePlayList(X.Tag.Title, X.Tag.FirstPerformer, X.Tag.Album, X.Tag.Year, X.Tag.Comment, X.Tag.FirstGenre,
+            '                                          System.Convert.ToString(X.Properties.Duration.Minutes) & ":" & System.Convert.ToString(Format(X.Properties.Duration.Seconds, "00")),
+            '                                          fiArr(i).Name, PathRep + "\" + fiArr(i).Name, X.Tag.Track)
+
+            '                _ListTagAudio.Add(a)
+
+            '                a = Nothing
+            '                X = Nothing
+            '            Next
+            '        End If
+            '    Next
+            'End Sub
+
+        End Class
+
+
+        Public Sub OnChanged(ByVal source As Object, ByVal e As FileSystemEventArgs)
+
+        End Sub
+
+        Public Sub OnRenamed(ByVal source As Object, ByVal e As RenamedEventArgs)
+
+        End Sub
+
 #End Region
 
 #End Region
@@ -3661,11 +3766,16 @@ Namespace HoMIDom
                     End With
                     _list.Add(x)
                 Next
+                _list.Sort(AddressOf sortDriver)
                 Return _list
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllDrivers", "Exception : " & ex.Message)
                 Return Nothing
             End Try
+        End Function
+
+        Private Function sortDriver(ByVal x As TemplateDriver, ByVal y As TemplateDriver) As Integer
+            Return x.Nom.CompareTo(y.Nom)
         End Function
 
         ''' <summary>Sauvegarde ou créer un driver dans la config</summary>
@@ -3728,75 +3838,75 @@ Namespace HoMIDom
                 Exit Function
             End If
 
-            Dim retour As New TemplateDriver
-            Try
-                For i As Integer = 0 To _ListDrivers.Count - 1
-                    If _ListDrivers.Item(i).ID = DriverId Then
-                        retour.Nom = _ListDrivers.Item(i).nom
-                        retour.ID = _ListDrivers.Item(i).id
-                        retour.COM = _ListDrivers.Item(i).com
-                        retour.Description = _ListDrivers.Item(i).description
-                        retour.Enable = _ListDrivers.Item(i).enable
-                        retour.IP_TCP = _ListDrivers.Item(i).ip_tcp
-                        retour.IP_UDP = _ListDrivers.Item(i).ip_udp
-                        retour.IsConnect = _ListDrivers.Item(i).isconnect
-                        retour.Modele = _ListDrivers.Item(i).modele
-                        retour.Picture = _ListDrivers.Item(i).picture
-                        retour.Port_TCP = _ListDrivers.Item(i).port_tcp
-                        retour.Port_UDP = _ListDrivers.Item(i).port_udp
-                        retour.Protocol = _ListDrivers.Item(i).protocol
-                        retour.Refresh = _ListDrivers.Item(i).refresh
-                        retour.StartAuto = _ListDrivers.Item(i).startauto
-                        retour.Version = _ListDrivers.Item(i).version
+                Dim retour As New TemplateDriver
+                Try
+                    For i As Integer = 0 To _ListDrivers.Count - 1
+                        If _ListDrivers.Item(i).ID = DriverId Then
+                            retour.Nom = _ListDrivers.Item(i).nom
+                            retour.ID = _ListDrivers.Item(i).id
+                            retour.COM = _ListDrivers.Item(i).com
+                            retour.Description = _ListDrivers.Item(i).description
+                            retour.Enable = _ListDrivers.Item(i).enable
+                            retour.IP_TCP = _ListDrivers.Item(i).ip_tcp
+                            retour.IP_UDP = _ListDrivers.Item(i).ip_udp
+                            retour.IsConnect = _ListDrivers.Item(i).isconnect
+                            retour.Modele = _ListDrivers.Item(i).modele
+                            retour.Picture = _ListDrivers.Item(i).picture
+                            retour.Port_TCP = _ListDrivers.Item(i).port_tcp
+                            retour.Port_UDP = _ListDrivers.Item(i).port_udp
+                            retour.Protocol = _ListDrivers.Item(i).protocol
+                            retour.Refresh = _ListDrivers.Item(i).refresh
+                            retour.StartAuto = _ListDrivers.Item(i).startauto
+                            retour.Version = _ListDrivers.Item(i).version
 
-                        For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
-                            retour.DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
-                        Next
-                        For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
-                            Dim y As New Driver.Parametre
-                            y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
-                            y.Description = _ListDrivers.Item(i).Parametres.item(j).description
-                            y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
-                            retour.Parametres.Add(y)
-                        Next
-
-                        Dim _listactdrv As New ArrayList
-                        Dim _listactd As New List(Of String)
-                        For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
-                            _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
-                        Next
-                        If _listactd.Count > 0 Then
-                            For n As Integer = 0 To _listactd.Count - 1
-                                Dim a() As String = _listactd.Item(n).Split("|")
-                                Dim p As New DeviceAction
-                                With p
-                                    .Nom = a(0)
-                                    If a.Length > 1 Then
-                                        For t As Integer = 1 To a.Length - 1
-                                            Dim pr As New DeviceAction.Parametre
-                                            Dim b() As String = a(t).Split(":")
-                                            With pr
-                                                .Nom = b(0)
-                                                .Type = b(1)
-                                            End With
-                                            p.Parametres.Add(pr)
-                                        Next
-                                    End If
-                                End With
-                                retour.DeviceAction.Add(p)
+                            For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
+                                retour.DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
                             Next
-                        End If
+                            For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
+                                Dim y As New Driver.Parametre
+                                y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
+                                y.Description = _ListDrivers.Item(i).Parametres.item(j).description
+                                y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
+                                retour.Parametres.Add(y)
+                            Next
 
-                        _listactd = Nothing
-                        _listactdrv = Nothing
-                        Exit For
-                    End If
-                Next
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDriverById", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
+                            Dim _listactdrv As New ArrayList
+                            Dim _listactd As New List(Of String)
+                            For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
+                                _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
+                            Next
+                            If _listactd.Count > 0 Then
+                                For n As Integer = 0 To _listactd.Count - 1
+                                    Dim a() As String = _listactd.Item(n).Split("|")
+                                    Dim p As New DeviceAction
+                                    With p
+                                        .Nom = a(0)
+                                        If a.Length > 1 Then
+                                            For t As Integer = 1 To a.Length - 1
+                                                Dim pr As New DeviceAction.Parametre
+                                                Dim b() As String = a(t).Split(":")
+                                                With pr
+                                                    .Nom = b(0)
+                                                    .Type = b(1)
+                                                End With
+                                                p.Parametres.Add(pr)
+                                            Next
+                                        End If
+                                    End With
+                                    retour.DeviceAction.Add(p)
+                                Next
+                            End If
+
+                            _listactd = Nothing
+                            _listactdrv = Nothing
+                            Exit For
+                        End If
+                    Next
+                    Return retour
+                Catch ex As Exception
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDriverById", "Exception : " & ex.Message)
+                    Return Nothing
+                End Try
         End Function
 
         ''' <summary>Retourne un driver par son ID</summary>
@@ -4065,11 +4175,16 @@ Namespace HoMIDom
                     End With
                     _list.Add(x)
                 Next
+                _list.Sort(AddressOf sortDevice)
                 Return _list
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllDevices", "Exception : " & ex.Message)
                 Return Nothing
             End Try
+        End Function
+
+        Private Function sortDevice(ByVal x As TemplateDevice, ByVal y As TemplateDevice) As Integer
+            Return x.Name.CompareTo(y.Name)
         End Function
 
         ''' <summary>Sauvegarder ou créer un device</summary>
@@ -5039,11 +5154,16 @@ Namespace HoMIDom
                     _list.Add(x)
                     x = Nothing
                 Next
+                _list.Sort(AddressOf sortZone)
                 Return _list
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllZones", "Exception : " & ex.Message)
                 Return Nothing
             End Try
+        End Function
+
+        Private Function sortZone(ByVal x As Zone, ByVal y As Zone) As Integer
+            Return x.Name.CompareTo(y.Name)
         End Function
 
         ''' <summary>ajouter un device à une zone</summary>
@@ -5214,15 +5334,9 @@ Namespace HoMIDom
                 Exit Function
             End If
 
-            Dim retour As Object = Nothing
             Try
-                For i As Integer = 0 To _ListZones.Count - 1
-                    If _ListZones.Item(i).ID = ZoneId Then
-                        retour = _ListZones.Item(i)
-                        Exit For
-                    End If
-                Next
-                Return retour
+                Dim Resultat = (From Zone In _ListZones Where Zone.ID = ZoneId Select Zone).First
+                Return Resultat
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnZoneById", "Exception : " & ex.Message)
                 Return Nothing
@@ -5276,11 +5390,16 @@ Namespace HoMIDom
                     End With
                     _list.Add(x)
                 Next
+                _list.Sort(AddressOf sortMacro)
                 Return _list
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllMacros", "Exception : " & ex.Message)
                 Return Nothing
             End Try
+        End Function
+
+        Private Function sortMacro(ByVal x As Macro, ByVal y As Macro) As Integer
+            Return x.Nom.CompareTo(y.Nom)
         End Function
 
         ''' <summary>
@@ -5343,15 +5462,9 @@ Namespace HoMIDom
                 Exit Function
             End If
 
-            Dim retour As Macro = Nothing
             Try
-                For i As Integer = 0 To _ListMacros.Count - 1
-                    If _ListMacros.Item(i).ID = MacroId Then
-                        retour = _ListMacros.Item(i)
-                        Exit For
-                    End If
-                Next
-                Return retour
+                Dim Resultat = (From Macro In _ListMacros Where Macro.ID = MacroId Select Macro).First
+                Return Resultat
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnMacroById", "Exception : " & ex.Message)
                 Return Nothing
@@ -5418,11 +5531,16 @@ Namespace HoMIDom
                     End With
                     _list.Add(x)
                 Next
+                _list.Sort(AddressOf sortTrigger)
                 Return _list
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllTriggers", "Exception : " & ex.Message)
                 Return Nothing
             End Try
+        End Function
+
+        Private Function sortTrigger(ByVal x As Trigger, ByVal y As Trigger) As Integer
+            Return x.Nom.CompareTo(y.Nom)
         End Function
 
         ''' <summary>
@@ -5513,16 +5631,10 @@ Namespace HoMIDom
                 Exit Function
             End If
 
-            Dim retour As Trigger = Nothing
             Try
-                For i As Integer = 0 To _listTriggers.Count - 1
-                    If _listTriggers.Item(i).ID = TriggerId Then
-                        retour = _listTriggers.Item(i)
-                        retour = retour
-                        Exit For
-                    End If
-                Next
-                Return retour
+                Dim Resultat = (From Trigger In _listTriggers Where Trigger.ID = TriggerId Select Trigger).First
+                Return Resultat
+
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnTriggerById", "Exception : " & ex.Message)
                 Return Nothing
@@ -5588,11 +5700,16 @@ Namespace HoMIDom
                     End With
                     _list.Add(x)
                 Next
+                _list.Sort(AddressOf sortUser)
                 Return _list
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllUsers", "Exception : " & ex.Message)
                 Return Nothing
             End Try
+        End Function
+
+        Private Function sortUser(ByVal x As Users.User, ByVal y As Users.User) As Integer
+            Return x.UserName.CompareTo(y.UserName)
         End Function
 
         ''' <summary>
@@ -5607,14 +5724,8 @@ Namespace HoMIDom
                 Exit Function
             End If
 
-            Dim retour As Users.User = Nothing
-            For i As Integer = 0 To _ListUsers.Count - 1
-                If _ListUsers.Item(i).UserName = Username Then
-                    retour = _ListUsers.Item(i)
-                    Exit For
-                End If
-            Next
-            Return retour
+            Dim Resultat = (From User In _ListUsers Where User.UserName = Username Select User).First
+            Return Resultat
         End Function
 
         ''' <summary>
@@ -5773,15 +5884,10 @@ Namespace HoMIDom
                 Exit Function
             End If
 
-            Dim retour As Object = Nothing
             Try
-                For i As Integer = 0 To _ListUsers.Count - 1
-                    If _ListUsers.Item(i).ID = UserId Then
-                        retour = _ListUsers.Item(i)
-                        Exit For
-                    End If
-                Next
-                Return retour
+                Dim Resultat = (From User In _ListUsers Where User.ID = UserId Select User).First
+                Return Resultat
+
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnUserById", "Exception : " & ex.Message)
                 Return Nothing
