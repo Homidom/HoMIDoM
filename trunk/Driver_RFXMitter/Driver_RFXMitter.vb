@@ -1108,7 +1108,7 @@ Imports System.Globalization
             If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID)
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
                 If (listedevices.Count = 1) Then
                     'un device trouvé on maj la value
                     listedevices.Item(0).Value = valeur
@@ -1116,7 +1116,7 @@ Imports System.Globalization
                     WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
                 Else
                     'on vérifie si le device est configuré en RFXReceiver
-                    listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, "3B808B6C-25B3-11E0-A6DB-36D2DED72085")
+                    listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, "3B808B6C-25B3-11E0-A6DB-36D2DED72085", True)
                     If (listedevices.Count = 1) Then
                         'un device trouvé on maj la value
                         listedevices.Item(0).Value = valeur
