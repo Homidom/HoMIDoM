@@ -42,6 +42,7 @@ Public Class uAction
         j = (Span * j) / _Zoom
         Fond.SetLeft(Rectangle1, j)
         Fond.SetLeft(ImgDelete, j + 160)
+        j = 0
     End Sub
 
     'Objet action

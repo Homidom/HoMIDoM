@@ -34,7 +34,7 @@ Partial Public Class uDevice
             Next
 
             If Action = EAction.Nouveau Then 'Nouveau Device
-                ImgDevice.Tag = " "
+                ImgDevice.Tag = ""
             Else 'Modification d'un Device
                 Dim x As HoMIDom.HoMIDom.TemplateDevice = Window1.myService.ReturnDeviceByID(IdSrv, DeviceId)
 
@@ -310,6 +310,7 @@ Partial Public Class uDevice
             Else
                 frm.Close()
             End If
+            frm = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub ImgDevice_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -333,8 +334,6 @@ Partial Public Class uDevice
             y.Uid = System.Guid.NewGuid.ToString()
             AddHandler y.CloseMe, AddressOf UnloadControl
             Window1.CanvasUser.Children.Add(y)
-            Window1.CanvasUser.SetLeft(y, 50)
-            Window1.CanvasUser.SetTop(y, 50)
         Catch ex As Exception
             MessageBox.Show("Erreur Tester: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try

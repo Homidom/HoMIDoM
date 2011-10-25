@@ -261,7 +261,11 @@ Class Window1
                 Elipse.Fill = myBrush
 
                 Dim label As New Label
-                label.Foreground = New SolidColorBrush(Colors.White)
+                If Drv.Enable = True Then
+                    label.Foreground = New SolidColorBrush(Colors.White)
+                Else
+                    label.Foreground = New SolidColorBrush(Colors.Black)
+                End If
                 label.Content = Drv.Nom
 
                 stack.Children.Add(Elipse)
@@ -319,7 +323,11 @@ Class Window1
                 Dim tl As New ToolTip
                 tl.Content = drv
                 Dim label As New Label
-                label.Foreground = New SolidColorBrush(Colors.White)
+                If Dev.Enable = True Then
+                    label.Foreground = New SolidColorBrush(Colors.White)
+                Else
+                    label.Foreground = New SolidColorBrush(Colors.Black)
+                End If
                 label.Content = drv
                 label.ToolTip = tl
 
@@ -356,7 +364,11 @@ Class Window1
                 img.Width = 20
 
                 Dim label As New Label
-                label.Foreground = New SolidColorBrush(Colors.White)
+                If Mac.Enable = True Then
+                    label.Foreground = New SolidColorBrush(Colors.White)
+                Else
+                    label.Foreground = New SolidColorBrush(Colors.Black)
+                End If
                 label.Content = Mac.Nom
 
                 uri = MyRep & "\Images\Icones\script-128.png"
@@ -399,7 +411,11 @@ Class Window1
                 img.Width = 20
 
                 Dim label As New Label
-                label.Foreground = New SolidColorBrush(Colors.White)
+                If Trig.Enable = True Then
+                    label.Foreground = New SolidColorBrush(Colors.White)
+                Else
+                    label.Foreground = New SolidColorBrush(Colors.Black)
+                End If
                 label.Content = Trig.Nom
 
                 uri = MyRep & "\Images\Icones\drapeau-vert-32.png"
@@ -526,7 +542,11 @@ Class Window1
             End If
 
             If TreeViewG.SelectedItem IsNot Nothing Then
-                Window1.myService.DeleteDevice(IdSrv, TreeViewG.SelectedItem.uid)
+                Dim retour As Integer = Window1.myService.DeleteDevice(IdSrv, TreeViewG.SelectedItem.uid)
+                If retour = -2 Then
+                    MessageBox.Show("Vous ne pouvez pas supprimer ce device !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
                 AffDevice()
             Else
                 MessageBox.Show("Veuillez sélectionner un Device à supprimer!")
