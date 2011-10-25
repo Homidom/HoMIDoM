@@ -33,7 +33,8 @@ Namespace HoMIDom
         Private Shared _ListZones As New List(Of Zone) 'Liste des zones
         Private Shared _ListUsers As New List(Of Users.User) 'Liste des users
         Private Shared _ListMacros As New List(Of Macro) 'Liste des macros
-        Private Shared _listTriggers As New List(Of Trigger) 'Liste de tous les triggers
+        Private Shared _ListTriggers As New List(Of Trigger) 'Liste de tous les triggers
+        Private Shared _ListGroups As New List(Of Groupes) 'Liste de tous les groupes
         <NonSerialized()> Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
         <NonSerialized()> Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
         Shared Soleil As New Soleil 'Déclaration class Soleil
@@ -203,8 +204,14 @@ Namespace HoMIDom
 
             Try
                 '---- Actions à effectuer toutes les minutes ----
-                If ladate.Second = 1 Then
-
+                If ladate.Second = 0 Then
+                    If _HeureLeverSoleil <= Now And _HeureCoucherSoleil >= Now Then
+                        Dim x As TemplateDevice = ReturnDeviceById(_IdSrv, "soleilleve01")
+                        If x IsNot Nothing Then x.Value = True
+                    Else
+                        Dim x As TemplateDevice = ReturnDeviceById(_IdSrv, "soleilleve01")
+                        If x IsNot Nothing Then x.Value = False
+                    End If
                 End If
 
                 '---- Actions à effectuer toutes les heures ----
@@ -513,6 +520,7 @@ Namespace HoMIDom
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des devices")
                         list = Nothing
                         list = myxml.SelectNodes("/homidom/devices/device")
+                        Dim trvSoleil As Boolean = False
 
                         If list.Count > 0 Then 'présence d'un device
                             For j As Integer = 0 To list.Count - 1
@@ -722,6 +730,9 @@ Namespace HoMIDom
                                     End If
                                     If .ID <> "" And .Name <> "" And .Adresse1 <> "" And .DriverId <> "" Then
                                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement du device " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
+                                        If .ID = "soleilleve01" Then
+                                            trvSoleil = True
+                                        End If
                                     Else
                                         _Dev.Enable = False
                                         Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement du device (information incomplete -> Disable) " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
@@ -730,6 +741,18 @@ Namespace HoMIDom
                                 _ListDevices.Add(_Dev)
                                 _Dev = Nothing
                             Next
+                            If trvSoleil = False Then
+                                Dim _Devs As New Device.GENERIQUEBOOLEEN(Me)
+                                _Devs.ID = "soleil01"
+                                _Devs.Name = "IsJour"
+                                _Devs.Enable = True
+                                _Devs.Adresse1 = "N/A"
+                                _Devs.Description = "Levé/Couché du soleil"
+                                _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
+                                _ListDevices.Add(_Devs)
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement du device " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
+                                _Devs = Nothing
+                            End If
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListDevices.Count & " devices(s) trouvé(s)")
                         Else
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun device enregistré dans le fichier de config")
@@ -4014,6 +4037,12 @@ Namespace HoMIDom
                 Exit Function
             End If
 
+            If deviceId = "soleilleve01" Then
+                Return -2
+                Exit Function
+            End If
+
+
             Try
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).Id = deviceId Then
@@ -5042,7 +5071,7 @@ Namespace HoMIDom
         ''' <param name="DriverID"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function ReturnDeviceByAdresse1TypeDriver(ByVal IdSrv As String, ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DriverID As String) As ArrayList Implements IHoMIDom.ReturnDeviceByAdresse1TypeDriver
+        Public Function ReturnDeviceByAdresse1TypeDriver(ByVal IdSrv As String, ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DriverID As String, ByVal Enable As Boolean) As ArrayList Implements IHoMIDom.ReturnDeviceByAdresse1TypeDriver
             If VerifIdSrv(IdSrv) = False Then
                 Return Nothing
                 Exit Function
@@ -5052,7 +5081,7 @@ Namespace HoMIDom
                 Dim retour As Object = Nothing
                 Dim listresultat As New ArrayList
                 For i As Integer = 0 To _ListDevices.Count - 1
-                    If (DeviceAdresse = "" Or _ListDevices.Item(i).Adresse1 = DeviceAdresse.ToUpper()) And (DeviceType = "" Or _ListDevices.Item(i).type = DeviceType.ToUpper()) And (DriverID = "" Or _ListDevices.Item(i).DriverID = DriverID.ToUpper()) Then
+                    If (DeviceAdresse = "" Or _ListDevices.Item(i).Adresse1 = DeviceAdresse.ToUpper()) And (DeviceType = "" Or _ListDevices.Item(i).type = DeviceType.ToUpper()) And (DriverID = "" Or _ListDevices.Item(i).DriverID = DriverID.ToUpper()) And _ListDevices.Item(i).Enable = Enable Then
                         retour = _ListDevices.Item(i)
                         listresultat.Add(retour)
                         retour = Nothing
