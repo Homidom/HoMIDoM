@@ -827,7 +827,7 @@ Imports System.IO.Ports
 
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID)
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
                 'un device trouvé on maj la value
                 If (listedevices.Count = 1) Then
                     'correction valeur pour correspondre au type de value
