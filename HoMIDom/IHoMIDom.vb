@@ -424,7 +424,7 @@ Namespace HoMIDom
         ''' <param name="DeviceDriver">ID driver du device</param>
         ''' <returns>List de device, Nothing si non trouvé ou ID du serveur erroné</returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ReturnDeviceByAdresse1TypeDriver(ByVal IdSrv As String, ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DeviceDriver As String) As ArrayList
+        <OperationContract()> Function ReturnDeviceByAdresse1TypeDriver(ByVal IdSrv As String, ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DeviceDriver As String, ByVal Enable As Boolean) As ArrayList
 
         ''' <summary>
         ''' Créer un nouveau device ou sauvegarder la modif (si ID est complété)
