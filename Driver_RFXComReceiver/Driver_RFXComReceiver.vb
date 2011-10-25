@@ -2799,7 +2799,7 @@ Imports System.Globalization
             If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, adresse, "", Me._ID)
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
                 If (listedevices.Count >= 1) Then
                     'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
                     WriteLog(listedevices.Item(0)._Name & " (" & adresse & ") : Battery Empty")
@@ -2831,7 +2831,7 @@ Imports System.Globalization
             If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID)
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
                 If (listedevices.Count = 1) Then
                     'un device trouvé on maj la value
                     If valeur = "ON" Then
@@ -2845,7 +2845,7 @@ Imports System.Globalization
                     WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
                 Else
                     'on vérifie si le device est configuré en RFXMitter
-                    listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, "C2B6AA22-77E7-11E0-A193-47D34824019B")
+                    listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, "C2B6AA22-77E7-11E0-A193-47D34824019B", True)
                     If (listedevices.Count = 1) Then
                         'un device trouvé on maj la value
                         If valeur = "ON" Then
