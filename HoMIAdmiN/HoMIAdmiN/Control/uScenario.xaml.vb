@@ -52,8 +52,11 @@ Public Class uScenario
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
 
+        Mouse.OverrideCursor = Cursors.Wait
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         Afficher()
+
+        Mouse.OverrideCursor = Nothing
     End Sub
 
     'Ajouter action device

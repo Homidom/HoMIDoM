@@ -1,6 +1,6 @@
 ﻿<UserControl x:Class="uTestDevice"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="419" Height="300">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="419" Height="300" Margin="5">
     
     <UserControl.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">

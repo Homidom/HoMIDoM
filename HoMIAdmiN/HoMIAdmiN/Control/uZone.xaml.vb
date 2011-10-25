@@ -134,7 +134,12 @@ Partial Public Class uZone
                 Exit Sub
             End If
             Dim y As New Zone.Element_Zone(uri, False)
+            If _ListIdSelect.Contains(y) Then
+                MessageBox.Show("Cet élément existe déjà dans la liste !", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
             _ListIdSelect.Add(y)
+            y = Nothing
             RefreshLists()
         Else
             e.Effects = DragDropEffects.None
