@@ -42,7 +42,6 @@ Public Class uAction
         j = (Span * j) / _Zoom
         Fond.SetLeft(Rectangle1, j)
         Fond.SetLeft(ImgDelete, j + 160)
-        j = 0
     End Sub
 
     'Objet action
@@ -57,26 +56,22 @@ Public Class uAction
                 Dim i As Action.TypeAction = _ObjAction.TypeAction
                 Select Case i
                     Case Action.TypeAction.ActionDevice
-                        Dim x As Action.ActionDevice
-                        x = _ObjAction
+                        Dim x As Action.ActionDevice = _ObjAction
                         Label1.Content = "Device"
                         If x.IdDevice IsNot Nothing Then Label1.Content = Window1.myService.ReturnDeviceByID(IdSrv, x.IdDevice).Name
                         If x.Method IsNot Nothing Then Label2.Content = x.Method
                     Case Action.TypeAction.ActionMail
-                        Dim x As Action.ActionMail
-                        x = _ObjAction
+                        Dim x As Action.ActionMail = _ObjAction
                         Label1.Content = "Mail "
-                        If x.UserId IsNot Nothing Then Label1.Content = Label1.Content & "{" & Window1.myService.ReturnUserById(IdSrv, x.UserId).Nom & "}"
+                        If x.UserId IsNot Nothing Then Label1.Content = Label1.Content & "{" & Window1.myService.ReturnUserById(IdSrv, x.UserId).UserName & "}"
                         If x.Sujet IsNot Nothing Then Label2.Content = x.Sujet
                     Case Action.TypeAction.ActionIf
-                        Dim x As Action.ActionIf
+                        Dim x As Action.ActionIf = _ObjAction
                         Label1.Content = "If"
-                        x = _ObjAction
                         Label2.Content = ""
                     Case Action.TypeAction.ActionMacro
-                        Dim x As Action.ActionMacro
+                        Dim x As Action.ActionMacro = _ObjAction
                         Label1.Content = "Macro"
-                        x = _ObjAction
                         If x.IdMacro IsNot Nothing Then Label2.Content = Window1.myService.ReturnMacroById(IdSrv, x.IdMacro).Nom
                 End Select
                 Refresh_Position()

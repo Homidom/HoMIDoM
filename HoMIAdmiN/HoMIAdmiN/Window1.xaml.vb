@@ -1226,4 +1226,29 @@ Class Window1
         StkMnu5.Height = 0
         StkMnu6.Height = 0
     End Sub
+
+    Private Sub BtnGenereReleve_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereReleve.Click
+        Dim _listhisto As New List(Of Historisation)
+        Dim _Two As Boolean = False
+
+        For i As Integer = 0 To TreeViewG.Items.Count - 1
+            Dim chk As CheckBox = TreeViewG.Items(i)
+
+            If chk.IsChecked = True And _Two = False Then
+                _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
+                _Two = True
+            Else
+                If chk.IsChecked = True And _Two = True Then
+                    MessageBox.Show("Seul un élément peut être affiché dans les relevés!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+            End If
+        Next
+
+        Dim x As New uReleve(_listhisto)
+        x.Uid = System.Guid.NewGuid.ToString()
+        AddHandler x.CloseMe, AddressOf UnloadControl
+        CanvasRight.Children.Clear()
+        CanvasRight.Children.Add(x)
+    End Sub
 End Class

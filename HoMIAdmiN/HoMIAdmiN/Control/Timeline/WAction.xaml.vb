@@ -47,7 +47,7 @@ Public Class WActionParametrage
                             Exit Sub
                         End If
                         Dim obj As Action.ActionMail = _ObjAction
-                        obj.UserId = Window1.myService.GetAllUsers(IdSrv).Item(Cb1.SelectedIndex).ID
+                        obj.UserId = Cb1.SelectedItem.ID
                         obj.Sujet = Txt2.Text
                         obj.Message = TxtValue.Text
                         _ObjAction = obj
@@ -176,7 +176,7 @@ Public Class WActionParametrage
                         Dim obj As Action.ActionMail = _ObjAction
 
                         'Mise en forme graphique
-                        Lbl1.Content = "User:"
+                        Lbl1.Content = "Username:"
                         Lbl2.Content = "Sujet:"
                         LblValue.Content = "Message:"
                         Txt2.Text = ""
@@ -187,15 +187,14 @@ Public Class WActionParametrage
                         TxtValue.Text = ""
                         TxtValue.Height = 80
 
-                        For i As Integer = 0 To Window1.myService.GetAllUsers(IdSrv).Count - 1
-                            Cb1.Items.Add(Window1.myService.GetAllUsers(IdSrv).Item(i).Nom & " " & Window1.myService.GetAllUsers(IdSrv).Item(i).Prenom)
-                        Next
+                        Cb1.ItemsSource = Window1.myService.GetAllUsers(IdSrv)
+                        Cb1.DisplayMemberPath = "UserName"
 
                         If obj.UserId IsNot Nothing Then
                             Dim _user As Users.User = Window1.myService.ReturnUserById(IdSrv, obj.UserId)
-                            Dim a As String = _user.Nom & " " & _user.Prenom
+
                             For i As Integer = 0 To Cb1.Items.Count - 1
-                                If a = Cb1.Items(i) Then
+                                If _user.UserName = Cb1.Items(i).Username Then
                                     Cb1.SelectedIndex = i
                                     Exit For
                                 End If
