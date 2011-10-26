@@ -320,8 +320,10 @@
                     <Button Height="22" Margin="5" Name="BtnGenereGraph" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Générer">
                         <Image Source="/HoMIAdmiN;component/Images/curve-32.png" />
                     </Button>
-
-                </StackPanel>
+                <Button Height="22" Margin="5" Name="BtnGenereReleve" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Générer Relevés">
+                    <Image Source="/HoMIAdmiN;component/Images/releve.png" />
+                </Button>
+            </StackPanel>
                 <TreeView Margin="3" Name="TreeViewG" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
 
             </DockPanel>
