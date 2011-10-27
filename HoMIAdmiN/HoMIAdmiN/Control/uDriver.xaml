@@ -69,7 +69,7 @@
         </ControlTemplate>
     </UserControl.Resources>
 
-    <Grid Margin="1" Height="548.75" Width="625.493" Visibility="Visible" Background="#636060">
+    <Grid Margin="1" Height="548.75" Width="625.493" Visibility="Visible" Background="#636060" Opacity="0.85">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
             <StackPanel Height="553">
             <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Driver</Label>

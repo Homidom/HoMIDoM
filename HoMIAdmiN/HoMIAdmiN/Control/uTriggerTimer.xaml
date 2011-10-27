@@ -69,7 +69,7 @@
         </ControlTemplate>
     </UserControl.Resources>
 
-    <Grid Background="#636060">
+    <Grid Background="#636060" Opacity="0.85">
         <StackPanel >
             <Label HorizontalAlignment="Center"  Content="Trigger Timer" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Name="Label1"  />
             <Rectangle Height="20" />

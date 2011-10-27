@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Margin="10">
+              Margin="10" MinWidth="400">
     
     <UserControl.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
@@ -77,12 +77,11 @@
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
             <StackPanel >
                 <Label HorizontalAlignment="Center" Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Relevé</Label>
-                <StackPanel HorizontalAlignment="Right">
-                    <StackPanel>
-                        <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="2" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Fermer</Button>
-                    </StackPanel>
-                </StackPanel>
-                <DataGrid Name="DataGrid1" MinHeight="150" MaxHeight="350" Margin="5" MinWidth="200" RowBackground="LightBlue" AlternatingRowBackground="LightYellow"></DataGrid>
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" >
+                    <Label Name="LblDev" Content="#####" Width="250" Foreground="White" />
+                    <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="2" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Fermer</Button>
+                 </StackPanel>
+                <DataGrid Name="DataGrid1" MinHeight="250" MaxHeight="350" Margin="5" MinWidth="200" RowBackground="LightBlue" AlternatingRowBackground="LightYellow"></DataGrid>
             </StackPanel>
         </Border>
 

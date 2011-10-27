@@ -4,7 +4,7 @@ Public Class uReleve
     Dim _listhisto As New List(Of Historisation)
     Public Event CloseMe(ByVal MyObject As Object)
 
-    Public Sub New(ByVal ListReleve)
+    Public Sub New(ByVal ListReleve As Object, ByVal Label As String)
 
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
@@ -12,7 +12,9 @@ Public Class uReleve
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         _listhisto = ListReleve
         DataGrid1.ItemsSource = _listhisto
-        AddHandler DataGrid1.Loaded, AddressOf GridOK
+        AddHandler DataGrid1.Loaded, AddressOf GridOk
+
+        LblDev.Content = Label
     End Sub
 
     Private Sub GridOk(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)

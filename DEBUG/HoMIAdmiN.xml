@@ -86,6 +86,14 @@ InitializeComponent
 	<summary>
 uCondition
 </summary>
+</member><member name="M:WpfApplication1.uReleve.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uReleve">
+	<summary>
+uReleve
+</summary>
 </member><member name="M:WpfApplication1.Application.InitializeComponent">
 	<summary>
 InitializeComponent

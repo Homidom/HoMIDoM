@@ -1044,15 +1044,9 @@ Class Window1
 
                 courbe = myPane.AddCurve(chk.Content, listpoint, ListColor(idxcolor), ZedGraph.SymbolType.None)
                 courbe.Line.Width = 1
-                'courbe.Line.Fill = New ZedGraph.Fill(System.Drawing.Color.FromArgb(150, 250, 220, 220))
-
             End If
 
 
-            'Mypane
-            'myPane.Rect = New System.Drawing.RectangleF(0, 0, largeur, hauteur)
-            'myPane.Title.FontSpec.FontColor = Color.DodgerBlue
-            'myPane.Legend.IsVisible = True 'on affiche la légende ou non
             myPane.Chart.Fill = New ZedGraph.Fill(System.Drawing.Color.FromArgb(240, 245, 250), System.Drawing.Color.FromArgb(210, 230, 240), -90) 'fond dégradé
 
             'Axe X
@@ -1230,12 +1224,14 @@ Class Window1
     Private Sub BtnGenereReleve_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereReleve.Click
         Dim _listhisto As New List(Of Historisation)
         Dim _Two As Boolean = False
+        Dim lbl As String = ""
 
         For i As Integer = 0 To TreeViewG.Items.Count - 1
             Dim chk As CheckBox = TreeViewG.Items(i)
 
             If chk.IsChecked = True And _Two = False Then
                 _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
+                lbl = chk.Content
                 _Two = True
             Else
                 If chk.IsChecked = True And _Two = True Then
@@ -1245,10 +1241,12 @@ Class Window1
             End If
         Next
 
-        Dim x As New uReleve(_listhisto)
-        x.Uid = System.Guid.NewGuid.ToString()
-        AddHandler x.CloseMe, AddressOf UnloadControl
-        CanvasRight.Children.Clear()
-        CanvasRight.Children.Add(x)
+        If _listhisto IsNot Nothing And _Two Then
+            Dim x As New uReleve(_listhisto, lbl)
+            x.Uid = System.Guid.NewGuid.ToString()
+            AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
+            CanvasRight.Children.Add(x)
+        End If
     End Sub
 End Class
