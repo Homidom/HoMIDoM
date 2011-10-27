@@ -69,7 +69,7 @@
         </ControlTemplate>
     </UserControl.Resources>
 
-    <Grid Margin="1" Visibility="Visible" Background="#636060">
+    <Grid Margin="1" Visibility="Visible" Background="#636060" Opacity="0.85">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" >
             <StackPanel >
                 <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Device</Label>

@@ -83,42 +83,42 @@
                 <StackPanel >
                         <StackPanel Orientation="Horizontal" >
                             <Label Content="Nom:" Width="70" Margin="1" Name="Label1" Foreground="White" />
-                            <TextBox Name="TxtName" Width="150"/>
-                            <Button Margin="2" Name="NewSite" Height="20" Width="20" Template="{DynamicResource GlassButton}" ToolTip="Ajouter/Modifier un serveur">
+                            <TextBox Name="TxtName" Width="150" TabIndex="2" />
+                            <Button Margin="2" Name="NewSite" Height="20" Width="20" Template="{DynamicResource GlassButton}" ToolTip="Ajouter/Modifier un serveur" TabIndex="3">
                                 <Image Source="/HoMIAdmiN;component/Images/save-icone-48.png" ToolTip="Appliquer"/>
                             </Button>
-                            <Button Margin="2" Name="DelSite" Height="20" Width="20" Template="{DynamicResource GlassButton}">
+                            <Button Margin="2" Name="DelSite" Height="20" Width="20" Template="{DynamicResource GlassButton}" TabIndex="4">
                                 <Image Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" ToolTip="Supprimer un serveur" />
                             </Button>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
                             <Label Content="ID:" Width="70" Name="Label15" Foreground="White" Margin=" 1" />
-                            <TextBox Height="20" Margin="1" Name="TxtID" Width="150" />
+                            <TextBox Height="20" Margin="1" Name="TxtID" Width="150" TabIndex="5" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
                             <Label Content="IP:" Width="70" Name="Label5" Foreground="White" Margin=" 1" />
-                            <TextBox Height="20" Margin="1" Name="TxtIP" Width="150" />
+                            <TextBox Height="20" Margin="1" Name="TxtIP" Width="150" TabIndex="6" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
                             <Label Content="Port:" Width="70" Foreground="White" Margin="1" Name="Label6" />
-                            <TextBox Margin="1" Name="TxtPort" Width="50" />
+                            <TextBox Margin="1" Name="TxtPort" Width="50" TabIndex="7" />
                             <Rectangle Width="10" />
-                            <CheckBox  Margin="2" Name="ChkDefaut" Foreground="White" Content="Serveur par défaut" />
+                            <CheckBox  Margin="2" Name="ChkDefaut" Foreground="White" Content="Serveur par défaut" TabIndex="8" />
                         </StackPanel>
                        <Rectangle Height="20" />
                     </StackPanel>
             </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                 <Label Content="Username:" Margin="1" Name="Label3" Foreground="White" Width=" 70"/>
-            <TextBox Margin="1" Name="TxtUsername" Width="200" />
+            <TextBox Margin="1" Name="TxtUsername" Width="200" TabIndex="0" />
                     <Rectangle Width="5" />
                 </StackPanel> 
             <StackPanel Orientation="Horizontal" >
             <Label Content="Password:" Margin="1" Name="Label4" Foreground="White" Width=" 70"/>
-            <PasswordBox Margin="1" Name="TxtPassword" Width="200" />
+            <PasswordBox Margin="1" Name="TxtPassword" Width="200" TabIndex="1" />
             </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <CheckBox Content="Se souvenir du mot de passe" Margin="2" Name="CheckBox1" Foreground="White" />
+                    <CheckBox Content="Se souvenir du mot de passe" Margin="2" Name="CheckBox1" Foreground="White" TabIndex="9" />
                 </StackPanel>
             </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="3">
