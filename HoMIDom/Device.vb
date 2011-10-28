@@ -681,7 +681,7 @@ Namespace HoMIDom
                         _Value = tmp
                         RaiseEvent DeviceChanged(Me, "Value", _Value)
                     Else
-                        _Server.Log(Server.TypeLog.VALEUR_INCHANGE, Server.TypeSource.SERVEUR, "DeviceChange", _Name & " : " & _Adresse1 & " : " & _Value)
+                        _Server.Log(Server.TypeLog.VALEUR_INCHANGE, Server.TypeSource.SERVEUR, "DeviceValue Inchangé", _Name & " : " & _Adresse1 & " : " & _Value)
                     End If
                 End Set
             End Property
