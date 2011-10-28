@@ -57,6 +57,8 @@ Namespace HoMIDom
         Private _ListTagAudio As New List(Of Audio.FilePlayList) ' Liste des tags des fichiers audio 
         Private Shared Etat_server As Boolean = False 'etat du serveur : true = démarré
         Dim fsw As FileSystemWatcher
+        Shared FIFOLog As List(Of System.Xml.XmlElement)
+
 #End Region
 
 
@@ -2085,7 +2087,6 @@ Namespace HoMIDom
 
                 'Ecrire le log
                 Try
-                    xmldoc.Load(_File) 'ouvre le fichier xml
                     Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
                     Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
                     Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
@@ -2106,7 +2107,10 @@ Namespace HoMIDom
                     elelog.SetAttribute("source", Source)
                     elelog.SetAttribute("fonction", HtmlEncode(Fonction))
                     elelog.SetAttribute("message", HtmlEncode(Message))
+                    FIFOLog.Add(elelog)
 
+
+                    xmldoc.Load(_File) 'ouvre le fichier xml
                     Dim root As XmlElement = xmldoc.Item("logs")
                     root.AppendChild(elelog)
 
@@ -2120,6 +2124,7 @@ Namespace HoMIDom
                     IO.File.Move(_File, filearchive)
                     CreateNewFileLog(_File)
                     Fichier = New FileInfo(_File)
+
                     xmldoc.Load(_File) 'ouvre le fichier xml
                     Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
                     Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
@@ -2156,22 +2161,30 @@ Namespace HoMIDom
             End Try
         End Sub
 
+        Private Sub ThreadLog()
+
+        End Sub
+
         ''' <summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
         ''' <param name="NewFichier"></param>
         ''' <remarks></remarks>
         Public Sub CreateNewFileLog(ByVal NewFichier As String)
-            Dim rw As XmlTextWriter = New XmlTextWriter(NewFichier, Nothing)
-            rw.WriteStartDocument()
-            rw.WriteStartElement("logs")
-            rw.WriteStartElement("log")
-            rw.WriteAttributeString("time", Now)
-            rw.WriteAttributeString("type", 0)
-            rw.WriteAttributeString("source", 0)
-            rw.WriteAttributeString("message", "Création du nouveau fichier log")
-            rw.WriteEndElement()
-            rw.WriteEndElement()
-            rw.WriteEndDocument()
-            rw.Close()
+            Try
+                Dim rw As XmlTextWriter = New XmlTextWriter(NewFichier, Nothing)
+                rw.WriteStartDocument()
+                rw.WriteStartElement("logs")
+                rw.WriteStartElement("log")
+                rw.WriteAttributeString("time", Now)
+                rw.WriteAttributeString("type", 0)
+                rw.WriteAttributeString("source", 0)
+                rw.WriteAttributeString("message", "Création du nouveau fichier log")
+                rw.WriteEndElement()
+                rw.WriteEndElement()
+                rw.WriteEndDocument()
+                rw.Close()
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CreateNewFileLog", "Erreur: " & ex.ToString)
+            End Try
         End Sub
 #End Region
 
@@ -2195,7 +2208,6 @@ Namespace HoMIDom
                 Else
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour)
                 End If
-
                 retour = sqlite_medias.connect("medias")
                 If retour.StartsWith("ERR:") Then
                     Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Medias : " & retour)
@@ -2271,6 +2283,9 @@ Namespace HoMIDom
                 '                 NotifyFilters.FileName Or _
                 '                 NotifyFilters.DirectoryName)
                 'End With
+
+                'test log
+                CleanLog(1)
             Catch ex As Exception
                 Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Exception : " & ex.Message)
             End Try
@@ -3089,6 +3104,15 @@ Namespace HoMIDom
         Public Function GetByteFromImage(ByVal file As String) As Byte() Implements IHoMIDom.GetByteFromImage
             Dim array As Byte() = Nothing
             Try
+                If file = "" Then
+                    Return Nothing
+                End If
+
+                If IO.File.Exists(file) = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetByteFromImage", "le fichier n'existe pas: " & file)
+                    Return Nothing
+                End If
+
                 Using fs As New FileStream(file, FileMode.Open, FileAccess.Read)
                     Dim reader As New BinaryReader(fs)
                     If reader IsNot Nothing Then
@@ -6015,6 +6039,50 @@ Namespace HoMIDom
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetPortSOAP", "Exception : " & ex.Message)
                 Return -1
+            End Try
+        End Function
+#End Region
+
+#Region "Maintenance"
+        Public Function CleanLog(ByVal Mois As Integer) As String
+            Try
+
+                Dim dirInfo As New System.IO.DirectoryInfo(_MonRepertoire & "\logs\")
+                Dim file As System.IO.FileInfo
+                Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.xml", System.IO.SearchOption.AllDirectories)
+                Dim b As String = ""
+                Dim DateRef As DateTime = Now.AddMonths(-1 * Mois)
+
+                If (files IsNot Nothing) Then
+                    For Each file In files
+                        Dim x As New ImageFile
+
+                        'C'est un log archivé
+                        If InStr(file.Name, "_") > 0 Then
+                            Dim a() As String = file.Name.Split("_")
+                            If a IsNot Nothing Then
+                                If a.Count > 2 Then
+                                    If a(0) = "log" Then
+                                        Dim filedate As String = a(1)
+                                        Dim fileyear As String = Mid(filedate, 1, 4)
+                                        Dim filemonth As String = Mid(filedate, 5, 2)
+                                        If DateRef.Year > fileyear Then
+                                            b &= file.Name & vbCrLf
+                                        Else
+                                            If DateRef.Month >= filemonth Then
+                                                b &= file.Name & vbCrLf
+                                            End If
+                                        End If
+                                    End If
+                                End If
+                            End If
+                        End If
+                    Next
+                End If
+                Return 0
+            Catch ex As Exception
+                Return "ERR:" & ex.ToString
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CleanLog", "Erreur: " & ex.Message)
             End Try
         End Function
 #End Region

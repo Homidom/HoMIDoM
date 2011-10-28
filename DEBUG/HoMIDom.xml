@@ -6,19 +6,7 @@ HoMIDom
 </name>
 </assembly>
 <members>
-<member name="P:HoMIDom.HoMIDom.Groupes.DeviceAction">
-	<summary>
- List des actions associées au Device
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Groupes">
-	<summary>
- Permet de regrouper un ensemble de devices du même type
- </summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.connect(System.String)">
+<member name="M:HoMIDom.HoMIDom.Sqlite.connect(System.String)">
 	<summary>          
  Connection à une BDD Sqlite
  </summary>
@@ -1470,6 +1458,18 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Server">
 	<summary>Classe Server</summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Groupes.DeviceAction">
+	<summary>
+ List des actions associées au Device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Groupes">
+	<summary>
+ Permet de regrouper un ensemble de devices du même type
+ </summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Soleil">
 	<summary>

@@ -81,7 +81,7 @@
                     <Label Name="LblDev" Content="#####" Width="250" Foreground="White" />
                     <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="2" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Fermer</Button>
                  </StackPanel>
-                <DataGrid Name="DataGrid1" MinHeight="250" MaxHeight="350" Margin="5" MinWidth="200" RowBackground="LightBlue" AlternatingRowBackground="LightYellow"></DataGrid>
+                <DataGrid Name="DataGrid1" Margin="5" RowBackground="LightBlue" AlternatingRowBackground="LightYellow" Width="400" Height="450"></DataGrid>
             </StackPanel>
         </Border>
 
