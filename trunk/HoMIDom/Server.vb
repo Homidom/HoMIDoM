@@ -61,7 +61,6 @@ Namespace HoMIDom
 
 #End Region
 
-
 #Region "Event"
         '********************************************************************
         'Gestion des Evènements
@@ -272,11 +271,15 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function VerifIdSrv(ByVal Value As String) As Boolean
-            If Value = _IdSrv Then
-                Return True
-            Else
-                Return False
-            End If
+            Try
+                If Value = _IdSrv Then
+                    Return True
+                Else
+                    Return False
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "VerifIdSrv", "Exception : " & ex.Message)
+            End Try
         End Function
 #End Region
 
@@ -1507,87 +1510,89 @@ Namespace HoMIDom
         ''' <param name="ListActions"></param>
         ''' <remarks></remarks>
         Private Sub WriteListAction(ByVal writer As XmlTextWriter, ByVal ListActions As ArrayList)
-            For j As Integer = 0 To ListActions.Count - 1
-                writer.WriteStartElement("action")
-                writer.WriteStartAttribute("typeaction")
-                writer.WriteValue(ListActions.Item(j).TypeAction.ToString)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("timing")
-                writer.WriteValue(ListActions.Item(j).timing)
-                writer.WriteEndAttribute()
-                Select Case ListActions.Item(j).TypeAction
-                    Case Action.TypeAction.ActionDevice
-                        writer.WriteStartAttribute("iddevice")
-                        writer.WriteValue(ListActions.Item(j).IdDevice)
-                        writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("method")
-                        writer.WriteValue(ListActions.Item(j).Method)
-                        writer.WriteEndAttribute()
-                        Dim a As String = ""
-                        For k As Integer = 0 To ListActions.Item(j).parametres.count - 1
-                            a = a & ListActions.Item(j).parametres.item(k) & "|"
-                        Next
-                        writer.WriteStartAttribute("parametres")
-                        writer.WriteValue(a)
-                        writer.WriteEndAttribute()
-                    Case Action.TypeAction.ActionMacro
-                        writer.WriteStartAttribute("idmacro")
-                        writer.WriteValue(ListActions.Item(j).IdMacro)
-                        writer.WriteEndAttribute()
-                    Case Action.TypeAction.ActionMail
-                        writer.WriteStartAttribute("userid")
-                        writer.WriteValue(ListActions.Item(j).UserId)
-                        writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("sujet")
-                        writer.WriteValue(ListActions.Item(j).Sujet)
-                        writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("message")
-                        writer.WriteValue(ListActions.Item(j).Sujet)
-                        writer.WriteEndAttribute()
-                    Case Action.TypeAction.ActionIf
-                        writer.WriteStartElement("conditions")
-                        For i2 As Integer = 0 To ListActions.Item(j).Conditions.count - 1
-                            writer.WriteStartElement("condition")
-                            writer.WriteStartAttribute("typecondition")
-                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Type.ToString)
+            Try
+                For j As Integer = 0 To ListActions.Count - 1
+                    writer.WriteStartElement("action")
+                    writer.WriteStartAttribute("typeaction")
+                    writer.WriteValue(ListActions.Item(j).TypeAction.ToString)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("timing")
+                    writer.WriteValue(ListActions.Item(j).timing)
+                    writer.WriteEndAttribute()
+                    Select Case ListActions.Item(j).TypeAction
+                        Case Action.TypeAction.ActionDevice
+                            writer.WriteStartAttribute("iddevice")
+                            writer.WriteValue(ListActions.Item(j).IdDevice)
                             writer.WriteEndAttribute()
-                            If ListActions.Item(j).conditions.item(i2).Type = Action.TypeCondition.DateTime Then
-                                writer.WriteStartAttribute("datetime")
-                                writer.WriteValue(ListActions.Item(j).Conditions.item(i2).DateTime)
-                                writer.WriteEndAttribute()
-                            End If
-                            If ListActions.Item(j).conditions.item(i2).Type = Action.TypeCondition.Device Then
-                                writer.WriteStartAttribute("iddevice")
-                                writer.WriteValue(ListActions.Item(j).Conditions.item(i2).IdDevice)
-                                writer.WriteEndAttribute()
-                                writer.WriteStartAttribute("propertydevice")
-                                writer.WriteValue(ListActions.Item(j).Conditions.item(i2).propertydevice)
-                                writer.WriteEndAttribute()
-                                writer.WriteStartAttribute("value")
-                                writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Value.ToString)
-                                writer.WriteEndAttribute()
-                            End If
-                            writer.WriteStartAttribute("condition")
-                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Condition.ToString)
+                            writer.WriteStartAttribute("method")
+                            writer.WriteValue(ListActions.Item(j).Method)
                             writer.WriteEndAttribute()
-                            writer.WriteStartAttribute("operateur")
-                            writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Operateur.ToString)
+                            Dim a As String = ""
+                            For k As Integer = 0 To ListActions.Item(j).parametres.count - 1
+                                a = a & ListActions.Item(j).parametres.item(k) & "|"
+                            Next
+                            writer.WriteStartAttribute("parametres")
+                            writer.WriteValue(a)
                             writer.WriteEndAttribute()
+                        Case Action.TypeAction.ActionMacro
+                            writer.WriteStartAttribute("idmacro")
+                            writer.WriteValue(ListActions.Item(j).IdMacro)
+                            writer.WriteEndAttribute()
+                        Case Action.TypeAction.ActionMail
+                            writer.WriteStartAttribute("userid")
+                            writer.WriteValue(ListActions.Item(j).UserId)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("sujet")
+                            writer.WriteValue(ListActions.Item(j).Sujet)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("message")
+                            writer.WriteValue(ListActions.Item(j).Sujet)
+                            writer.WriteEndAttribute()
+                        Case Action.TypeAction.ActionIf
+                            writer.WriteStartElement("conditions")
+                            For i2 As Integer = 0 To ListActions.Item(j).Conditions.count - 1
+                                writer.WriteStartElement("condition")
+                                writer.WriteStartAttribute("typecondition")
+                                writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Type.ToString)
+                                writer.WriteEndAttribute()
+                                If ListActions.Item(j).conditions.item(i2).Type = Action.TypeCondition.DateTime Then
+                                    writer.WriteStartAttribute("datetime")
+                                    writer.WriteValue(ListActions.Item(j).Conditions.item(i2).DateTime)
+                                    writer.WriteEndAttribute()
+                                End If
+                                If ListActions.Item(j).conditions.item(i2).Type = Action.TypeCondition.Device Then
+                                    writer.WriteStartAttribute("iddevice")
+                                    writer.WriteValue(ListActions.Item(j).Conditions.item(i2).IdDevice)
+                                    writer.WriteEndAttribute()
+                                    writer.WriteStartAttribute("propertydevice")
+                                    writer.WriteValue(ListActions.Item(j).Conditions.item(i2).propertydevice)
+                                    writer.WriteEndAttribute()
+                                    writer.WriteStartAttribute("value")
+                                    writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Value.ToString)
+                                    writer.WriteEndAttribute()
+                                End If
+                                writer.WriteStartAttribute("condition")
+                                writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Condition.ToString)
+                                writer.WriteEndAttribute()
+                                writer.WriteStartAttribute("operateur")
+                                writer.WriteValue(ListActions.Item(j).Conditions.item(i2).Operateur.ToString)
+                                writer.WriteEndAttribute()
+                                writer.WriteEndElement()
+                            Next
                             writer.WriteEndElement()
-                        Next
-                        writer.WriteEndElement()
-                        writer.WriteStartElement("then")
-                        If ListActions.Item(j).ListTrue IsNot Nothing Then WriteListAction(writer, ListActions.Item(j).ListTrue)
-                        writer.WriteEndElement()
-                        writer.WriteStartElement("else")
-                        If ListActions.Item(j).ListFalse IsNot Nothing Then WriteListAction(writer, ListActions.Item(j).ListFalse)
-                        writer.WriteEndElement()
-                End Select
-                writer.WriteEndElement()
-            Next
+                            writer.WriteStartElement("then")
+                            If ListActions.Item(j).ListTrue IsNot Nothing Then WriteListAction(writer, ListActions.Item(j).ListTrue)
+                            writer.WriteEndElement()
+                            writer.WriteStartElement("else")
+                            If ListActions.Item(j).ListFalse IsNot Nothing Then WriteListAction(writer, ListActions.Item(j).ListFalse)
+                            writer.WriteEndElement()
+                    End Select
+                    writer.WriteEndElement()
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "WriteListAction", "Exception : " & ex.Message)
+            End Try
         End Sub
-
-
 #End Region
 
 #Region "Device"
@@ -1759,13 +1764,18 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnSringFromEnumDevice(ByVal Index As Integer) As String
-            For Each value As Device.ListeDevices In [Enum].GetValues(GetType(Device.ListeDevices))
-                If value.GetHashCode = Index Then
-                    Return value.ToString
-                    Exit Function
-                End If
-            Next
-            Return ""
+            Try
+                For Each value As Device.ListeDevices In [Enum].GetValues(GetType(Device.ListeDevices))
+                    If value.GetHashCode = Index Then
+                        Return value.ToString
+                        Exit Function
+                    End If
+                Next
+                Return ""
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnSringFromEnumDevice", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 #End Region
 
@@ -1773,76 +1783,85 @@ Namespace HoMIDom
         ''' <summary>Retourne les propriétés d'un driver</summary>
         ''' <remarks></remarks>
         Public Function ReturnDriver(ByVal DriverId As String) As ArrayList
-            For i As Integer = 0 To _ListDrivers.Count - 1
-                Dim tabl As New ArrayList
-                If _ListDrivers.Item(i).ID = DriverId Then
-                    tabl.Add(_ListDrivers.Item(i).nom)
-                    tabl.Add(_ListDrivers.Item(i).enable)
-                    tabl.Add(_ListDrivers.Item(i).description)
-                    tabl.Add(_ListDrivers.Item(i).startauto)
-                    tabl.Add(_ListDrivers.Item(i).protocol)
-                    tabl.Add(_ListDrivers.Item(i).isconnect)
-                    tabl.Add(_ListDrivers.Item(i).IP_TCP)
-                    tabl.Add(_ListDrivers.Item(i).Port_TCP)
-                    tabl.Add(_ListDrivers.Item(i).IP_UDP)
-                    tabl.Add(_ListDrivers.Item(i).Port_UDP)
-                    tabl.Add(_ListDrivers.Item(i).COM)
-                    tabl.Add(_ListDrivers.Item(i).Refresh)
-                    tabl.Add(_ListDrivers.Item(i).Modele)
-                    tabl.Add(_ListDrivers.Item(i).Version)
-                    tabl.Add(_ListDrivers.Item(i).Picture)
-                    tabl.Add(_ListDrivers.Item(i).DeviceSupport)
-                    tabl.Add(_ListDrivers.Item(i).Parametres)
-                    Return tabl
-                    Exit For
-                End If
-            Next
-            Return Nothing
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    Dim tabl As New ArrayList
+                    If _ListDrivers.Item(i).ID = DriverId Then
+                        tabl.Add(_ListDrivers.Item(i).nom)
+                        tabl.Add(_ListDrivers.Item(i).enable)
+                        tabl.Add(_ListDrivers.Item(i).description)
+                        tabl.Add(_ListDrivers.Item(i).startauto)
+                        tabl.Add(_ListDrivers.Item(i).protocol)
+                        tabl.Add(_ListDrivers.Item(i).isconnect)
+                        tabl.Add(_ListDrivers.Item(i).IP_TCP)
+                        tabl.Add(_ListDrivers.Item(i).Port_TCP)
+                        tabl.Add(_ListDrivers.Item(i).IP_UDP)
+                        tabl.Add(_ListDrivers.Item(i).Port_UDP)
+                        tabl.Add(_ListDrivers.Item(i).COM)
+                        tabl.Add(_ListDrivers.Item(i).Refresh)
+                        tabl.Add(_ListDrivers.Item(i).Modele)
+                        tabl.Add(_ListDrivers.Item(i).Version)
+                        tabl.Add(_ListDrivers.Item(i).Picture)
+                        tabl.Add(_ListDrivers.Item(i).DeviceSupport)
+                        tabl.Add(_ListDrivers.Item(i).Parametres)
+                        Return tabl
+                        Exit For
+                    End If
+                Next
+                Return Nothing
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDriver", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
         ''' <summary>Ecrire ou lance propritété/Sub d'un driver</summary>
         ''' <remarks></remarks>
         Sub WriteDriver(ByVal DriverId As String, ByVal Command As String, ByVal Parametre As Object)
-            For i As Integer = 0 To _ListDrivers.Count - 1
-                If _ListDrivers.Item(i).ID = DriverId Then
-                    Select Case UCase(Command)
-                        Case "COM"
-                            _ListDrivers.Item(i).Com = Parametre
-                        Case "ENABLE"
-                            _ListDrivers.Item(i).Enable = Parametre
-                        Case "IP_TCP"
-                            _ListDrivers.Item(i).IP_TCP = Parametre
-                        Case "PORT_TCP"
-                            _ListDrivers.Item(i).Port_TCP = Parametre
-                        Case "IP_UDP"
-                            _ListDrivers.Item(i).IP_UDP = Parametre
-                        Case "PORT_UDP"
-                            _ListDrivers.Item(i).Port_UDP = Parametre
-                        Case "PICTURE"
-                            _ListDrivers.Item(i).Picture = Parametre
-                        Case "REFRESH"
-                            _ListDrivers.Item(i).Refresh = Parametre
-                        Case "STARTAUTO"
-                            _ListDrivers.Item(i).StartAuto = Parametre
-                        Case "START"
-                            _ListDrivers.Item(i).Start()
-                        Case "STOP"
-                            _ListDrivers.Item(i).Stop()
-                        Case "RESTART"
-                            _ListDrivers.Item(i).Restart()
-                        Case "PARAMETRES"
-                            For idx As Integer = 0 To Parametre.count - 1
-                                _ListDrivers.Item(i).Parametres.item(idx).valeur = Parametre(idx)
-                            Next
-                        Case "DELETEDEVICE"
-                            _ListDrivers.Item(i).DeleteDevice(Parametre)
-                        Case "NEWDEVICE"
-                            _ListDrivers.Item(i).NewDevice(Parametre)
-                    End Select
-                    Exit For
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).ID = DriverId Then
+                        Select Case UCase(Command)
+                            Case "COM"
+                                _ListDrivers.Item(i).Com = Parametre
+                            Case "ENABLE"
+                                _ListDrivers.Item(i).Enable = Parametre
+                            Case "IP_TCP"
+                                _ListDrivers.Item(i).IP_TCP = Parametre
+                            Case "PORT_TCP"
+                                _ListDrivers.Item(i).Port_TCP = Parametre
+                            Case "IP_UDP"
+                                _ListDrivers.Item(i).IP_UDP = Parametre
+                            Case "PORT_UDP"
+                                _ListDrivers.Item(i).Port_UDP = Parametre
+                            Case "PICTURE"
+                                _ListDrivers.Item(i).Picture = Parametre
+                            Case "REFRESH"
+                                _ListDrivers.Item(i).Refresh = Parametre
+                            Case "STARTAUTO"
+                                _ListDrivers.Item(i).StartAuto = Parametre
+                            Case "START"
+                                _ListDrivers.Item(i).Start()
+                            Case "STOP"
+                                _ListDrivers.Item(i).Stop()
+                            Case "RESTART"
+                                _ListDrivers.Item(i).Restart()
+                            Case "PARAMETRES"
+                                For idx As Integer = 0 To Parametre.count - 1
+                                    _ListDrivers.Item(i).Parametres.item(idx).valeur = Parametre(idx)
+                                Next
+                            Case "DELETEDEVICE"
+                                _ListDrivers.Item(i).DeleteDevice(Parametre)
+                            Case "NEWDEVICE"
+                                _ListDrivers.Item(i).NewDevice(Parametre)
+                        End Select
+                        Exit For
 
-                End If
-            Next
+                    End If
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "WriteDriver", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>Charge les drivers, donc toutes les dll dans le sous répertoire "plugins"</summary>
@@ -1950,18 +1969,23 @@ Namespace HoMIDom
             Dim DES As New System.Security.Cryptography.TripleDESCryptoServiceProvider
             Dim hashMD5 As New System.Security.Cryptography.MD5CryptoServiceProvider
 
-            ' scramble the key
-            sKey = ScrambleKey(sKey)
-            ' Compute the MD5 hash.
-            DES.Key = hashMD5.ComputeHash(System.Text.ASCIIEncoding.ASCII.GetBytes(sKey))
-            ' Set the cipher mode.
-            DES.Mode = System.Security.Cryptography.CipherMode.ECB
-            ' Create the encryptor.
-            Dim DESEncrypt As System.Security.Cryptography.ICryptoTransform = DES.CreateEncryptor()
-            ' Get a byte array of the string.
-            Dim Buffer As Byte() = System.Text.ASCIIEncoding.ASCII.GetBytes(sIn)
-            ' Transform and return the string.
-            Return Convert.ToBase64String(DESEncrypt.TransformFinalBlock(Buffer, 0, Buffer.Length))
+            Try
+                ' scramble the key
+                sKey = ScrambleKey(sKey)
+                ' Compute the MD5 hash.
+                DES.Key = hashMD5.ComputeHash(System.Text.ASCIIEncoding.ASCII.GetBytes(sKey))
+                ' Set the cipher mode.
+                DES.Mode = System.Security.Cryptography.CipherMode.ECB
+                ' Create the encryptor.
+                Dim DESEncrypt As System.Security.Cryptography.ICryptoTransform = DES.CreateEncryptor()
+                ' Get a byte array of the string.
+                Dim Buffer As Byte() = System.Text.ASCIIEncoding.ASCII.GetBytes(sIn)
+                ' Transform and return the string.
+                Return Convert.ToBase64String(DESEncrypt.TransformFinalBlock(Buffer, 0, Buffer.Length))
+            Catch ex As Exception
+                'Log(TypeLog.ERREUR, TypeSource.SERVEUR, "EncryptTripleDES", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 
         ''' <summary>Décrypter un string</summary>
@@ -1973,28 +1997,38 @@ Namespace HoMIDom
             Dim DES As New System.Security.Cryptography.TripleDESCryptoServiceProvider()
             Dim hashMD5 As New System.Security.Cryptography.MD5CryptoServiceProvider
 
-            ' scramble the key
-            sKey = ScrambleKey(sKey)
-            ' Compute the MD5 hash.
-            DES.Key = hashMD5.ComputeHash(System.Text.ASCIIEncoding.ASCII.GetBytes(sKey))
-            ' Set the cipher mode.
-            DES.Mode = System.Security.Cryptography.CipherMode.ECB
-            ' Create the decryptor.
-            Dim DESDecrypt As System.Security.Cryptography.ICryptoTransform = DES.CreateDecryptor()
-            Dim Buffer As Byte() = Convert.FromBase64String(sOut)
-            ' Transform and return the string.
-            Return System.Text.ASCIIEncoding.ASCII.GetString(DESDecrypt.TransformFinalBlock(Buffer, 0, Buffer.Length))
+            Try
+                ' scramble the key
+                sKey = ScrambleKey(sKey)
+                ' Compute the MD5 hash.
+                DES.Key = hashMD5.ComputeHash(System.Text.ASCIIEncoding.ASCII.GetBytes(sKey))
+                ' Set the cipher mode.
+                DES.Mode = System.Security.Cryptography.CipherMode.ECB
+                ' Create the decryptor.
+                Dim DESDecrypt As System.Security.Cryptography.ICryptoTransform = DES.CreateDecryptor()
+                Dim Buffer As Byte() = Convert.FromBase64String(sOut)
+                ' Transform and return the string.
+                Return System.Text.ASCIIEncoding.ASCII.GetString(DESDecrypt.TransformFinalBlock(Buffer, 0, Buffer.Length))
+            Catch ex As Exception
+                'Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DecryptTripleDES", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 
         Private Shared Function ScrambleKey(ByVal v_strKey As String) As String
             Dim sbKey As New System.Text.StringBuilder
             Dim intPtr As Integer
-            For intPtr = 1 To v_strKey.Length
-                Dim intIn As Integer = v_strKey.Length - intPtr + 1
-                sbKey.Append(Mid(v_strKey, intIn, 1))
-            Next
-            Dim strKey As String = sbKey.ToString
-            Return sbKey.ToString
+            Try
+                For intPtr = 1 To v_strKey.Length
+                    Dim intIn As Integer = v_strKey.Length - intPtr + 1
+                    sbKey.Append(Mid(v_strKey, intIn, 1))
+                Next
+                Dim strKey As String = sbKey.ToString
+                Return sbKey.ToString
+            Catch ex As Exception
+                'Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ScrambleKey", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 #End Region
 
@@ -2466,122 +2500,127 @@ Namespace HoMIDom
         Public Function EvalCondition(ByVal Conditions As List(Of Action.Condition)) As Boolean
             Dim _ResultFinal As Boolean = False
 
-            For i As Integer = 0 To Conditions.Count - 1
-                Dim _Result As Boolean = False
-                Select Case Conditions.Item(i).Type
-                    Case Action.TypeCondition.DateTime
-                        Dim retour As Object = Nothing
-                        Dim a() As String '0:ss 1:mm 2:hh 3:dd 4:mm 5:jj
-                        a = Conditions.Item(i).DateTime.Split("#")
+            Try
+                For i As Integer = 0 To Conditions.Count - 1
+                    Dim _Result As Boolean = False
+                    Select Case Conditions.Item(i).Type
+                        Case Action.TypeCondition.DateTime
+                            Dim retour As Object = Nothing
+                            Dim a() As String '0:ss 1:mm 2:hh 3:dd 4:mm 5:jj
+                            a = Conditions.Item(i).DateTime.Split("#")
 
-                        Dim b(6) As Boolean
-                        b(0) = Mid(a(5), 1, 1)
-                        b(1) = Mid(a(5), 2, 1)
-                        b(2) = Mid(a(5), 3, 1)
-                        b(3) = Mid(a(5), 4, 1)
-                        b(4) = Mid(a(5), 5, 1)
-                        b(5) = Mid(a(5), 6, 1)
-                        b(6) = Mid(a(5), 7, 1)
+                            Dim b(6) As Boolean
+                            b(0) = Mid(a(5), 1, 1)
+                            b(1) = Mid(a(5), 2, 1)
+                            b(2) = Mid(a(5), 3, 1)
+                            b(3) = Mid(a(5), 4, 1)
+                            b(4) = Mid(a(5), 5, 1)
+                            b(5) = Mid(a(5), 6, 1)
+                            b(6) = Mid(a(5), 7, 1)
 
-                        If (Now.DayOfWeek = DayOfWeek.Monday And b(0) = True) Or (Now.DayOfWeek = DayOfWeek.Tuesday And b(1) = True) Or (Now.DayOfWeek = DayOfWeek.Wednesday And b(2) = True) Or (Now.DayOfWeek = DayOfWeek.Thursday And b(3) = True) Or (Now.DayOfWeek = DayOfWeek.Friday And b(4) = True) Or (Now.DayOfWeek = DayOfWeek.Saturday And b(5) = True) Or (Now.DayOfWeek = DayOfWeek.Sunday And b(6) = True) Then
-                            Dim mydate As System.DateTime
-                            If a(3) = "0" And a(4) = "0" Then
-                                mydate = New System.DateTime(Now.Year, Now.Month, Now.Day, a(2), a(1), a(0))
-                            Else
-                                mydate = New System.DateTime(Now.Year, a(4), a(3), a(2), a(1), a(0))
+                            If (Now.DayOfWeek = DayOfWeek.Monday And b(0) = True) Or (Now.DayOfWeek = DayOfWeek.Tuesday And b(1) = True) Or (Now.DayOfWeek = DayOfWeek.Wednesday And b(2) = True) Or (Now.DayOfWeek = DayOfWeek.Thursday And b(3) = True) Or (Now.DayOfWeek = DayOfWeek.Friday And b(4) = True) Or (Now.DayOfWeek = DayOfWeek.Saturday And b(5) = True) Or (Now.DayOfWeek = DayOfWeek.Sunday And b(6) = True) Then
+                                Dim mydate As System.DateTime
+                                If a(3) = "0" And a(4) = "0" Then
+                                    mydate = New System.DateTime(Now.Year, Now.Month, Now.Day, a(2), a(1), a(0))
+                                Else
+                                    mydate = New System.DateTime(Now.Year, a(4), a(3), a(2), a(1), a(0))
+                                End If
+                                Select Case Conditions.Item(i).Condition
+                                    Case Action.TypeSigne.Different
+                                        If Now <> mydate Then
+                                            _Result = True
+                                        Else
+                                            _Result = False
+                                        End If
+                                    Case Action.TypeSigne.Egal
+                                        If Now = mydate Then
+                                            _Result = True
+                                        Else
+                                            _Result = False
+                                        End If
+                                    Case Action.TypeSigne.Inferieur
+                                        If Now < mydate Then
+                                            _Result = True
+                                        Else
+                                            _Result = False
+                                        End If
+                                    Case Action.TypeSigne.InferieurEgal
+                                        If Now <= mydate Then
+                                            _Result = True
+                                        Else
+                                            _Result = False
+                                        End If
+                                    Case Action.TypeSigne.Superieur
+                                        If Now > mydate Then
+                                            _Result = True
+                                        Else
+                                            _Result = False
+                                        End If
+                                    Case Action.TypeSigne.SuperieurEgal
+                                        If Now >= mydate Then
+                                            _Result = True
+                                        Else
+                                            _Result = False
+                                        End If
+                                End Select
                             End If
+                        Case Action.TypeCondition.Device
+                            Dim retour As Object
+                            Dim Args = Nothing
+                            retour = CallByName(ReturnDeviceById(_IdSrv, Conditions.Item(i).IdDevice), Conditions.Item(i).PropertyDevice, Args)
+
                             Select Case Conditions.Item(i).Condition
                                 Case Action.TypeSigne.Different
-                                    If Now <> mydate Then
+                                    If retour <> Conditions.Item(i).Value Then
                                         _Result = True
                                     Else
                                         _Result = False
                                     End If
                                 Case Action.TypeSigne.Egal
-                                    If Now = mydate Then
+                                    If retour = Conditions.Item(i).Value Then
                                         _Result = True
                                     Else
                                         _Result = False
                                     End If
                                 Case Action.TypeSigne.Inferieur
-                                    If Now < mydate Then
+                                    If retour < Conditions.Item(i).Value Then
                                         _Result = True
                                     Else
                                         _Result = False
                                     End If
                                 Case Action.TypeSigne.InferieurEgal
-                                    If Now <= mydate Then
+                                    If retour <= Conditions.Item(i).Value Then
                                         _Result = True
                                     Else
                                         _Result = False
                                     End If
                                 Case Action.TypeSigne.Superieur
-                                    If Now > mydate Then
+                                    If retour > Conditions.Item(i).Value Then
                                         _Result = True
                                     Else
                                         _Result = False
                                     End If
                                 Case Action.TypeSigne.SuperieurEgal
-                                    If Now >= mydate Then
+                                    If retour >= Conditions.Item(i).Value Then
                                         _Result = True
                                     Else
                                         _Result = False
                                     End If
                             End Select
-                        End If
-                    Case Action.TypeCondition.Device
-                        Dim retour As Object
-                        Dim Args = Nothing
-                        retour = CallByName(ReturnDeviceById(_IdSrv, Conditions.Item(i).IdDevice), Conditions.Item(i).PropertyDevice, Args)
+                    End Select
+                    Select Case Conditions.Item(i).Operateur
+                        Case Action.TypeOperateur.AND
+                            _ResultFinal = _ResultFinal And _Result
+                        Case Action.TypeOperateur.OR
+                            _ResultFinal = _ResultFinal Or _Result
+                    End Select
+                Next
 
-                        Select Case Conditions.Item(i).Condition
-                            Case Action.TypeSigne.Different
-                                If retour <> Conditions.Item(i).Value Then
-                                    _Result = True
-                                Else
-                                    _Result = False
-                                End If
-                            Case Action.TypeSigne.Egal
-                                If retour = Conditions.Item(i).Value Then
-                                    _Result = True
-                                Else
-                                    _Result = False
-                                End If
-                            Case Action.TypeSigne.Inferieur
-                                If retour < Conditions.Item(i).Value Then
-                                    _Result = True
-                                Else
-                                    _Result = False
-                                End If
-                            Case Action.TypeSigne.InferieurEgal
-                                If retour <= Conditions.Item(i).Value Then
-                                    _Result = True
-                                Else
-                                    _Result = False
-                                End If
-                            Case Action.TypeSigne.Superieur
-                                If retour > Conditions.Item(i).Value Then
-                                    _Result = True
-                                Else
-                                    _Result = False
-                                End If
-                            Case Action.TypeSigne.SuperieurEgal
-                                If retour >= Conditions.Item(i).Value Then
-                                    _Result = True
-                                Else
-                                    _Result = False
-                                End If
-                        End Select
-                End Select
-                Select Case Conditions.Item(i).Operateur
-                    Case Action.TypeOperateur.AND
-                        _ResultFinal = _ResultFinal And _Result
-                    Case Action.TypeOperateur.OR
-                        _ResultFinal = _ResultFinal Or _Result
-                End Select
-            Next
-
-            Return _ResultFinal
+                Return _ResultFinal
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "EvalCondition", "Exception : " & ex.Message)
+                Return False
+            End Try
         End Function
 #End Region
 
@@ -2617,249 +2656,259 @@ Namespace HoMIDom
         End Structure
 
         Public Function ConvertTextToHTML(ByVal Text As String) As String
-            Text = Replace(Text, "'", "&#191;")
-            Text = Replace(Text, "À", "&#192;")
-            Text = Replace(Text, "Á", "&#193;")
-            Text = Replace(Text, "Â", "&#194;")
-            Text = Replace(Text, "Ã", "&#195;")
-            Text = Replace(Text, "Ä", "&#196;")
-            Text = Replace(Text, "Å", "&#197;")
-            Text = Replace(Text, "Æ", "&#198;")
-            Text = Replace(Text, "à", "&#224;")
-            Text = Replace(Text, "á", "&#225;")
-            Text = Replace(Text, "â", "&#226;")
-            Text = Replace(Text, "ã", "&#227;")
-            Text = Replace(Text, "ä", "&#228;")
-            Text = Replace(Text, "å", "&#229;")
-            Text = Replace(Text, "æ", "&#230;")
-            Text = Replace(Text, "Ç", "&#199;")
-            Text = Replace(Text, "ç", "&#231;")
-            Text = Replace(Text, "Ð", "&#208;")
-            Text = Replace(Text, "ð", "&#240;")
-            Text = Replace(Text, "È", "&#200;")
-            Text = Replace(Text, "É", "&#201;")
-            Text = Replace(Text, "Ê", "&#202;")
-            Text = Replace(Text, "Ë", "&#203;")
-            Text = Replace(Text, "è", "&#232;")
-            Text = Replace(Text, "é", "&#233;")
-            Text = Replace(Text, "ê", "&#234;")
-            Text = Replace(Text, "ë", "&#235;")
-            Text = Replace(Text, "Ì", "&#204;")
-            Text = Replace(Text, "Í", "&#205;")
-            Text = Replace(Text, "Î", "&#206;")
-            Text = Replace(Text, "Ï", "&#207;")
-            Text = Replace(Text, "ì", "&#236;")
-            Text = Replace(Text, "í", "&#237;")
-            Text = Replace(Text, "î", "&#238;")
-            Text = Replace(Text, "ï", "&#239;")
-            Text = Replace(Text, "Ñ", "&#209;")
-            Text = Replace(Text, "ñ", "&#241;")
-            Text = Replace(Text, "Ò", "&#210;")
-            Text = Replace(Text, "Ó", "&#211;")
-            Text = Replace(Text, "Ô", "&#212;")
-            Text = Replace(Text, "Õ", "&#213;")
-            Text = Replace(Text, "Ö", "&#214;")
-            Text = Replace(Text, "Ø", "&#216;")
-            Text = Replace(Text, "Œ", "&#140;")
-            Text = Replace(Text, "ò", "&#242;")
-            Text = Replace(Text, "ó", "&#243;")
-            Text = Replace(Text, "ô", "&#244;")
-            Text = Replace(Text, "õ", "&#245;")
-            Text = Replace(Text, "ö", "&#246;")
-            Text = Replace(Text, "ø", "&#248;")
-            Text = Replace(Text, "œ", "&#156;")
-            Text = Replace(Text, "Š", "&#138;")
-            Text = Replace(Text, "š", "&#154;")
-            Text = Replace(Text, "Ù", "&#217;")
-            Text = Replace(Text, "Ú", "&#218;")
-            Text = Replace(Text, "Û", "&#219;")
-            Text = Replace(Text, "Ü", "&#220;")
-            Text = Replace(Text, "ù", "&#249;")
-            Text = Replace(Text, "ú", "&#250;")
-            Text = Replace(Text, "û", "&#251;")
-            Text = Replace(Text, "ü", "&#252;")
-            Text = Replace(Text, "Ý", "&#221;")
-            Text = Replace(Text, "Ÿ", "&#159;")
-            Text = Replace(Text, "ý", "&#253;")
-            Text = Replace(Text, "ÿ", "&#255;")
-            Text = Replace(Text, "Ž", "&#142;")
-            Text = Replace(Text, "ž", "&#158;")
-            Text = Replace(Text, "¢", "&#162;")
-            Text = Replace(Text, "£", "&#163;")
-            Text = Replace(Text, "¥", "&#165;")
-            Text = Replace(Text, "™", "&#153;")
-            Text = Replace(Text, "©", "&#169;")
-            Text = Replace(Text, "®", "&#174;")
-            Text = Replace(Text, "‰", "&#137;")
-            Text = Replace(Text, "ª", "&#170;")
-            Text = Replace(Text, "º", "&#186;")
-            Text = Replace(Text, "¹", "&#185;")
-            Text = Replace(Text, "²", "&#178;")
-            Text = Replace(Text, "³", "&#179;")
-            Text = Replace(Text, "¼", "&#188;")
-            Text = Replace(Text, "½", "&#189;")
-            Text = Replace(Text, "¾", "&#190;")
-            Text = Replace(Text, "÷", "&#247;")
-            Text = Replace(Text, "×", "&#215;")
-            Text = Replace(Text, ">", "&#155;")
-            Text = Replace(Text, "<", "&#139;")
-            Text = Replace(Text, "±", "&#177;")
-            Text = Replace(Text, "&", "")
-            Text = Replace(Text, "‚", "&#130;")
-            Text = Replace(Text, "ƒ", "&#131;")
-            Text = Replace(Text, "„", "&#132;")
-            Text = Replace(Text, "…", "&#133;")
-            Text = Replace(Text, "†", "&#134;")
-            Text = Replace(Text, "‡", "&#135;")
-            Text = Replace(Text, "ˆ", "&#136;")
-            Text = Replace(Text, "‘", "&#145;")
-            Text = Replace(Text, "’", "&#146;")
-            'Text=Replace(text,"“","&#147;")
-            'Text=Replace(text,"”","&#148;")
-            Text = Replace(Text, "•", "&#149;")
-            Text = Replace(Text, "–", "&#150;")
-            Text = Replace(Text, "—", "&#151;")
-            Text = Replace(Text, "˜", "&#152;")
-            Text = Replace(Text, "¿", "&#191;")
-            Text = Replace(Text, "¡", "&#161;")
-            Text = Replace(Text, "¤", "&#164;")
-            Text = Replace(Text, "¦", "&#166;")
-            Text = Replace(Text, "§", "&#167;")
-            Text = Replace(Text, "¨", "&#168;")
-            Text = Replace(Text, "«", "&#171;")
-            Text = Replace(Text, "»", "&#187;")
-            Text = Replace(Text, "¬", "&#172;")
-            Text = Replace(Text, "¯", "&#175;")
-            Text = Replace(Text, "´", "&#180;")
-            Text = Replace(Text, "µ", "&#181;")
-            Text = Replace(Text, "¶", "&#182;")
-            Text = Replace(Text, "·", "&#183;")
-            Text = Replace(Text, "¸", "&#184;")
-            Text = Replace(Text, "þ", "&#222;")
-            Text = Replace(Text, "ß", "&#223;")
-            ConvertTextToHTML = Text
+            Try
+                Text = Replace(Text, "'", "&#191;")
+                Text = Replace(Text, "À", "&#192;")
+                Text = Replace(Text, "Á", "&#193;")
+                Text = Replace(Text, "Â", "&#194;")
+                Text = Replace(Text, "Ã", "&#195;")
+                Text = Replace(Text, "Ä", "&#196;")
+                Text = Replace(Text, "Å", "&#197;")
+                Text = Replace(Text, "Æ", "&#198;")
+                Text = Replace(Text, "à", "&#224;")
+                Text = Replace(Text, "á", "&#225;")
+                Text = Replace(Text, "â", "&#226;")
+                Text = Replace(Text, "ã", "&#227;")
+                Text = Replace(Text, "ä", "&#228;")
+                Text = Replace(Text, "å", "&#229;")
+                Text = Replace(Text, "æ", "&#230;")
+                Text = Replace(Text, "Ç", "&#199;")
+                Text = Replace(Text, "ç", "&#231;")
+                Text = Replace(Text, "Ð", "&#208;")
+                Text = Replace(Text, "ð", "&#240;")
+                Text = Replace(Text, "È", "&#200;")
+                Text = Replace(Text, "É", "&#201;")
+                Text = Replace(Text, "Ê", "&#202;")
+                Text = Replace(Text, "Ë", "&#203;")
+                Text = Replace(Text, "è", "&#232;")
+                Text = Replace(Text, "é", "&#233;")
+                Text = Replace(Text, "ê", "&#234;")
+                Text = Replace(Text, "ë", "&#235;")
+                Text = Replace(Text, "Ì", "&#204;")
+                Text = Replace(Text, "Í", "&#205;")
+                Text = Replace(Text, "Î", "&#206;")
+                Text = Replace(Text, "Ï", "&#207;")
+                Text = Replace(Text, "ì", "&#236;")
+                Text = Replace(Text, "í", "&#237;")
+                Text = Replace(Text, "î", "&#238;")
+                Text = Replace(Text, "ï", "&#239;")
+                Text = Replace(Text, "Ñ", "&#209;")
+                Text = Replace(Text, "ñ", "&#241;")
+                Text = Replace(Text, "Ò", "&#210;")
+                Text = Replace(Text, "Ó", "&#211;")
+                Text = Replace(Text, "Ô", "&#212;")
+                Text = Replace(Text, "Õ", "&#213;")
+                Text = Replace(Text, "Ö", "&#214;")
+                Text = Replace(Text, "Ø", "&#216;")
+                Text = Replace(Text, "Œ", "&#140;")
+                Text = Replace(Text, "ò", "&#242;")
+                Text = Replace(Text, "ó", "&#243;")
+                Text = Replace(Text, "ô", "&#244;")
+                Text = Replace(Text, "õ", "&#245;")
+                Text = Replace(Text, "ö", "&#246;")
+                Text = Replace(Text, "ø", "&#248;")
+                Text = Replace(Text, "œ", "&#156;")
+                Text = Replace(Text, "Š", "&#138;")
+                Text = Replace(Text, "š", "&#154;")
+                Text = Replace(Text, "Ù", "&#217;")
+                Text = Replace(Text, "Ú", "&#218;")
+                Text = Replace(Text, "Û", "&#219;")
+                Text = Replace(Text, "Ü", "&#220;")
+                Text = Replace(Text, "ù", "&#249;")
+                Text = Replace(Text, "ú", "&#250;")
+                Text = Replace(Text, "û", "&#251;")
+                Text = Replace(Text, "ü", "&#252;")
+                Text = Replace(Text, "Ý", "&#221;")
+                Text = Replace(Text, "Ÿ", "&#159;")
+                Text = Replace(Text, "ý", "&#253;")
+                Text = Replace(Text, "ÿ", "&#255;")
+                Text = Replace(Text, "Ž", "&#142;")
+                Text = Replace(Text, "ž", "&#158;")
+                Text = Replace(Text, "¢", "&#162;")
+                Text = Replace(Text, "£", "&#163;")
+                Text = Replace(Text, "¥", "&#165;")
+                Text = Replace(Text, "™", "&#153;")
+                Text = Replace(Text, "©", "&#169;")
+                Text = Replace(Text, "®", "&#174;")
+                Text = Replace(Text, "‰", "&#137;")
+                Text = Replace(Text, "ª", "&#170;")
+                Text = Replace(Text, "º", "&#186;")
+                Text = Replace(Text, "¹", "&#185;")
+                Text = Replace(Text, "²", "&#178;")
+                Text = Replace(Text, "³", "&#179;")
+                Text = Replace(Text, "¼", "&#188;")
+                Text = Replace(Text, "½", "&#189;")
+                Text = Replace(Text, "¾", "&#190;")
+                Text = Replace(Text, "÷", "&#247;")
+                Text = Replace(Text, "×", "&#215;")
+                Text = Replace(Text, ">", "&#155;")
+                Text = Replace(Text, "<", "&#139;")
+                Text = Replace(Text, "±", "&#177;")
+                Text = Replace(Text, "&", "")
+                Text = Replace(Text, "‚", "&#130;")
+                Text = Replace(Text, "ƒ", "&#131;")
+                Text = Replace(Text, "„", "&#132;")
+                Text = Replace(Text, "…", "&#133;")
+                Text = Replace(Text, "†", "&#134;")
+                Text = Replace(Text, "‡", "&#135;")
+                Text = Replace(Text, "ˆ", "&#136;")
+                Text = Replace(Text, "‘", "&#145;")
+                Text = Replace(Text, "’", "&#146;")
+                'Text=Replace(text,"“","&#147;")
+                'Text=Replace(text,"”","&#148;")
+                Text = Replace(Text, "•", "&#149;")
+                Text = Replace(Text, "–", "&#150;")
+                Text = Replace(Text, "—", "&#151;")
+                Text = Replace(Text, "˜", "&#152;")
+                Text = Replace(Text, "¿", "&#191;")
+                Text = Replace(Text, "¡", "&#161;")
+                Text = Replace(Text, "¤", "&#164;")
+                Text = Replace(Text, "¦", "&#166;")
+                Text = Replace(Text, "§", "&#167;")
+                Text = Replace(Text, "¨", "&#168;")
+                Text = Replace(Text, "«", "&#171;")
+                Text = Replace(Text, "»", "&#187;")
+                Text = Replace(Text, "¬", "&#172;")
+                Text = Replace(Text, "¯", "&#175;")
+                Text = Replace(Text, "´", "&#180;")
+                Text = Replace(Text, "µ", "&#181;")
+                Text = Replace(Text, "¶", "&#182;")
+                Text = Replace(Text, "·", "&#183;")
+                Text = Replace(Text, "¸", "&#184;")
+                Text = Replace(Text, "þ", "&#222;")
+                Text = Replace(Text, "ß", "&#223;")
+                ConvertTextToHTML = Text
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ConvertTextToHTML", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 
         Public Function ConvertHtmlToText(ByVal Text As String) As String
-            Text = Replace(Text, "#191;", "'")
-            Text = Replace(Text, "#192;", "À")
-            Text = Replace(Text, "#193;", "Á")
-            Text = Replace(Text, "#194;", "Â")
-            Text = Replace(Text, "#195;", "Ã")
-            Text = Replace(Text, "#196;", "Ä")
-            Text = Replace(Text, "#197;", "Å")
-            Text = Replace(Text, "#198;", "Æ")
-            Text = Replace(Text, "#224;", "à")
-            Text = Replace(Text, "#225;", "á")
-            Text = Replace(Text, "#226;", "â")
-            Text = Replace(Text, "#227;", "ã")
-            Text = Replace(Text, "#228;", "ä")
-            Text = Replace(Text, "#229;", "å")
-            Text = Replace(Text, "#230;", "æ")
-            Text = Replace(Text, "#199;", "Ç")
-            Text = Replace(Text, "#231;", "ç")
-            Text = Replace(Text, "#208;", "Ð")
-            Text = Replace(Text, "#240;", "ð")
-            Text = Replace(Text, "#200;", "È")
-            Text = Replace(Text, "#201;", "É")
-            Text = Replace(Text, "#202;", "Ê")
-            Text = Replace(Text, "#203;", "Ë")
-            Text = Replace(Text, "#232;", "è")
-            Text = Replace(Text, "#233;", "é")
-            Text = Replace(Text, "#234;", "ê")
-            Text = Replace(Text, "#235;", "ë")
-            Text = Replace(Text, "#204;", "Ì")
-            Text = Replace(Text, "#205;", "Í")
-            Text = Replace(Text, "#206;", "Î")
-            Text = Replace(Text, "#207;", "Ï")
-            Text = Replace(Text, "#236;", "ì")
-            Text = Replace(Text, "#237;", "í")
-            Text = Replace(Text, "#238;", "î")
-            Text = Replace(Text, "#239;", "ï")
-            Text = Replace(Text, "#209;", "Ñ")
-            Text = Replace(Text, "#241;", "ñ")
-            Text = Replace(Text, "#210;", "Ò")
-            Text = Replace(Text, "#211;", "Ó")
-            Text = Replace(Text, "#212;", "Ô")
-            Text = Replace(Text, "#213;", "Õ")
-            Text = Replace(Text, "#214;", "Ö")
-            Text = Replace(Text, "#216;", "Ø")
-            Text = Replace(Text, "#140;", "Œ")
-            Text = Replace(Text, "#242;", "ò")
-            Text = Replace(Text, "#243;", "ó")
-            Text = Replace(Text, "#244;", "ô")
-            Text = Replace(Text, "#245;", "õ")
-            Text = Replace(Text, "#246;", "ö")
-            Text = Replace(Text, "#248;", "ø")
-            Text = Replace(Text, "#156;", "œ")
-            Text = Replace(Text, "#138;", "Š")
-            Text = Replace(Text, "#154;", "š")
-            Text = Replace(Text, "#217;", "Ù")
-            Text = Replace(Text, "#218;", "Ú")
-            Text = Replace(Text, "#219;", "Û")
-            Text = Replace(Text, "#220;", "Ü")
-            Text = Replace(Text, "#249;", "ù")
-            Text = Replace(Text, "#250;", "ú")
-            Text = Replace(Text, "#251;", "û")
-            Text = Replace(Text, "#252;", "ü")
-            Text = Replace(Text, "#221;", "Ý")
-            Text = Replace(Text, "#159;", "Ÿ")
-            Text = Replace(Text, "#253;", "ý")
-            Text = Replace(Text, "#255;", "ÿ")
-            Text = Replace(Text, "#142;", "Ž")
-            Text = Replace(Text, "#158;", "ž")
-            Text = Replace(Text, "#162;", "¢")
-            Text = Replace(Text, "#163;", "£")
-            Text = Replace(Text, "#165;", "¥")
-            Text = Replace(Text, "#153;", "™")
-            Text = Replace(Text, "#169;", "©")
-            Text = Replace(Text, "#174;", "®")
-            Text = Replace(Text, "#137;", "‰")
-            Text = Replace(Text, "#170;", "ª")
-            Text = Replace(Text, "#186;", "º")
-            Text = Replace(Text, "#185;", "¹")
-            Text = Replace(Text, "#178;", "²")
-            Text = Replace(Text, "#179;", "³")
-            Text = Replace(Text, "#188;", "¼")
-            Text = Replace(Text, "#189;", "½")
-            Text = Replace(Text, "#190;", "¾")
-            Text = Replace(Text, "#247;", "÷")
-            Text = Replace(Text, "#215;", "×")
-            Text = Replace(Text, "#155;", ">")
-            Text = Replace(Text, "#139;", "<")
-            Text = Replace(Text, "#177;", "±")
-            'Text = Replace(Text, "", "&")
-            Text = Replace(Text, "#130;", "‚")
-            Text = Replace(Text, "#131;", "ƒ")
-            Text = Replace(Text, "#132;", "„")
-            Text = Replace(Text, "#133;", "…")
-            Text = Replace(Text, "#134;", "†")
-            Text = Replace(Text, "#135;", "‡")
-            Text = Replace(Text, "#136;", "ˆ")
-            Text = Replace(Text, "#145;", "‘")
-            Text = Replace(Text, "#146;", "’")
-            Text = Replace(Text, "#149;", "•")
-            Text = Replace(Text, "#150;", "–")
-            Text = Replace(Text, "#151;", "—")
-            Text = Replace(Text, "#152;", "˜")
-            Text = Replace(Text, "#191;", "¿")
-            Text = Replace(Text, "#161;", "¡")
-            Text = Replace(Text, "#164;", "¤")
-            Text = Replace(Text, "#166;", "¦")
-            Text = Replace(Text, "#167;", "§")
-            Text = Replace(Text, "#168;", "¨")
-            Text = Replace(Text, "#171;", "«")
-            Text = Replace(Text, "#187;", "»")
-            Text = Replace(Text, "#172;", "¬")
-            Text = Replace(Text, "#175;", "¯")
-            Text = Replace(Text, "#180;", "´")
-            Text = Replace(Text, "#181;", "µ")
-            Text = Replace(Text, "#182;", "¶")
-            Text = Replace(Text, "#183;", "·")
-            Text = Replace(Text, "#184;", "¸")
-            Text = Replace(Text, "#222;", "þ")
-            Text = Replace(Text, "#223;", "ß")
-            ConvertHtmlToText = Text
+            Try
+                Text = Replace(Text, "#191;", "'")
+                Text = Replace(Text, "#192;", "À")
+                Text = Replace(Text, "#193;", "Á")
+                Text = Replace(Text, "#194;", "Â")
+                Text = Replace(Text, "#195;", "Ã")
+                Text = Replace(Text, "#196;", "Ä")
+                Text = Replace(Text, "#197;", "Å")
+                Text = Replace(Text, "#198;", "Æ")
+                Text = Replace(Text, "#224;", "à")
+                Text = Replace(Text, "#225;", "á")
+                Text = Replace(Text, "#226;", "â")
+                Text = Replace(Text, "#227;", "ã")
+                Text = Replace(Text, "#228;", "ä")
+                Text = Replace(Text, "#229;", "å")
+                Text = Replace(Text, "#230;", "æ")
+                Text = Replace(Text, "#199;", "Ç")
+                Text = Replace(Text, "#231;", "ç")
+                Text = Replace(Text, "#208;", "Ð")
+                Text = Replace(Text, "#240;", "ð")
+                Text = Replace(Text, "#200;", "È")
+                Text = Replace(Text, "#201;", "É")
+                Text = Replace(Text, "#202;", "Ê")
+                Text = Replace(Text, "#203;", "Ë")
+                Text = Replace(Text, "#232;", "è")
+                Text = Replace(Text, "#233;", "é")
+                Text = Replace(Text, "#234;", "ê")
+                Text = Replace(Text, "#235;", "ë")
+                Text = Replace(Text, "#204;", "Ì")
+                Text = Replace(Text, "#205;", "Í")
+                Text = Replace(Text, "#206;", "Î")
+                Text = Replace(Text, "#207;", "Ï")
+                Text = Replace(Text, "#236;", "ì")
+                Text = Replace(Text, "#237;", "í")
+                Text = Replace(Text, "#238;", "î")
+                Text = Replace(Text, "#239;", "ï")
+                Text = Replace(Text, "#209;", "Ñ")
+                Text = Replace(Text, "#241;", "ñ")
+                Text = Replace(Text, "#210;", "Ò")
+                Text = Replace(Text, "#211;", "Ó")
+                Text = Replace(Text, "#212;", "Ô")
+                Text = Replace(Text, "#213;", "Õ")
+                Text = Replace(Text, "#214;", "Ö")
+                Text = Replace(Text, "#216;", "Ø")
+                Text = Replace(Text, "#140;", "Œ")
+                Text = Replace(Text, "#242;", "ò")
+                Text = Replace(Text, "#243;", "ó")
+                Text = Replace(Text, "#244;", "ô")
+                Text = Replace(Text, "#245;", "õ")
+                Text = Replace(Text, "#246;", "ö")
+                Text = Replace(Text, "#248;", "ø")
+                Text = Replace(Text, "#156;", "œ")
+                Text = Replace(Text, "#138;", "Š")
+                Text = Replace(Text, "#154;", "š")
+                Text = Replace(Text, "#217;", "Ù")
+                Text = Replace(Text, "#218;", "Ú")
+                Text = Replace(Text, "#219;", "Û")
+                Text = Replace(Text, "#220;", "Ü")
+                Text = Replace(Text, "#249;", "ù")
+                Text = Replace(Text, "#250;", "ú")
+                Text = Replace(Text, "#251;", "û")
+                Text = Replace(Text, "#252;", "ü")
+                Text = Replace(Text, "#221;", "Ý")
+                Text = Replace(Text, "#159;", "Ÿ")
+                Text = Replace(Text, "#253;", "ý")
+                Text = Replace(Text, "#255;", "ÿ")
+                Text = Replace(Text, "#142;", "Ž")
+                Text = Replace(Text, "#158;", "ž")
+                Text = Replace(Text, "#162;", "¢")
+                Text = Replace(Text, "#163;", "£")
+                Text = Replace(Text, "#165;", "¥")
+                Text = Replace(Text, "#153;", "™")
+                Text = Replace(Text, "#169;", "©")
+                Text = Replace(Text, "#174;", "®")
+                Text = Replace(Text, "#137;", "‰")
+                Text = Replace(Text, "#170;", "ª")
+                Text = Replace(Text, "#186;", "º")
+                Text = Replace(Text, "#185;", "¹")
+                Text = Replace(Text, "#178;", "²")
+                Text = Replace(Text, "#179;", "³")
+                Text = Replace(Text, "#188;", "¼")
+                Text = Replace(Text, "#189;", "½")
+                Text = Replace(Text, "#190;", "¾")
+                Text = Replace(Text, "#247;", "÷")
+                Text = Replace(Text, "#215;", "×")
+                Text = Replace(Text, "#155;", ">")
+                Text = Replace(Text, "#139;", "<")
+                Text = Replace(Text, "#177;", "±")
+                'Text = Replace(Text, "", "&")
+                Text = Replace(Text, "#130;", "‚")
+                Text = Replace(Text, "#131;", "ƒ")
+                Text = Replace(Text, "#132;", "„")
+                Text = Replace(Text, "#133;", "…")
+                Text = Replace(Text, "#134;", "†")
+                Text = Replace(Text, "#135;", "‡")
+                Text = Replace(Text, "#136;", "ˆ")
+                Text = Replace(Text, "#145;", "‘")
+                Text = Replace(Text, "#146;", "’")
+                Text = Replace(Text, "#149;", "•")
+                Text = Replace(Text, "#150;", "–")
+                Text = Replace(Text, "#151;", "—")
+                Text = Replace(Text, "#152;", "˜")
+                Text = Replace(Text, "#191;", "¿")
+                Text = Replace(Text, "#161;", "¡")
+                Text = Replace(Text, "#164;", "¤")
+                Text = Replace(Text, "#166;", "¦")
+                Text = Replace(Text, "#167;", "§")
+                Text = Replace(Text, "#168;", "¨")
+                Text = Replace(Text, "#171;", "«")
+                Text = Replace(Text, "#187;", "»")
+                Text = Replace(Text, "#172;", "¬")
+                Text = Replace(Text, "#175;", "¯")
+                Text = Replace(Text, "#180;", "´")
+                Text = Replace(Text, "#181;", "µ")
+                Text = Replace(Text, "#182;", "¶")
+                Text = Replace(Text, "#183;", "·")
+                Text = Replace(Text, "#184;", "¸")
+                Text = Replace(Text, "#222;", "þ")
+                Text = Replace(Text, "#223;", "ß")
+                ConvertHtmlToText = Text
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ConvertHtmlToText", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 
 
@@ -2946,9 +2995,13 @@ Namespace HoMIDom
 
 #Region "Bibliotheques"
         Public Sub SearchTag()
-            For i As Integer = 0 To _ListRepertoireAudio.Count - 1
-                '  Dim x As New Thread(AddressOf FileTagRepload(_ListRepertoireAudio.Item(i).Repertoire))
-            Next
+            Try
+                For i As Integer = 0 To _ListRepertoireAudio.Count - 1
+                    '  Dim x As New Thread(AddressOf FileTagRepload(_ListRepertoireAudio.Item(i).Repertoire))
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SearchTag", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         Public Class ThreadSearchTag
@@ -2958,8 +3011,8 @@ Namespace HoMIDom
                 _Repertoire = Repertoire
             End Sub
 
-            ''' <summary>Fonction de chargement des tags des fichiers audio des repertoires contenus dans la liste active </summary>
-            ''' <remarks>Recupere les fichiers Audios selon les extensions actives</remarks>
+            '''' <summary>Fonction de chargement des tags des fichiers audio des repertoires contenus dans la liste active </summary>
+            '''' <remarks>Recupere les fichiers Audios selon les extensions actives</remarks>
             'Sub FileTagRepload()
 
             '    'Efface le tableau actuel
@@ -3137,58 +3190,70 @@ Namespace HoMIDom
         Public Function GetListOfImage() As List(Of ImageFile) Implements IHoMIDom.GetListOfImage
             Dim _list As New List(Of ImageFile)
 
-            Dim dirInfo As New System.IO.DirectoryInfo(_MonRepertoire & "\images\")
-            Dim file As System.IO.FileInfo
-            Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.*g", System.IO.SearchOption.AllDirectories)
+            Try
+                Dim dirInfo As New System.IO.DirectoryInfo(_MonRepertoire & "\images\")
+                Dim file As System.IO.FileInfo
+                Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.*g", System.IO.SearchOption.AllDirectories)
 
-            If (files IsNot Nothing) Then
-                For Each file In files
-                    Dim x As New ImageFile
-                    x.Path = file.FullName
-                    x.FileName = file.Name
-                    _list.Add(x)
-                Next
-            End If
+                If (files IsNot Nothing) Then
+                    For Each file In files
+                        Dim x As New ImageFile
+                        x.Path = file.FullName
+                        x.FileName = file.Name
+                        _list.Add(x)
+                    Next
+                End If
 
-            Return _list
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetListOfImage", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 #End Region
 
 #Region "Historisation"
         Public Function GetAllListHisto(ByVal idsrv As String) As List(Of Historisation) Implements IHoMIDom.GetAllListHisto
-            If VerifIdSrv(idsrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
+            Try
+                If VerifIdSrv(idsrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
 
-            If sqlite_homidom.bdd_name = "" Then
-                Dim retour2 As String = sqlite_homidom.connect("homidom")
-                If retour2.StartsWith("ERR:") Then
-                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour2)
+                If sqlite_homidom.bdd_name = "" Then
+                    Dim retour2 As String = sqlite_homidom.connect("homidom")
+                    If retour2.StartsWith("ERR:") Then
+                        Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour2)
+                    Else
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour2)
+                    End If
+                End If
+
+                Dim result As New DataTable
+                result.TableName = "ListHisto"
+                Dim retour As String
+                Dim commande As String = "select distinct source, device_id from historiques;"
+                retour = sqlite_homidom.query(commande, result, "")
+                If UCase(Mid(retour, 1, 3)) <> "ERR" Then
+                    If result IsNot Nothing Then
+                        Dim _list As New List(Of Historisation)
+                        For i As Integer = 0 To result.Rows.Count - 1
+                            Dim a As New Historisation
+                            a.Nom = result.Rows.Item(i).Item(0).ToString
+                            a.IdDevice = result.Rows.Item(i).Item(1).ToString
+                            _list.Add(a)
+                        Next
+                        Return _list
+                    Else
+                        Return Nothing
+                    End If
                 Else
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour2)
+                    Return Nothing
                 End If
-            End If
-
-            Dim result As New DataTable
-            result.TableName = "ListHisto"
-            Dim retour As String
-            Dim commande As String = "select distinct source, device_id from historiques;"
-            retour = sqlite_homidom.query(commande, result, "")
-            If UCase(Mid(retour, 1, 3)) <> "ERR" Then
-                If result IsNot Nothing Then
-                    Dim _list As New List(Of Historisation)
-                    For i As Integer = 0 To result.Rows.Count - 1
-                        Dim a As New Historisation
-                        a.Nom = result.Rows.Item(i).Item(0).ToString
-                        a.IdDevice = result.Rows.Item(i).Item(1).ToString
-                        _list.Add(a)
-                    Next
-                    Return _list
-                End If
-            Else
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllListHisto", "Exception : " & ex.Message)
                 Return Nothing
-            End If
+            End Try
         End Function
 
         Public Function GetHisto(ByVal IdSrv As String, ByVal Source As String, ByVal idDevice As String) As List(Of Historisation) Implements IHoMIDom.GetHisto
@@ -3227,6 +3292,8 @@ Namespace HoMIDom
                         result = Nothing
                         Return _list
                         _list = Nothing
+                    Else
+                        Return Nothing
                     End If
                 Else
                     result = Nothing
@@ -3234,7 +3301,8 @@ Namespace HoMIDom
                     Return Nothing
                 End If
             Catch ex As Exception
-                MsgBox("ERREUR: " & ex.ToString)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHisto", "Exception : " & ex.Message)
+                Return Nothing
             End Try
         End Function
 #End Region
@@ -3245,20 +3313,25 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function DeleteExtensionAudio(ByVal IdSrv As String, ByVal NomExtension As String) As Integer Implements IHoMIDom.DeleteExtensionAudio
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim retour As Integer = -1
-            For i As Integer = 0 To _ListExtensionAudio.Count - 1
-                If NomExtension = _ListExtensionAudio.Item(i).Extension Then
-                    _ListExtensionAudio.RemoveAt(i)
-                    retour = 0
-                    Exit For
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
                 End If
-            Next
-            Return retour
+
+                Dim retour As Integer = -1
+                For i As Integer = 0 To _ListExtensionAudio.Count - 1
+                    If NomExtension = _ListExtensionAudio.Item(i).Extension Then
+                        _ListExtensionAudio.RemoveAt(i)
+                        retour = 0
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteExtensionAudio", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 
         ''' <summary>
@@ -3269,22 +3342,27 @@ Namespace HoMIDom
         ''' <returns>-1 si déjà existant</returns>
         ''' <remarks></remarks>
         Public Function NewExtensionAudio(ByVal IdSrv As String, ByVal NomExtension As String, Optional ByVal Enable As Boolean = False) As Integer Implements IHoMIDom.NewExtensionAudio
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            For i As Integer = 0 To _ListExtensionAudio.Count - 1
-                If _ListExtensionAudio.Item(i).Extension = NomExtension Then
-                    Return -1
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
                     Exit Function
                 End If
-            Next
-            Dim x As New Audio.ExtensionAudio
-            x.Extension = NomExtension
-            x.Enable = Enable
-            _ListExtensionAudio.Add(x)
-            Return 0
+
+                For i As Integer = 0 To _ListExtensionAudio.Count - 1
+                    If _ListExtensionAudio.Item(i).Extension = NomExtension Then
+                        Return -1
+                        Exit Function
+                    End If
+                Next
+                Dim x As New Audio.ExtensionAudio
+                x.Extension = NomExtension
+                x.Enable = Enable
+                _ListExtensionAudio.Add(x)
+                Return 0
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "NewExtensionAudio", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 
         ''' <summary>
@@ -3295,19 +3373,24 @@ Namespace HoMIDom
         ''' <returns>-1 si Extension non trouvée</returns>
         ''' <remarks></remarks>
         Public Function EnableExtensionAudio(ByVal IdSrv As String, ByVal NomExtension As String, ByVal Enable As Boolean) As Integer Implements IHoMIDom.EnableExtensionAudio
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim retour As Integer = -1
-            For i As Integer = 0 To _ListExtensionAudio.Count - 1
-                If _ListExtensionAudio.Item(i).Extension = NomExtension Then
-                    _ListExtensionAudio.Item(i).Enable = Enable
-                    retour = 0
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
                 End If
-            Next
-            Return retour
+
+                Dim retour As Integer = -1
+                For i As Integer = 0 To _ListExtensionAudio.Count - 1
+                    If _ListExtensionAudio.Item(i).Extension = NomExtension Then
+                        _ListExtensionAudio.Item(i).Enable = Enable
+                        retour = 0
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "EnableExtensionAudio", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 
         ''' <summary>
@@ -3317,20 +3400,25 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function DeleteRepertoireAudio(ByVal IdSrv As String, ByVal NomRepertoire As String) As Integer Implements IHoMIDom.DeleteRepertoireAudio
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim retour As Integer = -1
-            For i As Integer = 0 To _ListRepertoireAudio.Count - 1
-                If NomRepertoire = _ListRepertoireAudio.Item(i).Repertoire Then
-                    _ListRepertoireAudio.RemoveAt(i)
-                    retour = 0
-                    Exit For
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
                 End If
-            Next
-            Return retour
+
+                Dim retour As Integer = -1
+                For i As Integer = 0 To _ListRepertoireAudio.Count - 1
+                    If NomRepertoire = _ListRepertoireAudio.Item(i).Repertoire Then
+                        _ListRepertoireAudio.RemoveAt(i)
+                        retour = 0
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteRepertoireAudio", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 
         ''' <summary>
@@ -3341,22 +3429,27 @@ Namespace HoMIDom
         ''' <returns>-1 si déjà existant</returns>
         ''' <remarks></remarks>
         Public Function NewRepertoireAudio(ByVal IdSrv As String, ByVal NomRepertoire As String, Optional ByVal Enable As Boolean = False) As Integer Implements IHoMIDom.NewRepertoireAudio
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            For i As Integer = 0 To _ListRepertoireAudio.Count - 1
-                If _ListRepertoireAudio.Item(i).Repertoire = NomRepertoire Then
-                    Return -1
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
                     Exit Function
                 End If
-            Next
-            Dim x As New Audio.RepertoireAudio
-            x.Repertoire = NomRepertoire
-            x.Enable = Enable
-            _ListRepertoireAudio.Add(x)
-            Return 0
+
+                For i As Integer = 0 To _ListRepertoireAudio.Count - 1
+                    If _ListRepertoireAudio.Item(i).Repertoire = NomRepertoire Then
+                        Return -1
+                        Exit Function
+                    End If
+                Next
+                Dim x As New Audio.RepertoireAudio
+                x.Repertoire = NomRepertoire
+                x.Enable = Enable
+                _ListRepertoireAudio.Add(x)
+                Return 0
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "NewRepertoireAudio", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 
         ''' <summary>
@@ -3367,19 +3460,24 @@ Namespace HoMIDom
         ''' <returns>-1 si répertoire non trouvé</returns>
         ''' <remarks></remarks>
         Public Function EnableRepertoireAudio(ByVal IdSrv As String, ByVal NomRepertoire As String, ByVal Enable As Boolean) As Integer Implements IHoMIDom.EnableRepertoireAudio
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim retour As Integer = -1
-            For i As Integer = 0 To _ListRepertoireAudio.Count - 1
-                If _ListRepertoireAudio.Item(i).Repertoire = NomRepertoire Then
-                    _ListRepertoireAudio.Item(i).Enable = Enable
-                    retour = 0
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
                 End If
-            Next
-            Return retour
+
+                Dim retour As Integer = -1
+                For i As Integer = 0 To _ListRepertoireAudio.Count - 1
+                    If _ListRepertoireAudio.Item(i).Repertoire = NomRepertoire Then
+                        _ListRepertoireAudio.Item(i).Enable = Enable
+                        retour = 0
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "EnableRepertoireAudio", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 
         ''' <summary>Retourne la liste de tous les répertoires audio</summary>
