@@ -2141,8 +2141,6 @@ Namespace HoMIDom
                     elelog.SetAttribute("source", Source)
                     elelog.SetAttribute("fonction", HtmlEncode(Fonction))
                     elelog.SetAttribute("message", HtmlEncode(Message))
-                    FIFOLog.Add(elelog)
-
 
                     xmldoc.Load(_File) 'ouvre le fichier xml
                     Dim root As XmlElement = xmldoc.Item("logs")
@@ -5979,8 +5977,7 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListUsers.Count - 1
                     If _ListUsers.Item(i).UserName = Username Then
                         Dim a As String = EncryptTripleDES(Password, "homidom")
-                        Dim b As String = DecryptTripleDES(_ListUsers.Item(i).Password, "homidom")
-                        If a = b Then
+                        If a = _ListUsers.Item(i).Password Then
                             Return True
                             Exit For
                         End If
