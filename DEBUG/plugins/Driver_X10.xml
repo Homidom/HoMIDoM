@@ -50,6 +50,9 @@ Driver_X10
  </summary>
 	<param name="Data"></param>
 	<remarks></remarks>
+</member><member name="M:Driver_X10.Driver_x10.traitement(System.String,System.String)">
+	<summary>Traite les paquets reçus</summary>
+	<remarks></remarks>
 </member><member name="M:Driver_X10.Driver_x10.X10_GetClock">
 	<summary>
  Retourne la date et l'heure, la version
