@@ -19,6 +19,37 @@ Driver_onewire
 	<summary>
   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
 </summary>
+</member><member name="M:Driver_onewire.Driver_onewire.Start">
+	<summary>Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_onewire.Driver_onewire.Stop">
+	<summary>Arrêter le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_onewire.Driver_onewire.Restart">
+	<summary>Re-Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_onewire.Driver_onewire.Read(System.Object)">
+	<summary>Intérroger un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<remarks>pas utilisé</remarks>
+</member><member name="M:Driver_onewire.Driver_onewire.Write(System.Object,System.String,System.Object,System.Object)">
+	<summary>Commander un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<param name="Command">La commande à passer</param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_onewire.Driver_onewire.DeleteDevice(System.String)">
+	<summary>Fonction lancée lors de la suppression d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_onewire.Driver_onewire.NewDevice(System.String)">
+	<summary>Fonction lancée lors de l'ajout d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_onewire.Driver_onewire.TimerTick">
+	<summary>Si refresh &gt;0 gestion du timer</summary>
+	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
 </member>
 </members>
 </doc>
