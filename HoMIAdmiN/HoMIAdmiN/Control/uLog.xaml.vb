@@ -21,6 +21,7 @@
 
         If Window1.IsConnect = True Then
             TxtFile.Text = Window1.myService.GetMaxFileSizeLog
+            TxtMaxLogMonth.Text = Window1.myService.GetMaxMonthLog
         End If
     End Sub
 
@@ -31,7 +32,22 @@
         End If
         If Window1.IsConnect = True And IsNumeric(TxtFile.Text) Then
             Window1.myService.SetMaxFileSizeLog(CDbl(TxtFile.Text))
+            Window1.myService.SetMaxMonthLog(CDbl(TxtMaxLogMonth.Text))
         End If
         RaiseEvent CloseMe(Me)
+    End Sub
+
+    Private Sub TxtMaxLogMonth_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMaxLogMonth.TextChanged
+        If IsNumeric(TxtMaxLogMonth.Text) = False Then
+            MessageBox.Show("Veuillez saisir un chiffre comme durée de mois maximum", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            TxtMaxLogMonth.Text = Window1.myService.GetMaxMonthLog
+        End If
+    End Sub
+
+    Private Sub TxtFile_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtFile.TextChanged
+        If IsNumeric(TxtFile.Text) = False Then
+            MessageBox.Show("Veuillez saisir un chiffre comme taille maximale", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            TxtFile.Text = Window1.myService.GetMaxFileSizeLog
+        End If
     End Sub
 End Class
