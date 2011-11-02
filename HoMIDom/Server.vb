@@ -50,15 +50,12 @@ Namespace HoMIDom
         Shared _SMTPmailEmetteur As String = "homidom@mail.com" 'adresse mail de l'émetteur
         Private Shared _PortSOAP As String = "" 'Port IP de connexion SOAP
         Dim TimerSecond As New Timers.Timer 'Timer à la seconde
-        ' Private graphe As New graphes(_MonRepertoire + "\Images\Graphes\")
         Shared _DateTimeLastStart As Date = Now
         Private Shared _ListExtensionAudio As New List(Of Audio.ExtensionAudio) 'Liste des extensions audio
         Private Shared _ListRepertoireAudio As New List(Of Audio.RepertoireAudio) 'Liste des répertoires audio
         Private _ListTagAudio As New List(Of Audio.FilePlayList) ' Liste des tags des fichiers audio 
         Private Shared Etat_server As Boolean = False 'etat du serveur : true = démarré
         Dim fsw As FileSystemWatcher
-        Shared FIFOLog As List(Of System.Xml.XmlElement)
-
 #End Region
 
 #Region "Event"
@@ -206,13 +203,7 @@ Namespace HoMIDom
             Try
                 '---- Actions à effectuer toutes les minutes ----
                 If ladate.Second = 0 Then
-                    If _HeureLeverSoleil <= Now And _HeureCoucherSoleil >= Now Then
-                        Dim x As TemplateDevice = ReturnDeviceById(_IdSrv, "soleilleve01")
-                        If x IsNot Nothing Then x.Value = True
-                    Else
-                        Dim x As TemplateDevice = ReturnDeviceById(_IdSrv, "soleilleve01")
-                        If x IsNot Nothing Then x.Value = False
-                    End If
+                    VerifIsJour()
                 End If
 
                 '---- Actions à effectuer toutes les heures ----
@@ -284,6 +275,24 @@ Namespace HoMIDom
 #End Region
 
 #Region "Soleil"
+        Private Sub VerifIsJour()
+            If _HeureLeverSoleil <= Now And _HeureCoucherSoleil >= Now Then
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).id = "soleil01" Then
+                        _ListDevices.Item(i).value = True
+                        Exit For
+                    End If
+                Next
+            Else
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).id = "soleil01" Then
+                        _ListDevices.Item(i).value = False
+                        Exit For
+                    End If
+                Next
+            End If
+        End Sub
+
         ''' <summary>Initialisation des heures du soleil</summary>
         ''' <remarks></remarks>
         Public Sub MAJ_HeuresSoleil()
@@ -298,6 +307,8 @@ Namespace HoMIDom
 
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Heure du lever : " & _HeureLeverSoleil)
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Heure du coucher : " & _HeureCoucherSoleil)
+
+                VerifIsJour()
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Exception : " & ex.Message)
             End Try
@@ -735,7 +746,7 @@ Namespace HoMIDom
                                     End If
                                     If .ID <> "" And .Name <> "" And .Adresse1 <> "" And .DriverId <> "" Then
                                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement du device " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
-                                        If .ID = "soleilleve01" Then
+                                        If .ID = "soleil01" Then
                                             trvSoleil = True
                                         End If
                                     Else
@@ -2105,8 +2116,7 @@ Namespace HoMIDom
                     Fichier = New FileInfo(_File)
                     'Vérifie si le fichier est trop gros si oui, on l'archive
                     If (Fichier.Length / 1000) > _MaxFileSize Then
-                        Dim filearchive As String
-                        filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                        Dim filearchive As String = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
                         IO.File.Move(_File, filearchive)
                     End If
                 Else
@@ -2116,6 +2126,20 @@ Namespace HoMIDom
 
                 'on affiche dans la console
                 Console.WriteLine(Now & " " & TypLog & " " & Source & " " & Fonction & " " & Message)
+
+                Dim timeout As DateTime = Now.AddSeconds(3)
+                Do While FileIsOpen(_File) = True And Now < timeout
+
+                Loop
+
+                If Now = timeout And FileIsOpen(_File) = True Then
+                    Console.WriteLine(Now & " Impossible d'écrire dans le fichier log car il est toujours en ouvert, création d'un nouveau fichier log")
+                    Dim filearchive As String
+                    filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                    IO.File.Move(_File, filearchive)
+                    CreateNewFileLog(_File)
+                    Fichier = New FileInfo(_File)
+                End If
 
                 Dim xmldoc As New XmlDocument()
 
@@ -2193,9 +2217,18 @@ Namespace HoMIDom
             End Try
         End Sub
 
-        Private Sub ThreadLog()
+        Private Function FileIsOpen(ByVal File As String) As Boolean
+            Try
+                'on tente d'ouvrir un stream sur le fichier, s'il est déjà utilisé, cela déclenche une erreur.
+                Dim fs As IO.FileStream = My.Computer.FileSystem.GetFileInfo(File).Open(IO.FileMode.Open, _
+                IO.FileAccess.Read)
+                fs.Close()
+                Return False
+            Catch ex As Exception
+                Return True
+            End Try
+        End Function
 
-        End Sub
 
         ''' <summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
         ''' <param name="NewFichier"></param>
