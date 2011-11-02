@@ -20,9 +20,9 @@ Public Class Driver_x10
     Dim _ID As String = "9BC60A04-3569-11E0-B9A7-3F66DFD72085"
     Dim _Nom As String = "X10"
     Dim _Enable As String = False
-    Dim _Description As String = "X10 Ethernet"
+    Dim _Description As String = "X10 CM11"
     Dim _StartAuto As Boolean = False
-    Dim _Protocol As String = "ETHERNET"
+    Dim _Protocol As String = "COM"
     Dim _IsConnect As Boolean = False
     Dim _IP_TCP As String = ""
     Dim _Port_TCP As String = ""
@@ -546,23 +546,66 @@ Public Class Driver_x10
 
             If Recieved_DeviceCode <> "" And Recieved_HouseCode <> "" And Recieved_Function <> "" Then
                 Dim _add As String = Recieved_HouseCode & Recieved_DeviceCode
-                For i As Integer = 0 To _Server.GetAllDevices(_IdSrv).Count - 1
-                    If _Server.GetAllDevices(_IdSrv).Item(i).Adresse1 = _add And _Server.GetAllDevices(_IdSrv).Item(i).DriverID = _ID Then
-                        Select Case Recieved_Function
-                            Case "3"
-                                _Server.GetAllDevices(_IdSrv).Item(i).Value = True
-                            Case "4"
-                                _Server.GetAllDevices(_IdSrv).Item(i).Value = False
+                Select Case Recieved_Function
+                    Case "3"
+                        traitement("ON", _add)
+                        '_Server.GetAllDevices(_IdSrv).Item(i).Value = True
+                    Case "4"
+                        traitement("OFF", _add)
+                        '_Server.GetAllDevices(_IdSrv).Item(i).Value = False
 
-                        End Select
-                    End If
-                Next
+                End Select
             End If
         Else
             'ERREUR TROP DE BYTES A RECEVOIR MAX 10
         End If
 
     End Sub
+
+    ''' <summary>Traite les paquets reçus</summary>
+    ''' <remarks></remarks>
+    Private Sub traitement(ByVal valeur As String, ByVal adresse As String)
+        If valeur <> "" Then
+            Try
+
+                'Recherche si un device affecté
+                Dim listedevices As New ArrayList
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
+                'un device trouvé on maj la value
+                If (listedevices.Count = 1) Then
+                    'correction valeur pour correspondre au type de value
+                    If TypeOf listedevices.Item(0).Value Is Integer Then
+                        If valeur = "ON" Then
+                            valeur = 100
+                        ElseIf valeur = "OFF" Then
+                            valeur = 0
+                        End If
+                    ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
+                        If valeur = "ON" Then
+                            valeur = True
+                        ElseIf valeur = "OFF" Then
+                            valeur = False
+                        Else
+                            valeur = True
+                        End If
+                    End If
+                    listedevices.Item(0).Value = valeur
+                ElseIf (listedevices.Count > 1) Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Device non trouvé : " & adresse & ":" & valeur)
+
+
+                    'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+
+
+                End If
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS traitement", "Exception : " & ex.Message & " --> " & adresse & " : " & valeur)
+            End Try
+        End If
+    End Sub
+
 
     Public Function ecrire(ByVal adresse As String, ByVal commande As String, ByVal data As Integer) As String
         'adresse= adresse du composant : A1
