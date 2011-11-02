@@ -70,17 +70,23 @@
     </UserControl.Resources>
 
     <Grid Height="485" Background="#636060">
-        <Border Name="Border1" BorderThickness="2" BorderBrush="Gray">
-           
-        </Border>
+        <Border Name="Border1" BorderThickness="2" BorderBrush="Gray" />
         <Button Height="24.293" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,7,12,0" Name="BtnClose" VerticalAlignment="Top" Width="87.169" Foreground="White">Fermer</Button>
         <Button Height="24.293" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,7,105.746,0" Name="BtnRefresh" VerticalAlignment="Top" Width="87.169" Foreground="White">Rafraichir</Button>
-        <TextBox Margin="14.29,62.5,12,36" Name="TxtLog" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+        
         <StackPanel >
             <Label FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Name="Label1" VerticalAlignment="Top" HorizontalAlignment="Center">Log</Label>
+            <StackPanel Orientation="Horizontal" >
+                <Rectangle Width="90" />
+                <Label Content="Taille max du fichier Log (Ko):" Name="Label2" Margin="1" Foreground="White" />
+                <TextBox Height="24" Name="TxtFile" Width="143" />
+                <Label Content="Conservation ancien log (mois):" Name="Label4" Margin="1" Foreground="White" />
+                <TextBox Height="24" Name="TxtMaxLogMonth" Width="30" />
+            </StackPanel>
+            <TextBox Margin="3" Height="380" Name="TxtLog" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
         </StackPanel>
-        <TextBox Height="24" Name="TxtFile" Width="143" Margin="585,36,12,425" />
-        <Label Content="Taille max du fichier Log (Ko):" Name="Label2" Margin="417,36,164,425" Foreground="White" />
+        
+        
         <Image Height="53" HorizontalAlignment="Left" Margin="7,1,0,0" Name="ImgDevice" Source="/HoMIAdmiN;component/Images/5250-128.png" Stretch="Fill" VerticalAlignment="Top" Width="53">
             <Image.LayoutTransform>
                 <RotateTransform Angle="-10" CenterX="0" CenterY="0" />
