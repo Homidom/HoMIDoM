@@ -214,7 +214,7 @@ Namespace HoMIDom
         End Property
 
         ''' <summary>
-        ''' Si Lastchanged+LastchangeDuree< Now alors le composant a un problème car il n'a pas emis depuis au moins lastchangedduree.
+        ''' Si Lastchanged+LastchangeDuree inférieur à Now alors le composant a un problème car il n'a pas emis depuis au moins lastchangedduree.
         ''' </summary>
         ''' <value></value>
         ''' <returns></returns>

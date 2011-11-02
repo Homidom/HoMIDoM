@@ -990,6 +990,7 @@ Namespace HoMIDom
                     Return str
                 Catch ex As Exception
                     _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "FREEBOX SendHttp", "Erreur: " & ex.ToString)
+                    Return ""
                 End Try
             End Function
 
