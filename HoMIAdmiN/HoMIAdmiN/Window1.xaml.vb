@@ -824,8 +824,6 @@ Class Window1
             AddHandler x.CloseMe, AddressOf UnloadControl
             CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
-            CanvasRight.SetLeft(x, 50)
-            CanvasRight.SetTop(x, 50)
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub MnuViewLog: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -887,7 +885,7 @@ Class Window1
     ''' <param name="IP"></param>
     ''' <param name="Port"></param>
     ''' <remarks></remarks>
-    Public Sub Connect_Srv(ByVal Name As String, ByVal IP As String, ByVal Port As String)
+    Public Function Connect_Srv(ByVal Name As String, ByVal IP As String, ByVal Port As String) As Integer
         Try
             myadress = "http://" & IP & ":" & Port & "/ServiceModelSamples/service"
             MyPort = Port
@@ -905,7 +903,15 @@ Class Window1
 
             myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
             myService = myChannelFactory.CreateChannel()
-            IsConnect = True
+            If myChannelFactory.State <> CommunicationState.Opened Then
+                MessageBox.Show("Erreur lors de la connexion au serveur", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                IsConnect = False
+                Return -1
+                Exit Function
+            Else
+                IsConnect = True
+            End If
+
 
             LblSrv.Content = "Serveur courant: " & Name
             For i As Integer = 0 To ListServer.Count - 1
@@ -920,12 +926,15 @@ Class Window1
                 End If
             Next
             CanvasUser = CanvasRight
+
+            Return 0
         Catch ex As Exception
             myChannelFactory.Abort()
             IsConnect = False
             MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            Return -1
         End Try
-    End Sub
+    End Function
 
     Private Sub Window1_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         Try
@@ -969,23 +978,25 @@ Class Window1
             frm.Owner = Me
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-                Connect_Srv(frm.TxtName.Text, frm.TxtIP.Text, frm.TxtPort.Text)
+                If Connect_Srv(frm.TxtName.Text, frm.TxtIP.Text, frm.TxtPort.Text) <> 0 Then
+                    Exit Sub
+                End If
                 If myService.GetIdServer(IdSrv) = "99" Then
                     MessageBox.Show("L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     Exit Sub
                 End If
-                If myService.VerifLogin(frm.TxtUsername.Text, frm.TxtPassword.Password) = False Then
-                    MessageBox.Show("Le username ou le password sont erroné, impossible veuillez réessayer", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                Else
-                    frm.Close()
-                    FlagStart = True
-                    frm = Nothing
-                End If
+                'If myService.VerifLogin(frm.TxtUsername.Text, frm.TxtPassword.Password) = False Then
+                '    MessageBox.Show("Le username ou le password sont erroné, impossible veuillez réessayer", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                'Else
+                frm.Close()
+                FlagStart = True
+                frm = Nothing
+                'End If
             Else
-                End
+            End
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub PageConnexion: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("ERREUR Connexion: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 

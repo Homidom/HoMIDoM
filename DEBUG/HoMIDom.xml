@@ -1428,6 +1428,18 @@ HoMIDom
 	<param name="UserId"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetMaxMonthLog(System.Int32)">
+	<summary>
+ Retourne le nombre de mois à conserver une archive de log avant de le supprimer
+ </summary>
+	<param name="Month"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetMaxMonthLog">
+	<summary>
+ Définit le nombre de mois à conserver une archive de log avant de le supprimer
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ReturnLog(System.String)">
 	<summary>renvoi le fichier log suivant une requête xml si besoin</summary>
 	<param name="Requete"></param>
@@ -2101,6 +2113,18 @@ HoMIDom
  </summary>
 	<param name="DeviceId">ID du device</param>
 	<returns>Retourne pour chaque élément de la liste NOMDELAMETHODE|Parametre1:TypeParametre1|Parametre2:TypeParametre2...</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetMaxMonthLog(System.Int32)">
+	<summary>
+ Retourne le nombre de mois à conserver une archive de log avant de le supprimer
+ </summary>
+	<param name="Month">Nombre de mois à conserver</param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetMaxMonthLog">
+	<summary>
+ Définit le nombre de mois à conserver une archive de log avant de le supprimer
+ </summary>
+	<returns>Nombre de mois à conserver une archive de log</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Log(HoMIDom.HoMIDom.Server.TypeLog,HoMIDom.HoMIDom.Server.TypeSource,System.String,System.String)">
 	<summary>Ecrit un log dans le fichier log au format xml</summary>

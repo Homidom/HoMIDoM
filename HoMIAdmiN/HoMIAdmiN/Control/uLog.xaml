@@ -1,6 +1,6 @@
 ﻿<UserControl x:Class="uLog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="740" Height="485">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="740" Height="485" Margin="5">
     
     <UserControl.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">

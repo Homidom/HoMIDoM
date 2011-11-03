@@ -2,10 +2,10 @@
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
-            If TxtUsername.Text = "" Or TxtPassword.Password = "" Then
-                MessageBox.Show("Le username ou le password doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                Exit Sub
-            End If
+            'If TxtUsername.Text = "" Or TxtPassword.Password = "" Then
+            '    MessageBox.Show("Le username ou le password doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            '    Exit Sub
+            'End If
             If TxtIP.Text = "" Or TxtPort.Text = "" Then
                 MessageBox.Show("L'adresse IP et le port du serveur doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
