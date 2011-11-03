@@ -30,32 +30,33 @@ Namespace HoMIDom
         Private Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
         Private Shared _ListImgDrivers As New List(Of Driver)
         Private Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
-        Private Shared _ListZones As New List(Of Zone) 'Liste des zones
-        Private Shared _ListUsers As New List(Of Users.User) 'Liste des users
-        Private Shared _ListMacros As New List(Of Macro) 'Liste des macros
-        Private Shared _ListTriggers As New List(Of Trigger) 'Liste de tous les triggers
-        Private Shared _ListGroups As New List(Of Groupes) 'Liste de tous les groupes
+        <NonSerialized()> Private Shared _ListZones As New List(Of Zone) 'Liste des zones
+        <NonSerialized()> Private Shared _ListUsers As New List(Of Users.User) 'Liste des users
+        <NonSerialized()> Private Shared _ListMacros As New List(Of Macro) 'Liste des macros
+        <NonSerialized()> Private Shared _ListTriggers As New List(Of Trigger) 'Liste de tous les triggers
+        <NonSerialized()> Private Shared _ListGroups As New List(Of Groupes) 'Liste de tous les groupes
         <NonSerialized()> Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
         <NonSerialized()> Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
-        Shared Soleil As New Soleil 'Déclaration class Soleil
-        Shared _Longitude As Double = 0 'Longitude
-        Shared _Latitude As Double = 0 'latitude
-        Private Shared _HeureLeverSoleil As DateTime 'heure du levé du soleil
-        Private Shared _HeureCoucherSoleil As DateTime 'heure du couché du soleil
-        Shared _HeureLeverSoleilCorrection As Integer = 0 'correction à appliquer sur heure du levé du soleil
-        Shared _HeureCoucherSoleilCorrection As Integer = 0 'correction à appliquer sur heure du couché du soleil
-        Shared _SMTPServeur As String = "smtp.homidom.fr" 'adresse du serveur SMTP
-        Shared _SMTPLogin As String = "" 'login du serveur SMTP
-        Shared _SMTPassword As String = "" 'password du serveur SMTP
-        Shared _SMTPmailEmetteur As String = "homidom@mail.com" 'adresse mail de l'émetteur
-        Private Shared _PortSOAP As String = "" 'Port IP de connexion SOAP
-        Dim TimerSecond As New Timers.Timer 'Timer à la seconde
-        Shared _DateTimeLastStart As Date = Now
-        Private Shared _ListExtensionAudio As New List(Of Audio.ExtensionAudio) 'Liste des extensions audio
-        Private Shared _ListRepertoireAudio As New List(Of Audio.RepertoireAudio) 'Liste des répertoires audio
-        Private _ListTagAudio As New List(Of Audio.FilePlayList) ' Liste des tags des fichiers audio 
-        Private Shared Etat_server As Boolean = False 'etat du serveur : true = démarré
-        Dim fsw As FileSystemWatcher
+        <NonSerialized()> Shared Soleil As New Soleil 'Déclaration class Soleil
+        <NonSerialized()> Shared _Longitude As Double = 0 'Longitude
+        <NonSerialized()> Shared _Latitude As Double = 0 'latitude
+        <NonSerialized()> Private Shared _HeureLeverSoleil As DateTime 'heure du levé du soleil
+        <NonSerialized()> Private Shared _HeureCoucherSoleil As DateTime 'heure du couché du soleil
+        <NonSerialized()> Shared _HeureLeverSoleilCorrection As Integer = 0 'correction à appliquer sur heure du levé du soleil
+        <NonSerialized()> Shared _HeureCoucherSoleilCorrection As Integer = 0 'correction à appliquer sur heure du couché du soleil
+        <NonSerialized()> Shared _SMTPServeur As String = "smtp.homidom.fr" 'adresse du serveur SMTP
+        <NonSerialized()> Shared _SMTPLogin As String = "" 'login du serveur SMTP
+        <NonSerialized()> Shared _SMTPassword As String = "" 'password du serveur SMTP
+        <NonSerialized()> Shared _SMTPmailEmetteur As String = "homidom@mail.com" 'adresse mail de l'émetteur
+        <NonSerialized()> Private Shared _PortSOAP As String = "" 'Port IP de connexion SOAP
+        <NonSerialized()> Dim TimerSecond As New Timers.Timer 'Timer à la seconde
+        <NonSerialized()> Shared _DateTimeLastStart As Date = Now
+        <NonSerialized()> Private Shared _ListExtensionAudio As New List(Of Audio.ExtensionAudio) 'Liste des extensions audio
+        <NonSerialized()> Private Shared _ListRepertoireAudio As New List(Of Audio.RepertoireAudio) 'Liste des répertoires audio
+        <NonSerialized()> Private _ListTagAudio As New List(Of Audio.FilePlayList) ' Liste des tags des fichiers audio 
+        <NonSerialized()> Private Shared Etat_server As Boolean = False 'etat du serveur : true = démarré
+        <NonSerialized()> Dim fsw As FileSystemWatcher
+        <NonSerialized()> Dim _MaxMonthLog As Integer = 2
 #End Region
 
 #Region "Event"
@@ -214,6 +215,7 @@ Namespace HoMIDom
                 '---- Actions à effectuer à minuit ----
                 If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
                     MAJ_HeuresSoleil()
+                    CleanLog(_MaxMonthLog)
                 End If
 
                 '---- Actions à effectuer à midi ----
@@ -2350,7 +2352,7 @@ Namespace HoMIDom
                 'End With
 
                 'test log
-                CleanLog(1)
+                CleanLog(_MaxMonthLog)
             Catch ex As Exception
                 Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Exception : " & ex.Message)
             End Try
@@ -6078,6 +6080,26 @@ Namespace HoMIDom
 #End Region
 
 #Region "Log"
+        ''' <summary>
+        ''' Retourne le nombre de mois à conserver une archive de log avant de le supprimer
+        ''' </summary>
+        ''' <param name="Month"></param>
+        ''' <remarks></remarks>
+        Public Sub SetMaxMonthLog(ByVal Month As Integer) Implements IHoMIDom.SetMaxMonthLog
+            If IsNumeric(Month) Then
+                _MaxMonthLog = Month
+            End If
+        End Sub
+
+        ''' <summary>
+        ''' Définit le nombre de mois à conserver une archive de log avant de le supprimer
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetMaxMonthLog() As Integer Implements IHoMIDom.GetMaxMonthLog
+            Return _MaxMonthLog
+        End Function
+
         ''' <summary>renvoi le fichier log suivant une requête xml si besoin</summary>
         ''' <param name="Requete"></param>
         ''' <returns></returns>
@@ -6178,8 +6200,8 @@ Namespace HoMIDom
                 Dim dirInfo As New System.IO.DirectoryInfo(_MonRepertoire & "\logs\")
                 Dim file As System.IO.FileInfo
                 Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.xml", System.IO.SearchOption.AllDirectories)
-                Dim b As String = ""
                 Dim DateRef As DateTime = Now.AddMonths(-1 * Mois)
+                Dim cnt As Integer = 0
 
                 If (files IsNot Nothing) Then
                     For Each file In files
@@ -6195,10 +6217,12 @@ Namespace HoMIDom
                                         Dim fileyear As String = Mid(filedate, 1, 4)
                                         Dim filemonth As String = Mid(filedate, 5, 2)
                                         If DateRef.Year > fileyear Then
-                                            b &= file.Name & vbCrLf
+                                            file.Delete()
+                                            cnt += 1
                                         Else
                                             If DateRef.Month >= filemonth Then
-                                                b &= file.Name & vbCrLf
+                                                file.Delete()
+                                                cnt += 1
                                             End If
                                         End If
                                     End If
@@ -6207,6 +6231,7 @@ Namespace HoMIDom
                         End If
                     Next
                 End If
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "CleanLog", cnt & " Fichier(s) log supprimé(s)")
                 Return 0
             Catch ex As Exception
                 Return "ERR:" & ex.ToString

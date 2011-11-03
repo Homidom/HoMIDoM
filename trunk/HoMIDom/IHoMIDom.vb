@@ -741,6 +741,20 @@ Namespace HoMIDom
 
 #Region "Log"
 
+        ''' <summary>
+        ''' Retourne le nombre de mois à conserver une archive de log avant de le supprimer
+        ''' </summary>
+        ''' <param name="Month">Nombre de mois à conserver</param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetMaxMonthLog(ByVal Month As Integer)
+
+        ''' <summary>
+        ''' Définit le nombre de mois à conserver une archive de log avant de le supprimer
+        ''' </summary>
+        ''' <returns>Nombre de mois à conserver une archive de log</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetMaxMonthLog() As Integer
+
         ''' <summary>Ecrit un log dans le fichier log au format xml</summary>
         ''' <param name="TypLog">Type de log ERREUR, MESSAGE, INFO...</param>
         ''' <param name="Source">Source du log CLIENT, SERVEUR...</param>
