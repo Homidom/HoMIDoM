@@ -3039,49 +3039,52 @@ Namespace HoMIDom
 
         Public Class ThreadSearchTag
             Dim _Repertoire As String
-            Dim _mylist As New List(Of Audio.FilePlayList)
+            Dim _mylist As List(Of Audio.FilePlayList)
+
             Sub New(ByVal Repertoire As String)
                 _Repertoire = Repertoire
             End Sub
 
+
             '''' <summary>Fonction de chargement des tags des fichiers audio des repertoires contenus dans la liste active </summary>
             '''' <remarks>Recupere les fichiers Audios selon les extensions actives</remarks>
-            'Sub FileTagRepload()
+            Sub FileTagRepload()
 
-            '    'Efface le tableau actuel
-            '    _ListTagAudio.Clear()
+                ' Créér une reference du dossier
+                Dim di As New DirectoryInfo(_Repertoire)
 
-            '    ' Créér une reference du dossier
-            '    Dim di As New DirectoryInfo(_Repertoire)
+                ' Pour chacune des extensions
+                For cpt2 = 0 To _ListExtensionAudio.Count - 1
 
-            '    ' Pour chacune des extensions
-            '    For cpt2 = 0 To _ListExtensionAudio.Count - 1
+                    Dim _extension As String = _ListExtensionAudio.Item(cpt2).Extension
+                    Dim _extensionenable As Boolean = _ListExtensionAudio.Item(cpt2).Enable
 
-            '        Dim _extension As String = _ListExtensionAudio.Item(cpt2).Extension
-            '        Dim _extensionenable As Boolean = _ListExtensionAudio.Item(cpt2).Enable
+                    ' Recupere la liste des fichiers du repertoire si l'extension est active
+                    If _extensionenable Then ' Extension active 
+                        ' Recuperation des fichiers du repertoire
+                        Dim fiArr As FileInfo() = di.GetFiles("*" & _extension, SearchOption.TopDirectoryOnly)
 
-            '        ' Recupere la liste des fichiers du repertoire si l'extension est active
-            '        If _extensionenable Then ' Extension active 
-            '            ' Recuperation des fichiers du repertoire
-            '            Dim fiArr As FileInfo() = di.GetFiles("*" & _extension, SearchOption.TopDirectoryOnly)
+                        ' Boucle sur tous les fichiers du repertoire
+                        For i = 0 To fiArr.Length - 1
 
-            '            ' Boucle sur tous les fichiers du repertoire
-            '            For i = 0 To fiArr.Length - 1
-            '                Dim X As TagLib.File
-            '                ' Recupere les tags du fichier Audio 
-            '                X = TagLib.File.Create(fiArr(i).FullName)
-            '                Dim a As New Audio.FilePlayList(X.Tag.Title, X.Tag.FirstPerformer, X.Tag.Album, X.Tag.Year, X.Tag.Comment, X.Tag.FirstGenre,
-            '                                          System.Convert.ToString(X.Properties.Duration.Minutes) & ":" & System.Convert.ToString(Format(X.Properties.Duration.Seconds, "00")),
-            '                                          fiArr(i).Name, PathRep + "\" + fiArr(i).Name, X.Tag.Track)
+                            Dim Resultat = (From FileAudio In _mylist Where FileAudio.SourceWpath = fiArr(i).FullName Select FileAudio).Count
+                            If Resultat = 0 Then
+                                Dim X As TagLib.File
+                                ' Recupere les tags du fichier Audio 
+                                X = TagLib.File.Create(fiArr(i).FullName)
+                                Dim a As New Audio.FilePlayList(X.Tag.Title, X.Tag.FirstPerformer, X.Tag.Album, X.Tag.Year, X.Tag.Comment, X.Tag.FirstGenre,
+                                                          System.Convert.ToString(X.Properties.Duration.Minutes) & ":" & System.Convert.ToString(Format(X.Properties.Duration.Seconds, "00")),
+                                                          fiArr(i).Name, fiArr(i).FullName, X.Tag.Track)
 
-            '                _ListTagAudio.Add(a)
+                                _mylist.Add(a)
 
-            '                a = Nothing
-            '                X = Nothing
-            '            Next
-            '        End If
-            '    Next
-            'End Sub
+                                a = Nothing
+                                X = Nothing
+                            End If
+                        Next
+                    End If
+                Next
+            End Sub
 
         End Class
 

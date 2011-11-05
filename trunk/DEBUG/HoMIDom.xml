@@ -290,6 +290,13 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.LastChangeDuree">
+	<summary>
+ Si Lastchanged+LastchangeDuree inférieur à Now alors le composant a un problème car il n'a pas emis depuis au moins lastchangedduree.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Modele">
 	<summary>
  Modèle du device
