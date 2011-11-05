@@ -108,16 +108,16 @@
                        <Rectangle Height="20" />
                     </StackPanel>
             </StackPanel>
-                    <StackPanel Orientation="Horizontal" >
-                <Label Content="Username:" Margin="1" Name="Label3" Foreground="White" Width=" 70"/>
-            <TextBox Margin="1" Name="TxtUsername" Width="200" TabIndex="0" />
+                    <StackPanel Orientation="Horizontal" Visibility="Hidden" >
+                        <Label Content="Username:" Margin="1" Name="Label3" Foreground="White" Width=" 70"/>
+                        <TextBox Margin="1" Name="TxtUsername" Width="200" TabIndex="0" />
                     <Rectangle Width="5" />
                 </StackPanel> 
-            <StackPanel Orientation="Horizontal" >
+            <StackPanel Orientation="Horizontal" Visibility="Hidden">
             <Label Content="Password:" Margin="1" Name="Label4" Foreground="White" Width=" 70"/>
             <PasswordBox Margin="1" Name="TxtPassword" Width="200" TabIndex="1" />
             </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Hidden" >
                     <CheckBox Content="Se souvenir du mot de passe" Margin="2" Name="CheckBox1" Foreground="White" TabIndex="9" />
                 </StackPanel>
             </StackPanel>

@@ -42,7 +42,7 @@ Driver_Foobar
 	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
 </member><member name="T:Driver_Foobar.Driver_Foobar">
 	<summary>Class Foobar le device doit donner par le biais de son adresse l'emplacement de l'executable de Foobar</summary>
-	<remarks></remarks>
+	<remarks>Adresse1: Adresse de l'executable foobar sinon la propriété ip_tcp doit être renseigné pour commander via http</remarks>
 </member><member name="P:Driver_Foobar.My.Resources.Resources.ResourceManager">
 	<summary>
   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.

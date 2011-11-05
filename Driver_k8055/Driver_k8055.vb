@@ -3,7 +3,6 @@ Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 
 ' Auteur : Seb
-' Date : 10/02/2011
 
 ''' <summary>Driver Velleman k8055, le device doit dans son adresse 1 indiqué sa carte et son numéro de relais séparé par un x, exemple pour le relais 1 de la carte 1: 1x1</summary>
 ''' <remarks>Nécessite la dll k8055d.dll</remarks>
@@ -43,26 +42,26 @@ Imports HoMIDom.HoMIDom.Device
 #End Region
 
 #Region "Declaration"
-    'Private Declare Function OpenDevice Lib "k8055d.dll" (ByVal CardAddress As Long) As Long
-    'Private Declare Sub CloseDevice Lib "k8055d.dll" ()
-    'Private Declare Sub WriteAllDigital Lib "k8055d.dll" (ByVal Data As Long)
-    'Private Declare Sub ClearDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long)
-    'Private Declare Sub ClearAllDigital Lib "k8055d.dll" ()
-    'Private Declare Sub SetDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long)
-    'Private Declare Sub SetAllDigital Lib "k8055d.dll" ()
-    'Private Declare Function ReadDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long) As Boolean
-    'Private Declare Function ReadAllDigital Lib "k8055d.dll" () As Long
-    'Private Declare Function ReadAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long) As Long
-    'Private Declare Sub ReadAllAnalog Lib "k8055d.dll" (ByVal Data1 As Long, ByVal Data2 As Long)
-    'Private Declare Sub OutputAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long, ByVal Data As Long)
-    'Private Declare Sub OutputAllAnalog Lib "k8055d.dll" (ByVal Data1 As Long, ByVal Data2 As Long)
-    'Private Declare Sub ClearAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long)
-    'Private Declare Function ReadCounter Lib "k8055d.dll" (ByVal CounterNr As Long) As Long
-    'Private Declare Sub SetAllAnalog Lib "k8055d.dll" ()
-    'Private Declare Sub ClearAllAnalog Lib "k8055d.dll" ()
-    'Private Declare Sub ResetCounter Lib "k8055d.dll" (ByVal CounterNr As Long)
-    'Private Declare Sub SetAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long)
-    'Private Declare Sub SetCounterDebounceTime Lib "k8055d.dll" (ByVal CounterNr As Long, ByVal DebounceTime As Long)
+    Private Declare Function OpenDevice Lib "k8055d.dll" (ByVal CardAddress As Long) As Long
+    Private Declare Sub CloseDevice Lib "k8055d.dll" ()
+    Private Declare Sub WriteAllDigital Lib "k8055d.dll" (ByVal Data As Long)
+    Private Declare Sub ClearDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long)
+    Private Declare Sub ClearAllDigital Lib "k8055d.dll" ()
+    Private Declare Sub SetDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long)
+    Private Declare Sub SetAllDigital Lib "k8055d.dll" ()
+    Private Declare Function ReadDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long) As Boolean
+    Private Declare Function ReadAllDigital Lib "k8055d.dll" () As Long
+    Private Declare Function ReadAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long) As Long
+    Private Declare Sub ReadAllAnalog Lib "k8055d.dll" (ByVal Data1 As Long, ByVal Data2 As Long)
+    Private Declare Sub OutputAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long, ByVal Data As Long)
+    Private Declare Sub OutputAllAnalog Lib "k8055d.dll" (ByVal Data1 As Long, ByVal Data2 As Long)
+    Private Declare Sub ClearAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long)
+    Private Declare Function ReadCounter Lib "k8055d.dll" (ByVal CounterNr As Long) As Long
+    Private Declare Sub SetAllAnalog Lib "k8055d.dll" ()
+    Private Declare Sub ClearAllAnalog Lib "k8055d.dll" ()
+    Private Declare Sub ResetCounter Lib "k8055d.dll" (ByVal CounterNr As Long)
+    Private Declare Sub SetAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long)
+    Private Declare Sub SetCounterDebounceTime Lib "k8055d.dll" (ByVal CounterNr As Long, ByVal DebounceTime As Long)
 #End Region
 
 #Region "Fonctions génériques"
@@ -220,19 +219,17 @@ Imports HoMIDom.HoMIDom.Device
         Try
             Dim h As Long
             Dim carte As Long = 0
-            ' h = OpenDevice(carte)
+            h = OpenDevice(carte)
             Select Case h
-                'Case 0, 1, 2, 3
-                '    Return 0
-                '    Start = "Card " + Str(h) + " connected"
-                '    _IsConnect = True
-                'Case -1
-                '    Return -1
-                '    Start = "Card " + Str(carte) + " not found"
-                '    _IsConnect = False
+                Case 0, 1, 2, 3
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Start", "Carte " & Str(h) & " connectée")
+                    _IsConnect = True
+                Case -1
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Start", "Carte " & Str(carte) & " non trouvée")
+                    _IsConnect = False
             End Select
         Catch ex As Exception
-            ' Start = "ERREUR: " & ex.Message
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Start", "Erreur lors du démarrage du driver: " & ex.ToString)
             _IsConnect = False
         End Try
     End Sub
@@ -247,7 +244,15 @@ Imports HoMIDom.HoMIDom.Device
     End Property
 
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
-
+        'cree l'objet
+        Try
+            CloseDevice()
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Stop", "Driver arrêté")
+            _IsConnect = False
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Stop", "Erreur lors de l'arrêt du driver: " & ex.ToString)
+            _IsConnect = False
+        End Try
     End Sub
 
     Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version

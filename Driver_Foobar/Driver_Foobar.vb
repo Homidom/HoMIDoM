@@ -1,14 +1,14 @@
 ﻿Imports HoMIDom
+Imports HoMIDom.HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports System.IO
+Imports System.Net
 
 ' Driver Foobar multiroom
-' Auteur : Seb
-' Date : 10/02/2011
 
 ''' <summary>Class Foobar le device doit donner par le biais de son adresse l'emplacement de l'executable de Foobar</summary>
-''' <remarks></remarks>
+''' <remarks>Adresse1: Adresse de l'executable foobar sinon la propriété ip_tcp doit être renseigné pour commander via http</remarks>
 <Serializable()> Public Class Driver_Foobar
     Implements HoMIDom.HoMIDom.IDriver
 
@@ -232,56 +232,143 @@ Imports System.IO
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
             If _Enable = False Then Exit Sub
-            If Objet.type = "AUDIO" Then
-                If File.Exists(Objet.adresse1) = False Then
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "FOOBAR", "Le fichier executable foobar n'existe pas")
+            If Objet.type = ListeDevices.AUDIO Then
+                If File.Exists(Objet.adresse1) = False And _IP_TCP = "" Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "FOOBAR", "Le fichier executable foobar n'existe pas ou l'adresse IP n'est pas définie")
                     Exit Sub
                 End If
                 Select Case UCase(Commande)
                     Case "PLAYAUDIO"
                         If Objet.Fichier = "" Then Exit Sub
-                        Dim ProcId As Object
-                        ProcId = Shell(Objet.Adresse1 & " /hide", AppWinStyle.Hide)
-                        System.Threading.Thread.Sleep(1000)
-                        ProcId = Shell(Objet.Adresse1 & " /add " & Objet.Fichier, AppWinStyle.Hide)
-                        System.Threading.Thread.Sleep(3000)
-                        ProcId = Shell(Objet.Adresse1 & " /play", AppWinStyle.Hide)
+                        If _IP_TCP = "" Then
+                            Dim ProcId As Object
+                            ProcId = Shell(Objet.Adresse1 & " /hide", AppWinStyle.Hide)
+                            System.Threading.Thread.Sleep(1000)
+                            ProcId = Shell(Objet.Adresse1 & " /add " & Objet.Fichier, AppWinStyle.Hide)
+                            System.Threading.Thread.Sleep(3000)
+                            ProcId = Shell(Objet.Adresse1 & " /play", AppWinStyle.Hide)
+                        Else
+                            SendCommandhttp("Start")
+                        End If
                         Objet.Value = "PLAY"
                     Case "PAUSEAUDIO"
-                        Dim ProcId As Object
-                        ProcId = Shell(Objet.Adresse1 & " /pause", AppWinStyle.Hide)
+                        If _IP_TCP = "" Then
+                            Dim ProcId As Object
+                            ProcId = Shell(Objet.Adresse1 & " /pause", AppWinStyle.Hide)
+                        Else
+                            SendCommandhttp("PlayOrPause")
+                        End If
                         Objet.Value = "PAUSE"
                     Case "STOPAUDIO"
-                        Dim ProcId As Object
-                        ProcId = Shell(Objet.Adresse1 & " /command:Clear", AppWinStyle.Hide)
-                        System.Threading.Thread.Sleep(500)
-                        ProcId = Shell(Objet.Adresse1 & " /stop", AppWinStyle.Hide)
-                        System.Threading.Thread.Sleep(500)
-                        ProcId = Shell(Objet.Adresse1 & " /exit", AppWinStyle.Hide)
+                        'Stop playback.
+                        If _IP_TCP = "" Then
+                            Dim ProcId As Object
+                            ProcId = Shell(Objet.Adresse1 & " /command:Clear", AppWinStyle.Hide)
+                            System.Threading.Thread.Sleep(500)
+                            ProcId = Shell(Objet.Adresse1 & " /stop", AppWinStyle.Hide)
+                            System.Threading.Thread.Sleep(500)
+                            ProcId = Shell(Objet.Adresse1 & " /exit", AppWinStyle.Hide)
+                        Else
+                            SendCommandhttp("Stop")
+                        End If
                         Objet.Value = "STOP"
                     Case "RANDOMAUDIO"
-                        Dim ProcId As Object
-                        ProcId = Shell(Objet.Adresse1 & " /random", AppWinStyle.Hide)
+                        'Start playback of random item in active playlist.
+                        If _IP_TCP = "" Then
+                            Dim ProcId As Object
+                            ProcId = Shell(Objet.Adresse1 & " /random", AppWinStyle.Hide)
+                        Else
+                            SendCommandhttp("StartRandom")
+                        End If
                         Objet.Value = "RANDOM"
                     Case "NEXTAUDIO"
-                        Dim ProcId As Object
-                        ProcId = Shell(Objet.Adresse1 & " /next", AppWinStyle.Hide)
+                        'Start playback of next item in active playlist.
+                        If _IP_TCP = "" Then
+                            Dim ProcId As Object
+                            ProcId = Shell(Objet.Adresse1 & " /next", AppWinStyle.Hide)
+                        Else
+                            SendCommandhttp("StartNext")
+                        End If
                         Objet.Value = "NEXT"
                     Case "PREVIOUSAUDIO"
-                        Dim ProcId As Object
-                        ProcId = Shell(Objet.Adresse1 & " /previous", AppWinStyle.Hide)
+                        'Start playback of previous item in active playlist.
+                        If _IP_TCP = "" Then
+                            Dim ProcId As Object
+                            ProcId = Shell(Objet.Adresse1 & " /previous", AppWinStyle.Hide)
+                        Else
+                            SendCommandhttp("StartPrevious")
+                        End If
                         Objet.Value = "PREVIOUS"
+                    Case "VOLUME"
+                        'Set volume level, in percent.
+                        'param1=volume level, 0...100
+                        If _IP_TCP <> "" Then
+                            Dim param As Integer = Parametre1
+                            If param < 0 Then param = 0
+                            If param > 100 Then param = 100
+                            SendCommandhttp("Volume&param1=" & param)
+                        End If
+                    Case "VOLUMEDB"
+                        'Set volume level, in dB.
+                        'param1=volume level, 0...665 (0...-66.5 db), or 1000 to mute
+                        If _IP_TCP <> "" Then
+                            Dim param As Integer = Parametre1
+                            If param < 0 Then param = 0
+                            If param > 1000 Then param = 1000
+                            SendCommandhttp("VolumeDB&param1=" & param)
+                        End If
+                    Case "VOLUMEDBDELTA"
+                        'Change volume level by given delta, in percent.
+                        'param1=signed delta,-N...N
+                        If _IP_TCP <> "" Then
+                            Dim param As Integer = Parametre1
+                            If param < -10 Then param = -10
+                            If param > 10 Then param = 10
+                            SendCommandhttp("VolumeDBDelta&param1=" & param)
+                        End If
+                    Case "SEEK"
+                        'Seek playing item, by percent.
+                        'param1=position, from 0 to 100
+                        If _IP_TCP <> "" Then
+                            Dim param As Integer = Parametre1
+                            If param < 0 Then param = 0
+                            If param > 100 Then param = 100
+                            SendCommandhttp("Seek&param1=" & param)
+                        End If
+                    Case "SEEKDELTA"
+                        'Seek playing item by given delta, in seconds
+                        If _IP_TCP <> "" Then
+                            Dim param As Integer = Parametre1
+                            If param < 0 Then param = 0
+                            SendCommandhttp("SeekDelta&param1=" & param)
+                        End If
+                    Case "PLAYBACKORDER"
+                        'Change playback order (Default, Repeat (Playlist), Repeat (Track), Random, Shuffle (tracks), Shuffle (Albums), Shuffle (Folders)).
+                        If _IP_TCP <> "" Then
+                            Dim param As Integer = Parametre1
+                            If param < 0 Then param = 0
+                            If param > 7 Then param = 7
+                            SendCommandhttp("PlaybackOrder&param1=" & param)
+                        End If
                     Case "VOLUMEDOWNAUDIO"
-                        Dim ProcId As Object
-                        ProcId = Shell(Objet.Adresse1 & " /Volume Down", AppWinStyle.Hide)
-                        Objet.Value = "VOLUME DOWN"
+                        If Objet.Adresse1 <> "" Then
+                            Dim ProcId As Object
+                            ProcId = Shell(Objet.Adresse1 & " /Volume Down", AppWinStyle.Hide)
+                            Objet.Value = "VOLUME DOWN"
+                        End If
                     Case "VOLUMEUPAUDIO"
-                        Dim ProcId As Object
-                        ProcId = Shell(Objet.Adresse1 & " /Volume Up", AppWinStyle.Hide)
-                        Objet.Value = "VOLUME UP"
+                        If Objet.Adresse1 <> "" Then
+                            Dim ProcId As Object
+                            ProcId = Shell(Objet.Adresse1 & " /Volume Up", AppWinStyle.Hide)
+                            Objet.Value = "VOLUME UP"
+                        End If
                     Case "VOLUMEMUTEAUDIO"
-                        Dim ProcId As Object
-                        ProcId = Shell(Objet.Adresse1 & " /Volume mute", AppWinStyle.Hide)
+                        If _IP_TCP = "" Then
+                            Dim ProcId As Object
+                            ProcId = Shell(Objet.Adresse1 & " /Volume mute", AppWinStyle.Hide)
+                        Else
+                            SendCommandhttp("VolumeDB&param1=" & 1000)
+                        End If
                         Objet.Value = "VOLUME MUTE"
                     Case Else
                         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "FOOBAR", "Commande inconnue:" & Commande)
@@ -342,7 +429,25 @@ Imports System.IO
 #End Region
 
 #Region "Fonctions internes"
+    Private Sub SendCommandhttp(ByVal Command As String)
+        Dim send As String = "http://>" & _IP_TCP
+        If _Port_TCP <> "" Then
+            send &= ":" & _Port_TCP & "/default/<?cmd=" & Command & ">"
+        Else
+            send &= "/default/<?cmd=" & Command & ">"
+        End If
 
+        Try
+            Dim URL As String = send
+            Dim request As WebRequest = WebRequest.Create(URL)
+            Dim response As WebResponse = request.GetResponse()
+            Dim reader As StreamReader = New StreamReader(response.GetResponseStream())
+            Dim str As String = reader.ReadToEnd
+            reader.Close()
+        Catch ex As Exception
+            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Foobar SendCommandhttp", "Erreur: " & ex.ToString)
+        End Try
+    End Sub
 #End Region
 
 End Class

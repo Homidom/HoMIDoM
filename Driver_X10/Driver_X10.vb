@@ -10,7 +10,6 @@ Imports System.Net.Sockets
 Imports System.Threading
 Imports System.Globalization
 
-
 Public Class Driver_x10
     Implements HoMIDom.HoMIDom.IDriver
 
@@ -50,6 +49,7 @@ Public Class Driver_x10
     Private device_to_hex As New Dictionary(Of String, Byte)
     Private GetPortInput As Boolean
     Private OutPortDevice As Boolean = False
+
 #End Region
 
 #Region "Déclaration"
@@ -247,7 +247,7 @@ Public Class Driver_x10
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 Start", "Port " & _Com & " déjà ouvert")
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 Start", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 Start", ex.ToString)
         End Try
     End Sub
 
@@ -449,8 +449,9 @@ Public Class Driver_x10
     ''' <remarks></remarks>
     Private Sub DataReceived(ByVal sender As Object, ByVal e As SerialDataReceivedEventArgs)
         Try
-            Dim count As Integer = 0
-            count = port.BytesToRead
+            'Nombre d'octet à lire
+            Dim count As Integer = port.BytesToRead
+
             If count > 0 And port_ouvert Then
                 port.Read(BufferIn, 0, count)
                 Select Case BufferIn(0)
@@ -467,6 +468,7 @@ Public Class Driver_x10
 
                         ''A t-on reçu des données?
                         If Time_Out >= 20 Then
+                            'Temps d'attente dépassé
                             'GetData = ("Get Data,2: Temps d'attente dépassé")
                             Exit Sub
                         End If
