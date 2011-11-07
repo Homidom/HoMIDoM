@@ -280,6 +280,7 @@ Imports System.IO
         If Relais > 7 Then Relais = 7
         tRelais(Carte, Relais) = Value
     End Sub
+
     Private Function ArretUrgence() As String
         Dim i As Integer
         Dim j As Integer

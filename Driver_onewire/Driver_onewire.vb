@@ -254,7 +254,40 @@ Public Class Driver_onewire
             If Objet IsNot Nothing Then
                 Select Case Objet.Type
                     Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE
-                        Objet.Value = temp_get_save(Objet.Adresse1)
+                        Dim retour As Integer = temp_get_save(Objet.Adresse1)
+                        If retour <> 9999 Then Objet.Value = retour
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.SWITCH
+                        Dim retour As Integer = switch_get(Objet.Adresse1)
+                        If retour <> 9999 Then
+                            If retour = 1 Then
+                                Objet.Value = True
+                            Else
+                                Objet.Value = False
+                            End If
+                        End If
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.CONTACT
+                        Dim retour As Integer = switch_get(Objet.Adresse1)
+                        If retour <> 9999 Then
+                            If retour = 1 Then
+                                Objet.Value = True
+                            Else
+                                Objet.Value = False
+                            End If
+                        End If
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR
+                        Dim retour As Integer = switch_get(Objet.Adresse1)
+                        If retour <> 9999 Then
+                            If retour = 1 Then
+                                Objet.Value = True
+                            Else
+                                Objet.Value = False
+                            End If
+                        End If
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE
+                        Dim retour As Integer = switch_get(Objet.Adresse1)
+                        If retour <> 9999 Then
+                            Objet.Value = retour
+                        End If
                 End Select
             End If
         Catch ex As Exception
@@ -392,40 +425,6 @@ Public Class Driver_onewire
         Return retour
     End Function
 
-    Public Function switch_get(ByVal adresse As String) As String
-        ' Renvoie l'etat et l'activité du switch (ex : 100 pour etat=On level=false activity=False)
-        Dim retour As String = ""
-        Dim state As Object
-        Dim owd As com.dalsemi.onewire.container.OneWireContainer12
-        Dim tc As com.dalsemi.onewire.container.SwitchContainer
-        Dim switch_state, switch_activity, switch_level
-        Try
-            If adapter_present Then
-                If wir_adapter.isPresent(adresse) Then
-                    wir_adapter.beginExclusive(True) 'demande l'acces exclusif au reseau
-                    owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
-                    tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer) 'creer la connexion
-                    state = tc.readDevice()  'lit les infos du composant
-                    switch_state = tc.getLatchState(0, state) 'recup l'etat du switch
-                    switch_level = tc.getLevel(0, state) 'recup le level du switch
-                    switch_activity = tc.getSensedActivity(0, state) 'recup l'activité du switch
-                    If switch_state Then retour = "1" Else retour = "0"
-                    If switch_level Then retour = retour & "1" Else retour = retour & "0"
-                    If switch_activity Then retour = retour & "1" Else retour = retour & "0"
-                    'switch_state = tc.getLatchState(0, state) 'recup l'etat du switch
-                    wir_adapter.endExclusive() 'rend l'accés au reseau
-                Else
-                    retour = "ERR: switch_get : Capteur non présent"
-                End If
-            Else
-                retour = "ERR: switch_get : Adaptateur non présent"
-            End If
-        Catch ex As Exception
-            retour = "ERR: switch_get : " & ex.Message
-        End Try
-        Return retour
-    End Function
-
     Public Function switchs_get(ByVal adresse As String) As String
         ' Récupere l'etat et activité d'un multiswitch
         Dim retour As String = ""
@@ -525,6 +524,42 @@ Public Class Driver_onewire
             End If
         Catch ex As Exception
             retour = "ERR: switchs_switchstate : " & ex.ToString
+        End Try
+        Return retour
+    End Function
+
+    Public Function switch_get(ByVal adresse As String) As String
+        ' Renvoie l'etat du switch 0=fermé, 1=ouvert, 2=fermé mais ouvert entre temps
+        Dim retour As String = ""
+        Dim state As Object
+        Dim owd As com.dalsemi.onewire.container.OneWireContainer12
+        Dim tc As com.dalsemi.onewire.container.SwitchContainer
+        Dim switch_state, switch_activity, switch_level
+        Try
+            If adapter_present Then
+                If wir_adapter.isPresent(adresse) Then
+                    wir_adapter.beginExclusive(True) 'demande l'acces exclusif au reseau
+                    owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
+                    tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer) 'creer la connexion
+                    state = tc.readDevice()  'lit les infos du composant
+                    switch_state = tc.getLatchState(0, state) 'recup l'etat du switch
+                    switch_activity = tc.getSensedActivity(0, state) 'recup l'activité du switch
+                    If switch_state Then retour = "1" Else 
+                    If switch_activity Then retour = "2" Else retour = "0"
+                    tc.clearActivity()
+                    tc.readDevice()
+                    wir_adapter.endExclusive() 'rend l'accés au reseau
+                Else
+                    retour = 9999
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_get", "Capteur à l'adresse " & adresse & " Non présent")
+                End If
+            Else
+                retour = 9999
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_get", "Adaptateur non présent")
+            End If
+        Catch ex As Exception
+            retour = 9999
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_get", "Erreur: " & ex.ToString)
         End Try
         Return retour
     End Function
