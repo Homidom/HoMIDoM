@@ -189,6 +189,8 @@ Imports HoMIDom.HoMIDom.Device
 
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         If _Enable = False Then Exit Sub
+
+        Objet.Value = ReadBinaireChannel(Objet.Adresse1)
     End Sub
 
     Public Property Refresh() As Integer Implements HoMIDom.HoMIDom.IDriver.Refresh
@@ -263,6 +265,23 @@ Imports HoMIDom.HoMIDom.Device
 
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         If _Enable = False Then Exit Sub
+
+        Select Case Objet.Type
+            Case HoMIDom.HoMIDom.Device.ListeDevices.SWITCH
+                If Commande = "ON" Then
+                    SetBinaireChannel(Objet.Adressse1)
+                End If
+                If Command() = "OFF" Then
+                    ClearBinaireChannel(Objet.Adresse1)
+                End If
+            Case HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL
+                If Commande = "ON" Then
+                    SetBinaireChannel(Objet.Adressse1)
+                End If
+                If Command() = "OFF" Then
+                    ClearBinaireChannel(Objet.Adresse1)
+                End If
+        End Select
     End Sub
 
     Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
@@ -294,7 +313,7 @@ Imports HoMIDom.HoMIDom.Device
     End Sub
 
     Public Sub ClearBinaireChannel(ByVal Channel As Long)
-        'ClearDigitalChannel(Channel)
+        ClearDigitalChannel(Channel)
     End Sub
 
     Public Sub OutputAllAnalogique(ByVal Data1 As Long, ByVal Data2 As Long)
@@ -322,7 +341,7 @@ Imports HoMIDom.HoMIDom.Device
     End Function
 
     Public Function ReadBinaireChannel(ByVal Channel As Long) As Boolean
-        'Return ReadDigitalChannel(Channel)
+        Return ReadDigitalChannel(Channel)
     End Function
 
     Public Sub ResetCompteur(ByVal CounterNr As Long)
@@ -346,7 +365,7 @@ Imports HoMIDom.HoMIDom.Device
     End Sub
 
     Public Sub SetBinaireChannel(ByVal Channel As Long)
-        'SetDigitalChannel(Channel)
+        SetDigitalChannel(Channel)
     End Sub
 
     Public Sub WriteAllBinaire(ByVal Channel As Long)

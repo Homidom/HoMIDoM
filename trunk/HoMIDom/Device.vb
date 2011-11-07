@@ -789,6 +789,24 @@ Namespace HoMIDom
                 End Try
             End Sub
 
+            Public Sub EmptyPlayList()
+                touche("EmptyPlayList")
+            End Sub
+
+            Public Sub Browse(ByVal Fichier As String)
+                touche("Browse")
+            End Sub
+
+            Public Sub Start(ByVal Item As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "start", Item)
+                    Value = "Start"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
             Public Sub Play(ByVal Fichier As String)
                 touche("PlayAudio")
             End Sub
@@ -825,6 +843,195 @@ Namespace HoMIDom
                 touche("VolumeMuteAudio")
             End Sub
 
+            Public Sub Volume(ByVal Level As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "volume", Level)
+                    Value = "Volume"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub VolumeDB(ByVal Level As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "volumedb", Level)
+                    Value = "VolumeDB"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub VolumeDBDelta(ByVal Level As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "volumedbdelta", Level)
+                    Value = "VolumeDBDelta"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub Seek(ByVal Position As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "Seek", Position)
+                    Value = "Seek"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub SeekDelta(ByVal Delta As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "SeekDelta", Delta)
+                    Value = "SeekDelta"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub PlayBackOrder(ByVal Order As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "PlayBackOrder", Order)
+                    Value = "PlayBackOrder"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub Sac(ByVal Flag As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "Sac", Flag)
+                    Value = "Sac"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub QueueItems(ByVal Index As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "QueueItems", Index)
+                    Value = "QueueItems"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub QueueAlbum(ByVal Index As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "QueueAlbum", Index)
+                    Value = "QueueAlbum"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub QueueRandomItems(ByVal Index As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "QueueRandomItems", Index)
+                    Value = "QueueRandomItems"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub DequeueItems(ByVal Index As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "DequeueItems", Index)
+                    Value = "DequeueItems"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub FlushQueue()
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "FlushQueue")
+                    Value = "FlushQueue"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub Del(ByVal Item As String, ByVal Index As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "Del", Item, Index)
+                    Value = "Del"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub Undo(ByVal Index As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "Undo", Index)
+                    Value = "Undo"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub Move(ByVal Item As String, ByVal Index As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "Move", Item, Index)
+                    Value = "Move"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub SetSelection(ByVal Item As String, ByVal Index As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "SetSelection", Item, Index)
+                    Value = "SetSelection"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub SwitchPlayList(ByVal Index As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "SwitchPlayList", Index)
+                    Value = "SwitchPlayList"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub SetFocus(ByVal Index As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "SetFocus", Index)
+                    Value = "SetFocus"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
+
+            Public Sub RemovePlaylist(ByVal Index As Integer)
+                Try
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "RemovePlaylist", Index)
+                    Value = "RemovePlaylist"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "Erreur: " & ex.Message)
+                End Try
+            End Sub
         End Class
 
         <Serializable()> Class BAROMETRE
