@@ -515,7 +515,7 @@ Namespace HoMIDom
             End Sub
 
             'Valeur : ON/OFF = True/False
-            Public Property Value() As Boolean
+            Public Property Value As Boolean
                 Get
                     Return _Value
                 End Get
@@ -629,20 +629,20 @@ Namespace HoMIDom
 
         End Class
 
-        ''' <summary>Classe valeur String pour device style Direction du Vent</summary>
+        ''' <summary>Classe valeur String </summary>
         ''' <remarks></remarks>
         <Serializable()> Public Class DeviceGenerique_ValueString
             Inherits DeviceGenerique
 
             Protected _Value As String = ""
-            Protected _ValueLast As Double = 0
+            Protected _ValueLast As String = 0
 
             'Contien l'avant derniere valeur
-            Public Property ValueLast() As Double
+            Public Property ValueLast() As String
                 Get
                     Return _ValueLast
                 End Get
-                Set(ByVal value As Double)
+                Set(ByVal value As String)
                     _ValueLast = value
                 End Set
             End Property
@@ -1170,11 +1170,13 @@ Namespace HoMIDom
         <Serializable()> Class FREEBOX
             Inherits DeviceGenerique_ValueString
 
+            Dim _AdresseBox As String = "http://hd1.freebox.fr"
+
             'Creation du device
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "FREEBOX"
-                _Adresse1 = "http://hd1.freebox.fr/pub/remote_control ?key="
+                Adresse1 = _AdresseBox
             End Sub
 
             'redefinition de read pour ne rien faire :)
@@ -1183,20 +1185,25 @@ Namespace HoMIDom
             End Sub
 
             Private Function Sendhttp(ByVal cmd As String) As String
+                Dim URL As String
+                Dim Box As String
+
                 Try
-                    Dim URL As String = Adresse1 & cmd
+                    If Adresse1 = "" Then
+                        Box = _AdresseBox
+                    Else
+                        Box = Adresse1
+                    End If
+                    Box &= "/pub/remote_control?key="
+                    URL = Box & cmd & "&code=" & Adresse2
                     Dim request As WebRequest = WebRequest.Create(URL)
                     Dim response As WebResponse = request.GetResponse()
                     Dim reader As StreamReader = New StreamReader(response.GetResponseStream())
                     Dim str As String = reader.ReadToEnd
-                    'Do While str.Length > 0
-                    '    Console.WriteLine(str)
-                    '    str = reader.ReadLine()
-                    'Loop
                     reader.Close()
                     Return str
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "FREEBOX SendHttp", "Erreur: " & ex.ToString)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "FREEBOX SendHttp", "Commande: " & URL & " Erreur: " & ex.ToString)
                     Return ""
                 End Try
             End Function
@@ -1204,11 +1211,10 @@ Namespace HoMIDom
             'function generique pour toutes les touches appelé par les fonctions touchexxx
             Private Sub Touche(ByVal commande As String)
                 Try
-                    Dim retour As String
-                    retour = Sendhttp(commande)
-                    Value = commande
+                    Dim retour As String = Sendhttp(commande)
+                    If retour <> "" Then Value = commande
                 Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche" & commande & " : " & ex.Message)
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " Touche" & commande & " : " & ex.ToString)
                 End Try
             End Sub
 

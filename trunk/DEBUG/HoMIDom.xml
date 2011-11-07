@@ -2700,7 +2700,7 @@ HoMIDom
 	<summary>Classe valeur Integer pour device avce valeur de 0(OFF) à 100(ON)</summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueString">
-	<summary>Classe valeur String pour device style Direction du Vent</summary>
+	<summary>Classe valeur String </summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestWrite(System.String,System.String,System.String)">
 	<summary>Permet de tester une commande write</summary>

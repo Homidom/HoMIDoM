@@ -206,7 +206,7 @@ Imports UsbLibrary
             Me.usb1.VendorId = Int32.Parse("1DA8", System.Globalization.NumberStyles.HexNumber)
             Me.usb1.CheckDevicePresent()
             If usb1 IsNot Nothing Then
-                '_IsConnect = True
+                _IsConnect = True
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Mirror", "Driver démarré:" & IsConnect)
             Else
                 _IsConnect = False
@@ -374,8 +374,9 @@ Imports UsbLibrary
 
     Private Sub SetDevice(ByVal idZtamp As String, ByVal Value As Boolean)
         For i As Integer = 0 To _Server.Devices.Count - 1
-            If _Server.Devices.Item(i).ID = idZtamp And (_Server.Devices.Item(i).type = "GENERIQUEBOOLEEN" Or _Server.Devices.Item(i).type = "SWITCH") Then
+            If _Server.Devices.Item(i).Adresse1 = idZtamp And (_Server.Devices.Item(i).type = "GENERIQUEBOOLEEN" Or _Server.Devices.Item(i).type = "SWITCH") Then
                 _Server.Devices.Item(i).value = Value
+                Exit For
             End If
         Next
     End Sub

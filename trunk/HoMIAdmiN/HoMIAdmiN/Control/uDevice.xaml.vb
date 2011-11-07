@@ -46,6 +46,11 @@ Partial Public Class uDevice
                     CbType.SelectedValue = x.Type.ToString
                     CbType.IsEnabled = False
 
+                    If CbType.SelectedValue = "FREEBOX" Then
+                        Label6.Content = "Adresse Http Freebox:"
+                        Label7.Content = "Code Telecommande:"
+                    End If
+
                     For j As Integer = 0 To Window1.myService.GetAllDrivers(IdSrv).Count - 1 'Window1.Obj.Drivers.Count - 1
                         If Window1.myService.GetAllDrivers(IdSrv).Item(j).ID = x.DriverID Then
                             CbDriver.SelectedValue = Window1.myService.GetAllDrivers(IdSrv).Item(j).Nom
@@ -208,6 +213,13 @@ Partial Public Class uDevice
                 Label13.Visibility = Windows.Visibility.Visible
                 Label14.Visibility = Windows.Visibility.Visible
                 Label15.Visibility = Windows.Visibility.Visible
+            End If
+
+            If CbType.SelectedValue = "FREEBOX" Then
+                TxtAdresse1.Text = "http://hd1.freebox.fr"
+                CbDriver.SelectedValue = "Virtuel"
+                Label6.Content = "Adresse Http Freebox:"
+                Label7.Content = "Code Telecommande:"
             End If
 
             If CbType.SelectedValue = "MULTIMEDIA" Then
