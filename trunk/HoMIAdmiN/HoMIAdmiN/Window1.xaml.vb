@@ -121,21 +121,22 @@ Class Window1
     'Menu Quitter
     Private Sub Quitter(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuQuitter.Click
         Try
-            Dim retour As MessageBoxResult
-            retour = MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question)
+            If IsConnect = True Then
+                Dim retour As MessageBoxResult
+                retour = MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question)
 
-            If retour = MessageBoxResult.Yes Then
-                Try
-                    If IsConnect = False Then
-                        MessageBox.Show("Impossible d'enregistrer la configuration car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                    Else
-                        myService.SaveConfig(IdSrv)
-                    End If
-                Catch ex As Exception
-                    MessageBox.Show("ERREUR Sub Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
+                If retour = MessageBoxResult.Yes Then
+                    Try
+                        If IsConnect = False Then
+                            MessageBox.Show("Impossible d'enregistrer la configuration car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                        Else
+                            myService.SaveConfig(IdSrv)
+                        End If
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+                End If
             End If
-
             Me.Close()
             End
         Catch ex As Exception

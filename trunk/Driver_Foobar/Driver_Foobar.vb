@@ -4,6 +4,9 @@ Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports System.IO
 Imports System.Net
+Imports System.Web
+Imports System.Text
+Imports System.Web.HttpUtility
 
 ' Driver Foobar multiroom
 
@@ -187,6 +190,11 @@ Imports System.Net
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
+            For i As Integer = 0 To _Server.Devices.Count - 1
+                If _Server.Devices.Item(i).Type = "AUDIO" And _Server.Devices.Item(i).Adresse1 <> "" Then
+                    Dim ProcId As Object = Shell(_Server.Devices.Item(i).Adresse1 & " /hide", AppWinStyle.Hide)
+                End If
+            Next
             _IsConnect = True
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "FOOBAR", "Driver " & Me.Nom & " démarré")
         Catch ex As Exception
@@ -198,6 +206,11 @@ Imports System.Net
     ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
+            For i As Integer = 0 To _Server.Devices.Count - 1
+                If _Server.Devices.Item(i).Type = "AUDIO" And _Server.Devices.Item(i).Adresse1 <> "" Then
+                    Dim ProcId As Object = Shell(_Server.Devices.Item(i).Adresse1 & " /exit", AppWinStyle.Hide)
+                End If
+            Next
             _IsConnect = False
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "FOOBAR", "Driver " & Me.Nom & " arrêté")
         Catch ex As Exception
@@ -232,45 +245,40 @@ Imports System.Net
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
             If _Enable = False Then Exit Sub
-            If Objet.type = ListeDevices.AUDIO Then
-                If File.Exists(Objet.adresse1) = False And _IP_TCP = "" Then
+            If Objet.type = "AUDIO" Then
+                If File.Exists(Objet.adresse1) = False And Objet.adresse2 = "" Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "FOOBAR", "Le fichier executable foobar n'existe pas ou l'adresse IP n'est pas définie")
                     Exit Sub
                 End If
-                If _IP_TCP <> "" Then
-                    Dim ProcId As Object
-                    ProcId = Shell(Objet.Adresse1 & " /hide", AppWinStyle.Hide)
-                End If
                 Select Case UCase(Commande)
                     Case "EMPTYPLAYLIST"
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             SendCommandhttp(Objet.Adresse2, "EmptyPlaylist")
                         End If
                     Case "BROWSE"
-                        If _IP_TCP <> "" Then
-                            SendCommandhttp(Objet.Adresse2, "Browse&param1=" & Parametre1)
+                        If Objet.adresse2 <> "" Then
+                            SendCommandhttp(Objet.Adresse2, "Browse&param1=" & HtmlEncode(Parametre1))
                         End If
                     Case "START"
                         'Start playback in active playlist.
                         '* param1=playlist item starting from 0. 
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             SendCommandhttp(Objet.Adresse2, "start&param1=" & Parametre1)
                         End If
                     Case "PLAYAUDIO"
                         If Objet.Fichier = "" Then Exit Sub
-                        If _IP_TCP = "" Then
+                        If Objet.adresse2 = "" Then
                             Dim ProcId As Object
-                            ProcId = Shell(Objet.Adresse1 & " /hide", AppWinStyle.Hide)
-                            System.Threading.Thread.Sleep(1000)
                             ProcId = Shell(Objet.Adresse1 & " /add " & Objet.Fichier, AppWinStyle.Hide)
                             System.Threading.Thread.Sleep(3000)
                             ProcId = Shell(Objet.Adresse1 & " /play", AppWinStyle.Hide)
                         Else
+                            SendCommandhttp(Objet.Adresse2, "Browse&param1=" & HtmlEncode(Parametre1))
                             SendCommandhttp(Objet.Adresse2, "PlayOrPause")
                         End If
                         Objet.Value = "PLAY"
                     Case "PAUSEAUDIO"
-                        If _IP_TCP = "" Then
+                        If Objet.adresse2 = "" Then
                             Dim ProcId As Object
                             ProcId = Shell(Objet.Adresse1 & " /pause", AppWinStyle.Hide)
                         Else
@@ -279,20 +287,18 @@ Imports System.Net
                         Objet.Value = "PAUSE"
                     Case "STOPAUDIO"
                         'Stop playback.
-                        If _IP_TCP = "" Then
+                        If Objet.adresse2 = "" Then
                             Dim ProcId As Object
                             ProcId = Shell(Objet.Adresse1 & " /command:Clear", AppWinStyle.Hide)
                             System.Threading.Thread.Sleep(500)
                             ProcId = Shell(Objet.Adresse1 & " /stop", AppWinStyle.Hide)
-                            System.Threading.Thread.Sleep(500)
-                            ProcId = Shell(Objet.Adresse1 & " /exit", AppWinStyle.Hide)
                         Else
                             SendCommandhttp(Objet.Adresse2, "Stop")
                         End If
                         Objet.Value = "STOP"
                     Case "RANDOMAUDIO"
                         'Start playback of random item in active playlist.
-                        If _IP_TCP = "" Then
+                        If Objet.adresse2 = "" Then
                             Dim ProcId As Object
                             ProcId = Shell(Objet.Adresse1 & " /random", AppWinStyle.Hide)
                         Else
@@ -301,7 +307,7 @@ Imports System.Net
                         Objet.Value = "RANDOM"
                     Case "NEXTAUDIO"
                         'Start playback of next item in active playlist.
-                        If _IP_TCP = "" Then
+                        If Objet.adresse2 = "" Then
                             Dim ProcId As Object
                             ProcId = Shell(Objet.Adresse1 & " /next", AppWinStyle.Hide)
                         Else
@@ -310,7 +316,7 @@ Imports System.Net
                         Objet.Value = "NEXT"
                     Case "PREVIOUSAUDIO"
                         'Start playback of previous item in active playlist.
-                        If _IP_TCP = "" Then
+                        If Objet.adresse2 = "" Then
                             Dim ProcId As Object
                             ProcId = Shell(Objet.Adresse1 & " /previous", AppWinStyle.Hide)
                         Else
@@ -320,7 +326,7 @@ Imports System.Net
                     Case "VOLUME"
                         'Set volume level, in percent.
                         'param1=volume level, 0...100
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             Dim param As Integer = Parametre1
                             If param < 0 Then param = 0
                             If param > 100 Then param = 100
@@ -329,7 +335,7 @@ Imports System.Net
                     Case "VOLUMEDB"
                         'Set volume level, in dB.
                         'param1=volume level, 0...665 (0...-66.5 db), or 1000 to mute
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             Dim param As Integer = Parametre1
                             If param < 0 Then param = 0
                             If param > 1000 Then param = 1000
@@ -338,7 +344,7 @@ Imports System.Net
                     Case "VOLUMEDBDELTA"
                         'Change volume level by given delta, in percent.
                         'param1=signed delta,-N...N
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             Dim param As Integer = Parametre1
                             If param < -10 Then param = -10
                             If param > 10 Then param = 10
@@ -347,7 +353,7 @@ Imports System.Net
                     Case "SEEK"
                         'Seek playing item, by percent.
                         'param1=position, from 0 to 100
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             Dim param As Integer = Parametre1
                             If param < 0 Then param = 0
                             If param > 100 Then param = 100
@@ -355,14 +361,14 @@ Imports System.Net
                         End If
                     Case "SEEKDELTA"
                         'Seek playing item by given delta, in seconds
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             Dim param As Integer = Parametre1
                             If param < 0 Then param = 0
                             SendCommandhttp(Objet.Adresse2, "SeekDelta&param1=" & param)
                         End If
                     Case "PLAYBACKORDER"
                         'Change playback order (Default, Repeat (Playlist), Repeat (Track), Random, Shuffle (tracks), Shuffle (Albums), Shuffle (Folders)).
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             Dim param As Integer = Parametre1
                             If param < 0 Then param = 0
                             If param > 7 Then param = 7
@@ -371,7 +377,7 @@ Imports System.Net
                     Case "SAC"
                         'Change stop after current flag (if stop after current feautre is enabled in component preferences).
                         '* param1=0 or 1 
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             Dim param As Integer = Parametre1
                             If param < 0 Then param = 0
                             If param > 1 Then param = 1
@@ -390,7 +396,7 @@ Imports System.Net
                             Objet.Value = "VOLUME UP"
                         End If
                     Case "VOLUMEMUTEAUDIO"
-                        If _IP_TCP = "" Then
+                        If Objet.adresse2 = "" Then
                             Dim ProcId As Object
                             ProcId = Shell(Objet.Adresse1 & " /Volume mute", AppWinStyle.Hide)
                         Else
@@ -400,75 +406,75 @@ Imports System.Net
                     Case "QUEUEITEMS"
                         'Put active playlist items to playback queue.
                         '* param1=item indexes separated by any delitemeter 
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             SendCommandhttp(Objet.Adresse2, "QueueItems&param1=" & Parametre1)
                         End If
                     Case "QUEUEALBUM"
                         'Queue album.
                         '* param1=item index album search starts from (focused item is used if param1 is omitted)  
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             SendCommandhttp(Objet.Adresse2, "QueueAlbum&param1=" & Parametre1)
                         End If
                     Case "QUEUERANDOMITEMS"
                         'Queue random items in active playlist.
                         '    * param1=item count
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             SendCommandhttp(Objet.Adresse2, "QueueRandomItems&param1=" & Parametre1)
                         End If
                     Case "DEQUEUEITEMS"
                         'Remove specified active playlist items from playback queue.
                         '* param1=item indexes separated by any delitemeter 
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             SendCommandhttp(Objet.Adresse2, "DequeueItems&param1=" & Parametre1)
                         End If
                     Case "FLUSHQUEUE"
                         'Flush queue completely
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             SendCommandhttp(Objet.Adresse2, "FlushQueue")
                         End If
                     Case "DEL"
                         'Delete one or more playlist items.
                         '* param1=item numbers separated by any delitemeter
                         '* param2=optionally specifies playlist index  
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             SendCommandhttp(Objet.Adresse2, "Del&param1=" & Parametre1 & "&param2=" & Parametre2)
                         End If
                     Case "UNDO"
                         'Undo changes made to playlist backed up by restore point.
                         '* param1=optionally specifies playlist index 
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             SendCommandhttp(Objet.Adresse2, "Undo&param1=" & Parametre1)
                         End If
                     Case "MOVE"
                         'Move one or more active playlist items.
                         '* param1=item numbers separated by any delitemeter
                         '* param2=signed move delta  
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             SendCommandhttp(Objet.Adresse2, "Move&param1=" & Parametre1 & "&param2=" & Parametre2)
                         End If
                     Case "SETSELECTION"
                         'Set playlist selection.
                         '* param1=item numbers separated by any delitemeter, empty to remove selection, ~ to select all
                         '* param2=optionally specifies playlist index 
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             SendCommandhttp(Objet.Adresse2, "SetSelection&param1=" & Parametre1 & "&param2=" & Parametre2)
                         End If
                     Case "SWITCHPLAYLIST"
                         'Switch playlist.
                         '* param1=playlist index 
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             SendCommandhttp(Objet.Adresse2, "SwitchPlaylist&param1=" & Parametre1)
                         End If
                     Case "SETFOCUS"
                         'Set focus to specific item of active playlist.
                         '* param1=item index 
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             SendCommandhttp(Objet.Adresse2, "SetFocus&param1=" & Parametre1)
                         End If
                     Case "REMOVEPLAYLIST"
                         'Removes specified playlist.
                         '* param1=playlist index 
-                        If _IP_TCP <> "" Then
+                        If Objet.adresse2 <> "" Then
                             SendCommandhttp(Objet.Adresse2, "RemovePlaylist&param1=" & Parametre1)
                         End If
                     Case Else
@@ -531,7 +537,7 @@ Imports System.Net
 
 #Region "Fonctions internes"
     Private Sub SendCommandhttp(ByVal AdresseIP As String, ByVal Command As String)
-        Dim send As String = "http://>" & AdresseIP
+        Dim send As String = AdresseIP
         send &= "/default/?cmd=" & Command
 
         Try
@@ -540,10 +546,10 @@ Imports System.Net
             Dim response As WebResponse = request.GetResponse()
             Dim reader As StreamReader = New StreamReader(response.GetResponseStream())
             Dim str As String = reader.ReadToEnd
-            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Foobar SendCommandhttp", "Command: " & Command & " Return:" & str)
+            _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DRIVER, "Foobar SendCommandhttp", "Command: " & Command & " Return:" & str)
             reader.Close()
         Catch ex As Exception
-            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "Foobar SendCommandhttp", "Erreur: " & ex.ToString)
+            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "Foobar SendCommandhttp", "Erreur lors de l'envoi de la commande: " & send & " - " & ex.ToString)
         End Try
     End Sub
 #End Region

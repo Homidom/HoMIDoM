@@ -351,13 +351,6 @@ Partial Public Class uDevice
         End Try
     End Sub
 
-    'Private Sub BtnWrite_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
-    '    Try
-    '        Window1.Obj.TestWrite(_DeviceId, TxtCmd.Text, TxtP1.Text, TxtP2.Text)
-    '    Catch ex As Exception
-    '        MessageBox.Show("Error Write device" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-    '    End Try
-    'End Sub
 
     Private Sub UnloadControl(ByVal MyControl As Object)
         For i As Integer = 0 To Window1.CanvasUser.Children.Count - 1
