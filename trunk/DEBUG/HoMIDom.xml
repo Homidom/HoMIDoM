@@ -1268,6 +1268,11 @@ HoMIDom
 	<param name="DeviceId"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnRealDeviceById(System.String)">
+	<summary>Retourne un device par son ID</summary>
+	<param name="DeviceId"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ListMethod(System.String)">
 	<summary>liste les méthodes d'un device depuis son ID</summary>
 	<param name="DeviceId"></param>

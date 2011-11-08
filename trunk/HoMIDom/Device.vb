@@ -434,6 +434,7 @@ Namespace HoMIDom
                 Set(ByVal value As Integer)
                     _Refresh = value
                     If _Refresh > 0 Then
+                        If MyTimer.Enabled = True Then MyTimer.Enabled = False
                         MyTimer.Interval = _Refresh
                         MyTimer.Enabled = True
                         AddHandler MyTimer.Elapsed, AddressOf Read
@@ -501,6 +502,7 @@ Namespace HoMIDom
                 Set(ByVal value As Integer)
                     _Refresh = value
                     If _Refresh > 0 Then
+                        If MyTimer.Enabled = True Then MyTimer.Enabled = False
                         MyTimer.Interval = _Refresh
                         MyTimer.Enabled = True
                         AddHandler MyTimer.Elapsed, AddressOf Read
@@ -598,6 +600,7 @@ Namespace HoMIDom
                 Set(ByVal value As Integer)
                     _Refresh = value
                     If _Refresh > 0 Then
+                        If MyTimer.Enabled = True Then MyTimer.Enabled = False
                         MyTimer.Interval = _Refresh
                         MyTimer.Enabled = True
                         AddHandler MyTimer.Elapsed, AddressOf Read
@@ -658,6 +661,7 @@ Namespace HoMIDom
                 Set(ByVal value As Integer)
                     _Refresh = value
                     If _Refresh > 0 Then
+                        If MyTimer.Enabled = True Then MyTimer.Enabled = False
                         MyTimer.Interval = _Refresh
                         MyTimer.Enabled = True
                         AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1428,6 +1432,7 @@ Namespace HoMIDom
                 Set(ByVal value As Double)
                     _Refresh = value
                     If _Refresh > 0 Then
+                        If MyTimer.Enabled = True Then MyTimer.Enabled = False
                         Driver.Read(Me)
                         LastChange = Now
                         MyTimer.Interval = value * 1000

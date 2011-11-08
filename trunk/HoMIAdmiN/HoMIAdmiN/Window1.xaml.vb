@@ -91,6 +91,8 @@ Class Window1
                     LblConnect.Content = "Serveur non connecté"
                     LblConnect.ToolTip = Nothing
 
+                    TreeViewG.Items.Clear()
+
                     Dim myBrush As New RadialGradientBrush()
                     myBrush.GradientOrigin = New Point(0.75, 0.25)
                     myBrush.GradientStops.Add(New GradientStop(Colors.Yellow, 0.0))
@@ -1265,5 +1267,9 @@ Class Window1
         Catch ex As Exception
             MessageBox.Show("Erreur lors de la génération du relevé: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+    Private Sub Ellipse1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Ellipse1.MouseDown
+        If IsConnect = False Then PageConnexion()
     End Sub
 End Class

@@ -10,7 +10,7 @@ Imports System.ServiceModel.Channels
 '***********************************************
 '** SERVICE HOMIDom - Simple exe qui sera ensuite convertit en service Windows
 '** Ce service créer le serveur SOAP Web via l'interface IHoMIDom
-'** Par défaut le service est lancé sur le port 8000
+'** Par défaut le service est lancé sur le port 7999
 '** version 1.0
 '** Date de création: 14/01/2011
 '***********************************************
@@ -31,7 +31,7 @@ Module Service
             Console.WriteLine(Now & " Start ServiceWeb")
             Dim PortSOAP As String = LoadPort()
             If PortSOAP = "" Or IsNumeric(PortSOAP) = False Then
-                PortSOAP = "8000"
+                PortSOAP = "7999"
                 Console.WriteLine(Now & "ERREUR: Le fichier de config ou la balise portsoap n'ont pas été trouvé !")
             End If
 
