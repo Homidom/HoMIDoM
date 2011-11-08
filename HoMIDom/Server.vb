@@ -2415,7 +2415,7 @@ Namespace HoMIDom
                 If mymacro IsNot Nothing Then
                     Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Macro:Action", "Lancement de la macro " & mymacro.Nom)
                     For i = 0 To mymacro.ListActions.Count - 1
-                        Dim _Action As New ThreadAction(mymacro.ListActions.Item(i), Me)
+                        Dim _Action As New ThreadAction(Me, mymacro.ListActions.Item(i))
                         Dim x As New Thread(AddressOf _Action.Execute)
                         x.Start()
                     Next
@@ -2424,237 +2424,6 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:Action", ex.ToString)
             End Try
         End Sub
-
-        Private Class ThreadAction
-            Dim _Action As Object
-            Dim _Server As Server
-
-            Sub New(ByVal Action As Object, ByVal Server As Server)
-                _Action = Action
-                _Server = Server
-            End Sub
-
-            Public Sub Execute()
-                Try
-
-                    'Traite le timing avant execution
-                    Dim t As DateTime = DateTime.Now
-                    t = t.AddHours(_Action.timing.Hour)
-                    t = t.AddMinutes(_Action.timing.Minute)
-                    t = t.AddSeconds(_Action.timing.Second)
-                    Do While DateTime.Now < t
-                        'ATTENDRE
-                    Loop
-
-                    Select Case _Action.TypeAction
-                        Case HoMIDom.Action.TypeAction.ActionDevice
-                            Dim x As New HoMIDom.Action.ActionDevice
-                            Try
-                                Dim y As Object = Nothing
-                                x = _Action
-                                For i As Integer = 0 To _ListDevices.Count - 1
-                                    If _ListDevices.Item(i).id = x.IdDevice Then
-                                        y = _ListDevices.Item(i)
-                                        Exit For
-                                    End If
-                                Next
-                                If x.Parametres.Count = 0 Then
-                                    Dim retour = CallByName(y, x.Method, CallType.Method)
-                                Else
-                                    Dim retour = CallByName(y, x.Method, CallType.Method, x.Parametres.Item(0))
-                                End If
-                                _Server.Log(TypeLog.DEBUG, TypeSource.SCRIPT, "Execute Action", "Device: " & y.name & " method: " & x.Method)
-                            Catch ex As Exception
-                                _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Erreur Execute Action Device", ex.ToString)
-                            End Try
-                            x = Nothing
-                        Case HoMIDom.Action.TypeAction.ActionMail
-                            Try
-                                'envoi de l'email à adresse avec sujet et texte via les smtp définis dans le serveur
-                                Dim email As System.Net.Mail.MailMessage = New System.Net.Mail.MailMessage()
-                                Dim x As New HoMIDom.Action.ActionMail
-                                x = _Action
-                                Dim _From As String = _Server.GetSMTPMailServeur(_IdSrv)
-                                Dim _To As String = _Server.ReturnUserById(_IdSrv, x.UserId).eMail
-                                If _From <> "" Or _To <> "" Then
-                                    email.From = New MailAddress(_From)
-                                    email.To.Add(_To)
-                                    email.Subject = x.Sujet
-                                    email.Body = x.Message
-                                    Dim mailSender As New System.Net.Mail.SmtpClient(_Server.GetSMTPServeur(_IdSrv))
-                                    If _Server.GetSMTPLogin(_IdSrv) <> "" Then
-                                        mailSender.Credentials = New Net.NetworkCredential(_Server.GetSMTPLogin(_IdSrv), _Server.GetSMTPPassword(_IdSrv))
-                                        '
-                                        'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate", "1")
-                                        'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername", mMailServerLogin)
-                                        'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword", mMailServerPassword)
-                                    End If
-                                    mailSender.Send(email)
-                                    mailSender = Nothing
-                                    _Server.Log(TypeLog.DEBUG, TypeSource.SCRIPT, "Execute Action Mail", "Mail Sujet: " & x.Sujet & " message: " & x.Message)
-                                Else
-                                    _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Erreur Execute Action Mail", "Erreur l'une des deux adresses n'est pas renseignée, From:" & _From & " To:" & _To)
-                                End If
-                                email = Nothing
-                                x = Nothing
-                            Catch ex As Exception
-                                _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Erreur Execute Action Mail", "Erreur: " & ex.ToString)
-                            End Try
-                        Case HoMIDom.Action.TypeAction.ActionMacro
-                            Dim x As New HoMIDom.Action.ActionMacro
-                            x = _Action
-                            _Server.RunMacro(_IdSrv, x.IdMacro)
-                        Case HoMIDom.Action.TypeAction.ActionIf
-                            Dim Resultat As Boolean
-                            Dim x As New HoMIDom.Action.ActionIf
-                            x = _Action
-                            Resultat = _Server.EvalCondition(x.Conditions)
-                            If Resultat = True Then
-                                For i As Integer = 0 To x.ListTrue.Count - 1
-                                    Dim _Action As New ThreadAction(x.ListTrue.Item(i), _Server)
-                                    Dim y As New Thread(AddressOf _Action.Execute)
-                                    y.Start()
-                                Next
-                            Else
-                                For i As Integer = 0 To x.ListFalse.Count - 1
-                                    Dim _Action As New ThreadAction(x.ListFalse.Item(i), _Server)
-                                    Dim y As New Thread(AddressOf _Action.Execute)
-                                    y.Start()
-                                Next
-                            End If
-                    End Select
-                Catch ex As Exception
-                    _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Execute Action", ex.ToString)
-                End Try
-            End Sub
-
-        End Class
-
-        Public Function EvalCondition(ByVal Conditions As List(Of Action.Condition)) As Boolean
-            Dim _ResultFinal As Boolean = False
-
-            Try
-                For i As Integer = 0 To Conditions.Count - 1
-                    Dim _Result As Boolean = False
-                    Select Case Conditions.Item(i).Type
-                        Case Action.TypeCondition.DateTime
-                            Dim retour As Object = Nothing
-                            Dim a() As String '0:ss 1:mm 2:hh 3:dd 4:mm 5:jj
-                            a = Conditions.Item(i).DateTime.Split("#")
-
-                            Dim b(6) As Boolean
-                            b(0) = Mid(a(5), 1, 1)
-                            b(1) = Mid(a(5), 2, 1)
-                            b(2) = Mid(a(5), 3, 1)
-                            b(3) = Mid(a(5), 4, 1)
-                            b(4) = Mid(a(5), 5, 1)
-                            b(5) = Mid(a(5), 6, 1)
-                            b(6) = Mid(a(5), 7, 1)
-
-                            If (Now.DayOfWeek = DayOfWeek.Monday And b(0) = True) Or (Now.DayOfWeek = DayOfWeek.Tuesday And b(1) = True) Or (Now.DayOfWeek = DayOfWeek.Wednesday And b(2) = True) Or (Now.DayOfWeek = DayOfWeek.Thursday And b(3) = True) Or (Now.DayOfWeek = DayOfWeek.Friday And b(4) = True) Or (Now.DayOfWeek = DayOfWeek.Saturday And b(5) = True) Or (Now.DayOfWeek = DayOfWeek.Sunday And b(6) = True) Then
-                                Dim mydate As System.DateTime
-                                If a(3) = "0" And a(4) = "0" Then
-                                    mydate = New System.DateTime(Now.Year, Now.Month, Now.Day, a(2), a(1), a(0))
-                                Else
-                                    mydate = New System.DateTime(Now.Year, a(4), a(3), a(2), a(1), a(0))
-                                End If
-                                Select Case Conditions.Item(i).Condition
-                                    Case Action.TypeSigne.Different
-                                        If Now <> mydate Then
-                                            _Result = True
-                                        Else
-                                            _Result = False
-                                        End If
-                                    Case Action.TypeSigne.Egal
-                                        If Now = mydate Then
-                                            _Result = True
-                                        Else
-                                            _Result = False
-                                        End If
-                                    Case Action.TypeSigne.Inferieur
-                                        If Now < mydate Then
-                                            _Result = True
-                                        Else
-                                            _Result = False
-                                        End If
-                                    Case Action.TypeSigne.InferieurEgal
-                                        If Now <= mydate Then
-                                            _Result = True
-                                        Else
-                                            _Result = False
-                                        End If
-                                    Case Action.TypeSigne.Superieur
-                                        If Now > mydate Then
-                                            _Result = True
-                                        Else
-                                            _Result = False
-                                        End If
-                                    Case Action.TypeSigne.SuperieurEgal
-                                        If Now >= mydate Then
-                                            _Result = True
-                                        Else
-                                            _Result = False
-                                        End If
-                                End Select
-                            End If
-                        Case Action.TypeCondition.Device
-                            Dim retour As Object
-                            Dim Args = Nothing
-                            retour = CallByName(ReturnDeviceById(_IdSrv, Conditions.Item(i).IdDevice), Conditions.Item(i).PropertyDevice, Args)
-
-                            Select Case Conditions.Item(i).Condition
-                                Case Action.TypeSigne.Different
-                                    If retour <> Conditions.Item(i).Value Then
-                                        _Result = True
-                                    Else
-                                        _Result = False
-                                    End If
-                                Case Action.TypeSigne.Egal
-                                    If retour = Conditions.Item(i).Value Then
-                                        _Result = True
-                                    Else
-                                        _Result = False
-                                    End If
-                                Case Action.TypeSigne.Inferieur
-                                    If retour < Conditions.Item(i).Value Then
-                                        _Result = True
-                                    Else
-                                        _Result = False
-                                    End If
-                                Case Action.TypeSigne.InferieurEgal
-                                    If retour <= Conditions.Item(i).Value Then
-                                        _Result = True
-                                    Else
-                                        _Result = False
-                                    End If
-                                Case Action.TypeSigne.Superieur
-                                    If retour > Conditions.Item(i).Value Then
-                                        _Result = True
-                                    Else
-                                        _Result = False
-                                    End If
-                                Case Action.TypeSigne.SuperieurEgal
-                                    If retour >= Conditions.Item(i).Value Then
-                                        _Result = True
-                                    Else
-                                        _Result = False
-                                    End If
-                            End Select
-                    End Select
-                    Select Case Conditions.Item(i).Operateur
-                        Case Action.TypeOperateur.AND
-                            _ResultFinal = _ResultFinal And _Result
-                        Case Action.TypeOperateur.OR
-                            _ResultFinal = _ResultFinal Or _Result
-                    End Select
-                Next
-
-                Return _ResultFinal
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "EvalCondition", "Exception : " & ex.Message)
-                Return False
-            End Try
-        End Function
 #End Region
 
 #Region "GuideTV"
@@ -5202,6 +4971,26 @@ Namespace HoMIDom
             End Try
         End Function
 
+        ''' <summary>Retourne un device par son ID</summary>
+        ''' <param name="DeviceId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnRealDeviceById(ByVal DeviceId As String) As Object
+            Try
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).ID = DeviceId Then
+                        Return _ListDevices.Item(i)
+                        Exit For
+                    End If
+                Next
+                Return Nothing
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnRealDeviceById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+
         ''' <summary>liste les méthodes d'un device depuis son ID</summary>
         ''' <param name="DeviceId"></param>
         ''' <returns></returns>
@@ -5290,6 +5079,8 @@ Namespace HoMIDom
                     Else
                         CallByName(x, Action.Nom, CallType.Method)
                     End If
+
+                    Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand effectué: " & x.Name & " Command: " & Action.Nom)
                 End If
             Catch ex As Exception
                 Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "Erreur lors du traitemant du Sub ExecuteDeviceCommand: " & ex.Message)

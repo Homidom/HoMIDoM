@@ -5,7 +5,7 @@
     <Nom>serveur par défaut</Nom>
     <Adresse>localhost</Adresse>
     <Defaut>true</Defaut>
-    <Port>8000</Port>
+    <Port>7999</Port>
     <Icon>C:\Documents and Settings\SPATTE\Bureau\piece.png</Icon>
   </ClServer>
 </ArrayOfClServer>

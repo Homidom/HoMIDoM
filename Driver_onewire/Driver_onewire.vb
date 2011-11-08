@@ -253,10 +253,10 @@ Public Class Driver_onewire
 
             If Objet IsNot Nothing Then
                 Select Case Objet.Type
-                    Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE
+                    Case "TEMPERATURE"
                         Dim retour As Integer = temp_get_save(Objet.Adresse1)
                         If retour <> 9999 Then Objet.Value = retour
-                    Case HoMIDom.HoMIDom.Device.ListeDevices.SWITCH
+                    Case "SWITCH"
                         Dim retour As Integer = switch_get(Objet.Adresse1)
                         If retour <> 9999 Then
                             If retour = 1 Then
@@ -265,7 +265,7 @@ Public Class Driver_onewire
                                 Objet.Value = False
                             End If
                         End If
-                    Case HoMIDom.HoMIDom.Device.ListeDevices.CONTACT
+                    Case "CONTACT"
                         Dim retour As Integer = switch_get(Objet.Adresse1)
                         If retour <> 9999 Then
                             If retour = 1 Then
@@ -274,7 +274,7 @@ Public Class Driver_onewire
                                 Objet.Value = False
                             End If
                         End If
-                    Case HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR
+                    Case "DETECTEUR"
                         Dim retour As Integer = switch_get(Objet.Adresse1)
                         If retour <> 9999 Then
                             If retour = 1 Then
@@ -283,7 +283,7 @@ Public Class Driver_onewire
                                 Objet.Value = False
                             End If
                         End If
-                    Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE
+                    Case "GENERIQUEVALUE"
                         Dim retour As Integer = switch_get(Objet.Adresse1)
                         If retour <> 9999 Then
                             Objet.Value = retour
