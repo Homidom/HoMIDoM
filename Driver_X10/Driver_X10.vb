@@ -547,6 +547,7 @@ Public Class Driver_x10
             Next
 
             If Recieved_DeviceCode <> "" And Recieved_HouseCode <> "" And Recieved_Function <> "" Then
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 TraiteLire", Recieved_HouseCode & ":" & Recieved_DeviceCode & ":" & Recieved_Function)
                 Dim _add As String = Recieved_HouseCode & Recieved_DeviceCode
                 Select Case Recieved_Function
                     Case "3"
@@ -593,9 +594,9 @@ Public Class Driver_x10
                     End If
                     listedevices.Item(0).Value = valeur
                 ElseIf (listedevices.Count > 1) Then
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
                 Else
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Device non trouvé : " & adresse & ":" & valeur)
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 Process", "Device non trouvé : " & adresse & ":" & valeur)
 
 
                     'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
