@@ -2835,8 +2835,8 @@ Namespace HoMIDom
 
                         ' Boucle sur tous les fichiers du repertoire
                         For i = 0 To fiArr.Length - 1
-
-                            Dim Resultat = (From FileAudio In _mylist Where FileAudio.SourceWpath = fiArr(i).FullName Select FileAudio).Count
+                            Dim ii = i
+                            Dim Resultat = (From FileAudio In _mylist Where FileAudio.SourceWpath = fiArr(ii).FullName Select FileAudio).Count
                             If Resultat = 0 Then
                                 Dim X As TagLib.File
                                 ' Recupere les tags du fichier Audio 

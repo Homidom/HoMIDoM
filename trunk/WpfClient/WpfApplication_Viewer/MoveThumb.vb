@@ -12,9 +12,9 @@ Namespace Designer
         Private designerItem As ContentControl
 
         Public Sub New()
-            Dim DragStarted As DragStartedEventHandler
+            'Dim DragStarted As DragStartedEventHandler
             AddHandler DragStarted, AddressOf Me.MoveThumb_DragStarted
-            Dim DragDelta As DragDeltaEventHandler
+            'Dim DragDelta As DragDeltaEventHandler
             AddHandler DragDelta, AddressOf Me.MoveThumb_DragDelta
         End Sub
 

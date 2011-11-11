@@ -27,7 +27,7 @@ Namespace Designer
         Public Shared ReadOnly ShowDecoratorProperty As DependencyProperty = DependencyProperty.Register("ShowDecorator", GetType(Boolean), GetType(DesignerItemDecorator), New FrameworkPropertyMetadata(False, New PropertyChangedCallback(AddressOf ShowDecoratorProperty_Changed)))
 
         Public Sub New()
-            Dim Unloaded As RoutedEventHandler
+            'Dim Unloaded As RoutedEventHandler
             AddHandler Unloaded, (AddressOf Me.DesignerItemDecorator_Unloaded)
         End Sub
 

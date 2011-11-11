@@ -18,11 +18,11 @@ Namespace Designer
         Private canvas As Canvas
 
         Public Sub New()
-            Dim DragStarted As DragStartedEventHandler
+            'Dim DragStarted As DragStartedEventHandler
             AddHandler DragStarted, AddressOf ResizeThumb_DragStarted
-            Dim DragDelta As DragDeltaEventHandler
+            'Dim DragDelta As DragDeltaEventHandler
             AddHandler DragDelta, AddressOf ResizeThumb_DragDelta
-            Dim DragCompleted As DragCompletedEventHandler
+            'Dim DragCompleted As DragCompletedEventHandler
             AddHandler DragCompleted, AddressOf ResizeThumb_DragCompleted
         End Sub
 

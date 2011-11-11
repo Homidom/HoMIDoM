@@ -540,7 +540,7 @@ Public Class Driver_onewire
         Dim state As Object
         Dim owd As com.dalsemi.onewire.container.OneWireContainer12
         Dim tc As com.dalsemi.onewire.container.SwitchContainer
-        Dim switch_state, switch_activity, switch_level
+        Dim switch_state, switch_activity
         Try
             If adapter_present Then
                 If wir_adapter.isPresent(adresse) Then
