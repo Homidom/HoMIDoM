@@ -79,10 +79,10 @@
             <ProgressBar Name="ProgressBar1" Orientation="Vertical" Width="40" Height="80" Foreground="Orange" SmallChange="10" /> 
             <StackPanel >
                 <Button Template="{DynamicResource GlassButton}" Name="BtnUp" Width="30" Height="40">
-                    <Image Source="/HoMIDomWPFClient;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                    <Image Source="/HoMIWpF;component/Images/bullet-fleche-vers-le-haut-32.png" />
                 </Button>
                 <Button Template="{DynamicResource GlassButton}" Name="BtnDown" Width="30" Height="40">
-                    <Image Source="/HoMIDomWPFClient;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                    <Image Source="/HoMIWpF;component/Images/bullet-fleche-vers-le-bas-32.png" />
                 </Button>
             </StackPanel>
         </StackPanel>

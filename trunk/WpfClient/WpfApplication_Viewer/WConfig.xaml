@@ -135,10 +135,10 @@
                         <StackPanel >
                         <StackPanel Orientation="Horizontal" >
                                 <Button Name="BtnUP"  Height="25" Width="25" Margin="2" IsEnabled="False" >
-                                    <Image Source="/HoMIDomWPFClient;component/Images/fleche-haut.png" />
+                                    <Image Source="/HoMIWpF;component/Images/fleche-haut.png" />
                                 </Button>
                                 <Button Name="BtnDown"  Height="25" Width="25" Margin="2" IsEnabled="False" >
-                                    <Image Source="/HoMIDomWPFClient;component/Images/fleche-bas.png" />
+                                    <Image Source="/HoMIWpF;component/Images/fleche-bas.png" />
                                     </Button> 
                             </StackPanel>
                         <ListBox Name="ListMnu" MinHeight=" 150" MinWidth=" 120">
@@ -157,7 +157,7 @@
                     <GroupBox Header="Propriétés" Margin="2" MinWidth="150">
                         <StackPanel Name="StkProperty" HorizontalAlignment="Left" Visibility="Hidden">
                             <StackPanel Orientation="Horizontal" >
-                            <Image Name="ImgMnu" Width="40" Height="40" Stretch="Fill" Margin="3" Source="/HoMIDomWPFClient;component/Images/vide-icone-128.png" />
+                                <Image Name="ImgMnu" Width="40" Height="40" Stretch="Fill" Margin="3" Source="/HoMIWpF;component/Images/vide-icone-128.png" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
                                 <Label Content="Label: " MinWidth="50"/>

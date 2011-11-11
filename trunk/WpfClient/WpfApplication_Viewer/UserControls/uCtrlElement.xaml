@@ -16,7 +16,7 @@
                 
                 <Label Name="Lbl" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" FontSize="9" Foreground="White" >?</Label>
                 <StackPanel Orientation="Horizontal" >
-                <Image Name="Image" Stretch="Fill" Height="40" VerticalAlignment="Center" Width="40" Source="/HoMIDomWPFClient;component/Images/script-128.png" MaxWidth="40" MaxHeight="40" />
+                    <Image Name="Image" Stretch="Fill" Height="40" VerticalAlignment="Center" Width="40" Source="/HoMIWpF;component/Images/script-128.png" MaxWidth="40" MaxHeight="40" />
                 <Label Name="LblStatus" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" FontSize="9" Foreground="LightGray"  >Status: ?</Label>
                 </StackPanel>
             </StackPanel>

@@ -127,7 +127,7 @@ Partial Friend NotInheritable Class Settings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("8000")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("7999")>  _
     Public Property PortSOAP() As String
         Get
             Return CType(Me("PortSOAP"),String)

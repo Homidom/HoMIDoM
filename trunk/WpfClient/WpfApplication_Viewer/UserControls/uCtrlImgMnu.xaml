@@ -4,7 +4,7 @@
             
         <StackPanel >
         <Border CornerRadius=" 5" BorderThickness="1" BorderBrush="DarkGray">
-            <Image Name="Image" Stretch="Fill" Height="55" VerticalAlignment="Top" Width="55" Source="/HoMIDomWPFClient;component/Images/vide-icone-128.png" MinWidth="65" MinHeight="65" />
+            <Image Name="Image" Stretch="Fill" Height="55" VerticalAlignment="Top" Width="55" Source="/HoMIWpF;component/Images/vide-icone-128.png" MinWidth="65" MinHeight="65" />
         </Border>
         <Label Name="Lbl" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="9" Foreground="White">TEST</Label>
         </StackPanel>

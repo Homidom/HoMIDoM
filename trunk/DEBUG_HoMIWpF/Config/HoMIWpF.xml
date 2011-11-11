@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <homidom>
   <server portsoap="7999" ip="localhost" />
-  <HS adresse="http:\\sebbergues2.no-ip.org:81" login="sebastien" password="sebastien" />
+  <HS adresse="" login="" password="" />
   <tactile speedtouch="600" friction="0.75" />
   <interface showsoleil="true" showtemperature="true" imgbackground="C:\Documents and Settings\SPATTE\Bureau\piece.png" />
   <menus>

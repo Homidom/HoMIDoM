@@ -92,32 +92,32 @@
             <StackPanel Tag="VOLET" Name="StackPanel1" VerticalAlignment="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="7">
                 <StackPanel >
                     <Label Foreground="White" FontSize="9">0%</Label>
-                    <Image Height="40" Name="Volet0" Width="40" Stretch="Fill" Source="/HoMIDomWPFClient;component/Images/Volet_0.png" Margin="5" />
+                    <Image Height="40" Name="Volet0" Width="40" Stretch="Fill" Source="/HoMIWpF;component/Images/Volet_0.png" Margin="5" />
                 </StackPanel>
                 <StackPanel >
                     <Label Foreground="White" FontSize="9">25%</Label>
-                    <Image Height="40" Name="Volet25" Width="40" Stretch="Fill" Source="/HoMIDomWPFClient;component/Images/Volet_25.png" Margin="5" />
+                    <Image Height="40" Name="Volet25" Width="40" Stretch="Fill" Source="/HoMIWpF;component/Images/Volet_25.png" Margin="5" />
                 </StackPanel>
                 <StackPanel >
                     <Label Foreground="White" FontSize="9">50%</Label>
-                    <Image Height="40" Name="Volet50" Width="40" Stretch="Fill" Source="/HoMIDomWPFClient;component/Images/Volet_50.png" Margin="5" />
+                    <Image Height="40" Name="Volet50" Width="40" Stretch="Fill" Source="/HoMIWpF;component/Images/Volet_50.png" Margin="5" />
                     </StackPanel>
                 <StackPanel >
                     <Label Foreground="White" FontSize="9">75%</Label>
-                    <Image Height="40" Name="Volet75" Width="40" Stretch="Fill" Source="/HoMIDomWPFClient;component/Images/Volet_75.png" Margin="5" />
+                    <Image Height="40" Name="Volet75" Width="40" Stretch="Fill" Source="/HoMIWpF;component/Images/Volet_75.png" Margin="5" />
                     </StackPanel>
                 <StackPanel >
                     <Label Foreground="White" FontSize="9">100%</Label>
-                    <Image Height="40" Name="Volet100" Width="40" Stretch="Fill" Source="/HoMIDomWPFClient;component/Images/Volet_100.png" Margin="5" />
+                    <Image Height="40" Name="Volet100" Width="40" Stretch="Fill" Source="/HoMIWpF;component/Images/Volet_100.png" Margin="5" />
                     </StackPanel>
             </StackPanel>
             <StackPanel Tag="AUDIO" Orientation="Horizontal" HorizontalAlignment="Center" Margin="7">
-                <Image Height="36" Name="BtnStop" Stretch="Fill" Source="/HoMIDomWPFClient;component/Images/stop.png" Width="36" Margin="3" />
-                <Image Height="34" Width="34" Name="BtnPause" Stretch="Fill" VerticalAlignment="Bottom" Source="/HoMIDomWPFClient;component/Images/pause.png" Margin="3" />
-                <Image Height="34" Width="34" Name="BtnMute" Stretch="Fill" VerticalAlignment="Bottom" Source="/HoMIDomWPFClient;component/Images/mute.png" Margin="3" />
-                <Image Height="34" Width="34" Name="BtnVolumDown" Stretch="Fill" VerticalAlignment="Bottom" Source="/HoMIDomWPFClient;component/Images/VolumeDown.png" Margin="3" />
-                <Image Height="34" Width="34" Name="BtnVolumUp" Stretch="Fill" VerticalAlignment="Bottom" Source="/HoMIDomWPFClient;component/Images/VolumeUp.png" Margin="3" />
-                <Image Name="BtnPlay" Stretch="Fill" Source="/HoMIDomWPFClient;component/Images/Play.png" Width="34" Height="34" Margin="3" />
+                <Image Height="36" Name="BtnStop" Stretch="Fill" Source="/HoMIWpF;component/Images/stop.png" Width="36" Margin="3" />
+                <Image Height="34" Width="34" Name="BtnPause" Stretch="Fill" VerticalAlignment="Bottom" Source="/HoMIWpF;component/Images/pause.png" Margin="3" />
+                <Image Height="34" Width="34" Name="BtnMute" Stretch="Fill" VerticalAlignment="Bottom" Source="/HoMIWpF;component/Images/mute.png" Margin="3" />
+                <Image Height="34" Width="34" Name="BtnVolumDown" Stretch="Fill" VerticalAlignment="Bottom" Source="/HoMIWpF;component/Images/VolumeDown.png" Margin="3" />
+                <Image Height="34" Width="34" Name="BtnVolumUp" Stretch="Fill" VerticalAlignment="Bottom" Source="/HoMIWpF;component/Images/VolumeUp.png" Margin="3" />
+                <Image Name="BtnPlay" Stretch="Fill" Source="/HoMIWpF;component/Images/Play.png" Width="34" Height="34" Margin="3" />
             </StackPanel>
            <StackPanel HorizontalAlignment="Center" Margin="7" Orientation="Horizontal" Tag="MACRO">
                 <Button Width="50" Name="BtnRun" Height="29.78" Foreground="White" Content="Run" Template="{DynamicResource GlassButton}" Margin="3" />
