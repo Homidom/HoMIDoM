@@ -454,6 +454,7 @@ Public Class Driver_x10
 
             If count > 0 And port_ouvert Then
                 port.Read(BufferIn, 0, count)
+
                 Select Case BufferIn(0)
                     Case INTERFACE_CQ
                         'L'interface demande au pc de lui envoyer des données
@@ -475,6 +476,7 @@ Public Class Driver_x10
 
                         port.Read(BufferIn, 0, count)
                         TraiteLire(BufferIn)
+
                     Case CM11_CLOCK_REQ
                         ' Power failure macro refresh request (Chr165 = 0xA5) Erreur CM11
                         ' Power fail/recovery detected.
@@ -495,74 +497,79 @@ Public Class Driver_x10
     ''' <param name="Data"></param>
     ''' <remarks></remarks>
     Private Sub TraiteLire(ByVal Data() As Byte)
-        Dim BufSize As Integer = 0
-        Dim Recieved_HouseCode As String = ""
-        Dim Recieved_DeviceCode As String = ""
-        Dim Recieved_Function As String = ""
-        Dim Recieved_FAMask As String = ""
-        Dim Recieved_Variation As Integer
-        Dim FlagOk As Boolean = False
+        Try
 
-        'Wake-up and data recieved
+            Dim BufSize As Integer = 0
+            Dim Recieved_HouseCode As String = ""
+            Dim Recieved_DeviceCode As String = ""
+            Dim Recieved_Function As String = ""
+            Dim Recieved_FAMask As String = ""
+            Dim Recieved_Variation As Integer
+            Dim FlagOk As Boolean = False
 
-        Dim trame() As Byte = Data
-        BufSize = CInt(trame(0)) 'récupère la taille de la trame qui ne peu faire que 10 octets maxi
+            'Wake-up and data recieved
 
-        'Byte   Function
-        '0      Upload Buffer Size
-        '1      Function / Address Mask
-        '2      Data Byte #0
-        '3      Data Byte #1
-        '4      Data Byte #2
-        '5      Data Byte #3
-        '6      Data Byte #4
-        '7      Data Byte #5
-        '8      Data Byte #6
-        '9      Data Byte #7
+            Dim trame() As Byte = Data
+            BufSize = CInt(trame(0)) 'récupère la taille de la trame qui ne peu faire que 10 octets maxi
 
-        If BufSize <= 10 Then 'Vérifie qu'il ne doit y avoir que 10 octet maximum qui doivent être envoyé sinon message d'erreur
+            'Byte   Function
+            '0      Upload Buffer Size
+            '1      Function / Address Mask
+            '2      Data Byte #0
+            '3      Data Byte #1
+            '4      Data Byte #2
+            '5      Data Byte #3
+            '6      Data Byte #4
+            '7      Data Byte #5
+            '8      Data Byte #6
+            '9      Data Byte #7
 
-            ' Le mask représente les octets 2 à 9 (bit0 pour octet2, bit1 pour octet3..,bit 8 pour octet9)
-            ' Si le bit est à 0 cela veut dire que l'octet correspondant est une Adresse et si le bit est à 1 c'est une fonction
-            Recieved_FAMask = Int2Bin(CInt(trame(1)))
-            Recieved_FAMask = StrReverse(Recieved_FAMask)
+            If BufSize <= 10 Then 'Vérifie qu'il ne doit y avoir que 10 octet maximum qui doivent être envoyé sinon message d'erreur
 
-            For i = 2 To BufSize
-                Recieved_HouseCode = GetHouse(Mid(trame(i), 1, 4))
+                ' Le mask représente les octets 2 à 9 (bit0 pour octet2, bit1 pour octet3..,bit 8 pour octet9)
+                ' Si le bit est à 0 cela veut dire que l'octet correspondant est une Adresse et si le bit est à 1 c'est une fonction
+                Recieved_FAMask = Int2Bin(CInt(trame(1)))
+                Recieved_FAMask = StrReverse(Recieved_FAMask)
 
-                Select Case Mid(Recieved_FAMask, (i - 1), 1)
-                    Case "0" 'Le Mask est à 0 donc c'est une adresse
-                        Recieved_DeviceCode = GetDevice(Mid(trame(i), 5, 4))
+                For i = 2 To BufSize
+                    Recieved_HouseCode = GetHouse(Mid(trame(i), 1, 4))
 
-                    Case "1" 'Le Mask est à 1 donc c'est une fonction
-                        Recieved_Function = GetFunction(Mid(trame(i), 5, 4))
-                        If Recieved_Function = "5" Or Recieved_Function = "6" Then
-                            'C'est une fonction Dim ou Bright donc octet suivant c'est la valeur de variation
-                            Recieved_Variation = CInt(trame(i + 1))
-                            i += 1
-                        End If
-                    Case Else 'C'est une erreur car ni adresse ni fonction
+                    Select Case Mid(Recieved_FAMask, (i - 1), 1)
+                        Case "0" 'Le Mask est à 0 donc c'est une adresse
+                            Recieved_DeviceCode = GetDevice(Mid(trame(i), 5, 4))
 
-                End Select
-            Next
+                        Case "1" 'Le Mask est à 1 donc c'est une fonction
+                            Recieved_Function = GetFunction(Mid(trame(i), 5, 4))
+                            If Recieved_Function = "5" Or Recieved_Function = "6" Then
+                                'C'est une fonction Dim ou Bright donc octet suivant c'est la valeur de variation
+                                Recieved_Variation = CInt(trame(i + 1))
+                                i += 1
+                            End If
+                        Case Else 'C'est une erreur car ni adresse ni fonction
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 TraiteLire", "Erreur inconnu")
+                    End Select
+                Next
 
-            If Recieved_DeviceCode <> "" And Recieved_HouseCode <> "" And Recieved_Function <> "" Then
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 TraiteLire", Recieved_HouseCode & ":" & Recieved_DeviceCode & ":" & Recieved_Function)
-                Dim _add As String = Recieved_HouseCode & Recieved_DeviceCode
-                Select Case Recieved_Function
-                    Case "3"
-                        traitement("ON", _add)
-                        '_Server.GetAllDevices(_IdSrv).Item(i).Value = True
-                    Case "4"
-                        traitement("OFF", _add)
-                        '_Server.GetAllDevices(_IdSrv).Item(i).Value = False
+                If Recieved_DeviceCode <> "" And Recieved_HouseCode <> "" And Recieved_Function <> "" Then
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 TraiteLire", Recieved_HouseCode & ":" & Recieved_DeviceCode & ":" & Recieved_Function)
+                    Dim _add As String = Recieved_HouseCode & Recieved_DeviceCode
+                    Select Case Recieved_Function
+                        Case "3"
+                            traitement("ON", _add)
+                            '_Server.GetAllDevices(_IdSrv).Item(i).Value = True
+                        Case "4"
+                            traitement("OFF", _add)
+                            '_Server.GetAllDevices(_IdSrv).Item(i).Value = False
 
-                End Select
+                    End Select
+                End If
+            Else
+                'ERREUR TROP DE BYTES A RECEVOIR MAX 10
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 TraiteLire", "Trop de Bytes reçu: " & BufSize & " reçu au lieu de 10 maximum")
             End If
-        Else
-            'ERREUR TROP DE BYTES A RECEVOIR MAX 10
-        End If
-
+        Catch Ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 TraiteLire", "Erreur: " & Ex.ToString)
+        End Try
     End Sub
 
     ''' <summary>Traite les paquets reçus</summary>
@@ -570,9 +577,9 @@ Public Class Driver_x10
     Private Sub traitement(ByVal valeur As String, ByVal adresse As String)
         If valeur <> "" Then
             Try
-
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
+
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
                 'un device trouvé on maj la value
                 If (listedevices.Count = 1) Then
@@ -592,19 +599,17 @@ Public Class Driver_x10
                             valeur = True
                         End If
                     End If
+
                     listedevices.Item(0).Value = valeur
+
                 ElseIf (listedevices.Count > 1) Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
                 Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 Process", "Device non trouvé : " & adresse & ":" & valeur)
 
-
-                    'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
-
-
                 End If
             Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS traitement", "Exception : " & ex.Message & " --> " & adresse & " : " & valeur)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 traitement", "Exception : " & ex.Message & " --> " & adresse & " : " & valeur)
             End Try
         End If
     End Sub
