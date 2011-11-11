@@ -235,6 +235,7 @@ Public Class Driver_x10
                 port.ReadTimeout = 500
                 port.WriteTimeout = 500
                 AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
+                AddHandler port.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf m_serialPort_ErrorReceived)
                 port.Open()
                 'If port.IsOpen Then
                 '    port.DtrEnable = True
@@ -441,6 +442,10 @@ Public Class Driver_x10
         End Try
     End Sub
 
+    Private Sub m_serialPort_ErrorReceived(ByVal sender As Object, ByVal e As SerialErrorReceivedEventArgs)
+        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 ErrorReceived", "Error: " & e.ToString)
+    End Sub
+
     ''' <summary>
     ''' Traite les infos reçus
     ''' </summary>
@@ -457,8 +462,11 @@ Public Class Driver_x10
 
                 Select Case BufferIn(0)
                     Case INTERFACE_CQ
-                        'L'interface demande au pc de lui envoyer des données
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Un Device a envoyé un ordre")
+
+                        'L'interface demande au pc de lui envoyer des données et on doit répondre 
                         port.Write(COMPUTER_READY)
+                        System.Threading.Thread.Sleep(200)
 
                         '' Attend le reste des données
                         Dim Time_Out As Integer = 0
@@ -470,7 +478,7 @@ Public Class Driver_x10
                         ''A t-on reçu des données?
                         If Time_Out >= 20 Then
                             'Temps d'attente dépassé
-                            'GetData = ("Get Data,2: Temps d'attente dépassé")
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Temps d'attente dépassé")
                             Exit Sub
                         End If
 
@@ -524,7 +532,7 @@ Public Class Driver_x10
             '8      Data Byte #6
             '9      Data Byte #7
 
-            If BufSize <= 10 Then 'Vérifie qu'il ne doit y avoir que 10 octet maximum qui doivent être envoyé sinon message d'erreur
+            If BufSize > 2 And BufSize <= 10 Then 'Vérifie qu'il ne doit y avoir que 10 octet maximum qui doivent être envoyé sinon message d'erreur
 
                 ' Le mask représente les octets 2 à 9 (bit0 pour octet2, bit1 pour octet3..,bit 8 pour octet9)
                 ' Si le bit est à 0 cela veut dire que l'octet correspondant est une Adresse et si le bit est à 1 c'est une fonction
@@ -560,12 +568,11 @@ Public Class Driver_x10
                         Case "4"
                             traitement("OFF", _add)
                             '_Server.GetAllDevices(_IdSrv).Item(i).Value = False
-
                     End Select
                 End If
             Else
                 'ERREUR TROP DE BYTES A RECEVOIR MAX 10
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 TraiteLire", "Trop de Bytes reçu: " & BufSize & " reçu au lieu de 10 maximum")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 TraiteLire", "Trop ou pas assez de Bytes reçu: " & BufSize)
             End If
         Catch Ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 TraiteLire", "Erreur: " & Ex.ToString)
