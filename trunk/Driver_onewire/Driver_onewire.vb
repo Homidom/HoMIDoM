@@ -349,17 +349,20 @@ Public Class Driver_onewire
 
 #Region "Fonctions propres au driver"
     Public Function temp_get_save(ByVal adresse As String) As String
+
         ' Renvoi la temperature du capteur X
         Dim resolution As Double = 0.1 'resolution de la temperature : 0.1 ou 0.5
         Dim retour As String = ""
         Dim state As Object
         Dim tc As com.dalsemi.onewire.container.TemperatureContainer
         Dim owd As com.dalsemi.onewire.container.OneWireContainer
+
         If adapter_present Then
             'demande l'acces exclusif au reseau
             Try
                 wir_adapter.beginExclusive(False)
                 owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
+
                 If owd.isPresent() Then
                     Try
                         tc = DirectCast(owd, com.dalsemi.onewire.container.TemperatureContainer) 'creer la connexion
@@ -373,15 +376,18 @@ Public Class Driver_onewire
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire GetTemp", ex.ToString)
                     End Try
                 Else
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire GetTemp", "Capteur à l'adresse " & adresse & " Non présent")
                     retour = 9999
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire GetTemp", "Capteur à l'adresse " & adresse & " Non présent")
                 End If
+
                 wir_adapter.endExclusive()
             Catch ex As Exception
+                retour = 9999
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire GetTemp", ex.ToString)
             End Try
         Else
-            retour = "ERR: temp_get : Adaptateur non présent"
+            retour = 9999
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire GetTemp", "Erreur Adaptateur non présent")
         End If
         Return retour
     End Function
