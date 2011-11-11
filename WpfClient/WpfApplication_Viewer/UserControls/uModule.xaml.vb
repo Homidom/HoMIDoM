@@ -271,32 +271,32 @@ Partial Public Class uModule
 #Region "Bouton Audio"
 
     Private Sub BtnStop_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnStop.MouseDown
-        Dim s
+        'Dim s
         's = hs.RunEx("Multiroom.vb", "", "SDB|stop|a")
     End Sub
 
     Private Sub BtnPlay_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnPlay.MouseDown
-        Dim s
+        'Dim s
         's = hs.RunEx("Multiroom.vb", "", "SDB|play|http://streaming.radio.rtl.fr/rtl-1-44-96")
     End Sub
 
     Private Sub BtnPause_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnPause.MouseDown
-        Dim s
+        'Dim s
         's = hs.RunEx("Multiroom.vb", "", "SDB|pause|a")
     End Sub
 
     Private Sub BtnMute_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnMute.MouseDown
-        Dim s
+        ' Dim s
         's = hs.RunEx("Multiroom.vb", "", "SDB|VOLUME MUTE|a")
     End Sub
 
     Private Sub BtnVolumDown_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnVolumDown.MouseDown
-        Dim s
+        'Dim s
         's = hs.RunEx("Multiroom.vb", "", "SDB|VOLUME DOWN|a")
     End Sub
 
     Private Sub BtnVolumUp_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnVolumUp.MouseDown
-        Dim s
+        'Dim s
         's = hs.RunEx("Multiroom.vb", "", "SDB|VOLUME UP|a")
     End Sub
 #End Region
@@ -345,7 +345,7 @@ Partial Public Class uModule
 
 #Region "Macro"
     Private Sub BtnRun_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnRun.Click
-        Dim s
+        'Dim s
         's = hs.RunEx(_Script, _Fonction, _Command)
     End Sub
 #End Region

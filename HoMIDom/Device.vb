@@ -1189,7 +1189,7 @@ Namespace HoMIDom
             End Sub
 
             Private Function Sendhttp(ByVal cmd As String) As String
-                Dim URL As String
+                Dim URL As String = ""
                 Dim Box As String
 
                 Try

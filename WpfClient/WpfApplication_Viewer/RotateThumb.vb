@@ -16,9 +16,9 @@ Namespace Designer
         Private canvas As Canvas
 
         Public Sub New()
-            Dim DragDelta As DragDeltaEventHandler
+            'Dim DragDelta As DragDeltaEventHandler
             AddHandler DragDelta, (AddressOf Me.RotateThumb_DragDelta)
-            Dim DragStarted As DragStartedEventHandler
+            'Dim DragStarted As DragStartedEventHandler
             AddHandler DragStarted, (AddressOf Me.RotateThumb_DragStarted)
         End Sub
 
