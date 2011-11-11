@@ -203,7 +203,7 @@ Class Window1
             ' _MonRepertoire = System.Environment.CurrentDirectory 'représente le répertoire de l'application 
 
             Dim mystyles As New ResourceDictionary()
-            mystyles.Source = New Uri("/HoMIDomWPFClient;component/Resources/DesignerItem.xaml",
+            mystyles.Source = New Uri("/HoMIWpF;component/Resources/DesignerItem.xaml",
                     UriKind.RelativeOrAbsolute)
             mybuttonstyle = mystyles("DesignerItemStyle")
 
@@ -300,7 +300,7 @@ Class Window1
     Public Function LoadConfig(ByVal Fichier As String) As String
         'Copy du fichier de config avant chargement
         Try
-            Dim _file As String = Fichier & "homidomwpf"
+            Dim _file As String = Fichier & "HoMIWpF"
             If File.Exists(_file & ".bak") = True Then File.Delete(_file & ".bak")
             File.Copy(_file & ".xml", Mid(_file & ".xml", 1, Len(_file & ".xml") - 4) & ".bak")
             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
@@ -311,7 +311,7 @@ Class Window1
         Try
             Dim dirInfo As New System.IO.DirectoryInfo(Fichier)
             Dim file As System.IO.FileInfo
-            Dim files() As System.IO.FileInfo = dirInfo.GetFiles("homidomwpf.xml")
+            Dim files() As System.IO.FileInfo = dirInfo.GetFiles("HoMIWpF.xml")
             Dim myxml As XML
 
             If (files IsNot Nothing) Then
@@ -1139,7 +1139,7 @@ Class Window1
     Private Sub BtnQuit_Click_1(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnQuit.Click
         If Chk1.IsChecked = True Then Chk1.IsChecked = False
 
-        SaveConfig(_MonRepertoire & "\config\homidomWPF.xml")
+        SaveConfig(_MonRepertoire & "\config\HoMIWpF.xml")
         Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
         End
     End Sub

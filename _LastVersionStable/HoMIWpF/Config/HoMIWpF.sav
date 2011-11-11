@@ -1,15 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <homidom>
   <server portsoap="7999" ip="localhost" />
-  <HS adresse="http:\\sebbergues2.no-ip.org:81" login="sebastien" password="sebastien" />
+  <HS adresse="" login="" password="" />
   <tactile speedtouch="600" friction="0.75" />
-  <interface showsoleil="true" showtemperature="true" imgbackground="" />
+  <interface showsoleil="true" showtemperature="true" imgbackground="C:\Documents and Settings\SPATTE\Bureau\piece.png" />
   <menus>
-    <menu nom="Paramètres" defaut="true" type="Config" icon="" />
-    <menu nom="Meteo" defaut="false" type="Meteo" icon="" />
-    <menu nom="Google" defaut="false" type="Internet" icon="" parametre0="http://www.google.fr/" />
-    <menu nom="Maison" defaut="false" type="Zone" idelement="97da176d-abe9-45c2-85db-dc2e8adb2e48" visible="true" />
-    <menu nom="Salon" defaut="false" type="Zone" idelement="005147d9-a705-4d71-8f4d-8edc405c8a79" visible="true" />
+    <menu nom="Paramètres" defaut="true" type="Config" icon="d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\Images\Icones\configurer-128.PNG" />
+    <menu nom="Meteo" defaut="false" type="Meteo" icon="C:\ehome\images\125_goodmorning.png" />
+    <menu nom="Google" defaut="false" type="Internet" icon="C:\ehome\images\Internet.png" parametre0="http://www.google.fr/" />
   </menus>
   <elements>
     <element id="8efb097e-4c14-4d5e-bb83-95d32a5bc6c4" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="323" y="218" width="140" height="60" angle="0" />

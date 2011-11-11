@@ -104,12 +104,12 @@
                     <CheckBox  Name="Chk2" Content="Move" Foreground="White" Visibility="Hidden" />
                     </StackPanel>
                 <Rectangle Width="100" />
-                <Image Margin="1" Name="ImageLeve" Stretch="Fill" Tag="Soleil" HorizontalAlignment="Right" Width="20"  Height="20" Source="/HoMIDomWPFClient;component/Images/01.png" />
+                <Image Margin="1" Name="ImageLeve" Stretch="Fill" Tag="Soleil" HorizontalAlignment="Right" Width="20"  Height="20" Source="/HoMIWpF;component/Images/01.png" />
                 <Label Margin="1" Name="LblLeve" HorizontalAlignment="Right" Tag="Soleil" Foreground="White" FontSize="10">?</Label>
-                <Image HorizontalAlignment="Left" Margin="1" Name="ImageCouche" Stretch="Fill" Tag="Soleil" Width="20"  Height="20" Source="/HoMIDomWPFClient;component/Images/36.png" />
+                <Image HorizontalAlignment="Left" Margin="1" Name="ImageCouche" Stretch="Fill" Tag="Soleil" Width="20"  Height="20" Source="/HoMIWpF;component/Images/36.png" />
                 <Label Foreground="White" HorizontalAlignment="Left" Margin="1" Name="LblCouche" Tag="Soleil" FontSize="10">?</Label>
                 <Rectangle Width="100" />
-                <Image HorizontalAlignment="Left" Margin="1" Name="ImgTemp" Tag="Temperature" Stretch="Fill" Width="20" Grid.Column="1" Height="20" Source="/HoMIDomWPFClient;component/Images/temperature.png" />
+                <Image HorizontalAlignment="Left" Margin="1" Name="ImgTemp" Tag="Temperature" Stretch="Fill" Width="20" Grid.Column="1" Height="20" Source="/HoMIWpF;component/Images/temperature.png" />
                 <Label FontSize="10" Foreground="White" Margin="1" Tag="Temperature" Name="LblTemp">?</Label>
         </StackPanel>
         <StackPanel DockPanel.Dock="Bottom" >

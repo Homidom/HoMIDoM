@@ -21,7 +21,7 @@
       <Value Profile="(Default)">600</Value>
     </Setting>
     <Setting Name="PortSOAP" Type="System.String" Scope="User">
-      <Value Profile="(Default)">8000</Value>
+      <Value Profile="(Default)">7999</Value>
     </Setting>
     <Setting Name="IP" Type="System.String" Scope="User">
       <Value Profile="(Default)">localhost</Value>
