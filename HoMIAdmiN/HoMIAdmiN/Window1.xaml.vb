@@ -44,7 +44,7 @@ Class Window1
             dt.Interval = New TimeSpan(0, 0, 1)
             dt.Start()
 
-            Myfile = MyRep & "\HoMIAdmiN_config.xml"
+            Myfile = MyRep & "\Config\HoMIAdmiN.xml"
 
             ErazeMnu()
         Catch ex As Exception

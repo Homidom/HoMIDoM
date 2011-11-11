@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ArrayOfClServer xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ClServer>
-    <Nom>Local</Nom>
-    <Adresse>localhost</Adresse>
-    <Defaut>true</Defaut>
-    <Port>8000</Port>
-  </ClServer>
-</ArrayOfClServer>
