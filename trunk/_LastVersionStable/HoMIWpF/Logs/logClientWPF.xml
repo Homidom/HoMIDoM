@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<logs>
+  <log time="11/11/2011 11:52:04" type="0" source="0" message="Création du nouveau fichier log" />
+  <log time="11/11/2011 11:52:04" type="1" source="1" fonction="LoadConfig" message="Cr&amp;#233;ation du backup (.bak) du fichier de config avant chargement" />
+  <log time="11/11/2011 11:52:04" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: D:\Homidom\DEBUG_HoMIWpF\Config\homidomWPF.xml" />
+  <log time="11/11/2011 11:52:04" type="1" source="1" fonction="LoadConfig" message="Param&amp;#232;tres du client WPF charg&amp;#233;s" />
+  <log time="11/11/2011 11:52:04" type="1" source="1" fonction="LoadConfig" message="Param&amp;#232;tres du Serveur HomeSeer charg&amp;#233;s" />
+  <log time="11/11/2011 11:52:04" type="1" source="1" fonction="LoadConfig" message="Param&amp;#232;tres tactiles charg&amp;#233;s" />
+  <log time="11/11/2011 11:52:04" type="1" source="1" fonction="LoadConfig" message="Param&amp;#232;tres de l&amp;#39;interface charg&amp;#233;s" />
+  <log time="11/11/2011 11:52:06" type="1" source="7" fonction="NewBtnMnu" message="Erreur NewBtnMnu: There was no endpoint listening at http://localhost:8000/ServiceModelSamples/service that could accept the message. This is often caused by an incorrect address or SOAP action. See InnerException, if present, for more details." />
+  <log time="11/11/2011 11:52:43" type="1" source="7" fonction="NewBtnMnu" message="Erreur NewBtnMnu: There was no endpoint listening at http://localhost:8000/ServiceModelSamples/service that could accept the message. This is often caused by an incorrect address or SOAP action. See InnerException, if present, for more details." />
+  <log time="11/11/2011 11:52:47" type="1" source="1" fonction="LoadConfig" message="Menus charg&amp;#233;s" />
+  <log time="11/11/2011 11:52:47" type="1" source="1" fonction="LoadConfig" message="El&amp;#233;ments charg&amp;#233;s" />
+  <log time="11/11/2011 11:52:47" type="1" source="7" fonction="LOADCONFIG" message="Message:  Chargement de la configuration termin&amp;#233;e" />
+  <log time="11/11/2011 11:52:52" type="1" source="1" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier D:\Homidom\DEBUG_HoMIWpF\config\homidomWPF.xml" />
+  <log time="11/11/2011 11:52:52" type="1" source="1" fonction="LoadConfig" message="Cr&amp;#233;ation de sauvegarde (.sav) du fichier de config avant sauvegarde" />
+  <log time="11/11/2011 11:52:52" type="1" source="1" fonction="SaveConfig" message="Sauvegarde des param&amp;#232;tres du client WPF" />
+  <log time="11/11/2011 11:52:52" type="1" source="1" fonction="SaveConfig" message="Sauvegarde termin&amp;#233;e" />
+  <log time="11/11/2011 11:52:52" type="1" source="7" fonction="Client" message="Fermture de l&amp;#39;application" />
+  <log time="11/11/2011 13:06:11" type="1" source="1" fonction="LoadConfig" message="Cr&amp;#233;ation du backup (.bak) du fichier de config avant chargement" />
+  <log time="11/11/2011 13:06:11" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: D:\Test_HoMIWpF\Config\homidomWPF.xml" />
+  <log time="11/11/2011 13:06:11" type="1" source="1" fonction="LoadConfig" message="Param&amp;#232;tres du client WPF charg&amp;#233;s" />
+  <log time="11/11/2011 13:06:12" type="1" source="1" fonction="LoadConfig" message="Param&amp;#232;tres du Serveur HomeSeer charg&amp;#233;s" />
+  <log time="11/11/2011 13:06:12" type="1" source="1" fonction="LoadConfig" message="Param&amp;#232;tres tactiles charg&amp;#233;s" />
+  <log time="11/11/2011 13:06:12" type="1" source="1" fonction="LoadConfig" message="Param&amp;#232;tres de l&amp;#39;interface charg&amp;#233;s" />
+  <log time="11/11/2011 13:06:12" type="1" source="1" fonction="LoadConfig" message="Menus charg&amp;#233;s" />
+  <log time="11/11/2011 13:06:12" type="1" source="1" fonction="LoadConfig" message="El&amp;#233;ments charg&amp;#233;s" />
+  <log time="11/11/2011 13:06:12" type="1" source="7" fonction="LOADCONFIG" message="Message:  Chargement de la configuration termin&amp;#233;e" />
+  <log time="11/11/2011 13:06:32" type="1" source="1" fonction="SaveConfig" message="Sauvegarde de la config sous le fichier D:\Test_HoMIWpF\config\homidomWPF.xml" />
+  <log time="11/11/2011 13:06:32" type="1" source="1" fonction="LoadConfig" message="Cr&amp;#233;ation de sauvegarde (.sav) du fichier de config avant sauvegarde" />
+  <log time="11/11/2011 13:06:32" type="1" source="1" fonction="SaveConfig" message="Sauvegarde des param&amp;#232;tres du client WPF" />
+  <log time="11/11/2011 13:06:32" type="1" source="1" fonction="SaveConfig" message="Sauvegarde termin&amp;#233;e" />
+  <log time="11/11/2011 13:06:32" type="1" source="7" fonction="Client" message="Fermture de l&amp;#39;application" />
+</logs>
