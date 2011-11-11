@@ -11,11 +11,11 @@ Imports System.Windows
 
 ' Vérifiez les valeurs des attributs de l'assembly
 
-<Assembly: AssemblyTitle("WpfApplication1")> 
+<Assembly: AssemblyTitle("HoMIWpF")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("AHALR")> 
-<Assembly: AssemblyProduct("WpfApplication1")> 
-<Assembly: AssemblyCopyright("Copyright @ AHALR 2010")> 
+<Assembly: AssemblyCompany("HOMIDOM")> 
+<Assembly: AssemblyProduct("HoMIWpF")> 
+<Assembly: AssemblyCopyright("Copyright @ HOMIDOM 2010")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: ComVisible(false)>
 
