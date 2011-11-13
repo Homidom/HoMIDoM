@@ -811,8 +811,15 @@ Namespace HoMIDom
                 End Try
             End Sub
 
-            Public Sub Play(ByVal Fichier As String)
-                touche("PlayAudio")
+            Public Sub Play(ByVal Param1 As String)
+                Try
+                    _Fichier = Param1
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "PlayAudio", _Fichier)
+                    Value = "PlayAudio"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "PlayAudio: " & ex.Message)
+                End Try
             End Sub
 
             Public Sub Pause()
