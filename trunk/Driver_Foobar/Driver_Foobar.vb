@@ -257,7 +257,7 @@ Imports System.Web.HttpUtility
                         End If
                     Case "BROWSE"
                         If Objet.adresse2 <> "" Then
-                            SendCommandhttp(Objet.Adresse2, "Browse&param1=" & HtmlEncode(Parametre1))
+                            SendCommandhttp(Objet.Adresse2, "Browse&param1=" & UrlPathEncode(Parametre1))
                         End If
                     Case "START"
                         'Start playback in active playlist.
@@ -273,7 +273,7 @@ Imports System.Web.HttpUtility
                             System.Threading.Thread.Sleep(3000)
                             ProcId = Shell(Objet.Adresse1 & " /play", AppWinStyle.Hide)
                         Else
-                            SendCommandhttp(Objet.Adresse2, "Browse&param1=" & HtmlEncode(Parametre1))
+                            SendCommandhttp(Objet.Adresse2, "Browse&param1=" & UrlPathEncode(Parametre1))
                             SendCommandhttp(Objet.Adresse2, "PlayOrPause")
                         End If
                         Objet.Value = "PLAY"
@@ -546,7 +546,8 @@ Imports System.Web.HttpUtility
             Dim response As WebResponse = request.GetResponse()
             Dim reader As StreamReader = New StreamReader(response.GetResponseStream())
             Dim str As String = reader.ReadToEnd
-            _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DRIVER, "Foobar SendCommandhttp", "Command: " & Command & " Return:" & str)
+            If Len(str) > 255 Then str = Mid(str, 1, 255)
+            _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DRIVER, "Foobar SendCommandhttp", "Command: " & send & " Return:" & str)
             reader.Close()
         Catch ex As Exception
             _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "Foobar SendCommandhttp", "Erreur lors de l'envoi de la commande: " & send & " - " & ex.ToString)
