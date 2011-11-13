@@ -38,7 +38,7 @@ Public Class Driver_onewire
 #End Region
 
 #Region "Variables Internes"
-    Private wir_adapter As com.dalsemi.onewire.adapter.DSPortAdapter
+    Dim wir_adapter As com.dalsemi.onewire.adapter.DSPortAdapter
     Public adapter_present = 0 '=1 si adapteur présent sinon =0
 #End Region
 
@@ -196,25 +196,25 @@ Public Class Driver_onewire
         'Initialisation de la cle USB 1-WIRE
                 'adapteurname = {DS9490B}
                 'port = USB1
-                Dim retour As String
                 Try
-                    If (_Modele = "") Then
+                    If (_Modele = "" Or _Modele = " ") And (_Com = "" Or _Com = " ") Then
                         wir_adapter = dalsemi.onewire.OneWireAccessProvider.getDefaultAdapter
                     Else
                         wir_adapter = dalsemi.onewire.OneWireAccessProvider.getAdapter(_Modele, _Com)
                     End If
                     adapter_present = 1
-                    retour = "Adapter " & wir_adapter.getAdapterName & " " & wir_adapter.getPortName
+                    _IsConnect = True
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "1-Wire Start", "Adapter " & wir_adapter.getAdapterName & " " & wir_adapter.getPortName)
                 Catch ex As Exception
                     adapter_present = 0
-                    retour = "ERR: Initialisation : " & ex.ToString
+                    _IsConnect = False
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "1-Wire Start", "ERR: Initialisation : " & ex.ToString)
                 End Try
-                _IsConnect = True
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "1-Wire Start", "Port " & _Com & " ouvert")
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire Start", "Driver déjà connecté")
             End If
         Catch ex As Exception
+            _IsConnect = False
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire Start", ex.Message)
         End Try
     End Sub
@@ -357,7 +357,7 @@ Public Class Driver_onewire
         Dim tc As com.dalsemi.onewire.container.TemperatureContainer
         Dim owd As com.dalsemi.onewire.container.OneWireContainer
 
-        If adapter_present Then
+        If _IsConnect = True Then
             'demande l'acces exclusif au reseau
             Try
                 wir_adapter.beginExclusive(False)
