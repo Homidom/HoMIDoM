@@ -29,11 +29,11 @@ Imports System.Globalization
     Dim _IsConnect As Boolean = False
     Dim _IP_TCP As String = ""
     Dim _Port_TCP As String = "10001"
-    Dim _IP_UDP As String = ""
-    Dim _Port_UDP As String = ""
+    Dim _IP_UDP As String = "@"
+    Dim _Port_UDP As String = "@"
     Dim _Com As String = ""
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = "RFXCom"
+    Dim _Modele As String = ""
     Dim _Version As String = "1.0"
     Dim _Picture As String = "rfxcom.png"
     Dim _Server As HoMIDom.HoMIDom.Server
@@ -670,7 +670,7 @@ Imports System.Globalization
     ''' <summary>Rassemble un message complet pour ensuite l'envoyer à displaymess</summary>
     ''' <param name="temp">Byte recu</param>
     ''' <remarks></remarks>
-    Public Sub ProcessReceivedChar(ByVal temp As Byte)
+    Private Sub ProcessReceivedChar(ByVal temp As Byte)
         Try
             'Dim temp As Byte
 
@@ -728,7 +728,7 @@ Imports System.Globalization
 
     ''' <summary>Decode le message pour l'envoyer aux bonnes fonctions de traitement</summary>
     ''' <remarks></remarks>
-    Public Sub display_mess()
+    Private Sub display_mess()
         Try
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte cette boucle
             'interprete le message recu
@@ -2413,7 +2413,7 @@ Imports System.Globalization
 
 #Region "Fonctions"
 
-    Function createhsaddr() As Integer
+    Private Function createhsaddr() As Integer
         Try
             Dim hsaddr As Integer = 0
             If (recbuf(0) And &H1) <> 0 Then hsaddr = hsaddr Or &H80
@@ -2439,7 +2439,7 @@ Imports System.Globalization
         End Try
     End Function
 
-    Public Function wrdirection(ByVal direction As Integer) As String
+    Private Function wrdirection(ByVal direction As Integer) As String
         Try
             If direction > 348.75 Or direction < 11.26 Then
                 Return "N"
@@ -2480,7 +2480,7 @@ Imports System.Globalization
         End Try
     End Function
 
-    Public Function wrspeed(ByVal speed As Single) As String
+    Private Function wrspeed(ByVal speed As Single) As String
         Try
             'WriteMessage(" speed " & CStr(speed) & " m/sec", False)
             If speed < 0.2 Then
@@ -2517,7 +2517,7 @@ Imports System.Globalization
         End Try
     End Function
 
-    Function wrbattery() As String
+    Private Function wrbattery() As String
         Try
             Select Case (recbuf(4) And &HF)
                 Case 0 : Return "battery 100%"
@@ -2538,7 +2538,7 @@ Imports System.Globalization
         End Try
     End Function
 
-    Function wrchannel() As Byte
+    Private Function wrchannel() As Byte
         Try
             Select Case (recbuf(2) And &H70)
                 Case &H10
@@ -2560,7 +2560,7 @@ Imports System.Globalization
         End Try
     End Function
 
-    Function wrchannel3() As Byte
+    Private Function wrchannel3() As Byte
         Try
             'WriteMessage(" CH " & (recbuf(2) >> 4), False)
             wrchannel3 = (recbuf(2) >> 4)
@@ -2570,7 +2570,7 @@ Imports System.Globalization
         End Try
     End Function
 
-    Function wrforecast(ByVal forecast As Byte) As String
+    Private Function wrforecast(ByVal forecast As Byte) As String
         Try
             Select Case forecast
                 Case &HC : Return "Sunny"
@@ -2585,7 +2585,7 @@ Imports System.Globalization
         End Try
     End Function
 
-    Function wrhum(ByVal hum As Byte) As String
+    Private Function wrhum(ByVal hum As Byte) As String
         Try
             Select Case hum
                 Case &H0 : Return "Normal"
@@ -2600,7 +2600,7 @@ Imports System.Globalization
         End Try
     End Function
 
-    Function cs8() As Byte
+    Private Function cs8() As Byte
         Try
             Dim cs As Byte
 
@@ -2619,7 +2619,7 @@ Imports System.Globalization
         End Try
     End Function
 
-    Sub checksume()
+    Private Sub checksume()
         Try
             Dim cs As Short
             cs = (recbuf(0) >> 4 And &HF) + (recbuf(0) And &HF)
@@ -2638,7 +2638,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Sub checksum7()
+    Private Sub checksum7()
         Try
             Dim cs As Short
             cs = (recbuf(0) >> 4 And &HF) + (recbuf(0) And &HF)
@@ -2657,7 +2657,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Sub checksum8()
+    Private Sub checksum8()
         Try
             Dim cs As Short
             cs = cs8()
@@ -2670,7 +2670,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Sub checksum2()
+    Private Sub checksum2()
         Try
             Dim cs As Short
             cs = cs8()
@@ -2684,7 +2684,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Sub checksum9()
+    Private Sub checksum9()
         Try
             Dim cs As Short
             cs = cs8()
@@ -2698,7 +2698,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Sub checksum10()
+    Private Sub checksum10()
         Try
             Dim cs As Short
             cs = cs8()
@@ -2713,7 +2713,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Sub checksum11()
+    Private Sub checksum11()
         Try
             Dim cs As Short
             cs = cs8()
@@ -2729,7 +2729,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Function checksumw() As Byte
+    Private Function checksumw() As Byte
         Try
             Dim cs As Short
 
@@ -2751,7 +2751,7 @@ Imports System.Globalization
         End Try
     End Function
 
-    Function checksumr() As Byte
+    Private Function checksumr() As Byte
         Try
             Dim cs As Short
 
@@ -2773,7 +2773,7 @@ Imports System.Globalization
 
 #Region "Write"
 
-    Public Sub WriteLog(ByVal message As String)
+    Private Sub WriteLog(ByVal message As String)
         Try
             'utilise la fonction de base pour loguer un event
             If STRGS.InStr(message, "DBG:") > 0 Then
@@ -2788,7 +2788,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Public Sub WriteBattery(ByVal adresse As String)
+    Private Sub WriteBattery(ByVal adresse As String)
         Try
             'Dim tabletmp() As DataRow
 
@@ -2816,7 +2816,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Public Sub WriteRetour(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
+    Private Sub WriteRetour(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
         Try
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
 

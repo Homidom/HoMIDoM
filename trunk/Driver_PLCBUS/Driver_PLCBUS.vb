@@ -23,13 +23,13 @@ Imports System.IO.Ports
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "COM"
     Dim _IsConnect As Boolean = False
-    Dim _IP_TCP As String = ""
-    Dim _Port_TCP As String = ""
-    Dim _IP_UDP As String = ""
-    Dim _Port_UDP As String = ""
+    Dim _IP_TCP As String = "@"
+    Dim _Port_TCP As String = "@"
+    Dim _IP_UDP As String = "@"
+    Dim _Port_UDP As String = "@"
     Dim _Com As String = ""
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = "PLCBUS"
+    Dim _Modele As String = "1141"
     Dim _Version As String = "1.1"
     Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
