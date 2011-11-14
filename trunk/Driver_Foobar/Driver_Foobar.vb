@@ -192,7 +192,9 @@ Imports System.Web.HttpUtility
         Try
             For i As Integer = 0 To _Server.Devices.Count - 1
                 If _Server.Devices.Item(i).Type = "AUDIO" And _Server.Devices.Item(i).Adresse1 <> "" Then
-                    Dim ProcId As Object = Shell(_Server.Devices.Item(i).Adresse1 & " /hide", AppWinStyle.Hide)
+                    If File.Exists(_Server.Devices.Item(i).Adresse1) Then
+                        Dim ProcId As Object = Shell(_Server.Devices.Item(i).Adresse1 & " /hide", AppWinStyle.Hide)
+                    End If
                 End If
             Next
             _IsConnect = True
@@ -266,14 +268,13 @@ Imports System.Web.HttpUtility
                             SendCommandhttp(Objet.Adresse2, "start&param1=" & Parametre1)
                         End If
                     Case "PLAYAUDIO"
-                        If Objet.Fichier = "" Then Exit Sub
                         If Objet.adresse2 = "" Then
+                            If Objet.Fichier = "" Then Exit Sub
                             Dim ProcId As Object
                             ProcId = Shell(Objet.Adresse1 & " /add " & Objet.Fichier, AppWinStyle.Hide)
                             System.Threading.Thread.Sleep(3000)
                             ProcId = Shell(Objet.Adresse1 & " /play", AppWinStyle.Hide)
                         Else
-                            SendCommandhttp(Objet.Adresse2, "Browse&param1=" & UrlPathEncode(Parametre1))
                             SendCommandhttp(Objet.Adresse2, "PlayOrPause")
                         End If
                         Objet.Value = "PLAY"
@@ -518,10 +519,10 @@ Imports System.Web.HttpUtility
             _DeviceSupport.Add(ListeDevices.AUDIO)
 
             'Parametres avancés
-            Dim x As New HoMIDom.HoMIDom.Driver.Parametre
-            x.Nom = "test"
-            x.Description = "Description"
-            _Parametres.Add(x)
+            'Dim x As New HoMIDom.HoMIDom.Driver.Parametre
+            'x.Nom = "test"
+            'x.Description = "Description"
+            '_Parametres.Add(x)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "FOOBAR New", ex.Message)
         End Try

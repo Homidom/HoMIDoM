@@ -413,7 +413,7 @@ Namespace HoMIDom
                                         Dim a As String = UCase(list.Item(j).Attributes.Item(i).Name)
                                         If a.StartsWith("PARAMETRE") Then
                                             Dim idx As Integer = Mid(a, 10, Len(a) - 9)
-                                            _drv.Parametres.Item(idx).valeur = list.Item(j).Attributes.Item(i).Value
+                                            If _drv.Parametres.Count > 0 Then _drv.Parametres.Item(idx).valeur = list.Item(j).Attributes.Item(i).Value
                                         End If
                                         a = Nothing
                                     Next
@@ -5067,6 +5067,7 @@ Namespace HoMIDom
                         Select Case Action.Parametres.Count
                             Case 1
                                 _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value)
+                                Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand effectué: " & x.Name & " Command: " & Action.Nom & " Parametre: " & Action.Parametres.Item(0).Value)
                             Case 2
                                 _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value)
                             Case 3
@@ -5078,9 +5079,9 @@ Namespace HoMIDom
                         End Select
                     Else
                         CallByName(x, Action.Nom, CallType.Method)
+                        Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand effectué: " & x.Name & " Command: " & Action.Nom)
                     End If
 
-                    Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand effectué: " & x.Name & " Command: " & Action.Nom)
                 End If
             Catch ex As Exception
                 Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "Erreur lors du traitemant du Sub ExecuteDeviceCommand: " & ex.Message)

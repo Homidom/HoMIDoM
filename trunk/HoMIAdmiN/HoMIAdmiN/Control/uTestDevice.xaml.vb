@@ -76,6 +76,9 @@ Partial Public Class uTestDevice
     End Sub
 
     Private Sub CbCmd_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbCmd.MouseLeave
+        If CbCmd.Text = "" Then Exit Sub
+        If CbCmd.SelectedIndex < 0 Then Exit Sub
+
         LblP1.Visibility = Windows.Visibility.Hidden
         LblP2.Visibility = Windows.Visibility.Hidden
         LblP3.Visibility = Windows.Visibility.Hidden
@@ -91,9 +94,6 @@ Partial Public Class uTestDevice
         TxtP3.Visibility = Windows.Visibility.Hidden
         TxtP4.Visibility = Windows.Visibility.Hidden
         TxtP5.Visibility = Windows.Visibility.Hidden
-
-        If CbCmd.Text = "" Then Exit Sub
-        If CbCmd.SelectedIndex < 0 Then Exit Sub
 
         Dim Idx As Integer = CbCmd.SelectedIndex
         For j As Integer = 0 To _Device.DeviceAction.Item(Idx).Parametres.Count - 1
