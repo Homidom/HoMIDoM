@@ -797,8 +797,15 @@ Namespace HoMIDom
                 touche("EmptyPlayList")
             End Sub
 
-            Public Sub Browse(ByVal Fichier As String)
-                touche("Browse")
+            Public Sub Browse(ByVal Param1 As String)
+                Try
+                    _Fichier = Param1
+                    If _Enable = False Then Exit Sub
+                    Driver.Write(Me, "Browse", _Fichier)
+                    Value = "Browse"
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, "PlayAudio: " & ex.Message)
+                End Try
             End Sub
 
             Public Sub Start(ByVal Item As Integer)
@@ -811,7 +818,7 @@ Namespace HoMIDom
                 End Try
             End Sub
 
-            Public Sub Play(ByVal Param1 As String)
+            Public Sub Play(Optional ByVal Param1 As String = "")
                 Try
                     _Fichier = Param1
                     If _Enable = False Then Exit Sub

@@ -462,11 +462,10 @@ Public Class Driver_x10
 
                 Select Case BufferIn(0)
                     Case INTERFACE_CQ
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Un Device a envoyé un ordre")
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Un Device a envoyé un ordre, " & count & " bytes recus")
 
                         'L'interface demande au pc de lui envoyer des données et on doit répondre 
                         port.Write(COMPUTER_READY)
-                        System.Threading.Thread.Sleep(200)
 
                         '' Attend le reste des données
                         Dim Time_Out As Integer = 0
@@ -518,6 +517,11 @@ Public Class Driver_x10
             'Wake-up and data recieved
 
             Dim trame() As Byte = Data
+
+            Do While CInt(trame(0)) = 90
+                trame = trame.Skip(1)
+            Loop
+
             BufSize = CInt(trame(0)) 'récupère la taille de la trame qui ne peu faire que 10 octets maxi
 
             'Byte   Function
@@ -620,7 +624,6 @@ Public Class Driver_x10
             End Try
         End If
     End Sub
-
 
     Public Function ecrire(ByVal adresse As String, ByVal commande As String, ByVal data As Integer) As String
         'adresse= adresse du composant : A1
