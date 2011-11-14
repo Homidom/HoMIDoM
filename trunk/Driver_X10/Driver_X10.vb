@@ -1,9 +1,6 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
-Imports STRGS = Microsoft.VisualBasic.Strings
-Imports VB = Microsoft.VisualBasic
-Imports Microsoft.VisualBasic.Strings
 Imports System.IO.Ports
 Imports System.Math
 Imports System.Net.Sockets
@@ -515,10 +512,10 @@ Public Class Driver_x10
             Dim FlagOk As Boolean = False
 
             'Wake-up and data recieved
-
             Dim trame() As Byte = Data
 
-            Do While CInt(trame(0)) = 90
+            'On enlève les INTERFACE_CQ si on en a reçu plusieurs 
+            Do While CInt(trame(0)) = 90 And trame.Length > 1
                 trame = trame.Skip(1)
             Loop
 
