@@ -244,10 +244,13 @@ Imports System.Globalization
             Return _IsConnect
         End Get
     End Property
-    Public ReadOnly Property Modele() As String Implements HoMIDom.HoMIDom.IDriver.Modele
+    Public Property Modele() As String Implements HoMIDom.HoMIDom.IDriver.Modele
         Get
             Return _Modele
         End Get
+        Set(ByVal value As String)
+            _Modele = value
+        End Set
     End Property
     Public ReadOnly Property Nom() As String Implements HoMIDom.HoMIDom.IDriver.Nom
         Get

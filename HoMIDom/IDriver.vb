@@ -27,7 +27,7 @@
         Property Port_UDP() As String
         Property COM() As String
         Property Refresh() As Integer
-        ReadOnly Property Modele() As String
+        Property Modele() As String
         ReadOnly Property Version() As String
         Property Picture() As String
         ReadOnly Property DeviceSupport() As ArrayList

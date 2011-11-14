@@ -116,10 +116,13 @@ Public Class Driver_onewire
             Return _IsConnect
         End Get
     End Property
-    Public ReadOnly Property Modele() As String Implements HoMIDom.HoMIDom.IDriver.Modele
+    Public Property Modele() As String Implements HoMIDom.HoMIDom.IDriver.Modele
         Get
             Return _Modele
         End Get
+        Set(ByVal value As String)
+            _Modele = value
+        End Set
     End Property
     Public ReadOnly Property Nom() As String Implements HoMIDom.HoMIDom.IDriver.Nom
         Get
@@ -194,8 +197,8 @@ Public Class Driver_onewire
         Try
             If Not _IsConnect Then
         'Initialisation de la cle USB 1-WIRE
-                'adapteurname = {DS9490B}
-                'port = USB1
+                '_Modele = "{DS9490B}"
+                ' _Com = "USB2"
                 Try
                     If (_Modele = "" Or _Modele = " ") And (_Com = "" Or _Com = " ") Then
                         wir_adapter = dalsemi.onewire.OneWireAccessProvider.getDefaultAdapter
@@ -208,7 +211,8 @@ Public Class Driver_onewire
                 Catch ex As Exception
                     adapter_present = 0
                     _IsConnect = False
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "1-Wire Start", "ERR: Initialisation : " & ex.ToString)
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "1-Wire Start", "ERR: Initialisation : " & ex.ToString & " - " & _Modele & " - " & _Com)
+
                 End Try
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire Start", "Driver déjà connecté")
