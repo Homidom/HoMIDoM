@@ -457,7 +457,7 @@ Public Class Driver_x10
             'Nombre d'octet à lire
             Dim count As Integer = port.BytesToRead
 
-            If count > 0 And port_ouvert Then
+            If count > 0 And _IsConnect Then
                 port.Read(BufferIn, 0, count)
 
                 Select Case BufferIn(0)
