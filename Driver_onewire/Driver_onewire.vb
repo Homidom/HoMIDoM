@@ -16,17 +16,17 @@ Public Class Driver_onewire
     Dim _ID As String = "6DAA2DE2-0545-11E1-B580-3CCD4824019B"
     Dim _Nom As String = "1-Wire"
     Dim _Enable As String = False
-    Dim _Description As String = "Adaptateur 1-wire"
+    Dim _Description As String = "Adaptateur 1-wire USB / COM"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "COM"
     Dim _IsConnect As Boolean = False
-    Dim _IP_TCP As String = ""
-    Dim _Port_TCP As String = ""
-    Dim _IP_UDP As String = ""
-    Dim _Port_UDP As String = ""
-    Dim _Com As String = ""
+    Dim _IP_TCP As String = "@"
+    Dim _Port_TCP As String = "@"
+    Dim _IP_UDP As String = "@"
+    Dim _Port_UDP As String = "@"
+    Dim _Com As String = "USB1"
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = ""
+    Dim _Modele As String = "{DS9490}"
     Dim _Version As String = "1.0"
     Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
