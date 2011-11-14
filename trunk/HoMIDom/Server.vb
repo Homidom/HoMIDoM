@@ -407,6 +407,7 @@ Namespace HoMIDom
                                     _drv.Port_UDP = list.Item(j).Attributes.GetNamedItem("portudp").Value
                                     _drv.COM = list.Item(j).Attributes.GetNamedItem("com").Value
                                     _drv.Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
+                                    _drv.Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
                                     _drv.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
 
                                     For i As Integer = 0 To list.Item(j).Attributes.Count - 1
@@ -1850,6 +1851,8 @@ Namespace HoMIDom
                             Case "PICTURE"
                                 _ListDrivers.Item(i).Picture = Parametre
                             Case "REFRESH"
+                                _ListDrivers.Item(i).Refresh = Parametre
+                            Case "MODELE"
                                 _ListDrivers.Item(i).Refresh = Parametre
                             Case "STARTAUTO"
                                 _ListDrivers.Item(i).StartAuto = Parametre

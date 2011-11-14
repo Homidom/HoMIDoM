@@ -80,10 +80,13 @@
             End Get
         End Property
 
-        Public ReadOnly Property Modele() As String
+        Public Property Modele() As String
             Get
                 Return _Server.ReturnDriver(_ID).Item(12)
             End Get
+            Set(ByVal value As String)
+                _Server.WriteDriver(_ID, "MODELE", value)
+            End Set
         End Property
 
         Public ReadOnly Property Nom() As String
