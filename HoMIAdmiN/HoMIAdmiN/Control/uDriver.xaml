@@ -138,7 +138,7 @@
                 <Rectangle Width="10" />
                 <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="Black" Name="TxtVersion" Width="49" HorizontalAlignment="Left" IsEnabled="False">0</TextBox>
                 <Rectangle Width="10" />
-                <TextBox Height="22" Background="DarkGray" Width="100 " BorderBrush="Black" Foreground="Black" Name="TxtModele" IsEnabled="False" />
+                <TextBox Height="22" Background="DarkGray" Width="100 " BorderBrush="Black" Foreground="White" Name="TxtModele" />
             </StackPanel>
             <Rectangle Height="10" />
             <StackPanel Orientation="Horizontal" >
