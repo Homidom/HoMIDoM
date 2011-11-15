@@ -42,7 +42,7 @@ Imports System.IO.Ports
     'Ajoutés dans les ppt avancés dans New()
     Dim plcack As Boolean = True 'gestion des acks ?
     Dim plctriphase As Boolean = False 'installation en triphase
-    Dim plcmodele As String = "1141" '"1141" ou "1141+" si modele 1141+, utilise le checksum plutot que H3 en fin de paquet
+    'Dim plcmodele As String = "1141" '"1141" ou "1141+" si modele 1141+, utilise le checksum plutot que H3 en fin de paquet
 #End Region
 
 #Region "Variables internes"
@@ -214,7 +214,6 @@ Imports System.IO.Ports
         Try
             plcack = _Parametres.Item(0).Valeur
             plctriphase = _Parametres.Item(1).Valeur
-            plcmodele = _Parametres.Item(2).Valeur
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
         End Try
@@ -332,11 +331,6 @@ Imports System.IO.Ports
             x.Nom = "triphase"
             x.Description = "Installation en triphase"
             x.Valeur = False
-            _Parametres.Add(x)
-            x = New HoMIDom.HoMIDom.Driver.Parametre
-            x.Nom = "modele"
-            x.Description = "Modele de l'interface : 1141 ou 1141+"
-            x.Valeur = "1141"
             _Parametres.Add(x)
 
             'Liste des devices compatibles
@@ -610,7 +604,7 @@ Imports System.IO.Ports
                     data2 = 0
                 End If
 
-                If plcmodele = "1141+" Then
+                If _Modele = "1141+" Then
                     'pour les modeles 1141+
                     checksum = &H200 - (&H2 + &H5 + usercode + _adresse + _cmd + data1 + data2)
                 Else
