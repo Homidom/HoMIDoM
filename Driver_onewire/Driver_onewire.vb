@@ -258,17 +258,41 @@ Public Class Driver_onewire
             If Objet IsNot Nothing Then
                 Select Case Objet.Type
                     Case "TEMPERATURE"
-                        Dim retour As Integer = temp_get_save(Objet.Adresse1)
+                        Dim retour As Double = temp_get_save(Objet.Adresse1)
                         If retour <> 9999 Then Objet.Value = retour
                     Case "SWITCH"
-                        Dim retour As Integer = switch_get(Objet.Adresse1)
-                        If retour <> 9999 Then
-                            If retour = 1 Then
-                                Objet.Value = True
+                        If Objet.Adresse2 = "" Then
+                            'c'est un simple switch
+                            Dim retour As Integer = switch_get(Objet.Adresse1)
+                            If retour <> 9999 Then
+                                If retour = 1 Then
+                                    Objet.Value = True
+                                Else
+                                    Objet.Value = False
+                                End If
+                            End If
+                        Else
+                            If IsNumeric(Objet.Adresse2) Then
+                                'l'adresse2 est renseigné et représente le numero du switch à interroger
+                                Dim retour As New ArrayList
+                                retour = switchs_get(Objet.Adresse1)
+                                If Not (retour Is Nothing) Then
+                                    'on a bien un resultat, on verifie si notre numero de switch est renvoyé
+                                    If CInt(Objet.Adresse2) <= retour.Count Then
+                                        If retour(CInt(Objet.Adresse2)) = 1 Then
+                                            Objet.Value = True
+                                        Else
+                                            Objet.Value = False
+                                        End If
+                                    Else
+                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire Read", "Le multi-switch " & Objet.Name & " n a pas de switch numero " & Objet.Adresse2)
+                                    End If
+                                End If
                             Else
-                                Objet.Value = False
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire Read", "Le multi-switch " & Objet.Name & " a une adresse2 incorrecte : " & Objet.Adresse2)
                             End If
                         End If
+
                     Case "CONTACT"
                         Dim retour As Integer = switch_get(Objet.Adresse1)
                         If retour <> 9999 Then
@@ -294,12 +318,7 @@ Public Class Driver_onewire
                         End If
                     Case "COMPTEUR"
                         Dim flag As Boolean = True
-                        If Objet.Adresse2 <> "" Then
-                            If Objet.Adresse2 = 2 Then
-                                flag = False
-                            End If
-                        End If
-
+                        If Objet.Adresse2 = "B" Then flag = False 'on interroge le deuxieme compteur
                         Dim retour As String = counter(Objet.Adresse1, flag)
                         If retour <> 9999 Then
                             Objet.Value = retour
@@ -323,8 +342,15 @@ Public Class Driver_onewire
             If _IsConnect = False Then Exit Sub
             Select Case UCase(Command)
                 Case "ON"
-
+                    If Objet.Type = "SWITCH" Then
+                        Dim retour As Integer = switch_setstate(Objet.Adresse1, True)
+                        If retour = 1 Then Objet.value = True
+                    End If
                 Case "OFF"
+                    If Objet.Type = "SWITCH" Then
+                        Dim retour As Integer = switch_setstate(Objet.Adresse1, False)
+                        If retour = 0 Then Objet.value = False
+                    End If
                 Case "DIM"
                 Case "OUVERTURE"
             End Select
@@ -361,14 +387,29 @@ Public Class Driver_onewire
 
     End Sub
 
+    Public Sub New()
+        Try
+            'liste des devices compatibles
+            _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
+            _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
+            _DeviceSupport.Add(ListeDevices.DETECTEUR.ToString)
+            _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
+            _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
+            _DeviceSupport.Add(ListeDevices.COMPTEUR.ToString)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire New", ex.Message)
+        End Try
+    End Sub
 #End Region
 
 #Region "Fonctions propres au driver"
-    Public Function temp_get_save(ByVal adresse As String) As String
+
+    Private Function temp_get_save(ByVal adresse As String) As Double
 
         ' Renvoi la temperature du capteur X
         Dim resolution As Double = 0.1 'resolution de la temperature : 0.1 ou 0.5
-        Dim retour As String = ""
+        Dim retour As Double = 9999
         Dim state As Object
         Dim tc As com.dalsemi.onewire.container.TemperatureContainer
         Dim owd As com.dalsemi.onewire.container.OneWireContainer
@@ -408,7 +449,7 @@ Public Class Driver_onewire
         Return retour
     End Function
 
-    Public Function temp_get(ByVal adresse As String, ByVal resolution As Double) As String
+    Private Function temp_get(ByVal adresse As String, ByVal resolution As Double) As String
         ' Renvoi la temperature du capteur X
         'resolution = Domos.WIR_res --> resolution de la temperature : 0.1 ou 0.5
         Dim retour As String = ""
@@ -447,9 +488,9 @@ Public Class Driver_onewire
         Return retour
     End Function
 
-    Public Function switchs_get(ByVal adresse As String) As String
-        ' Récupere l'etat et activité d'un multiswitch
-        Dim retour As String = ""
+    Private Function switchs_get(ByVal adresse As String) As ArrayList
+        ' Renvoie l'etat d'un multiswitch sous forme d'un tableau : 0=fermé, 1=ouvert, 2=fermé mais ouvert entre temps
+        Dim retour As New ArrayList
         Dim state As Object
         Dim owd As com.dalsemi.onewire.container.OneWireContainer
         Dim tc As com.dalsemi.onewire.container.SwitchContainer
@@ -466,24 +507,31 @@ Public Class Driver_onewire
                     For i = 0 To (number_of_switches - 1)
                         switch_state = tc.getLatchState(i, state) 'recup l'etat du switch
                         switch_activity = tc.getSensedActivity(i, state) 'recup l'activité du switch
-                        If i <> 0 Then retour = retour & "-"
-                        If switch_state Then retour = retour & "1" Else retour = retour & "0"
-                        If switch_activity Then retour = retour & "1" Else retour = retour & "0"
+                        If switch_state Then
+                            retour.Add("1")
+                        Else
+                            If switch_activity Then retour.Add("2") Else retour.Add("0")
+                        End If
                     Next
+                    tc.clearActivity()
+                    tc.readDevice()
                     wir_adapter.endExclusive()
                 Else
-                    retour = "ERR: switchs_get : Capteur non présent"
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switchs_get", "Capteur à l'adresse " & adresse & " Non présent")
+                    Return Nothing
                 End If
             Else
-                retour = "ERR: switchs_get : Adaptateur non présent"
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switchs_get", "Adaptateur non présent")
+                Return Nothing
             End If
         Catch ex As Exception
-            retour = "ERR: switchs_get : " & ex.ToString
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switchs_get", "Erreur: " & ex.ToString)
+            Return Nothing
         End Try
         Return retour
     End Function
 
-    Public Function switch_switchstate(ByVal adresse As String) As String
+    Private Function switch_switchstate(ByVal adresse As String) As String
         ' Change l'etat d'un switch et renvoi le nouveau etat (ex :0 ==> Off)
         Dim retour As String = ""
         Dim state As Object
@@ -514,7 +562,7 @@ Public Class Driver_onewire
         Return retour
     End Function
 
-    Public Function switchs_switchstate(ByVal adresse As String, ByVal channel As Integer) As String
+    Private Function switchs_switchstate(ByVal adresse As String, ByVal channel As Integer) As String
         ' Change l'etat d'un switch
         Dim retour As String = ""
         Dim state As Object
@@ -551,9 +599,9 @@ Public Class Driver_onewire
         Return retour
     End Function
 
-    Public Function switch_get(ByVal adresse As String) As String
+    Private Function switch_get(ByVal adresse As String) As Integer
         ' Renvoie l'etat du switch 0=fermé, 1=ouvert, 2=fermé mais ouvert entre temps
-        Dim retour As String = ""
+        Dim retour As Integer = 9999
         Dim state As Object
         Dim owd As com.dalsemi.onewire.container.OneWireContainer12
         Dim tc As com.dalsemi.onewire.container.SwitchContainer
@@ -568,8 +616,11 @@ Public Class Driver_onewire
                     state = tc.readDevice()  'lit les infos du composant
                     switch_state = tc.getLatchState(0, state) 'recup l'etat du switch
                     switch_activity = tc.getSensedActivity(0, state) 'recup l'activité du switch
-                    If switch_state Then retour = "1" Else 
-                    If switch_activity Then retour = "2" Else retour = "0"
+                    If switch_state Then
+                        retour = "1"
+                    Else
+                        If switch_activity Then retour = "2" Else retour = "0"
+                    End If
                     tc.clearActivity()
                     tc.readDevice()
                     wir_adapter.endExclusive() 'rend l'accés au reseau
@@ -588,7 +639,7 @@ Public Class Driver_onewire
         Return retour
     End Function
 
-    Public Function switch_setstate(ByVal adresse As String, ByVal etat As Boolean) As String
+    Private Function switch_setstate(ByVal adresse As String, ByVal etat As Boolean) As String
         ' Change l'etat d'un switch et renvoi le nouvel etat
         Dim retour As String = ""
         Dim state As Object
@@ -608,18 +659,21 @@ Public Class Driver_onewire
                     tc.writeDevice(state)
                     wir_adapter.endExclusive()
                 Else
-                    retour = "ERR: switch_setstate : Capteur non présent"
+                    retour = 9999
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_set", "Capteur à l'adresse " & adresse & " Non présent")
                 End If
             Else
-                retour = "ERR: switch_setstate : Adaptateur non présent"
+                retour = 9999
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_set", "Adaptateur non présent")
             End If
         Catch ex As Exception
-            retour = "ERR: switch_setstate : " & ex.ToString
+            retour = 9999
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_set", "Erreur: " & ex.ToString)
         End Try
         Return retour
     End Function
 
-    Public Function switchs_setstate(ByVal adresse As String, ByVal channel As Integer, ByVal etat As Boolean) As String
+    Private Function switchs_setstate(ByVal adresse As String, ByVal channel As Integer, ByVal etat As Boolean) As String
         ' Change l'etat du channel x du switch Y et renvoi le nouvel etat
         Dim retour As String = ""
         Dim state As Object
@@ -655,7 +709,7 @@ Public Class Driver_onewire
         Return retour
     End Function
 
-    Public Function switch_clearactivity(ByVal adresse As String) As String
+    Private Function switch_clearactivity(ByVal adresse As String) As String
         ' Récupere l'etat et activité d'un switch
         Dim retour As String = ""
         Dim state As Object
@@ -695,7 +749,7 @@ Public Class Driver_onewire
         Return retour
     End Function
 
-    Public Function counter(ByVal adresse As String, ByVal countera As Boolean) As String
+    Private Function counter(ByVal adresse As String, ByVal countera As Boolean) As String
         'recupere la valeur du compteur A (true) ou B (false)
         Dim CounterContainer As com.dalsemi.onewire.container.OneWireContainer1D
         Dim owd As com.dalsemi.onewire.container.OneWireContainer
@@ -732,22 +786,6 @@ Public Class Driver_onewire
     End Function
 
 #End Region
-
-    Public Sub New()
-        Try
-            'liste des devices compatibles
-            _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
-            _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
-            _DeviceSupport.Add(ListeDevices.DETECTEUR.ToString)
-            _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
-            _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
-            _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
-            _DeviceSupport.Add(ListeDevices.COMPTEUR.ToString)
-        Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire New", ex.Message)
-        End Try
-    End Sub
-
 
 End Class
 
