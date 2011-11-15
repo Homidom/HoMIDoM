@@ -2955,9 +2955,12 @@ Namespace HoMIDom
         ''' <param name="Message"></param>
         ''' <remarks></remarks>
         Public Sub MessageToServer(ByVal Message As String) Implements IHoMIDom.MessageToServer
-            'traiter le message
-
-
+             Try
+                'traiter le message
+                Log(TypeLog.MESSAGE, TypeSource.SERVEUR, "MessageToServer", "Message From client : " & Message)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "MessageToServer", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>Convert a file on a byte array.</summary>

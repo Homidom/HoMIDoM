@@ -523,12 +523,12 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value2 As Boolean)
                     Dim tmp As Boolean = value2
-                    If _Value <> tmp Then
-                        _LastChange = Now
-                        _ValueLast = _Value 'on garde l'ancienne value en memoire
-                        _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
-                        RaiseEvent DeviceChanged(Me, "Value", _Value)
-                    End If
+                    'If _Value <> tmp Then
+                    _LastChange = Now
+                    _ValueLast = _Value 'on garde l'ancienne value en memoire
+                    _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
+                    RaiseEvent DeviceChanged(Me, "Value", _Value)
+                    'End If
                 End Set
             End Property
 
@@ -1617,7 +1617,7 @@ Namespace HoMIDom
                     If _JourJ1 <> value Then
                         _JourJ1 = value
                         _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "JourJ1", value)
+                        'RaiseEvent DeviceChanged(Me, "JourJ1", value)
                     End If
                 End Set
             End Property
@@ -1630,7 +1630,7 @@ Namespace HoMIDom
                     If MinJ1 <> value Then
                         _MinJ1 = value
                         _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "MinJ1", value)
+                        'RaiseEvent DeviceChanged(Me, "MinJ1", value)
                     End If
                 End Set
             End Property
@@ -1643,7 +1643,7 @@ Namespace HoMIDom
                     If _MaxJ1 <> value Then
                         _MaxJ1 = value
                         _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "MaxJ1", value)
+                        'RaiseEvent DeviceChanged(Me, "MaxJ1", value)
                     End If
                 End Set
             End Property
@@ -1665,7 +1665,7 @@ Namespace HoMIDom
                     If _ConditionJ1 <> value Then
                         _ConditionJ1 = value
                         _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "ConditionJ1", value)
+                        ' RaiseEvent DeviceChanged(Me, "ConditionJ1", value)
                     End If
                 End Set
             End Property
@@ -1678,7 +1678,7 @@ Namespace HoMIDom
                     If _JourJ2 <> value Then
                         _JourJ2 = value
                         _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "JourJ2", value)
+                        'RaiseEvent DeviceChanged(Me, "JourJ2", value)
                     End If
                 End Set
             End Property
@@ -1691,7 +1691,7 @@ Namespace HoMIDom
                     If _MinJ2 <> value Then
                         _MinJ2 = value
                         _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "MinJ2", value)
+                        'RaiseEvent DeviceChanged(Me, "MinJ2", value)
                     End If
                 End Set
             End Property
@@ -1704,7 +1704,7 @@ Namespace HoMIDom
                     If _MaxJ2 <> value Then
                         _MaxJ2 = value
                         _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "MaxJ2", value)
+                        'RaiseEvent DeviceChanged(Me, "MaxJ2", value)
                     End If
                 End Set
             End Property
@@ -1726,7 +1726,7 @@ Namespace HoMIDom
                     If _ConditionJ2 <> value Then
                         _ConditionJ2 = value
                         _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "ConditionJ2", value)
+                        'RaiseEvent DeviceChanged(Me, "ConditionJ2", value)
                     End If
                 End Set
             End Property
@@ -1739,7 +1739,7 @@ Namespace HoMIDom
                     If _JourJ3 <> value Then
                         _JourJ3 = value
                         _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "JourJ3", value)
+                        'RaiseEvent DeviceChanged(Me, "JourJ3", value)
                     End If
                 End Set
             End Property
@@ -1752,7 +1752,7 @@ Namespace HoMIDom
                     If _MinJ3 <> value Then
                         _MinJ3 = value
                         _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "MinJ3", value)
+                        'RaiseEvent DeviceChanged(Me, "MinJ3", value)
                     End If
                 End Set
             End Property
@@ -1765,7 +1765,7 @@ Namespace HoMIDom
                     If _MaxJ3 <> value Then
                         _MaxJ3 = value
                         _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "MaxJ3", value)
+                        'RaiseEvent DeviceChanged(Me, "MaxJ3", value)
                     End If
                 End Set
             End Property
@@ -1787,7 +1787,7 @@ Namespace HoMIDom
                     If _ConditionJ3 <> value Then
                         _ConditionJ3 = value
                         _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "ConditionJ3", value)
+                        'RaiseEvent DeviceChanged(Me, "ConditionJ3", value)
                     End If
                 End Set
             End Property
