@@ -135,6 +135,7 @@ Imports System.IO.Ports
             Return _Modele
         End Get
         Set(ByVal value As String)
+            If (value <> "1141" And value <> "1141+") Then value = "1141" 'pour etre sur d'avoir un modéle correct
             _Modele = value
         End Set
     End Property
