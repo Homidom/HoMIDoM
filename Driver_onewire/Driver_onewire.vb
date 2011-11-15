@@ -292,6 +292,18 @@ Public Class Driver_onewire
                         If retour <> 9999 Then
                             Objet.Value = retour
                         End If
+                    Case "COMPTEUR"
+                        Dim flag As Boolean = True
+                        If Objet.Adresse2 <> "" Then
+                            If Objet.Adresse2 = 2 Then
+                                flag = False
+                            End If
+                        End If
+
+                        Dim retour As String = counter(Objet.Adresse1, flag)
+                        If retour <> 9999 Then
+                            Objet.Value = retour
+                        End If
                 End Select
             End If
         Catch ex As Exception
@@ -442,6 +454,7 @@ Public Class Driver_onewire
         Dim owd As com.dalsemi.onewire.container.OneWireContainer
         Dim tc As com.dalsemi.onewire.container.SwitchContainer
         Dim switch_activity, switch_state
+
         Try
             If adapter_present Then
                 If wir_adapter.isPresent(adresse) Then
@@ -478,7 +491,7 @@ Public Class Driver_onewire
         Dim tc As com.dalsemi.onewire.container.SwitchContainer
         Dim switch_state
         Try
-            If adapter_present Then
+            If _IsConnect Then
                 If wir_adapter.isPresent(adresse) Then
                     wir_adapter.beginExclusive(True)
                     owd = wir_adapter.getDeviceContainer(adresse)
@@ -545,8 +558,9 @@ Public Class Driver_onewire
         Dim owd As com.dalsemi.onewire.container.OneWireContainer12
         Dim tc As com.dalsemi.onewire.container.SwitchContainer
         Dim switch_state, switch_activity
+
         Try
-            If adapter_present Then
+            If _IsConnect Then
                 If wir_adapter.isPresent(adresse) Then
                     wir_adapter.beginExclusive(True) 'demande l'acces exclusif au reseau
                     owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
@@ -688,7 +702,7 @@ Public Class Driver_onewire
         Dim retour As String = ""
         Dim counterstate As Long
         Try
-            If adapter_present Then
+            If _IsConnect Then
                 wir_adapter.beginExclusive(True)
                 'owd = wir_adapter.getDeviceContainer(adresse)
                 'CounterContainer = New com.dalsemi.onewire.container.OneWireContainer1D(wir_adapter, adresse)
@@ -707,10 +721,12 @@ Public Class Driver_onewire
                 wir_adapter.endExclusive()
                 retour = counterstate.ToString
             Else
-                retour = "ERR: counter : Adaptateur non présent"
+                retour = 9999
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire counter", "ERR: counter : Adaptateur non présent")
             End If
         Catch ex As Exception
-            retour = "ERR: counter : " & ex.ToString
+            retour = 9999
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire counter", "ERR: counter : " & ex.ToString)
         End Try
         Return retour
     End Function
@@ -726,6 +742,7 @@ Public Class Driver_onewire
             _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
             _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
             _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
+            _DeviceSupport.Add(ListeDevices.COMPTEUR.ToString)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire New", ex.Message)
         End Try
