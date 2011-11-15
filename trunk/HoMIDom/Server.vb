@@ -414,7 +414,9 @@ Namespace HoMIDom
                                         Dim a As String = UCase(list.Item(j).Attributes.Item(i).Name)
                                         If a.StartsWith("PARAMETRE") Then
                                             Dim idx As Integer = Mid(a, 10, Len(a) - 9)
-                                            If _drv.Parametres.Count > 0 Then _drv.Parametres.Item(idx).valeur = list.Item(j).Attributes.Item(i).Value
+                                            If idx < _drv.Parametres.Count Then
+                                                _drv.Parametres.Item(idx).valeur = list.Item(j).Attributes.Item(i).Value
+                                            End If
                                         End If
                                         a = Nothing
                                     Next
