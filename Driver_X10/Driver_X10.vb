@@ -469,6 +469,7 @@ Public Class Driver_x10
 
                         '' Attend le reste des données
                         Dim Time_Out As Integer = 0
+
                         Do While Time_Out <= 20 And port.BytesToRead = 0
                             System.Threading.Thread.Sleep(500)
                             Time_Out += 1
@@ -481,6 +482,8 @@ Public Class Driver_x10
                             Exit Sub
                         End If
 
+                        count = port.BytesToRead
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Le serveur a repondu OK, CM11: " & count & " bytes recus")
                         port.Read(BufferIn, 0, count)
                         TraiteLire(BufferIn)
 
@@ -513,16 +516,17 @@ Public Class Driver_x10
             Dim Recieved_FAMask As String = ""
             Dim Recieved_Variation As Integer
             Dim FlagOk As Boolean = False
+            Dim start As Integer = 0
 
             'Wake-up and data recieved
             Dim trame() As Byte = Data
 
             'On enlève les INTERFACE_CQ si on en a reçu plusieurs 
-            Do While CInt(trame(0)) = 90 And trame.Length > 1
-                trame = trame.Skip(1)
+            Do While CInt(trame(start)) = 90 And start <= trame.Length
+                start += 1
             Loop
 
-            BufSize = CInt(trame(0)) 'récupère la taille de la trame qui ne peu faire que 10 octets maxi
+            BufSize = CInt(trame(start)) 'récupère la taille de la trame qui ne peu faire que 10 octets maxi
 
             'Byte   Function
             '0      Upload Buffer Size
@@ -540,21 +544,21 @@ Public Class Driver_x10
 
                 ' Le mask représente les octets 2 à 9 (bit0 pour octet2, bit1 pour octet3..,bit 8 pour octet9)
                 ' Si le bit est à 0 cela veut dire que l'octet correspondant est une Adresse et si le bit est à 1 c'est une fonction
-                Recieved_FAMask = Int2Bin(CInt(trame(1)))
+                Recieved_FAMask = Int2Bin(CInt(trame(start + 1)))
                 Recieved_FAMask = StrReverse(Recieved_FAMask)
 
                 For i = 2 To BufSize
-                    Recieved_HouseCode = GetHouse(Mid(trame(i), 1, 4))
+                    Recieved_HouseCode = GetHouse(Mid(trame(start + i), 1, 4))
 
-                    Select Case Mid(Recieved_FAMask, (i - 1), 1)
+                    Select Case Mid(Recieved_FAMask, (start + i - 1), 1)
                         Case "0" 'Le Mask est à 0 donc c'est une adresse
-                            Recieved_DeviceCode = GetDevice(Mid(trame(i), 5, 4))
+                            Recieved_DeviceCode = GetDevice(Mid(trame(start + i), 5, 4))
 
                         Case "1" 'Le Mask est à 1 donc c'est une fonction
-                            Recieved_Function = GetFunction(Mid(trame(i), 5, 4))
+                            Recieved_Function = GetFunction(Mid(trame(start + i), 5, 4))
                             If Recieved_Function = "5" Or Recieved_Function = "6" Then
                                 'C'est une fonction Dim ou Bright donc octet suivant c'est la valeur de variation
-                                Recieved_Variation = CInt(trame(i + 1))
+                                Recieved_Variation = CInt(trame(start + i + 1))
                                 i += 1
                             End If
                         Case Else 'C'est une erreur car ni adresse ni fonction
