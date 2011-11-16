@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Window1"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Height="700" MinWidth="1024" Icon="/HoMIAdmiN;component/Images/homidom_icone_moyen.png" Name="Window1" WindowStartupLocation="CenterScreen" Background="#FF312D2D" WindowState="Normal" WindowStyle="SingleBorderWindow">
+    MinHeight="700" MinWidth="1024" Icon="/HoMIAdmiN;component/Images/homidom_icone_moyen.png" Name="Window1" WindowStartupLocation="CenterScreen" Background="#FF312D2D" WindowState="Normal" WindowStyle="SingleBorderWindow">
     
     <Window.Resources>
         <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
@@ -176,7 +176,7 @@
     <DockPanel MinHeight="660" MinWidth="1002">
           
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top" >
-            <StackPanel Orientation="Horizontal" >
+            <!--<StackPanel Orientation="Horizontal" >
                 <Label HorizontalAlignment="Left" Name="Label1" Content="HoMIAdmiN" FontSize="18">
                     <Label.Foreground>
                         <LinearGradientBrush EndPoint="0.494,0.889" StartPoint="0.494,0.028">
@@ -187,7 +187,7 @@
                 </Label>
                                 
                 
-            </StackPanel>
+            </StackPanel>-->
                <Menu HorizontalAlignment="Left" Name="Menu1" Background="Transparent" Foreground="Black" FontSize="11">
                     <MenuItem Header="Fichier" Foreground="GhostWhite">
                     <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig" Foreground="Black"/>
