@@ -1090,6 +1090,8 @@ Class Window1
         ErazeMnu()
         StkMnu0.Height = Double.NaN
         AffDriver()
+        BtnStart.Visibility = Windows.Visibility.Hidden
+        BtnStop.Visibility = Windows.Visibility.Hidden
     End Sub
 
     Private Sub MnuDevice_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuDevice.Click
@@ -1217,6 +1219,42 @@ Class Window1
                     obj.SetData(GetType(String), TreeViewG.SelectedItem.uid)
                     effects = DragDrop.DoDragDrop(Me.TreeViewG, obj, DragDropEffects.Copy Or DragDropEffects.Move)
                 End If
+            End If
+
+            If TreeViewG.SelectedItem IsNot Nothing Then
+                If TreeViewG.SelectedItem.uid Is Nothing Then Exit Sub
+
+                Select Case _CurrentMnu
+                    Case 0 'driver
+                        If myService.ReturnDriverByID(IdSrv, TreeViewG.SelectedItem.uid).ID = "DE96B466-2540-11E0-A321-65D7DFD72085" Then
+                            BtnStart.Visibility = Windows.Visibility.Hidden
+                            BtnStop.Visibility = Windows.Visibility.Hidden
+                        Else
+                            If myService.ReturnDriverByID(IdSrv, TreeViewG.SelectedItem.uid).IsConnect Then
+                                BtnStart.Visibility = Windows.Visibility.Hidden
+                                BtnStop.Visibility = Windows.Visibility.Visible
+                            Else
+                                BtnStart.Visibility = Windows.Visibility.Visible
+                                BtnStop.Visibility = Windows.Visibility.Hidden
+                            End If
+                        End If
+                    Case 1 'device
+                        If Mid(myService.ReturnDeviceByID(IdSrv, TreeViewG.SelectedItem.uid).Name, 1, 4) = "HOMI" Then
+                            BtnDelDevice.Visibility = Windows.Visibility.Hidden
+                        Else
+                            BtnDelDevice.Visibility = Windows.Visibility.Visible
+                        End If
+                    Case 2 'zone
+
+                    Case 3 'user
+
+                    Case 4 'trigger
+
+                    Case 5 'macros
+
+                    Case 6 'histo
+
+                End Select
             End If
 
         Catch ex As Exception
