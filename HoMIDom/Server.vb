@@ -281,14 +281,14 @@ Namespace HoMIDom
             If _HeureLeverSoleil <= Now And _HeureCoucherSoleil >= Now Then
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).id = "soleil01" Then
-                        _ListDevices.Item(i).value = True
+                        If _ListDevices.Item(i).value = False Then _ListDevices.Item(i).value = True
                         Exit For
                     End If
                 Next
             Else
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).id = "soleil01" Then
-                        _ListDevices.Item(i).value = False
+                        If _ListDevices.Item(i).value = True Then _ListDevices.Item(i).value = False
                         Exit For
                     End If
                 Next
@@ -3600,6 +3600,10 @@ Namespace HoMIDom
                     Exit Function
                 End If
 
+                If driverId = "DE96B466-2540-11E0-A321-65D7DFD72085" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDriver", "La suppression du driver Virtuel est impossible")
+                    Return -1
+                End If
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).Id = driverId Then
                         _ListDrivers.RemoveAt(i)
@@ -3974,15 +3978,14 @@ Namespace HoMIDom
                 Exit Function
             End If
 
-            If deviceId = "soleilleve01" Then
-                Return -2
-                Exit Function
-            End If
-
-
             Try
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).Id = deviceId Then
+                        'on teste si c'est un device systeme pour ne pas le supprimer
+                        If Left(_ListDevices.Item(i).Name, 5) = "HOMI_" Then
+                            Return -2
+                            Exit Function
+                        End If
                         _ListDevices.Item(i).driver.deletedevice(deviceId)
                         _ListDevices.RemoveAt(i)
                         DeleteDevice = 0
@@ -4700,6 +4703,13 @@ Namespace HoMIDom
                     myID = deviceId
                     For i As Integer = 0 To _ListDevices.Count - 1
                         If _ListDevices.Item(i).ID = deviceId Then
+
+                            'on teste si c'est un device systeme pour ne pas le modifier
+                            If Left(_ListDevices.Item(i).Name, 5) = "HOMI_" Then
+                                Return -2
+                                Exit Function
+                            End If
+
                             _ListDevices.Item(i).name = name
                             _ListDevices.Item(i).adresse1 = address1
                             _ListDevices.Item(i).adresse2 = address2
