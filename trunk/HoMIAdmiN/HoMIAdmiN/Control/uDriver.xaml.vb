@@ -20,6 +20,7 @@ Partial Public Class uDriver
             x = Window1.myService.ReturnDriverByID(IdSrv, DriverId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
 
             If x IsNot Nothing Then 'on a trouvé le device
+                'on cache certains champs si leur valeur est @
                 If x.IP_TCP = "@" Then
                     Label4.Visibility = Windows.Visibility.Hidden
                     TxtAdrTCP.Visibility = Windows.Visibility.Hidden
@@ -55,6 +56,15 @@ Partial Public Class uDriver
                     Label10.Visibility = Windows.Visibility.Visible
                     TxtCom.Visibility = Windows.Visibility.Visible
                 End If
+                If x.Modele = "@" Then
+                    Label8.Visibility = Windows.Visibility.Hidden
+                    TxtModele.Visibility = Windows.Visibility.Hidden
+                Else
+                    Label8.Visibility = Windows.Visibility.Visible
+                    TxtModele.Visibility = Windows.Visibility.Visible
+                End If
+
+                'on affiche les parametres avancées
                 If x.Parametres IsNot Nothing And x.Parametres.Count > 0 Then
                     Label15.Visibility = Windows.Visibility.Visible
                     Label14.Visibility = Windows.Visibility.Visible
@@ -98,6 +108,18 @@ Partial Public Class uDriver
                     ImgDevice.Tag = x.Picture
                 End If
 
+                'si c'est le driver virtuel, on cache certains champs
+                If x.Nom = "Virtuel" Then
+                    Label1.Content = "Driver SYSTEME"
+                    ChkEnable.Visibility = Windows.Visibility.Hidden
+                    CbStartAuto.Visibility = Windows.Visibility.Hidden
+                    Label8.Visibility = Windows.Visibility.Hidden
+                    TxtModele.Visibility = Windows.Visibility.Hidden
+                    Label9.Visibility = Windows.Visibility.Hidden
+                    TxtRefresh.Visibility = Windows.Visibility.Hidden
+                    Label11.Visibility = Windows.Visibility.Hidden
+                    TxtVersion.Visibility = Windows.Visibility.Hidden
+                End If
             End If
 
         Catch Ex As Exception

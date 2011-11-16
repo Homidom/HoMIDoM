@@ -3765,6 +3765,13 @@ Namespace HoMIDom
             Try
                 'Driver Existant
                 myID = driverId
+
+                'verification pour ne pas modifier le driver virtuel
+                If driverId = "DE96B466-2540-11E0-A321-65D7DFD72085" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDriver", "La modification du driver Virtuel est impossible")
+                    Return -1
+                End If
+
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).id = driverId Then
                         _ListDrivers.Item(i).Enable = enable
