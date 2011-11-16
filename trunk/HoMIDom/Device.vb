@@ -444,7 +444,7 @@ Namespace HoMIDom
 
             Public Sub Read()
                 If _Enable = False Then Exit Sub
-                If Driver.IsConnect() Then Driver.Read(Me)
+                If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
             End Sub
 
             'Valeur
@@ -453,21 +453,21 @@ Namespace HoMIDom
                     Return _Value
                 End Get
                 Set(ByVal value As Double)
-                    Dim tmp As Double = value
-                    _LastChange = Now
-                    If tmp < _ValueMin Then tmp = _ValueMin
-                    If tmp > _ValueMax Then tmp = _ValueMax
-                    If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                    tmp += _Correction
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    'MsgBox("Device double a recu une value : " & _Name & " - " & tmp)
-                    If tmp <> _Value Then
-                        _ValueLast = _Value 'on garde l'ancienne value en memoire
-                        _Value = tmp
-                        RaiseEvent DeviceChanged(Me, "Value", _Value)
-                    Else
-                        _Server.Log(Server.TypeLog.VALEUR_INCHANGE, Server.TypeSource.SERVEUR, "DeviceValue Inchangé", _Name & " : " & _Adresse1 & " : " & _Value)
-                    End If
+                        Dim tmp As Double = value
+                        _LastChange = Now
+                        If tmp < _ValueMin Then tmp = _ValueMin
+                        If tmp > _ValueMax Then tmp = _ValueMax
+                        If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
+                        tmp += _Correction
+                        'Si la valeur a changé on la prend en compte et on créer l'event
+                        'MsgBox("Device double a recu une value : " & _Name & " - " & tmp)
+                        If tmp <> _Value Then
+                            _ValueLast = _Value 'on garde l'ancienne value en memoire
+                            _Value = tmp
+                            If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                        Else
+                        If _Server.Etat_server Then _Server.Log(Server.TypeLog.VALEUR_INCHANGE, Server.TypeSource.SERVEUR, "DeviceValue Inchangé", _Name & " : " & _Adresse1 & " : " & _Value)
+                        End If
                 End Set
             End Property
         End Class
@@ -513,7 +513,7 @@ Namespace HoMIDom
             'Demande de Lecture au driver
             Public Sub Read()
                 If _Enable = False Then Exit Sub
-                If Driver.IsConnect() Then Driver.Read(Me)
+                If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
             End Sub
 
             'Valeur : ON/OFF = True/False
@@ -522,12 +522,12 @@ Namespace HoMIDom
                     Return _Value
                 End Get
                 Set(ByVal value2 As Boolean)
-                    Dim tmp As Boolean = value2
-                    'If _Value <> tmp Then
-                    _LastChange = Now
-                    _ValueLast = _Value 'on garde l'ancienne value en memoire
-                    _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
-                    RaiseEvent DeviceChanged(Me, "Value", _Value)
+                        Dim tmp As Boolean = value2
+                        'If _Value <> tmp Then
+                        _LastChange = Now
+                        _ValueLast = _Value 'on garde l'ancienne value en memoire
+                        _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
+                    If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
                     'End If
                 End Set
             End Property
@@ -611,7 +611,7 @@ Namespace HoMIDom
             'Demande de Lecture au driver
             Public Sub Read()
                 If _Enable = False Then Exit Sub
-                If Driver.IsConnect() Then Driver.Read(Me)
+                If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
             End Sub
 
             'Valeur de 0 à 100
@@ -620,13 +620,13 @@ Namespace HoMIDom
                     Return _Value
                 End Get
                 Set(ByVal value As Integer)
-                    Dim tmp As Integer = value
-                    _LastChange = Now
-                    If tmp < 0 Then tmp = 0
-                    If tmp > 100 Then tmp = 100
-                    _ValueLast = _Value 'on garde l'ancienne value en memoire
-                    _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
-                    RaiseEvent DeviceChanged(Me, "Value", _Value)
+                        Dim tmp As Integer = value
+                        _LastChange = Now
+                        If tmp < 0 Then tmp = 0
+                        If tmp > 100 Then tmp = 100
+                        _ValueLast = _Value 'on garde l'ancienne value en memoire
+                        _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
+                        If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
                 End Set
             End Property
 
@@ -671,7 +671,7 @@ Namespace HoMIDom
 
             Private Sub Read()
                 If _Enable = False Then Exit Sub
-                If Driver.IsConnect() Then Driver.Read(Me)
+                If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
             End Sub
 
             Public Property Value() As String
@@ -679,16 +679,16 @@ Namespace HoMIDom
                     Return _Value
                 End Get
                 Set(ByVal value As String)
-                    Dim tmp As String = value
-                    _LastChange = Now
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _ValueLast = _Value 'on garde l'ancienne value en memoire
-                        _Value = tmp
-                        RaiseEvent DeviceChanged(Me, "Value", _Value)
-                    Else
-                        _Server.Log(Server.TypeLog.VALEUR_INCHANGE, Server.TypeSource.SERVEUR, "DeviceValue Inchangé", _Name & " : " & _Adresse1 & " : " & _Value)
-                    End If
+                        Dim tmp As String = value
+                        _LastChange = Now
+                        'Si la valeur a changé on la prend en compte et on créer l'event
+                        If tmp <> _Value Then
+                            _ValueLast = _Value 'on garde l'ancienne value en memoire
+                            _Value = tmp
+                        If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                        Else
+                        If _Server.Etat_server Then _Server.Log(Server.TypeLog.VALEUR_INCHANGE, Server.TypeSource.SERVEUR, "DeviceValue Inchangé", _Name & " : " & _Adresse1 & " : " & _Value)
+                        End If
                 End Set
             End Property
 
@@ -1447,9 +1447,10 @@ Namespace HoMIDom
                     _Refresh = value
                     If _Refresh > 0 Then
                         If MyTimer.Enabled = True Then MyTimer.Enabled = False
-                        Driver.Read(Me)
+                        'Driver.Read(Me)
                         LastChange = Now
-                        MyTimer.Interval = value * 1000
+                        'MyTimer.Interval = value * 1000 'ca transforme temps en secondes au lieu de ms comme pour les autres devices
+                        MyTimer.Interval = value
                         MyTimer.Enabled = True
                         AddHandler MyTimer.Elapsed, AddressOf Read
                     End If
@@ -1458,7 +1459,7 @@ Namespace HoMIDom
 
             Public Sub Read()
                 If _Enable = False Then Exit Sub
-                Driver.Read(Me)
+                If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
             End Sub
 
             'Contien l'avant derniere valeur
