@@ -208,9 +208,9 @@ Namespace HoMIDom
                 End If
 
                 '---- Actions à effectuer toutes les heures ----
-                If ladate.Minute = 59 And ladate.Second = 59 Then
+                'If ladate.Minute = 59 And ladate.Second = 59 Then
 
-                End If
+                'End If
 
                 '---- Actions à effectuer à minuit ----
                 If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
@@ -765,10 +765,10 @@ Namespace HoMIDom
                             If trvSoleil = False Then
                                 Dim _Devs As New Device.GENERIQUEBOOLEEN(Me)
                                 _Devs.ID = "soleil01"
-                                _Devs.Name = "IsJour"
+                                _Devs.Name = "HOMI_Jour"
                                 _Devs.Enable = True
                                 _Devs.Adresse1 = "N/A"
-                                _Devs.Description = "Levé/Couché du soleil"
+                                _Devs.Description = "Levé/Couché du soleil : True si il fait jour"
                                 _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
                                 _ListDevices.Add(_Devs)
                                 Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement du device " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
@@ -2955,7 +2955,7 @@ Namespace HoMIDom
         ''' <param name="Message"></param>
         ''' <remarks></remarks>
         Public Sub MessageToServer(ByVal Message As String) Implements IHoMIDom.MessageToServer
-             Try
+            Try
                 'traiter le message
                 Log(TypeLog.MESSAGE, TypeSource.SERVEUR, "MessageToServer", "Message From client : " & Message)
             Catch ex As Exception
@@ -3748,9 +3748,10 @@ Namespace HoMIDom
         ''' <param name="com"></param>
         ''' <param name="refresh"></param>
         ''' <param name="picture"></param>
+        ''' <param name="modele"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveDriver(ByVal IdSrv As String, ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String, Optional ByVal Parametres As ArrayList = Nothing) As String Implements IHoMIDom.SaveDriver
+        Public Function SaveDriver(ByVal IdSrv As String, ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String, ByVal modele As String, Optional ByVal Parametres As ArrayList = Nothing) As String Implements IHoMIDom.SaveDriver
             If VerifIdSrv(IdSrv) = False Then
                 Return 99
                 Exit Function
@@ -3771,6 +3772,7 @@ Namespace HoMIDom
                         If _ListDrivers.Item(i).Com <> "@" Then _ListDrivers.Item(i).Com = com
                         _ListDrivers.Item(i).Refresh = refresh
                         _ListDrivers.Item(i).Picture = picture
+                        _ListDrivers.Item(i).Modele = modele
                         If Parametres IsNot Nothing Then
                             For j As Integer = 0 To Parametres.Count - 1
                                 _ListDrivers.Item(i).parametres.item(j).valeur = Parametres.Item(j)

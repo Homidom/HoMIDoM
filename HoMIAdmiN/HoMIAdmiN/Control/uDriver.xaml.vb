@@ -112,7 +112,7 @@ Partial Public Class uDriver
 
     'Bouton Ok
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        Window1.myService.SaveDriver(IdSrv, _DriverId, TxtNom.Text, ChkEnable.IsChecked, CbStartAuto.IsChecked, TxtAdrTCP.Text, TxtPortTCP.Text, TxtAdrUDP.Text, TxtPortUDP.Text, TxtCom.Text, TxtRefresh.Text, ImgDevice.Tag, _ListParam)
+        Window1.myService.SaveDriver(IdSrv, _DriverId, TxtNom.Text, ChkEnable.IsChecked, CbStartAuto.IsChecked, TxtAdrTCP.Text, TxtPortTCP.Text, TxtAdrUDP.Text, TxtPortUDP.Text, TxtCom.Text, TxtRefresh.Text, ImgDevice.Tag, TxtModele.Text, _ListParam)
         RaiseEvent CloseMe(Me)
     End Sub
 
