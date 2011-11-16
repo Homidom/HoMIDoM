@@ -17,4 +17,13 @@
   <log time="11/11/2011 11:52:52" type="1" source="1" fonction="SaveConfig" message="Sauvegarde des param&amp;#232;tres du client WPF" />
   <log time="11/11/2011 11:52:52" type="1" source="1" fonction="SaveConfig" message="Sauvegarde termin&amp;#233;e" />
   <log time="11/11/2011 11:52:52" type="1" source="7" fonction="Client" message="Fermture de l&amp;#39;application" />
+  <log time="15/11/2011 11:00:49" type="1" source="1" fonction="LoadConfig" message="Cr&amp;#233;ation du backup (.bak) du fichier de config avant chargement" />
+  <log time="15/11/2011 11:01:20" type="1" source="1" fonction="LoadConfig" message="Chargement du fichier config: d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG_HoMIWpF\Config\HoMIWpF.xml" />
+  <log time="15/11/2011 11:01:20" type="1" source="1" fonction="LoadConfig" message="Param&amp;#232;tres du client WPF charg&amp;#233;s" />
+  <log time="15/11/2011 11:01:20" type="1" source="1" fonction="LoadConfig" message="Param&amp;#232;tres du Serveur HomeSeer charg&amp;#233;s" />
+  <log time="15/11/2011 11:01:20" type="1" source="1" fonction="LoadConfig" message="Param&amp;#232;tres tactiles charg&amp;#233;s" />
+  <log time="15/11/2011 11:01:21" type="1" source="1" fonction="LoadConfig" message="Param&amp;#232;tres de l&amp;#39;interface charg&amp;#233;s" />
+  <log time="15/11/2011 11:01:21" type="1" source="1" fonction="LoadConfig" message="Menus charg&amp;#233;s" />
+  <log time="15/11/2011 11:01:21" type="1" source="1" fonction="LoadConfig" message="El&amp;#233;ments charg&amp;#233;s" />
+  <log time="15/11/2011 11:01:21" type="1" source="7" fonction="LOADCONFIG" message="Message:  Chargement de la configuration termin&amp;#233;e" />
 </logs>

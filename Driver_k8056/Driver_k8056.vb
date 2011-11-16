@@ -46,7 +46,6 @@ Imports System.IO
 #Region "Declaration"
     Dim rs232 As New System.IO.Ports.SerialPort
     Dim tRelais(7, 7) As Boolean
-
 #End Region
 
 #Region "Fonctions génériques"
@@ -246,16 +245,20 @@ Imports System.IO
             If _Enable = False Then Exit Sub
             If Objet.type = "APPAREIL" Then
                 Dim tabl() As String = Objet.adresse1.split("x")
-                Select Case UCase(Commande)
-                    Case "ON"
-                        SetRelais(tabl(0), tabl(1))
-                    Case "OFF"
-                        ClearRelais(tabl(0), tabl(1))
-                    Case Else
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "k8056", "Erreur la commande du device n'est pas supporté par ce driver - device: " & Objet.name & " commande:" & Commande)
-                End Select
+                If tabl IsNot Nothing Then
+                    If tabl.Length = 2 Then
+                        Select Case UCase(Commande)
+                            Case "ON"
+                                SetRelais(tabl(0), tabl(1))
+                            Case "OFF"
+                                ClearRelais(tabl(0), tabl(1))
+                            Case Else
+                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "k8056", "Erreur la commande du device n'est pas supporté par ce driver - device: " & Objet.name & " commande:" & Commande)
+                        End Select
+                    End If
+                End If
             Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "k8056", "Erreur le type de device n'est pas supporté par ce driver - device: " & Objet.name & " type:" & Objet.type)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "k8056", "Erreur le type de device n'est pas supporté par ce driver - device: " & Objet.name & " type:" & Objet.type.ToString)
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "k8056", "Erreur lors de la traitement de la commande - device: " & Objet.name & " commande:" & Commande & " erreur: " & ex.Message)
@@ -299,6 +302,7 @@ Imports System.IO
     Private Sub ClearRelais(ByVal Carte As Integer, ByVal Relais As Integer)
         Call EnvoyerTrame(Carte, "C", Relais)
         MAJ(Carte, Relais, False)
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "k8056", "Envoi de la commande OFF sur le relais " & Relais & " de la carte " & Carte)
     End Sub
 
     Private Function GetEtatRelais(ByVal Carte As Integer, ByVal Relais As Integer) As Integer
@@ -339,6 +343,7 @@ Imports System.IO
     Private Sub SetRelais(ByVal Carte As Integer, ByVal Relais As Integer)
         Call EnvoyerTrame(Carte, "S", Relais)
         MAJ(Carte, Relais, True)
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "k8056", "Envoi de la commande ON sur le relais " & Relais & " de la carte " & Carte)
     End Sub
 
     Private Function ShowAdrCarte() As String
