@@ -15,7 +15,7 @@ Imports VB = Microsoft.VisualBasic
 #Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
-    Dim _ID As String = "DE96B466-2540-11E0-A321-65D7DFD72085"
+    Dim _ID As String = "DE96B466-2540-11E0-A321-65D7DFD72085" 'ne pas modifier car utilisé dans le code du serveur
     Dim _Nom As String = "Virtuel"
     Dim _Enable As String = False
     Dim _Description As String = "Driver Virtuel"
