@@ -54,7 +54,7 @@ Namespace HoMIDom
         <NonSerialized()> Private Shared _ListExtensionAudio As New List(Of Audio.ExtensionAudio) 'Liste des extensions audio
         <NonSerialized()> Private Shared _ListRepertoireAudio As New List(Of Audio.RepertoireAudio) 'Liste des répertoires audio
         <NonSerialized()> Private _ListTagAudio As New List(Of Audio.FilePlayList) ' Liste des tags des fichiers audio 
-        <NonSerialized()> Private Shared Etat_server As Boolean = False 'etat du serveur : true = démarré
+        <NonSerialized()> Public Etat_server As Boolean = False 'etat du serveur : true = démarré
         <NonSerialized()> Dim fsw As FileSystemWatcher
         <NonSerialized()> Dim _MaxMonthLog As Integer = 2
 #End Region
@@ -1943,10 +1943,10 @@ Namespace HoMIDom
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", "Démarrage des drivers")
                 For Each driver In _ListDrivers
                     If driver.Enable And driver.StartAuto Then
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", " - " & driver.Nom & " démarré")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", "- " & driver.Nom & " démarré")
                         driver.start()
                     Else
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", " - " & driver.Nom & " non démarré car non Auto")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", "- " & driver.Nom & " non démarré car non Auto")
                     End If
                 Next
             Catch ex As Exception
@@ -2300,6 +2300,7 @@ Namespace HoMIDom
 
                 '----- Calcul les heures de lever et coucher du soleil ----- 
                 MAJ_HeuresSoleil()
+                VerifIsJour()
 
                 '----- Maj des triggers type CRON ----- 
                 For i = 0 To _listTriggers.Count - 1
