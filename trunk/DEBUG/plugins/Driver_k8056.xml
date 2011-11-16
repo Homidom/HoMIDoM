@@ -6,7 +6,10 @@ Driver_k8056
 </name>
 </assembly>
 <members>
-<member name="P:Driver_k8056.My.Resources.Resources.ResourceManager">
+<member name="T:Driver_k8056.Driver_k8056">
+	<summary>Driver Velleman k8056, le device doit dans son adresse 1 indiqué sa carte et son numéro de relais séparé par un x, exemple pour le relais 1 de la carte 1: 1x1</summary>
+	<remarks></remarks>
+</member><member name="P:Driver_k8056.My.Resources.Resources.ResourceManager">
 	<summary>
   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
 </summary>
@@ -19,9 +22,6 @@ Driver_k8056
 	<summary>
   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
 </summary>
-</member><member name="T:Driver_k8056.Driver_k8056">
-	<summary>Driver Velleman k8056, le device doit dans son adresse 1 indiqué sa carte et son numéro de relais séparé par un x, exemple pour le relais 1 de la carte 1: 1x1</summary>
-	<remarks></remarks>
 </member>
 </members>
 </doc>
