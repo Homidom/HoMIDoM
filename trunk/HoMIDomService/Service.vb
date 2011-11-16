@@ -23,6 +23,12 @@ Module Service
 
     Sub Main()
         Try
+            Console.SetWindowSize(132, 50)
+            Console.SetBufferSize(200, 1000)
+            Console.BackgroundColor = ConsoleColor.White 'Couleur du fond
+            Console.Clear()  'Applique la couleur du fond
+            Console.ForegroundColor = ConsoleColor.Black 'Couleur du texte
+
             Console.WriteLine("******************************")
             Console.WriteLine("**** DEMARRAGE DU SERVEUR ****")
             Console.WriteLine(" ")
@@ -88,6 +94,9 @@ Module Service
                     hostFileServer.Close()
                 End Using
                 host.Close()
+
+                'démarrage OK
+                Console.Beep()
             End Using
         Catch ex As Exception
             MsgBox("Erreur lors du service: " & ex.Message & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.Critical, "ERREUR SERVICE")
