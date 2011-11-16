@@ -464,21 +464,20 @@ Public Class Driver_x10
                     Case INTERFACE_CQ
                         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Un Device a envoyé un ordre, " & count & " bytes recus")
 
-                        'L'interface demande au pc de lui envoyer des données et on doit répondre 
-                        port.Write(COMPUTER_READY)
-
                         '' Attend le reste des données
                         Dim Time_Out As Integer = 0
                         Dim Inbyte As Integer = INTERFACE_CQ
 
-                        Do While Time_Out <= 50 And Inbyte = INTERFACE_CQ
+                        Do While Time_Out <= 20 And Inbyte = INTERFACE_CQ
+                            'L'interface demande au pc de lui envoyer des données et on doit répondre 
+                            port.Write(COMPUTER_READY)
                             Inbyte = port.ReadByte
                             System.Threading.Thread.Sleep(100)
                             Time_Out += 1
                         Loop
 
                         ''A t-on reçu des données?
-                        If Time_Out > 50 Then
+                        If Time_Out > 20 Then
                             'Temps d'attente dépassé
                             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 DataReceived", "Temps d'attente dépassé")
                             Exit Sub
@@ -493,13 +492,13 @@ Public Class Driver_x10
 
                         'On attend de recevoir le reste
                         Time_Out = 0
-                        Do While Time_Out <= 50 And port.BytesToRead < Inbyte
+                        Do While Time_Out <= 20 And port.BytesToRead < Inbyte
                             System.Threading.Thread.Sleep(100)
                             Time_Out += 1
                         Loop
 
                         ''A t-on reçu des données restantes?
-                        If Time_Out > 50 Then
+                        If Time_Out > 20 Then
                             'Temps d'attente dépassé
                             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 DataReceived", "Temps d'attente (reste) dépassé")
                             Exit Sub
@@ -519,7 +518,7 @@ Public Class Driver_x10
                 End Select
             End If
         Catch Ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 Datareceived", Ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 Datareceived", "Erreur:" & Ex.ToString)
         End Try
     End Sub
 
