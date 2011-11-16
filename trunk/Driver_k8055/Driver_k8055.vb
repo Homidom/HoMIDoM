@@ -2,7 +2,6 @@
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 
-' Auteur : Seb
 
 ''' <summary>Driver Velleman k8055, le device doit dans son adresse 1 indiqué sa carte et son numéro de relais séparé par un x, exemple pour le relais 1 de la carte 1: 1x1</summary>
 ''' <remarks>Nécessite la dll k8055d.dll</remarks>

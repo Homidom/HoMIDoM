@@ -1,0 +1,17 @@
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\bin\Debug\Driver_DMX.dll
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\bin\Debug\Driver_DMX.pdb
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\bin\Debug\Driver_DMX.xml
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\bin\Debug\HoMIDom.dll
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\bin\Debug\ZedGraph.dll
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\bin\Debug\NCrontab.dll
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\bin\Debug\taglib-sharp.dll
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\bin\Debug\HoMIDom.pdb
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\bin\Debug\HoMIDom.xml
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\bin\Debug\ZedGraph.xml
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\obj\Debug\ResolveAssemblyReference.cache
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\obj\Debug\Driver_DMX.Resources.resources
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\obj\Debug\GenerateResource.read.1.tlog
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\obj\Debug\GenerateResource.write.1.tlog
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\obj\Debug\Driver_DMX.dll
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\obj\Debug\Driver_DMX.xml
+d:\cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_DMX\obj\Debug\Driver_DMX.pdb
