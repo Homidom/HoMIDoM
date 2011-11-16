@@ -232,8 +232,8 @@ Public Class Driver_x10
                 'port.ReceivedBytesThreshold = 1
                 port.StopBits = StopBits.One
                 port.Handshake = IO.Ports.Handshake.XOnXOff
-                port.ReadTimeout = 500
-                port.WriteTimeout = 500
+                port.ReadTimeout = 5000
+                port.WriteTimeout = 5000
                 AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
                 AddHandler port.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf m_serialPort_ErrorReceived)
                 port.Open()
