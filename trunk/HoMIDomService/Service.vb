@@ -54,9 +54,6 @@ Module Service
                 host.Open()
                 Console.WriteLine(Now & " ServiceWeb Démarré") ' & obj.PortTCP)
                 Console.WriteLine("")
-                Console.WriteLine("****   SERVEUR DEMARRE    ****")
-                Console.WriteLine("******************************")
-                Console.WriteLine(" ")
 
                 'Connexion au serveur
                 Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
@@ -90,13 +87,26 @@ Module Service
                 Using hostFileServer As New ServiceHost(GetType(HoMIDom.HoMIDom.FileServer), fileServerAddress)
                     hostFileServer.Open()
                     Console.WriteLine(Now & " Démarrage du serveur de fichiers OK")
+
+                    'démarrage OK
+                    Console.Beep()
+                    Console.WriteLine(" ")
+                    Console.WriteLine("******************************")
+                    Console.WriteLine("****   SERVEUR DEMARRE    ****")
+                    Console.WriteLine("******************************")
+                    Console.WriteLine(" ")
+
                     Console.ReadLine()
+
+                    'fin --> on arrete
+                    myService.Stop(_IdSrv)
+
                     hostFileServer.Close()
                 End Using
                 host.Close()
 
-                'démarrage OK
-                Console.Beep()
+
+
             End Using
         Catch ex As Exception
             MsgBox("Erreur lors du service: " & ex.Message & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.Critical, "ERREUR SERVICE")
