@@ -39,6 +39,7 @@ Partial Public Class uDevice
                 Dim x As HoMIDom.HoMIDom.TemplateDevice = Window1.myService.ReturnDeviceByID(IdSrv, DeviceId)
 
                 If x IsNot Nothing Then 'on a trouvé le device
+
                     TxtNom.Text = x.Name
                     TxtDescript.Text = x.Description
                     ChkEnable.IsChecked = x.Enable
@@ -117,6 +118,30 @@ Partial Public Class uDevice
                     Else
                         StkCde.Height = 0
                     End If
+
+                    'on verifie si le device est un device systeme pour ne pas le rendre modifiable
+                    If Left(x.Name, 5) = "HOMI_" Then
+                        Label1.Content = "Device SYSTEME"
+                        TxtNom.IsReadOnly = True
+                        TxtDescript.IsReadOnly = True
+                        CbDriver.IsEditable = False
+                        CbDriver.IsReadOnly = True
+                        CbDriver.IsEnabled = False
+                        ChkEnable.Visibility = Windows.Visibility.Hidden
+                        ChKSolo.Visibility = Windows.Visibility.Hidden
+                        TxtAdresse1.Visibility = Windows.Visibility.Hidden
+                        TxtAdresse2.Visibility = Windows.Visibility.Hidden
+                        TxtModele.Visibility = Windows.Visibility.Hidden
+                        TxtRefresh.Visibility = Windows.Visibility.Hidden
+                        TxtLastChangeDuree.Visibility = Windows.Visibility.Hidden
+                        BtnRead.Visibility = Windows.Visibility.Hidden
+                        Label6.Visibility = Windows.Visibility.Hidden
+                        Label7.Visibility = Windows.Visibility.Hidden
+                        Label8.Visibility = Windows.Visibility.Hidden
+                        Label9.Visibility = Windows.Visibility.Hidden
+                        Label19.Visibility = Windows.Visibility.Hidden
+                    End If
+
                 End If
             End If
         Catch Ex As Exception
