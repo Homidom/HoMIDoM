@@ -92,7 +92,7 @@ Module OpenDmx
     ' sleep for x milliseconds
     Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Integer)
 
-    Public Const Max_Devices As Short = 3 ' four devices 0..3
+    Public Const Max_Devices As Short = 255 ' four devices 0..3
 
     ' Threading Support variables
     Dim thdDMXSendThread(Max_Devices) As System.Threading.Thread
