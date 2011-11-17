@@ -507,9 +507,7 @@ Public Class Driver_x10
                             Exit Sub
                         End If
 
-                        BufferIn = Nothing
                         port.Read(BufferIn, 0, Inbyte)
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", BufferIn.Length & " bytes reçus")
                         TraiteLire(BufferIn)
 
                     Case CM11_CLOCK_REQ
