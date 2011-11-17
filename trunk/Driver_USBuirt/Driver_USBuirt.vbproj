@@ -73,9 +73,11 @@
     </Reference>
     <Reference Include="UsbLibrary">
       <HintPath>..\Dll_externes\UsbLibrary.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UsbUirtManagedWrapper">
       <HintPath>..\Dll_externes\UsbUirtManagedWrapper.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
