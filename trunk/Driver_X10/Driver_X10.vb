@@ -468,10 +468,12 @@ Public Class Driver_x10
                         Dim Time_Out As Integer = 0
                         Dim Inbyte As Integer = INTERFACE_CQ
 
+                        Dim donnee As Byte() = {&HC3}
+                        port.Write(donnee, 0, 1)
+                        System.Threading.Thread.Sleep(50)
+
                         Do While Time_Out <= 20 And Inbyte = INTERFACE_CQ
                             'L'interface demande au pc de lui envoyer des données et on doit répondre 
-                            Dim donnee As Byte() = {&HC3}
-                            port.Write(donnee, 0, 1)
                             Inbyte = port.ReadByte
                             System.Threading.Thread.Sleep(100)
                             Time_Out += 1
@@ -505,6 +507,7 @@ Public Class Driver_x10
                             Exit Sub
                         End If
 
+                        BufferIn = Nothing
                         port.Read(BufferIn, 0, Inbyte)
                         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", BufferIn.Length & " bytes reçus")
                         TraiteLire(BufferIn)
@@ -537,7 +540,7 @@ Public Class Driver_x10
             Dim Recieved_DeviceCode As String = ""
             Dim Recieved_Function As String = ""
             Dim Recieved_FAMask As String = ""
-            Dim Recieved_Variation As Integer
+            Dim Recieved_Variation As Double
             Dim FlagOk As Boolean = False
 
             'Wake-up and data recieved
@@ -546,7 +549,7 @@ Public Class Driver_x10
             'BufSize = CInt(trame(0)) 'récupère la taille de la trame qui ne peu faire que 10 octets maxi
 
             'Byte   Function
-            '0      Upload Buffer Size
+            '0      Upload Buffer Size --> déjà traité avant
             '1      Function / Address Mask
             '2      Data Byte #0
             '3      Data Byte #1
@@ -565,17 +568,18 @@ Public Class Driver_x10
             Recieved_FAMask = StrReverse(Recieved_FAMask)
 
             For i = 1 To trame.Length - 1
-                Recieved_HouseCode = GetHouse(Mid(trame(i), 1, 4))
+                Dim Bin As String = Int2Bin(CInt(trame(i)))
+                Recieved_HouseCode = GetHouse(Mid(Bin, 1, 4))
 
-                Select Case Mid(Recieved_FAMask, (i - 1), 1)
+                Select Case Mid(Recieved_FAMask, i, 1)
                     Case "0" 'Le Mask est à 0 donc c'est une adresse
-                        Recieved_DeviceCode = GetDevice(Mid(trame(i), 5, 4))
+                        Recieved_DeviceCode = GetDevice(Mid(Bin, 5, 4))
 
                     Case "1" 'Le Mask est à 1 donc c'est une fonction
-                        Recieved_Function = GetFunction(Mid(trame(i), 5, 4))
+                        Recieved_Function = GetFunction(Mid(Bin, 5, 4))
                         If Recieved_Function = "5" Or Recieved_Function = "6" Then
                             'C'est une fonction Dim ou Bright donc octet suivant c'est la valeur de variation
-                            Recieved_Variation = CInt(trame(i + 1))
+                            Recieved_Variation = CInt(trame(i + 1)) / 210
                             i += 1
                         End If
                     Case Else 'C'est une erreur car ni adresse ni fonction
@@ -646,7 +650,7 @@ Public Class Driver_x10
         End If
     End Sub
 
-    Public Function ecrire(ByVal adresse As String, ByVal commande As String, ByVal data As Integer) As String
+    Public Sub ecrire(ByVal adresse As String, ByVal commande As String, ByVal data As Integer)
         'adresse= adresse du composant : A1
         'commande : ON, OFF...
         'data
@@ -672,7 +676,7 @@ Public Class Driver_x10
                     axbData(4) = house_to_hex(Microsoft.VisualBasic.Left(adresse, 1)) Or com_to_hex(commande)
                 Catch ex As Exception
                     OutPortDevice = False
-                    Return ("ERR: X10: messages non valides : " & adresse & "-" & commande & " --> " & ex.Message)
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 ecrire", "ERR: X10: messages non valides : " & adresse & "-" & commande & " --> " & ex.ToString)
                 End Try
 
                 Try
@@ -693,7 +697,7 @@ Public Class Driver_x10
                     'le chesksum n'a jamais été bon
                     If nbboucle >= 4 Then
                         OutPortDevice = False
-                        Return ("ERR: X10 : cheksum non valide")
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 ecrire", "ERR: X10 : cheksum non valide")
                     End If
 
                     'on envoie le ack
@@ -724,7 +728,7 @@ Public Class Driver_x10
                     'le chesksum n'a jamais été bon
                     If nbboucle >= 4 Then
                         OutPortDevice = False
-                        Return ("ERR: X10 : cheksum non valide")
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 ecrire", "ERR: X10 : cheksum non valide")
                     End If
 
                     'on envoie le ack
@@ -739,22 +743,22 @@ Public Class Driver_x10
                     'End If
 
                 Catch ex As Exception
-                    Return ("ERR: X10: " & ex.Message)
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 ecrire", "ERR: X10: " & ex.ToString)
                 End Try
             Else
                 OutPortDevice = False
-                Return "ERR: X10: ecriture déjà en cours"
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 ecrire", "ERR: X10: ecriture déjà en cours")
             End If
 
             AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
 
             OutPortDevice = False
-            Return "X10: OK"
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 ecrire", "OK Adresse:" & adresse & " Commande:" & commande & " Data:" & data)
         Else
-            Return "ERR: X10: Port fermé"
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 ecrire", "ERR: X10: Port fermé")
         End If
 
-    End Function
+    End Sub
 
     ''' <summary>
     ''' Retourne la date et l'heure, la version
