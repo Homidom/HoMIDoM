@@ -6,45 +6,13 @@ HoMIAdmiN
 </name>
 </assembly>
 <members>
-<member name="M:WpfApplication1.uTriggerDevice.InitializeComponent">
+<member name="M:WpfApplication1.uCtrlImgMnu.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uTriggerDevice">
+</member><member name="T:WpfApplication1.uCtrlImgMnu">
 	<summary>
-uTriggerDevice
-</summary>
-</member><member name="M:WpfApplication1.uConfigAudio.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uConfigAudio">
-	<summary>
-uConfigAudio
-</summary>
-</member><member name="M:WpfApplication1.uMacro.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uMacro">
-	<summary>
-uMacro
-</summary>
-</member><member name="M:WpfApplication1.uTriggerTimer.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uTriggerTimer">
-	<summary>
-uTriggerTimer
-</summary>
-</member><member name="M:WpfApplication1.uZone.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uZone">
-	<summary>
-uZone
+uCtrlImgMnu
 </summary>
 </member><member name="M:WpfApplication1.uDevice.InitializeComponent">
 	<summary>
@@ -54,29 +22,29 @@ InitializeComponent
 	<summary>
 uDevice
 </summary>
-</member><member name="M:WpfApplication1.uTestDevice.InitializeComponent">
+</member><member name="M:WpfApplication1.uMacro.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uTestDevice">
+</member><member name="T:WpfApplication1.uMacro">
 	<summary>
-uTestDevice
+uMacro
 </summary>
-</member><member name="M:WpfApplication1.WActionParametrage.InitializeComponent">
+</member><member name="M:WpfApplication1.uReleve.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.WActionParametrage">
+</member><member name="T:WpfApplication1.uReleve">
 	<summary>
-WActionParametrage
+uReleve
 </summary>
-</member><member name="M:WpfApplication1.WindowImg.InitializeComponent">
+</member><member name="M:WpfApplication1.Window2.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.WindowImg">
+</member><member name="T:WpfApplication1.Window2">
 	<summary>
-WindowImg
+Window2
 </summary>
 </member><member name="M:WpfApplication1.uCondition.InitializeComponent">
 	<summary>
@@ -86,13 +54,117 @@ InitializeComponent
 	<summary>
 uCondition
 </summary>
-</member><member name="M:WpfApplication1.uReleve.InitializeComponent">
+</member><member name="M:WpfApplication1.WindowImg.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uReleve">
+</member><member name="T:WpfApplication1.WindowImg">
 	<summary>
-uReleve
+WindowImg
+</summary>
+</member><member name="M:WpfApplication1.uHisto.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uHisto">
+	<summary>
+uHisto
+</summary>
+</member><member name="M:WpfApplication1.uTestDevice.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uTestDevice">
+	<summary>
+uTestDevice
+</summary>
+</member><member name="M:WpfApplication1.Window3.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.Window3">
+	<summary>
+Window3
+</summary>
+</member><member name="M:WpfApplication1.uAction.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uAction">
+	<summary>
+uAction
+</summary>
+</member><member name="M:WpfApplication1.uTriggerDevice.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uTriggerDevice">
+	<summary>
+uTriggerDevice
+</summary>
+</member><member name="M:WpfApplication1.uLog.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uLog">
+	<summary>
+uLog
+</summary>
+</member><member name="M:WpfApplication1.uUser.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uUser">
+	<summary>
+uUser
+</summary>
+</member><member name="M:WpfApplication1.uDriver.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uDriver">
+	<summary>
+uDriver
+</summary>
+</member><member name="M:WpfApplication1.uConfigServer.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uConfigServer">
+	<summary>
+uConfigServer
+</summary>
+</member><member name="M:WpfApplication1.uScenario.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uScenario">
+	<summary>
+uScenario
+</summary>
+</member><member name="M:WpfApplication1.uConfigAudio.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uConfigAudio">
+	<summary>
+uConfigAudio
+</summary>
+</member><member name="M:WpfApplication1.Window1.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.Window1">
+	<summary>
+Window1
+</summary>
+</member><member name="M:WpfApplication1.uTriggerTimer.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uTriggerTimer">
+	<summary>
+uTriggerTimer
 </summary>
 </member><member name="M:WpfApplication1.Application.InitializeComponent">
 	<summary>
@@ -106,77 +178,21 @@ Application Entry Point.
 	<summary>
 Application
 </summary>
-</member><member name="M:WpfApplication1.uHisto.InitializeComponent">
+</member><member name="M:WpfApplication1.WActionParametrage.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uHisto">
+</member><member name="T:WpfApplication1.WActionParametrage">
 	<summary>
-uHisto
+WActionParametrage
 </summary>
-</member><member name="M:WpfApplication1.uLog.InitializeComponent">
+</member><member name="M:WpfApplication1.uZone.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uLog">
+</member><member name="T:WpfApplication1.uZone">
 	<summary>
-uLog
-</summary>
-</member><member name="M:WpfApplication1.Window1.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.Window1">
-	<summary>
-Window1
-</summary>
-</member><member name="M:WpfApplication1.uScenario.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uScenario">
-	<summary>
-uScenario
-</summary>
-</member><member name="M:WpfApplication1.uCtrlImgMnu.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uCtrlImgMnu">
-	<summary>
-uCtrlImgMnu
-</summary>
-</member><member name="M:WpfApplication1.uDriver.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uDriver">
-	<summary>
-uDriver
-</summary>
-</member><member name="M:WpfApplication1.uAction.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uAction">
-	<summary>
-uAction
-</summary>
-</member><member name="M:WpfApplication1.uUser.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uUser">
-	<summary>
-uUser
-</summary>
-</member><member name="M:WpfApplication1.Window2.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.Window2">
-	<summary>
-Window2
+uZone
 </summary>
 </member><member name="M:WpfApplication1.uPlaylist.InitializeComponent">
 	<summary>
@@ -186,38 +202,6 @@ InitializeComponent
 	<summary>
 uPlaylist
 </summary>
-</member><member name="M:WpfApplication1.uConfigServer.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uConfigServer">
-	<summary>
-uConfigServer
-</summary>
-</member><member name="M:WpfApplication1.Window3.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.Window3">
-	<summary>
-Window3
-</summary>
-</member><member name="M:WpfApplication1.uPlaylist.FileTagRepload(System.String@)">
-	<summary>Fonction de chargement des tags des fichiers audio des repertoires contenus dans la liste active </summary>
-	<remarks>Recupere les fichiers Audios selon les extensions actives</remarks>
-</member><member name="M:WpfApplication1.uPlaylist.CreatePlayListFile(System.IO.StreamWriter@)">
-	<summary>Creation du fichier au format m3u Extend </summary>
-	<param name="objWriterFile"></param>
-	<remarks></remarks>
-</member><member name="M:WpfApplication1.uPlaylist.WriteTitle(WpfApplication1.uPlaylist.FilePlayList@,System.IO.StreamWriter@)">
-	<summary>Enregistrement d un titre au format m3u extend </summary>
-	<param name="FileAudioPlist"></param>
-	<param name="objWriterFile"></param>
-	<remarks></remarks>
-</member><member name="M:WpfApplication1.uPlaylist.ImagePochetteLoad(System.String@)">
-	<summary> Recherche la pochette contenue dans le repertoire et l'affiche</summary>
-	<param name="PathRep"></param>
-	<remarks></remarks>
 </member><member name="P:WpfApplication1.ClServer.Nom">
 	<summary>
  Nom du serveur
@@ -310,6 +294,22 @@ Window3
 	<summary>
   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
 </summary>
+</member><member name="M:WpfApplication1.uPlaylist.FileTagRepload(System.String@)">
+	<summary>Fonction de chargement des tags des fichiers audio des repertoires contenus dans la liste active </summary>
+	<remarks>Recupere les fichiers Audios selon les extensions actives</remarks>
+</member><member name="M:WpfApplication1.uPlaylist.CreatePlayListFile(System.IO.StreamWriter@)">
+	<summary>Creation du fichier au format m3u Extend </summary>
+	<param name="objWriterFile"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.uPlaylist.WriteTitle(WpfApplication1.uPlaylist.FilePlayList@,System.IO.StreamWriter@)">
+	<summary>Enregistrement d un titre au format m3u extend </summary>
+	<param name="FileAudioPlist"></param>
+	<param name="objWriterFile"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.uPlaylist.ImagePochetteLoad(System.String@)">
+	<summary> Recherche la pochette contenue dans le repertoire et l'affiche</summary>
+	<param name="PathRep"></param>
+	<remarks></remarks>
 </member>
 </members>
 </doc>
