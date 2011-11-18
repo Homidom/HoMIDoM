@@ -72,11 +72,11 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="UsbLibrary">
-      <HintPath>..\Dll_externes\UsbLibrary.dll</HintPath>
+      <HintPath>..\DEBUG\UsbLibrary.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UsbUirtManagedWrapper">
-      <HintPath>..\Dll_externes\UsbUirtManagedWrapper.dll</HintPath>
+      <HintPath>..\DEBUG\UsbUirtManagedWrapper.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

@@ -86,7 +86,7 @@ Driver_PLCBUS
 </member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Process(System.Byte[])">
 	<summary>Recomponse les messages reçu</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.traitement(System.String,System.String,System.String)">
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.traitement(System.String,System.String,System.String,System.Boolean)">
 	<summary>Traite les paquets reçus</summary>
 	<remarks></remarks>
 </member><member name="T:Driver_PLCBUS.Driver_PLCBUS">

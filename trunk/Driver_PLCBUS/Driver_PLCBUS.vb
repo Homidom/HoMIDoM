@@ -718,96 +718,127 @@ Imports System.IO.Ports
         Dim listeactif As String = ""
         Dim TblBits(7) As Boolean
         Dim unbyte As Byte
+        Dim checksum As Byte
+        Dim verifchecksum As Boolean = False
 
         Try
 
-            'pour les modeles 1141+
-            Dim checksum = comBuffer(0) + comBuffer(1) + comBuffer(2) + comBuffer(3) + comBuffer(4) + comBuffer(5) + comBuffer(6) + comBuffer(7) + comBuffer(8)
-
-            If (((comBuffer(1) = &H6) And (comBuffer(0) = &H2) And (comBuffer(8) = &H3)) Or ((comBuffer(1) = &H6) And (comBuffer(0) = &H2) And (checksum = &H200))) Then ' si trame de reponse valide
-                plcbus_adresse = hex_to_adresse(comBuffer(3))
-                plcbus_commande = hex_to_com(comBuffer(4))
-                data1 = comBuffer(5)
-                data2 = comBuffer(6)
-
-                'test si c'est un ack
-                unbyte = comBuffer(7)
-                For Iteration As Integer = 0 To 7
-                    TblBits(Iteration) = unbyte And 1
-                    unbyte >>= 1
-                Next
-                If TblBits(4) Then
-                    'c'est un Ack
-                    ackreceived = True
-                    If plcbus_commande = "STATUS_REQUEST" Or plcbus_commande = "GetOnlyOnIdPulse" Or plcbus_commande = "GetAllIdPulse" Then
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Process", " <- ACK :" & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2 & " : " & comBuffer(7))
-                    Else
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- ACK :" & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2 & " : " & comBuffer(7))
-                    End If
+            'test du cheksum suivant le modele
+            Try
+                If _Modele = "1141+" Then
+                    'pour les modeles 1141+
+                    checksum = comBuffer(0) + comBuffer(1) + comBuffer(2) + comBuffer(3) + comBuffer(4) + comBuffer(5) + comBuffer(6) + comBuffer(7) + comBuffer(8)
+                    If (checksum = &H200) Then verifchecksum = True
                 Else
-                    'ce n'est pas un ack, je traite le paquet
-                    ackreceived = False
+                    'pour les modéles 1141
+                    If (comBuffer(8) = &H3) Then verifchecksum = True
+                End If
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process : Checksum", "Exception : " & ex.Message)
+            End Try
 
-                    Select Case plcbus_commande
-                        Case "ON", "OFF", "BRIGHT", "BLINK", "FADE_STOP", "STATUS_REQUEST"
-                            If data1 = 0 Then traitement("OFF", plcbus_adresse, plcbus_commande) Else traitement("ON", plcbus_adresse, plcbus_commande)
-                        Case "DIM", "PRESET_DIM"
-                            traitement(data1, plcbus_adresse, plcbus_commande)
-                        Case "GetSignalStrength", "GetNoiseStrength"
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1)
-                        Case "ReceiverMasterAddressSetup", "TransmitterMasterAddressSetup"
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
-                        Case "ALL_UNITS_OFF", "All_USER_UNITS_OFF"
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
-                        Case "ALL_LIGHTS_ON", "ALL_LIGHTS_OFF", "All_USER_LIGHTS_ON", "All_USER_LIGHTS_OFF"
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
-                        Case "STATUS_ON"
-                            traitement("ON", plcbus_adresse, plcbus_commande)
-                        Case "STATUS_OFF"
-                            traitement("OFF", plcbus_adresse, plcbus_commande)
-                        Case "SceneAddressSetup", "SceneAddressErase", "AllSceneAddressErase"
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
-                        Case "ReportSignalStrength", "ReportNoiseStrength"
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
-                        Case "GetAllIdPulse", "ReportAllIdPulse3Phase"
-                            unbyte = comBuffer(6)
-                            For Iteration As Integer = 0 To 7
-                                actif = (unbyte And 1)
-                                If actif Then listeactif = listeactif & " " & Left(plcbus_adresse, 1) & (Iteration + 1)
-                                unbyte >>= 1
-                            Next
-                            unbyte = comBuffer(5)
-                            For Iteration As Integer = 0 To 7
-                                actif = (unbyte And 1)
-                                If actif Then listeactif = listeactif & " " & Left(plcbus_adresse, 1) & (Iteration + 9)
-                                unbyte >>= 1
-                            Next
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- Liste des composants actifs : " & listeactif)
-                        Case "GetOnlyOnIdPulse", "ReportOnlyOnIdPulse3Phase"
-                            unbyte = comBuffer(6)
-                            For Iteration As Integer = 0 To 7
-                                actif = (unbyte And 1)
-                                If actif Then
-                                    listeactif = listeactif & " " & Left(plcbus_adresse, 1) & (Iteration + 1)
-                                    traitement("ON", Left(plcbus_adresse, 1) & (Iteration + 1), "GetOnlyOnIdPulse")
-                                Else
-                                    traitement("OFF", Left(plcbus_adresse, 1) & (Iteration + 1), "GetOnlyOnIdPulse")
-                                End If
-                                unbyte >>= 1
-                            Next
-                            unbyte = comBuffer(5)
-                            For Iteration As Integer = 0 To 7
-                                actif = (unbyte And 1)
-                                If actif Then
-                                    listeactif = listeactif & " " & Left(plcbus_adresse, 1) & (Iteration + 9)
-                                    traitement("ON", Left(plcbus_adresse, 1) & (Iteration + 9), "GetOnlyOnIdPulse")
-                                Else
-                                    traitement("OFF", Left(plcbus_adresse, 1) & (Iteration + 9), "GetOnlyOnIdPulse")
-                                End If
-                                unbyte >>= 1
-                            Next
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Process", " <- Liste des composants ON : " & Left(plcbus_adresse, 1) & " -> " & listeactif)
-                    End Select
+
+            If ((comBuffer(1) = &H6) And (comBuffer(0) = &H2) And verifchecksum) Then ' si trame de reponse valide
+                Try
+                    plcbus_adresse = hex_to_adresse(comBuffer(3))
+                    plcbus_commande = hex_to_com(comBuffer(4))
+                    data1 = comBuffer(5)
+                    data2 = comBuffer(6)
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process : Get data", "Exception : " & ex.Message)
+                End Try
+
+                Try
+                    'test si c'est un ack
+                    unbyte = comBuffer(7)
+                    For Iteration As Integer = 0 To 7
+                        TblBits(Iteration) = unbyte And 1
+                        unbyte >>= 1
+                    Next
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process : Test Ack", "Exception : " & ex.Message)
+                End Try
+
+                If TblBits(4) Then
+                    Try
+                        'c'est un Ack
+                        ackreceived = True
+                        If plcbus_commande = "STATUS_REQUEST" Or plcbus_commande = "GetOnlyOnIdPulse" Or plcbus_commande = "GetAllIdPulse" Then
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Process", " <- ACK :" & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2 & " : " & comBuffer(7))
+                        Else
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- ACK :" & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2 & " : " & comBuffer(7))
+                        End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process : Traitement Ack", "Exception : " & ex.Message)
+                    End Try
+                Else
+                    Try
+                        'ce n'est pas un ack, je traite le paquet
+                        ackreceived = False
+
+                        Select Case plcbus_commande
+                            Case "ON", "OFF", "BRIGHT", "BLINK", "FADE_STOP", "STATUS_REQUEST"
+                                If data1 = 0 Then traitement("OFF", plcbus_adresse, plcbus_commande, True) Else traitement("ON", plcbus_adresse, plcbus_commande, True)
+                            Case "DIM", "PRESET_DIM"
+                                traitement(data1, plcbus_adresse, plcbus_commande, True)
+                            Case "GetSignalStrength", "GetNoiseStrength"
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1)
+                            Case "ReceiverMasterAddressSetup", "TransmitterMasterAddressSetup"
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
+                            Case "ALL_UNITS_OFF", "All_USER_UNITS_OFF"
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
+                            Case "ALL_LIGHTS_ON", "ALL_LIGHTS_OFF", "All_USER_LIGHTS_ON", "All_USER_LIGHTS_OFF"
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
+                            Case "STATUS_ON"
+                                traitement("ON", plcbus_adresse, plcbus_commande, True)
+                            Case "STATUS_OFF"
+                                traitement("OFF", plcbus_adresse, plcbus_commande, True)
+                            Case "SceneAddressSetup", "SceneAddressErase", "AllSceneAddressErase"
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
+                            Case "ReportSignalStrength", "ReportNoiseStrength"
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
+                            Case "GetAllIdPulse", "ReportAllIdPulse3Phase"
+                                unbyte = comBuffer(6)
+                                For Iteration As Integer = 0 To 7
+                                    actif = (unbyte And 1)
+                                    If actif Then listeactif = listeactif & " " & Left(plcbus_adresse, 1) & (Iteration + 1)
+                                    unbyte >>= 1
+                                Next
+                                unbyte = comBuffer(5)
+                                For Iteration As Integer = 0 To 7
+                                    actif = (unbyte And 1)
+                                    If actif Then listeactif = listeactif & " " & Left(plcbus_adresse, 1) & (Iteration + 9)
+                                    unbyte >>= 1
+                                Next
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- Liste des composants actifs : " & listeactif)
+                            Case "GetOnlyOnIdPulse", "ReportOnlyOnIdPulse3Phase"
+                                unbyte = comBuffer(6)
+                                For Iteration As Integer = 0 To 7
+                                    actif = (unbyte And 1)
+                                    If actif Then
+                                        listeactif = listeactif & " " & Left(plcbus_adresse, 1) & (Iteration + 1)
+                                        traitement("ON", Left(plcbus_adresse, 1) & (Iteration + 1), "GetOnlyOnIdPulse", False)
+                                    Else
+                                        traitement("OFF", Left(plcbus_adresse, 1) & (Iteration + 1), "GetOnlyOnIdPulse", False)
+                                    End If
+                                    unbyte >>= 1
+                                Next
+                                unbyte = comBuffer(5)
+                                For Iteration As Integer = 0 To 7
+                                    actif = (unbyte And 1)
+                                    If actif Then
+                                        listeactif = listeactif & " " & Left(plcbus_adresse, 1) & (Iteration + 9)
+                                        traitement("ON", Left(plcbus_adresse, 1) & (Iteration + 9), "GetOnlyOnIdPulse", False)
+                                    Else
+                                        traitement("OFF", Left(plcbus_adresse, 1) & (Iteration + 9), "GetOnlyOnIdPulse", False)
+                                    End If
+                                    unbyte >>= 1
+                                Next
+                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Process", " <- Liste des composants ON : " & Left(plcbus_adresse, 1) & " -> " & listeactif)
+                        End Select
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process : Traitement Paquet reçu", "Exception : " & ex.Message)
+                    End Try
                 End If
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Message recu invalide")
@@ -819,7 +850,7 @@ Imports System.IO.Ports
 
     ''' <summary>Traite les paquets reçus</summary>
     ''' <remarks></remarks>
-    Private Sub traitement(ByVal valeur As String, ByVal adresse As String, ByVal plcbus_commande As String)
+    Private Sub traitement(ByVal valeur As String, ByVal adresse As String, ByVal plcbus_commande As String, ByVal erreursidevicepastrouve As Boolean)
         If valeur <> "" Then
             Try
 
@@ -848,7 +879,7 @@ Imports System.IO.Ports
                 ElseIf (listedevices.Count > 1) Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
                 Else
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Device non trouvé : " & adresse & ":" & valeur)
+                    If erreursidevicepastrouve Then _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Device non trouvé : " & adresse & ":" & valeur)
 
 
                     'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
