@@ -73,6 +73,7 @@
     </Reference>
     <Reference Include="UsbLibrary">
       <HintPath>..\DEBUG\UsbLibrary.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
