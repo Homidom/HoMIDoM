@@ -423,7 +423,7 @@ Imports System.Threading
             doc = Nothing
             nodes = Nothing
 
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GOOGLEMETEO", "MAJ Meteo effectuée pour " & objet.name)
+            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GOOGLEMETEO", "MAJ Meteo effectuée pour " & objet.name)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GOOGLEMETEO", "Erreur Lors de la MaJ de " & objet.name & " : " & ex.Message)
         End Try
