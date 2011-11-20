@@ -226,9 +226,9 @@
         </StackPanel>
         <StackPanel Orientation="vertical"  DockPanel.Dock="Right" Width="35">
             <Rectangle Height="20" />
-            <Image Height="29" Name="Image1" Stretch="Fill" Width="29" Source="/HoMIAdmiN;component/Images/homidom_icone_moyen.png" />
+            <Image Height="23" Name="Image1" Stretch="Fill" Width="23" Source="/HoMIAdmiN;component/Images/homidom_icone_moyen.png" />
             <Rectangle Height="20" />
-            <Label HorizontalAlignment="center" Name="Label1" Content="H" FontSize="18" Padding="0" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom">
+            <Label HorizontalAlignment="center" Name="Label1" Content="H" FontSize="18" Padding="0" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom" >
                 <Label.Foreground>
                     <LinearGradientBrush EndPoint="0.494,0.889" StartPoint="0.494,0.028">
                         <GradientStop Color="#CCFFFFFF" Offset="0" />

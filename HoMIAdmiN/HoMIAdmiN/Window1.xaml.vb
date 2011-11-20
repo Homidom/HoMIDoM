@@ -244,24 +244,41 @@ Class Window1
                 Dim stack As New StackPanel
                 stack.Orientation = Orientation.Horizontal
                 stack.HorizontalAlignment = HorizontalAlignment.Left
-
-                Dim Elipse As New Ellipse
-                Elipse.Width = 9
-                Elipse.Height = 9
-
-                Dim myBrush As New RadialGradientBrush()
-                myBrush.GradientOrigin = New Point(0.75, 0.25)
+                Dim Graph As Object
 
                 If Drv.IsConnect = True Then
+                    Dim Rect As New Polygon
+                    Dim myPointCollection As PointCollection = New PointCollection
+                    myPointCollection.Add(New Point(0, 0))
+                    myPointCollection.Add(New Point(10, 5))
+                    myPointCollection.Add(New Point(0, 10))
+                    Rect.Points = myPointCollection
+
+                    Rect.Width = 9
+                    Rect.Height = 9
+
+                    Dim myBrush As New RadialGradientBrush()
                     myBrush.GradientStops.Add(New GradientStop(Colors.LightGreen, 0.0))
                     myBrush.GradientStops.Add(New GradientStop(Colors.Green, 0.5))
                     myBrush.GradientStops.Add(New GradientStop(Colors.DarkGreen, 1.0))
+
+                    Rect.Fill = Brushes.DarkGreen 'myBrush
+                    Graph = Rect
                 Else
+                    Dim Rect As New Rectangle
+                    Rect.Width = 9
+                    Rect.Height = 9
+
+                    Dim myBrush As New RadialGradientBrush()
+                    myBrush.GradientOrigin = New Point(0.75, 0.25)
                     myBrush.GradientStops.Add(New GradientStop(Colors.Yellow, 0.0))
                     myBrush.GradientStops.Add(New GradientStop(Colors.Red, 0.5))
                     myBrush.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
+
+                    Rect.Fill = Brushes.Red 'myBrush
+                    Graph = Rect
                 End If
-                Elipse.Fill = myBrush
+
 
                 Dim label As New Label
                 If Drv.Enable = True Then
@@ -271,7 +288,7 @@ Class Window1
                 End If
                 label.Content = Drv.Nom
 
-                stack.Children.Add(Elipse)
+                stack.Children.Add(Graph)
                 stack.Children.Add(label)
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
@@ -1234,7 +1251,11 @@ Class Window1
                                 BtnStart.Visibility = Windows.Visibility.Hidden
                                 BtnStop.Visibility = Windows.Visibility.Visible
                             Else
-                                BtnStart.Visibility = Windows.Visibility.Visible
+                                If myService.ReturnDriverByID(IdSrv, TreeViewG.SelectedItem.uid).Enable = True Then
+                                    BtnStart.Visibility = Windows.Visibility.Visible
+                                Else
+                                    BtnStart.Visibility = Windows.Visibility.Hidden
+                                End If
                                 BtnStop.Visibility = Windows.Visibility.Hidden
                             End If
                         End If
