@@ -468,12 +468,11 @@ Public Class Driver_x10
                         Dim Time_Out As Integer = 0
                         Dim Inbyte As Integer = INTERFACE_CQ
 
-                        Dim donnee As Byte() = {&HC3}
-                        port.Write(donnee, 0, 1)
-                        System.Threading.Thread.Sleep(50)
-
                         Do While Time_Out <= 20 And Inbyte = INTERFACE_CQ
                             'L'interface demande au pc de lui envoyer des données et on doit répondre 
+                            Dim donnee As Byte() = {&HC3}
+                            port.Write(donnee, 0, 1)
+                            System.Threading.Thread.Sleep(20)
                             Inbyte = port.ReadByte
                             System.Threading.Thread.Sleep(100)
                             Time_Out += 1
