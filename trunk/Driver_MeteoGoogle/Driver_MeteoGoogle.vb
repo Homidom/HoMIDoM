@@ -336,6 +336,7 @@ Imports System.Threading
                                 Case "temp_c"
                                     objet.TemperatureActuel = b
                                 Case "humidity"
+                                    b = b.Replace("%", "")
                                     objet.HumiditeActuel = b
                                 Case "icon"
                                     objet.IconActuel = ExtractFile(b)
