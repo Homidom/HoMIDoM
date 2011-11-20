@@ -165,11 +165,11 @@
                                     <TextBox Width="240" Height="41" Name="TxtCmdData" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" >
-                                    <Button Height="26.664" Margin="1" HorizontalAlignment="Left" Name="BtnNewCmd" VerticalAlignment="Bottom" Width="67">Nouveau</Button>
-                                    <Button Height="26.664" Margin="1" Name="BtnSaveCmd" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="67">Enregistrer</Button>
-                                    <Button Height="26.664" Margin="1" Name="BtnDelCmd" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="67">Supprimer</Button>
-                                    <Button Height="26.664" HorizontalAlignment="Left" Margin="1" Name="BtnTstCmd" VerticalAlignment="Bottom" Width="67">Tester</Button>
-                                    <Button Height="26.664" HorizontalAlignment="Right" Margin="1" Name="BtnLearn" VerticalAlignment="Bottom" Width="67">Apprendre</Button>
+                                    <Button Height="26.664" Margin="1" Name="BtnNewCmd" Width="67">Nouveau</Button>
+                                    <Button Height="26.664" Margin="1" Name="BtnSaveCmd" Width="67">Enregistrer</Button>
+                                    <Button Height="26.664" Margin="1" Name="BtnDelCmd" Width="67">Supprimer</Button>
+                                    <Button Height="26.664" Margin="1" Name="BtnTstCmd" Width="67">Tester</Button>
+                                    <Button Height="26.664" Margin="1" Name="BtnLearn" Width="67">Apprendre</Button>
                                 </StackPanel>
 
                             </StackPanel>
