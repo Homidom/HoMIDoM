@@ -1,4 +1,6 @@
-﻿Partial Public Class uConfigAudio
+﻿Imports System.IO
+
+Partial Public Class uConfigAudio
     Public Event CloseMe(ByVal MyObject As Object)
 
     Public Sub New()
@@ -28,6 +30,7 @@
                 a.Content = Window1.myService.GetAllRepertoiresAudio(IdSrv).Item(i).Repertoire
                 a.IsChecked = Window1.myService.GetAllRepertoiresAudio(IdSrv).Item(i).Enable
                 ListBox1.Items.Add(a)
+                BtnDelRepertoireAudio.IsEnabled = True
             Next
 
             ListBox2.Items.Clear()
@@ -36,10 +39,11 @@
                 a.Content = Window1.myService.GetAllExtensionsAudio(IdSrv).Item(i).Extension
                 a.IsChecked = Window1.myService.GetAllExtensionsAudio(IdSrv).Item(i).Enable
                 ListBox2.Items.Add(a)
+                BtnDeleteExtension.IsEnabled = True
             Next
 
-            BtnDelRepertoireAudio.IsEnabled = False
-            BtnDeleteExtension.IsEnabled = False
+
+
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub uconfigaudio RefreshList: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -60,18 +64,22 @@
     End Sub
 
     Private Sub BtnNewRepertoire_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewRepertoire.Click
-        Dim retour As String
-        retour = InputBox("Veuillez saisir le chemin du répertoire Audio à scanner, et l'activer ensuite si besoin", "Répertoire Audio", "")
-        If retour = "" Then
+        Dim dlg As New Forms.FolderBrowserDialog()
+
+        ' Ouverture de la fenetre de selection d un repertoire
+        Dim retour As Forms.DialogResult = dlg.ShowDialog()
+
+        If dlg.SelectedPath = "" Then
             MessageBox.Show("Le chemin du répertoire audio ne peut être vide!", "Repertoire Audio", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         Else
-            If Window1.myService.NewRepertoireAudio(retour, False) = -1 Then
+            If Window1.myService.NewRepertoireAudio(IdSrv, dlg.SelectedPath, False) = -1 Then
                 MessageBox.Show("Le chemin du répertoire audio existe déjà il ne sera pas pris en compte", "Repertoire Audio", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             Else
                 RefreshList()
             End If
+
         End If
     End Sub
 
@@ -91,7 +99,7 @@
             Exit Sub
         End If
         retour = "." & LCase(retour)
-        If Window1.myService.NewExtensionAudio(retour, False) = -1 Then
+        If Window1.myService.NewExtensionAudio(IdSrv, retour, False) = -1 Then
             MessageBox.Show("L'extension audio existe déjà elle ne sera pas pris en compte", "Extension Audio", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         Else
@@ -136,14 +144,21 @@
     End Sub
 
     Private Sub BtnOk_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOk.Click
-        For i As Integer = 0 To ListBox1.Items.Count - 1
-            Dim x As CheckBox = ListBox1.Items(i)
-            Window1.myService.EnableRepertoireAudio(IdSrv, x.Content, x.IsChecked)
-        Next
+        Try
+            If Window1.IsConnect = True Then
+                For i As Integer = 0 To ListBox1.Items.Count - 1
+                    Dim x As CheckBox = ListBox1.Items(i)
+                    Window1.myService.EnableRepertoireAudio(IdSrv, x.Content, x.IsChecked)
+                Next
 
-        For i As Integer = 0 To ListBox2.Items.Count - 1
-            Dim x As CheckBox = ListBox2.Items(i)
-            Window1.myService.EnableExtensionAudio(IdSrv, x.Content, x.IsChecked)
-        Next
+                For i As Integer = 0 To ListBox2.Items.Count - 1
+                    Dim x As CheckBox = ListBox2.Items(i)
+                    Window1.myService.EnableExtensionAudio(IdSrv, x.Content, x.IsChecked)
+                Next
+            End If
+            RaiseEvent CloseMe(Me)
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uconfigserver BtnOK_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 End Class
