@@ -176,6 +176,7 @@ Namespace HoMIDom
             Protected _Solo As Boolean = True
             Protected _LastEtat As Boolean = False
             Protected MyTimer As New Timers.Timer
+            <NonSerialized()> Protected _FistTime As Boolean = False
 
             'Identification unique du device
             Public Property ID() As String
@@ -434,13 +435,15 @@ Namespace HoMIDom
                 Set(ByVal value As Integer)
                     _Refresh = value
                     If _Refresh > 0 Then
-                        If MyTimer.Enabled = True Then
-                            MyTimer.Enabled = False
+                        MyTimer.Enabled = False
+                        If _FistTime = True Then
                             RemoveHandler MyTimer.Elapsed, AddressOf Read
+                        Else
+                            _FistTime = True
+                            AddHandler MyTimer.Elapsed, AddressOf Read
                         End If
                         MyTimer.Interval = _Refresh
                         MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf Read
                     End If
                 End Set
             End Property
