@@ -729,8 +729,8 @@ Namespace HoMIDom
                                         End If
                                     End If
                                     If (Not list.Item(j).Attributes.GetNamedItem("solo") Is Nothing) Then .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = list.Item(j).Attributes.GetNamedItem("value").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = list.Item(j).Attributes.GetNamedItem("valuelast").Value
+                                    If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Replace(list.Item(j).Attributes.GetNamedItem("value").Value, ".", ",")
+                                    If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = Replace(list.Item(j).Attributes.GetNamedItem("valuelast").Value, ".", ",")
                                     If (Not list.Item(j).Attributes.GetNamedItem("lastetat") Is Nothing) Then .LastEtat = list.Item(j).Attributes.GetNamedItem("lastetat").Value
                                     '-- propriétés generique value --
                                     If _Dev.Type = "BAROMETRE" _
