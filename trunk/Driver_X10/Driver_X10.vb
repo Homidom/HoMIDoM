@@ -506,8 +506,16 @@ Public Class Driver_x10
                             Exit Sub
                         End If
 
-                        port.Read(BufferIn, 0, Inbyte)
-                        TraiteLire(BufferIn)
+                        Dim trame(Inbyte) As Byte
+                        port.Read(trame, 0, Inbyte)
+
+                        Dim tramerecue As String = ""
+                        For j As Integer = 0 To trame.Length - 1
+                            tramerecue &= CInt(trame(j)).ToString & " "
+                        Next
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Trame recue: " & tramerecue)
+
+                        TraiteLire(trame)
 
                     Case CM11_CLOCK_REQ
                         ' Power failure macro refresh request (Chr165 = 0xA5) Erreur CM11
@@ -568,10 +576,10 @@ Public Class Driver_x10
                 Dim Bin As String = Int2Bin(CInt(trame(i)))
                 Recieved_HouseCode = GetHouse(Mid(Bin, 1, 4))
 
-                Select Case Mid(Recieved_FAMask, i, 1)
+                Dim Mask As String = Mid(Recieved_FAMask, i, 1)
+                Select Case Mask
                     Case "0" 'Le Mask est à 0 donc c'est une adresse
                         Recieved_DeviceCode = GetDevice(Mid(Bin, 5, 4))
-
                     Case "1" 'Le Mask est à 1 donc c'est une fonction
                         Recieved_Function = GetFunction(Mid(Bin, 5, 4))
                         If Recieved_Function = "5" Or Recieved_Function = "6" Then
@@ -580,7 +588,7 @@ Public Class Driver_x10
                             i += 1
                         End If
                     Case Else 'C'est une erreur car ni adresse ni fonction
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 TraiteLire", "Erreur inconnu")
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 TraiteLire", "Erreur inconnu - Mask=" & Mask)
                 End Select
             Next
 
@@ -979,15 +987,19 @@ Public Class Driver_x10
     Public Function Int2Bin(ByVal Dec As Integer) As String
         Dim tdec As Integer = Dec
         Dim Bin As String = ""
+
         Do While tdec > 0
             If tdec / 2 = tdec \ 2 Then
-                Bin = "0" + Bin
+                Bin = "0" & Bin
             ElseIf tdec / 2 <> tdec \ 2 Then
-                Bin = "1" + Bin
+                Bin = "1" & Bin
             End If
             tdec = tdec \ 2
         Loop
-        Return Format(Bin, "00000000")
+
+        Dim retour As New String("0", 8 - Len(Bin))
+        retour &= Bin
+        Return retour
     End Function
 
     ''' <summary>
