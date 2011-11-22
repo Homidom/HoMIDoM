@@ -462,19 +462,26 @@ Public Class Driver_x10
 
                 Select Case BufferIn(0)
                     Case INTERFACE_CQ
+                        'suppression de l'attente de données à lire
+                        RemoveHandler port.DataReceived, AddressOf DataReceived
+
                         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Un Device a envoyé un ordre, " & count & " bytes recus")
 
                         '' Attend le reste des données
                         Dim Time_Out As Integer = 0
-                        Dim Inbyte As Integer = INTERFACE_CQ
+                        Dim Inbyte As Integer
 
-                        Do While Time_Out <= 20 And Inbyte = INTERFACE_CQ
+                        Do While Time_Out <= 20
                             'L'interface demande au pc de lui envoyer des données et on doit répondre 
                             Dim donnee As Byte() = {&HC3}
                             port.Write(donnee, 0, 1)
-                            System.Threading.Thread.Sleep(20)
+
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Le serveur a repondu OK")
+                            System.Threading.Thread.Sleep(200)
+
                             Inbyte = port.ReadByte
-                            System.Threading.Thread.Sleep(100)
+                            If Inbyte <> INTERFACE_CQ Then Exit Do
+
                             Time_Out += 1
                         Loop
 
@@ -490,7 +497,7 @@ Public Class Driver_x10
                             Exit Sub
                         End If
 
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Le serveur a repondu OK, CM11: " & Inbyte & " bytes à traiter")
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", Inbyte & " bytes à traiter")
 
                         'On attend de recevoir le reste
                         Time_Out = 0
@@ -516,7 +523,7 @@ Public Class Driver_x10
                         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Trame recue: " & tramerecue)
 
                         TraiteLire(trame)
-
+                        AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
                     Case CM11_CLOCK_REQ
                         ' Power failure macro refresh request (Chr165 = 0xA5) Erreur CM11
                         ' Power fail/recovery detected.
@@ -596,12 +603,12 @@ Public Class Driver_x10
                 _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 TraiteLire", Recieved_HouseCode & ":" & Recieved_DeviceCode & ":" & Recieved_Function)
                 Dim _add As String = Recieved_HouseCode & Recieved_DeviceCode
                 Select Case Recieved_Function
+                    Case "1"
+                        traitement("ALLLIGHTSON", _add)
                     Case "3"
                         traitement("ON", _add)
-                        '_Server.GetAllDevices(_IdSrv).Item(i).Value = True
                     Case "4"
                         traitement("OFF", _add)
-                        '_Server.GetAllDevices(_IdSrv).Item(i).Value = False
                 End Select
             End If
             'Else
