@@ -469,7 +469,7 @@ Public Class Driver_x10
 
                         '' Attend le reste des données
                         Dim Time_Out As Integer = 0
-                        Dim Inbyte As Integer
+                        Dim Inbyte As Integer = 0
 
                         Do While Time_Out <= 20
                             'L'interface demande au pc de lui envoyer des données et on doit répondre 
@@ -479,6 +479,7 @@ Public Class Driver_x10
                             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Le serveur a repondu OK")
                             System.Threading.Thread.Sleep(200)
 
+                            'Si on a reçu un byte différent que la demande de notification on sort de la boucle pour traiter le reste
                             Inbyte = port.ReadByte
                             If Inbyte <> INTERFACE_CQ Then Exit Do
 
