@@ -57,6 +57,7 @@ Namespace HoMIDom
         <NonSerialized()> Public Etat_server As Boolean = False 'etat du serveur : true = démarré
         <NonSerialized()> Dim fsw As FileSystemWatcher
         <NonSerialized()> Dim _MaxMonthLog As Integer = 2
+        <NonSerialized()> Private Shared _TypeLogEnable As New List(Of Boolean) 'True si on doit pas prendre en compte le type de log
 #End Region
 
 #Region "Event"
@@ -376,6 +377,26 @@ Namespace HoMIDom
                                         _SMTPLogin = list.Item(0).Attributes.Item(j).Value
                                     Case "smtppassword"
                                         _SMTPassword = list.Item(0).Attributes.Item(j).Value
+                                    Case "log0"
+                                        _TypeLogEnable(0) = list.Item(0).Attributes.Item(j).Value
+                                    Case "log1"
+                                        _TypeLogEnable(1) = list.Item(0).Attributes.Item(j).Value
+                                    Case "log2"
+                                        _TypeLogEnable(2) = list.Item(0).Attributes.Item(j).Value
+                                    Case "log3"
+                                        _TypeLogEnable(3) = list.Item(0).Attributes.Item(j).Value
+                                    Case "log4"
+                                        _TypeLogEnable(4) = list.Item(0).Attributes.Item(j).Value
+                                    Case "log5"
+                                        _TypeLogEnable(5) = list.Item(0).Attributes.Item(j).Value
+                                    Case "log6"
+                                        _TypeLogEnable(6) = list.Item(0).Attributes.Item(j).Value
+                                    Case "log7"
+                                        _TypeLogEnable(7) = list.Item(0).Attributes.Item(j).Value
+                                    Case "log8"
+                                        _TypeLogEnable(8) = list.Item(0).Attributes.Item(j).Value
+                                    Case "log9"
+                                        _TypeLogEnable(9) = list.Item(0).Attributes.Item(j).Value
                                     Case Else
                                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                 End Select
@@ -1114,6 +1135,36 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("smtppassword")
                 writer.WriteValue(_SMTPassword)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("log0")
+                writer.WriteValue(_TypeLogEnable(0))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("log1")
+                writer.WriteValue(_TypeLogEnable(1))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("log2")
+                writer.WriteValue(_TypeLogEnable(2))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("log3")
+                writer.WriteValue(_TypeLogEnable(3))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("log4")
+                writer.WriteValue(_TypeLogEnable(4))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("log5")
+                writer.WriteValue(_TypeLogEnable(5))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("log6")
+                writer.WriteValue(_TypeLogEnable(6))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("log7")
+                writer.WriteValue(_TypeLogEnable(7))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("log8")
+                writer.WriteValue(_TypeLogEnable(8))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("log9")
+                writer.WriteValue(_TypeLogEnable(9))
                 writer.WriteEndAttribute()
                 writer.WriteEndElement()
 
@@ -2116,6 +2167,9 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String) Implements IHoMIDom.Log
             Try
+
+                If _TypeLogEnable(TypLog - 1) = True Then Exit Sub
+
                 Dim Fichier As FileInfo
 
                 'Vérifie si le fichier log existe sinon le crée
@@ -2272,6 +2326,10 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub start() Implements IHoMIDom.Start
             Try
+                For i As Integer = 0 To 9
+                    _TypeLogEnable.Add(False)
+                Next
+
                 '----- Démarre les connexions Sqlite ----- 
                 Dim retour As String = sqlite_homidom.connect("homidom")
                 If retour.StartsWith("ERR:") Then
@@ -2303,10 +2361,10 @@ Namespace HoMIDom
                 VerifIsJour()
 
                 '----- Maj des triggers type CRON ----- 
-                For i = 0 To _listTriggers.Count - 1
+                For i = 0 To _ListTriggers.Count - 1
                     'on vérifie si la condition est un cron
-                    If _listTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
-                        _listTriggers.Item(i).maj_cron() 'on calcule la date de prochain execution
+                    If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
+                        _ListTriggers.Item(i).maj_cron() 'on calcule la date de prochain execution
                     End If
                 Next
 
@@ -5908,6 +5966,45 @@ Namespace HoMIDom
 #End Region
 
 #Region "Log"
+
+        ''' <summary>
+        ''' Retourne pour chaque type de log s'il doit être pris en compte ou non
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetTypeLogEnable() As List(Of Boolean) Implements IHoMIDom.GetTypeLogEnable
+            Dim _list As New List(Of Boolean)
+
+            For i As Integer = 0 To _TypeLogEnable.Count - 1
+                If _TypeLogEnable.Item(i) = True Then
+                    _list.Add(False)
+                Else
+                    _list.Add(True)
+                End If
+            Next
+
+            Return _list
+        End Function
+
+        ''' <summary>
+        ''' Fixe si chaque type de log doit être pris en compte ou non
+        ''' </summary>
+        ''' <param name="ListTypeLogEnable"></param>
+        ''' <remarks></remarks>
+        Public Sub SetTypeLogEnable(ByVal ListTypeLogEnable As List(Of Boolean)) Implements IHoMIDom.SetTypeLogEnable
+            Try
+                For i As Integer = 0 To ListTypeLogEnable.Count - 1
+                    If ListTypeLogEnable(i) = True Then
+                        _TypeLogEnable.Item(i) = False
+                    Else
+                        _TypeLogEnable.Item(i) = True
+                    End If
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetTypeLogEnable", "Erreur : " & ex.Message)
+            End Try
+        End Sub
+
         ''' <summary>
         ''' Retourne le nombre de mois à conserver une archive de log avant de le supprimer
         ''' </summary>

@@ -743,6 +743,20 @@ Namespace HoMIDom
 #Region "Log"
 
         ''' <summary>
+        ''' Retourne pour chaque type de log s'il doit être pris en compte ou non
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetTypeLogEnable() As List(Of Boolean)
+
+        ''' <summary>
+        ''' ''' Fixe si chaque type de log doit être pris en compte ou non
+        ''' </summary>
+        ''' <param name="ListTypeLogEnable"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetTypeLogEnable(ByVal ListTypeLogEnable As List(Of Boolean))
+
+        ''' <summary>
         ''' Retourne le nombre de mois à conserver une archive de log avant de le supprimer
         ''' </summary>
         ''' <param name="Month">Nombre de mois à conserver</param>

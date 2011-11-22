@@ -22,6 +22,18 @@
         If Window1.IsConnect = True Then
             TxtFile.Text = Window1.myService.GetMaxFileSizeLog
             TxtMaxLogMonth.Text = Window1.myService.GetMaxMonthLog
+
+            Dim _list As List(Of Boolean) = Window1.myService.GetTypeLogEnable
+            ChkTyp0.IsChecked = _list.Item(0)
+            ChkTyp1.IsChecked = _list.Item(1)
+            ChkTyp2.IsChecked = _list.Item(2)
+            ChkTyp3.IsChecked = _list.Item(3)
+            ChkTyp4.IsChecked = _list.Item(4)
+            ChkTyp5.IsChecked = _list.Item(5)
+            ChkTyp6.IsChecked = _list.Item(6)
+            ChkTyp7.IsChecked = _list.Item(7)
+            ChkTyp8.IsChecked = _list.Item(8)
+            ChkTyp9.IsChecked = _list.Item(9)
         End If
     End Sub
 
@@ -30,9 +42,63 @@
             MessageBox.Show("Veuillez saisir un numérique et positif pour la taille max du fichier de log!", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         End If
-        If Window1.IsConnect = True And IsNumeric(TxtFile.Text) Then
+        If Window1.IsConnect = True Then
             Window1.myService.SetMaxFileSizeLog(CDbl(TxtFile.Text))
             Window1.myService.SetMaxMonthLog(CDbl(TxtMaxLogMonth.Text))
+
+            Dim _list As New List(Of Boolean)
+            If ChkTyp0.IsChecked Then
+                _list.Add(True)
+            Else
+                _list.Add(False)
+            End If
+            If ChkTyp1.IsChecked Then
+                _list.Add(True)
+            Else
+                _list.Add(False)
+            End If
+            If ChkTyp2.IsChecked Then
+                _list.Add(True)
+            Else
+                _list.Add(False)
+            End If
+            If ChkTyp3.IsChecked Then
+                _list.Add(True)
+            Else
+                _list.Add(False)
+            End If
+            If ChkTyp4.IsChecked Then
+                _list.Add(True)
+            Else
+                _list.Add(False)
+            End If
+            If ChkTyp5.IsChecked Then
+                _list.Add(True)
+            Else
+                _list.Add(False)
+            End If
+            If ChkTyp6.IsChecked Then
+                _list.Add(True)
+            Else
+                _list.Add(False)
+            End If
+            If ChkTyp7.IsChecked Then
+                _list.Add(True)
+            Else
+                _list.Add(False)
+            End If
+            If ChkTyp8.IsChecked Then
+                _list.Add(True)
+            Else
+                _list.Add(False)
+            End If
+            If ChkTyp9.IsChecked Then
+                _list.Add(True)
+            Else
+                _list.Add(False)
+            End If
+
+            Window1.myService.SetTypeLogEnable(_list)
         End If
         RaiseEvent CloseMe(Me)
     End Sub

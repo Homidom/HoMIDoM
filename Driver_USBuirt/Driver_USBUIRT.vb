@@ -29,7 +29,7 @@ Imports UsbUirt
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "USBuirt"
     Dim _Version As String = "1.0"
-    Dim _Picture As String = "usbuirt.png"
+    Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
     Dim _DeviceSupport As New ArrayList

@@ -89,7 +89,7 @@ Module Service
                     Console.WriteLine(Now & " Démarrage du serveur de fichiers OK")
 
                     'démarrage OK
-                    Console.Beep()
+                    '                    Console.Beep()
                     Console.WriteLine(" ")
                     Console.WriteLine("******************************")
                     Console.WriteLine("****   SERVEUR DEMARRE    ****")
