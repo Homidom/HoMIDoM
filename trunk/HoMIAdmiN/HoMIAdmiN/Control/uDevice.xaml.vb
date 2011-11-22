@@ -174,6 +174,8 @@ Partial Public Class uDevice
                 Exit Sub
             End If
 
+            TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
+
             Dim _driverid As String = ""
             For i As Integer = 0 To Window1.myService.GetAllDrivers(IdSrv).Count - 1 'Window1.Obj.Drivers.Count - 1
                 If Window1.myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
