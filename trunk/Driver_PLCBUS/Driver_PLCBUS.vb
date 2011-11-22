@@ -42,6 +42,7 @@ Imports System.IO.Ports
     'Ajoutés dans les ppt avancés dans New()
     Dim plcack As Boolean = True 'gestion des acks ?
     Dim plctriphase As Boolean = False 'installation en triphase
+    Dim plcusercode As Integer = 209 'usercode PLCBUS defaut : &HD1 / 209
     'Dim plcmodele As String = "1141" '"1141" ou "1141+" si modele 1141+, utilise le checksum plutot que H3 en fin de paquet
 #End Region
 
@@ -215,6 +216,7 @@ Imports System.IO.Ports
         Try
             plcack = _Parametres.Item(0).Valeur
             plctriphase = _Parametres.Item(1).Valeur
+            plcusercode = _Parametres.Item(2).Valeur
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
         End Try
@@ -333,7 +335,11 @@ Imports System.IO.Ports
             x.Description = "Installation en triphase"
             x.Valeur = False
             _Parametres.Add(x)
-
+            x = New HoMIDom.HoMIDom.Driver.Parametre
+            x.Nom = "plcusercode"
+            x.Description = "User Code (0-255)"
+            x.Valeur = 209
+            _Parametres.Add(x)
             'Liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
             _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
@@ -575,7 +581,7 @@ Imports System.IO.Ports
         'Dim tblack() As DataRow
 
         If _IsConnect Then
-            Dim usercode = &HD1 'D1
+            'Dim usercode = &HD1 'D1
             Try
                 _adresse = adresse_to_hex(adresse)
             Catch ex As Exception
@@ -590,6 +596,14 @@ Imports System.IO.Ports
             End Try
 
             Try
+                '--- usercode ---
+                'on verifie si bon format : 1-255
+                If Not (IsNumeric(plcusercode) And plcusercode >= 0 And plcusercode <= 255) Then
+                    'non correct, on log et prend la valeur par défaut
+                    plcusercode = 209
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "usercode non valide (0-255 defaut:209) : " & commande)
+                End If
+
                 '--- TriPhase ---
                 If plctriphase Then _cmd = _cmd Or &H40
                 '--- request acks --- (sauf pour les status_request car pas important et encombre le port)
@@ -607,13 +621,13 @@ Imports System.IO.Ports
 
                 If _Modele = "1141+" Then
                     'pour les modeles 1141+
-                    checksum = &H200 - (&H2 + &H5 + usercode + _adresse + _cmd + data1 + data2)
+                    checksum = &H200 - (&H2 + &H5 + plcusercode + _adresse + _cmd + data1 + data2)
                 Else
                     'pour les modéles 1141
                     checksum = &H3
                 End If
 
-                Dim donnee() As Byte = {&H2, &H5, usercode, _adresse, _cmd, data1, data2, checksum}
+                Dim donnee() As Byte = {&H2, &H5, plcusercode, _adresse, _cmd, data1, data2, checksum}
 
                 'ecriture sur le port
                 port.Write(donnee, 0, donnee.Length)
