@@ -1441,6 +1441,18 @@ HoMIDom
 	<param name="UserId"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetTypeLogEnable">
+	<summary>
+ Retourne pour chaque type de log s'il doit être pris en compte ou non
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetTypeLogEnable(System.Collections.Generic.List{System.Boolean})">
+	<summary>
+ Fixe si chaque type de log doit être pris en compte ou non
+ </summary>
+	<param name="ListTypeLogEnable"></param>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SetMaxMonthLog(System.Int32)">
 	<summary>
  Retourne le nombre de mois à conserver une archive de log avant de le supprimer
@@ -2127,6 +2139,18 @@ HoMIDom
  </summary>
 	<param name="DeviceId">ID du device</param>
 	<returns>Retourne pour chaque élément de la liste NOMDELAMETHODE|Parametre1:TypeParametre1|Parametre2:TypeParametre2...</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetTypeLogEnable">
+	<summary>
+ Retourne pour chaque type de log s'il doit être pris en compte ou non
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetTypeLogEnable(System.Collections.Generic.List{System.Boolean})">
+	<summary>
+ ''' Fixe si chaque type de log doit être pris en compte ou non
+ </summary>
+	<param name="ListTypeLogEnable"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetMaxMonthLog(System.Int32)">
 	<summary>

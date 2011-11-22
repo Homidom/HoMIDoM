@@ -88,8 +88,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\HoMIAdmiN\HoMIAdmiN\bin\Debug\taglib-sharp.dll</HintPath>
     </Reference>
-    <Reference Include="ZedGraph">
-      <HintPath>..\Dll_externes\ZedGraph.dll</HintPath>
+    <Reference Include="ZedGraph, Version=5.1.5.28844, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dll_externes\Homidom-32bits\ZedGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

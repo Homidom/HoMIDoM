@@ -83,7 +83,31 @@
                 <Label Content="Conservation ancien log (mois):" Name="Label4" Margin="1" Foreground="White" />
                 <TextBox Height="24" Name="TxtMaxLogMonth" Width="30" />
             </StackPanel>
-            <TextBox Margin="3" Height="380" Name="TxtLog" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+            <StackPanel >
+                <GroupBox Foreground="White" Header="Type de Log à prendre en compte">
+                    <StackPanel Orientation="Horizontal" >
+                        <StackPanel >
+                        <CheckBox Name="ChkTyp0" Content="INFO" Foreground="White" />
+                        <CheckBox Name="ChkTyp1" Content="ACTION" Foreground="White" />
+                        <CheckBox Name="ChkTyp2" Content="MESSAGE" Foreground="White" />
+                        </StackPanel>
+                        <StackPanel >
+                            <CheckBox Name="ChkTyp3" Content="VALEUR_CHANGE" Foreground="White" />
+                            <CheckBox Name="ChkTyp4" Content="VALEUR_INCHANGE" Foreground="White" />
+                            <CheckBox Name="ChkTyp5" Content="VALEUR_INCHANGE_PRECISION" Foreground="White" />
+                        </StackPanel>
+                        <StackPanel >
+                            <CheckBox Name="ChkTyp6" Content="VALEUR_INCHANGE_LASTETAT" Foreground="White" />
+                            <CheckBox Name="ChkTyp7" Content="ERREUR" Foreground="White" />
+                            <CheckBox Name="ChkTyp8" Content="ERREUR_CRITIQUE" Foreground="White" />
+                        </StackPanel>
+                        <StackPanel >
+                            <CheckBox Name="ChkTyp9" Content="DEBUG" Foreground="White" />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+            <TextBox Margin="3" Height="300" Name="TxtLog" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
         </StackPanel>
         
         
