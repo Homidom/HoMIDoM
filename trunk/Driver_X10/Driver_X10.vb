@@ -455,17 +455,17 @@ Public Class Driver_x10
     Private Sub DataReceived(ByVal sender As Object, ByVal e As SerialDataReceivedEventArgs)
         Try
             'Nombre d'octet à lire
-            Dim count As Integer = port.BytesToRead
+            'Dim count As Integer = port.BytesToRead
 
-            If count > 0 And _IsConnect Then
-                port.Read(BufferIn, 0, count)
+            If _IsConnect Then
+                'port.Read(BufferIn, 0, 1)
 
-                Select Case BufferIn(0)
+                Select Case port.ReadByte
                     Case INTERFACE_CQ
                         'suppression de l'attente de données à lire
                         RemoveHandler port.DataReceived, AddressOf DataReceived
 
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Un Device a envoyé un ordre, " & count & " bytes recus")
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Un Device a envoyé un ordre")
 
                         '' Attend le reste des données
                         Dim Time_Out As Integer = 0
