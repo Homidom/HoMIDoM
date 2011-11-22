@@ -434,7 +434,10 @@ Namespace HoMIDom
                 Set(ByVal value As Integer)
                     _Refresh = value
                     If _Refresh > 0 Then
-                        If MyTimer.Enabled = True Then MyTimer.Enabled = False
+                        If MyTimer.Enabled = True Then
+                            MyTimer.Enabled = False
+                            RemoveHandler MyTimer.Elapsed, AddressOf Read
+                        End If
                         MyTimer.Interval = _Refresh
                         MyTimer.Enabled = True
                         AddHandler MyTimer.Elapsed, AddressOf Read
