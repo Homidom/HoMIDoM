@@ -1,13 +1,35 @@
-﻿Partial Public Class uLog
+﻿Imports System.Data
+Imports System.IO
+
+Partial Public Class uLog
     Public Event CloseMe(ByVal MyObject As Object)
 
     Private Sub BtnRefresh_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnRefresh.Click
-        TxtLog.Text = Nothing
         RefreshLog()
     End Sub
 
     Private Sub RefreshLog()
-        If Window1.IsConnect = True Then TxtLog.Text = Window1.myService.ReturnLog()
+        Try
+
+            If Window1.IsConnect = True Then
+                If File.Exists("log.xml") Then
+                    File.Delete("log.xml")
+                End If
+
+                Dim TargetFile As StreamWriter
+                TargetFile = New StreamWriter("log.xml", True)
+                TargetFile.Write(Window1.myService.ReturnLog)
+                TargetFile.Close()
+
+                Dim ds As DataSet = New DataSet("Table")
+                ds.ReadXml("log.xml")
+                DGW.ItemsSource = ds.Tables(0).DefaultView
+
+                File.Delete("log.xml")
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur" & ex.ToString)
+        End Try
     End Sub
 
 
