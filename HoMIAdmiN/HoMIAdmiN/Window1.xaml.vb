@@ -169,7 +169,7 @@ Class Window1
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
-                label.Content = zon.Name
+                label.Content = zon.Name & " {" & zon.ListElement.Count & " éléments}"
 
                 stack.Children.Add(img)
                 stack.Children.Add(label)
@@ -319,6 +319,99 @@ Class Window1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
+                Dim img2 As New Image
+                Dim uri As String = ""
+                Dim uri2 As String = MyRep & "\Images\Devices\Defaut_NoZone.png"
+                Dim bmpImage As New BitmapImage()
+                Dim bmpImage2 As New BitmapImage()
+                Dim FlagZone As Boolean = False
+                stack.Orientation = Orientation.Horizontal
+
+                For Each Zon In myService.GetAllZones(IdSrv)
+                    For Each elemnt In Zon.ListElement
+                        If elemnt.ElementID = Dev.ID Then
+                            FlagZone = True
+                            Exit For
+                        End If
+                    Next
+                Next
+
+
+                img.Height = 20
+                img.Width = 20
+                img2.Height = 20
+                img2.Width = 20
+
+                If Dev.Picture <> "" And File.Exists(Dev.Picture) = True Then
+                    uri = Dev.Picture
+                Else
+                    uri = MyRep & "\Images\Devices\Defaut-128.png"
+                End If
+
+                bmpImage.BeginInit()
+                bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
+                bmpImage.EndInit()
+                img.Source = bmpImage
+
+                Dim drv As String = Dev.Name
+                drv &= " (" & myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom & ")"
+
+                Dim tl As New ToolTip
+                tl.Content = drv
+                Dim label As New Label
+                If Dev.Enable = True Then
+                    label.Foreground = New SolidColorBrush(Colors.White)
+                Else
+                    label.Foreground = New SolidColorBrush(Colors.Black)
+                End If
+                label.Content = drv
+                label.ToolTip = tl
+
+                stack.Children.Add(img)
+
+
+                If FlagZone = False Then
+                    bmpImage2.BeginInit()
+                    bmpImage2.UriSource = New Uri(uri2, UriKind.Absolute)
+                    bmpImage2.EndInit()
+                    img2.Source = bmpImage2
+                    stack.Children.Add(img2)
+                End If
+
+                stack.Children.Add(label)
+
+                newchild.Foreground = New SolidColorBrush(Colors.White)
+                newchild.Header = stack
+                newchild.Uid = Dev.ID
+                TreeViewG.Items.Add(newchild)
+            Next
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub AffDevice: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    'Afficher la liste des devices sans zone affectée
+    Public Sub AffDeviceWithoutZone()
+        Try
+            TreeViewG.Items.Clear()
+            If IsConnect = False Then Exit Sub
+
+            CntDevice.Content = myService.GetAllDevices(IdSrv).Count & " Device(s)"
+
+            For Each Dev In myService.GetAllDevices(IdSrv)
+
+
+                For Each Zon In myService.GetAllZones(IdSrv)
+                    For i As Integer = 0 To Zon.ListElement.Count - 1
+                        If Zon.ListElement.Item(i).ElementID = Dev.ID Then
+
+                        End If
+                    Next
+                Next
+
+                Dim newchild As New TreeViewItem
+                Dim stack As New StackPanel
+                Dim img As New Image
                 Dim uri As String = ""
                 Dim bmpImage As New BitmapImage()
                 stack.Orientation = Orientation.Horizontal
@@ -363,6 +456,7 @@ Class Window1
             MessageBox.Show("ERREUR Sub AffDevice: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
 
     'Afficher la liste des scenes
     Public Sub AffScene()

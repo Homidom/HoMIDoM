@@ -107,7 +107,9 @@
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
-            <TextBox Margin="3" Height="300" Name="TxtLog" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+            <DataGrid Name="DGW" Height="300" RowBackground="LightBlue" AlternatingRowBackground="LightYellow">
+                
+            </DataGrid>
         </StackPanel>
         
         
