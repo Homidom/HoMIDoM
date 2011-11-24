@@ -12,6 +12,10 @@
                     MessageBox.Show("L'id du serveur ne peut être vide !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
                 End If
+                If IsNumeric(TxtSave.Text) = False Or TxtSave.Text = "" Or TxtSave.Text = " " Or CInt(TxtSave.Text) < 0 Then
+                    MessageBox.Show("La valeur de saubegarde doit être un chiffre et positif !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Exit Sub
+                End If
                 If TxtSOAP.Text <> Window1.myService.GetPortSOAP Then
                     MessageBox.Show("Vous avez modifié le port SOAP, n'oubliez pas:" & vbCrLf & "- D'enregistrer la configuration pour qu'elle soit prise en compte au prochain démarrage" & vbCrLf & "- De redémarrer le service", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     Window1.myService.SetPortSOAP(IdSrv, TxtSOAP.Text)
@@ -19,6 +23,9 @@
                 Window1.myService.SetIdServer(IdSrv, TxtIdSrv.Text)
                 IdSrv = TxtIdSrv.Text
 
+                Dim tmpSave As Integer = TxtSave.Text
+                tmpSave = Format(tmpSave, "#0")
+                Window1.myService.SetTimeSave(IdSrv, tmpSave)
                 Window1.myService.SetLongitude(IdSrv, CDbl(TxtLong.Text.Replace(".", ",")))
                 Window1.myService.SetLatitude(IdSrv, CDbl(TxtLat.Text.Replace(".", ",")))
                 Window1.myService.SetHeureCorrectionLever(IdSrv, CInt(HCL.Text))
@@ -56,6 +63,7 @@
                 HCL.Text = Window1.myService.GetHeureCorrectionLever
                 HCC.Text = Window1.myService.GetHeureCorrectionCoucher
                 TxtIdSrv.Text = IdSrv
+                TxtSave.Text = Window1.myService.GetTimeSave(IdSrv)
 
                 TxtAdresse.Text = Window1.myService.GetSMTPServeur(IdSrv)
                 TxtMail.Text = Window1.myService.GetSMTPMailServeur(IdSrv)

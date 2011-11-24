@@ -99,6 +99,10 @@
                             <Label Foreground="White" Name="Label4" VerticalAlignment="Bottom">Correction Heure Coucher Soleil:</Label>
                             <TextBox Height="20" Width="25" Name="HCC" VerticalAlignment="Bottom" Text="0"></TextBox>
                         </StackPanel>
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Foreground="White" Name="Label15" VerticalAlignment="Bottom">Enregistrer automatiquement (minutes), 0=Inactif:</Label>
+                            <TextBox Height="20" Width="25" Name="TxtSave" VerticalAlignment="Bottom" Text="0"></TextBox>
+                        </StackPanel>
                     </StackPanel>
 
                 </GroupBox>

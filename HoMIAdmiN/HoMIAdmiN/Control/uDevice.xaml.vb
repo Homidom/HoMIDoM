@@ -46,6 +46,7 @@ Partial Public Class uDevice
                     ChKSolo.IsChecked = x.Solo
                     CbType.SelectedValue = x.Type.ToString
                     CbType.IsEnabled = False
+                    BtnRead.Visibility = Windows.Visibility.Visible
 
                     If CbType.SelectedValue = "FREEBOX" Then
                         Label6.Content = "Adresse Http Freebox:"
@@ -389,4 +390,40 @@ Partial Public Class uDevice
 
     End Sub
 
+    Private Sub BtnSave_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSave.Click
+        Try
+            If TxtNom.Text = "" Then
+                MessageBox.Show("Le nom du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            If CbType.Text = "" Then
+                MessageBox.Show("Le type du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            If CbDriver.Text = "" Then
+                MessageBox.Show("Le driver du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            If TxtAdresse1.Text = "" Then
+                MessageBox.Show("L'adresse de base du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+
+            TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
+
+            Dim _driverid As String = ""
+            For i As Integer = 0 To Window1.myService.GetAllDrivers(IdSrv).Count - 1 'Window1.Obj.Drivers.Count - 1
+                If Window1.myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
+                    _driverid = Window1.myService.GetAllDrivers(IdSrv).Item(i).ID
+                    Exit For
+                End If
+            Next
+            Window1.myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
+
+            BtnRead.Visibility = Windows.Visibility.Visible
+
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uDevice BtnSave_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
 End Class

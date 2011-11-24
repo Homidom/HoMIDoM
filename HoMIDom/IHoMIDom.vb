@@ -15,7 +15,22 @@ Namespace HoMIDom
 
 
 #Region "Serveur"
+        ''' <summary>
+        ''' Retourne le paramètre de sauvegarde
+        ''' </summary>
+        ''' <param name="IdSrv">ID du serveur</param>
+        ''' <returns>la valeur du paramètre, -1 si l'id du serveur est erronée</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetTimeSave(ByVal IdSrv As String) As Integer
 
+        ''' <summary>
+        ''' Fixe le paramètre de sauvegarde
+        ''' </summary>
+        ''' <param name="IdSrv">ID du serveur</param>
+        ''' <param name="Value">Valeur positive qui définit toutes les X minutes une sauvegarde sera effectuée puis à l'arrêt du serveur</param>
+        ''' <returns>0 si réussite</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function SetTimeSave(ByVal IdSrv As String, ByVal Value As Integer) As String
 
         ''' <summary>
         ''' Retourne l'Id du serveur pour la communication SOAP
