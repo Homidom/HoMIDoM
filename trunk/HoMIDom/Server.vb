@@ -58,6 +58,8 @@ Namespace HoMIDom
         <NonSerialized()> Dim fsw As FileSystemWatcher
         <NonSerialized()> Dim _MaxMonthLog As Integer = 2
         <NonSerialized()> Private Shared _TypeLogEnable As New List(Of Boolean) 'True si on doit pas prendre en compte le type de log
+        <NonSerialized()> Dim _CycleSave As Integer = 0 'Enregistrer toute les X minutes
+        <NonSerialized()> Dim _NextTimeSave As Date  'Enregistrer toute les X minutes
 #End Region
 
 #Region "Event"
@@ -201,6 +203,10 @@ Namespace HoMIDom
             Dim thr As New Thread(AddressOf VerifTimeDevice)
             thr.IsBackground = True
             thr.Start()
+
+            If _CycleSave > 0 Then
+                If Now = _NextTimeSave Then SaveConfig(_MonRepertoire & "\config\homidom.xml")
+            End If
 
             Try
                 '---- Actions à effectuer toutes les minutes ----
@@ -397,6 +403,8 @@ Namespace HoMIDom
                                         _TypeLogEnable(8) = list.Item(0).Attributes.Item(j).Value
                                     Case "log9"
                                         _TypeLogEnable(9) = list.Item(0).Attributes.Item(j).Value
+                                    Case "cyclesave"
+                                        _CycleSave = list.Item(0).Attributes.Item(j).Value
                                     Case Else
                                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                 End Select
@@ -1165,6 +1173,9 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("log9")
                 writer.WriteValue(_TypeLogEnable(9))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("cyclesave")
+                writer.WriteValue(_CycleSave)
                 writer.WriteEndAttribute()
                 writer.WriteEndElement()
 
@@ -2330,6 +2341,8 @@ Namespace HoMIDom
                     _TypeLogEnable.Add(False)
                 Next
 
+                If _CycleSave > 0 Then _NextTimeSave = Now.AddMinutes(_CycleSave)
+
                 '----- Démarre les connexions Sqlite ----- 
                 Dim retour As String = sqlite_homidom.connect("homidom")
                 If retour.StartsWith("ERR:") Then
@@ -2455,6 +2468,9 @@ Namespace HoMIDom
                 If Mid(retour, 1, 4) = "ERR:" Then
                     Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Medias : " & retour)
                 End If
+
+                If _CycleSave > 0 Then SaveConfig(_MonRepertoire & "\config\homidom.xml")
+
             Catch ex As Exception
                 Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Exception : " & ex.Message)
             End Try
@@ -2952,6 +2968,40 @@ Namespace HoMIDom
 
         '*** FONCTIONS ******************************************
 #Region "Serveur"
+        ''' <summary>
+        ''' Retourne le paramètre de sauvegarde
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetTimeSave(ByVal IdSrv As String) As Integer Implements IHoMIDom.GetTimeSave
+            If VerifIdSrv(IdSrv) = False Then
+                Return "-1"
+                Exit Function
+            End If
+            Return _CycleSave
+        End Function
+
+        ''' <summary>
+        ''' Fixe le paramètre de sauvegarde
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function SetTimeSave(ByVal IdSrv As String, ByVal Value As Integer) As String Implements IHoMIDom.SetTimeSave
+            If VerifIdSrv(IdSrv) = False Then
+                Return 99
+                Exit Function
+            End If
+
+            If IsNumeric(Value) = False Or Value = 0 Or Value < 0 Then
+                Return "ERR: la valeur doit être numérique, positive et non nulle"
+            Else
+                _CycleSave = Value
+                _NextTimeSave = Now.AddMinutes(Value)
+                Return 0
+            End If
+        End Function
+
         ''' <summary>
         ''' Retourne l'Id du serveur pour SOAP
         ''' </summary>

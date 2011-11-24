@@ -1034,6 +1034,19 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.stop(System.String)">
 	<summary>Arrêt du serveur</summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetTimeSave(System.String)">
+	<summary>
+ Retourne le paramètre de sauvegarde
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetTimeSave(System.String,System.Int32)">
+	<summary>
+ Fixe le paramètre de sauvegarde
+ </summary>
+	<param name="Value"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetIdServer(System.String)">
 	<summary>
  Retourne l'Id du serveur pour SOAP
@@ -1517,6 +1530,21 @@ HoMIDom
 	<summary>
  Template de Classe de type Driver pour le service web
  </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetTimeSave(System.String)">
+	<summary>
+ Retourne le paramètre de sauvegarde
+ </summary>
+	<param name="IdSrv">ID du serveur</param>
+	<returns>la valeur du paramètre, -1 si l'id du serveur est erronée</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetTimeSave(System.String,System.Int32)">
+	<summary>
+ Fixe le paramètre de sauvegarde
+ </summary>
+	<param name="IdSrv">ID du serveur</param>
+	<param name="Value">Valeur positive qui définit toutes les X minutes une sauvegarde sera effectuée puis à l'arrêt du serveur</param>
+	<returns>0 si réussite</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetIdServer(System.String)">
 	<summary>

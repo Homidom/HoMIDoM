@@ -183,13 +183,14 @@
             <Image.LayoutTransform >
                 <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
             </Image.LayoutTransform>
-            </Image> 
-        
-                     
-        <Button Height="25" HorizontalAlignment="Right" Margin="0,42.5,20,0" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Foreground="White">Fermer</Button>
-        <Button Height="25" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Margin="0,11.25,20,0" Name="BtnOK" VerticalAlignment="Top" Width="88.75" Foreground="White">Ok</Button>
-        <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,93.352,20,0" Name="BtnRead" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Tester</Button>
-            
-        
+            </Image>
+
+        <StackPanel Margin="0,12.5,10,0">
+            <Button Margin="2" Height="25" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Name="BtnOK" VerticalAlignment="Top" Width="88.75" Foreground="White">Ok</Button>
+            <Button Margin="2" Height="25" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Name="BtnSave" VerticalAlignment="Top" Width="88.75" Foreground="White">Save</Button>
+            <Button Margin="2" Height="25" HorizontalAlignment="Right"  Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Foreground="White">Fermer</Button>
+            <Button Margin="2" Foreground="White" Height="25" HorizontalAlignment="Right" Name="BtnRead" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Visibility="Hidden">Tester</Button>
+        </StackPanel>
+
     </Grid>
 </UserControl>
