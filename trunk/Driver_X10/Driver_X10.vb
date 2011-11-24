@@ -69,7 +69,8 @@ Public Class Driver_x10
     Public Const ENHANCED_FUNCTION As Byte = &H7
 
     Private BufferIn(8192) As Byte
-
+    Dim CurrentHouse As String = ""
+    Dim CurrentCode As String = ""
 #End Region
 
 #Region "Propriétés génériques"
@@ -514,7 +515,7 @@ Public Class Driver_x10
                             Exit Sub
                         End If
 
-                        Dim trame(Inbyte) As Byte
+                        Dim trame(Inbyte - 1) As Byte
                         port.Read(trame, 0, Inbyte)
 
                         Dim tramerecue As String = ""
@@ -548,13 +549,9 @@ Public Class Driver_x10
     Private Sub TraiteLire(ByVal Data() As Byte)
         Try
 
-            Dim BufSize As Integer = 0
-            Dim Recieved_HouseCode As String = ""
-            Dim Recieved_DeviceCode As String = ""
             Dim Recieved_Function As String = ""
             Dim Recieved_FAMask As String = ""
             Dim Recieved_Variation As Double
-            Dim FlagOk As Boolean = False
 
             'Wake-up and data recieved
             Dim trame() As Byte = Data
@@ -582,12 +579,13 @@ Public Class Driver_x10
 
             For i = 1 To trame.Length - 1
                 Dim Bin As String = Int2Bin(CInt(trame(i)))
-                Recieved_HouseCode = GetHouse(Mid(Bin, 1, 4))
+                CurrentHouse = GetHouse(Mid(Bin, 1, 4))
 
                 Dim Mask As String = Mid(Recieved_FAMask, i, 1)
                 Select Case Mask
                     Case "0" 'Le Mask est à 0 donc c'est une adresse
-                        Recieved_DeviceCode = GetDevice(Mid(Bin, 5, 4))
+                        CurrentCode = GetDevice(Mid(Bin, 5, 4))
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 TraiteLire", "House: " & CurrentHouse & " Code: " & CurrentCode)
                     Case "1" 'Le Mask est à 1 donc c'est une fonction
                         Recieved_Function = GetFunction(Mid(Bin, 5, 4))
                         If Recieved_Function = "5" Or Recieved_Function = "6" Then
@@ -595,23 +593,22 @@ Public Class Driver_x10
                             Recieved_Variation = CInt(trame(i + 1)) / 210
                             i += 1
                         End If
+                        If CurrentCode <> "" And CurrentHouse <> "" Then
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 TraiteLire", CurrentHouse & ":" & CurrentCode & ":" & Recieved_Function)
+                            Dim _add As String = CurrentHouse & CurrentCode
+                            Select Case Recieved_Function
+                                Case "1"
+                                    traitement("ALLLIGHTSON", _add)
+                                Case "3"
+                                    traitement("ON", _add)
+                                Case "4"
+                                    traitement("OFF", _add)
+                            End Select
+                        End If
                     Case Else 'C'est une erreur car ni adresse ni fonction
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 TraiteLire", "Erreur inconnu - Mask=" & Mask)
                 End Select
             Next
-
-            If Recieved_DeviceCode <> "" And Recieved_HouseCode <> "" And Recieved_Function <> "" Then
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 TraiteLire", Recieved_HouseCode & ":" & Recieved_DeviceCode & ":" & Recieved_Function)
-                Dim _add As String = Recieved_HouseCode & Recieved_DeviceCode
-                Select Case Recieved_Function
-                    Case "1"
-                        traitement("ALLLIGHTSON", _add)
-                    Case "3"
-                        traitement("ON", _add)
-                    Case "4"
-                        traitement("OFF", _add)
-                End Select
-            End If
             'Else
             'ERREUR TROP DE BYTES A RECEVOIR MAX 10
             '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 TraiteLire", "Trop ou pas assez de Bytes reçu: " & BufSize)
@@ -906,7 +903,6 @@ Public Class Driver_x10
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function GetFunction(ByVal Bin As String) As String
-        Bin = Format(Bin, "0000")
         Select Case Bin
             Case "0000" : GetFunction = "1"     'All units off
             Case "0001" : GetFunction = "2"     'All lights on
@@ -935,7 +931,6 @@ Public Class Driver_x10
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function GetDevice(ByVal Bin As String) As String
-        Bin = Format(Bin, "0000")
         Select Case Bin
             Case "0110" : GetDevice = "1"
             Case "1110" : GetDevice = "2"
@@ -964,7 +959,6 @@ Public Class Driver_x10
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function GetHouse(ByVal Bin As String) As String
-        Bin = Format(Bin, "0000")
         Select Case Bin
             Case "0110" : GetHouse = "A"
             Case "1110" : GetHouse = "B"
