@@ -71,6 +71,7 @@ Public Class Driver_x10
     Private BufferIn(8192) As Byte
     Dim CurrentHouse As String = ""
     Dim CurrentCode As String = ""
+    Dim IntToCmd() As String = {"All Units Off", "All Lights On", "On", "Off", "Dim", "Bright", "All Lights Off", "Extended Code", "Hail Request", "Hail Acknowledge", "Preset Dim 1", "Preset Dim 2", "Extended Data Transfer", "Status On", "Status Off", "Status Request"}
 #End Region
 
 #Region "Propriétés génériques"
@@ -477,7 +478,7 @@ Public Class Driver_x10
                             Dim donnee As Byte() = {&HC3}
                             port.Write(donnee, 0, 1)
 
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Le serveur a repondu OK")
+                            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Le serveur a repondu OK")
                             System.Threading.Thread.Sleep(200)
 
                             'Si on a reçu un byte différent que la demande de notification on sort de la boucle pour traiter le reste
@@ -499,7 +500,7 @@ Public Class Driver_x10
                             Exit Sub
                         End If
 
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", Inbyte & " bytes à traiter")
+                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", Inbyte & " bytes à traiter")
 
                         'On attend de recevoir le reste
                         Time_Out = 0
@@ -518,11 +519,11 @@ Public Class Driver_x10
                         Dim trame(Inbyte - 1) As Byte
                         port.Read(trame, 0, Inbyte)
 
-                        Dim tramerecue As String = ""
-                        For j As Integer = 0 To trame.Length - 1
-                            tramerecue &= CInt(trame(j)).ToString & " "
-                        Next
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Trame recue: " & tramerecue)
+                        'Dim tramerecue As String = ""
+                        'For j As Integer = 0 To trame.Length - 1
+                        'tramerecue &= CInt(trame(j)).ToString & " "
+                        'Next
+                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Trame recue: " & tramerecue)
 
                         TraiteLire(trame)
                         AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
@@ -585,7 +586,7 @@ Public Class Driver_x10
                 Select Case Mask
                     Case "0" 'Le Mask est à 0 donc c'est une adresse
                         CurrentCode = GetDevice(Mid(Bin, 5, 4))
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 TraiteLire", "House: " & CurrentHouse & " Code: " & CurrentCode)
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10", "Adresse courante:" & CurrentHouse & CurrentCode)
                     Case "1" 'Le Mask est à 1 donc c'est une fonction
                         Recieved_Function = GetFunction(Mid(Bin, 5, 4))
                         If Recieved_Function = "5" Or Recieved_Function = "6" Then
@@ -594,7 +595,7 @@ Public Class Driver_x10
                             i += 1
                         End If
                         If CurrentCode <> "" And CurrentHouse <> "" Then
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 TraiteLire", CurrentHouse & ":" & CurrentCode & ":" & Recieved_Function)
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 TraiteLire", CurrentHouse & CurrentCode & ":" & IntToCmd(Recieved_Function))
                             Dim _add As String = CurrentHouse & CurrentCode
                             Select Case Recieved_Function
                                 Case "1"
