@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <homidom>
-  <server portsoap="8000" longitude="6.052793" latitude="49.364016" heurecorrectionlever="0" heurecorrectioncoucher="0" smtpserver="smtp.free.fr" smtpmail="contact@homidom.com" smtplogin="6,052793" smtppassword="" />
+  <server portsoap="7999" longitude="6.052793" latitude="49.364016" heurecorrectionlever="0" heurecorrectioncoucher="0" smtpserver="smtp.free.fr" smtpmail="contact@homidom.com" smtplogin="6,052793" smtppassword="" />
   <drivers>
     <driver id="9C3E7696-34F7-11E0-AEB0-53DBDED72085" nom="Foobar" enable="false" description="Multiroom audio Foobar" startauto="false" protocol="AUDIO" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="" picture=" " parametre0=" " />
     <driver id="1BB97374-34F5-11E0-BF44-48D8DED72085" nom="K8055" enable="false" description="Carte Velleman k8055" startauto="false" protocol="USB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="" refresh="0" modele="" picture="k8055.png" />
@@ -9,7 +9,7 @@
     <driver id="30E229A2-34F1-11E0-BDFE-9FD3DED72085" nom="RFID" enable="false" description="Récepteur Rfid mir:ror" startauto="false" protocol="RFID" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="" picture="rfid.png" />
     <driver id="6DAA2DE2-0545-11E1-B580-3CCD4824019B" nom="1-Wire" enable="false" description="Adaptateur 1-wire USB / COM" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="USB1" refresh="0" modele="{DS9490}" picture=" " />
     <driver id="4A4774AA-34F7-11E0-B665-ADDADED72085" nom="OpenWebNet" enable="false" description="Driver OpenWebNet" startauto="false" protocol="OpenWebNet" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="" picture=" " />
-    <driver id="5AEDF3A8-3568-11E0-9DEC-D164DFD72085" nom="PLCBUS" enable="false" description="PLCBUS COM / USB (PLC1141)" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM9" refresh="0" modele="1141" picture=" " parametre0="true" parametre1="false" parametre2="1141" />
+    <driver id="5AEDF3A8-3568-11E0-9DEC-D164DFD72085" nom="PLCBUS" enable="false" description="PLCBUS COM / USB (PLC1141)" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM9" refresh="0" modele="1141" picture=" " parametre0="true" parametre1="false" />
     <driver id="3B808B6C-25B3-11E0-A6DB-36D2DED72085" nom="RFXCom_receiver" enable="false" description="RFXCom Receiver COM, USB or Ethernet" startauto="false" protocol="RF" iptcp="192.168.1.6" porttcp="10001" ipudp="@" portudp="@" com="" refresh="0" modele="m" picture=" " />
     <driver id="C2B6AA22-77E7-11E0-A193-47D34824019B" nom="RFXMitter" enable="false" description="RFXMitter Ethernet Interface" startauto="false" protocol="RF" iptcp="192.168.1.6" porttcp="10002" ipudp="@" portudp="@" com="@" refresh="0" modele="" picture=" " parametre0="true" />
     <driver id="74FD4E7C-34ED-11E0-8AC4-70CEDED72085" nom="USBuirt" enable="false" description="Emetteur/Récepteur Infrarouge sur port USB" startauto="false" protocol="IR" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="" refresh="0" modele="" picture="usbuirt.png" />
