@@ -476,20 +476,20 @@ Namespace HoMIDom
                         'End If
 
                         If tmp = _Value Then
-                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceDBL Value", _Name & " : " & _Adresse1 & " : " & _Value & " (Inchangé)")
+                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceDBL Value", _Name & " : " & _Adresse1 & " : " & _Value.ToString & " (Inchangé)")
                         Else
                             '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
-                            If LastEtat And tmp = ValueLast Then
+                            If _LastEtat And tmp = _ValueLast Then
                                 'log de "inchangé lastetat"
-                                _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceDBL Value", Name & " : " & Adresse1 & " : " & tmp.ToString & " (inchangé lastetat " & ValueLast.ToString & ")")
+                                _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceDBL Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé lastetat " & _ValueLast.ToString & ")")
                             Else
                                 'on vérifie que la valeur a changé de plus de precision sinon inchangé
-                                If ((Precision <> 0) And ((tmp + Precision) >= Value) And ((tmp - Precision) <= Value)) Then
+                                If ((_Precision <> 0) And ((tmp + _Precision) >= _Value) And ((tmp - _Precision) <= _Value)) Then
                                     'log de "inchangé précision"
-                                    _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DEVICE, "DeviceDBL Value", Name & " : " & Adresse1 & " : " & tmp.ToString & " (inchangé precision " & ValueLast.ToString & "+-" & Precision.ToString & ")")
+                                    _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DEVICE, "DeviceDBL Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé precision " & _ValueLast.ToString & "+-" & _Precision.ToString & ")")
                                 Else
                                     'enregistre la nouvelle valeur
-                                    _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceDBL Value", Name & " : " & Adresse1 & " : " & tmp.ToString)
+                                    _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceDBL Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString)
                                     _ValueLast = _Value 'on garde l'ancienne value en memoire
                                     _Value = tmp
                                     If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
@@ -556,16 +556,10 @@ Namespace HoMIDom
                     Try
                         'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
                         _LastChange = Now
-                        '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
-                        'If LastEtat And tmp = ValueLast Then
-                        '    'log de "inchangé lastetat"
-                        '    _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceBool Value", Name & " : " & Adresse1 & " : " & tmp.ToString & " (inchangé lastetat " & ValueLast.ToString & ")")
-                        'Else
-                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceBool Value", Name & " : " & Adresse1 & " : " & tmp.ToString)
+                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceBool Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString)
                         _ValueLast = _Value 'on garde l'ancienne value en memoire
                         _Value = tmp
                         If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
-                        'End If
                     Catch ex As Exception
                         _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceBOOL Value", "Exception : " & ex.Message)
                     End Try
@@ -674,21 +668,25 @@ Namespace HoMIDom
                         If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
                         tmp += _Correction
 
-                        '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
-                        If LastEtat And tmp = ValueLast Then
-                            'log de "inchangé lastetat"
-                            _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceChange", Name & " : " & Adresse1 & " : " & tmp.ToString & " (inchangé lastetat " & ValueLast.ToString & ")")
+                        If tmp = _Value Then
+                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceINT Value", _Name & " : " & _Adresse1 & " : " & _Value & " (Inchangé)")
                         Else
-                            'on vérifie que la valeur a changé de plus de precision sinon inchangé
-                            If ((tmp + Precision) >= Value) And ((tmp - Precision) <= Value) Then
-                                'log de "inchangé précision"
-                                _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DEVICE, "DeviceChange", Name & " : " & Adresse1 & " : " & tmp.ToString & " (inchangé precision " & ValueLast.ToString & "+-" & Precision.ToString & ")")
+                            '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                            If _LastEtat And tmp = _ValueLast Then
+                                'log de "inchangé lastetat"
+                                _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceINT", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé lastetat " & _ValueLast.ToString & ")")
                             Else
-                                'enregistre la nouvelle valeur
-                                _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceINT Value", Name & " : " & Adresse1 & " : " & tmp.ToString)
-                                _ValueLast = _Value 'on garde l'ancienne value en memoire
-                                _Value = tmp
-                                If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                                'on vérifie que la valeur a changé de plus de precision sinon inchangé
+                                If ((tmp + _Precision) >= _Value) And ((tmp - _Precision) <= _Value) Then
+                                    'log de "inchangé précision"
+                                    _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DEVICE, "DeviceINT", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé precision " & _ValueLast.ToString & "+-" & _Precision.ToString & ")")
+                                Else
+                                    'enregistre la nouvelle valeur
+                                    _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceINT Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString)
+                                    _ValueLast = _Value 'on garde l'ancienne value en memoire
+                                    _Value = tmp
+                                    If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                                End If
                             End If
                         End If
                     Catch ex As Exception
@@ -707,7 +705,7 @@ Namespace HoMIDom
             Protected _Value As String = ""
             Protected _ValueLast As String = ""
 
-            'Contien l'avant derniere valeur
+            'Contient l'avant derniere valeur
             Public Property ValueLast() As String
                 Get
                     Return _ValueLast
@@ -758,26 +756,26 @@ Namespace HoMIDom
 
                     Try
                         _LastChange = Now
-                        If Mid(tmp.ToString, 1, 4) <> "CFG:" Then
-                            If tmp = _Value Then
-                                _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceSTR Value", _Name & " : " & _Adresse1 & " : " & _Value & " (Inchangé)")
-                            Else
-                                '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
-                                If LastEtat And tmp = ValueLast Then
-                                    'log de "inchangé lastetat"
-                                    _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceSTR Value", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat " & ValueLast & ")")
-                                Else
-                                    'enregistre la nouvelle valeur
-                                    _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceSTR Value", Name & " : " & Adresse1 & " : " & tmp)
-                                    _ValueLast = _Value 'on garde l'ancienne value en memoire
-                                    _Value = tmp
-                                    If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
-                                End If
-                            End If
+                        'If Mid(tmp, 1, 4) <> "CFG:" Then
+                        If tmp = _Value Then
+                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceSTR Value", _Name & " : " & _Adresse1 & " : " & _Value & " (Inchangé)")
                         Else
-                            'log de l'info de config
-                            _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceSTR Value", Name & " : " & Adresse1 & " : " & tmp)
+                            '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                            If LastEtat And tmp = _ValueLast Then
+                                'log de "inchangé lastetat"
+                                _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceSTR Value", _Name & " : " & _Adresse1 & " : " & tmp & " (inchangé lastetat " & _ValueLast & ")")
+                            Else
+                                'enregistre la nouvelle valeur
+                                _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceSTR Value", _Name & " : " & _Adresse1 & " : " & tmp)
+                                _ValueLast = _Value 'on garde l'ancienne value en memoire
+                                _Value = tmp
+                                If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                            End If
                         End If
+                        'Else
+                        ''log de l'info de config
+                        '_Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceSTR Value", _Name & " : " & _Adresse1 & " : " & tmp)
+                        'End If
                     Catch ex As Exception
                         _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceSTR Value", "Exception : " & ex.Message)
                     End Try
