@@ -1578,7 +1578,7 @@ Namespace HoMIDom
                             _Value = tmp
                             RaiseEvent DeviceChanged(Me, "Value", _Value)
                         Else
-                            _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO Value", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat " & ValueLast & ")")
+                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO Value", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
                         End If
                     Catch ex As Exception
                         _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceMETEO Value", "Exception : " & ex.Message)
@@ -1596,7 +1596,7 @@ Namespace HoMIDom
                         _ConditionActuel = tmp
                         RaiseEvent DeviceChanged(Me, "ConditionActuel", tmp)
                     Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO ConditionActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
+                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
                     End If
                 End Set
             End Property
@@ -1611,7 +1611,7 @@ Namespace HoMIDom
                         _TempActuel = tmp
                         RaiseEvent DeviceChanged(Me, "TemperatureActuel", tmp)
                     Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO TemperatureActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
+                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO TemperatureActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
                     End If
                 End Set
             End Property
@@ -1626,7 +1626,7 @@ Namespace HoMIDom
                         _HumActuel = tmp
                         RaiseEvent DeviceChanged(Me, "HumiditeActuel", tmp)
                     Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO HumiditeActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
+                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO HumiditeActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
                     End If
                 End Set
             End Property
@@ -1650,7 +1650,7 @@ Namespace HoMIDom
                         _VentActuel = tmp
                         RaiseEvent DeviceChanged(Me, "VentActuel", tmp)
                     Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO VentActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
+                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO VentActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
                     End If
                 End Set
             End Property
@@ -1665,7 +1665,7 @@ Namespace HoMIDom
                         _JourToday = tmp
                         'RaiseEvent DeviceChanged(Me, "JourToday", tmp)
                     Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO JourToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
+                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO JourToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
                     End If
                 End Set
             End Property
@@ -1680,7 +1680,7 @@ Namespace HoMIDom
                         _MinToday = tmp
                         RaiseEvent DeviceChanged(Me, "MinToday", tmp)
                     Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO MinToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
+                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO MinToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
                     End If
                 End Set
             End Property
@@ -1695,7 +1695,7 @@ Namespace HoMIDom
                         _MaxToday = tmp
                         RaiseEvent DeviceChanged(Me, "MaxToday", tmp)
                     Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO MaxToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
+                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO MaxToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
                     End If
                 End Set
             End Property
@@ -1719,7 +1719,7 @@ Namespace HoMIDom
                         _ConditionToday = tmp
                         RaiseEvent DeviceChanged(Me, "ConditionToday", tmp)
                     Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO ConditionToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
+                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
                     End If
                 End Set
             End Property
