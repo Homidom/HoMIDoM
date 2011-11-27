@@ -1663,9 +1663,9 @@ Namespace HoMIDom
                     If _JourToday <> tmp Then
                         _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO JourToday", Name & " : " & Adresse1 & " : " & tmp)
                         _JourToday = tmp
-                        RaiseEvent DeviceChanged(Me, "JourToday", tmp)
+                        'RaiseEvent DeviceChanged(Me, "JourToday", tmp)
                     Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO JourToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
+                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO JourToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
                     End If
                 End Set
             End Property
@@ -1731,7 +1731,6 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _JourJ1 <> value Then
                         _JourJ1 = value
-                        _LastChange = Now
                         'RaiseEvent DeviceChanged(Me, "JourJ1", value)
                     End If
                 End Set
@@ -1744,7 +1743,6 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If MinJ1 <> value Then
                         _MinJ1 = value
-                        _LastChange = Now
                         'RaiseEvent DeviceChanged(Me, "MinJ1", value)
                     End If
                 End Set
@@ -1757,8 +1755,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _MaxJ1 <> value Then
                         _MaxJ1 = value
-                        _LastChange = Now
-                        'RaiseEvent DeviceChanged(Me, "MaxJ1", value)
+                         'RaiseEvent DeviceChanged(Me, "MaxJ1", value)
                     End If
                 End Set
             End Property
@@ -1779,7 +1776,6 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _ConditionJ1 <> value Then
                         _ConditionJ1 = value
-                        _LastChange = Now
                         ' RaiseEvent DeviceChanged(Me, "ConditionJ1", value)
                     End If
                 End Set
@@ -1792,7 +1788,6 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _JourJ2 <> value Then
                         _JourJ2 = value
-                        _LastChange = Now
                         'RaiseEvent DeviceChanged(Me, "JourJ2", value)
                     End If
                 End Set
@@ -1805,7 +1800,6 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _MinJ2 <> value Then
                         _MinJ2 = value
-                        _LastChange = Now
                         'RaiseEvent DeviceChanged(Me, "MinJ2", value)
                     End If
                 End Set
@@ -1818,7 +1812,6 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _MaxJ2 <> value Then
                         _MaxJ2 = value
-                        _LastChange = Now
                         'RaiseEvent DeviceChanged(Me, "MaxJ2", value)
                     End If
                 End Set
@@ -1840,7 +1833,6 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _ConditionJ2 <> value Then
                         _ConditionJ2 = value
-                        _LastChange = Now
                         'RaiseEvent DeviceChanged(Me, "ConditionJ2", value)
                     End If
                 End Set
@@ -1853,7 +1845,6 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _JourJ3 <> value Then
                         _JourJ3 = value
-                        _LastChange = Now
                         'RaiseEvent DeviceChanged(Me, "JourJ3", value)
                     End If
                 End Set
@@ -1866,7 +1857,6 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _MinJ3 <> value Then
                         _MinJ3 = value
-                        _LastChange = Now
                         'RaiseEvent DeviceChanged(Me, "MinJ3", value)
                     End If
                 End Set
@@ -1879,7 +1869,6 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _MaxJ3 <> value Then
                         _MaxJ3 = value
-                        _LastChange = Now
                         'RaiseEvent DeviceChanged(Me, "MaxJ3", value)
                     End If
                 End Set
@@ -1901,7 +1890,6 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _ConditionJ3 <> value Then
                         _ConditionJ3 = value
-                        _LastChange = Now
                         'RaiseEvent DeviceChanged(Me, "ConditionJ3", value)
                     End If
                 End Set
