@@ -1527,7 +1527,7 @@ HoMIDom
 	<summary>Classe valeur True/False pour device ON/OFF</summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueInt">
-	<summary>Classe valeur Integer pour device avce valeur de 0(OFF) à 100(ON)</summary>
+	<summary>Classe valeur Integer pour device avec valeur de 0(OFF) à 100(ON)</summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueString">
 	<summary>Classe valeur String </summary>

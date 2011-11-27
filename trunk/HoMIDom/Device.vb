@@ -1,5 +1,6 @@
 ﻿Imports System.Net
 Imports System.IO
+Imports HoMIDom.HoMIDom.Server
 
 Namespace HoMIDom
     '***********************************************
@@ -174,7 +175,7 @@ Namespace HoMIDom
             Protected _Modele As String = ""
             Protected _Picture As String = ""
             Protected _Solo As Boolean = True
-            Protected _LastEtat As Boolean = False
+            Protected _LastEtat As Boolean = True
             Protected MyTimer As New Timers.Timer
             <NonSerialized()> Protected _FistTime As Boolean = False
 
@@ -458,22 +459,46 @@ Namespace HoMIDom
                 Get
                     Return _Value
                 End Get
-                Set(ByVal value As Double)
-                        Dim tmp As Double = value
+                Set(ByVal tmp As Double)
+                    Try
                         _LastChange = Now
                         If tmp < _ValueMin Then tmp = _ValueMin
                         If tmp > _ValueMax Then tmp = _ValueMax
                         If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
                         tmp += _Correction
                         'Si la valeur a changé on la prend en compte et on créer l'event
-                        'MsgBox("Device double a recu une value : " & _Name & " - " & tmp)
-                        If tmp <> _Value Then
-                            _ValueLast = _Value 'on garde l'ancienne value en memoire
-                            _Value = tmp
-                            If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                        'If tmp <> _Value Then
+                        '    _ValueLast = _Value 'on garde l'ancienne value en memoire
+                        '    _Value = tmp
+                        '    If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                        'Else
+                        '    If _Server.Etat_server Then _Server.Log(Server.TypeLog.VALEUR_INCHANGE, Server.TypeSource.SERVEUR, "DeviceValue Inchangé", _Name & " : " & _Adresse1 & " : " & _Value)
+                        'End If
+
+                        If tmp = _Value Then
+                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceDBL Value", _Name & " : " & _Adresse1 & " : " & _Value & " (Inchangé)")
                         Else
-                        If _Server.Etat_server Then _Server.Log(Server.TypeLog.VALEUR_INCHANGE, Server.TypeSource.SERVEUR, "DeviceValue Inchangé", _Name & " : " & _Adresse1 & " : " & _Value)
+                            '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                            If LastEtat And tmp = ValueLast Then
+                                'log de "inchangé lastetat"
+                                _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceDBL Value", Name & " : " & Adresse1 & " : " & tmp.ToString & " (inchangé lastetat " & ValueLast.ToString & ")")
+                            Else
+                                'on vérifie que la valeur a changé de plus de precision sinon inchangé
+                                If ((Precision <> 0) And ((tmp + Precision) >= Value) And ((tmp - Precision) <= Value)) Then
+                                    'log de "inchangé précision"
+                                    _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DEVICE, "DeviceDBL Value", Name & " : " & Adresse1 & " : " & tmp.ToString & " (inchangé precision " & ValueLast.ToString & "+-" & Precision.ToString & ")")
+                                Else
+                                    'enregistre la nouvelle valeur
+                                    _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceDBL Value", Name & " : " & Adresse1 & " : " & tmp.ToString)
+                                    _ValueLast = _Value 'on garde l'ancienne value en memoire
+                                    _Value = tmp
+                                    If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                                End If
+                            End If
                         End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceDBL Value", "Exception : " & ex.Message)
+                    End Try
                 End Set
             End Property
         End Class
@@ -527,31 +552,40 @@ Namespace HoMIDom
                 Get
                     Return _Value
                 End Get
-                Set(ByVal value2 As Boolean)
-                        Dim tmp As Boolean = value2
-                        'If _Value <> tmp Then
+                Set(ByVal tmp As Boolean)
+                    Try
+                        'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
                         _LastChange = Now
+                        '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                        'If LastEtat And tmp = ValueLast Then
+                        '    'log de "inchangé lastetat"
+                        '    _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceBool Value", Name & " : " & Adresse1 & " : " & tmp.ToString & " (inchangé lastetat " & ValueLast.ToString & ")")
+                        'Else
+                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceBool Value", Name & " : " & Adresse1 & " : " & tmp.ToString)
                         _ValueLast = _Value 'on garde l'ancienne value en memoire
-                        _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
-                    If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
-                    'End If
+                        _Value = tmp
+                        If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                        'End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceBOOL Value", "Exception : " & ex.Message)
+                    End Try
                 End Set
             End Property
 
         End Class
 
-        ''' <summary>Classe valeur Integer pour device avce valeur de 0(OFF) à 100(ON)</summary>
+        ''' <summary>Classe valeur Integer pour device avec valeur de 0(OFF) à 100(ON)</summary>
         ''' <remarks></remarks>
         <Serializable()> Public MustInherit Class DeviceGenerique_ValueInt
             Inherits DeviceGenerique
 
             Protected _Value As Integer = 0
             Protected _ValueLast As Integer = 0
-            Protected _ValueMin As Integer = -9999
-            Protected _ValueMax As Integer = 9999
+            Protected _ValueMin As Integer = 0
+            Protected _ValueMax As Integer = 100
             Protected _ValueDef As Integer = 0
-            Protected _Precision As Double = 0
-            Protected _Correction As Double = 0
+            Protected _Precision As Integer = 0
+            Protected _Correction As Integer = 0
             Protected _Formatage As String = ""
 
             'Contien l'avant derniere valeur
@@ -625,14 +659,41 @@ Namespace HoMIDom
                 Get
                     Return _Value
                 End Get
-                Set(ByVal value As Integer)
-                        Dim tmp As Integer = value
+                Set(ByVal tmp As Integer)
+                    '    _LastChange = Now
+                    '    If tmp < 0 Then tmp = 0
+                    '    If tmp > 100 Then tmp = 100
+                    '    _ValueLast = _Value 'on garde l'ancienne value en memoire
+                    '    _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
+                    'If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+
+                    Try
                         _LastChange = Now
-                        If tmp < 0 Then tmp = 0
-                        If tmp > 100 Then tmp = 100
-                        _ValueLast = _Value 'on garde l'ancienne value en memoire
-                        _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
-                        If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                        If tmp < _ValueMin Then tmp = _ValueMin 'If tmp < 0 Then tmp = 0
+                        If tmp > _ValueMax Then tmp = _ValueMax 'If tmp > 100 Then tmp = 100
+                        If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
+                        tmp += _Correction
+
+                        '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                        If LastEtat And tmp = ValueLast Then
+                            'log de "inchangé lastetat"
+                            _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceChange", Name & " : " & Adresse1 & " : " & tmp.ToString & " (inchangé lastetat " & ValueLast.ToString & ")")
+                        Else
+                            'on vérifie que la valeur a changé de plus de precision sinon inchangé
+                            If ((tmp + Precision) >= Value) And ((tmp - Precision) <= Value) Then
+                                'log de "inchangé précision"
+                                _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DEVICE, "DeviceChange", Name & " : " & Adresse1 & " : " & tmp.ToString & " (inchangé precision " & ValueLast.ToString & "+-" & Precision.ToString & ")")
+                            Else
+                                'enregistre la nouvelle valeur
+                                _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceINT Value", Name & " : " & Adresse1 & " : " & tmp.ToString)
+                                _ValueLast = _Value 'on garde l'ancienne value en memoire
+                                _Value = tmp
+                                If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                            End If
+                        End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceINT Value", "Exception : " & ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -644,7 +705,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique
 
             Protected _Value As String = ""
-            Protected _ValueLast As String = 0
+            Protected _ValueLast As String = ""
 
             'Contien l'avant derniere valeur
             Public Property ValueLast() As String
@@ -684,17 +745,42 @@ Namespace HoMIDom
                 Get
                     Return _Value
                 End Get
-                Set(ByVal value As String)
-                        Dim tmp As String = value
+                Set(ByVal tmp As String)
+                    '_LastChange = Now
+                    ''Si la valeur a changé on la prend en compte et on créer l'event
+                    'If tmp <> _Value Then
+                    '    _ValueLast = _Value 'on garde l'ancienne value en memoire
+                    '    _Value = tmp
+                    '    If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                    'Else
+                    '    If _Server.Etat_server Then _Server.Log(Server.TypeLog.VALEUR_INCHANGE, Server.TypeSource.SERVEUR, "DeviceValue Inchangé", _Name & " : " & _Adresse1 & " : " & _Value)
+                    'End If
+
+                    Try
                         _LastChange = Now
-                        'Si la valeur a changé on la prend en compte et on créer l'event
-                        If tmp <> _Value Then
-                            _ValueLast = _Value 'on garde l'ancienne value en memoire
-                            _Value = tmp
-                        If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                        If Mid(tmp.ToString, 1, 4) <> "CFG:" Then
+                            If tmp = _Value Then
+                                _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceSTR Value", _Name & " : " & _Adresse1 & " : " & _Value & " (Inchangé)")
+                            Else
+                                '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                                If LastEtat And tmp = ValueLast Then
+                                    'log de "inchangé lastetat"
+                                    _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceSTR Value", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat " & ValueLast & ")")
+                                Else
+                                    'enregistre la nouvelle valeur
+                                    _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceSTR Value", Name & " : " & Adresse1 & " : " & tmp)
+                                    _ValueLast = _Value 'on garde l'ancienne value en memoire
+                                    _Value = tmp
+                                    If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                                End If
+                            End If
                         Else
-                        If _Server.Etat_server Then _Server.Log(Server.TypeLog.VALEUR_INCHANGE, Server.TypeSource.SERVEUR, "DeviceValue Inchangé", _Name & " : " & _Adresse1 & " : " & _Value)
+                            'log de l'info de config
+                            _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceSTR Value", Name & " : " & Adresse1 & " : " & tmp)
                         End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceSTR Value", "Exception : " & ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -1408,7 +1494,7 @@ Namespace HoMIDom
         <Serializable()> Class METEO
             Inherits DeviceGenerique
             Dim _Value As String = ""
-            Dim _ValueLast As Double
+            Dim _ValueLast As String = ""
             Dim _ConditionActuel As String = ""
             Dim _TempActuel As String = ""
             Dim _HumActuel As String = ""
@@ -1482,15 +1568,21 @@ Namespace HoMIDom
                 Get
                     Return _Value
                 End Get
-                Set(ByVal value As String)
-                    Dim tmp As String = value
-                    _LastChange = Now
-                    'Si la valeur a changé on la prend en compte et on créer l'event
-                    If tmp <> _Value Then
-                        _ValueLast = _Value 'on garde l'ancienne valeur en memoire
-                        _Value = tmp
-                        RaiseEvent DeviceChanged(Me, "Value", _Value)
-                    End If
+                Set(ByVal tmp As String)
+                    Try
+                        _LastChange = Now
+                        'Si la valeur a changé on la prend en compte et on créer l'event
+                        If tmp <> _Value Then
+                            _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO Value", Name & " : " & Adresse1 & " : " & tmp)
+                            _ValueLast = _Value 'on garde l'ancienne valeur en memoire
+                            _Value = tmp
+                            RaiseEvent DeviceChanged(Me, "Value", _Value)
+                        Else
+                            _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO Value", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat " & ValueLast & ")")
+                        End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceMETEO Value", "Exception : " & ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -1498,11 +1590,13 @@ Namespace HoMIDom
                 Get
                     Return _ConditionActuel
                 End Get
-                Set(ByVal value As String)
-                    If _ConditionActuel <> value Then
-                        _ConditionActuel = value
-                        _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "ConditionActuel", value)
+                Set(ByVal tmp As String)
+                    If _ConditionActuel <> tmp Then
+                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionActuel", Name & " : " & Adresse1 & " : " & tmp)
+                        _ConditionActuel = tmp
+                        RaiseEvent DeviceChanged(Me, "ConditionActuel", tmp)
+                    Else
+                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO ConditionActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
                     End If
                 End Set
             End Property
@@ -1511,11 +1605,13 @@ Namespace HoMIDom
                 Get
                     Return _TempActuel
                 End Get
-                Set(ByVal value As String)
-                    If _TempActuel <> value Then
-                        _TempActuel = value
-                        _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "TemperatureActuel", value)
+                Set(ByVal tmp As String)
+                    If _TempActuel <> tmp Then
+                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionActuel", Name & " : " & Adresse1 & " : " & tmp)
+                        _TempActuel = tmp
+                        RaiseEvent DeviceChanged(Me, "TemperatureActuel", tmp)
+                    Else
+                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO TemperatureActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
                     End If
                 End Set
             End Property
@@ -1524,11 +1620,13 @@ Namespace HoMIDom
                 Get
                     Return _HumActuel
                 End Get
-                Set(ByVal value As String)
-                    If _HumActuel <> value Then
-                        _HumActuel = value
-                        _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "HumiditeActuel", value)
+                Set(ByVal tmp As String)
+                    If _HumActuel <> tmp Then
+                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO HumiditeActuel", Name & " : " & Adresse1 & " : " & tmp)
+                        _HumActuel = tmp
+                        RaiseEvent DeviceChanged(Me, "HumiditeActuel", tmp)
+                    Else
+                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO HumiditeActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
                     End If
                 End Set
             End Property
@@ -1546,11 +1644,13 @@ Namespace HoMIDom
                 Get
                     Return _VentActuel
                 End Get
-                Set(ByVal value As String)
-                    If _VentActuel <> value Then
-                        _VentActuel = value
-                        _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "VentActuel", value)
+                Set(ByVal tmp As String)
+                    If _VentActuel <> tmp Then
+                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO VentActuel", Name & " : " & Adresse1 & " : " & tmp)
+                        _VentActuel = tmp
+                        RaiseEvent DeviceChanged(Me, "VentActuel", tmp)
+                    Else
+                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO VentActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
                     End If
                 End Set
             End Property
@@ -1559,11 +1659,13 @@ Namespace HoMIDom
                 Get
                     Return _JourToday
                 End Get
-                Set(ByVal value As String)
-                    If _JourToday <> value Then
-                        _JourToday = value
-                        _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "JourToday", value)
+                Set(ByVal tmp As String)
+                    If _JourToday <> tmp Then
+                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO JourToday", Name & " : " & Adresse1 & " : " & tmp)
+                        _JourToday = tmp
+                        RaiseEvent DeviceChanged(Me, "JourToday", tmp)
+                    Else
+                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO JourToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
                     End If
                 End Set
             End Property
@@ -1572,11 +1674,13 @@ Namespace HoMIDom
                 Get
                     Return _MinToday
                 End Get
-                Set(ByVal value As String)
-                    If _MinToday <> value Then
-                        _MinToday = value
-                        _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "MinToday", value)
+                Set(ByVal tmp As String)
+                    If _MinToday <> tmp Then
+                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO MinToday", Name & " : " & Adresse1 & " : " & tmp)
+                        _MinToday = tmp
+                        RaiseEvent DeviceChanged(Me, "MinToday", tmp)
+                    Else
+                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO MinToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
                     End If
                 End Set
             End Property
@@ -1585,11 +1689,13 @@ Namespace HoMIDom
                 Get
                     Return _MaxToday
                 End Get
-                Set(ByVal value As String)
-                    If _MaxToday <> value Then
-                        _MaxToday = value
-                        _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "MaxToday", value)
+                Set(ByVal tmp As String)
+                    If _MaxToday <> tmp Then
+                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO MaxToday", Name & " : " & Adresse1 & " : " & tmp)
+                        _MaxToday = tmp
+                        RaiseEvent DeviceChanged(Me, "MaxToday", tmp)
+                    Else
+                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO MaxToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
                     End If
                 End Set
             End Property
@@ -1607,11 +1713,13 @@ Namespace HoMIDom
                 Get
                     Return _ConditionToday
                 End Get
-                Set(ByVal value As String)
-                    If _ConditionToday <> value Then
-                        _ConditionToday = value
-                        _LastChange = Now
-                        RaiseEvent DeviceChanged(Me, "ConditionToday", value)
+                Set(ByVal tmp As String)
+                    If _ConditionToday <> tmp Then
+                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionToday", Name & " : " & Adresse1 & " : " & tmp)
+                        _ConditionToday = tmp
+                        RaiseEvent DeviceChanged(Me, "ConditionToday", tmp)
+                    Else
+                        _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceMETEO ConditionToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé lastetat)")
                     End If
                 End Set
             End Property
