@@ -8,7 +8,7 @@ Imports System.IO.Ports
 ' Auteur : David
 ' Date : 10/02/2011
 
-''' <summary>Class Driver_PLCBUS, permet de ommander et recevoir des ordres avec les périphériques PLCBUS via un 1141 ou 1141+</summary>
+''' <summary>Class Driver_PLCBUS, permet de commander et recevoir des ordres avec les périphériques PLCBUS via un 1141 ou 1141+</summary>
 ''' <remarks>Pour la version USB, necessite l'installation du driver</remarks>
 <Serializable()> Public Class Driver_PLCBUS
     Implements HoMIDom.HoMIDom.IDriver
@@ -269,6 +269,7 @@ Imports System.IO.Ports
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
             If _Enable = False Then Exit Sub
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Read", "Lecture de " & Objet.Name)
             If (Objet.adresse1.ToString.Length > 1) Then
                 'c'est une adresse std on fait un status request
                 ecrire(Objet.adresse1, "STATUS_REQUEST")
@@ -297,6 +298,7 @@ Imports System.IO.Ports
         Dim sendtwice As Boolean = False
         Try
             If _Enable = False Then Exit Sub
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Write", "Ecriture de " & Objet.Name)
             If Parametre1 Is Nothing Then Parametre1 = 0
             If Parametre2 Is Nothing Then Parametre2 = 0
             If Objet.type = "APPAREIL" Or Objet.type = "LAMPE" Then sendtwice = True
@@ -601,7 +603,7 @@ Imports System.IO.Ports
                 If Not (IsNumeric(plcusercode) And plcusercode >= 0 And plcusercode <= 255) Then
                     'non correct, on log et prend la valeur par défaut
                     plcusercode = 209
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "usercode non valide (0-255 defaut:209) : " & commande)
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "usercode non valide (0-255 defaut:209) : " & plcusercode)
                 End If
 
                 '--- TriPhase ---
@@ -633,7 +635,7 @@ Imports System.IO.Ports
                 port.Write(donnee, 0, donnee.Length)
                 If ecriretwice Then port.Write(donnee, 0, donnee.Length) 'on ecrit deux fois : voir la norme PLCBUS
 
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Ecrire", " Ecrire " & adresse & " : " & commande & " " & data1 & "-" & data2)
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Ecrire", " Ecrire " & adresse & " : " & commande & " " & data1 & "-" & data2 & " (data:" & &H2 & "." & &H5 & "." & plcusercode & "." & _adresse & "." & _cmd & "." & data1 & "." & data2 & "." & checksum & ")")
 
                 'gestion des acks (sauf pour les status_request car pas important et encombre le port)
                 If plcack And Not attente_ack() And commande <> "STATUS_REQUEST" And commande <> "GetOnlyOnIdPulse" And commande <> "GetAllIdPulse" And commande <> "ReportAllIdPulse3Phase" And commande <> "ReportOnlyOnIdPulse3Phase" Then

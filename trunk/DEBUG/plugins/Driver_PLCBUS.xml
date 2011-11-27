@@ -90,7 +90,7 @@ Driver_PLCBUS
 	<summary>Traite les paquets reçus</summary>
 	<remarks></remarks>
 </member><member name="T:Driver_PLCBUS.Driver_PLCBUS">
-	<summary>Class Driver_PLCBUS, permet de ommander et recevoir des ordres avec les périphériques PLCBUS via un 1141 ou 1141+</summary>
+	<summary>Class Driver_PLCBUS, permet de commander et recevoir des ordres avec les périphériques PLCBUS via un 1141 ou 1141+</summary>
 	<remarks>Pour la version USB, necessite l'installation du driver</remarks>
 </member>
 </members>
