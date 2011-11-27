@@ -6,37 +6,13 @@ HoMIWpF
 </name>
 </assembly>
 <members>
-<member name="M:WpfApplication1.uMeteos.InitializeComponent">
+<member name="M:WpfApplication1.uCtrlElement.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uMeteos">
+</member><member name="T:WpfApplication1.uCtrlElement">
 	<summary>
-uMeteos
-</summary>
-</member><member name="M:WpfApplication1.uNotes.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uNotes">
-	<summary>
-uNotes
-</summary>
-</member><member name="M:WpfApplication1.WConfig.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.WConfig">
-	<summary>
-WConfig
-</summary>
-</member><member name="M:WpfApplication1.uContact.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uContact">
-	<summary>
-uContact
+uCtrlElement
 </summary>
 </member><member name="M:WpfApplication1.keyboard.InitializeComponent">
 	<summary>
@@ -46,14 +22,6 @@ InitializeComponent
 	<summary>
 keyboard
 </summary>
-</member><member name="M:WpfApplication1.uOnOff.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uOnOff">
-	<summary>
-uOnOff
-</summary>
 </member><member name="M:WpfApplication1.uInternet.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -62,13 +30,13 @@ InitializeComponent
 	<summary>
 uInternet
 </summary>
-</member><member name="M:WpfApplication1.Window1.InitializeComponent">
+</member><member name="M:WpfApplication1.uMeteo.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.Window1">
+</member><member name="T:WpfApplication1.uMeteo">
 	<summary>
-Window1
+uMeteo
 </summary>
 </member><member name="M:WpfApplication1.uModules.InitializeComponent">
 	<summary>
@@ -77,70 +45,6 @@ InitializeComponent
 </member><member name="T:WpfApplication1.uModules">
 	<summary>
 uModules
-</summary>
-</member><member name="M:WpfApplication1.FrmConfigChaine.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.FrmConfigChaine">
-	<summary>
-FrmConfigChaine
-</summary>
-</member><member name="M:WpfApplication1.uVariateur.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uVariateur">
-	<summary>
-uVariateur
-</summary>
-</member><member name="M:WpfApplication1.uCtrlImgMnu.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uCtrlImgMnu">
-	<summary>
-uCtrlImgMnu
-</summary>
-</member><member name="M:WpfApplication1.uModule.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uModule">
-	<summary>
-uModule
-</summary>
-</member><member name="M:WpfApplication1.uCtrlElement.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uCtrlElement">
-	<summary>
-uCtrlElement
-</summary>
-</member><member name="M:WpfApplication1.uProgrammeTV.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uProgrammeTV">
-	<summary>
-uProgrammeTV
-</summary>
-</member><member name="M:WpfApplication1.FrmDetailProgram.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.FrmDetailProgram">
-	<summary>
-FrmDetailProgram
-</summary>
-</member><member name="M:WpfApplication1.uMeteo.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uMeteo">
-	<summary>
-uMeteo
 </summary>
 </member><member name="M:WpfApplication1.Application.InitializeComponent">
 	<summary>
@@ -154,18 +58,101 @@ Application Entry Point.
 	<summary>
 Application
 </summary>
-</member><member name="P:WpfApplication1.My.Resources.Resources.ResourceManager">
+</member><member name="M:WpfApplication1.uProgrammeTV.InitializeComponent">
 	<summary>
-  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+InitializeComponent
 </summary>
-</member><member name="P:WpfApplication1.My.Resources.Resources.Culture">
+</member><member name="T:WpfApplication1.uProgrammeTV">
 	<summary>
-  Remplace la propriété CurrentUICulture du thread actuel pour toutes
-  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+uProgrammeTV
 </summary>
-</member><member name="T:WpfApplication1.My.Resources.Resources">
+</member><member name="M:WpfApplication1.uMeteos.InitializeComponent">
 	<summary>
-  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uMeteos">
+	<summary>
+uMeteos
+</summary>
+</member><member name="M:WpfApplication1.uVariateur.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uVariateur">
+	<summary>
+uVariateur
+</summary>
+</member><member name="M:WpfApplication1.FrmDetailProgram.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.FrmDetailProgram">
+	<summary>
+FrmDetailProgram
+</summary>
+</member><member name="M:WpfApplication1.uModule.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uModule">
+	<summary>
+uModule
+</summary>
+</member><member name="M:WpfApplication1.WConfig.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.WConfig">
+	<summary>
+WConfig
+</summary>
+</member><member name="M:WpfApplication1.Window1.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.Window1">
+	<summary>
+Window1
+</summary>
+</member><member name="M:WpfApplication1.uNotes.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uNotes">
+	<summary>
+uNotes
+</summary>
+</member><member name="M:WpfApplication1.uContact.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uContact">
+	<summary>
+uContact
+</summary>
+</member><member name="M:WpfApplication1.uCtrlImgMnu.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uCtrlImgMnu">
+	<summary>
+uCtrlImgMnu
+</summary>
+</member><member name="M:WpfApplication1.uOnOff.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uOnOff">
+	<summary>
+uOnOff
+</summary>
+</member><member name="M:WpfApplication1.FrmConfigChaine.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.FrmConfigChaine">
+	<summary>
+FrmConfigChaine
 </summary>
 </member><member name="M:WpfApplication1.Window1.LoadConfig(System.String)">
 	<summary>Chargement de la config depuis le fichier XML</summary>
@@ -206,6 +193,28 @@ Application
 	<summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
 	<param name="NewFichier"></param>
 	<remarks></remarks>
+</member><member name="T:WpfApplication1.Appointment">
+	<summary>
+ This class is actually a stripped-down version of the actual Appointment class, which was generated using the 
+ Linq-to-SQL Designer (essentially a Linq ORM to the Appointments table in the db)
+ </summary>
+	<remarks>Obviously, you should use your own appointment object/classes, and change the code-behind in MonthView.xaml.vb to
+ support a List(Of T) where T is whatever the System.Type is for your appointment class.
+ </remarks>
+	<author>Kirk Davis, February 2009 (in like, 4 hours, and it shows!)</author>
+</member><member name="P:WpfApplication1.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:WpfApplication1.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:WpfApplication1.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
 </member><member name="P:WpfApplication1.My.MyWpfExtension.Application">
 	<summary>
  Retourne l'objet application pour l'application en cours d'exécution
@@ -561,15 +570,6 @@ Application
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="T:WpfApplication1.Appointment">
-	<summary>
- This class is actually a stripped-down version of the actual Appointment class, which was generated using the 
- Linq-to-SQL Designer (essentially a Linq ORM to the Appointments table in the db)
- </summary>
-	<remarks>Obviously, you should use your own appointment object/classes, and change the code-behind in MonthView.xaml.vb to
- support a List(Of T) where T is whatever the System.Type is for your appointment class.
- </remarks>
-	<author>Kirk Davis, February 2009 (in like, 4 hours, and it shows!)</author>
 </member>
 </members>
 </doc>

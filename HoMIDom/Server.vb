@@ -101,7 +101,6 @@ Namespace HoMIDom
                         '------------------------------------------------------------------------------------------------
                         '    MACRO/Triggers
                         '------------------------------------------------------------------------------------------------
-
                         'Parcour des triggers pour vérifier si le device déclenche des macros
                         For i As Integer = 0 To _listTriggers.Count - 1
                             If _listTriggers.Item(i).Enable = True Then
@@ -118,72 +117,78 @@ Namespace HoMIDom
                         '------------------------------------------------------------------------------------------------
                         '    HISTORIQUE
                         '------------------------------------------------------------------------------------------------
-
-                        '--- si on teste la value (et non les autres propriétés d'un device) et si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
-                        If [Property] = "Value" Then
-
-                            If TypeOf Device.value Is Double Or TypeOf Device.value Is Integer Then
-                                'le device est de type double/integer (nombre), on converti la valeur récupérée en string pour la traiter
-                                Dim valeurstring As String = valeur.ToString
-                                '--- Remplacement de , par .
-                                valeurstring = valeurstring.Replace(",", ".") '?encore besoin ???
-
-                                '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
-                                If Device.LastEtat And valeurstring = Device.ValueLast.ToString Then
-                                    'log de "inchangé lastetat"
-                                    Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeurstring & " (inchangé lastetat " & Device.ValueLast.ToString & ")")
-                                Else
-                                    '--- on vérifie que la valeur a changé de plus de composants_precision sinon inchangé
-                                    If (CDbl(valeur) + CDbl(Device.Precision)) >= CDbl(Device.Value) And (CDbl(valeur) - CDbl(Device.Precision)) <= CDbl(Device.Value) Then
-                                        'log de "inchangé précision"
-                                        Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeurstring & " (inchangé precision " & Device.ValueLast.ToString & ")")
-                                    Else
-                                        'log de la nouvelle valeur
-                                        Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeurstring)
-                                        'On historise la nouvellevaleur
-                                        retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeurstring)
-                                        If Mid(retour, 1, 4) = "ERR:" Then
-                                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
-                                        End If
-                                    End If
-                                End If
-
-                            ElseIf TypeOf Device.value Is Boolean Or TypeOf Device.value Is String Then
-                                '--- Valeur est autre chose qu'un nombre
-                                '--- historise la valeur si ce n'est pas une simple info de config
-                                If Mid(valeur.ToString, 1, 4) <> "CFG:" Then
-                                    '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
-                                    If Device.LastEtat And valeur.ToString = Device.ValueLast.ToString Then
-                                        'log de "inchangé lastetat"
-                                        Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur.ToString & " (inchangé lastetat " & Device.ValueLast.ToString & ")")
-                                    Else
-                                        'log de la nouvelle valeur
-                                        Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur.ToString)
-                                        'Ajout dans la BDD
-                                        retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur.ToString)
-                                        If Mid(retour, 1, 4) = "ERR:" Then
-                                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
-                                        End If
-                                    End If
-                                Else
-                                    'log de l'info de config
-                                    Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur.ToString)
-                                End If
-                            Else
-                                '-- Type non reconnu : ERREUR
-                                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Type de device non reconnu " & Device.Name.ToString)
-                            End If
-
-
-                        Else
-                            'C'est une autre propriété, on logue directement et stocke la modif
-                            Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (" & [Property] & ")")
-                            'Ajout dans la BDD
-                            retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
-                            If Mid(retour, 1, 4) = "ERR:" Then
-                                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
-                            End If
+                        'Ajout dans la BDD
+                        retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
+                        If Mid(retour, 1, 4) = "ERR:" Then
+                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur Requete sqlite : " & retour)
                         End If
+
+                        'Ancienne gestion, maintenant directement dans les devices
+                        '--- si on teste la value (et non les autres propriétés d'un device) et si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                        'If [Property] = "Value" Then
+
+                        '    If TypeOf Device.value Is Double Or TypeOf Device.value Is Integer Then
+                        '        'le device est de type double/integer (nombre), on converti la valeur récupérée en string pour la traiter
+                        '        Dim valeurstring As String = valeur.ToString
+                        '        '--- Remplacement de , par .
+                        '        valeurstring = valeurstring.Replace(",", ".") '?encore besoin ???
+
+                        '        '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                        '        If Device.LastEtat And valeurstring = Device.ValueLast.ToString Then
+                        '            'log de "inchangé lastetat"
+                        '            Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeurstring & " (inchangé lastetat " & Device.ValueLast.ToString & ")")
+                        '        Else
+                        '            '--- on vérifie que la valeur a changé de plus de composants_precision sinon inchangé
+                        '            If (CDbl(valeur) + CDbl(Device.Precision)) >= CDbl(Device.Value) And (CDbl(valeur) - CDbl(Device.Precision)) <= CDbl(Device.Value) Then
+                        '                'log de "inchangé précision"
+                        '                Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeurstring & " (inchangé precision " & Device.ValueLast.ToString & ")")
+                        '            Else
+                        '                'log de la nouvelle valeur
+                        '                Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeurstring)
+                        '                'On historise la nouvellevaleur
+                        '                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeurstring)
+                        '                If Mid(retour, 1, 4) = "ERR:" Then
+                        '                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
+                        '                End If
+                        '            End If
+                        '        End If
+
+                        '    ElseIf TypeOf Device.value Is Boolean Or TypeOf Device.value Is String Then
+                        '        '--- Valeur est autre chose qu'un nombre
+                        '        '--- historise la valeur si ce n'est pas une simple info de config
+                        '        If Mid(valeur.ToString, 1, 4) <> "CFG:" Then
+                        '            '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                        '            If Device.LastEtat And valeur.ToString = Device.ValueLast.ToString Then
+                        '                'log de "inchangé lastetat"
+                        '                Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur.ToString & " (inchangé lastetat " & Device.ValueLast.ToString & ")")
+                        '            Else
+                        '                'log de la nouvelle valeur
+                        '                Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur.ToString)
+                        '                'Ajout dans la BDD
+                        '                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur.ToString)
+                        '                If Mid(retour, 1, 4) = "ERR:" Then
+                        '                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
+                        '                End If
+                        '            End If
+                        '        Else
+                        '            'log de l'info de config
+                        '            Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur.ToString)
+                        '        End If
+                        '    Else
+                        '        '-- Type non reconnu : ERREUR
+                        '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Type de device non reconnu " & Device.Name.ToString)
+                        '    End If
+
+
+                        'Else
+                        '    'C'est une autre propriété, on logue directement et stocke la modif
+                        '    Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (" & [Property] & ")")
+                        '    'Ajout dans la BDD
+                        '    retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
+                        '    If Mid(retour, 1, 4) = "ERR:" Then
+                        '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
+                        '    End If
+                        'End If
                     Else
                         'erreur d'acquisition
                         Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur d'acquisition : " & Device.Name & " - " & valeur.ToString)
