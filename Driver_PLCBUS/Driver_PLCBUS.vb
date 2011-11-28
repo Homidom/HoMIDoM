@@ -634,7 +634,7 @@ Imports System.IO.Ports
                 'ecriture sur le port
                 _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Ecrire", " Ecrire " & adresse & " : " & commande & " " & data1 & "-" & data2 & " (data:" & &H2 & "." & &H5 & "." & plcusercode & "." & _adresse & "." & _cmd & "." & data1 & "." & data2 & "." & &H3 & ")")
                 port.Write(donnee, 0, donnee.Length)
-                If ecriretwice Then port.Write(donnee, 0, donnee.Length) 'on ecrit deux fois : voir la norme PLCBUS
+                'If ecriretwice Then port.Write(donnee, 0, donnee.Length) 'on ecrit deux fois : voir la norme PLCBUS
 
                 'gestion des acks (sauf pour les status_request car pas important et encombre le port)
                 If plcack And Not attente_ack() And commande <> "STATUS_REQUEST" And commande <> "GetOnlyOnIdPulse" And commande <> "GetAllIdPulse" And commande <> "ReportAllIdPulse3Phase" And commande <> "ReportOnlyOnIdPulse3Phase" Then
@@ -743,22 +743,22 @@ Imports System.IO.Ports
             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Process", " Received data: " & comBuffer(0) & "." & comBuffer(1) & "." & comBuffer(2) & "." & comBuffer(3) & "." & comBuffer(4) & "." & comBuffer(5) & "." & comBuffer(6) & "." & comBuffer(7) & "." & comBuffer(8))
             'test du cheksum suivant le modele
             Try
-                If _Modele = "1141+" Then
-                    'pour les modeles 1141+
-                    For i = 0 To 8
-                        checksum += CInt(comBuffer(i))
-                    Next
-                    If (checksum = &H100 Or checksum = &H200 Or checksum = &H300 Or checksum = &H400 Or checksum = &H500) Then verifchecksum = True
-                Else
-                    'pour les modéles 1141
-                    If (comBuffer(8) = &H3) Then verifchecksum = True
-                End If
+                'If _Modele = "1141+" Then
+                '    'pour les modeles 1141+
+                '    For i = 0 To 8
+                '        checksum += CInt(comBuffer(i))
+                '    Next
+                '    If (checksum = &H100 Or checksum = &H200 Or checksum = &H300 Or checksum = &H400 Or checksum = &H500) Then verifchecksum = True
+                'Else
+                '    'pour les modéles 1141
+                '    If (comBuffer(8) = &H3) Then verifchecksum = True
+                'End If
 
                 'fonctionne pour les deux modele 1141 et 1141+
-                'For i = 0 To 8
-                '    checksum += CInt(comBuffer(i))
-                'Next
-                'If (comBuffer(8) = &H3 Or checksum = &H100 Or checksum = &H200 Or checksum = &H300 Or checksum = &H400 Or checksum = &H500) Then verifchecksum = True
+                For i = 0 To 8
+                    checksum += CInt(comBuffer(i))
+                Next
+                If (comBuffer(8) = &H3 Or (checksum = &H100 Or checksum = &H200 Or checksum = &H300 Or checksum = &H400 Or checksum = &H500)) Then verifchecksum = True
 
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process : Checksum", "Exception : " & ex.Message)
