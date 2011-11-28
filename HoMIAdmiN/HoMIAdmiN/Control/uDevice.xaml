@@ -74,12 +74,14 @@
             <StackPanel >
                 <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Device</Label>
                 <Rectangle Height="20" />
-                <StackPanel Orientation="Vertical" Margin="2" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal" >
+                    <StackPanel Orientation="Vertical" Margin="2" HorizontalAlignment="Left">
                     <Label Name="Label2" Foreground="White">Nom:</Label>
                     <StackPanel Orientation="Horizontal" >
                         <TextBox Height="22" Name="TxtNom" Width="215" Foreground="White" Background="DarkGray" BorderBrush="Black" />
-                        <CheckBox Height="18" Name="ChkEnable" VerticalAlignment="Top" Foreground="White" Margin="5" IsChecked="False">Enable</CheckBox>
-                        <CheckBox Foreground="White" Height="18" HorizontalAlignment="Right" Margin="5" Name="ChKSolo" VerticalAlignment="Top" Width="62" IsChecked="True">Solo</CheckBox>
+                        <CheckBox Height="18" Name="ChkEnable" VerticalAlignment="Top" Foreground="White" Margin="3" IsChecked="False">Enable</CheckBox>
+                        <CheckBox Foreground="White" Height="18" HorizontalAlignment="Right" Margin="3" Name="ChKSolo" VerticalAlignment="Top" IsChecked="True">Solo</CheckBox>
+                        <CheckBox Foreground="White" Height="18" HorizontalAlignment="Right" Margin="3" Name="ChKLastEtat" VerticalAlignment="Top" IsChecked="True" ToolTip="Prendre en compte l'avant dernier etat d'un device">LastEtat</CheckBox>
                     </StackPanel>
                     <Label Foreground="White" Name="Label3">Description:</Label>
                     <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtDescript" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" />
@@ -176,7 +178,12 @@
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
-
+                    <StackPanel >
+                        <Rectangle Height="80"/>
+                        <Label Content="Zone" Foreground="White" />
+                        <ListBox Name="ListZone" Width="120" Height="150"/>
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
         </Border>
         <Image Height="60" HorizontalAlignment="Left" Margin="17,-1,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Defaut-128.png">
@@ -185,7 +192,7 @@
             </Image.LayoutTransform>
             </Image>
 
-        <StackPanel Margin="0,12.5,10,0">
+        <StackPanel Margin="0,12.5,5,0">
             <Button Margin="2" Height="25" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Name="BtnOK" VerticalAlignment="Top" Width="88.75" Foreground="White">Sauvegarder</Button>
             <Button Margin="2" Height="25" HorizontalAlignment="Right"  Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Foreground="White">Annuler</Button>
             <Button Margin="2" Height="25" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Name="BtnSave" VerticalAlignment="Top" Width="88.75" Foreground="White">Save</Button>

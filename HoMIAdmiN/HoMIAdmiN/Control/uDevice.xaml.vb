@@ -44,6 +44,7 @@ Partial Public Class uDevice
                     TxtDescript.Text = x.Description
                     ChkEnable.IsChecked = x.Enable
                     ChKSolo.IsChecked = x.Solo
+                    ChKLastEtat.IsChecked = x.LastEtat
                     CbType.SelectedValue = x.Type.ToString
                     CbType.IsEnabled = False
                     BtnRead.Visibility = Windows.Visibility.Visible
@@ -145,6 +146,21 @@ Partial Public Class uDevice
 
                 End If
             End If
+
+            'Liste toutes les zones dans la liste
+            For i As Integer = 0 To Window1.myService.GetAllZones(IdSrv).Count - 1
+                Dim ch As New CheckBox
+                ch.Content = Window1.myService.GetAllZones(IdSrv).Item(i).Name
+                ch.Tag = Window1.myService.GetAllZones(IdSrv).Item(i).ID
+
+                For j As Integer = 0 To Window1.myService.GetAllZones(IdSrv).Item(i).ListElement.Count - 1
+                    If Window1.myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).ElementID = _DeviceId Then
+                        ch.IsChecked = True
+                        Exit For
+                    End If
+                Next
+                ListZone.Items.Add(ch)
+            Next
         Catch Ex As Exception
             MessageBox.Show("Erreur: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -184,11 +200,38 @@ Partial Public Class uDevice
                     Exit For
                 End If
             Next
-            Window1.myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
+            Window1.myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text)
+
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub uDevice BtnOK_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+    Private Sub SaveInZone()
+
+        Dim trv As Boolean = False
+
+        For i As Integer = 0 To Window1.myService.GetAllZones(IdSrv).Count - 1
+            For j As Integer = 0 To Window1.myService.GetAllZones(IdSrv).Item(i).ListElement.Count - 1
+                If Window1.myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).ElementID = _DeviceId Then
+                    trv = True
+                    Exit For
+                End If
+            Next
+            For k As Integer = 0 To ListZone.Items.Count - 1
+                Dim x As CheckBox = ListZone.Items(k)
+
+                If trv = True And x.IsChecked = True Then
+                    Window1.myService.DeleteDeviceToZone(IdSrv, Window1.myService.GetAllZones(IdSrv).Item(i).ID, _DeviceId)
+                Else
+                    Window1.myService.AddDeviceToZone(IdSrv, Window1.myService.GetAllZones(IdSrv).Item(i).ID, _DeviceId, False)
+                End If
+            Next
+
+        Next
+
+
     End Sub
 
     Private Sub TxtRefresh_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtRefresh.TextChanged

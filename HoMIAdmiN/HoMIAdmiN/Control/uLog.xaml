@@ -107,7 +107,7 @@
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
-            <DataGrid Name="DGW" Height="300" RowBackground="LightBlue" AlternatingRowBackground="LightYellow">
+            <DataGrid Name="DGW" Height="300" >
                 
             </DataGrid>
         </StackPanel>
