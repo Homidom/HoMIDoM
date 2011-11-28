@@ -59,6 +59,7 @@ Partial Public Class uZone
             _ZoneId = ZoneId
             If x IsNot Nothing Then
                 TxtName.Text = x.Name
+
                 For j As Integer = 0 To x.ListElement.Count - 1
                     _ListIdSelect.Add(x.ListElement.Item(j))
                 Next
@@ -79,17 +80,19 @@ Partial Public Class uZone
     End Sub
 
     Private Sub RefreshLists()
-        ListBxDevice.Items.Clear()
+        ListBxDeviceSelect.Items.Clear()
 
         For i As Integer = 0 To _ListIdSelect.Count - 1
             If Window1.myService.ReturnDeviceByID(IdSrv, _ListIdSelect.Item(i).ElementID) IsNot Nothing Then
-                ListBxDevice.Items.Add(Window1.myService.ReturnDeviceByID(IdSrv, _ListIdSelect.Item(i).ElementID).Name)
-            End If
-            If Window1.myService.ReturnZoneByID(IdSrv, _ListIdSelect.Item(i).ElementID) IsNot Nothing Then
-                ListBxDevice.Items.Add(Window1.myService.ReturnZoneByID(IdSrv, _ListIdSelect.Item(i).ElementID).Name)
-            End If
-            If Window1.myService.ReturnMacroById(IdSrv, _ListIdSelect.Item(i).ElementID) IsNot Nothing Then
-                ListBxDevice.Items.Add(Window1.myService.ReturnMacroById(IdSrv, _ListIdSelect.Item(i).ElementID).Nom)
+                ListBxDeviceSelect.Items.Add(Window1.myService.ReturnDeviceByID(IdSrv, _ListIdSelect.Item(i).ElementID).Name)
+            Else
+                If Window1.myService.ReturnZoneByID(IdSrv, _ListIdSelect.Item(i).ElementID) IsNot Nothing Then
+                    ListBxDeviceSelect.Items.Add(Window1.myService.ReturnZoneByID(IdSrv, _ListIdSelect.Item(i).ElementID).Name)
+                Else
+                    If Window1.myService.ReturnMacroById(IdSrv, _ListIdSelect.Item(i).ElementID) IsNot Nothing Then
+                        ListBxDeviceSelect.Items.Add(Window1.myService.ReturnMacroById(IdSrv, _ListIdSelect.Item(i).ElementID).Nom)
+                    End If
+                End If
             End If
         Next
     End Sub
@@ -105,17 +108,17 @@ Partial Public Class uZone
     End Sub
 
     Private Sub BtnDel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDel.Click
-        If ListBxDevice.SelectedIndex < 0 Then
+        If ListBxDeviceSelect.SelectedIndex < 0 Then
             MessageBox.Show("Veuillez sélectionner un élément à supprimer", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
         Else
-            _ListIdSelect.RemoveAt(ListBxDevice.SelectedIndex)
+            _ListIdSelect.RemoveAt(ListBxDeviceSelect.SelectedIndex)
         End If
 
         ChkVisible.IsChecked = False
         RefreshLists()
     End Sub
 
-    Private Sub ListBxDevice_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles ListBxDevice.DragOver
+    Private Sub ListBxDevice_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles ListBxDeviceSelect.DragOver
         If e.Data.GetDataPresent(GetType(String)) Then
             e.Effects = DragDropEffects.Copy
         Else
@@ -124,7 +127,7 @@ Partial Public Class uZone
 
     End Sub
 
-    Private Sub ListBxDevice_Drop(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles ListBxDevice.Drop
+    Private Sub ListBxDevice_Drop(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles ListBxDeviceSelect.Drop
         If e.Data.GetDataPresent(GetType(String)) Then
             e.Effects = DragDropEffects.Copy
 
@@ -146,20 +149,20 @@ Partial Public Class uZone
         End If
     End Sub
 
-    Private Sub ListBxDevice_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ListBxDevice.MouseDoubleClick
-        If ListBxDevice.SelectedIndex < 0 Then Exit Sub
+    Private Sub ListBxDevice_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ListBxDeviceSelect.MouseDoubleClick
+        If ListBxDeviceSelect.SelectedIndex < 0 Then Exit Sub
 
         ChkVisible.Visibility = Windows.Visibility.Visible
         BtnOkDev.Visibility = Windows.Visibility.Visible
 
-        ChkVisible.IsChecked = _ListIdSelect.Item(ListBxDevice.SelectedIndex).Visible
+        ChkVisible.IsChecked = _ListIdSelect.Item(ListBxDeviceSelect.SelectedIndex).Visible
     End Sub
 
     Private Sub BtnOkDev_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkDev.Click
-        If ListBxDevice.SelectedIndex < 0 Then
+        If ListBxDeviceSelect.SelectedIndex < 0 Then
             MessageBox.Show("Veuillez sélectionner un device", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
         Else
-            _ListIdSelect(ListBxDevice.SelectedIndex).Visible = ChkVisible.IsChecked
+            _ListIdSelect(ListBxDeviceSelect.SelectedIndex).Visible = ChkVisible.IsChecked
             ChkVisible.Visibility = Windows.Visibility.Hidden
             BtnOkDev.Visibility = Windows.Visibility.Hidden
         End If

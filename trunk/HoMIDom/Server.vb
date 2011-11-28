@@ -2317,8 +2317,9 @@ Namespace HoMIDom
                 rw.WriteStartElement("logs")
                 rw.WriteStartElement("log")
                 rw.WriteAttributeString("time", Now)
-                rw.WriteAttributeString("type", 0)
-                rw.WriteAttributeString("source", 0)
+                rw.WriteAttributeString("type", 1)
+                rw.WriteAttributeString("source", 1)
+                rw.WriteAttributeString("fonction", "Log")
                 rw.WriteAttributeString("message", "Création du nouveau fichier log")
                 rw.WriteEndElement()
                 rw.WriteEndElement()
@@ -4277,7 +4278,10 @@ Namespace HoMIDom
             Return x.Name.CompareTo(y.Name)
         End Function
 
-        ''' <summary>Sauvegarder ou créer un device</summary>
+        ''' <summary>
+        ''' Sauvegarder ou créer un device
+        ''' </summary>
+        ''' <param name="IdSrv"></param>
         ''' <param name="deviceId"></param>
         ''' <param name="name"></param>
         ''' <param name="address1"></param>
@@ -4291,9 +4295,16 @@ Namespace HoMIDom
         ''' <param name="modele"></param>
         ''' <param name="description"></param>
         ''' <param name="lastchangeduree"></param>
+        ''' <param name="lastEtat"></param>
+        ''' <param name="correction"></param>
+        ''' <param name="formatage"></param>
+        ''' <param name="precision"></param>
+        ''' <param name="valuemax"></param>
+        ''' <param name="valuemin"></param>
+        ''' <param name="valuedef"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0) As String Implements IHoMIDom.SaveDevice
+        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As Double = 0, Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0) As String Implements IHoMIDom.SaveDevice
             If VerifIdSrv(IdSrv) = False Then
                 Return 99
                 Exit Function
@@ -4321,6 +4332,13 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
+                                .ValueMax = valuemax
+                                .ValueMin = valuemin
+                                .ValueDef = valuedef
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4340,6 +4358,13 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
+                                .ValueMax = valuemax
+                                .ValueMin = valuemin
+                                .ValueDef = valuedef
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4359,6 +4384,7 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4378,6 +4404,13 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
+                                .ValueMax = valuemax
+                                .ValueMin = valuemin
+                                .ValueDef = valuedef
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4397,6 +4430,13 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
+                                .ValueMax = valuemax
+                                .ValueMin = valuemin
+                                .ValueDef = valuedef
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4416,6 +4456,13 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
+                                .ValueMax = valuemax
+                                .ValueMin = valuemin
+                                .ValueDef = valuedef
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4435,6 +4482,13 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
+                                .ValueMax = valuemax
+                                .ValueMin = valuemin
+                                .ValueDef = valuedef
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4454,6 +4508,13 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
+                                .ValueMax = valuemax
+                                .ValueMin = valuemin
+                                .ValueDef = valuedef
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4473,6 +4534,13 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
+                                .ValueMax = valuemax
+                                .ValueMin = valuemin
+                                .ValueDef = valuedef
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4492,6 +4560,7 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4511,6 +4580,13 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
+                                .ValueMax = valuemax
+                                .ValueMin = valuemin
+                                .ValueDef = valuedef
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4530,6 +4606,7 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4549,6 +4626,10 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4568,6 +4649,7 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4587,6 +4669,7 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4606,6 +4689,7 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4625,6 +4709,7 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4644,6 +4729,7 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4663,6 +4749,10 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4682,6 +4772,13 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
+                                .ValueMax = valuemax
+                                .ValueMin = valuemin
+                                .ValueDef = valuedef
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4701,6 +4798,13 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
+                                .ValueMax = valuemax
+                                .ValueMin = valuemin
+                                .ValueDef = valuedef
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4720,6 +4824,7 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4739,6 +4844,7 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4758,6 +4864,7 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4777,6 +4884,13 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
+                                .ValueMax = valuemax
+                                .ValueMin = valuemin
+                                .ValueDef = valuedef
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4796,6 +4910,7 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4815,6 +4930,7 @@ Namespace HoMIDom
                                 .Solo = solo
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
+                                .LastEtat = lastEtat
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -4842,7 +4958,14 @@ Namespace HoMIDom
                             _ListDevices.Item(i).refresh = refresh
                             _ListDevices.Item(i).solo = solo
                             _ListDevices.Item(i).LastChangeDuree = lastchangeduree
+                            _ListDevices.Item(i).LastEtat = lastEtat
                             _ListDevices.Item(i).Driver.newdevice(deviceId)
+                            _ListDevices.Item(i).Correction = correction
+                            _ListDevices.Item(i).Formatage = formatage
+                            _ListDevices.Item(i).Precision = precision
+                            _ListDevices.Item(i).ValueMax = valuemax
+                            _ListDevices.Item(i).ValueMin = valuemin
+                            _ListDevices.Item(i).ValueDef = valuedef
                         End If
                     Next
                 End If
@@ -5130,7 +5253,6 @@ Namespace HoMIDom
                 Return Nothing
             End Try
         End Function
-
 
         ''' <summary>liste les méthodes d'un device depuis son ID</summary>
         ''' <param name="DeviceId"></param>
@@ -5460,13 +5582,19 @@ Namespace HoMIDom
             End If
 
             Try
-                Dim Resultat = (From Zone In _ListZones Where Zone.ID = ZoneId Select Zone).First
-                Return Resultat
+                If (From Zone In _ListZones Where Zone.ID = ZoneId Select Zone).Count > 0 Then
+                    Dim Resultat = (From Zone In _ListZones Where Zone.ID = ZoneId Select Zone).First
+                    Return Resultat
+                Else
+                    Return Nothing
+                End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnZoneById", "Exception : " & ex.Message)
                 Return Nothing
             End Try
         End Function
+
+
 #End Region
 
 #Region "Macro"
@@ -5588,8 +5716,12 @@ Namespace HoMIDom
             End If
 
             Try
-                Dim Resultat = (From Macro In _ListMacros Where Macro.ID = MacroId Select Macro).First
-                Return Resultat
+                If (From Macro In _ListMacros Where Macro.ID = MacroId Select Macro).Count > 0 Then
+                    Dim Resultat = (From Macro In _ListMacros Where Macro.ID = MacroId Select Macro).First
+                    Return Resultat
+                Else
+                    Return Nothing
+                End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnMacroById", "Exception : " & ex.Message)
                 Return Nothing

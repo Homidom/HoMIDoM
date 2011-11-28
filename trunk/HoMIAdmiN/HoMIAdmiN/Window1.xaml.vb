@@ -315,7 +315,7 @@ Class Window1
             CntDevice.Content = myService.GetAllDevices(IdSrv).Count & " Device(s)"
 
             For Each Dev In myService.GetAllDevices(IdSrv)
-
+                Dim tool As String = ""
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -356,8 +356,15 @@ Class Window1
                 Dim drv As String = Dev.Name
                 drv &= " (" & myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom & ")"
 
+                tool = "Nom: " & Dev.Name & vbCrLf
+                tool &= "Enable " & Dev.Enable & vbCrLf
+                tool &= "Description: " & Dev.Description & vbCrLf
+                tool &= "Type: " & Dev.Type.ToString & vbCrLf
+                tool &= "Driver: " & myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom & vbCrLf
+                tool &= "Value: " & Dev.Value & vbCrLf
+
                 Dim tl As New ToolTip
-                tl.Content = drv
+                tl.Content = tool
                 Dim label As New Label
                 If Dev.Enable = True Then
                     label.Foreground = New SolidColorBrush(Colors.White)
