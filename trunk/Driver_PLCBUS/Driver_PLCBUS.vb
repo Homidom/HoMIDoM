@@ -579,7 +579,7 @@ Imports System.IO.Ports
     Private Function ecrire(ByVal adresse As String, ByVal commande As String, Optional ByVal data1 As Integer = 0, Optional ByVal data2 As Integer = 0, Optional ByVal ecriretwice As Boolean = False) As String
         Dim _adresse = 0
         Dim _cmd = 0
-        Dim checksum = &H3
+        'Dim checksum = &H3
         'Dim tblack() As DataRow
 
         If _IsConnect Then
@@ -628,12 +628,11 @@ Imports System.IO.Ports
                 '    'pour les modéles 1141
                 '    checksum = &H3
                 'End If
-                checksum = &H3
 
-                Dim donnee() As Byte = {&H2, &H5, plcusercode, _adresse, _cmd, data1, data2, checksum}
+                Dim donnee() As Byte = {&H2, &H5, plcusercode, _adresse, _cmd, data1, data2, &H3}
 
                 'ecriture sur le port
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Ecrire", " Ecrire " & adresse & " : " & commande & " " & data1 & "-" & data2 & " (data:" & &H2 & "." & &H5 & "." & plcusercode & "." & _adresse & "." & _cmd & "." & data1 & "." & data2 & "." & checksum & ")")
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Ecrire", " Ecrire " & adresse & " : " & commande & " " & data1 & "-" & data2 & " (data:" & &H2 & "." & &H5 & "." & plcusercode & "." & _adresse & "." & _cmd & "." & data1 & "." & data2 & "." & &H3 & ")")
                 port.Write(donnee, 0, donnee.Length)
                 If ecriretwice Then port.Write(donnee, 0, donnee.Length) 'on ecrit deux fois : voir la norme PLCBUS
 
@@ -736,18 +735,18 @@ Imports System.IO.Ports
         Dim listeactif As String = ""
         Dim TblBits(7) As Boolean
         Dim unbyte As Byte
-        Dim checksum As Byte
+        Dim checksum As Integer
         Dim verifchecksum As Boolean = False
 
         Try
 
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Process", " Received data: " & comBuffer(0) & "." & comBuffer(1) & "." & comBuffer(2) & "." & comBuffer(3) & "." & comBuffer(4) & "." & comBuffer(5) & "." & comBuffer(6) & "." & comBuffer(7))
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Process", " Received data: " & comBuffer(0) & "." & comBuffer(1) & "." & comBuffer(2) & "." & comBuffer(3) & "." & comBuffer(4) & "." & comBuffer(5) & "." & comBuffer(6) & "." & comBuffer(7) & "." & comBuffer(8))
             'test du cheksum suivant le modele
             Try
                 If _Modele = "1141+" Then
                     'pour les modeles 1141+
-                    checksum = comBuffer(0) + comBuffer(1) + comBuffer(2) + comBuffer(3) + comBuffer(4) + comBuffer(5) + comBuffer(6) + comBuffer(7)
-                    If (checksum = &H200) Then verifchecksum = True
+                    checksum = comBuffer(0) + comBuffer(1) + comBuffer(2) + comBuffer(3) + comBuffer(4) + comBuffer(5) + comBuffer(6) + comBuffer(7) + comBuffer(8)
+                    If (checksum = &H100 Or checksum = &H200 Or checksum = &H300 Or checksum = &H400 Or checksum = &H500) Then verifchecksum = True
                 Else
                     'pour les modéles 1141
                     If (comBuffer(8) = &H3) Then verifchecksum = True
