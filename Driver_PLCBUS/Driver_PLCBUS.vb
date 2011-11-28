@@ -741,6 +741,7 @@ Imports System.IO.Ports
 
         Try
 
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Process", " Received data: " & comBuffer(0) & "." & comBuffer(1) & "." & comBuffer(2) & "." & comBuffer(3) & "." & comBuffer(4) & "." & comBuffer(5) & "." & comBuffer(6) & "." & comBuffer(7))
             'test du cheksum suivant le modele
             Try
                 If _Modele = "1141+" Then
