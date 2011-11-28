@@ -745,7 +745,7 @@ Imports System.IO.Ports
             Try
                 If _Modele = "1141+" Then
                     'pour les modeles 1141+
-                    checksum = comBuffer(0) + comBuffer(1) + comBuffer(2) + comBuffer(3) + comBuffer(4) + comBuffer(5) + comBuffer(6) + comBuffer(7) + comBuffer(8)
+                    checksum = comBuffer(0) + comBuffer(1) + comBuffer(2) + comBuffer(3) + comBuffer(4) + comBuffer(5) + comBuffer(6) + comBuffer(7)
                     If (checksum = &H200) Then verifchecksum = True
                 Else
                     'pour les modéles 1141
