@@ -745,12 +745,21 @@ Imports System.IO.Ports
             Try
                 If _Modele = "1141+" Then
                     'pour les modeles 1141+
-                    checksum = comBuffer(0) + comBuffer(1) + comBuffer(2) + comBuffer(3) + comBuffer(4) + comBuffer(5) + comBuffer(6) + comBuffer(7) + comBuffer(8)
+                    For i = 0 To 8
+                        checksum += CInt(comBuffer(i))
+                    Next
                     If (checksum = &H100 Or checksum = &H200 Or checksum = &H300 Or checksum = &H400 Or checksum = &H500) Then verifchecksum = True
                 Else
                     'pour les modéles 1141
                     If (comBuffer(8) = &H3) Then verifchecksum = True
                 End If
+
+                'fonctionne pour les deux modele 1141 et 1141+
+                'For i = 0 To 8
+                '    checksum += CInt(comBuffer(i))
+                'Next
+                'If (comBuffer(8) = &H3 Or checksum = &H100 Or checksum = &H200 Or checksum = &H300 Or checksum = &H400 Or checksum = &H500) Then verifchecksum = True
+
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process : Checksum", "Exception : " & ex.Message)
             End Try
