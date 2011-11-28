@@ -35,8 +35,8 @@ Namespace HoMIDom
         <NonSerialized()> Private Shared _ListMacros As New List(Of Macro) 'Liste des macros
         <NonSerialized()> Private Shared _ListTriggers As New List(Of Trigger) 'Liste de tous les triggers
         <NonSerialized()> Private Shared _ListGroups As New List(Of Groupes) 'Liste de tous les groupes
-        <NonSerialized()> Private sqlite_homidom As New Sqlite 'BDD sqlite pour Homidom
-        <NonSerialized()> Private sqlite_medias As New Sqlite 'BDD sqlite pour les medias
+        <NonSerialized()> Private sqlite_homidom As New Sqlite("homidom") 'BDD sqlite pour Homidom
+        <NonSerialized()> Private sqlite_medias As New Sqlite("medias") 'BDD sqlite pour les medias
         <NonSerialized()> Shared Soleil As New Soleil 'Déclaration class Soleil
         <NonSerialized()> Shared _Longitude As Double = 0 'Longitude
         <NonSerialized()> Shared _Latitude As Double = 0 'latitude
@@ -2343,6 +2343,8 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub start() Implements IHoMIDom.Start
             Try
+                Dim retour As String
+
                 For i As Integer = 0 To 9
                     _TypeLogEnable.Add(False)
                 Next
@@ -2350,20 +2352,24 @@ Namespace HoMIDom
                 If _CycleSave > 0 Then _NextTimeSave = Now.AddMinutes(_CycleSave)
 
                 '----- Démarre les connexions Sqlite ----- 
-                Dim retour As String = sqlite_homidom.connect("homidom")
-                If retour.StartsWith("ERR:") Then
-                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour)
-                    'on arrête tout
-                Else
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour)
-                End If
-                retour = sqlite_medias.connect("medias")
-                If retour.StartsWith("ERR:") Then
-                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Medias : " & retour)
-                    'on arrête tout
-                Else
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Medias : " & retour)
-                End If
+                'retour = sqlite_homidom.connect()
+                'If retour.StartsWith("ERR:") Then
+                '    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour)
+                '    'on arrête tout
+
+
+                'Else
+                '    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour)
+                'End If
+                'retour = sqlite_medias.connect()
+                'If retour.StartsWith("ERR:") Then
+                '    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Medias : " & retour)
+                '    'on arrête tout
+
+
+                'Else
+                '    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Medias : " & retour)
+                'End If
 
                 '----- Charge les drivers ----- 
                 Drivers_Load()
@@ -3148,14 +3154,14 @@ Namespace HoMIDom
                     Exit Function
                 End If
 
-                If sqlite_homidom.bdd_name = "" Then
-                    Dim retour2 As String = sqlite_homidom.connect("homidom")
-                    If retour2.StartsWith("ERR:") Then
-                        Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour2)
-                    Else
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour2)
-                    End If
-                End If
+                'If Not sqlite_homidom.getconnecte Then
+                '    Dim retour2 As String = sqlite_homidom.connect()
+                '    If retour2.StartsWith("ERR:") Then
+                '        Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "GetAllListHisto", "Erreur lors de la connexion à la BDD Homidom : " & retour2)
+                '    Else
+                '        Log(TypeLog.INFO, TypeSource.SERVEUR, "GetAllListHisto", "Connexion à la BDD Homidom : " & retour2)
+                '    End If
+                'End If
 
                 Dim result As New DataTable
                 result.TableName = "ListHisto"
@@ -3176,6 +3182,7 @@ Namespace HoMIDom
                         Return Nothing
                     End If
                 Else
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllListHisto", retour)
                     Return Nothing
                 End If
             Catch ex As Exception
@@ -3191,15 +3198,15 @@ Namespace HoMIDom
                     Exit Function
                 End If
 
-                If sqlite_homidom.bdd_name = "" Then
-                    Dim retour2 As String = sqlite_homidom.connect("homidom")
-                    If retour2.StartsWith("ERR:") Then
-                        Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour2)
-                    Else
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour2)
-                    End If
-                    retour2 = Nothing
-                End If
+                'If Not sqlite_homidom.connecte Then
+                '    Dim retour2 As String = sqlite_homidom.connect()
+                '    If retour2.StartsWith("ERR:") Then
+                '        Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "GetHisto", "Erreur lors de la connexion à la BDD Homidom : " & retour2)
+                '    Else
+                '        Log(TypeLog.INFO, TypeSource.SERVEUR, "GetHisto", "Connexion à la BDD Homidom : " & retour2)
+                '    End If
+                '    retour2 = Nothing
+                'End If
 
                 Dim result As New DataTable("HistoDB")
                 Dim retour As String = ""
@@ -3224,6 +3231,7 @@ Namespace HoMIDom
                         Return Nothing
                     End If
                 Else
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllListHisto", retour)
                     result = Nothing
                     _list = Nothing
                     Return Nothing
@@ -3924,75 +3932,75 @@ Namespace HoMIDom
                 Exit Function
             End If
 
-                Dim retour As New TemplateDriver
-                Try
-                    For i As Integer = 0 To _ListDrivers.Count - 1
-                        If _ListDrivers.Item(i).ID = DriverId Then
-                            retour.Nom = _ListDrivers.Item(i).nom
-                            retour.ID = _ListDrivers.Item(i).id
-                            retour.COM = _ListDrivers.Item(i).com
-                            retour.Description = _ListDrivers.Item(i).description
-                            retour.Enable = _ListDrivers.Item(i).enable
-                            retour.IP_TCP = _ListDrivers.Item(i).ip_tcp
-                            retour.IP_UDP = _ListDrivers.Item(i).ip_udp
-                            retour.IsConnect = _ListDrivers.Item(i).isconnect
-                            retour.Modele = _ListDrivers.Item(i).modele
-                            retour.Picture = _ListDrivers.Item(i).picture
-                            retour.Port_TCP = _ListDrivers.Item(i).port_tcp
-                            retour.Port_UDP = _ListDrivers.Item(i).port_udp
-                            retour.Protocol = _ListDrivers.Item(i).protocol
-                            retour.Refresh = _ListDrivers.Item(i).refresh
-                            retour.StartAuto = _ListDrivers.Item(i).startauto
-                            retour.Version = _ListDrivers.Item(i).version
+            Dim retour As New TemplateDriver
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).ID = DriverId Then
+                        retour.Nom = _ListDrivers.Item(i).nom
+                        retour.ID = _ListDrivers.Item(i).id
+                        retour.COM = _ListDrivers.Item(i).com
+                        retour.Description = _ListDrivers.Item(i).description
+                        retour.Enable = _ListDrivers.Item(i).enable
+                        retour.IP_TCP = _ListDrivers.Item(i).ip_tcp
+                        retour.IP_UDP = _ListDrivers.Item(i).ip_udp
+                        retour.IsConnect = _ListDrivers.Item(i).isconnect
+                        retour.Modele = _ListDrivers.Item(i).modele
+                        retour.Picture = _ListDrivers.Item(i).picture
+                        retour.Port_TCP = _ListDrivers.Item(i).port_tcp
+                        retour.Port_UDP = _ListDrivers.Item(i).port_udp
+                        retour.Protocol = _ListDrivers.Item(i).protocol
+                        retour.Refresh = _ListDrivers.Item(i).refresh
+                        retour.StartAuto = _ListDrivers.Item(i).startauto
+                        retour.Version = _ListDrivers.Item(i).version
 
-                            For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
-                                retour.DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
-                            Next
-                            For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
-                                Dim y As New Driver.Parametre
-                                y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
-                                y.Description = _ListDrivers.Item(i).Parametres.item(j).description
-                                y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
-                                retour.Parametres.Add(y)
-                            Next
+                        For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
+                            retour.DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
+                        Next
+                        For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
+                            Dim y As New Driver.Parametre
+                            y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
+                            y.Description = _ListDrivers.Item(i).Parametres.item(j).description
+                            y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
+                            retour.Parametres.Add(y)
+                        Next
 
-                            Dim _listactdrv As New ArrayList
-                            Dim _listactd As New List(Of String)
-                            For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
-                                _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
+                        Dim _listactdrv As New ArrayList
+                        Dim _listactd As New List(Of String)
+                        For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
+                            _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
+                        Next
+                        If _listactd.Count > 0 Then
+                            For n As Integer = 0 To _listactd.Count - 1
+                                Dim a() As String = _listactd.Item(n).Split("|")
+                                Dim p As New DeviceAction
+                                With p
+                                    .Nom = a(0)
+                                    If a.Length > 1 Then
+                                        For t As Integer = 1 To a.Length - 1
+                                            Dim pr As New DeviceAction.Parametre
+                                            Dim b() As String = a(t).Split(":")
+                                            With pr
+                                                .Nom = b(0)
+                                                .Type = b(1)
+                                            End With
+                                            p.Parametres.Add(pr)
+                                        Next
+                                    End If
+                                End With
+                                retour.DeviceAction.Add(p)
                             Next
-                            If _listactd.Count > 0 Then
-                                For n As Integer = 0 To _listactd.Count - 1
-                                    Dim a() As String = _listactd.Item(n).Split("|")
-                                    Dim p As New DeviceAction
-                                    With p
-                                        .Nom = a(0)
-                                        If a.Length > 1 Then
-                                            For t As Integer = 1 To a.Length - 1
-                                                Dim pr As New DeviceAction.Parametre
-                                                Dim b() As String = a(t).Split(":")
-                                                With pr
-                                                    .Nom = b(0)
-                                                    .Type = b(1)
-                                                End With
-                                                p.Parametres.Add(pr)
-                                            Next
-                                        End If
-                                    End With
-                                    retour.DeviceAction.Add(p)
-                                Next
-                            End If
-
-                            _listactd = Nothing
-                            _listactdrv = Nothing
-                            Exit For
                         End If
-                    Next
-                    Return retour
-                Catch ex As Exception
-                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDriverById", "Exception : " & ex.Message)
-                    Return Nothing
-                End Try
+
+                        _listactd = Nothing
+                        _listactdrv = Nothing
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDriverById", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
         ''' <summary>Retourne un driver par son ID</summary>

@@ -15,28 +15,57 @@ Namespace HoMIDom
 
         Private SQLconnect As New SQLiteConnection()
         Private Shared lock As New Object
-        Public bdd_name As String = ""
+        Public bdd_name As String
+        Public connecte As Boolean
+
+        ''' <summary>          
+        ''' Creation de l'objet
+        ''' </summary>
+        ''' <param name="basename">Nom de la base de donnée : homidom / medias</param>
+        ''' <remarks></remarks>
+        Public Sub New(ByVal basename As String)
+            bdd_name = basename
+            connecte = False
+        End Sub
+
+        ''' <summary>Fourni l'etat d'une connexion à la bdd</summary>
+        ''' <returns>True/False</returns> 
+        Public Function getconnecte() As Boolean
+            Try
+                If SQLconnect.State = ConnectionState.Open Then
+                    connecte = True
+                    Return True
+                Else
+                    connecte = False
+                    Return False
+                End If
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
 
         ''' <summary>          
         ''' Connection à une BDD Sqlite
         ''' </summary>
-        ''' <param name="dbname">Nom de la base de donnée : homidom / media</param>
         ''' <returns>String si OK, String "ERR:..." si erreur</returns>
         ''' <remarks></remarks>          
-        ''' 
-        Public Function connect(ByVal dbname As String) As String
+        Public Function connect() As String
             Try
-
-                If File.Exists("./bdd/" & dbname & ".db") Then
-                    SQLconnect.ConnectionString = "Data Source=./bdd/" & dbname & ".db;"
+                If File.Exists("./bdd/" & bdd_name & ".db") Then
+                    SQLconnect.ConnectionString = "Data Source=./bdd/" & bdd_name & ".db;"
                     SQLconnect.Open()
-                    bdd_name = dbname
-                    Return "Connecté"
+                    If SQLconnect.State = ConnectionState.Open Then
+                        connecte = True
+                        Return "Connecté"
+                    Else
+                        connecte = False
+                        Return "ERR: Non Connecté à la base sqlite " & bdd_name
+                    End If
                 Else
-                    Return "ERR: base sqlite " & dbname & " non trouvé"
+                    Return "ERR: base sqlite " & bdd_name & " non trouvé"
                 End If
             Catch ex As Exception
-                Return "ERR: Non Connecté à la base sqlite " & dbname
+                Return "ERR: Non Connecté à la base sqlite " & bdd_name & " exception: " & ex.Message
             End Try
         End Function
 
@@ -47,13 +76,12 @@ Namespace HoMIDom
         ''' <remarks></remarks>          
         ''' 
         Public Function disconnect() As String
-
             Try
-
+                connecte = False
                 SQLconnect.Close()
                 Return "Deconnecté"
             Catch ex As Exception
-                Return "ERR: Erreur lors de la déconnexion de la base " & bdd_name
+                Return "ERR: Erreur lors de la déconnexion de la base " & bdd_name & " : " & ex.Message
             End Try
         End Function
 
@@ -68,6 +96,7 @@ Namespace HoMIDom
             Dim SQLcommand As SQLiteCommand
 
             Try
+                connect()
                 'on vérifie si on est connecté à la BDD       
                 If SQLconnect.State = ConnectionState.Open Then
                     'on vérifie si la commande n'est pas vide
@@ -84,11 +113,14 @@ Namespace HoMIDom
                             SQLcommand.ExecuteNonQuery()
                         End SyncLock
                         SQLcommand.Dispose()
+                        disconnect()
                         Return "Commande éxécutée avec succés : " & commande
                     Else
+                        disconnect()
                         Return "ERR: La commande est vide"
                     End If
                 Else
+                    connecte = False
                     Return "ERR: Non connecté à la BDD " & bdd_name
                 End If
             Catch ex As Exception
@@ -108,6 +140,8 @@ Namespace HoMIDom
             Dim x As DataColumn
 
             Try
+                connect()
+
                 'on vérifie si on est connecté à la BDD   
                 If SQLconnect.State = ConnectionState.Open Then
                     'on vérifie si la commande n'est pas vide  
@@ -145,16 +179,21 @@ Namespace HoMIDom
                                 j = j + 1
                             End While
                             resultat = resultattemp
+                            SQLreader.Close()
+                            disconnect()
                             Return "Commande éxécutée avec succés : " & commande
                         Else
+                            SQLreader.Close()
+                            disconnect()
                             Return "Commande éxécutée avec succés mais pas de résultat : " & commande
                         End If
-                        SQLreader.Close()
                         'SQLcommand.Dispose()
                     Else
+                        disconnect()
                         Return "ERR: La commande est vide"
                     End If
                 Else
+                    connecte = False
                     Return "ERR: Non connecté à la BDD " & bdd_name
                 End If
             Catch ex As Exception
