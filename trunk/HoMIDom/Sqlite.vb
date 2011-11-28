@@ -161,12 +161,14 @@ Namespace HoMIDom
 
                         If SQLreader.HasRows = True Then
                             'lecture de la premiere ligne       
-                            SQLreader.Read()
+                            'SQLreader.Read()
 
                             For i = 0 To SQLreader.FieldCount - 1 'pour chaque colonne, on va créer la même dans le datable 
                                 x = New DataColumn("col_" & i)
                                 resultattemp.Columns.Add(x)
                             Next
+
+
 
                             'lecture des lignes   
                             Dim j As Integer = 0
