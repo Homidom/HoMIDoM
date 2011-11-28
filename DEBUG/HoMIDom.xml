@@ -1903,11 +1903,19 @@ HoMIDom
 	<summary>initialisation de l'objet Graphes</summary>
 	<param name="chemin">Chemin ou enregistrer les graphes</param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.connect(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.#ctor(System.String)">
+	<summary>          
+ Creation de l'objet
+ </summary>
+	<param name="basename">Nom de la base de donnée : homidom / medias</param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.getconnecte">
+	<summary>Fourni l'etat d'une connexion à la bdd</summary>
+	<returns>True/False</returns>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.connect">
 	<summary>          
  Connection à une BDD Sqlite
  </summary>
-	<param name="dbname">Nom de la base de donnée : homidom / media</param>
 	<returns>String si OK, String "ERR:..." si erreur</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Sqlite.disconnect">
