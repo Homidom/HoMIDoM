@@ -621,13 +621,14 @@ Imports System.IO.Ports
                     data2 = 0
                 End If
 
-                If _Modele = "1141+" Then
-                    'pour les modeles 1141+
-                    checksum = &H200 - (&H2 + &H5 + plcusercode + _adresse + _cmd + data1 + data2)
-                Else
-                    'pour les modéles 1141
-                    checksum = &H3
-                End If
+                'If _Modele = "1141+" Then
+                '    'pour les modeles 1141+
+                '    checksum = &H200 - (&H2 + &H5 + plcusercode + _adresse + _cmd + data1 + data2)
+                'Else
+                '    'pour les modéles 1141
+                '    checksum = &H3
+                'End If
+                checksum = &H3
 
                 Dim donnee() As Byte = {&H2, &H5, plcusercode, _adresse, _cmd, data1, data2, checksum}
 
