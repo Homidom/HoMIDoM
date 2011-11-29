@@ -5437,7 +5437,7 @@ Namespace HoMIDom
             Dim _retour As String = -1
             Try
                 If _zone IsNot Nothing Then
-                    Dim _dev As New Zone.Element_Zone("", Visible)
+                    Dim _dev As New Zone.Element_Zone(DeviceId, True)
                     _zone.ListElement.Add(_dev)
                     _retour = 0
                 End If

@@ -135,9 +135,9 @@
                         <Label Foreground="White" Name="Label12" Visibility="Hidden">Precision:</Label>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtValDef" VerticalAlignment="Bottom" Visibility="Hidden" Width="215" />
+                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtValDef" VerticalAlignment="Bottom" Visibility="Hidden" Width="215" Text="0" />
                         <Rectangle Width="10" />
-                        <TextBox Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtPrecision" Height="22" VerticalAlignment="Bottom" Visibility="Hidden" />
+                        <TextBox Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtPrecision" Height="22" VerticalAlignment="Bottom" Visibility="Hidden" Text="0" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                         <Label Foreground="White" Name="Label13" Visibility="Hidden" Width="215">Correction:</Label>
