@@ -1895,7 +1895,7 @@ Namespace HoMIDom
 
             Protected Overrides Sub Finalize()
                 MyBase.Finalize()
-                MyTimer.Enabled = True
+                MyTimer.Enabled = false
             End Sub
         End Class
 
