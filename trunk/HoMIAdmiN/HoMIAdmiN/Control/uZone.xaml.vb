@@ -37,6 +37,41 @@ Partial Public Class uZone
         End Try
     End Sub
 
+    Private Sub SaveElement()
+        _ListIdSelect.Clear()
+        Dim y As StackPanel
+        Dim x1 As CheckBox
+        Dim x2 As CheckBox
+
+        For j As Integer = 0 To ListBxDevice.Items.Count - 1
+            y = ListBxDevice.Items(j)
+            x1 = y.Children.Item(0)
+            x2 = y.Children.Item(1)
+            If x1.IsChecked = True Then
+                Dim z As New Zone.Element_Zone(x1.Uid, x2.IsChecked)
+                _ListIdSelect.Add(z)
+            End If
+        Next
+        For j As Integer = 0 To ListBxZone.Items.Count - 1
+            y = ListBxZone.Items(j)
+            x1 = y.Children.Item(0)
+            x2 = y.Children.Item(1)
+            If x1.IsChecked = True Then
+                Dim z As New Zone.Element_Zone(x1.Uid, x2.IsChecked)
+                _ListIdSelect.Add(z)
+            End If
+        Next
+        For j As Integer = 0 To ListBxMacro.Items.Count - 1
+            y = ListBxMacro.Items(j)
+            x1 = y.Children.Item(0)
+            x2 = y.Children.Item(1)
+            If x1.IsChecked = True Then
+                Dim z As New Zone.Element_Zone(x1.Uid, x2.IsChecked)
+                _ListIdSelect.Add(z)
+            End If
+        Next
+    End Sub
+
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
         RaiseEvent CloseMe(Me)
     End Sub
@@ -76,96 +111,120 @@ Partial Public Class uZone
             End If
         End If
 
+        For Each Device In Window1.myService.GetAllDevices(IdSrv)
+            Dim stk As New StackPanel
+            stk.Orientation = Orientation.Horizontal
+
+            Dim x As New CheckBox
+            x.Content = Device.Name
+            x.ToolTip = Device.Name
+            x.Uid = Device.ID
+            x.Width = 80
+            stk.Children.Add(x)
+
+            Dim y As New CheckBox
+            y.Content = "Visible Client"
+            stk.Children.Add(y)
+
+            ListBxDevice.Items.Add(stk)
+        Next
+
+        For Each Zone In Window1.myService.GetAllZones(IdSrv)
+            Dim stk As New StackPanel
+            stk.Orientation = Orientation.Horizontal
+
+            Dim x As New CheckBox
+            x.Content = Zone.Name
+            x.ToolTip = Zone.Name
+            x.Uid = Zone.ID
+            x.Width = 80
+            stk.Children.Add(x)
+
+            Dim y As New CheckBox
+            y.Content = "Visible Client"
+            stk.Children.Add(y)
+
+            ListBxZone.Items.Add(stk)
+        Next
+
+        For Each Macro In Window1.myService.GetAllMacros(IdSrv)
+            Dim stk As New StackPanel
+            stk.Orientation = Orientation.Horizontal
+
+            Dim x As New CheckBox
+            x.Content = Macro.Nom
+            x.ToolTip = Macro.Nom
+            x.Uid = Macro.ID
+            x.Width = 80
+            stk.Children.Add(x)
+
+            Dim y As New CheckBox
+            y.Content = "Visible Client"
+            stk.Children.Add(y)
+
+            ListBxMacro.Items.Add(stk)
+        Next
         RefreshLists()
     End Sub
 
     Private Sub RefreshLists()
-        ListBxDeviceSelect.Items.Clear()
 
         For i As Integer = 0 To _ListIdSelect.Count - 1
-            If Window1.myService.ReturnDeviceByID(IdSrv, _ListIdSelect.Item(i).ElementID) IsNot Nothing Then
-                ListBxDeviceSelect.Items.Add(Window1.myService.ReturnDeviceByID(IdSrv, _ListIdSelect.Item(i).ElementID).Name)
-            Else
-                If Window1.myService.ReturnZoneByID(IdSrv, _ListIdSelect.Item(i).ElementID) IsNot Nothing Then
-                    ListBxDeviceSelect.Items.Add(Window1.myService.ReturnZoneByID(IdSrv, _ListIdSelect.Item(i).ElementID).Name)
-                Else
-                    If Window1.myService.ReturnMacroById(IdSrv, _ListIdSelect.Item(i).ElementID) IsNot Nothing Then
-                        ListBxDeviceSelect.Items.Add(Window1.myService.ReturnMacroById(IdSrv, _ListIdSelect.Item(i).ElementID).Nom)
+            Dim x As CheckBox
+            Dim y As CheckBox
+            Dim stk As StackPanel
+            For j As Integer = 0 To ListBxDevice.Items.Count - 1
+                stk = ListBxDevice.Items(j)
+                x = stk.Children.Item(0)
+                y = stk.Children.Item(1)
+                If x.Uid = _ListIdSelect.Item(i).ElementID Then
+                    x.IsChecked = True
+                    If _ListIdSelect.Item(i).Visible = True Then
+                        y.IsChecked = True
+                    Else
+                        y.IsChecked = False
                     End If
+                    Exit For
                 End If
-            End If
+            Next
+            For j As Integer = 0 To ListBxZone.Items.Count - 1
+                stk = ListBxDevice.Items(j)
+                x = stk.Children.Item(0)
+                y = stk.Children.Item(1)
+                If x.Uid = _ListIdSelect.Item(i).ElementID Then
+                    x.IsChecked = True
+                    If _ListIdSelect.Item(i).Visible = True Then
+                        y.IsChecked = True
+                    Else
+                        y.IsChecked = False
+                    End If
+                    Exit For
+                End If
+            Next
+            For j As Integer = 0 To ListBxMacro.Items.Count - 1
+                stk = ListBxDevice.Items(j)
+                x = stk.Children.Item(0)
+                y = stk.Children.Item(1)
+                If x.Uid = _ListIdSelect.Item(i).ElementID Then
+                    x.IsChecked = True
+                    If _ListIdSelect.Item(i).Visible = True Then
+                        y.IsChecked = True
+                    Else
+                        y.IsChecked = False
+                    End If
+                    Exit For
+                End If
+            Next
         Next
     End Sub
 
-    Private Sub BtnAjout_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
-        'If ListBxDispo.SelectedIndex < 0 Then
-        '    MessageBox.Show("Veuillez sélectionner un élément", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-        'Else
-        '    _ListIdSelect.Add(_ListIdDispo.Item(ListBxDispo.SelectedIndex))
-        '    _ListIdDispo.RemoveAt(ListBxDispo.SelectedIndex)
-        'End If
-        'RefreshLists()
-    End Sub
-
-    Private Sub BtnDel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDel.Click
-        If ListBxDeviceSelect.SelectedIndex < 0 Then
-            MessageBox.Show("Veuillez sélectionner un élément à supprimer", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-        Else
-            _ListIdSelect.RemoveAt(ListBxDeviceSelect.SelectedIndex)
-        End If
-
-        ChkVisible.IsChecked = False
-        RefreshLists()
-    End Sub
-
-    Private Sub ListBxDevice_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles ListBxDeviceSelect.DragOver
+    Private Sub ListBxDevice_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs)
         If e.Data.GetDataPresent(GetType(String)) Then
             e.Effects = DragDropEffects.Copy
         Else
             e.Effects = DragDropEffects.None
         End If
 
-    End Sub
-
-    Private Sub ListBxDevice_Drop(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles ListBxDeviceSelect.Drop
-        If e.Data.GetDataPresent(GetType(String)) Then
-            e.Effects = DragDropEffects.Copy
-
-            Dim uri As String = e.Data.GetData(GetType(String)).ToString  'DirectCast(e.Data.GetData(GetType(TreeViewItem)), String)
-            If uri = _ZoneId Then
-                MessageBox.Show("Une zone ne peut être une sous zone à elle même !", "Zone", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                Exit Sub
-            End If
-            Dim y As New Zone.Element_Zone(uri, False)
-            If _ListIdSelect.Contains(y) Then
-                MessageBox.Show("Cet élément existe déjà dans la liste !", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                Exit Sub
-            End If
-            _ListIdSelect.Add(y)
-            y = Nothing
-            RefreshLists()
-        Else
-            e.Effects = DragDropEffects.None
-        End If
-    End Sub
-
-    Private Sub ListBxDevice_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ListBxDeviceSelect.MouseDoubleClick
-        If ListBxDeviceSelect.SelectedIndex < 0 Then Exit Sub
-
-        ChkVisible.Visibility = Windows.Visibility.Visible
-        BtnOkDev.Visibility = Windows.Visibility.Visible
-
-        ChkVisible.IsChecked = _ListIdSelect.Item(ListBxDeviceSelect.SelectedIndex).Visible
-    End Sub
-
-    Private Sub BtnOkDev_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkDev.Click
-        If ListBxDeviceSelect.SelectedIndex < 0 Then
-            MessageBox.Show("Veuillez sélectionner un device", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-        Else
-            _ListIdSelect(ListBxDeviceSelect.SelectedIndex).Visible = ChkVisible.IsChecked
-            ChkVisible.Visibility = Windows.Visibility.Hidden
-            BtnOkDev.Visibility = Windows.Visibility.Hidden
-        End If
     End Sub
 
     Private Sub ImgZone_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgZone.MouseLeftButtonDown
@@ -205,6 +264,8 @@ Partial Public Class uZone
             MessageBox.Show("ERREUR Sub ImgIcon_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
+
 
 
 End Class

@@ -151,7 +151,7 @@ Partial Public Class uDevice
             For i As Integer = 0 To Window1.myService.GetAllZones(IdSrv).Count - 1
                 Dim ch As New CheckBox
                 ch.Content = Window1.myService.GetAllZones(IdSrv).Item(i).Name
-                ch.Tag = Window1.myService.GetAllZones(IdSrv).Item(i).ID
+                ch.Uid = Window1.myService.GetAllZones(IdSrv).Item(i).ID
 
                 For j As Integer = 0 To Window1.myService.GetAllZones(IdSrv).Item(i).ListElement.Count - 1
                     If Window1.myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).ElementID = _DeviceId Then
@@ -201,36 +201,40 @@ Partial Public Class uDevice
                 End If
             Next
             Window1.myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text)
-
+            SaveInZone()
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uDevice BtnOK_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("ERREUR Sub uDevice BtnOK_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
     Private Sub SaveInZone()
+        Try
+            For i As Integer = 0 To ListZone.Items.Count - 1
+                Dim x As CheckBox = ListZone.Items(i)
+                Dim trv As Boolean = False
 
-        Dim trv As Boolean = False
+                For Each dev In Window1.myService.GetDeviceInZone(IdSrv, x.Uid)
+                    If dev IsNot Nothing Then
+                        If dev.ID = _DeviceId Then
+                            trv = True
+                            Exit For
+                        End If
+                    End If
+                Next
 
-        For i As Integer = 0 To Window1.myService.GetAllZones(IdSrv).Count - 1
-            For j As Integer = 0 To Window1.myService.GetAllZones(IdSrv).Item(i).ListElement.Count - 1
-                If Window1.myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).ElementID = _DeviceId Then
-                    trv = True
-                    Exit For
-                End If
-            Next
-            For k As Integer = 0 To ListZone.Items.Count - 1
-                Dim x As CheckBox = ListZone.Items(k)
-
-                If trv = True And x.IsChecked = True Then
-                    Window1.myService.DeleteDeviceToZone(IdSrv, Window1.myService.GetAllZones(IdSrv).Item(i).ID, _DeviceId)
+                If trv = True And x.IsChecked = False Then
+                    Window1.myService.DeleteDeviceToZone(IdSrv, x.Uid, _DeviceId)
                 Else
-                    Window1.myService.AddDeviceToZone(IdSrv, Window1.myService.GetAllZones(IdSrv).Item(i).ID, _DeviceId, False)
+                    If trv = False And x.IsChecked = True Then
+                        Window1.myService.AddDeviceToZone(IdSrv, x.Uid, _DeviceId, True)
+                    End If
                 End If
             Next
 
-        Next
-
+        Catch ex As Exception
+            MessageBox.Show("Erreur dans le programme SaveInZone: " & ex.ToString, "Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
 
     End Sub
 
@@ -462,6 +466,7 @@ Partial Public Class uDevice
                 End If
             Next
             Window1.myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
+            SaveInZone()
 
             BtnRead.Visibility = Windows.Visibility.Visible
 
