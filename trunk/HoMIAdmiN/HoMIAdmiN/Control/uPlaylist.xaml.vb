@@ -16,8 +16,22 @@ Public Class uPlaylist
     Private _ListeExt As List(Of String)
 
 #End Region
+    Public Sub listeRep(ByVal nomreptoscan As String)
+
+        ' Créér une reference du dossier
+        Dim di As New DirectoryInfo(nomreptoscan)
+        Dim listeDir As DirectoryInfo() = di.GetDirectories()
+
+        ' Traitement de chaque sous repertoire
+        For i = 0 To listeDir.Count - 1
+            nomrep.Items.Add(listeDir(i).FullName)
+            listeRep(listeDir(i).FullName)
+        Next
+    End Sub
 
     Public Sub New()
+
+
 
         Dim cpt1 As Integer
 
@@ -38,7 +52,7 @@ Public Class uPlaylist
         ' Creation de la liste des repertoires audios
         For cpt1 = 0 To Window1.myService.GetAllRepertoiresAudio(IdSrv).Count - 1
             ' Repertoire actif
-            If Window1.myService.GetAllRepertoiresAudio(IdSrv).Item(cpt1).Enable = True Then NomRep.Items.Add(Window1.myService.GetAllRepertoiresAudio(IdSrv).Item(cpt1).Repertoire)
+            If Window1.myService.GetAllRepertoiresAudio(IdSrv).Item(cpt1).Enable = True Then listeRep(Window1.myService.GetAllRepertoiresAudio(IdSrv).Item(cpt1).Repertoire)
         Next
 
     End Sub
