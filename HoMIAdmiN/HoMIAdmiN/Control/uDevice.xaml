@@ -181,7 +181,7 @@
                     <StackPanel >
                         <Rectangle Height="80"/>
                         <Label Content="Zone" Foreground="White" />
-                        <ListBox Name="ListZone" Width="120" Height="150"/>
+                        <ListBox Name="ListZone" Width="150" Height="150"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

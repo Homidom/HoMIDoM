@@ -149,17 +149,37 @@ Partial Public Class uDevice
 
             'Liste toutes les zones dans la liste
             For i As Integer = 0 To Window1.myService.GetAllZones(IdSrv).Count - 1
-                Dim ch As New CheckBox
-                ch.Content = Window1.myService.GetAllZones(IdSrv).Item(i).Name
-                ch.Uid = Window1.myService.GetAllZones(IdSrv).Item(i).ID
+                Dim ch1 As New CheckBox
+                Dim ch2 As New CheckBox
+
+                Dim stk As New StackPanel
+                stk.Orientation = Orientation.Horizontal
+
+                ch1.Width = 80
+                ch1.Content = Window1.myService.GetAllZones(IdSrv).Item(i).Name
+                ch1.ToolTip = ch1.Content
+                ch1.Uid = Window1.myService.GetAllZones(IdSrv).Item(i).ID
+                AddHandler ch1.Click, AddressOf ChkElement_Click
+
+                ch2.Content = "Visible"
+                ch2.ToolTip = "Visible dans la zone côté client"
+                ch2.Visibility = Windows.Visibility.Hidden
 
                 For j As Integer = 0 To Window1.myService.GetAllZones(IdSrv).Item(i).ListElement.Count - 1
                     If Window1.myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).ElementID = _DeviceId Then
-                        ch.IsChecked = True
+                        ch1.IsChecked = True
+                        ch2.Visibility = Windows.Visibility.Visible
+
+                        If Window1.myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).Visible = True Then
+                            ch2.IsChecked = True
+                        End If
                         Exit For
                     End If
                 Next
-                ListZone.Items.Add(ch)
+
+                stk.Children.Add(ch1)
+                stk.Children.Add(ch2)
+                ListZone.Items.Add(stk)
             Next
         Catch Ex As Exception
             MessageBox.Show("Erreur: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -211,10 +231,12 @@ Partial Public Class uDevice
     Private Sub SaveInZone()
         Try
             For i As Integer = 0 To ListZone.Items.Count - 1
-                Dim x As CheckBox = ListZone.Items(i)
+                Dim stk As StackPanel = ListZone.Items(i)
+                Dim x1 As CheckBox = stk.Children.Item(0)
+                Dim X2 As CheckBox = stk.Children.Item(1)
                 Dim trv As Boolean = False
 
-                For Each dev In Window1.myService.GetDeviceInZone(IdSrv, x.Uid)
+                For Each dev In Window1.myService.GetDeviceInZone(IdSrv, x1.Uid)
                     If dev IsNot Nothing Then
                         If dev.ID = _DeviceId Then
                             trv = True
@@ -223,11 +245,15 @@ Partial Public Class uDevice
                     End If
                 Next
 
-                If trv = True And x.IsChecked = False Then
-                    Window1.myService.DeleteDeviceToZone(IdSrv, x.Uid, _DeviceId)
+                If trv = True And x1.IsChecked = False Then
+                    Window1.myService.DeleteDeviceToZone(IdSrv, x1.Uid, _DeviceId)
                 Else
-                    If trv = False And x.IsChecked = True Then
-                        Window1.myService.AddDeviceToZone(IdSrv, x.Uid, _DeviceId, True)
+                    If trv = True And x1.IsChecked = True Then
+                        Window1.myService.AddDeviceToZone(IdSrv, x1.Uid, _DeviceId, X2.IsChecked)
+                    Else
+                        If trv = False And x1.IsChecked = True Then
+                            Window1.myService.AddDeviceToZone(IdSrv, x1.Uid, _DeviceId, X2.IsChecked)
+                        End If
                     End If
                 End If
             Next
@@ -474,4 +500,16 @@ Partial Public Class uDevice
             MessageBox.Show("ERREUR Sub uDevice BtnSave_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
+    Private Sub ChkElement_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs)
+        For Each stk As StackPanel In ListZone.Items
+            Dim x As CheckBox = stk.Children.Item(0)
+            If x.IsChecked = True Then
+                stk.Children.Item(1).Visibility = Windows.Visibility.Visible
+            Else
+                stk.Children.Item(1).Visibility = Windows.Visibility.Hidden
+            End If
+        Next
+    End Sub
+
 End Class
