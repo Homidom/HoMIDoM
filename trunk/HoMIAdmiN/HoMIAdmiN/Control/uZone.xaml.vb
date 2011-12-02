@@ -30,6 +30,7 @@ Partial Public Class uZone
                 Next
             End If
 
+            SaveElement()
             Window1.myService.SaveZone(IdSrv, _ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag.ToString, ImgZone.Tag.ToString)
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
@@ -38,38 +39,43 @@ Partial Public Class uZone
     End Sub
 
     Private Sub SaveElement()
-        _ListIdSelect.Clear()
-        Dim y As StackPanel
-        Dim x1 As CheckBox
-        Dim x2 As CheckBox
+        Try
 
-        For j As Integer = 0 To ListBxDevice.Items.Count - 1
-            y = ListBxDevice.Items(j)
-            x1 = y.Children.Item(0)
-            x2 = y.Children.Item(1)
-            If x1.IsChecked = True Then
-                Dim z As New Zone.Element_Zone(x1.Uid, x2.IsChecked)
-                _ListIdSelect.Add(z)
-            End If
-        Next
-        For j As Integer = 0 To ListBxZone.Items.Count - 1
-            y = ListBxZone.Items(j)
-            x1 = y.Children.Item(0)
-            x2 = y.Children.Item(1)
-            If x1.IsChecked = True Then
-                Dim z As New Zone.Element_Zone(x1.Uid, x2.IsChecked)
-                _ListIdSelect.Add(z)
-            End If
-        Next
-        For j As Integer = 0 To ListBxMacro.Items.Count - 1
-            y = ListBxMacro.Items(j)
-            x1 = y.Children.Item(0)
-            x2 = y.Children.Item(1)
-            If x1.IsChecked = True Then
-                Dim z As New Zone.Element_Zone(x1.Uid, x2.IsChecked)
-                _ListIdSelect.Add(z)
-            End If
-        Next
+            _ListIdSelect.Clear()
+            Dim y As StackPanel
+            Dim x1 As CheckBox
+            Dim x2 As CheckBox
+
+            For j As Integer = 0 To ListBxDevice.Items.Count - 1
+                y = ListBxDevice.Items(j)
+                x1 = y.Children.Item(0)
+                x2 = y.Children.Item(1)
+                If x1.IsChecked = True Then
+                    Dim z As New Zone.Element_Zone(x1.Uid, x2.IsChecked)
+                    _ListIdSelect.Add(z)
+                End If
+            Next
+            For j As Integer = 0 To ListBxZone.Items.Count - 1
+                y = ListBxZone.Items(j)
+                x1 = y.Children.Item(0)
+                x2 = y.Children.Item(1)
+                If x1.IsChecked = True Then
+                    Dim z As New Zone.Element_Zone(x1.Uid, x2.IsChecked)
+                    _ListIdSelect.Add(z)
+                End If
+            Next
+            For j As Integer = 0 To ListBxMacro.Items.Count - 1
+                y = ListBxMacro.Items(j)
+                x1 = y.Children.Item(0)
+                x2 = y.Children.Item(1)
+                If x1.IsChecked = True Then
+                    Dim z As New Zone.Element_Zone(x1.Uid, x2.IsChecked)
+                    _ListIdSelect.Add(z)
+                End If
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors du traitement SaveElement: " & ex.ToString, "Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
@@ -119,11 +125,14 @@ Partial Public Class uZone
             x.Content = Device.Name
             x.ToolTip = Device.Name
             x.Uid = Device.ID
-            x.Width = 80
+            x.Width = 110
+            AddHandler x.Click, AddressOf ChkElement_Click
             stk.Children.Add(x)
 
             Dim y As New CheckBox
-            y.Content = "Visible Client"
+            y.Content = "Visible"
+            y.ToolTip = "Visible côté client"
+            y.Visibility = Windows.Visibility.Hidden
             stk.Children.Add(y)
 
             ListBxDevice.Items.Add(stk)
@@ -135,13 +144,17 @@ Partial Public Class uZone
 
             Dim x As New CheckBox
             x.Content = Zone.Name
+            If Zone.Name = TxtName.Text Then x.IsEnabled = False
             x.ToolTip = Zone.Name
             x.Uid = Zone.ID
-            x.Width = 80
+            x.Width = 110
+            AddHandler x.Click, AddressOf ChkElement_Click
             stk.Children.Add(x)
 
             Dim y As New CheckBox
-            y.Content = "Visible Client"
+            y.Content = "Visible"
+            y.ToolTip = "Visible côté client"
+            y.Visibility = Windows.Visibility.Hidden
             stk.Children.Add(y)
 
             ListBxZone.Items.Add(stk)
@@ -155,11 +168,14 @@ Partial Public Class uZone
             x.Content = Macro.Nom
             x.ToolTip = Macro.Nom
             x.Uid = Macro.ID
-            x.Width = 80
+            x.Width = 110
+            AddHandler x.Click, AddressOf ChkElement_Click
             stk.Children.Add(x)
 
             Dim y As New CheckBox
-            y.Content = "Visible Client"
+            y.Content = "Visible"
+            y.ToolTip = "Visible côté client"
+            y.Visibility = Windows.Visibility.Hidden
             stk.Children.Add(y)
 
             ListBxMacro.Items.Add(stk)
@@ -173,12 +189,15 @@ Partial Public Class uZone
             Dim x As CheckBox
             Dim y As CheckBox
             Dim stk As StackPanel
+
             For j As Integer = 0 To ListBxDevice.Items.Count - 1
                 stk = ListBxDevice.Items(j)
                 x = stk.Children.Item(0)
                 y = stk.Children.Item(1)
+
                 If x.Uid = _ListIdSelect.Item(i).ElementID Then
                     x.IsChecked = True
+                    y.Visibility = Windows.Visibility.Visible
                     If _ListIdSelect.Item(i).Visible = True Then
                         y.IsChecked = True
                     Else
@@ -187,32 +206,41 @@ Partial Public Class uZone
                     Exit For
                 End If
             Next
+
             For j As Integer = 0 To ListBxZone.Items.Count - 1
-                stk = ListBxDevice.Items(j)
+                stk = ListBxZone.Items(j)
                 x = stk.Children.Item(0)
                 y = stk.Children.Item(1)
                 If x.Uid = _ListIdSelect.Item(i).ElementID Then
                     x.IsChecked = True
+                    y.Visibility = Windows.Visibility.Visible
                     If _ListIdSelect.Item(i).Visible = True Then
                         y.IsChecked = True
                     Else
                         y.IsChecked = False
                     End If
                     Exit For
+                Else
+                    x.IsChecked = False
+                    y.Visibility = Windows.Visibility.Hidden
                 End If
             Next
             For j As Integer = 0 To ListBxMacro.Items.Count - 1
-                stk = ListBxDevice.Items(j)
+                stk = ListBxMacro.Items(j)
                 x = stk.Children.Item(0)
                 y = stk.Children.Item(1)
                 If x.Uid = _ListIdSelect.Item(i).ElementID Then
                     x.IsChecked = True
+                    y.Visibility = Windows.Visibility.Visible
                     If _ListIdSelect.Item(i).Visible = True Then
                         y.IsChecked = True
                     Else
                         y.IsChecked = False
                     End If
                     Exit For
+                Else
+                    x.IsChecked = False
+                    y.Visibility = Windows.Visibility.Hidden
                 End If
             Next
         Next
@@ -266,6 +294,36 @@ Partial Public Class uZone
     End Sub
 
 
-
-
+    Private Sub ChkElement_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs)
+        If InStr(UCase(sender.parent.parent.name), "DEVICE") > 0 Then
+            For Each stk As StackPanel In ListBxDevice.Items
+                Dim x As CheckBox = stk.Children.Item(0)
+                If x.IsChecked = True Then
+                    stk.Children.Item(1).Visibility = Windows.Visibility.Visible
+                Else
+                    stk.Children.Item(1).Visibility = Windows.Visibility.Hidden
+                End If
+            Next
+        End If
+        If InStr(UCase(sender.parent.parent.name), "ZONE") > 0 Then
+            For Each stk As StackPanel In ListBxZone.Items
+                Dim x As CheckBox = stk.Children.Item(0)
+                If x.IsChecked = True Then
+                    stk.Children.Item(1).Visibility = Windows.Visibility.Visible
+                Else
+                    stk.Children.Item(1).Visibility = Windows.Visibility.Hidden
+                End If
+            Next
+        End If
+        If InStr(UCase(sender.parent.parent.name), "MACRO") > 0 Then
+            For Each stk As StackPanel In ListBxMacro.Items
+                Dim x As CheckBox = stk.Children.Item(0)
+                If x.IsChecked = True Then
+                    stk.Children.Item(1).Visibility = Windows.Visibility.Visible
+                Else
+                    stk.Children.Item(1).Visibility = Windows.Visibility.Hidden
+                End If
+            Next
+        End If
+    End Sub
 End Class

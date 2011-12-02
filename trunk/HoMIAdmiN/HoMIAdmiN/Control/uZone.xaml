@@ -86,9 +86,9 @@
                 <Label Content="Eléments appartenant à la zone" Foreground="Orange" ToolTip="Glisser un élément (device, macro ou zone) dans la liste ci-dessous"/>
                 <StackPanel Orientation="Horizontal" >
                     <Rectangle Width="10" />
-                    <Label Content="Devices" Foreground="White" Width="150" Margin="3" />
-                    <Label Content="Zones" Foreground="White" Width="150" Margin="3" />
-                    <Label Content="Macros" Foreground="White" Width="150" Margin="3" />
+                    <Label Content="Devices" Foreground="White" Width="200" Margin="3" />
+                    <Label Content="Zones" Foreground="White" Width="200" Margin="3" />
+                    <Label Content="Macros" Foreground="White" Width="200" Margin="3" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
                     <Rectangle Width="10" />
@@ -96,8 +96,7 @@
                     <ListBox Margin="3" Name="ListBxZone" Width="200" Height="75" AllowDrop="True" Grid.ColumnSpan="2" />
                     <ListBox Margin="3" Name="ListBxMacro" Width="200" Height="75" AllowDrop="True" Grid.ColumnSpan="2" />
                 </StackPanel>
-                <CheckBox Margin="5" Name="ChkVisible" Foreground="White" Visibility="Hidden" HorizontalAlignment="Center">Visible</CheckBox>
-            </StackPanel>
+                </StackPanel>
         </Border>
         <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgIcon" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Defaut-128.png">
             <Image.LayoutTransform >
