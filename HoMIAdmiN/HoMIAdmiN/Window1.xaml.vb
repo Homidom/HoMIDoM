@@ -34,6 +34,7 @@ Class Window1
 
             ' Cet appel est requis par le Concepteur Windows Form.
             InitializeComponent()
+            DKpanel.Width = 0
 
             spl.Close()
             spl = Nothing
@@ -47,6 +48,8 @@ Class Window1
             Myfile = MyRep & "\Config\HoMIAdmiN.xml"
 
             ErazeMnu()
+
+
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -463,7 +466,6 @@ Class Window1
             MessageBox.Show("ERREUR Sub AffDevice: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
-
 
     'Afficher la liste des scenes
     Public Sub AffScene()
@@ -1031,6 +1033,7 @@ Class Window1
                 Exit Function
             Else
                 IsConnect = True
+                DKpanel.Width = Double.NaN
             End If
 
 

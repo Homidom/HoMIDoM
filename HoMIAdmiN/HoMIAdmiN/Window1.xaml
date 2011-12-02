@@ -177,14 +177,14 @@
           
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top" >
                      <Menu HorizontalAlignment="Left" Name="Menu1" Background="Transparent" Foreground="Black" FontSize="11">
-                    <MenuItem Header="Fichier" Foreground="GhostWhite">
+                    <MenuItem Header="Fichier" Foreground="GhostWhite" FontFamily="Verdana">
                     <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig" Foreground="Black"/>
                     <MenuItem Header="Configuration du Serveur" Name="MenuConfigSrv"  Foreground="Black"/>
                     <MenuItem Header="Paramètres Audio du Serveur" Name="MenuConfigAudio"  Foreground="Black"/>
                     <MenuItem Header="Quitter" Name="MenuQuitter"  Foreground="Black"/>
                     </MenuItem>
 
-                   <MenuItem Header="Affichage" Foreground="WhiteSmoke">
+                   <MenuItem Header="Affichage" Foreground="WhiteSmoke" FontFamily="Verdana">
                         <MenuItem Header="Consulter Log" Name="MenuConsultLog" Foreground="Black"  />
                         <MenuItem Header="PlayList" Name="MenuPlayList" Foreground="Black"  />
                     </MenuItem>
@@ -214,6 +214,7 @@
             </Image>
             <Label Content="Serveur courant: ?" Foreground=" White" Name="LblSrv"/>
         </StackPanel>
+        
         <DockPanel Name="DKpanel">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                     <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuDriver" ToolTip="Gérer les drivers">
@@ -317,10 +318,9 @@
        
         <Canvas Name="CanvasRight" Margin="5" >
             <Canvas.Background>
-                <ImageBrush ImageSource="/HoMIAdmiN;component/Images/01.png" Stretch="UniformToFill" />
+                <ImageBrush ImageSource="/HoMIAdmiN;component/Images/01.png"  />
             </Canvas.Background>
          </Canvas>
-
 
     </DockPanel>
 

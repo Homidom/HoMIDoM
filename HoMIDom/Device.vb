@@ -339,6 +339,12 @@ Namespace HoMIDom
             Protected Overrides Sub Finalize()
                 MyBase.Finalize()
             End Sub
+
+            Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+                Dim CMD As String = UCase(Command)
+
+
+            End Function
         End Class
 
         ''' <summary>Classe valeur Double avec min/max/def/correction...</summary>
