@@ -7,6 +7,7 @@ Imports System.Xml
 Imports System.Xml.Serialization
 Imports System.Threading
 Imports System.Reflection.Assembly
+Imports System.Windows.Media.Animation
 
 Class Window1
 
@@ -1033,7 +1034,16 @@ Class Window1
                 Exit Function
             Else
                 IsConnect = True
+
                 DKpanel.Width = Double.NaN
+
+                Dim da3 As DoubleAnimation = New DoubleAnimation
+                da3.From = 0
+                da3.To = 1
+                da3.Duration = New Duration(TimeSpan.FromMilliseconds(600))
+                Dim sc As ScaleTransform = New ScaleTransform()
+                DKpanel.RenderTransform = sc
+                sc.BeginAnimation(ScaleTransform.ScaleXProperty, da3)
             End If
 
 
@@ -1274,24 +1284,57 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         CanvasRight.Children.Clear()
                         CanvasRight.Children.Add(x)
+
+                        Dim da3 As DoubleAnimation = New DoubleAnimation
+                        da3.From = 0
+                        da3.To = 1
+                        da3.Duration = New Duration(TimeSpan.FromMilliseconds(600))
+                        Dim sc As ScaleTransform = New ScaleTransform()
+                        x.RenderTransform = sc
+                        sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
                     Case 1 'device
                         Dim x As New uDevice(uDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         CanvasRight.Children.Clear()
                         CanvasRight.Children.Add(x)
+
+                        Dim da3 As DoubleAnimation = New DoubleAnimation
+                        da3.From = 0
+                        da3.To = 1
+                        da3.Duration = New Duration(TimeSpan.FromMilliseconds(500))
+                        Dim sc As ScaleTransform = New ScaleTransform()
+                        x.RenderTransform = sc
+                        sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
                     Case 2 'zone
                         Dim x As New uZone(uDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         CanvasRight.Children.Clear()
                         CanvasRight.Children.Add(x)
+
+                        Dim da3 As DoubleAnimation = New DoubleAnimation
+                        da3.From = 0
+                        da3.To = 1
+                        da3.Duration = New Duration(TimeSpan.FromMilliseconds(600))
+                        Dim sc As ScaleTransform = New ScaleTransform()
+                        x.RenderTransform = sc
+                        sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
                     Case 3 'user
                         Dim x As New uUser(uDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         CanvasRight.Children.Clear()
                         CanvasRight.Children.Add(x)
+
+                        Dim da3 As DoubleAnimation = New DoubleAnimation
+                        da3.From = 0
+                        da3.To = 1
+                        da3.Duration = New Duration(TimeSpan.FromMilliseconds(600))
+                        Dim sc As ScaleTransform = New ScaleTransform()
+                        x.RenderTransform = sc
+                        sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
+
                     Case 4 'trigger
                         Dim _Trig As Trigger = myService.ReturnTriggerById(IdSrv, TreeViewG.SelectedItem.uid)
 
@@ -1301,13 +1344,31 @@ Class Window1
                                     x.Uid = System.Guid.NewGuid.ToString()
                                     AddHandler x.CloseMe, AddressOf UnloadControl
                                     CanvasRight.Children.Clear()
-                                    CanvasRight.Children.Add(x)
+                                CanvasRight.Children.Add(x)
+
+                                Dim da3 As DoubleAnimation = New DoubleAnimation
+                                da3.From = 0
+                                da3.To = 1
+                                da3.Duration = New Duration(TimeSpan.FromMilliseconds(600))
+                                Dim sc As ScaleTransform = New ScaleTransform()
+                                x.RenderTransform = sc
+                                sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
+
                                 Else
                                     Dim x As New uTriggerDevice(uTriggerDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
                                     x.Uid = System.Guid.NewGuid.ToString()
                                     AddHandler x.CloseMe, AddressOf UnloadControl
                                     CanvasRight.Children.Clear()
-                                    CanvasRight.Children.Add(x)
+                                CanvasRight.Children.Add(x)
+
+                                Dim da3 As DoubleAnimation = New DoubleAnimation
+                                da3.From = 0
+                                da3.To = 1
+                                da3.Duration = New Duration(TimeSpan.FromMilliseconds(600))
+                                Dim sc As ScaleTransform = New ScaleTransform()
+                                x.RenderTransform = sc
+                                sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
+
                                 End If
                                 _Trig = Nothing
                             End If
@@ -1317,6 +1378,15 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         CanvasRight.Children.Clear()
                         CanvasRight.Children.Add(x)
+
+                        Dim da3 As DoubleAnimation = New DoubleAnimation
+                        da3.From = 0
+                        da3.To = 1
+                        da3.Duration = New Duration(TimeSpan.FromMilliseconds(600))
+                        Dim sc As ScaleTransform = New ScaleTransform()
+                        x.RenderTransform = sc
+                        sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
+
                     Case 6 'histo
 
                 End Select
