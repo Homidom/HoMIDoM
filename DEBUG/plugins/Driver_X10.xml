@@ -6,7 +6,21 @@ Driver_X10
 </name>
 </assembly>
 <members>
-<member name="M:Driver_X10.Driver_x10.Start">
+<member name="M:Driver_X10.Driver_x10.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10.Driver_x10.ExecuteCommand(System.String,System.Object[])">
+	<summary>
+ Execute une commande avancée
+ </summary>
+	<param name="Command"></param>
+	<param name="Param"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10.Driver_x10.Start">
 	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_X10.Driver_x10.Stop">

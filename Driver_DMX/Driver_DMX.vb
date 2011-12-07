@@ -36,7 +36,7 @@ Imports System.IO
     Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
     Dim _IdSrv As String
-
+    Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
     'A ajouter dans les ppt du driver
     Dim _tempsentrereponse As Integer = 1500
     Dim _ignoreadresse As Boolean = False
@@ -85,7 +85,6 @@ Imports System.IO
     End Property
 
     Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
-
 
     Public Property Enable() As Boolean Implements HoMIDom.HoMIDom.IDriver.Enable
         Get
@@ -178,6 +177,26 @@ Imports System.IO
         If _Enable = False Then Exit Sub
     End Sub
 
+    Public Function GetCommandPlus() As List(Of DeviceCommande)
+        Return _DeviceCommandPlus
+    End Function
+
+    Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+        Dim retour As Boolean = False
+
+        If Command = "" Then
+            Return False
+            Exit Function
+        End If
+
+        Select Case UCase(Command)
+            Case ""
+            Case Else
+        End Select
+
+        Return retour
+    End Function
+
     Public Property Refresh() As Integer Implements HoMIDom.HoMIDom.IDriver.Refresh
         Get
             Return _Refresh
@@ -264,6 +283,15 @@ Imports System.IO
 
     Public Sub New()
         _DeviceSupport.Add(ListeDevices.LAMPE)
+
+        'ajout des commandes avancées pour les devices
+        'Ci-dessous un exemple
+        'Dim x As New DeviceCommande
+        'x.NameCommand = "Test"
+        'x.DescriptionCommand = "Ceci est une commande avancée de test"
+        'x.CountParam = 1
+        '_DeviceCommandPlus.Add(x)
+
     End Sub
 #End Region
 

@@ -6,7 +6,21 @@ Driver_MeteoGoogle
 </name>
 </assembly>
 <members>
-<member name="M:Driver_MeteoGoogle.Driver_MeteoGoogle.Start">
+<member name="M:Driver_MeteoGoogle.Driver_MeteoGoogle.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_MeteoGoogle.Driver_MeteoGoogle.ExecuteCommand(System.String,System.Object[])">
+	<summary>
+ Execute une commande avancée
+ </summary>
+	<param name="Command"></param>
+	<param name="Param"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_MeteoGoogle.Driver_MeteoGoogle.Start">
 	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_MeteoGoogle.Driver_MeteoGoogle.Stop">

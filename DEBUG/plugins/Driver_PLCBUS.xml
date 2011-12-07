@@ -19,6 +19,20 @@ Driver_PLCBUS
 	<summary>
   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
 </summary>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.ExecuteCommand(System.String,System.Object[])">
+	<summary>
+ Execute une commande avancée
+ </summary>
+	<param name="Command"></param>
+	<param name="Param"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Start">
 	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>

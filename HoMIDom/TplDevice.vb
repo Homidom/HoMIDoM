@@ -61,6 +61,7 @@ Namespace HoMIDom
         Dim _MaxJ3 As String = ""
         Dim _IconJ3 As String = ""
         Dim _ConditionJ3 As String = ""
+        Dim _ListCommandPlus As New List(Of Device.DeviceCommande)
 
         ''' <summary>
         ''' Nom du device
@@ -91,7 +92,6 @@ Namespace HoMIDom
                 _ID = value
             End Set
         End Property
-
 
         ''' <summary>
         ''' Activation/désactivation du device
@@ -811,6 +811,21 @@ Namespace HoMIDom
             End Get
             Set(ByVal value As String)
                 _ConditionJ3 = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Retourne la liste des commandes avancées
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property GetDeviceCommandePlus As List(Of Device.DeviceCommande)
+            Get
+                Return _ListCommandPlus
+            End Get
+            Set(ByVal value As List(Of Device.DeviceCommande))
+                _ListCommandPlus = value
             End Set
         End Property
 

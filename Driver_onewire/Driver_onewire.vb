@@ -35,6 +35,7 @@ Public Class Driver_onewire
     Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
     Dim _IdSrv As String
+    Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
 #End Region
 
 #Region "Variables Internes"
@@ -190,6 +191,38 @@ Public Class Driver_onewire
 #End Region
 
 #Region "Fonctions génériques"
+    ''' <summary>
+    ''' Retourne la liste des Commandes avancées
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function GetCommandPlus() As List(Of DeviceCommande)
+        Return _DeviceCommandPlus
+    End Function
+
+    ''' <summary>
+    ''' Execute une commande avancée
+    ''' </summary>
+    ''' <param name="Command"></param>
+    ''' <param name="Param"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+        Dim retour As Boolean = False
+
+        If Command = "" Then
+            Return False
+            Exit Function
+        End If
+
+        Select Case UCase(Command)
+            Case ""
+            Case Else
+        End Select
+
+        Return retour
+    End Function
+
 
     ''' <summary>Démarrer le du driver</summary>
     ''' <remarks></remarks>
@@ -397,6 +430,14 @@ Public Class Driver_onewire
             _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
             _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
             _DeviceSupport.Add(ListeDevices.COMPTEUR.ToString)
+
+            'ajout des commandes avancées pour les devices
+            'Ci-dessous un exemple
+            'Dim x As New DeviceCommande
+            'x.NameCommand = "Test"
+            'x.DescriptionCommand = "Ceci est une commande avancée de test"
+            'x.CountParam = 1
+            '_DeviceCommandPlus.Add(x)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire New", ex.Message)
         End Try

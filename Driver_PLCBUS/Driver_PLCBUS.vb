@@ -38,6 +38,7 @@ Imports System.IO.Ports
     Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
     Public _IdSrv As String
+    Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
 
     'Ajoutés dans les ppt avancés dans New()
     Dim plcack As Boolean = True 'gestion des acks ?
@@ -207,6 +208,37 @@ Imports System.IO.Ports
 #End Region
 
 #Region "Fonctions génériques"
+    ''' <summary>
+    ''' Retourne la liste des Commandes avancées
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function GetCommandPlus() As List(Of DeviceCommande)
+        Return _DeviceCommandPlus
+    End Function
+
+    ''' <summary>
+    ''' Execute une commande avancée
+    ''' </summary>
+    ''' <param name="Command"></param>
+    ''' <param name="Param"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+        Dim retour As Boolean = False
+
+        If Command = "" Then
+            Return False
+            Exit Function
+        End If
+
+        Select Case UCase(Command)
+            Case ""
+            Case Else
+        End Select
+
+        Return retour
+    End Function
 
     ''' <summary>Démarrer le du driver</summary>
     ''' <remarks></remarks>
@@ -414,6 +446,14 @@ Imports System.IO.Ports
             hex_to_com.Add(29, "GetOnlyOnIdPulse")
             hex_to_com.Add(30, "ReportAllIdPulse3Phase")
             hex_to_com.Add(31, "ReportOnlyOnIdPulse3Phase")
+
+            'ajout des commandes avancées pour les devices
+            'Ci-dessous un exemple
+            'Dim x As New DeviceCommande
+            'x.NameCommand = "Test"
+            'x.DescriptionCommand = "Ceci est une commande avancée de test"
+            'x.CountParam = 1
+            '_DeviceCommandPlus.Add(x)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS New", "Exception : " & ex.Message)
         End Try

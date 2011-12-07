@@ -8,37 +8,35 @@ Partial Public Class uTestDevice
 
     Private Sub BtnTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTest.Click
         Try
-            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If CbCmd.SelectedItem IsNot Nothing Then
+                Dim y As Label = CbCmd.SelectedItem
+                Dim x As New HoMIDom.HoMIDom.DeviceAction
 
-            x.Nom = CbCmd.Text
+                If y.Tag = 0 Then 'c une fonction de base
+                    x.Nom = y.Content
+                    For i As Integer = 0 To StkParam.Children.Count - 1
+                        Dim txt As TextBox = StkParam.Children.Item(i)
+                        Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                        param.Value = txt.Text
+                        x.Parametres.Add(param)
+                    Next
+                    Window1.myService.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
+                Else 'c une fonction avancée
+                    x.Nom = "ExecuteCommand"
 
-            If TxtP1.Text <> "" Then
-                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
-                y.Value = TxtP1.Text
-                x.Parametres.Add(y)
-            End If
-            If TxtP2.Text <> "" Then
-                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
-                y.Value = TxtP2.Text
-                x.Parametres.Add(y)
-            End If
-            If TxtP3.Text <> "" Then
-                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
-                y.Value = TxtP3.Text
-                x.Parametres.Add(y)
-            End If
-            If TxtP4.Text <> "" Then
-                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
-                y.Value = TxtP4.Text
-                x.Parametres.Add(y)
-            End If
-            If TxtP5.Text <> "" Then
-                Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
-                y.Value = TxtP5.Text
-                x.Parametres.Add(y)
-            End If
+                    Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                    param.Value = y.Content
+                    x.Parametres.Add(param)
 
-            Window1.myService.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
+                    For i As Integer = 0 To StkParam.Children.Count - 1
+                        Dim txt As TextBox = StkParam.Children.Item(i)
+                        Dim param1 As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                        param1.Value = txt.Text
+                        x.Parametres.Add(param)
+                    Next
+                    Window1.myService.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
+                End If
+            End If
         Catch ex As Exception
             MessageBox.Show("Erreur lors du test: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -57,11 +55,18 @@ Partial Public Class uTestDevice
         If _Device IsNot Nothing Then
 
             For i As Integer = 0 To _Device.DeviceAction.Count - 1
-                CbCmd.Items.Add(_Device.DeviceAction.Item(i).Nom)
-                If _Device.DeviceAction.Item(i).Parametres.Count > 5 Then
-                    MessageBox.Show("Seuls 5 paramètres sont acceptés veuillez contacter l'administrateur !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                    RaiseEvent CloseMe(Me)
-                End If
+                Dim x As New Label
+                x.Content = _Device.DeviceAction.Item(i).Nom
+                x.Tag = 0 'c une fonction de base
+                CbCmd.Items.Add(x)
+            Next
+
+            For i As Integer = 0 To _Device.GetDeviceCommandePlus.Count - 1
+                Dim x As New Label
+                x.Content = _Device.GetDeviceCommandePlus.Item(i).NameCommand
+                x.ToolTip = _Device.GetDeviceCommandePlus.Item(i).DescriptionCommand
+                x.Tag = 1 'c une fonction avancée
+                CbCmd.Items.Add(x)
             Next
 
         Else
@@ -75,57 +80,59 @@ Partial Public Class uTestDevice
         RaiseEvent CloseMe(Me)
     End Sub
 
-    Private Sub CbCmd_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbCmd.MouseLeave
-        If CbCmd.Text = "" Then Exit Sub
+    Private Sub CbCmd_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbCmd.SelectionChanged
         If CbCmd.SelectedIndex < 0 Then Exit Sub
+        StkParam.Children.Clear()
 
-        LblP1.Visibility = Windows.Visibility.Hidden
-        LblP2.Visibility = Windows.Visibility.Hidden
-        LblP3.Visibility = Windows.Visibility.Hidden
-        LblP4.Visibility = Windows.Visibility.Hidden
-        LblP5.Visibility = Windows.Visibility.Hidden
-        TxtP1.Text = ""
-        TxtP2.Text = ""
-        TxtP3.Text = ""
-        TxtP4.Text = ""
-        TxtP5.Text = ""
-        TxtP1.Visibility = Windows.Visibility.Hidden
-        TxtP2.Visibility = Windows.Visibility.Hidden
-        TxtP3.Visibility = Windows.Visibility.Hidden
-        TxtP4.Visibility = Windows.Visibility.Hidden
-        TxtP5.Visibility = Windows.Visibility.Hidden
+        Dim x As Label = CbCmd.SelectedItem
 
-        Dim Idx As Integer = CbCmd.SelectedIndex
-        For j As Integer = 0 To _Device.DeviceAction.Item(Idx).Parametres.Count - 1
+        If x.Tag = 0 Then 'c une fonction de base
+            For i As Integer = 0 To _Device.DeviceAction.Count - 1
+                If _Device.DeviceAction.Item(i).Nom = x.Content Then
+                    For j As Integer = 0 To _Device.DeviceAction.Item(i).Parametres.Count - 1
+                        Dim stk As New StackPanel
+                        stk.Orientation = Orientation.Horizontal
 
-            Select Case j
-                Case 0
-                    LblP1.Content = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
-                    LblP1.Visibility = Windows.Visibility.Visible
-                    TxtP1.ToolTip = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Type
-                    TxtP1.Visibility = Windows.Visibility.Visible
-                Case 1
-                    LblP2.Content = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
-                    LblP2.Visibility = Windows.Visibility.Visible
-                    TxtP2.ToolTip = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Type
-                    TxtP2.Visibility = Windows.Visibility.Visible
-                Case 2
-                    LblP3.Content = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
-                    LblP3.Visibility = Windows.Visibility.Visible
-                    TxtP3.ToolTip = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Type
-                    TxtP3.Visibility = Windows.Visibility.Visible
-                Case 3
-                    LblP4.Content = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
-                    LblP4.Visibility = Windows.Visibility.Visible
-                    TxtP4.ToolTip = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Type
-                    TxtP4.Visibility = Windows.Visibility.Visible
-                Case 4
-                    LblP5.Content = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
-                    LblP5.Visibility = Windows.Visibility.Visible
-                    TxtP5.ToolTip = _Device.DeviceAction.Item(Idx).Parametres.Item(j).Type
-                    TxtP5.Visibility = Windows.Visibility.Visible
-            End Select
-        Next
+                        Dim lbl As New Label
+                        lbl.Content = _Device.DeviceAction.Item(i).Parametres.Item(j).Nom
+                        lbl.Width = 76
+                        lbl.Foreground = Brushes.White
+                        stk.Children.Add(lbl)
+
+                        Dim txt As New TextBox
+                        txt.Height = 20
+                        txt.Width = 250
+                        txt.ToolTip = _Device.DeviceAction.Item(i).Parametres.Item(j).Type
+                        stk.Children.Add(txt)
+
+                        StkParam.Children.Add(stk)
+                    Next
+                    Exit Sub
+                End If
+            Next
+        Else 'c une fonction avancée
+            For i As Integer = 0 To _Device.GetDeviceCommandePlus.Count - 1
+                If _Device.GetDeviceCommandePlus.Item(i).NameCommand = x.Content Then
+                    For j As Integer = 1 To _Device.GetDeviceCommandePlus.Item(i).CountParam
+                        Dim stk As New StackPanel
+                        stk.Orientation = Orientation.Horizontal
+
+                        Dim lbl As New Label
+                        lbl.Content = "Parametre " & j & ":"
+                        lbl.Width = 76
+                        lbl.Foreground = Brushes.White
+                        stk.Children.Add(lbl)
+
+                        Dim txt As New TextBox
+                        txt.Height = 20
+                        txt.Width = 250
+                        stk.Children.Add(txt)
+
+                        StkParam.Children.Add(stk)
+                    Next
+                    Exit Sub
+                End If
+            Next
+        End If
     End Sub
-
 End Class

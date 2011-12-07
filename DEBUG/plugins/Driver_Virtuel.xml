@@ -6,7 +6,21 @@ Driver_Virtuel
 </name>
 </assembly>
 <members>
-<member name="M:Driver_Virtuel.Driver_Virtuel.Start">
+<member name="M:Driver_Virtuel.Driver_Virtuel.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Virtuel.Driver_Virtuel.ExecuteCommand(System.String,System.Object[])">
+	<summary>
+ Execute une commande avancée
+ </summary>
+	<param name="Command"></param>
+	<param name="Param"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Virtuel.Driver_Virtuel.Start">
 	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_Virtuel.Driver_Virtuel.Stop">

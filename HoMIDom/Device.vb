@@ -155,6 +155,38 @@ Namespace HoMIDom
             VOLET = 27
         End Enum
 
+        <Serializable()> Public Class DeviceCommande
+            Dim _NameCommand As String
+            Dim _DescriptionCommand As String
+            Dim _CountParam As Integer = 0
+            Public Property NameCommand As String
+                Get
+                    Return _NameCommand
+                End Get
+                Set(ByVal value As String)
+                    _NameCommand = value
+                End Set
+            End Property
+
+            Public Property DescriptionCommand As String
+                Get
+                    Return _DescriptionCommand
+                End Get
+                Set(ByVal value As String)
+                    _DescriptionCommand = value
+                End Set
+            End Property
+
+            Public Property CountParam As Integer
+                Get
+                    Return _CountParam
+                End Get
+                Set(ByVal value As Integer)
+                    _CountParam = value
+                End Set
+            End Property
+        End Class
+
         ''' <summary>Class de déclaration du Device Générique</summary>
         ''' <remarks></remarks>
         <Serializable()> Public MustInherit Class DeviceGenerique
@@ -336,15 +368,26 @@ Namespace HoMIDom
                 End Set
             End Property
 
+            Public ReadOnly Property GetCommandPlus As List(Of DeviceCommande)
+                Get
+                    If _Driver IsNot Nothing Then
+                        Return _Driver.GetCommandPlus
+                    Else
+                        Return Nothing
+                    End If
+                End Get
+            End Property
+
             Protected Overrides Sub Finalize()
                 MyBase.Finalize()
             End Sub
 
             Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+                If _Enable = False Then Exit Function
                 Dim CMD As String = UCase(Command)
-
-
+                Return _Driver.ExecuteCommand(Me, CMD, Param)
             End Function
+
         End Class
 
         ''' <summary>Classe valeur Double avec min/max/def/correction...</summary>
@@ -445,6 +488,9 @@ Namespace HoMIDom
                         MyTimer.Enabled = False
                         If _FistTime = True Then
                             RemoveHandler MyTimer.Elapsed, AddressOf Read
+                            MyTimer.Interval = _Refresh
+                            MyTimer.Enabled = True
+                            AddHandler MyTimer.Elapsed, AddressOf Read
                         Else
                             _FistTime = True
                             AddHandler MyTimer.Elapsed, AddressOf Read
@@ -539,10 +585,18 @@ Namespace HoMIDom
                 Set(ByVal value As Integer)
                     _Refresh = value
                     If _Refresh > 0 Then
-                        If MyTimer.Enabled = True Then MyTimer.Enabled = False
+                        MyTimer.Enabled = False
+                        If _FistTime = True Then
+                            RemoveHandler MyTimer.Elapsed, AddressOf Read
+                            MyTimer.Interval = _Refresh
+                            MyTimer.Enabled = True
+                            AddHandler MyTimer.Elapsed, AddressOf Read
+                        Else
+                            _FistTime = True
+                            AddHandler MyTimer.Elapsed, AddressOf Read
+                        End If
                         MyTimer.Interval = _Refresh
                         MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf Read
                     End If
                 End Set
             End Property
@@ -640,10 +694,18 @@ Namespace HoMIDom
                 Set(ByVal value As Integer)
                     _Refresh = value
                     If _Refresh > 0 Then
-                        If MyTimer.Enabled = True Then MyTimer.Enabled = False
+                        MyTimer.Enabled = False
+                        If _FistTime = True Then
+                            RemoveHandler MyTimer.Elapsed, AddressOf Read
+                            MyTimer.Interval = _Refresh
+                            MyTimer.Enabled = True
+                            AddHandler MyTimer.Elapsed, AddressOf Read
+                        Else
+                            _FistTime = True
+                            AddHandler MyTimer.Elapsed, AddressOf Read
+                        End If
                         MyTimer.Interval = _Refresh
                         MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf Read
                     End If
                 End Set
             End Property
@@ -732,10 +794,18 @@ Namespace HoMIDom
                 Set(ByVal value As Integer)
                     _Refresh = value
                     If _Refresh > 0 Then
-                        If MyTimer.Enabled = True Then MyTimer.Enabled = False
+                        MyTimer.Enabled = False
+                        If _FistTime = True Then
+                            RemoveHandler MyTimer.Elapsed, AddressOf Read
+                            MyTimer.Interval = _Refresh
+                            MyTimer.Enabled = True
+                            AddHandler MyTimer.Elapsed, AddressOf Read
+                        Else
+                            _FistTime = True
+                            AddHandler MyTimer.Elapsed, AddressOf Read
+                        End If
                         MyTimer.Interval = _Refresh
                         MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf Read
                     End If
                 End Set
             End Property
@@ -1542,13 +1612,18 @@ Namespace HoMIDom
                 Set(ByVal value As Double)
                     _Refresh = value
                     If _Refresh > 0 Then
-                        If MyTimer.Enabled = True Then MyTimer.Enabled = False
-                        'Driver.Read(Me)
-                        LastChange = Now
-                        'MyTimer.Interval = value * 1000 'ca transforme temps en secondes au lieu de ms comme pour les autres devices
-                        MyTimer.Interval = value
+                        MyTimer.Enabled = False
+                        If _FistTime = True Then
+                            RemoveHandler MyTimer.Elapsed, AddressOf Read
+                            MyTimer.Interval = _Refresh
+                            MyTimer.Enabled = True
+                            AddHandler MyTimer.Elapsed, AddressOf Read
+                        Else
+                            _FistTime = True
+                            AddHandler MyTimer.Elapsed, AddressOf Read
+                        End If
+                        MyTimer.Interval = _Refresh
                         MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf Read
                     End If
                 End Set
             End Property
