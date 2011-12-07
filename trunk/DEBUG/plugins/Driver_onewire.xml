@@ -19,6 +19,20 @@ Driver_onewire
 	<summary>
   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
 </summary>
+</member><member name="M:Driver_onewire.Driver_onewire.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_onewire.Driver_onewire.ExecuteCommand(System.String,System.Object[])">
+	<summary>
+ Execute une commande avancée
+ </summary>
+	<param name="Command"></param>
+	<param name="Param"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:Driver_onewire.Driver_onewire.Start">
 	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>

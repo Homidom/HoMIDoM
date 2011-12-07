@@ -42,6 +42,7 @@ Imports System.Globalization
     Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
     Dim _IdSrv As String
+    Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
 
 #End Region
 
@@ -244,6 +245,37 @@ Imports System.Globalization
 #End Region
 
 #Region "Fonctions génériques"
+    ''' <summary>
+    ''' Retourne la liste des Commandes avancées
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function GetCommandPlus() As List(Of DeviceCommande)
+        Return _DeviceCommandPlus
+    End Function
+
+    ''' <summary>
+    ''' Execute une commande avancée
+    ''' </summary>
+    ''' <param name="Command"></param>
+    ''' <param name="Param"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+        Dim retour As Boolean = False
+
+        If Command = "" Then
+            Return False
+            Exit Function
+        End If
+
+        Select Case UCase(Command)
+            Case ""
+            Case Else
+        End Select
+
+        Return retour
+    End Function
 
     ''' <summary>Démarrer le du driver</summary>
     ''' <remarks></remarks>
@@ -370,6 +402,14 @@ Imports System.Globalization
         _DeviceSupport.Add(ListeDevices.UV.ToString)
         _DeviceSupport.Add(ListeDevices.VITESSEVENT.ToString)
         _DeviceSupport.Add(ListeDevices.VOLET.ToString)
+
+        'ajout des commandes avancées pour les devices
+        'Ci-dessous un exemple
+        'Dim x As New DeviceCommande
+        'x.NameCommand = "Test"
+        'x.DescriptionCommand = "Ceci est une commande avancée de test"
+        'x.CountParam = 1
+        '_DeviceCommandPlus.Add(x)
     End Sub
 
     ''' <summary>Si refresh >0 gestion du timer</summary>

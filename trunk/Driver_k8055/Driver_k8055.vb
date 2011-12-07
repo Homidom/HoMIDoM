@@ -33,6 +33,7 @@ Imports HoMIDom.HoMIDom.Device
     Dim _Parametres As New ArrayList
     Dim MyTimer As New Timers.Timer
     Dim _idsrv As String
+    Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
 
     'A ajouter dans les ppt du driver
     Dim _tempsentrereponse As Integer = 1500
@@ -64,6 +65,7 @@ Imports HoMIDom.HoMIDom.Device
 #End Region
 
 #Region "Fonctions génériques"
+
     Public WriteOnly Property IdSrv As String Implements HoMIDom.HoMIDom.IDriver.IdSrv
         Set(ByVal value As String)
             _idsrv = value
@@ -218,6 +220,39 @@ Imports HoMIDom.HoMIDom.Device
         End Set
     End Property
 
+    ''' <summary>
+    ''' Retourne la liste des Commandes avancées
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function GetCommandPlus() As List(Of DeviceCommande)
+        Return _DeviceCommandPlus
+    End Function
+
+    ''' <summary>
+    ''' Execute une commande avancée
+    ''' </summary>
+    ''' <param name="Command"></param>
+    ''' <param name="Param"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+        Dim retour As Boolean = False
+
+        If Command = "" Then
+            Return False
+            Exit Function
+        End If
+
+        Select Case UCase(Command)
+            Case ""
+            Case Else
+        End Select
+
+        Return retour
+    End Function
+
+
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         'cree l'objet
         Try
@@ -299,6 +334,14 @@ Imports HoMIDom.HoMIDom.Device
         _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
         _DeviceSupport.Add(ListeDevices.CONTACT)
         _DeviceSupport.Add(ListeDevices.APPAREIL)
+
+        'ajout des commandes avancées pour les devices
+        'Ci-dessous un exemple
+        'Dim x As New DeviceCommande
+        'x.NameCommand = "Test"
+        'x.DescriptionCommand = "Ceci est une commande avancée de test"
+        'x.CountParam = 1
+        '_DeviceCommandPlus.Add(x)
     End Sub
 #End Region
 
@@ -383,7 +426,4 @@ Imports HoMIDom.HoMIDom.Device
     End Sub
 #End Region
 
-    Protected Overrides Sub Finalize()
-        MyBase.Finalize()
-    End Sub
 End Class

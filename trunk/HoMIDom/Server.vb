@@ -4185,6 +4185,7 @@ Namespace HoMIDom
                         .Solo = _ListDevices.Item(i).solo
                         .Refresh = _ListDevices.Item(i).refresh
                         .Modele = _ListDevices.Item(i).modele
+                        .GetDeviceCommandePlus = _ListDevices.Item(i).GetCommandPlus
 
                         _listact = ListMethod(_ListDevices.Item(i).id)
                         If _listact.Count > 0 Then
@@ -5103,6 +5104,7 @@ Namespace HoMIDom
                         retour.ID = _ListDevices.Item(i).id
                         retour.Name = _ListDevices.Item(i).name
                         retour.Enable = _ListDevices.Item(i).enable
+                        retour.GetDeviceCommandePlus = _ListDevices.Item(i).GetCommandPlus
                         Select Case UCase(_ListDevices.Item(i).type)
                             Case "APPAREIL" : retour.Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
                             Case "AUDIO" : retour.Type = Device.ListeDevices.AUDIO

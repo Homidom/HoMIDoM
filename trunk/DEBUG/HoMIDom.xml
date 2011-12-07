@@ -578,6 +578,13 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.GetDeviceCommandePlus">
+	<summary>
+ Retourne la liste des commandes avancées
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="F:HoMIDom.HoMIDom.TemplateDevice.ListCommandName">
 	<summary>
  Liste des noms des commandes IR (device IR)

@@ -6,7 +6,21 @@ Driver_OpenWebNet
 </name>
 </assembly>
 <members>
-<member name="M:Driver_OpenWebNet.Driver_OpenWebNet.Start">
+<member name="M:Driver_OpenWebNet.Driver_OpenWebNet.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_OpenWebNet.Driver_OpenWebNet.ExecuteCommand(System.String,System.Object[])">
+	<summary>
+ Execute une commande avancée
+ </summary>
+	<param name="Command"></param>
+	<param name="Param"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_OpenWebNet.Driver_OpenWebNet.Start">
 	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_OpenWebNet.Driver_OpenWebNet.Stop">
