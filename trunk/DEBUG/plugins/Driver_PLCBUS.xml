@@ -61,6 +61,9 @@ Driver_PLCBUS
 	<summary>Fonction lancée lors de l'ajout d'un device</summary>
 	<param name="DeviceId">Objet représetant le device à interroger</param>
 	<remarks></remarks>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.add_devicecommande(System.String,System.String,System.Int32)">
+	<summary>ajout des commandes avancées pour les devices</summary>
+	<remarks></remarks>
 </member><member name="M:Driver_PLCBUS.Driver_PLCBUS.#ctor">
 	<summary>Creation d'un objet de type</summary>
 	<remarks></remarks>
