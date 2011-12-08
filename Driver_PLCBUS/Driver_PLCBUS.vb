@@ -225,19 +225,21 @@ Imports System.IO.Ports
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
-        Dim retour As Boolean = False
-
-        If Command = "" Then
+        Try
+            Dim retour As Boolean = False
+            If Command = "" Then
+                Return False
+                Exit Function
+            End If
+            Select Case UCase(Command)
+                Case ""
+                Case Else
+            End Select
+            Return retour
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS ExecuteCommand", "exception : " & ex.Message)
             Return False
-            Exit Function
-        End If
-
-        Select Case UCase(Command)
-            Case ""
-            Case Else
-        End Select
-
-        Return retour
+        End Try
     End Function
 
     ''' <summary>Démarrer le du driver</summary>
@@ -279,20 +281,28 @@ Imports System.IO.Ports
     ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Dim retour As String
-        retour = fermer()
-        If STRGS.Left(retour, 4) = "ERR:" Then
-            retour = STRGS.Right(retour, retour.Length - 5)
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS", retour)
-        Else
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS", retour)
-        End If
+        Try
+            retour = fermer()
+            If STRGS.Left(retour, 4) = "ERR:" Then
+                retour = STRGS.Right(retour, retour.Length - 5)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS", retour)
+            Else
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS", retour)
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Stop", ex.Message)
+        End Try
     End Sub
 
     ''' <summary>Re-Démarrer le du driver</summary>
     ''' <remarks></remarks>
     Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
-        [Stop]()
-        Start()
+        Try
+            [Stop]()
+            Start()
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS ReStart", ex.Message)
+        End Try
     End Sub
 
     ''' <summary>Intérroger un device</summary>
@@ -344,14 +354,36 @@ Imports System.IO.Ports
     ''' <param name="DeviceId">Objet représetant le device à interroger</param>
     ''' <remarks></remarks>
     Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
+        Try
 
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS DeleteDevice", ex.Message)
+        End Try
     End Sub
 
     ''' <summary>Fonction lancée lors de l'ajout d'un device</summary>
     ''' <param name="DeviceId">Objet représetant le device à interroger</param>
     ''' <remarks></remarks>
     Public Sub NewDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.NewDevice
+        Try
 
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS NewDevice", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>ajout des commandes avancées pour les devices</summary>
+    ''' <remarks></remarks>
+    Private Sub add_devicecommande(ByVal nom As String, ByVal description As String, ByVal nbparam As Integer)
+        Try
+            Dim x As New DeviceCommande
+            x.NameCommand = nom
+            x.DescriptionCommand = description
+            x.CountParam = nbparam
+            _DeviceCommandPlus.Add(x)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+        End Try
     End Sub
 
     ''' <summary>Creation d'un objet de type</summary>
@@ -448,12 +480,32 @@ Imports System.IO.Ports
             hex_to_com.Add(31, "ReportOnlyOnIdPulse3Phase")
 
             'ajout des commandes avancées pour les devices
-            'Ci-dessous un exemple
-            'Dim x As New DeviceCommande
-            'x.NameCommand = "Test"
-            'x.DescriptionCommand = "Ceci est une commande avancée de test"
-            'x.CountParam = 1
-            '_DeviceCommandPlus.Add(x)
+            add_devicecommande("ALL_UNITS_OFF", "Eteint tous les appareils du meme range que ce device", 0)
+            add_devicecommande("ALL_LIGHTS_ON", "Allume toutes les lampes du meme range que ce device", 0)
+            add_devicecommande("BRIGHT", "light will bright until fade-stop is received /  parametre = Fade rate", 1)
+            add_devicecommande("ALL_LIGHTS_OFF", "Eteint toutes les lampes du meme range que ce device", 0)
+            add_devicecommande("All_USER_LIGHTS_ON", "Allume toutes les lampes", 0)
+            add_devicecommande("All_USER_UNITS_OFF", "Eteint tous les appareils", 0)
+            add_devicecommande("All_USER_LIGHTS_OFF", "Eteint toutes les lampes", 0)
+            add_devicecommande("BLINK", "Flashe à intervalle régulier, parametre = intervalle", 1)
+            add_devicecommande("FADE_STOP", "Arrete de varier DIM/BRIGHT", 0)
+            add_devicecommande("PRESET_DIM", " Allume et enregistre à tel level et en rate secondes la lampe, param1=dim level, param2=rate", 2)
+            add_devicecommande("STATUS_ON", "", 0)
+            add_devicecommande("STATUS_OFF", "", 0)
+            'add_devicecommande("STATUS_REQUEST", "", 0)
+            add_devicecommande("ReceiverMasterAddressSetup", "param1=New user code, param2=new home+unitcode", 2)
+            add_devicecommande("TransmitterMasterAddressSetup", "param1=New user code, param2=new home+unitcode", 2)
+            add_devicecommande("SceneAddressSetup", "", 0)
+            add_devicecommande("SceneAddressErase", "", 0)
+            add_devicecommande("AllSceneAddressErase", "", 0)
+            add_devicecommande("GetSignalStrength", "param = signal strength", 1)
+            add_devicecommande("GetNoiseStrength", "param = Noise strength", 1)
+            add_devicecommande("ReportSignalStrength", "", 0)
+            add_devicecommande("ReportNoiseStrength", "", 0)
+            'add_devicecommande("GetAllIdPulse", "", 0)
+            'add_devicecommande("GetOnlyOnIdPulse", "", 0)
+            'add_devicecommande("ReportAllIdPulse3Phase", "", 0)
+            'add_devicecommande("ReportOnlyOnIdPulse3Phase", "", 0)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS New", "Exception : " & ex.Message)
         End Try
@@ -462,7 +514,11 @@ Imports System.IO.Ports
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
     Private Sub TimerTick()
+        Try
 
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS TimerTick", ex.Message)
+        End Try
     End Sub
 
 #End Region
@@ -544,54 +600,64 @@ Imports System.IO.Ports
     ''' <remarks></remarks>
     Private Function adresse_to_hex(ByVal adresse As String)
         'convertit une adresse du type L1 en byte
-        Dim table() As String = {0, 16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240}
-        If adresse.Length > 1 Then
-            Return table(Asc(Microsoft.VisualBasic.Left(adresse, 1)) - 65) + CInt(Microsoft.VisualBasic.Right(adresse, adresse.Length - 1)) - 1
-        Else
-            Return table(Asc(adresse) - 65)
-        End If
+        Try
+            Dim table() As String = {0, 16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240}
+            If adresse.Length > 1 Then
+                Return table(Asc(Microsoft.VisualBasic.Left(adresse, 1)) - 65) + CInt(Microsoft.VisualBasic.Right(adresse, adresse.Length - 1)) - 1
+            Else
+                Return table(Asc(adresse) - 65)
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS adresse_to_hex", ex.Message)
+            Return ""
+        End Try
     End Function
 
     ''' <summary>Converti les adresses d'hexa en string</summary>
     ''' <remarks></remarks>
-    Private Function hex_to_adresse(ByVal adresse As Byte)
+    Private Function hex_to_adresse(ByVal adresse As Byte) As String
         'convertit une adresse en byte en type L1
-        Dim x As Integer = 0
-        Dim y As Integer = 0
+        Try
+            Dim x As Integer = 0
+            Dim y As Integer = 0
 
-        If adresse >= 128 Then
-            x = x + 8
-            adresse = adresse - 128
-        End If
-        If adresse >= 64 Then
-            x = x + 4
-            adresse = adresse - 64
-        End If
-        If adresse >= 32 Then
-            x = x + 2
-            adresse = adresse - 32
-        End If
-        If adresse >= 16 Then
-            x = x + 1
-            adresse = adresse - 16
-        End If
-        If adresse >= 8 Then
-            y = y + 8
-            adresse = adresse - 8
-        End If
-        If adresse >= 4 Then
-            y = y + 4
-            adresse = adresse - 4
-        End If
-        If adresse >= 2 Then
-            y = y + 2
-            adresse = adresse - 2
-        End If
-        If adresse >= 1 Then
-            y = y + 1
-            adresse = adresse - 1
-        End If
-        Return Chr(x + 65) & (y + 1)
+            If adresse >= 128 Then
+                x = x + 8
+                adresse = adresse - 128
+            End If
+            If adresse >= 64 Then
+                x = x + 4
+                adresse = adresse - 64
+            End If
+            If adresse >= 32 Then
+                x = x + 2
+                adresse = adresse - 32
+            End If
+            If adresse >= 16 Then
+                x = x + 1
+                adresse = adresse - 16
+            End If
+            If adresse >= 8 Then
+                y = y + 8
+                adresse = adresse - 8
+            End If
+            If adresse >= 4 Then
+                y = y + 4
+                adresse = adresse - 4
+            End If
+            If adresse >= 2 Then
+                y = y + 2
+                adresse = adresse - 2
+            End If
+            If adresse >= 1 Then
+                y = y + 1
+                adresse = adresse - 1
+            End If
+            Return Chr(x + 65) & (y + 1)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS hex_to_adresse", "exception : " & ex.Message)
+            Return "" 'on renvoi rien car il y a eu une erreur
+        End Try
     End Function
 
     ''' <summary>Pause pour attendre x msecondes </summary>
@@ -621,107 +687,115 @@ Imports System.IO.Ports
         Dim _cmd = 0
         'Dim checksum = &H3
         'Dim tblack() As DataRow
+        Try
+            If _IsConnect Then
+                'Dim usercode = &HD1 'D1
+                Try
+                    _adresse = adresse_to_hex(adresse)
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Adresse non valide : " & _adresse)
+                    Return ""
+                End Try
+                Try
+                    _cmd = com_to_hex(commande)
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Commande non valide : " & commande)
+                    Return ""
+                End Try
 
-        If _IsConnect Then
-            'Dim usercode = &HD1 'D1
-            Try
-                _adresse = adresse_to_hex(adresse)
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Adresse non valide : " & _adresse)
-                Return ""
-            End Try
-            Try
-                _cmd = com_to_hex(commande)
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Commande non valide : " & commande)
-                Return ""
-            End Try
-
-            Try
-                '--- usercode ---
-                'on verifie si bon format : 1-255
-                If Not (IsNumeric(plcusercode) And plcusercode >= 0 And plcusercode <= 255) Then
-                    'non correct, on log et prend la valeur par défaut
-                    plcusercode = 209
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "usercode non valide (0-255 defaut:209) : " & plcusercode)
-                End If
-
-                '--- TriPhase ---
-                If plctriphase Then _cmd = _cmd Or &H40
-                '--- request acks --- (sauf pour les status_request car pas important et encombre le port)
-                'If commande <> "STATUS_REQUEST" And commande <> "GetOnlyOnIdPulse" And commande <> "GetAllIdPulse" And commande <> "ReportAllIdPulse3Phase" And commande <> "ReportOnlyOnIdPulse3Phase" Then
-                '    _cmd = _cmd Or &H20
-                'End If
-                ' --- correction data suivant la commande ---
-                If commande = "ON" Then
-                    data1 = 100
-                    data2 = 0
-                ElseIf commande = "OFF" Then
-                    data1 = 0
-                    data2 = 0
-                End If
-
-                'If _Modele = "1141+" Then
-                '    'pour les modeles 1141+
-                '    checksum = &H200 - (&H2 + &H5 + plcusercode + _adresse + _cmd + data1 + data2)
-                'Else
-                '    'pour les modéles 1141
-                '    checksum = &H3
-                'End If
-
-                Dim donnee() As Byte = {&H2, &H5, plcusercode, _adresse, _cmd, data1, data2, &H3}
-
-                'ecriture sur le port
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Ecrire", " Ecrire " & adresse & " : " & commande & " " & data1 & "-" & data2 & " (data:" & &H2 & "." & &H5 & "." & plcusercode & "." & _adresse & "." & _cmd & "." & data1 & "." & data2 & "." & &H3 & ")")
-                port.Write(donnee, 0, donnee.Length)
-                'If ecriretwice Then port.Write(donnee, 0, donnee.Length) 'on ecrit deux fois : voir la norme PLCBUS
-
-                'gestion des acks (sauf pour les status_request car pas important et encombre le port)
-                If plcack And Not attente_ack() And commande <> "STATUS_REQUEST" And commande <> "GetOnlyOnIdPulse" And commande <> "GetAllIdPulse" And commande <> "ReportAllIdPulse3Phase" And commande <> "ReportOnlyOnIdPulse3Phase" Then
-                    'pas de ack, on relance l ordre
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Pas de Ack -> resend : " & adresse & " : " & commande & " " & data1 & "-" & data2)
-                    port.Write(donnee, 0, donnee.Length)
-                    'port.Write(donnee, 0, donnee.Length) 'on ecrit deux fois : voir la norme PLCBUS
-                    If Not attente_ack() Then
-                        'pas de ack > NOK
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Pas de Ack --> " & adresse & " : " & commande & " " & data1 & "-" & data2)
-                        Return "" 'on renvoi rien car le composant n'a pas recu l'ordre
+                Try
+                    '--- usercode ---
+                    'on verifie si bon format : 1-255
+                    If Not (IsNumeric(plcusercode) And plcusercode >= 0 And plcusercode <= 255) Then
+                        'non correct, on log et prend la valeur par défaut
+                        plcusercode = 209
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "usercode non valide (0-255 defaut:209) : " & plcusercode)
                     End If
-                Else
-                    wait(30) 'on attend 0.3s pour liberer le bus correctement
-                End If
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "exception : " & ex.Message & " --> " & adresse & " : " & commande & " " & data1 & "-" & data2)
-                Return "" 'on renvoi rien car il y a eu une erreur
-            End Try
 
-            'renvoie la valeur ecrite
-            Select Case UCase(commande)
-                Case "ON", "ALL_LIGHTS_ON", "All_USER_LIGHTS_ON" : Return "ON"
-                Case "OFF", "ALL_UNITS_OFF", "ALL_LIGHTS_OFF", "All_USER_LIGHTS_OFF", "All_USER_UNITS_OFF" : Return "OFF"
-                Case "PRESET_DIM" : Return "ON" 'data1
-                Case Else : Return ""
-            End Select
+                    '--- TriPhase ---
+                    If plctriphase Then _cmd = _cmd Or &H40
+                    '--- request acks --- (sauf pour les status_request car pas important et encombre le port)
+                    'If commande <> "STATUS_REQUEST" And commande <> "GetOnlyOnIdPulse" And commande <> "GetAllIdPulse" And commande <> "ReportAllIdPulse3Phase" And commande <> "ReportOnlyOnIdPulse3Phase" Then
+                    '    _cmd = _cmd Or &H20
+                    'End If
+                    ' --- correction data suivant la commande ---
+                    If commande = "ON" Then
+                        data1 = 100
+                        data2 = 0
+                    ElseIf commande = "OFF" Then
+                        data1 = 0
+                        data2 = 0
+                    End If
 
-        Else
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Port Fermé, impossible d ecrire : " & adresse & " : " & commande & " " & data1 & "-" & data2)
-            Return ""
-        End If
+                    'If _Modele = "1141+" Then
+                    '    'pour les modeles 1141+
+                    '    checksum = &H200 - (&H2 + &H5 + plcusercode + _adresse + _cmd + data1 + data2)
+                    'Else
+                    '    'pour les modéles 1141
+                    '    checksum = &H3
+                    'End If
+
+                    Dim donnee() As Byte = {&H2, &H5, plcusercode, _adresse, _cmd, data1, data2, &H3}
+
+                    'ecriture sur le port
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Ecrire", " Ecrire " & adresse & " : " & commande & " " & data1 & "-" & data2 & " (data:" & &H2 & "." & &H5 & "." & plcusercode & "." & _adresse & "." & _cmd & "." & data1 & "." & data2 & "." & &H3 & ")")
+                    port.Write(donnee, 0, donnee.Length)
+                    'If ecriretwice Then port.Write(donnee, 0, donnee.Length) 'on ecrit deux fois : voir la norme PLCBUS
+
+                    'gestion des acks (sauf pour les status_request car pas important et encombre le port)
+                    If plcack And Not attente_ack() And commande <> "STATUS_REQUEST" And commande <> "GetOnlyOnIdPulse" And commande <> "GetAllIdPulse" And commande <> "ReportAllIdPulse3Phase" And commande <> "ReportOnlyOnIdPulse3Phase" Then
+                        'pas de ack, on relance l ordre
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Pas de Ack -> resend : " & adresse & " : " & commande & " " & data1 & "-" & data2)
+                        port.Write(donnee, 0, donnee.Length)
+                        'port.Write(donnee, 0, donnee.Length) 'on ecrit deux fois : voir la norme PLCBUS
+                        If Not attente_ack() Then
+                            'pas de ack > NOK
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Pas de Ack --> " & adresse & " : " & commande & " " & data1 & "-" & data2)
+                            Return "" 'on renvoi rien car le composant n'a pas recu l'ordre
+                        End If
+                    Else
+                        wait(30) 'on attend 0.3s pour liberer le bus correctement
+                    End If
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "exception : " & ex.Message & " --> " & adresse & " : " & commande & " " & data1 & "-" & data2)
+                    Return "" 'on renvoi rien car il y a eu une erreur
+                End Try
+
+                'renvoie la valeur ecrite
+                Select Case UCase(commande)
+                    Case "ON", "ALL_LIGHTS_ON", "All_USER_LIGHTS_ON" : Return "ON"
+                    Case "OFF", "ALL_UNITS_OFF", "ALL_LIGHTS_OFF", "All_USER_LIGHTS_OFF", "All_USER_UNITS_OFF" : Return "OFF"
+                    Case "PRESET_DIM" : Return "ON" 'data1
+                    Case Else : Return ""
+                End Select
+
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Port Fermé, impossible d ecrire : " & adresse & " : " & commande & " " & data1 & "-" & data2)
+                Return ""
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "exception : " & ex.Message)
+            Return "" 'on renvoi rien car il y a eu une erreur
+        End Try
     End Function
 
     Private Function attente_ack() As Boolean
         'test si on recoit le ack pendant 1.5 secondes
-        Dim nbtest As Integer = 0
-        While nbtest < 15
-            If ackreceived Then 'ack recu on sort
-                ackreceived = False
-                Return True
-            Else
-                nbtest += 1
-                wait(10) 'on attend 0.1s
-            End If
-        End While
-        Return False
+        Try
+            Dim nbtest As Integer = 0
+            While nbtest < 15
+                If ackreceived Then 'ack recu on sort
+                    ackreceived = False
+                    Return True
+                Else
+                    nbtest += 1
+                    wait(10) 'on attend 0.1s
+                End If
+            End While
+            Return False
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS attente_ack", "Exception : " & ex.Message)
+        End Try
     End Function
 
     ''' <summary>Fonction lancée sur reception de données sur le port COM</summary>
