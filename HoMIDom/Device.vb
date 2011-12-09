@@ -516,9 +516,9 @@ Namespace HoMIDom
                                 'premier lancement
                                 _FirstTime = False
                                 'pour décaler le lancement des threads de 0 à 30 secondes
-                                Dim r As New Random(System.DateTime.Now.Millisecond)
-                                Dim RandomNumber As Integer = r.Next(30000)
-                                System.Threading.Thread.Sleep(RandomNumber)
+                                'Dim r As New Random(System.DateTime.Now.Millisecond)
+                                'Dim RandomNumber As Integer = r.Next(3000)
+                                System.Threading.Thread.Sleep(3000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
@@ -640,9 +640,9 @@ Namespace HoMIDom
                                 'premier lancement
                                 _FirstTime = False
                                 'pour décaler le lancement des threads de 0 à 30 secondes
-                                Dim r As New Random(System.DateTime.Now.Millisecond)
-                                Dim RandomNumber As Integer = r.Next(30000)
-                                System.Threading.Thread.Sleep(RandomNumber)
+                                'Dim r As New Random(System.DateTime.Now.Millisecond)
+                                'Dim RandomNumber As Integer = r.Next(30000)
+                                System.Threading.Thread.Sleep(3000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
@@ -773,9 +773,9 @@ Namespace HoMIDom
                                 'premier lancement
                                 _FirstTime = False
                                 'pour décaler le lancement des threads de 0 à 30 secondes
-                                Dim r As New Random(System.DateTime.Now.Millisecond)
-                                Dim RandomNumber As Integer = r.Next(30000)
-                                System.Threading.Thread.Sleep(RandomNumber)
+                                'Dim r As New Random(System.DateTime.Now.Millisecond)
+                                'Dim RandomNumber As Integer = r.Next(30000)
+                                System.Threading.Thread.Sleep(3000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
@@ -897,9 +897,9 @@ Namespace HoMIDom
                                 'premier lancement
                                 _FirstTime = False
                                 'pour décaler le lancement des threads de 0 à 30 secondes
-                                Dim r As New Random(System.DateTime.Now.Millisecond)
-                                Dim RandomNumber As Integer = r.Next(30000)
-                                System.Threading.Thread.Sleep(RandomNumber)
+                                'Dim r As New Random(System.DateTime.Now.Millisecond)
+                                'Dim RandomNumber As Integer = r.Next(30000)
+                                System.Threading.Thread.Sleep(3000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
@@ -1739,9 +1739,9 @@ Namespace HoMIDom
                                 'premier lancement
                                 _FirstTime = False
                                 'pour décaler le lancement des threads de 0 à 30 secondes
-                                Dim r As New Random(System.DateTime.Now.Millisecond)
-                                Dim RandomNumber As Integer = r.Next(30000)
-                                System.Threading.Thread.Sleep(RandomNumber)
+                                'Dim r As New Random(System.DateTime.Now.Millisecond)
+                                'Dim RandomNumber As Integer = r.Next(30000)
+                                System.Threading.Thread.Sleep(3000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True

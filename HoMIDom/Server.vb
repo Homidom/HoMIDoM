@@ -2455,7 +2455,7 @@ Namespace HoMIDom
             End If
 
             Try
-                Dim retour As String
+                'Dim retour As String
 
                 'on change l'etat du server pour ne plus lancer de traitement
                 Etat_server = False
@@ -2472,14 +2472,14 @@ Namespace HoMIDom
                 _ListDrivers = Nothing
 
                 '----- Arrete les connexions Sqlite -----
-                retour = sqlite_homidom.disconnect("homidom")
-                If Mid(retour, 1, 4) = "ERR:" Then
-                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Homidom : " & retour)
-                End If
-                retour = sqlite_medias.disconnect("medias")
-                If Mid(retour, 1, 4) = "ERR:" Then
-                    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Medias : " & retour)
-                End If
+                'retour = sqlite_homidom.disconnect("homidom")
+                'If Mid(retour, 1, 4) = "ERR:" Then
+                '    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Homidom : " & retour)
+                'End If
+                'retour = sqlite_medias.disconnect("medias")
+                'If Mid(retour, 1, 4) = "ERR:" Then
+                '    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Medias : " & retour)
+                'End If
 
                 If _CycleSave > 0 Then SaveConfig(_MonRepertoire & "\config\homidom.xml")
 
