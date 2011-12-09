@@ -334,18 +334,20 @@ Imports System.Globalization
     ''' <remarks></remarks>
     Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
         Dim retour As Boolean = False
-
-        If Command = "" Then
+        Try
+            If Command = "" Then
+                Return False
+                Exit Function
+            End If
+            Select Case UCase(Command)
+                Case ""
+                Case Else
+            End Select
+            Return retour
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXmitter ExecuteCommand", ex.Message)
             Return False
-            Exit Function
-        End If
-
-        Select Case UCase(Command)
-            Case ""
-            Case Else
-        End Select
-
-        Return retour
+        End Try
     End Function
 
     ''' <summary>Démarrer le du driver</summary>
@@ -404,13 +406,17 @@ Imports System.Globalization
     ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Dim retour As String
-        retour = fermer()
-        If STRGS.Left(retour, 4) = "ERR:" Then
-            retour = STRGS.Right(retour, retour.Length - 5)
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Stop", retour)
-        Else
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter Stop", retour)
-        End If
+        Try
+            retour = fermer()
+            If STRGS.Left(retour, 4) = "ERR:" Then
+                retour = STRGS.Right(retour, retour.Length - 5)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Stop", retour)
+            Else
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter Stop", retour)
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXmitter Stop", ex.Message)
+        End Try
     End Sub
 
     ''' <summary>Re-Démarrer le du driver</summary>
@@ -483,30 +489,42 @@ Imports System.Globalization
 
     End Sub
 
+    ''' <summary>ajout des commandes avancées pour les devices</summary>
+    ''' <remarks></remarks>
+    Private Sub add_devicecommande(ByVal nom As String, ByVal description As String, ByVal nbparam As Integer)
+        Try
+            Dim x As New DeviceCommande
+            x.NameCommand = nom
+            x.DescriptionCommand = description
+            x.CountParam = nbparam
+            _DeviceCommandPlus.Add(x)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+        End Try
+    End Sub
+
     ''' <summary>Creation d'un objet de type</summary>
     ''' <remarks></remarks>
     Public Sub New()
+        Try
+            'Paramétres avancés
+            Dim x As New HoMIDom.HoMIDom.Driver.Parametre
+            x.Nom = "synchro"
+            x.Description = "Synchronisation avec le receiver (True/False)"
+            x.Valeur = True
+            _Parametres.Add(x)
 
-        'Paramétres avancés
-        Dim x As New HoMIDom.HoMIDom.Driver.Parametre
-        x.Nom = "synchro"
-        x.Description = "Synchronisation avec le receiver (True/False)"
-        x.Valeur = True
-        _Parametres.Add(x)
+            'liste des devices compatibles
+            _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
+            _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
+            _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
+            _DeviceSupport.Add(ListeDevices.VOLET.ToString)
 
-        'liste des devices compatibles
-        _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
-        _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
-        _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
-        _DeviceSupport.Add(ListeDevices.VOLET.ToString)
-
-        'ajout des commandes avancées pour les devices
-        'Ci-dessous un exemple
-        'Dim x As New DeviceCommande
-        'x.NameCommand = "Test"
-        'x.DescriptionCommand = "Ceci est une commande avancée de test"
-        'x.CountParam = 1
-        '_DeviceCommandPlus.Add(x)
+            'ajout des commandes avancées pour les devices
+            'add_devicecommande("XX", "xxx", 0)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXmitter New", ex.Message)
+        End Try
     End Sub
 
     ''' <summary>Si refresh >0 gestion du timer</summary>
@@ -524,47 +542,47 @@ Imports System.Globalization
     ''' <remarks></remarks>
     Private Function ouvrir(ByVal numero As String) As String
         'Forcer le . 
-        Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
-        My.Application.ChangeCulture("en-US")
         Try
-            If Not _IsConnect Then
-                port_name = numero 'pour se rapeller du nom du port
-                If VB.Left(numero, 3) <> "COM" Then
-                    'RFXMitter est un modele ethernet
-                    tcp = True
-                    client = New TcpClient(numero, _Port_TCP)
-                    _IsConnect = True
-                    Return ("Port IP " & port_name & ":" & _Port_TCP & " ouvert")
-                Else
-                    'RFXMitter est un modele usb
-                    tcp = False
-                    port.PortName = port_name 'nom du port : COM1
-                    port.BaudRate = 4800 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
-                    port.Parity = Parity.None 'pas de parité
-                    port.StopBits = StopBits.Two '2 bits d'arrêt par octet
-                    port.DataBits = 8 'nombre de bit par octet
-                    port.Encoding = System.Text.Encoding.GetEncoding(1252)  'Extended ASCII (8-bits)
-                    port.Handshake = Handshake.None
-                    port.ReadBufferSize = CInt(8192)
-                    port.ReceivedBytesThreshold = 1
-                    port.ReadTimeout = 100
-                    port.WriteTimeout = 500
-                    port.Open()
-                    _IsConnect = True
-                    If port.IsOpen Then
-                        port.DtrEnable = True
-                        port.RtsEnable = True
-                        port.DiscardInBuffer()
+            Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
+            My.Application.ChangeCulture("en-US")
+                If Not _IsConnect Then
+                    port_name = numero 'pour se rapeller du nom du port
+                    If VB.Left(numero, 3) <> "COM" Then
+                        'RFXMitter est un modele ethernet
+                        tcp = True
+                        client = New TcpClient(numero, _Port_TCP)
+                        _IsConnect = True
+                        Return ("Port IP " & port_name & ":" & _Port_TCP & " ouvert")
+                    Else
+                        'RFXMitter est un modele usb
+                        tcp = False
+                        port.PortName = port_name 'nom du port : COM1
+                        port.BaudRate = 4800 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
+                        port.Parity = Parity.None 'pas de parité
+                        port.StopBits = StopBits.Two '2 bits d'arrêt par octet
+                        port.DataBits = 8 'nombre de bit par octet
+                        port.Encoding = System.Text.Encoding.GetEncoding(1252)  'Extended ASCII (8-bits)
+                        port.Handshake = Handshake.None
+                        port.ReadBufferSize = CInt(8192)
+                        port.ReceivedBytesThreshold = 1
+                        port.ReadTimeout = 100
+                        port.WriteTimeout = 500
+                        port.Open()
+                        _IsConnect = True
+                        If port.IsOpen Then
+                            port.DtrEnable = True
+                            port.RtsEnable = True
+                            port.DiscardInBuffer()
+                        End If
+                        dateheurelancement = DateTime.Now
+                        Return ("Port " & port_name & " ouvert")
                     End If
-                    dateheurelancement = DateTime.Now
-                    Return ("Port " & port_name & " ouvert")
+                Else
+                    Return ("Port " & port_name & " dejà ouvert")
                 End If
-            Else
-                Return ("Port " & port_name & " dejà ouvert")
-            End If
-        Catch ex As Exception
-            Return ("ERR: " & ex.Message)
-        End Try
+            Catch ex As Exception
+                Return ("ERR: " & ex.Message)
+            End Try
     End Function
 
     ''' <summary>Lances les handlers sur le port</summary>
@@ -686,40 +704,27 @@ Imports System.Globalization
 
     Private Sub ecrirecommande(ByVal kar As Byte())
         Dim message As String
-        Dim temp, tcpdata(0) As Byte
-        Dim ok(0) As Byte
-        Dim intIndex, intEnd As Integer
-        Dim Finish As Double
-        ack_ok = True
+        Try
+            Dim temp, tcpdata(0) As Byte
+            Dim ok(0) As Byte
+            Dim intIndex, intEnd As Integer
+            Dim Finish As Double
+            ack_ok = True
 
-        Finish = VB.DateAndTime.Timer + 3.0   ' wait for ACK, max 3-seconds
+            Finish = VB.DateAndTime.Timer + 3.0   ' wait for ACK, max 3-seconds
 
-        Do While (ack = False)
-            If VB.DateAndTime.Timer > Finish Then
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "No ACK received witin 3 seconds !")
-                ack_ok = False
-                Exit Do
-            End If
+            Do While (ack = False)
+                If VB.DateAndTime.Timer > Finish Then
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "No ACK received witin 3 seconds !")
+                    ack_ok = False
+                    Exit Do
+                End If
 
-            If tcp = True Then
-                ' As long as there is information, read one byte at a time and output it.
-                While stream.DataAvailable
-                    stream.Read(tcpdata, 0, 1)
-                    temp = tcpdata(0)
-                    If temp = protocolsynchro Then
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "ACK  => " & VB.Right("0" & Hex(temp), 2))
-                    ElseIf temp = &H5A Then
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "NAK  => " & VB.Right("0" & Hex(temp), 2))
-                    End If
-                    mess = True
-                End While
-            Else
-                Try
-                    ' As long as there is information, read one byte at a time and 
-                    '   output it.
-                    While (port.BytesToRead() > 0)
-                        ' Write the output to the screen.
-                        temp = port.ReadByte()
+                If tcp = True Then
+                    ' As long as there is information, read one byte at a time and output it.
+                    While stream.DataAvailable
+                        stream.Read(tcpdata, 0, 1)
+                        temp = tcpdata(0)
                         If temp = protocolsynchro Then
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "ACK  => " & VB.Right("0" & Hex(temp), 2))
                         ElseIf temp = &H5A Then
@@ -727,40 +732,57 @@ Imports System.Globalization
                         End If
                         mess = True
                     End While
-                Catch exc As Exception
-                    ' An exception is raised when there is no information to read : Don't do anything here, just let the exception go.
-                End Try
+                Else
+                    Try
+                        ' As long as there is information, read one byte at a time and 
+                        '   output it.
+                        While (port.BytesToRead() > 0)
+                            ' Write the output to the screen.
+                            temp = port.ReadByte()
+                            If temp = protocolsynchro Then
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "ACK  => " & VB.Right("0" & Hex(temp), 2))
+                            ElseIf temp = &H5A Then
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "NAK  => " & VB.Right("0" & Hex(temp), 2))
+                            End If
+                            mess = True
+                        End While
+                    Catch exc As Exception
+                        ' An exception is raised when there is no information to read : Don't do anything here, just let the exception go.
+                    End Try
+                End If
+
+                If mess Then
+                    ack = True
+                    mess = False
+                End If
+            Loop
+
+            ack = False
+
+            ' Write a user specified Command to the Port.
+            Try
+                ecrire(kar)
+            Catch exc As Exception
+                ' Warn the user.
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "Unable to write to port")
+                ack_ok = False
+            Finally
+
+            End Try
+
+            message = VB.Right("0" & Hex(kar(0)), 2)
+            intEnd = ((kar(0) And &HF8) / 8)
+            If (kar(0) And &H7) <> 0 Then
+                intEnd += 1
             End If
-
-            If mess Then
-                ack = True
-                mess = False
-            End If
-        Loop
-
-        ack = False
-
-        ' Write a user specified Command to the Port.
-        Try
-            ecrire(kar)
-        Catch exc As Exception
-            ' Warn the user.
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "Unable to write to port")
-            ack_ok = False
-        Finally
-
+            For intIndex = 1 To intEnd
+                message = message + VB.Right("0" & Hex(kar(intIndex)), 2)
+            Next
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter Ecrirecommande", message)
+            ack = False
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXmitter ecrirecommande", ex.Message)
         End Try
-
-        message = VB.Right("0" & Hex(kar(0)), 2)
-        intEnd = ((kar(0) And &HF8) / 8)
-        If (kar(0) And &H7) <> 0 Then
-            intEnd += 1
-        End If
-        For intIndex = 1 To intEnd
-            message = message + VB.Right("0" & Hex(kar(intIndex)), 2)
-        Next
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter Ecrirecommande", message)
-        ack = False
     End Sub
 
     ''' <summary>Executer lors de la reception d'une donnée sur le port</summary>
