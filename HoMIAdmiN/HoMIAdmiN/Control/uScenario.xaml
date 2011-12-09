@@ -6,32 +6,39 @@
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="400" Background="Black" MinWidth="400" MinHeight="200" Width="Auto" Name="uScenario">
     <Grid>
-        <Canvas  Name="CanvasParent" Height="{Binding ElementName=uScenario, Path=ActualHeight}">
-            <StackPanel >
-                <StackPanel Name="StkHaut" Orientation="Horizontal">
-                    <Label Content="Actions:" Foreground="White" />
-                    <Image Source="/HoMIAdmiN;component/Images/blockdevice-icone-7594-128.png" Height="32" Width="32" ToolTip="Device" Name="ImgActDevice"></Image>
-                    <Image Source="/HoMIAdmiN;component/Images/e-mail-32.png" Height="32" Width="32" ToolTip="Mail" Name="ImgActMail"></Image>
-                    <Image Source="/HoMIAdmiN;component/Images/workflow.png" Height="32" Width="32" ToolTip="If" Name="ImgActIf"></Image>
-                    <Image Source="/HoMIAdmiN;component/Images/script-128.png" Height="32" Width="32" ToolTip="Macro" Name="ImgActMacro"></Image>
-                    <Rectangle Width="50"/>
-                    <Image Name="ZoomPlus" Source="/HoMIAdmiN;component/Images/avant-zoom-128.png" Width="23" Height="23" />
-                    <Image Name="ZoomMoins" Source="/HoMIAdmiN;component/Images/arriere-zoom-128.png" Width="23" Height="23" />
-                  
+        <DockPanel >
+            <StackPanel DockPanel.Dock="Top" CanHorizontallyScroll="True" CanVerticallyScroll="True">
+                <StackPanel   Name="StkHaut" Orientation="Horizontal">
+                <Label Name="Lbl01" Content="Actions:" Foreground="White" />
+                <Image Source="/HoMIAdmiN;component/Images/blockdevice-icone-7594-128.png" Height="32" Width="32" ToolTip="Device" Name="ImgActDevice"></Image>
+                <Image Source="/HoMIAdmiN;component/Images/e-mail-32.png" Height="32" Width="32" ToolTip="Mail" Name="ImgActMail"></Image>
+                <Image Source="/HoMIAdmiN;component/Images/workflow.png" Height="32" Width="32" ToolTip="If" Name="ImgActIf"></Image>
+                <Image Source="/HoMIAdmiN;component/Images/script-128.png" Height="32" Width="32" ToolTip="Macro" Name="ImgActMacro"></Image>
+                <Rectangle Width="50"/>
+                <Image Name="ZoomPlus" Source="/HoMIAdmiN;component/Images/avant-zoom-128.png" Width="23" Height="23" />
+                <Image Name="ZoomMoins" Source="/HoMIAdmiN;component/Images/arriere-zoom-128.png" Width="23" Height="23" />
+            </StackPanel>
+      
+            </StackPanel>
+            
+            <StackPanel DockPanel.Dock="Bottom" Height="8" Orientation="Horizontal"> 
+            
+            </StackPanel> 
+
+            <Canvas Width="15" DockPanel.Dock="Left"  />
+
+            <Canvas Width="5" DockPanel.Dock="Right"  />
+
+            <ScrollViewer DockPanel.Dock="Top"  Name="ScrollViewer2" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+                <StackPanel CanHorizontallyScroll="True">
+                    <StackPanel HorizontalAlignment="Left"  Name="StckPnlLib" VerticalAlignment="Top" Orientation="Horizontal" Background="DarkGray" CanHorizontallyScroll="True"/>
+                    <StackPanel Background="DarkGray" Height="22" HorizontalAlignment="Left"  Name="StckPnlLibTr" Orientation="Horizontal" VerticalAlignment="Top" CanHorizontallyScroll="True"  />
                 </StackPanel>
-                 <ScrollViewer  Name="ScrollViewer1" VerticalAlignment="Top" Width="Auto" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True" MaxWidth="{Binding ElementName=uScenario, Path=ActualWidth}" MinWidth="{Binding ElementName=uScenario, Path=ActualWidth}" AllowDrop="True">
-                        <StackPanel Name="StackPanel2" >
-                        <StackPanel Height="26" HorizontalAlignment="Left"  Name="StckPnlLib" VerticalAlignment="Top" Orientation="Horizontal" Background="Black"  />
-                        <StackPanel Orientation="Horizontal">
-                            <Canvas Width="28"></Canvas>
-                            <StackPanel >
-                            <StackPanel Background="DarkGray" Height="22" HorizontalAlignment="Left"  Name="StckPnlLibTr" Orientation="Horizontal" VerticalAlignment="Top"   />
-                            <StackPanel HorizontalAlignment="Left"  Name="StackPanel1" VerticalAlignment="Top" MinHeight="100"  />
-                            </StackPanel>
-                        </StackPanel>
-                    </StackPanel>
-                    </ScrollViewer>
-                </StackPanel>
-        </Canvas>
+            </ScrollViewer>
+            <ScrollViewer  Name="ScrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" AllowDrop="True" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
+                    <StackPanel HorizontalAlignment="Left" Name="StackPanel1" VerticalAlignment="Top" MinHeight="100" CanHorizontallyScroll=" True" CanVerticallyScroll=" True"/>
+            </ScrollViewer>
+            
+        </DockPanel>
     </Grid>
 </UserControl>

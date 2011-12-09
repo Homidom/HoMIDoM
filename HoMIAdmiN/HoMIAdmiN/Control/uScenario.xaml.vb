@@ -131,13 +131,14 @@ Public Class uScenario
     End Sub
 
     Private Sub uScenario_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles uScenario.Loaded
-        ScrollViewer1.MinHeight = uScenario.Height - 34
-        ScrollViewer1.MaxHeight = uScenario.Height - 34
+        'ScrollViewer1.Height = uScenario.ActualHeight - 60
+        'ScrollViewer1.Width = uScenario.Width - 40
+        ' ScrollViewer1.MaxHeight = uScenario.Height - 34
     End Sub
 
     Private Sub uScenario_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles uScenario.SizeChanged
-        ScrollViewer1.MinHeight = uScenario.ActualHeight - 34
-        ScrollViewer1.MaxHeight = uScenario.ActualHeight - 34
+        'ScrollViewer1.MinHeight = uScenario.ActualHeight - 34
+        'ScrollViewer1.MaxHeight = uScenario.ActualHeight - 34
     End Sub
 
     'Afficher les éléments du timeline
@@ -145,12 +146,15 @@ Public Class uScenario
         If StckPnlLib IsNot Nothing Then StckPnlLib.Children.Clear()
         If StckPnlLibTr IsNot Nothing Then StckPnlLibTr.Children.Clear()
 
+        Dim Rect As New Rectangle
+        Rect.Width = 15
+
         Dim _time As DateTime
         Dim t As Double = _Duree * 60 / _Zoom
         For j As Integer = 0 To t 'ajout des labels temps
             Dim x As New Label
             x.FontSize = 10
-            x.HorizontalContentAlignment = HorizontalAlignment.Center
+            x.HorizontalContentAlignment = HorizontalAlignment.Left
             x.Width = 60
             x.Foreground = New SolidColorBrush(Colors.White)
             x.Content = _time.ToLongTimeString
@@ -236,5 +240,9 @@ Public Class uScenario
         Dim obj As New DataObject()
         obj.SetData(GetType(String), "ACTIONMACRO")
         effects = DragDrop.DoDragDrop(Me.ImgActMacro, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+    End Sub
+
+    Private Sub ScrollViewer1_ScrollChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.ScrollChangedEventArgs) Handles ScrollViewer1.ScrollChanged
+        ScrollViewer2.ScrollToHorizontalOffset(e.HorizontalOffset)
     End Sub
 End Class
