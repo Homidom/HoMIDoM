@@ -73,7 +73,7 @@ Class Window1
                         tool = Nothing
                     End If
                     
-                    LblConnect.Content = Mid("Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString(), 1, 64) & "..."
+                    LblConnect.Content = Mid(myChannelFactory.Endpoint.Address.ToString(), 1, 32) & "..."
 
                     Dim mydate As Date
                     mydate = myService.GetHeureLeverSoleil
@@ -1373,6 +1373,7 @@ Class Window1
                                 _Trig = Nothing
                             End If
                     Case 5 'macros
+
                         Dim x As New uMacro(uMacro.EAction.Modifier, TreeViewG.SelectedItem.uid)
                         x.Uid = System.Guid.NewGuid.ToString()
                         AddHandler x.CloseMe, AddressOf UnloadControl
@@ -1382,7 +1383,7 @@ Class Window1
                         Dim da3 As DoubleAnimation = New DoubleAnimation
                         da3.From = 0
                         da3.To = 1
-                        da3.Duration = New Duration(TimeSpan.FromMilliseconds(600))
+                        da3.Duration = New Duration(TimeSpan.FromMilliseconds(800))
                         Dim sc As ScaleTransform = New ScaleTransform()
                         x.RenderTransform = sc
                         sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)

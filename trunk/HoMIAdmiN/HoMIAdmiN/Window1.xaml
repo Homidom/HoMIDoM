@@ -220,11 +220,11 @@
                     <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuDriver" ToolTip="Gérer les drivers">
                         <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/driver-128.png" />
                     </Button>
-                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuDevice" ToolTip="Gérer les devices">
+                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuDevice" ToolTip="Gérer les composants">
                         <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/light.png" />
                     </Button>
                     <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuZone" ToolTip="Gérer les Zones">
-                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/home-128.png" />
+                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/room.png" />
                     </Button>
                     <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuUser" ToolTip="Gérer les users">
                         <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/user.png" />
@@ -318,9 +318,33 @@
        
         <Canvas Name="CanvasRight" Margin="5" >
             <Canvas.Background>
-                <ImageBrush ImageSource="/HoMIAdmiN;component/Images/01.png"  />
+                <ImageBrush ImageSource="/HoMIAdmiN;component/Images/01.png"  >
+                   </ImageBrush> 
             </Canvas.Background>
-         </Canvas>
+            <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuDriver2" ToolTip="Gérer les drivers">
+                    <Image Width="50" Height="50" Source="/HoMIAdmiN;component/Images/driver-128.png" />
+                </Button>
+                <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuDevice2" ToolTip="Gérer les composants">
+                    <Image Width="50" Height="50" Source="/HoMIAdmiN;component/Images/light.png" />
+                </Button>
+                <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuZone2" ToolTip="Gérer les Zones">
+                    <Image Width="50" Height="50" Source="/HoMIAdmiN;component/Images/room.png" />
+                </Button>
+                <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuUser2" ToolTip="Gérer les users">
+                    <Image Width="50" Height="50" Source="/HoMIAdmiN;component/Images/user.png" />
+                </Button>
+                <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuTrigger2" ToolTip="Gérer les triggers">
+                    <Image Width="50" Height="50" Source="/HoMIAdmiN;component/Images/drapeau-vert-32.png" />
+                </Button>
+                <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuMacro2" ToolTip="Gérer les Macros">
+                    <Image Width="50" Height="50" Source="/HoMIAdmiN;component/Images/script-128.png" />
+                </Button>
+                <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuHisto2" ToolTip="Historique">
+                    <Image Width="50" Height="50" Source="/HoMIAdmiN;component/Images/curve-32.png" />
+                </Button>
+            </StackPanel>-->
+        </Canvas>
 
     </DockPanel>
 
