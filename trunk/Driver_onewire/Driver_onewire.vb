@@ -41,6 +41,7 @@ Public Class Driver_onewire
 #Region "Variables Internes"
     Dim wir_adapter As com.dalsemi.onewire.adapter.DSPortAdapter
     Public adapter_present = 0 '=1 si adapteur présent sinon =0
+    Private Shared lock_portwrite As New Object
 #End Region
 
 #Region "Déclaration"
@@ -502,23 +503,25 @@ Public Class Driver_onewire
             If adapter_present Then
                 'demande l'acces exclusif au reseau
                 result = wir_adapter.beginExclusive(False)
-                If result Then
-                    'wir_adapter.reset()
-                    owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
-                    tc = DirectCast(owd, com.dalsemi.onewire.container.TemperatureContainer) 'creer la connexion
-                    If owd.isPresent() Then
-                        state = tc.readDevice() 'lit le capteur
-                        tc.setTemperatureResolution(resolution, state) 'modifie la resolution à 0.1 degré (0.5 par défaut)
-                        tc.doTemperatureConvert(state)
-                        state = tc.readDevice 'lit la conversion
-                        retour = Math.Round(tc.getTemperature(state), 1)
+                SyncLock lock_portwrite
+                    If result Then
+                        'wir_adapter.reset()
+                        owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
+                        tc = DirectCast(owd, com.dalsemi.onewire.container.TemperatureContainer) 'creer la connexion
+                        If owd.isPresent() Then
+                            state = tc.readDevice() 'lit le capteur
+                            tc.setTemperatureResolution(resolution, state) 'modifie la resolution à 0.1 degré (0.5 par défaut)
+                            tc.doTemperatureConvert(state)
+                            state = tc.readDevice 'lit la conversion
+                            retour = Math.Round(tc.getTemperature(state), 1)
+                        Else
+                            retour = "ERR: temp_get : Capteur non présent"
+                        End If
                     Else
-                        retour = "ERR: temp_get : Capteur non présent"
+                        retour = "ERR: temp_get : Acces Exclusif refusé"
                     End If
                     wir_adapter.endExclusive()
-                Else
-                    retour = "ERR: temp_get : Acces Exclusif refusé"
-                End If
+                End SyncLock
             Else
                 retour = "ERR: temp_get : Adaptateur non présent"
             End If
@@ -539,21 +542,23 @@ Public Class Driver_onewire
             If adapter_present Then
                 If wir_adapter.isPresent(adresse) Then
                     wir_adapter.beginExclusive(True)
-                    owd = wir_adapter.getDeviceContainer(adresse)
-                    tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
-                    state = tc.readDevice()
-                    Dim number_of_switches = tc.getNumberChannels(state)
-                    For i = 0 To (number_of_switches - 1)
-                        switch_state = tc.getLatchState(i, state) 'recup l'etat du switch
-                        switch_activity = tc.getSensedActivity(i, state) 'recup l'activité du switch
-                        If switch_state Then
-                            retour.Add("1")
-                        Else
-                            If switch_activity Then retour.Add("2") Else retour.Add("0")
-                        End If
-                    Next
-                    tc.clearActivity()
-                    tc.readDevice()
+                    SyncLock lock_portwrite
+                        owd = wir_adapter.getDeviceContainer(adresse)
+                        tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
+                        state = tc.readDevice()
+                        Dim number_of_switches = tc.getNumberChannels(state)
+                        For i = 0 To (number_of_switches - 1)
+                            switch_state = tc.getLatchState(i, state) 'recup l'etat du switch
+                            switch_activity = tc.getSensedActivity(i, state) 'recup l'activité du switch
+                            If switch_state Then
+                                retour.Add("1")
+                            Else
+                                If switch_activity Then retour.Add("2") Else retour.Add("0")
+                            End If
+                        Next
+                        tc.clearActivity()
+                        tc.readDevice()
+                    End SyncLock
                     wir_adapter.endExclusive()
                 Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switchs_get", "Capteur à l'adresse " & adresse & " Non présent")
@@ -581,13 +586,15 @@ Public Class Driver_onewire
             If _IsConnect Then
                 If wir_adapter.isPresent(adresse) Then
                     wir_adapter.beginExclusive(True)
-                    owd = wir_adapter.getDeviceContainer(adresse)
-                    tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
-                    state = tc.readDevice()
-                    switch_state = tc.getLatchState(0, state)
-                    If switch_state Then retour = "0" Else retour = "1"
-                    tc.setLatchState(0, Not switch_state, False, state)
-                    tc.writeDevice(state)
+                    SyncLock lock_portwrite
+                        owd = wir_adapter.getDeviceContainer(adresse)
+                        tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
+                        state = tc.readDevice()
+                        switch_state = tc.getLatchState(0, state)
+                        If switch_state Then retour = "0" Else retour = "1"
+                        tc.setLatchState(0, Not switch_state, False, state)
+                        tc.writeDevice(state)
+                    End SyncLock
                     wir_adapter.endExclusive()
                 Else
                     retour = "ERR: switch_switchstate : Capteur non présent"
@@ -612,19 +619,21 @@ Public Class Driver_onewire
             If adapter_present Then
                 If wir_adapter.isPresent(adresse) Then
                     wir_adapter.beginExclusive(True)
-                    owd = wir_adapter.getDeviceContainer(adresse)
-                    tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
-                    state = tc.readDevice()
-                    Dim number_of_switches = tc.getNumberChannels(state)
-                    For i = 0 To (number_of_switches - 1)
-                        If i = channel Then
-                            switch_state = tc.getLatchState(i, state)
-                            If i <> 0 Then retour = retour & "-"
-                            If switch_state Then retour = retour & "0" Else retour = retour & "1"
-                            tc.setLatchState(i, Not switch_state, False, state)
-                        End If
-                    Next
-                    tc.writeDevice(state)
+                    SyncLock lock_portwrite
+                        owd = wir_adapter.getDeviceContainer(adresse)
+                        tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
+                        state = tc.readDevice()
+                        Dim number_of_switches = tc.getNumberChannels(state)
+                        For i = 0 To (number_of_switches - 1)
+                            If i = channel Then
+                                switch_state = tc.getLatchState(i, state)
+                                If i <> 0 Then retour = retour & "-"
+                                If switch_state Then retour = retour & "0" Else retour = retour & "1"
+                                tc.setLatchState(i, Not switch_state, False, state)
+                            End If
+                        Next
+                        tc.writeDevice(state)
+                    End SyncLock
                     wir_adapter.endExclusive()
                 Else
                     retour = "ERR: switchs_switchstate : Capteur non présent"
@@ -649,18 +658,20 @@ Public Class Driver_onewire
             If _IsConnect Then
                 If wir_adapter.isPresent(adresse) Then
                     wir_adapter.beginExclusive(True) 'demande l'acces exclusif au reseau
-                    owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
-                    tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer) 'creer la connexion
-                    state = tc.readDevice()  'lit les infos du composant
-                    switch_state = tc.getLatchState(0, state) 'recup l'etat du switch
-                    switch_activity = tc.getSensedActivity(0, state) 'recup l'activité du switch
-                    If switch_state Then
-                        retour = "1"
-                    Else
-                        If switch_activity Then retour = "2" Else retour = "0"
-                    End If
-                    tc.clearActivity()
-                    tc.readDevice()
+                    SyncLock lock_portwrite
+                        owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
+                        tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer) 'creer la connexion
+                        state = tc.readDevice()  'lit les infos du composant
+                        switch_state = tc.getLatchState(0, state) 'recup l'etat du switch
+                        switch_activity = tc.getSensedActivity(0, state) 'recup l'activité du switch
+                        If switch_state Then
+                            retour = "1"
+                        Else
+                            If switch_activity Then retour = "2" Else retour = "0"
+                        End If
+                        tc.clearActivity()
+                        tc.readDevice()
+                    End SyncLock
                     wir_adapter.endExclusive() 'rend l'accés au reseau
                 Else
                     retour = 9999
@@ -688,13 +699,15 @@ Public Class Driver_onewire
             If adapter_present Then
                 If wir_adapter.isPresent(adresse) Then
                     wir_adapter.beginExclusive(True)
-                    owd = wir_adapter.getDeviceContainer(adresse)
-                    tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
-                    state = tc.readDevice()
-                    switch_state = tc.getLatchState(0, state)
-                    If etat Then retour = "1" Else retour = "0"
-                    tc.setLatchState(0, etat, False, state)
-                    tc.writeDevice(state)
+                    SyncLock lock_portwrite
+                        owd = wir_adapter.getDeviceContainer(adresse)
+                        tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
+                        state = tc.readDevice()
+                        switch_state = tc.getLatchState(0, state)
+                        If etat Then retour = "1" Else retour = "0"
+                        tc.setLatchState(0, etat, False, state)
+                        tc.writeDevice(state)
+                    End SyncLock
                     wir_adapter.endExclusive()
                 Else
                     retour = 9999
@@ -722,18 +735,20 @@ Public Class Driver_onewire
             If adapter_present Then
                 If wir_adapter.isPresent(adresse) Then
                     wir_adapter.beginExclusive(True)
-                    owd = wir_adapter.getDeviceContainer(adresse)
-                    tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
-                    state = tc.readDevice()
-                    Dim number_of_switches = tc.getNumberChannels(state)
-                    For i = 0 To (number_of_switches - 1)
-                        If i = channel Then
-                            switch_state = tc.getLatchState(i, state)
-                            If etat Then retour = "1" Else retour = "0"
-                            tc.setLatchState(i, etat, False, state)
-                        End If
-                    Next
-                    tc.writeDevice(state)
+                    SyncLock lock_portwrite
+                        owd = wir_adapter.getDeviceContainer(adresse)
+                        tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
+                        state = tc.readDevice()
+                        Dim number_of_switches = tc.getNumberChannels(state)
+                        For i = 0 To (number_of_switches - 1)
+                            If i = channel Then
+                                switch_state = tc.getLatchState(i, state)
+                                If etat Then retour = "1" Else retour = "0"
+                                tc.setLatchState(i, etat, False, state)
+                            End If
+                        Next
+                        tc.writeDevice(state)
+                    End SyncLock
                     wir_adapter.endExclusive()
                 Else
                     retour = "ERR: switchs_setstate : Capteur non présent"
@@ -758,22 +773,24 @@ Public Class Driver_onewire
             If adapter_present Then
                 If wir_adapter.isPresent(adresse) Then
                     wir_adapter.beginExclusive(True)
-                    owd = wir_adapter.getDeviceContainer(adresse)
-                    tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
-                    state = tc.readDevice()
-                    Dim number_of_switches = tc.getNumberChannels(state)
-                    For i = 0 To (number_of_switches - 1)
-                        switch_state = tc.getLatchState(i, state)
-                        switch_activity = tc.getSensedActivity(i, state)
-                        If Not switch_state Then
-                            retour = "Switch " & i & " => Activité " & switch_activity & " à False"
-                            'retour = "0"
-                            tc.clearActivity()
-                            tc.readDevice()
-                        Else
-                            retour = "1"
-                        End If
-                    Next
+                    SyncLock lock_portwrite
+                        owd = wir_adapter.getDeviceContainer(adresse)
+                        tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
+                        state = tc.readDevice()
+                        Dim number_of_switches = tc.getNumberChannels(state)
+                        For i = 0 To (number_of_switches - 1)
+                            switch_state = tc.getLatchState(i, state)
+                            switch_activity = tc.getSensedActivity(i, state)
+                            If Not switch_state Then
+                                retour = "Switch " & i & " => Activité " & switch_activity & " à False"
+                                'retour = "0"
+                                tc.clearActivity()
+                                tc.readDevice()
+                            Else
+                                retour = "1"
+                            End If
+                        Next
+                    End SyncLock
                     wir_adapter.endExclusive()
                 Else
                     retour = "ERR: switch_clearactivity : Capteur non présent"
@@ -796,20 +813,22 @@ Public Class Driver_onewire
             Dim counterstate As Long
             If _IsConnect Then
                 wir_adapter.beginExclusive(True)
-                'owd = wir_adapter.getDeviceContainer(adresse)
-                'CounterContainer = New com.dalsemi.onewire.container.OneWireContainer1D(wir_adapter, adresse)
-                'If countera Then
-                '    counterstate = CounterContainer.readCounter(14)
-                'Else
-                '    counterstate = CounterContainer.readCounter(15)
-                'End If
-                owd = wir_adapter.getDeviceContainer(adresse)
-                CounterContainer = DirectCast(owd, com.dalsemi.onewire.container.OneWireContainer1D)
-                If countera Then
-                    counterstate = CounterContainer.readCounter(14)
-                Else
-                    counterstate = CounterContainer.readCounter(15)
-                End If
+                SyncLock lock_portwrite
+                    'owd = wir_adapter.getDeviceContainer(adresse)
+                    'CounterContainer = New com.dalsemi.onewire.container.OneWireContainer1D(wir_adapter, adresse)
+                    'If countera Then
+                    '    counterstate = CounterContainer.readCounter(14)
+                    'Else
+                    '    counterstate = CounterContainer.readCounter(15)
+                    'End If
+                    owd = wir_adapter.getDeviceContainer(adresse)
+                    CounterContainer = DirectCast(owd, com.dalsemi.onewire.container.OneWireContainer1D)
+                    If countera Then
+                        counterstate = CounterContainer.readCounter(14)
+                    Else
+                        counterstate = CounterContainer.readCounter(15)
+                    End If
+                End SyncLock
                 wir_adapter.endExclusive()
                 retour = counterstate.ToString
             Else

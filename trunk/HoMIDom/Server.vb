@@ -60,6 +60,8 @@ Namespace HoMIDom
         <NonSerialized()> Private Shared _TypeLogEnable As New List(Of Boolean) 'True si on doit pas prendre en compte le type de log
         <NonSerialized()> Dim _CycleSave As Integer = 0 'Enregistrer toute les X minutes
         <NonSerialized()> Dim _NextTimeSave As Date  'Enregistrer toute les X minutes
+        Private Shared lock_logwrite As New Object
+
 #End Region
 
 #Region "Event"
@@ -2204,19 +2206,19 @@ Namespace HoMIDom
                 'on affiche dans la console
                 Console.WriteLine(Now & " " & TypLog & " " & Source & " " & Fonction & " " & Message)
 
-                Dim timeout As DateTime = Now.AddSeconds(3)
-                Do While FileIsOpen(_File) = True And Now < timeout
+                'Dim timeout As DateTime = Now.AddSeconds(3)
+                'Do While FileIsOpen(_File) = True And Now < timeout
 
-                Loop
+                'Loop
 
-                If Now = timeout And FileIsOpen(_File) = True Then
-                    Console.WriteLine(Now & " Impossible d'écrire dans le fichier log car il est toujours en ouvert, création d'un nouveau fichier log")
-                    Dim filearchive As String
-                    filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                    IO.File.Move(_File, filearchive)
-                    CreateNewFileLog(_File)
-                    Fichier = New FileInfo(_File)
-                End If
+                'If Now = timeout And FileIsOpen(_File) = True Then
+                '    Console.WriteLine(Now & " Impossible d'écrire dans le fichier log car il est toujours en ouvert, création d'un nouveau fichier log")
+                '    Dim filearchive As String
+                '    filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                '    IO.File.Move(_File, filearchive)
+                '    CreateNewFileLog(_File)
+                '    Fichier = New FileInfo(_File)
+                'End If
 
                 Dim xmldoc As New XmlDocument()
 
@@ -2243,9 +2245,11 @@ Namespace HoMIDom
                     elelog.SetAttribute("fonction", HtmlEncode(Fonction))
                     elelog.SetAttribute("message", HtmlEncode(Message))
 
-                    xmldoc.Load(_File) 'ouvre le fichier xml
-                    Dim root As XmlElement = xmldoc.Item("logs")
-                    root.AppendChild(elelog)
+                    SyncLock lock_logwrite
+                        xmldoc.Load(_File) 'ouvre le fichier xml
+                        Dim root As XmlElement = xmldoc.Item("logs")
+                        root.AppendChild(elelog)
+                    End SyncLock
 
                     'on enregistre le fichier xml
                     xmldoc.Save(_File)
