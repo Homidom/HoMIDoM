@@ -209,7 +209,7 @@ Namespace HoMIDom
             Protected _Solo As Boolean = True
             Protected _LastEtat As Boolean = True
             Protected MyTimer As New Timers.Timer
-            <NonSerialized()> Protected _FistTime As Boolean = False
+            <NonSerialized()> Protected _FirstTime As Boolean = True
 
             'Identification unique du device
             Public Property ID() As String
@@ -383,9 +383,14 @@ Namespace HoMIDom
             End Sub
 
             Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
-                If _Enable = False Then Exit Function
-                Dim CMD As String = UCase(Command)
-                Return _Driver.ExecuteCommand(Me, CMD, Param)
+                Try
+                    If _Enable = False Then Exit Function
+                    Dim CMD As String = UCase(Command)
+                    Return _Driver.ExecuteCommand(Me, CMD, Param)
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device ExecuteCommand", ex.Message)
+                    Return False
+                End Try
             End Function
 
         End Class
@@ -483,21 +488,45 @@ Namespace HoMIDom
                     Return _Refresh
                 End Get
                 Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Enabled = False
-                        If _FistTime = True Then
-                            RemoveHandler MyTimer.Elapsed, AddressOf Read
-                            MyTimer.Interval = _Refresh
-                            MyTimer.Enabled = True
-                            AddHandler MyTimer.Elapsed, AddressOf Read
-                        Else
-                            _FistTime = True
-                            AddHandler MyTimer.Elapsed, AddressOf Read
+                    Try
+                        '_Refresh = value
+                        'If _Refresh > 0 Then
+                        '    MyTimer.Enabled = False
+                        '    If _FirstTime = false Then
+                        '        RemoveHandler MyTimer.Elapsed, AddressOf Read
+                        '        MyTimer.Interval = _Refresh
+                        '        MyTimer.Enabled = True
+                        '        AddHandler MyTimer.Elapsed, AddressOf Read
+                        '    Else
+                        '        _FirstTime = false
+                        '        AddHandler MyTimer.Elapsed, AddressOf Read
+                        '    End If
+                        '    MyTimer.Interval = _Refresh
+                        '    MyTimer.Enabled = True
+                        'End If
+
+                        _Refresh = value
+                        If _Refresh > 0 Then
+                            MyTimer.Enabled = False
+                            If _FirstTime = False Then
+                                'timer déjà lancé
+                                MyTimer.Interval = _Refresh
+                                MyTimer.Enabled = True
+                            Else
+                                'premier lancement
+                                _FirstTime = False
+                                'pour décaler le lancement des threads de 0 à 30 secondes
+                                Dim r As New Random(System.DateTime.Now.Millisecond)
+                                Dim RandomNumber As Integer = r.Next(30000)
+                                System.Threading.Thread.Sleep(RandomNumber)
+                                AddHandler MyTimer.Elapsed, AddressOf Read
+                                MyTimer.Interval = _Refresh
+                                MyTimer.Enabled = True
+                            End If
                         End If
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                    End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -583,21 +612,45 @@ Namespace HoMIDom
                     Return _Refresh
                 End Get
                 Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Enabled = False
-                        If _FistTime = True Then
-                            RemoveHandler MyTimer.Elapsed, AddressOf Read
-                            MyTimer.Interval = _Refresh
-                            MyTimer.Enabled = True
-                            AddHandler MyTimer.Elapsed, AddressOf Read
-                        Else
-                            _FistTime = True
-                            AddHandler MyTimer.Elapsed, AddressOf Read
+                    Try
+                        '_Refresh = value
+                        'If _Refresh > 0 Then
+                        '    MyTimer.Enabled = False
+                        '    If _FistTime = True Then
+                        '        RemoveHandler MyTimer.Elapsed, AddressOf Read
+                        '        MyTimer.Interval = _Refresh
+                        '        MyTimer.Enabled = True
+                        '        AddHandler MyTimer.Elapsed, AddressOf Read
+                        '    Else
+                        '        _FistTime = True
+                        '        AddHandler MyTimer.Elapsed, AddressOf Read
+                        '    End If
+                        '    MyTimer.Interval = _Refresh
+                        '    MyTimer.Enabled = True
+                        'End If
+
+                        _Refresh = value
+                        If _Refresh > 0 Then
+                            MyTimer.Enabled = False
+                            If _FirstTime = False Then
+                                'timer déjà lancé
+                                MyTimer.Interval = _Refresh
+                                MyTimer.Enabled = True
+                            Else
+                                'premier lancement
+                                _FirstTime = False
+                                'pour décaler le lancement des threads de 0 à 30 secondes
+                                Dim r As New Random(System.DateTime.Now.Millisecond)
+                                Dim RandomNumber As Integer = r.Next(30000)
+                                System.Threading.Thread.Sleep(RandomNumber)
+                                AddHandler MyTimer.Elapsed, AddressOf Read
+                                MyTimer.Interval = _Refresh
+                                MyTimer.Enabled = True
+                            End If
                         End If
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                    End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -692,21 +745,45 @@ Namespace HoMIDom
                     Return _Refresh
                 End Get
                 Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Enabled = False
-                        If _FistTime = True Then
-                            RemoveHandler MyTimer.Elapsed, AddressOf Read
-                            MyTimer.Interval = _Refresh
-                            MyTimer.Enabled = True
-                            AddHandler MyTimer.Elapsed, AddressOf Read
-                        Else
-                            _FistTime = True
-                            AddHandler MyTimer.Elapsed, AddressOf Read
+                    Try
+                        '_Refresh = value
+                        'If _Refresh > 0 Then
+                        '    MyTimer.Enabled = False
+                        '    If _FistTime = True Then
+                        '        RemoveHandler MyTimer.Elapsed, AddressOf Read
+                        '        MyTimer.Interval = _Refresh
+                        '        MyTimer.Enabled = True
+                        '        AddHandler MyTimer.Elapsed, AddressOf Read
+                        '    Else
+                        '        _FistTime = True
+                        '        AddHandler MyTimer.Elapsed, AddressOf Read
+                        '    End If
+                        '    MyTimer.Interval = _Refresh
+                        '    MyTimer.Enabled = True
+                        'End If
+
+                        _Refresh = value
+                        If _Refresh > 0 Then
+                            MyTimer.Enabled = False
+                            If _FirstTime = False Then
+                                'timer déjà lancé
+                                MyTimer.Interval = _Refresh
+                                MyTimer.Enabled = True
+                            Else
+                                'premier lancement
+                                _FirstTime = False
+                                'pour décaler le lancement des threads de 0 à 30 secondes
+                                Dim r As New Random(System.DateTime.Now.Millisecond)
+                                Dim RandomNumber As Integer = r.Next(30000)
+                                System.Threading.Thread.Sleep(RandomNumber)
+                                AddHandler MyTimer.Elapsed, AddressOf Read
+                                MyTimer.Interval = _Refresh
+                                MyTimer.Enabled = True
+                            End If
                         End If
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                    End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -792,21 +869,45 @@ Namespace HoMIDom
                     Return _Refresh
                 End Get
                 Set(ByVal value As Integer)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Enabled = False
-                        If _FistTime = True Then
-                            RemoveHandler MyTimer.Elapsed, AddressOf Read
-                            MyTimer.Interval = _Refresh
-                            MyTimer.Enabled = True
-                            AddHandler MyTimer.Elapsed, AddressOf Read
-                        Else
-                            _FistTime = True
-                            AddHandler MyTimer.Elapsed, AddressOf Read
+                    Try
+                        '_Refresh = value
+                        'If _Refresh > 0 Then
+                        '    MyTimer.Enabled = False
+                        '    If _FistTime = True Then
+                        '        RemoveHandler MyTimer.Elapsed, AddressOf Read
+                        '        MyTimer.Interval = _Refresh
+                        '        MyTimer.Enabled = True
+                        '        AddHandler MyTimer.Elapsed, AddressOf Read
+                        '    Else
+                        '        _FistTime = True
+                        '        AddHandler MyTimer.Elapsed, AddressOf Read
+                        '    End If
+                        '    MyTimer.Interval = _Refresh
+                        '    MyTimer.Enabled = True
+                        'End If
+
+                        _Refresh = value
+                        If _Refresh > 0 Then
+                            MyTimer.Enabled = False
+                            If _FirstTime = False Then
+                                'timer déjà lancé
+                                MyTimer.Interval = _Refresh
+                                MyTimer.Enabled = True
+                            Else
+                                'premier lancement
+                                _FirstTime = False
+                                'pour décaler le lancement des threads de 0 à 30 secondes
+                                Dim r As New Random(System.DateTime.Now.Millisecond)
+                                Dim RandomNumber As Integer = r.Next(30000)
+                                System.Threading.Thread.Sleep(RandomNumber)
+                                AddHandler MyTimer.Elapsed, AddressOf Read
+                                MyTimer.Interval = _Refresh
+                                MyTimer.Enabled = True
+                            End If
                         End If
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                    End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -1610,21 +1711,45 @@ Namespace HoMIDom
                     Return _Refresh
                 End Get
                 Set(ByVal value As Double)
-                    _Refresh = value
-                    If _Refresh > 0 Then
-                        MyTimer.Enabled = False
-                        If _FistTime = True Then
-                            RemoveHandler MyTimer.Elapsed, AddressOf Read
-                            MyTimer.Interval = _Refresh
-                            MyTimer.Enabled = True
-                            AddHandler MyTimer.Elapsed, AddressOf Read
-                        Else
-                            _FistTime = True
-                            AddHandler MyTimer.Elapsed, AddressOf Read
+                    Try
+                        '_Refresh = value
+                        'If _Refresh > 0 Then
+                        '    MyTimer.Enabled = False
+                        '    If _FistTime = True Then
+                        '        RemoveHandler MyTimer.Elapsed, AddressOf Read
+                        '        MyTimer.Interval = _Refresh
+                        '        MyTimer.Enabled = True
+                        '        AddHandler MyTimer.Elapsed, AddressOf Read
+                        '    Else
+                        '        _FistTime = True
+                        '        AddHandler MyTimer.Elapsed, AddressOf Read
+                        '    End If
+                        '    MyTimer.Interval = _Refresh
+                        '    MyTimer.Enabled = True
+                        'End If
+
+                        _Refresh = value
+                        If _Refresh > 0 Then
+                            MyTimer.Enabled = False
+                            If _FirstTime = False Then
+                                'timer déjà lancé
+                                MyTimer.Interval = _Refresh
+                                MyTimer.Enabled = True
+                            Else
+                                'premier lancement
+                                _FirstTime = False
+                                'pour décaler le lancement des threads de 0 à 30 secondes
+                                Dim r As New Random(System.DateTime.Now.Millisecond)
+                                Dim RandomNumber As Integer = r.Next(30000)
+                                System.Threading.Thread.Sleep(RandomNumber)
+                                AddHandler MyTimer.Elapsed, AddressOf Read
+                                MyTimer.Interval = _Refresh
+                                MyTimer.Enabled = True
+                            End If
                         End If
-                        MyTimer.Interval = _Refresh
-                        MyTimer.Enabled = True
-                    End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -1670,13 +1795,17 @@ Namespace HoMIDom
                     Return _ConditionActuel
                 End Get
                 Set(ByVal tmp As String)
-                    If _ConditionActuel <> tmp Then
-                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionActuel", Name & " : " & Adresse1 & " : " & tmp)
-                        _ConditionActuel = tmp
-                        RaiseEvent DeviceChanged(Me, "ConditionActuel", tmp)
-                    Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
-                    End If
+                    Try
+                        If _ConditionActuel <> tmp Then
+                            _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionActuel", Name & " : " & Adresse1 & " : " & tmp)
+                            _ConditionActuel = tmp
+                            RaiseEvent DeviceChanged(Me, "ConditionActuel", tmp)
+                        Else
+                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
+                        End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceMETEO ConditionActuel", "Exception : " & ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -1685,13 +1814,17 @@ Namespace HoMIDom
                     Return _TempActuel
                 End Get
                 Set(ByVal tmp As String)
-                    If _TempActuel <> tmp Then
-                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionActuel", Name & " : " & Adresse1 & " : " & tmp)
-                        _TempActuel = tmp
-                        RaiseEvent DeviceChanged(Me, "TemperatureActuel", tmp)
-                    Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO TemperatureActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
-                    End If
+                    Try
+                        If _TempActuel <> tmp Then
+                            _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionActuel", Name & " : " & Adresse1 & " : " & tmp)
+                            _TempActuel = tmp
+                            RaiseEvent DeviceChanged(Me, "TemperatureActuel", tmp)
+                        Else
+                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO TemperatureActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
+                        End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceMETEO TemperatureActuel", "Exception : " & ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -1700,13 +1833,17 @@ Namespace HoMIDom
                     Return _HumActuel
                 End Get
                 Set(ByVal tmp As String)
-                    If _HumActuel <> tmp Then
-                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO HumiditeActuel", Name & " : " & Adresse1 & " : " & tmp)
-                        _HumActuel = tmp
-                        RaiseEvent DeviceChanged(Me, "HumiditeActuel", tmp)
-                    Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO HumiditeActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
-                    End If
+                    Try
+                        If _HumActuel <> tmp Then
+                            _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO HumiditeActuel", Name & " : " & Adresse1 & " : " & tmp)
+                            _HumActuel = tmp
+                            RaiseEvent DeviceChanged(Me, "HumiditeActuel", tmp)
+                        Else
+                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO HumiditeActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
+                        End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceMETEO HumiditeActuel", "Exception : " & ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -1724,13 +1861,17 @@ Namespace HoMIDom
                     Return _VentActuel
                 End Get
                 Set(ByVal tmp As String)
-                    If _VentActuel <> tmp Then
-                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO VentActuel", Name & " : " & Adresse1 & " : " & tmp)
-                        _VentActuel = tmp
-                        RaiseEvent DeviceChanged(Me, "VentActuel", tmp)
-                    Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO VentActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
-                    End If
+                    Try
+                        If _VentActuel <> tmp Then
+                            _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO VentActuel", Name & " : " & Adresse1 & " : " & tmp)
+                            _VentActuel = tmp
+                            RaiseEvent DeviceChanged(Me, "VentActuel", tmp)
+                        Else
+                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO VentActuel", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
+                        End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceMETEO VentActuel", "Exception : " & ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -1739,13 +1880,17 @@ Namespace HoMIDom
                     Return _JourToday
                 End Get
                 Set(ByVal tmp As String)
-                    If _JourToday <> tmp Then
-                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO JourToday", Name & " : " & Adresse1 & " : " & tmp)
-                        _JourToday = tmp
-                        'RaiseEvent DeviceChanged(Me, "JourToday", tmp)
-                    Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO JourToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
-                    End If
+                    Try
+                        If _JourToday <> tmp Then
+                            _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO JourToday", Name & " : " & Adresse1 & " : " & tmp)
+                            _JourToday = tmp
+                            'RaiseEvent DeviceChanged(Me, "JourToday", tmp)
+                        Else
+                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO JourToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
+                        End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceMETEO JourToday", "Exception : " & ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -1754,13 +1899,17 @@ Namespace HoMIDom
                     Return _MinToday
                 End Get
                 Set(ByVal tmp As String)
-                    If _MinToday <> tmp Then
-                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO MinToday", Name & " : " & Adresse1 & " : " & tmp)
-                        _MinToday = tmp
-                        RaiseEvent DeviceChanged(Me, "MinToday", tmp)
-                    Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO MinToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
-                    End If
+                    Try
+                        If _MinToday <> tmp Then
+                            _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO MinToday", Name & " : " & Adresse1 & " : " & tmp)
+                            _MinToday = tmp
+                            RaiseEvent DeviceChanged(Me, "MinToday", tmp)
+                        Else
+                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO MinToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
+                        End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceMETEO MinToday", "Exception : " & ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -1769,13 +1918,17 @@ Namespace HoMIDom
                     Return _MaxToday
                 End Get
                 Set(ByVal tmp As String)
-                    If _MaxToday <> tmp Then
-                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO MaxToday", Name & " : " & Adresse1 & " : " & tmp)
-                        _MaxToday = tmp
-                        RaiseEvent DeviceChanged(Me, "MaxToday", tmp)
-                    Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO MaxToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
-                    End If
+                    Try
+                        If _MaxToday <> tmp Then
+                            _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO MaxToday", Name & " : " & Adresse1 & " : " & tmp)
+                            _MaxToday = tmp
+                            RaiseEvent DeviceChanged(Me, "MaxToday", tmp)
+                        Else
+                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO MaxToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
+                        End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceMETEO MaxToday", "Exception : " & ex.Message)
+                    End Try
                 End Set
             End Property
 
@@ -1793,13 +1946,17 @@ Namespace HoMIDom
                     Return _ConditionToday
                 End Get
                 Set(ByVal tmp As String)
-                    If _ConditionToday <> tmp Then
-                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionToday", Name & " : " & Adresse1 & " : " & tmp)
-                        _ConditionToday = tmp
-                        RaiseEvent DeviceChanged(Me, "ConditionToday", tmp)
-                    Else
-                        _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
-                    End If
+                    Try
+                        If _ConditionToday <> tmp Then
+                            _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionToday", Name & " : " & Adresse1 & " : " & tmp)
+                            _ConditionToday = tmp
+                            RaiseEvent DeviceChanged(Me, "ConditionToday", tmp)
+                        Else
+                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
+                        End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceMETEO ConditionToday", "Exception : " & ex.Message)
+                    End Try
                 End Set
             End Property
 

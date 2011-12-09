@@ -48,6 +48,9 @@ Driver_RFXMitter
 	<summary>Fonction lancée lors de l'ajout d'un device</summary>
 	<param name="DeviceId">Objet représetant le device à interroger</param>
 	<remarks></remarks>
+</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.add_devicecommande(System.String,System.String,System.Int32)">
+	<summary>ajout des commandes avancées pour les devices</summary>
+	<remarks></remarks>
 </member><member name="M:Driver_RFXMitter.Driver_RFXMitter.#ctor">
 	<summary>Creation d'un objet de type</summary>
 	<remarks></remarks>
