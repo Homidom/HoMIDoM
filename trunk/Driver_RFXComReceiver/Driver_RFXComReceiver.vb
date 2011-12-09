@@ -262,19 +262,24 @@ Imports System.Globalization
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
-        Dim retour As Boolean = False
+        Try
+            Dim retour As Boolean = False
 
-        If Command = "" Then
+            If Command = "" Then
+                Return False
+                Exit Function
+            End If
+
+            Select Case UCase(Command)
+                Case ""
+                Case Else
+            End Select
+
+            Return retour
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER ExecuteCommand", ex.Message)
             Return False
-            Exit Function
-        End If
-
-        Select Case UCase(Command)
-            Case ""
-            Case Else
-        End Select
-
-        Return retour
+        End Try
     End Function
 
     ''' <summary>Démarrer le du driver</summary>
@@ -324,14 +329,18 @@ Imports System.Globalization
     ''' <summary>Arrêter le du driver</summary>
     ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
-        Dim retour As String
-        retour = fermer()
-        If STRGS.Left(retour, 4) = "ERR:" Then
-            retour = STRGS.Right(retour, retour.Length - 5)
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour)
-        Else
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour)
-        End If
+        Try
+            Dim retour As String
+            retour = fermer()
+            If STRGS.Left(retour, 4) = "ERR:" Then
+                retour = STRGS.Right(retour, retour.Length - 5)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour)
+            Else
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", retour)
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER Stop", ex.Message)
+        End Try
     End Sub
 
     ''' <summary>Re-Démarrer le du driver</summary>
@@ -345,8 +354,12 @@ Imports System.Globalization
     ''' <param name="Objet">Objet représetant le device à interroger</param>
     ''' <remarks>pas utilisé</remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
-        'pas utilisé
-        If _Enable = False Then Exit Sub
+        Try
+            'pas utilisé
+            If _Enable = False Then Exit Sub
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER Read", ex.Message)
+        End Try
     End Sub
 
     ''' <summary>Commander un device</summary>
@@ -356,66 +369,95 @@ Imports System.Globalization
     ''' <param name="Parametre2"></param>
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-        If _Enable = False Then Exit Sub
-        'command pas utiliser car String, on utilise donc Parametre1 pour transmettre les commandes style MODEB32
-        ecrire(&HF0, Parametre1)
+        Try
+            If _Enable = False Then Exit Sub
+            'command pas utiliser car String, on utilise donc Parametre1 pour transmettre les commandes style MODEB32
+            ecrire(&HF0, Parametre1)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER Write", ex.Message)
+        End Try
     End Sub
 
     ''' <summary>Fonction lancée lors de la suppression d'un device</summary>
     ''' <param name="DeviceId">Objet représetant le device à interroger</param>
     ''' <remarks></remarks>
     Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
+        Try
 
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER DeleteDevice", ex.Message)
+        End Try
     End Sub
 
     ''' <summary>Fonction lancée lors de l'ajout d'un device</summary>
     ''' <param name="DeviceId">Objet représetant le device à interroger</param>
     ''' <remarks></remarks>
     Public Sub NewDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.NewDevice
+        Try
 
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER NewDevice", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>ajout des commandes avancées pour les devices</summary>
+    ''' <remarks></remarks>
+    Private Sub add_devicecommande(ByVal nom As String, ByVal description As String, ByVal nbparam As Integer)
+        Try
+            Dim x As New DeviceCommande
+            x.NameCommand = nom
+            x.DescriptionCommand = description
+            x.CountParam = nbparam
+            _DeviceCommandPlus.Add(x)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+        End Try
     End Sub
 
     ''' <summary>Creation d'un objet de type</summary>
     ''' <remarks></remarks>
     Public Sub New()
-        'liste des devices compatibles
-        _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
-        _DeviceSupport.Add(ListeDevices.BAROMETRE.ToString)
-        _DeviceSupport.Add(ListeDevices.BATTERIE.ToString)
-        _DeviceSupport.Add(ListeDevices.COMPTEUR.ToString)
-        _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
-        _DeviceSupport.Add(ListeDevices.DETECTEUR.ToString)
-        _DeviceSupport.Add(ListeDevices.DIRECTIONVENT.ToString)
-        _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE.ToString)
-        _DeviceSupport.Add(ListeDevices.ENERGIETOTALE.ToString)
-        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
-        _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
-        _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE.ToString)
-        _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
-        _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
-        _DeviceSupport.Add(ListeDevices.PLUIECOURANT.ToString)
-        _DeviceSupport.Add(ListeDevices.PLUIETOTAL.ToString)
-        _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
-        _DeviceSupport.Add(ListeDevices.TELECOMMANDE.ToString)
-        _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
-        _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE.ToString)
-        _DeviceSupport.Add(ListeDevices.UV.ToString)
-        _DeviceSupport.Add(ListeDevices.VITESSEVENT.ToString)
-        _DeviceSupport.Add(ListeDevices.VOLET.ToString)
+        Try
+            'liste des devices compatibles
+            _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
+            _DeviceSupport.Add(ListeDevices.BAROMETRE.ToString)
+            _DeviceSupport.Add(ListeDevices.BATTERIE.ToString)
+            _DeviceSupport.Add(ListeDevices.COMPTEUR.ToString)
+            _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
+            _DeviceSupport.Add(ListeDevices.DETECTEUR.ToString)
+            _DeviceSupport.Add(ListeDevices.DIRECTIONVENT.ToString)
+            _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE.ToString)
+            _DeviceSupport.Add(ListeDevices.ENERGIETOTALE.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE.ToString)
+            _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
+            _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
+            _DeviceSupport.Add(ListeDevices.PLUIECOURANT.ToString)
+            _DeviceSupport.Add(ListeDevices.PLUIETOTAL.ToString)
+            _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
+            _DeviceSupport.Add(ListeDevices.TELECOMMANDE.ToString)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE.ToString)
+            _DeviceSupport.Add(ListeDevices.UV.ToString)
+            _DeviceSupport.Add(ListeDevices.VITESSEVENT.ToString)
+            _DeviceSupport.Add(ListeDevices.VOLET.ToString)
 
-        'ajout des commandes avancées pour les devices
-        'Ci-dessous un exemple
-        'Dim x As New DeviceCommande
-        'x.NameCommand = "Test"
-        'x.DescriptionCommand = "Ceci est une commande avancée de test"
-        'x.CountParam = 1
-        '_DeviceCommandPlus.Add(x)
+            'ajout des commandes avancées pour les devices
+            ' add_devicecommande("XXX", "xxxx", 0)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER New", ex.Message)
+        End Try
     End Sub
 
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
     Private Sub TimerTick()
+        Try
 
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER TimerTick", ex.Message)
+        End Try
     End Sub
 
 #End Region
