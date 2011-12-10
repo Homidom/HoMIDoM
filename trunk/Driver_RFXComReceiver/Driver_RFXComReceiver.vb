@@ -823,14 +823,14 @@ Imports System.Globalization
             mess = False
             firstbyte = True
 
-            ''affichage de la chaine reçu
+            ''ONLY FOR DEBUGGING
             'Dim valtemp As String = ""
-            'Dim xxx As String = ""
-            'For i As Integer = 0 To bytecnt
-            '    valtemp = valtemp & recbuf(i)
-            '    xxx = xxx & (VB.Right("0" & Hex(recbuf(i)), 2))
-            'Next
-            'WriteLog(xxx)
+            Dim xxx As String = ""
+            For i As Integer = 0 To bytecnt
+                'valtemp = valtemp & recbuf(i)
+                xxx = xxx & (VB.Right("0" & Hex(recbuf(i)), 2))
+            Next
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXComReceiver display_mess", " Received data: " & xxx)
 
             If Not waitforack Then
                 If bytecnt = 4 Then
@@ -2912,19 +2912,23 @@ Imports System.Globalization
             'log tous les paquets en mode debug
             'WriteLog("DBG: WriteRetour receive from " & adresse & " (" & type & ") -> " & valeur)
 
-            'on ne traite rien pendant les 6 premieres secondes
-            If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
+            'on ne traite rien pendant les 15 premieres secondes
+            If DateTime.Now > DateAdd(DateInterval.Second, 15, dateheurelancement) Then
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
                 If (listedevices.Count = 1) Then
-                    'un device trouvé on maj la value
-                    If valeur = "ON" Then
-                        listedevices.Item(0).Value = True
-                    ElseIf valeur = "OFF" Then
-                        listedevices.Item(0).Value = False
+                    'un device trouvé on maj la value si la durée entre les deux receptions est > à 1.5s
+                    If (DateTime.Now - Date.Parse(listedevices.Item(0).LastChange)).TotalMilliseconds > 1500 Then
+                        If valeur = "ON" Then
+                            listedevices.Item(0).Value = True
+                        ElseIf valeur = "OFF" Then
+                            listedevices.Item(0).Value = False
+                        Else
+                            listedevices.Item(0).Value = valeur
+                        End If
                     Else
-                        listedevices.Item(0).Value = valeur
+                        WriteLog("DBG: Reception < 1.5s de deux valeurs pour le meme composant : " & listedevices.Item(0).name & ":" & valeur)
                     End If
                 ElseIf (listedevices.Count > 1) Then
                     WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
@@ -2932,13 +2936,17 @@ Imports System.Globalization
                     'on vérifie si le device est configuré en RFXMitter
                     listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, "C2B6AA22-77E7-11E0-A193-47D34824019B", True)
                     If (listedevices.Count = 1) Then
-                        'un device trouvé on maj la value
-                        If valeur = "ON" Then
-                            listedevices.Item(0).Value = True
-                        ElseIf valeur = "OFF" Then
-                            listedevices.Item(0).Value = False
+                        'un device trouvé on maj la value si la durée entre les deux receptions est > à 1.5s
+                        If (DateTime.Now - Date.Parse(listedevices.Item(0).LastChange)).TotalMilliseconds > 1500 Then
+                            If valeur = "ON" Then
+                                listedevices.Item(0).Value = True
+                            ElseIf valeur = "OFF" Then
+                                listedevices.Item(0).Value = False
+                            Else
+                                listedevices.Item(0).Value = valeur
+                            End If
                         Else
-                            listedevices.Item(0).Value = valeur
+                            WriteLog("DBG: Reception < 1.5s de deux valeurs pour le meme composant : " & listedevices.Item(0).name & ":" & valeur)
                         End If
                     Else
                         WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)

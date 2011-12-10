@@ -1388,6 +1388,7 @@ Namespace HoMIDom
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des devices")
                 writer.WriteStartElement("devices")
                 For i As Integer = 0 To _ListDevices.Count - 1
+                    'Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", " - " & _ListDevices.Item(i).name)
                     writer.WriteStartElement("device")
                     '-- propriétés génériques --
                     writer.WriteStartAttribute("id")
@@ -2192,36 +2193,36 @@ Namespace HoMIDom
                 Console.WriteLine(Now & " " & TypLog & " " & Source & " " & Fonction & " " & Message)
 
                 Dim Fichier As FileInfo
-                SyncLock lock_logwrite
-                    'Vérifie si le fichier log existe sinon le crée
-                    If IO.File.Exists(_File) Then
-                        Fichier = New FileInfo(_File)
-                        'Vérifie si le fichier est trop gros si oui, on l'archive
-                        If (Fichier.Length / 1000) > _MaxFileSize Then
-                            Dim filearchive As String = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                            IO.File.Move(_File, filearchive)
-                        End If
-                    Else
-                        CreateNewFileLog(_File)
-                        Fichier = New FileInfo(_File)
+                'Vérifie si le fichier log existe sinon le crée
+                If IO.File.Exists(_File) Then
+                    Fichier = New FileInfo(_File)
+                    'Vérifie si le fichier est trop gros si oui, on l'archive
+                    If (Fichier.Length / 1000) > _MaxFileSize Then
+                        Dim filearchive As String = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                        IO.File.Move(_File, filearchive)
                     End If
+                Else
+                    CreateNewFileLog(_File)
+                    Fichier = New FileInfo(_File)
+                End If
 
-                    'Dim timeout As DateTime = Now.AddSeconds(3)
-                    'Do While FileIsOpen(_File) = True And Now < timeout
+                'Dim timeout As DateTime = Now.AddSeconds(3)
+                'Do While FileIsOpen(_File) = True And Now < timeout
 
-                    'Loop
+                'Loop
 
-                    'If Now = timeout And FileIsOpen(_File) = True Then
-                    '    Console.WriteLine(Now & " Impossible d'écrire dans le fichier log car il est toujours en ouvert, création d'un nouveau fichier log")
-                    '    Dim filearchive As String
-                    '    filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                    '    IO.File.Move(_File, filearchive)
-                    '    CreateNewFileLog(_File)
-                    '    Fichier = New FileInfo(_File)
-                    'End If
+                'If Now = timeout And FileIsOpen(_File) = True Then
+                '    Console.WriteLine(Now & " Impossible d'écrire dans le fichier log car il est toujours en ouvert, création d'un nouveau fichier log")
+                '    Dim filearchive As String
+                '    filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                '    IO.File.Move(_File, filearchive)
+                '    CreateNewFileLog(_File)
+                '    Fichier = New FileInfo(_File)
+                'End If
 
-                    Dim xmldoc As New XmlDocument()
+                Dim xmldoc As New XmlDocument()
 
+                SyncLock lock_logwrite
                     'Ecrire le log
                     Try
                         Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
@@ -4121,6 +4122,8 @@ Namespace HoMIDom
                             Return -2
                             Exit Function
                         End If
+                        'on arrete le timer en forçant le refresh à 0
+                        _ListDevices.Item(i).refresh = 0
                         _ListDevices.Item(i).driver.deletedevice(deviceId)
                         _ListDevices.RemoveAt(i)
                         DeleteDevice = 0
@@ -4191,6 +4194,8 @@ Namespace HoMIDom
                         .Refresh = _ListDevices.Item(i).refresh
                         .Modele = _ListDevices.Item(i).modele
                         .GetDeviceCommandePlus = _ListDevices.Item(i).GetCommandPlus
+                        .Value = _ListDevices.Item(i).value
+                        .ValueLast = _ListDevices.Item(i).valuelast
 
                         _listact = ListMethod(_ListDevices.Item(i).id)
                         If _listact.Count > 0 Then
@@ -4235,9 +4240,7 @@ Namespace HoMIDom
                             .Correction = _ListDevices.Item(i).correction
                             .Precision = _ListDevices.Item(i).precision
                             .Formatage = _ListDevices.Item(i).formatage
-                            .Value = _ListDevices.Item(i).value
                             .ValueDef = _ListDevices.Item(i).valuedef
-                            .ValueLast = _ListDevices.Item(i).valuelast
                             .ValueMax = _ListDevices.Item(i).valuemax
                             .ValueMin = _ListDevices.Item(i).valuemin
                         End If
