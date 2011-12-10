@@ -462,23 +462,25 @@ Public Class Driver_onewire
             If _IsConnect = True Then
                 'demande l'acces exclusif au reseau
                 wir_adapter.beginExclusive(False)
-                owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
-                If owd.isPresent() Then
-                    Try
-                        tc = DirectCast(owd, com.dalsemi.onewire.container.TemperatureContainer) 'creer la connexion
-                        state = tc.readDevice 'lit le capteur
-                        tc.setTemperatureResolution(resolution, state) 'modifie la resolution à 0.1 degré (0.5 par défaut)
-                        tc.doTemperatureConvert(state) 'converti la valeur obtenu en temperature
-                        state = tc.readDevice 'lit la conversion
-                        retour = Math.Round(tc.getTemperature(state), 1)
-                    Catch ex As Exception
+                SyncLock lock_portwrite
+                    owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
+                    If owd.isPresent() Then
+                        Try
+                            tc = DirectCast(owd, com.dalsemi.onewire.container.TemperatureContainer) 'creer la connexion
+                            state = tc.readDevice 'lit le capteur
+                            tc.setTemperatureResolution(resolution, state) 'modifie la resolution à 0.1 degré (0.5 par défaut)
+                            tc.doTemperatureConvert(state) 'converti la valeur obtenu en temperature
+                            state = tc.readDevice 'lit la conversion
+                            retour = Math.Round(tc.getTemperature(state), 1)
+                        Catch ex As Exception
+                            retour = 9999
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire GetTemp", ex.ToString)
+                        End Try
+                    Else
                         retour = 9999
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire GetTemp", ex.ToString)
-                    End Try
-                Else
-                    retour = 9999
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire GetTemp", "Capteur à l'adresse " & adresse & " Non présent")
-                End If
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire GetTemp", "Capteur à l'adresse " & adresse & " Non présent")
+                    End If
+                End SyncLock
                 wir_adapter.endExclusive()
             Else
                 retour = 9999
