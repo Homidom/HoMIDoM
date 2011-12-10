@@ -456,13 +456,13 @@ Public Class Driver_onewire
         Dim resolution As Double = 0.1 'resolution de la temperature : 0.1 ou 0.5
         Dim retour As Double = 9999
         Dim state As Object
-        Try
-            Dim tc As com.dalsemi.onewire.container.TemperatureContainer
-            Dim owd As com.dalsemi.onewire.container.OneWireContainer
-            If _IsConnect = True Then
-                'demande l'acces exclusif au reseau
-                wir_adapter.beginExclusive(False)
-                SyncLock lock_portwrite
+        SyncLock lock_portwrite
+            Try
+                Dim tc As com.dalsemi.onewire.container.TemperatureContainer
+                Dim owd As com.dalsemi.onewire.container.OneWireContainer
+                If _IsConnect = True Then
+                    'demande l'acces exclusif au reseau
+                    wir_adapter.beginExclusive(False)
                     owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
                     If owd.isPresent() Then
                         Try
@@ -480,16 +480,16 @@ Public Class Driver_onewire
                         retour = 9999
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire GetTemp", "Capteur à l'adresse " & adresse & " Non présent")
                     End If
-                End SyncLock
-                wir_adapter.endExclusive()
-            Else
+                    wir_adapter.endExclusive()
+                Else
+                    retour = 9999
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire GetTemp", "Erreur Adaptateur non présent")
+                End If
+            Catch ex As Exception
                 retour = 9999
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire GetTemp", "Erreur Adaptateur non présent")
-            End If
-        Catch ex As Exception
-            retour = 9999
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire GetTemp", ex.ToString)
-        End Try
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire GetTemp", ex.ToString)
+            End Try
+        End SyncLock
         Return retour
     End Function
 
@@ -499,13 +499,13 @@ Public Class Driver_onewire
         Dim retour As String = ""
         Dim state As Object
         Dim result As Boolean = False
-        Try
-            Dim tc As com.dalsemi.onewire.container.TemperatureContainer
-            Dim owd As com.dalsemi.onewire.container.OneWireContainer
-            If adapter_present Then
-                'demande l'acces exclusif au reseau
-                result = wir_adapter.beginExclusive(False)
-                SyncLock lock_portwrite
+        SyncLock lock_portwrite
+            Try
+                Dim tc As com.dalsemi.onewire.container.TemperatureContainer
+                Dim owd As com.dalsemi.onewire.container.OneWireContainer
+                If adapter_present Then
+                    'demande l'acces exclusif au reseau
+                    result = wir_adapter.beginExclusive(False)
                     If result Then
                         'wir_adapter.reset()
                         owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
@@ -523,13 +523,13 @@ Public Class Driver_onewire
                         retour = "ERR: temp_get : Acces Exclusif refusé"
                     End If
                     wir_adapter.endExclusive()
-                End SyncLock
-            Else
-                retour = "ERR: temp_get : Adaptateur non présent"
-            End If
-        Catch ex As Exception
-            retour = "ERR: temp_get : " & ex.ToString
-        End Try
+                Else
+                    retour = "ERR: temp_get : Adaptateur non présent"
+                End If
+            Catch ex As Exception
+                retour = "ERR: temp_get : " & ex.ToString
+            End Try
+        End SyncLock
         Return retour
     End Function
 
@@ -537,14 +537,14 @@ Public Class Driver_onewire
         ' Renvoie l'etat d'un multiswitch sous forme d'un tableau : 0=fermé, 1=ouvert, 2=fermé mais ouvert entre temps
         Dim retour As New ArrayList
         Dim state As Object
-        Try
-            Dim owd As com.dalsemi.onewire.container.OneWireContainer
-            Dim tc As com.dalsemi.onewire.container.SwitchContainer
-            Dim switch_activity, switch_state
-            If adapter_present Then
-                If wir_adapter.isPresent(adresse) Then
-                    wir_adapter.beginExclusive(True)
-                    SyncLock lock_portwrite
+        SyncLock lock_portwrite
+            Try
+                Dim owd As com.dalsemi.onewire.container.OneWireContainer
+                Dim tc As com.dalsemi.onewire.container.SwitchContainer
+                Dim switch_activity, switch_state
+                If adapter_present Then
+                    If wir_adapter.isPresent(adresse) Then
+                        wir_adapter.beginExclusive(True)
                         owd = wir_adapter.getDeviceContainer(adresse)
                         tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
                         state = tc.readDevice()
@@ -560,20 +560,20 @@ Public Class Driver_onewire
                         Next
                         tc.clearActivity()
                         tc.readDevice()
-                    End SyncLock
-                    wir_adapter.endExclusive()
+                        wir_adapter.endExclusive()
+                    Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switchs_get", "Capteur à l'adresse " & adresse & " Non présent")
+                        Return Nothing
+                    End If
                 Else
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switchs_get", "Capteur à l'adresse " & adresse & " Non présent")
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switchs_get", "Adaptateur non présent")
                     Return Nothing
                 End If
-            Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switchs_get", "Adaptateur non présent")
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switchs_get", "Erreur: " & ex.ToString)
                 Return Nothing
-            End If
-        Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switchs_get", "Erreur: " & ex.ToString)
-            Return Nothing
-        End Try
+            End Try
+        End SyncLock
         Return retour
     End Function
 
@@ -581,14 +581,14 @@ Public Class Driver_onewire
         ' Change l'etat d'un switch et renvoi le nouveau etat (ex :0 ==> Off)
         Dim retour As String = ""
         Dim state As Object
-        Try
-            Dim owd As com.dalsemi.onewire.container.OneWireContainer
-            Dim tc As com.dalsemi.onewire.container.SwitchContainer
-            Dim switch_state
-            If _IsConnect Then
-                If wir_adapter.isPresent(adresse) Then
-                    wir_adapter.beginExclusive(True)
-                    SyncLock lock_portwrite
+        SyncLock lock_portwrite
+            Try
+                Dim owd As com.dalsemi.onewire.container.OneWireContainer
+                Dim tc As com.dalsemi.onewire.container.SwitchContainer
+                Dim switch_state
+                If _IsConnect Then
+                    If wir_adapter.isPresent(adresse) Then
+                        wir_adapter.beginExclusive(True)
                         owd = wir_adapter.getDeviceContainer(adresse)
                         tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
                         state = tc.readDevice()
@@ -596,17 +596,17 @@ Public Class Driver_onewire
                         If switch_state Then retour = "0" Else retour = "1"
                         tc.setLatchState(0, Not switch_state, False, state)
                         tc.writeDevice(state)
-                    End SyncLock
-                    wir_adapter.endExclusive()
+                        wir_adapter.endExclusive()
+                    Else
+                        retour = "ERR: switch_switchstate : Capteur non présent"
+                    End If
                 Else
-                    retour = "ERR: switch_switchstate : Capteur non présent"
+                    retour = "ERR: switch_switchstate : Adaptateur non présent"
                 End If
-            Else
-                retour = "ERR: switch_switchstate : Adaptateur non présent"
-            End If
-        Catch ex As Exception
-            retour = "ERR: switch_switchstate : " & ex.ToString
-        End Try
+            Catch ex As Exception
+                retour = "ERR: switch_switchstate : " & ex.ToString
+            End Try
+        End SyncLock
         Return retour
     End Function
 
@@ -614,14 +614,14 @@ Public Class Driver_onewire
         ' Change l'etat d'un switch
         Dim retour As String = ""
         Dim state As Object
-        Try
-            Dim owd As com.dalsemi.onewire.container.OneWireContainer
-            Dim tc As com.dalsemi.onewire.container.SwitchContainer
-            Dim switch_state
-            If adapter_present Then
-                If wir_adapter.isPresent(adresse) Then
-                    wir_adapter.beginExclusive(True)
-                    SyncLock lock_portwrite
+        SyncLock lock_portwrite
+            Try
+                Dim owd As com.dalsemi.onewire.container.OneWireContainer
+                Dim tc As com.dalsemi.onewire.container.SwitchContainer
+                Dim switch_state
+                If adapter_present Then
+                    If wir_adapter.isPresent(adresse) Then
+                        wir_adapter.beginExclusive(True)
                         owd = wir_adapter.getDeviceContainer(adresse)
                         tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
                         state = tc.readDevice()
@@ -635,17 +635,17 @@ Public Class Driver_onewire
                             End If
                         Next
                         tc.writeDevice(state)
-                    End SyncLock
-                    wir_adapter.endExclusive()
+                        wir_adapter.endExclusive()
+                    Else
+                        retour = "ERR: switchs_switchstate : Capteur non présent"
+                    End If
                 Else
-                    retour = "ERR: switchs_switchstate : Capteur non présent"
+                    retour = "ERR: switchs_switchstate : Adaptateur non présent"
                 End If
-            Else
-                retour = "ERR: switchs_switchstate : Adaptateur non présent"
-            End If
-        Catch ex As Exception
-            retour = "ERR: switchs_switchstate : " & ex.ToString
-        End Try
+            Catch ex As Exception
+                retour = "ERR: switchs_switchstate : " & ex.ToString
+            End Try
+        End SyncLock
         Return retour
     End Function
 
@@ -653,14 +653,14 @@ Public Class Driver_onewire
         ' Renvoie l'etat du switch 0=fermé, 1=ouvert, 2=fermé mais ouvert entre temps
         Dim retour As Integer = 9999
         Dim state As Object
-        Try
-            Dim owd As com.dalsemi.onewire.container.OneWireContainer12
-            Dim tc As com.dalsemi.onewire.container.SwitchContainer
-            Dim switch_state, switch_activity
-            If _IsConnect Then
-                If wir_adapter.isPresent(adresse) Then
-                    wir_adapter.beginExclusive(True) 'demande l'acces exclusif au reseau
-                    SyncLock lock_portwrite
+        SyncLock lock_portwrite
+            Try
+                Dim owd As com.dalsemi.onewire.container.OneWireContainer12
+                Dim tc As com.dalsemi.onewire.container.SwitchContainer
+                Dim switch_state, switch_activity
+                If _IsConnect Then
+                    If wir_adapter.isPresent(adresse) Then
+                        wir_adapter.beginExclusive(True) 'demande l'acces exclusif au reseau
                         owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
                         tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer) 'creer la connexion
                         state = tc.readDevice()  'lit les infos du composant
@@ -673,20 +673,20 @@ Public Class Driver_onewire
                         End If
                         tc.clearActivity()
                         tc.readDevice()
-                    End SyncLock
-                    wir_adapter.endExclusive() 'rend l'accés au reseau
+                        wir_adapter.endExclusive() 'rend l'accés au reseau
+                    Else
+                        retour = 9999
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_get", "Capteur à l'adresse " & adresse & " Non présent")
+                    End If
                 Else
                     retour = 9999
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_get", "Capteur à l'adresse " & adresse & " Non présent")
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_get", "Adaptateur non présent")
                 End If
-            Else
+            Catch ex As Exception
                 retour = 9999
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_get", "Adaptateur non présent")
-            End If
-        Catch ex As Exception
-            retour = 9999
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_get", "Erreur: " & ex.ToString)
-        End Try
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_get", "Erreur: " & ex.ToString)
+            End Try
+        End SyncLock
         Return retour
     End Function
 
@@ -694,14 +694,14 @@ Public Class Driver_onewire
         ' Change l'etat d'un switch et renvoi le nouvel etat
         Dim retour As String = ""
         Dim state As Object
-        Try
-            Dim owd As com.dalsemi.onewire.container.OneWireContainer
-            Dim tc As com.dalsemi.onewire.container.SwitchContainer
-            Dim switch_state
-            If adapter_present Then
-                If wir_adapter.isPresent(adresse) Then
-                    wir_adapter.beginExclusive(True)
-                    SyncLock lock_portwrite
+        SyncLock lock_portwrite
+            Try
+                Dim owd As com.dalsemi.onewire.container.OneWireContainer
+                Dim tc As com.dalsemi.onewire.container.SwitchContainer
+                Dim switch_state
+                If adapter_present Then
+                    If wir_adapter.isPresent(adresse) Then
+                        wir_adapter.beginExclusive(True)
                         owd = wir_adapter.getDeviceContainer(adresse)
                         tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
                         state = tc.readDevice()
@@ -709,20 +709,20 @@ Public Class Driver_onewire
                         If etat Then retour = "1" Else retour = "0"
                         tc.setLatchState(0, etat, False, state)
                         tc.writeDevice(state)
-                    End SyncLock
-                    wir_adapter.endExclusive()
+                        wir_adapter.endExclusive()
+                    Else
+                        retour = 9999
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_set", "Capteur à l'adresse " & adresse & " Non présent")
+                    End If
                 Else
                     retour = 9999
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_set", "Capteur à l'adresse " & adresse & " Non présent")
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_set", "Adaptateur non présent")
                 End If
-            Else
+            Catch ex As Exception
                 retour = 9999
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_set", "Adaptateur non présent")
-            End If
-        Catch ex As Exception
-            retour = 9999
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_set", "Erreur: " & ex.ToString)
-        End Try
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire switch_set", "Erreur: " & ex.ToString)
+            End Try
+        End SyncLock
         Return retour
     End Function
 
@@ -730,14 +730,14 @@ Public Class Driver_onewire
         ' Change l'etat du channel x du switch Y et renvoi le nouvel etat
         Dim retour As String = ""
         Dim state As Object
-        Try
-            Dim owd As com.dalsemi.onewire.container.OneWireContainer
-            Dim tc As com.dalsemi.onewire.container.SwitchContainer
-            Dim switch_state
-            If adapter_present Then
-                If wir_adapter.isPresent(adresse) Then
-                    wir_adapter.beginExclusive(True)
-                    SyncLock lock_portwrite
+        SyncLock lock_portwrite
+            Try
+                Dim owd As com.dalsemi.onewire.container.OneWireContainer
+                Dim tc As com.dalsemi.onewire.container.SwitchContainer
+                Dim switch_state
+                If adapter_present Then
+                    If wir_adapter.isPresent(adresse) Then
+                        wir_adapter.beginExclusive(True)
                         owd = wir_adapter.getDeviceContainer(adresse)
                         tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
                         state = tc.readDevice()
@@ -750,17 +750,17 @@ Public Class Driver_onewire
                             End If
                         Next
                         tc.writeDevice(state)
-                    End SyncLock
-                    wir_adapter.endExclusive()
+                        wir_adapter.endExclusive()
+                    Else
+                        retour = "ERR: switchs_setstate : Capteur non présent"
+                    End If
                 Else
-                    retour = "ERR: switchs_setstate : Capteur non présent"
+                    retour = "ERR: switchs_setstate : Adaptateur non présent"
                 End If
-            Else
-                retour = "ERR: switchs_setstate : Adaptateur non présent"
-            End If
-        Catch ex As Exception
-            retour = "ERR: switchs_setstate : " & ex.ToString
-        End Try
+            Catch ex As Exception
+                retour = "ERR: switchs_setstate : " & ex.ToString
+            End Try
+        End SyncLock
         Return retour
     End Function
 
@@ -768,14 +768,14 @@ Public Class Driver_onewire
         ' Récupere l'etat et activité d'un switch
         Dim retour As String = ""
         Dim state As Object
-        Try
-            Dim owd As com.dalsemi.onewire.container.OneWireContainer
-            Dim tc As com.dalsemi.onewire.container.SwitchContainer
-            Dim switch_activity, switch_state
-            If adapter_present Then
-                If wir_adapter.isPresent(adresse) Then
-                    wir_adapter.beginExclusive(True)
-                    SyncLock lock_portwrite
+        SyncLock lock_portwrite
+            Try
+                Dim owd As com.dalsemi.onewire.container.OneWireContainer
+                Dim tc As com.dalsemi.onewire.container.SwitchContainer
+                Dim switch_activity, switch_state
+                If adapter_present Then
+                    If wir_adapter.isPresent(adresse) Then
+                        wir_adapter.beginExclusive(True)
                         owd = wir_adapter.getDeviceContainer(adresse)
                         tc = DirectCast(owd, com.dalsemi.onewire.container.SwitchContainer)
                         state = tc.readDevice()
@@ -792,30 +792,30 @@ Public Class Driver_onewire
                                 retour = "1"
                             End If
                         Next
-                    End SyncLock
-                    wir_adapter.endExclusive()
+                        wir_adapter.endExclusive()
+                    Else
+                        retour = "ERR: switch_clearactivity : Capteur non présent"
+                    End If
                 Else
-                    retour = "ERR: switch_clearactivity : Capteur non présent"
+                    retour = "ERR: switch_clearactivity : Adaptateur non présent"
                 End If
-            Else
-                retour = "ERR: switch_clearactivity : Adaptateur non présent"
-            End If
-        Catch ex As Exception
-            retour = "ERR: switch_clearactivity : " & ex.ToString
-        End Try
+            Catch ex As Exception
+                retour = "ERR: switch_clearactivity : " & ex.ToString
+            End Try
+        End SyncLock
         Return retour
     End Function
 
     Private Function counter(ByVal adresse As String, ByVal countera As Boolean) As String
         'recupere la valeur du compteur A (true) ou B (false)
         Dim retour As String = ""
-        Try
-            Dim CounterContainer As com.dalsemi.onewire.container.OneWireContainer1D
-            Dim owd As com.dalsemi.onewire.container.OneWireContainer
-            Dim counterstate As Long
-            If _IsConnect Then
-                wir_adapter.beginExclusive(True)
-                SyncLock lock_portwrite
+        SyncLock lock_portwrite
+            Try
+                Dim CounterContainer As com.dalsemi.onewire.container.OneWireContainer1D
+                Dim owd As com.dalsemi.onewire.container.OneWireContainer
+                Dim counterstate As Long
+                If _IsConnect Then
+                    wir_adapter.beginExclusive(True)
                     'owd = wir_adapter.getDeviceContainer(adresse)
                     'CounterContainer = New com.dalsemi.onewire.container.OneWireContainer1D(wir_adapter, adresse)
                     'If countera Then
@@ -830,17 +830,17 @@ Public Class Driver_onewire
                     Else
                         counterstate = CounterContainer.readCounter(15)
                     End If
-                End SyncLock
-                wir_adapter.endExclusive()
-                retour = counterstate.ToString
-            Else
+                    wir_adapter.endExclusive()
+                    retour = counterstate.ToString
+                Else
+                    retour = 9999
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire counter", "ERR: counter : Adaptateur non présent")
+                End If
+            Catch ex As Exception
                 retour = 9999
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire counter", "ERR: counter : Adaptateur non présent")
-            End If
-        Catch ex As Exception
-            retour = 9999
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire counter", "ERR: counter : " & ex.ToString)
-        End Try
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire counter", "ERR: counter : " & ex.ToString)
+            End Try
+        End SyncLock
         Return retour
     End Function
 
