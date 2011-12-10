@@ -2188,111 +2188,112 @@ Namespace HoMIDom
 
                 If _TypeLogEnable(TypLog - 1) = True Then Exit Sub
 
-                Dim Fichier As FileInfo
-
-                'Vérifie si le fichier log existe sinon le crée
-                If IO.File.Exists(_File) Then
-                    Fichier = New FileInfo(_File)
-                    'Vérifie si le fichier est trop gros si oui, on l'archive
-                    If (Fichier.Length / 1000) > _MaxFileSize Then
-                        Dim filearchive As String = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                        IO.File.Move(_File, filearchive)
-                    End If
-                Else
-                    CreateNewFileLog(_File)
-                    Fichier = New FileInfo(_File)
-                End If
-
                 'on affiche dans la console
                 Console.WriteLine(Now & " " & TypLog & " " & Source & " " & Fonction & " " & Message)
 
-                'Dim timeout As DateTime = Now.AddSeconds(3)
-                'Do While FileIsOpen(_File) = True And Now < timeout
+                Dim Fichier As FileInfo
+                SyncLock lock_logwrite
+                    'Vérifie si le fichier log existe sinon le crée
+                    If IO.File.Exists(_File) Then
+                        Fichier = New FileInfo(_File)
+                        'Vérifie si le fichier est trop gros si oui, on l'archive
+                        If (Fichier.Length / 1000) > _MaxFileSize Then
+                            Dim filearchive As String = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                            IO.File.Move(_File, filearchive)
+                        End If
+                    Else
+                        CreateNewFileLog(_File)
+                        Fichier = New FileInfo(_File)
+                    End If
 
-                'Loop
+                    'Dim timeout As DateTime = Now.AddSeconds(3)
+                    'Do While FileIsOpen(_File) = True And Now < timeout
 
-                'If Now = timeout And FileIsOpen(_File) = True Then
-                '    Console.WriteLine(Now & " Impossible d'écrire dans le fichier log car il est toujours en ouvert, création d'un nouveau fichier log")
-                '    Dim filearchive As String
-                '    filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                '    IO.File.Move(_File, filearchive)
-                '    CreateNewFileLog(_File)
-                '    Fichier = New FileInfo(_File)
-                'End If
+                    'Loop
 
-                Dim xmldoc As New XmlDocument()
+                    'If Now = timeout And FileIsOpen(_File) = True Then
+                    '    Console.WriteLine(Now & " Impossible d'écrire dans le fichier log car il est toujours en ouvert, création d'un nouveau fichier log")
+                    '    Dim filearchive As String
+                    '    filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                    '    IO.File.Move(_File, filearchive)
+                    '    CreateNewFileLog(_File)
+                    '    Fichier = New FileInfo(_File)
+                    'End If
 
-                'Ecrire le log
-                Try
-                    Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
-                    Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
-                    Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
-                    Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
-                    Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
-                    Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
+                    Dim xmldoc As New XmlDocument()
 
-                    'on affecte les attributs à l'élément
-                    elelog.SetAttributeNode(atttime)
-                    elelog.SetAttributeNode(atttype)
-                    elelog.SetAttributeNode(attsrc)
-                    elelog.SetAttributeNode(attfct)
-                    elelog.SetAttributeNode(attmsg)
+                    'Ecrire le log
+                    Try
+                        Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
+                        Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
+                        Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
+                        Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
+                        Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
+                        Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
 
-                    'on affecte les valeur
-                    elelog.SetAttribute("time", Now)
-                    elelog.SetAttribute("type", TypLog)
-                    elelog.SetAttribute("source", Source)
-                    elelog.SetAttribute("fonction", HtmlEncode(Fonction))
-                    elelog.SetAttribute("message", HtmlEncode(Message))
+                        'on affecte les attributs à l'élément
+                        elelog.SetAttributeNode(atttime)
+                        elelog.SetAttributeNode(atttype)
+                        elelog.SetAttributeNode(attsrc)
+                        elelog.SetAttributeNode(attfct)
+                        elelog.SetAttributeNode(attmsg)
 
-                    SyncLock lock_logwrite
+                        'on affecte les valeur
+                        elelog.SetAttribute("time", Now)
+                        elelog.SetAttribute("type", TypLog)
+                        elelog.SetAttribute("source", Source)
+                        elelog.SetAttribute("fonction", HtmlEncode(Fonction))
+                        elelog.SetAttribute("message", HtmlEncode(Message))
+
+                        'SyncLock lock_logwrite
                         xmldoc.Load(_File) 'ouvre le fichier xml
                         Dim root As XmlElement = xmldoc.Item("logs")
                         root.AppendChild(elelog)
-                    End SyncLock
+                        'on enregistre le fichier xml
+                        xmldoc.Save(_File)
+                        xmldoc = Nothing
+                        'End SyncLock
 
-                    'on enregistre le fichier xml
-                    xmldoc.Save(_File)
-                    xmldoc = Nothing
-                Catch ex As Exception 'Le fichier xml est corrompu ou comporte des caractères non supportés par xml
-                    Console.WriteLine(Now & " Impossible d'écrire dans le fichier log un nouveau fichier à été créé: " & ex.Message)
-                    Dim filearchive As String
-                    filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                    IO.File.Move(_File, filearchive)
-                    CreateNewFileLog(_File)
-                    Fichier = New FileInfo(_File)
+                    Catch ex As Exception 'Le fichier xml est corrompu ou comporte des caractères non supportés par xml
+                        Console.WriteLine(Now & " Impossible d'écrire dans le fichier log un nouveau fichier à été créé: " & ex.Message)
+                        Dim filearchive As String
+                        filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                        IO.File.Move(_File, filearchive)
+                        CreateNewFileLog(_File)
+                        Fichier = New FileInfo(_File)
 
-                    xmldoc.Load(_File) 'ouvre le fichier xml
-                    Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
-                    Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
-                    Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
-                    Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
-                    Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
-                    Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
+                        xmldoc.Load(_File) 'ouvre le fichier xml
+                        Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
+                        Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
+                        Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
+                        Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
+                        Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
+                        Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
 
-                    'on affecte les attributs à l'élément
-                    elelog.SetAttributeNode(atttime)
-                    elelog.SetAttributeNode(atttype)
-                    elelog.SetAttributeNode(attsrc)
-                    elelog.SetAttributeNode(attfct)
-                    elelog.SetAttributeNode(attmsg)
+                        'on affecte les attributs à l'élément
+                        elelog.SetAttributeNode(atttime)
+                        elelog.SetAttributeNode(atttype)
+                        elelog.SetAttributeNode(attsrc)
+                        elelog.SetAttributeNode(attfct)
+                        elelog.SetAttributeNode(attmsg)
 
-                    'on affecte les valeur
-                    elelog.SetAttribute("time", Now)
-                    elelog.SetAttribute("type", TypLog)
-                    elelog.SetAttribute("source", Source)
-                    elelog.SetAttribute("fonction", Fonction)
-                    elelog.SetAttribute("message", HtmlEncode(Message))
+                        'on affecte les valeur
+                        elelog.SetAttribute("time", Now)
+                        elelog.SetAttribute("type", TypLog)
+                        elelog.SetAttribute("source", Source)
+                        elelog.SetAttribute("fonction", Fonction)
+                        elelog.SetAttribute("message", HtmlEncode(Message))
 
-                    Dim root As XmlElement = xmldoc.Item("logs")
-                    root.AppendChild(elelog)
+                        Dim root As XmlElement = xmldoc.Item("logs")
+                        root.AppendChild(elelog)
 
-                    'on enregistre le fichier xml
-                    xmldoc.Save(_File)
-                    xmldoc = Nothing
-                End Try
+                        'on enregistre le fichier xml
+                        xmldoc.Save(_File)
+                        xmldoc = Nothing
+                    End Try
 
-                Fichier = Nothing
+                    Fichier = Nothing
+                End SyncLock
             Catch ex As Exception
                 Console.WriteLine("Erreur lors de l'écriture d'un log: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
             End Try
@@ -4973,12 +4974,15 @@ Namespace HoMIDom
                             _ListDevices.Item(i).LastChangeDuree = lastchangeduree
                             _ListDevices.Item(i).LastEtat = lastEtat
                             _ListDevices.Item(i).Driver.newdevice(deviceId)
-                            _ListDevices.Item(i).Correction = correction
-                            _ListDevices.Item(i).Formatage = formatage
-                            _ListDevices.Item(i).Precision = precision
-                            _ListDevices.Item(i).ValueMax = valuemax
-                            _ListDevices.Item(i).ValueMin = valuemin
-                            _ListDevices.Item(i).ValueDef = valuedef
+                            'si c'est un device de type double ou integer
+                            If _ListDevices.Item(i).type = "VOLET" Or _ListDevices.Item(i).type = "VITESSEVENT" Or _ListDevices.Item(i).type = "UV" Or _ListDevices.Item(i).type = "TEMPERATURECONSIGNE" Or _ListDevices.Item(i).type = "TEMPERATURE" Or _ListDevices.Item(i).type = "PLUIETOTAL" Or _ListDevices.Item(i).type = "PLUIECOURANT" Or _ListDevices.Item(i).type = "LAMPE" Or _ListDevices.Item(i).type = "HUMIDITE" Or _ListDevices.Item(i).type = "GENERIQUEVALUE" Or _ListDevices.Item(i).type = "ENERGIETOTALE" Or _ListDevices.Item(i).type = "ENERGIEINSTANTANEE" Or _ListDevices.Item(i).type = "COMPTEUR" Or _ListDevices.Item(i).type = "BAROMETRE" Then
+                                _ListDevices.Item(i).Correction = correction
+                                _ListDevices.Item(i).Formatage = formatage
+                                _ListDevices.Item(i).Precision = precision
+                                _ListDevices.Item(i).ValueMax = valuemax
+                                _ListDevices.Item(i).ValueMin = valuemin
+                                _ListDevices.Item(i).ValueDef = valuedef
+                            End If
                         End If
                     Next
                 End If
