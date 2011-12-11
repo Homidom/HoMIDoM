@@ -4195,7 +4195,7 @@ Namespace HoMIDom
                         .Modele = _ListDevices.Item(i).modele
                         .GetDeviceCommandePlus = _ListDevices.Item(i).GetCommandPlus
                         .Value = _ListDevices.Item(i).value
-                        .ValueLast = _ListDevices.Item(i).valuelast
+                        If IsNumeric(_ListDevices.Item(i).valuelast) Then .ValueLast = _ListDevices.Item(i).valuelast
 
                         _listact = ListMethod(_ListDevices.Item(i).id)
                         If _listact.Count > 0 Then
@@ -4286,7 +4286,7 @@ Namespace HoMIDom
                 _list.Sort(AddressOf sortDevice)
                 Return _list
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllDevices", "Exception : " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllDevices", "Exception : " & ex.ToString)
                 Return Nothing
             End Try
         End Function
