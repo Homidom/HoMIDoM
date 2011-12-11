@@ -518,7 +518,9 @@ Namespace HoMIDom
                                 'pour décaler le lancement des threads de 0 à 30 secondes
                                 'Dim r As New Random(System.DateTime.Now.Millisecond)
                                 'Dim RandomNumber As Integer = r.Next(3000)
-                                System.Threading.Thread.Sleep(3000)
+
+                                'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
+                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(3000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
@@ -649,7 +651,9 @@ Namespace HoMIDom
                                 'pour décaler le lancement des threads de 0 à 30 secondes
                                 'Dim r As New Random(System.DateTime.Now.Millisecond)
                                 'Dim RandomNumber As Integer = r.Next(30000)
-                                System.Threading.Thread.Sleep(3000)
+
+                                'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
+                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(3000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
@@ -792,7 +796,9 @@ Namespace HoMIDom
                                 'pour décaler le lancement des threads de 0 à 30 secondes
                                 'Dim r As New Random(System.DateTime.Now.Millisecond)
                                 'Dim RandomNumber As Integer = r.Next(30000)
-                                System.Threading.Thread.Sleep(3000)
+
+                                'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
+                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(3000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
@@ -922,7 +928,9 @@ Namespace HoMIDom
                                 'pour décaler le lancement des threads de 0 à 30 secondes
                                 'Dim r As New Random(System.DateTime.Now.Millisecond)
                                 'Dim RandomNumber As Integer = r.Next(30000)
-                                System.Threading.Thread.Sleep(3000)
+
+                                'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
+                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(3000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
@@ -1771,7 +1779,9 @@ Namespace HoMIDom
                                 'pour décaler le lancement des threads de 0 à 30 secondes
                                 'Dim r As New Random(System.DateTime.Now.Millisecond)
                                 'Dim RandomNumber As Integer = r.Next(30000)
-                                System.Threading.Thread.Sleep(3000)
+
+                                'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
+                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(3000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
