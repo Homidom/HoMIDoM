@@ -1436,7 +1436,7 @@ Namespace HoMIDom
                     writer.WriteValue(_ListDevices.Item(i).solo)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("value")
-                    writer.WriteValue(_ListDevices.Item(i).value)
+                    If _ListDevices.Item(i).value IsNot Nothing Then writer.WriteValue(_ListDevices.Item(i).value)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("lastetat")
                     writer.WriteValue(_ListDevices.Item(i).lastetat)
