@@ -898,6 +898,7 @@ Class Window1
     'Décharger une fenêtre suivant son Id
     Public Sub UnloadControl(ByVal MyControl As Object)
         Try
+            Me.Cursor = Cursors.Wait
             CanvasRight.Children.Clear()
             Select Case _CurrentMnu
                 Case 0
@@ -915,6 +916,7 @@ Class Window1
                 Case 6
                     AffHisto()
             End Select
+            Me.Cursor = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub UnloadControl: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1127,7 +1129,7 @@ Class Window1
                 frm = Nothing
                 'End If
             Else
-            End
+                End
             End If
         Catch ex As Exception
             MessageBox.Show("ERREUR Connexion: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -1217,54 +1219,68 @@ Class Window1
 #Region "BtnMnu"
 
     Private Sub MnuDriver_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuDriver.Click
+        Me.Cursor = Cursors.Wait
         _CurrentMnu = 0
         ErazeMnu()
         StkMnu0.Height = Double.NaN
         AffDriver()
         BtnStart.Visibility = Windows.Visibility.Hidden
         BtnStop.Visibility = Windows.Visibility.Hidden
+        Me.Cursor = Nothing
     End Sub
 
     Private Sub MnuDevice_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuDevice.Click
+        Me.Cursor = Cursors.Wait
         _CurrentMnu = 1
         ErazeMnu()
         StkMnu1.Height = Double.NaN
         AffDevice()
+        Me.Cursor = Nothing
     End Sub
 
     Private Sub MnuZone_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuZone.Click
+        Me.Cursor = Cursors.Wait
         _CurrentMnu = 2
         ErazeMnu()
         StkMnu2.Height = Double.NaN
         AffZone()
+        Me.Cursor = Nothing
     End Sub
 
     Private Sub MnuUser_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuUser.Click
+        Me.Cursor = Cursors.Wait
         _CurrentMnu = 3
         ErazeMnu()
         StkMnu3.Height = Double.NaN
         AffUser()
+        Me.Cursor = Nothing
     End Sub
 
     Private Sub MnuTrigger_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuTrigger.Click
+        Me.Cursor = Cursors.Wait
         _CurrentMnu = 4
         ErazeMnu()
         StkMnu4.Height = Double.NaN
         AffTrigger()
+        Me.Cursor = Nothing
     End Sub
 
     Private Sub MnuMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuMacro.Click
+        Me.Cursor = Cursors.Wait
         _CurrentMnu = 5
         ErazeMnu()
         StkMnu5.Height = Double.NaN
         AffScene()
+        Me.Cursor = Nothing
     End Sub
 
     Private Sub MnuHisto_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuHisto.Click
+        Me.Cursor = Cursors.Wait
         _CurrentMnu = 6
         ErazeMnu()
         StkMnu6.Height = Double.NaN
         AffHisto()
+        Me.Cursor = Nothing
     End Sub
 
     Private Sub TreeViewG_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewG.MouseDoubleClick
@@ -1277,6 +1293,7 @@ Class Window1
             If TreeViewG.SelectedItem IsNot Nothing Then
                 If TreeViewG.SelectedItem.uid Is Nothing Then Exit Sub
 
+                Me.Cursor = Cursors.Wait
                 Select Case _CurrentMnu
                     Case 0 'driver
                         Dim x As New uDriver(TreeViewG.SelectedItem.uid)
@@ -1338,12 +1355,12 @@ Class Window1
                     Case 4 'trigger
                         Dim _Trig As Trigger = myService.ReturnTriggerById(IdSrv, TreeViewG.SelectedItem.uid)
 
-                            If _Trig IsNot Nothing Then
-                                If _Trig.Type = Trigger.TypeTrigger.TIMER Then
-                                    Dim x As New uTriggerTimer(uTriggerTimer.EAction.Modifier, TreeViewG.SelectedItem.uid)
-                                    x.Uid = System.Guid.NewGuid.ToString()
-                                    AddHandler x.CloseMe, AddressOf UnloadControl
-                                    CanvasRight.Children.Clear()
+                        If _Trig IsNot Nothing Then
+                            If _Trig.Type = Trigger.TypeTrigger.TIMER Then
+                                Dim x As New uTriggerTimer(uTriggerTimer.EAction.Modifier, TreeViewG.SelectedItem.uid)
+                                x.Uid = System.Guid.NewGuid.ToString()
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                CanvasRight.Children.Clear()
                                 CanvasRight.Children.Add(x)
 
                                 Dim da3 As DoubleAnimation = New DoubleAnimation
@@ -1354,11 +1371,11 @@ Class Window1
                                 x.RenderTransform = sc
                                 sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
 
-                                Else
-                                    Dim x As New uTriggerDevice(uTriggerDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
-                                    x.Uid = System.Guid.NewGuid.ToString()
-                                    AddHandler x.CloseMe, AddressOf UnloadControl
-                                    CanvasRight.Children.Clear()
+                            Else
+                                Dim x As New uTriggerDevice(uTriggerDevice.EAction.Modifier, TreeViewG.SelectedItem.uid)
+                                x.Uid = System.Guid.NewGuid.ToString()
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                CanvasRight.Children.Clear()
                                 CanvasRight.Children.Add(x)
 
                                 Dim da3 As DoubleAnimation = New DoubleAnimation
@@ -1369,9 +1386,9 @@ Class Window1
                                 x.RenderTransform = sc
                                 sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
 
-                                End If
-                                _Trig = Nothing
                             End If
+                            _Trig = Nothing
+                        End If
                     Case 5 'macros
 
                         Dim x As New uMacro(uMacro.EAction.Modifier, TreeViewG.SelectedItem.uid)
@@ -1391,6 +1408,7 @@ Class Window1
                     Case 6 'histo
 
                 End Select
+                Me.Cursor = Nothing
             End If
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -1416,6 +1434,7 @@ Class Window1
             If TreeViewG.SelectedItem IsNot Nothing Then
                 If TreeViewG.SelectedItem.uid Is Nothing Then Exit Sub
 
+                Me.Cursor = Cursors.Wait
                 Select Case _CurrentMnu
                     Case 0 'driver
                         If myService.ReturnDriverByID(IdSrv, TreeViewG.SelectedItem.uid).ID = "DE96B466-2540-11E0-A321-65D7DFD72085" Then
@@ -1451,6 +1470,7 @@ Class Window1
                     Case 6 'histo
 
                 End Select
+                Me.Cursor = Nothing
             End If
 
         Catch ex As Exception
