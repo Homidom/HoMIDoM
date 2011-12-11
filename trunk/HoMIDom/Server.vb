@@ -3150,6 +3150,34 @@ Namespace HoMIDom
                 Return Nothing
             End Try
         End Function
+
+        ''' <summary>
+        ''' Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetDefautDeviceImage(ByVal TypeDevice As String) As String
+            Try
+                Dim dirInfo As New System.IO.DirectoryInfo(_MonRepertoire & "\images\devices\")
+                Dim file As System.IO.FileInfo
+                Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.*g", System.IO.SearchOption.AllDirectories)
+
+                If (files IsNot Nothing) Then
+                    For Each file In files
+                        If LCase(Mid(file.Name, 1, Len(file.Name) - 4)) = LCase(TypeDevice & "-defaut") Then
+                            Return file.FullName
+                            Exit Function
+                        End If
+                    Next
+                End If
+
+                Return ""
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetListOfImage", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
 #End Region
 
 #Region "Historisation"
@@ -4189,7 +4217,12 @@ Namespace HoMIDom
                         .Adresse1 = _ListDevices.Item(i).adresse1
                         .Adresse2 = _ListDevices.Item(i).adresse2
                         .DriverID = _ListDevices.Item(i).driverid
-                        .Picture = _ListDevices.Item(i).picture
+                        If _ListDevices.Item(i).picture = "" Or _ListDevices.Item(i).picture = " " Then
+                            .Picture = GetDefautDeviceImage(_ListDevices.Item(i).type)
+                        Else
+                            .Picture = _ListDevices.Item(i).picture
+                        End If
+
                         .Solo = _ListDevices.Item(i).solo
                         .Refresh = _ListDevices.Item(i).refresh
                         .Modele = _ListDevices.Item(i).modele
@@ -5151,8 +5184,10 @@ Namespace HoMIDom
                         retour.DriverID = _ListDevices.Item(i).driverid
                         If _ListDevices.Item(i).picture = " " Then
                             retour.Picture = ""
+                            retour.Picture = GetDefautDeviceImage(retour.Type)
+                        Else
+                            retour.Picture = _ListDevices.Item(i).picture
                         End If
-                        retour.Picture = _ListDevices.Item(i).picture
                         retour.Solo = _ListDevices.Item(i).solo
                         retour.Refresh = _ListDevices.Item(i).refresh
                         retour.Modele = _ListDevices.Item(i).modele
