@@ -35,6 +35,7 @@ Partial Public Class uDevice
 
             If Action = EAction.Nouveau Then 'Nouveau Device
                 ImgDevice.Tag = ""
+                StkCde.Height = 0
             Else 'Modification d'un Device
                 Dim x As HoMIDom.HoMIDom.TemplateDevice = Window1.myService.ReturnDeviceByID(IdSrv, DeviceId)
 
@@ -324,7 +325,7 @@ Partial Public Class uDevice
             End If
 
             If CbType.SelectedValue = "MULTIMEDIA" Then
-
+                StkCde.Height = Double.NaN
             Else
                 StkCde.Height = 0
             End If

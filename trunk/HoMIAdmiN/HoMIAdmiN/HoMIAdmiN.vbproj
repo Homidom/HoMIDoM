@@ -147,6 +147,9 @@
     <Compile Include="Control\uReleve.xaml.vb">
       <DependentUpon>uReleve.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\uMainMenu.xaml.vb">
+      <DependentUpon>uMainMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Variables.vb" />
     <Compile Include="WindowImg.xaml.vb">
       <DependentUpon>WindowImg.xaml</DependentUpon>
@@ -243,6 +246,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Control\uReleve.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control\uMainMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

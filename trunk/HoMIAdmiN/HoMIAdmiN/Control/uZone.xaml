@@ -80,7 +80,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
                     <Label Foreground="White" Name="Label3" VerticalAlignment="Top" Width="55" Content="Image :"></Label>
-                    <Image Margin="5" Name="ImgZone" Stretch="Fill" HorizontalAlignment="Left" Width="150" Source="/HoMIAdmiN;component/Images/Defaut-128.png" />
+                    <Image Margin="5" Name="ImgZone" Stretch="Fill" HorizontalAlignment="Left" Width="90" Height="90" Source="/HoMIAdmiN;component/Images/Defaut-128.png" />
                 </StackPanel>
                 <Rectangle Height=" 10" />
                 <Label Content="Eléments appartenant à la zone" Foreground="Orange" ToolTip="Glisser un élément (device, macro ou zone) dans la liste ci-dessous"/>
@@ -92,9 +92,9 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
                     <Rectangle Width="10" />
-                    <ListBox Margin="3" Name="ListBxDevice" Width="200" Height="75" AllowDrop="True" Grid.ColumnSpan="2" />
-                    <ListBox Margin="3" Name="ListBxZone" Width="200" Height="75" AllowDrop="True" Grid.ColumnSpan="2" />
-                    <ListBox Margin="3" Name="ListBxMacro" Width="200" Height="75" AllowDrop="True" Grid.ColumnSpan="2" />
+                    <ListBox Margin="3" Name="ListBxDevice" Width="200" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
+                    <ListBox Margin="3" Name="ListBxZone" Width="200" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
+                    <ListBox Margin="3" Name="ListBxMacro" Width="200" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
                 </StackPanel>
                 </StackPanel>
         </Border>

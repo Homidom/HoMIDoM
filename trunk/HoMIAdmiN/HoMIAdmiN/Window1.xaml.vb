@@ -24,6 +24,8 @@ Class Window1
     Dim MemCanvas As Canvas
     Dim MyRep As String = System.Environment.CurrentDirectory
     Dim _CurrentMnu As Integer
+    Dim WMainMenu As Double = 0
+    Dim HMainMenu As Double = 0
 
     Public Sub New()
         Try
@@ -389,73 +391,6 @@ Class Window1
                     stack.Children.Add(img2)
                 End If
 
-                stack.Children.Add(label)
-
-                newchild.Foreground = New SolidColorBrush(Colors.White)
-                newchild.Header = stack
-                newchild.Uid = Dev.ID
-                TreeViewG.Items.Add(newchild)
-            Next
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub AffDevice: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    'Afficher la liste des devices sans zone affectée
-    Public Sub AffDeviceWithoutZone()
-        Try
-            TreeViewG.Items.Clear()
-            If IsConnect = False Then Exit Sub
-
-            CntDevice.Content = myService.GetAllDevices(IdSrv).Count & " Device(s)"
-
-            For Each Dev In myService.GetAllDevices(IdSrv)
-
-
-                For Each Zon In myService.GetAllZones(IdSrv)
-                    For i As Integer = 0 To Zon.ListElement.Count - 1
-                        If Zon.ListElement.Item(i).ElementID = Dev.ID Then
-
-                        End If
-                    Next
-                Next
-
-                Dim newchild As New TreeViewItem
-                Dim stack As New StackPanel
-                Dim img As New Image
-                Dim uri As String = ""
-                Dim bmpImage As New BitmapImage()
-                stack.Orientation = Orientation.Horizontal
-
-                img.Height = 20
-                img.Width = 20
-
-                If Dev.Picture <> "" And File.Exists(Dev.Picture) = True Then
-                    uri = Dev.Picture
-                Else
-                    uri = MyRep & "\Images\Devices\Defaut-128.png"
-                End If
-
-                bmpImage.BeginInit()
-                bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
-                bmpImage.EndInit()
-                img.Source = bmpImage
-
-                Dim drv As String = Dev.Name
-                drv &= " (" & myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom & ")"
-
-                Dim tl As New ToolTip
-                tl.Content = drv
-                Dim label As New Label
-                If Dev.Enable = True Then
-                    label.Foreground = New SolidColorBrush(Colors.White)
-                Else
-                    label.Foreground = New SolidColorBrush(Colors.Black)
-                End If
-                label.Content = drv
-                label.ToolTip = tl
-
-                stack.Children.Add(img)
                 stack.Children.Add(label)
 
                 newchild.Foreground = New SolidColorBrush(Colors.White)
@@ -900,6 +835,7 @@ Class Window1
         Try
             Me.Cursor = Cursors.Wait
             CanvasRight.Children.Clear()
+
             Select Case _CurrentMnu
                 Case 0
                     AffDriver()
@@ -916,6 +852,7 @@ Class Window1
                 Case 6
                     AffHisto()
             End Select
+
             Me.Cursor = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub UnloadControl: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -934,24 +871,6 @@ Class Window1
             CanvasRight.SetTop(x, 8)
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub MnuConfigSrv: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    'Menu Consulter le log
-    Private Sub MnuViewLog(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuConsultLog.Click
-        Try
-            If IsConnect = False Then
-                MessageBox.Show("Impossible d'afficher le log car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                Exit Sub
-            End If
-
-            Dim x As New uLog
-            x.Uid = System.Guid.NewGuid.ToString()
-            AddHandler x.CloseMe, AddressOf UnloadControl
-            CanvasRight.Children.Clear()
-            CanvasRight.Children.Add(x)
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MnuViewLog: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1037,15 +956,7 @@ Class Window1
             Else
                 IsConnect = True
 
-                DKpanel.Width = Double.NaN
-
-                Dim da3 As DoubleAnimation = New DoubleAnimation
-                da3.From = 0
-                da3.To = 1
-                da3.Duration = New Duration(TimeSpan.FromMilliseconds(600))
-                Dim sc As ScaleTransform = New ScaleTransform()
-                DKpanel.RenderTransform = sc
-                sc.BeginAnimation(ScaleTransform.ScaleXProperty, da3)
+                ShowMainMenu()
             End If
 
 
@@ -1071,6 +982,89 @@ Class Window1
             Return -1
         End Try
     End Function
+
+    Private Sub ShowMainMenu()
+        Dim MainMenu As New uMainMenu
+        AddHandler MainMenu.ChangeMenu, AddressOf MainMenuChange
+        CanvasRight.Children.Add(MainMenu)
+        If WMainMenu = 0 Or HMainMenu = 0 Then
+            WMainMenu = CanvasRight.ActualWidth / 2 - (MainMenu.Width / 2)
+            HMainMenu = CanvasRight.ActualHeight / 2 - (MainMenu.Height / 2)
+        End If
+        CanvasRight.SetLeft(MainMenu, WMainMenu)
+        CanvasRight.SetTop(MainMenu, HMainMenu)
+    End Sub
+
+    Private Sub MainMenuChange(ByVal index As Integer)
+        Me.Cursor = Cursors.Wait
+        CanvasRight.Children.Clear()
+        DKpanel.Width = Double.NaN
+
+        Dim da3 As DoubleAnimation = New DoubleAnimation
+        da3.From = 0
+        da3.To = 1
+        da3.Duration = New Duration(TimeSpan.FromMilliseconds(600))
+        Dim sc As ScaleTransform = New ScaleTransform()
+        DKpanel.RenderTransform = sc
+        sc.BeginAnimation(ScaleTransform.ScaleXProperty, da3)
+
+        Select Case index
+            Case 0
+                _CurrentMnu = 0
+                ErazeMnu()
+                StkMnu0.Height = Double.NaN
+                AffDriver()
+                BtnStart.Visibility = Windows.Visibility.Hidden
+                BtnStop.Visibility = Windows.Visibility.Hidden
+            Case 1
+                _CurrentMnu = 1
+                ErazeMnu()
+                StkMnu1.Height = Double.NaN
+                AffDevice()
+            Case 2
+                _CurrentMnu = 2
+                ErazeMnu()
+                StkMnu2.Height = Double.NaN
+                AffZone()
+            Case 3
+                _CurrentMnu = 3
+                ErazeMnu()
+                StkMnu3.Height = Double.NaN
+                AffUser()
+            Case 4
+                _CurrentMnu = 4
+                ErazeMnu()
+                StkMnu4.Height = Double.NaN
+                AffTrigger()
+            Case 5
+                _CurrentMnu = 5
+                ErazeMnu()
+                StkMnu5.Height = Double.NaN
+                AffScene()
+            Case 6
+                _CurrentMnu = 6
+                ErazeMnu()
+                StkMnu6.Height = Double.NaN
+                AffHisto()
+            Case 7
+                Try
+                    If IsConnect = False Then
+                        MessageBox.Show("Impossible d'afficher le log car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                        Exit Sub
+                    End If
+
+                    DKpanel.Width = 0
+                    Dim x As New uLog
+                    x.Uid = System.Guid.NewGuid.ToString()
+                    AddHandler x.CloseMe, AddressOf UnloadControl
+                    CanvasRight.Children.Clear()
+                    CanvasRight.Children.Add(x)
+                Catch ex As Exception
+                    MessageBox.Show("ERREUR Sub MnuViewLog: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                End Try
+        End Select
+        Me.Cursor = Nothing
+    End Sub
 
     Private Sub Window1_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         Try
@@ -1216,72 +1210,7 @@ Class Window1
         Next
     End Sub
 
-#Region "BtnMnu"
-
-    Private Sub MnuDriver_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuDriver.Click
-        Me.Cursor = Cursors.Wait
-        _CurrentMnu = 0
-        ErazeMnu()
-        StkMnu0.Height = Double.NaN
-        AffDriver()
-        BtnStart.Visibility = Windows.Visibility.Hidden
-        BtnStop.Visibility = Windows.Visibility.Hidden
-        Me.Cursor = Nothing
-    End Sub
-
-    Private Sub MnuDevice_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuDevice.Click
-        Me.Cursor = Cursors.Wait
-        _CurrentMnu = 1
-        ErazeMnu()
-        StkMnu1.Height = Double.NaN
-        AffDevice()
-        Me.Cursor = Nothing
-    End Sub
-
-    Private Sub MnuZone_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuZone.Click
-        Me.Cursor = Cursors.Wait
-        _CurrentMnu = 2
-        ErazeMnu()
-        StkMnu2.Height = Double.NaN
-        AffZone()
-        Me.Cursor = Nothing
-    End Sub
-
-    Private Sub MnuUser_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuUser.Click
-        Me.Cursor = Cursors.Wait
-        _CurrentMnu = 3
-        ErazeMnu()
-        StkMnu3.Height = Double.NaN
-        AffUser()
-        Me.Cursor = Nothing
-    End Sub
-
-    Private Sub MnuTrigger_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuTrigger.Click
-        Me.Cursor = Cursors.Wait
-        _CurrentMnu = 4
-        ErazeMnu()
-        StkMnu4.Height = Double.NaN
-        AffTrigger()
-        Me.Cursor = Nothing
-    End Sub
-
-    Private Sub MnuMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuMacro.Click
-        Me.Cursor = Cursors.Wait
-        _CurrentMnu = 5
-        ErazeMnu()
-        StkMnu5.Height = Double.NaN
-        AffScene()
-        Me.Cursor = Nothing
-    End Sub
-
-    Private Sub MnuHisto_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuHisto.Click
-        Me.Cursor = Cursors.Wait
-        _CurrentMnu = 6
-        ErazeMnu()
-        StkMnu6.Height = Double.NaN
-        AffHisto()
-        Me.Cursor = Nothing
-    End Sub
+#Region "Treeview"
 
     Private Sub TreeViewG_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewG.MouseDoubleClick
         Try
@@ -1526,5 +1455,10 @@ Class Window1
 
     Private Sub Ellipse1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Ellipse1.MouseDown
         If IsConnect = False Then PageConnexion()
+    End Sub
+
+    Private Sub MenuItem1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem1.Click
+        DKpanel.Width = 0
+        ShowMainMenu()
     End Sub
 End Class
