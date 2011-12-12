@@ -177,6 +177,7 @@
           
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top" >
                      <Menu HorizontalAlignment="Left" Name="Menu1" Background="Transparent" Foreground="Black" FontSize="11">
+                    <MenuItem Header="Démarrer" Foreground="GhostWhite" FontFamily="Verdana" FontSize="14" Name="MenuItem1" />
                     <MenuItem Header="Fichier" Foreground="GhostWhite" FontFamily="Verdana">
                     <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig" Foreground="Black"/>
                     <MenuItem Header="Configuration du Serveur" Name="MenuConfigSrv"  Foreground="Black"/>
@@ -185,7 +186,6 @@
                     </MenuItem>
 
                    <MenuItem Header="Affichage" Foreground="WhiteSmoke" FontFamily="Verdana">
-                        <MenuItem Header="Consulter Log" Name="MenuConsultLog" Foreground="Black"  />
                         <MenuItem Header="PlayList" Name="MenuPlayList" Foreground="Black"  />
                     </MenuItem>
                     
@@ -217,27 +217,6 @@
         
         <DockPanel Name="DKpanel">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuDriver" ToolTip="Gérer les drivers">
-                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/driver-128.png" />
-                    </Button>
-                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuDevice" ToolTip="Gérer les composants">
-                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/light.png" />
-                    </Button>
-                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuZone" ToolTip="Gérer les Zones">
-                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/room.png" />
-                    </Button>
-                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuUser" ToolTip="Gérer les users">
-                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/user.png" />
-                    </Button>
-                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuTrigger" ToolTip="Gérer les triggers">
-                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/drapeau-vert-32.png" />
-                    </Button>
-                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuMacro" ToolTip="Gérer les Macros">
-                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/script-128.png" />
-                    </Button>
-                    <Button Margin="2" Template="{DynamicResource GlassButton}" Name="MnuHisto" ToolTip="Historique">
-                        <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/curve-32.png" />
-                    </Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Name="StkMnu0" DockPanel.Dock="Bottom">
                     <Button Height="22" Width="22" HorizontalAlignment="Left" Margin="5" Name="BtnStart" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" Foreground="White" ToolTip="Démarrer le driver">

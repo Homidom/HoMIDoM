@@ -196,7 +196,7 @@
         <StackPanel Margin="0,12.5,5,0">
             <Button Margin="2" Height="25" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Name="BtnOK" VerticalAlignment="Top" Width="88.75" Foreground="White">Sauvegarder</Button>
             <Button Margin="2" Height="25" HorizontalAlignment="Right"  Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Foreground="White">Annuler</Button>
-            <Button Margin="2" Height="25" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Name="BtnSave" VerticalAlignment="Top" Width="88.75" Foreground="White">Save</Button>
+            <Button Margin="2" Height="0" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Name="BtnSave" VerticalAlignment="Top" Width="88.75" Foreground="White">Save</Button>
             <Button Margin="2" Foreground="White" Height="25" HorizontalAlignment="Right" Name="BtnRead" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Visibility="Hidden">Tester</Button>
         </StackPanel>
 
