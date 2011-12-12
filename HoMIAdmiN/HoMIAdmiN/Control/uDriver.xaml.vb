@@ -23,41 +23,52 @@ Partial Public Class uDriver
                 'on cache certains champs si leur valeur est @
                 If x.IP_TCP = "@" Then
                     Label4.Visibility = Windows.Visibility.Hidden
+                    Label4.Width = 0
                     TxtAdrTCP.Visibility = Windows.Visibility.Hidden
+                    TxtAdrTCP.Width = 0
                 Else
                     Label4.Visibility = Windows.Visibility.Visible
                     TxtAdrTCP.Visibility = Windows.Visibility.Visible
                 End If
                 If x.Port_TCP = "@" Then
                     Label5.Visibility = Windows.Visibility.Hidden
+                    Label5.Width = 0
                     TxtPortTCP.Visibility = Windows.Visibility.Hidden
+                    TxtPortTCP.Width = 0
                 Else
                     Label5.Visibility = Windows.Visibility.Visible
                     TxtPortTCP.Visibility = Windows.Visibility.Visible
                 End If
                 If x.IP_UDP = "@" Then
                     Label7.Visibility = Windows.Visibility.Hidden
+                    Label7.Width = 0
                     TxtAdrUDP.Visibility = Windows.Visibility.Hidden
+                    TxtAdrUDP.Width = 0
                 Else
                     Label7.Visibility = Windows.Visibility.Visible
                     TxtAdrUDP.Visibility = Windows.Visibility.Visible
                 End If
                 If x.Port_UDP = "@" Then
                     Label16.Visibility = Windows.Visibility.Hidden
+                    Label16.Width = 0
                     TxtPortUDP.Visibility = Windows.Visibility.Hidden
+                    TxtPortUDP.Width = 0
                 Else
                     Label16.Visibility = Windows.Visibility.Visible
                     TxtPortUDP.Visibility = Windows.Visibility.Visible
                 End If
                 If x.COM = "@" Then
                     Label10.Visibility = Windows.Visibility.Hidden
+                    Label10.Width = 0
                     TxtCom.Visibility = Windows.Visibility.Hidden
+                    TxtCom.Width = 0
                 Else
                     Label10.Visibility = Windows.Visibility.Visible
                     TxtCom.Visibility = Windows.Visibility.Visible
                 End If
                 If x.Modele = "@" Then
                     Label8.Visibility = Windows.Visibility.Hidden
+                    Label8.Width = 0
                     TxtModele.Visibility = Windows.Visibility.Hidden
                 Else
                     Label8.Visibility = Windows.Visibility.Visible
