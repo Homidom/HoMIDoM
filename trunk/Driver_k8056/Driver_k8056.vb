@@ -21,15 +21,15 @@ Imports System.IO
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "RS232"
     Dim _IsConnect As Boolean = False
-    Dim _IP_TCP As String = ""
-    Dim _Port_TCP As String = ""
-    Dim _IP_UDP As String = ""
-    Dim _Port_UDP As String = ""
+    Dim _IP_TCP As String = "@"
+    Dim _Port_TCP As String = "@"
+    Dim _IP_UDP As String = "@"
+    Dim _Port_UDP As String = "@"
     Dim _Com As String = ""
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "k8056"
     Dim _Version As String = "1.0"
-    Dim _Picture As String = "k8056.png"
+    Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
     Dim _DeviceSupport As New ArrayList

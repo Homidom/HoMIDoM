@@ -150,6 +150,9 @@
     <Compile Include="Control\uMainMenu.xaml.vb">
       <DependentUpon>uMainMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="uSelectElmt.xaml.vb">
+      <DependentUpon>uSelectElmt.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Variables.vb" />
     <Compile Include="WindowImg.xaml.vb">
       <DependentUpon>WindowImg.xaml</DependentUpon>
@@ -250,6 +253,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Control\uMainMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="uSelectElmt.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
