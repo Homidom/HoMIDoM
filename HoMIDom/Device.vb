@@ -522,12 +522,13 @@ Namespace HoMIDom
                                 'Dim RandomNumber As Integer = r.Next(3000)
 
                                 'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
-                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(3000)
+                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(2000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
                             End If
                         ElseIf _Refresh = 0 Then
+                            MyTimer.Interval = 0
                             MyTimer.Enabled = False
                             RemoveHandler MyTimer.Elapsed, AddressOf Read
                         End If
@@ -644,25 +645,31 @@ Namespace HoMIDom
                         'End If
 
                         _Refresh = value
-                        MyTimer.Enabled = False
                         If _Refresh > 0 Then
+                            MyTimer.Enabled = False
                             If _FirstTime = False Then
                                 'timer déjà lancé
+                                RemoveHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
+                                AddHandler MyTimer.Elapsed, AddressOf Read
                             Else
                                 'premier lancement
                                 _FirstTime = False
                                 'pour décaler le lancement des threads de 0 à 30 secondes
                                 'Dim r As New Random(System.DateTime.Now.Millisecond)
-                                'Dim RandomNumber As Integer = r.Next(30000)
+                                'Dim RandomNumber As Integer = r.Next(3000)
 
                                 'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
-                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(3000)
+                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(2000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
                             End If
+                        ElseIf _Refresh = 0 Then
+                            MyTimer.Interval = 0
+                            MyTimer.Enabled = False
+                            RemoveHandler MyTimer.Elapsed, AddressOf Read
                         End If
                     Catch ex As Exception
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
@@ -793,21 +800,27 @@ Namespace HoMIDom
                             MyTimer.Enabled = False
                             If _FirstTime = False Then
                                 'timer déjà lancé
+                                RemoveHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
+                                AddHandler MyTimer.Elapsed, AddressOf Read
                             Else
                                 'premier lancement
                                 _FirstTime = False
                                 'pour décaler le lancement des threads de 0 à 30 secondes
                                 'Dim r As New Random(System.DateTime.Now.Millisecond)
-                                'Dim RandomNumber As Integer = r.Next(30000)
+                                'Dim RandomNumber As Integer = r.Next(3000)
 
                                 'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
-                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(3000)
+                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(2000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
                             End If
+                        ElseIf _Refresh = 0 Then
+                            MyTimer.Interval = 0
+                            MyTimer.Enabled = False
+                            RemoveHandler MyTimer.Elapsed, AddressOf Read
                         End If
                     Catch ex As Exception
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
@@ -925,21 +938,27 @@ Namespace HoMIDom
                             MyTimer.Enabled = False
                             If _FirstTime = False Then
                                 'timer déjà lancé
+                                RemoveHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
+                                AddHandler MyTimer.Elapsed, AddressOf Read
                             Else
                                 'premier lancement
                                 _FirstTime = False
                                 'pour décaler le lancement des threads de 0 à 30 secondes
                                 'Dim r As New Random(System.DateTime.Now.Millisecond)
-                                'Dim RandomNumber As Integer = r.Next(30000)
+                                'Dim RandomNumber As Integer = r.Next(3000)
 
                                 'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
-                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(3000)
+                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(2000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
                             End If
+                        ElseIf _Refresh = 0 Then
+                            MyTimer.Interval = 0
+                            MyTimer.Enabled = False
+                            RemoveHandler MyTimer.Elapsed, AddressOf Read
                         End If
                     Catch ex As Exception
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
@@ -1776,21 +1795,27 @@ Namespace HoMIDom
                             MyTimer.Enabled = False
                             If _FirstTime = False Then
                                 'timer déjà lancé
+                                RemoveHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
+                                AddHandler MyTimer.Elapsed, AddressOf Read
                             Else
                                 'premier lancement
                                 _FirstTime = False
                                 'pour décaler le lancement des threads de 0 à 30 secondes
                                 'Dim r As New Random(System.DateTime.Now.Millisecond)
-                                'Dim RandomNumber As Integer = r.Next(30000)
+                                'Dim RandomNumber As Integer = r.Next(3000)
 
                                 'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
-                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(3000)
+                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(2000)
                                 AddHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
                             End If
+                        ElseIf _Refresh = 0 Then
+                            MyTimer.Interval = 0
+                            MyTimer.Enabled = False
+                            RemoveHandler MyTimer.Elapsed, AddressOf Read
                         End If
                     Catch ex As Exception
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)

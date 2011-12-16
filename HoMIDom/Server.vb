@@ -5019,6 +5019,7 @@ Namespace HoMIDom
                                 _ListDevices.Item(i).ValueMin = valuemin
                                 _ListDevices.Item(i).ValueDef = valuedef
                             End If
+                            Exit For 'on a trouvé le device, on arrete donc de le chercher.
                         End If
                     Next
                 End If
