@@ -510,8 +510,10 @@ Namespace HoMIDom
                             MyTimer.Enabled = False
                             If _FirstTime = False Then
                                 'timer déjà lancé
+                                RemoveHandler MyTimer.Elapsed, AddressOf Read
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
+                                AddHandler MyTimer.Elapsed, AddressOf Read
                             Else
                                 'premier lancement
                                 _FirstTime = False
@@ -525,6 +527,9 @@ Namespace HoMIDom
                                 MyTimer.Interval = _Refresh
                                 MyTimer.Enabled = True
                             End If
+                        ElseIf _Refresh = 0 Then
+                            MyTimer.Enabled = False
+                            RemoveHandler MyTimer.Elapsed, AddressOf Read
                         End If
                     Catch ex As Exception
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)

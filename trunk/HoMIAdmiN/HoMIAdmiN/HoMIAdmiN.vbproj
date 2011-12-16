@@ -563,5 +563,8 @@
   <ItemGroup>
     <Resource Include="Images\room.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\crayon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

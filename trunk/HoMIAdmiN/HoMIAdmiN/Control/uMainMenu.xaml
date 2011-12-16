@@ -15,9 +15,14 @@
                 </StackPanel>
             </Border>
                 <Border BorderThickness="2" Margin="5" BorderBrush="Gray">
-                        <StackPanel Name="Mnu2" Width="100" Height="100" Background="Black">
+                        <StackPanel Name="Mnu2" Width="100" Height="110" Background="Black">
                             <Image Name="ImgMnu2" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/light.png" />
                             <Label Name="LblMnu2" Content="Composants" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Height="0">
+                            <Image Name="Img30" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
+                            <Image Name="Img31" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" />
+                            <Image Name="Img32" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" />
+                        </StackPanel>
                         </StackPanel>
                     </Border> 
             </StackPanel>
