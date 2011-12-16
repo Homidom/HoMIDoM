@@ -277,59 +277,63 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub CbType_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbType.MouseLeave
-        TxtCorrection.Visibility = Windows.Visibility.Hidden
-        TxtFormatage.Visibility = Windows.Visibility.Hidden
-        TxtPrecision.Visibility = Windows.Visibility.Hidden
-        TxtValueMax.Visibility = Windows.Visibility.Hidden
-        TxtValueMin.Visibility = Windows.Visibility.Hidden
-        TxtValDef.Visibility = Windows.Visibility.Hidden
-        Label10.Visibility = Windows.Visibility.Hidden
-        Label11.Visibility = Windows.Visibility.Hidden
-        Label12.Visibility = Windows.Visibility.Hidden
-        Label13.Visibility = Windows.Visibility.Hidden
-        Label14.Visibility = Windows.Visibility.Hidden
-        Label15.Visibility = Windows.Visibility.Hidden
+        Try
+            TxtCorrection.Visibility = Windows.Visibility.Hidden
+            TxtFormatage.Visibility = Windows.Visibility.Hidden
+            TxtPrecision.Visibility = Windows.Visibility.Hidden
+            TxtValueMax.Visibility = Windows.Visibility.Hidden
+            TxtValueMin.Visibility = Windows.Visibility.Hidden
+            TxtValDef.Visibility = Windows.Visibility.Hidden
+            Label10.Visibility = Windows.Visibility.Hidden
+            Label11.Visibility = Windows.Visibility.Hidden
+            Label12.Visibility = Windows.Visibility.Hidden
+            Label13.Visibility = Windows.Visibility.Hidden
+            Label14.Visibility = Windows.Visibility.Hidden
+            Label15.Visibility = Windows.Visibility.Hidden
 
-        If _Action = EAction.Nouveau Then
-            'Gestion si Device avec Value
-            If CbType.SelectedValue Is Nothing Then Exit Sub
-            If CbType.SelectedValue = "TEMPERATURE" _
-                               Or CbType.Text = "HUMIDITE" _
-                               Or CbType.Text = "TEMPERATURECONSIGNE" _
-                               Or CbType.Text = "ENERGIETOTALE" _
-                               Or CbType.Text = "ENERGIEINSTANTANEE" _
-                               Or CbType.Text = "PLUIETOTAL" _
-                               Or CbType.Text = "PLUIECOURANT" _
-                               Or CbType.Text = "VITESSEVENT" _
-                               Or CbType.Text = "UV" _
-                               Then
-                TxtCorrection.Visibility = Windows.Visibility.Visible
-                TxtFormatage.Visibility = Windows.Visibility.Visible
-                TxtPrecision.Visibility = Windows.Visibility.Visible
-                TxtValueMax.Visibility = Windows.Visibility.Visible
-                TxtValueMin.Visibility = Windows.Visibility.Visible
-                TxtValDef.Visibility = Windows.Visibility.Visible
-                Label10.Visibility = Windows.Visibility.Visible
-                Label11.Visibility = Windows.Visibility.Visible
-                Label12.Visibility = Windows.Visibility.Visible
-                Label13.Visibility = Windows.Visibility.Visible
-                Label14.Visibility = Windows.Visibility.Visible
-                Label15.Visibility = Windows.Visibility.Visible
-            End If
+            If _Action = EAction.Nouveau Then
+                'Gestion si Device avec Value
+                If CbType.SelectedValue Is Nothing Then Exit Sub
+                If CbType.SelectedValue = "TEMPERATURE" _
+                                   Or CbType.Text = "HUMIDITE" _
+                                   Or CbType.Text = "TEMPERATURECONSIGNE" _
+                                   Or CbType.Text = "ENERGIETOTALE" _
+                                   Or CbType.Text = "ENERGIEINSTANTANEE" _
+                                   Or CbType.Text = "PLUIETOTAL" _
+                                   Or CbType.Text = "PLUIECOURANT" _
+                                   Or CbType.Text = "VITESSEVENT" _
+                                   Or CbType.Text = "UV" _
+                                   Then
+                    TxtCorrection.Visibility = Windows.Visibility.Visible
+                    TxtFormatage.Visibility = Windows.Visibility.Visible
+                    TxtPrecision.Visibility = Windows.Visibility.Visible
+                    TxtValueMax.Visibility = Windows.Visibility.Visible
+                    TxtValueMin.Visibility = Windows.Visibility.Visible
+                    TxtValDef.Visibility = Windows.Visibility.Visible
+                    Label10.Visibility = Windows.Visibility.Visible
+                    Label11.Visibility = Windows.Visibility.Visible
+                    Label12.Visibility = Windows.Visibility.Visible
+                    Label13.Visibility = Windows.Visibility.Visible
+                    Label14.Visibility = Windows.Visibility.Visible
+                    Label15.Visibility = Windows.Visibility.Visible
+                End If
 
-            If CbType.SelectedValue = "FREEBOX" Then
-                TxtAdresse1.Text = "http://hd1.freebox.fr"
-                CbDriver.SelectedValue = "Virtuel"
-                Label6.Content = "Adresse Http Freebox:"
-                Label7.Content = "Code Telecommande:"
-            End If
+                If CbType.SelectedValue = "FREEBOX" Then
+                    TxtAdresse1.Text = "http://hd1.freebox.fr"
+                    CbDriver.SelectedValue = "Virtuel"
+                    Label6.Content = "Adresse Http Freebox:"
+                    Label7.Content = "Code Telecommande:"
+                End If
 
-            If CbType.SelectedValue = "MULTIMEDIA" Then
-                StkCde.Height = Double.NaN
-            Else
-                StkCde.Height = 0
+                If CbType.SelectedValue = "MULTIMEDIA" Then
+                    StkCde.Height = Double.NaN
+                Else
+                    StkCde.Height = 0
+                End If
             End If
-        End If
+        Catch Ex As Exception
+            MessageBox.Show("Erreur lors du changement de type: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnNewCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewCmd.Click
@@ -341,66 +345,82 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub BtnSaveCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSaveCmd.Click
-        If IsNumeric(TxtCmdRepeat.Text) = False Then
-            MsgBox("Numérique obligatoire pour repeat !!")
-            Exit Sub
-        End If
-        If TxtCmdName.Text = "" Or TxtCmdName.Text = " " Then
-            MsgBox("Le nom de la commande est obligatoire !!")
-            Exit Sub
-        End If
+        Try
+            If IsNumeric(TxtCmdRepeat.Text) = False Then
+                MsgBox("Numérique obligatoire pour repeat !!")
+                Exit Sub
+            End If
+            If TxtCmdName.Text = "" Or TxtCmdName.Text = " " Then
+                MsgBox("Le nom de la commande est obligatoire !!")
+                Exit Sub
+            End If
 
-        If FlagNewCmd = True Then 'nouvelle commande
-            Window1.myService.SaveDeviceCommandIR(IdSrv, _DeviceId, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
-        Else 'modifier commande
-            Window1.myService.SaveDeviceCommandIR(IdSrv, _DeviceId, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
-        End If
+            If FlagNewCmd = True Then 'nouvelle commande
+                Window1.myService.SaveDeviceCommandIR(IdSrv, _DeviceId, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
+            Else 'modifier commande
+                Window1.myService.SaveDeviceCommandIR(IdSrv, _DeviceId, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
+            End If
 
-        ListCmd.Items.Clear()
-        Dim x As Object = Window1.myService.ReturnDeviceByID(IdSrv, _DeviceId)
-        For i As Integer = 0 To x.listcommandname.count - 1
-            ListCmd.Items.Add(x.listcommandname(i))
-        Next
-        x = Nothing
-
-        FlagNewCmd = False
-    End Sub
-
-    Private Sub BtnDelCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelCmd.Click
-        If ListCmd.SelectedIndex >= 0 Then
-            Window1.myService.DeleteDeviceCommandIR(IdSrv, _DeviceId, TxtCmdName.Text)
-
-            TxtCmdName.Text = ""
-            TxtCmdData.Text = ""
-            TxtCmdRepeat.Text = "0"
             ListCmd.Items.Clear()
-
             Dim x As Object = Window1.myService.ReturnDeviceByID(IdSrv, _DeviceId)
             For i As Integer = 0 To x.listcommandname.count - 1
                 ListCmd.Items.Add(x.listcommandname(i))
             Next
             x = Nothing
 
-        End If
+            FlagNewCmd = False
+        Catch Ex As Exception
+            MessageBox.Show("Erreur BtnSaveCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub BtnDelCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelCmd.Click
+        Try
+            If ListCmd.SelectedIndex >= 0 Then
+                Window1.myService.DeleteDeviceCommandIR(IdSrv, _DeviceId, TxtCmdName.Text)
+
+                TxtCmdName.Text = ""
+                TxtCmdData.Text = ""
+                TxtCmdRepeat.Text = "0"
+                ListCmd.Items.Clear()
+
+                Dim x As Object = Window1.myService.ReturnDeviceByID(IdSrv, _DeviceId)
+                For i As Integer = 0 To x.listcommandname.count - 1
+                    ListCmd.Items.Add(x.listcommandname(i))
+                Next
+                x = Nothing
+
+            End If
+        Catch Ex As Exception
+            MessageBox.Show("Erreur BtnDelCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnTstCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTstCmd.Click
-        Dim _Param As New ArrayList
-        Dim x As New HoMIDom.HoMIDom.DeviceAction
-        Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+        Try
+            Dim _Param As New ArrayList
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
 
-        y.Value = TxtCmdName.Text
+            y.Value = TxtCmdName.Text
 
-        With x
-            .Nom = "SendCommand"
-            .Parametres.Add(y)
-        End With
+            With x
+                .Nom = "SendCommand"
+                .Parametres.Add(y)
+            End With
 
-        Window1.myService.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
+            Window1.myService.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
+        Catch Ex As Exception
+            MessageBox.Show("Erreur BtnTstCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnLearn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnLearn.Click
-        TxtCmdData.Text = Window1.myService.StartIrLearning(IdSrv)
+        Try
+            TxtCmdData.Text = Window1.myService.StartIrLearning(IdSrv)
+        Catch Ex As Exception
+            MessageBox.Show("Erreur BtnLearnCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub TxtLastChangeDuree_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtLastChangeDuree.TextChanged
@@ -431,10 +451,15 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub ListCmd_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles ListCmd.SelectionChanged
-        If ListCmd.SelectedIndex < 0 Then Exit Sub
-        TxtCmdName.Text = Window1.myService.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandName(ListCmd.SelectedIndex)
-        TxtCmdData.Text = Window1.myService.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandData(ListCmd.SelectedIndex)
-        TxtCmdRepeat.Text = Window1.myService.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandRepeat(ListCmd.SelectedIndex)
+        Try
+            If ListCmd.SelectedIndex < 0 Then Exit Sub
+            TxtCmdName.Text = Window1.myService.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandName(ListCmd.SelectedIndex)
+            TxtCmdData.Text = Window1.myService.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandData(ListCmd.SelectedIndex)
+            TxtCmdRepeat.Text = Window1.myService.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandRepeat(ListCmd.SelectedIndex)
+            TxtCmdData.Text = Window1.myService.StartIrLearning(IdSrv)
+        Catch Ex As Exception
+            MessageBox.Show("Erreur ListCmd_SelectionChanged: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnRead_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnRead.Click

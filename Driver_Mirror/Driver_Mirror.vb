@@ -33,7 +33,7 @@ Imports UsbLibrary
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "RFID"
     Dim _Version As String = "1.0"
-    Dim _Picture As String = "rfid.png"
+    Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
     Dim _DeviceSupport As New ArrayList
@@ -85,7 +85,9 @@ Imports UsbLibrary
             _Parametres = value
         End Set
     End Property
+
     Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
+
     Public Property Enable() As Boolean Implements HoMIDom.HoMIDom.IDriver.Enable
         Get
             Return _Enable
@@ -365,19 +367,23 @@ Imports UsbLibrary
     End Sub
 
     Private Sub usb_OnDataRecieved(ByVal sender As Object, ByVal args As DataRecievedEventArgs)
-        Dim different0 As Boolean = False
-        Dim rec_data As String = "Data: "
-        For Each myData As Byte In args.data
-            If myData <> 0 Then
-                different0 = True
+        Try
+            Dim different0 As Boolean = False
+            Dim rec_data As String = "Data: "
+            For Each myData As Byte In args.data
+                If myData <> 0 Then
+                    different0 = True
+                End If
+
+                rec_data += myData.ToString("X") & " "
+            Next
+
+            If different0 Then
+                processMirrorData(args.data)
             End If
-
-            rec_data += myData.ToString("X") & " "
-        Next
-
-        If different0 Then
-            processMirrorData(args.data)
-        End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Mirror usb_OnDataRecieved", "Erreur: " & ex.Message)
+        End Try
     End Sub
 
     Private Sub processMirrorData(ByVal mirrorData As Byte())
@@ -415,12 +421,18 @@ Imports UsbLibrary
     End Sub
 
     Private Sub SetDevice(ByVal idZtamp As String, ByVal Value As Boolean)
-        For i As Integer = 0 To _Server.Devices.Count - 1
-            If _Server.Devices.Item(i).Adresse1 = idZtamp And (_Server.Devices.Item(i).type = "GENERIQUEBOOLEEN" Or _Server.Devices.Item(i).type = "SWITCH") Then
-                _Server.Devices.Item(i).value = Value
-                Exit For
-            End If
-        Next
+        Try
+
+            For i As Integer = 0 To _Server.Devices.Count - 1
+                If _Server.Devices.Item(i).Adresse1 = idZtamp And (_Server.Devices.Item(i).type = "GENERIQUEBOOLEEN" Or _Server.Devices.Item(i).type = "SWITCH") Then
+                    _Server.Devices.Item(i).value = Value
+                    Exit For
+                End If
+            Next
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Mirror SetDevice", "Erreur: " & ex.ToString)
+        End Try
     End Sub
 #End Region
 

@@ -130,6 +130,14 @@ InitializeComponent
 	<summary>
 Window1
 </summary>
+</member><member name="M:WpfApplication1.uSelectElmt.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uSelectElmt">
+	<summary>
+uSelectElmt
+</summary>
 </member><member name="M:WpfApplication1.uScenario.InitializeComponent">
 	<summary>
 InitializeComponent

@@ -18,15 +18,15 @@ Imports HoMIDom.HoMIDom.Device
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "USB"
     Dim _IsConnect As Boolean = False
-    Dim _IP_TCP As String = ""
-    Dim _Port_TCP As String = ""
-    Dim _IP_UDP As String = ""
-    Dim _Port_UDP As String = ""
+    Dim _IP_TCP As String = "@"
+    Dim _Port_TCP As String = "@"
+    Dim _IP_UDP As String = "@"
+    Dim _Port_UDP As String = "@"
     Dim _Com As String = ""
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "k8055"
     Dim _Version As String = "1.0"
-    Dim _Picture As String = "k8055.png"
+    Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
     Dim _DeviceSupport As New ArrayList
@@ -301,24 +301,28 @@ Imports HoMIDom.HoMIDom.Device
     End Property
 
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-        If _Enable = False Then Exit Sub
+        Try
+            If _Enable = False Then Exit Sub
 
-        Select Case Objet.Type
-            Case HoMIDom.HoMIDom.Device.ListeDevices.SWITCH
-                If Commande = "ON" Then
-                    SetBinaireChannel(Objet.Adressse1)
-                End If
-                If Command() = "OFF" Then
-                    ClearBinaireChannel(Objet.Adresse1)
-                End If
-            Case HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL
-                If Commande = "ON" Then
-                    SetBinaireChannel(Objet.Adressse1)
-                End If
-                If Command() = "OFF" Then
-                    ClearBinaireChannel(Objet.Adresse1)
-                End If
-        End Select
+            Select Case Objet.Type
+                Case HoMIDom.HoMIDom.Device.ListeDevices.SWITCH
+                    If Commande = "ON" Then
+                        SetBinaireChannel(Objet.Adressse1)
+                    End If
+                    If Command() = "OFF" Then
+                        ClearBinaireChannel(Objet.Adresse1)
+                    End If
+                Case HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL
+                    If Commande = "ON" Then
+                        SetBinaireChannel(Objet.Adressse1)
+                    End If
+                    If Command() = "OFF" Then
+                        ClearBinaireChannel(Objet.Adresse1)
+                    End If
+            End Select
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: " & ex.ToString)
+        End Try
     End Sub
 
     Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
