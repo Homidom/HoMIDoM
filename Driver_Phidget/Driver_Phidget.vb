@@ -361,35 +361,33 @@ Public Class Driver_Phidget
     ''' <summary>Traite les paquets reçus</summary>
     ''' <remarks></remarks>
     Private Sub traitement(ByVal valeur As Boolean, ByVal adresse As String)
-        If valeur <> "" Then
-            Try
-                'Recherche si un device affecté
-                Dim listedevices As New ArrayList
+        Try
+            'Recherche si un device affecté
+            Dim listedevices As New ArrayList
 
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, adresse, "CONTACT", Me._ID, True)
-                'un device trouvé on maj la value
-                If (listedevices.Count = 1) Then
-                    'correction valeur pour correspondre au type de value
-                    If TypeOf listedevices.Item(0).Value Is Integer Then
-                        If valeur = True Then
-                            valeur = 100
-                        ElseIf valeur = False Then
-                            valeur = 0
-                        End If
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, adresse, "CONTACT", Me._ID, True)
+            'un device trouvé on maj la value
+            If (listedevices.Count = 1) Then
+                'correction valeur pour correspondre au type de value
+                If TypeOf listedevices.Item(0).Value Is Integer Then
+                    If valeur = True Then
+                        valeur = 100
+                    ElseIf valeur = False Then
+                        valeur = 0
                     End If
-
-                    listedevices.Item(0).Value = valeur
-
-                ElseIf (listedevices.Count > 1) Then
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
-                Else
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit Process", "Device non trouvé : " & adresse & ":" & valeur)
-
                 End If
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit traitement", "Exception : " & ex.Message & " --> " & adresse & " : " & valeur)
-            End Try
-        End If
+
+                listedevices.Item(0).Value = valeur
+
+            ElseIf (listedevices.Count > 1) Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit Process", "Device non trouvé : " & adresse & ":" & valeur)
+
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit traitement", "Exception : " & ex.Message & " --> " & adresse & " : " & valeur)
+        End Try
     End Sub
 
 #End Region
