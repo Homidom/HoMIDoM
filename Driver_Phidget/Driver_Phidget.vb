@@ -284,7 +284,7 @@ Public Class Driver_Phidget
         If _IsConnect = False Then Exit Sub
         Try
             Select Case Objet.Type
-                Case 1 Or 12 'APPAREIL Or GENERIQUEBOOLEAN
+                Case "APPAREIL" Or "GENERIQUEBOOLEEN" 'APPAREIL Or GENERIQUEBOOLEAN
                     If Commande = "ON" Then
                         phidgetIFK.outputs(Objet.Adresse1) = True
                     End If
