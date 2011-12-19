@@ -1,36 +1,22 @@
 ﻿Public Class uMainMenu
     Public Event ChangeMenu(ByVal IndexMenu As Integer)
+    Public Event Delete(ByVal IndexMenu As Integer)
+    Public Event Create(ByVal IndexMenu As Integer)
+    Public Event Edit(ByVal IndexMenu As Integer)
 
-
-    Private Sub Mnu1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Mnu1.MouseDown
-        RaiseEvent ChangeMenu(0)
+    Private Sub Mnu1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgMnu1.MouseDown, ImgMnu2.MouseDown, ImgMnu3.MouseDown, ImgMnu4.MouseDown, ImgMnu5.MouseDown, ImgMnu6.MouseDown, ImgMnu7.MouseDown, ImgMnu8.MouseDown
+        RaiseEvent ChangeMenu(sender.tag)
     End Sub
 
-    Private Sub Mnu2_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Mnu2.MouseDown
-        RaiseEvent ChangeMenu(1)
+    Private Sub Delete_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Img102.MouseDown, Img202.MouseDown, Img302.MouseDown, Img402.MouseDown, Img502.MouseDown, Img602.MouseDown, Img702.MouseDown, Img802.MouseDown
+        RaiseEvent Delete(sender.tag)
     End Sub
 
-    Private Sub Mnu3_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Mnu3.MouseDown
-        RaiseEvent ChangeMenu(2)
+    Private Sub Create_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Img100.MouseDown, Img200.MouseDown, Img300.MouseDown, Img400.MouseDown, Img600.MouseDown, Img700.MouseDown, Img800.MouseDown, Img500.MouseDown, Img510.MouseDown
+        RaiseEvent Create(sender.tag)
     End Sub
 
-    Private Sub ImgMnu4_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgMnu4.MouseDown
-        RaiseEvent ChangeMenu(3)
-    End Sub
-
-    Private Sub ImgMnu5_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgMnu5.MouseDown
-        RaiseEvent ChangeMenu(4)
-    End Sub
-
-    Private Sub ImgMnu6_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgMnu6.MouseDown
-        RaiseEvent ChangeMenu(5)
-    End Sub
-
-    Private Sub ImgMnu7_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgMnu7.MouseDown
-        RaiseEvent ChangeMenu(6)
-    End Sub
-
-    Private Sub ImgMnu8_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgMnu8.MouseDown
-        RaiseEvent ChangeMenu(7)
+    Private Sub Edit_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Img101.MouseDown, Img201.MouseDown, Img301.MouseDown, Img401.MouseDown, Img501.MouseDown, Img601.MouseDown, Img701.MouseDown, Img801.MouseDown
+        RaiseEvent Edit(sender.tag)
     End Sub
 End Class
