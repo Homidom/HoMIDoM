@@ -424,7 +424,7 @@ Namespace HoMIDom
                         '********************************
                         'on va chercher les drivers
                         '*********************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des drivers")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des drivers :")
                         list = Nothing
                         list = myxml.SelectNodes("/homidom/drivers/driver")
 
@@ -457,7 +457,7 @@ Namespace HoMIDom
                                         a = Nothing
                                     Next
 
-                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Driver " & _drv.Nom & " chargé")
+                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _drv.Nom & " chargé")
                                     _drv = Nothing
                                 End If
                             Next
@@ -468,7 +468,7 @@ Namespace HoMIDom
                         '******************************************
                         'on va chercher les zones
                         '******************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des zones")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des zones :")
                         list = Nothing
                         list = myxml.SelectNodes("/homidom/zones/zone")
                         If list.Count > 0 Then 'présence des zones
@@ -493,7 +493,7 @@ Namespace HoMIDom
                                                 x.Image = _MonRepertoire & "\images\zones\image\defaut.jpg"
                                             End If
                                         Case Else
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
                                 Next
                                 If list.Item(i).HasChildNodes = True Then
@@ -507,14 +507,14 @@ Namespace HoMIDom
                                 _ListZones.Add(x)
                             Next
                         Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucune zone enregistrée dans le fichier de config")
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucune zone enregistrée dans le fichier de config")
                         End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListZones.Count & " Zone(s) chargée(s)")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListZones.Count & " Zone(s) chargée(s)")
 
                         '******************************************
                         'on va chercher les users
                         '******************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des users")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des users :")
                         list = Nothing
                         list = myxml.SelectNodes("/homidom/users/user")
                         If list.Count > 0 Then 'présence des users
@@ -559,22 +559,22 @@ Namespace HoMIDom
                                         Case "codepostal"
                                             x.CodePostal = list.Item(i).Attributes.Item(j).Value
                                         Case Else
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
                                 Next
                                 _ListUsers.Add(x)
                             Next
                         Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du user admin par défaut !!")
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Création du user admin par défaut !!")
                             SaveUser(_IdSrv, "", "Admin", "password", Users.TypeProfil.admin, "Administrateur", "Admin")
                         End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListUsers.Count & " Users(s) chargé(s)")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListUsers.Count & " Users(s) chargé(s)")
 
 
                         '******************************************
                         'on va chercher les devices
                         '********************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des devices")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des devices :")
                         list = Nothing
                         list = myxml.SelectNodes("/homidom/devices/device")
                         Dim trvSoleil As Boolean = False
@@ -786,13 +786,13 @@ Namespace HoMIDom
                                         Next
                                     End If
                                     If .ID <> "" And .Name <> "" And .Adresse1 <> "" And .DriverId <> "" Then
-                                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement du device " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
+                                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
                                         If .ID = "soleil01" Then
                                             trvSoleil = True
                                         End If
                                     Else
                                         _Dev.Enable = False
-                                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement du device (information incomplete -> Disable) " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
+                                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", " -> Erreur lors du chargement du device (information incomplete -> Disable) " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
                                     End If
                                 End With
                                 _ListDevices.Add(_Dev)
@@ -807,19 +807,19 @@ Namespace HoMIDom
                                 _Devs.Description = "Levé/Couché du soleil : True si il fait jour"
                                 _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
                                 _ListDevices.Add(_Devs)
-                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement du device " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
                                 _Devs = Nothing
                             End If
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListDevices.Count & " devices(s) trouvé(s)")
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListDevices.Count & " devices(s) trouvé(s)")
                         Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun device enregistré dans le fichier de config")
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucun device enregistré dans le fichier de config")
                         End If
                         list = Nothing
 
                         '******************************************
                         'on va chercher les triggers
                         '******************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des triggers")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des triggers :")
                         list = Nothing
                         list = myxml.SelectNodes("/homidom/triggers/trigger")
                         If list.Count > 0 Then 'présence des triggers
@@ -851,7 +851,7 @@ Namespace HoMIDom
                                         Case "prochainedateheure"
                                             If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Prochainedateheure = list.Item(i).Attributes.Item(j1).Value
                                         Case Else
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au trigger est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant au trigger est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
                                     End Select
                                 Next
                                 If list.Item(i).HasChildNodes = True Then
@@ -868,15 +868,15 @@ Namespace HoMIDom
                                 _listTriggers.Add(x)
                             Next
                         Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun trigger enregistré dans le fichier de config")
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucun trigger enregistré dans le fichier de config")
                         End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _listTriggers.Count & " Trigger(s) chargé(s)")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListTriggers.Count & " Trigger(s) chargé(s)")
                         list = Nothing
 
                         '******************************************
                         'on va chercher les macros
                         '******************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des macros")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des macros :")
                         list = Nothing
                         list = myxml.SelectNodes("/homidom/macros/macro")
                         If list.Count > 0 Then 'présence des macros
@@ -893,22 +893,22 @@ Namespace HoMIDom
                                         Case "description"
                                             If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(0).Attributes.Item(j1).Value
                                         Case Else
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant à la macro est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la macro est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
                                     End Select
                                 Next
                                 LoadAction(list.Item(i), x.ListActions)
                                 _ListMacros.Add(x)
                             Next
                         Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucune macro enregistrée dans le fichier de config")
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucune macro enregistrée dans le fichier de config")
                         End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListMacros.Count & " Macro(s) chargée(s)")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListMacros.Count & " Macro(s) chargée(s)")
                         list = Nothing
 
                         '******************************************
                         'on va chercher des extensions audios
                         '******************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des extensions audio")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des extensions audio :")
                         list = Nothing
                         list = myxml.SelectNodes("/homidom/audios/extension")
                         If list.Count > 0 Then 'présence des extension
@@ -921,19 +921,19 @@ Namespace HoMIDom
                                         Case "enable"
                                             x.Enable = list.Item(i).Attributes.Item(j).Value
                                         Case Else
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant à une extension audio est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à une extension audio est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
                                 Next
                                 _ListExtensionAudio.Add(x)
                             Next
                         End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListExtensionAudio.Count & " Extension(s) Audio chargée(s)")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListExtensionAudio.Count & " Extension(s) Audio chargée(s)")
                         list = Nothing
 
                         '******************************************
                         'on va chercher les répertoires audios
                         '******************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des répertoires audio")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des répertoires audio :")
                         list = Nothing
                         list = myxml.SelectNodes("/homidom/audios/repertoire")
                         If list.Count > 0 Then 'présence des répertoires
@@ -946,13 +946,13 @@ Namespace HoMIDom
                                         Case "enable"
                                             x.Enable = list.Item(i).Attributes.Item(j).Value
                                         Case Else
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant à un répertoire audio est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à un répertoire audio est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
                                 Next
                                 _ListRepertoireAudio.Add(x)
                             Next
                         End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", _ListRepertoireAudio.Count & " Répertoire(s) Audio chargé(s)")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListRepertoireAudio.Count & " Répertoire(s) Audio chargé(s)")
                         list = Nothing
 
                     Next
@@ -1687,7 +1687,7 @@ Namespace HoMIDom
         Public Sub Devices_Stop()
             Try
                 'Cherche tous les devices chargés
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Devices_Stop", "Arrêt des devices")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Devices_Stop", "Arrêt des devices :")
                 For Each _dev As Device.DeviceGenerique In _ListDevices
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Devices_Stop", " - " & _dev.Name & " arrété")
                     'marche pas !!!!!
@@ -1841,7 +1841,7 @@ Namespace HoMIDom
                 Next
             Catch ex As Exception
                 MsgBox("Erreur lors de l arret des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Devices_Stop", " Erreur lors de l'arret des devices: " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Devices_Stop", " -> Erreur lors de l'arret des devices: " & ex.Message)
             End Try
         End Sub
 
@@ -1967,7 +1967,7 @@ Namespace HoMIDom
                 Dim fi As IO.FileInfo
 
                 'Cherche tous les fichiers dll dans le répertoie plugin
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", "Chargement des DLL des drivers")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", "Chargement des DLL des drivers :")
                 For Each fi In aryFi
                     'chargement du plugin
                     tx = fi.FullName   'emplacement de la dll
@@ -2010,18 +2010,18 @@ Namespace HoMIDom
         Public Sub Drivers_Start()
             Try
                 'Cherche tous les drivers chargés
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", "Démarrage des drivers")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", "Démarrage des drivers :")
                 For Each driver In _ListDrivers
                     If driver.Enable And driver.StartAuto Then
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", "- " & driver.Nom & " démarré")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", " - " & driver.Nom & " démarré")
                         driver.start()
                     Else
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", "- " & driver.Nom & " non démarré car non Auto")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Start", " - " & driver.Nom & " non démarré car non Auto")
                     End If
                 Next
             Catch ex As Exception
                 MsgBox("Erreur lors du démarrage des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Start", " Erreur lors du démarrage des drivers: " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Start", " -> Erreur lors du démarrage des drivers: " & ex.Message)
             End Try
         End Sub
 
@@ -2030,16 +2030,16 @@ Namespace HoMIDom
         Public Sub Drivers_Stop()
             Try
                 'Cherche tous les drivers chargés
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Stop", "Arrêt des drivers")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Stop", "Arrêt des drivers :")
                 For Each driver In _ListDrivers
                     If driver.Enable And driver.IsConnect Then
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Stop", " - " & driver.Nom & " démarré")
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Stop", " - " & driver.Nom & " : ")
                         driver.stop()
                     End If
                 Next
             Catch ex As Exception
                 MsgBox("Erreur lors de l arret des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Stop", " Erreur lors de l'arret des drivers: " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Stop", " -> Erreur lors de l'arret des drivers: " & ex.Message)
             End Try
         End Sub
 
