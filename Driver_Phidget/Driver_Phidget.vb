@@ -283,15 +283,15 @@ Public Class Driver_Phidget
         If _Enable = False Then Exit Sub
         If _IsConnect = False Then Exit Sub
         Try
-            Select Case Objet.Type
-                Case "APPAREIL" Or "GENERIQUEBOOLEEN" 'APPAREIL Or GENERIQUEBOOLEAN
-                    If Commande = "ON" Then
-                        phidgetIFK.outputs(Objet.Adresse1) = True
-                    End If
-                    If Command() = "OFF" Then
-                        phidgetIFK.outputs(Objet.Adresse1) = False
-                    End If
-            End Select
+            'Select Case Objet.Type
+            '    Case "APPAREIL" Or "GENERIQUEBOOLEEN" 'APPAREIL Or GENERIQUEBOOLEAN
+            If Commande = "ON" Then
+                phidgetIFK.outputs(Objet.Adresse1) = True
+            End If
+            If Command() = "OFF" Then
+                phidgetIFK.outputs(Objet.Adresse1) = False
+            End If
+            'End Select
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit Write", "Erreur: " & ex.ToString)
         End Try
