@@ -209,7 +209,7 @@ Namespace HoMIDom
             Protected _Solo As Boolean = True
             Protected _LastEtat As Boolean = True
             Protected MyTimer As New Timers.Timer
-            <NonSerialized()> Protected _FirstTime As Boolean = True
+            '<NonSerialized()> Protected _FirstTime As Boolean = True
 
             'Identification unique du device
             Public Property ID() As String
@@ -248,7 +248,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _DriverId = value
-                    _Driver = _Server.ReturnDrvById(_idsrv, DriverID)
+                    _Driver = _Server.ReturnDrvById(_IdSrv, DriverID)
                 End Set
             End Property
 
@@ -380,6 +380,7 @@ Namespace HoMIDom
 
             Protected Overrides Sub Finalize()
                 MyBase.Finalize()
+                'RemoveHandler MyTimer.Elapsed, AddressOf read
             End Sub
 
             Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
@@ -393,6 +394,25 @@ Namespace HoMIDom
                 End Try
             End Function
 
+            Protected Sub setrefresh(ByVal value As Double)
+                Try
+                    If value > 0 Then
+                        _Refresh = value
+                        'si timer déjà lancé, on l'arrete
+                        If MyTimer.Enabled Then MyTimer.Stop()
+                        'si le serveur n'a pas fini de démarrer, on décale le lancement du timer pour eviter les conflits
+                        If Not _Server.Etat_server Then System.Threading.Thread.Sleep(2000)
+                        MyTimer.Interval = _Refresh
+                        MyTimer.Start()
+                    Else
+                        _Refresh = 0
+                        'si timer déjà lancé, on l'arrete
+                        If MyTimer.Enabled Then MyTimer.Stop()
+                    End If
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
+                End Try
+            End Sub
         End Class
 
         ''' <summary>Classe valeur Double avec min/max/def/correction...</summary>
@@ -488,59 +508,17 @@ Namespace HoMIDom
                     Return _Refresh
                 End Get
                 Set(ByVal value As Integer)
-                    Try
-                        '_Refresh = value
-                        'If _Refresh > 0 Then
-                        '    MyTimer.Enabled = False
-                        '    If _FirstTime = false Then
-                        '        RemoveHandler MyTimer.Elapsed, AddressOf Read
-                        '        MyTimer.Interval = _Refresh
-                        '        MyTimer.Enabled = True
-                        '        AddHandler MyTimer.Elapsed, AddressOf Read
-                        '    Else
-                        '        _FirstTime = false
-                        '        AddHandler MyTimer.Elapsed, AddressOf Read
-                        '    End If
-                        '    MyTimer.Interval = _Refresh
-                        '    MyTimer.Enabled = True
-                        'End If
-
-                        _Refresh = value
-                        If _Refresh > 0 Then
-                            MyTimer.Enabled = False
-                            If _FirstTime = False Then
-                                'timer déjà lancé
-                                RemoveHandler MyTimer.Elapsed, AddressOf Read
-                                MyTimer.Interval = _Refresh
-                                MyTimer.Enabled = True
-                                AddHandler MyTimer.Elapsed, AddressOf Read
-                            Else
-                                'premier lancement
-                                _FirstTime = False
-                                'pour décaler le lancement des threads de 0 à 30 secondes
-                                'Dim r As New Random(System.DateTime.Now.Millisecond)
-                                'Dim RandomNumber As Integer = r.Next(3000)
-
-                                'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
-                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(2000)
-                                AddHandler MyTimer.Elapsed, AddressOf Read
-                                MyTimer.Interval = _Refresh
-                                MyTimer.Enabled = True
-                            End If
-                        ElseIf _Refresh = 0 Then
-                            MyTimer.Interval = 0
-                            MyTimer.Enabled = False
-                            RemoveHandler MyTimer.Elapsed, AddressOf Read
-                        End If
-                    Catch ex As Exception
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
-                    End Try
+                    setrefresh(value)
                 End Set
             End Property
 
             Public Sub Read()
-                If _Enable = False Then Exit Sub
-                If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
+                Try
+                    If _Enable = False Then Exit Sub
+                    If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceBOOL Read", "Exception : " & ex.Message)
+                End Try
             End Sub
 
             'Valeur
@@ -627,60 +605,18 @@ Namespace HoMIDom
                     Return _Refresh
                 End Get
                 Set(ByVal value As Integer)
-                    Try
-                        '_Refresh = value
-                        'If _Refresh > 0 Then
-                        '    MyTimer.Enabled = False
-                        '    If _FistTime = True Then
-                        '        RemoveHandler MyTimer.Elapsed, AddressOf Read
-                        '        MyTimer.Interval = _Refresh
-                        '        MyTimer.Enabled = True
-                        '        AddHandler MyTimer.Elapsed, AddressOf Read
-                        '    Else
-                        '        _FistTime = True
-                        '        AddHandler MyTimer.Elapsed, AddressOf Read
-                        '    End If
-                        '    MyTimer.Interval = _Refresh
-                        '    MyTimer.Enabled = True
-                        'End If
-
-                        _Refresh = value
-                        If _Refresh > 0 Then
-                            MyTimer.Enabled = False
-                            If _FirstTime = False Then
-                                'timer déjà lancé
-                                RemoveHandler MyTimer.Elapsed, AddressOf Read
-                                MyTimer.Interval = _Refresh
-                                MyTimer.Enabled = True
-                                AddHandler MyTimer.Elapsed, AddressOf Read
-                            Else
-                                'premier lancement
-                                _FirstTime = False
-                                'pour décaler le lancement des threads de 0 à 30 secondes
-                                'Dim r As New Random(System.DateTime.Now.Millisecond)
-                                'Dim RandomNumber As Integer = r.Next(3000)
-
-                                'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
-                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(2000)
-                                AddHandler MyTimer.Elapsed, AddressOf Read
-                                MyTimer.Interval = _Refresh
-                                MyTimer.Enabled = True
-                            End If
-                        ElseIf _Refresh = 0 Then
-                            MyTimer.Interval = 0
-                            MyTimer.Enabled = False
-                            RemoveHandler MyTimer.Elapsed, AddressOf Read
-                        End If
-                    Catch ex As Exception
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
-                    End Try
+                    setrefresh(value)
                 End Set
             End Property
 
             'Demande de Lecture au driver
-            Public Sub Read()
-                If _Enable = False Then Exit Sub
-                If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
+            Public Overloads Sub Read()
+                Try
+                    If _Enable = False Then Exit Sub
+                    If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceBOOL Read", "Exception : " & ex.Message)
+                End Try
             End Sub
 
             'Valeur : ON/OFF = True/False
@@ -778,60 +714,18 @@ Namespace HoMIDom
                     Return _Refresh
                 End Get
                 Set(ByVal value As Integer)
-                    Try
-                        '_Refresh = value
-                        'If _Refresh > 0 Then
-                        '    MyTimer.Enabled = False
-                        '    If _FistTime = True Then
-                        '        RemoveHandler MyTimer.Elapsed, AddressOf Read
-                        '        MyTimer.Interval = _Refresh
-                        '        MyTimer.Enabled = True
-                        '        AddHandler MyTimer.Elapsed, AddressOf Read
-                        '    Else
-                        '        _FistTime = True
-                        '        AddHandler MyTimer.Elapsed, AddressOf Read
-                        '    End If
-                        '    MyTimer.Interval = _Refresh
-                        '    MyTimer.Enabled = True
-                        'End If
-
-                        _Refresh = value
-                        If _Refresh > 0 Then
-                            MyTimer.Enabled = False
-                            If _FirstTime = False Then
-                                'timer déjà lancé
-                                RemoveHandler MyTimer.Elapsed, AddressOf Read
-                                MyTimer.Interval = _Refresh
-                                MyTimer.Enabled = True
-                                AddHandler MyTimer.Elapsed, AddressOf Read
-                            Else
-                                'premier lancement
-                                _FirstTime = False
-                                'pour décaler le lancement des threads de 0 à 30 secondes
-                                'Dim r As New Random(System.DateTime.Now.Millisecond)
-                                'Dim RandomNumber As Integer = r.Next(3000)
-
-                                'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
-                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(2000)
-                                AddHandler MyTimer.Elapsed, AddressOf Read
-                                MyTimer.Interval = _Refresh
-                                MyTimer.Enabled = True
-                            End If
-                        ElseIf _Refresh = 0 Then
-                            MyTimer.Interval = 0
-                            MyTimer.Enabled = False
-                            RemoveHandler MyTimer.Elapsed, AddressOf Read
-                        End If
-                    Catch ex As Exception
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
-                    End Try
+                    setrefresh(value)
                 End Set
             End Property
 
             'Demande de Lecture au driver
             Public Sub Read()
-                If _Enable = False Then Exit Sub
-                If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
+                Try
+                    If _Enable = False Then Exit Sub
+                    If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceINT Read", "Exception : " & ex.Message)
+                End Try
             End Sub
 
             'Valeur de 0 à 100
@@ -916,57 +810,11 @@ Namespace HoMIDom
                     Return _Refresh
                 End Get
                 Set(ByVal value As Integer)
-                    Try
-                        '_Refresh = value
-                        'If _Refresh > 0 Then
-                        '    MyTimer.Enabled = False
-                        '    If _FistTime = True Then
-                        '        RemoveHandler MyTimer.Elapsed, AddressOf Read
-                        '        MyTimer.Interval = _Refresh
-                        '        MyTimer.Enabled = True
-                        '        AddHandler MyTimer.Elapsed, AddressOf Read
-                        '    Else
-                        '        _FistTime = True
-                        '        AddHandler MyTimer.Elapsed, AddressOf Read
-                        '    End If
-                        '    MyTimer.Interval = _Refresh
-                        '    MyTimer.Enabled = True
-                        'End If
-
-                        _Refresh = value
-                        If _Refresh > 0 Then
-                            MyTimer.Enabled = False
-                            If _FirstTime = False Then
-                                'timer déjà lancé
-                                RemoveHandler MyTimer.Elapsed, AddressOf Read
-                                MyTimer.Interval = _Refresh
-                                MyTimer.Enabled = True
-                                AddHandler MyTimer.Elapsed, AddressOf Read
-                            Else
-                                'premier lancement
-                                _FirstTime = False
-                                'pour décaler le lancement des threads de 0 à 30 secondes
-                                'Dim r As New Random(System.DateTime.Now.Millisecond)
-                                'Dim RandomNumber As Integer = r.Next(3000)
-
-                                'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
-                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(2000)
-                                AddHandler MyTimer.Elapsed, AddressOf Read
-                                MyTimer.Interval = _Refresh
-                                MyTimer.Enabled = True
-                            End If
-                        ElseIf _Refresh = 0 Then
-                            MyTimer.Interval = 0
-                            MyTimer.Enabled = False
-                            RemoveHandler MyTimer.Elapsed, AddressOf Read
-                        End If
-                    Catch ex As Exception
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
-                    End Try
+                    setrefresh(value)
                 End Set
             End Property
 
-            Private Sub Read()
+            Public Overridable Sub Read()
                 If _Enable = False Then Exit Sub
                 If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
             End Sub
@@ -1046,6 +894,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "APPAREIL"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
             'ON
@@ -1086,10 +935,11 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "AUDIO"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
             'redéfinition car on ne veut rien faire
-            Public Sub Read()
+            Public Overloads Sub Read()
                 If _Enable = False Then Exit Sub
             End Sub
 
@@ -1387,6 +1237,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "BAROMETRE"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -1398,6 +1249,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "BATTERIE"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -1409,6 +1261,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "COMPTEUR"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -1421,6 +1274,7 @@ Namespace HoMIDom
                 _Server = Server
                 _Type = "CONTACT"
                 _valuemustchange = True 'on ne prend en compte que si la value change
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -1432,6 +1286,7 @@ Namespace HoMIDom
             Public Sub New(ByVal server As Server)
                 _Server = server
                 _Type = "DETECTEUR"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -1443,6 +1298,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "DIRECTIONVENT"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -1454,6 +1310,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "ENERGIEINSTANTANEE"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -1465,6 +1322,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "ENERGIETOTALE"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -1476,6 +1334,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "GENERIQUEBOOLEEN"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
             'ON
@@ -1499,6 +1358,7 @@ Namespace HoMIDom
             Public Sub New(ByVal server As Server)
                 _Server = server
                 _Type = "GENERIQUESTRING"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -1510,6 +1370,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "GENERIQUEVALUE"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -1524,10 +1385,11 @@ Namespace HoMIDom
                 _Server = Server
                 _Type = "FREEBOX"
                 Adresse1 = _AdresseBox
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
             'redefinition de read pour ne rien faire :)
-            Public Sub Read()
+            Public Overrides Sub Read()
                 If _Enable = False Then Exit Sub
             End Sub
 
@@ -1690,6 +1552,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "HUMIDITE"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -1701,6 +1564,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "LAMPE"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
             'ON
@@ -1762,6 +1626,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "METEO"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
             Public Event DeviceChanged(ByVal device As Object, ByVal [Property] As String, ByVal Parametre As Object)
@@ -1773,53 +1638,7 @@ Namespace HoMIDom
                     Return _Refresh
                 End Get
                 Set(ByVal value As Double)
-                    Try
-                        '_Refresh = value
-                        'If _Refresh > 0 Then
-                        '    MyTimer.Enabled = False
-                        '    If _FistTime = True Then
-                        '        RemoveHandler MyTimer.Elapsed, AddressOf Read
-                        '        MyTimer.Interval = _Refresh
-                        '        MyTimer.Enabled = True
-                        '        AddHandler MyTimer.Elapsed, AddressOf Read
-                        '    Else
-                        '        _FistTime = True
-                        '        AddHandler MyTimer.Elapsed, AddressOf Read
-                        '    End If
-                        '    MyTimer.Interval = _Refresh
-                        '    MyTimer.Enabled = True
-                        'End If
-
-                        _Refresh = value
-                        If _Refresh > 0 Then
-                            MyTimer.Enabled = False
-                            If _FirstTime = False Then
-                                'timer déjà lancé
-                                RemoveHandler MyTimer.Elapsed, AddressOf Read
-                                MyTimer.Interval = _Refresh
-                                MyTimer.Enabled = True
-                                AddHandler MyTimer.Elapsed, AddressOf Read
-                            Else
-                                'premier lancement
-                                _FirstTime = False
-                                'pour décaler le lancement des threads de 0 à 30 secondes
-                                'Dim r As New Random(System.DateTime.Now.Millisecond)
-                                'Dim RandomNumber As Integer = r.Next(3000)
-
-                                'si le serveur n'a pas fini de démarrer, on décale le lancement du timer
-                                If Not _Server.Etat_server Then System.Threading.Thread.Sleep(2000)
-                                AddHandler MyTimer.Elapsed, AddressOf Read
-                                MyTimer.Interval = _Refresh
-                                MyTimer.Enabled = True
-                            End If
-                        ElseIf _Refresh = 0 Then
-                            MyTimer.Interval = 0
-                            MyTimer.Enabled = False
-                            RemoveHandler MyTimer.Elapsed, AddressOf Read
-                        End If
-                    Catch ex As Exception
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
-                    End Try
+                    setrefresh(value)
                 End Set
             End Property
 
@@ -2264,6 +2083,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "MULTIMEDIA"
+                AddHandler MyTimer.Elapsed, AddressOf Read
 
                 ListCommandName.Add("Power")
                 ListCommandData.Add("0")
@@ -2319,7 +2139,7 @@ Namespace HoMIDom
             End Sub
 
             'redéfinition car on veut rien faire
-            Private Sub Read()
+            Public Overrides Sub Read()
                 If _Enable = False Then Exit Sub
             End Sub
 
@@ -2346,6 +2166,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "PLUIECOURANT"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -2357,6 +2178,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "PLUIETOTAL"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -2368,6 +2190,7 @@ Namespace HoMIDom
             Public Sub New(ByVal server As Server)
                 _Server = server
                 _Type = "SWITCH"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
             'ON
@@ -2390,10 +2213,11 @@ Namespace HoMIDom
             Public Sub New(ByVal server As Server)
                 _Server = server
                 _Type = "TELECOMMANDE"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
             'redéfinition car on veut rien faire
-            Private Sub Read()
+            Public Overrides Sub Read()
                 If _Enable = False Then Exit Sub
             End Sub
 
@@ -2406,6 +2230,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "TEMPERATURE"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -2417,6 +2242,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "TEMPERATURECONSIGNE"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -2428,6 +2254,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "UV"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -2439,6 +2266,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "VITESSEVENT"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
         End Class
@@ -2450,6 +2278,7 @@ Namespace HoMIDom
             Public Sub New(ByVal server As Server)
                 _Server = server
                 _Type = "VOLET"
+                AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
             'Ouvrir volet
