@@ -288,7 +288,7 @@ Public Class Driver_Phidget
             If Commande = "ON" Then
                 phidgetIFK.outputs(Objet.Adresse1) = True
             End If
-            If Command() = "OFF" Then
+            If Commande = "OFF" Then
                 phidgetIFK.outputs(Objet.Adresse1) = False
             End If
             'End Select
