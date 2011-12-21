@@ -58,8 +58,9 @@ Namespace HoMIDom
         <NonSerialized()> Dim fsw As FileSystemWatcher
         <NonSerialized()> Dim _MaxMonthLog As Integer = 2
         <NonSerialized()> Private Shared _TypeLogEnable As New List(Of Boolean) 'True si on doit pas prendre en compte le type de log
-        <NonSerialized()> Dim _CycleSave As Integer = 0 'Enregistrer toute les X minutes
-        <NonSerialized()> Dim _NextTimeSave As Date  'Enregistrer toute les X minutes
+        <NonSerialized()> Shared _CycleSave As Integer  'Enregistrer toute les X minutes
+        <NonSerialized()> Shared _NextTimeSave As DateTime  'Enregistrer toute les X minutes
+        <NonSerialized()> Shared _Finish As Boolean  'Le serveur est prêt
         Private Shared lock_logwrite As New Object
 
 #End Region
@@ -211,8 +212,11 @@ Namespace HoMIDom
             thr.IsBackground = True
             thr.Start()
 
-            If _CycleSave > 0 Then
-                If Now = _NextTimeSave Then SaveConfig(_MonRepertoire & "\config\homidom.xml")
+            If _CycleSave > 0 And _Finish = True Then
+                If ladate.Minute >= _NextTimeSave.Minute Then
+                    _NextTimeSave = Now.AddMinutes(_CycleSave)
+                    SaveConfig(_MonRepertoire & "\config\homidom.xml")
+                End If
             End If
 
             Try
@@ -959,6 +963,8 @@ Namespace HoMIDom
                 Else
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Fichier de configuration non trouvé")
                 End If
+
+                _Finish = True
 
                 'Vide les variables
                 dirInfo = Nothing
@@ -3011,7 +3017,7 @@ Namespace HoMIDom
                 Exit Function
             End If
 
-            If IsNumeric(Value) = False Or Value = 0 Or Value < 0 Then
+            If IsNumeric(Value) = False Or Value < 0 Then
                 Return "ERR: la valeur doit être numérique, positive et non nulle"
             Else
                 _CycleSave = Value
@@ -3656,8 +3662,10 @@ Namespace HoMIDom
                     Exit Sub
                 End If
 
-                _Longitude = value
-                MAJ_HeuresSoleil()
+                If _Longitude <> value Then
+                    _Longitude = value
+                    MAJ_HeuresSoleil()
+                End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetLongitude", "Exception : " & ex.Message)
             End Try
@@ -3681,8 +3689,10 @@ Namespace HoMIDom
                     Exit Sub
                 End If
 
-                _Latitude = value
-                MAJ_HeuresSoleil()
+                If _Latitude <> value Then
+                    _Latitude = value
+                    MAJ_HeuresSoleil()
+                End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetLatitude", "Exception : " & ex.Message)
             End Try
@@ -3710,8 +3720,10 @@ Namespace HoMIDom
                     Exit Sub
                 End If
 
-                _HeureCoucherSoleilCorrection = value
-                MAJ_HeuresSoleil()
+                If _HeureCoucherSoleilCorrection <> value Then
+                    _HeureCoucherSoleilCorrection = value
+                    MAJ_HeuresSoleil()
+                End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetHeureCorrectionCoucher", "Exception : " & ex.Message)
             End Try
@@ -3722,7 +3734,6 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Function GetHeureCorrectionLever() As Integer Implements IHoMIDom.GetHeureCorrectionLever
             Try
-
                 Return _HeureLeverSoleilCorrection
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHeureCorrectionLever", "Exception : " & ex.Message)
@@ -3739,8 +3750,10 @@ Namespace HoMIDom
                     Exit Sub
                 End If
 
-                _HeureLeverSoleilCorrection = value
-                MAJ_HeuresSoleil()
+                If _HeureLeverSoleilCorrection <> value Then
+                    _HeureLeverSoleilCorrection = value
+                    MAJ_HeuresSoleil()
+                End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetHeureCorrectionLever", "Exception : " & ex.Message)
             End Try

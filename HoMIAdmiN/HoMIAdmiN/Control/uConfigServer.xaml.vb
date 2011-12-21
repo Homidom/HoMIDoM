@@ -24,8 +24,10 @@
                 IdSrv = TxtIdSrv.Text
 
                 Dim tmpSave As Integer = TxtSave.Text
+
                 tmpSave = Format(tmpSave, "#0")
-                Window1.myService.SetTimeSave(IdSrv, tmpSave)
+                Dim retour As String = Window1.myService.SetTimeSave(IdSrv, tmpSave)
+                If retour <> "0" Then MessageBox.Show(retour, "Erreur SetTimeSave")
                 Window1.myService.SetLongitude(IdSrv, CDbl(TxtLong.Text.Replace(".", ",")))
                 Window1.myService.SetLatitude(IdSrv, CDbl(TxtLat.Text.Replace(".", ",")))
                 Window1.myService.SetHeureCorrectionLever(IdSrv, CInt(HCL.Text))
