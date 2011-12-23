@@ -35,8 +35,8 @@
                     <StackPanel Background="DarkGray" Height="22" HorizontalAlignment="Left"  Name="StckPnlLibTr" Orientation="Horizontal" VerticalAlignment="Top" CanHorizontallyScroll="True"  />
                 </StackPanel>
             </ScrollViewer>
-            <ScrollViewer  MinHeight="80" Name="ScrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" AllowDrop="True" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
-                    <StackPanel HorizontalAlignment="Left" Name="StackPanel1" VerticalAlignment="Top" MinHeight="100" CanHorizontallyScroll=" True" CanVerticallyScroll=" True"/>
+            <ScrollViewer MinHeight="100"  MinWidth="300"  Name="ScrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" AllowDrop="True" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
+                <StackPanel HorizontalAlignment="Left" Name="StackPanel1" VerticalAlignment="Top" MinHeight="100" CanHorizontallyScroll=" True" CanVerticallyScroll=" True"/>
             </ScrollViewer>
             
         </DockPanel>
