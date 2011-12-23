@@ -13,6 +13,7 @@
                     <Image Name="ImgMnu1" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/driver-128.png" Tag="0" ToolTip="Gérer les drivers" />
                     <Label Name="LblMnu1" Content="Drivers" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Image Tag="0" Name="Img190" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Ajouter un composant" />
                             <Image Tag="0" Name="Img100" Margin="2" Height="15" Width="15" Visibility="Hidden" />
                             <Image Tag="0" Name="Img101" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer un driver" />
                             <Image Name="Img102" Margin="2" Height="15" Width="15" Tag="0" Visibility="Hidden" />
@@ -24,9 +25,10 @@
                             <Image Name="ImgMnu2" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/light.png" Tag="1" ToolTip="Gérer les composants" />
                             <Label Name="LblMnu2" Content="Composants" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Image Tag="1" Name="Img290" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Ajouter un composant" />
                             <Image Tag="1" Name="Img200" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" ToolTip="Ajouter un composant" />
                             <Image Tag="1"  Name="Img201" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer un composant" />
-                                <Image Name="Img202" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" Tag="1" ToolTip="Supprimer un composant" />
+                            <Image Name="Img202" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" Tag="1" ToolTip="Supprimer un composant" />
                         </StackPanel>
                         </StackPanel>
                     </Border> 
@@ -37,6 +39,7 @@
                             <Image Name="ImgMnu3" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/room.png" Tag="2" ToolTip="Gérer les zones" />
                             <Label Name="LblMnu3" Content="Zones" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Image Tag="2" Name="Img390" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Ajouter un composant" />
                             <Image Tag="2" Name="Img300" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" ToolTip="Ajouter une zone" />
                             <Image Tag="2" Name="Img301" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer une zone" />
                             <Image Name="Img302" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" Tag="2" ToolTip="Supprimer une zone" />
@@ -49,6 +52,7 @@
                     <Image Name="ImgMnu4" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/user.png" Tag="3" ToolTip="Gérer les utilisateurs" />
                     <Label Name="LblMnu4" Content="Utilisateurs" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Image Tag="3" Name="Img490" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Ajouter un composant" />
                             <Image Tag="3" Name="Img400" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" ToolTip="Ajouter un utilisateur" />
                             <Image Tag="3" Name="Img401" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer un utilisateur" />
                             <Image Name="Img402" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" Tag="3" ToolTip="Supprimer un utilisateur" />
@@ -63,6 +67,7 @@
                     <Image Name="ImgMnu5" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/drapeau-vert-32.png" Tag="4" ToolTip="Gérer les triggers" />
                     <Label Name="LblMnu5" Content="Triggers" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Image Tag="4" Name="Img590" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Gérer les tiggers" />
                             <Image Tag="40" Name="Img500" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/temps-ajouter-32.png" ToolTip="Ajouter un trigger timer" />
                             <Image Tag="41" Name="Img510" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-la-brique-32.png" ToolTip="Ajouter un trigger device" />
                             <Image Tag="4" Name="Img501" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer un trigger" />
@@ -76,6 +81,7 @@
                     <Image Name="ImgMnu6" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/macro.png" Tag="5" ToolTip="Gérer les macros" />
                     <Label Name="LblMnu6" Content="Macros" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Image Tag="5" Name="Img690" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Gérer les macros" />
                             <Image Tag="5" Name="Img600" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" ToolTip="Ajouter une macro" />
                             <Image Tag="5" Name="Img601" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer une macro" />
                             <Image Name="Img602" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" Tag="5" ToolTip="Supprimer une macro" />
