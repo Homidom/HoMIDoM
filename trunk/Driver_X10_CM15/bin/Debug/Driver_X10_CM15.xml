@@ -1,0 +1,38 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Driver_X10_CM15
+</name>
+</assembly>
+<members>
+<member name="M:Driver_X10_CM15.Driver_X10_CM15.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM15.Driver_X10_CM15.ExecuteCommand(System.String,System.Object[])">
+	<summary>
+ Execute une commande avancée
+ </summary>
+	<param name="Command"></param>
+	<param name="Param"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_X10_CM15.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_X10_CM15.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_X10_CM15.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+</members>
+</doc>

@@ -7,7 +7,7 @@ Driver_DMX
 </assembly>
 <members>
 <member name="T:Driver_DMX.Driver_DMX">
-	<summary>Driver Velleman k8056, le device doit dans son adresse 1 indiqué sa carte et son numéro de relais séparé par un x, exemple pour le relais 1 de la carte 1: 1x1</summary>
+	<summary>Driver DMX</summary>
 	<remarks></remarks>
 </member><member name="P:Driver_DMX.My.Resources.Resources.ResourceManager">
 	<summary>
