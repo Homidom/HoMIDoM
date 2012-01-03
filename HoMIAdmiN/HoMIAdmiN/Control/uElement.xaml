@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="uElement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             >
+
+    <Grid  Background="DarkGray" Name="Grid1">
+        <Border BorderThickness="1" BorderBrush="Black" CornerRadius="5" />
+        <StackPanel Orientation="Horizontal" >
+            <Image Name="MyImage" Width="28 " Height="28" Margin="3" Source="/HoMIAdmiN;component/Images/blockdevice-icone-7594-128.png" />
+            <Label Name="LabelElement" Margin="2" Content="#####################" Foreground="White" />
+        </StackPanel>
+    </Grid>
+</UserControl>
