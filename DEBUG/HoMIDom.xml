@@ -1101,12 +1101,6 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetDefautDeviceImage(System.String)">
-	<summary>
- Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
- </summary>
-	<returns></returns>
-	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DeleteExtensionAudio(System.String,System.String)">
 	<summary>Supprimer une extension Audio</summary>
 	<param name="NomExtension"></param>
@@ -2776,6 +2770,12 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Device.ListeDevices">
 	<summary>Indique la liste des devices gérés</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.DeviceGenerique.GetDefautDeviceImage(System.String)">
+	<summary>
+ Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
+ </summary>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique">
 	<summary>Class de déclaration du Device Générique</summary>
