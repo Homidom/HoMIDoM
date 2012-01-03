@@ -211,6 +211,35 @@ Namespace HoMIDom
             Protected MyTimer As New Timers.Timer
             '<NonSerialized()> Protected _FirstTime As Boolean = True
 
+
+            ''' <summary>
+            ''' Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
+            ''' </summary>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Function GetDefautDeviceImage(ByVal TypeDevice As String) As String
+                Try
+                    Dim dirInfo As New System.IO.DirectoryInfo(_MonRepertoire & "\images\devices\")
+                    Dim file As System.IO.FileInfo
+                    Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.*g", System.IO.SearchOption.AllDirectories)
+
+                    If (files IsNot Nothing) Then
+                        For Each file In files
+                            If LCase(Mid(file.Name, 1, Len(file.Name) - 4)) = LCase(TypeDevice & "-defaut") Then
+                                Return file.FullName
+                                Exit Function
+                            End If
+                        Next
+                    End If
+
+                    Return _MonRepertoire & "\images\devices\defaut.png"
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetListOfImage", "Exception : " & ex.Message)
+                    Return Nothing
+                End Try
+            End Function
+
+
             'Identification unique du device
             Public Property ID() As String
                 Get
@@ -339,12 +368,14 @@ Namespace HoMIDom
             'Adresse de son image
             Public Property Picture() As String
                 Get
-                    If _Picture = " " Then _Picture = ""
                     Return _Picture
                 End Get
                 Set(ByVal value As String)
-                    If value = " " Then value = ""
-                    _Picture = value
+                    If value = " " Or value = "" Then
+                        _Picture = GetDefautDeviceImage(_Type.ToString)
+                    Else
+                        _Picture = value
+                    End If
                 End Set
             End Property
 

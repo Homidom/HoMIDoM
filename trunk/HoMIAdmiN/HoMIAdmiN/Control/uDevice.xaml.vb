@@ -68,10 +68,8 @@ Partial Public Class uDevice
                     TxtRefresh.Text = x.Refresh
                     TxtLastChangeDuree.Text = x.LastChangeDuree
 
-                    If x.Picture <> "" And x.Picture <> " " Then
-                        ImgDevice.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Picture))
-                        ImgDevice.Tag = x.Picture
-                    End If
+                    ImgDevice.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Picture))
+                    ImgDevice.Tag = x.Picture
 
                     'Gestion si Device avec Value
                     If x.Type = ListeDevices.TEMPERATURE _
@@ -145,7 +143,7 @@ Partial Public Class uDevice
                         Label19.Visibility = Windows.Visibility.Hidden
                     End If
 
-                End If
+            End If
             End If
 
             'Liste toutes les zones dans la liste
