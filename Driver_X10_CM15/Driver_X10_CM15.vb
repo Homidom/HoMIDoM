@@ -1,18 +1,18 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
-Imports Phidgets
+Imports ActiveHomeScriptLib
 
-Public Class Driver_Phidget
+Public Class Driver_X10_CM15
     Implements HoMIDom.HoMIDom.IDriver
 
 #Region "Variable Driver"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
-    Dim _ID As String = "10160480-24B7-11E1-ACF1-C9F34824019B"
-    Dim _Nom As String = "Phidget InterfaceKit"
+    Dim _ID As String = "1DA44C90-353F-11E1-9B3D-78FC4824019B"
+    Dim _Nom As String = "X10 CM15"
     Dim _Enable As String = False
-    Dim _Description As String = "PhidgetInterfaceKit 0/16/16"
+    Dim _Description As String = "Driver X10 CM15"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "USB"
     Dim _IsConnect As Boolean = False
@@ -22,7 +22,7 @@ Public Class Driver_Phidget
     Dim _Port_UDP As String = "@"
     Dim _Com As String = "@"
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = "PhidgetInterfaceKit 0/16/16"
+    Dim _Modele As String = "CM15"
     Dim _Version As String = "1.0"
     Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
@@ -40,8 +40,7 @@ Public Class Driver_Phidget
 #End Region
 
 #Region "Declaration"
-    'Dim WithEvents phidgetMan As Phidgets.Manager
-    Dim WithEvents phidgetIFK As Phidgets.InterfaceKit
+    Dim WithEvents ActiveHomeObj As ActiveHome
 #End Region
 
 #Region "Fonctions génériques"
@@ -174,6 +173,11 @@ Public Class Driver_Phidget
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         If _Enable = False Then Exit Sub
 
+        Try
+            'ActiveHomeObj.SendAction(
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: " & ex.ToString)
+        End Try
         ' Objet.Value = ReadBinaireChannel(Objet.Adresse1)
     End Sub
 
@@ -235,13 +239,13 @@ Public Class Driver_Phidget
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         'cree l'objet
         Try
-            'phidgetMan = New Phidgets.Manager()
-            phidgetIFK = New Phidgets.InterfaceKit
-            phidgetIFK.open()
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Phidget InterfaceKit Start", "Carte connectée")
-            _IsConnect = True
+            ActiveHomeObj = CreateObject("X10.ActiveHome")
+            If ActiveHomeObj IsNot Nothing Then
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Connectée")
+                _IsConnect = True
+            End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit Start", "Erreur lors du démarrage du driver: " & ex.ToString)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur lors du démarrage du driver: " & ex.ToString)
             _IsConnect = False
         End Try
     End Sub
@@ -258,18 +262,11 @@ Public Class Driver_Phidget
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         'cree l'objet
         Try
-            'RemoveHandler phidgetIFK.Attach, AddressOf phidgetIFK_Attach
-            'RemoveHandler phidgetIFK.Detach, AddressOf phidgetIFK_Detach
-            'RemoveHandler phidgetIFK.Error, AddressOf phidgetIFK_Error
-            'RemoveHandler phidgetIFK.InputChange, AddressOf phidgetIFK_InputChange
-            'RemoveHandler phidgetIFK.OutputChange, AddressOf phidgetIFK_OutputChange
-            'RemoveHandler phidgetIFK.SensorChange, AddressOf phidgetIFK_SensorChange
-
-            phidgetIFK.close()
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Phidget InterfaceKit Stop", "Driver arrêté")
+            ActiveHomeObj = Nothing
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Stop", "Driver arrêté")
             _IsConnect = False
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit Stop", "Erreur lors de l'arrêt du driver: " & ex.ToString)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Stop", "Erreur lors de l'arrêt du driver: " & ex.ToString)
             _IsConnect = False
         End Try
     End Sub
@@ -284,17 +281,32 @@ Public Class Driver_Phidget
         If _Enable = False Then Exit Sub
         If _IsConnect = False Then Exit Sub
         Try
-            'Select Case Objet.Type
-            '    Case "APPAREIL" Or "GENERIQUEBOOLEEN" 'APPAREIL Or GENERIQUEBOOLEAN
+            Dim TypeDev As String
+
+            Select Case Objet.Adresse2.ToString
+                Case "0" Or " " Or ""
+                    TypeDev = "sendplc"
+                Case 1
+                    TypeDev = "sendrf"
+                Case 2
+                    TypeDev = "sendsecurerf"
+                Case 3
+                    TypeDev = "sendsecurehomecontrolrf"
+                Case Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur le type de device (adresse2) est inconnu (0--3): " & Objet.adresse2)
+                    Exit Sub
+            End Select
             If Commande = "ON" Then
-                phidgetIFK.outputs(Objet.Adresse1) = True
+                ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " on")
             End If
             If Commande = "OFF" Then
-                phidgetIFK.outputs(Objet.Adresse1) = False
+                ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " off")
             End If
-            'End Select
+            If Commande = "DIM" Then
+                ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " dim " & Parametre1)
+            End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit Write", "Erreur: " & ex.ToString)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: " & ex.ToString)
         End Try
     End Sub
 
@@ -323,74 +335,49 @@ Public Class Driver_Phidget
 #End Region
 
 #Region "Fonctions propres au driver"
-    'attach event handler... here we'll display the interface kit details as well as determine how many output and input
-    'fields to display as well as determine the range of values for the output simulator slider
-    Private Sub phidgetIFK_Attach(ByVal sender As Object, ByVal e As Phidgets.Events.AttachEventArgs) Handles phidgetIFK.Attach
-        Dim a As String = ""
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Phidget InterfaceKit Details", "Carte connectée: " & phidgetIFK.Attached.ToString())
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Phidget InterfaceKit Details", "Nom: " & phidgetIFK.Name)
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Phidget InterfaceKit Details", "Serial Number: " & sender.SerialNumber.ToString())
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Phidget InterfaceKit Details", "Version: " & sender.Version.ToString())
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Phidget InterfaceKit Details", "Nombre d'entrées: " & sender.inputs.Count.ToString())
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Phidget InterfaceKit Details", "Nombre de sorties: " & phidgetIFK.outputs.Count.ToString())
-        '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Phidget 0/16/16 Details", "Nombre de capteurs analogique: " & phidgetIFK.sensors.Count.ToString())
-    End Sub
+    'events from ActiveHome: write out received event
+    Sub ActiveHome_RecvAction(ByVal bszRecv As Object _
+                            , ByVal vParm1 As Object _
+                            , ByVal vParm2 As Object _
+                            , ByVal vParm3 As Object _
+                            , ByVal vParm4 As Object _
+                            , ByVal vParm5 As Object _
+                            , ByVal vReserved As Object) Handles ActiveHomeObj.RecvAction
 
-    ''ifkit detach event handler... here we display the statu, which will be false as the device is not attached.  We
-    ''will also clear the display fields and hide the inputs and outputs.
-    Private Sub phidgetIFK_Detach(ByVal sender As Object, ByVal e As Phidgets.Events.DetachEventArgs) Handles phidgetIFK.Detach
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Phidget InterfaceKit Details", "Carte connectée: " & phidgetIFK.Attached.ToString())
-    End Sub
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RecvAction", "RecvAction: " & bszRecv & " " & vParm1 & " " & vParm2 & " " & vParm3 & " " & vParm4 & " " & vParm5)
 
-    Private Sub phidgetIFK_Error(ByVal sender As Object, ByVal e As Phidgets.Events.ErrorEventArgs) Handles phidgetIFK.Error
-        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit Error", "Erreur: " & e.Description)
-    End Sub
-
-    'digital input change event handler... here we check or uncheck the corresponding input checkbox based on the index of
-    'the digital input that generated the event
-    Private Sub phidgetIFK_InputChange(ByVal sender As Object, ByVal e As Phidgets.Events.InputChangeEventArgs) Handles phidgetIFK.InputChange
-        traitement(e.Value, e.Index)
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Phidget InterfaceKit InputChange", "Entrée N°:" & e.Index & " Value:" & e.Value)
-    End Sub
-
-    ''digital output change event handler... here we check or uncheck the corresponding output checkbox based on the index of
-    ''the output that generated the event
-    Private Sub phidgetIFK_OutputChange(ByVal sender As Object, ByVal e As Phidgets.Events.OutputChangeEventArgs) Handles phidgetIFK.OutputChange
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Phidget InterfaceKit OutputChange", "Sortie N°:" & e.Index & " Value:" & e.Value)
-    End Sub
-
-    ''' <summary>Traite les paquets reçus</summary>
-    ''' <remarks></remarks>
-    Private Sub traitement(ByVal valeur As Boolean, ByVal adresse As String)
-        Try
-            'Recherche si un device affecté
-            Dim listedevices As New ArrayList
-
-            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, adresse, "CONTACT", Me._ID, True)
-            'un device trouvé on maj la value
-            If (listedevices.Count = 1) Then
-                'correction valeur pour correspondre au type de value
-                If TypeOf listedevices.Item(0).Value Is Integer Then
-                    If valeur = True Then
-                        valeur = 100
-                    ElseIf valeur = False Then
-                        valeur = 0
+        If vParm3 <> "" Then
+            Try
+                'Recherche si un device affecté
+                Dim listedevices As New ArrayList
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, vParm2, "", Me._ID, True)
+                'un device trouvé on maj la value
+                If (listedevices.Count = 1) Then
+                    'correction valeur pour correspondre au type de value
+                    If TypeOf listedevices.Item(0).Value Is Integer Then
+                        If UCase(vParm3) = "ON" Then
+                            listedevices.Item(0).Value = 100
+                        ElseIf UCase(vParm3) = "OFF" Then
+                            listedevices.Item(0).Value = 0
+                        End If
+                    ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
+                        If UCase(vParm3) = "ON" Then
+                            listedevices.Item(0).Value = True
+                        ElseIf UCase(vParm3) = "OFF" Then
+                            listedevices.Item(0).Value = False
+                        Else
+                            listedevices.Item(0).Value = True
+                        End If
                     End If
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RecvAction", "Aucun ou Plusieurs devices correspondent à : " & vParm2 & ":" & vParm3)
                 End If
 
-                listedevices.Item(0).Value = valeur
-
-            ElseIf (listedevices.Count > 1) Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
-            Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit Process", "Device non trouvé : " & adresse & ":" & valeur)
-
-            End If
-        Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit traitement", "Exception : " & ex.Message & " --> " & adresse & " : " & valeur)
-        End Try
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RecvAction", "Erreur : " & ex.ToString)
+            End Try
+        End If
     End Sub
-
 #End Region
 
 End Class

@@ -6,7 +6,7 @@ Imports System.IO
 ' Auteur : Seb
 ' Date : 10/02/2011
 
-''' <summary>Driver Velleman k8056, le device doit dans son adresse 1 indiqué sa carte et son numéro de relais séparé par un x, exemple pour le relais 1 de la carte 1: 1x1</summary>
+''' <summary>Driver DMX</summary>
 ''' <remarks></remarks>
 <Serializable()> Public Class Driver_DMX
     Implements HoMIDom.HoMIDom.IDriver
@@ -21,15 +21,15 @@ Imports System.IO
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "USB"
     Dim _IsConnect As Boolean = False
-    Dim _IP_TCP As String = ""
-    Dim _Port_TCP As String = ""
-    Dim _IP_UDP As String = ""
-    Dim _Port_UDP As String = ""
-    Dim _Com As String = ""
+    Dim _IP_TCP As String = "@"
+    Dim _Port_TCP As String = "@"
+    Dim _IP_UDP As String = "@"
+    Dim _Port_UDP As String = "@"
+    Dim _Com As String = "@"
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "DMX"
     Dim _Version As String = "1.0"
-    Dim _Picture As String = "dmx.png"
+    Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
     Dim _DeviceSupport As New ArrayList
@@ -222,10 +222,15 @@ Imports System.IO
 
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
-            Call OpenDmx.Initialize()
-            Call OpenDmx.Init_All() ' automaticly find devices and start threads for them
+            OpenDmx.Initialize()
+            Dim find As Integer = OpenDmx.Init_All() ' automaticly find devices and start threads for them
             _IsConnect = True
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "DMX", "Driver démarré")
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "DMX", "Driver démarré, " & find & " device(s) trouvé(s)")
+            If find > 0 Then
+                For i = 0 To OpenDmx.Max_Devices
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "DMX", "Start, Device ID-" & i & "-" & "ID: " & OpenDmx.JumperID(i) & ": " & OpenDmx.Error_String(i))
+                Next
+            End If
         Catch ex As Exception
             _IsConnect = False
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "DMX", "Driver en erreur lors du démarrage: " & ex.Message)
