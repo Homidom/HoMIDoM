@@ -7,8 +7,13 @@ Partial Public Class uCtrlElement
     Dim _dev As HoMIDom.HoMIDom.TemplateDevice = Nothing
     Dim _macro As HoMIDom.HoMIDom.Macro = Nothing
     Dim _zone As HoMIDom.HoMIDom.Zone = Nothing
+    Dim _ShowStatus As Boolean = True 'Affiche le status - Oui par défaut
+    Dim _ShowEtiqDefaut As Boolean = True 'Affiche le libellé du composant par défaut - Oui par défaut
+    Dim _Etiquette As String = "" 'Etiquette
+    Dim _ColorBackGround As SolidColorBrush = New SolidColorBrush(Colors.Black)
 
-    Public Event click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
+    Public Event Click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
+    Public Event LongClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event ShowZone(ByVal zoneid As String)
 
     Public Property Id As String
@@ -23,7 +28,7 @@ Partial Public Class uCtrlElement
                 _zone = myService.ReturnZoneByID(IdSrv, _Id)
 
                 If _dev IsNot Nothing Then
-                    Lbl.Content = _dev.Name
+                    Etiquette = _dev.Name
                     Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_dev.Picture))
 
                     Select Case _dev.Type
@@ -109,26 +114,82 @@ Partial Public Class uCtrlElement
                         Case HoMIDom.HoMIDom.Device.ListeDevices.UV
                             LblStatus.Content = "Status: " & _dev.Value
                     End Select
-
-                    
-
                 End If
+
                 If _macro IsNot Nothing Then
-                    Lbl.Content = _macro.Nom
-                    LblStatus.Visibility = Windows.Visibility.Hidden
-                    LblStatus.Width = 0
-                    LblStatus.Height = 0
+                    Etiquette = _macro.Nom
+                    ShowStatus = False
                 End If
+
                 If _zone IsNot Nothing Then
-                    Lbl.Content = _zone.Name
+                    Etiquette = _zone.Name
                     Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Icon))
-                    LblStatus.Visibility = Windows.Visibility.Hidden
-                    LblStatus.Width = 0
-                    LblStatus.Height = 0
+                    ShowStatus = False
                 End If
             End If
 
             Refresh()
+        End Set
+    End Property
+
+    Public Property ShowEtiquetteByDefaut As Boolean
+        Get
+            Return _ShowEtiqDefaut
+        End Get
+        Set(ByVal value As Boolean)
+            _ShowEtiqDefaut = value
+            If value = True Then
+                If _dev IsNot Nothing Then
+                    Etiquette = _dev.Name
+                End If
+                If _zone IsNot Nothing Then
+                    Etiquette = _zone.Name
+                End If
+                If _macro IsNot Nothing Then
+                    Etiquette = _macro.Nom
+                End If
+            End If
+        End Set
+    End Property
+
+    Private Sub ShowEtiquette()
+        Lbl.Content = _Etiquette
+    End Sub
+
+    Public Property Etiquette As String
+        Get
+            Return _Etiquette
+        End Get
+        Set(ByVal value As String)
+            _Etiquette = value
+            ShowEtiquette()
+        End Set
+    End Property
+
+    Public Property ShowStatus As Boolean
+        Get
+            Return _ShowStatus
+        End Get
+        Set(ByVal value As Boolean)
+            _ShowStatus = value
+            If value = False Then
+                LblStatus.Visibility = Windows.Visibility.Hidden
+                LblStatus.Width = 0
+                LblStatus.Height = 0
+            Else
+                LblStatus.Visibility = Windows.Visibility.Visible
+                LblStatus.Width = Double.NaN
+                LblStatus.Height = Double.NaN
+            End If
+        End Set
+    End Property
+
+    Public Property ColorBackGround As SolidColorBrush
+        Get
+            Return _ColorBackGround
+        End Get
+        Set(ByVal value As SolidColorBrush)
+            Border1.Background = value
         End Set
     End Property
 
@@ -155,6 +216,10 @@ Partial Public Class uCtrlElement
             End If
 
             If _dev IsNot Nothing Then
+                If ShowEtiquetteByDefaut And _dev.Name <> Etiquette Then
+                    Etiquette = _dev.Name
+                End If
+
                 Select Case _dev.Type
                     Case HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL
                         LblStatus.Content = "Status: " & _dev.Value
@@ -208,7 +273,18 @@ Partial Public Class uCtrlElement
                     Case HoMIDom.HoMIDom.Device.ListeDevices.UV
                         LblStatus.Content = "Status: " & _dev.Value
                 End Select
-                _dev = Nothing
+            End If
+
+            If _zone IsNot Nothing Then
+                If ShowEtiquetteByDefaut And _zone.Name <> Etiquette Then
+                    Etiquette = _zone.Name
+                End If
+            End If
+
+            If _macro IsNot Nothing Then
+                If ShowEtiquetteByDefaut And _macro.Nom <> Etiquette Then
+                    Etiquette = _macro.Nom
+                End If
             End If
         Catch ex As Exception
             MsgBox("Error Refresh: " & ex.ToString & vbCrLf)
@@ -219,13 +295,16 @@ Partial Public Class uCtrlElement
         Refresh()
     End Sub
 
-
-    Private Sub Image_MouseLeftButtonUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Image.MouseLeftButtonUp
+    Private Sub Image_MouseLeftButtonUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Image.MouseLeftButtonUp, Stk1.MouseLeftButtonUp
         Dim vDiff As TimeSpan = Now - _Down
-        If vDiff.Seconds < 1 Then RaiseEvent click(Me, e)
+        If vDiff.Seconds < 1 Then
+            RaiseEvent Click(Me, e)
+        Else
+            RaiseEvent LongClick(Me, e)
+        End If
     End Sub
 
-    Private Sub Image_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Image.PreviewMouseDown
+    Private Sub Image_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Image.PreviewMouseDown, Stk1.PreviewMouseDown
         _Down = Now
     End Sub
 
@@ -234,40 +313,58 @@ Partial Public Class uCtrlElement
     End Sub
 
     Private Sub ClickOn(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
-        Dim x As New HoMIDom.HoMIDom.DeviceAction
-        If _dev.Type <> HoMIDom.HoMIDom.Device.ListeDevices.VOLET Then
-            x.Nom = "ON"
-        Else
-            x.Nom = "OPEN"
-        End If
-        x.Parametres = Nothing
-        myService.ExecuteDeviceCommand(IdSrv, Id, x)
+        Try
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If _dev IsNot Nothing Then
+                If _dev.Type <> HoMIDom.HoMIDom.Device.ListeDevices.VOLET Then
+                    x.Nom = "ON"
+                Else
+                    x.Nom = "OPEN"
+                End If
+                x.Parametres = Nothing
+                myService.ExecuteDeviceCommand(IdSrv, Id, x)
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK)
+        End Try
     End Sub
 
     Private Sub ClickOff(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
-        Dim x As New HoMIDom.HoMIDom.DeviceAction
-        If _dev.Type <> HoMIDom.HoMIDom.Device.ListeDevices.VOLET Then
-            x.Nom = "OFF"
-        Else
-            x.Nom = "CLOSE"
-        End If
-        x.Parametres = Nothing
-        myService.ExecuteDeviceCommand(IdSrv, Id, x)
+        Try
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If _dev IsNot Nothing Then
+                If _dev.Type <> HoMIDom.HoMIDom.Device.ListeDevices.VOLET Then
+                    x.Nom = "OFF"
+                Else
+                    x.Nom = "CLOSE"
+                End If
+                x.Parametres = Nothing
+                myService.ExecuteDeviceCommand(IdSrv, Id, x)
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK)
+        End Try
     End Sub
 
     Private Sub ValueChange(ByVal Value As Integer)
-        Dim x As New HoMIDom.HoMIDom.DeviceAction
-        Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+        Try
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
 
-        If _dev.Type <> HoMIDom.HoMIDom.Device.ListeDevices.VOLET Then
-            x.Nom = "DIM"
-        Else
-            x.Nom = "OUVERTURE"
-        End If
+            If _dev IsNot Nothing Then
+                If _dev.Type <> HoMIDom.HoMIDom.Device.ListeDevices.VOLET Then
+                    x.Nom = "DIM"
+                Else
+                    x.Nom = "OUVERTURE"
+                End If
 
-        y.Value = Value
-        x.Parametres.Add(y)
-        myService.ExecuteDeviceCommand(IdSrv, Id, x)
+                y.Value = Value
+                x.Parametres.Add(y)
+                myService.ExecuteDeviceCommand(IdSrv, Id, x)
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK)
+        End Try
     End Sub
 
     Private Sub Stk1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Stk1.MouseDown

@@ -1,11 +1,6 @@
 ﻿Public Class uMacro
     Public Event CloseMe(ByVal MyObject As Object)
 
-    Public Enum EAction
-        Nouveau
-        Modifier
-    End Enum
-
     Dim _Action As EAction
     Dim _MacroId As String
 
@@ -13,7 +8,7 @@
         RaiseEvent CloseMe(Me)
     End Sub
 
-    Public Sub New(ByVal Action As EAction, ByVal MacroId As String)
+    Public Sub New(ByVal Action As Classe.EAction, ByVal MacroId As String)
         Try
 
             ' Cet appel est requis par le concepteur.
@@ -26,7 +21,7 @@
             If _Action = EAction.Nouveau Then 'Nouvelle macro
 
             Else 'Modifier Macro
-                Dim x As HoMIDom.HoMIDom.Macro = Window1.myService.ReturnMacroById(IdSrv, MacroId)
+                Dim x As HoMIDom.HoMIDom.Macro = myservice.ReturnMacroById(IdSrv, MacroId)
 
                 If x IsNot Nothing Then
                     TxtNom.Text = x.Nom
@@ -51,12 +46,13 @@
             If _Action = EAction.Nouveau Then
                 Dim tabl As New ArrayList
                 tabl = UScenario1.Items
-                _MacroId = Window1.myService.SaveMacro(IdSrv, "", TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
+                _MacroId = myservice.SaveMacro(IdSrv, "", TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
                 RaiseEvent CloseMe(Me)
             Else
                 Dim tabl As New ArrayList
                 tabl = UScenario1.Items
-                _MacroId = Window1.myService.SaveMacro(IdSrv, _MacroId, TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
+                _MacroId = myservice.SaveMacro(IdSrv, _MacroId, TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
+                FlagChange = True
                 RaiseEvent CloseMe(Me)
             End If
             RaiseEvent CloseMe(Me)
@@ -66,8 +62,8 @@
     End Sub
 
     Private Sub BtnTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTest.Click
-        If _MacroId <> "" Then
-            Window1.myService.RunMacro(IdSrv, _MacroId)
+        If _MacroId <> "" And IsConnect Then
+            myService.RunMacro(IdSrv, _MacroId)
         End If
     End Sub
 End Class

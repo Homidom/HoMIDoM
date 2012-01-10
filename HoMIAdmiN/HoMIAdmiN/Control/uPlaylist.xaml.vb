@@ -30,17 +30,12 @@ Public Class uPlaylist
     End Sub
 
     Public Sub New()
-
-
-
-        Dim cpt1 As Integer
-
         ' Cet appel est requis par le Concepteur Windows Form.
         InitializeComponent()
 
         Try
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-            If Window1.IsConnect = True Then
+            If IsConnect = True Then
                 ListTagAudio.Clear()
             End If
 
@@ -50,20 +45,14 @@ Public Class uPlaylist
         End Try
 
         ' Creation de la liste des repertoires audios
-        For cpt1 = 0 To Window1.myService.GetAllRepertoiresAudio(IdSrv).Count - 1
+        For cpt1 As Integer = 0 To myService.GetAllRepertoiresAudio(IdSrv).Count - 1
             ' Repertoire actif
-            If Window1.myService.GetAllRepertoiresAudio(IdSrv).Item(cpt1).Enable = True Then listeRep(Window1.myService.GetAllRepertoiresAudio(IdSrv).Item(cpt1).Repertoire)
+            If myService.GetAllRepertoiresAudio(IdSrv).Item(cpt1).Enable = True Then listeRep(myService.GetAllRepertoiresAudio(IdSrv).Item(cpt1).Repertoire)
         Next
 
     End Sub
 
     Public Event CloseMe(ByVal MyObject As Object)
-
-    Public Enum EAction
-        Nouveau
-        Modifier
-    End Enum
-
 
     Public Class FilePlayList
         Dim _Titre As String
@@ -195,12 +184,12 @@ Public Class uPlaylist
         Dim di As New DirectoryInfo(PathRep)
 
         ' Pour chacune des extensions
-        For cpt2 = 0 To Window1.myService.GetAllExtensionsAudio(IdSrv).Count - 1
+        For cpt2 = 0 To myservice.GetAllExtensionsAudio(IdSrv).Count - 1
 
             Dim _extension As String
             Dim _extensionenable As String = True
-            _extension = Window1.myService.GetAllExtensionsAudio(IdSrv).Item(cpt2).Extension
-            _extensionenable = Window1.myService.GetAllExtensionsAudio(IdSrv).Item(cpt2).Enable
+            _extension = myservice.GetAllExtensionsAudio(IdSrv).Item(cpt2).Extension
+            _extensionenable = myservice.GetAllExtensionsAudio(IdSrv).Item(cpt2).Enable
 
             ' Recupere la liste des fichiers du repertoire si l'extension est active
             If _extensionenable Then ' Extension active 
@@ -292,6 +281,7 @@ Public Class uPlaylist
             MessageBox.Show("Le nom de la zone est obligatoire!", "Erreur")
             Exit Sub
         End If
+
         ' Creation du fichier m3u
         Dim objWriter As New StreamWriter(_MonRepertoire + "\multimedia\" + TxtName.Text + ".m3u")
         CreatePlayListFile(objWriter)

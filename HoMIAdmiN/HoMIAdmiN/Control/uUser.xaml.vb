@@ -7,11 +7,6 @@ Partial Public Class uUser
     Dim _Action As EAction 'Définit si modif ou création d'un device
     Dim _UserId As String 'Id de la zone à modifier
 
-    Public Enum EAction
-        Nouveau
-        Modifier
-    End Enum
-
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
             If TxtPassword.Password <> TxtConfirm.Password Then
@@ -24,7 +19,8 @@ Partial Public Class uUser
                 Exit Sub
             End If
 
-            Window1.myService.SaveUser(IdSrv, _UserId, TxtUsername.Text, TxtPassword.Password, ComboProfil.SelectedIndex, TxtNom.Text, TxtPrenom.Text, TxtIden.Text, ImgIcon.Tag, TxteMail.Text, TxteMailAutre.Text, TxtTelFixe.Text, TxtTelMobile.Text, TxtTelAutre.Text, TxtAdresse.Text, TxtVille.Text, TxtCodePostal.Text)
+            myservice.SaveUser(IdSrv, _UserId, TxtUsername.Text, TxtPassword.Password, ComboProfil.SelectedIndex, TxtNom.Text, TxtPrenom.Text, TxtIden.Text, ImgIcon.Tag, TxteMail.Text, TxteMailAutre.Text, TxtTelFixe.Text, TxtTelMobile.Text, TxtTelAutre.Text, TxtAdresse.Text, TxtVille.Text, TxtCodePostal.Text)
+            FlagChange = True
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'enregistrement du user, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -35,7 +31,7 @@ Partial Public Class uUser
         RaiseEvent CloseMe(Me)
     End Sub
 
-    Public Sub New(ByVal Action As EAction, ByVal UserId As String)
+    Public Sub New(ByVal Action As Classe.EAction, ByVal UserId As String)
 
         ' Cet appel est requis par le Concepteur Windows Form.
         InitializeComponent()
@@ -46,7 +42,7 @@ Partial Public Class uUser
         If Action = EAction.Nouveau Then 'Nouveau user
 
         Else 'Modifier zone
-            Dim x As Users.User = Window1.myService.ReturnUserById(IdSrv, UserId)
+            Dim x As Users.User = myservice.ReturnUserById(IdSrv, UserId)
             _UserId = UserId
             If x IsNot Nothing Then
                 TxtUsername.Text = x.UserName
@@ -66,7 +62,7 @@ Partial Public Class uUser
                 TxtCodePostal.Text = x.CodePostal
 
                 If x.Image <> "" And x.Image <> " " Then
-                    ImgIcon.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Image))
+                    ImgIcon.Source = ConvertArrayToImage(myservice.GetByteFromImage(x.Image))
                     ImgIcon.Tag = x.Image
                 End If
             End If
@@ -81,7 +77,7 @@ Partial Public Class uUser
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
                 If retour <> "" Then
-                    ImgIcon.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(retour))
+                    ImgIcon.Source = ConvertArrayToImage(myservice.GetByteFromImage(retour))
                     ImgIcon.Tag = retour
                 End If
                 frm.Close()

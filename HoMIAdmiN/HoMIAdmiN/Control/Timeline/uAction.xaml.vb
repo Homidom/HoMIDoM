@@ -58,12 +58,12 @@ Public Class uAction
                     Case Action.TypeAction.ActionDevice
                         Dim x As Action.ActionDevice = _ObjAction
                         Label1.Content = "Device"
-                        If x.IdDevice IsNot Nothing Then Label1.Content = Window1.myService.ReturnDeviceByID(IdSrv, x.IdDevice).Name
+                        If x.IdDevice IsNot Nothing Then Label1.Content = myService.ReturnDeviceByID(IdSrv, x.IdDevice).Name
                         If x.Method IsNot Nothing Then Label2.Content = x.Method
                     Case Action.TypeAction.ActionMail
                         Dim x As Action.ActionMail = _ObjAction
                         Label1.Content = "Mail "
-                        If x.UserId IsNot Nothing Then Label1.Content = Label1.Content & "{" & Window1.myService.ReturnUserById(IdSrv, x.UserId).UserName & "}"
+                        If x.UserId IsNot Nothing Then Label1.Content = Label1.Content & "{" & myservice.ReturnUserById(IdSrv, x.UserId).UserName & "}"
                         If x.Sujet IsNot Nothing Then Label2.Content = x.Sujet
                     Case Action.TypeAction.ActionIf
                         Dim x As Action.ActionIf = _ObjAction
@@ -72,7 +72,7 @@ Public Class uAction
                     Case Action.TypeAction.ActionMacro
                         Dim x As Action.ActionMacro = _ObjAction
                         Label1.Content = "Macro"
-                        If x.IdMacro IsNot Nothing Then Label2.Content = Window1.myService.ReturnMacroById(IdSrv, x.IdMacro).Nom
+                        If x.IdMacro IsNot Nothing Then Label2.Content = myservice.ReturnMacroById(IdSrv, x.IdMacro).Nom
                 End Select
                 Refresh_Position()
             End If

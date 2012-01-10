@@ -6,6 +6,7 @@
     Dim _Angle As Double
     Dim _X As Double
     Dim _Y As Double
+    'Dim _Label As String = ""
 
     Public Property ID As String
         Get
@@ -69,4 +70,13 @@
             _Y = value
         End Set
     End Property
+
+    'Public Property Label As String
+    '    Get
+    '        Return _Label
+    '    End Get
+    '    Set(ByVal value As String)
+    '        _Label = value
+    '    End Set
+    'End Property
 End Class

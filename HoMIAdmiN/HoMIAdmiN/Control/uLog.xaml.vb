@@ -10,15 +10,15 @@ Partial Public Class uLog
 
     Private Sub RefreshLog()
         Try
-
-            If Window1.IsConnect = True Then
+            Me.Cursor = Cursors.Wait
+            If IsConnect = True Then
                 If File.Exists("log.xml") Then
                     File.Delete("log.xml")
                 End If
 
                 Dim TargetFile As StreamWriter
                 TargetFile = New StreamWriter("log.xml", True)
-                TargetFile.Write(Window1.myService.ReturnLog)
+                TargetFile.Write(myservice.ReturnLog)
                 TargetFile.Close()
 
                 Dim ds As DataSet = New DataSet("Table")
@@ -27,6 +27,7 @@ Partial Public Class uLog
 
                 File.Delete("log.xml")
             End If
+            Me.Cursor = Nothing
         Catch ex As Exception
             MessageBox.Show("Erreur" & ex.ToString)
         End Try
@@ -41,11 +42,11 @@ Partial Public Class uLog
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         RefreshLog()
 
-        If Window1.IsConnect = True Then
-            TxtFile.Text = Window1.myService.GetMaxFileSizeLog
-            TxtMaxLogMonth.Text = Window1.myService.GetMaxMonthLog
+        If IsConnect = True Then
+            TxtFile.Text = myservice.GetMaxFileSizeLog
+            TxtMaxLogMonth.Text = myservice.GetMaxMonthLog
 
-            Dim _list As List(Of Boolean) = Window1.myService.GetTypeLogEnable
+            Dim _list As List(Of Boolean) = myservice.GetTypeLogEnable
             ChkTyp0.IsChecked = _list.Item(0)
             ChkTyp1.IsChecked = _list.Item(1)
             ChkTyp2.IsChecked = _list.Item(2)
@@ -64,9 +65,9 @@ Partial Public Class uLog
             MessageBox.Show("Veuillez saisir un numérique et positif pour la taille max du fichier de log!", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         End If
-        If Window1.IsConnect = True Then
-            Window1.myService.SetMaxFileSizeLog(CDbl(TxtFile.Text))
-            Window1.myService.SetMaxMonthLog(CDbl(TxtMaxLogMonth.Text))
+        If IsConnect = True Then
+            myservice.SetMaxFileSizeLog(CDbl(TxtFile.Text))
+            myservice.SetMaxMonthLog(CDbl(TxtMaxLogMonth.Text))
 
             Dim _list As New List(Of Boolean)
             If ChkTyp0.IsChecked Then
@@ -120,7 +121,7 @@ Partial Public Class uLog
                 _list.Add(False)
             End If
 
-            Window1.myService.SetTypeLogEnable(_list)
+            myservice.SetTypeLogEnable(_list)
         End If
         RaiseEvent CloseMe(Me)
     End Sub
@@ -128,14 +129,14 @@ Partial Public Class uLog
     Private Sub TxtMaxLogMonth_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMaxLogMonth.TextChanged
         If IsNumeric(TxtMaxLogMonth.Text) = False Then
             MessageBox.Show("Veuillez saisir un chiffre comme durée de mois maximum", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            TxtMaxLogMonth.Text = Window1.myService.GetMaxMonthLog
+            TxtMaxLogMonth.Text = myservice.GetMaxMonthLog
         End If
     End Sub
 
     Private Sub TxtFile_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtFile.TextChanged
         If IsNumeric(TxtFile.Text) = False Then
             MessageBox.Show("Veuillez saisir un chiffre comme taille maximale", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            TxtFile.Text = Window1.myService.GetMaxFileSizeLog
+            TxtFile.Text = myservice.GetMaxFileSizeLog
         End If
     End Sub
 
@@ -146,8 +147,7 @@ Partial Public Class uLog
         If e.Row IsNot Nothing Then
             If e.Row.DataContext IsNot Nothing Then
                 If e.Row.Item IsNot Nothing Then
-                    Dim RowDataContaxt As System.Data.DataRowView = Nothing
-                    RowDataContaxt = e.Row.DataContext
+                    Dim RowDataContaxt As System.Data.DataRowView = e.Row.DataContext
                     If RowDataContaxt IsNot Nothing Then
                         If RowDataContaxt.Row IsNot Nothing Then
                             If RowDataContaxt.Row.ItemArray IsNot Nothing Then

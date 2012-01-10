@@ -3,7 +3,7 @@
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
-            If Window1.IsConnect = True Then
+            If IsConnect = True Then
                 If IsNumeric(TxtSOAP.Text) = False Or TxtSOAP.Text = "" Then
                     MessageBox.Show("Le port SOAP est erroné !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
@@ -16,26 +16,28 @@
                     MessageBox.Show("La valeur de saubegarde doit être un chiffre et positif !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
                 End If
-                If TxtSOAP.Text <> Window1.myService.GetPortSOAP Then
+                If TxtSOAP.Text <> myservice.GetPortSOAP Then
                     MessageBox.Show("Vous avez modifié le port SOAP, n'oubliez pas:" & vbCrLf & "- D'enregistrer la configuration pour qu'elle soit prise en compte au prochain démarrage" & vbCrLf & "- De redémarrer le service", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                    Window1.myService.SetPortSOAP(IdSrv, TxtSOAP.Text)
+                    myservice.SetPortSOAP(IdSrv, TxtSOAP.Text)
                 End If
-                Window1.myService.SetIdServer(IdSrv, TxtIdSrv.Text)
+                myservice.SetIdServer(IdSrv, TxtIdSrv.Text)
                 IdSrv = TxtIdSrv.Text
 
                 Dim tmpSave As Integer = TxtSave.Text
 
                 tmpSave = Format(tmpSave, "#0")
-                Dim retour As String = Window1.myService.SetTimeSave(IdSrv, tmpSave)
+                Dim retour As String = myservice.SetTimeSave(IdSrv, tmpSave)
                 If retour <> "0" Then MessageBox.Show(retour, "Erreur SetTimeSave")
-                Window1.myService.SetLongitude(IdSrv, CDbl(TxtLong.Text.Replace(".", ",")))
-                Window1.myService.SetLatitude(IdSrv, CDbl(TxtLat.Text.Replace(".", ",")))
-                Window1.myService.SetHeureCorrectionLever(IdSrv, CInt(HCL.Text))
-                Window1.myService.SetHeureCorrectionCoucher(IdSrv, CInt(HCC.Text))
-                Window1.myService.SetSMTPMailServeur(IdSrv, TxtMail.Text)
-                Window1.myService.SetSMTPServeur(IdSrv, TxtAdresse.Text)
-                Window1.myService.SetSMTPLogin(IdSrv, TxtLogin.Text)
-                Window1.myService.SetSMTPPassword(IdSrv, TxtPassword.Password)
+                myservice.SetLongitude(IdSrv, CDbl(TxtLong.Text.Replace(".", ",")))
+                myservice.SetLatitude(IdSrv, CDbl(TxtLat.Text.Replace(".", ",")))
+                myservice.SetHeureCorrectionLever(IdSrv, CInt(HCL.Text))
+                myservice.SetHeureCorrectionCoucher(IdSrv, CInt(HCC.Text))
+                myservice.SetSMTPMailServeur(IdSrv, TxtMail.Text)
+                myservice.SetSMTPServeur(IdSrv, TxtAdresse.Text)
+                myservice.SetSMTPLogin(IdSrv, TxtLogin.Text)
+                myservice.SetSMTPPassword(IdSrv, TxtPassword.Password)
+
+                FlagChange = True
             End If
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
@@ -58,19 +60,19 @@
 
         Try
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-            If Window1.IsConnect = True Then
-                TxtSOAP.Text = Window1.myService.GetPortSOAP
-                TxtLat.Text = Window1.myService.GetLatitude
-                TxtLong.Text = Window1.myService.GetLongitude
-                HCL.Text = Window1.myService.GetHeureCorrectionLever
-                HCC.Text = Window1.myService.GetHeureCorrectionCoucher
+            If IsConnect = True Then
+                TxtSOAP.Text = myservice.GetPortSOAP
+                TxtLat.Text = myservice.GetLatitude
+                TxtLong.Text = myservice.GetLongitude
+                HCL.Text = myservice.GetHeureCorrectionLever
+                HCC.Text = myservice.GetHeureCorrectionCoucher
                 TxtIdSrv.Text = IdSrv
-                TxtSave.Text = Window1.myService.GetTimeSave(IdSrv)
+                TxtSave.Text = myservice.GetTimeSave(IdSrv)
 
-                TxtAdresse.Text = Window1.myService.GetSMTPServeur(IdSrv)
-                TxtMail.Text = Window1.myService.GetSMTPMailServeur(IdSrv)
-                TxtLogin.Text = Window1.myService.GetSMTPLogin(IdSrv)
-                TxtPassword.Password = Window1.myService.GetSMTPPassword(IdSrv)
+                TxtAdresse.Text = myservice.GetSMTPServeur(IdSrv)
+                TxtMail.Text = myservice.GetSMTPMailServeur(IdSrv)
+                TxtLogin.Text = myservice.GetSMTPLogin(IdSrv)
+                TxtPassword.Password = myservice.GetSMTPPassword(IdSrv)
             End If
 
         Catch ex As Exception

@@ -4,15 +4,10 @@ Imports System.IO
 Partial Public Class uZone
     '--- Variables ------------------
     Public Event CloseMe(ByVal MyObject As Object)
-    Dim _Action As EAction 'Définit si modif ou création d'un device
+    Dim _Action As EAction 'Définit si modif ou création d'une zone
     Dim _ZoneId As String 'Id de la zone à modifier
     Dim FlagNewCmd As Boolean
     Dim _ListIdSelect As New List(Of Zone.Element_Zone)
-
-    Public Enum EAction
-        Nouveau
-        Modifier
-    End Enum
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
@@ -22,8 +17,8 @@ Partial Public Class uZone
             End If
 
             If _ZoneId = "" Then
-                For i As Integer = 0 To Window1.myService.GetAllZones(IdSrv).Count - 1
-                    If Window1.myService.GetAllZones(IdSrv).Item(i).Name = TxtName.Text Then
+                For i As Integer = 0 To myservice.GetAllZones(IdSrv).Count - 1
+                    If myservice.GetAllZones(IdSrv).Item(i).Name = TxtName.Text Then
                         MessageBox.Show("Le nom de cette zone est déjà utilisée, veuillez en choisir un autre!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                         Exit Sub
                     End If
@@ -31,7 +26,8 @@ Partial Public Class uZone
             End If
 
             SaveElement()
-            Window1.myService.SaveZone(IdSrv, _ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag.ToString, ImgZone.Tag.ToString)
+            myservice.SaveZone(IdSrv, _ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag.ToString, ImgZone.Tag.ToString)
+            FlagChange = True
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'enregistrement de la zone, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -82,7 +78,7 @@ Partial Public Class uZone
         RaiseEvent CloseMe(Me)
     End Sub
 
-    Public Sub New(ByVal Action As EAction, ByVal ZoneId As String)
+    Public Sub New(ByVal Action As Classe.EAction, ByVal ZoneId As String)
 
         ' Cet appel est requis par le Concepteur Windows Form.
         InitializeComponent()
@@ -94,7 +90,7 @@ Partial Public Class uZone
         If Action = EAction.Nouveau Then 'Nouvelle Zone
 
         Else 'Modifier zone
-            Dim x As Zone = Window1.myService.ReturnZoneByID(IdSrv, ZoneId)
+            Dim x As Zone = myservice.ReturnZoneByID(IdSrv, ZoneId)
             Dim _list As New List(Of Integer)
 
             _ZoneId = ZoneId
@@ -106,18 +102,18 @@ Partial Public Class uZone
                 Next
 
                 If x.Image <> "" And x.Image <> " " Then
-                    ImgZone.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Image))
+                    ImgZone.Source = ConvertArrayToImage(myservice.GetByteFromImage(x.Image))
                     ImgZone.Tag = x.Image
                 End If
 
                 If x.Icon <> "" And x.Icon <> "" And x.Icon <> " " Then
-                    ImgIcon.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Icon))
+                    ImgIcon.Source = ConvertArrayToImage(myservice.GetByteFromImage(x.Icon))
                     ImgIcon.Tag = x.Icon
                 End If
             End If
         End If
 
-        For Each Device In Window1.myService.GetAllDevices(IdSrv)
+        For Each Device In myservice.GetAllDevices(IdSrv)
             Dim stk As New StackPanel
             stk.Orientation = Orientation.Horizontal
 
@@ -138,7 +134,7 @@ Partial Public Class uZone
             ListBxDevice.Items.Add(stk)
         Next
 
-        For Each Zone In Window1.myService.GetAllZones(IdSrv)
+        For Each Zone In myservice.GetAllZones(IdSrv)
             Dim stk As New StackPanel
             stk.Orientation = Orientation.Horizontal
 
@@ -160,7 +156,7 @@ Partial Public Class uZone
             ListBxZone.Items.Add(stk)
         Next
 
-        For Each Macro In Window1.myService.GetAllMacros(IdSrv)
+        For Each Macro In myservice.GetAllMacros(IdSrv)
             Dim stk As New StackPanel
             stk.Orientation = Orientation.Horizontal
 
@@ -262,7 +258,7 @@ Partial Public Class uZone
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
                 If retour <> "" Then
-                    ImgZone.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(retour))
+                    ImgZone.Source = ConvertArrayToImage(myservice.GetByteFromImage(retour))
                     ImgZone.Tag = retour
                 End If
                 frm.Close()
@@ -281,7 +277,7 @@ Partial Public Class uZone
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
                 If retour <> "" Then
-                    ImgIcon.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(retour))
+                    ImgIcon.Source = ConvertArrayToImage(myservice.GetByteFromImage(retour))
                     ImgIcon.Tag = retour
                 End If
                 frm.Close()

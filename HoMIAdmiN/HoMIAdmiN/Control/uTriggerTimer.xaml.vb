@@ -1,11 +1,6 @@
 ﻿Public Class uTriggerTimer
     Public Event CloseMe(ByVal MyObject As Object)
 
-    Public Enum EAction
-        Nouveau
-        Modifier
-    End Enum
-
     Dim _Action As EAction
     Dim _TriggerId As String
     Dim _ListMacro As New List(Of String)
@@ -14,7 +9,7 @@
         RaiseEvent CloseMe(Me)
     End Sub
 
-    Public Sub New(ByVal Action As EAction, ByVal TriggerId As String)
+    Public Sub New(ByVal Action As Classe.EAction, ByVal TriggerId As String)
         Try
             ' Cet appel est requis par le concepteur.
             InitializeComponent()
@@ -27,7 +22,7 @@
             If _Action = EAction.Nouveau Then 'Nouveau Trigger
 
             Else 'Modifier Trigger
-                Dim x As HoMIDom.HoMIDom.Trigger = Window1.myService.ReturnTriggerById(IdSrv, _TriggerId)
+                Dim x As HoMIDom.HoMIDom.Trigger = myservice.ReturnTriggerById(IdSrv, _TriggerId)
 
                 If x IsNot Nothing Then
                     TxtNom.Text = x.Nom
@@ -37,7 +32,7 @@
 
                     If _ListMacro IsNot Nothing Then
                         For i As Integer = 0 To _ListMacro.Count - 1
-                            ListBox1.Items.Add(Window1.myService.ReturnMacroById(IdSrv, _ListMacro.Item(i)).Nom)
+                            ListBox1.Items.Add(myservice.ReturnMacroById(IdSrv, _ListMacro.Item(i)).Nom)
                         Next
                     End If
 
@@ -169,10 +164,12 @@
             _myconditiontime &= _prepajr
 
             If _Action = EAction.Nouveau Then
-                Window1.myService.SaveTrigger(IdSrv, "", TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
+                myservice.SaveTrigger(IdSrv, "", TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
+                FlagChange = True
                 RaiseEvent CloseMe(Me)
             Else
-                Window1.myService.SaveTrigger(IdSrv, _TriggerId, TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
+                myservice.SaveTrigger(IdSrv, _TriggerId, TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
+                FlagChange = True
                 RaiseEvent CloseMe(Me)
             End If
         Catch ex As Exception
@@ -194,7 +191,7 @@
 
             Dim uri As String = e.Data.GetData(GetType(String)).ToString
             _ListMacro.Add(uri)
-            ListBox1.Items.Add(Window1.myService.ReturnMacroById(IdSrv, uri).Nom)
+            ListBox1.Items.Add(myservice.ReturnMacroById(IdSrv, uri).Nom)
         Else
             e.Effects = DragDropEffects.None
         End If
@@ -209,7 +206,7 @@
             _ListMacro.RemoveAt(i)
             ListBox1.Items.Clear()
             For j As Integer = 0 To _ListMacro.Count - 1
-                ListBox1.Items.Add(Window1.myService.ReturnMacroById(IdSrv, _ListMacro(j)).Nom)
+                ListBox1.Items.Add(myservice.ReturnMacroById(IdSrv, _ListMacro(j)).Nom)
             Next
             i = Nothing
         End If
@@ -228,7 +225,7 @@
             _ListMacro(i) = a
             ListBox1.Items.Clear()
             For j As Integer = 0 To _ListMacro.Count - 1
-                ListBox1.Items.Add(Window1.myService.ReturnMacroById(IdSrv, _ListMacro(j)).Nom)
+                ListBox1.Items.Add(myservice.ReturnMacroById(IdSrv, _ListMacro(j)).Nom)
             Next
         End If
     End Sub
@@ -246,7 +243,7 @@
             _ListMacro(i) = a
             ListBox1.Items.Clear()
             For j As Integer = 0 To _ListMacro.Count - 1
-                ListBox1.Items.Add(Window1.myService.ReturnMacroById(IdSrv, _ListMacro(j)).Nom)
+                ListBox1.Items.Add(myservice.ReturnMacroById(IdSrv, _ListMacro(j)).Nom)
             Next
         End If
     End Sub

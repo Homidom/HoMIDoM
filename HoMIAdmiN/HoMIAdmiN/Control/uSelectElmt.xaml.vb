@@ -21,12 +21,11 @@
         InitializeComponent()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        LblTitle.Content = Title
-
         Select Case TypeElement
             Case 0
+                Title = Replace(Title, "{TITLE}", "un Driver")
                 _Type = 0
-                For Each driver In Window1.myService.GetAllDrivers(IdSrv)
+                For Each driver In myService.GetAllDrivers(IdSrv)
                     Dim x As New uElement
                     x.ID = driver.ID
                     x.Image = driver.Picture
@@ -36,8 +35,9 @@
                     ListBox1.Items.Add(x)
                 Next
             Case 1
+                Title = Replace(Title, "{TITLE}", "un Composant")
                 _Type = 1
-                For Each device In Window1.myService.GetAllDevices(IdSrv)
+                For Each device In myService.GetAllDevices(IdSrv)
                     Dim x As New uElement
                     x.ID = device.ID
                     x.Image = device.Picture
@@ -47,8 +47,9 @@
                     ListBox1.Items.Add(x)
                 Next
             Case 2
+                Title = Replace(Title, "{TITLE}", "une Zone")
                 _Type = 2
-                For Each zone In Window1.myService.GetAllZones(IdSrv)
+                For Each zone In myService.GetAllZones(IdSrv)
                     Dim x As New uElement
                     x.ID = zone.ID
                     x.Image = zone.Icon
@@ -58,8 +59,9 @@
                     ListBox1.Items.Add(x)
                 Next
             Case 3
+                Title = Replace(Title, "{TITLE}", "un Utilisateur")
                 _Type = 3
-                For Each user In Window1.myService.GetAllUsers(IdSrv)
+                For Each user In myService.GetAllUsers(IdSrv)
                     Dim x As New uElement
                     x.ID = user.ID
                     x.Image = user.Image
@@ -69,8 +71,9 @@
                     ListBox1.Items.Add(x)
                 Next
             Case 4
+                Title = Replace(Title, "{TITLE}", "un Trigger")
                 _Type = 4
-                For Each trigger In Window1.myService.GetAllTriggers(IdSrv)
+                For Each trigger In myService.GetAllTriggers(IdSrv)
                     Dim x As New uElement
                     x.ID = trigger.ID
                     x.Title = trigger.Nom
@@ -79,8 +82,9 @@
                     ListBox1.Items.Add(x)
                 Next
             Case 5
+                Title = Replace(Title, "{TITLE}", "une Macro")
                 _Type = 5
-                For Each macro In Window1.myService.GetAllMacros(IdSrv)
+                For Each macro In myService.GetAllMacros(IdSrv)
                     Dim x As New uElement
                     x.ID = macro.ID
                     x.Title = macro.Nom
@@ -89,6 +93,8 @@
                     ListBox1.Items.Add(x)
                 Next
         End Select
+
+        LblTitle.Content = Title
     End Sub
 
     Private Sub BtnCancel_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCancel.Click
