@@ -10,7 +10,7 @@ Partial Public Class uConfigAudio
 
         Try
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-            If Window1.IsConnect = True Then
+            If IsConnect = True Then
                 RefreshList()
             End If
 
@@ -25,19 +25,19 @@ Partial Public Class uConfigAudio
     Private Sub RefreshList()
         Try
             ListBox1.Items.Clear()
-            For i As Integer = 0 To Window1.myService.GetAllRepertoiresAudio(IdSrv).Count - 1
+            For i As Integer = 0 To myservice.GetAllRepertoiresAudio(IdSrv).Count - 1
                 Dim a As New CheckBox
-                a.Content = Window1.myService.GetAllRepertoiresAudio(IdSrv).Item(i).Repertoire
-                a.IsChecked = Window1.myService.GetAllRepertoiresAudio(IdSrv).Item(i).Enable
+                a.Content = myservice.GetAllRepertoiresAudio(IdSrv).Item(i).Repertoire
+                a.IsChecked = myservice.GetAllRepertoiresAudio(IdSrv).Item(i).Enable
                 ListBox1.Items.Add(a)
                 BtnDelRepertoireAudio.IsEnabled = True
             Next
 
             ListBox2.Items.Clear()
-            For i As Integer = 0 To Window1.myService.GetAllExtensionsAudio(IdSrv).Count - 1
+            For i As Integer = 0 To myservice.GetAllExtensionsAudio(IdSrv).Count - 1
                 Dim a As New CheckBox
-                a.Content = Window1.myService.GetAllExtensionsAudio(IdSrv).Item(i).Extension
-                a.IsChecked = Window1.myService.GetAllExtensionsAudio(IdSrv).Item(i).Enable
+                a.Content = myservice.GetAllExtensionsAudio(IdSrv).Item(i).Extension
+                a.IsChecked = myservice.GetAllExtensionsAudio(IdSrv).Item(i).Enable
                 ListBox2.Items.Add(a)
                 BtnDeleteExtension.IsEnabled = True
             Next
@@ -55,7 +55,7 @@ Partial Public Class uConfigAudio
                 MessageBox.Show("Veuillez un répertoire dans la liste!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             Else
-                Window1.myService.DeleteRepertoireAudio(IdSrv, ListBox1.SelectedItem.content)
+                myservice.DeleteRepertoireAudio(IdSrv, ListBox1.SelectedItem.content)
                 RefreshList()
             End If
         Catch ex As Exception
@@ -73,7 +73,7 @@ Partial Public Class uConfigAudio
             MessageBox.Show("Le chemin du répertoire audio ne peut être vide!", "Repertoire Audio", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         Else
-            If Window1.myService.NewRepertoireAudio(IdSrv, dlg.SelectedPath, False) = -1 Then
+            If myservice.NewRepertoireAudio(IdSrv, dlg.SelectedPath, False) = -1 Then
                 MessageBox.Show("Le chemin du répertoire audio existe déjà il ne sera pas pris en compte", "Repertoire Audio", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             Else
@@ -99,7 +99,7 @@ Partial Public Class uConfigAudio
             Exit Sub
         End If
         retour = "." & LCase(retour)
-        If Window1.myService.NewExtensionAudio(IdSrv, retour, False) = -1 Then
+        If myservice.NewExtensionAudio(IdSrv, retour, False) = -1 Then
             MessageBox.Show("L'extension audio existe déjà elle ne sera pas pris en compte", "Extension Audio", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         Else
@@ -114,7 +114,7 @@ Partial Public Class uConfigAudio
                 MessageBox.Show("Veuillez une extension dans la liste!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             Else
-                Window1.myService.DeleteExtensionAudio(IdSrv, ListBox2.SelectedItem.content)
+                myservice.DeleteExtensionAudio(IdSrv, ListBox2.SelectedItem.content)
                 RefreshList()
             End If
         Catch ex As Exception
@@ -145,16 +145,18 @@ Partial Public Class uConfigAudio
 
     Private Sub BtnOk_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOk.Click
         Try
-            If Window1.IsConnect = True Then
+            If IsConnect = True Then
                 For i As Integer = 0 To ListBox1.Items.Count - 1
                     Dim x As CheckBox = ListBox1.Items(i)
-                    Window1.myService.EnableRepertoireAudio(IdSrv, x.Content, x.IsChecked)
+                    myservice.EnableRepertoireAudio(IdSrv, x.Content, x.IsChecked)
                 Next
 
                 For i As Integer = 0 To ListBox2.Items.Count - 1
                     Dim x As CheckBox = ListBox2.Items(i)
-                    Window1.myService.EnableExtensionAudio(IdSrv, x.Content, x.IsChecked)
+                    myservice.EnableExtensionAudio(IdSrv, x.Content, x.IsChecked)
                 Next
+
+                FlagChange = True
             End If
             RaiseEvent CloseMe(Me)
         Catch ex As Exception

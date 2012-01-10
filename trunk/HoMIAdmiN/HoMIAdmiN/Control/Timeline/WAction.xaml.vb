@@ -129,7 +129,7 @@ Public Class WActionParametrage
                         Txt2.Height = 0
                         TxtValue.Height = 21
 
-                        Cb1.ItemsSource = Window1.myService.GetAllDevices(IdSrv)
+                        Cb1.ItemsSource = myservice.GetAllDevices(IdSrv)
                         Cb1.DisplayMemberPath = "Name"
 
                         If obj.IdDevice IsNot Nothing Then
@@ -160,7 +160,7 @@ Public Class WActionParametrage
                         Txt2.Height = 20
                         TxtValue.Visibility = Windows.Visibility.Hidden
 
-                        Cb1.ItemsSource = Window1.myService.GetAllMacros(IdSrv)
+                        Cb1.ItemsSource = myservice.GetAllMacros(IdSrv)
                         Cb1.DisplayMemberPath = "Nom"
 
                         Dim a As String = ""
@@ -187,11 +187,11 @@ Public Class WActionParametrage
                         TxtValue.Text = ""
                         TxtValue.Height = 80
 
-                        Cb1.ItemsSource = Window1.myService.GetAllUsers(IdSrv)
+                        Cb1.ItemsSource = myservice.GetAllUsers(IdSrv)
                         Cb1.DisplayMemberPath = "UserName"
 
                         If obj.UserId IsNot Nothing Then
-                            Dim _user As Users.User = Window1.myService.ReturnUserById(IdSrv, obj.UserId)
+                            Dim _user As Users.User = myservice.ReturnUserById(IdSrv, obj.UserId)
 
                             For i As Integer = 0 To Cb1.Items.Count - 1
                                 If _user.UserName = Cb1.Items(i).Username Then
@@ -267,7 +267,7 @@ Public Class WActionParametrage
             If Cb2.SelectedIndex < 0 Then Exit Sub
 
             Dim Idx As Integer = Cb2.SelectedIndex
-            For j As Integer = 0 To Window1.myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).DeviceAction.Item(Idx).Parametres.Count - 1
+            For j As Integer = 0 To myservice.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).DeviceAction.Item(Idx).Parametres.Count - 1
                 Select Case j
                     Case 0
                         LblValue.Content = Cb1.SelectedItem.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"

@@ -276,7 +276,7 @@ Class Window1
             '    LblLeve.Content = Mid(hs.Sunrise, 1, 5)
             '    LblCouche.Content = Mid(hs.Sunset, 1, 5)
             'End If
-            If IsConnect = True Then
+            If IsConnect = True And ShowSoleil = True Then
                 Dim mydate As Date
                 mydate = myService.GetHeureLeverSoleil
                 LblLeve.Content = mydate.ToShortTimeString
@@ -639,18 +639,18 @@ Class Window1
                 writer.WriteValue(_ListElement.Item(i).ZoneId)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("x")
-                writer.WriteValue(_ListElement.Item(i).X)
+                writer.WriteValue(Replace(_ListElement.Item(i).X, ".", ","))
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("y")
-                writer.WriteValue(_ListElement.Item(i).Y)
+                writer.WriteValue(Replace(_ListElement.Item(i).Y, ".", ","))
                 writer.WriteEndAttribute()
-                writer.WriteStartAttribute("width")
+                writer.WriteStartAttribute(Replace("width", ".", ","))
                 writer.WriteValue(_ListElement.Item(i).Width)
                 writer.WriteEndAttribute()
-                writer.WriteStartAttribute("height")
+                writer.WriteStartAttribute(Replace("height", ".", ","))
                 writer.WriteValue(_ListElement.Item(i).Height)
                 writer.WriteEndAttribute()
-                writer.WriteStartAttribute("angle")
+                writer.WriteStartAttribute(Replace("angle", ".", ","))
                 writer.WriteValue(_ListElement.Item(i).Angle)
                 writer.WriteEndAttribute()
                 writer.WriteEndElement()
@@ -958,7 +958,7 @@ Class Window1
             '    LblCouche.Content = Mid(hs.Sunset, 1, 5)
             '    LblTemp.Content = "INT: " & hs.DeviceString("T3") & "°C / EXT: " & hs.DeviceString("T2") & "°C"
             'Else
-            If IsConnect = True Then
+            If IsConnect = True And ShowSoleil = True Then
                 Dim mydate As Date
                 mydate = myService.GetHeureLeverSoleil
                 LblLeve.Content = mydate.ToShortTimeString

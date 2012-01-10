@@ -17,7 +17,7 @@ Partial Public Class uDriver
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             _DriverId = DriverId
 
-            x = Window1.myService.ReturnDriverByID(IdSrv, DriverId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
+            x = myservice.ReturnDriverByID(IdSrv, DriverId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
 
             If x IsNot Nothing Then 'on a trouvé le device
                 'on cache certains champs si leur valeur est @
@@ -115,7 +115,7 @@ Partial Public Class uDriver
                 End If
 
                 If x.Picture <> "" And x.Picture <> " " Then
-                    ImgDevice.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Picture))
+                    ImgDevice.Source = ConvertArrayToImage(myservice.GetByteFromImage(x.Picture))
                     ImgDevice.Tag = x.Picture
                 End If
 
@@ -145,7 +145,8 @@ Partial Public Class uDriver
 
     'Bouton Ok
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        Window1.myService.SaveDriver(IdSrv, _DriverId, TxtNom.Text, ChkEnable.IsChecked, CbStartAuto.IsChecked, TxtAdrTCP.Text, TxtPortTCP.Text, TxtAdrUDP.Text, TxtPortUDP.Text, TxtCom.Text, TxtRefresh.Text, ImgDevice.Tag, TxtModele.Text, _ListParam)
+        myservice.SaveDriver(IdSrv, _DriverId, TxtNom.Text, ChkEnable.IsChecked, CbStartAuto.IsChecked, TxtAdrTCP.Text, TxtPortTCP.Text, TxtAdrUDP.Text, TxtPortUDP.Text, TxtCom.Text, TxtRefresh.Text, ImgDevice.Tag, TxtModele.Text, _ListParam)
+        FlagChange = True
         RaiseEvent CloseMe(Me)
     End Sub
 
@@ -163,7 +164,7 @@ Partial Public Class uDriver
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
                 If retour <> "" Then
-                    ImgDevice.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(retour))
+                    ImgDevice.Source = ConvertArrayToImage(myservice.GetByteFromImage(retour))
                     ImgDevice.Tag = retour
                 End If
                 frm.Close()
@@ -287,7 +288,7 @@ Partial Public Class uDriver
                 a.Parametres.Add(y)
             End If
 
-            Window1.myService.ExecuteDriverCommand(IdSrv, _DriverId, a)
+            myservice.ExecuteDriverCommand(IdSrv, _DriverId, a)
         Catch ex As Exception
             MessageBox.Show("Erreur lors du test: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try

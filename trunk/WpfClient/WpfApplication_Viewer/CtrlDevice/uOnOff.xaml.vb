@@ -28,4 +28,5 @@
     Private Sub BtnOff_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOff.Click
         RaiseEvent ClickOff(sender, e)
     End Sub
+
 End Class

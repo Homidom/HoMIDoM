@@ -4,7 +4,7 @@
     Public Event Create(ByVal IndexMenu As Integer)
     Public Event Edit(ByVal IndexMenu As Integer)
 
-    Private Sub Mnu1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgMnu1.MouseDown, ImgMnu2.MouseDown, ImgMnu3.MouseDown, ImgMnu4.MouseDown, ImgMnu5.MouseDown, ImgMnu6.MouseDown, ImgMnu7.MouseDown, ImgMnu8.MouseDown
+    Private Sub Mnu1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgMnu1.MouseDown, ImgMnu2.MouseDown, ImgMnu3.MouseDown, ImgMnu4.MouseDown, ImgMnu5.MouseDown, ImgMnu6.MouseDown, ImgMnu7.MouseDown, ImgMnu8.MouseDown, Img190.MouseDown, Img290.MouseDown, Img390.MouseDown, Img490.MouseDown, Img590.MouseDown, Img690.MouseDown
         RaiseEvent ChangeMenu(sender.tag)
     End Sub
 

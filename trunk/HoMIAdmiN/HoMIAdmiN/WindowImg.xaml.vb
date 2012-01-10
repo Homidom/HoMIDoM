@@ -21,7 +21,7 @@ Public Class WindowImg
         InitializeComponent()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        _ListImg = Window1.myService.GetListOfImage
+        _ListImg = myservice.GetListOfImage
         Affiche()
     End Sub
 
@@ -37,7 +37,7 @@ Public Class WindowImg
             stk.Orientation = Orientation.Horizontal
 
             Try
-                img.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(x.Path))
+                img.Source = ConvertArrayToImage(myservice.GetByteFromImage(x.Path))
                 lbl.Content = x.Path
                 lbl.Foreground = New SolidColorBrush(Colors.White)
                 stk.Tag = x.Path

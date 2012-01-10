@@ -110,6 +110,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Class.vb" />
     <Compile Include="Control\Condition\uCondition.xaml.vb">
       <DependentUpon>uCondition.xaml</DependentUpon>
     </Compile>
@@ -440,9 +441,7 @@
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\Lune.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

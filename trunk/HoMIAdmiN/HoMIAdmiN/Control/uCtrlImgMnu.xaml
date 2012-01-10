@@ -4,7 +4,7 @@
             
         <StackPanel >
         <Border Name="Border1" CornerRadius=" 5" BorderThickness="2" BorderBrush="DarkGray" Height="70" Width="70">
-            <Image Name="Image" Stretch="Fill" VerticalAlignment="Top" Source="/HoMIAdmiN;component/Images/home-128.png" MinWidth="65" MinHeight="65" />
+            <Image Name="Image" Stretch="Fill" VerticalAlignment="Top" Source="/HoMIAdmiN;component/Images/home-128.png" MinWidth="65" MinHeight="65" ToolTip="Effectuer un clic droit pour changer l'image" />
         </Border>
         <Label Name="Lbl" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="9" Foreground="White">TEST</Label>
         </StackPanel>

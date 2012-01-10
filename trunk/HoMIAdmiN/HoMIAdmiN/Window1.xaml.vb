@@ -11,9 +11,7 @@ Imports System.Windows.Media.Animation
 
 Class Window1
 
-    Public Shared IsConnect As Boolean = False
     Public Shared CanvasUser As Canvas
-    Public Shared myService As HoMIDom.HoMIDom.IHoMIDom
     Public Shared ListServer As New List(Of ClServer)
 
     Dim Myfile As String
@@ -134,7 +132,7 @@ Class Window1
     'Menu Quitter
     Private Sub Quitter(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuQuitter.Click
         Try
-            If IsConnect = True Then
+            If IsConnect = True And FlagChange Then
                 Dim retour As MessageBoxResult
                 retour = MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question)
 
@@ -177,7 +175,7 @@ Class Window1
                 img.Width = 20
 
                 If zon.Icon <> "" Then
-                    img.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(zon.Icon))
+                    img.Source = ConvertArrayToImage(myservice.GetByteFromImage(zon.Icon))
                 End If
 
                 Dim label As New Label
@@ -316,7 +314,7 @@ Class Window1
             Next
 
             For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1 'Obj.Drivers.Count - 1
-                
+
 
             Next
         Catch ex As Exception
@@ -611,14 +609,29 @@ Class Window1
         Try
             Me.Cursor = Cursors.Wait
 
-            CanvasRight.Children.Clear()
-            CloseTreeView()
-            ShowMainMenu()
+            Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
+            myDoubleAnimation.From = 1.0
+            myDoubleAnimation.To = 0.0
+            myDoubleAnimation.Duration = New Duration(TimeSpan.FromSeconds(1))
+            Dim myStoryboard As Storyboard
+            myStoryboard = New Storyboard()
+            myStoryboard.Children.Add(myDoubleAnimation)
+            AddHandler myStoryboard.Completed, AddressOf StoryBoardFinish
+
+            Storyboard.SetTarget(myDoubleAnimation, MyControl)
+            Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
+            myStoryboard.Begin()
 
             Me.Cursor = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub UnloadControl: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+    Private Sub StoryBoardFinish(ByVal sender As Object, ByVal e As System.EventArgs)
+        CanvasRight.Children.Clear()
+        CloseTreeView()
+        ShowMainMenu()
     End Sub
 
     'Menu paramétrer le serveur
@@ -760,6 +773,7 @@ Class Window1
         CanvasRight.SetTop(MainMenu, HMainMenu)
     End Sub
 
+#Region "MainMenu"
     Private Sub MainMenuChange(ByVal index As Integer)
         Me.Cursor = Cursors.Wait
 
@@ -790,7 +804,6 @@ Class Window1
 
     Private Sub MainMenuNew(ByVal index As Integer)
         _MainMenuAction = 0
-        CanvasRight.Children.Clear()
 
         If IsConnect = False Then
             MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
@@ -804,61 +817,49 @@ Class Window1
 
             Case 1
                 Try
-                    Dim x As New uDevice(uDevice.EAction.Nouveau, "")
-                    x.Uid = System.Guid.NewGuid.ToString()
+                    Dim x As New uDevice(Classe.EAction.Nouveau, "")
                     AddHandler x.CloseMe, AddressOf UnloadControl
-                    CanvasRight.Children.Add(x)
-                    AnimationApparition(x)
+                    AffControlPage(x)
                 Catch ex As Exception
                     MessageBox.Show("ERREUR Sub NewDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                 End Try
             Case 2
                 Try
-                    Dim x As New uZone(uDevice.EAction.Nouveau, "")
-                    x.Uid = System.Guid.NewGuid.ToString()
+                    Dim x As New uZone(Classe.EAction.Nouveau, "")
                     AddHandler x.CloseMe, AddressOf UnloadControl
-                    CanvasRight.Children.Add(x)
-                    AnimationApparition(x)
+                    AffControlPage(x)
                 Catch ex As Exception
                     MessageBox.Show("ERREUR Sub NewZone: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                 End Try
             Case 3
                 Try
-                    Dim x As New uUser(uDevice.EAction.Nouveau, "")
-                    x.Uid = System.Guid.NewGuid.ToString()
+                    Dim x As New uUser(Classe.EAction.Nouveau, "")
                     AddHandler x.CloseMe, AddressOf UnloadControl
-                    CanvasRight.Children.Add(x)
-                    AnimationApparition(x)
+                    AffControlPage(x)
                 Catch ex As Exception
                     MessageBox.Show("ERREUR Sub NewUser: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                 End Try
             Case 40
                 Try
                     Dim x As New uTriggerTimer(0, "")
-                    x.Uid = System.Guid.NewGuid.ToString()
                     AddHandler x.CloseMe, AddressOf UnloadControl
-                    CanvasRight.Children.Add(x)
-                    AnimationApparition(x)
+                    AffControlPage(x)
                 Catch ex As Exception
                     MessageBox.Show("ERREUR Sub NewTriggerTime: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                 End Try
             Case 41
                 Try
                     Dim x As New uTriggerDevice(0, "")
-                    x.Uid = System.Guid.NewGuid.ToString()
                     AddHandler x.CloseMe, AddressOf UnloadControl
-                    CanvasRight.Children.Add(x)
-                    AnimationApparition(x)
+                    AffControlPage(x)
                 Catch ex As Exception
                     MessageBox.Show("ERREUR Sub NewTriggerDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                 End Try
             Case 5
                 Try
-                    Dim x As New uMacro(uMacro.EAction.Nouveau, "")
-                    x.Uid = System.Guid.NewGuid.ToString()
+                    Dim x As New uMacro(Classe.EAction.Nouveau, "")
                     AddHandler x.CloseMe, AddressOf UnloadControl
-                    CanvasRight.Children.Add(x)
-                    AnimationApparition(x)
+                    AffControlPage(x)
                 Catch ex As Exception
                     MessageBox.Show("ERREUR Sub NewMacro: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                 End Try
@@ -873,7 +874,7 @@ Class Window1
         _MainMenuAction = 2
         CanvasRight.Children.Clear()
 
-        Dim x As New uSelectElmt("Choisir un composant à supprimer", index)
+        Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", index)
         CanvasRight.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
         AddHandler x.CloseMe, AddressOf UnloadSelectElmt
         CanvasRight.Children.Add(x)
@@ -883,13 +884,13 @@ Class Window1
         _MainMenuAction = 1
         CanvasRight.Children.Clear()
 
-        Dim x As New uSelectElmt("Choisir un composant à éditer", index)
+        Dim x As New uSelectElmt("Choisir {TITLE} à éditer", index)
         CanvasRight.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
         AddHandler x.CloseMe, AddressOf UnloadSelectElmt
         CanvasRight.Children.Add(x)
 
-
     End Sub
+#End Region
 
     Private Sub UnloadSelectElmt(ByVal Objet As Object)
         If Objet.retour = "CANCEL" Then
@@ -917,7 +918,7 @@ Class Window1
 
                                     AnimationApparition(x)
                                 Case 1 'device
-                                    Dim x As New uDevice(uDevice.EAction.Modifier, Objet.retour)
+                                    Dim x As New uDevice(Classe.EAction.Modifier, Objet.retour)
                                     x.Uid = System.Guid.NewGuid.ToString()
                                     AddHandler x.CloseMe, AddressOf UnloadControl
                                     CanvasRight.Children.Clear()
@@ -925,7 +926,7 @@ Class Window1
 
                                     AnimationApparition(x)
                                 Case 2 'zone
-                                    Dim x As New uZone(uDevice.EAction.Modifier, Objet.retour)
+                                    Dim x As New uZone(Classe.EAction.Modifier, Objet.retour)
                                     x.Uid = System.Guid.NewGuid.ToString()
                                     AddHandler x.CloseMe, AddressOf UnloadControl
                                     CanvasRight.Children.Clear()
@@ -933,7 +934,7 @@ Class Window1
 
                                     AnimationApparition(x)
                                 Case 3 'user
-                                    Dim x As New uUser(uDevice.EAction.Modifier, Objet.retour)
+                                    Dim x As New uUser(Classe.EAction.Modifier, Objet.retour)
                                     x.Uid = System.Guid.NewGuid.ToString()
                                     AddHandler x.CloseMe, AddressOf UnloadControl
                                     CanvasRight.Children.Clear()
@@ -946,7 +947,7 @@ Class Window1
 
                                     If _Trig IsNot Nothing Then
                                         If _Trig.Type = Trigger.TypeTrigger.TIMER Then
-                                            Dim x As New uTriggerTimer(uTriggerTimer.EAction.Modifier, Objet.retour)
+                                            Dim x As New uTriggerTimer(Classe.EAction.Modifier, Objet.retour)
                                             x.Uid = System.Guid.NewGuid.ToString()
                                             AddHandler x.CloseMe, AddressOf UnloadControl
                                             CanvasRight.Children.Clear()
@@ -955,7 +956,7 @@ Class Window1
                                             AnimationApparition(x)
 
                                         Else
-                                            Dim x As New uTriggerDevice(uTriggerDevice.EAction.Modifier, Objet.retour)
+                                            Dim x As New uTriggerDevice(Classe.EAction.Modifier, Objet.retour)
                                             x.Uid = System.Guid.NewGuid.ToString()
                                             AddHandler x.CloseMe, AddressOf UnloadControl
                                             CanvasRight.Children.Clear()
@@ -967,7 +968,7 @@ Class Window1
                                     End If
                                 Case 5 'macros
 
-                                    Dim x As New uMacro(uMacro.EAction.Modifier, Objet.retour)
+                                    Dim x As New uMacro(Classe.EAction.Modifier, Objet.retour)
                                     x.Uid = System.Guid.NewGuid.ToString()
                                     AddHandler x.CloseMe, AddressOf UnloadControl
                                     CanvasRight.Children.Clear()
@@ -992,19 +993,19 @@ Class Window1
                             Select Case Objet.Type
                                 Case 0
                                 Case 1
-                                    retour = Window1.myService.DeleteDevice(IdSrv, Objet.retour)
+                                    retour = myservice.DeleteDevice(IdSrv, Objet.retour)
                                     AffDevice()
                                 Case 2
-                                    retour = Window1.myService.DeleteZone(IdSrv, Objet.retour)
+                                    retour = myservice.DeleteZone(IdSrv, Objet.retour)
                                     AffZone()
                                 Case 3
-                                    retour = Window1.myService.DeleteUser(IdSrv, Objet.retour)
+                                    retour = myservice.DeleteUser(IdSrv, Objet.retour)
                                     AffUser()
                                 Case 4
-                                    retour = Window1.myService.DeleteTrigger(IdSrv, Objet.retour)
+                                    retour = myservice.DeleteTrigger(IdSrv, Objet.retour)
                                     AffTrigger()
                                 Case 5
-                                    retour = Window1.myService.DeleteMacro(IdSrv, Objet.retour)
+                                    retour = myservice.DeleteMacro(IdSrv, Objet.retour)
                                     AffScene()
                             End Select
 
@@ -1022,7 +1023,7 @@ Class Window1
                     CanvasRight.Children.Clear()
                     ShowMainMenu()
             End Select
-            
+
         End If
     End Sub
 
@@ -1037,7 +1038,6 @@ Class Window1
             sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
         End If
     End Sub
-
 
     Private Sub Window1_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         Try
@@ -1216,71 +1216,39 @@ Class Window1
                 Select Case sender.Name
                     Case "TreeViewDriver"  'driver
                         Dim x As New uDriver(sender.SelectedItem.uid)
-                        x.Uid = System.Guid.NewGuid.ToString()
                         AddHandler x.CloseMe, AddressOf UnloadControl
-                        CanvasRight.Children.Clear()
-                        CanvasRight.Children.Add(x)
-
-                        AnimationApparition(x)
+                        AffControlPage(x)
                     Case "TreeViewDevice"  'device
-                        Dim x As New uDevice(uDevice.EAction.Modifier, sender.SelectedItem.uid)
-                        x.Uid = System.Guid.NewGuid.ToString()
+                        Dim x As New uDevice(Classe.EAction.Modifier, sender.SelectedItem.uid)
                         AddHandler x.CloseMe, AddressOf UnloadControl
-                        CanvasRight.Children.Clear()
-                        CanvasRight.Children.Add(x)
-
-                        AnimationApparition(x)
+                        AffControlPage(x)
                     Case "TreeViewZone"  'zone
-                        Dim x As New uZone(uDevice.EAction.Modifier, sender.SelectedItem.uid)
-                        x.Uid = System.Guid.NewGuid.ToString()
+                        Dim x As New uZone(Classe.EAction.Modifier, sender.SelectedItem.uid)
                         AddHandler x.CloseMe, AddressOf UnloadControl
-                        CanvasRight.Children.Clear()
-                        CanvasRight.Children.Add(x)
-
-                        AnimationApparition(x)
+                        AffControlPage(x)
                     Case "TreeViewUser"  'user
-                        Dim x As New uUser(uDevice.EAction.Modifier, sender.SelectedItem.uid)
-                        x.Uid = System.Guid.NewGuid.ToString()
+                        Dim x As New uUser(Classe.EAction.Modifier, sender.SelectedItem.uid)
                         AddHandler x.CloseMe, AddressOf UnloadControl
-                        CanvasRight.Children.Clear()
-                        CanvasRight.Children.Add(x)
-
-                        AnimationApparition(x)
-
+                        AffControlPage(x)
                     Case "TreeViewTrigger"  'trigger
                         Dim _Trig As Trigger = myService.ReturnTriggerById(IdSrv, sender.SelectedItem.uid)
 
                         If _Trig IsNot Nothing Then
                             If _Trig.Type = Trigger.TypeTrigger.TIMER Then
-                                Dim x As New uTriggerTimer(uTriggerTimer.EAction.Modifier, sender.SelectedItem.uid)
-                                x.Uid = System.Guid.NewGuid.ToString()
+                                Dim x As New uTriggerTimer(Classe.EAction.Modifier, sender.SelectedItem.uid)
                                 AddHandler x.CloseMe, AddressOf UnloadControl
-                                CanvasRight.Children.Clear()
-                                CanvasRight.Children.Add(x)
-
-                                AnimationApparition(x)
+                                AffControlPage(x)
                             Else
-                                Dim x As New uTriggerDevice(uTriggerDevice.EAction.Modifier, sender.SelectedItem.uid)
-                                x.Uid = System.Guid.NewGuid.ToString()
+                                Dim x As New uTriggerDevice(Classe.EAction.Modifier, sender.SelectedItem.uid)
                                 AddHandler x.CloseMe, AddressOf UnloadControl
-                                CanvasRight.Children.Clear()
-                                CanvasRight.Children.Add(x)
-
-                                AnimationApparition(x)
-
+                                AffControlPage(x)
                             End If
                             _Trig = Nothing
                         End If
                     Case "TreeViewMacro"  'macros
-
-                        Dim x As New uMacro(uMacro.EAction.Modifier, sender.SelectedItem.uid)
-                        x.Uid = System.Guid.NewGuid.ToString()
+                        Dim x As New uMacro(Classe.EAction.Modifier, sender.SelectedItem.uid)
                         AddHandler x.CloseMe, AddressOf UnloadControl
-                        CanvasRight.Children.Clear()
-                        CanvasRight.Children.Add(x)
-
-                        AnimationApparition(x)
-
+                        AffControlPage(x)
                     Case 6 'histo
 
                 End Select
@@ -1289,6 +1257,18 @@ Class Window1
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+    ''' <summary>
+    ''' Affiche le usercontrol et l'anime
+    ''' </summary>
+    ''' <param name="Objet"></param>
+    ''' <remarks></remarks>
+    Private Sub AffControlPage(ByVal Objet As Object)
+        Objet.Uid = System.Guid.NewGuid.ToString()
+        CanvasRight.Children.Clear()
+        CanvasRight.Children.Add(Objet)
+        AnimationApparition(Objet)
     End Sub
 
     Private Sub TreeView_SelectedItemChanged(ByVal sender As System.Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of System.Object)) Handles TreeViewDriver.SelectedItemChanged, TreeViewDevice.SelectedItemChanged, TreeViewZone.SelectedItemChanged, TreeViewUser.SelectedItemChanged, TreeViewTrigger.SelectedItemChanged, TreeViewMacro.SelectedItemChanged, TreeViewHisto.SelectedItemChanged
@@ -1310,23 +1290,17 @@ Class Window1
             If sender.SelectedItem IsNot Nothing Then
                 If sender.SelectedItem.uid Is Nothing Then Exit Sub
 
-                Me.Cursor = Cursors.Wait
-                Select Case sender.Name
-                    Case "TreeViewDriver"  'driver
-                    Case "TreeViewDevice"  'device
-
-                    Case "TreeViewZone"  'zone
-
-                    Case "TreeViewUser"  'user
-
-                    Case "TreeViewTrigger"  'trigger
-
-                    Case "TreeViewMacro"  'macros
-
-                    Case "TreeViewHisto"  'histo
-
-                End Select
-                Me.Cursor = Nothing
+                'Me.Cursor = Cursors.Wait
+                'Select Case sender.Name
+                '    Case "TreeViewDriver"  'driver
+                '    Case "TreeViewDevice"  'device
+                '    Case "TreeViewZone"  'zone
+                '    Case "TreeViewUser"  'user
+                '    Case "TreeViewTrigger"  'trigger
+                '    Case "TreeViewMacro"  'macros
+                '    Case "TreeViewHisto"  'histo
+                'End Select
+                'Me.Cursor = Nothing
             End If
 
         Catch ex As Exception

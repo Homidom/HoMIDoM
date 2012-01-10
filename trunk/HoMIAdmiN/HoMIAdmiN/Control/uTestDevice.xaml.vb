@@ -20,7 +20,7 @@ Partial Public Class uTestDevice
                         param.Value = txt.Text
                         x.Parametres.Add(param)
                     Next
-                    Window1.myService.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
+                    myservice.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
                 Else 'c une fonction avancée
                     x.Nom = "ExecuteCommand"
 
@@ -34,7 +34,7 @@ Partial Public Class uTestDevice
                         param1.Value = txt.Text
                         x.Parametres.Add(param)
                     Next
-                    Window1.myService.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
+                    myservice.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
                 End If
             End If
         Catch ex As Exception
@@ -50,7 +50,7 @@ Partial Public Class uTestDevice
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         _DeviceId = DeviceId
 
-        _Device = Window1.myService.ReturnDeviceByID(IdSrv, _DeviceId)
+        _Device = myservice.ReturnDeviceByID(IdSrv, _DeviceId)
 
         If _Device IsNot Nothing Then
 

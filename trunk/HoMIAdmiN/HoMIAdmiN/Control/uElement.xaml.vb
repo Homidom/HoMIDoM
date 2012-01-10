@@ -40,7 +40,7 @@
     Public WriteOnly Property Image As String
         Set(ByVal value As String)
             If value.Length < 10 Then Exit Property
-            MyImage.Source = ConvertArrayToImage(Window1.myService.GetByteFromImage(value))
+            MyImage.Source = ConvertArrayToImage(myservice.GetByteFromImage(value))
         End Set
     End Property
 
