@@ -20,6 +20,11 @@
                     MessageBox.Show("Vous avez modifié le port SOAP, n'oubliez pas:" & vbCrLf & "- D'enregistrer la configuration pour qu'elle soit prise en compte au prochain démarrage" & vbCrLf & "- De redémarrer le service", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     myservice.SetPortSOAP(IdSrv, TxtSOAP.Text)
                 End If
+                If IsNumeric(TxtFile.Text) = False Or CDbl(TxtFile.Text) < 1 Then
+                    MessageBox.Show("Veuillez saisir un numérique et positif pour la taille max du fichier de log!", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+
                 myservice.SetIdServer(IdSrv, TxtIdSrv.Text)
                 IdSrv = TxtIdSrv.Text
 
@@ -36,6 +41,8 @@
                 myservice.SetSMTPServeur(IdSrv, TxtAdresse.Text)
                 myservice.SetSMTPLogin(IdSrv, TxtLogin.Text)
                 myservice.SetSMTPPassword(IdSrv, TxtPassword.Password)
+                myService.SetMaxFileSizeLog(CDbl(TxtFile.Text))
+                myService.SetMaxMonthLog(CDbl(TxtMaxLogMonth.Text))
 
                 FlagChange = True
             End If
@@ -68,6 +75,8 @@
                 HCC.Text = myservice.GetHeureCorrectionCoucher
                 TxtIdSrv.Text = IdSrv
                 TxtSave.Text = myservice.GetTimeSave(IdSrv)
+                TxtFile.Text = myService.GetMaxFileSizeLog
+                TxtMaxLogMonth.Text = myService.GetMaxMonthLog
 
                 TxtAdresse.Text = myservice.GetSMTPServeur(IdSrv)
                 TxtMail.Text = myservice.GetSMTPMailServeur(IdSrv)
@@ -80,4 +89,17 @@
         End Try
     End Sub
 
+    Private Sub TxtMaxLogMonth_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMaxLogMonth.TextChanged
+        If IsNumeric(TxtMaxLogMonth.Text) = False Then
+            MessageBox.Show("Veuillez saisir un chiffre comme durée de mois maximum", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            TxtMaxLogMonth.Text = myservice.GetMaxMonthLog
+        End If
+    End Sub
+
+    Private Sub TxtFile_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtFile.TextChanged
+        If IsNumeric(TxtFile.Text) = False Then
+            MessageBox.Show("Veuillez saisir un chiffre comme taille maximale", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            TxtFile.Text = myservice.GetMaxFileSizeLog
+        End If
+    End Sub
 End Class

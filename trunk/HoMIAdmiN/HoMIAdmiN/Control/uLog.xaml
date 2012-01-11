@@ -9,13 +9,7 @@
         
         <StackPanel >
             <Label FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Name="Label1" VerticalAlignment="Top" HorizontalAlignment="Center">Log</Label>
-            <StackPanel Orientation="Horizontal" >
-                <Rectangle Width="90" />
-                <Label Content="Taille max du fichier Log (Ko):" Name="Label2" Margin="1" Foreground="White" />
-                <TextBox Height="24" Name="TxtFile" Width="143" />
-                <Label Content="Conservation ancien log (mois):" Name="Label4" Margin="1" Foreground="White" />
-                <TextBox Height="24" Name="TxtMaxLogMonth" Width="30" />
-            </StackPanel>
+            <Rectangle Height="20" />
             <StackPanel >
                 <GroupBox >
                     <GroupBox.Header>
