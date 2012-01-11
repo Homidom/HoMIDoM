@@ -46,7 +46,8 @@
             If _Action = EAction.Nouveau Then
                 Dim tabl As New ArrayList
                 tabl = UScenario1.Items
-                _MacroId = myservice.SaveMacro(IdSrv, "", TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
+                _MacroId = myService.SaveMacro(IdSrv, "", TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
+                FlagChange = True
                 RaiseEvent CloseMe(Me)
             Else
                 Dim tabl As New ArrayList

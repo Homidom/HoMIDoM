@@ -1,4 +1,5 @@
-﻿Public Class uElement
+﻿
+Public Class uElement
     Dim _Title As String = ""
     Dim _Image As String = ""
     Dim _ID As String = ""
@@ -40,7 +41,7 @@
     Public WriteOnly Property Image As String
         Set(ByVal value As String)
             If value.Length < 10 Then Exit Property
-            MyImage.Source = ConvertArrayToImage(myservice.GetByteFromImage(value))
+            MyImage.Source = ConvertArrayToImage(myService.GetByteFromImage(value))
         End Set
     End Property
 
@@ -51,6 +52,26 @@
 
     Private Sub Grid1_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Grid1.MouseMove
         Grid1.Background = Brushes.OrangeRed
+        'Try
+        '    Dim brush As New SolidColorBrush(Colors.DarkGray)
+        '    Grid1.Background = brush
+
+        '    Dim myDoubleAnimation As ColorAnimation = New ColorAnimation()
+        '    myDoubleAnimation.From = Colors.DarkGray
+        '    myDoubleAnimation.To = Colors.OrangeRed
+        '    myDoubleAnimation.Duration = New Duration(TimeSpan.FromSeconds(1))
+
+        '    Dim myStoryboard As Storyboard
+        '    myStoryboard = New Storyboard()
+        '    myStoryboard.Children.Add(myDoubleAnimation)
+        '    '        AddHandler myStoryboard.Completed, AddressOf StoryBoardFinish
+
+        '    Storyboard.SetTarget(myDoubleAnimation, brush)
+        '    Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(SolidColorBrush.ColorProperty))
+        '    myStoryboard.Begin()
+        'Catch ex As Exception
+        '    MessageBox.Show("Erreur: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK)
+        'End Try
     End Sub
 
     Private Sub Grid1_MouseLeave(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Grid1.MouseLeave

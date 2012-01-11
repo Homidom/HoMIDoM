@@ -8,7 +8,7 @@
 
     <Grid  Background="DarkGray" Name="Grid1">
         <Border BorderThickness="1" BorderBrush="Black" CornerRadius="5" />
-        <StackPanel Orientation="Horizontal" >
+        <StackPanel Name="Stk1" Orientation="Horizontal" >
             <Image Name="MyImage" Width="28 " Height="28" Margin="3" Source="/HoMIAdmiN;component/Images/blockdevice-icone-7594-128.png" />
             <Label Name="LabelElement" Margin="2" Content="#####################" Foreground="White" />
         </StackPanel>

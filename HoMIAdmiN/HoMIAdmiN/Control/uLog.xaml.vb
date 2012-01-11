@@ -43,10 +43,7 @@ Partial Public Class uLog
         RefreshLog()
 
         If IsConnect = True Then
-            TxtFile.Text = myservice.GetMaxFileSizeLog
-            TxtMaxLogMonth.Text = myservice.GetMaxMonthLog
-
-            Dim _list As List(Of Boolean) = myservice.GetTypeLogEnable
+            Dim _list As List(Of Boolean) = myService.GetTypeLogEnable
             ChkTyp0.IsChecked = _list.Item(0)
             ChkTyp1.IsChecked = _list.Item(1)
             ChkTyp2.IsChecked = _list.Item(2)
@@ -61,14 +58,7 @@ Partial Public Class uLog
     End Sub
 
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
-        If IsNumeric(TxtFile.Text) = False Or CDbl(TxtFile.Text) < 1 Then
-            MessageBox.Show("Veuillez saisir un numérique et positif pour la taille max du fichier de log!", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        End If
         If IsConnect = True Then
-            myservice.SetMaxFileSizeLog(CDbl(TxtFile.Text))
-            myservice.SetMaxMonthLog(CDbl(TxtMaxLogMonth.Text))
-
             Dim _list As New List(Of Boolean)
             If ChkTyp0.IsChecked Then
                 _list.Add(True)
@@ -121,25 +111,10 @@ Partial Public Class uLog
                 _list.Add(False)
             End If
 
-            myservice.SetTypeLogEnable(_list)
+            myService.SetTypeLogEnable(_list)
         End If
         RaiseEvent CloseMe(Me)
     End Sub
-
-    Private Sub TxtMaxLogMonth_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMaxLogMonth.TextChanged
-        If IsNumeric(TxtMaxLogMonth.Text) = False Then
-            MessageBox.Show("Veuillez saisir un chiffre comme durée de mois maximum", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            TxtMaxLogMonth.Text = myservice.GetMaxMonthLog
-        End If
-    End Sub
-
-    Private Sub TxtFile_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtFile.TextChanged
-        If IsNumeric(TxtFile.Text) = False Then
-            MessageBox.Show("Veuillez saisir un chiffre comme taille maximale", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            TxtFile.Text = myservice.GetMaxFileSizeLog
-        End If
-    End Sub
-
 
     Private Sub DGW_LoadingRow(ByVal sender As Object, ByVal e As System.Windows.Controls.DataGridRowEventArgs) Handles DGW.LoadingRow
         Exit Sub
