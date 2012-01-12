@@ -6,7 +6,20 @@ Driver_teleinfo
 </name>
 </assembly>
 <members>
-<member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.GetCommandPlus">
+<member name="P:Driver_teleinfo.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_teleinfo.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_teleinfo.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
@@ -64,25 +77,12 @@ Driver_teleinfo
 </member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
 	<summary>Fonction lancée sur reception de données sur le port COM</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.ProcessReceivedChar(System.Byte)">
-	<summary>Récupére les données reçu du port com et detecte les débuts et fin de paquet</summary>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Process(System.String)">
+	<summary>Recomponse les messages reçu</summary>
 	<remarks></remarks>
 </member><member name="T:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo">
 	<summary>Class Driver_Teleinfo, permet de communiquer avec le module USB de A DAUGUET</summary>
 	<remarks>Nécessite l'installation des pilotes fournis sur le site </remarks>
-</member><member name="P:Driver_teleinfo.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_teleinfo.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_teleinfo.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
 </member>
 </members>
 </doc>

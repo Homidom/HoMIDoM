@@ -415,43 +415,81 @@ Public Class Driver_Teleinfo
         ''' <remarks></remarks>
         Private Sub DataReceived(ByVal sender As Object, ByVal e As SerialDataReceivedEventArgs)
             'fonction qui lit les données sur le port serie
+            Dim LigneRecu As String
+
             Try
                 Dim count As Integer = 0
                 count = port.BytesToRead
-                If _IsConnect And count > 0 Then
-                    port.Read(BufferIn, 0, count)
-                    For i As Integer = 0 To count - 1
-                        ProcessReceivedChar(BufferIn(i))
-                    Next
+                '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "TeleInfo Datareceived", "Nombre de caracteres : " & count)
+                If count > 0 Then
+                    LigneRecu = port.ReadLine().ToString
+                    '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "TeleInfo Datareceived", "ligne recu : " & LigneRecu)
+                    Process(LigneRecu)
                 End If
+
             Catch Ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Datareceived", "Exception : " & Ex.Message)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Datareceived", "Exception : " & Ex.Message)
             End Try
         End Sub
 #End Region
 
-        ''' <summary>Récupére les données reçu du port com et detecte les débuts et fin de paquet</summary>
+  
+        ''' <summary>Recomponse les messages reçu</summary>
         ''' <remarks></remarks>
-        Private Sub ProcessReceivedChar(ByVal temp As Byte)
-            'fonction qui rassemble un message complet
-            'si c'est le premier byte qu'on recoit
-            Try
-                If firstbyte Then
-                    firstbyte = False
-                    bytecnt = 0
-                End If
-                recbuf(bytecnt) = temp
-                bytecnt += 1
-                If bytecnt = 9 Then
-                    firstbyte = True
-                    Process(recbuf)
-                End If
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS ProcessReceivedChar", "Exception : " & ex.Message)
-            End Try
-        End Sub
+        Private Sub Process(ByVal comBuffer As String)
 
-        Private Sub Process(ByVal comBuffer() As Byte)
+            Dim TeleInfo_adresse As String = ""
+            Dim data1 As String = ""
+
+            Dim charSeparators() As Char = {" "c}
+            Dim result() As String
+
+            ' Recupere les informations de la chaine recue
+            Try
+                result = comBuffer.Split(charSeparators, StringSplitOptions.RemoveEmptyEntries)
+                TeleInfo_adresse = result(0)
+                data1 = result(1)
+
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Get data", "Exception : " & ex.Message)
+            End Try
+
+ 
+            Try
+
+                Select Case TeleInfo_adresse
+                    Case "ADCO", "OPTARIF", "ISOUSC", "BASE", "PTEC"
+                        Try
+                            'Recherche si un device affecté
+                            Dim listedevices As New ArrayList
+                            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, TeleInfo_adresse, "", Me._ID, True)
+                            'un device trouvé on maj la value
+                            If (listedevices.Count = 1) Then
+                                If TypeOf listedevices.Item(0).Value Is Integer Then
+                                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "TeleInfo Process", " Type Conversion ")
+
+                                    listedevices.Item(0).Value = Convert.ToInt64(data1)
+                                    'correction valeur pour correspondre au type de value
+                                    '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "TeleInfo Process", " Value " & listedevices.Item(0) & " recue avec la valeur : " & data1)
+                                Else
+                                    listedevices.Item(0).Value = data1
+                                End If
+
+
+                                ' Plusieurs composants correspondent à l'adresse
+                            ElseIf (listedevices.Count > 1) Then
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process", "Plusieurs devices correspondent à : " & TeleInfo_adresse & ":" & data1)
+
+                            End If
+                        Catch ex As Exception
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo traitement", "Exception : " & ex.Message & " --> " & TeleInfo_adresse & " : " & data1)
+                        End Try
+                End Select
+
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Traitement commande reçue", "Exception : " & ex.Message)
+            End Try
+   
         End Sub
 
     End Class
