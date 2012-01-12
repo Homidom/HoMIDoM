@@ -6,7 +6,7 @@
     <DockPanel MinHeight="660" MinWidth="1002">
           
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top" >
-                     <Menu HorizontalAlignment="Left" Name="Menu1" Background="Transparent" Foreground="Black" FontSize="11">
+                    <Menu HorizontalAlignment="Left" Name="Menu1" Background="Transparent" Foreground="Black" FontSize="11">
                     <MenuItem Header="Fichier" Foreground="GhostWhite" FontFamily="Verdana">
                     <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig" Foreground="Black"/>
                     <MenuItem Header="Configuration du Serveur" Name="MenuConfigSrv"  Foreground="Black"/>
@@ -45,7 +45,51 @@
         
         <DockPanel Name="DKpanel">
             <TabControl Name="Tabcontrol1" MaxWidth="230" DockPanel.Dock="Left" >
-                <TabItem Header="Driver" >
+                <TabControl.Resources>
+                    <Style TargetType="{x:Type TabItem}">
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="HeaderTemplate">
+                            <Setter.Value>
+                                <DataTemplate>
+                                    <Border x:Name="grid">
+                                        <ContentPresenter>
+                                            <ContentPresenter.Content>
+                                                <TextBlock Margin="4" FontSize="11" Text="{TemplateBinding Content}" Foreground="white"/>
+                                            </ContentPresenter.Content>
+                                        </ContentPresenter>
+                                    </Border>
+                                </DataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type TabItem}">
+                                    <Grid>
+                                        <Border Name="Border" Margin="1" Background="black" BorderBrush="gray" BorderThickness="1,2,1,0" CornerRadius="5,5,0,0" >
+                                            <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="0" RecognizesAccessKey="True">
+                                                <ContentPresenter.LayoutTransform>
+                                                    <RotateTransform Angle="275" />
+                                                </ContentPresenter.LayoutTransform>
+                                            </ContentPresenter>
+                                        </Border>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Panel.ZIndex" Value="100" />
+                                            <Setter TargetName="Border" Property="Background" Value="#FF312D2D" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TabControl.Resources>
+                <TabControl.Background>
+                    <SolidColorBrush Color="black"/>
+                </TabControl.Background>
+
+                <TabItem Header="Driver">
                     <DockPanel  >
                         <StackPanel Orientation="Horizontal" Name="StkMnu0" DockPanel.Dock="Bottom">
                             <Label Margin="5" Name="CntDriver" Content="0 Driver(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
@@ -53,7 +97,7 @@
                         <TreeView Margin="3" Name="TreeViewDriver" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
                     </DockPanel>
                 </TabItem> 
-                <TabItem Header="Device" >
+                <TabItem Header="Composant" >
                         <DockPanel  >
                             <StackPanel Orientation="Horizontal" Name="StkMnu1" DockPanel.Dock="Bottom">
                         <Label Margin="5" Name="CntDevice" Content="0 Device(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
@@ -94,7 +138,7 @@
                         <TreeView Margin="3" Name="TreeViewMacro" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
                     </DockPanel>
                 </TabItem> 
-                <TabItem Header="Historisation" >
+                <TabItem Header="Historique" >
                     <DockPanel >
                     <StackPanel Orientation="Horizontal" Name="StkMnu6" DockPanel.Dock="Bottom">
                         <Button Height="22" Margin="5" Name="BtnGenereGraph" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Générer">
