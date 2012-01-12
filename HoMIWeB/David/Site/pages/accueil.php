@@ -28,33 +28,10 @@ echo "<div class=cadregauche>";
 
 
 echo "<div class='cadresl'>";
-ini_set('soap.wsdl_cache_enabled', 0);
-$client = new SoapClient('http://localhost:8000/ServiceModelSamples/service?wsdl');
-//$reponse= $client->GetTime();
-//print_r($reponse); //permet de connaitre la ppt à utiliser le l'objet qu'on récupère en SOAP
-//echo $reponse->GetTimeResult;
-
-$reponse= $client->GetAllDevices(array('IdSrv'=>"123456789"));
 
 
-echo "liste des devices : <br />";
-$i=0;
-$x=$reponse->GetAllDevicesResult->TemplateDevice;
-//print_r($x);
-for($i = 0; $i < count($x); $i++){
-	echo $x[$i]->_ID . " - " . $x[$i]->_Name . "<br />";
-}
-
-//print_r($reponse->GetAllDevicesResult);
-
-//echo $reponse->GetAllDevicesResult;
-
-//echo "<pre>\n";
-// Retourne la requete envoyée au serveur
-//echo "Request :\n".htmlspecialchars($client ->__getLastRequest()) ."\n";
-// Retourne la vraie réponse construite sur le serveur
-//echo "Response:\n".htmlspecialchars($client ->__getLastResponse())."\n";
-//echo "</pre>";
+$homidom = new HomidomClass("localhost", "7999", "123456789",true);
+$homidom->RefreshBddDevice();
 echo "</div>";
 
 

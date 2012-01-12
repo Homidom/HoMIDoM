@@ -3,6 +3,8 @@
 	if(isset($_SESSION['user_id'])){
 		include("./include_php/config.php");
 		include ("./include_php/fonctions.php");
+		include ("./include_php/homisoap.php");
+		include ("./include_php/homiclass.php");
 		$resultat = mysql_query("select config_valeur from config where config_nom='menu_seticone'");
 		$menuset = mysql_result($resultat,0,"config_valeur");
 ?>
