@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" package="net.colsup.homidroid" android:versionCode="1">
+  <application android:label="HoMIDroid">
+  </application>
+  <uses-sdk android:minSdkVersion="8" />
+  <uses-permission android:name="android.permission.INTERNET" />
+</manifest>
