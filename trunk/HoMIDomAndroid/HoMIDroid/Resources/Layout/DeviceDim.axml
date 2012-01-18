@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+  <TextView android:text="TextView" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_alignParentLeft="true" android:layout_marginTop="16dp" android:layout_marginLeft="20dp" android:layout_marginRight="20dp" android:layout_width="match_parent" android:gravity="center_horizontal" android:id="@+id/deviceDIM_txtName"></TextView>
+  <SeekBar android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_alignParentBottom="true" android:layout_alignLeft="@+id/textView2" android:layout_alignRight="@+id/textView2" android:layout_marginBottom="90dp" android:layout_marginLeft="10dp" android:layout_marginRight="10dp" android:id="@+id/deviceDIM_seekBar"></SeekBar>
+  <ImageButton android:layout_height="wrap_content" android:background="@null" android:layout_width="wrap_content" android:src="@drawable/light_bulb_on" android:layout_centerVertical="true" android:layout_centerHorizontal="true" android:id="@+id/deviceDim_btnAction"></ImageButton>
+  <ImageButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/deviceDIM_btn_minus" android:src="@drawable/minus" android:layout_alignParentBottom="true" android:layout_alignLeft="@+id/deviceDIM_seekBar" android:layout_marginBottom="34dp"></ImageButton>
+  <ImageButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/deviceDIM_btn_plus" android:src="@drawable/plus" android:layout_alignTop="@+id/deviceDIM_btn_minus" android:layout_alignRight="@+id/deviceDIM_seekBar"></ImageButton>
+  <TextView android:layout_height="wrap_content" android:text="0%" android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_alignTop="@+id/deviceDIM_btn_minus" android:layout_centerHorizontal="true" android:id="@+id/deviceDIM_txtPercent"></TextView>
+
+</RelativeLayout>

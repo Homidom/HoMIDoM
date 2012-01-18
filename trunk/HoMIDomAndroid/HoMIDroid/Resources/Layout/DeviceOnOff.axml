@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/LinearLayout1"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+  <TextView android:layout_alignParentLeft="true" android:layout_alignParentTop="true" android:layout_height="wrap_content" android:text="TextView" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_marginLeft="20dp" android:layout_marginRight="20dp" android:layout_marginTop="16dp" android:layout_width="match_parent" android:id="@+id/deviceOnOff_txtName"></TextView>
+  <ImageButton android:src="@drawable/light_bulb_on" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_centerVertical="true" android:layout_centerHorizontal="true" android:id="@+id/deviceOnOff_btnAction" android:background="@null"></ImageButton>
+
+</RelativeLayout>
