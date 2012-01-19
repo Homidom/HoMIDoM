@@ -26,6 +26,7 @@ Class Window1
     Dim _MainMenuAction As Integer = -1 'NEW,MODIF,SUPP -1 si aucun
     Dim myBrushVert As New RadialGradientBrush()
     Dim myBrushRouge As New RadialGradientBrush()
+    Dim flagTreeV As Boolean = False
 
     Public Sub New()
         Try
@@ -522,6 +523,8 @@ Class Window1
                     y.Tag = a.Nom
                     y.Uid = a.IdDevice
                     y.Foreground = New SolidColorBrush(Colors.White)
+                    Dim marg As New Thickness(-12, 0, 0, 0)
+                    y.Margin = marg
                     TreeViewHisto.Items.Add(y)
                 Next
             End If
@@ -589,6 +592,8 @@ Class Window1
     Public Sub UnloadControl(ByVal MyControl As Object)
         Try
             Me.Cursor = Cursors.Wait
+
+            RefreshTreeView()
 
             Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
             myDoubleAnimation.From = 1.0
@@ -1165,9 +1170,11 @@ Class Window1
 #Region "Treeview"
     Private Sub CloseTreeView()
         DKpanel.Width = 0
+        flagTreeV = False
     End Sub
 
     Private Sub ShowTreeView()
+        If flagTreeV = True Then Exit Sub
         DKpanel.Width = Double.NaN
         Dim da3 As DoubleAnimation = New DoubleAnimation
         da3.From = 0
@@ -1176,6 +1183,7 @@ Class Window1
         Dim sc As ScaleTransform = New ScaleTransform()
         DKpanel.RenderTransform = sc
         sc.BeginAnimation(ScaleTransform.ScaleXProperty, da3)
+        flagTreeV = True
     End Sub
 
     Private Sub TreeView_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewDriver.MouseDoubleClick, TreeViewDevice.MouseDoubleClick, TreeViewZone.MouseDoubleClick, TreeViewUser.MouseDoubleClick, TreeViewTrigger.MouseDoubleClick, TreeViewMacro.MouseDoubleClick, TreeViewHisto.MouseDoubleClick
@@ -1326,6 +1334,11 @@ Class Window1
     End Sub
 
     Private Sub Tabcontrol1_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles Tabcontrol1.SelectionChanged
+        RefreshTreeView()
+    End Sub
+
+    Private Sub RefreshTreeView()
+        Me.Cursor = Cursors.Wait
         Select Case Tabcontrol1.SelectedIndex
             Case 0
                 AffDriver()
@@ -1342,6 +1355,7 @@ Class Window1
             Case 6
                 AffHisto()
         End Select
+        Me.Cursor = Nothing
     End Sub
 
     Private Sub LOG_PreviewMouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Log.PreviewMouseMove
