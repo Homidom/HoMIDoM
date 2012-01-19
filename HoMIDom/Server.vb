@@ -58,6 +58,7 @@ Namespace HoMIDom
         <NonSerialized()> Dim fsw As FileSystemWatcher
         <NonSerialized()> Dim _MaxMonthLog As Integer = 2
         <NonSerialized()> Private Shared _TypeLogEnable As New List(Of Boolean) 'True si on doit pas prendre en compte le type de log
+        <NonSerialized()> Shared _4Log(3) As String  'Le serveur est prêt
         <NonSerialized()> Shared _CycleSave As Integer  'Enregistrer toute les X minutes
         <NonSerialized()> Shared _NextTimeSave As DateTime  'Enregistrer toute les X minutes
         <NonSerialized()> Shared _Finish As Boolean  'Le serveur est prêt
@@ -2184,6 +2185,13 @@ Namespace HoMIDom
             CLIENT = 7
         End Enum
 
+        Private Sub Write4Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
+            _4Log(3) = _4Log(2)
+            _4Log(2) = _4Log(1)
+            _4Log(1) = _4Log(0)
+            _4Log(0) = Now & " - " & TypLog.ToString & " - " & Source.ToString & " - " & Fonction & " - " & Message
+        End Sub
+
         ''' <summary>Ecrit un log dans le fichier log au format xml</summary>
         ''' <param name="TypLog"></param>
         ''' <param name="Source"></param>
@@ -2197,6 +2205,7 @@ Namespace HoMIDom
 
                 'on affiche dans la console
                 Console.WriteLine(Now & " " & TypLog & " " & Source & " " & Fonction & " " & Message)
+                Write4Log(TypLog, Source, Fonction, Message)
 
                 Dim Fichier As FileInfo
                 'Vérifie si le fichier log existe sinon le crée
@@ -6236,6 +6245,22 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetTypeLogEnable", "Erreur : " & ex.Message)
             End Try
         End Sub
+
+        ''' <summary>
+        ''' Retourne les 4 logs les plus récents (du plus récent au plus ancien)
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function Get4Log() As List(Of String) Implements IHoMIDom.Get4Log
+            Dim list As New List(Of String)
+
+            list.Add(_4Log(0))
+            list.Add(_4Log(1))
+            list.Add(_4Log(2))
+            list.Add(_4Log(3))
+
+            Return list
+        End Function
 
         ''' <summary>
         ''' Retourne le nombre de mois à conserver une archive de log avant de le supprimer
