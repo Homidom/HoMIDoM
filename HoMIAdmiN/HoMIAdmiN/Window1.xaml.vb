@@ -24,6 +24,8 @@ Class Window1
     Dim WMainMenu As Double = 0
     Dim HMainMenu As Double = 0
     Dim _MainMenuAction As Integer = -1 'NEW,MODIF,SUPP -1 si aucun
+    Dim myBrushVert As New RadialGradientBrush()
+    Dim myBrushRouge As New RadialGradientBrush()
 
     Public Sub New()
         Try
@@ -35,6 +37,18 @@ Class Window1
 
             ' Cet appel est requis par le Concepteur Windows Form.
             InitializeComponent()
+
+            myBrushVert.GradientOrigin = New Point(0.75, 0.25)
+            myBrushVert.GradientStops.Add(New GradientStop(Colors.LightGreen, 0.0))
+            myBrushVert.GradientStops.Add(New GradientStop(Colors.Green, 0.5))
+            myBrushVert.GradientStops.Add(New GradientStop(Colors.DarkGreen, 1.0))
+
+            myBrushRouge.GradientOrigin = New Point(0.75, 0.25)
+            myBrushRouge.GradientStops.Add(New GradientStop(Colors.Yellow, 0.0))
+            myBrushRouge.GradientStops.Add(New GradientStop(Colors.Red, 0.5))
+            myBrushRouge.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
+
+
             CloseTreeView()
 
             spl.Close()
@@ -63,13 +77,7 @@ Class Window1
                     LblStatus.Content = Now.ToLongDateString & " " & mytime & " "
                     mytime = ""
 
-                    If LblConnect.ToolTip Is Nothing Then
-                        Dim tool As New ToolTip
-                        tool.Content = "Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString()
-                        LblConnect.ToolTip = tool
-                        tool = Nothing
-                    End If
-                    
+                    LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString()
                     LblConnect.Content = Mid(myChannelFactory.Endpoint.Address.ToString(), 1, 32) & "..."
 
                     Dim mydate As Date
@@ -78,14 +86,7 @@ Class Window1
                     mydate = myService.GetHeureCoucherSoleil
                     LCS.Content = mydate.ToShortTimeString
 
-                    Dim myBrush As New RadialGradientBrush()
-                    myBrush.GradientOrigin = New Point(0.75, 0.25)
-                    myBrush.GradientStops.Add(New GradientStop(Colors.LightGreen, 0.0))
-                    myBrush.GradientStops.Add(New GradientStop(Colors.Green, 0.5))
-                    myBrush.GradientStops.Add(New GradientStop(Colors.DarkGreen, 1.0))
-                    Ellipse1.Fill = myBrush
-                    myBrush = Nothing
-
+                    Ellipse1.Fill = myBrushVert
                 Catch ex As Exception
                     IsConnect = False
                     LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString & " "
@@ -94,25 +95,13 @@ Class Window1
 
                     ClearAllTreeview()
 
-                    Dim myBrush As New RadialGradientBrush()
-                    myBrush.GradientOrigin = New Point(0.75, 0.25)
-                    myBrush.GradientStops.Add(New GradientStop(Colors.Yellow, 0.0))
-                    myBrush.GradientStops.Add(New GradientStop(Colors.Red, 0.5))
-                    myBrush.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
-                    Ellipse1.Fill = myBrush
-                    myBrush = Nothing
+                    Ellipse1.Fill = myBrushVert
                 End Try
             Else
                 LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString & "      "
                 LblConnect.Content = "Serveur non connecté"
 
-                Dim myBrush As New RadialGradientBrush()
-                myBrush.GradientOrigin = New Point(0.75, 0.25)
-                myBrush.GradientStops.Add(New GradientStop(Colors.Yellow, 0.0))
-                myBrush.GradientStops.Add(New GradientStop(Colors.Red, 0.5))
-                myBrush.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
-                Ellipse1.Fill = myBrush
-                myBrush = Nothing
+                Ellipse1.Fill = myBrushRouge
             End If
         Catch ex As Exception
             MessageBox.Show("ERREUR dispatcherTimer_Tick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -622,7 +611,6 @@ Class Window1
 
     Private Sub StoryBoardFinish(ByVal sender As Object, ByVal e As System.EventArgs)
         CanvasRight.Children.Clear()
-        CloseTreeView()
         ShowMainMenu()
     End Sub
 
@@ -1376,6 +1364,7 @@ Class Window1
                 HMainMenu = CanvasRight.ActualHeight / 2 - (x.Height / 2)
                 CanvasRight.SetLeft(x, WMainMenu)
                 CanvasRight.SetTop(x, HMainMenu)
+                x = Nothing
             End If
         End If
     End Sub
