@@ -188,6 +188,8 @@ Class Window1
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
                 newchild.Uid = zon.ID
+                Dim marg As New Thickness(-12, 0, 0, 0)
+                newchild.Margin = marg
                 TreeViewZone.Items.Add(newchild)
             Next
 
@@ -235,6 +237,8 @@ Class Window1
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
                 newchild.Uid = Usr.ID
+                Dim marg As New Thickness(-12, 0, 0, 0)
+                newchild.Margin = marg
                 TreeViewUser.Items.Add(newchild)
             Next
 
@@ -310,13 +314,12 @@ Class Window1
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
                 newchild.Uid = Drv.ID
+
+                Dim marg As New Thickness(-12, 0, 0, 0)
+                newchild.Margin = marg
                 TreeViewDriver.Items.Add(newchild)
             Next
 
-            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1 'Obj.Drivers.Count - 1
-
-
-            Next
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffDriver: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -406,6 +409,8 @@ Class Window1
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
                 newchild.Uid = Dev.ID
+                Dim marg As New Thickness(-12, 0, 0, 0)
+                newchild.Margin = marg
                 TreeViewDevice.Items.Add(newchild)
             Next
         Catch ex As Exception
@@ -452,6 +457,8 @@ Class Window1
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
                 newchild.Uid = Mac.ID
+                Dim marg As New Thickness(-12, 0, 0, 0)
+                newchild.Margin = marg
                 TreeViewMacro.Items.Add(newchild)
             Next
 
@@ -499,20 +506,14 @@ Class Window1
                 newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
                 newchild.Uid = Trig.ID
+                Dim marg As New Thickness(-12, 0, 0, 0)
+                newchild.Margin = marg
                 TreeViewTrigger.Items.Add(newchild)
             Next
 
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub Afftrigger: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
-    End Sub
-
-    'Afficher la liste des schedule
-    Public Sub AffSchedule()
-        'TreeViewSchedule.Nodes.Clear()
-        'For i As Integer = 0 To Obj.Schedules.Count - 1
-        '    TreeViewSchedule.Nodes.Add(Obj.Schedules.Item(i).ID, Obj.Schedules.Item(i).Name)
-        'Next
     End Sub
 
     'Afficher la liste des historisations
@@ -540,15 +541,6 @@ Class Window1
         End Try
     End Sub
 
-    Public Sub AffAll()
-        AffDriver()
-        AffDevice()
-        AffZone()
-        AffUser()
-        AffTrigger()
-        AffScene()
-        AffHisto()
-    End Sub
 #End Region
 
 #Region "Drivers"
@@ -760,6 +752,7 @@ Class Window1
 
     Private Sub ShowMainMenu()
         Dim MainMenu As New uMainMenu
+        MainMenu.Uid = "MAINMENU"
         AddHandler MainMenu.ChangeMenu, AddressOf MainMenuChange
         AddHandler MainMenu.Delete, AddressOf MainMenuDelete
         AddHandler MainMenu.Edit, AddressOf MainMenuEdit
@@ -776,12 +769,9 @@ Class Window1
 #Region "MainMenu"
     Private Sub MainMenuChange(ByVal index As Integer)
         Me.Cursor = Cursors.Wait
-
-        ShowTreeView()
-
+        If Tabcontrol1.SelectedIndex = 0 And index = 0 Then AffDriver()
         Tabcontrol1.SelectedIndex = index
         Select Case index
-            Case 0
             Case 7
                 Try
                     If IsConnect = False Then
@@ -799,6 +789,7 @@ Class Window1
                     MessageBox.Show("ERREUR Sub MnuViewLog: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                 End Try
         End Select
+        ShowTreeView()
         Me.Cursor = Nothing
     End Sub
 
@@ -993,19 +984,19 @@ Class Window1
                             Select Case Objet.Type
                                 Case 0
                                 Case 1
-                                    retour = myservice.DeleteDevice(IdSrv, Objet.retour)
+                                    retour = myService.DeleteDevice(IdSrv, Objet.retour)
                                     AffDevice()
                                 Case 2
-                                    retour = myservice.DeleteZone(IdSrv, Objet.retour)
+                                    retour = myService.DeleteZone(IdSrv, Objet.retour)
                                     AffZone()
                                 Case 3
-                                    retour = myservice.DeleteUser(IdSrv, Objet.retour)
+                                    retour = myService.DeleteUser(IdSrv, Objet.retour)
                                     AffUser()
                                 Case 4
-                                    retour = myservice.DeleteTrigger(IdSrv, Objet.retour)
+                                    retour = myService.DeleteTrigger(IdSrv, Objet.retour)
                                     AffTrigger()
                                 Case 5
-                                    retour = myservice.DeleteMacro(IdSrv, Objet.retour)
+                                    retour = myService.DeleteMacro(IdSrv, Objet.retour)
                                     AffScene()
                             End Select
 
@@ -1189,10 +1180,7 @@ Class Window1
     End Sub
 
     Private Sub ShowTreeView()
-        AffAll()
-
         DKpanel.Width = Double.NaN
-
         Dim da3 As DoubleAnimation = New DoubleAnimation
         da3.From = 0
         da3.To = 1
@@ -1349,4 +1337,46 @@ Class Window1
         If IsConnect = False Then PageConnexion()
     End Sub
 
+    Private Sub Tabcontrol1_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles Tabcontrol1.SelectionChanged
+        Select Case Tabcontrol1.SelectedIndex
+            Case 0
+                AffDriver()
+            Case 1
+                AffDevice()
+            Case 2
+                AffZone()
+            Case 3
+                AffUser()
+            Case 4
+                AffTrigger()
+            Case 5
+                AffScene()
+            Case 6
+                AffHisto()
+        End Select
+    End Sub
+
+    Private Sub LOG_PreviewMouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Log.PreviewMouseMove
+        If IsConnect = True Then
+            Dim list As New List(Of String)
+            Dim a As String = ""
+            list = myService.Get4Log
+            For i As Integer = 0 To list.Count - 1
+                a &= list(i) & vbCrLf
+            Next
+            LOG.ToolTip = a
+        End If
+    End Sub
+
+    Private Sub CanvasRight_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles CanvasRight.SizeChanged
+        If CanvasRight.Children.Count > 0 Then
+            If CanvasRight.Children.Item(0).Uid = "MAINMENU" Then
+                Dim x As uMainMenu = CanvasRight.Children.Item(0)
+                WMainMenu = CanvasRight.ActualWidth / 2 - (x.Width / 2)
+                HMainMenu = CanvasRight.ActualHeight / 2 - (x.Height / 2)
+                CanvasRight.SetLeft(x, WMainMenu)
+                CanvasRight.SetTop(x, HMainMenu)
+            End If
+        End If
+    End Sub
 End Class

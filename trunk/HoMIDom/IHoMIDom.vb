@@ -758,6 +758,13 @@ Namespace HoMIDom
 #Region "Log"
 
         ''' <summary>
+        ''' Retourne les 4 logs les plus récents (du plus récent au plus ancien)
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function Get4Log() As List(Of String)
+
+        ''' <summary>
         ''' Retourne pour chaque type de log s'il doit être pris en compte ou non
         ''' </summary>
         ''' <returns></returns>

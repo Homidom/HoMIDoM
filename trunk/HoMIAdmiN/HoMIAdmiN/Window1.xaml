@@ -235,10 +235,12 @@
                 </Image.LayoutTransform>
             </Image>
             <Label Content="Serveur courant: ?" Foreground=" White" Name="LblSrv"/>
+            <Rectangle Width="15"/>
+            <Label Name="LOG" Content="LOG" Foreground=" White"/>
         </StackPanel>
         
         <DockPanel Name="DKpanel">
-            <TabControl Name="Tabcontrol1" MaxWidth="230" DockPanel.Dock="Left" Width="230">
+            <TabControl Name="Tabcontrol1" MaxWidth="230" DockPanel.Dock="Left" Width="230" Background="black" SelectedIndex="-1">
                 <TabControl.Resources>
                     <Style TargetType="{x:Type TabItem}">
                         <Setter Property="BorderThickness" Value="0"/>
@@ -303,10 +305,6 @@
                         </Setter>
                     </Style>
                 </TabControl.Resources>
-                <TabControl.Background>
-                    <SolidColorBrush Color="black"/>
-                </TabControl.Background>
-
                 <TabItem Header="Driver">
                     <DockPanel  >
                         <StackPanel Orientation="Horizontal" Name="StkMnu0" DockPanel.Dock="Bottom">

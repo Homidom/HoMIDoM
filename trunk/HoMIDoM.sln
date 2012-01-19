@@ -54,6 +54,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_X10_CM15", "Driver_X
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Arduino", "Driver_Arduino\Driver_Arduino.vbproj", "{BBBA21FA-21D8-4A73-B392-43D85D3BF076}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_teleinfo", "Driver_teleinfo\Driver_teleinfo.vbproj", "{47A7B1DB-9947-4508-912C-E84EEB9E6D1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -236,6 +238,16 @@ Global
 		{BBBA21FA-21D8-4A73-B392-43D85D3BF076}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{BBBA21FA-21D8-4A73-B392-43D85D3BF076}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{BBBA21FA-21D8-4A73-B392-43D85D3BF076}.Release|x86.ActiveCfg = Release|Any CPU
+		{47A7B1DB-9947-4508-912C-E84EEB9E6D1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47A7B1DB-9947-4508-912C-E84EEB9E6D1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47A7B1DB-9947-4508-912C-E84EEB9E6D1E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{47A7B1DB-9947-4508-912C-E84EEB9E6D1E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{47A7B1DB-9947-4508-912C-E84EEB9E6D1E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{47A7B1DB-9947-4508-912C-E84EEB9E6D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47A7B1DB-9947-4508-912C-E84EEB9E6D1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47A7B1DB-9947-4508-912C-E84EEB9E6D1E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{47A7B1DB-9947-4508-912C-E84EEB9E6D1E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{47A7B1DB-9947-4508-912C-E84EEB9E6D1E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
