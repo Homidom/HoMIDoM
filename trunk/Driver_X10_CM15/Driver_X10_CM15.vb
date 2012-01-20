@@ -178,7 +178,6 @@ Public Class Driver_X10_CM15
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: " & ex.ToString)
         End Try
-        ' Objet.Value = ReadBinaireChannel(Objet.Adresse1)
     End Sub
 
     Public Property Refresh() As Integer Implements HoMIDom.HoMIDom.IDriver.Refresh
@@ -243,6 +242,9 @@ Public Class Driver_X10_CM15
             If ActiveHomeObj IsNot Nothing Then
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Connectée")
                 _IsConnect = True
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur lors de la connexion au CM15")
+                _IsConnect = False
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur lors du démarrage du driver: " & ex.ToString)
