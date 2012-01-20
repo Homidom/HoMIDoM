@@ -519,7 +519,11 @@ Class Window1
                     Dim a As Historisation = x.Item(i)
                     Dim b As String = myService.ReturnDeviceByID(IdSrv, a.IdDevice).Name
                     If b = "" Then b = "?"
-                    y.Content = a.Nom & " {" & b & "}"
+                    If a.Nom = "Value" Then
+                        y.Content = b
+                    Else
+                        y.Content = b & ": " & a.Nom
+                    End If
                     y.Tag = a.Nom
                     y.Uid = a.IdDevice
                     y.Foreground = New SolidColorBrush(Colors.White)
