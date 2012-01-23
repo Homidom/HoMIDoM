@@ -20,6 +20,13 @@ Driver_Virtuel
 	<param name="Param"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:Driver_Virtuel.Driver_Virtuel.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:Driver_Virtuel.Driver_Virtuel.Start">
 	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>

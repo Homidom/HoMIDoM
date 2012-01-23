@@ -38,6 +38,8 @@ Imports UsbLibrary
     Dim _Device As HoMIDom.HoMIDom.Device
     Dim _DeviceSupport As New ArrayList
     Dim _Parametres As New ArrayList
+    Dim _LabelsDriver As New ArrayList
+    Dim _LabelsDevice As New ArrayList
     Dim MyTimer As New Timers.Timer
     Dim _IdSrv As String
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
@@ -86,6 +88,22 @@ Imports UsbLibrary
         End Set
     End Property
 
+    Public Property LabelsDriver() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.LabelsDriver
+        Get
+            Return _LabelsDriver
+        End Get
+        Set(ByVal value As System.Collections.ArrayList)
+            _LabelsDriver = value
+        End Set
+    End Property
+    Public Property LabelsDevice() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.LabelsDevice
+        Get
+            Return _LabelsDevice
+        End Get
+        Set(ByVal value As System.Collections.ArrayList)
+            _LabelsDevice = value
+        End Set
+    End Property
     Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
 
     Public Property Enable() As Boolean Implements HoMIDom.HoMIDom.IDriver.Enable
@@ -229,6 +247,24 @@ Imports UsbLibrary
         Return retour
     End Function
 
+    ''' <summary>
+    ''' Permet de vérifier si un champ est valide
+    ''' </summary>
+    ''' <param name="Champ"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function VerifChamp(ByVal Champ As String, ByVal Value As Object) As String Implements HoMIDom.HoMIDom.IDriver.VerifChamp
+        Try
+            Dim retour As String = "0"
+            Select Case UCase(Champ)
+
+
+            End Select
+            Return retour
+        Catch ex As Exception
+            Return "Une erreur est apparue lors de la vérification du champ " & Champ & ": " & ex.ToString
+        End Try
+    End Function
 
     ''' <summary>Démarrer le du driver</summary>
     ''' <remarks></remarks>

@@ -108,6 +108,16 @@ Partial Public Class uDriver
                 TxtVersion.Text = x.Version
                 TxtModele.Text = x.Modele
 
+                If x.LabelsDriver.Count > 0 Then
+                    For k As Integer = 0 To x.LabelsDriver.Count - 1
+                        Select Case x.LabelsDriver.Item(k).NomChamp
+                            Case "HELP"
+                                LblHelp.Visibility = Windows.Visibility.Visible
+                                LblHelp.ToolTip = x.LabelsDriver.Item(k).Tooltip
+                        End Select
+                    Next
+                End If
+
                 If x.DeviceAction.Count = 0 Then
                     Label12.Visibility = Windows.Visibility.Hidden
                     BtnAv.Visibility = Windows.Visibility.Hidden
@@ -115,7 +125,7 @@ Partial Public Class uDriver
                 End If
 
                 If x.Picture <> "" And x.Picture <> " " Then
-                    ImgDevice.Source = ConvertArrayToImage(myservice.GetByteFromImage(x.Picture))
+                    ImgDevice.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Picture))
                     ImgDevice.Tag = x.Picture
                 End If
 

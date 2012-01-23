@@ -20,6 +20,13 @@ Driver_RFXComReceiver
 	<param name="Param"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:Driver_RFXComReceiver.Driver_RFXComReceiver.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:Driver_RFXComReceiver.Driver_RFXComReceiver.Start">
 	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>

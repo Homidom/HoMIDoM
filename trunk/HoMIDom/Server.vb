@@ -1897,6 +1897,7 @@ Namespace HoMIDom
                         tabl.Add(_ListDrivers.Item(i).Picture)
                         tabl.Add(_ListDrivers.Item(i).DeviceSupport)
                         tabl.Add(_ListDrivers.Item(i).Parametres)
+                        tabl.Add(_ListDrivers.Item(i).Labels)
                         Return tabl
                         Exit For
                     End If
@@ -1944,6 +1945,10 @@ Namespace HoMIDom
                             Case "PARAMETRES"
                                 For idx As Integer = 0 To Parametre.count - 1
                                     _ListDrivers.Item(i).Parametres.item(idx).valeur = Parametre(idx)
+                                Next
+                            Case "LABELS"
+                                For idx As Integer = 0 To Parametre.count - 1
+                                    _ListDrivers.Item(i).Labels.item(idx).tooltip = Parametre(idx)
                                 Next
                             Case "DELETEDEVICE"
                                 _ListDrivers.Item(i).DeleteDevice(Parametre)
@@ -3801,12 +3806,33 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).id = DriverId Then
                         _ListDrivers.Item(i).start()
+                        Exit For
                     End If
                 Next
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "StartDriver", "Exception : " & ex.Message)
             End Try
         End Sub
+
+        Public Function VerifChamp(ByVal Idsrv As String, ByVal DriverId As String, ByVal Champ As String, ByVal Value As Object) As String Implements IHoMIDom.VerifChamp
+            Try
+                If VerifIdSrv(Idsrv) = False Then
+                    Exit Function
+                End If
+
+                Dim retour As String = "0"
+
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).id = DriverId Then
+                        retour = _ListDrivers.Item(i).VerifChamp(Champ, Value)
+                        Exit For
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Return "Une erreur est apparue lors de la vérification du champ " & Champ & ": " & ex.ToString
+            End Try
+        End Function
 
         ''' <summary>Retourne la liste de tous les drivers</summary>
         ''' <returns></returns>
@@ -3847,6 +3873,20 @@ Namespace HoMIDom
                             y.Description = _ListDrivers.Item(i).Parametres.item(j).description
                             y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
                             .Parametres.Add(y)
+                        Next
+                        For j As Integer = 0 To _ListDrivers.Item(i).LabelsDriver.count - 1
+                            Dim y As New Driver.cLabels
+                            y.NomChamp = _ListDrivers.Item(i).LabelsDriver.item(j).NomChamp
+                            y.LabelChamp = _ListDrivers.Item(i).LabelsDriver.item(j).LabelChamp
+                            y.Tooltip = _ListDrivers.Item(i).LabelsDriver.item(j).Tooltip
+                            .LabelsDriver.Add(y)
+                        Next
+                        For j As Integer = 0 To _ListDrivers.Item(i).LabelsDevice.count - 1
+                            Dim y As New Driver.cLabels
+                            y.NomChamp = _ListDrivers.Item(i).LabelsDevice.item(j).NomChamp
+                            y.LabelChamp = _ListDrivers.Item(i).LabelsDevice.item(j).LabelChamp
+                            y.Tooltip = _ListDrivers.Item(i).LabelsDevice.item(j).Tooltip
+                            .LabelsDevice.Add(y)
                         Next
                         Dim _listactdrv As New ArrayList
                         Dim _listactd As New List(Of String)
@@ -3992,7 +4032,20 @@ Namespace HoMIDom
                             y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
                             retour.Parametres.Add(y)
                         Next
-
+                        For j As Integer = 0 To _ListDrivers.Item(i).LabelsDriver.count - 1
+                            Dim y As New Driver.cLabels
+                            y.NomChamp = _ListDrivers.Item(i).LabelsDriver.item(j).NomChamp
+                            y.LabelChamp = _ListDrivers.Item(i).LabelsDriver.item(j).LabelChamp
+                            y.Tooltip = _ListDrivers.Item(i).LabelsDriver.item(j).Tooltip
+                            retour.LabelsDriver.Add(y)
+                        Next
+                        For j As Integer = 0 To _ListDrivers.Item(i).LabelsDevice.count - 1
+                            Dim y As New Driver.cLabels
+                            y.NomChamp = _ListDrivers.Item(i).LabelsDevice.item(j).NomChamp
+                            y.LabelChamp = _ListDrivers.Item(i).LabelsDevice.item(j).LabelChamp
+                            y.Tooltip = _ListDrivers.Item(i).LabelsDevice.item(j).Tooltip
+                            retour.LabelsDevice.Add(y)
+                        Next
                         Dim _listactdrv As New ArrayList
                         Dim _listactd As New List(Of String)
                         For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1

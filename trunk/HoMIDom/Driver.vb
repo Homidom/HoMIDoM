@@ -26,6 +26,24 @@
             End Set
         End Property
 
+        Public Property LabelsDriver() As ArrayList
+            Get
+                Return _Server.ReturnDriver(_ID).Item(17)
+            End Get
+            Set(ByVal value As ArrayList)
+                _Server.WriteDriver(_ID, "LABELSDRIVER", value)
+            End Set
+        End Property
+
+        Public Property LabelsDevice() As ArrayList
+            Get
+                Return _Server.ReturnDriver(_ID).Item(17)
+            End Get
+            Set(ByVal value As ArrayList)
+                _Server.WriteDriver(_ID, "LABELSDEVICE", value)
+            End Set
+        End Property
+
         Public Property COM() As String
             Get
                 Return _Server.ReturnDriver(_ID).Item(10)
@@ -207,6 +225,39 @@
                 End Get
                 Set(ByVal value As Object)
                     _Value = value
+                End Set
+            End Property
+        End Class
+
+        Public Class cLabels
+            Dim _NomChamp As String
+            Dim _LabelChamp As String
+            Dim _ToolTip As String
+
+            Public Property NomChamp As String
+                Get
+                    Return _NomChamp
+                End Get
+                Set(ByVal value As String)
+                    _NomChamp = value
+                End Set
+            End Property
+
+            Public Property LabelChamp As String
+                Get
+                    Return _LabelChamp
+                End Get
+                Set(ByVal value As String)
+                    _LabelChamp = value
+                End Set
+            End Property
+
+            Public Property Tooltip As String
+                Get
+                    Return _ToolTip
+                End Get
+                Set(ByVal value As String)
+                    _ToolTip = value
                 End Set
             End Property
         End Class

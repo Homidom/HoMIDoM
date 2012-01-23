@@ -32,6 +32,8 @@
         Property Picture() As String
         ReadOnly Property DeviceSupport() As ArrayList
         Property Parametres() As ArrayList
+        Property LabelsDriver As ArrayList
+        Property LabelsDevice As ArrayList
 
         Sub Start()
         Sub [Stop]()
@@ -40,6 +42,7 @@
         Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing)
         Sub DeleteDevice(ByVal DeviceId As String)
         Sub NewDevice(ByVal DeviceId As String)
+        Function VerifChamp(ByVal Champ As String, ByVal Value As Object) As String
 
         'Fonctions à gérer par driver
 
