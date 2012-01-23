@@ -20,6 +20,13 @@ Driver_k8055
 	<param name="Param"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:Driver_k8055.Driver_k8055.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="T:Driver_k8055.Driver_k8055">
 	<summary>Driver Velleman k8055, le device doit dans son adresse 1 indiqué sa carte et son numéro de relais séparé par un x, exemple pour le relais 1 de la carte 1: 1x1</summary>
 	<remarks>Nécessite la dll k8055d.dll</remarks>

@@ -6,7 +6,14 @@ Driver_DMX
 </name>
 </assembly>
 <members>
-<member name="T:Driver_DMX.Driver_DMX">
+<member name="M:Driver_DMX.Driver_DMX.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:Driver_DMX.Driver_DMX">
 	<summary>Driver DMX</summary>
 	<remarks></remarks>
 </member><member name="P:Driver_DMX.My.Resources.Resources.ResourceManager">

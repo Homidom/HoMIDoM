@@ -20,6 +20,13 @@ Driver_MeteoGoogle
 	<param name="Param"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:Driver_MeteoGoogle.Driver_MeteoGoogle.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:Driver_MeteoGoogle.Driver_MeteoGoogle.Start">
 	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>

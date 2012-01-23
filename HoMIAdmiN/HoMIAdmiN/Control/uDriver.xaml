@@ -20,6 +20,8 @@
                 <TextBox Height="22" HorizontalAlignment="Left" Name="TxtNom" VerticalAlignment="Top" Width="215" Foreground="Black" Background="DarkGray" BorderBrush="Black" IsEnabled="False" SelectionBrush="DarkGray" />
                 <CheckBox Margin="4" Name="ChkEnable" VerticalAlignment="Top" Foreground="White" IsChecked="False">Enable</CheckBox>
                 <CheckBox Foreground="White" HorizontalAlignment="Right" IsChecked="False" Margin="4" Name="CbStartAuto" VerticalAlignment="Top" >StartAuto</CheckBox>
+                <Rectangle Width="50" />
+                <Label Foreground=" White" Name="LblHelp" Content="Aide" Visibility="Hidden" />
             </StackPanel>
             <Label Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" Content="Description:"></Label>
             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="Black" Name="TxtDescript" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" IsEnabled="False" />

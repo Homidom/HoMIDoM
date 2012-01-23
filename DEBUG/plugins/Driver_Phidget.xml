@@ -33,6 +33,13 @@ Driver_Phidget
 	<param name="Param"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:Driver_Phidget.Driver_Phidget.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:Driver_Phidget.Driver_Phidget.traitement(System.Boolean,System.String)">
 	<summary>Traite les paquets reçus</summary>
 	<remarks></remarks>

@@ -23,6 +23,8 @@
         Dim _Picture As String = ""
         Dim _DeviceSupport As New List(Of String)
         Dim _Parametres As New List(Of Driver.Parametre)
+        Dim _LabelsDriver As New List(Of Driver.cLabels)
+        Dim _LabelsDevice As New List(Of Driver.cLabels)
         Dim _DeviceAction As New List(Of DeviceAction)
 
         Public Property ID() As String  'Identification unique du driver
@@ -169,6 +171,25 @@
                 _Parametres = value
             End Set
         End Property
+
+        Public Property LabelsDriver() As List(Of Driver.cLabels)
+            Get
+                Return _LabelsDriver
+            End Get
+            Set(ByVal value As List(Of Driver.cLabels))
+                _LabelsDriver = value
+            End Set
+        End Property
+
+        Public Property LabelsDevice() As List(Of Driver.cLabels)
+            Get
+                Return _LabelsDevice
+            End Get
+            Set(ByVal value As List(Of Driver.cLabels))
+                _LabelsDevice = value
+            End Set
+        End Property
+
         Public Property DeviceAction() As List(Of DeviceAction)
             Get
                 Return _DeviceAction

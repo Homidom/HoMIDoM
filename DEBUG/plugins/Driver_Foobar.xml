@@ -20,6 +20,13 @@ Driver_Foobar
 	<param name="Param"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:Driver_Foobar.Driver_Foobar.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:Driver_Foobar.Driver_Foobar.Start">
 	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>

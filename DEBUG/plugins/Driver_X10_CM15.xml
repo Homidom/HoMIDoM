@@ -20,6 +20,13 @@ Driver_X10_CM15
 	<param name="Param"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:Driver_X10_CM15.Driver_X10_CM15.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="P:Driver_X10_CM15.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.

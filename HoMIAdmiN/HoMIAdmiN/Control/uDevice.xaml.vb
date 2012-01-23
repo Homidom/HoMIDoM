@@ -9,6 +9,7 @@ Partial Public Class uDevice
     Dim _Action As EAction 'Définit si modif ou création d'un device
     Dim _DeviceId As String 'Id du device à modifier
     Dim FlagNewCmd As Boolean
+    Dim _Driver As HoMIDom.HoMIDom.TemplateDriver
 
     Public Sub New(ByVal Action As Classe.EAction, ByVal DeviceId As String)
 
@@ -52,8 +53,31 @@ Partial Public Class uDevice
                     End If
 
                     For j As Integer = 0 To myservice.GetAllDrivers(IdSrv).Count - 1 'Window1.Obj.Drivers.Count - 1
-                        If myservice.GetAllDrivers(IdSrv).Item(j).ID = x.DriverID Then
-                            CbDriver.SelectedValue = myservice.GetAllDrivers(IdSrv).Item(j).Nom
+                        If myService.GetAllDrivers(IdSrv).Item(j).ID = x.DriverID Then
+                            _Driver = myService.GetAllDrivers(IdSrv).Item(j)
+                            CbDriver.SelectedValue = _Driver.Nom
+                            If _Driver.LabelsDevice.Count > 0 Then
+                                For k As Integer = 0 To _Driver.LabelsDevice.Count - 1
+                                    Select Case UCase(_Driver.LabelsDevice.Item(k).NomChamp)
+                                        Case "ADRESSE1"
+                                            If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
+                                                TxtAdresse1.Visibility = Windows.Visibility.Hidden
+                                                Label6.Visibility = Windows.Visibility.Hidden
+                                            Else
+                                                Label6.Content = _Driver.LabelsDevice.Item(k).LabelChamp
+                                                TxtAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                            End If
+                                        Case "ADRESSE2"
+                                            If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
+                                                TxtAdresse2.Visibility = Windows.Visibility.Hidden
+                                                Label7.Visibility = Windows.Visibility.Hidden
+                                            Else
+                                                Label7.Content = _Driver.LabelsDevice.Item(k).LabelChamp
+                                                TxtAdresse2.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                            End If
+                                    End Select
+                                Next
+                            End If
                             Exit For
                         End If
                     Next
@@ -208,10 +232,12 @@ Partial Public Class uDevice
 
             TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
 
+            'MessageBox.Show("TEST: " & myService.VerifChamp(IdSrv, _Driver.ID, " ", ""))
+
             Dim _driverid As String = ""
             For i As Integer = 0 To myservice.GetAllDrivers(IdSrv).Count - 1 'Window1.Obj.Drivers.Count - 1
                 If myservice.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
-                    _driverid = myservice.GetAllDrivers(IdSrv).Item(i).ID
+                    _driverid = myService.GetAllDrivers(IdSrv).Item(i).ID
                     Exit For
                 End If
             Next
@@ -533,4 +559,36 @@ Partial Public Class uDevice
         Next
     End Sub
 
+    Private Sub CbDriver_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbDriver.SelectionChanged
+        If CbDriver.SelectedIndex < 0 Then Exit Sub
+
+        For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1 'Window1.Obj.Drivers.Count - 1
+            If myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
+                _Driver = myService.GetAllDrivers(IdSrv).Item(i)
+                If _Driver.LabelsDevice.Count > 0 Then
+                    For k As Integer = 0 To _Driver.LabelsDevice.Count - 1
+                        Select Case UCase(_Driver.LabelsDevice.Item(k).NomChamp)
+                            Case "ADRESSE1"
+                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
+                                    TxtAdresse1.Visibility = Windows.Visibility.Hidden
+                                    Label6.Visibility = Windows.Visibility.Hidden
+                                Else
+                                    Label6.Content = _Driver.LabelsDevice.Item(k).LabelChamp
+                                    TxtAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                End If
+                            Case "ADRESSE2"
+                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
+                                    TxtAdresse2.Visibility = Windows.Visibility.Hidden
+                                    Label7.Visibility = Windows.Visibility.Hidden
+                                Else
+                                    Label7.Content = _Driver.LabelsDevice.Item(k).LabelChamp
+                                    TxtAdresse2.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                End If
+                        End Select
+                    Next
+                End If
+                Exit For
+            End If
+        Next
+    End Sub
 End Class
