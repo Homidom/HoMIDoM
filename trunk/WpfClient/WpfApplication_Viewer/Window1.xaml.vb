@@ -1197,7 +1197,7 @@ Class Window1
                                 x.Tag = True
                                 x.Uid = z.ElementID
 
-                                Dim y As New uCtrlElement
+                                Dim y As New uWidgetEmpty
                                 y.Id = z.ElementID
                                 y.IsHitTestVisible = True 'True:bouge pas False:Bouge
                                 AddHandler y.PreviewMouseDown, AddressOf Dbleclk
@@ -1238,7 +1238,7 @@ Class Window1
                             elmt.Y = _Top
                             _ListElement.Add(elmt)
 
-                            Dim y As New uCtrlElement
+                            Dim y As New uWidgetEmpty
                             y.Id = z.ElementID
                             y.IsHitTestVisible = True 'True:bouge pas False:Bouge
                             AddHandler y.PreviewMouseDown, AddressOf Dbleclk
@@ -1271,7 +1271,7 @@ Class Window1
                 For Each child As ContentControl In Canvas1.Children
                     Selector.SetIsSelected(child, True)
 
-                    Dim lbl As uCtrlElement = child.Content
+                    Dim lbl As uWidgetEmpty = child.Content
                     lbl.IsHitTestVisible = False
                 Next
             Else
@@ -1306,7 +1306,7 @@ Class Window1
                         End If
                     Next
 
-                    Dim lbl As uCtrlElement = child.Content
+                    Dim lbl As uWidgetEmpty = child.Content
                     lbl.IsHitTestVisible = True
 
                 Next
