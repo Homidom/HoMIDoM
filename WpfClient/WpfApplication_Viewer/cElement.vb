@@ -1,4 +1,5 @@
 ﻿Public Class cElement
+
     Dim _ID As String
     Dim _ZoneId As String
     Dim _Height As Double
@@ -6,7 +7,16 @@
     Dim _Angle As Double
     Dim _X As Double
     Dim _Y As Double
-    'Dim _Label As String = ""
+
+    Public Enum WidgetType
+        VIERGE = 0
+        ONOFF = 1
+        VARIATEUR = 2
+        VOLET = 3
+        LABEL = 4
+        METEO = 5
+        AUDIO = 6
+    End Enum
 
     Public Property ID As String
         Get
@@ -71,12 +81,4 @@
         End Set
     End Property
 
-    'Public Property Label As String
-    '    Get
-    '        Return _Label
-    '    End Get
-    '    Set(ByVal value As String)
-    '        _Label = value
-    '    End Set
-    'End Property
 End Class

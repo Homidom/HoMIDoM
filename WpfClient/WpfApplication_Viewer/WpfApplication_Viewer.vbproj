@@ -166,7 +166,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\uCtrlElement.xaml">
+    <Page Include="Widget\uWidgetEmpty.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -230,13 +230,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\uWidget.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="WConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Widget\uWidgetONOFF.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Window1.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -264,8 +264,8 @@
     <Compile Include="ResizeThumb.vb" />
     <Compile Include="RotateThumb.vb" />
     <Compile Include="ServiceTV.vb" />
-    <Compile Include="UserControls\uCtrlElement.xaml.vb">
-      <DependentUpon>uCtrlElement.xaml</DependentUpon>
+    <Compile Include="Widget\uWidgetEmpty.xaml.vb">
+      <DependentUpon>uWidgetEmpty.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\FrmConfigChaine.xaml.vb">
       <DependentUpon>FrmConfigChaine.xaml</DependentUpon>
@@ -276,11 +276,11 @@
     <Compile Include="UserControls\keyboard.xaml.vb">
       <DependentUpon>keyboard.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\uWidget.xaml.vb">
-      <DependentUpon>uWidget.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WConfig.xaml.vb">
       <DependentUpon>WConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\uWidgetONOFF.xaml.vb">
+      <DependentUpon>uWidgetONOFF.xaml</DependentUpon>
     </Compile>
     <Compile Include="Window1.xaml.vb">
       <DependentUpon>Window1.xaml</DependentUpon>

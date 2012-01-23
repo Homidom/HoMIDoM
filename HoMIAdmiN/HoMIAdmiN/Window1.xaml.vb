@@ -1364,9 +1364,8 @@ Class Window1
 
     Private Sub LOG_PreviewMouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Log.PreviewMouseMove
         If IsConnect = True Then
-            Dim list As New List(Of String)
+            Dim list As List(Of String) = myService.Get4Log
             Dim a As String = ""
-            list = myService.Get4Log
             For i As Integer = 0 To list.Count - 1
                 a &= list(i) & vbCrLf
             Next
@@ -1386,4 +1385,5 @@ Class Window1
             End If
         End If
     End Sub
+
 End Class
