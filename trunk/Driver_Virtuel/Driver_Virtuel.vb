@@ -41,6 +41,8 @@ Imports VB = Microsoft.VisualBasic
     Dim _IdSrv As String
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
 
+    'parametre avancé du driver
+    'Dim test As Boolean = True
 #End Region
 
 #Region "Variables Internes"
@@ -224,18 +226,21 @@ Imports VB = Microsoft.VisualBasic
     ''' <remarks></remarks>
     Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
         Dim retour As Boolean = False
-
-        If Command = "" Then
+        Try
+            If Command = "" Then
+                Return False
+            Else
+                'Write(deviceobject, Command, Param(0), Param(1))
+                Select Case UCase(Command)
+                    Case ""
+                    Case Else
+                End Select
+                Return True
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "VIRTUEL ExecuteCommand", "exception : " & ex.Message)
             Return False
-            Exit Function
-        End If
-
-        Select Case UCase(Command)
-            Case ""
-            Case Else
-        End Select
-
-        Return retour
+        End Try
     End Function
 
     ''' <summary>
@@ -261,6 +266,13 @@ Imports VB = Microsoft.VisualBasic
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
+            'récupération des paramétres avancés
+            Try
+                'test = _Parametres.Item(0).Valeur
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Virtuel Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+            End Try
+
             _IsConnect = True
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Virtuel", "Driver " & Me.Nom & " démarré")
         Catch ex As Exception
@@ -333,6 +345,71 @@ Imports VB = Microsoft.VisualBasic
         End Try
     End Sub
 
+    ''' <summary>ajout des commandes avancées pour les devices</summary>
+    ''' <remarks></remarks>
+    Private Sub add_devicecommande(ByVal nom As String, ByVal description As String, ByVal nbparam As Integer)
+        Try
+            Dim x As New DeviceCommande
+            x.NameCommand = nom
+            x.DescriptionCommand = description
+            x.CountParam = nbparam
+            _DeviceCommandPlus.Add(x)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>ajout Libellé pour le Driver</summary>
+    ''' <param name="nom">Nom du champ : HELP</param>
+    ''' <param name="labelchamp">Nom à afficher : Aide</param>
+    ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+    ''' <remarks></remarks>
+    Private Sub add_libelledriver(ByVal nom As String, ByVal labelchamp As String, ByVal tooltip As String)
+        Try
+            Dim y0 As New HoMIDom.HoMIDom.Driver.cLabels
+            y0.LabelChamp = labelchamp
+            y0.NomChamp = nom
+            y0.Tooltip = tooltip
+            _LabelsDriver.Add(y0)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>ajout Libellé pour les Devices</summary>
+    ''' <param name="nom">Nom du champ : HELP</param>
+    ''' <param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+    ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+    ''' <remarks></remarks>
+    Private Sub add_libelledevice(ByVal nom As String, ByVal labelchamp As String, ByVal tooltip As String)
+        Try
+            Dim ld0 As New HoMIDom.HoMIDom.Driver.cLabels
+            ld0.LabelChamp = labelchamp
+            ld0.NomChamp = nom
+            ld0.Tooltip = tooltip
+            _LabelsDevice.Add(ld0)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>ajout de parametre avancés</summary>
+    ''' <param name="nom">Nom du parametre (sans espace)</param>
+    ''' <param name="description">Description du parametre</param>
+    ''' <param name="valeur">Sa valeur</param>
+    ''' <remarks></remarks>
+    Private Sub add_paramavance(ByVal nom As String, ByVal description As String, ByVal valeur As Object)
+        Try
+            Dim x As New HoMIDom.HoMIDom.Driver.Parametre
+            x.Nom = nom
+            x.Description = description
+            x.Valeur = valeur
+            _Parametres.Add(x)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+        End Try
+    End Sub
+
     ''' <summary>Creation d'un objet de type</summary>
     ''' <remarks></remarks>
     Public Sub New()
@@ -341,18 +418,18 @@ Imports VB = Microsoft.VisualBasic
             _DeviceSupport.Add(ListeDevices.FREEBOX)
 
             'Parametres avancés
-            Dim x As New HoMIDom.HoMIDom.Driver.Parametre
-            x.Nom = "test"
-            x.Description = "Description"
-            _Parametres.Add(x)
+            'add_paramavance("test", "Description", True)
 
             'ajout des commandes avancées pour les devices
-            'Ci-dessous un exemple
-            'Dim x As New DeviceCommande
-            'x.NameCommand = "Test"
-            'x.DescriptionCommand = "Ceci est une commande avancée de test"
-            'x.CountParam = 1
-            '_DeviceCommandPlus.Add(x)
+            'add_devicecommande("COMMANDE", "DESCRIPTION", 0)
+
+            'Libellé Driver
+            'add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
+
+            'Libellé Device
+            'add_libelledevice("ADRESSE1", "Adresse 1", "")
+            'add_libelledevice("ADRESSE2", "@", "")
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Virtuel New", ex.Message)
         End Try
