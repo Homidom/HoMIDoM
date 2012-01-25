@@ -12,12 +12,11 @@ Driver_X10_CM11
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.ExecuteCommand(System.String,System.Object[])">
-	<summary>
- Execute une commande avancée
- </summary>
-	<param name="Command"></param>
-	<param name="Param"></param>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.ExecuteCommand(System.Object,System.String,System.Object[])">
+	<summary>Execute une commande avancée</summary>
+	<param name="MyDevice">Objet représentant le Device </param>
+	<param name="Command">Nom de la commande avancée à éxécuter</param>
+	<param name="Param">tableau de paramétres</param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:Driver_X10_CM11.Driver_X10_CM11.VerifChamp(System.String,System.Object)">
@@ -54,6 +53,24 @@ Driver_X10_CM11
 </member><member name="M:Driver_X10_CM11.Driver_X10_CM11.NewDevice(System.String)">
 	<summary>Fonction lancée lors de l'ajout d'un device</summary>
 	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.add_devicecommande(System.String,System.String,System.Int32)">
+	<summary>ajout des commandes avancées pour les devices</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.add_libelledriver(System.String,System.String,System.String)">
+	<summary>ajout Libellé pour le Driver</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.add_libelledevice(System.String,System.String,System.String)">
+	<summary>ajout Libellé pour les Devices</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.#ctor">
+	<summary>Creation d'un objet de type</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_X10_CM11.Driver_X10_CM11.TimerTick">
 	<summary>Si refresh &gt;0 gestion du timer</summary>

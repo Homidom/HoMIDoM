@@ -1491,6 +1491,12 @@ HoMIDom
  </summary>
 	<param name="ListTypeLogEnable"></param>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.Get4Log">
+	<summary>
+ Retourne les 4 logs les plus récents (du plus récent au plus ancien)
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SetMaxMonthLog(System.Int32)">
 	<summary>
  Retourne le nombre de mois à conserver une archive de log avant de le supprimer
@@ -1960,6 +1966,16 @@ HoMIDom
 	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
 	<returns>Données de la commande IR, vide si aucune donnée(s) reçue(s), 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.VerifChamp(System.String,System.String,System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ a correctement été saisi
+ </summary>
+	<param name="Idsrv"></param>
+	<param name="DriverId"></param>
+	<param name="Champ"></param>
+	<param name="Value">retourne 0 si Ok sinon le message d'erreur</param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllDrivers(System.String)">
 	<summary>
  Obtient la liste des drivers
@@ -2192,6 +2208,12 @@ HoMIDom
  </summary>
 	<param name="DeviceId">ID du device</param>
 	<returns>Retourne pour chaque élément de la liste NOMDELAMETHODE|Parametre1:TypeParametre1|Parametre2:TypeParametre2...</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Get4Log">
+	<summary>
+ Retourne les 4 logs les plus récents (du plus récent au plus ancien)
+ </summary>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetTypeLogEnable">
 	<summary>

@@ -1,8 +1,6 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
-Imports STRGS = Microsoft.VisualBasic.Strings
-Imports VB = Microsoft.VisualBasic
 
 ' Auteur : xxx
 ' Date : 01/01/2011
@@ -16,46 +14,65 @@ Imports VB = Microsoft.VisualBasic
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "DE96B466-2540-11E0-A321-65D7DFD72085" 'ne pas modifier car utilisé dans le code du serveur
-    Dim _Nom As String = "Virtuel"
-    Dim _Enable As String = False
-    Dim _Description As String = "Driver Virtuel"
-    Dim _StartAuto As Boolean = False
-    Dim _Protocol As String = "Virtuel"
-    Dim _IsConnect As Boolean = False
-    Dim _IP_TCP As String = ""
-    Dim _Port_TCP As String = ""
-    Dim _IP_UDP As String = ""
-    Dim _Port_UDP As String = ""
-    Dim _Com As String = ""
-    Dim _Refresh As Integer = 0
-    Dim _Modele As String = "Virtuel"
-    Dim _Version As String = "1.0"
-    Dim _Picture As String = ""
-    Dim _Server As HoMIDom.HoMIDom.Server
-    Dim _DeviceSupport As New ArrayList
-    Dim _Device As HoMIDom.HoMIDom.Device
-    Dim _Parametres As New ArrayList
-    Dim _LabelsDriver As New ArrayList
-    Dim _LabelsDevice As New ArrayList
-    Dim MyTimer As New Timers.Timer
-    Dim _IdSrv As String
-    Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
+    Dim _Nom As String = "Virtuel" 'Nom du driver à afficher
+    Dim _Enable As String = False 'Activer/Désactiver le driver
+    Dim _Description As String = "Driver Virtuel" 'Description du driver
+    Dim _StartAuto As Boolean = False 'True si le driver doit démarrer automatiquement
+    Dim _Protocol As String = "Virtuel" 'Protocole utilisé par le driver, exemple: RS232
+    Dim _IsConnect As Boolean = False 'True si le driver est connecté et sans erreur
+    Dim _IP_TCP As String = "" 'Adresse IP TCP à utiliser, "@" si non applicable pour le cacher côté client
+    Dim _Port_TCP As String = "" 'Port TCP à utiliser, "@" si non applicable pour le cacher côté client
+    Dim _IP_UDP As String = "" 'Adresse IP UDP à utiliser, , "@" si non applicable pour le cacher côté client
+    Dim _Port_UDP As String = "" 'Port UDP à utiliser, , "@" si non applicable pour le cacher côté client
+    Dim _Com As String = "" 'Port COM à utiliser, , "@" si non applicable pour le cacher côté client
+    Dim _Refresh As Integer = 0 'Valeur à laquelle le driver doit rafraichir les valeurs des devices (ex: toutes les 200ms aller lire les devices)
+    Dim _Modele As String = "Virtuel" 'Modèle du driver/interface
+    Dim _Version As String = "1.0" 'Version du driver
+    Dim _Picture As String = "" 'Image du driver (non utilisé actuellement)
+    Dim _Server As HoMIDom.HoMIDom.Server 'Objet Reflètant le serveur
+    Dim _DeviceSupport As New ArrayList 'Type de Device supporté par le driver
+    Dim _Device As HoMIDom.HoMIDom.Device 'Image reflétant un device
+    Dim _Parametres As New ArrayList 'Paramètres supplémentaires associés au driver
+    Dim _LabelsDriver As New ArrayList 'Libellés, tooltip associés au driver
+    Dim _LabelsDevice As New ArrayList 'Libellés, tooltip des devices associés au driver
+    Dim MyTimer As New Timers.Timer 'Timer du driver
+    Dim _IdSrv As String 'Id du Serveur (pour autoriser à utiliser des commandes)
+    Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande) 'Liste des commandes avancées du driver
 
-    'parametre avancé du driver
-    'Dim test As Boolean = True
 #End Region
 
 #Region "Variables Internes"
+    'Insérer ici les variables internes propres au driver et non communes
 
 #End Region
 
 #Region "Propriétés génériques"
+    ''' <summary>
+    ''' Evènement déclenché par le driver au serveur
+    ''' </summary>
+    ''' <param name="DriveName"></param>
+    ''' <param name="TypeEvent"></param>
+    ''' <param name="Parametre"></param>
+    ''' <remarks></remarks>
+    Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
+
+    ''' <summary>
+    ''' ID du serveur
+    ''' </summary>
+    ''' <value>ID du serveur</value>
+    ''' <remarks>Permet d'accéder aux commandes du serveur pour lesquels il faut passer l'ID du serveur</remarks>
     Public WriteOnly Property IdSrv As String Implements HoMIDom.HoMIDom.IDriver.IdSrv
         Set(ByVal value As String)
             _IdSrv = value
         End Set
     End Property
 
+    ''' <summary>
+    ''' Port COM du driver
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
         Get
             Return _Com
@@ -69,11 +86,25 @@ Imports VB = Microsoft.VisualBasic
             Return _Description
         End Get
     End Property
+
+    ''' <summary>
+    ''' Retourne la liste des devices supportés par le driver
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks>Voir Sub New</remarks>
     Public ReadOnly Property DeviceSupport() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.DeviceSupport
         Get
             Return _DeviceSupport
         End Get
     End Property
+
+    ''' <summary>
+    ''' Liste des paramètres avancés du driver
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks>Voir Sub New</remarks>
     Public Property Parametres() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.Parametres
         Get
             Return _Parametres
@@ -83,6 +114,12 @@ Imports VB = Microsoft.VisualBasic
         End Set
     End Property
 
+    ''' <summary>
+    ''' Liste les libellés et tooltip des champs associés au driver
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property LabelsDriver() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.LabelsDriver
         Get
             Return _LabelsDriver
@@ -91,6 +128,13 @@ Imports VB = Microsoft.VisualBasic
             _LabelsDriver = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' Liste les libellés et tooltip des champs associés au device associé au driver
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property LabelsDevice() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.LabelsDevice
         Get
             Return _LabelsDevice
@@ -99,7 +143,13 @@ Imports VB = Microsoft.VisualBasic
             _LabelsDevice = value
         End Set
     End Property
-    Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
+
+    ''' <summary>
+    ''' Active/Désactive le driver
+    ''' </summary>
+    ''' <value>True si actif</value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property Enable() As Boolean Implements HoMIDom.HoMIDom.IDriver.Enable
         Get
             Return _Enable
@@ -108,11 +158,25 @@ Imports VB = Microsoft.VisualBasic
             _Enable = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' ID du driver
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public ReadOnly Property ID() As String Implements HoMIDom.HoMIDom.IDriver.ID
         Get
             Return _ID
         End Get
     End Property
+
+    ''' <summary>
+    ''' Adresse IP TCP du driver
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property IP_TCP() As String Implements HoMIDom.HoMIDom.IDriver.IP_TCP
         Get
             Return _IP_TCP
@@ -121,6 +185,13 @@ Imports VB = Microsoft.VisualBasic
             _IP_TCP = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' Adresse IP UDP du driver
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property IP_UDP() As String Implements HoMIDom.HoMIDom.IDriver.IP_UDP
         Get
             Return _IP_UDP
@@ -129,11 +200,25 @@ Imports VB = Microsoft.VisualBasic
             _IP_UDP = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' Permet de savoir si le driver est actif
+    ''' </summary>
+    ''' <value>Retourne True si le driver est démarré</value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public ReadOnly Property IsConnect() As Boolean Implements HoMIDom.HoMIDom.IDriver.IsConnect
         Get
             Return _IsConnect
         End Get
     End Property
+
+    ''' <summary>
+    ''' Modèle du driver
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property Modele() As String Implements HoMIDom.HoMIDom.IDriver.Modele
         Get
             Return _Modele
@@ -142,11 +227,25 @@ Imports VB = Microsoft.VisualBasic
             _Modele = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' Nom du driver
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public ReadOnly Property Nom() As String Implements HoMIDom.HoMIDom.IDriver.Nom
         Get
             Return _Nom
         End Get
     End Property
+
+    ''' <summary>
+    ''' Image du driver (non utilisé)
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property Picture() As String Implements HoMIDom.HoMIDom.IDriver.Picture
         Get
             Return _Picture
@@ -155,6 +254,13 @@ Imports VB = Microsoft.VisualBasic
             _Picture = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' Port TCP du driver
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
@@ -163,6 +269,13 @@ Imports VB = Microsoft.VisualBasic
             _Port_TCP = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' Port UDP du driver
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property Port_UDP() As String Implements HoMIDom.HoMIDom.IDriver.Port_UDP
         Get
             Return _Port_UDP
@@ -171,11 +284,25 @@ Imports VB = Microsoft.VisualBasic
             _Port_UDP = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' Type de protocole utilisé par le driver
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public ReadOnly Property Protocol() As String Implements HoMIDom.HoMIDom.IDriver.Protocol
         Get
             Return _Protocol
         End Get
     End Property
+
+    ''' <summary>
+    ''' Valeur de rafraichissement des devices
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property Refresh() As Integer Implements HoMIDom.HoMIDom.IDriver.Refresh
         Get
             Return _Refresh
@@ -184,6 +311,13 @@ Imports VB = Microsoft.VisualBasic
             _Refresh = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' Objet représentant le serveur
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property Server() As HoMIDom.HoMIDom.Server Implements HoMIDom.HoMIDom.IDriver.Server
         Get
             Return _Server
@@ -192,11 +326,25 @@ Imports VB = Microsoft.VisualBasic
             _Server = value
         End Set
     End Property
+
+    ''' <summary>
+    ''' Version du driver
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
         Get
             Return _Version
         End Get
     End Property
+
+    ''' <summary>
+    ''' True si le driver doit démarrer automatiquement
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property StartAuto() As Boolean Implements HoMIDom.HoMIDom.IDriver.StartAuto
         Get
             Return _StartAuto
@@ -208,32 +356,39 @@ Imports VB = Microsoft.VisualBasic
 #End Region
 
 #Region "Fonctions génériques"
-    ''' <summary>Retourne la liste des Commandes avancées</summary>
+
+    ''' <summary>Retourne la liste des Commandes avancées de type DeviceCommande</summary>
     ''' <remarks></remarks>
     Public Function GetCommandPlus() As List(Of DeviceCommande)
         Return _DeviceCommandPlus
     End Function
 
     ''' <summary>Execute une commande avancée</summary>
+    ''' <param name="MyDevice">Objet représentant le Device </param>
     ''' <param name="Command">Nom de la commande avancée à éxécuter</param>
     ''' <param name="Param">tableau de paramétres</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+    Public Function ExecuteCommand(ByVal MyDevice As Object, ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
         Dim retour As Boolean = False
         Try
-            If Command = "" Then
-                Return False
+            If MyDevice IsNot Nothing Then
+                'Pas de commande demandée donc erreur
+                If Command = "" Then
+                    Return False
+                Else
+                    'Write(deviceobject, Command, Param(0), Param(1))
+                    Select Case UCase(Command)
+                        Case ""
+                        Case Else
+                    End Select
+                    Return True
+                End If
             Else
-                'Write(deviceobject, Command, Param(0), Param(1))
-                Select Case UCase(Command)
-                    Case ""
-                    Case Else
-                End Select
-                Return True
+                Return False
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "VIRTUEL ExecuteCommand", "exception : " & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "exception : " & ex.Message)
             Return False
         End Try
     End Function
@@ -247,7 +402,9 @@ Imports VB = Microsoft.VisualBasic
         Try
             Dim retour As String = "0"
             Select Case UCase(Champ)
+                Case "ADRESSE1"
 
+                Case "ADRESSE2"
 
             End Select
             Return retour
@@ -256,21 +413,21 @@ Imports VB = Microsoft.VisualBasic
         End Try
     End Function
 
-    ''' <summary>Démarrer le du driver</summary>
+    ''' <summary>Démarrer le driver</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
             'récupération des paramétres avancés
             Try
-                'test = _Parametres.Item(0).Valeur
+
             Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Virtuel Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
             End Try
 
             _IsConnect = True
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Virtuel", "Driver " & Me.Nom & " démarré")
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Driver " & Me.Nom & " démarré")
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Virtuel Start", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", ex.Message)
         End Try
     End Sub
 
@@ -279,9 +436,9 @@ Imports VB = Microsoft.VisualBasic
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
             _IsConnect = False
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Virtuel", "Driver " & Me.Nom & " arrêté")
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Stop", "Driver " & Me.Nom & " arrêté")
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Virtuel Stop", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Stop", ex.Message)
         End Try
     End Sub
 
@@ -294,17 +451,17 @@ Imports VB = Microsoft.VisualBasic
 
     ''' <summary>Intérroger un device</summary>
     ''' <param name="Objet">Objet représetant le device à interroger</param>
-    ''' <remarks>pas utilisé</remarks>
+    ''' <remarks>Le device demande au driver d'aller le lire suivant son adresse</remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
             If _Enable = False Then Exit Sub
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Virtuel Read", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
         End Try
     End Sub
 
     ''' <summary>Commander un device</summary>
-    ''' <param name="Objet">Objet représetant le device à interroger</param>
+    ''' <param name="Objet">Objet représetant le device à commander</param>
     ''' <param name="Command">La commande à passer</param>
     ''' <param name="Parametre1">parametre 1 de la commande, optionnel</param>
     ''' <param name="Parametre2">parametre 2 de la commande, optionnel</param>
@@ -313,7 +470,7 @@ Imports VB = Microsoft.VisualBasic
         Try
             If _Enable = False Then Exit Sub
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Virtuel Write", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
         End Try
     End Sub
 
@@ -324,7 +481,7 @@ Imports VB = Microsoft.VisualBasic
         Try
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Virtuel DeleteDevice", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " DeleteDevice", ex.Message)
         End Try
     End Sub
 
@@ -335,7 +492,7 @@ Imports VB = Microsoft.VisualBasic
         Try
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Virtuel NewDevice", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " NewDevice", ex.Message)
         End Try
     End Sub
 
@@ -344,15 +501,15 @@ Imports VB = Microsoft.VisualBasic
     ''' <param name="description">Description qui sera affichée dans l'admin</param>
     ''' <param name="nbparam">Nombre de parametres attendus</param>
     ''' <remarks></remarks>
-    Private Sub add_devicecommande(ByVal nom As String, ByVal description As String, ByVal nbparam As Integer)
+    Private Sub Add_DeviceCommande(ByVal Nom As String, ByVal Description As String, ByVal NbParam As Integer)
         Try
             Dim x As New DeviceCommande
-            x.NameCommand = nom
+            x.NameCommand = Nom
             x.DescriptionCommand = description
             x.CountParam = nbparam
             _DeviceCommandPlus.Add(x)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -361,32 +518,32 @@ Imports VB = Microsoft.VisualBasic
     ''' <param name="labelchamp">Nom à afficher : Aide</param>
     ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
     ''' <remarks></remarks>
-    Private Sub add_libelledriver(ByVal nom As String, ByVal labelchamp As String, ByVal tooltip As String)
+    Private Sub Add_LibelleDriver(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String)
         Try
             Dim y0 As New HoMIDom.HoMIDom.Driver.cLabels
-            y0.LabelChamp = labelchamp
-            y0.NomChamp = nom
-            y0.Tooltip = tooltip
+            y0.LabelChamp = Labelchamp
+            y0.NomChamp = UCase(Nom)
+            y0.Tooltip = Tooltip
             _LabelsDriver.Add(y0)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
         End Try
     End Sub
 
-    ''' <summary>ajout Libellé pour les Devices</summary>
+    ''' <summary>Ajout Libellé pour les Devices</summary>
     ''' <param name="nom">Nom du champ : HELP</param>
     ''' <param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
     ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
     ''' <remarks></remarks>
-    Private Sub add_libelledevice(ByVal nom As String, ByVal labelchamp As String, ByVal tooltip As String)
+    Private Sub Add_LibelleDevice(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String)
         Try
             Dim ld0 As New HoMIDom.HoMIDom.Driver.cLabels
-            ld0.LabelChamp = labelchamp
-            ld0.NomChamp = nom
-            ld0.Tooltip = tooltip
+            ld0.LabelChamp = Labelchamp
+            ld0.NomChamp = UCase(Nom)
+            ld0.Tooltip = Tooltip
             _LabelsDevice.Add(ld0)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -395,7 +552,7 @@ Imports VB = Microsoft.VisualBasic
     ''' <param name="description">Description du parametre</param>
     ''' <param name="valeur">Sa valeur</param>
     ''' <remarks></remarks>
-    Private Sub add_paramavance(ByVal nom As String, ByVal description As String, ByVal valeur As Object)
+    Private Sub Add_ParamAvance(ByVal nom As String, ByVal description As String, ByVal valeur As Object)
         Try
             Dim x As New HoMIDom.HoMIDom.Driver.Parametre
             x.Nom = nom
@@ -403,7 +560,7 @@ Imports VB = Microsoft.VisualBasic
             x.Valeur = valeur
             _Parametres.Add(x)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -429,7 +586,7 @@ Imports VB = Microsoft.VisualBasic
             'add_libelledevice("ADRESSE2", "@", "")
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Virtuel New", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)
         End Try
     End Sub
 
@@ -442,6 +599,7 @@ Imports VB = Microsoft.VisualBasic
 #End Region
 
 #Region "Fonctions internes"
+    'Insérer ci-dessous les fonctions propres au driver et nom communes (ex: start)
 
 #End Region
 

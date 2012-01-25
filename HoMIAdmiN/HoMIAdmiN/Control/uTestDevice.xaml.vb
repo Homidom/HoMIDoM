@@ -34,7 +34,7 @@ Partial Public Class uTestDevice
                         param1.Value = txt.Text
                         x.Parametres.Add(param)
                     Next
-                    myservice.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
+                    myService.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
                 End If
             End If
         Catch ex As Exception

@@ -130,11 +130,11 @@ Partial Public Class uNotes
         Canvas4.Width = Me.ActualWidth
         ScrollViewer1.Width = Canvas4.ActualWidth
         CanvasImg.Width = Me.ActualWidth - 150
-        Canvas1.SetLeft(Canvas3, CanvasImg.Width + 35)
-        Canvas1.SetLeft(Canvas5, CanvasImg.Width + 35)
-        Canvas1.SetLeft(BtnClear, CanvasImg.Width + 35)
-        Canvas1.SetLeft(BtnSave, CanvasImg.Width + 35)
-        Canvas1.SetLeft(BtnDelete, CanvasImg.Width + 35)
+        Canvas.SetLeft(Canvas3, CanvasImg.Width + 35)
+        Canvas.SetLeft(Canvas5, CanvasImg.Width + 35)
+        Canvas.SetLeft(BtnClear, CanvasImg.Width + 35)
+        Canvas.SetLeft(BtnSave, CanvasImg.Width + 35)
+        Canvas.SetLeft(BtnDelete, CanvasImg.Width + 35)
         CanvasImg.Height = Me.ActualHeight - Canvas4.ActualHeight - 15
     End Sub
 

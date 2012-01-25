@@ -345,24 +345,32 @@ Imports System.Globalization
         Return _DeviceCommandPlus
     End Function
 
-    ''' <summary>
-    ''' Execute une commande avancée
-    ''' </summary>
-    ''' <param name="Command"></param>
-    ''' <param name="Param"></param>
+    ''' <summary>Execute une commande avancée</summary>
+    ''' <param name="MyDevice">Objet représentant le Device </param>
+    ''' <param name="Command">Nom de la commande avancée à éxécuter</param>
+    ''' <param name="Param">tableau de paramétres</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+    Public Function ExecuteCommand(ByVal MyDevice As Object, ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+        Dim retour As Boolean = False
         Try
-            Dim retour As Boolean = False
-            If Command = "" Then
-                Return False
+            If MyDevice IsNot Nothing Then
+                'Pas de commande demandée donc erreur
+                If Command = "" Then
+                    Return False
+                Else
+                    'Write(deviceobject, Command, Param(0), Param(1))
+                    Select Case UCase(Command)
+                        Case ""
+                        Case Else
+                    End Select
+                    Return True
+                End If
             Else
-                'Write(deviceobject, Command, Param(0), Param(1))
-                Return True
+                Return False
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS ExecuteCommand", "exception : " & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "exception : " & ex.Message)
             Return False
         End Try
     End Function

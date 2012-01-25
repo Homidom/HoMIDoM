@@ -2,7 +2,7 @@
 Public Class keyboard
     Dim FlagBtn As Boolean
     Dim BtnState As Integer = 0 '0= lettre 1=chiffre
-    Dim ActualHeight As Double = 0
+    Dim _ActualHeight As Double = 0
 
     Private Sub Reduce()
         If FlagBtn = False Then
@@ -11,7 +11,7 @@ Public Class keyboard
             FlagBtn = True
         Else
             BtnClose.Content = "▼"
-            Me.Height = ActualHeight
+            Me.Height = _ActualHeight
             FlagBtn = False
         End If
     End Sub
@@ -26,7 +26,7 @@ Public Class keyboard
         InitializeComponent()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        ActualHeight = Me.Height
+        _ActualHeight = Me.Height
         Reduce()
     End Sub
 End Class

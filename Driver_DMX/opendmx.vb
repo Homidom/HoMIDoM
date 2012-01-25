@@ -201,7 +201,7 @@ Module OpenDmx
 
         ' start/resume threads
         If thdDMXSendThread(n).ThreadState = Threading.ThreadState.Suspended Then
-            thdDMXSendThread(n).Resume() ' resume the thread if it has been suspended
+            Threading.Thread.Sleep(0) ' resume the thread if it has been suspended
             Error_String(n) = "SENDING DMX"
         Else
             Error_String(n) = "Starting Thread"
@@ -259,6 +259,7 @@ Module OpenDmx
             Error_String(n) = "Failed To Get Modem Status"
             Done((n))
             JumperID(n) = 0
+            Return Nothing
             Exit Function
         End If
 
@@ -364,7 +365,7 @@ Module OpenDmx
         If n > Max_Devices Then ' no such device
             Exit Sub
         End If
-        If ThreadStarted(n) Then thdDMXSendThread(n).Suspend() ' suspend the thread
+        If ThreadStarted(n) Then Threading.Thread.Sleep(Threading.Timeout.Infinite) ' suspend the thread
     End Sub
 
 

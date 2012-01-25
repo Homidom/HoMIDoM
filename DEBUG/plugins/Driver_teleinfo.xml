@@ -6,18 +6,30 @@ Driver_teleinfo
 </name>
 </assembly>
 <members>
-<member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.GetCommandPlus">
+<member name="P:Driver_teleinfo.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_teleinfo.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_teleinfo.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.ExecuteCommand(System.String,System.Object[])">
-	<summary>
- Execute une commande avancée
- </summary>
-	<param name="Command"></param>
-	<param name="Param"></param>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.ExecuteCommand(System.Object,System.String,System.Object[])">
+	<summary>Execute une commande avancée</summary>
+	<param name="MyDevice">Objet représentant le Device </param>
+	<param name="Command">Nom de la commande avancée à éxécuter</param>
+	<param name="Param">tableau de paramétres</param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.VerifChamp(System.String,System.Object)">
@@ -55,6 +67,30 @@ Driver_teleinfo
 	<summary>Fonction lancée lors de l'ajout d'un device</summary>
 	<param name="DeviceId">Objet représetant le device à interroger</param>
 	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Add_DeviceCommande(System.String,System.String,System.Int32)">
+	<summary>ajout des commandes avancées pour les devices</summary>
+	<param name="nom">Nom de la commande avancée</param>
+	<param name="description">Description qui sera affichée dans l'admin</param>
+	<param name="nbparam">Nombre de parametres attendus</param>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Add_LibelleDriver(System.String,System.String,System.String)">
+	<summary>ajout Libellé pour le Driver</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Add_LibelleDevice(System.String,System.String,System.String)">
+	<summary>Ajout Libellé pour les Devices</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Add_ParamAvance(System.String,System.String,System.Object)">
+	<summary>ajout de parametre avancés</summary>
+	<param name="nom">Nom du parametre (sans espace)</param>
+	<param name="description">Description du parametre</param>
+	<param name="valeur">Sa valeur</param>
+	<remarks></remarks>
 </member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.#ctor">
 	<summary>Creation d'un objet de type</summary>
 	<remarks></remarks>
@@ -77,19 +113,6 @@ Driver_teleinfo
 </member><member name="T:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo">
 	<summary>Class Driver_Teleinfo, permet de communiquer avec le module USB de A DAUGUET</summary>
 	<remarks>Nécessite l'installation des pilotes fournis sur le site </remarks>
-</member><member name="P:Driver_teleinfo.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_teleinfo.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_teleinfo.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
 </member>
 </members>
 </doc>

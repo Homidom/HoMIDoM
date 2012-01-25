@@ -189,7 +189,7 @@ Public Class uScenario
                 R2.Width = 1
                 R2.Height = 8
                 y1.Children.Add(R2)
-                y1.SetLeft(R2, k * Span)
+                Canvas.SetLeft(R2, k * Span)
             Next
             StckPnlLibTr.Children.Add(y1)
         Next

@@ -25,12 +25,11 @@ Driver_PLCBUS
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.ExecuteCommand(System.String,System.Object[])">
-	<summary>
- Execute une commande avancée
- </summary>
-	<param name="Command"></param>
-	<param name="Param"></param>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.ExecuteCommand(System.Object,System.String,System.Object[])">
+	<summary>Execute une commande avancée</summary>
+	<param name="MyDevice">Objet représentant le Device </param>
+	<param name="Command">Nom de la commande avancée à éxécuter</param>
+	<param name="Param">tableau de paramétres</param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:Driver_PLCBUS.Driver_PLCBUS.VerifChamp(System.String,System.Object)">

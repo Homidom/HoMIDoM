@@ -6,18 +6,30 @@ Driver_RFXMitter
 </name>
 </assembly>
 <members>
-<member name="M:Driver_RFXMitter.Driver_RFXMitter.GetCommandPlus">
+<member name="P:Driver_RFXMitter.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_RFXMitter.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_RFXMitter.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.ExecuteCommand(System.String,System.Object[])">
-	<summary>
- Execute une commande avancée
- </summary>
-	<param name="Command"></param>
-	<param name="Param"></param>
+</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.ExecuteCommand(System.Object,System.String,System.Object[])">
+	<summary>Execute une commande avancée</summary>
+	<param name="MyDevice">Objet représentant le Device </param>
+	<param name="Command">Nom de la commande avancée à éxécuter</param>
+	<param name="Param">tableau de paramétres</param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:Driver_RFXMitter.Driver_RFXMitter.VerifChamp(System.String,System.Object)">
@@ -57,6 +69,24 @@ Driver_RFXMitter
 	<remarks></remarks>
 </member><member name="M:Driver_RFXMitter.Driver_RFXMitter.add_devicecommande(System.String,System.String,System.Int32)">
 	<summary>ajout des commandes avancées pour les devices</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.add_libelledriver(System.String,System.String,System.String)">
+	<summary>ajout Libellé pour le Driver</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.add_libelledevice(System.String,System.String,System.String)">
+	<summary>ajout Libellé pour les Devices</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.add_paramavance(System.String,System.String,System.Object)">
+	<summary>ajout de parametre avancés</summary>
+	<param name="nom">Nom du parametre (sans espace)</param>
+	<param name="description">Description du parametre</param>
+	<param name="valeur">Sa valeur</param>
 	<remarks></remarks>
 </member><member name="M:Driver_RFXMitter.Driver_RFXMitter.#ctor">
 	<summary>Creation d'un objet de type</summary>
@@ -128,19 +158,6 @@ Driver_RFXMitter
 </member><member name="T:Driver_RFXMitter.Driver_RFXMitter">
 	<summary>Class Driver_RFXMitter, permet de communiquer avec le RFXMitter Ethernet/COM</summary>
 	<remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
-</member><member name="P:Driver_RFXMitter.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_RFXMitter.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_RFXMitter.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
 </member>
 </members>
 </doc>
