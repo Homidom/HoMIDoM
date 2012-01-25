@@ -62,30 +62,6 @@ InitializeComponent
 	<summary>
 uInternet
 </summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
-	<summary>
-CreateInstance
-</summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
-	<summary>
-GetPropertyValue
-</summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
-	<summary>
-SetPropertyValue
-</summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
-	<summary>
-CreateDelegate
-</summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
-	<summary>
-AddEventHandler
-</summary>
-</member><member name="T:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper">
-	<summary>
-GeneratedInternalTypeHelper
-</summary>
 </member><member name="M:WpfApplication1.Window1.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -134,13 +110,13 @@ InitializeComponent
 	<summary>
 uModule
 </summary>
-</member><member name="M:WpfApplication1.uCtrlElement.InitializeComponent">
+</member><member name="M:WpfApplication1.uWidgetEmpty.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uCtrlElement">
+</member><member name="T:WpfApplication1.uWidgetEmpty">
 	<summary>
-uCtrlElement
+uWidgetEmpty
 </summary>
 </member><member name="M:WpfApplication1.uProgrammeTV.InitializeComponent">
 	<summary>
@@ -150,13 +126,13 @@ InitializeComponent
 	<summary>
 uProgrammeTV
 </summary>
-</member><member name="M:WpfApplication1.uWidget.InitializeComponent">
+</member><member name="M:WpfApplication1.uWidgetONOFF.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uWidget">
+</member><member name="T:WpfApplication1.uWidgetONOFF">
 	<summary>
-uWidget
+uWidgetONOFF
 </summary>
 </member><member name="M:WpfApplication1.FrmDetailProgram.InitializeComponent">
 	<summary>
