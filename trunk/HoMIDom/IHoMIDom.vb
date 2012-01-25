@@ -494,7 +494,7 @@ Namespace HoMIDom
         ''' <param name="Value">retourne 0 si Ok sinon le message d'erreur</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function VerifChamp(ByVal Idsrv As String, ByVal DriverId As String, ByVal Champ As String, ByVal Value As Object) As String
+        <OperationContract()> Function VerifChamp(ByVal Idsrv As String, ByVal DriverId As String, ByVal Champ As String, ByVal Value As Object) As String
 
         ''' <summary>
         ''' Obtient la liste des drivers

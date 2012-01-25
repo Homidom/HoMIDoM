@@ -371,6 +371,18 @@ Imports UsbLibrary
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
             _DeviceSupport.Add(ListeDevices.SWITCH)
+
+            'Libellé Device
+            Dim ld0 As New HoMIDom.HoMIDom.Driver.cLabels
+            ld0.LabelChamp = "ID de la puce"
+            ld0.NomChamp = "ADRESSE1"
+            ld0.Tooltip = "Adresse d'identification de la puce RFID"
+            _LabelsDevice.Add(ld0)
+            Dim ld1 As New HoMIDom.HoMIDom.Driver.cLabels
+            ld1.LabelChamp = "@"
+            ld1.NomChamp = "ADRESSE2"
+            ld1.Tooltip = ""
+            _LabelsDevice.Add(ld1)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Mirror New", ex.Message)
         End Try

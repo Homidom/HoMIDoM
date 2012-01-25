@@ -232,7 +232,16 @@ Partial Public Class uDevice
 
             TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
 
-            'MessageBox.Show("TEST: " & myService.VerifChamp(IdSrv, _Driver.ID, " ", ""))
+            Dim retour As String = myService.VerifChamp(IdSrv, _Driver.ID, "ADRESSE1", TxtAdresse1.Text)
+            If retour <> "0" Then
+                MessageBox.Show("Champ " & Label6.Content & ": " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            retour = myService.VerifChamp(IdSrv, _Driver.ID, "ADRESSE2", TxtAdresse2.Text)
+            If retour <> "0" Then
+                MessageBox.Show("Champ " & Label7.Content & ": " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
 
             Dim _driverid As String = ""
             For i As Integer = 0 To myservice.GetAllDrivers(IdSrv).Count - 1 'Window1.Obj.Drivers.Count - 1

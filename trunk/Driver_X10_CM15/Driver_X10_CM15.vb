@@ -371,6 +371,17 @@ Public Class Driver_X10_CM15
         'x.DescriptionCommand = "Ceci est une commande avancée de test"
         'x.CountParam = 1
         '_DeviceCommandPlus.Add(x)
+        'Libellé Device
+        Dim ld0 As New HoMIDom.HoMIDom.Driver.cLabels
+        ld0.LabelChamp = "Adresse du module"
+        ld0.NomChamp = "ADRESSE1"
+        ld0.Tooltip = "Adresse HouseCode du module (ex: C3)"
+        _LabelsDevice.Add(ld0)
+        Dim ld1 As New HoMIDom.HoMIDom.Driver.cLabels
+        ld1.LabelChamp = "Type de module "
+        ld1.NomChamp = "ADRESSE2"
+        ld1.Tooltip = "Type de module 0:sendplc (courant porteur), 1:sendrf (RF)"
+        _LabelsDevice.Add(ld1)
     End Sub
 #End Region
 

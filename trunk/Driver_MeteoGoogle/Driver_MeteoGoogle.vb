@@ -254,7 +254,12 @@ Imports System.Threading
         Try
             Dim retour As String = "0"
             Select Case UCase(Champ)
-
+                Case "ADRESSE1"
+                    If Value IsNot Nothing Then
+                        If Value = "" Or Value = " " Or IsNumeric(Value) Then
+                            retour = "Veuillez saisir le nom de la ville, ex: paris"
+                        End If
+                    End If
             End Select
             Return retour
         Catch ex As Exception

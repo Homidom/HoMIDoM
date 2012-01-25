@@ -3817,6 +3817,7 @@ Namespace HoMIDom
         Public Function VerifChamp(ByVal Idsrv As String, ByVal DriverId As String, ByVal Champ As String, ByVal Value As Object) As String Implements IHoMIDom.VerifChamp
             Try
                 If VerifIdSrv(Idsrv) = False Then
+                    Return "L'ID du serveur est erroné pour pouvoir exécuter cette fonction VERIFCHAMP"
                     Exit Function
                 End If
 
