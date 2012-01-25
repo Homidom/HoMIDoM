@@ -12,18 +12,18 @@ Imports System.Globalization
 ' Auteur : David
 ' Date : 22/01/2011
 
-''' <summary>Class Driver_RFXMitter, permet de communiquer avec le RFXMitter Ethernet/COM</summary>
+''' <summary>Class Driver_RFXTrx, permet de communiquer avec le RFXtrx Ethernet/COM</summary>
 ''' <remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
-<Serializable()> Public Class Driver_RFXMitter
+<Serializable()> Public Class Driver_RFXtrx
     Implements HoMIDom.HoMIDom.IDriver
 
 #Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
-    Dim _ID As String = "C2B6AA22-77E7-11E0-A193-47D34824019B"
-    Dim _Nom As String = "RFXMitter"
+    Dim _ID As String = "3D9D5D42-475B-11E1-B117-64314824019B"
+    Dim _Nom As String = "RFXtrx"
     Dim _Enable As String = False
-    Dim _Description As String = "RFXMitter USB/Ethernet Interface"
+    Dim _Description As String = "RFXtrx USB/Ethernet Interface"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "RF"
     Dim _IsConnect As Boolean = False
@@ -167,7 +167,7 @@ Imports System.Globalization
 
     Dim adressetoint() As String = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "0A", "0B", "0C", "0D", "0E", "0F", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "1A", "1B", "1C", "1D", "1E", "1F", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "2A", "2B", "2C", "2D", "2E", "2F", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "3A", "3B", "3C", "3D", "3E", "3F", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "4A", "4B", "4C", "4D", "4E", "4F", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "5A", "5B", "5C", "5D", "5E", "5F", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "6A", "6B", "6C", "6D", "6E", "6F", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "7A", "7B", "7C", "7D", "7E", "7F", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "8A", "8B", "8C", "8D", "8E", "8F", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "9A", "9B", "9C", "9D", "9E", "9F", "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "AA", "AB", "AC", "AD", "AE", "AF", "B0", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "BA", "BB", "BC", "BD", "BE", "BF", "C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "CA", "CB", "CC", "CD", "CE", "CF", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "DA", "DB", "DC", "DD", "DE", "DF", "E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "EA", "EB", "EC", "ED", "EE", "EF", "F0", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "FA", "FB", "FC", "FD", "FE", "FF"}
     Dim adressetoint2() As String = {"0", "1", "2", "3"}
-     Dim unittoint() As String = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"}
+    Dim unittoint() As String = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"}
 
 #End Region
 
@@ -345,9 +345,7 @@ Imports System.Globalization
         Return _DeviceCommandPlus
     End Function
 
-    ''' <summary>
-    ''' Execute une commande avancée
-    ''' </summary>
+    ''' <summary>Execute une commande avancée</summary>
     ''' <param name="Command"></param>
     ''' <param name="Param"></param>
     ''' <returns></returns>
@@ -367,9 +365,7 @@ Imports System.Globalization
         End Try
     End Function
 
-    ''' <summary>
-    ''' Permet de vérifier si un champ est valide
-    ''' </summary>
+    ''' <summary>Permet de vérifier si un champ est valide</summary>
     ''' <param name="Champ"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
@@ -396,7 +392,7 @@ Imports System.Globalization
         Try
             rfxsynchro = _Parametres.Item(0).Valeur
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXmitter Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
         End Try
 
         'ouverture du port suivant le Port Com ou IP
@@ -411,30 +407,30 @@ Imports System.Globalization
             'traitement du message de retour
             If STRGS.Left(retour, 4) = "ERR:" Then
                 retour = STRGS.Right(retour, retour.Length - 5)
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter", "Driver non démarré : " & retour)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx", "Driver non démarré : " & retour)
             Else
                 'le driver est démarré, on log puis on lance les handlers
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "Driver démarré : " & retour)
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx", "Driver démarré : " & retour)
                 retour = lancer()
                 If STRGS.Left(retour, 4) = "ERR:" Then
                     retour = STRGS.Right(retour, retour.Length - 5)
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter", retour & " non lancé, arrêt du driver")
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx", retour & " non lancé, arrêt du driver")
                     [Stop]()
                 Else
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", retour)
-                    'les handlers sont lancés, on configure le rfxmitter
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx", retour)
+                    'les handlers sont lancés, on configure le RFXtrx
                     retour = configurer()
                     If STRGS.Left(retour, 4) = "ERR:" Then
                         retour = STRGS.Right(retour, retour.Length - 5)
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter", retour)
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx", retour)
                         [Stop]()
                     Else
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", retour)
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx", retour)
                     End If
                 End If
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Start", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx Start", ex.Message)
         End Try
     End Sub
 
@@ -446,12 +442,12 @@ Imports System.Globalization
             retour = fermer()
             If STRGS.Left(retour, 4) = "ERR:" Then
                 retour = STRGS.Right(retour, retour.Length - 5)
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Stop", retour)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx Stop", retour)
             Else
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter Stop", retour)
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx Stop", retour)
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXmitter Stop", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx Stop", ex.Message)
         End Try
     End Sub
 
@@ -479,7 +475,7 @@ Imports System.Globalization
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
             If _Enable = False Then Exit Sub
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXMitter WRITE", "Device " & Objet.Name & " <-- " & Command)
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXtrx WRITE", "Device " & Objet.Name & " <-- " & Command)
             'suivant le protocole, on lance la bonne fonction
             'HOMEEASY / HOMEEASYUS / X10 / ARC / WAVEMAN
             Select Case UCase(Objet.modele)
@@ -498,16 +494,16 @@ Imports System.Globalization
                 Case "HOMEEASY"
                     protocol_chacon(Objet.adresse1, Command, False)
                 Case "X10"
-                        protocol_x10(Objet.adresse1, Command)
+                    protocol_x10(Objet.adresse1, Command)
                 Case "ARC"
-                        protocol_arc(Objet.adresse1, Command)
+                    protocol_arc(Objet.adresse1, Command)
                 Case "WAVEMAN"
-                        protocol_waveman(Objet.Adresse1, Command)
+                    protocol_waveman(Objet.Adresse1, Command)
                 Case Else
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter WRITE", "Protocole non géré : " & Objet.Modele.ToString.ToUpper)
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx WRITE", "Protocole non géré : " & Objet.Modele.ToString.ToUpper)
             End Select
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter WRITE", ex.ToString)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx WRITE", ex.ToString)
         End Try
     End Sub
 
@@ -615,7 +611,7 @@ Imports System.Globalization
             add_libelledevice("ADRESSE2", "@", "")
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXmitter New", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx New", ex.Message)
         End Try
     End Sub
 
@@ -637,44 +633,44 @@ Imports System.Globalization
         Try
             Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
             My.Application.ChangeCulture("en-US")
-                If Not _IsConnect Then
-                    port_name = numero 'pour se rapeller du nom du port
-                    If VB.Left(numero, 3) <> "COM" Then
-                        'RFXMitter est un modele ethernet
-                        tcp = True
-                        client = New TcpClient(numero, _Port_TCP)
-                        _IsConnect = True
-                        Return ("Port IP " & port_name & ":" & _Port_TCP & " ouvert")
-                    Else
-                        'RFXMitter est un modele usb
-                        tcp = False
-                        port.PortName = port_name 'nom du port : COM1
-                        port.BaudRate = 4800 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
-                        port.Parity = Parity.None 'pas de parité
-                        port.StopBits = StopBits.Two '2 bits d'arrêt par octet
-                        port.DataBits = 8 'nombre de bit par octet
-                        port.Encoding = System.Text.Encoding.GetEncoding(1252)  'Extended ASCII (8-bits)
-                        port.Handshake = Handshake.None
-                        port.ReadBufferSize = CInt(8192)
-                        port.ReceivedBytesThreshold = 1
-                        port.ReadTimeout = 100
-                        port.WriteTimeout = 500
-                        port.Open()
-                        _IsConnect = True
-                        If port.IsOpen Then
-                            port.DtrEnable = True
-                            port.RtsEnable = True
-                            port.DiscardInBuffer()
-                        End If
-                        dateheurelancement = DateTime.Now
-                        Return ("Port " & port_name & " ouvert")
-                    End If
+            If Not _IsConnect Then
+                port_name = numero 'pour se rapeller du nom du port
+                If VB.Left(numero, 3) <> "COM" Then
+                    'RFXtrx est un modele ethernet
+                    tcp = True
+                    client = New TcpClient(numero, _Port_TCP)
+                    _IsConnect = True
+                    Return ("Port IP " & port_name & ":" & _Port_TCP & " ouvert")
                 Else
-                    Return ("Port " & port_name & " dejà ouvert")
+                    'RFXtrx est un modele usb
+                    tcp = False
+                    port.PortName = port_name 'nom du port : COM1
+                    port.BaudRate = 4800 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
+                    port.Parity = Parity.None 'pas de parité
+                    port.StopBits = StopBits.Two '2 bits d'arrêt par octet
+                    port.DataBits = 8 'nombre de bit par octet
+                    port.Encoding = System.Text.Encoding.GetEncoding(1252)  'Extended ASCII (8-bits)
+                    port.Handshake = Handshake.None
+                    port.ReadBufferSize = CInt(8192)
+                    port.ReceivedBytesThreshold = 1
+                    port.ReadTimeout = 100
+                    port.WriteTimeout = 500
+                    port.Open()
+                    _IsConnect = True
+                    If port.IsOpen Then
+                        port.DtrEnable = True
+                        port.RtsEnable = True
+                        port.DiscardInBuffer()
+                    End If
+                    dateheurelancement = DateTime.Now
+                    Return ("Port " & port_name & " ouvert")
                 End If
-            Catch ex As Exception
-                Return ("ERR: " & ex.Message)
-            End Try
+            Else
+                Return ("Port " & port_name & " dejà ouvert")
+            End If
+        Catch ex As Exception
+            Return ("ERR: " & ex.Message)
+        End Try
     End Function
 
     ''' <summary>Lances les handlers sur le port</summary>
@@ -687,7 +683,7 @@ Imports System.Globalization
                 stream.BeginRead(TCPData, 0, 1024, AddressOf TCPDataReceived, Nothing)
                 Return "Handler IP OK"
             Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter LANCER GETSTREAM", ex.Message)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx LANCER GETSTREAM", ex.Message)
                 Return "ERR: Handler IP"
             End Try
         Else
@@ -697,16 +693,16 @@ Imports System.Globalization
                 AddHandler port.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf ReadErrorEvent)
                 Return "Handler COM OK"
             Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter LANCER Serial", ex.Message)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx LANCER Serial", ex.Message)
                 Return "ERR: Handler COM"
             End Try
         End If
     End Function
 
-    ''' <summary>Configurer le RFXMitter</summary>
+    ''' <summary>Configurer le RFXtrx</summary>
     ''' <remarks></remarks>
     Private Function configurer() As String
-        'configurer le rfxmitter
+        'configurer le RFXtrx
         Try
             'get firmware version
             Dim kar1() As Byte = {&HF0, GETSW, &HF0, GETSW}
@@ -725,7 +721,7 @@ Imports System.Globalization
 
             Return "Configuration OK"
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter LANCER Configuration", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx LANCER Configuration", ex.Message)
             Return "ERR: Configuration " & ex.Message
         End Try
     End Function
@@ -807,7 +803,7 @@ Imports System.Globalization
 
             Do While (ack = False)
                 If VB.DateAndTime.Timer > Finish Then
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "No ACK received witin 3 seconds !")
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx", "No ACK received witin 3 seconds !")
                     ack_ok = False
                     Exit Do
                 End If
@@ -818,9 +814,9 @@ Imports System.Globalization
                         stream.Read(tcpdata, 0, 1)
                         temp = tcpdata(0)
                         If temp = protocolsynchro Then
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "ACK  => " & VB.Right("0" & Hex(temp), 2))
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx", "ACK  => " & VB.Right("0" & Hex(temp), 2))
                         ElseIf temp = &H5A Then
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "NAK  => " & VB.Right("0" & Hex(temp), 2))
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx", "NAK  => " & VB.Right("0" & Hex(temp), 2))
                         End If
                         mess = True
                     End While
@@ -832,9 +828,9 @@ Imports System.Globalization
                             ' Write the output to the screen.
                             temp = port.ReadByte()
                             If temp = protocolsynchro Then
-                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "ACK  => " & VB.Right("0" & Hex(temp), 2))
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx", "ACK  => " & VB.Right("0" & Hex(temp), 2))
                             ElseIf temp = &H5A Then
-                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "NAK  => " & VB.Right("0" & Hex(temp), 2))
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx", "NAK  => " & VB.Right("0" & Hex(temp), 2))
                             End If
                             mess = True
                         End While
@@ -856,7 +852,7 @@ Imports System.Globalization
                 ecrire(kar)
             Catch exc As Exception
                 ' Warn the user.
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", "Unable to write to port")
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx", "Unable to write to port")
                 ack_ok = False
             Finally
 
@@ -870,10 +866,10 @@ Imports System.Globalization
             For intIndex = 1 To intEnd
                 message = message + VB.Right("0" & Hex(kar(intIndex)), 2)
             Next
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter Ecrirecommande", message)
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx Ecrirecommande", message)
             ack = False
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXmitter ecrirecommande", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx ecrirecommande", ex.Message)
         End Try
     End Sub
 
@@ -890,7 +886,7 @@ Imports System.Globalization
                 Next
             End If
         Catch Ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter Datareceived", Ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx Datareceived", Ex.Message)
         End Try
     End Sub
 
@@ -907,7 +903,7 @@ Imports System.Globalization
                 Next
             End If
         Catch Ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ERRORDatareceived", Ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx ERRORDatareceived", Ex.Message)
         End Try
     End Sub
 
@@ -922,7 +918,7 @@ Imports System.Globalization
                 stream.BeginRead(TCPData, 0, 1024, AddressOf TCPDataReceived, Nothing)
             End If
         Catch Ex As Exception
-            WriteLog("ERR: RFXMitter TCPDatareceived : " & Ex.Message)
+            WriteLog("ERR: RFXtrx TCPDatareceived : " & Ex.Message)
         End Try
     End Sub
 
@@ -935,7 +931,7 @@ Imports System.Globalization
                 ProcessReceivedChar(Bytes(intIndex))
             Next
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ProcessNewTCPData", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx ProcessNewTCPData", ex.Message)
         End Try
     End Sub
 
@@ -954,11 +950,11 @@ Imports System.Globalization
                         display_mess()
                     End If
                 Else
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter", "Buffer flushed due to timeout")
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx", "Buffer flushed due to timeout")
                 End If
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter tmrRead_Elapsed", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx tmrRead_Elapsed", ex.Message)
         End Try
     End Sub
 
@@ -968,13 +964,13 @@ Imports System.Globalization
     Private Sub ProcessReceivedChar(ByVal temp As Byte)
         Try
             If temp = protocolsynchro Then
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter ProcessReceivedChar", "ACK => " & VB.Right("0" & Hex(temp), 2))
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx ProcessReceivedChar", "ACK => " & VB.Right("0" & Hex(temp), 2))
             End If
             mess = True
             ack = True
             mess = False
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ProcessReceivedChar", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx ProcessReceivedChar", ex.Message)
         End Try
     End Sub
 
@@ -985,7 +981,7 @@ Imports System.Globalization
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte cette boucle
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter display_mess", ex.ToString)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx display_mess", ex.ToString)
         End Try
     End Sub
 #End Region
@@ -1054,7 +1050,7 @@ Imports System.Globalization
                 ecrirecommande(kar)
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ECRIRE CHACON", ex.ToString)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx ECRIRE CHACON", ex.ToString)
         End Try
     End Sub
 
@@ -1132,7 +1128,7 @@ Imports System.Globalization
 
             ecrirecommande(kar)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ECRIRE X10", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx ECRIRE X10", ex.Message)
         End Try
     End Sub
 
@@ -1204,7 +1200,7 @@ Imports System.Globalization
                     ecrirecommande(kar)
             End Select
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ECRIRE ARC", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx ECRIRE ARC", ex.Message)
         End Try
     End Sub
 
@@ -1226,7 +1222,7 @@ Imports System.Globalization
             kar(3) = xlate(Asc(adresse.Substring(0, 1)) - &H41)
             ecrirecommande(kar)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ECRIRE WAVEMAN", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx ECRIRE WAVEMAN", ex.Message)
         End Try
     End Sub
 
@@ -1239,14 +1235,14 @@ Imports System.Globalization
         Try
             'utilise la fonction de base pour loguer un event
             If STRGS.InStr(message, "DBG:") > 0 Then
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXMitter ", STRGS.Right(message, message.Length - 4))
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXtrx ", STRGS.Right(message, message.Length - 4))
             ElseIf STRGS.InStr(message, "ERR:") > 0 Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ", STRGS.Right(message, message.Length - 4))
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx ", STRGS.Right(message, message.Length - 4))
             Else
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter ", STRGS.Right(message, message.Length - 4))
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx ", STRGS.Right(message, message.Length - 4))
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter WriteLog", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx WriteLog", ex.Message)
         End Try
     End Sub
 
