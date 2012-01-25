@@ -66,7 +66,7 @@ Class Window1
         End Get
         Set(ByVal value As Boolean)
             _ShowSoleil = value
-            Show("Soleil", value)
+            Affiche("Soleil", value)
         End Set
     End Property
 
@@ -76,7 +76,7 @@ Class Window1
         End Get
         Set(ByVal value As Boolean)
             _ShowTemperature = value
-            Show("Temperature", value)
+            Affiche("Temperature", value)
         End Set
     End Property
 
@@ -173,7 +173,7 @@ Class Window1
     End Property
 #End Region
 
-    Public Sub [Show](ByVal Tag As String, ByVal Visible As Boolean)
+    Public Sub [Affiche](ByVal Tag As String, ByVal Visible As Boolean)
         For i As Integer = 0 To StkTop.Children.Count - 1
             Dim x As Object = StkTop.Children.Item(i)
             If UCase(x.Tag) = UCase(Tag) Then
@@ -1204,8 +1204,8 @@ Class Window1
                                 AddHandler y.ShowZone, AddressOf ElementShowZone
                                 x.Content = y
                                 Canvas1.Children.Add(x)
-                                Canvas1.SetLeft(x, _ListElement.Item(j).X)
-                                Canvas1.SetTop(x, _ListElement.Item(j).Y)
+                                Canvas.SetLeft(x, _ListElement.Item(j).X)
+                                Canvas.SetTop(x, _ListElement.Item(j).Y)
 
                                 _flagTrouv = True
                             End If
@@ -1244,8 +1244,8 @@ Class Window1
                             AddHandler y.PreviewMouseDown, AddressOf Dbleclk
                             x.Content = y
                             Canvas1.Children.Add(x)
-                            Canvas1.SetLeft(x, _Left)
-                            Canvas1.SetTop(x, _Top)
+                            Canvas.SetLeft(x, _Left)
+                            Canvas.SetTop(x, _Top)
 
                             _idx += 1
                         End If
@@ -1283,8 +1283,8 @@ Class Window1
                     'a &= child.Name & " : Left=" & Canvas1.GetLeft(child) & " Top=" & Canvas1.GetTop(child) & " Width=" & child.Width & " Height=" & child.Height & " Angle=" & child.RenderTransform.GetValue(RotateTransform.AngleProperty) & vbCrLf
                     For j As Integer = 0 To _ListElement.Count - 1
                         If _ListElement.Item(j).ID = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
-                            _ListElement.Item(j).X = CType(Canvas1.GetLeft(child), Double)
-                            _ListElement.Item(j).Y = CType(Canvas1.GetTop(child), Double)
+                            _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
+                            _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
                             _ListElement.Item(j).Width = child.Width
                             _ListElement.Item(j).Height = child.Height
 

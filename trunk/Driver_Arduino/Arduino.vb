@@ -210,6 +210,7 @@
             If Not serialPort1.IsOpen Then
                 WriteDebug(System.Reflection.MethodBase.GetCurrentMethod.Name + ": Unable to open comport...")
                 _ReturnValue = False
+                Return False
                 Exit Function
             Else
                 serialPort1.DtrEnable = True

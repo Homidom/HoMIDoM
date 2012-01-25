@@ -239,7 +239,6 @@ Namespace HoMIDom
                 End Try
             End Function
 
-
             'Identification unique du device
             Public Property ID() As String
                 Get

@@ -19,8 +19,8 @@ Public Class uAction
             _Zoom = value
             Dim j As Double = (_ObjAction.Timing.Hour * 3600) + (_ObjAction.Timing.Minute * 60) + _ObjAction.Timing.Second
             j = (Span * j) / _Zoom
-            Me.Fond.SetLeft(Rectangle1, j)
-            Me.Fond.SetLeft(ImgDelete, j + 160)
+            Canvas.SetLeft(Rectangle1, j)
+            Canvas.SetLeft(ImgDelete, j + 160)
         End Set
     End Property
 
@@ -40,8 +40,8 @@ Public Class uAction
     Sub Refresh_Position()
         Dim j As Double = (_ObjAction.Timing.Hour * 3600) + (_ObjAction.Timing.Minute * 60) + _ObjAction.Timing.Second
         j = (Span * j) / _Zoom
-        Fond.SetLeft(Rectangle1, j)
-        Fond.SetLeft(ImgDelete, j + 160)
+        Canvas.SetLeft(Rectangle1, j)
+        Canvas.SetLeft(ImgDelete, j + 160)
     End Sub
 
     'Objet action

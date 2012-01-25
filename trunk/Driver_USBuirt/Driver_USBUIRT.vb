@@ -231,27 +231,34 @@ Imports UsbUirt
         Return _DeviceCommandPlus
     End Function
 
-    ''' <summary>
-    ''' Execute une commande avancée
-    ''' </summary>
-    ''' <param name="Command"></param>
-    ''' <param name="Param"></param>
+    ''' <summary>Execute une commande avancée</summary>
+    ''' <param name="MyDevice">Objet représentant le Device </param>
+    ''' <param name="Command">Nom de la commande avancée à éxécuter</param>
+    ''' <param name="Param">tableau de paramétres</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+    Public Function ExecuteCommand(ByVal MyDevice As Object, ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
         Dim retour As Boolean = False
-
-        If Command = "" Then
+        Try
+            If MyDevice IsNot Nothing Then
+                'Pas de commande demandée donc erreur
+                If Command = "" Then
+                    Return False
+                Else
+                    'Write(deviceobject, Command, Param(0), Param(1))
+                    Select Case UCase(Command)
+                        Case ""
+                        Case Else
+                    End Select
+                    Return True
+                End If
+            Else
+                Return False
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "exception : " & ex.Message)
             Return False
-            Exit Function
-        End If
-
-        Select Case UCase(Command)
-            Case ""
-            Case Else
-        End Select
-
-        Return retour
+        End Try
     End Function
 
     ''' <summary>
@@ -360,6 +367,74 @@ Imports UsbUirt
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUirt NewDevice", ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>ajout des commandes avancées pour les devices</summary>
+    ''' <param name="nom">Nom de la commande avancée</param>
+    ''' <param name="description">Description qui sera affichée dans l'admin</param>
+    ''' <param name="nbparam">Nombre de parametres attendus</param>
+    ''' <remarks></remarks>
+    Private Sub Add_DeviceCommande(ByVal Nom As String, ByVal Description As String, ByVal NbParam As Integer)
+        Try
+            Dim x As New DeviceCommande
+            x.NameCommand = Nom
+            x.DescriptionCommand = description
+            x.CountParam = nbparam
+            _DeviceCommandPlus.Add(x)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>ajout Libellé pour le Driver</summary>
+    ''' <param name="nom">Nom du champ : HELP</param>
+    ''' <param name="labelchamp">Nom à afficher : Aide</param>
+    ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+    ''' <remarks></remarks>
+    Private Sub Add_LibelleDriver(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String)
+        Try
+            Dim y0 As New HoMIDom.HoMIDom.Driver.cLabels
+            y0.LabelChamp = Labelchamp
+            y0.NomChamp = UCase(Nom)
+            y0.Tooltip = Tooltip
+            _LabelsDriver.Add(y0)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Ajout Libellé pour les Devices</summary>
+    ''' <param name="nom">Nom du champ : HELP</param>
+    ''' <param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+    ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+    ''' <remarks></remarks>
+    Private Sub Add_LibelleDevice(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String)
+        Try
+            Dim ld0 As New HoMIDom.HoMIDom.Driver.cLabels
+            ld0.LabelChamp = Labelchamp
+            ld0.NomChamp = UCase(Nom)
+            ld0.Tooltip = Tooltip
+            _LabelsDevice.Add(ld0)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>ajout de parametre avancés</summary>
+    ''' <param name="nom">Nom du parametre (sans espace)</param>
+    ''' <param name="description">Description du parametre</param>
+    ''' <param name="valeur">Sa valeur</param>
+    ''' <remarks></remarks>
+    Private Sub Add_ParamAvance(ByVal nom As String, ByVal description As String, ByVal valeur As Object)
+        Try
+            Dim x As New HoMIDom.HoMIDom.Driver.Parametre
+            x.Nom = nom
+            x.Description = description
+            x.Valeur = valeur
+            _Parametres.Add(x)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
         End Try
     End Sub
 
