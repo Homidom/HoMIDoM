@@ -208,20 +208,15 @@ Imports VB = Microsoft.VisualBasic
 #End Region
 
 #Region "Fonctions génériques"
-    ''' <summary>
-    ''' Retourne la liste des Commandes avancées
-    ''' </summary>
-    ''' <returns></returns>
+    ''' <summary>Retourne la liste des Commandes avancées</summary>
     ''' <remarks></remarks>
     Public Function GetCommandPlus() As List(Of DeviceCommande)
         Return _DeviceCommandPlus
     End Function
 
-    ''' <summary>
-    ''' Execute une commande avancée
-    ''' </summary>
-    ''' <param name="Command"></param>
-    ''' <param name="Param"></param>
+    ''' <summary>Execute une commande avancée</summary>
+    ''' <param name="Command">Nom de la commande avancée à éxécuter</param>
+    ''' <param name="Param">tableau de paramétres</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
@@ -243,11 +238,10 @@ Imports VB = Microsoft.VisualBasic
         End Try
     End Function
 
-    ''' <summary>
-    ''' Permet de vérifier si un champ est valide
-    ''' </summary>
-    ''' <param name="Champ"></param>
-    ''' <returns></returns>
+    ''' <summary>Permet de vérifier si un champ est valide</summary>
+    ''' <param name="Champ">Nom du champ à vérifier, ex ADRESSE1</param>
+    ''' <param name="Value">Valeur à vérifier</param>
+    ''' <returns>Retourne 0 si OK, sinon un message d'erreur</returns>
     ''' <remarks></remarks>
     Public Function VerifChamp(ByVal Champ As String, ByVal Value As Object) As String Implements HoMIDom.HoMIDom.IDriver.VerifChamp
         Try
@@ -312,8 +306,8 @@ Imports VB = Microsoft.VisualBasic
     ''' <summary>Commander un device</summary>
     ''' <param name="Objet">Objet représetant le device à interroger</param>
     ''' <param name="Command">La commande à passer</param>
-    ''' <param name="Parametre1"></param>
-    ''' <param name="Parametre2"></param>
+    ''' <param name="Parametre1">parametre 1 de la commande, optionnel</param>
+    ''' <param name="Parametre2">parametre 2 de la commande, optionnel</param>
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
@@ -346,6 +340,9 @@ Imports VB = Microsoft.VisualBasic
     End Sub
 
     ''' <summary>ajout des commandes avancées pour les devices</summary>
+    ''' <param name="nom">Nom de la commande avancée</param>
+    ''' <param name="description">Description qui sera affichée dans l'admin</param>
+    ''' <param name="nbparam">Nombre de parametres attendus</param>
     ''' <remarks></remarks>
     Private Sub add_devicecommande(ByVal nom As String, ByVal description As String, ByVal nbparam As Integer)
         Try
