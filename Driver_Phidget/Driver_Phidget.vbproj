@@ -47,7 +47,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Phidget21.NET">
-      <HintPath>..\Dll_externes\Homidom-32bits\Phidget21.NET.dll</HintPath>
+      <HintPath>..\DEBUG\Phidget21.NET.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -107,6 +108,7 @@
     <ProjectReference Include="..\HoMIDom\HoMIDom.vbproj">
       <Project>{1F0CE8B5-5BA9-4704-8B5E-52682635F803}</Project>
       <Name>HoMIDom</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

@@ -46,6 +46,10 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Interop.ActiveHomeScriptLib">
+      <HintPath>..\DEBUG\Interop.ActiveHomeScriptLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -104,18 +108,8 @@
     <ProjectReference Include="..\HoMIDom\HoMIDom.vbproj">
       <Project>{1F0CE8B5-5BA9-4704-8B5E-52682635F803}</Project>
       <Name>HoMIDom</Name>
+      <Private>False</Private>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="ActiveHomeScriptLib">
-      <Guid>{001000AF-1DEF-0010-10B6-DC5BA692C858}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
