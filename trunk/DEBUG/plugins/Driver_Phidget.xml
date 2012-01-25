@@ -6,20 +6,7 @@ Driver_Phidget
 </name>
 </assembly>
 <members>
-<member name="P:Driver_Phidget.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_Phidget.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_Phidget.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member><member name="M:Driver_Phidget.Driver_Phidget.GetCommandPlus">
+<member name="M:Driver_Phidget.Driver_Phidget.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
@@ -43,6 +30,19 @@ Driver_Phidget
 </member><member name="M:Driver_Phidget.Driver_Phidget.traitement(System.Boolean,System.String)">
 	<summary>Traite les paquets reçus</summary>
 	<remarks></remarks>
+</member><member name="P:Driver_Phidget.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_Phidget.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_Phidget.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member>
 </members>
 </doc>
