@@ -14,9 +14,9 @@ Imports System.Windows
 <Assembly: AssemblyTitle("HoMIDom Administration")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("HoMIDoM")> 
-<Assembly: AssemblyProduct("WpfApplication1")> 
+<Assembly: AssemblyProduct("HoMIAdmiN")> 
 <Assembly: AssemblyCopyright("Copyright @ HoMIDoM 2011")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyTrademark("HoMIDoM")> 
 <Assembly: ComVisible(false)>
 
 'Pour commencer à générer des applications localisables, définissez 

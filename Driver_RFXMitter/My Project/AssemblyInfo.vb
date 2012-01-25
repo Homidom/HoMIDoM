@@ -10,10 +10,10 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("Driver_RFXMitter")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("Microsoft")> 
+<Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("Driver_RFXMitter")> 
-<Assembly: AssemblyCopyright("Copyright © Microsoft 2011")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2011")> 
+<Assembly: AssemblyTrademark("HoMIDoM")> 
 
 <Assembly: ComVisible(False)>
 

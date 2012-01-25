@@ -10,10 +10,10 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("Driver_Foobar")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("cyberconseil")> 
+<Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("Driver_Foobar")> 
-<Assembly: AssemblyCopyright("Copyright © cyberconseil 2011")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2011")> 
+<Assembly: AssemblyTrademark("HoMIDoM")> 
 
 <Assembly: ComVisible(False)>
 

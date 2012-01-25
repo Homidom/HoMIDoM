@@ -12,8 +12,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Le système complet de domotique pour la maison")> 
 <Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("HoMIDoM")> 
-<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2011")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyCopyright("Copyright @ HoMIDoM 2011")> 
+<Assembly: AssemblyTrademark("HoMIDoM")> 
 
 <Assembly: ComVisible(False)>
 
