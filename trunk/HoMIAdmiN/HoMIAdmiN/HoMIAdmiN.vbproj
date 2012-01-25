@@ -441,7 +441,9 @@
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\aide.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Lune.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

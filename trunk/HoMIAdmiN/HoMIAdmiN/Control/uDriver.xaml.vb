@@ -112,8 +112,8 @@ Partial Public Class uDriver
                     For k As Integer = 0 To x.LabelsDriver.Count - 1
                         Select Case x.LabelsDriver.Item(k).NomChamp
                             Case "HELP"
-                                LblHelp.Visibility = Windows.Visibility.Visible
-                                LblHelp.ToolTip = x.LabelsDriver.Item(k).Tooltip
+                                BtnHelp.Visibility = Windows.Visibility.Visible
+                                BtnHelp.ToolTip = x.LabelsDriver.Item(k).Tooltip
                         End Select
                     Next
                 End If
@@ -316,5 +316,9 @@ Partial Public Class uDriver
         Else
             MessageBox.Show("Veuillez sélectionner un paramètre ou saisir sa valeur", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
         End If
+    End Sub
+
+    Private Sub BtnHelp_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnHelp.Click
+        MessageBox.Show(BtnHelp.ToolTip, "Aide", MessageBoxButton.OK, MessageBoxImage.Question)
     End Sub
 End Class

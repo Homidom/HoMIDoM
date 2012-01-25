@@ -631,8 +631,6 @@ Class Window1
             AddHandler x.CloseMe, AddressOf UnloadControl
             CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
-            CanvasRight.SetLeft(x, 50)
-            CanvasRight.SetTop(x, 8)
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub MnuConfigSrv: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -665,8 +663,8 @@ Class Window1
             AddHandler x.CloseMe, AddressOf UnloadControl
             CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
-            CanvasRight.SetLeft(x, 10)
-            CanvasRight.SetTop(x, 5)
+            Canvas.SetLeft(x, 10)
+            Canvas.SetTop(x, 5)
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub MnuPlayList: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -759,8 +757,8 @@ Class Window1
             WMainMenu = CanvasRight.ActualWidth / 2 - (MainMenu.Width / 2)
             HMainMenu = CanvasRight.ActualHeight / 2 - (MainMenu.Height / 2)
         End If
-        CanvasRight.SetLeft(MainMenu, WMainMenu)
-        CanvasRight.SetTop(MainMenu, HMainMenu)
+        Canvas.SetLeft(MainMenu, WMainMenu)
+        Canvas.SetTop(MainMenu, HMainMenu)
     End Sub
 
 #Region "MainMenu"
@@ -863,7 +861,7 @@ Class Window1
         CanvasRight.Children.Clear()
 
         Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", index)
-        CanvasRight.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
+        Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
         AddHandler x.CloseMe, AddressOf UnloadSelectElmt
         CanvasRight.Children.Add(x)
     End Sub
@@ -873,7 +871,7 @@ Class Window1
         CanvasRight.Children.Clear()
 
         Dim x As New uSelectElmt("Choisir {TITLE} à éditer", index)
-        CanvasRight.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
+        Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
         AddHandler x.CloseMe, AddressOf UnloadSelectElmt
         CanvasRight.Children.Add(x)
 
@@ -1098,8 +1096,6 @@ Class Window1
             AddHandler x.CloseMe, AddressOf UnloadControl
             CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
-            CanvasRight.SetLeft(x, 50)
-            CanvasRight.SetTop(x, 8)
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub MenuConfigAudio: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1379,8 +1375,8 @@ Class Window1
                 Dim x As uMainMenu = CanvasRight.Children.Item(0)
                 WMainMenu = CanvasRight.ActualWidth / 2 - (x.Width / 2)
                 HMainMenu = CanvasRight.ActualHeight / 2 - (x.Height / 2)
-                CanvasRight.SetLeft(x, WMainMenu)
-                CanvasRight.SetTop(x, HMainMenu)
+                Canvas.SetLeft(x, WMainMenu)
+                Canvas.SetTop(x, HMainMenu)
                 x = Nothing
             End If
         End If
