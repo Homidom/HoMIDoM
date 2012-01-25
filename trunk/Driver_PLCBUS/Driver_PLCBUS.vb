@@ -477,11 +477,6 @@ Imports System.IO.Ports
     ''' <remarks></remarks>
     Public Sub New()
         Try
-            'Paramétres avancés
-            add_paramavance("ack", "Gestion du ack", True)
-            add_paramavance("triphase", "Installation en triphase", False)
-            add_paramavance("plcusercode", "User Code (0-255)", 209)
-
             'Liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
             _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
@@ -489,6 +484,46 @@ Imports System.IO.Ports
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
             _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
             _DeviceSupport.Add(ListeDevices.VOLET.ToString)
+
+            'Paramétres avancés
+            add_paramavance("ack", "Gestion du ack", True)
+            add_paramavance("triphase", "Installation en triphase", False)
+            add_paramavance("plcusercode", "User Code (0-255)", 209)
+
+            'ajout des commandes avancées pour les devices
+            add_devicecommande("ALL_UNITS_OFF", "Eteint tous les appareils du meme range que ce device", 0)
+            add_devicecommande("ALL_LIGHTS_ON", "Allume toutes les lampes du meme range que ce device", 0)
+            add_devicecommande("BRIGHT", "light will bright until fade-stop is received /  parametre = Fade rate", 1)
+            add_devicecommande("ALL_LIGHTS_OFF", "Eteint toutes les lampes du meme range que ce device", 0)
+            add_devicecommande("All_USER_LIGHTS_ON", "Allume toutes les lampes", 0)
+            add_devicecommande("All_USER_UNITS_OFF", "Eteint tous les appareils", 0)
+            add_devicecommande("All_USER_LIGHTS_OFF", "Eteint toutes les lampes", 0)
+            add_devicecommande("BLINK", "Flashe à intervalle régulier, parametre = intervalle", 1)
+            add_devicecommande("FADE_STOP", "Arrete de varier DIM/BRIGHT", 0)
+            add_devicecommande("PRESET_DIM", " Allume et enregistre à tel level et en rate secondes la lampe, param1=dim level, param2=rate", 2)
+            add_devicecommande("STATUS_ON", "", 0)
+            add_devicecommande("STATUS_OFF", "", 0)
+            'add_devicecommande("STATUS_REQUEST", "", 0)
+            add_devicecommande("ReceiverMasterAddressSetup", "param1=New user code, param2=new home+unitcode", 2)
+            add_devicecommande("TransmitterMasterAddressSetup", "param1=New user code, param2=new home+unitcode", 2)
+            add_devicecommande("SceneAddressSetup", "", 0)
+            add_devicecommande("SceneAddressErase", "", 0)
+            add_devicecommande("AllSceneAddressErase", "", 0)
+            add_devicecommande("GetSignalStrength", "param = signal strength", 1)
+            add_devicecommande("GetNoiseStrength", "param = Noise strength", 1)
+            add_devicecommande("ReportSignalStrength", "", 0)
+            add_devicecommande("ReportNoiseStrength", "", 0)
+            'add_devicecommande("GetAllIdPulse", "", 0)
+            'add_devicecommande("GetOnlyOnIdPulse", "", 0)
+            'add_devicecommande("ReportAllIdPulse3Phase", "", 0)
+            'add_devicecommande("ReportOnlyOnIdPulse3Phase", "", 0)
+
+            'Libellé Driver
+            add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
+
+            'Libellé Device
+            add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant de type L1 ou L")
+            add_libelledevice("ADRESSE2", "@", "")
 
             'dictionnaire Commande STRING -> INT
             com_to_hex.Add("ALL_UNITS_OFF", 0)
@@ -555,33 +590,6 @@ Imports System.IO.Ports
             hex_to_com.Add(30, "ReportAllIdPulse3Phase")
             hex_to_com.Add(31, "ReportOnlyOnIdPulse3Phase")
 
-            'ajout des commandes avancées pour les devices
-            add_devicecommande("ALL_UNITS_OFF", "Eteint tous les appareils du meme range que ce device", 0)
-            add_devicecommande("ALL_LIGHTS_ON", "Allume toutes les lampes du meme range que ce device", 0)
-            add_devicecommande("BRIGHT", "light will bright until fade-stop is received /  parametre = Fade rate", 1)
-            add_devicecommande("ALL_LIGHTS_OFF", "Eteint toutes les lampes du meme range que ce device", 0)
-            add_devicecommande("All_USER_LIGHTS_ON", "Allume toutes les lampes", 0)
-            add_devicecommande("All_USER_UNITS_OFF", "Eteint tous les appareils", 0)
-            add_devicecommande("All_USER_LIGHTS_OFF", "Eteint toutes les lampes", 0)
-            add_devicecommande("BLINK", "Flashe à intervalle régulier, parametre = intervalle", 1)
-            add_devicecommande("FADE_STOP", "Arrete de varier DIM/BRIGHT", 0)
-            add_devicecommande("PRESET_DIM", " Allume et enregistre à tel level et en rate secondes la lampe, param1=dim level, param2=rate", 2)
-            add_devicecommande("STATUS_ON", "", 0)
-            add_devicecommande("STATUS_OFF", "", 0)
-            'add_devicecommande("STATUS_REQUEST", "", 0)
-            add_devicecommande("ReceiverMasterAddressSetup", "param1=New user code, param2=new home+unitcode", 2)
-            add_devicecommande("TransmitterMasterAddressSetup", "param1=New user code, param2=new home+unitcode", 2)
-            add_devicecommande("SceneAddressSetup", "", 0)
-            add_devicecommande("SceneAddressErase", "", 0)
-            add_devicecommande("AllSceneAddressErase", "", 0)
-            add_devicecommande("GetSignalStrength", "param = signal strength", 1)
-            add_devicecommande("GetNoiseStrength", "param = Noise strength", 1)
-            add_devicecommande("ReportSignalStrength", "", 0)
-            add_devicecommande("ReportNoiseStrength", "", 0)
-            'add_devicecommande("GetAllIdPulse", "", 0)
-            'add_devicecommande("GetOnlyOnIdPulse", "", 0)
-            'add_devicecommande("ReportAllIdPulse3Phase", "", 0)
-            'add_devicecommande("ReportOnlyOnIdPulse3Phase", "", 0)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS New", "Exception : " & ex.Message)
         End Try

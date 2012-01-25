@@ -418,10 +418,11 @@ Imports VB = Microsoft.VisualBasic
             _DeviceSupport.Add(ListeDevices.FREEBOX)
 
             'Parametres avancés
-            'add_paramavance("test", "Description", True)
+            'add_paramavance("nom", "Description", valeupardefaut)
 
             'ajout des commandes avancées pour les devices
-            'add_devicecommande("COMMANDE", "DESCRIPTION", 0)
+            'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
+            'add_devicecommande("PRESETDIM", "permet de paramétrer le DIM : param1=niveau, param2=timer", 2)
 
             'Libellé Driver
             'add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
