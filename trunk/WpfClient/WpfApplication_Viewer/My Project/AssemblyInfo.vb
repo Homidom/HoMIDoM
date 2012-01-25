@@ -13,10 +13,10 @@ Imports System.Windows
 
 <Assembly: AssemblyTitle("HoMIWpF")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("HOMIDOM")> 
+<Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("HoMIWpF")> 
-<Assembly: AssemblyCopyright("Copyright @ HOMIDOM 2010")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2011")> 
+<Assembly: AssemblyTrademark("HoMIDoM")> 
 <Assembly: ComVisible(false)>
 
 'Pour commencer à générer des applications localisables, définissez 

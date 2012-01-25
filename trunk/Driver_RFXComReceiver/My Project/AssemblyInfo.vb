@@ -13,7 +13,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("Driver_RFXComReceiver")> 
 <Assembly: AssemblyCopyright("Copyright © HoMIDoM 2011")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyTrademark("HoMIDoM")> 
 
 <Assembly: ComVisible(False)>
 

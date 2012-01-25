@@ -13,7 +13,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("HoMIDomService")> 
 <Assembly: AssemblyCopyright("Copyright © HoMIDoM 2011")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyTrademark("HoMIDoM")> 
 
 <Assembly: ComVisible(False)>
 
