@@ -442,14 +442,56 @@ Public Class Driver_X10_CM11
         End Try
     End Sub
 
-    ''' <summary>Si refresh >0 gestion du timer</summary>
-    ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-    Private Sub TimerTick()
-
+    ''' <summary>ajout des commandes avancées pour les devices</summary>
+    ''' <remarks></remarks>
+    Private Sub add_devicecommande(ByVal nom As String, ByVal description As String, ByVal nbparam As Integer)
+        Try
+            Dim x As New DeviceCommande
+            x.NameCommand = nom
+            x.DescriptionCommand = description
+            x.CountParam = nbparam
+            _DeviceCommandPlus.Add(x)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+        End Try
     End Sub
 
-#End Region
+    ''' <summary>ajout Libellé pour le Driver</summary>
+    ''' <param name="nom">Nom du champ : HELP</param>
+    ''' <param name="labelchamp">Nom à afficher : Aide</param>
+    ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+    ''' <remarks></remarks>
+    Private Sub add_libelledriver(ByVal nom As String, ByVal labelchamp As String, ByVal tooltip As String)
+        Try
+            Dim y0 As New HoMIDom.HoMIDom.Driver.cLabels
+            y0.LabelChamp = labelchamp
+            y0.NomChamp = nom
+            y0.Tooltip = tooltip
+            _LabelsDriver.Add(y0)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+        End Try
+    End Sub
 
+    ''' <summary>ajout Libellé pour les Devices</summary>
+    ''' <param name="nom">Nom du champ : HELP</param>
+    ''' <param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+    ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+    ''' <remarks></remarks>
+    Private Sub add_libelledevice(ByVal nom As String, ByVal labelchamp As String, ByVal tooltip As String)
+        Try
+            Dim ld0 As New HoMIDom.HoMIDom.Driver.cLabels
+            ld0.LabelChamp = labelchamp
+            ld0.NomChamp = nom
+            ld0.Tooltip = tooltip
+            _LabelsDevice.Add(ld0)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Creation d'un objet de type</summary>
+    ''' <remarks></remarks>
     Public Sub New()
         Try
             house_to_hex.Add("A", &H60)
@@ -511,28 +553,30 @@ Public Class Driver_X10_CM11
             _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
             _DeviceSupport.Add(ListeDevices.VOLET.ToString)
 
+            'ajout des commandes avancées pour les devices
+            'add_devicecommande("COMMANDE", "DESCRIPTION", 0)
+
             'Libellé Driver
-            Dim y0 As New HoMIDom.HoMIDom.Driver.cLabels
-            y0.LabelChamp = "Aide..."
-            y0.NomChamp = "HELP"
-            y0.Tooltip = "Pas d'aide actuellement..."
-            _LabelsDriver.Add(y0)
+            add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Dim ld0 As New HoMIDom.HoMIDom.Driver.cLabels
-            ld0.LabelChamp = "Adresse du module"
-            ld0.NomChamp = "ADRESSE1"
-            ld0.Tooltip = "Adresse HouseCode du module (ex: C3)"
-            _LabelsDevice.Add(ld0)
-            Dim ld1 As New HoMIDom.HoMIDom.Driver.cLabels
-            ld1.LabelChamp = "@"
-            ld1.NomChamp = "ADRESSE2"
-            ld1.Tooltip = ""
-            _LabelsDevice.Add(ld1)
+            add_libelledevice("ADRESSE1", "Adresse du module", "Adresse HouseCode du module (ex: C3)")
+            add_libelledevice("ADRESSE2", "@", "")
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 New", ex.Message)
         End Try
     End Sub
+
+    ''' <summary>Si refresh >0 gestion du timer</summary>
+    ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+    Private Sub TimerTick()
+
+    End Sub
+
+#End Region
+
+#Region "Fonctions internes"
 
     Private Sub m_serialPort_ErrorReceived(ByVal sender As Object, ByVal e As SerialErrorReceivedEventArgs)
         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 ErrorReceived", "Error: " & e.ToString)
@@ -1190,5 +1234,6 @@ Public Class Driver_X10_CM11
     End Function
 #End Region
 
+#End Region
 
 End Class

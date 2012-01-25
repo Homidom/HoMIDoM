@@ -1,0 +1,229 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Driver_Arduino
+</name>
+</assembly>
+<members>
+<member name="P:Driver_Arduino.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_Arduino.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_Arduino.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="E:Driver_Arduino.Arduino.DigitalDataReceived">
+	<summary>
+ Gives the value of a digital port
+ </summary>
+	<param name="DPortNr">The digital portnr. that has the data</param>
+	<param name="Value">The new value of the port</param>
+	<remarks>This event is fired when a trigger is enabled on a digital port 
+ and the data changes or as a reaction on the GetDigitalValue command</remarks>
+</member><member name="E:Driver_Arduino.Arduino.AnalogDataReceived">
+	<summary>
+ Gives the value of an analog port
+ </summary>
+	<param name="APortNr">The analog portnumber that has the data</param>
+	<param name="Value">The new value of the port</param>
+	<remarks>This event is fired when a trigger is enabled on an analog port 
+ and the data changes more than the set threshold, or as a reaction on the 
+ GetAnalogValue command</remarks>
+</member><member name="E:Driver_Arduino.Arduino.LogMessageReceived">
+	<summary>
+ Gives a system message from the Arduino
+ </summary>
+	<param name="Message">The message</param>
+	<remarks></remarks>
+</member><member name="E:Driver_Arduino.Arduino.WatchdogReceived">
+	<summary>
+ Fires when a watchdog message (heartbeat) is received
+ </summary>
+	<remarks></remarks>
+</member><member name="E:Driver_Arduino.Arduino.ConnectionLost">
+	<summary>
+ Fires when there has not been a watchdog message for 5 seconds
+ </summary>
+	<remarks></remarks>
+</member><member name="P:Driver_Arduino.Arduino.ComPort">
+	<summary>
+ Set the comport where the Arduino is connected to
+ </summary>
+	<value>"COM1", "COM2", etc...</value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_Arduino.Arduino.BaudRate">
+	<summary>
+ Set the baudrate of the comport
+ </summary>
+	<value>9600, 19200</value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_Arduino.Arduino.DigitalCount">
+	<summary>
+ Set the number of digital pins for the used Arduino model
+ </summary>
+	<value>Number of digital pins</value>
+	<returns>Number of digital pins</returns>
+	<remarks>Default = 14 (Duemilanove)</remarks>
+</member><member name="P:Driver_Arduino.Arduino.AnalogCount">
+	<summary>
+ Set the number of analog pins for the used Arduino model
+ </summary>
+	<value>Number of analog pins</value>
+	<returns>Number of analog pins</returns>
+	<remarks>Default = 6 (Duemilanove)</remarks>
+</member><member name="P:Driver_Arduino.Arduino.PWMPorts">
+	<summary>
+ Set the zero-based pinnumbers of the digital PWM lines for the used Arduino model
+ </summary>
+	<value>Array of zero-based integers with PWM portnumbers</value>
+	<returns>Array of zero-based integers with PWM portnumbers</returns>
+	<remarks>Default = {3, 5, 6, 9, 10, 11} (Duemilanove)</remarks>
+</member><member name="P:Driver_Arduino.Arduino.ServoPorts">
+	<summary>
+ Set the zero-based pinnumbers of the servo lines for the used Arduino model
+ </summary>
+	<value>Array of zero-based integers with servo portnumbers</value>
+	<returns>Array of zero-based integers with servo portnumbers</returns>
+	<remarks>Default = {9, 10}</remarks>
+</member><member name="M:Driver_Arduino.Arduino.#ctor">
+	<summary>
+ Creates new instance of this class
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Arduino.#ctor(System.String)">
+	<summary>
+ Creates new instance of this class
+ </summary>
+	<param name="PortName">The comport the Arduino is connected to</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Arduino.#ctor(System.String,System.String)">
+	<summary>
+ Creates new instance of this class
+ </summary>
+	<param name="PortName">The serial port the Arduino is connected to</param>
+	<param name="BaudRate">The baudrate of the serial port</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Arduino.StartCommunication">
+	<summary>
+ Start the serial communication to the Arduino on the set comport
+ </summary>
+	<returns>True when connected</returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Arduino.SetDigitalDirection(System.Int32,Driver_Arduino.Arduino.DigitalDirection)">
+	<summary>
+ Set the direction of digital port
+ </summary>
+	<param name="Port">Digital portnumber</param>
+	<param name="Direction">DigitalInput, DigitalOutput, PWMoutput</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Arduino.SetDigitalValue(System.Int32,System.Int32)">
+	<summary>
+ Set the value of the digital (Output) port
+ </summary>
+	<param name="Port">Digital portnumber</param>
+	<param name="Value">Value to write to port</param>
+	<remarks>The value can be 0/1 if the port is set to Output or 0-255 if the port is set to PWM</remarks>
+</member><member name="M:Driver_Arduino.Arduino.EnableDigitalPort(System.Int32,System.Boolean)">
+	<summary>
+ Enable digital port
+ </summary>
+	<param name="Port">Digital portnumber</param>
+	<param name="Enable">0 = Disable, 1 = Enable</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Arduino.EnableAnalogPort(System.Int32,System.Boolean)">
+	<summary>
+ Enable analog port
+ </summary>
+	<param name="Port">Analog portnumber</param>
+	<param name="Enable">0 = Disable, 1 = Enable</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Arduino.EnableServoPort(System.Int32,System.Boolean)">
+	<summary>
+ Enable servo port
+ </summary>
+	<param name="Port">Servo portnumber</param>
+	<param name="Enable">0 = Disable, 1 = Enable</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Arduino.SetServoValue(System.Int32,System.Int32)">
+	<summary>
+ Set the value of the servo port
+ </summary>
+	<param name="Port">Servo portnumber</param>
+	<param name="Value">Value to write to port</param>
+	<remarks>The value can be between 0 and 179 (in degrees)</remarks>
+</member><member name="M:Driver_Arduino.Arduino.SetMotorSpeed(System.Int32,System.Int32)">
+	<summary>
+ Set the speed of a motor
+ </summary>
+	<param name="MotorNr">Motor number</param>
+	<param name="Value">Value to write to motor</param>
+	<remarks>The value can be between 0 and 255</remarks>
+</member><member name="M:Driver_Arduino.Arduino.SetMotorDir(System.Int32,Driver_Arduino.Arduino.MotorDirection)">
+	<summary>
+ Set the direction of a motor
+ </summary>
+	<param name="MotorNr">Motor number</param>
+	<param name="Value">Value to write to motor</param>
+	<remarks>The value can be 1, 2 or 4</remarks>
+</member><member name="M:Driver_Arduino.Arduino.EnableDigitalTrigger(System.Int32,System.Boolean)">
+	<summary>
+ Enable trigger on digital port
+ </summary>
+	<param name="Port">Digital portnumber</param>
+	<param name="Enable">0 = Disable, 1 = Enable</param>
+	<remarks>The trigger will fire an event when the value of the digital (input) port is changed</remarks>
+</member><member name="M:Driver_Arduino.Arduino.EnableAnalogTrigger(System.Int32,System.Int32)">
+	<summary>
+ Enable threshold on analog port
+ </summary>
+	<param name="Port">Analog portnumber</param>
+	<param name="Threshold">Threshold value (0-255)</param>
+	<remarks>The trigger will fire an event when the valuechange of the analog port will exceed this threshold</remarks>
+</member><member name="M:Driver_Arduino.Arduino.GetDigitalValue(System.Int32)">
+	<summary>
+ Get value of digital (output) port
+ </summary>
+	<param name="Port">Digital portnumber</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Arduino.GetAnalogValue(System.Int32)">
+	<summary>
+ Get value of analog port
+ </summary>
+	<param name="Port">Analog portnumber</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.ExecuteCommand(System.String,System.Object[])">
+	<summary>
+ Execute une commande avancée
+ </summary>
+	<param name="Command"></param>
+	<param name="Param"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.traitement(System.Boolean,System.String)">
+	<summary>Traite les paquets reçus</summary>
+	<remarks></remarks>
+</member>
+</members>
+</doc>

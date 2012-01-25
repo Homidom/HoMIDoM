@@ -249,13 +249,10 @@ Imports System.IO.Ports
             Dim retour As Boolean = False
             If Command = "" Then
                 Return False
-                Exit Function
+            Else
+                'Write(deviceobject, Command, Param(0), Param(1))
+                Return True
             End If
-            Select Case UCase(Command)
-                Case ""
-                Case Else
-            End Select
-            Return retour
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS ExecuteCommand", "exception : " & ex.Message)
             Return False
@@ -425,26 +422,66 @@ Imports System.IO.Ports
         End Try
     End Sub
 
+    ''' <summary>ajout Libellé pour le Driver</summary>
+    ''' <param name="nom">Nom du champ : HELP</param>
+    ''' <param name="labelchamp">Nom à afficher : Aide</param>
+    ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+    ''' <remarks></remarks>
+    Private Sub add_libelledriver(ByVal nom As String, ByVal labelchamp As String, ByVal tooltip As String)
+        Try
+            Dim y0 As New HoMIDom.HoMIDom.Driver.cLabels
+            y0.LabelChamp = labelchamp
+            y0.NomChamp = nom
+            y0.Tooltip = tooltip
+            _LabelsDriver.Add(y0)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>ajout Libellé pour les Devices</summary>
+    ''' <param name="nom">Nom du champ : HELP</param>
+    ''' <param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+    ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+    ''' <remarks></remarks>
+    Private Sub add_libelledevice(ByVal nom As String, ByVal labelchamp As String, ByVal tooltip As String)
+        Try
+            Dim ld0 As New HoMIDom.HoMIDom.Driver.cLabels
+            ld0.LabelChamp = labelchamp
+            ld0.NomChamp = nom
+            ld0.Tooltip = tooltip
+            _LabelsDevice.Add(ld0)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>ajout de parametre avancés</summary>
+    ''' <param name="nom">Nom du parametre (sans espace)</param>
+    ''' <param name="description">Description du parametre</param>
+    ''' <param name="valeur">Sa valeur</param>
+    ''' <remarks></remarks>
+    Private Sub add_paramavance(ByVal nom As String, ByVal description As String, ByVal valeur As Object)
+        Try
+            Dim x As New HoMIDom.HoMIDom.Driver.Parametre
+            x.Nom = nom
+            x.Description = description
+            x.Valeur = valeur
+            _Parametres.Add(x)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+        End Try
+    End Sub
+
     ''' <summary>Creation d'un objet de type</summary>
     ''' <remarks></remarks>
     Public Sub New()
         Try
             'Paramétres avancés
-            Dim x As New HoMIDom.HoMIDom.Driver.Parametre
-            x.Nom = "ack"
-            x.Description = "Gestion du ack"
-            x.Valeur = True
-            _Parametres.Add(x)
-            x = New HoMIDom.HoMIDom.Driver.Parametre
-            x.Nom = "triphase"
-            x.Description = "Installation en triphase"
-            x.Valeur = False
-            _Parametres.Add(x)
-            x = New HoMIDom.HoMIDom.Driver.Parametre
-            x.Nom = "plcusercode"
-            x.Description = "User Code (0-255)"
-            x.Valeur = 209
-            _Parametres.Add(x)
+            add_paramavance("ack", "Gestion du ack", True)
+            add_paramavance("triphase", "Installation en triphase", False)
+            add_paramavance("plcusercode", "User Code (0-255)", 209)
+
             'Liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
             _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
