@@ -279,8 +279,10 @@ Public Class Driver_X10_CM11
         Try
             Dim retour As String = "0"
             Select Case UCase(Champ)
-
-
+                Case "ADRESSE1"
+                    If Value = " " Then retour = "l'adresse du module est obligatoire"
+                    If IsNumeric(Mid(Value, 1, 1)) Then retour = "l'adresse doit commencer par une lettre (House), ex: A"
+                    If IsNumeric(Mid(Value, 2, Len(Value) - 1)) = False Then retour = "l'adresse doit être assciée au House puis le Code qui doit être compris entre 1 et 16, ex: C3"
             End Select
             Return retour
         Catch ex As Exception
@@ -508,6 +510,25 @@ Public Class Driver_X10_CM11
             _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
             _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
             _DeviceSupport.Add(ListeDevices.VOLET.ToString)
+
+            'Libellé Driver
+            Dim y0 As New HoMIDom.HoMIDom.Driver.cLabels
+            y0.LabelChamp = "Aide..."
+            y0.NomChamp = "HELP"
+            y0.Tooltip = "Pas d'aide actuellement..."
+            _LabelsDriver.Add(y0)
+
+            'Libellé Device
+            Dim ld0 As New HoMIDom.HoMIDom.Driver.cLabels
+            ld0.LabelChamp = "Adresse du module"
+            ld0.NomChamp = "ADRESSE1"
+            ld0.Tooltip = "Adresse HouseCode du module (ex: C3)"
+            _LabelsDevice.Add(ld0)
+            Dim ld1 As New HoMIDom.HoMIDom.Driver.cLabels
+            ld1.LabelChamp = "@"
+            ld1.NomChamp = "ADRESSE2"
+            ld1.Tooltip = ""
+            _LabelsDevice.Add(ld1)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 New", ex.Message)
         End Try
