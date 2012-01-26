@@ -87,9 +87,9 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data.SQLite, Version=1.0.74.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+    <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DEBUG_HoMIWpF\System.Data.SQLite.dll</HintPath>
+      <HintPath>..\..\Dll_externes\Homidom-32bits\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
@@ -137,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="CtrlDevice\uFreeBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CtrlDevice\uOnOff.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -254,6 +258,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="cElement.vb" />
+    <Compile Include="CtrlDevice\uFreeBox.xaml.vb">
+      <DependentUpon>uFreeBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CtrlDevice\uOnOff.xaml.vb">
       <DependentUpon>uOnOff.xaml</DependentUpon>
     </Compile>
@@ -486,6 +493,25 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icone.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\k0.png" />
+    <Resource Include="Images\k1.png" />
+    <Resource Include="Images\k2.png" />
+    <Resource Include="Images\k3.png" />
+    <Resource Include="Images\k4.png" />
+    <Resource Include="Images\k5.png" />
+    <Resource Include="Images\k6.png" />
+    <Resource Include="Images\k7.png" />
+    <Resource Include="Images\k8.png" />
+    <Resource Include="Images\k9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\kmoi.png" />
+    <Resource Include="Images\kplus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\kmute.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
