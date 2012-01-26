@@ -29,7 +29,7 @@ Imports System.IO.Ports
     Dim _Port_UDP As String = "@"
     Dim _Com As String = "@"
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = ""
+    Dim _Modele As String = "@"
     Dim _Version As String = "1.0"
     Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
@@ -412,6 +412,10 @@ Imports System.IO.Ports
     ''' <remarks></remarks>
     Public Sub New()
         Try
+
+            'Parametres avancés
+            'add_paramavance("nom", "Description", valeupardefaut)
+
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
             _DeviceSupport.Add(ListeDevices.BAROMETRE.ToString)
@@ -438,12 +442,18 @@ Imports System.IO.Ports
             _DeviceSupport.Add(ListeDevices.VOLET.ToString)
 
             'ajout des commandes avancées pour les devices
-            'Ci-dessous un exemple
-            'Dim x As New DeviceCommande
-            'x.NameCommand = "Test"
-            'x.DescriptionCommand = "Ceci est une commande avancée de test"
-            'x.CountParam = 1
-            '_DeviceCommandPlus.Add(x)
+            'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
+            'add_devicecommande("PRESETDIM", "permet de paramétrer le DIM : param1=niveau, param2=timer", 2)
+
+            'Libellé Driver
+            Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
+
+            'Libellé Device
+            Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
+            Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("SOLO", "@", "")
+            Add_LibelleDevice("MODELE", "@", "")
+            Add_LibelleDevice("REFRESH", "@", "")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase New", ex.Message)
         End Try

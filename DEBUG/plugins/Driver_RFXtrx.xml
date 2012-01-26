@@ -2,159 +2,156 @@
 <doc>
 <assembly>
 <name>
-Driver_RFXMitter
+Driver_RFXtrx
 </name>
 </assembly>
 <members>
-<member name="M:Driver_RFXMitter.Driver_RFXMitter.GetCommandPlus">
+<member name="M:Driver_RFXtrx.Driver_RFXtrx.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.ExecuteCommand(System.Object,System.String,System.Object[])">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ExecuteCommand(System.String,System.Object[])">
 	<summary>Execute une commande avancée</summary>
-	<param name="MyDevice">Objet représentant le Device </param>
-	<param name="Command">Nom de la commande avancée à éxécuter</param>
-	<param name="Param">tableau de paramétres</param>
+	<param name="Command"></param>
+	<param name="Param"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.VerifChamp(System.String,System.Object)">
-	<summary>
- Permet de vérifier si un champ est valide
- </summary>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.VerifChamp(System.String,System.Object)">
+	<summary>Permet de vérifier si un champ est valide</summary>
 	<param name="Champ"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.Start">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.Start">
 	<summary>Démarrer le du driver</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.Stop">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.Stop">
 	<summary>Arrêter le du driver</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.Restart">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.Restart">
 	<summary>Re-Démarrer le du driver</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.Read(System.Object)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.Read(System.Object)">
 	<summary>Intérroger un device</summary>
 	<param name="Objet">Objet représetant le device à interroger</param>
 	<remarks>pas utilisé</remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.Write(System.Object,System.String,System.Object,System.Object)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.Write(System.Object,System.String,System.Object,System.Object)">
 	<summary>Commander un device</summary>
 	<param name="Objet">Objet représetant le device à interroger</param>
 	<param name="Command">La commande à passer</param>
 	<param name="Parametre1"></param>
 	<param name="Parametre2"></param>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.DeleteDevice(System.String)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.DeleteDevice(System.String)">
 	<summary>Fonction lancée lors de la suppression d'un device</summary>
 	<param name="DeviceId">Objet représetant le device à interroger</param>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.NewDevice(System.String)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.NewDevice(System.String)">
 	<summary>Fonction lancée lors de l'ajout d'un device</summary>
 	<param name="DeviceId">Objet représetant le device à interroger</param>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.add_devicecommande(System.String,System.String,System.Int32)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.add_devicecommande(System.String,System.String,System.Int32)">
 	<summary>ajout des commandes avancées pour les devices</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.add_libelledriver(System.String,System.String,System.String)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.add_libelledriver(System.String,System.String,System.String)">
 	<summary>ajout Libellé pour le Driver</summary>
 	<param name="nom">Nom du champ : HELP</param>
 	<param name="labelchamp">Nom à afficher : Aide</param>
 	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.add_libelledevice(System.String,System.String,System.String)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.add_libelledevice(System.String,System.String,System.String)">
 	<summary>ajout Libellé pour les Devices</summary>
 	<param name="nom">Nom du champ : HELP</param>
 	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
 	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.add_paramavance(System.String,System.String,System.Object)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.add_paramavance(System.String,System.String,System.Object)">
 	<summary>ajout de parametre avancés</summary>
 	<param name="nom">Nom du parametre (sans espace)</param>
 	<param name="description">Description du parametre</param>
 	<param name="valeur">Sa valeur</param>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.#ctor">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.#ctor">
 	<summary>Creation d'un objet de type</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.TimerTick">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.TimerTick">
 	<summary>Si refresh &gt;0 gestion du timer</summary>
 	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.ouvrir(System.String)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ouvrir(System.String)">
 	<summary>Ouvrir le port COM/ETHERNET</summary>
 	<param name="numero">Nom/Numero du port COM/Adresse IP: COM2</param>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.lancer">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.lancer">
 	<summary>Lances les handlers sur le port</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.configurer">
-	<summary>Configurer le RFXMitter</summary>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.configurer">
+	<summary>Configurer le RFXtrx</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.fermer">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.fermer">
 	<summary>Ferme la connexion au port</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.ecrire(System.Byte[])">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ecrire(System.Byte[])">
 	<summary>ecrire sur le port</summary>
 	<param name="commande">premier paquet à envoyer</param>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
 	<summary>Executer lors de la reception d'une donnée sur le port</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.ReadErrorEvent(System.Object,System.IO.Ports.SerialErrorReceivedEventArgs)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ReadErrorEvent(System.Object,System.IO.Ports.SerialErrorReceivedEventArgs)">
 	<summary>Executer lors de la reception d'une erreur sur le port</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.TCPDataReceived(System.IAsyncResult)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.TCPDataReceived(System.IAsyncResult)">
 	<summary>Executer lors de la reception d'une donnée sur le port IP</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.ProcessNewTCPData(System.Byte[],System.Int32,System.Int32)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ProcessNewTCPData(System.Byte[],System.Int32,System.Int32)">
 	<summary>Traite les données IP recu</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.tmrRead_Elapsed(System.Object,System.EventArgs)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.tmrRead_Elapsed(System.Object,System.EventArgs)">
 	<summary>xxx</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.ProcessReceivedChar(System.Byte)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ProcessReceivedChar(System.Byte)">
 	<summary>Traite chaque byte reçu</summary>
 	<param name="temp">Byte recu</param>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.display_mess">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.display_mess">
 	<summary>Decode le message pour l'envoyer aux bonnes fonctions de traitement</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.protocol_chacon(System.String,System.String,System.Boolean,System.Int32)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.protocol_chacon(System.String,System.String,System.Boolean,System.Int32)">
 	<summary>Gestion du protocole CHACON - HomeEasy</summary>
 	<param name="adresse">Adresse du type 00-00-00-0 ou 0 (pour les Heaters)</param>
 	<param name="commande">commande ON, OFF, DIM, GROUP_ON, GROUP_OFF, GROUP_DIM, HEATER_ON, HEATER_OFF</param>
 	<param name="europe">Type Europe ou US ?</param>
 	<param name="dimlevel">Niveau du Dim</param>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.protocol_x10(System.String,System.String)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.protocol_x10(System.String,System.String)">
 	<summary>Gestion du protocole X10 RF</summary>
 	<param name="adresse">Adresse du type A1</param>
 	<param name="commande">commande ON, OFF, BRIGHT, DIM, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.protocol_arc(System.String,System.String)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.protocol_arc(System.String,System.String)">
 	<summary>Gestion du protocole ARC</summary>
 	<param name="adresse">Adresse du type A1</param>
 	<param name="commande">commande ON, OFF, GROUP_ON, GROUP_OFF, CHIME</param>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXMitter.Driver_RFXMitter.protocol_waveman(System.String,System.String)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.protocol_waveman(System.String,System.String)">
 	<summary>Gestion du protocole WAVEMAN</summary>
 	<param name="adresse">Adresse du type A1</param>
 	<param name="commande">commande ON, OFF</param>
 	<remarks></remarks>
-</member><member name="T:Driver_RFXMitter.Driver_RFXMitter">
-	<summary>Class Driver_RFXMitter, permet de communiquer avec le RFXMitter Ethernet/COM</summary>
+</member><member name="T:Driver_RFXtrx.Driver_RFXtrx">
+	<summary>Class Driver_RFXTrx, permet de communiquer avec le RFXtrx Ethernet/COM</summary>
 	<remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
-</member><member name="P:Driver_RFXMitter.My.Resources.Resources.ResourceManager">
+</member><member name="P:Driver_RFXtrx.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
 </summary>
-</member><member name="P:Driver_RFXMitter.My.Resources.Resources.Culture">
+</member><member name="P:Driver_RFXtrx.My.Resources.Resources.Culture">
 	<summary>
   Overrides the current thread's CurrentUICulture property for all
   resource lookups using this strongly typed resource class.
 </summary>
-</member><member name="T:Driver_RFXMitter.My.Resources.Resources">
+</member><member name="T:Driver_RFXtrx.My.Resources.Resources">
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
 </summary>

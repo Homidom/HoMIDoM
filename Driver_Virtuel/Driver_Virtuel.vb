@@ -584,6 +584,9 @@ Imports HoMIDom.HoMIDom.Device
             'Libellé Device
             'add_libelledevice("ADRESSE1", "Adresse 1", "")
             'add_libelledevice("ADRESSE2", "@", "")
+            'Add_LibelleDevice("SOLO", "@", "")
+            'Add_LibelleDevice("MODELE", "@", "")
+            'Add_LibelleDevice("REFRESH", "@", "")
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)

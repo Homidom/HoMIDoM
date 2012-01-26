@@ -33,7 +33,7 @@ Imports System.Globalization
     Dim _Port_UDP As String = "@"
     Dim _Com As String = ""
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = ""
+    Dim _Modele As String = "@"
     Dim _Version As String = "1.0"
     Dim _Picture As String = "rfxcom.png"
     Dim _Server As HoMIDom.HoMIDom.Server
@@ -595,8 +595,27 @@ Imports System.Globalization
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
+            _DeviceSupport.Add(ListeDevices.BAROMETRE.ToString)
+            _DeviceSupport.Add(ListeDevices.BATTERIE.ToString)
+            _DeviceSupport.Add(ListeDevices.COMPTEUR.ToString)
+            _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
+            _DeviceSupport.Add(ListeDevices.DETECTEUR.ToString)
+            _DeviceSupport.Add(ListeDevices.DIRECTIONVENT.ToString)
+            _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE.ToString)
+            _DeviceSupport.Add(ListeDevices.ENERGIETOTALE.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE.ToString)
+            _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
             _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
+            _DeviceSupport.Add(ListeDevices.PLUIECOURANT.ToString)
+            _DeviceSupport.Add(ListeDevices.PLUIETOTAL.ToString)
             _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
+            _DeviceSupport.Add(ListeDevices.TELECOMMANDE.ToString)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE.ToString)
+            _DeviceSupport.Add(ListeDevices.UV.ToString)
+            _DeviceSupport.Add(ListeDevices.VITESSEVENT.ToString)
             _DeviceSupport.Add(ListeDevices.VOLET.ToString)
 
             'ajout des commandes avancées pour les devices
@@ -607,8 +626,11 @@ Imports System.Globalization
             add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant de type L1 ou L")
+            add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
             add_libelledevice("ADRESSE2", "@", "")
+            add_libelledevice("SOLO", "@", "")
+            add_libelledevice("MODELE", "Protocole", "Nom du protocole à utiliser : HOMEEASY / X10 / ARC / WAVEMAN")
+            add_libelledevice("REFRESH", "@", "")
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx New", ex.Message)

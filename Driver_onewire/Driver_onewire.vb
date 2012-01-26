@@ -26,7 +26,7 @@ Public Class Driver_onewire
     Dim _Port_UDP As String = "@"
     Dim _Com As String = "USB1"
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = "{DS9490}"
+    Dim _Modele As String = "@"
     Dim _Version As String = "1.0"
     Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
