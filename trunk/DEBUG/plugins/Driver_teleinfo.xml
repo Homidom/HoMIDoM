@@ -102,12 +102,16 @@ Driver_teleinfo
 	<param name="numero">Nom/Numero du port COM: COM2</param>
 	<remarks></remarks>
 </member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.fermer">
-	<summary>Fermer le port PLCBUS</summary>
+	<summary>Fermer le port TeleInfo</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
 	<summary>Fonction lancée sur reception de données sur le port COM</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Process(System.String)">
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.ProcessReceivedChar(System.Byte)">
+	<summary>Rassemble un message complet pour ensuite l'envoyer à displaymess</summary>
+	<param name="temp">Byte recu</param>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Process(System.String[]@)">
 	<summary>Recomponse les messages reçu</summary>
 	<remarks></remarks>
 </member><member name="T:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo">
