@@ -74,6 +74,14 @@ Partial Public Class uDriver
                     Label8.Visibility = Windows.Visibility.Visible
                     TxtModele.Visibility = Windows.Visibility.Visible
                 End If
+                If IsNumeric(x.Refresh) = False Then
+                    Label9.Visibility = Windows.Visibility.Hidden
+                    Label9.Width = 0
+                    TxtRefresh.Visibility = Windows.Visibility.Hidden
+                Else
+                    Label9.Visibility = Windows.Visibility.Visible
+                    TxtRefresh.Visibility = Windows.Visibility.Visible
+                End If
 
                 'on affiche les parametres avancées
                 If x.Parametres IsNot Nothing And x.Parametres.Count > 0 Then
@@ -94,6 +102,7 @@ Partial Public Class uDriver
                     CbParam.Visibility = Windows.Visibility.Hidden
                     BtnOkParam.Visibility = Windows.Visibility.Hidden
                 End If
+
                 TxtNom.Text = x.Nom
                 TxtDescript.Text = x.Description
                 ChkEnable.IsChecked = x.Enable

@@ -114,6 +114,11 @@ Public Class uWidgetEmpty
                             StkPopup.Children.Add(x2)
                         Case HoMIDom.HoMIDom.Device.ListeDevices.UV
                             LblStatus.Content = "Status: " & _dev.Value
+                        Case HoMIDom.HoMIDom.Device.ListeDevices.FREEBOX
+                            ShowStatus = False
+                            Dim x As New uFreeBox
+                            AddHandler x.ButtonClick, AddressOf FreeTouch
+                            StkPopup.Children.Add(x)
                     End Select
                 End If
 
@@ -318,6 +323,19 @@ Public Class uWidgetEmpty
 
     Private Sub ClosePopup()
         Popup1.IsOpen = False
+    End Sub
+
+    Private Sub FreeTouch(ByVal Touche As String)
+        Try
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If _dev IsNot Nothing Then
+                x.Nom = Touche
+                x.Parametres = Nothing
+                myService.ExecuteDeviceCommand(IdSrv, Id, x)
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK)
+        End Try
     End Sub
 
     Private Sub ClickOn(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)

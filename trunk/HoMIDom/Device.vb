@@ -1573,6 +1573,13 @@ Namespace HoMIDom
                 Touche("blue")
             End Sub
 
+            Public Sub ProgPlus()
+                Touche("prgm_inc")
+            End Sub
+
+            Public Sub ProgMoins()
+                Touche("prgm_dec")
+            End Sub
         End Class
 
         <Serializable()> Class HUMIDITE

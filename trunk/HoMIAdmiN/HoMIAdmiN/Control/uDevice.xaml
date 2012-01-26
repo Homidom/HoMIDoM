@@ -13,7 +13,7 @@
                     <Label Name="Label2" Foreground="White">Nom:</Label>
                     <StackPanel Orientation="Horizontal" >
                         <TextBox Height="22" Name="TxtNom" Width="215" Foreground="White" Background="DarkGray" BorderBrush="Black" />
-                        <CheckBox Height="18" Name="ChkEnable" VerticalAlignment="Top" Foreground="White" Margin="3" IsChecked="False">Enable</CheckBox>
+                        <CheckBox Height="18" Name="ChkEnable" VerticalAlignment="Top" Foreground="White" Margin="3" IsChecked="True">Enable</CheckBox>
                         <CheckBox Foreground="White" Height="18" HorizontalAlignment="Right" Margin="3" Name="ChKSolo" VerticalAlignment="Top" IsChecked="True">Solo</CheckBox>
                         <CheckBox Foreground="White" Height="18" HorizontalAlignment="Right" Margin="3" Name="ChKLastEtat" VerticalAlignment="Top" IsChecked="True" ToolTip="Prendre en compte l'avant dernier etat d'un device">LastEtat</CheckBox>
                     </StackPanel>
