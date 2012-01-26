@@ -543,13 +543,22 @@ Public Class Driver_onewire
             _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
             _DeviceSupport.Add(ListeDevices.COMPTEUR.ToString)
 
+            'Parametres avancés
+            'add_paramavance("nom", "Description", valeupardefaut)
+
             'ajout des commandes avancées pour les devices
-            'Ci-dessous un exemple
-            'Dim x As New DeviceCommande
-            'x.NameCommand = "Test"
-            'x.DescriptionCommand = "Ceci est une commande avancée de test"
-            'x.CountParam = 1
-            '_DeviceCommandPlus.Add(x)
+            'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
+            'add_devicecommande("PRESETDIM", "permet de paramétrer le DIM : param1=niveau, param2=timer", 2)
+
+            'Libellé Driver
+            Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
+
+            'Libellé Device
+            Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant de type 44000002F4CBFD28")
+            Add_LibelleDevice("ADRESSE2", "Port", "Nom/numéro du port pour un compteur (A/B) ou un switch (1/8)	")
+            Add_LibelleDevice("SOLO", "SOLO", "Permet de mettre à jour d une seulz lecture tous les swicths/compteur du même composant dans le cas d un multiswitch/compteur")
+            Add_LibelleDevice("MODELE", "@", "")
+            Add_LibelleDevice("REFRESH", "Refresh", "Valeur de rafraîchissement de la mesure en millisecondes")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire New", ex.Message)
         End Try
