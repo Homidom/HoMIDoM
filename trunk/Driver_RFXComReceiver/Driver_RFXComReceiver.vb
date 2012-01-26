@@ -1680,10 +1680,12 @@ Imports System.Globalization
 
     'pas géré
     Private Sub processrfxsensor()
+        Dim adresse, message As String
+        Dim barometer As Integer
+        Dim measured_value, humidity As Single
         Try
-            WriteLog("ERR: Process RFXSENSOR pas encore géré ")
-            'Dim barometer As Integer
-            'Dim measured_value, humidity As Single
+            'WriteLog("ERR: Process RFXSENSOR pas encore géré ")
+
 
             'WriteMessage("               RFXsensor[" & (recbuf(0) * 256 + recbuf(1)).ToString, False)
             'Select Case (recbuf(0) And &H3)
@@ -1696,71 +1698,74 @@ Imports System.Globalization
             'WriteMessage(" addr:" & VB.Right("0" & Hex(recbuf(0)), 2), False)
             'WriteMessage(VB.Right("0" & Hex(recbuf(1)), 2), False)
             'WriteMessage(" ID:" & Convert.ToString(recbuf(1) + (recbuf(0) * 256)) & " ", False)
-            'If (recbuf(3) And &H10) <> 0 Then
-            '    Select Case recbuf(2)
-            '        Case &H81 : WriteMessage(" Error: No 1-Wire device connected", False)
-            '        Case &H82 : WriteMessage(" Error: 1-Wire ROM CRC error", False)
-            '        Case &H83 : WriteMessage(" Error: 1-Wire device connected is not a DS1820", False)
-            '        Case &H84 : WriteMessage(" Error: No end of read signal received from 1-Wire device", False)
-            '        Case &H85 : WriteMessage(" Error: 1-Wire device Scratchpad CRC error", False)
-            '        Case &H1 : WriteMessage(" Info: address incremented", False)
-            '        Case &H2 : WriteMessage(" Info: battery low", False)
-            '        Case Else : WriteMessage(" Unknown Info/Error code!", False)
-            '    End Select
-            'Else
-            '    If (recbuf(0) And &H3) = 0 Then
-            '        measured_value = recbuf(2) + ((recbuf(3) >> 5) * 0.125)
-            '        If measured_value > 200 Then
-            '            '   WriteMessage("Temp:-" & Convert.ToString(256.0 - measured_value) & "ºC | " & Convert.ToString((256.0 - measured_value) * 1.8 + 32) & "ºF", False)
-            '            measured_value = 0 - (256 - measured_value)
-            '        End If
-            '        WriteMessage("Temp:" & Convert.ToString(measured_value) & "ºC | " & Convert.ToString((measured_value) * 1.8 + 32) & "ºF", False)
-            '        temperature = measured_value
-
-            '    ElseIf (recbuf(0) And &H3) = 1 Then
-            '        measured_value = (recbuf(2) * 256 + recbuf(3)) >> 5
-            '        ' It is assumed that only one RFXSensor is active!
-            '        ' For correct processing you need to save the temp and voltage for each sensor
-            '        ' and use this in the checks and calculations.
-            '        If supply_voltage <> 0 Then
-            '            humidity = (((measured_value / supply_voltage) - 0.16) / 0.0062)
-            '            barometer = ((measured_value / supply_voltage) + 0.095) / 0.0009
-            '        Else
-            '            WriteMessage(" ", True)
-            '            WriteMessage("                                   Not yet able to calculate the right RH and barometric pressure values.", True)
-            '            WriteMessage("                                   Supply Voltage not yet available! Now 4.7V assumed. Reset the RFXSensor or wait. (max. 80min)", True)
-            '            humidity = (((measured_value / 470) - 0.16) / 0.0062)
-            '            barometer = ((measured_value / 470) + 0.095) / 0.0009
-            '        End If
-            '        If temperature <> 0 Then
-            '            humidity = Math.Round(humidity / (1.0546 - 0.00216 * temperature), 2)
-            '        Else
-            '            If supply_voltage <> 0 Then
-            '                WriteMessage(" ", True)
-            '                WriteMessage("                                   Not yet able to calculate the right RH and barometric pressure values.", True)
-            '            End If
-            '            WriteMessage("                                   Temperature not yet available! Now 25ºC assumed. Reset the RFXSensor or wait. (max. 80min)", True)
-            '            humidity = Math.Round(humidity / (1.0546 - 0.00216 * 25), 2)
-            '        End If
-            '        If supply_voltage = 0 Or temperature = 0 Then
-            '            WriteMessage("                                   ", False)
-            '        End If
-            '        WriteMessage("RH:" & Convert.ToString(humidity) & "%", False)
-            '        WriteMessage(" Barometer:" & Convert.ToString(barometer) & "hPa", False)
-            '        WriteMessage(" A/D voltage:" & Convert.ToString(measured_value / 100), False)
-            '    ElseIf (recbuf(0) And &H3) = 2 Then
-            '        supply_voltage = (recbuf(2) * 256 + recbuf(3)) >> 5
-            '        WriteMessage("Supply Voltage:" & Convert.ToString(supply_voltage / 100), False)
-            '    ElseIf (recbuf(0) And &H3) = 3 Then
-            '        If (recbuf(3) And &H20) = 0 Then
-            '            WriteMessage("ZAP25:" & Convert.ToString(Math.Round((5 / 1024) * (recbuf(2) * 2 + (recbuf(3) >> 7)) / 0.033, 2) & "A"), False)
-            '            WriteMessage(" ZAP50:" & Convert.ToString(Math.Round((5 / 1024) * (recbuf(2) * 2 + (recbuf(3) >> 7)) / 0.023, 2) & "A"), False)
-            '            WriteMessage(" ZAP100:" & Convert.ToString(Math.Round((5 / 1024) * (recbuf(2) * 2 + (recbuf(3) >> 7)) / 0.019, 2) & "A"), False)
-            '        Else
-            '            WriteMessage("Voltage=" & Convert.ToString(recbuf(2) * 2), False)
-            '        End If
-            '    End If
-            'End If
+            adresse = VB.Right("0" & Hex(recbuf(0)), 2) & VB.Right("0" & Hex(recbuf(1)), 2) & "-" & Convert.ToString(recbuf(1) + (recbuf(0) * 256))
+            If (recbuf(3) And &H10) <> 0 Then
+                Select Case recbuf(2)
+                    Case &H81 : message = "No 1-Wire device connected"
+                    Case &H82 : message = " Error: 1-Wire ROM CRC error"
+                    Case &H83 : message = " Error: 1-Wire device connected is not a DS1820"
+                    Case &H84 : message = " Error: No end of read signal received from 1-Wire device"
+                    Case &H85 : message = " Error: 1-Wire device Scratchpad CRC error"
+                    Case &H1 : message = " Info: address incremented"
+                    Case &H2 : message = " Info: battery low"
+                    Case Else : message = " Unknown Info/Error code!"
+                End Select
+                WriteLog("ERR: RFXSENSOR: " & adresse & " : " & message)
+            Else
+                If (recbuf(0) And &H3) = 0 Then
+                    measured_value = recbuf(2) + ((recbuf(3) >> 5) * 0.125)
+                    If measured_value > 200 Then
+                        measured_value = 0 - (256 - measured_value) ' en ºC, en ºF: (256.0 - measured_value) * 1.8 + 32
+                    End If
+                    temperature = measured_value
+                    WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, measured_value) ' en ºC, en ºF: (measured_value) * 1.8 + 32
+                ElseIf (recbuf(0) And &H3) = 1 Then
+                    measured_value = (recbuf(2) * 256 + recbuf(3)) >> 5
+                    ' It is assumed that only one RFXSensor is active!
+                    ' For correct processing you need to save the temp and voltage for each sensor
+                    ' and use this in the checks and calculations.
+                    If supply_voltage <> 0 Then
+                        humidity = (((measured_value / supply_voltage) - 0.16) / 0.0062)
+                        barometer = ((measured_value / supply_voltage) + 0.095) / 0.0009
+                    Else
+                        '            WriteMessage(" ", True)
+                        '            WriteMessage("                                   Not yet able to calculate the right RH and barometric pressure values.", True)
+                        '            WriteMessage("                                   Supply Voltage not yet available! Now 4.7V assumed. Reset the RFXSensor or wait. (max. 80min)", True)
+                        humidity = (((measured_value / 470) - 0.16) / 0.0062)
+                        barometer = ((measured_value / 470) + 0.095) / 0.0009
+                        WriteLog("ERR: RFXCOM RFXsensor : " & adresse & " : Not yet able to calculate the right RH and barometric pressure values. Supply Voltage not yet available! Reset the RFXSensor or wait. (max. 80min)")
+                    End If
+                    If temperature <> 0 Then
+                        humidity = Math.Round(humidity / (1.0546 - 0.00216 * temperature), 2)
+                    Else
+                        '            If supply_voltage <> 0 Then
+                        '                WriteMessage(" ", True)
+                        '                WriteMessage("                                   Not yet able to calculate the right RH and barometric pressure values.", True)
+                        '            End If
+                        '            WriteMessage("                                   Temperature not yet available! Now 25ºC assumed. Reset the RFXSensor or wait. (max. 80min)", True)
+                        humidity = Math.Round(humidity / (1.0546 - 0.00216 * 25), 2)
+                        WriteLog("ERR: RFXCOM RFXsensor : " & adresse & " : Not yet able to calculate the right RH and barometric pressure values. Temperature not yet available! Reset the RFXSensor or wait. (max. 80min)")
+                    End If
+                    If supply_voltage = 0 Or temperature = 0 Then
+                        '            WriteMessage("                                   ", False)
+                    End If
+                    WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, humidity) 'en %
+                    WriteRetour(adresse, ListeDevices.BAROMETRE.ToString, barometer) 'en hPa
+                    WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE.ToString, measured_value / 100)
+                ElseIf (recbuf(0) And &H3) = 2 Then
+                    supply_voltage = (recbuf(2) * 256 + recbuf(3)) >> 5
+                    '        WriteMessage("Supply Voltage:" & Convert.ToString(supply_voltage / 100), False)
+                    WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE.ToString, supply_voltage / 100)
+                ElseIf (recbuf(0) And &H3) = 3 Then
+                    If (recbuf(3) And &H20) = 0 Then
+                        WriteLog("ERR: RFXCOM processrfxsensor : ZAP25: " & Convert.ToString(Math.Round((5 / 1024) * (recbuf(2) * 2 + (recbuf(3) >> 7)) / 0.033, 2) & "A"))
+                        WriteLog("ERR: RFXCOM processrfxsensor : ZAP50: " & Convert.ToString(Math.Round((5 / 1024) * (recbuf(2) * 2 + (recbuf(3) >> 7)) / 0.023, 2) & "A"))
+                        WriteLog("ERR: RFXCOM processrfxsensor : ZAP100: " & Convert.ToString(Math.Round((5 / 1024) * (recbuf(2) * 2 + (recbuf(3) >> 7)) / 0.019, 2) & "A"))
+                    Else
+                        WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE.ToString, Convert.ToString(recbuf(2) * 2))
+                    End If
+                End If
+            End If
         Catch ex As Exception
             WriteLog("ERR: RFXCOM processrfxsensor : " & ex.Message)
         End Try
