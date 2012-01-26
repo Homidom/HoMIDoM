@@ -33,7 +33,7 @@ Imports System.Globalization
     Dim _Port_UDP As String = "@"
     Dim _Com As String = ""
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = ""
+    Dim _Modele As String = "@"
     Dim _Version As String = "1.0"
     Dim _Picture As String = "rfxcom.png"
     Dim _Server As HoMIDom.HoMIDom.Server
@@ -546,8 +546,11 @@ Imports System.Globalization
             add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant de type L1 ou L")
+            add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole: L1, 0F25E-01...")
             add_libelledevice("ADRESSE2", "@", "")
+            add_libelledevice("SOLO", "@", "")
+            add_libelledevice("MODELE", "@", "")
+            add_libelledevice("REFRESH", "@", "")
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER New", ex.Message)
@@ -1678,7 +1681,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    'pas géré
+    'OK
     Private Sub processrfxsensor()
         Dim adresse, message As String
         Dim barometer As Integer

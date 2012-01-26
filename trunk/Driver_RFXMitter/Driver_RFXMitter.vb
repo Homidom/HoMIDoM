@@ -33,7 +33,7 @@ Imports System.Globalization
     Dim _Port_UDP As String = "@"
     Dim _Com As String = ""
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = ""
+    Dim _Modele As String = "@"
     Dim _Version As String = "1.0"
     Dim _Picture As String = "rfxcom.png"
     Dim _Server As HoMIDom.HoMIDom.Server
@@ -619,8 +619,11 @@ Imports System.Globalization
             add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant de type L1 ou L")
+            add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
             add_libelledevice("ADRESSE2", "@", "")
+            add_libelledevice("SOLO", "@", "")
+            add_libelledevice("MODELE", "Protocole", "Nom du protocole à utiliser : HOMEEASY / X10 / ARC / WAVEMAN")
+            add_libelledevice("REFRESH", "@", "")
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXmitter New", ex.Message)

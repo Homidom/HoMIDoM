@@ -29,7 +29,7 @@ Imports System.IO.Ports
     Dim _Port_UDP As String = "@"
     Dim _Com As String = ""
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = "1141"
+    Dim _Modele As String = "1141/1141+"
     Dim _Version As String = "1.1"
     Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
@@ -532,6 +532,9 @@ Imports System.IO.Ports
             'Libellé Device
             add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant de type L1 ou L")
             add_libelledevice("ADRESSE2", "@", "")
+            add_libelledevice("SOLO", "@", "")
+            add_libelledevice("MODELE", "@", "")
+            add_libelledevice("REFRESH", "@", "")
 
             'dictionnaire Commande STRING -> INT
             com_to_hex.Add("ALL_UNITS_OFF", 0)
