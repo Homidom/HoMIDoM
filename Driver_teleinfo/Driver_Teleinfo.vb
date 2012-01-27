@@ -30,7 +30,7 @@ Public Class Driver_Teleinfo
         Dim _Port_TCP As String = "@"
         Dim _IP_UDP As String = "@"
         Dim _Port_UDP As String = "@"
-        Dim _Com As String = "@"
+        Dim _Com As String = "COM1"
         Dim _Refresh As Integer = 0
         Dim _Modele As String = ""
         Dim _Version As String = "1.0"
