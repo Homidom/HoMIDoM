@@ -568,7 +568,7 @@ Partial Public Class uDevice
                                     Label6.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                     TxtAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                 End If
-                            Case "ADRESSE2"
+                            Case "ADRESSE1"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
                                     TxtAdresse2.Visibility = Windows.Visibility.Hidden
                                     Label7.Visibility = Windows.Visibility.Hidden

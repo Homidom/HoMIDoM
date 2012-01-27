@@ -14,14 +14,6 @@ InitializeComponent
 	<summary>
 uTriggerDevice
 </summary>
-</member><member name="M:WpfApplication1.uConfigAudio.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uConfigAudio">
-	<summary>
-uConfigAudio
-</summary>
 </member><member name="M:WpfApplication1.uMacro.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -317,20 +309,6 @@ Window3
 	<summary>
  Module utilisé pour définir les propriétés qui sont disponibles dans l'espace de noms My pour WPF
  </summary>
-	<remarks></remarks>
-</member><member name="M:WpfApplication1.Window1.MnuPropos(System.Object,System.Windows.RoutedEventArgs)">
-	<summary>
- Menu à propos
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks></remarks>
-</member><member name="M:WpfApplication1.Window1.MnuPlayList(System.Object,System.Windows.RoutedEventArgs)">
-	<summary>
- Afficher la playlist
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
 	<remarks></remarks>
 </member><member name="M:WpfApplication1.Window1.Connect_Srv(System.String,System.String,System.String)">
 	<summary>

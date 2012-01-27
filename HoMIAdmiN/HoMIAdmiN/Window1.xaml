@@ -200,23 +200,7 @@
     <DockPanel MinHeight="660" MinWidth="1002">
           
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top" >
-                    <Menu HorizontalAlignment="Left" Name="Menu1" Background="Transparent" Foreground="Black" FontSize="11">
-                    <MenuItem Header="Fichier" Foreground="GhostWhite" FontFamily="Verdana">
-                    <MenuItem Header="Sauvegarder la Configuration" Name="MenuSaveConfig" Foreground="Black"/>
-                    <MenuItem Header="Configuration du Serveur" Name="MenuConfigSrv"  Foreground="Black"/>
-                    <MenuItem Header="Paramètres Audio du Serveur" Name="MenuConfigAudio"  Foreground="Black"/>
-                    <MenuItem Header="Quitter" Name="MenuQuitter"  Foreground="Black"/>
-                    </MenuItem>
-
-                   <MenuItem Header="Affichage" Foreground="WhiteSmoke" FontFamily="Verdana">
-                        <MenuItem Header="PlayList" Name="MenuPlayList" Foreground="Black"  />
-                    </MenuItem>
-                    
-                   <MenuItem Header="?" Foreground="WhiteSmoke">
-                        <MenuItem Header="A propos" Name="MenuPropos" Foreground="Black"  />
-                   </MenuItem>
-                
-                   </Menu>
+                   
          </StackPanel>
 
         <StackPanel Height="27" DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Orientation="Horizontal" >
