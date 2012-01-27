@@ -119,31 +119,6 @@ Class Window1
         TreeViewHisto.Items.Clear()
     End Sub
 
-    'Menu Quitter
-    Private Sub Quitter(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuQuitter.Click
-        Try
-            If IsConnect = True And FlagChange Then
-                Dim retour As MessageBoxResult
-                retour = MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question)
-
-                If retour = MessageBoxResult.Yes Then
-                    Try
-                        If IsConnect = False Then
-                            MessageBox.Show("Impossible d'enregistrer la configuration car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                        Else
-                            myService.SaveConfig(IdSrv)
-                        End If
-                    Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                    End Try
-                End If
-            End If
-            Me.Close()
-            End
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
 
 #Region "Affichage"
     'Afficher la liste des zones
@@ -578,20 +553,6 @@ Class Window1
     End Sub
 #End Region
 
-    'Menu Save Config
-    Private Sub MnuSaveConfig(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuSaveConfig.Click
-        Try
-            If IsConnect = False Then
-                MessageBox.Show("Impossible d'enregistrer la config car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                Exit Sub
-            End If
-
-            myService.SaveConfig(IdSrv)
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MnuSaveConfig: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
     'Décharger une fenêtre suivant son Id
     Public Sub UnloadControl(ByVal MyControl As Object)
         Try
@@ -621,53 +582,6 @@ Class Window1
     Private Sub StoryBoardFinish(ByVal sender As Object, ByVal e As System.EventArgs)
         CanvasRight.Children.Clear()
         ShowMainMenu()
-    End Sub
-
-    'Menu paramétrer le serveur
-    Private Sub MnuConfigSrv(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuConfigSrv.Click
-        Try
-            Dim x As New uConfigServer
-            x.Uid = System.Guid.NewGuid.ToString()
-            AddHandler x.CloseMe, AddressOf UnloadControl
-            CanvasRight.Children.Clear()
-            CanvasRight.Children.Add(x)
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MnuConfigSrv: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    ''' <summary>
-    ''' Menu à propos
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub MnuPropos(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuPropos.Click
-        Try
-            Process.Start("http://www.homidom.com/#")
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MnuPropos: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    ''' <summary>
-    ''' Afficher la playlist
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
-    Private Sub MnuPlayList(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuPlayList.Click
-        Try
-            Dim x As New uPlaylist
-            x.Uid = System.Guid.NewGuid.ToString()
-            AddHandler x.CloseMe, AddressOf UnloadControl
-            CanvasRight.Children.Clear()
-            CanvasRight.Children.Add(x)
-            Canvas.SetLeft(x, 10)
-            Canvas.SetTop(x, 5)
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MnuPlayList: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
     End Sub
 
     Protected Overrides Sub Finalize()
@@ -717,10 +631,9 @@ Class Window1
                 Exit Function
             Else
                 IsConnect = True
-
+                AffDriver()
                 ShowMainMenu()
             End If
-
 
             LblSrv.Content = "Serveur courant: " & Name
             For i As Integer = 0 To ListServer.Count - 1
@@ -753,10 +666,8 @@ Class Window1
         AddHandler MainMenu.Edit, AddressOf MainMenuEdit
         AddHandler MainMenu.Create, AddressOf MainMenuNew
         CanvasRight.Children.Add(MainMenu)
-        If WMainMenu = 0 Or HMainMenu = 0 Then
-            WMainMenu = CanvasRight.ActualWidth / 2 - (MainMenu.Width / 2)
-            HMainMenu = CanvasRight.ActualHeight / 2 - (MainMenu.Height / 2)
-        End If
+        WMainMenu = CanvasRight.ActualWidth / 2 - (MainMenu.Width / 2)
+        HMainMenu = CanvasRight.ActualHeight / 2 - (MainMenu.Height / 2)
         Canvas.SetLeft(MainMenu, WMainMenu)
         Canvas.SetTop(MainMenu, HMainMenu)
     End Sub
@@ -764,7 +675,6 @@ Class Window1
 #Region "MainMenu"
     Private Sub MainMenuChange(ByVal index As Integer)
         Me.Cursor = Cursors.Wait
-        If Tabcontrol1.SelectedIndex = 0 And index = 0 Then AffDriver()
         Tabcontrol1.SelectedIndex = index
         Select Case index
             Case 7
@@ -774,7 +684,6 @@ Class Window1
                         Exit Sub
                     End If
 
-                    CloseTreeView()
                     Dim x As New uLog
                     x.Uid = System.Guid.NewGuid.ToString()
                     AddHandler x.CloseMe, AddressOf UnloadControl
@@ -782,6 +691,55 @@ Class Window1
                     CanvasRight.Children.Add(x)
                 Catch ex As Exception
                     MessageBox.Show("ERREUR Sub MnuViewLog: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                End Try
+            Case 9 'Multimedia Playlist
+                Try
+                    Dim x As New uPlaylist
+                    x.Uid = System.Guid.NewGuid.ToString()
+                    AddHandler x.CloseMe, AddressOf UnloadControl
+                    CanvasRight.Children.Clear()
+                    CanvasRight.Children.Add(x)
+                Catch ex As Exception
+                    MessageBox.Show("ERREUR Sub MnuPlayList: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                End Try
+            Case 10 'Configurer le serveur
+                Try
+                    Dim x As New uConfigServer
+                    x.Uid = System.Guid.NewGuid.ToString()
+                    AddHandler x.CloseMe, AddressOf UnloadControl
+                    CanvasRight.Children.Clear()
+                    CanvasRight.Children.Add(x)
+                Catch ex As Exception
+                    MessageBox.Show("ERREUR Sub MnuConfigSrv: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                End Try
+            Case 11 'Aide
+                Try
+                    Process.Start("http://www.homidom.com/#")
+                Catch ex As Exception
+                    MessageBox.Show("ERREUR Sub MnuPropos: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                End Try
+            Case 12
+                Try
+                    If IsConnect = True And FlagChange Then
+                        Dim retour As MessageBoxResult
+                        retour = MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question)
+
+                        If retour = MessageBoxResult.Yes Then
+                            Try
+                                If IsConnect = False Then
+                                    MessageBox.Show("Impossible d'enregistrer la configuration car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                                Else
+                                    myService.SaveConfig(IdSrv)
+                                End If
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
+                        End If
+                    End If
+                    Me.Close()
+                    End
+                Catch ex As Exception
+                    MessageBox.Show("ERREUR Sub Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                 End Try
         End Select
         ShowTreeView()
@@ -857,6 +815,21 @@ Class Window1
     End Sub
 
     Private Sub MainMenuDelete(ByVal index As Integer)
+        'Enregistrer la config
+        If index = 10 Then
+            Try
+                If IsConnect = False Then
+                    MessageBox.Show("Impossible d'enregistrer la config car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                    Exit Sub
+                End If
+
+                myService.SaveConfig(IdSrv)
+                Exit Sub
+            Catch ex As Exception
+                MessageBox.Show("ERREUR Sub MnuSaveConfig: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
+        End If
+
         _MainMenuAction = 2
         CanvasRight.Children.Clear()
 
@@ -1089,18 +1062,6 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub MenuConfigAudio_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuConfigAudio.Click
-        Try
-            Dim x As New uConfigAudio
-            x.Uid = System.Guid.NewGuid.ToString()
-            AddHandler x.CloseMe, AddressOf UnloadControl
-            CanvasRight.Children.Clear()
-            CanvasRight.Children.Add(x)
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MenuConfigAudio: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
     Private Sub BtnGenereGraph_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereGraph.Click
         Dim myPane As New ZedGraph.GraphPane
         Dim ListColor As New List(Of System.Drawing.Color)
@@ -1184,6 +1145,7 @@ Class Window1
         DKpanel.RenderTransform = sc
         sc.BeginAnimation(ScaleTransform.ScaleXProperty, da3)
         flagTreeV = True
+
     End Sub
 
     Private Sub TreeView_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewDriver.MouseDoubleClick, TreeViewDevice.MouseDoubleClick, TreeViewZone.MouseDoubleClick, TreeViewUser.MouseDoubleClick, TreeViewTrigger.MouseDoubleClick, TreeViewMacro.MouseDoubleClick, TreeViewHisto.MouseDoubleClick
@@ -1366,19 +1328,6 @@ Class Window1
                 a &= list(i) & vbCrLf
             Next
             LOG.ToolTip = a
-        End If
-    End Sub
-
-    Private Sub CanvasRight_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles CanvasRight.SizeChanged
-        If CanvasRight.Children.Count > 0 Then
-            If CanvasRight.Children.Item(0).Uid = "MAINMENU" Then
-                Dim x As uMainMenu = CanvasRight.Children.Item(0)
-                WMainMenu = CanvasRight.ActualWidth / 2 - (x.Width / 2)
-                HMainMenu = CanvasRight.ActualHeight / 2 - (x.Height / 2)
-                Canvas.SetLeft(x, WMainMenu)
-                Canvas.SetTop(x, HMainMenu)
-                x = Nothing
-            End If
         End If
     End Sub
 

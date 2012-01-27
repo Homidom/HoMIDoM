@@ -4,11 +4,12 @@
     Public Event Create(ByVal IndexMenu As Integer)
     Public Event Edit(ByVal IndexMenu As Integer)
 
-    Private Sub Mnu1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgMnu1.MouseDown, ImgMnu2.MouseDown, ImgMnu3.MouseDown, ImgMnu4.MouseDown, ImgMnu5.MouseDown, ImgMnu6.MouseDown, ImgMnu7.MouseDown, ImgMnu8.MouseDown, Img190.MouseDown, Img290.MouseDown, Img390.MouseDown, Img490.MouseDown, Img590.MouseDown, Img690.MouseDown
+    Private Sub Mnu1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgMnu1.MouseDown, ImgMnu2.MouseDown, ImgMnu3.MouseDown, ImgMnu4.MouseDown, ImgMnu5.MouseDown, ImgMnu6.MouseDown, ImgMnu7.MouseDown, ImgMnu8.MouseDown, ImgMnu9.MouseDown, ImgMnu10.MouseDown, ImgMnu11.MouseDown, ImgMnu12.MouseDown, Img190.MouseDown, Img290.MouseDown, Img390.MouseDown, Img490.MouseDown, Img590.MouseDown, Img690.MouseDown
         RaiseEvent ChangeMenu(sender.tag)
     End Sub
 
-    Private Sub Delete_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Img102.MouseDown, Img202.MouseDown, Img302.MouseDown, Img402.MouseDown, Img502.MouseDown, Img602.MouseDown, Img702.MouseDown, Img802.MouseDown
+    Private Sub Delete_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Img102.MouseDown, Img202.MouseDown, Img302.MouseDown, Img402.MouseDown, Img502.MouseDown, Img602.MouseDown, Img702.MouseDown, Img802.MouseDown, Img1002.MouseDown
+        'Attention 1002 correspond à enregistrer la config et non supprimer
         RaiseEvent Delete(sender.tag)
     End Sub
 

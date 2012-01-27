@@ -135,9 +135,6 @@
     <Compile Include="Control\uTriggerDevice.xaml.vb">
       <DependentUpon>uTriggerDevice.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Control\uConfigAudio.xaml.vb">
-      <DependentUpon>uConfigAudio.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Control\uTriggerTimer.xaml.vb">
       <DependentUpon>uTriggerTimer.xaml</DependentUpon>
     </Compile>
@@ -193,10 +190,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Control\uTriggerDevice.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Control\uConfigAudio.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -583,6 +576,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\config.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\multimedia-128.png" />
+    <Resource Include="Images\sortie-128.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

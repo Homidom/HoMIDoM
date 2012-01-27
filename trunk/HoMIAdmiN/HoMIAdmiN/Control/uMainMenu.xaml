@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" VerticalAlignment="Center" HorizontalAlignment="Center" Width="500" Height="250">
+             mc:Ignorable="d" VerticalAlignment="Center" HorizontalAlignment="Center" Width="500" Height="380">
     <Grid>
         <StackPanel Orientation="Horizontal" >
             
@@ -12,7 +12,7 @@
                 <StackPanel Name="Mnu1" Width="110" Height="110" Background="Black">
                     <Image Name="ImgMnu1" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/driver-128.png" Tag="0" ToolTip="Gérer les drivers" />
                     <Label Name="LblMnu1" Content="Drivers" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                             <Image Tag="0" Name="Img190" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Gérer les drivers" />
                             <Image Tag="0" Name="Img100" Margin="2" Height="15" Width="15" Visibility="Hidden" />
                             <Image Tag="0" Name="Img101" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer un driver" />
@@ -31,7 +31,19 @@
                             <Image Name="Img202" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" Tag="1" ToolTip="Supprimer un composant" />
                         </StackPanel>
                         </StackPanel>
-                    </Border> 
+                    </Border>
+                <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
+                    <StackPanel Name="Mnu9" Width="110" Height="110" Background="Black">
+                        <Image Name="ImgMnu9" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/multimedia-128.png" Tag="9" ToolTip="Gérer le multimedia" />
+                        <Label Name="LblMnu9" Content="Multimedia" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Height="0">
+                            <Image Tag="9" Name="Img990" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Gérer les composants" />
+                            <Image Tag="9" Name="Img900" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" ToolTip="Ajouter un composant" />
+                            <Image Tag="9"  Name="Img901" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer un composant" />
+                            <Image Name="Img902" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" Tag="9" ToolTip="Supprimer un composant" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
             </StackPanel>
             <StackPanel >
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
@@ -59,7 +71,20 @@
                         </StackPanel>
 
                     </StackPanel>
-                    </Border> 
+                    </Border>
+                <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
+                    <StackPanel Name="Mnu10" Width="110" Height="110" Background="Black">
+                        <Image Name="ImgMnu10" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/config.png" Tag="10" ToolTip="Configurer le serveur" />
+                        <Label Name="LblMnu10" Content="Configurer" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                            <Image Tag="10" Name="Img1090" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Gérer les composants" Visibility="Hidden" />
+                            <Image Tag="10" Name="Img1000" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" ToolTip="Ajouter un composant" Visibility="Hidden"/>
+                            <Image Tag="10"  Name="Img1001" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer un composant" Visibility="Hidden"/>
+                            <Image Name="Img1002" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/save-icone-48.png" Tag="10" ToolTip="Sauvegarder la configuration" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
             </StackPanel>
             <StackPanel >
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
@@ -88,7 +113,20 @@
                         </StackPanel>
 
                     </StackPanel>
-                    </Border> 
+                    </Border>
+                <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
+                    <StackPanel Name="Mnu11" Width="110" Height="110" Background="Black">
+                        <Image Name="ImgMnu11" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/aide.png" Tag="11" ToolTip="Aide" />
+                        <Label Name="LblMnu11" Content="Aide" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Height="0">
+                            <Image Tag="11" Name="Img1190" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Gérer les composants" Visibility="Hidden" />
+                            <Image Tag="11" Name="Img1100" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" ToolTip="Ajouter un composant" Visibility="Hidden"/>
+                            <Image Tag="11"  Name="Img1101" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer un composant" Visibility="Hidden"/>
+                            <Image Name="Img1102" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/save-icone-48.png" Tag="11" ToolTip="Sauvegarder la configuration" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
             </StackPanel>
             <StackPanel >
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
@@ -97,7 +135,7 @@
                         <Image Name="ImgMnu7" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/curve-32.png" Tag="6" ToolTip="Consulter les historiques" />
                     </Border>
                     <Label Name="LblMnu7" Content="Historiques" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Height="0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Height="0">
                             <Image Name="Img700" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" />
                             <Image Name="Img701" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" />
                             <Image Name="Img702" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" Tag="6" />
@@ -118,7 +156,20 @@
                         </StackPanel>
 
                     </StackPanel>
-                    </Border> 
+                    </Border>
+                <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
+                    <StackPanel Name="Mnu12" Width="110" Height="110" Background="Black">
+                        <Image Name="ImgMnu12" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/sortie-128.png" Tag="12" ToolTip="Quitter" />
+                        <Label Name="LblMnu12" Content="Quitter" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Height="0">
+                            <Image Tag="12" Name="Img1290" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Gérer les composants" Visibility="Hidden" />
+                            <Image Tag="12" Name="Img1200" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" ToolTip="Ajouter un composant" Visibility="Hidden"/>
+                            <Image Tag="12"  Name="Img1201" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer un composant" Visibility="Hidden"/>
+                            <Image Name="Img1202" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/save-icone-48.png" Tag="12" ToolTip="Sauvegarder la configuration" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
             </StackPanel>
         </StackPanel>
     </Grid>
