@@ -291,6 +291,16 @@ Public Class Driver_Arduino
             If Arduino.StartCommunication() = True Then
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Carte connectée")
                 _IsConnect = True
+
+                For i As Integer = 0 To 6
+                    Arduino.SetDigitalDirection(i, Arduino.DigitalDirection.Input)
+                    Arduino.EnableDigitalPort(i, True)
+                    Arduino.EnableDigitalTrigger(i, True)
+                Next
+                For i As Integer = 7 To 13
+                    Arduino.SetDigitalDirection(i, Arduino.DigitalDirection.DigitalOutput)
+                    Arduino.EnableDigitalPort(i, True)
+                Next
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le driver n'a pas réussit à se connecter à la carte ")
                 _IsConnect = False
@@ -452,20 +462,7 @@ Public Class Driver_Arduino
     End Sub
 
     Private Sub ArduinoDigitalData(ByVal PortNr As Integer, ByVal Value As Integer)
-        Select Case PortNr
-            Case 2
-                If Value = 0 Then
-                    '            Label1.BackColor = Drawing.Color.Black
-                Else
-                    '           Label1.BackColor = Drawing.Color.Red
-                End If
-            Case 3
-                If Value = 0 Then
-                    '          Label2.BackColor = Drawing.Color.Black
-                Else
-                    '         Label2.BackColor = Drawing.Color.Red
-                End If
-        End Select
+        traitement(Value, PortNr)
     End Sub
 
     Delegate Sub ArduinoAnalogDataCallback(ByVal PortNr As Integer, ByVal Value As Integer)
@@ -506,7 +503,7 @@ Public Class Driver_Arduino
 
     ''' <summary>Traite les paquets reçus</summary>
     ''' <remarks></remarks>
-    Private Sub traitement(ByVal valeur As Boolean, ByVal adresse As String)
+    Private Sub traitement(ByVal valeur As Integer, ByVal adresse As String)
         Try
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
@@ -516,9 +513,9 @@ Public Class Driver_Arduino
             If (listedevices.Count = 1) Then
                 'correction valeur pour correspondre au type de value
                 If TypeOf listedevices.Item(0).Value Is Integer Then
-                    If valeur = True Then
+                    If valeur = 1 Then
                         valeur = 100
-                    ElseIf valeur = False Then
+                    ElseIf valeur = 0 Then
                         valeur = 0
                     End If
                 End If
