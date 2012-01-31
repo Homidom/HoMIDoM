@@ -12,12 +12,12 @@
         <StackPanel Margin="12,52,0,0" >
             <StackPanel Orientation="Horizontal" >
                 <Label Width="75" Content="Nom:" HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Foreground="White" />
-                <TextBox Height="21" HorizontalAlignment="Left" Name="TxtNom" VerticalAlignment="Top" Width="218" />
-                <CheckBox Margin="4" Content="Enable"  HorizontalAlignment="Left" Name="cEnable" VerticalAlignment="Top" Width="70" Foreground="White" />
+                <TextBox Height="21" HorizontalAlignment="Left" Name="TxtNom" VerticalAlignment="Top" Width="218" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
+                <CheckBox Margin="4" Content="Enable"  HorizontalAlignment="Left" Name="cEnable" VerticalAlignment="Top" Width="70" Background="DarkGray" BorderBrush="Black" Foreground="White" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Width="75" Content="Description:" Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" />
-                <TextBox Height="21" HorizontalAlignment="Left" Name="TxtDescription" VerticalAlignment="Top" Width="349" />
+                <TextBox Height="21" HorizontalAlignment="Left" Name="TxtDescription" VerticalAlignment="Top" Width="349" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
             </StackPanel>
             <Rectangle Height="10" />
             <my:uScenario HorizontalAlignment="Left" x:Name="UScenario1" VerticalAlignment="Top" Height="390" Width="677" />

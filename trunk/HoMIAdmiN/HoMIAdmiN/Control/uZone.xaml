@@ -9,7 +9,7 @@
                 <Rectangle Height="40" />
                 <StackPanel Orientation="Horizontal" >
                     <Label HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Width="55" Foreground="White" Content="Nom :"></Label>
-                    <TextBox Height="22" Width="200" Name="TxtName" VerticalAlignment="Top" Foreground="White" Background="DarkGray" />
+                    <TextBox Height="22" Width="200" Name="TxtName" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White"  />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
                     <Label Foreground="White" Name="Label3" VerticalAlignment="Top" Width="55" Content="Image :"></Label>
@@ -25,9 +25,9 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
                     <Rectangle Width="10" />
-                    <ListBox Margin="3" Name="ListBxDevice" Width="200" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
-                    <ListBox Margin="3" Name="ListBxZone" Width="200" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
-                    <ListBox Margin="3" Name="ListBxMacro" Width="200" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
+                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxDevice" Width="200" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
+                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxZone" Width="200" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
+                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxMacro" Width="200" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
                 </StackPanel>
                 </StackPanel>
         </Border>

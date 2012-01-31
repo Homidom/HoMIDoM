@@ -359,7 +359,7 @@
         <Canvas Name="CanvasRight" Margin="5" >
             <Canvas.Background>
                 <ImageBrush ImageSource="/HoMIAdmiN;component/Images/01.png"  >
-                   </ImageBrush> 
+                </ImageBrush>
             </Canvas.Background>
         </Canvas>
 
