@@ -34,7 +34,7 @@ Public Class Driver_Teleinfo
         Dim _Refresh As Integer = 0
         Dim _Modele As String = ""
         Dim _Version As String = "1.0"
-        Dim _Picture As String = ""
+        Dim _Picture As String = "compteur-monophase.png"
         Dim _Server As HoMIDom.HoMIDom.Server
         Dim _Device As HoMIDom.HoMIDom.Device
         Dim _DeviceSupport As New ArrayList
@@ -365,8 +365,13 @@ Public Class Driver_Teleinfo
                             Dim retour As String = Sauve_temp_teleinfo(Objet.Adresse1)
                             Objet.Value = retour
 
+                        Case "GENERIQUEVALUE"
+                            Dim retour As Integer = Sauve_temp_teleinfo(Objet.Adresse1)
+                            Objet.Value = retour
+
                         Case Else
-                            Console.WriteLine("Erreur dans la reconnaissance du type du composant")
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo Read", "Erreur dans la reconnaissance du type du composant de " & Objet.Adresse1)
+
 
                     End Select
 
