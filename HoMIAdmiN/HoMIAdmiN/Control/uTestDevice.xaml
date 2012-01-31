@@ -9,7 +9,7 @@
                 <Label Name="Label1" HorizontalAlignment="Center"  VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Test Device</Label>
                 <StackPanel Orientation="Horizontal" >
                     <Label Height="22" HorizontalAlignment="Left" Margin="5" Name="Label2" VerticalAlignment="Top" Width="62" Foreground="White">Fonction:</Label>
-                    <ComboBox Height="20" Margin="5" Width="200" Name="CbCmd" VerticalAlignment="Top" />
+                    <ComboBox Height="25" Margin="5" Width="200" Name="CbCmd" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2"/>
                 </StackPanel>
                 <Rectangle Height="5" />
                 <GroupBox Header="Paramètres" Margin="2" Name="GroupBox1">
@@ -17,23 +17,23 @@
                         <StackPanel Name="StkParam">
                         <StackPanel Orientation="Horizontal" >
                             <Label Height="23" HorizontalAlignment="Left" Margin="1" Name="LblP1" VerticalAlignment="Top" Width="76" Foreground="White" Visibility="Hidden">##########:</Label>
-                            <TextBox Height="20" Width="250" Margin="1" Name="TxtP1" VerticalAlignment="Top" Visibility="Hidden" />
+                                <TextBox Height="20" Width="250" Margin="1" Name="TxtP1" VerticalAlignment="Top" Visibility="Hidden" Background="DarkGray" BorderBrush="Black" Foreground="White" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
                             <Label Foreground="White" Height="23" HorizontalAlignment="Left" Margin="1" Name="LblP2" VerticalAlignment="Top" Width="76" Visibility="Hidden">##########:</Label>
-                            <TextBox Height="20" Width="250" Margin="1" Name="TxtP2" VerticalAlignment="Top" Visibility="Hidden" />
+                                <TextBox Height="20" Width="250" Margin="1" Name="TxtP2" VerticalAlignment="Top" Visibility="Hidden" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
                         </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <Label Foreground="White" HorizontalAlignment="Left" Margin="1" Name="LblP3" Width="76" Visibility="Hidden">##########:</Label>
-                                <TextBox Height="20" Width="250" Margin="1" Name="TxtP3" Visibility="Hidden" />
+                                <TextBox Height="20" Width="250" Margin="1" Name="TxtP3" Visibility="Hidden" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <Label Foreground="White" Height="23" HorizontalAlignment="Left" Margin="1" Name="LblP4" VerticalAlignment="Bottom" Width="76" Visibility="Hidden">##########:</Label>
-                                <TextBox Height="20" Width="250" Margin="1" Name="TxtP4" VerticalAlignment="Bottom" Visibility="Hidden" />
+                                <TextBox Height="20" Width="250" Margin="1" Name="TxtP4" VerticalAlignment="Bottom" Visibility="Hidden" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <Label Foreground="White" Height="23" HorizontalAlignment="Left" Margin="1" Name="LblP5" VerticalAlignment="Bottom" Width="76" Visibility="Hidden">##########:</Label>
-                                <TextBox Height="20" Width="250" Margin="1" Name="TxtP5" VerticalAlignment="Bottom" Visibility="Hidden" />
+                                <TextBox Height="20" Width="250" Margin="1" Name="TxtP5" VerticalAlignment="Bottom" Visibility="Hidden" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
                             </StackPanel>
                         </StackPanel>
                                                

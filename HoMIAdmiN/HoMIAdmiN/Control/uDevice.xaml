@@ -13,9 +13,9 @@
                     <Label Name="Label2" Foreground="White">Nom:</Label>
                     <StackPanel Orientation="Horizontal" >
                         <TextBox Height="22" Name="TxtNom" Width="215" Foreground="White" Background="DarkGray" BorderBrush="Black" />
-                        <CheckBox Height="18" Name="ChkEnable" VerticalAlignment="Top" Foreground="White" Margin="3" IsChecked="True">Enable</CheckBox>
-                        <CheckBox Foreground="White" Height="18" HorizontalAlignment="Right" Margin="3" Name="ChKSolo" VerticalAlignment="Top" IsChecked="True">Solo</CheckBox>
-                        <CheckBox Foreground="White" Height="18" HorizontalAlignment="Right" Margin="3" Name="ChKLastEtat" VerticalAlignment="Top" IsChecked="True" ToolTip="Prendre en compte l'avant dernier etat d'un device">LastEtat</CheckBox>
+                            <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChkEnable" VerticalAlignment="Top" IsChecked="True">Enable</CheckBox>
+                            <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" Name="ChKSolo" VerticalAlignment="Top" IsChecked="True">Solo</CheckBox>
+                        <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" Name="ChKLastEtat" VerticalAlignment="Top" IsChecked="True" ToolTip="Prendre en compte l'avant dernier etat d'un device">LastEtat</CheckBox>
                     </StackPanel>
                     <Label Foreground="White" Name="Label3">Description:</Label>
                     <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtDescript" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" />
@@ -25,9 +25,9 @@
                         <Label Foreground="White" Name="Label5" >Driver:</Label>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                        <ComboBox HorizontalAlignment="Left" Name="CbType" Width="215" Background="White" Foreground="Black" BorderBrush="Black" Height="22" VerticalAlignment="Top" IsReadOnly="True" />
+                        <ComboBox HorizontalAlignment="Left" Name="CbType" Width="215" Background="White" Foreground="Black" BorderBrush="Black" BorderThickness="2" Height="25" VerticalAlignment="Top" IsReadOnly="True" />
                         <Rectangle Width="10" />
-                        <ComboBox Background="White" BorderBrush="Black" Width="215" Foreground="Black" Name="CbDriver" Height="22" VerticalAlignment="Top" />
+                            <ComboBox Background="White" BorderBrush="Black" Width="215" Foreground="Black" Name="CbDriver" BorderThickness="2" Height="25" VerticalAlignment="Top" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                         <Label Foreground="White" Name="Label6" Width="215" >Adresse1:</Label>
@@ -114,8 +114,8 @@
                 </StackPanel>
                     <StackPanel >
                         <Rectangle Height="80"/>
-                        <Label Content="Zone" Foreground="White" />
-                        <ListBox Name="ListZone" Margin="5" Width="150" Height="150" ToolTip="Liste des zones pour lesquels le composant y est associé" />
+                        <Label Content="Zones" Foreground="White" />
+                        <ListBox Background="DarkGray" BorderBrush="Black" Name="ListZone" Margin="5" Padding="2" Width="150" Height="180" ToolTip="Liste des zones pour lesquels le composant y est associé" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

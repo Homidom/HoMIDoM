@@ -8,13 +8,13 @@
             <Rectangle Height="20" />
             <StackPanel Orientation="Horizontal" >
                 <Label Content="Nom:" Height="22" HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Width="67" Foreground="White" />
-                <TextBox Height="21" HorizontalAlignment="Left" Name="TxtNom" VerticalAlignment="Top" Width="218" />
-                <CheckBox Content="Enable" Height="17" HorizontalAlignment="Left" Margin="3" Name="ChkEnable" VerticalAlignment="Top" Foreground="White" />
+                <TextBox Height="21" HorizontalAlignment="Left" Name="TxtNom" VerticalAlignment="Top" Width="218" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
+                <CheckBox Content="Enable" Height="17" HorizontalAlignment="Left" Margin="3" Name="ChkEnable" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
             </StackPanel>
             
             <StackPanel Orientation="Horizontal" >
                 <Label Content="Description:" Foreground="White" Height="22" HorizontalAlignment="Left"  Name="Label3" VerticalAlignment="Top" Width="67" />
-                <TextBox Height="21" HorizontalAlignment="Left" Name="TxtDescription" VerticalAlignment="Top" Width="436" />
+                <TextBox Height="21" HorizontalAlignment="Left" Name="TxtDescription" VerticalAlignment="Top" Width="436" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
             </StackPanel>
            
             <StackPanel Orientation="Horizontal" >
@@ -87,13 +87,13 @@
 
                             <Rectangle Width="20"/>
                             <StackPanel Margin="2">
-                                <CheckBox Content="Lundi" Height="15" HorizontalAlignment="Left"  Name="CheckBox1" VerticalAlignment="Top"  Foreground="White" />
-                                <CheckBox Content="Mardi" Height="15" HorizontalAlignment="Left"  Name="CheckBox2" VerticalAlignment="Top"  Foreground="White" />
-                                <CheckBox Content="Mercredi" Height="15" HorizontalAlignment="Left"  Name="CheckBox3" VerticalAlignment="Top"  Foreground="White" />
-                                <CheckBox Content="Jeudi" Height="15" HorizontalAlignment="Left"  Name="CheckBox4" VerticalAlignment="Top"  Foreground="White" />
-                                <CheckBox Content="Vendredi" Height="15" HorizontalAlignment="Left"  Name="CheckBox5" VerticalAlignment="Top"  Foreground="White" />
-                                <CheckBox Content="Samedi" Height="15" HorizontalAlignment="Left"  Name="CheckBox6" VerticalAlignment="Top"  Foreground="White" />
-                                <CheckBox Content="Dimanche" Height="15" HorizontalAlignment="Left"  Name="CheckBox7" VerticalAlignment="Top"  Foreground="White" />
+                            <CheckBox Content="Lundi" Height="15" HorizontalAlignment="Left"  Name="CheckBox1" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                            <CheckBox Content="Mardi" Height="15" HorizontalAlignment="Left"  Name="CheckBox2" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                            <CheckBox Content="Mercredi" Height="15" HorizontalAlignment="Left"  Name="CheckBox3" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                <CheckBox Content="Jeudi" Height="15" HorizontalAlignment="Left"  Name="CheckBox4" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                            <CheckBox Content="Vendredi" Height="15" HorizontalAlignment="Left"  Name="CheckBox5" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                            <CheckBox Content="Samedi" Height="15" HorizontalAlignment="Left"  Name="CheckBox6" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                            <CheckBox Content="Dimanche" Height="15" HorizontalAlignment="Left"  Name="CheckBox7" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
@@ -113,7 +113,7 @@
                     </Button>
 
                 </StackPanel>
-                <ListBox Height="80" HorizontalAlignment="Left" Margin="2" Name="ListBox1" VerticalAlignment="Top" Width="287" AllowDrop="True" />
+                <ListBox Height="80" HorizontalAlignment="Left" Margin="2" Name="ListBox1" VerticalAlignment="Top" Width="287" AllowDrop="True" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
             </StackPanel>
 
             <GroupBox Header="Condition" Height="273" HorizontalAlignment="Left" Margin="13,112,0,0" Name="GroupBox1" VerticalAlignment="Top" Width="254">

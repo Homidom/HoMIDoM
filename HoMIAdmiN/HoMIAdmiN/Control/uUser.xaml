@@ -14,27 +14,27 @@
         <StackPanel Margin="5,85,0,0">
             <StackPanel Orientation="Horizontal" >
                 <Label Height="25" HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Width="80" Foreground="White" Content="Username :"></Label>
-                <TextBox Height="22" Name="TxtUsername" VerticalAlignment="Top" Foreground="White" Background="DarkGray" Width="223" HorizontalAlignment="Left" TabIndex="0" />
+                <TextBox Height="22" Name="TxtUsername" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" Width="223" HorizontalAlignment="Left" TabIndex="0" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" Height="25" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" Width="80" Content="Nom :"></Label>
-                <TextBox Background="DarkGray" Foreground="White" Height="22" Name="TxtNom" VerticalAlignment="Top" Width="223" HorizontalAlignment="Left" TabIndex="1" />
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtNom" VerticalAlignment="Top" Width="223" HorizontalAlignment="Left" TabIndex="1" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" Height="25" HorizontalAlignment="Left" Name="Label5" VerticalAlignment="Top" Width="80" Content="Prénom :"></Label>
-                <TextBox Background="DarkGray" Foreground="White" Height="22" Name="TxtPrenom" VerticalAlignment="Top" Width="223" HorizontalAlignment="Left" TabIndex="2" />
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtPrenom" VerticalAlignment="Top" Width="223" HorizontalAlignment="Left" TabIndex="2" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" Height="25" HorizontalAlignment="Left" Name="Label6" VerticalAlignment="Top" Width="80" Content="Password :"></Label>
-                <PasswordBox Height="22" Name="TxtPassword" VerticalAlignment="Top" Background="DarkGray" Foreground="White" TabIndex="3" Width="223" />
+                <PasswordBox Height="22" Name="TxtPassword" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" TabIndex="3" Width="223" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" Height="25" Name="Label4" VerticalAlignment="Top" HorizontalAlignment="Left" Width="80" Content="Confirm :"></Label>
-                <PasswordBox Background="DarkGray" Foreground="White" Height="22" Name="TxtConfirm" VerticalAlignment="Top" TabIndex="4" Width="223"/>
+                <PasswordBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtConfirm" VerticalAlignment="Top" TabIndex="4" Width="223"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" Height="25" HorizontalAlignment="Left" Name="Label7" VerticalAlignment="Top" Width="80" Content="Profil :"></Label>
-                <ComboBox Height="21" Name="ComboProfil" VerticalAlignment="Top" Foreground="Black" SelectedIndex="0" Width="223" HorizontalAlignment="Left" TabIndex="5" Background="White">
+                <ComboBox Height="25" Name="ComboProfil" VerticalAlignment="Top" Foreground="Black" SelectedIndex="0" Width="223" HorizontalAlignment="Left" TabIndex="5" Background="DarkGray" BorderBrush="Black" BorderThickness="2" OverridesDefaultStyle="False" ClipToBounds="False">
                     <ComboBoxItem>Invité</ComboBoxItem>
                     <ComboBoxItem>Client</ComboBoxItem>
                     <ComboBoxItem>Administrateur</ComboBoxItem>
@@ -42,39 +42,39 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" HorizontalAlignment="Left" Name="Label8" Width="80" Height="25" VerticalAlignment="Top" Content="N° Ident. :"></Label>
-                <TextBox Background="DarkGray" Foreground="White" Name="TxtIden" Width="223" HorizontalAlignment="Left" TabIndex="6" Height="21" />
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtIden" Width="223" HorizontalAlignment="Left" TabIndex="6" Height="21" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Height="25">
                 <Label Foreground="White" Height="25" HorizontalAlignment="Left" Name="Label9" VerticalAlignment="Top" Width="80" Content="eMail :"></Label>
-                <TextBox Background="DarkGray" Foreground="White" Height="22" Name="TxteMail" Width="223" TabIndex="7" />
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxteMail" Width="223" TabIndex="7" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" HorizontalAlignment="Left" Name="Label10" Width="80" Height="25" VerticalAlignment="Bottom" Content="eMail autre :"></Label>
-                <TextBox Background="DarkGray" Foreground="White" Name="TxteMailAutre" Width="223" HorizontalAlignment="Left" Height="22" VerticalAlignment="Bottom" TabIndex="8" />
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxteMailAutre" Width="223" HorizontalAlignment="Left" Height="22" VerticalAlignment="Bottom" TabIndex="8" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" Name="Label11" Height="25" Width="80" VerticalAlignment="Bottom" Content="Tel Fixe :"></Label>
-                <TextBox Background="DarkGray" Foreground="White" Name="TxtTelFixe" Width="223" HorizontalAlignment="Left" Height="22" VerticalAlignment="Bottom" TabIndex="9" />
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtTelFixe" Width="223" HorizontalAlignment="Left" Height="22" VerticalAlignment="Bottom" TabIndex="9" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" Height="25" HorizontalAlignment="Left" Name="Label12" VerticalAlignment="Bottom" Width="80" Content="Tel Mobile :"></Label>
-                <TextBox Background="DarkGray" Foreground="White" Height="22" Name="TxtTelMobile" VerticalAlignment="Bottom" Width="223" HorizontalAlignment="Left" TabIndex="10" />
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtTelMobile" VerticalAlignment="Bottom" Width="223" HorizontalAlignment="Left" TabIndex="10" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" Height="25" HorizontalAlignment="Left" Name="Label13" VerticalAlignment="Bottom" Width="80" Content="Tel Autre :"></Label>
-                <TextBox Background="DarkGray" Foreground="White" Height="22" Name="TxtTelAutre" VerticalAlignment="Bottom" Width="223" HorizontalAlignment="Left" BorderThickness="2" TabIndex="11" />
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtTelAutre" VerticalAlignment="Bottom" Width="223" HorizontalAlignment="Left" BorderThickness="2" TabIndex="11" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" Height="25" HorizontalAlignment="Left" Name="Label14" VerticalAlignment="Bottom" Width="80" Content="Adresse :"></Label>
-                <TextBox Background="DarkGray" Foreground="White" Height="22" Width="500" Name="TxtAdresse" VerticalAlignment="Bottom" TabIndex="12" />
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Width="500" Name="TxtAdresse" VerticalAlignment="Bottom" TabIndex="12" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" HorizontalAlignment="Left" Name="Label15" Width="80" Height="25" VerticalAlignment="Bottom" Content="Ville :"></Label>
-                <TextBox Background="DarkGray" Foreground="White" Name="TxtVille" Height="22" VerticalAlignment="Bottom" Width="223" HorizontalAlignment="Left" TabIndex="13" />
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtVille" Height="22" VerticalAlignment="Bottom" Width="223" HorizontalAlignment="Left" TabIndex="13" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" HorizontalAlignment="Left" Name="Label16" Width="80" Height="25" VerticalAlignment="Bottom" Content="Code Postal :"></Label>
-                <TextBox Background="DarkGray" Foreground="White" Name="TxtCodePostal" Height="22" VerticalAlignment="Bottom" Width="223" HorizontalAlignment="Left" TabIndex="14" />
+                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtCodePostal" Height="22" VerticalAlignment="Bottom" Width="223" HorizontalAlignment="Left" TabIndex="14" />
             </StackPanel>
         </StackPanel>
         <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,12,12,0" Name="BtnOK" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Ok</Button>
