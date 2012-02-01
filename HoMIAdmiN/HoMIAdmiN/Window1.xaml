@@ -195,6 +195,19 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+
+        <Style TargetType="{x:Type ComboBoxItem}">
+            <Setter Property="Foreground" Value="white"/>
+            <Setter Property="Background" Value="DarkGray"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+        </Style>
+        
+        <!--<ComboBox.Resources>
+            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="Yellow" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Red" />
+        </ComboBox.Resources>-->
+
     </Window.Resources>
 
     <DockPanel MinHeight="660" MinWidth="1002">
