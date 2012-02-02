@@ -18,6 +18,8 @@
             _Action = Action
             _TriggerId = TriggerId
 
+
+
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             If _Action = EAction.Nouveau Then 'Nouveau Trigger
 
@@ -29,12 +31,6 @@
                     ChkEnable.IsChecked = x.Enable
                     TxtDescription.Text = x.Description
                     _ListMacro = x.ListMacro
-
-                    If _ListMacro IsNot Nothing Then
-                        For i As Integer = 0 To _ListMacro.Count - 1
-                            ListBox1.Items.Add(myservice.ReturnMacroById(IdSrv, _ListMacro.Item(i)).Nom)
-                        Next
-                    End If
 
                     Dim cron As String = x.ConditionTime
                     If cron.StartsWith("_cron") Then
@@ -77,6 +73,7 @@
                 End If
 
             End If
+            RemplirMacro()
         Catch ex As Exception
             MessageBox.Show("Erreur NewuTriggerTimer: " & ex.ToString)
         End Try
@@ -163,6 +160,13 @@
             End If
             _myconditiontime &= _prepajr
 
+            _ListMacro.Clear()
+            For i As Integer = 0 To ListBox1.Items.Count - 1
+                Dim x As StackPanel = ListBox1.Items.Item(i)
+                Dim w As CheckBox = x.Children.Item(0)
+                If w.IsChecked = True Then _ListMacro.Add(ListBox1.Items.Item(i).uid)
+            Next
+
             If _Action = EAction.Nouveau Then
                 myservice.SaveTrigger(IdSrv, "", TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
                 FlagChange = True
@@ -177,76 +181,137 @@
         End Try
     End Sub
 
-    Private Sub ListBox1_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles ListBox1.DragOver
-        If e.Data.GetDataPresent(GetType(String)) Then
-            e.Effects = DragDropEffects.Copy
-        Else
-            e.Effects = DragDropEffects.None
-        End If
-    End Sub
-
-    Private Sub ListBox1_Drop(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles ListBox1.Drop
-        If e.Data.GetDataPresent(GetType(String)) Then
-            e.Effects = DragDropEffects.Copy
-
-            Dim uri As String = e.Data.GetData(GetType(String)).ToString
-            _ListMacro.Add(uri)
-            ListBox1.Items.Add(myservice.ReturnMacroById(IdSrv, uri).Nom)
-        Else
-            e.Effects = DragDropEffects.None
-        End If
-    End Sub
-
-    Private Sub DeleteMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles DeleteMacro.Click
-        If ListBox1.SelectedIndex < 0 Then
-            MessageBox.Show("Aucune macro sélectionnée, veuillez en choisir une à supprimer!", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        Else
-            Dim i As Integer = ListBox1.SelectedIndex
-            _ListMacro.RemoveAt(i)
-            ListBox1.Items.Clear()
-            For j As Integer = 0 To _ListMacro.Count - 1
-                ListBox1.Items.Add(myservice.ReturnMacroById(IdSrv, _ListMacro(j)).Nom)
-            Next
-            i = Nothing
-        End If
-    End Sub
-
     Private Sub UpMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles UpMacro.Click
-        If ListBox1.SelectedIndex <= 0 Then
-            MessageBox.Show("Aucune macro sélectionnée ou celle-ci est déjà en 1ère position, veuillez en choisir une à déplacer !", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        Else
-            Dim i As Integer = ListBox1.SelectedIndex
-            Dim a As String = _ListMacro(i - 1)
-            Dim b As String = _ListMacro(i)
+        Try
+            If ListBox1.SelectedIndex <= 0 Then
+                MessageBox.Show("Aucune macro sélectionnée ou celle-ci est déjà en 1ère position, veuillez en choisir une à déplacer !", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            Else
+                Dim i As Integer = ListBox1.SelectedIndex
 
-            _ListMacro(i - 1) = b
-            _ListMacro(i) = a
-            ListBox1.Items.Clear()
-            For j As Integer = 0 To _ListMacro.Count - 1
-                ListBox1.Items.Add(myservice.ReturnMacroById(IdSrv, _ListMacro(j)).Nom)
-            Next
-        End If
+                Dim x As StackPanel = ListBox1.Items.Item(i)
+                Dim w As CheckBox = x.Children.Item(0)
+                If w.IsChecked = False Then
+                    MessageBox.Show("Cette macro n'est pas cochée, elle ne peut être déplacée !", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+
+                Dim a As String = _ListMacro(i - 1)
+                Dim b As String = _ListMacro(i)
+
+                _ListMacro(i - 1) = b
+                _ListMacro(i) = a
+                RemplirMacro()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur UpMacro: " & ex.ToString, "Erreur")
+        End Try
     End Sub
 
     Private Sub DownMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles DownMacro.Click
-        If ListBox1.SelectedIndex < 0 Or ListBox1.SelectedIndex = ListBox1.Items.Count - 1 Then
-            MessageBox.Show("Aucune macro sélectionnée ou celle-ci est déjà en dernière position, veuillez en choisir une déplacer!", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        Else
-            Dim i As Integer = ListBox1.SelectedIndex
-            Dim a As String = _ListMacro(i + 1)
-            Dim b As String = _ListMacro(i)
+        Try
 
-            _ListMacro(i + 1) = b
-            _ListMacro(i) = a
+            If ListBox1.SelectedIndex < 0 Or ListBox1.SelectedIndex = ListBox1.Items.Count - 1 Then
+                MessageBox.Show("Aucune macro sélectionnée ou celle-ci est déjà en dernière position, veuillez en choisir une déplacer!", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            Else
+                Dim i As Integer = ListBox1.SelectedIndex
+
+                Dim x As StackPanel = ListBox1.Items.Item(i)
+                Dim w As CheckBox = x.Children.Item(0)
+                If w.IsChecked = False Then
+                    MessageBox.Show("Cette macro n'est pas cochée, elle ne peut être déplacée !", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+                x = ListBox1.Items.Item(i + 1)
+                w = x.Children.Item(0)
+                If w.IsChecked = False Then
+                    MessageBox.Show("Cette macro ne peut pas être descendu dans la liste car la macro suivante n'est pas cochée, elle ne peut être déplacée !", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+
+                Dim a As String = _ListMacro(i + 1)
+                Dim b As String = _ListMacro(i)
+
+                _ListMacro(i + 1) = b
+                _ListMacro(i) = a
+                RemplirMacro()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur DownMacro: " & ex.ToString, "Erreur")
+        End Try
+    End Sub
+
+    Private Sub RemplirMacro()
+        Try
             ListBox1.Items.Clear()
+
+            If _ListMacro IsNot Nothing Then
+                For i As Integer = 0 To _ListMacro.Count - 1
+                    Dim x As New CheckBox
+                    Dim stk As New StackPanel
+                    stk.MinHeight = 25
+                    stk.Margin = New Thickness(2)
+                    x.Content = myService.ReturnMacroById(IdSrv, _ListMacro.Item(i)).Nom
+                    stk.Uid = myService.ReturnMacroById(IdSrv, _ListMacro.Item(i)).ID
+                    x.Uid = stk.Uid
+                    x.IsChecked = True
+                    AddHandler x.Click, AddressOf CheckClick
+                    stk.Children.Add(x)
+                    ListBox1.Items.Add(stk)
+                Next
+            End If
+
+            For i As Integer = 0 To myService.GetAllMacros(IdSrv).Count - 1
+                If IsInList(myService.GetAllMacros(IdSrv).Item(i).ID) = False Then
+                    Dim x As New CheckBox
+                    Dim stk As New StackPanel
+                    x.Content = myService.GetAllMacros(IdSrv).Item(i).Nom
+                    x.IsChecked = False
+                    AddHandler x.Click, AddressOf CheckClick
+                    stk.Uid = myService.GetAllMacros(IdSrv).Item(i).ID
+                    x.Uid = stk.Uid
+                    stk.MinHeight = 25
+                    stk.Margin = New Thickness(2)
+                    stk.Children.Add(x)
+                    ListBox1.Items.Add(stk)
+                End If
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur remplirMacro: " & ex.ToString, "Erreur")
+        End Try
+    End Sub
+
+    Private Sub CheckClick(ByVal sender As Object, ByVal e As Windows.RoutedEventArgs)
+        If sender.IsChecked = True Then
+            _ListMacro.Add(sender.uid)
+        Else
             For j As Integer = 0 To _ListMacro.Count - 1
-                ListBox1.Items.Add(myservice.ReturnMacroById(IdSrv, _ListMacro(j)).Nom)
+                If _ListMacro.Item(j) = sender.uid Then
+                    _ListMacro.RemoveAt(j)
+                    Exit For
+                End If
             Next
         End If
+        RemplirMacro()
     End Sub
+
+    Private Function IsInList(ByVal uid As String) As Boolean
+        Try
+            Dim flag As Boolean = False
+
+            For i As Integer = 0 To ListBox1.Items.Count - 1
+                If ListBox1.Items.Item(i).uid = uid Then
+                    flag = True
+                    Exit For
+                End If
+            Next
+
+            Return flag
+        Catch ex As Exception
+            MessageBox.Show("Erreur IsInList: " & ex.ToString, "Erreur")
+        End Try
+    End Function
 
 #Region "Gestion Date/time"
     Private Sub BtnPHr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPHr.Click

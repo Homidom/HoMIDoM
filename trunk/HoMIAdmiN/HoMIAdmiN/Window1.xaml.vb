@@ -715,22 +715,25 @@ Class Window1
                 End Try
             Case 11 'Aide
                 Try
-                    Process.Start("http://www.homidom.com/#")
+                    Process.Start("http://www.homidom.com/documentation-c16.html")
                 Catch ex As Exception
                     MessageBox.Show("ERREUR Sub MnuPropos: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                 End Try
             Case 12
                 Try
                     If IsConnect = True And FlagChange Then
-                        Dim retour As MessageBoxResult
-                        retour = MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question)
 
-                        If retour = MessageBoxResult.Yes Then
+                        If MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
                             Try
                                 If IsConnect = False Then
                                     MessageBox.Show("Impossible d'enregistrer la configuration car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
                                 Else
-                                    myService.SaveConfig(IdSrv)
+                                    Dim retour As String = myService.SaveConfig(IdSrv)
+                                    If retour <> "0" Then
+                                        MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
+                                    Else
+                                        MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
+                                    End If
                                 End If
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -824,7 +827,12 @@ Class Window1
                     Exit Sub
                 End If
 
-                myService.SaveConfig(IdSrv)
+                Dim retour As String = myService.SaveConfig(IdSrv)
+                If retour <> "0" Then
+                    MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
+                Else
+                    MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
+                End If
                 Exit Sub
             Catch ex As Exception
                 MessageBox.Show("ERREUR Sub MnuSaveConfig: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)

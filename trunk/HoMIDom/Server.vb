@@ -1103,7 +1103,7 @@ Namespace HoMIDom
 
         ''' <summary>Sauvegarde de la config dans le fichier XML</summary>
         ''' <remarks></remarks>
-        Private Sub SaveConfig(ByVal Fichier As String)
+        Private Function SaveConfig(ByVal Fichier As String) As Boolean
             Try
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde de la config sous le fichier " & Fichier)
 
@@ -1511,48 +1511,48 @@ Namespace HoMIDom
                 ''------------
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des triggers")
                 writer.WriteStartElement("triggers")
-                For i As Integer = 0 To _listTriggers.Count - 1
+                For i As Integer = 0 To _ListTriggers.Count - 1
                     writer.WriteStartElement("trigger")
                     writer.WriteStartAttribute("id")
-                    writer.WriteValue(_listTriggers.Item(i).ID)
+                    writer.WriteValue(_ListTriggers.Item(i).ID)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("nom")
-                    writer.WriteValue(_listTriggers.Item(i).Nom)
+                    writer.WriteValue(_ListTriggers.Item(i).Nom)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("description")
-                    writer.WriteValue(_listTriggers.Item(i).Description)
+                    writer.WriteValue(_ListTriggers.Item(i).Description)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("enable")
-                    writer.WriteValue(_listTriggers.Item(i).Enable)
+                    writer.WriteValue(_ListTriggers.Item(i).Enable)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("type")
-                    If _listTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
+                    If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
                         writer.WriteValue("0")
                     Else
                         writer.WriteValue("1")
                     End If
                     writer.WriteEndAttribute()
-                    If _listTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
+                    If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
                         writer.WriteStartAttribute("conditiontime")
-                        writer.WriteValue(_listTriggers.Item(i).ConditionTime)
+                        writer.WriteValue(_ListTriggers.Item(i).ConditionTime)
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("prochainedateheure")
-                        writer.WriteValue(_listTriggers.Item(i).Prochainedateheure)
+                        writer.WriteValue(_ListTriggers.Item(i).Prochainedateheure)
                         writer.WriteEndAttribute()
                     End If
-                    If _listTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE Then
+                    If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE Then
                         writer.WriteStartAttribute("conditiondeviceid")
-                        writer.WriteValue(_listTriggers.Item(i).ConditionDeviceId)
+                        writer.WriteValue(_ListTriggers.Item(i).ConditionDeviceId)
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("conditiondeviceproperty")
-                        writer.WriteValue(_listTriggers.Item(i).ConditionDeviceProperty)
+                        writer.WriteValue(_ListTriggers.Item(i).ConditionDeviceProperty)
                         writer.WriteEndAttribute()
                     End If
                     writer.WriteStartElement("macros")
-                    For k = 0 To _listTriggers.Item(i).ListMacro.Count - 1
+                    For k = 0 To _ListTriggers.Item(i).ListMacro.Count - 1
                         writer.WriteStartElement("macro")
                         writer.WriteStartAttribute("id")
-                        writer.WriteValue(_listTriggers.Item(i).ListMacro.Item(k))
+                        writer.WriteValue(_ListTriggers.Item(i).ListMacro.Item(k))
                         writer.WriteEndAttribute()
                         writer.WriteEndElement()
                     Next
@@ -1589,12 +1589,13 @@ Namespace HoMIDom
                 writer.WriteEndDocument()
                 writer.Close()
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde terminée")
+                Return True
             Catch ex As Exception
-                MsgBox("ERREUR SAVECONFIG " & ex.ToString, MsgBoxStyle.Exclamation, "Erreur serveur")
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: " & ex.Message)
+                Return False
             End Try
 
-        End Sub
+        End Function
 
         ''' <summary>
         ''' Ecris les actions dans le fichier de config
@@ -6387,17 +6388,23 @@ Namespace HoMIDom
 #Region "Configuration"
         ''' <summary>Sauvegarder la configuration</summary>
         ''' <remarks></remarks>
-        Public Sub SaveConfiguration(ByVal IdSrv As String) Implements IHoMIDom.SaveConfig
+        Public Function SaveConfiguration(ByVal IdSrv As String) As String Implements IHoMIDom.SaveConfig
             If VerifIdSrv(IdSrv) = False Then
-                Exit Sub
+                Return "L'Id du serveur est incorrect"
             End If
 
             Try
-                SaveConfig(_MonRepertoire & "\config\homidom.xml")
+                If SaveConfig(_MonRepertoire & "\config\homidom.xml") = True Then
+                    Return "0"
+                Else
+                    Return "Erreur lors de l'enregistrement veuillez consulter le log"
+                End If
+
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfiguration", "Exception : " & ex.Message)
+                Return "Erreur lors de l'enregistrement veuillez consulter le log"
             End Try
-        End Sub
+        End Function
 #End Region
 
 #Region "SOAP"

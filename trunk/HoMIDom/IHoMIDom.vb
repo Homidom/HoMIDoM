@@ -76,7 +76,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
         ''' <remarks></remarks>
-        <OperationContract()> Sub SaveConfig(ByVal IdSrv As String)
+        <OperationContract()> Function SaveConfig(ByVal IdSrv As String) As String
 
 
         ''' <summary>
