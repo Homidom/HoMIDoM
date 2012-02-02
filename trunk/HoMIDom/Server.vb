@@ -2134,7 +2134,8 @@ Namespace HoMIDom
 #End Region
 
 #Region "Log"
-        Dim _File As String = _MonRepertoire & "\logs\log.xml" 'Représente le fichier log: ex"C:\homidom\log\log.xml"
+        'Dim _File As String = _MonRepertoire & "\logs\log.xml" 'Représente le fichier log: ex"C:\homidom\log\log.xml"
+        Dim _FichierLog As String = _MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt"
         Dim _MaxFileSize As Long = 5120 'en Koctets
 
         ''' <summary>
@@ -2145,7 +2146,8 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public ReadOnly Property FichierLog() As String
             Get
-                Return _File
+                'Return _File
+                Return _FichierLog
             End Get
         End Property
 
@@ -2210,152 +2212,175 @@ Namespace HoMIDom
                 If _TypeLogEnable(TypLog - 1) = True Then Exit Sub
 
                 'on affiche dans la console
-                Console.WriteLine(Now & " " & TypLog & " " & Source & " " & Fonction & " " & Message)
+                Console.WriteLine(Now & " " & TypLog.ToString & " " & Source.ToString & " " & Fonction & " " & Message)
                 Write4Log(TypLog, Source, Fonction, Message)
 
-                Dim Fichier As FileInfo
-                'Vérifie si le fichier log existe sinon le crée
-                If IO.File.Exists(_File) Then
-                    Fichier = New FileInfo(_File)
-                    'Vérifie si le fichier est trop gros si oui, on l'archive
-                    If (Fichier.Length / 1000) > _MaxFileSize Then
-                        Dim filearchive As String = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                        IO.File.Move(_File, filearchive)
-                    End If
-                Else
-                    CreateNewFileLog(_File)
-                    Fichier = New FileInfo(_File)
-                End If
 
-                'Dim timeout As DateTime = Now.AddSeconds(3)
-                'Do While FileIsOpen(_File) = True And Now < timeout
+                'écriture dans un fichier texte
+                _FichierLog = _MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt"
+                Dim FreeF As Integer
+                Dim texte As String
+                texte = Now & " " & TypLog.ToString & " " & Source.ToString & " " & Fonction & " " & Message
+                Try
+                    FreeF = FreeFile()
+                    texte = Replace(texte, vbLf, vbCrLf)
+                    SyncLock lock_logwrite
+                        FileOpen(FreeF, FichierLog, OpenMode.Append)
+                        Print(FreeF, texte & vbCrLf)
+                        FileClose(FreeF)
+                    End SyncLock
+                Catch ex As IOException
+                    'wait(500)
+                    Console.WriteLine(Now & " " & TypLog & " SERVER LOG ERROR IOException : " & ex.ToString)
+                Catch ex As Exception
+                    'wait(500)
+                    Console.WriteLine(Now & " " & TypLog & " SERVER LOG ERROR Exception : " & ex.ToString)
+                End Try
 
-                'Loop
 
-                'If Now = timeout And FileIsOpen(_File) = True Then
-                '    Console.WriteLine(Now & " Impossible d'écrire dans le fichier log car il est toujours en ouvert, création d'un nouveau fichier log")
-                '    Dim filearchive As String
-                '    filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                '    IO.File.Move(_File, filearchive)
+                'Dim Fichier As FileInfo
+                ''Vérifie si le fichier log existe sinon le crée
+                'If IO.File.Exists(_File) Then
+                '    Fichier = New FileInfo(_File)
+                '    'Vérifie si le fichier est trop gros si oui, on l'archive
+                '    If (Fichier.Length / 1000) > _MaxFileSize Then
+                '        Dim filearchive As String = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                '        IO.File.Move(_File, filearchive)
+                '    End If
+                'Else
                 '    CreateNewFileLog(_File)
                 '    Fichier = New FileInfo(_File)
                 'End If
 
-                Dim xmldoc As New XmlDocument()
+                ''Dim timeout As DateTime = Now.AddSeconds(3)
+                ''Do While FileIsOpen(_File) = True And Now < timeout
 
-                SyncLock lock_logwrite
-                    'Ecrire le log
-                    Try
-                        Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
-                        Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
-                        Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
-                        Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
-                        Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
-                        Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
+                ''Loop
 
-                        'on affecte les attributs à l'élément
-                        elelog.SetAttributeNode(atttime)
-                        elelog.SetAttributeNode(atttype)
-                        elelog.SetAttributeNode(attsrc)
-                        elelog.SetAttributeNode(attfct)
-                        elelog.SetAttributeNode(attmsg)
+                ''If Now = timeout And FileIsOpen(_File) = True Then
+                ''    Console.WriteLine(Now & " Impossible d'écrire dans le fichier log car il est toujours en ouvert, création d'un nouveau fichier log")
+                ''    Dim filearchive As String
+                ''    filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                ''    IO.File.Move(_File, filearchive)
+                ''    CreateNewFileLog(_File)
+                ''    Fichier = New FileInfo(_File)
+                ''End If
 
-                        'on affecte les valeur
-                        elelog.SetAttribute("time", Now)
-                        elelog.SetAttribute("type", TypLog)
-                        elelog.SetAttribute("source", Source)
-                        elelog.SetAttribute("fonction", HtmlEncode(Fonction))
-                        elelog.SetAttribute("message", HtmlEncode(Message))
+                'Dim xmldoc As New XmlDocument()
 
-                        'SyncLock lock_logwrite
-                        xmldoc.Load(_File) 'ouvre le fichier xml
-                        Dim root As XmlElement = xmldoc.Item("logs")
-                        root.AppendChild(elelog)
-                        'on enregistre le fichier xml
-                        xmldoc.Save(_File)
-                        xmldoc = Nothing
-                        'End SyncLock
+                'SyncLock lock_logwrite
+                '    'Ecrire le log
+                '    Try
+                '        Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
+                '        Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
+                '        Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
+                '        Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
+                '        Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
+                '        Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
 
-                    Catch ex As Exception 'Le fichier xml est corrompu ou comporte des caractères non supportés par xml
-                        Console.WriteLine(Now & " Impossible d'écrire dans le fichier log un nouveau fichier à été créé: " & ex.Message)
-                        Dim filearchive As String
-                        filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                        IO.File.Move(_File, filearchive)
-                        CreateNewFileLog(_File)
-                        Fichier = New FileInfo(_File)
+                '        'on affecte les attributs à l'élément
+                '        elelog.SetAttributeNode(atttime)
+                '        elelog.SetAttributeNode(atttype)
+                '        elelog.SetAttributeNode(attsrc)
+                '        elelog.SetAttributeNode(attfct)
+                '        elelog.SetAttributeNode(attmsg)
 
-                        xmldoc.Load(_File) 'ouvre le fichier xml
-                        Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
-                        Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
-                        Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
-                        Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
-                        Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
-                        Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
+                '        'on affecte les valeur
+                '        elelog.SetAttribute("time", Now)
+                '        elelog.SetAttribute("type", TypLog)
+                '        elelog.SetAttribute("source", Source)
+                '        elelog.SetAttribute("fonction", HtmlEncode(Fonction))
+                '        elelog.SetAttribute("message", HtmlEncode(Message))
 
-                        'on affecte les attributs à l'élément
-                        elelog.SetAttributeNode(atttime)
-                        elelog.SetAttributeNode(atttype)
-                        elelog.SetAttributeNode(attsrc)
-                        elelog.SetAttributeNode(attfct)
-                        elelog.SetAttributeNode(attmsg)
+                '        'SyncLock lock_logwrite
+                '        xmldoc.Load(_File) 'ouvre le fichier xml
+                '        Dim root As XmlElement = xmldoc.Item("logs")
+                '        root.AppendChild(elelog)
+                '        'on enregistre le fichier xml
+                '        xmldoc.Save(_File)
+                '        xmldoc = Nothing
+                '        'End SyncLock
 
-                        'on affecte les valeur
-                        elelog.SetAttribute("time", Now)
-                        elelog.SetAttribute("type", TypLog)
-                        elelog.SetAttribute("source", Source)
-                        elelog.SetAttribute("fonction", Fonction)
-                        elelog.SetAttribute("message", HtmlEncode(Message))
+                '    Catch ex As Exception 'Le fichier xml est corrompu ou comporte des caractères non supportés par xml
+                '        Console.WriteLine(Now & " Impossible d'écrire dans le fichier log un nouveau fichier à été créé: " & ex.Message)
+                '        Dim filearchive As String
+                '        filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
+                '        IO.File.Move(_File, filearchive)
+                '        CreateNewFileLog(_File)
+                '        Fichier = New FileInfo(_File)
 
-                        Dim root As XmlElement = xmldoc.Item("logs")
-                        root.AppendChild(elelog)
+                '        xmldoc.Load(_File) 'ouvre le fichier xml
+                '        Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
+                '        Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
+                '        Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
+                '        Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
+                '        Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
+                '        Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
 
-                        'on enregistre le fichier xml
-                        xmldoc.Save(_File)
-                        xmldoc = Nothing
-                    End Try
+                '        'on affecte les attributs à l'élément
+                '        elelog.SetAttributeNode(atttime)
+                '        elelog.SetAttributeNode(atttype)
+                '        elelog.SetAttributeNode(attsrc)
+                '        elelog.SetAttributeNode(attfct)
+                '        elelog.SetAttributeNode(attmsg)
 
-                    Fichier = Nothing
-                End SyncLock
+                '        'on affecte les valeur
+                '        elelog.SetAttribute("time", Now)
+                '        elelog.SetAttribute("type", TypLog)
+                '        elelog.SetAttribute("source", Source)
+                '        elelog.SetAttribute("fonction", Fonction)
+                '        elelog.SetAttribute("message", HtmlEncode(Message))
+
+                '        Dim root As XmlElement = xmldoc.Item("logs")
+                '        root.AppendChild(elelog)
+
+                '        'on enregistre le fichier xml
+                '        xmldoc.Save(_File)
+                '        xmldoc = Nothing
+                '    End Try
+
+                '    Fichier = Nothing
+                'End SyncLock
             Catch ex As Exception
                 Console.WriteLine("Erreur lors de l'écriture d'un log: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
             End Try
         End Sub
 
-        Private Function FileIsOpen(ByVal File As String) As Boolean
-            Try
-                'on tente d'ouvrir un stream sur le fichier, s'il est déjà utilisé, cela déclenche une erreur.
-                Dim fs As IO.FileStream = My.Computer.FileSystem.GetFileInfo(File).Open(IO.FileMode.Open, _
-                IO.FileAccess.Read)
-                fs.Close()
-                Return False
-            Catch ex As Exception
-                Return True
-            End Try
-        End Function
+        'Private Function FileIsOpen(ByVal File As String) As Boolean
+        '    Try
+        '        'on tente d'ouvrir un stream sur le fichier, s'il est déjà utilisé, cela déclenche une erreur.
+        '        Dim fs As IO.FileStream = My.Computer.FileSystem.GetFileInfo(File).Open(IO.FileMode.Open, _
+        '        IO.FileAccess.Read)
+        '        fs.Close()
+        '        Return False
+        '    Catch ex As Exception
+        '        Return True
+        '    End Try
+        'End Function
 
 
-        ''' <summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
-        ''' <param name="NewFichier"></param>
-        ''' <remarks></remarks>
-        Public Sub CreateNewFileLog(ByVal NewFichier As String)
-            Try
-                Dim rw As XmlTextWriter = New XmlTextWriter(NewFichier, Nothing)
-                rw.WriteStartDocument()
-                rw.WriteStartElement("logs")
-                rw.WriteStartElement("log")
-                rw.WriteAttributeString("time", Now)
-                rw.WriteAttributeString("type", 1)
-                rw.WriteAttributeString("source", 1)
-                rw.WriteAttributeString("fonction", "Log")
-                rw.WriteAttributeString("message", "Création du nouveau fichier log")
-                rw.WriteEndElement()
-                rw.WriteEndElement()
-                rw.WriteEndDocument()
-                rw.Close()
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CreateNewFileLog", "Erreur: " & ex.ToString)
-            End Try
-        End Sub
+        ' ''' <summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
+        ' ''' <param name="NewFichier"></param>
+        ' ''' <remarks></remarks>
+        'Public Sub CreateNewFileLog(ByVal NewFichier As String)
+        '    Try
+        '        Dim rw As XmlTextWriter = New XmlTextWriter(NewFichier, Nothing)
+        '        rw.WriteStartDocument()
+        '        rw.WriteStartElement("logs")
+        '        rw.WriteStartElement("log")
+        '        rw.WriteAttributeString("time", Now)
+        '        rw.WriteAttributeString("type", 1)
+        '        rw.WriteAttributeString("source", 1)
+        '        rw.WriteAttributeString("fonction", "Log")
+        '        rw.WriteAttributeString("message", "Création du nouveau fichier log")
+        '        rw.WriteEndElement()
+        '        rw.WriteEndElement()
+        '        rw.WriteEndDocument()
+        '        rw.Close()
+        '    Catch ex As Exception
+        '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CreateNewFileLog", "Erreur: " & ex.ToString)
+        '    End Try
+        'End Sub
 #End Region
 
 #Region "Declaration de la classe Server"
