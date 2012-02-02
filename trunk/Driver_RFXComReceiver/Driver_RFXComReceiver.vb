@@ -46,6 +46,8 @@ Imports System.Globalization
     Dim _IdSrv As String
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
 
+    'param avancé
+    Dim _PortBaudRate As Long = 38400
 #End Region
 
 #Region "Variables Internes"
@@ -329,6 +331,13 @@ Imports System.Globalization
         '_IsConnect = True
         Dim retour As String
         Try
+            'récupération des paramétres avancés
+            Try
+                _PortBaudRate = _Parametres.Item(0).Valeur
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+            End Try
+
             'ouverture du port suivant le Port Com ou IP
             If _Com <> "" Then
                 retour = ouvrir(_Com)
@@ -536,7 +545,7 @@ Imports System.Globalization
             _DeviceSupport.Add(ListeDevices.VOLET.ToString)
 
             'Parametres avancés
-            'add_paramavance("nom", "Description", valeupardefaut)
+            add_paramavance("Port BaudRate", "vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200", 38400)
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
@@ -591,7 +600,7 @@ Imports System.Globalization
                     'RFXCOM est un modele usb
                     tcp = False
                     port.PortName = port_name 'nom du port : COM1
-                    port.BaudRate = 38400 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
+                    port.BaudRate = _PortBaudRate 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
                     port.Parity = Parity.None 'pas de parité
                     port.StopBits = StopBits.One 'un bit d'arrêt par octet
                     port.DataBits = 8 'nombre de bit par octet
