@@ -15,8 +15,8 @@
                 <StackPanel Orientation="Horizontal">
                 <StackPanel >
                         <StackPanel Orientation="Horizontal" >
-                            <Label Content="Nom:" Width="70" Margin="1" Name="Label1" Foreground="White" />
-                            <TextBox Name="TxtName" Width="150" TabIndex="2" />
+                            <Label Content="Nom :" Width="70" Margin="1" Name="Label1" Foreground="White" FlowDirection="LeftToRight" HorizontalContentAlignment="Right" />
+                            <TextBox Name="TxtName" Width="150" TabIndex="2" Height="20" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
                             <Button Margin="2" Name="NewSite" Height="20" Width="20" Template="{DynamicResource GlassButton}" ToolTip="Ajouter/Modifier un serveur" TabIndex="3">
                                 <Image Source="/HoMIAdmiN;component/Images/save-icone-48.png" ToolTip="Appliquer"/>
                             </Button>
@@ -25,33 +25,33 @@
                             </Button>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
-                            <Label Content="ID:" Width="70" Name="Label15" Foreground="White" Margin=" 1" />
-                            <TextBox Height="20" Margin="1" Name="TxtID" Width="150" TabIndex="5" />
+                            <Label Content="ID Server :" Width="70" Name="Label15" Foreground="White" Margin=" 1" HorizontalContentAlignment="Right" />
+                            <TextBox Height="20" Margin="1" Name="TxtID" Width="150" TabIndex="5" Background="DarkGray" BorderBrush="Black" Foreground="White" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
-                            <Label Content="IP:" Width="70" Name="Label5" Foreground="White" Margin=" 1" />
-                            <TextBox Height="20" Margin="1" Name="TxtIP" Width="150" TabIndex="6" />
+                            <Label Content="Adresse IP :" Width="70" Name="Label5" Foreground="White" Margin=" 1" HorizontalContentAlignment="Right" />
+                            <TextBox Height="20" Margin="1" Name="TxtIP" Width="150" TabIndex="6" Background="DarkGray" BorderBrush="Black" Foreground="White" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
-                            <Label Content="Port:" Width="70" Foreground="White" Margin="1" Name="Label6" />
-                            <TextBox Margin="1" Name="TxtPort" Width="50" TabIndex="7" />
-                            <Rectangle Width="10" />
-                            <CheckBox  Margin="2" Name="ChkDefaut" Foreground="White" Content="Serveur par défaut" TabIndex="8" />
+                            <Label Content="Port :" Width="70" Foreground="White" Margin="1" Name="Label6" HorizontalContentAlignment="Right" />
+                            <TextBox Margin="1" Name="TxtPort" Width="50" Height="20" TabIndex="7" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                            <Rectangle Width="15" />
+                            <CheckBox  Margin="6" Name="ChkDefaut" Foreground="White" Content="Serveur par défaut" TabIndex="8" Background="DarkGray" BorderBrush="Black" />
                         </StackPanel>
                        <Rectangle Height="20" />
                     </StackPanel>
             </StackPanel>
                     <StackPanel Orientation="Horizontal" Visibility="Hidden" >
-                        <Label Content="Username:" Margin="1" Name="Label3" Foreground="White" Width=" 70"/>
-                        <TextBox Margin="1" Name="TxtUsername" Width="200" TabIndex="0" />
+                    <Label Content="Login :" Margin="1" Name="Label3" Foreground="White" Width="70" HorizontalContentAlignment="Right" />
+                    <TextBox Margin="1" Name="TxtUsername" Width="200" Height="20"  TabIndex="0"  Background="DarkGray" BorderBrush="Black" Foreground="White" />
                     <Rectangle Width="5" />
                 </StackPanel> 
             <StackPanel Orientation="Horizontal" Visibility="Hidden">
-            <Label Content="Password:" Margin="1" Name="Label4" Foreground="White" Width=" 70"/>
-            <PasswordBox Margin="1" Name="TxtPassword" Width="200" TabIndex="1" />
+                    <Label Content="Password :" Margin="1" Name="Label4" Foreground="White" Width="70" HorizontalContentAlignment="Right" />
+                    <PasswordBox Margin="1" Name="TxtPassword" Width="200" Height="20" TabIndex="1"  Background="DarkGray" BorderBrush="Black" Foreground="White" />
             </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Hidden" >
-                    <CheckBox Content="Se souvenir du mot de passe" Margin="2" Name="CheckBox1" Foreground="White" TabIndex="9" />
+                    <CheckBox Content="Se souvenir du mot de passe" Margin="2" Name="CheckBox1" Background="DarkGray" BorderBrush="Black" Foreground="White" TabIndex="9" />
                 </StackPanel>
             </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="3">

@@ -50,7 +50,7 @@ Class Window1
             myBrushRouge.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
 
 
-            CloseTreeView()
+            'CloseTreeView()
 
             spl.Close()
             spl = Nothing
