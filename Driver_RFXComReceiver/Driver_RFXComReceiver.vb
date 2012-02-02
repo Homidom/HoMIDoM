@@ -47,7 +47,7 @@ Imports System.Globalization
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
 
     'param avancé
-    Dim _PortBaudRate As Long = 38400
+    Dim _PortBaudRate As Long = 4800
 #End Region
 
 #Region "Variables Internes"
@@ -545,7 +545,7 @@ Imports System.Globalization
             _DeviceSupport.Add(ListeDevices.VOLET.ToString)
 
             'Parametres avancés
-            add_paramavance("Port BaudRate", "vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200", 38400)
+            add_paramavance("Port BaudRate", "vitesse du port 4800 ou 38400", 4800)
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
@@ -600,7 +600,7 @@ Imports System.Globalization
                     'RFXCOM est un modele usb
                     tcp = False
                     port.PortName = port_name 'nom du port : COM1
-                    port.BaudRate = _PortBaudRate 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
+                    port.BaudRate = _PortBaudRate 'vitesse du port 4800, 38400
                     port.Parity = Parity.None 'pas de parité
                     port.StopBits = StopBits.One 'un bit d'arrêt par octet
                     port.DataBits = 8 'nombre de bit par octet
