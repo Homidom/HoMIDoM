@@ -36,9 +36,6 @@
                     <Label Content="Macro(s):" FontSize="14" Foreground="Orange" />
                     <StackPanel >
                         <StackPanel Orientation="Horizontal" >
-                            <Button Name="DeleteMacro" Template="{DynamicResource GlassButton}" ToolTip="Supprimer" Margin="2">
-                                <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" Name="Image1" />
-                            </Button>
                             <Button Name="UpMacro" Template="{DynamicResource GlassButton}" ToolTip="Monter la macro" Margin="2">
                                 <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/fleche-vers-le-haut-icone-32.png"  />
                             </Button>
