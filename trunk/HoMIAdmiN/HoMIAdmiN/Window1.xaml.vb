@@ -51,6 +51,7 @@ Class Window1
 
 
             'CloseTreeView()
+            flagTreeV = True
 
             spl.Close()
             spl = Nothing
