@@ -660,7 +660,7 @@ Imports System.Globalization
                         'RFXMitter est un modele usb
                         tcp = False
                         port.PortName = port_name 'nom du port : COM1
-                        port.BaudRate = 4800 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
+                    port.BaudRate = 4800 'vitesse du port : toujours 4800
                         port.Parity = Parity.None 'pas de parité
                         port.StopBits = StopBits.Two '2 bits d'arrêt par octet
                         port.DataBits = 8 'nombre de bit par octet
