@@ -12,7 +12,7 @@
             <Rectangle Height="20" />
             <StackPanel >
             </StackPanel>
-            <DataGrid Name="DGW" Height="410" >
+            <DataGrid Name="DGW" Height="410" AutoGenerateColumns="False" ItemsSource="{Binding}">
                 
             </DataGrid>
         </StackPanel>
