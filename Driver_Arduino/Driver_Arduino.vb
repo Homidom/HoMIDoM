@@ -2,6 +2,7 @@
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports Driver_Arduino.Arduino
+Imports Firmata
 
 Public Class Driver_Arduino
     Implements HoMIDom.HoMIDom.IDriver
@@ -43,6 +44,7 @@ Public Class Driver_Arduino
 
 #Region "Declaration"
     Private WithEvents Arduino As Arduino
+    Dim WithEvents ArduinoVB As New Firmata.FirmataVB
 #End Region
 
 #Region "Fonctions génériques"
@@ -189,9 +191,19 @@ Public Class Driver_Arduino
     End Property
 
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
-        If _Enable = False Then Exit Sub
+        Try
+            If _Enable = False Then Exit Sub
+            If _IsConnect = False Then Exit Sub
 
-        Arduino.GetDigitalValue(Objet.Adresse1)
+            Dim _type As Integer
+            If Objet.Type = "CONTACT" Then _type = 0
+            If Objet.Type = "APPAREIL" Then _type = 1
+            If Objet.Type = "GENERIQUEVALUE" Then _type = 2
+
+            traitement(ArduinoVB.DigitalRead(Objet.Adresse1), Objet.Adresse1, _type)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur : " & ex.ToString)
+        End Try
     End Sub
 
     Public Property Refresh() As Integer Implements HoMIDom.HoMIDom.IDriver.Refresh
@@ -266,8 +278,14 @@ Public Class Driver_Arduino
         Try
             Dim retour As String = "0"
             Select Case UCase(Champ)
-
-
+                Case "ADRESSE1"
+                    If IsNumeric(Value) = False Then
+                        retour = "veuillez saisir une adresse numérique est positive entre 2 et 12"
+                    Else
+                        If Value < 2 And Value > 12 Then
+                            retour = "veuillez saisir une adresse entre 2 et 12"
+                        End If
+                    End If
             End Select
             Return retour
         Catch ex As Exception
@@ -278,34 +296,60 @@ Public Class Driver_Arduino
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         'cree l'objet
         Try
-            Arduino = New Arduino(_Com, "9600")
-            Arduino.DigitalCount = 14
-            Arduino.AnalogCount = 6
-            Arduino.PWMPorts = New Integer() {3, 5, 6, 9, 10, 11}
+            'Arduino = New Arduino(_Com, "9600")
+            'Arduino.DigitalCount = 14
+            'Arduino.AnalogCount = 6
+            'Arduino.PWMPorts = New Integer() {3, 5, 6, 9, 10, 11}
 
-            AddHandler Arduino.DigitalDataReceived, AddressOf ArduinoDigitalData
-            AddHandler Arduino.AnalogDataReceived, AddressOf ArduinoAnalogData
-            AddHandler Arduino.LogMessageReceived, AddressOf WriteLog
-            AddHandler Arduino.ConnectionLost, AddressOf ConnectionLost
+            'AddHandler Arduino.DigitalDataReceived, AddressOf ArduinoDigitalData
+            'AddHandler Arduino.AnalogDataReceived, AddressOf ArduinoAnalogData
+            'AddHandler Arduino.LogMessageReceived, AddressOf WriteLog
+            'AddHandler Arduino.ConnectionLost, AddressOf ConnectionLost
 
-            If Arduino.StartCommunication() = True Then
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Carte connectée")
-                _IsConnect = True
+            'If Arduino.StartCommunication() = True Then
+            '    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Carte connectée")
+            '    _IsConnect = True
 
-                For i As Integer = 0 To 6
-                    Arduino.SetDigitalDirection(i, Arduino.DigitalDirection.Input)
-                    Arduino.EnableDigitalPort(i, True)
-                    Arduino.EnableDigitalTrigger(i, True)
-                Next
-                For i As Integer = 7 To 13
-                    Arduino.SetDigitalDirection(i, Arduino.DigitalDirection.DigitalOutput)
-                    Arduino.EnableDigitalPort(i, True)
-                Next
+            '    For i As Integer = 0 To 6
+            '        Arduino.SetDigitalDirection(i, Arduino.DigitalDirection.Input)
+            '        Arduino.EnableDigitalPort(i, True)
+            '        Arduino.EnableDigitalTrigger(i, True)
+            '    Next
+            '    For i As Integer = 7 To 13
+            '        Arduino.SetDigitalDirection(i, Arduino.DigitalDirection.DigitalOutput)
+            '        Arduino.EnableDigitalPort(i, True)
+            '    Next
+            'Else
+            '    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le driver n'a pas réussit à se connecter à la carte ")
+            '    _IsConnect = False
+            'End If
+            If Enable = True And ArduinoVB.PortOpen = False Then
+                ArduinoVB.Connect(_Com, Firmata.FirmataVB.DEFAULT_BAUD_RATE)
+                ArduinoVB.QueryVersion()
+                Threading.Thread.Sleep(500)
+                If ArduinoVB.PortOpen = True Then
+                    _IsConnect = True
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Carte connectée sur le port:" & ArduinoVB.PortName & " Baud:" & ArduinoVB.Baud)
+                    ArduinoVB.DigitalPortReport(0, 1) 'Activer le port0
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Activation du port 0 effectué")
+                    ArduinoVB.DigitalPortReport(1, 1) 'Activer le port1
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Activation du port 1 effectué")
+                    'Pin0 à 6 définie en entrée
+                    For i As Integer = 2 To 6
+                        ArduinoVB.PinMode(i, Firmata.FirmataVB.INPUT)
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i & " définie en entrée")
+                    Next
+                    'Pin 7 à 12 définie en sortie
+                    For i As Integer = 7 To 12
+                        ArduinoVB.PinMode(i, Firmata.FirmataVB.OUTUPT)
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i & " définie en sortie")
+                    Next
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le driver n'a pas réussit à se connecter à la carte")
+                End If
             Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le driver n'a pas réussit à se connecter à la carte ")
-                _IsConnect = False
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le driver n'est pas activé ou la carte est déjà connectée ")
             End If
-            
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur lors du démarrage du driver: " & ex.ToString)
             _IsConnect = False
@@ -324,12 +368,12 @@ Public Class Driver_Arduino
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         'cree l'objet
         Try
-            RemoveHandler Arduino.DigitalDataReceived, AddressOf ArduinoDigitalData
-            RemoveHandler Arduino.AnalogDataReceived, AddressOf ArduinoAnalogData
-            RemoveHandler Arduino.LogMessageReceived, AddressOf WriteLog
-            RemoveHandler Arduino.ConnectionLost, AddressOf ConnectionLost
-
-            Arduino = Nothing
+            'RemoveHandler Arduino.DigitalDataReceived, AddressOf ArduinoDigitalData
+            'RemoveHandler Arduino.AnalogDataReceived, AddressOf ArduinoAnalogData
+            'RemoveHandler Arduino.LogMessageReceived, AddressOf WriteLog
+            'RemoveHandler Arduino.ConnectionLost, AddressOf ConnectionLost
+            ArduinoVB.Disconnect()
+            'Arduino = Nothing
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Stop", "Driver arrêté")
             _IsConnect = False
         Catch ex As Exception
@@ -348,15 +392,16 @@ Public Class Driver_Arduino
         If _Enable = False Then Exit Sub
         If _IsConnect = False Then Exit Sub
         Try
-            'Select Case Objet.Type
-            '    Case "APPAREIL" Or "GENERIQUEBOOLEEN" 'APPAREIL Or GENERIQUEBOOLEAN
-            If Commande = "ON" Then
-                Arduino.SetDigitalValue(Objet.adresse1, 1)
+            If Objet.type = "APPAREIL" Then
+                If Commande = "ON" Then
+                    ArduinoVB.DigitalWrite(Objet.Adresse1, 1)
+                End If
+                If Commande = "OFF" Then
+                    ArduinoVB.DigitalWrite(Objet.Adresse1, 0)
+                End If
+            Else
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Write", "Impossible d'écrire sur un device autre que de type APPAREIL")
             End If
-            If Commande = "OFF" Then
-                Arduino.SetDigitalValue(Objet.adresse1, 0)
-            End If
-            'End Select
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: " & ex.ToString)
         End Try
@@ -439,8 +484,7 @@ Public Class Driver_Arduino
     End Sub
 
     Public Sub New()
-        _DeviceSupport.Add(ListeDevices.SWITCH)
-        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
+        _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE)
         _DeviceSupport.Add(ListeDevices.CONTACT)
         _DeviceSupport.Add(ListeDevices.APPAREIL)
 
@@ -455,70 +499,71 @@ Public Class Driver_Arduino
 #End Region
 
 #Region "Fonctions propres au driver"
+    'Reception pin digital a changé
+    Private Sub FirmataVB1_DigitalMessageReceieved(ByVal portNumber As Integer, ByVal portData As Integer) Handles ArduinoVB.DigitalMessageReceieved
+        Try
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DigitalMessageRecu", "PortNumber:" & portNumber & " Value:" & portData)
+            Select Case portNumber
+                Case 0 'Normal sur le port 0 les pins 2 à 6 sont en entrées
+                    For i As Integer = 2 To 6
+                        traitement(ArduinoVB.DigitalRead(i), i, 0)
+                    Next
+                Case 1 'Pas Normal sur le port 1 les pins 7 à 12 sont en sorties
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DigitalMessageRecu", "Le port 1 est paramétré en sortie donc rien à traiter")
+            End Select
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " DigitalMessageReceieved", "Erreur : " & ex.ToString)
+        End Try
+    End Sub
+
+    'Reception de la version
+    Private Sub FirmataVB1_VersionInfoReceieved(ByVal majorVersion As Integer, ByVal minorVersion As Integer) Handles ArduinoVB.VersionInfoReceieved
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Version", "Version:" & majorVersion & "." & minorVersion)
+    End Sub
+
+    'Reception pin analogique a changé
+    Private Sub FirmataVB1_AnalogMessageReceieved(ByVal pin As Integer, ByVal value As Integer) Handles ArduinoVB.AnalogMessageReceieved
+        Try
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " AnalogMessageReceieved", "Pin:" & pin & " Value:" & value)
+            traitement(value, pin, 2)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " AnalogMessageReceieved", "Erreur : " & ex.ToString)
+        End Try
+    End Sub
+
     Delegate Sub ArduinoDigitalDataCallback(ByVal PortNr As Integer, ByVal Value As Integer)
-
-    Private Sub WriteLog(ByVal LogText As String)
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " WriteLog", "Log:" & LogText)
-    End Sub
-
-    Private Sub ArduinoDigitalData(ByVal PortNr As Integer, ByVal Value As Integer)
-        traitement(Value, PortNr)
-    End Sub
-
-    Delegate Sub ArduinoAnalogDataCallback(ByVal PortNr As Integer, ByVal Value As Integer)
-
-    Private Sub ArduinoAnalogData(ByVal PortNr As Integer, ByVal Value As Integer)
-        Select Case PortNr
-            Case 0
-                '                Label3.Text = Value.ToString
-        End Select
-
-        'process analog data produced by analogtimer1
-        If PortNr = 1 Then
-            'convert value to distance...needs testing
-
-            'http://www.acroname.com/robotics/info/articles/irlinear/irlinear.html
-
-            Dim Distance As Integer 'distance in cm
-            If Value > 50 Then
-                Distance = (6787 / (Value - 3)) - 4
-                If Distance > 80 Then Distance = 80
-            Else
-                Distance = 0
-            End If
-
-            '           AnalogValue1.Text = Distance.ToString + " cm"
-            '          AnalogSlider1.Value = Distance
-
-        End If
-    End Sub
-
-    Private Sub Watchdog()
-        'WriteLog("Watchdog")
-    End Sub
-
-    Private Sub ConnectionLost()
-        'WriteLog("Connection is lost")
-    End Sub
-
     ''' <summary>Traite les paquets reçus</summary>
     ''' <remarks></remarks>
-    Private Sub traitement(ByVal valeur As Integer, ByVal adresse As String)
+    Private Sub traitement(ByVal valeur As Integer, ByVal adresse As String, ByVal type As Integer)
         Try
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
+            Dim _Type As String = ""
 
-            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, adresse, "CONTACT", Me._ID, True)
+            Select Case type
+                Case 0 'CONTACT
+                    _Type = "CONTACT"
+                Case 1 'APPAREIL
+                    _Type = "APPAREIL"
+                Case 2 'GENERIQUE VALUE
+                    _Type = "GENERIQUEVALUE"
+                Case Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Process", "Le type de device n'appartient pas à ce driver: " & type)
+                    Exit Sub
+            End Select
+
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, adresse, _Type, Me._ID, True)
+
             'un device trouvé on maj la value
             If (listedevices.Count = 1) Then
                 'correction valeur pour correspondre au type de value
-                If TypeOf listedevices.Item(0).Value Is Integer Then
-                    If valeur = 1 Then
-                        valeur = 100
-                    ElseIf valeur = 0 Then
-                        valeur = 0
-                    End If
-                End If
+                'If TypeOf listedevices.Item(0).Value Is Integer Then
+                '    If valeur = 1 Then
+                '        valeur = 100
+                '    ElseIf valeur = 0 Then
+                '        valeur = 0
+                '    End If
+                'End If
 
                 listedevices.Item(0).Value = valeur
 
