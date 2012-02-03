@@ -183,6 +183,7 @@
                     Dim x As New CheckBox
                     Dim stk As New StackPanel
                     stk.MinHeight = 25
+
                     stk.Margin = New Thickness(2)
                     stk.Uid = myService.ReturnMacroById(IdSrv, _ListMacro.Item(i)).ID
                     x.Uid = stk.Uid

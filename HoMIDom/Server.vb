@@ -2220,7 +2220,7 @@ Namespace HoMIDom
                 _FichierLog = _MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt"
                 Dim FreeF As Integer
                 Dim texte As String
-                texte = Now & " " & TypLog.ToString & " " & Source.ToString & " " & Fonction & " " & Message
+                texte = Now & vbTab & TypLog.ToString & vbTab & Source.ToString & vbTab & Fonction & vbTab & Message
                 Try
                     FreeF = FreeFile()
                     texte = Replace(texte, vbLf, vbCrLf)
@@ -6370,7 +6370,7 @@ Namespace HoMIDom
             Try
                 Dim retour As String = ""
                 If Requete = "" Then
-                    Dim SR As New StreamReader(_MonRepertoire & "\logs\log.xml")
+                    Dim SR As New StreamReader(_MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt")
                     retour = SR.ReadToEnd()
                     retour = HtmlDecode(retour)
                     SR.Close()
