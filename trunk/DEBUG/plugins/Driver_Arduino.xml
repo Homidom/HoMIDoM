@@ -231,7 +231,7 @@ Driver_Arduino
 	<param name="description">Description du parametre</param>
 	<param name="valeur">Sa valeur</param>
 	<remarks></remarks>
-</member><member name="M:Driver_Arduino.Driver_Arduino.traitement(System.Int32,System.String)">
+</member><member name="M:Driver_Arduino.Driver_Arduino.traitement(System.Int32,System.String,System.Int32)">
 	<summary>Traite les paquets reçus</summary>
 	<remarks></remarks>
 </member><member name="P:Driver_Arduino.My.Resources.Resources.ResourceManager">
