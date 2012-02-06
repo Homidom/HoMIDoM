@@ -43,7 +43,7 @@ Public Class Driver_Arduino
 #End Region
 
 #Region "Declaration"
-    Private WithEvents Arduino As Arduino
+    'Private WithEvents Arduino As Arduino
     Dim WithEvents ArduinoVB As New Firmata.FirmataVB
 #End Region
 
@@ -325,9 +325,11 @@ Public Class Driver_Arduino
             'End If
             If Enable = True And ArduinoVB.PortOpen = False Then
                 ArduinoVB.Connect(_Com, Firmata.FirmataVB.DEFAULT_BAUD_RATE)
-                ArduinoVB.QueryVersion()
-                Threading.Thread.Sleep(500)
+
+                Threading.Thread.Sleep(1000)
+
                 If ArduinoVB.PortOpen = True Then
+                    ArduinoVB.QueryVersion()
                     _IsConnect = True
                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Carte connectée sur le port:" & ArduinoVB.PortName & " Baud:" & ArduinoVB.Baud)
                     ArduinoVB.DigitalPortReport(0, 1) 'Activer le port0
@@ -346,9 +348,12 @@ Public Class Driver_Arduino
                     Next
                 Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le driver n'a pas réussit à se connecter à la carte")
+                    _IsConnect = False
+                    Exit Sub
                 End If
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le driver n'est pas activé ou la carte est déjà connectée ")
+
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur lors du démarrage du driver: " & ex.ToString)
