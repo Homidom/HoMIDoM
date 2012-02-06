@@ -2215,12 +2215,11 @@ Namespace HoMIDom
                 Console.WriteLine(Now & " " & TypLog.ToString & " " & Source.ToString & " " & Fonction & " " & Message)
                 Write4Log(TypLog, Source, Fonction, Message)
 
-
                 'écriture dans un fichier texte
                 _FichierLog = _MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt"
                 Dim FreeF As Integer
-                Dim texte As String
-                texte = Now & vbTab & TypLog.ToString & vbTab & Source.ToString & vbTab & Fonction & vbTab & Message
+                Dim texte As String = Now & vbTab & TypLog.ToString & vbTab & Source.ToString & vbTab & Fonction & vbTab & Message
+
                 Try
                     FreeF = FreeFile()
                     texte = Replace(texte, vbLf, vbCrLf)
