@@ -13,11 +13,11 @@
         RaiseEvent Delete(sender.tag)
     End Sub
 
-    Private Sub Create_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Img100.MouseDown, Img200.MouseDown, Img300.MouseDown, Img400.MouseDown, Img600.MouseDown, Img700.MouseDown, Img800.MouseDown, Img500.MouseDown, Img510.MouseDown
+    Private Sub Create_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Img100.MouseDown, Img200.MouseDown, Img300.MouseDown, Img400.MouseDown, Img600.MouseDown, Img700.MouseDown, Img800.MouseDown, Img500.MouseDown, Img510.MouseDown, Img1000.MouseDown
         RaiseEvent Create(sender.tag)
     End Sub
 
-    Private Sub Edit_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Img101.MouseDown, Img201.MouseDown, Img301.MouseDown, Img401.MouseDown, Img501.MouseDown, Img601.MouseDown, Img701.MouseDown, Img801.MouseDown
+    Private Sub Edit_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Img101.MouseDown, Img201.MouseDown, Img301.MouseDown, Img401.MouseDown, Img501.MouseDown, Img601.MouseDown, Img701.MouseDown, Img801.MouseDown, Img1001.MouseDown
         RaiseEvent Edit(sender.tag)
     End Sub
 End Class

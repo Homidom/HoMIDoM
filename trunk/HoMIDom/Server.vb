@@ -2225,7 +2225,8 @@ Namespace HoMIDom
                     texte = Replace(texte, vbLf, vbCrLf)
                     SyncLock lock_logwrite
                         FileOpen(FreeF, FichierLog, OpenMode.Append)
-                        Print(FreeF, texte & vbCrLf)
+                        'Print(FreeF, texte & vbCrLf)
+                        WriteLine(FreeF, texte & vbCrLf)
                         FileClose(FreeF)
                     End SyncLock
                 Catch ex As IOException
@@ -2396,10 +2397,34 @@ Namespace HoMIDom
             Try
                 Dim retour As String
 
+                'Cree les sous répertoires s'ils nexistent pas
+                If System.IO.Directory.Exists(_MonRepertoire & "\logs") = False Then
+                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\logs")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier logs")
+                End If
+                If System.IO.Directory.Exists(_MonRepertoire & "\captures") = False Then
+                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\captures")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier captures")
+                End If
+                If System.IO.Directory.Exists(_MonRepertoire & "\config") = False Then
+                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\config")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier config")
+                End If
+                If System.IO.Directory.Exists(_MonRepertoire & "\images") = False Then
+                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\images")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier images")
+                End If
+                If System.IO.Directory.Exists(_MonRepertoire & "\plugins") = False Then
+                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\plugins")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier plugins")
+                End If
+
+                'Charge les types de log
                 For i As Integer = 0 To 9
                     _TypeLogEnable.Add(False)
                 Next
 
+                'Si sauvegarde automatique
                 If _CycleSave > 0 Then _NextTimeSave = Now.AddMinutes(_CycleSave)
 
                 '----- Démarre les connexions Sqlite ----- 
@@ -6410,6 +6435,61 @@ Namespace HoMIDom
 #End Region
 
 #Region "Configuration"
+        ''' <summary>
+        ''' Exporte le fichier de config vers une destination
+        ''' </summary>
+        ''' <param name="IdSrv">Id du serveur</param>
+        ''' <returns>le fichier sous format text si ok sinon message d'erreur commençant par ERREUR</returns>
+        ''' <remarks></remarks>
+        Public Function ExportConfig(ByVal IdSrv As String) As String Implements IHoMIDom.ExportConfig
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return "ERREUR: L'Id du serveur est incorrect"
+                    Exit Function
+                End If
+
+                Dim retour As String
+                Dim SR As New StreamReader(_MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt")
+                retour = SR.ReadToEnd()
+                SR.Close()
+                Return retour
+            Catch ex As Exception
+                Return "ERREUR lors de l'exportation du fichier de config: " & ex.ToString
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Importe un fichier de config depuis une source
+        ''' </summary>
+        ''' <param name="Source">chemin + fichier (homidom.xml)</param>
+        ''' <returns>"0" si ok sinon message d'erreur</returns>
+        ''' <remarks></remarks>
+        Public Function ImportConfig(ByVal IdSrv As String, ByVal Source As String) As String Implements IHoMIDom.ImportConfig
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return "L'Id du serveur est incorrect!"
+                    Exit Function
+                End If
+
+                If Source = "" Or Source = " " Then
+                    Return "Erreur la source est vide ou erronée !"
+                    Exit Function
+                End If
+
+                'sauvegarde de l'ancien fichier sous .old
+                IO.File.Copy(_MonRepertoire & "\config\homidom.xml", _MonRepertoire & "\config\homidom.old", True)
+
+                Dim TargetFile As StreamWriter
+                TargetFile = New StreamWriter(_MonRepertoire & "\config\homidom.xml", False)
+                TargetFile.Write(Source)
+                TargetFile.Close()
+
+                Return "0"
+            Catch ex As Exception
+                Return "Erreur lors de l'importation du fichier de config: " & ex.ToString
+            End Try
+        End Function
+
         ''' <summary>Sauvegarder la configuration</summary>
         ''' <remarks></remarks>
         Public Function SaveConfiguration(ByVal IdSrv As String) As String Implements IHoMIDom.SaveConfig

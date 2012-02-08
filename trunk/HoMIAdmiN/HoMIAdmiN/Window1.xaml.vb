@@ -613,11 +613,11 @@ Class Window1
             MyPort = Port
 
             Dim binding As New ServiceModel.BasicHttpBinding
-            binding.MaxBufferPoolSize = 5000000
-            binding.MaxReceivedMessageSize = 5000000
-            binding.MaxBufferSize = 5000000
-            binding.ReaderQuotas.MaxArrayLength = 5000000
-            binding.ReaderQuotas.MaxStringContentLength = 5000000
+            binding.MaxBufferPoolSize = 250000000
+            binding.MaxReceivedMessageSize = 250000000
+            binding.MaxBufferSize = 250000000
+            binding.ReaderQuotas.MaxArrayLength = 250000000
+            binding.ReaderQuotas.MaxStringContentLength = 250000000
             binding.SendTimeout = TimeSpan.FromMinutes(60)
             binding.CloseTimeout = TimeSpan.FromMinutes(60)
             binding.OpenTimeout = TimeSpan.FromMinutes(60)
@@ -751,71 +751,106 @@ Class Window1
     End Sub
 
     Private Sub MainMenuNew(ByVal index As Integer)
-        _MainMenuAction = 0
+        Try
+            _MainMenuAction = 0
 
-        If IsConnect = False Then
-            MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-            ShowMainMenu()
-            Exit Sub
-        End If
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                ShowMainMenu()
+                Exit Sub
+            End If
 
-        Tabcontrol1.SelectedIndex = index
-        Select Case index
-            Case 0
+            If index <= 6 Then Tabcontrol1.SelectedIndex = index
+            Select Case index
+                Case 0
 
-            Case 1
-                Try
-                    Dim x As New uDevice(Classe.EAction.Nouveau, "")
-                    AddHandler x.CloseMe, AddressOf UnloadControl
-                    AffControlPage(x)
-                Catch ex As Exception
-                    MessageBox.Show("ERREUR Sub NewDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
-            Case 2
-                Try
-                    Dim x As New uZone(Classe.EAction.Nouveau, "")
-                    AddHandler x.CloseMe, AddressOf UnloadControl
-                    AffControlPage(x)
-                Catch ex As Exception
-                    MessageBox.Show("ERREUR Sub NewZone: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
-            Case 3
-                Try
-                    Dim x As New uUser(Classe.EAction.Nouveau, "")
-                    AddHandler x.CloseMe, AddressOf UnloadControl
-                    AffControlPage(x)
-                Catch ex As Exception
-                    MessageBox.Show("ERREUR Sub NewUser: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
-            Case 40
-                Try
-                    Dim x As New uTriggerTimer(0, "")
-                    AddHandler x.CloseMe, AddressOf UnloadControl
-                    AffControlPage(x)
-                Catch ex As Exception
-                    MessageBox.Show("ERREUR Sub NewTriggerTime: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
-            Case 41
-                Try
-                    Dim x As New uTriggerDevice(0, "")
-                    AddHandler x.CloseMe, AddressOf UnloadControl
-                    AffControlPage(x)
-                Catch ex As Exception
-                    MessageBox.Show("ERREUR Sub NewTriggerDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
-            Case 5
-                Try
-                    Dim x As New uMacro(Classe.EAction.Nouveau, "")
-                    AddHandler x.CloseMe, AddressOf UnloadControl
-                    AffControlPage(x)
-                Catch ex As Exception
-                    MessageBox.Show("ERREUR Sub NewMacro: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
-            Case 6
+                Case 1
+                    Try
+                        Dim x As New uDevice(Classe.EAction.Nouveau, "")
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AffControlPage(x)
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub NewDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+                Case 2
+                    Try
+                        Dim x As New uZone(Classe.EAction.Nouveau, "")
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AffControlPage(x)
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub NewZone: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+                Case 3
+                    Try
+                        Dim x As New uUser(Classe.EAction.Nouveau, "")
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AffControlPage(x)
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub NewUser: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+                Case 40
+                    Try
+                        Dim x As New uTriggerTimer(0, "")
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AffControlPage(x)
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub NewTriggerTime: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+                Case 41
+                    Try
+                        Dim x As New uTriggerDevice(0, "")
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AffControlPage(x)
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub NewTriggerDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+                Case 5
+                    Try
+                        Dim x As New uMacro(Classe.EAction.Nouveau, "")
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AffControlPage(x)
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub NewMacro: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+                Case 6
+                Case 10
+                    MessageBox.Show("Fonctionnalité non disponible pour le moment...")
 
-        End Select
-        ShowTreeView()
-        _MainMenuAction = -1
+                    ' Configure open file dialog box
+                    Dim dlg As New Microsoft.Win32.OpenFileDialog()
+                    dlg.FileName = "Homidom" ' Default file name
+                    dlg.DefaultExt = ".xml" ' Default file extension
+                    dlg.Filter = "Fichier de configuration (.xml)|*.xml" ' Filter files by extension
+
+                    ' Show open file dialog box
+                    Dim result As Boolean = dlg.ShowDialog()
+
+                    ' Process open file dialog box results
+                    If result = True Then
+                        ' Open document
+                        Dim filename As String = dlg.FileName
+                        Dim envoi As String = ""
+
+                        Try
+                            envoi = File.ReadAllText(filename)
+                        Catch ex As Exception
+                            'Code exécuté en cas d'exception
+                            MessageBox.Show("Une erreur est survenue au cours de la lecture du fichier source!: " & ex.ToString)
+                        End Try
+
+                        Dim retour As String = myService.ImportConfig(IdSrv, envoi)
+                        If retour <> "0" Then
+                            MessageBox.Show(retour, "Erreur import config", MessageBoxButton.OK, MessageBoxImage.Error)
+                        Else
+                            MessageBox.Show("L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", MessageBoxButton.OK, MessageBoxImage.Information)
+                        End If
+                    End If
+            End Select
+            ShowTreeView()
+            _MainMenuAction = -1
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de l'exécution de MainMenuNew: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub MainMenuDelete(ByVal index As Integer)
@@ -849,6 +884,36 @@ Class Window1
     End Sub
 
     Private Sub MainMenuEdit(ByVal index As Integer)
+        If index = 10 Then 'Exporter le fichier de config
+            ' Configure open file dialog box
+            Dim dlg As New Microsoft.Win32.SaveFileDialog()
+            dlg.FileName = "" ' Default file name
+            dlg.DefaultExt = ".xml" ' Default file extension
+            dlg.Filter = "Fichier de configuration (.xml)|*.xml" ' Filter files by extension
+
+            ' Show open file dialog box
+            Dim result As Boolean = dlg.ShowDialog()
+
+            ' Process open file dialog box results
+            If result = True Then
+                ' Open document
+                Dim filename As String = dlg.FileName
+                Dim retour As String = myService.ExportConfig(IdSrv)
+                If retour.StartsWith("ERREUR") Then
+                    MessageBox.Show(retour, "Erreur export config", MessageBoxButton.OK, MessageBoxImage.Error)
+                Else
+                    Dim TargetFile As StreamWriter
+                    TargetFile = New StreamWriter(filename, True)
+                    TargetFile.Write(retour)
+                    TargetFile.Close()
+                    MessageBox.Show("L'export du fichier de configuration a été effectué", "Import config", MessageBoxButton.OK, MessageBoxImage.Information)
+                End If
+
+            End If
+
+            Exit Sub
+        End If
+
         _MainMenuAction = 1
         CanvasRight.Children.Clear()
 

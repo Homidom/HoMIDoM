@@ -78,6 +78,21 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function SaveConfig(ByVal IdSrv As String) As String
 
+        ''' <summary>
+        ''' Exporte le fichier de config vers une destination
+        ''' </summary>
+        ''' <param name="IdSrv">Id du serveur</param>
+        ''' <returns>0 si ok sinon message d'erreur</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function ExportConfig(ByVal IdSrv As String) As String
+
+        ''' <summary>
+        ''' Importe un fichier de config depuis une source
+        ''' </summary>
+        ''' <param name="Source">chemin + fichier (homidom.xml)</param>
+        ''' <returns>"0" si ok sinon message d'erreur</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function ImportConfig(ByVal IdSrv As String, ByVal Source As String) As String
 
         ''' <summary>
         ''' Démarre le service et charge la config

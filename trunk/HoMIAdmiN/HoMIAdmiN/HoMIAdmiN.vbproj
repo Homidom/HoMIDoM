@@ -581,5 +581,9 @@
     <Resource Include="Images\multimedia-128.png" />
     <Resource Include="Images\sortie-128.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\export-128.png" />
+    <Resource Include="Images\import-128.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

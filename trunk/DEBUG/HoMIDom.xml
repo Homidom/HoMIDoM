@@ -1522,6 +1522,20 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ExportConfig(System.String)">
+	<summary>
+ Exporte le fichier de config vers une destination
+ </summary>
+	<param name="IdSrv">Id du serveur</param>
+	<returns>le fichier sous format text si ok sinon message d'erreur commençant par ERREUR</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ImportConfig(System.String,System.String)">
+	<summary>
+ Importe un fichier de config depuis une source
+ </summary>
+	<param name="Source">chemin + fichier (homidom.xml)</param>
+	<returns>"0" si ok sinon message d'erreur</returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SaveConfiguration(System.String)">
 	<summary>Sauvegarder la configuration</summary>
 	<remarks></remarks>
@@ -1611,6 +1625,20 @@ HoMIDom
  Sauvegarde la configuration
  </summary>
 	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExportConfig(System.String)">
+	<summary>
+ Exporte le fichier de config vers une destination
+ </summary>
+	<param name="IdSrv">Id du serveur</param>
+	<returns>0 si ok sinon message d'erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ImportConfig(System.String,System.String)">
+	<summary>
+ Importe un fichier de config depuis une source
+ </summary>
+	<param name="Source">chemin + fichier (homidom.xml)</param>
+	<returns>"0" si ok sinon message d'erreur</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Start">
 	<summary>
