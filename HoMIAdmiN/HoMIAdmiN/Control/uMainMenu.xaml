@@ -78,8 +78,8 @@
                         <Label Name="LblMnu10" Content="Configurer" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
                             <Image Tag="10" Name="Img1090" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Gérer les composants" Visibility="Hidden" />
-                            <Image Tag="10" Name="Img1000" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" ToolTip="Ajouter un composant" Visibility="Hidden"/>
-                            <Image Tag="10"  Name="Img1001" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer un composant" Visibility="Hidden"/>
+                            <Image Tag="10" Name="Img1000" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/import-128.png" ToolTip="Importer le fichier de configuration" />
+                            <Image Tag="10"  Name="Img1001" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/export-128.png" ToolTip="Exporter le fichier de configuration" />
                             <Image Name="Img1002" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/save-icone-48.png" Tag="10" ToolTip="Sauvegarder la configuration" />
                         </StackPanel>
                     </StackPanel>

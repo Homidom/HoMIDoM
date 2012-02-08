@@ -324,6 +324,10 @@ Public Class Driver_Arduino
             '    _IsConnect = False
             'End If
             If Enable = True And ArduinoVB.PortOpen = False Then
+                AddHandler ArduinoVB.DigitalMessageReceieved, AddressOf FirmataVB1_DigitalMessageReceieved
+                AddHandler ArduinoVB.AnalogMessageReceieved, AddressOf FirmataVB1_AnalogMessageReceieved
+                AddHandler ArduinoVB.VersionInfoReceieved, AddressOf FirmataVB1_VersionInfoReceieved
+
                 ArduinoVB.Connect(_Com, Firmata.FirmataVB.DEFAULT_BAUD_RATE)
 
                 Threading.Thread.Sleep(1000)
@@ -331,11 +335,11 @@ Public Class Driver_Arduino
                 If ArduinoVB.PortOpen = True Then
                     ArduinoVB.QueryVersion()
                     _IsConnect = True
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Carte connectée sur le port:" & ArduinoVB.PortName & " Baud:" & ArduinoVB.Baud)
-                    ArduinoVB.DigitalPortReport(0, 1) 'Activer le port0
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Activation du port 0 effectué")
-                    ArduinoVB.DigitalPortReport(1, 1) 'Activer le port1
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Activation du port 1 effectué")
+                    '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Carte connectée sur le port:" & ArduinoVB.PortName & " Baud:" & ArduinoVB.Baud)
+                    'ArduinoVB.DigitalPortReport(0, 1) 'Activer le port0
+                    '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Activation du port 0 effectué")
+                    'ArduinoVB.DigitalPortReport(1, 1) 'Activer le port1
+                    '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Activation du port 1 effectué")
                     'Pin0 à 6 définie en entrée
                     For i As Integer = 2 To 6
                         ArduinoVB.PinMode(i, Firmata.FirmataVB.INPUT)
@@ -353,7 +357,6 @@ Public Class Driver_Arduino
                 End If
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le driver n'est pas activé ou la carte est déjà connectée ")
-
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur lors du démarrage du driver: " & ex.ToString)
@@ -373,6 +376,9 @@ Public Class Driver_Arduino
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         'cree l'objet
         Try
+            RemoveHandler ArduinoVB.DigitalMessageReceieved, AddressOf FirmataVB1_DigitalMessageReceieved
+            RemoveHandler ArduinoVB.AnalogMessageReceieved, AddressOf FirmataVB1_AnalogMessageReceieved
+            RemoveHandler ArduinoVB.VersionInfoReceieved, AddressOf FirmataVB1_VersionInfoReceieved
             'RemoveHandler Arduino.DigitalDataReceived, AddressOf ArduinoDigitalData
             'RemoveHandler Arduino.AnalogDataReceived, AddressOf ArduinoAnalogData
             'RemoveHandler Arduino.LogMessageReceived, AddressOf WriteLog
@@ -493,19 +499,15 @@ Public Class Driver_Arduino
         _DeviceSupport.Add(ListeDevices.CONTACT)
         _DeviceSupport.Add(ListeDevices.APPAREIL)
 
-        'ajout des commandes avancées pour les devices
-        'Ci-dessous un exemple
-        'Dim x As New DeviceCommande
-        'x.NameCommand = "Test"
-        'x.DescriptionCommand = "Ceci est une commande avancée de test"
-        'x.CountParam = 1
-        '_DeviceCommandPlus.Add(x)
+        'Paramétres avancés
+        Add_ParamAvance("Baud", "Gestion du ack", Firmata.FirmataVB.DEFAULT_BAUD_RATE)
+
     End Sub
 #End Region
 
 #Region "Fonctions propres au driver"
     'Reception pin digital a changé
-    Private Sub FirmataVB1_DigitalMessageReceieved(ByVal portNumber As Integer, ByVal portData As Integer) Handles ArduinoVB.DigitalMessageReceieved
+    Private Sub FirmataVB1_DigitalMessageReceieved(ByVal portNumber As Integer, ByVal portData As Integer)
         Try
             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DigitalMessageRecu", "PortNumber:" & portNumber & " Value:" & portData)
             Select Case portNumber
@@ -522,12 +524,12 @@ Public Class Driver_Arduino
     End Sub
 
     'Reception de la version
-    Private Sub FirmataVB1_VersionInfoReceieved(ByVal majorVersion As Integer, ByVal minorVersion As Integer) Handles ArduinoVB.VersionInfoReceieved
+    Private Sub FirmataVB1_VersionInfoReceieved(ByVal majorVersion As Integer, ByVal minorVersion As Integer)
         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Version", "Version:" & majorVersion & "." & minorVersion)
     End Sub
 
     'Reception pin analogique a changé
-    Private Sub FirmataVB1_AnalogMessageReceieved(ByVal pin As Integer, ByVal value As Integer) Handles ArduinoVB.AnalogMessageReceieved
+    Private Sub FirmataVB1_AnalogMessageReceieved(ByVal pin As Integer, ByVal value As Integer)
         Try
             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " AnalogMessageReceieved", "Pin:" & pin & " Value:" & value)
             traitement(value, pin, 2)
