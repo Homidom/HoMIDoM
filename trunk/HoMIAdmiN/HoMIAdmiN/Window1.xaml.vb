@@ -613,10 +613,12 @@ Class Window1
             MyPort = Port
 
             Dim binding As New ServiceModel.BasicHttpBinding
-            binding.MaxBufferPoolSize = 250000000
-            binding.MaxReceivedMessageSize = 250000000
-            binding.MaxBufferSize = 250000000
+            binding.MaxBufferPoolSize = Integer.MaxValue
+            binding.MaxReceivedMessageSize = Integer.MaxValue
+            binding.MaxBufferSize = Integer.MaxValue
             binding.ReaderQuotas.MaxArrayLength = 250000000
+            binding.ReaderQuotas.MaxNameTableCharCount = 250000000
+            binding.ReaderQuotas.MaxBytesPerRead = 250000000
             binding.ReaderQuotas.MaxStringContentLength = 250000000
             binding.SendTimeout = TimeSpan.FromMinutes(60)
             binding.CloseTimeout = TimeSpan.FromMinutes(60)
@@ -814,7 +816,7 @@ Class Window1
                     End Try
                 Case 6
                 Case 10
-                    MessageBox.Show("Fonctionnalité non disponible pour le moment...")
+                    'MessageBox.Show("Fonctionnalité non disponible pour le moment...")
 
                     ' Configure open file dialog box
                     Dim dlg As New Microsoft.Win32.OpenFileDialog()
@@ -829,22 +831,19 @@ Class Window1
                     If result = True Then
                         ' Open document
                         Dim filename As String = dlg.FileName
-                        Dim envoi As String = ""
 
-                        Try
-                            envoi = File.ReadAllText(filename)
-                        Catch ex As Exception
-                            'Code exécuté en cas d'exception
-                            MessageBox.Show("Une erreur est survenue au cours de la lecture du fichier source!: " & ex.ToString)
-                        End Try
+                        If MessageBox.Show("Etes vous sur que le serveur puisse accéder au fichier " & filename & " que ce soit en local ou via le réseau, sinon il ne pourra pas l'importer!", "Import Config", MessageBoxButton.OKCancel, MessageBoxImage.Question) = MessageBoxResult.Cancel Then
+                            Exit Sub
+                        End If
 
-                        Dim retour As String = myService.ImportConfig(IdSrv, envoi)
+                        Dim retour As String = myService.ImportConfig(IdSrv, filename)
                         If retour <> "0" Then
                             MessageBox.Show(retour, "Erreur import config", MessageBoxButton.OK, MessageBoxImage.Error)
                         Else
                             MessageBox.Show("L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", MessageBoxButton.OK, MessageBoxImage.Information)
                         End If
                     End If
+
             End Select
             ShowTreeView()
             _MainMenuAction = -1
@@ -852,6 +851,36 @@ Class Window1
             MessageBox.Show("Erreur lors de l'exécution de MainMenuNew: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
+    'Public Shared Function Zip(ByVal value As String) As String
+    '    'Transform string into byte[]  
+    '    Dim byteArray As Byte() = New Byte(value.Length - 1) {}
+    '    Dim indexBA As Integer = 0
+    '    For Each item As Char In value.ToCharArray()
+    '        byteArray(System.Math.Max(System.Threading.Interlocked.Increment(indexBA), indexBA - 1)) = CByte(AscW(item))
+    '    Next
+
+    '    'Prepare for compress
+    '    Dim ms As New System.IO.MemoryStream()
+    '    Dim sw As New System.IO.Compression.GZipStream(ms, System.IO.Compression.CompressionMode.Compress)
+
+    '    'Compress
+    '    sw.Write(byteArray, 0, byteArray.Length)
+    '    'Close, DO NOT FLUSH cause bytes will go missing...
+    '    sw.Close()
+
+    '    'Transform byte[] zip data to string
+    '    byteArray = ms.ToArray()
+    '    Dim sB As New System.Text.StringBuilder(byteArray.Length)
+    '    For Each item As Byte In byteArray
+    '        sB.Append(ChrW(item))
+    '    Next
+    '    ms.Close()
+    '    sw.Dispose()
+    '    ms.Dispose()
+    '    Return sB.ToString()
+    'End Function
+
 
     Private Sub MainMenuDelete(ByVal index As Integer)
         'Enregistrer la config
