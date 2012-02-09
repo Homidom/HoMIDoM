@@ -327,19 +327,18 @@ Public Class Driver_Arduino
                 AddHandler ArduinoVB.DigitalMessageReceieved, AddressOf FirmataVB1_DigitalMessageReceieved
                 AddHandler ArduinoVB.AnalogMessageReceieved, AddressOf FirmataVB1_AnalogMessageReceieved
                 AddHandler ArduinoVB.VersionInfoReceieved, AddressOf FirmataVB1_VersionInfoReceieved
-
-                ArduinoVB.Connect(_Com, Firmata.FirmataVB.DEFAULT_BAUD_RATE)
+                ArduinoVB.Connect(_Com, 57600)
 
                 Threading.Thread.Sleep(1000)
 
                 If ArduinoVB.PortOpen = True Then
                     ArduinoVB.QueryVersion()
                     _IsConnect = True
-                    '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Carte connectée sur le port:" & ArduinoVB.PortName & " Baud:" & ArduinoVB.Baud)
-                    'ArduinoVB.DigitalPortReport(0, 1) 'Activer le port0
-                    '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Activation du port 0 effectué")
-                    'ArduinoVB.DigitalPortReport(1, 1) 'Activer le port1
-                    '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Activation du port 1 effectué")
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Carte connectée sur le port:" & ArduinoVB.PortName & " Baud:" & ArduinoVB.Baud)
+                    ArduinoVB.DigitalPortReport(0, 1) 'Activer le port0
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Activation du port 0 effectué")
+                    ArduinoVB.DigitalPortReport(1, 1) 'Activer le port1
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Activation du port 1 effectué")
                     'Pin0 à 6 définie en entrée
                     For i As Integer = 2 To 6
                         ArduinoVB.PinMode(i, Firmata.FirmataVB.INPUT)
@@ -400,15 +399,23 @@ Public Class Driver_Arduino
     End Property
 
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-        If _Enable = False Then Exit Sub
-        If _IsConnect = False Then Exit Sub
+        If _Enable = False Then
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Impossible de traiter cette commande car le driver n'est pas activé")
+            Exit Sub
+        End If
+        If _IsConnect = False Then
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Impossible de traiter cette commande car le driver n'est connecté")
+            Exit Sub
+        End If
         Try
             If Objet.type = "APPAREIL" Then
                 If Commande = "ON" Then
                     ArduinoVB.DigitalWrite(Objet.Adresse1, 1)
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Activation de la pin:" & Objet.Adresse1)
                 End If
                 If Commande = "OFF" Then
                     ArduinoVB.DigitalWrite(Objet.Adresse1, 0)
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Désactivation de la pin:" & Objet.Adresse1)
                 End If
             Else
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Write", "Impossible d'écrire sur un device autre que de type APPAREIL")
