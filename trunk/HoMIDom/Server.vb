@@ -6471,18 +6471,14 @@ Namespace HoMIDom
                     Exit Function
                 End If
 
-                If Source = "" Or Source = " " Then
-                    Return "Erreur la source est vide ou erronée !"
+                If IO.File.Exists(Source) = False Then
+                    Return "Le serveur n'a pas trouvé le fichier de configuration !"
                     Exit Function
                 End If
 
                 'sauvegarde de l'ancien fichier sous .old
                 IO.File.Copy(_MonRepertoire & "\config\homidom.xml", _MonRepertoire & "\config\homidom.old", True)
-
-                Dim TargetFile As StreamWriter
-                TargetFile = New StreamWriter(_MonRepertoire & "\config\homidom.xml", False)
-                TargetFile.Write(Source)
-                TargetFile.Close()
+                IO.File.Copy(Source, _MonRepertoire & "\config\homidom.xml", True)
 
                 Return "0"
             Catch ex As Exception

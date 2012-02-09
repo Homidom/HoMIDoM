@@ -3,6 +3,7 @@ Imports System.ServiceModel
 Imports System.Runtime.Serialization
 Imports System.Linq
 Imports System.Data
+Imports System.IO
 
 Namespace HoMIDom
 
