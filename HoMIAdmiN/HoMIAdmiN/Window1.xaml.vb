@@ -613,9 +613,9 @@ Class Window1
             MyPort = Port
 
             Dim binding As New ServiceModel.BasicHttpBinding
-            binding.MaxBufferPoolSize = Integer.MaxValue
-            binding.MaxReceivedMessageSize = Integer.MaxValue
-            binding.MaxBufferSize = Integer.MaxValue
+            binding.MaxBufferPoolSize = 250000000
+            binding.MaxReceivedMessageSize = 250000000
+            binding.MaxBufferSize = 250000000
             binding.ReaderQuotas.MaxArrayLength = 250000000
             binding.ReaderQuotas.MaxNameTableCharCount = 250000000
             binding.ReaderQuotas.MaxBytesPerRead = 250000000
