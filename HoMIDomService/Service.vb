@@ -63,10 +63,12 @@ Module Service
                     Dim myadress As String = "http://localhost:" & PortSOAP & "/ServiceModelSamples/service"
                     Dim binding As New ServiceModel.BasicHttpBinding
                     Dim Context As OperationContext = OperationContext.Current
-
                     binding.MaxBufferPoolSize = 250000000
-                    binding.MaxReceivedMessageSize = 250000000
+                    binding.MaxReceivedMessageSize = Integer.MaxValue
+                    binding.MaxBufferSize = Integer.MaxValue
                     binding.ReaderQuotas.MaxArrayLength = 250000000
+                    binding.ReaderQuotas.MaxNameTableCharCount = 250000000
+                    binding.ReaderQuotas.MaxBytesPerRead = 250000000
                     binding.ReaderQuotas.MaxStringContentLength = 250000000
                     binding.SendTimeout = TimeSpan.FromMinutes(60)
                     binding.CloseTimeout = TimeSpan.FromMinutes(60)
