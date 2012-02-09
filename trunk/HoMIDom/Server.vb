@@ -2225,8 +2225,8 @@ Namespace HoMIDom
                     texte = Replace(texte, vbLf, vbCrLf)
                     SyncLock lock_logwrite
                         FileOpen(FreeF, FichierLog, OpenMode.Append)
-                        'Print(FreeF, texte & vbCrLf)
-                        WriteLine(FreeF, texte & vbCrLf)
+                        Print(FreeF, texte & vbCrLf)
+                        'WriteLine(FreeF, texte & vbCrLf)
                         FileClose(FreeF)
                     End SyncLock
                 Catch ex As IOException
