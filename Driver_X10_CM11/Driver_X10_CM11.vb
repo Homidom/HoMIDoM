@@ -302,6 +302,10 @@ Public Class Driver_X10_CM11
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
             If Not _IsConnect Then
+                If _Com = "" Or _Com = " " Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 Start", "Le port COM est vide veuillez le renseigner")
+                    Exit Sub
+                End If
                 port.PortName = _Com  'nom du port : COM1
                 port.BaudRate = 4800 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
                 port.Parity = IO.Ports.Parity.None 'pas de parité
