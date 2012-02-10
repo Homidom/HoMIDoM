@@ -1,7 +1,6 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
-Imports Driver_Arduino.Arduino
 Imports Firmata
 
 Public Class Driver_Arduino
@@ -43,8 +42,11 @@ Public Class Driver_Arduino
 #End Region
 
 #Region "Declaration"
-    'Private WithEvents Arduino As Arduino
     Dim WithEvents ArduinoVB As New Firmata.FirmataVB
+    Dim _Baud As Integer = 57600
+    Dim _RemotingPort0 As Integer = 0
+    Dim _RemotingPort1 As Integer = 1
+    Dim _Pin(10) As Integer 'Pin(0)=Pin 2, 0 si entrée 1 si sortie
 #End Region
 
 #Region "Fonctions génériques"
@@ -296,38 +298,37 @@ Public Class Driver_Arduino
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         'cree l'objet
         Try
-            'Arduino = New Arduino(_Com, "9600")
-            'Arduino.DigitalCount = 14
-            'Arduino.AnalogCount = 6
-            'Arduino.PWMPorts = New Integer() {3, 5, 6, 9, 10, 11}
-
-            'AddHandler Arduino.DigitalDataReceived, AddressOf ArduinoDigitalData
-            'AddHandler Arduino.AnalogDataReceived, AddressOf ArduinoAnalogData
-            'AddHandler Arduino.LogMessageReceived, AddressOf WriteLog
-            'AddHandler Arduino.ConnectionLost, AddressOf ConnectionLost
-
-            'If Arduino.StartCommunication() = True Then
-            '    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Carte connectée")
-            '    _IsConnect = True
-
-            '    For i As Integer = 0 To 6
-            '        Arduino.SetDigitalDirection(i, Arduino.DigitalDirection.Input)
-            '        Arduino.EnableDigitalPort(i, True)
-            '        Arduino.EnableDigitalTrigger(i, True)
-            '    Next
-            '    For i As Integer = 7 To 13
-            '        Arduino.SetDigitalDirection(i, Arduino.DigitalDirection.DigitalOutput)
-            '        Arduino.EnableDigitalPort(i, True)
-            '    Next
-            'Else
-            '    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le driver n'a pas réussit à se connecter à la carte ")
-            '    _IsConnect = False
-            'End If
             If Enable = True And ArduinoVB.PortOpen = False Then
+                'récupération des paramétres avancés
+                Try
+                    _Baud = _Parametres.Item(0).Valeur
+                    _RemotingPort0 = _Parametres.Item(1).Valeur
+                    _RemotingPort1 = _Parametres.Item(2).Valeur
+
+                    For i As Integer = 0 To 10
+                        If _Parametres.Item(i + 3).valeur <= 0 Then
+                            _Pin(i) = 0
+                        Else
+                            _Pin(i) = 1
+                        End If
+                    Next
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+                    _Baud = 57600
+                    _RemotingPort0 = 0
+                    _RemotingPort1 = 0
+                    For i = 0 To 4
+                        _Pin(i) = 0
+                    Next
+                    For i = 5 To 10
+                        _Pin(i) = 1
+                    Next
+                End Try
+
                 AddHandler ArduinoVB.DigitalMessageReceieved, AddressOf FirmataVB1_DigitalMessageReceieved
                 AddHandler ArduinoVB.AnalogMessageReceieved, AddressOf FirmataVB1_AnalogMessageReceieved
                 AddHandler ArduinoVB.VersionInfoReceieved, AddressOf FirmataVB1_VersionInfoReceieved
-                ArduinoVB.Connect(_Com, 57600)
+                ArduinoVB.Connect(_Com, _Baud)
 
                 Threading.Thread.Sleep(1000)
 
@@ -335,20 +336,30 @@ Public Class Driver_Arduino
                     ArduinoVB.QueryVersion()
                     _IsConnect = True
                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Carte connectée sur le port:" & ArduinoVB.PortName & " Baud:" & ArduinoVB.Baud)
-                    ArduinoVB.DigitalPortReport(0, 1) 'Activer le port0
+                    ArduinoVB.DigitalPortReport(0, _RemotingPort0) 'Activer le port0
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Activation du port 0 effectué")
-                    ArduinoVB.DigitalPortReport(1, 1) 'Activer le port1
+                    ArduinoVB.DigitalPortReport(1, _RemotingPort1) 'Activer le port1
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Activation du port 1 effectué")
-                    'Pin0 à 6 définie en entrée
-                    For i As Integer = 2 To 6
-                        ArduinoVB.PinMode(i, Firmata.FirmataVB.INPUT)
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i & " définie en entrée")
+                    'Définir les pins en entrée ou sortie
+                    For i As Integer = 0 To 10
+                        If _Pin(i) = 0 Then
+                            ArduinoVB.PinMode(i, Firmata.FirmataVB.INPUT)
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i & " définie en entrée")
+                        Else
+                            ArduinoVB.PinMode(i, Firmata.FirmataVB.OUTUPT)
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i & " définie en sortie")
+                        End If
                     Next
-                    'Pin 7 à 12 définie en sortie
-                    For i As Integer = 7 To 12
-                        ArduinoVB.PinMode(i, Firmata.FirmataVB.OUTUPT)
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i & " définie en sortie")
-                    Next
+                    ''Pin0 à 6 définie en entrée
+                    'For i As Integer = 2 To 6
+                    '    ArduinoVB.PinMode(i, Firmata.FirmataVB.INPUT)
+                    '    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i & " définie en entrée")
+                    'Next
+                    ''Pin 7 à 12 définie en sortie
+                    'For i As Integer = 7 To 12
+                    '    ArduinoVB.PinMode(i, Firmata.FirmataVB.OUTUPT)
+                    '    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i & " définie en sortie")
+                    'Next
                 Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le driver n'a pas réussit à se connecter à la carte")
                     _IsConnect = False
@@ -378,12 +389,7 @@ Public Class Driver_Arduino
             RemoveHandler ArduinoVB.DigitalMessageReceieved, AddressOf FirmataVB1_DigitalMessageReceieved
             RemoveHandler ArduinoVB.AnalogMessageReceieved, AddressOf FirmataVB1_AnalogMessageReceieved
             RemoveHandler ArduinoVB.VersionInfoReceieved, AddressOf FirmataVB1_VersionInfoReceieved
-            'RemoveHandler Arduino.DigitalDataReceived, AddressOf ArduinoDigitalData
-            'RemoveHandler Arduino.AnalogDataReceived, AddressOf ArduinoAnalogData
-            'RemoveHandler Arduino.LogMessageReceived, AddressOf WriteLog
-            'RemoveHandler Arduino.ConnectionLost, AddressOf ConnectionLost
             ArduinoVB.Disconnect()
-            'Arduino = Nothing
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Stop", "Driver arrêté")
             _IsConnect = False
         Catch ex As Exception
@@ -506,9 +512,33 @@ Public Class Driver_Arduino
         _DeviceSupport.Add(ListeDevices.CONTACT)
         _DeviceSupport.Add(ListeDevices.APPAREIL)
 
-        'Paramétres avancés
-        Add_ParamAvance("Baud", "Gestion du ack", Firmata.FirmataVB.DEFAULT_BAUD_RATE)
+        _Pin(0) = 0 'Pin 2 en entrée
+        _Pin(1) = 0 'Pin 3 en entrée
+        _Pin(2) = 0 'Pin 4 en entrée
+        _Pin(3) = 0 'Pin 5 en entrée
+        _Pin(4) = 0 'Pin 6 en entrée
+        _Pin(5) = 1 'Pin 7 en sortie
+        _Pin(6) = 1 'Pin 8 en sortie
+        _Pin(7) = 1 'Pin 9 en sortie
+        _Pin(8) = 1 'Pin 10 en sortie
+        _Pin(9) = 1 'Pin 11 en sortie
+        _Pin(10) = 1 'Pin 12 en sortie
 
+        'Paramétres avancés
+        Add_ParamAvance("Baud", "BaudRate", 57600)
+        Add_ParamAvance("RemotingPort0", "Si actif (1, sinon 0) Arduino envoi régulièrement les valeurs des pins du port 0", 0)
+        Add_ParamAvance("RemotingPort1", "Si actif (1, sinon 0) Arduino envoi régulièrement les valeurs des pins du port 1", 0)
+        Add_ParamAvance("Pin2", "Définit si Pin 2 est en entrée(0) ou en sortie(1)", 0)
+        Add_ParamAvance("Pin3", "Définit si Pin 3 est en entrée(0) ou en sortie(1)", 0)
+        Add_ParamAvance("Pin4", "Définit si Pin 4 est en entrée(0) ou en sortie(1)", 0)
+        Add_ParamAvance("Pin5", "Définit si Pin 5 est en entrée(0) ou en sortie(1)", 0)
+        Add_ParamAvance("Pin6", "Définit si Pin 6 est en entrée(0) ou en sortie(1)", 0)
+        Add_ParamAvance("Pin7", "Définit si Pin 7 est en entrée(0) ou en sortie(1)", 1)
+        Add_ParamAvance("Pin8", "Définit si Pin 8 est en entrée(0) ou en sortie(1)", 1)
+        Add_ParamAvance("Pin9", "Définit si Pin 9 est en entrée(0) ou en sortie(1)", 1)
+        Add_ParamAvance("Pin10", "Définit si Pin 10 est en entrée(0) ou en sortie(1)", 1)
+        Add_ParamAvance("Pin11", "Définit si Pin 11 est en entrée(0) ou en sortie(1)", 1)
+        Add_ParamAvance("Pin12", "Définit si Pin 12 est en entrée(0) ou en sortie(1)", 1)
     End Sub
 #End Region
 
@@ -516,13 +546,16 @@ Public Class Driver_Arduino
     'Reception pin digital a changé
     Private Sub FirmataVB1_DigitalMessageReceieved(ByVal portNumber As Integer, ByVal portData As Integer)
         Try
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DigitalMessageRecu", "PortNumber:" & portNumber & " Value:" & portData)
+            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DigitalMessageRecu", "PortNumber:" & portNumber & " Value:" & portData)
             Select Case portNumber
                 Case 0 'Normal sur le port 0 les pins 2 à 6 sont en entrées
-                    For i As Integer = 2 To 6
-                        traitement(ArduinoVB.DigitalRead(i), i, 0)
+                    For i As Integer = 2 To 7
+                        traitement(ArduinoVB.DigitalRead(i), i, _Pin(i - 2))
                     Next
                 Case 1 'Pas Normal sur le port 1 les pins 7 à 12 sont en sorties
+                    For i As Integer = 8 To 12
+                        traitement(ArduinoVB.DigitalRead(i), i, _Pin(i - 2))
+                    Next
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DigitalMessageRecu", "Le port 1 est paramétré en sortie donc rien à traiter")
             End Select
         Catch ex As Exception
@@ -532,7 +565,7 @@ Public Class Driver_Arduino
 
     'Reception de la version
     Private Sub FirmataVB1_VersionInfoReceieved(ByVal majorVersion As Integer, ByVal minorVersion As Integer)
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Version", "Version:" & majorVersion & "." & minorVersion)
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " VersionInfoReceieved", "Version:" & majorVersion & "." & minorVersion)
     End Sub
 
     'Reception pin analogique a changé
@@ -566,31 +599,31 @@ Public Class Driver_Arduino
                     Exit Sub
             End Select
 
-            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, adresse, _Type, Me._ID, True)
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, adresse, type, Me._ID, True)
 
             'un device trouvé on maj la value
             If (listedevices.Count = 1) Then
                 'correction valeur pour correspondre au type de value
-                'If TypeOf listedevices.Item(0).Value Is Integer Then
-                '    If valeur = 1 Then
-                '        valeur = 100
-                '    ElseIf valeur = 0 Then
-                '        valeur = 0
-                '    End If
-                'End If
-
-                listedevices.Item(0).Value = valeur
+                If TypeOf listedevices.Item(0).Value Is Integer Then
+                    If valeur = 1 Then
+                        valeur = 100
+                    ElseIf valeur = 0 Then
+                        valeur = 0
+                    End If
+                Else
+                    listedevices.Item(0).Value = valeur
+                End If
 
             ElseIf (listedevices.Count > 1) Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traitement", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
             Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Process", "Device non trouvé : " & adresse & ":" & valeur)
-
+                'Le Device n'existe pas dans Homidom
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traitement", "Exception : " & ex.Message & " --> " & adresse & " : " & valeur)
         End Try
     End Sub
+
 
 #End Region
 
