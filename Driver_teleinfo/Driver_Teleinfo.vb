@@ -621,12 +621,12 @@ Public Class Driver_Teleinfo
             Try
                 If trame Then
                     ' Ajout de valeurs pour debug
-                    ReDim Preserve InfoTrame(messcnt)
-                    InfoTrame(messcnt) = "HCHC 000059672845 S"
-                    messcnt += 1
-                    ReDim Preserve InfoTrame(messcnt)
-                    InfoTrame(messcnt) = "HCHP 067159650 x"
-                    messcnt += 1
+                    ' ReDim Preserve InfoTrame(messcnt)
+                    ' InfoTrame(messcnt) = "HCHC 000059672845 S"
+                    ' messcnt += 1
+                    ' ReDim Preserve InfoTrame(messcnt)
+                    ' InfoTrame(messcnt) = "HCHP 067159650 x"
+                    ' messcnt += 1
                     Process(InfoTrame)
 
                 ElseIf mess Then ' Un message est recu ==> on le stocke
