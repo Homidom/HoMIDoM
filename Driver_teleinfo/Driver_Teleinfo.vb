@@ -46,7 +46,7 @@ Public Class Driver_Teleinfo
         Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
 
 		'Ajoutés dans les ppt avancés dans New()
-		Dim TeleInfoRefresh As Boolean = True 'Refresh avec le teleinfo
+
 		#End Region
 
 #Region "Variables Internes"
@@ -66,8 +66,9 @@ Public Class Driver_Teleinfo
         Private mess As Boolean = False
         Private trame As Boolean = False
 
-        Dim ADCO, OPTARIF, ISOUSC,
-            HCHC, HCHP, BASE, PTEC, PEJP, IMAX, PAPP, HHPHC, IINST, MOTDETAT As String
+        Dim ADCO, OPTARIF, ISOUSC, HCHC, HCHP,
+         BASE, PTEC, PEJP, IMAX, PAPP, HHPHC, IINST, MOTDETAT As String
+
 
 #End Region
 
@@ -351,6 +352,7 @@ Public Class Driver_Teleinfo
         ''' <param name="Objet">Objet représetant le device à interroger</param>
         ''' <remarks>pas utilisé</remarks>
         Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
+
             Try
                 If _Enable = False Then Exit Sub
                 If _IsConnect = False Then Exit Sub
@@ -358,20 +360,19 @@ Public Class Driver_Teleinfo
                 If Objet IsNot Nothing Then
                     Select Case Objet.Type
                         Case "ENERGIETOTALE", "ENERGIEINSTANTANEE"
-                            Dim retour As Double = Sauve_temp_teleinfo(Objet.Adresse1)
+                            Dim retour As Double = Val(Sauve_temp_teleinfo(LTrim(Objet.Adresse1)))
                             If retour <> 9999 Then Objet.Value = retour
 
                         Case "GENERIQUESTRING"
-                            Dim retour As String = Sauve_temp_teleinfo(Objet.Adresse1)
+                            Dim retour As String = LTrim(Objet.Adresse1)
                             Objet.Value = retour
 
                         Case "GENERIQUEVALUE"
-                            Dim retour As Integer = Sauve_temp_teleinfo(Objet.Adresse1)
+                            Dim retour As Double = Val(Sauve_temp_teleinfo(LTrim(Objet.Adresse1)))
                             Objet.Value = retour
 
                         Case Else
-                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo Read", "Erreur dans la reconnaissance du type du composant de " & Objet.Adresse1)
-
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo Read", "Erreur du type du composant de " & Objet.Adresse1)
 
                     End Select
 
@@ -619,6 +620,13 @@ Public Class Driver_Teleinfo
 
             Try
                 If trame Then
+                    ' Ajout de valeurs pour debug
+                    ReDim Preserve InfoTrame(messcnt)
+                    InfoTrame(messcnt) = "HCHC 000059672845 S"
+                    messcnt += 1
+                    ReDim Preserve InfoTrame(messcnt)
+                    InfoTrame(messcnt) = "HCHP 067159650 x"
+                    messcnt += 1
                     Process(InfoTrame)
 
                 ElseIf mess Then ' Un message est recu ==> on le stocke
@@ -670,7 +678,9 @@ Public Class Driver_Teleinfo
 
                 Try
 
-                    Select Case TeleInfo_adresse
+                    ' Console.WriteLine("Test:#" & LTrim(UCase(TeleInfo_adresse)) & "#")
+                    Select Case (LTrim(UCase(TeleInfo_adresse)))
+
                         Case "ADCO"
                             ADCO = data1
 
@@ -711,7 +721,7 @@ Public Class Driver_Teleinfo
                             MOTDETAT = data1
 
                         Case Else
-                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Case Teleinfo_adresse ", "Parametre non reconnu")
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Case Teleinfo_adresse ", "Parametre non reconnu adresse : " & TeleInfo_adresse)
 
                     End Select
 
@@ -728,7 +738,7 @@ Public Class Driver_Teleinfo
             Dim retour As String = ""
             Try
 
-                Select Case adresse
+                Select Case LTrim(UCase(adresse))
 
                     Case "ADCO"
                         retour = ADCO
@@ -740,7 +750,7 @@ Public Class Driver_Teleinfo
                         retour = ISOUSC
 
                     Case "HCHC"
-                        retour = HCHC
+                        retour = Val(HCHC)
 
                     Case "HCHP"
                         retour = HCHP
@@ -750,6 +760,7 @@ Public Class Driver_Teleinfo
 
                     Case "PEJP"
                         retour = PEJP
+
                     Case "PTEC"
                         retour = PTEC
 
@@ -772,8 +783,8 @@ Public Class Driver_Teleinfo
                         retour = MOTDETAT
 
                     Case Else
-                        retour = ""
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Sauve_temp_teleinfo : Case Teleinfo_adresse ", "Parametre non reconnu")
+                        retour = "-1"
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Sauve_temp_teleinfo : Case Teleinfo_adresse ", "Parametre non reconnu adresse : " & adresse)
                 End Select
 
 
