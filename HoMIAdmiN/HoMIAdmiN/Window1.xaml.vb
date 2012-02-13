@@ -503,8 +503,9 @@ Class Window1
                     y.Tag = a.Nom
                     y.Uid = a.IdDevice
                     y.Foreground = New SolidColorBrush(Colors.White)
-                    Dim marg As New Thickness(-12, 0, 0, 0)
-                    y.Margin = marg
+                    y.Background = New SolidColorBrush(Colors.DarkGray)
+                    y.BorderBrush = New SolidColorBrush(Colors.Black)
+                    y.Margin = New Thickness(-15, 1, 0, 0)
                     TreeViewHisto.Items.Add(y)
                 Next
             End If
