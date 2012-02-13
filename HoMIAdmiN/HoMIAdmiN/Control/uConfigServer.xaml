@@ -15,31 +15,31 @@
                     <StackPanel >
                         <StackPanel Orientation="Horizontal" >
                             <Label Foreground="White" Height="28" HorizontalAlignment="Left" Name="Label19" VerticalAlignment="Top" Width="67">Id Serveur:</Label>
-                            <TextBox Height="21" HorizontalAlignment="Left" Name="TxtIdSrv" VerticalAlignment="Top" Width="79" ToolTip="Id du serveur" />
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtIdSrv" VerticalAlignment="Top" Width="79" ToolTip="Id du serveur" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
                             <Label Foreground="White" Height="28" HorizontalAlignment="Left" Name="Label8" VerticalAlignment="Top" Width="67">Port SOAP:</Label>
-                            <TextBox Height="21" HorizontalAlignment="Left" Name="TxtSOAP" VerticalAlignment="Top" Width="79" ToolTip="Permet de modifier le port SOAP du serveur à son prochain démarrage" />
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtSOAP" VerticalAlignment="Top" Width="79" ToolTip="Permet de modifier le port SOAP du serveur à son prochain démarrage" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
                             <Label HorizontalAlignment="Left" Name="Label1" Width="67" Foreground="White" VerticalAlignment="Top">Longitude:</Label>
-                            <TextBox Name="TxtLong" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="107" />
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtLong" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="107" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
                             <Label Foreground="White" HorizontalAlignment="Left"  Name="Label2" Width="67">Latitude:</Label>
-                            <TextBox Name="TxtLat" HorizontalAlignment="Left" Width="107" Height="20" />
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtLat" HorizontalAlignment="Left" Width="107" Height="20" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
                             <Label Foreground="White" Name="Label3" VerticalAlignment="Bottom">Correction Heure Lever Soleil:</Label>
-                            <TextBox Name="HCL" Width="25" Height="19.723" VerticalAlignment="Bottom">0</TextBox>
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="HCL" Width="25" Height="19.723" VerticalAlignment="Bottom">0</TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
                             <Label Foreground="White" Name="Label4" VerticalAlignment="Bottom">Correction Heure Coucher Soleil:</Label>
-                            <TextBox Height="20" Width="25" Name="HCC" VerticalAlignment="Bottom" Text="0"></TextBox>
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="HCC" VerticalAlignment="Bottom" Text="0"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
                             <Label Foreground="White" Name="Label15" VerticalAlignment="Bottom">Enregistrer automatiquement (minutes), 0=Inactif:</Label>
-                            <TextBox Height="20" Width="25" Name="TxtSave" VerticalAlignment="Bottom" Text="0"></TextBox>
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="TxtSave" VerticalAlignment="Bottom" Text="0"></TextBox>
                         </StackPanel>
                     </StackPanel>
 
@@ -53,10 +53,10 @@
                         <Label Content="Adresse SMTP:" Height="23" HorizontalAlignment="Left" Margin="8,19,0,0" Name="Label11" VerticalAlignment="Top" Width="82" Foreground="White" />
                         <Label Content="Login:" Height="27" HorizontalAlignment="Left" Margin="8,40,0,0" Name="Label12" VerticalAlignment="Top" Width="72" Foreground="White" />
                         <Label Content="Password:" Height="27" HorizontalAlignment="Left" Margin="8,63,0,0" Name="Label13" VerticalAlignment="Top" Width="72" Foreground="White" />
-                        <TextBox Height="20" HorizontalAlignment="Left" Margin="98,0,0,0" Name="TxtMail" VerticalAlignment="Top" Width="271" />
-                        <TextBox Height="20" HorizontalAlignment="Left" Margin="98,22,0,0" Name="TxtAdresse" VerticalAlignment="Top" Width="271" />
-                        <TextBox Height="20" HorizontalAlignment="Left" Margin="98,44,0,0" Name="TxtLogin" VerticalAlignment="Top" Width="158" />
-                        <PasswordBox Height="20" HorizontalAlignment="Left" Margin="98,66,0,0" Name="TxtPassword" VerticalAlignment="Top" Width="158" />
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,0,0,0" Name="TxtMail" VerticalAlignment="Top" Width="271" />
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,22,0,0" Name="TxtAdresse" VerticalAlignment="Top" Width="271" />
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,44,0,0" Name="TxtLogin" VerticalAlignment="Top" Width="158" />
+                                <PasswordBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,66,0,0" Name="TxtPassword" VerticalAlignment="Top" Width="158" />
                     </Grid>
                 </GroupBox>
                 <GroupBox Name="GroupBox4" Width="389" Margin="5">
@@ -67,11 +67,11 @@
                         <StackPanel >
                             <StackPanel Orientation="Horizontal" >
                                 <Label Content="Taille max du fichier Log (Ko):" Name="Label22" Margin="1" Foreground="White" />
-                                <TextBox Height="24" Name="TxtFile" Width="143" />
+                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="24" Name="TxtFile" Width="143" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <Label Content="Conservation ancien log (mois):" Name="Label14" Margin="1" Foreground="White" />
-                                <TextBox Height="24" Name="TxtMaxLogMonth" Width="30" />
+                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="24" Name="TxtMaxLogMonth" Width="30" />
                             </StackPanel>
                             <GroupBox >
                                 <GroupBox.Header>
@@ -79,19 +79,19 @@
                                 </GroupBox.Header>
                                 <StackPanel Orientation="Horizontal" >
                                     <StackPanel >
-                                        <CheckBox Name="ChkTyp0" Content="INFO" Foreground="White" />
-                                        <CheckBox Name="ChkTyp1" Content="ACTION" Foreground="White" />
-                                        <CheckBox Name="ChkTyp2" Content="MESSAGE" Foreground="White" />
+                                                <CheckBox Name="ChkTyp0" Content="INFO" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                                <CheckBox Name="ChkTyp1" Content="ACTION" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                                <CheckBox Name="ChkTyp2" Content="MESSAGE" Background="DarkGray" BorderBrush="Black" Foreground="White" />
                                     </StackPanel>
                                     <StackPanel >
-                                        <CheckBox Name="ChkTyp3" Content="VALEUR_CHANGE" Foreground="White" />
-                                        <CheckBox Name="ChkTyp4" Content="VALEUR_INCHANGE" Foreground="White" />
-                                        <CheckBox Name="ChkTyp5" Content="VALEUR_INCHANGE_PRECISION" Foreground="White" />
+                                                <CheckBox Name="ChkTyp3" Content="VALEUR_CHANGE" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                        <CheckBox Name="ChkTyp4" Content="VALEUR_INCHANGE" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                                <CheckBox Name="ChkTyp5" Content="VALEUR_INCHANGE_PRECISION" Background="DarkGray" BorderBrush="Black" Foreground="White" />
                                     </StackPanel>
                                     <StackPanel >
-                                        <CheckBox Name="ChkTyp6" Content="VALEUR_INCHANGE_LASTETAT" Foreground="White" />
-                                        <CheckBox Name="ChkTyp7" Content="ERREUR" Foreground="White" />
-                                        <CheckBox Name="ChkTyp8" Content="ERREUR_CRITIQUE" Foreground="White" />
+                                                <CheckBox Name="ChkTyp6" Content="VALEUR_INCHANGE_LASTETAT" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                                <CheckBox Name="ChkTyp7" Content="ERREUR" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                                <CheckBox Name="ChkTyp8" Content="ERREUR_CRITIQUE" Background="DarkGray" BorderBrush="Black" Foreground="White" />
                                     </StackPanel>
                                     <StackPanel >
                                         <CheckBox Name="ChkTyp9" Content="DEBUG" Foreground="White" />
@@ -109,7 +109,7 @@
                                 <Label Foreground="White" FontWeight="Bold">Liste des répertoires Audio à scanner</Label>
                             </GroupBox.Header>
                             <StackPanel >
-                                <ListBox HorizontalAlignment="Left" Margin="3" Name="ListBox1" Width="330" Height="80"/>
+                                <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Margin="3" Name="ListBox1" Width="330" Height="80"/>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                     <Button Height="23" Margin="2" Name="BtnNewRepertoire" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Foreground="White" HorizontalAlignment="Left" Width="64">Nouveau</Button>
                                     <Button Height="23" Margin="2" Name="BtnDelRepertoireAudio" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Width="64" Foreground="White">Supprimer</Button>
@@ -121,7 +121,7 @@
                                 <Label Foreground="White" FontWeight="Bold">Liste des extensions Audio à prendre en compte lors du scan</Label>
                             </GroupBox.Header>
                             <StackPanel Orientation="Horizontal" >
-                                <ListBox HorizontalAlignment="Left" Margin="3" Name="ListBox2" Width="146" Height="50"/>
+                                <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Margin="3" Name="ListBox2" Width="146" Height="50"/>
                                 <StackPanel >
                                 <Button Content="Nouveau" Foreground="White" Height="23" HorizontalAlignment="Left" Margin="2" Name="BtnNewExension" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="64" />
                                 <Button Content="Supprimer" Foreground="White" Height="23" HorizontalAlignment="Right" Margin="2" Name="BtnDeleteExtension" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="64" />
