@@ -1004,7 +1004,7 @@ Imports System.Globalization
 #Region "Fonctions ecriture protocoles"
 
     ''' <summary>Gestion du protocole CHACON - HomeEasy</summary>
-    ''' <param name="adresse">Adresse du type 00-00-00-0 ou 0 (pour les Heaters)</param>
+    ''' <param name="adresse">Adresse du type 04E073E-1 (0-4E-07-3E-1 dans le rfxmitter.exe) ou 0 (pour les Heaters)</param>
     ''' <param name="commande">commande ON, OFF, DIM, GROUP_ON, GROUP_OFF, GROUP_DIM, HEATER_ON, HEATER_OFF</param>
     ''' <param name="europe">Type Europe ou US ?</param>
     ''' <param name="dimlevel">Niveau du Dim</param>
@@ -1012,36 +1012,53 @@ Imports System.Globalization
     Private Sub protocol_chacon(ByVal adresse As String, ByVal commande As String, ByVal europe As Boolean, Optional ByVal dimlevel As Integer = 0)
         Try
             If commande <> "HEATER_ON" And commande <> "HEATER_OFF" Then
+                If adresse.Length <> 9 Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ECRIRE CHACON", "Adresse : incorrecte " & adresse & " (ex : 04E073E-1)")
+                    Exit Sub
+                End If
                 Dim kar(5) As Byte
+                'Dim adressetab As String() = adresse.Split("-")
+                'If europe Then kar(0) = 34 Else kar(0) = 33
+                'kar(1) = CByte(Array.IndexOf(adressetoint, adressetab(0)))
+                'kar(2) = CByte(Array.IndexOf(adressetoint, adressetab(1)))
+                'kar(3) = CByte(Array.IndexOf(adressetoint, adressetab(2)))
+                'Select Case Array.IndexOf(adressetoint2, adressetab(3))
+                '    Case 0 : kar(4) = 0
+                '    Case 1 : kar(4) = &H40
+                '    Case 2 : kar(4) = &H80
+                '    Case 3 : kar(4) = &HC0
+                'End Select
+
                 Dim adressetab As String() = adresse.Split("-")
                 If europe Then kar(0) = 34 Else kar(0) = 33
-                kar(1) = CByte(Array.IndexOf(adressetoint, adressetab(0)))
-                kar(2) = CByte(Array.IndexOf(adressetoint, adressetab(1)))
-                kar(3) = CByte(Array.IndexOf(adressetoint, adressetab(2)))
-                Select Case Array.IndexOf(adressetoint2, adressetab(3))
+                kar(1) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(1, 2)))
+                kar(2) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(3, 2)))
+                kar(3) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(3, 2)))
+                Select Case Array.IndexOf(adressetoint2, adressetab(0).Substring(0, 1))
                     Case 0 : kar(4) = 0
                     Case 1 : kar(4) = &H40
                     Case 2 : kar(4) = &H80
                     Case 3 : kar(4) = &HC0
                 End Select
+
                 Select Case commande
                     Case "ON"
-                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(4)))
+                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(1)))
                         kar(4) = kar(4) Or &H10
                         kar(5) = 0
                     Case "OFF"
-                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(4)))
+                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(1)))
                         kar(5) = 0
                     Case "GROUP_ON"
-                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(4)))
+                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(1)))
                         kar(4) = kar(4) Or &H30
                         kar(5) = 0
                     Case "GROUP_OFF"
-                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(4)))
+                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(1)))
                         kar(4) = kar(4) Or &H20
                         kar(5) = 0
                     Case "DIM"
-                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(4)))
+                        kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(1)))
                         kar(5) = CByte(dimlevel) << 4
                     Case "GROUP_DIM"
                         kar(4) = kar(4) Or &H20
