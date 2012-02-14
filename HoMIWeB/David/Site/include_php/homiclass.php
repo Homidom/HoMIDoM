@@ -5,15 +5,22 @@ class HomidomClass {
 	public $_ip = "localhost";
 	public $_idserver = "123456789";
 	public $_trace = false;
-	private $_homidomsoap;
-
+	public $_homidomsoap;
+	
+	/*--------------------------
+	------- CONSTUCTEUR --------
+	--------------------------*/
 	public function __construct($ip,$port,$idserver,$trace) {
-		$this->_port=$port; //7999
-		$this->_ip=$ip; //localhost ou 192.168.1.X
+		$this->_port=$port; 
+		$this->_ip=$ip; 
 		$this->_idserver=$idserver;
 		$this->_trace=$trace;
 		$this->_homidomsoap = new HomidomSoap($this->_ip, $this->_port, $this->_idserver,$this->_trace);
 		$this->_homidomsoap->connect();
+	}
+
+	public function GetTime() {
+		return $this->_homidomsoap->GetTime();
 	}
 
 	public function RefreshBddDevice(){
