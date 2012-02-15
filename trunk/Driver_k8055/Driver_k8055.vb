@@ -358,7 +358,7 @@ Imports HoMIDom.HoMIDom.Device
                 If Commande = "ON" Then
                     SetBinaireChannel(adr)
                 End If
-                If Command() = "OFF" Then
+                If Commande = "OFF" Then
                     ClearBinaireChannel(adr)
                 End If
             Else
