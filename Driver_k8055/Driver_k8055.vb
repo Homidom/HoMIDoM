@@ -348,15 +348,15 @@ Imports HoMIDom.HoMIDom.Device
         Try
             If _Enable = False Then Exit Sub
 
-            Select Case Objet.Type
-                Case "SWITCH" Or "APPAREIL"
-                    If Commande = "ON" Then
-                        SetBinaireChannel(Objet.Adressse1)
-                    End If
-                    If Command() = "OFF" Then
-                        ClearBinaireChannel(Objet.Adresse1)
-                    End If
-            End Select
+            If Objet.Type = "SWITCH" Or Objet.Type = "APPAREIL" Then
+                If Commande = "ON" Then
+                    SetBinaireChannel(Objet.Adressse1)
+                End If
+                If Command() = "OFF" Then
+                    ClearBinaireChannel(Objet.Adresse1)
+                End If
+            End If
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: " & ex.ToString)
         End Try
