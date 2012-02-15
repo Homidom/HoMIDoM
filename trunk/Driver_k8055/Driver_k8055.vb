@@ -349,7 +349,7 @@ Imports HoMIDom.HoMIDom.Device
             If _Enable = False Then Exit Sub
 
             Select Case Objet.Type
-                Case 21 Or 1 'SWITCH ou APPAREIL
+                Case "SWITCH" Or "APPAREIL"
                     If Commande = "ON" Then
                         SetBinaireChannel(Objet.Adressse1)
                     End If
