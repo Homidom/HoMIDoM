@@ -122,7 +122,7 @@ Driver_RFXMitter
 	<remarks></remarks>
 </member><member name="M:Driver_RFXMitter.Driver_RFXMitter.protocol_chacon(System.String,System.String,System.Boolean,System.Int32)">
 	<summary>Gestion du protocole CHACON - HomeEasy</summary>
-	<param name="adresse">Adresse du type 04E073E-1 (0-4E-07-3E-1 dans le rfxmitter.exe) ou 0 (pour les Heaters)</param>
+	<param name="adresse">Adresse du type 02F4416-1 (02F4416-1 en leftshifted : 0BD10580-1 dans le rfxmitter.exe) ou 0 (pour les Heaters)</param>
 	<param name="commande">commande ON, OFF, DIM, GROUP_ON, GROUP_OFF, GROUP_DIM, HEATER_ON, HEATER_OFF</param>
 	<param name="europe">Type Europe ou US ?</param>
 	<param name="dimlevel">Niveau du Dim</param>
