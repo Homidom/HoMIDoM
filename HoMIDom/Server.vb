@@ -2418,6 +2418,10 @@ Namespace HoMIDom
                     System.IO.Directory.CreateDirectory(_MonRepertoire & "\plugins")
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier plugins")
                 End If
+                If System.IO.Directory.Exists(_MonRepertoire & "\templates") = False Then
+                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\templates")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier templates")
+                End If
 
                 'Charge les types de log
                 For i As Integer = 0 To 9
@@ -6308,6 +6312,74 @@ Namespace HoMIDom
             End Try
         End Function
 
+#End Region
+
+#Region "Telecommande"
+        ''' <summary>
+        ''' Retourne la liste des templates télécommande (fichier xml), présents dans le répertoire templates
+        ''' </summary>
+        ''' <returns>List of Templates</returns>
+        ''' <remarks></remarks>
+        Public Function GetListOfTemplate() As List(Of Telecommande.Template)
+            Try
+                Dim Tabl As New List(Of Telecommande.Template)
+                Dim MyPath As String = _MonRepertoire & "\templates\"
+                Dim xml As XML = Nothing
+
+                Dim dirInfo As New System.IO.DirectoryInfo(MyPath)
+                Dim file As System.IO.FileInfo
+                Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.xml", System.IO.SearchOption.AllDirectories)
+
+                If (files IsNot Nothing) Then
+                    For Each file In files
+                        MyXML = New XML(file.FullName)
+                        Dim list As XmlNodeList
+
+                        list = MyXML.SelectNodes("/template")
+                        If list.Count > 0 Then 'présence des paramètres du template
+                            Dim x As New Telecommande.Template
+                            For j As Integer = 0 To list.Item(0).Attributes.Count - 1
+                                Select Case list.Item(0).Attributes.Item(j).Name
+                                    Case "fabricant"
+                                        x.Fabricant = list.Item(0).Attributes.Item(j).Value
+                                    Case "modele"
+                                        x.Modele = list.Item(0).Attributes.Item(j).Value
+                                    Case "driver"
+                                        x.Driver = list.Item(0).Attributes.Item(j).Value
+                                End Select
+                                x.File = file.Name
+                                Tabl.Add(x)
+                            Next
+                        End If
+                        xml = Nothing
+                        list = Nothing
+                    Next
+                End If
+
+                Return Tabl
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetListOfTemplate", "Erreur : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        Public Function CreateNewTemplate(ByVal Fabricant As String, ByVal Modele As String, ByVal Driver As String, ByVal Type As Telecommande.TypeEquipement)
+            Try
+                Dim MyPath As String = _MonRepertoire & "\templates\"
+
+                If IO.File.Exists(MyPath & LCase(Fabricant) & "-" & LCase(Modele) & "-" & LCase(Driver) & ".xml") Then
+                    Return "Le template existe déjà pour ce même couple fabricant, modèle et driver!"
+                    Exit Function
+                End If
+
+
+
+                Return 0
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CreateNewTemplate", "Erreur : " & ex.Message)
+                Return ex.Message
+            End Try
+        End Function
 #End Region
 
 #Region "Log"
