@@ -194,15 +194,31 @@ Public Class Driver_Arduino
 
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
-            If _Enable = False Then Exit Sub
-            If _IsConnect = False Then Exit Sub
+            If _Enable = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Impossible d'effectuer un Read car le driver n'est pas Activé")
+                Exit Sub
+            End If
+            If _IsConnect = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Impossible d'effectuer un Read car le driver n'est pas connecté à la carte")
+                Exit Sub
+            End If
 
-            Dim _type As Integer
-            If Objet.Type = "CONTACT" Then _type = 0
-            If Objet.Type = "APPAREIL" Then _type = 1
-            If Objet.Type = "GENERIQUEVALUE" Then _type = 2
+            Dim _type As Integer = 0
+            Select Case Objet.Type
+                Case "CONTACT"
+                    _type = 0
+                Case "APPAREIL"
+                    _type = 1
+                Case "GENERIQUEVALUE"
+                    _type = 2
+                Case Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Le type de device " & Objet.Type & " n'est pas supporté pas ce driver")
+                    Exit Sub
+            End Select
 
-            traitement(ArduinoVB.DigitalRead(Objet.Adresse1), Objet.Adresse1, _type)
+            Dim Val As Integer = ArduinoVB.DigitalRead(Objet.Adresse1)
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
+            traitement(Val, Objet.Adresse1, _type)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur : " & ex.ToString)
         End Try
@@ -556,7 +572,6 @@ Public Class Driver_Arduino
                     For i As Integer = 8 To 12
                         traitement(ArduinoVB.DigitalRead(i), i, _Pin(i - 2))
                     Next
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DigitalMessageRecu", "Le port 1 est paramétré en sortie donc rien à traiter")
             End Select
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " DigitalMessageReceieved", "Erreur : " & ex.ToString)
