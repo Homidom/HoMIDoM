@@ -1004,7 +1004,7 @@ Imports System.Globalization
 #Region "Fonctions ecriture protocoles"
 
     ''' <summary>Gestion du protocole CHACON - HomeEasy</summary>
-    ''' <param name="adresse">Adresse du type 04E073E-1 (0-4E-07-3E-1 dans le rfxmitter.exe) ou 0 (pour les Heaters)</param>
+    ''' <param name="adresse">Adresse du type 02F4416-1 (02F4416-1 en leftshifted : 0BD10580-1 dans le rfxmitter.exe) ou 0 (pour les Heaters)</param>
     ''' <param name="commande">commande ON, OFF, DIM, GROUP_ON, GROUP_OFF, GROUP_DIM, HEATER_ON, HEATER_OFF</param>
     ''' <param name="europe">Type Europe ou US ?</param>
     ''' <param name="dimlevel">Niveau du Dim</param>
@@ -1031,15 +1031,23 @@ Imports System.Globalization
 
                 Dim adressetab As String() = adresse.Split("-")
                 If europe Then kar(0) = 34 Else kar(0) = 33
-                kar(1) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(1, 2)))
-                kar(2) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(3, 2)))
-                kar(3) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(3, 2)))
-                Select Case Array.IndexOf(adressetoint2, adressetab(0).Substring(0, 1))
-                    Case 0 : kar(4) = 0
-                    Case 1 : kar(4) = &H40
-                    Case 2 : kar(4) = &H80
-                    Case 3 : kar(4) = &HC0
-                End Select
+                'Leftshit (2) de l'adresse : 02F44160 -> 0BD10580
+                Dim adresse_hex As Long = CLng("&h" & adressetab(0) & "0") << 2
+                kar(1) = (adresse_hex And "&hFF000000") >> 24
+                kar(2) = (adresse_hex And "&hFF0000") >> 16
+                kar(3) = (adresse_hex And "&hFF00") >> 8
+                kar(4) = (adresse_hex And "&hFF")
+
+
+                'kar(1) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(1, 2)))
+                'kar(2) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(3, 2)))
+                'kar(3) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(3, 2)))
+                'Select Case Array.IndexOf(adressetoint2, adressetab(0).Substring(0, 1))
+                '    Case 0 : kar(4) = 0
+                '    Case 1 : kar(4) = &H40
+                '    Case 2 : kar(4) = &H80
+                '    Case 3 : kar(4) = &HC0
+                'End Select
 
                 Select Case commande
                     Case "ON"
