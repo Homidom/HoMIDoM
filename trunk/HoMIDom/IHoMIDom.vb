@@ -17,6 +17,15 @@ Namespace HoMIDom
 
 #Region "Serveur"
         ''' <summary>
+        ''' Vérifie si un élément existe dans une zone, une macro, un trigger... avant de le supprimer
+        ''' </summary>
+        ''' <param name="IdSrv"></param>
+        ''' <param name="Id"></param>
+        ''' <returns>Retourne une erreur commencant par ERREUR ou la liste des noms des macros, zones...</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function CanDelete(ByVal IdSrv As String, ByVal Id As String) As List(Of String)
+
+        ''' <summary>
         ''' Retourne le paramètre de sauvegarde
         ''' </summary>
         ''' <param name="IdSrv">ID du serveur</param>
