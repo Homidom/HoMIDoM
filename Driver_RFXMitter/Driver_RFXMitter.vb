@@ -489,24 +489,22 @@ Imports System.Globalization
             If _Enable = False Then Exit Sub
             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXMitter WRITE", "Device " & Objet.Name & " <-- " & Command)
             'suivant le protocole, on lance la bonne fonction
-            'HOMEEASY / HOMEEASYUS / X10 / ARC / WAVEMAN
+            ' AC / X10 / ARC / WAVEMAN
             Select Case UCase(Objet.modele)
-                'Case "HOMEEASY"
-                '    If IsNothing(Parametre1) Then
-                '        protocol_chacon(Objet.adresse1, Command, True)
-                '    Else
-                '        protocol_chacon(Objet.adresse1, Command, True, Parametre1)
-                '    End If
-                'Case "HOMEEASYUS"
-                '    If IsNothing(Parametre1) Then
-                '        protocol_chacon(Objet.adresse1, Command, False)
-                '    Else
-                '        protocol_chacon(Objet.adresse1, Command, False, Parametre1)
-                '    End If
-                Case "HOMEEASY"
-                    protocol_chacon(Objet.adresse1, Command, False)
+                Case "AC" 'AC : Chacon...
+                    If IsNothing(Parametre1) Then
+                        protocol_chacon(Objet.adresse1, Command, False)
+                    Else
+                        protocol_chacon(Objet.adresse1, Command, False, Parametre1)
+                    End If
+                Case "ACEU" 'AC norme Europe
+                    If IsNothing(Parametre1) Then
+                        protocol_chacon(Objet.adresse1, Command, True)
+                    Else
+                        protocol_chacon(Objet.adresse1, Command, True, Parametre1)
+                    End If
                 Case "X10"
-                        protocol_x10(Objet.adresse1, Command)
+                    protocol_x10(Objet.adresse1, Command)
                 Case "ARC"
                         protocol_arc(Objet.adresse1, Command)
                 Case "WAVEMAN"
