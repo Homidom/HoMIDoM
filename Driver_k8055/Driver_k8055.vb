@@ -348,13 +348,21 @@ Imports HoMIDom.HoMIDom.Device
         Try
             If _Enable = False Then Exit Sub
 
+            If IsNumeric(Objet.Adresse1) = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: l'adresse du device " & Objet.Adresse1 & " n'est pas une valeur numérique")
+            End If
+
+            Dim adr As Long = Objet.Adresse1
+
             If Objet.Type = "SWITCH" Or Objet.Type = "APPAREIL" Then
                 If Commande = "ON" Then
-                    SetBinaireChannel(Objet.Adressse1)
+                    SetBinaireChannel(adr)
                 End If
                 If Command() = "OFF" Then
-                    ClearBinaireChannel(Objet.Adresse1)
+                    ClearBinaireChannel(adr)
                 End If
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: le type du device " & Objet.Type & " n'est pas reconnu pour ce driver")
             End If
 
         Catch ex As Exception
