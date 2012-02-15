@@ -853,36 +853,6 @@ Class Window1
         End Try
     End Sub
 
-    'Public Shared Function Zip(ByVal value As String) As String
-    '    'Transform string into byte[]  
-    '    Dim byteArray As Byte() = New Byte(value.Length - 1) {}
-    '    Dim indexBA As Integer = 0
-    '    For Each item As Char In value.ToCharArray()
-    '        byteArray(System.Math.Max(System.Threading.Interlocked.Increment(indexBA), indexBA - 1)) = CByte(AscW(item))
-    '    Next
-
-    '    'Prepare for compress
-    '    Dim ms As New System.IO.MemoryStream()
-    '    Dim sw As New System.IO.Compression.GZipStream(ms, System.IO.Compression.CompressionMode.Compress)
-
-    '    'Compress
-    '    sw.Write(byteArray, 0, byteArray.Length)
-    '    'Close, DO NOT FLUSH cause bytes will go missing...
-    '    sw.Close()
-
-    '    'Transform byte[] zip data to string
-    '    byteArray = ms.ToArray()
-    '    Dim sB As New System.Text.StringBuilder(byteArray.Length)
-    '    For Each item As Byte In byteArray
-    '        sB.Append(ChrW(item))
-    '    Next
-    '    ms.Close()
-    '    sw.Dispose()
-    '    ms.Dispose()
-    '    Return sB.ToString()
-    'End Function
-
-
     Private Sub MainMenuDelete(ByVal index As Integer)
         'Enregistrer la config
         If index = 10 Then
@@ -1053,36 +1023,60 @@ Class Window1
                     Try
                         If Objet.retour IsNot Nothing Then
                             Dim retour As Integer
-                            Select Case Objet.Type
-                                Case 0
-                                Case 1
-                                    retour = myService.DeleteDevice(IdSrv, Objet.retour)
-                                    AffDevice()
-                                Case 2
-                                    retour = myService.DeleteZone(IdSrv, Objet.retour)
-                                    AffZone()
-                                Case 3
-                                    retour = myService.DeleteUser(IdSrv, Objet.retour)
-                                    AffUser()
-                                Case 4
-                                    retour = myService.DeleteTrigger(IdSrv, Objet.retour)
-                                    AffTrigger()
-                                Case 5
-                                    retour = myService.DeleteMacro(IdSrv, Objet.retour)
-                                    AffScene()
-                            End Select
+                            Dim _retour As New List(Of String)
+                            _retour = myService.CanDelete(IdSrv, Objet.retour)
+                            While _retour(_retour.Count - 1) <> "0"
+                                Thread.Sleep(1500)
+                                _retour = myService.CanDelete(IdSrv, Objet.retour)
+                            End While
+                            If _retour(0).StartsWith("ERREUR") Then
+                                MessageBox.Show(_retour(0), "Erreur CanDelete", MessageBoxButton.OK, MessageBoxImage.Error)
+                                Exit Sub
+                            Else
+                                If _retour(0) <> "0" Then
+                                    Dim a As String = "Attention confirmez vous de supprimer cet élément car il est utilisé dans: " & vbCrLf
+                                    For i As Integer = 0 To _retour.Count - 2
+                                        a = a & _retour(i) & vbCrLf
+                                    Next
+                                    If MessageBox.Show(a, "Suppression", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.No Then
+                                        Exit Sub
+                                    End If
+                                End If
+                                End If
+
+
+                                Select Case Objet.Type
+                                    Case 0
+                                    Case 1
+                                        retour = myService.DeleteDevice(IdSrv, Objet.retour)
+                                        AffDevice()
+                                    Case 2
+                                        retour = myService.DeleteZone(IdSrv, Objet.retour)
+                                        AffZone()
+                                    Case 3
+                                        retour = myService.DeleteUser(IdSrv, Objet.retour)
+                                        AffUser()
+                                    Case 4
+                                        retour = myService.DeleteTrigger(IdSrv, Objet.retour)
+                                        AffTrigger()
+                                    Case 5
+                                        retour = myService.DeleteMacro(IdSrv, Objet.retour)
+                                        AffScene()
+                                End Select
 
                             If retour = -2 Then
                                 MessageBox.Show("Vous ne pouvez pas supprimer cet élément!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                                 Exit Sub
+                            Else
+                                FlagChange = True
                             End If
 
                         Else
-                            MessageBox.Show("Veuillez sélectionner un élément à supprimer!")
+                                MessageBox.Show("Veuillez sélectionner un élément à supprimer!")
                         End If
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR de la suppression: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                    End Try
+            MessageBox.Show("ERREUR de la suppression: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
                     CanvasRight.Children.Clear()
                     ShowMainMenu()
             End Select

@@ -3061,6 +3061,113 @@ Namespace HoMIDom
         '*** FONCTIONS ******************************************
 #Region "Serveur"
         ''' <summary>
+        ''' Vérifie si un élément existe dans une zone, une macro, un trigger... avant de le supprimer
+        ''' </summary>
+        ''' <param name="IdSrv"></param>
+        ''' <param name="Id"></param>
+        ''' <returns>Retourne une erreur commencant par ERREUR ou la liste des noms des macros, zones...</returns>
+        ''' <remarks></remarks>
+        Public Function CanDelete(ByVal IdSrv As String, ByVal Id As String) As List(Of String) Implements IHoMIDom.CanDelete
+            Dim retour As New List(Of String)
+            Try
+                Dim thr As New ThreadDelete(Me, IdSrv, Id, retour)
+                Dim x As New Thread(AddressOf thr.Traite)
+                x.Start()
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CanDelete", "Erreur : " & ex.Message)
+                retour.Add("ERREUR lors de l'exécution de la fonction: " & ex.ToString)
+                Return retour
+            End Try
+        End Function
+
+        Private Class ThreadDelete
+            Dim _retour As List(Of String)
+            Dim _server As Server
+            Dim _id As String
+            Dim _Idsrv As String
+
+            Public Sub New(ByVal Server As Server, ByVal IdSrv As String, ByVal Id As String, ByVal Retour As List(Of String))
+                _server = Server
+                _retour = Retour
+                _id = Id
+                _Idsrv = IdSrv
+            End Sub
+
+            Public Sub Traite()
+                _server._CanDelete(_Idsrv, _id, _retour)
+            End Sub
+        End Class
+
+        Private Sub _CanDelete(ByVal IdSrv As String, ByVal Id As String, ByVal retour As List(Of String))
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    retour.Add("ERREUR: L'Id du serveur est erronée")
+                    retour.Add("0")
+                    Exit Sub
+                End If
+                If Id = "" Then
+                    retour.Add("ERREUR: L'Id est vide")
+                    retour.Add("0")
+                    Exit Sub
+                End If
+
+                'va vérifier toutes les zones
+                For i As Integer = 0 To _ListZones.Count - 1
+                    For j As Integer = 0 To _ListZones.Item(i).ListElement.Count - 1
+                        If _ListZones.Item(i).ListElement.Item(j).ElementID = Id Then AddLabel(retour, "Zone: " & _ListZones.Item(i).Name)
+                    Next
+                Next
+                'va vérifier tous les triggers
+                For i As Integer = 0 To _ListTriggers.Count - 1
+                    If _ListTriggers.Item(i).ConditionDeviceId = Id Then AddLabel(retour, "Trigger: " & _ListTriggers.Item(i).Nom)
+                Next
+                'va vérifier toutes les macros
+                For i As Integer = 0 To _ListMacros.Count - 1
+                    VerifIdInAction(_ListMacros.Item(i).ListActions, Id, _ListMacros.Item(i).Nom, retour)
+                Next
+
+                retour.Add("0")
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "_CanDelete", "Erreur : " & ex.Message)
+                retour.Add("ERREUR lors de l'exécution de la fonction: " & ex.ToString)
+                retour.Add("0")
+            End Try
+        End Sub
+
+        Private Sub AddLabel(ByVal List As List(Of String), ByVal Message As String)
+            For i As Integer = 0 To List.Count - 1
+                If List(i) = Message Then Exit Sub
+            Next
+            List.Add(Message)
+        End Sub
+
+        Private Sub VerifIdInAction(ByVal Actions As ArrayList, ByVal Id As String, ByVal NameMacro As String, ByVal Retour As List(Of String))
+            Try
+                For j As Integer = 0 To Actions.Count - 1
+                    Select Case Actions.Item(j).TypeAction
+                        Case Action.TypeAction.ActionDevice
+                            If Actions.Item(j).IdDevice = Id Then AddLabel(Retour, "Macro: " & NameMacro)
+                        Case Action.TypeAction.ActionIf
+                            Dim x As Action.ActionIf = Actions.Item(j)
+                            For k As Integer = 0 To x.Conditions.Count - 1
+                                If x.Conditions.Item(k).IdDevice = Id Then AddLabel(Retour, "Macro: " & NameMacro)
+                            Next
+                            VerifIdInAction(x.ListTrue, Id, NameMacro, Retour)
+                            VerifIdInAction(x.ListFalse, Id, NameMacro, Retour)
+                        Case Action.TypeAction.ActionMail
+                            If Actions.Item(j).UserId = Id Then AddLabel(Retour, "Macro: " & NameMacro)
+                        Case Action.TypeAction.ActionMacro
+                            If Actions.Item(j).IdMacro = Id Then AddLabel(Retour, "Macro: " & NameMacro)
+                    End Select
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "VerifIdInAction", "Erreur : " & ex.ToString)
+                AddLabel(Retour, "ERREUR lors de l'exécution de la fonction: " & ex.ToString)
+            End Try
+        End Sub
+
+        ''' <summary>
         ''' Retourne le paramètre de sauvegarde
         ''' </summary>
         ''' <returns></returns>
@@ -5505,6 +5612,7 @@ Namespace HoMIDom
                 Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "Erreur lors du traitemant du Sub ExecuteDeviceCommand: " & ex.ToString)
             End Try
         End Sub
+
 #End Region
 
 #Region "Zone"
@@ -5909,9 +6017,9 @@ Namespace HoMIDom
             End If
 
             Try
-                For i As Integer = 0 To _listTriggers.Count - 1
-                    If _listTriggers.Item(i).ID = triggerId Then
-                        _listTriggers.RemoveAt(i)
+                For i As Integer = 0 To _ListTriggers.Count - 1
+                    If _ListTriggers.Item(i).ID = triggerId Then
+                        _ListTriggers.RemoveAt(i)
                         DeleteTrigger = 0
                         Exit Function
                     End If
@@ -5934,19 +6042,19 @@ Namespace HoMIDom
 
             Try
                 Dim _list As New List(Of Trigger)
-                For i As Integer = 0 To _listTriggers.Count - 1
+                For i As Integer = 0 To _ListTriggers.Count - 1
                     Dim x As New Trigger
                     With x
-                        .Nom = _listTriggers.Item(i).Nom
-                        .ID = _listTriggers.Item(i).ID
-                        .Description = _listTriggers.Item(i).Description
-                        .Enable = _listTriggers.Item(i).Enable
-                        .Prochainedateheure = _listTriggers.Item(i).Prochainedateheure
-                        .Type = _listTriggers.Item(i).Type
-                        .ConditionTime = _listTriggers.Item(i).ConditionTime
-                        .ConditionDeviceId = _listTriggers.Item(i).ConditionDeviceId
-                        .ConditionDeviceProperty = _listTriggers.Item(i).ConditionDeviceProperty
-                        .ListMacro = _listTriggers.Item(i).ListMacro
+                        .Nom = _ListTriggers.Item(i).Nom
+                        .ID = _ListTriggers.Item(i).ID
+                        .Description = _ListTriggers.Item(i).Description
+                        .Enable = _ListTriggers.Item(i).Enable
+                        .Prochainedateheure = _ListTriggers.Item(i).Prochainedateheure
+                        .Type = _ListTriggers.Item(i).Type
+                        .ConditionTime = _ListTriggers.Item(i).ConditionTime
+                        .ConditionDeviceId = _ListTriggers.Item(i).ConditionDeviceId
+                        .ConditionDeviceProperty = _ListTriggers.Item(i).ConditionDeviceProperty
+                        .ListMacro = _ListTriggers.Item(i).ListMacro
                     End With
                     _list.Add(x)
                 Next
@@ -6009,26 +6117,26 @@ Namespace HoMIDom
 
                     End With
                     myID = x.ID
-                    _listTriggers.Add(x)
+                    _ListTriggers.Add(x)
                     x = Nothing
                 Else
                     'trigger Existante
                     myID = triggerId
-                    For i As Integer = 0 To _listTriggers.Count - 1
-                        If _listTriggers.Item(i).ID = triggerId Then
-                            _listTriggers.Item(i).Nom = nom
-                            _listTriggers.Item(i).Enable = enable
-                            _listTriggers.Item(i).Description = description
+                    For i As Integer = 0 To _ListTriggers.Count - 1
+                        If _ListTriggers.Item(i).ID = triggerId Then
+                            _ListTriggers.Item(i).Nom = nom
+                            _ListTriggers.Item(i).Enable = enable
+                            _ListTriggers.Item(i).Description = description
                             Select Case TypeTrigger
                                 Case Trigger.TypeTrigger.TIMER
-                                    _listTriggers.Item(i).Type = HoMIDom.Trigger.TypeTrigger.TIMER
-                                    _listTriggers.Item(i).ConditionTime = conditiontimer
+                                    _ListTriggers.Item(i).Type = HoMIDom.Trigger.TypeTrigger.TIMER
+                                    _ListTriggers.Item(i).ConditionTime = conditiontimer
                                 Case Trigger.TypeTrigger.DEVICE
-                                    _listTriggers.Item(i).Type = HoMIDom.Trigger.TypeTrigger.DEVICE
-                                    _listTriggers.Item(i).ConditionDeviceId = deviceid
-                                    _listTriggers.Item(i).ConditionDeviceProperty = deviceproperty
+                                    _ListTriggers.Item(i).Type = HoMIDom.Trigger.TypeTrigger.DEVICE
+                                    _ListTriggers.Item(i).ConditionDeviceId = deviceid
+                                    _ListTriggers.Item(i).ConditionDeviceProperty = deviceproperty
                             End Select
-                            If macro IsNot Nothing Then _listTriggers.Item(i).ListMacro = macro
+                            If macro IsNot Nothing Then _ListTriggers.Item(i).ListMacro = macro
                         End If
                     Next
                 End If
@@ -6051,7 +6159,7 @@ Namespace HoMIDom
             End If
 
             Try
-                Dim Resultat = (From Trigger In _listTriggers Where Trigger.ID = TriggerId Select Trigger).First
+                Dim Resultat = (From Trigger In _ListTriggers Where Trigger.ID = TriggerId Select Trigger).First
                 Return Resultat
 
             Catch ex As Exception
