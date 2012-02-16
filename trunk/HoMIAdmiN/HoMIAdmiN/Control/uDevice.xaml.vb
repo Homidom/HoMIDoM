@@ -572,6 +572,8 @@ Partial Public Class uDevice
                                 Else
                                     Label6.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                     TxtAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    TxtAdresse1.Visibility = Windows.Visibility.Visible
+                                    Label6.Visibility = Windows.Visibility.Visible
                                 End If
                             Case "ADRESSE2"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
@@ -580,12 +582,15 @@ Partial Public Class uDevice
                                 Else
                                     Label7.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                     TxtAdresse2.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    TxtAdresse2.Visibility = Windows.Visibility.Visible
+                                    Label7.Visibility = Windows.Visibility.Visible
                                 End If
                             Case "SOLO"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
                                     ChKSolo.Visibility = Windows.Visibility.Hidden
                                 Else
                                     ChKSolo.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    ChKSolo.Visibility = Windows.Visibility.Visible
                                 End If
                             Case "MODELE"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
@@ -594,6 +599,8 @@ Partial Public Class uDevice
                                 Else
                                     Label8.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                     TxtModele.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    TxtModele.Visibility = Windows.Visibility.Visible
+                                    Label8.Visibility = Windows.Visibility.Visible
                                 End If
                             Case "REFRESH"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
@@ -602,6 +609,8 @@ Partial Public Class uDevice
                                 Else
                                     Label9.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                     TxtRefresh.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    TxtRefresh.Visibility = Windows.Visibility.Visible
+                                    Label9.Visibility = Windows.Visibility.Visible
                                 End If
                             Case "LASTCHANGEDUREE"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
@@ -610,6 +619,26 @@ Partial Public Class uDevice
                                 Else
                                     Label19.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                     TxtLastChangeDuree.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    TxtLastChangeDuree.Visibility = Windows.Visibility.Visible
+                                    Label19.Visibility = Windows.Visibility.Visible
+                                End If
+                            Case "MODELE"
+                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
+                                    TxtModele.Visibility = Windows.Visibility.Hidden
+                                    Label8.Visibility = Windows.Visibility.Hidden
+                                Else
+                                    If _Driver.LabelsDevice.Item(k).LabelChamp <> "" Then
+                                        TxtModele.Items.Clear()
+                                        Dim a() As String = _Driver.LabelsDevice.Item(k).LabelChamp.Split("|")
+                                        For g As Integer = 0 To a.Length - 1
+                                            TxtModele.Items.Add(a(g))
+                                        Next
+                                        TxtModele.IsEditable = False
+                                    Else
+                                        TxtModele.IsEditable = True
+                                    End If
+                                    TxtModele.Visibility = Windows.Visibility.Visible
+                                    Label8.Visibility = Windows.Visibility.Visible
                                 End If
                         End Select
                     Next
