@@ -106,9 +106,6 @@ Module Service
                     hostFileServer.Close()
                 End Using
                 host.Close()
-
-
-
             End Using
         Catch ex As Exception
             MsgBox("Erreur lors du service: " & ex.Message & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.Critical, "ERREUR SERVICE")

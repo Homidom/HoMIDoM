@@ -925,6 +925,31 @@ Namespace HoMIDom
         <OperationContract()> Sub SetSMTPMailServeur(ByVal IdSrv As String, ByVal Value As String)
 #End Region
 
+#Region "Telecommande"
+        ''' <summary>
+        ''' Retourne la liste des templates télécommande (fichier xml), présents dans le répertoire templates
+        ''' </summary>
+        ''' <returns>List of Templates</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetListOfTemplate() As List(Of Telecommande.Template)
+
+        ''' <summary>
+        ''' Crée un nouveau template dans le répertoire templates
+        ''' </summary>
+        ''' <param name="Fabricant">nom du fabricant</param>
+        ''' <param name="Modele">modele</param>
+        ''' <param name="Driver">driver</param>
+        ''' <param name="Type">Type de base, si différent de VIDE va mettre les commandes de bases par défaut</param>
+        ''' <returns>0 si ok, sinon message d'erreur</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function CreateNewTemplate(ByVal Fabricant As String, ByVal Modele As String, ByVal Driver As String, ByVal Type As Telecommande.TypeEquipement) As String
+
+        ''' <summary>Demander un apprentissage à un driver</summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function StartLearning(ByVal IdSrv As String, ByVal DriverId As String) As String
+
+#End Region
     End Interface
 
 End Namespace

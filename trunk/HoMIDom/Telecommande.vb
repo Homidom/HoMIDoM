@@ -5,6 +5,11 @@ Namespace HoMIDom
     ''' </summary>
     ''' <remarks></remarks>
     Public Class Telecommande
+        Public Shared TemplateBOX() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power"}
+        Public Shared TemplateTV() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power"}
+        Public Shared TemplateDVD() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power"}
+        Public Shared TemplateAUDIO() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power"}
+
         Public Class Template
             Dim _Fabricant As String = ""
             Dim _Modele As String = ""
@@ -83,5 +88,38 @@ Namespace HoMIDom
             AUDIO = 3
             BOX = 4
         End Enum
+
+        Public Class Commandes
+            Dim _Name As String
+            Dim _Code As String
+            Dim _Repeat As Integer = 0
+
+            Property Name As String
+                Get
+                    Return _Name
+                End Get
+                Set(ByVal value As String)
+                    _Name = value
+                End Set
+            End Property
+
+            Property Code As String
+                Get
+                    Return _Code
+                End Get
+                Set(ByVal value As String)
+                    _Code = value
+                End Set
+            End Property
+
+            Property Repeat As Integer
+                Get
+                    Return _Repeat
+                End Get
+                Set(ByVal value As Integer)
+                    _Repeat = value
+                End Set
+            End Property
+        End Class
     End Class
 End Namespace

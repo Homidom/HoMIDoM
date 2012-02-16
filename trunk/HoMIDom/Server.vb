@@ -2342,7 +2342,7 @@ Namespace HoMIDom
                 '    Fichier = Nothing
                 'End SyncLock
             Catch ex As Exception
-                Console.WriteLine("Erreur lors de l'écriture d'un log: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
+                Console.WriteLine("Erreur lors de l'écriture d'un log: " & ex.ToString, MsgBoxStyle.Exclamation, "Erreur Serveur")
             End Try
         End Sub
 
@@ -6428,7 +6428,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns>List of Templates</returns>
         ''' <remarks></remarks>
-        Public Function GetListOfTemplate() As List(Of Telecommande.Template)
+        Public Function GetListOfTemplate() As List(Of Telecommande.Template) Implements IHoMIDom.GetListOfTemplate
             Try
                 Dim Tabl As New List(Of Telecommande.Template)
                 Dim MyPath As String = _MonRepertoire & "\templates\"
@@ -6456,8 +6456,8 @@ Namespace HoMIDom
                                         x.Driver = list.Item(0).Attributes.Item(j).Value
                                 End Select
                                 x.File = file.Name
-                                Tabl.Add(x)
                             Next
+                            Tabl.Add(x)
                         End If
                         xml = Nothing
                         list = Nothing
@@ -6471,23 +6471,165 @@ Namespace HoMIDom
             End Try
         End Function
 
-        Public Function CreateNewTemplate(ByVal Fabricant As String, ByVal Modele As String, ByVal Driver As String, ByVal Type As Telecommande.TypeEquipement)
+        ''' <summary>
+        ''' Crée un nouveau template dans le répertoire templates
+        ''' </summary>
+        ''' <param name="Fabricant">nom du fabricant</param>
+        ''' <param name="Modele">modele</param>
+        ''' <param name="Driver">driver</param>
+        ''' <param name="Type">Type de base, si différent de VIDE va mettre les commandes de bases par défaut</param>
+        ''' <returns>0 si ok, sinon message d'erreur</returns>
+        ''' <remarks></remarks>
+        Public Function CreateNewTemplate(ByVal Fabricant As String, ByVal Modele As String, ByVal Driver As String, ByVal Type As Telecommande.TypeEquipement) As String Implements IHoMIDom.CreateNewTemplate
             Try
                 Dim MyPath As String = _MonRepertoire & "\templates\"
+                Dim _Fichier As String = MyPath & LCase(Fabricant) & "-" & LCase(Modele) & "-" & Trim(LCase(Driver)) & ".xml"
 
-                If IO.File.Exists(MyPath & LCase(Fabricant) & "-" & LCase(Modele) & "-" & LCase(Driver) & ".xml") Then
+                If IO.File.Exists(_Fichier) Then
+                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "CreateNewTemplate", "Le template existe déjà pour ce même couple fabricant, modèle et driver!")
                     Return "Le template existe déjà pour ce même couple fabricant, modèle et driver!"
                     Exit Function
                 End If
 
+                ''Creation du fichier XML
+                Dim writer As New XmlTextWriter(_Fichier, System.Text.Encoding.UTF8)
+                writer.WriteStartDocument(True)
+                writer.Formatting = Formatting.Indented
+                writer.Indentation = 2
 
+                writer.WriteStartElement("template")
+                writer.WriteStartAttribute("fabricant")
+                writer.WriteValue(LCase(Fabricant))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("modele")
+                writer.WriteValue(LCase(Modele))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("driver")
+                writer.WriteValue(LCase(Driver))
+                writer.WriteEndAttribute()
+                writer.WriteStartElement("commandes")
 
-                Return 0
+                Dim _listcmd() As String = Nothing
+                Select Case Type
+                    Case Telecommande.TypeEquipement.VIDE
+                    Case Telecommande.TypeEquipement.TV
+                        _listcmd = Telecommande.TemplateTV
+                    Case Telecommande.TypeEquipement.DVD
+                        _listcmd = Telecommande.TemplateDVD
+                    Case Telecommande.TypeEquipement.BOX
+                        _listcmd = Telecommande.TemplateBOX
+                    Case Telecommande.TypeEquipement.AUDIO
+                        _listcmd = Telecommande.TemplateAUDIO
+                End Select
+
+                If _listcmd IsNot Nothing Then
+                    For i As Integer = 0 To _listcmd.Length - 1
+                        writer.WriteStartElement("cmd")
+                        writer.WriteStartAttribute("name")
+                        writer.WriteValue(_listcmd(i))
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("code")
+                        writer.WriteValue("")
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("repeat")
+                        writer.WriteValue("0")
+                        writer.WriteEndAttribute()
+                        writer.WriteEndElement()
+                    Next
+                End If
+
+                writer.WriteEndElement()
+                writer.WriteEndElement()
+
+                writer.WriteEndDocument()
+                writer.Close()
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "CreateNewTemplate", "Nouveau template créé: " & Fabricant & "-" & Modele & "-" & Driver)
+
+                Return "0"
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CreateNewTemplate", "Erreur : " & ex.Message)
                 Return ex.Message
             End Try
         End Function
+
+        ''' <summary>
+        ''' Recupère la liste des commandes d'un template donné
+        ''' </summary>
+        ''' <param name="Fabricant"></param>
+        ''' <param name="Modele"></param>
+        ''' <param name="Driver"></param>
+        ''' <returns>Liste de commandes</returns>
+        ''' <remarks></remarks>
+        Public Function ReadTemplate(ByVal Fabricant As String, ByVal Modele As String, ByVal Driver As String) As List(Of Telecommande.Commandes)
+            Try
+                Dim _list As New List(Of Telecommande.Commandes)
+
+                Dim MyPath As String = _MonRepertoire & "\templates\" & LCase(Fabricant) & "-" & LCase(Modele) & "-" & LCase(Driver) & ".xml"
+
+                If IO.File.Exists(MyPath) = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReadTemplate", "Erreur le fichier n'existe pas: " & MyPath)
+                End If
+
+                Dim xml As XML = Nothing
+
+                MyXML = New XML(MyPath)
+                Dim list As XmlNodeList
+
+                list = MyXML.SelectNodes("/template/commandes/cmd")
+                If list.Count > 0 Then 'présence des paramètres du template
+                    For i As Integer = 0 To list.Count - 1
+                        Dim x As New Telecommande.Commandes
+                        For j As Integer = 0 To list.Item(i).Attributes.Count - 1
+                            Select Case list.Item(i).Attributes.Item(j).Name
+                                Case "name"
+                                    If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then x.Name = list.Item(i).Attributes.Item(j).Value
+                                Case "code"
+                                    If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then x.Code = list.Item(i).Attributes.Item(j).Value
+                                Case "repeat"
+                                    If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then
+                                        If IsNumeric(list.Item(i).Attributes.Item(j).Value) Then x.Repeat = list.Item(i).Attributes.Item(j).Value
+                                    End If
+                            End Select
+                        Next
+                        _list.Add(x)
+                    Next
+
+                End If
+                xml = Nothing
+                list = Nothing
+
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReadTemplate", "Erreur : " & ex.ToString)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>Demander un apprentissage à un driver</summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function StartLearning(ByVal IdSrv As String, ByVal DriverId As String) As String Implements IHoMIDom.StartLearning
+            If VerifIdSrv(IdSrv) = False Then
+                Return "ERREUR: l'Id du serveur est erroné"
+                Exit Function
+            End If
+
+            Dim retour As String = ""
+            Try
+                For i As Integer = 0 To _ListDrivers.Count - 1
+                    If _ListDrivers.Item(i).ID = DriverId Then
+                        Dim x As Object = _ListDrivers.Item(i)
+                        retour = x.LearnCode()
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "SERVEUR", "StartLearning: " & retour)
+                    End If
+                Next
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "StartLearning", "Erreur : " & ex.Message)
+                Return ("ERREUR: " & ex.Message)
+            End Try
+        End Function
+
 #End Region
 
 #Region "Log"
