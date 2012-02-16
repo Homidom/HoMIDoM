@@ -548,6 +548,10 @@ Partial Public Class uDevice
         Next
     End Sub
 
+    Private Sub CbDriver_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbDriver.MouseLeave
+        MaJDriver()
+    End Sub
+
     Private Sub CbDriver_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbDriver.SelectionChanged
         MaJDriver()
     End Sub
@@ -555,7 +559,7 @@ Partial Public Class uDevice
     Private Sub MaJDriver()
         If CbDriver.SelectedIndex < 0 Then Exit Sub
 
-        For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1 'Window1.Obj.Drivers.Count - 1
+        For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
             If myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
                 _Driver = myService.GetAllDrivers(IdSrv).Item(i)
                 If _Driver.LabelsDevice.Count > 0 Then
@@ -569,7 +573,7 @@ Partial Public Class uDevice
                                     Label6.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                     TxtAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                 End If
-                            Case "ADRESSE1"
+                            Case "ADRESSE2"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
                                     TxtAdresse2.Visibility = Windows.Visibility.Hidden
                                     Label7.Visibility = Windows.Visibility.Hidden
