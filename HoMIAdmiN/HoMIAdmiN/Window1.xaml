@@ -220,19 +220,19 @@
             <Label Foreground="White" Name="LblStatus" VerticalAlignment="Stretch">#####</Label>
             <Ellipse Height="20" Name="Ellipse1" Stroke="Black" Width="20" Fill="Cyan" />
             <Label Foreground="White" Name="LblConnect" VerticalAlignment="Stretch">#####</Label>
-            <Rectangle Width="25"/>
+            <Rectangle Width="10"/>
             <Image Height="20"  Name="Image3" Stretch="Fill" Width="20" Source="/HoMIAdmiN;component/Images/Soleil.png" />
             <Label Content="##:##" Name="LHS" Foreground="White" />
             <Image Height="20"  Name="Image4" Stretch="Fill" Width="20" Source="/HoMIAdmiN;component/Images/Lune.png" />
             <Label Content="##:##" Name="LCS" Foreground="White" />
-            <Rectangle Width="20" />
-            <Image Name="ImgSrv" Margin="2" Height="25" Width="25" Source="/HoMIAdmiN;component/Images/home-128.png">
+            <Rectangle Width="10" />
+            <Image Name="ImgSrv" Margin="2" Height="20" Width="22" Source="/HoMIAdmiN;component/Images/home-128.png">
                 <Image.LayoutTransform >
                     <RotateTransform CenterX="0" CenterY="0" Angle="-5" />
                 </Image.LayoutTransform>
             </Image>
-            <Label Content="Serveur courant: ?" Foreground=" White" Name="LblSrv"/>
-            <Rectangle Width="15"/>
+            <Label Content="#####" Foreground=" White" Name="LblSrv"/>
+            <Rectangle Width="10"/>
             <Label Name="LOG" Content="LOG" Foreground=" White"/>
         </StackPanel>
         

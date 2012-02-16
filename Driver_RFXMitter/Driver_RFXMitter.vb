@@ -618,7 +618,6 @@ Imports System.Globalization
             add_devicecommande("ALL_LIGHT_ON", "Protocole X10 : ALL_LIGHT_ON", 2)
             add_devicecommande("ALL_LIGHT_OFF", "Protocole X10 : ALL_LIGHT_OFF", 2)
             add_devicecommande("CHIME", "Protocole ARC : Chime", 2)
-            add_devicecommande("BRIGHT", "Protocole X10 : Bright", 2)
 
             'Libellé Driver
             add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
@@ -627,7 +626,7 @@ Imports System.Globalization
             add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
             add_libelledevice("ADRESSE2", "@", "")
             add_libelledevice("SOLO", "@", "")
-            add_libelledevice("MODELE", "Protocole", "Nom du protocole à utiliser : AC / ACEU / X10 / ARC / WAVEMAN")
+            add_libelledevice("MODELE", "Protocole|AC|ACEU|ARC|WAVEMAN|X10", "Nom du protocole à utiliser : AC / ACEU / X10 / ARC / WAVEMAN")
             add_libelledevice("REFRESH", "@", "")
 
         Catch ex As Exception

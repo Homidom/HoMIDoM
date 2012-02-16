@@ -79,8 +79,14 @@ Class Window1
                     LblStatus.Content = Now.ToLongDateString & " " & mytime & " "
                     mytime = ""
 
-                    LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & myChannelFactory.Endpoint.Address.ToString()
-                    LblConnect.Content = Mid(myChannelFactory.Endpoint.Address.ToString(), 1, 32) & "..."
+                    Dim serveurcomplet As String = myChannelFactory.Endpoint.Address.ToString()
+                    serveurcomplet = Mid(serveurcomplet, 8, serveurcomplet.Length - 8)
+                    serveurcomplet = Split(serveurcomplet, "/", 2)(0)
+                    Dim serveuradresse As String = Split(serveurcomplet, ":", 2)(0)
+                    Dim serveurport As String = Split(serveurcomplet, ":", 2)(1)
+                    LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & serveuradresse & ":" & serveurport
+                    'LblConnect.Content = Mid(myChannelFactory.Endpoint.Address.ToString(), 1, 32) & "..."
+                    LblConnect.Content = serveuradresse & ":" & serveurport
 
                     Dim mydate As Date
                     mydate = myService.GetHeureLeverSoleil
@@ -639,7 +645,8 @@ Class Window1
                 ShowMainMenu()
             End If
 
-            LblSrv.Content = "Serveur courant: " & Name
+            LblSrv.Content = Name
+            LblSrv.ToolTip = "Serveur courant : " & Name
             For i As Integer = 0 To ListServer.Count - 1
                 If ListServer.Item(i).Nom = Name Then
                     If File.Exists(ListServer.Item(i).Icon) Then
