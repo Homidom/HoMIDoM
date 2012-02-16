@@ -44,26 +44,29 @@ Imports HoMIDom.HoMIDom.Device
 #End Region
 
 #Region "Declaration"
-    Private Declare Function OpenDevice Lib "k8055d.dll" (ByVal CardAddress As Long) As Long
+    Private Declare Function OpenDevice Lib "k8055d.dll" (ByVal CardAddress As Integer) As Integer
     Private Declare Sub CloseDevice Lib "k8055d.dll" ()
-    Private Declare Sub WriteAllDigital Lib "k8055d.dll" (ByVal Data As Long)
-    Private Declare Sub ClearDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long)
-    Private Declare Sub ClearAllDigital Lib "k8055d.dll" ()
-    Private Declare Sub SetDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long)
-    Private Declare Sub SetAllDigital Lib "k8055d.dll" ()
-    Private Declare Function ReadDigitalChannel Lib "k8055d.dll" (ByVal Channel As Long) As Boolean
-    Private Declare Function ReadAllDigital Lib "k8055d.dll" () As Long
-    Private Declare Function ReadAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long) As Long
-    Private Declare Sub ReadAllAnalog Lib "k8055d.dll" (ByVal Data1 As Long, ByVal Data2 As Long)
-    Private Declare Sub OutputAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long, ByVal Data As Long)
-    Private Declare Sub OutputAllAnalog Lib "k8055d.dll" (ByVal Data1 As Long, ByVal Data2 As Long)
-    Private Declare Sub ClearAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long)
-    Private Declare Function ReadCounter Lib "k8055d.dll" (ByVal CounterNr As Long) As Long
+    'Private Declare Function Version Lib "k8055d.dll" () As Integer
+    Private Declare Function SearchDevices Lib "k8055d.dll" () As Integer
+    Private Declare Function SetCurrentDevice Lib "k8055d.dll" (ByVal CardAddress As Integer) As Integer
+    Private Declare Function ReadAnalogChannel Lib "k8055d.dll" (ByVal Channel As Integer) As Integer
+    Private Declare Sub ReadAllAnalog Lib "k8055d.dll" (ByRef Data1 As Integer, ByRef Data2 As Integer)
+    Private Declare Sub OutputAnalogChannel Lib "k8055d.dll" (ByVal Channel As Integer, ByVal Data As Integer)
+    Private Declare Sub OutputAllAnalog Lib "k8055d.dll" (ByVal Data1 As Integer, ByVal Data2 As Integer)
+    Private Declare Sub ClearAnalogChannel Lib "k8055d.dll" (ByVal Channel As Integer)
     Private Declare Sub SetAllAnalog Lib "k8055d.dll" ()
     Private Declare Sub ClearAllAnalog Lib "k8055d.dll" ()
-    Private Declare Sub ResetCounter Lib "k8055d.dll" (ByVal CounterNr As Long)
-    Private Declare Sub SetAnalogChannel Lib "k8055d.dll" (ByVal Channel As Long)
-    Private Declare Sub SetCounterDebounceTime Lib "k8055d.dll" (ByVal CounterNr As Long, ByVal DebounceTime As Long)
+    Private Declare Sub SetAnalogChannel Lib "k8055d.dll" (ByVal Channel As Integer)
+    Private Declare Sub WriteAllDigital Lib "k8055d.dll" (ByVal Data As Integer)
+    Private Declare Sub ClearDigitalChannel Lib "k8055d.dll" (ByVal Channel As Integer)
+    Private Declare Sub ClearAllDigital Lib "k8055d.dll" ()
+    Private Declare Sub SetDigitalChannel Lib "k8055d.dll" (ByVal Channel As Integer)
+    Private Declare Sub SetAllDigital Lib "k8055d.dll" ()
+    Private Declare Function ReadDigitalChannel Lib "k8055d.dll" (ByVal Channel As Integer) As Boolean
+    Private Declare Function ReadAllDigital Lib "k8055d.dll" () As Integer
+    Private Declare Function ReadCounter Lib "k8055d.dll" (ByVal CounterNr As Integer) As Integer
+    Private Declare Sub ResetCounter Lib "k8055d.dll" (ByVal CounterNr As Integer)
+    Private Declare Sub SetCounterDebounceTime Lib "k8055d.dll" (ByVal CounterNr As Integer, ByVal DebounceTime As Integer)
 #End Region
 
 #Region "Fonctions génériques"
@@ -210,9 +213,31 @@ Imports HoMIDom.HoMIDom.Device
     End Property
 
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
-        If _Enable = False Then Exit Sub
+        Try
+            If _Enable = False Then Exit Sub
+            If IsNumeric(Objet.Adresse1) = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse du device (Adresse1) " & Objet.Adresse1 & " n'est pas une valeur numérique")
+                Exit Sub
+            End If
+            Dim adr As Long = Objet.Adresse1
+            If adr < 1 Or adr > 8 Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 8")
+                Exit Sub
+            End If
+            If IsNumeric(Objet.Adresse2) = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse de la carte (Adresse2) " & Objet.Adresse2 & " n'est pas une valeur numérique")
+                Exit Sub
+            End If
+            If CInt(Objet.Adresse2) < 0 Or CInt(Objet.Adresse2) > 3 Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse de la carte (Adresse2) doit être comprise entre 0 et 3")
+                Exit Sub
+            End If
 
-        Objet.Value = ReadBinaireChannel(Objet.Adresse1)
+            SetCurrentDevice(CInt(Objet.Adresse2))
+            Objet.Value = ReadBinaireChannel(Objet.Adresse1)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: " & ex.ToString)
+        End Try
     End Sub
 
     Public Property Refresh() As Integer Implements HoMIDom.HoMIDom.IDriver.Refresh
@@ -287,8 +312,14 @@ Imports HoMIDom.HoMIDom.Device
         Try
             Dim retour As String = "0"
             Select Case UCase(Champ)
-
-
+                Case "ADRESSE1"
+                    If Value = " " Then retour = "l'adresse du device est obligatoire"
+                    If IsNumeric(Value) = False Then retour = "l'adresse doit être numérique et comprise entre 1 et 5"
+                    If CInt(Value) < 1 Or CInt(Value) > 5 Then retour = "l'adresse doit être numérique et comprise entre 1 et 5"
+                Case "ADRESSE2"
+                    If Value = " " Then retour = "l'adresse de la carte est obligatoire"
+                    If IsNumeric(Value) = False Then retour = "l'adresse de la carte doit être numérique et comprise entre 0 et 3"
+                    If CInt(Value) < 0 Or CInt(Value) > 3 Then retour = "l'adresse de la carte doit être numérique et comprise entre 0 et 3"
             End Select
             Return retour
         Catch ex As Exception
@@ -300,17 +331,51 @@ Imports HoMIDom.HoMIDom.Device
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         'cree l'objet
         Try
-            Dim h As Long
-            Dim carte As Long = 0
-            h = OpenDevice(carte)
-            Select Case h
-                Case 0, 1, 2, 3
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Start", "Carte " & Str(h) & " connectée")
-                    _IsConnect = True
-                Case -1
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Start", "Carte " & Str(carte) & " non trouvée")
-                    _IsConnect = False
-            End Select
+            'Dim h As Long
+            'Dim carte As Long = 0
+            'h = OpenDevice(carte)
+            'Select Case h
+            '    Case 0, 1, 2, 3
+            '        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Start", "Carte " & Str(h) & " connectée")
+            '        _IsConnect = True
+            '    Case -1
+            '        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Start", "Carte " & Str(carte) & " non trouvée")
+            '        _IsConnect = False
+            'End Select
+
+            Dim k As Integer
+            Dim CardFound As Boolean
+            CardFound = False
+            k = SearchDevices()
+            If k = 0 Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Start", "Aucune Carte n'a été trouvée")
+                _IsConnect = False
+            End If
+            If (k And 1) Then
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Start", "Carte 0 connectée")
+                CardFound = True
+                SetCurrentDevice(0)
+            End If
+            If (k And 2) Then
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Start", "Carte 1 connectée")
+                If Not CardFound Then
+                    CardFound = True
+                    SetCurrentDevice(1)
+                End If
+            End If
+            If (k And 4) Then
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Start", "Carte 2 connectée")
+                If Not CardFound Then
+                    CardFound = True
+                    SetCurrentDevice(2)
+                End If
+            End If
+            If (k And 8) Then
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Start", "Carte 3 connectée")
+                If Not CardFound Then
+                    SetCurrentDevice(3)
+                End If
+            End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Start", "Erreur lors du démarrage du driver: " & ex.ToString)
             _IsConnect = False
@@ -349,11 +414,24 @@ Imports HoMIDom.HoMIDom.Device
             If _Enable = False Then Exit Sub
 
             If IsNumeric(Objet.Adresse1) = False Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: l'adresse du device " & Objet.Adresse1 & " n'est pas une valeur numérique")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: l'adresse du device (Adresse1) " & Objet.Adresse1 & " n'est pas une valeur numérique")
+                Exit Sub
+            End If
+            Dim adr As Long = Objet.Adresse1
+            If adr < 1 Or adr > 8 Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 8")
+                Exit Sub
+            End If
+            If IsNumeric(Objet.Adresse2) = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: l'adresse de la carte (Adresse2) " & Objet.Adresse2 & " n'est pas une valeur numérique")
+                Exit Sub
+            End If
+            If CInt(Objet.Adresse2) < 0 Or CInt(Objet.Adresse2) > 3 Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: l'adresse de la carte (Adresse2) doit être comprise entre 0 et 3")
+                Exit Sub
             End If
 
-            Dim adr As Long = Objet.Adresse1
-
+            SetCurrentDevice(CInt(Objet.Adresse2))
             If Objet.Type = "SWITCH" Or Objet.Type = "APPAREIL" Then
                 If Commande = "ON" Then
                     SetBinaireChannel(adr)
@@ -459,6 +537,8 @@ Imports HoMIDom.HoMIDom.Device
         'x.DescriptionCommand = "Ceci est une commande avancée de test"
         'x.CountParam = 1
         '_DeviceCommandPlus.Add(x)
+        Add_LibelleDevice("ADRESSE1", "Adresse du device", "Doit être compris entre 1 et 5 pour une entrée et 1 et 8 pour une sortie")
+        Add_LibelleDevice("ADRESSE2", "Adresse de la carte", "Adresse de la carte qui doit être compris entre 0 et 3")
     End Sub
 #End Region
 
@@ -543,4 +623,7 @@ Imports HoMIDom.HoMIDom.Device
     End Sub
 #End Region
 
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
+    End Sub
 End Class
