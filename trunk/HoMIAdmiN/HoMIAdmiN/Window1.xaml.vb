@@ -11,6 +11,8 @@ Imports System.Windows.Media.Animation
 
 Class Window1
 
+    Public Event ChangeMenu(ByVal IndexMenu As Integer)
+
     Public Shared CanvasUser As Canvas
     Public Shared ListServer As New List(Of ClServer)
 
@@ -55,6 +57,8 @@ Class Window1
 
             spl.Close()
             spl = Nothing
+
+            AddHandler Window1.ChangeMenu, AddressOf MainMenuChange
 
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             Dim dt As DispatcherTimer = New DispatcherTimer()
@@ -101,7 +105,8 @@ Class Window1
                     Dim list As List(Of String) = myService.Get4Log
                     Dim a As String = ""
                     For i As Integer = 0 To list.Count - 1
-                        a &= list(i) & vbCrLf
+                        a &= list(i)
+                        If (i <> list.Count - 1) Then a &= vbCrLf
                     Next
                     LOG.ToolTip = a
                     ImgLog.ToolTip = a
@@ -365,7 +370,7 @@ Class Window1
                 tool &= "Description: " & Dev.Description & vbCrLf
                 tool &= "Type: " & Dev.Type.ToString & vbCrLf
                 tool &= "Driver: " & myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom & vbCrLf
-                tool &= "Value: " & Dev.Value & vbCrLf
+                tool &= "Value: " & Dev.Value
 
                 Dim tl As New ToolTip
                 tl.Content = tool
@@ -1066,27 +1071,27 @@ Class Window1
                                         Exit Sub
                                     End If
                                 End If
-                                End If
+                            End If
 
 
-                                Select Case Objet.Type
-                                    Case 0
-                                    Case 1
-                                        retour = myService.DeleteDevice(IdSrv, Objet.retour)
-                                        AffDevice()
-                                    Case 2
-                                        retour = myService.DeleteZone(IdSrv, Objet.retour)
-                                        AffZone()
-                                    Case 3
-                                        retour = myService.DeleteUser(IdSrv, Objet.retour)
-                                        AffUser()
-                                    Case 4
-                                        retour = myService.DeleteTrigger(IdSrv, Objet.retour)
-                                        AffTrigger()
-                                    Case 5
-                                        retour = myService.DeleteMacro(IdSrv, Objet.retour)
-                                        AffScene()
-                                End Select
+                            Select Case Objet.Type
+                                Case 0
+                                Case 1
+                                    retour = myService.DeleteDevice(IdSrv, Objet.retour)
+                                    AffDevice()
+                                Case 2
+                                    retour = myService.DeleteZone(IdSrv, Objet.retour)
+                                    AffZone()
+                                Case 3
+                                    retour = myService.DeleteUser(IdSrv, Objet.retour)
+                                    AffUser()
+                                Case 4
+                                    retour = myService.DeleteTrigger(IdSrv, Objet.retour)
+                                    AffTrigger()
+                                Case 5
+                                    retour = myService.DeleteMacro(IdSrv, Objet.retour)
+                                    AffScene()
+                            End Select
 
                             If retour = -2 Then
                                 MessageBox.Show("Vous ne pouvez pas supprimer cet élément!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
@@ -1096,7 +1101,7 @@ Class Window1
                             End If
 
                         Else
-                                MessageBox.Show("Veuillez sélectionner un élément à supprimer!")
+                            MessageBox.Show("Veuillez sélectionner un élément à supprimer!")
                         End If
                     Catch ex As Exception
                         MessageBox.Show("ERREUR de la suppression: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -1447,10 +1452,14 @@ Class Window1
             Dim list As List(Of String) = myService.Get4Log
             Dim a As String = ""
             For i As Integer = 0 To list.Count - 1
-                a &= list(i) & vbCrLf
+                a &= list(i)
+                If (i <> list.Count - 1) Then a &= vbCrLf
             Next
             LOG.ToolTip = a
         End If
     End Sub
 
+    Private Sub Log_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgLog.MouseDown, LOG.MouseDown, LOG.PreviewMouseDown, ImgLog.PreviewMouseDown
+        RaiseEvent ChangeMenu(sender.tag)
+    End Sub
 End Class
