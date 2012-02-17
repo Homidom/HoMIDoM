@@ -5,22 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
             Margin="10"  >
-    
-        <Grid Background="#636060">
-            <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
-                <StackPanel >
-                    <Label HorizontalAlignment="Center" Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Historisation</Label>
-                <StackPanel HorizontalAlignment="Right">
-                    <StackPanel>
-                        <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="2" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Fermer</Button>
-                    </StackPanel>
-                    </StackPanel>
-                <WindowsFormsHost Name="host" Width="600" Height="400" Margin="3">
+           
+        <DockPanel Background="#636060">
+            <Border Name="Border1" BorderBrush="Gray" BorderThickness="2"/>
 
-                </WindowsFormsHost>
-            </StackPanel>
-            </Border>
-        
-    </Grid>
-    
+        <DockPanel DockPanel.Dock="Top" >
+            <Button Foreground="White" DockPanel.Dock="Right"  Height="25" HorizontalAlignment="Right" Margin="2" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Fermer</Button>
+            <Label HorizontalAlignment="Center" Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Historisation</Label>
+        </DockPanel>
+        <StackPanel Height="5" DockPanel.Dock="Bottom" />
+        <WindowsFormsHost Name="host" MinWidth="600" MinHeight="400" Margin="3" />
+        </DockPanel>
+
 </UserControl>

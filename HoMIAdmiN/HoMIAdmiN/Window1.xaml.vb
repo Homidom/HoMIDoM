@@ -716,7 +716,7 @@ Class Window1
                     Dim x As New uLog
                     x.Uid = System.Guid.NewGuid.ToString()
                     AddHandler x.CloseMe, AddressOf UnloadControl
-                    x.Width = CanvasRight.ActualWidth - 120
+                    x.Width = CanvasRight.ActualWidth - 100
                     x.Height = CanvasRight.ActualHeight - 50
                     CanvasRight.Children.Clear()
                     CanvasRight.Children.Add(x)
@@ -1251,6 +1251,8 @@ Class Window1
 
             Dim x As New uHisto(myPane)
             x.Uid = System.Guid.NewGuid.ToString()
+            x.Width = CanvasRight.ActualWidth - 100
+            x.Height = CanvasRight.ActualHeight - 50
             AddHandler x.CloseMe, AddressOf UnloadControl
             CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
