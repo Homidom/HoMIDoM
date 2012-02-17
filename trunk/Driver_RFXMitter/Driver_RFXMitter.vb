@@ -506,11 +506,11 @@ Imports System.Globalization
                 Case "X10"
                     protocol_x10(Objet.adresse1, Command)
                 Case "ARC"
-                        protocol_arc(Objet.adresse1, Command)
+                    protocol_arc(Objet.adresse1, Command)
                 Case "WAVEMAN"
-                        protocol_waveman(Objet.Adresse1, Command)
+                    protocol_waveman(Objet.Adresse1, Command)
                 Case Else
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter WRITE", "Protocole non géré : " & Objet.Modele.ToString.ToUpper)
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter WRITE", "Protocole non géré : " & Objet.Modele.ToString.ToUpper)
             End Select
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter WRITE", ex.ToString)
@@ -628,7 +628,7 @@ Imports System.Globalization
             add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
             add_libelledevice("ADRESSE2", "@", "")
             add_libelledevice("SOLO", "@", "")
-            add_libelledevice("MODELE", "Protocole|AC|ACEU|ARC|WAVEMAN|X10", "Nom du protocole à utiliser : AC / ACEU / X10 / ARC / WAVEMAN")
+            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : AC / ACEU / X10 / ARC / WAVEMAN", "AC|ACEU|ARC|WAVEMAN|X10")
             add_libelledevice("REFRESH", "@", "")
 
         Catch ex As Exception
@@ -654,44 +654,44 @@ Imports System.Globalization
         Try
             Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
             My.Application.ChangeCulture("en-US")
-                If Not _IsConnect Then
-                    port_name = numero 'pour se rapeller du nom du port
-                    If VB.Left(numero, 3) <> "COM" Then
-                        'RFXMitter est un modele ethernet
-                        tcp = True
-                        client = New TcpClient(numero, _Port_TCP)
-                        _IsConnect = True
-                        Return ("Port IP " & port_name & ":" & _Port_TCP & " ouvert")
-                    Else
-                        'RFXMitter est un modele usb
-                        tcp = False
-                        port.PortName = port_name 'nom du port : COM1
-                    port.BaudRate = 4800 'vitesse du port : toujours 4800
-                        port.Parity = Parity.None 'pas de parité
-                        port.StopBits = StopBits.Two '2 bits d'arrêt par octet
-                        port.DataBits = 8 'nombre de bit par octet
-                        port.Encoding = System.Text.Encoding.GetEncoding(1252)  'Extended ASCII (8-bits)
-                        port.Handshake = Handshake.None
-                        port.ReadBufferSize = CInt(8192)
-                        port.ReceivedBytesThreshold = 1
-                        port.ReadTimeout = 100
-                        port.WriteTimeout = 500
-                        port.Open()
-                        _IsConnect = True
-                        If port.IsOpen Then
-                            port.DtrEnable = True
-                            port.RtsEnable = True
-                            port.DiscardInBuffer()
-                        End If
-                        dateheurelancement = DateTime.Now
-                        Return ("Port " & port_name & " ouvert")
-                    End If
+            If Not _IsConnect Then
+                port_name = numero 'pour se rapeller du nom du port
+                If VB.Left(numero, 3) <> "COM" Then
+                    'RFXMitter est un modele ethernet
+                    tcp = True
+                    client = New TcpClient(numero, _Port_TCP)
+                    _IsConnect = True
+                    Return ("Port IP " & port_name & ":" & _Port_TCP & " ouvert")
                 Else
-                    Return ("Port " & port_name & " dejà ouvert")
+                    'RFXMitter est un modele usb
+                    tcp = False
+                    port.PortName = port_name 'nom du port : COM1
+                    port.BaudRate = 4800 'vitesse du port : toujours 4800
+                    port.Parity = Parity.None 'pas de parité
+                    port.StopBits = StopBits.Two '2 bits d'arrêt par octet
+                    port.DataBits = 8 'nombre de bit par octet
+                    port.Encoding = System.Text.Encoding.GetEncoding(1252)  'Extended ASCII (8-bits)
+                    port.Handshake = Handshake.None
+                    port.ReadBufferSize = CInt(8192)
+                    port.ReceivedBytesThreshold = 1
+                    port.ReadTimeout = 100
+                    port.WriteTimeout = 500
+                    port.Open()
+                    _IsConnect = True
+                    If port.IsOpen Then
+                        port.DtrEnable = True
+                        port.RtsEnable = True
+                        port.DiscardInBuffer()
+                    End If
+                    dateheurelancement = DateTime.Now
+                    Return ("Port " & port_name & " ouvert")
                 End If
-            Catch ex As Exception
-                Return ("ERR: " & ex.Message)
-            End Try
+            Else
+                Return ("Port " & port_name & " dejà ouvert")
+            End If
+        Catch ex As Exception
+            Return ("ERR: " & ex.Message)
+        End Try
     End Function
 
     ''' <summary>Lances les handlers sur le port</summary>

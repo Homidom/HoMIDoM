@@ -354,15 +354,45 @@ Public Class Driver_onewire
                                 Dim retour As New ArrayList
                                 retour = switchs_get(Objet.Adresse1)
                                 If Not (retour Is Nothing) Then
-                                    'on a bien un resultat, on verifie si notre numero de switch est renvoyé
-                                    If CInt(Objet.Adresse2) <= retour.Count Then
-                                        If retour(CInt(Objet.Adresse2)) = 1 Then
-                                            Objet.Value = True
+                                    'on vérifie si ppt SOLO à true pour multiswitch
+                                    If Objet.Solo Then
+                                        'SOLO = true : on lit uniquement la valeur du composant qui a lancé le read
+                                        'on a bien un resultat, on verifie si notre numero de switch est renvoyé
+                                        If CInt(Objet.Adresse2) <= retour.Count Then
+                                            If retour(CInt(Objet.Adresse2) - 1) = 1 Then
+                                                Objet.Value = True
+                                            Else
+                                                Objet.Value = False
+                                            End If
                                         Else
-                                            Objet.Value = False
+                                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire Read", "Le multi-switch " & Objet.Name & " n a pas de switch numero " & Objet.Adresse2)
                                         End If
                                     Else
-                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire Read", "Le multi-switch " & Objet.Name & " n a pas de switch numero " & Objet.Adresse2)
+                                        'SOLO = false : Pour chaque valeur renvoyé, on cherche le composant et on met à jour sa valeur
+                                        'on recupere la liste des composant ayant la même adresse1 en 1-wire (même multiswitch)
+                                        Dim listedevices As New ArrayList
+                                        listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, Objet.Adresse1, "", Me._ID, True)
+                                        For i As Integer = 0 To retour.Count
+                                            'si le numero est celui de notre composant qui a lancé le read, on met à jour direct sinon on cherche le composant
+                                            If i = (Objet.Adresse2 - 1) Then
+                                                If retour(CInt(Objet.Adresse2) - 1) = 1 Then
+                                                    Objet.Value = True
+                                                Else
+                                                    Objet.Value = False
+                                                End If
+                                            Else
+                                                'on cherche le composant
+                                                For j = 0 To listedevices.Count
+                                                    If i = (listedevices.Item(j).Adresse2 - 1) Then
+                                                        If retour(listedevices.Item(j).Adresse2 - 1) = 1 Then
+                                                            Objet.Value = True
+                                                        Else
+                                                            Objet.Value = False
+                                                        End If
+                                                    End If
+                                                Next
+                                            End If
+                                        Next
                                     End If
                                 End If
                             Else
@@ -557,8 +587,8 @@ Public Class Driver_onewire
 
             'Libellé Device
             Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant de type 44000002F4CBFD28")
-            Add_LibelleDevice("ADRESSE2", "Port", "Nom/numéro du port pour un compteur (A/B) ou un switch (1/8)	")
-            Add_LibelleDevice("SOLO", "SOLO", "Permet de mettre à jour d une seulz lecture tous les swicths/compteur du même composant dans le cas d un multiswitch/compteur")
+            Add_LibelleDevice("ADRESSE2", "Port", "Nom/numéro du port pour un compteur (A/B) ou un switch (1/8)	pour un multiswitch/compteur uniquement")
+            Add_LibelleDevice("SOLO", "SOLO", "Permet de mettre à jour d une seule lecture tous les swicths/compteurs du même composant dans le cas d un multiswitch/compteur")
             Add_LibelleDevice("MODELE", "@", "")
             Add_LibelleDevice("REFRESH", "Refresh", "Valeur de rafraîchissement de la mesure en millisecondes")
         Catch ex As Exception
