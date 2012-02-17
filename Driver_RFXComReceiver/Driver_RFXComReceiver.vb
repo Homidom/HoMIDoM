@@ -560,7 +560,7 @@ Imports System.Globalization
             add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole: L1, 0F25E-01...")
             add_libelledevice("ADRESSE2", "@", "")
             add_libelledevice("SOLO", "@", "")
-            add_libelledevice("MODELE", "@", "")
+            Add_LibelleDevice("MODELE", "@", "")
             add_libelledevice("REFRESH", "@", "")
 
         Catch ex As Exception
