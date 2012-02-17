@@ -75,10 +75,12 @@ Class Window1
         Try
             If IsConnect = True Then
                 Try
+                    'Modifie la date et Heure
                     Dim mytime As String = myService.GetTime
                     LblStatus.Content = Now.ToLongDateString & " " & mytime & " "
                     mytime = ""
 
+                    'Modifie l'adresse/port du serveur connecté
                     Dim serveurcomplet As String = myChannelFactory.Endpoint.Address.ToString()
                     serveurcomplet = Mid(serveurcomplet, 8, serveurcomplet.Length - 8)
                     serveurcomplet = Split(serveurcomplet, "/", 2)(0)
@@ -88,11 +90,22 @@ Class Window1
                     'LblConnect.Content = Mid(myChannelFactory.Endpoint.Address.ToString(), 1, 32) & "..."
                     LblConnect.Content = serveuradresse & ":" & serveurport
 
+                    'Modifie les heures du soleil
                     Dim mydate As Date
                     mydate = myService.GetHeureLeverSoleil
                     LHS.Content = mydate.ToShortTimeString
                     mydate = myService.GetHeureCoucherSoleil
                     LCS.Content = mydate.ToShortTimeString
+
+                    'Modifie les LOG
+                    Dim list As List(Of String) = myService.Get4Log
+                    Dim a As String = ""
+                    For i As Integer = 0 To list.Count - 1
+                        a &= list(i) & vbCrLf
+                    Next
+                    LOG.ToolTip = a
+                    ImgLog.ToolTip = a
+                    LOG.Content = Mid(list(0), 1, 100) & "..."
 
                     Ellipse1.Fill = myBrushVert
                 Catch ex As Exception
@@ -1425,7 +1438,7 @@ Class Window1
         Me.Cursor = Nothing
     End Sub
 
-    Private Sub LOG_PreviewMouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Log.PreviewMouseMove
+    Private Sub LOG_PreviewMouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles LOG.PreviewMouseMove, ImgLog.PreviewMouseMove
         If IsConnect = True Then
             Dim list As List(Of String) = myService.Get4Log
             Dim a As String = ""
