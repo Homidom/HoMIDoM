@@ -1464,6 +1464,6 @@ Class Window1
     End Sub
 
     Private Sub Log_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgLog.MouseDown, LOG.MouseDown, LOG.PreviewMouseDown, ImgLog.PreviewMouseDown
-        RaiseEvent ChangeMenu(sender.tag)
+        'RaiseEvent ChangeMenu(sender.tag)
     End Sub
 End Class

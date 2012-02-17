@@ -17,12 +17,12 @@ Partial Public Class uLog
             Me.Cursor = Cursors.Wait
 
             If IsConnect = True Then
-                If File.Exists("log.txt") Then
-                    File.Delete("log.txt")
-                End If
+                'If File.Exists("log.txt") Then
+                '    File.Delete("log.txt")
+                'End If
 
                 Dim TargetFile As StreamWriter
-                TargetFile = New StreamWriter("log.txt", True)
+                TargetFile = New StreamWriter("log.txt", False)
                 TargetFile.Write(myservice.ReturnLog)
                 TargetFile.Close()
 
