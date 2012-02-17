@@ -233,8 +233,8 @@
             </Image>
             <Label Content="#####" Foreground=" White" Name="LblSrv"/>
             <Rectangle Width="10"/>
-            <Image Name="ImgLog" Margin="2" Height="20" Source="/HoMIAdmiN;component/Images/5250-128.png" />
-            <Label Name="LOG" Content="LOG" Foreground=" White"/>
+            <Image Name="ImgLog" Margin="2" Height="20" Source="/HoMIAdmiN;component/Images/5250-128.png" Tag="7" />
+            <Label Name="LOG" Content="LOG" Foreground=" White" Tag="7" />
         </StackPanel>
         
         <DockPanel Name="DKpanel">
