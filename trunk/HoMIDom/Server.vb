@@ -4041,6 +4041,7 @@ Namespace HoMIDom
                             y.NomChamp = _ListDrivers.Item(i).LabelsDriver.item(j).NomChamp
                             y.LabelChamp = _ListDrivers.Item(i).LabelsDriver.item(j).LabelChamp
                             y.Tooltip = _ListDrivers.Item(i).LabelsDriver.item(j).Tooltip
+                            y.Parametre = _ListDrivers.Item(i).LabelsDriver.item(j).Parametre
                             .LabelsDriver.Add(y)
                         Next
                         For j As Integer = 0 To _ListDrivers.Item(i).LabelsDevice.count - 1
@@ -4048,6 +4049,7 @@ Namespace HoMIDom
                             y.NomChamp = _ListDrivers.Item(i).LabelsDevice.item(j).NomChamp
                             y.LabelChamp = _ListDrivers.Item(i).LabelsDevice.item(j).LabelChamp
                             y.Tooltip = _ListDrivers.Item(i).LabelsDevice.item(j).Tooltip
+                            y.Parametre = _ListDrivers.Item(i).LabelsDevice.item(j).Parametre
                             .LabelsDevice.Add(y)
                         Next
                         Dim _listactdrv As New ArrayList
@@ -4199,6 +4201,7 @@ Namespace HoMIDom
                             y.NomChamp = _ListDrivers.Item(i).LabelsDriver.item(j).NomChamp
                             y.LabelChamp = _ListDrivers.Item(i).LabelsDriver.item(j).LabelChamp
                             y.Tooltip = _ListDrivers.Item(i).LabelsDriver.item(j).Tooltip
+                            y.Parametre = _ListDrivers.Item(i).LabelsDriver.item(j).Parametre
                             retour.LabelsDriver.Add(y)
                         Next
                         For j As Integer = 0 To _ListDrivers.Item(i).LabelsDevice.count - 1
@@ -4206,6 +4209,7 @@ Namespace HoMIDom
                             y.NomChamp = _ListDrivers.Item(i).LabelsDevice.item(j).NomChamp
                             y.LabelChamp = _ListDrivers.Item(i).LabelsDevice.item(j).LabelChamp
                             y.Tooltip = _ListDrivers.Item(i).LabelsDevice.item(j).Tooltip
+                            y.Parametre = _ListDrivers.Item(i).LabelsDevice.item(j).Parametre
                             retour.LabelsDevice.Add(y)
                         Next
                         Dim _listactdrv As New ArrayList

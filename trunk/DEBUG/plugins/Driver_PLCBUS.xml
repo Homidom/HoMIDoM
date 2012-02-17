@@ -70,14 +70,14 @@ Driver_PLCBUS
 </member><member name="M:Driver_PLCBUS.Driver_PLCBUS.add_devicecommande(System.String,System.String,System.Int32)">
 	<summary>ajout des commandes avancées pour les devices</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.add_libelledriver(System.String,System.String,System.String)">
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
 	<summary>ajout Libellé pour le Driver</summary>
 	<param name="nom">Nom du champ : HELP</param>
 	<param name="labelchamp">Nom à afficher : Aide</param>
 	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
 	<remarks></remarks>
-</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.add_libelledevice(System.String,System.String,System.String)">
-	<summary>ajout Libellé pour les Devices</summary>
+</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
+	<summary>Ajout Libellé pour les Devices</summary>
 	<param name="nom">Nom du champ : HELP</param>
 	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
 	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>

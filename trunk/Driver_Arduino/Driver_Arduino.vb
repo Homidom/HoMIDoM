@@ -216,7 +216,7 @@ Public Class Driver_Arduino
                     Exit Sub
             End Select
 
-            Dim Val As Integer = ArduinoVB.DigitalRead(Objet.Adresse1)
+            Dim Val As Integer = ArduinoVB.DigitalRead(CInt(Objet.Adresse1))
             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
             traitement(Val, Objet.Adresse1, _type)
         Catch ex As Exception
@@ -359,11 +359,11 @@ Public Class Driver_Arduino
                     'Définir les pins en entrée ou sortie
                     For i As Integer = 0 To 10
                         If _Pin(i) = 0 Then
-                            ArduinoVB.PinMode(i, Firmata.FirmataVB.INPUT)
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i & " définie en entrée")
+                            ArduinoVB.PinMode(i + 2, Firmata.FirmataVB.INPUT)
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i + 2 & " définie en entrée")
                         Else
-                            ArduinoVB.PinMode(i, Firmata.FirmataVB.OUTUPT)
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i & " définie en sortie")
+                            ArduinoVB.PinMode(i + 2, Firmata.FirmataVB.OUTUPT)
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i + 2 & " définie en sortie")
                         End If
                     Next
                     ''Pin0 à 6 définie en entrée
@@ -477,12 +477,13 @@ Public Class Driver_Arduino
     ''' <param name="labelchamp">Nom à afficher : Aide</param>
     ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
     ''' <remarks></remarks>
-    Private Sub Add_LibelleDriver(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String)
+    Private Sub Add_LibelleDriver(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String, Optional ByVal Parametre As String = "")
         Try
             Dim y0 As New HoMIDom.HoMIDom.Driver.cLabels
             y0.LabelChamp = Labelchamp
             y0.NomChamp = UCase(Nom)
             y0.Tooltip = Tooltip
+            y0.Parametre = Parametre
             _LabelsDriver.Add(y0)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
@@ -494,12 +495,13 @@ Public Class Driver_Arduino
     ''' <param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
     ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
     ''' <remarks></remarks>
-    Private Sub Add_LibelleDevice(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String)
+    Private Sub Add_LibelleDevice(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String, Optional ByVal Parametre As String = "")
         Try
             Dim ld0 As New HoMIDom.HoMIDom.Driver.cLabels
             ld0.LabelChamp = Labelchamp
             ld0.NomChamp = UCase(Nom)
             ld0.Tooltip = Tooltip
+            ld0.Parametre = Parametre
             _LabelsDevice.Add(ld0)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
@@ -562,7 +564,7 @@ Public Class Driver_Arduino
     'Reception pin digital a changé
     Private Sub FirmataVB1_DigitalMessageReceieved(ByVal portNumber As Integer, ByVal portData As Integer)
         Try
-            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DigitalMessageRecu", "PortNumber:" & portNumber & " Value:" & portData)
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DigitalMessageRecu", "PortNumber:" & portNumber & " Value:" & portData)
             Select Case portNumber
                 Case 0 'Normal sur le port 0 les pins 2 à 6 sont en entrées
                     For i As Integer = 2 To 7

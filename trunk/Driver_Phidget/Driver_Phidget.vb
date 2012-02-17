@@ -373,12 +373,13 @@ Public Class Driver_Phidget
     ''' <param name="labelchamp">Nom à afficher : Aide</param>
     ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
     ''' <remarks></remarks>
-    Private Sub Add_LibelleDriver(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String)
+    Private Sub Add_LibelleDriver(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String, Optional ByVal Parametre As String = "")
         Try
             Dim y0 As New HoMIDom.HoMIDom.Driver.cLabels
             y0.LabelChamp = Labelchamp
             y0.NomChamp = UCase(Nom)
             y0.Tooltip = Tooltip
+            y0.Parametre = Parametre
             _LabelsDriver.Add(y0)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
@@ -390,12 +391,13 @@ Public Class Driver_Phidget
     ''' <param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
     ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
     ''' <remarks></remarks>
-    Private Sub Add_LibelleDevice(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String)
+    Private Sub Add_LibelleDevice(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String, Optional ByVal Parametre As String = "")
         Try
             Dim ld0 As New HoMIDom.HoMIDom.Driver.cLabels
             ld0.LabelChamp = Labelchamp
             ld0.NomChamp = UCase(Nom)
             ld0.Tooltip = Tooltip
+            ld0.Parametre = Parametre
             _LabelsDevice.Add(ld0)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)

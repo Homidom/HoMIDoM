@@ -6,7 +6,20 @@ Driver_RFXtrx
 </name>
 </assembly>
 <members>
-<member name="M:Driver_RFXtrx.Driver_RFXtrx.GetCommandPlus">
+<member name="P:Driver_RFXtrx.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_RFXtrx.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_RFXtrx.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
@@ -54,14 +67,14 @@ Driver_RFXtrx
 </member><member name="M:Driver_RFXtrx.Driver_RFXtrx.add_devicecommande(System.String,System.String,System.Int32)">
 	<summary>ajout des commandes avancées pour les devices</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.add_libelledriver(System.String,System.String,System.String)">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
 	<summary>ajout Libellé pour le Driver</summary>
 	<param name="nom">Nom du champ : HELP</param>
 	<param name="labelchamp">Nom à afficher : Aide</param>
 	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.add_libelledevice(System.String,System.String,System.String)">
-	<summary>ajout Libellé pour les Devices</summary>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
+	<summary>Ajout Libellé pour les Devices</summary>
 	<param name="nom">Nom du champ : HELP</param>
 	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
 	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
@@ -142,19 +155,6 @@ Driver_RFXtrx
 </member><member name="T:Driver_RFXtrx.Driver_RFXtrx">
 	<summary>Class Driver_RFXTrx, permet de communiquer avec le RFXtrx Ethernet/COM</summary>
 	<remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
-</member><member name="P:Driver_RFXtrx.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_RFXtrx.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_RFXtrx.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
 </member>
 </members>
 </doc>

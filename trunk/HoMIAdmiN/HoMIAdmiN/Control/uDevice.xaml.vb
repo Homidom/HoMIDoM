@@ -592,16 +592,6 @@ Partial Public Class uDevice
                                     ChKSolo.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                     ChKSolo.Visibility = Windows.Visibility.Visible
                                 End If
-                            Case "MODELE"
-                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                    TxtModele.Visibility = Windows.Visibility.Hidden
-                                    Label8.Visibility = Windows.Visibility.Hidden
-                                Else
-                                    Label8.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    TxtModele.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
-                                    TxtModele.Visibility = Windows.Visibility.Visible
-                                    Label8.Visibility = Windows.Visibility.Visible
-                                End If
                             Case "REFRESH"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
                                     TxtRefresh.Visibility = Windows.Visibility.Hidden
@@ -627,9 +617,11 @@ Partial Public Class uDevice
                                     TxtModele.Visibility = Windows.Visibility.Hidden
                                     Label8.Visibility = Windows.Visibility.Hidden
                                 Else
-                                    If _Driver.LabelsDevice.Item(k).LabelChamp <> "" Then
+                                    Label8.Visibility = Windows.Visibility.Visible
+                                    If _Driver.LabelsDevice.Item(k).LabelChamp <> "" Then Label8.Content = _Driver.LabelsDevice.Item(k).LabelChamp
+                                    If _Driver.LabelsDevice.Item(k).Parametre <> "" Then
                                         TxtModele.Items.Clear()
-                                        Dim a() As String = _Driver.LabelsDevice.Item(k).LabelChamp.Split("|")
+                                        Dim a() As String = _Driver.LabelsDevice.Item(k).Parametre.Split("|")
                                         For g As Integer = 0 To a.Length - 1
                                             TxtModele.Items.Add(a(g))
                                         Next
@@ -638,7 +630,6 @@ Partial Public Class uDevice
                                         TxtModele.IsEditable = True
                                     End If
                                     TxtModele.Visibility = Windows.Visibility.Visible
-                                    Label8.Visibility = Windows.Visibility.Visible
                                 End If
                         End Select
                     Next
