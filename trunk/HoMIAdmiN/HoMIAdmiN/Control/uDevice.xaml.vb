@@ -1,6 +1,7 @@
 ﻿Imports HoMIDom.HoMIDom.Device
 Imports HoMIDom.HoMIDom.Api
 Imports System.IO
+Imports System.Threading
 
 Partial Public Class uDevice
 
@@ -64,6 +65,7 @@ Partial Public Class uDevice
                     TxtAdresse1.Text = x.Adresse1
                     TxtAdresse2.Text = x.Adresse2
                     TxtModele.Text = x.Modele
+                    TxtModele2.Text = x.Modele
                     TxtRefresh.Text = x.Refresh
                     TxtLastChangeDuree.Text = x.LastChangeDuree
 
@@ -230,7 +232,18 @@ Partial Public Class uDevice
                 Exit Sub
             End If
 
-            myservice.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text)
+            Dim _modele As String
+            If TxtModele.Tag = 1 Then
+                _modele = TxtModele.Text
+            Else
+                If TxtModele2.Tag = 1 Then
+                    _modele = TxtModele2.Text
+                Else
+                    _modele = ""
+                End If
+            End If
+
+            myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text)
             SaveInZone()
             FlagChange = True
             RaiseEvent CloseMe(Me)
@@ -549,15 +562,22 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub CbDriver_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbDriver.MouseLeave
-        MaJDriver()
+        If CbDriver.Text <> tmp Then
+            tmp = CbDriver.Text
+            MaJDriver()
+        End If
     End Sub
 
+    Dim tmp As String = ""
+
     Private Sub CbDriver_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbDriver.SelectionChanged
+        tmp = CbDriver.Text
         MaJDriver()
+
     End Sub
 
     Private Sub MaJDriver()
-        If CbDriver.SelectedIndex < 0 Then Exit Sub
+        'If CbDriver.SelectedIndex < 0 Then Exit Sub
 
         For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
             If myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
@@ -615,21 +635,47 @@ Partial Public Class uDevice
                             Case "MODELE"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
                                     TxtModele.Visibility = Windows.Visibility.Hidden
+                                    TxtModele.Tag = 0
+                                    TxtModele.Width = 0
+                                    TxtModele2.Visibility = Windows.Visibility.Hidden
+                                    TxtModele2.Tag = 0
+                                    TxtModele2.Width = 215
                                     Label8.Visibility = Windows.Visibility.Hidden
                                 Else
                                     Label8.Visibility = Windows.Visibility.Visible
                                     If _Driver.LabelsDevice.Item(k).LabelChamp <> "" Then Label8.Content = _Driver.LabelsDevice.Item(k).LabelChamp
+
                                     If _Driver.LabelsDevice.Item(k).Parametre <> "" Then
                                         TxtModele.Items.Clear()
                                         Dim a() As String = _Driver.LabelsDevice.Item(k).Parametre.Split("|")
-                                        For g As Integer = 0 To a.Length - 1
-                                            TxtModele.Items.Add(a(g))
-                                        Next
-                                        TxtModele.IsEditable = False
+                                        If a.Length > 0 Then
+                                            For g As Integer = 0 To a.Length - 1
+                                                TxtModele.Items.Add(a(g))
+                                            Next
+                                            TxtModele.IsEditable = False
+                                            TxtModele.Visibility = Windows.Visibility.Visible
+                                            TxtModele.Tag = 1
+                                            TxtModele.Width = 215
+                                            TxtModele2.Visibility = Windows.Visibility.Hidden
+                                            TxtModele2.Tag = 0
+                                            TxtModele2.Width = 0
+                                        Else
+                                            TxtModele.Visibility = Windows.Visibility.Hidden
+                                            TxtModele.Tag = 0
+                                            TxtModele.Width = 0
+                                            TxtModele2.Visibility = Windows.Visibility.Visible
+                                            TxtModele2.Tag = 1
+                                            TxtModele2.Width = 215
+                                            TxtModele2.Text = a(0)
+                                        End If
                                     Else
-                                        TxtModele.IsEditable = True
+                                        TxtModele.Visibility = Windows.Visibility.Hidden
+                                        TxtModele.Tag = 0
+                                        TxtModele.Width = 0
+                                        TxtModele2.Visibility = Windows.Visibility.Visible
+                                        TxtModele2.Tag = 1
+                                        TxtModele2.Width = 215
                                     End If
-                                    TxtModele.Visibility = Windows.Visibility.Visible
                                 End If
                         End Select
                     Next

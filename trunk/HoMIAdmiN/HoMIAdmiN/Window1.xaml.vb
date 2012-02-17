@@ -1045,8 +1045,12 @@ Class Window1
                             Dim retour As Integer
                             Dim _retour As New List(Of String)
                             _retour = myService.CanDelete(IdSrv, Objet.retour)
-                            While _retour(_retour.Count - 1) <> "0"
+                            While _retour.Count = 0
                                 Thread.Sleep(1500)
+                                _retour = myService.CanDelete(IdSrv, Objet.retour)
+                            End While
+                            While _retour(_retour.Count - 1) <> "0"
+                                Thread.Sleep(500)
                                 _retour = myService.CanDelete(IdSrv, Objet.retour)
                             End While
                             If _retour(0).StartsWith("ERREUR") Then
@@ -1095,7 +1099,7 @@ Class Window1
                                 MessageBox.Show("Veuillez sélectionner un élément à supprimer!")
                         End If
                     Catch ex As Exception
-            MessageBox.Show("ERREUR de la suppression: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        MessageBox.Show("ERREUR de la suppression: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
                     CanvasRight.Children.Clear()
                     ShowMainMenu()

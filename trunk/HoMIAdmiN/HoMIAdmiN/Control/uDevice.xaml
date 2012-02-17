@@ -47,8 +47,8 @@
                         <Label Foreground="White" Name="Label19" >LastChange Duree:</Label>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                            <ComboBox Background="White" BorderBrush="Black" Width="215" Foreground="Black" Name="TxtModele" BorderThickness="2" Height="25" VerticalAlignment="Top" IsEditable="True" />
-                            <!--<TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtModele" Width="215" />-->
+                            <ComboBox Background="White" BorderBrush="Black" Width="0" Foreground="Black" Name="TxtModele" BorderThickness="2" Height="25" VerticalAlignment="Top" IsEditable="True" Visibility="Hidden" Tag="0" />
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtModele2" Width="215" Tag="1" />
                         <Rectangle Width="10" />
                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Width="75" Name="TxtRefresh">0</TextBox>
                         <Rectangle Width="10" />
