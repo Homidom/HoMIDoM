@@ -226,13 +226,14 @@
             <Image Height="20"  Name="Image4" Stretch="Fill" Width="20" Source="/HoMIAdmiN;component/Images/Lune.png" />
             <Label Content="##:##" Name="LCS" Foreground="White" />
             <Rectangle Width="10" />
-            <Image Name="ImgSrv" Margin="2" Height="20" Width="22" Source="/HoMIAdmiN;component/Images/home-128.png">
+            <Image Name="ImgSrv" Margin="2" Height="20" Source="/HoMIAdmiN;component/Images/home-128.png">
                 <Image.LayoutTransform >
                     <RotateTransform CenterX="0" CenterY="0" Angle="-5" />
                 </Image.LayoutTransform>
             </Image>
             <Label Content="#####" Foreground=" White" Name="LblSrv"/>
             <Rectangle Width="10"/>
+            <Image Name="ImgLog" Margin="2" Height="20" Source="/HoMIAdmiN;component/Images/5250-128.png" />
             <Label Name="LOG" Content="LOG" Foreground=" White"/>
         </StackPanel>
         
