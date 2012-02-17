@@ -207,18 +207,25 @@ Public Class Driver_Arduino
             Select Case Objet.Type
                 Case "CONTACT"
                     _type = 0
+                    Dim Val As Integer = ArduinoVB.DigitalRead(CInt(Objet.Adresse1))
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
+                    traitement(Val, Objet.Adresse1, _type)
                 Case "APPAREIL"
                     _type = 1
+                    Dim Val As Integer = ArduinoVB.DigitalRead(CInt(Objet.Adresse1))
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
+                    traitement(Val, Objet.Adresse1, _type)
                 Case "GENERIQUEVALUE"
                     _type = 2
+                    Dim Val As Integer = ArduinoVB.AnalogRead(CInt(Objet.Adresse1))
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
+                    traitement(Val, Objet.Adresse1, _type)
                 Case Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Le type de device " & Objet.Type & " n'est pas supporté pas ce driver")
                     Exit Sub
             End Select
 
-            Dim Val As Integer = ArduinoVB.DigitalRead(CInt(Objet.Adresse1))
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
-            traitement(Val, Objet.Adresse1, _type)
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur : " & ex.ToString)
         End Try
