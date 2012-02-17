@@ -22,7 +22,7 @@ Imports HoMIDom.HoMIDom.Device
     Dim _Port_TCP As String = "@"
     Dim _IP_UDP As String = "@"
     Dim _Port_UDP As String = "@"
-    Dim _Com As String = ""
+    Dim _Com As String = "@"
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "k8055"
     Dim _Version As String = "1.0"
@@ -115,6 +115,7 @@ Imports HoMIDom.HoMIDom.Device
             _LabelsDriver = value
         End Set
     End Property
+
     Public Property LabelsDevice() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.LabelsDevice
         Get
             Return _LabelsDevice
@@ -123,6 +124,7 @@ Imports HoMIDom.HoMIDom.Device
             _LabelsDevice = value
         End Set
     End Property
+
     Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
 
     Public Property Enable() As Boolean Implements HoMIDom.HoMIDom.IDriver.Enable
@@ -215,13 +217,21 @@ Imports HoMIDom.HoMIDom.Device
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
             If _Enable = False Then Exit Sub
+            If _IsConnect = False Then Exit Sub
+
+            If Objet.Adresse1 <> "GENERIQUEBOOLEEN" Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: Le device doit être du type GENERIQUEBOOLEEN")
+                Exit Sub
+            End If
+
             If IsNumeric(Objet.Adresse1) = False Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse du device (Adresse1) " & Objet.Adresse1 & " n'est pas une valeur numérique")
                 Exit Sub
             End If
             Dim adr As Long = Objet.Adresse1
-            If adr < 1 Or adr > 8 Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 8")
+
+            If adr < 1 Or adr > 5 Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 5")
                 Exit Sub
             End If
             If IsNumeric(Objet.Adresse2) = False Then
@@ -314,8 +324,8 @@ Imports HoMIDom.HoMIDom.Device
             Select Case UCase(Champ)
                 Case "ADRESSE1"
                     If Value = " " Then retour = "l'adresse du device est obligatoire"
-                    If IsNumeric(Value) = False Then retour = "l'adresse doit être numérique et comprise entre 1 et 5"
-                    If CInt(Value) < 1 Or CInt(Value) > 5 Then retour = "l'adresse doit être numérique et comprise entre 1 et 5"
+                    If IsNumeric(Value) = False Then retour = "l'adresse doit être numérique "
+                    If CInt(Value) < 1 Or CInt(Value) > 8 Then retour = "l'adresse doit être numérique et comprise entre 1 et 5 pour une entrée et 1 et 8 pour une sortie"
                 Case "ADRESSE2"
                     If Value = " " Then retour = "l'adresse de la carte est obligatoire"
                     If IsNumeric(Value) = False Then retour = "l'adresse de la carte doit être numérique et comprise entre 0 et 3"
@@ -326,7 +336,6 @@ Imports HoMIDom.HoMIDom.Device
             Return "Une erreur est apparue lors de la vérification du champ " & Champ & ": " & ex.ToString
         End Try
     End Function
-
 
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         'cree l'objet
@@ -344,8 +353,6 @@ Imports HoMIDom.HoMIDom.Device
             'End Select
 
             Dim k As Integer
-            Dim CardFound As Boolean
-            CardFound = False
             k = SearchDevices()
             If k = 0 Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Start", "Aucune Carte n'a été trouvée")
@@ -353,26 +360,27 @@ Imports HoMIDom.HoMIDom.Device
             End If
             If (k And 1) Then
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Start", "Carte 0 connectée")
-                CardFound = True
+                _IsConnect = True
                 SetCurrentDevice(0)
             End If
             If (k And 2) Then
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Start", "Carte 1 connectée")
-                If Not CardFound Then
-                    CardFound = True
+                If Not _IsConnect Then
+                    _IsConnect = True
                     SetCurrentDevice(1)
                 End If
             End If
             If (k And 4) Then
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Start", "Carte 2 connectée")
-                If Not CardFound Then
-                    CardFound = True
+                If Not _IsConnect Then
+                    _IsConnect = True
                     SetCurrentDevice(2)
                 End If
             End If
             If (k And 8) Then
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Start", "Carte 3 connectée")
-                If Not CardFound Then
+                If Not _IsConnect Then
+                    _IsConnect = True
                     SetCurrentDevice(3)
                 End If
             End If
@@ -478,12 +486,13 @@ Imports HoMIDom.HoMIDom.Device
     ''' <param name="labelchamp">Nom à afficher : Aide</param>
     ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
     ''' <remarks></remarks>
-    Private Sub Add_LibelleDriver(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String)
+    Private Sub Add_LibelleDriver(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String, Optional ByVal Parametre As String = "")
         Try
             Dim y0 As New HoMIDom.HoMIDom.Driver.cLabels
             y0.LabelChamp = Labelchamp
             y0.NomChamp = UCase(Nom)
             y0.Tooltip = Tooltip
+            y0.Parametre = Parametre
             _LabelsDriver.Add(y0)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
@@ -495,12 +504,13 @@ Imports HoMIDom.HoMIDom.Device
     ''' <param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
     ''' <param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
     ''' <remarks></remarks>
-    Private Sub Add_LibelleDevice(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String)
+    Private Sub Add_LibelleDevice(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String, Optional ByVal Parametre As String = "")
         Try
             Dim ld0 As New HoMIDom.HoMIDom.Driver.cLabels
             ld0.LabelChamp = Labelchamp
             ld0.NomChamp = UCase(Nom)
             ld0.Tooltip = Tooltip
+            ld0.Parametre = Parametre
             _LabelsDevice.Add(ld0)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
@@ -563,7 +573,7 @@ Imports HoMIDom.HoMIDom.Device
     End Sub
 
     Public Sub OutputAnalogiqueChannel(ByVal Channel As Long, ByVal Data As Long)
-        'OutputAnalogChannel(Channel, Data)
+        OutputAnalogChannel(Channel, Data)
     End Sub
 
     Public Sub ReadAllAnalogique(ByVal Data1 As Long, ByVal Data2 As Long)
@@ -575,7 +585,7 @@ Imports HoMIDom.HoMIDom.Device
     End Function
 
     Public Function ReadAnalogiqueChannel(ByVal Channel As Long) As Long
-        'Return ReadAnalogChannel(Channel)
+        Return ReadAnalogChannel(Channel)
     End Function
 
     Public Function ReadCompter(ByVal CounterNr As Long) As Long

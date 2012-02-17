@@ -233,6 +233,7 @@
             Dim _NomChamp As String
             Dim _LabelChamp As String
             Dim _ToolTip As String
+            Dim _Param As String
 
             Public Property NomChamp As String
                 Get
@@ -258,6 +259,15 @@
                 End Get
                 Set(ByVal value As String)
                     _ToolTip = value
+                End Set
+            End Property
+
+            Public Property Parametre As String
+                Get
+                    Return _Param
+                End Get
+                Set(ByVal value As String)
+                    _Param = value
                 End Set
             End Property
         End Class
