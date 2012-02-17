@@ -716,6 +716,8 @@ Class Window1
                     Dim x As New uLog
                     x.Uid = System.Guid.NewGuid.ToString()
                     AddHandler x.CloseMe, AddressOf UnloadControl
+                    x.Width = CanvasRight.ActualWidth - 120
+                    x.Height = CanvasRight.ActualHeight - 50
                     CanvasRight.Children.Clear()
                     CanvasRight.Children.Add(x)
                 Catch ex As Exception
