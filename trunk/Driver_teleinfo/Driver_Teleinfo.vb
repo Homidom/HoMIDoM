@@ -364,7 +364,7 @@ Public Class Driver_Teleinfo
                             If retour <> 9999 Then Objet.Value = retour
 
                         Case "GENERIQUESTRING"
-                            Dim retour As String = LTrim(Objet.Adresse1)
+                            Dim retour As String = Sauve_temp_teleinfo(LTrim(Objet.Adresse1))
                             Objet.Value = retour
 
                         Case "GENERIQUEVALUE"
