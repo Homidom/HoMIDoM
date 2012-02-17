@@ -193,6 +193,7 @@ Partial Public Class uDevice
 
     'Bouton Fermer
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
+        Me.Tag = 3
         RaiseEvent CloseMe(Me)
     End Sub
 
@@ -505,7 +506,6 @@ Partial Public Class uDevice
             MessageBox.Show("Erreur Tester: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
-
 
     Private Sub UnloadControl(ByVal MyControl As Object)
         For i As Integer = 0 To Window1.CanvasUser.Children.Count - 1
