@@ -219,7 +219,7 @@ Imports HoMIDom.HoMIDom.Device
             If _Enable = False Then Exit Sub
             If _IsConnect = False Then Exit Sub
 
-            If Objet.Adresse1 <> "GENERIQUEBOOLEEN" Then
+            If Objet.Type <> "GENERIQUEBOOLEEN" Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: Le device doit être du type GENERIQUEBOOLEEN")
                 Exit Sub
             End If
