@@ -11,6 +11,21 @@ Imports System.Globalization
 
 ' Auteur : David
 ' Date : 22/01/2011
+'-------------------------------------------------------------------------------------
+'                                                                     
+'                     Software License Agreement                      
+'                                                                     
+' A part of this code is owned by RFXCOM, and is protected under applicable copyright laws.
+' 
+' It is not allowed to use this code or any part of it in an exclusive or patented
+' product without the express prior written permission of RFXCOM.
+' It is not allowed to use this software or any part of it for non-RFXCOM products.
+'
+' Any use in violation of the foregoing restrictions may subject the  
+' user to criminal sanctions under applicable laws, as well as to     
+' civil liability for the breach of the terms and conditions of this license.                                                             
+'                                                                      
+'-------------------------------------------------------------------------------------
 
 ''' <summary>Class Driver_RFXComReceiver, permet de communiquer avec un RFXCOM Ethernet ou USB</summary>
 ''' <remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
