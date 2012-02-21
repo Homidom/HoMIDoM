@@ -704,6 +704,36 @@ Namespace HoMIDom
                 End Set
             End Property
 
+            'Valeur minimale que value peut avoir 
+            Public Property ValueMin() As Double
+                Get
+                    Return _ValueMin
+                End Get
+                Set(ByVal value As Double)
+                    _ValueMin = value
+                End Set
+            End Property
+
+            'Valeur maximale que value peut avoir 
+            Public Property ValueMax() As Double
+                Get
+                    Return _ValueMax
+                End Get
+                Set(ByVal value As Double)
+                    _ValueMax = value
+                End Set
+            End Property
+
+            'Valeur par défaut de Value au démarrage du Device, si Vide = Value
+            Public Property ValueDef() As Double
+                Get
+                    Return _ValueDef
+                End Get
+                Set(ByVal value As Double)
+                    _ValueDef = value
+                    _Value = _ValueDef
+                End Set
+            End Property
             'Precision de value
             Public Property Precision() As Integer
                 Get
