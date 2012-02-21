@@ -216,13 +216,17 @@ Imports HoMIDom.HoMIDom.Device
 
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
-            If _Enable = False Then Exit Sub
-            If _IsConnect = False Then Exit Sub
-
-            If Objet.Type <> "GENERIQUEBOOLEEN" Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: Le device doit être du type GENERIQUEBOOLEEN")
+            If _Enable = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
                 Exit Sub
             End If
+
+            If _IsConnect = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
+                Exit Sub
+            End If
+
+            Dim _IsAna As Boolean = False
 
             If IsNumeric(Objet.Adresse1) = False Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse du device (Adresse1) " & Objet.Adresse1 & " n'est pas une valeur numérique")
@@ -230,10 +234,25 @@ Imports HoMIDom.HoMIDom.Device
             End If
             Dim adr As Long = Objet.Adresse1
 
-            If adr < 1 Or adr > 5 Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 5")
-                Exit Sub
+            If Objet.Type <> "GENERIQUEBOOLEEN" Then
+                If Objet.Type <> "GENERIQUEVALUE" Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: Le device doit être du type GENERIQUEBOOLEEN ou GENERIQUEVALUE")
+                    Exit Sub
+                Else
+                    If adr < 1 Or adr > 2 Then
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 2 pour une entree analogique")
+                        Exit Sub
+                    Else
+                        _IsAna = True
+                    End If
+                End If
+            Else
+                If adr < 1 Or adr > 5 Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 5 pour une entree binaire")
+                    Exit Sub
+                End If
             End If
+
             If IsNumeric(Objet.Adresse2) = False Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse de la carte (Adresse2) " & Objet.Adresse2 & " n'est pas une valeur numérique")
                 Exit Sub
@@ -243,8 +262,16 @@ Imports HoMIDom.HoMIDom.Device
                 Exit Sub
             End If
 
-            SetCurrentDevice(CInt(Objet.Adresse2))
-            Objet.Value = ReadBinaireChannel(Objet.Adresse1)
+            If SetCurrentDevice(CInt(Objet.Adresse2)) <> -1 Then
+                If _IsAna = True Then
+                    Objet.Value = ReadAnalogChannel(Objet.Adresse1)
+                Else
+                    Objet.Value = ReadDigitalChannel(Objet.Adresse1)
+                End If
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse de la carte: " & Objet.Adresse2 & " n'a pas été trouvée")
+                Exit Sub
+            End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: " & ex.ToString)
         End Try
@@ -442,10 +469,10 @@ Imports HoMIDom.HoMIDom.Device
             SetCurrentDevice(CInt(Objet.Adresse2))
             If Objet.Type = "SWITCH" Or Objet.Type = "APPAREIL" Then
                 If Commande = "ON" Then
-                    SetBinaireChannel(adr)
+                    SetDigitalChannel(adr)
                 End If
                 If Commande = "OFF" Then
-                    ClearBinaireChannel(adr)
+                    ClearDigitalChannel(adr)
                 End If
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: le type du device " & Objet.Type & " n'est pas reconnu pour ce driver")
@@ -535,10 +562,10 @@ Imports HoMIDom.HoMIDom.Device
     End Sub
 
     Public Sub New()
-        _DeviceSupport.Add(ListeDevices.SWITCH)
-        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
-        _DeviceSupport.Add(ListeDevices.CONTACT)
-        _DeviceSupport.Add(ListeDevices.APPAREIL)
+        _DeviceSupport.Add(ListeDevices.SWITCH) 'SORTIE
+        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN) 'ENTREE
+        _DeviceSupport.Add(ListeDevices.APPAREIL) 'SORTIE
+        _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE) 'E/S ANA (Adresse Ex ou Sx)
 
         'ajout des commandes avancées pour les devices
         'Ci-dessous un exemple
@@ -553,84 +580,8 @@ Imports HoMIDom.HoMIDom.Device
 #End Region
 
 #Region "Fonctions propres au driver"
-    Public Sub ClearAllAnalogique()
-        'ClearAllAnalog()
-    End Sub
-    Public Sub ClearAllBinaire()
-        'ClearAllDigital()
-    End Sub
 
-    Public Sub ClearAnalogiqueChannel(ByVal Channel As Long)
-        'ClearAnalogChannel(Channel)
-    End Sub
 
-    Public Sub ClearBinaireChannel(ByVal Channel As Long)
-        ClearDigitalChannel(Channel)
-    End Sub
-
-    Public Sub OutputAllAnalogique(ByVal Data1 As Long, ByVal Data2 As Long)
-        'OutputAllAnalog(Data1, Data2)
-    End Sub
-
-    Public Sub OutputAnalogiqueChannel(ByVal Channel As Long, ByVal Data As Long)
-        OutputAnalogChannel(Channel, Data)
-    End Sub
-
-    Public Sub ReadAllAnalogique(ByVal Data1 As Long, ByVal Data2 As Long)
-        'ReadAllAnalog(Data1, Data2)
-    End Sub
-
-    Public Function ReadAllBinaire() As Long
-        'Return ReadAllDigital
-    End Function
-
-    Public Function ReadAnalogiqueChannel(ByVal Channel As Long) As Long
-        Return ReadAnalogChannel(Channel)
-    End Function
-
-    Public Function ReadCompter(ByVal CounterNr As Long) As Long
-        'Return ReadCounter(CounterNr)
-    End Function
-
-    Public Function ReadBinaireChannel(ByVal Channel As Long) As Boolean
-        Return ReadDigitalChannel(Channel)
-    End Function
-
-    Public Sub ResetCompteur(ByVal CounterNr As Long)
-        'ResetCounter(CounterNr)
-    End Sub
-
-    Public Sub SetAllAnalogique()
-        'SetAllAnalog()
-    End Sub
-
-    Public Sub SetAllBinaire()
-        'SetAllDigital()
-    End Sub
-
-    Public Sub SetAnalogiqueChannel(ByVal Channel As Long)
-        'SetAnalogChannel(Channel)
-    End Sub
-
-    Public Sub SetCompteurDebounceTime(ByVal CounterNr As Long, ByVal DebounceTime As Long)
-        'SetCounterDebounceTime(CounterNr, DebounceTime)
-    End Sub
-
-    Public Sub SetBinaireChannel(ByVal Channel As Long)
-        SetDigitalChannel(Channel)
-    End Sub
-
-    Public Sub WriteAllBinaire(ByVal Channel As Long)
-        ' WriteAllDigital(Channel)
-    End Sub
-
-    Public Sub [On](ByVal Objet As Object)
-        SetBinaireChannel(Objet.adresse)
-    End Sub
-
-    Public Sub Off(ByVal Objet As Object)
-        ClearBinaireChannel(Objet.adresse)
-    End Sub
 #End Region
 
     Protected Overrides Sub Finalize()
