@@ -48,9 +48,11 @@ Module Service
             ' IPAddress class contains the address of a computer on an IP network.
             For Each _IPAddress As System.Net.IPAddress In _IPHostEntry.AddressList
                 Console.WriteLine(Now & " Adresse IP du serveur trouvée: " & _IPAddress.ToString() & " (" & _IPAddress.AddressFamily.ToString() & ")")
-                If _IP Is Nothing Then _IP = _IPAddress.ToString()
+                If _IPAddress.AddressFamily.ToString() = "InterNetwork" Then
+                    If _IP Is Nothing Then _IP = _IPAddress.ToString()
+                End If
             Next _IPAddress
-            Console.WriteLine(Now & " Adresses IP du serveur utilisée: " & _IP)
+            Console.WriteLine(Now & " Adresse IP du serveur utilisée: " & _IP)
 
             Dim baseAddress As Uri = New Uri("http://" & _IP & ":" & PortSOAP & "/ServiceModelSamples/service")
             Dim fileServerAddress As Uri = New Uri("http://" & _IP & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
