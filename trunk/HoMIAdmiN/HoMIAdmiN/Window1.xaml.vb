@@ -580,11 +580,11 @@ Class Window1
 #End Region
 
     'Décharger une fenêtre suivant son Id
-    Public Sub UnloadControl(ByVal MyControl As Object)
+    Public Sub UnloadControl(ByVal MyControl As Object, Optional ByVal Cancel As Boolean = False)
         Try
             Me.Cursor = Cursors.Wait
 
-            RefreshTreeView()
+            If Cancel = False Then RefreshTreeView()
 
             Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
             myDoubleAnimation.From = 1.0
