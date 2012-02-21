@@ -6,6 +6,7 @@ Imports System.ServiceModel
 Imports System.ServiceModel.Description
 Imports System.Xml.Serialization
 Imports System.ServiceModel.Channels
+Imports System.Net
 
 '***********************************************
 '** SERVICE HOMIDom - Simple exe qui sera ensuite convertit en service Windows
@@ -41,8 +42,17 @@ Module Service
                 Console.WriteLine(Now & "ERREUR: Le fichier de config ou la balise portsoap n'ont pas été trouvé !")
             End If
 
-            Dim baseAddress As Uri = New Uri("http://localhost:" & PortSOAP & "/ServiceModelSamples/service")
-            Dim fileServerAddress As Uri = New Uri("http://localhost:" & PortSOAP & "/ServiceModelSamples/fileServer")
+            Dim _IP As String = Nothing
+            Dim _IPHostEntry As System.Net.IPHostEntry = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
+
+            ' IPAddress class contains the address of a computer on an IP network.
+            For Each _IPAddress As System.Net.IPAddress In _IPHostEntry.AddressList
+                Console.WriteLine("Adresse IP du serveur: " & _IPAddress.ToString() & " (" & _IPAddress.AddressFamily.ToString() & ")")
+                _IP = _IPAddress.ToString()
+            Next _IPAddress
+
+            Dim baseAddress As Uri = New Uri("http://" & _IP & ":" & PortSOAP & "/ServiceModelSamples/service")
+            Dim fileServerAddress As Uri = New Uri("http://" & _IP & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
 
             Console.WriteLine(Now & " Adresss SOAP: " & baseAddress.ToString)
 
@@ -56,56 +66,56 @@ Module Service
                 Console.WriteLine("")
 
                 'Connexion au serveur
-                Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
+                    Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
 
-                Try
-                    'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
-                    Dim myadress As String = "http://localhost:" & PortSOAP & "/ServiceModelSamples/service"
-                    Dim binding As New ServiceModel.BasicHttpBinding
-                    Dim Context As OperationContext = OperationContext.Current
-                    binding.MaxBufferPoolSize = 250000000
-                    binding.MaxReceivedMessageSize = Integer.MaxValue
-                    binding.MaxBufferSize = Integer.MaxValue
-                    binding.ReaderQuotas.MaxArrayLength = 250000000
-                    binding.ReaderQuotas.MaxNameTableCharCount = 250000000
-                    binding.ReaderQuotas.MaxBytesPerRead = 250000000
-                    binding.ReaderQuotas.MaxStringContentLength = 250000000
-                    binding.SendTimeout = TimeSpan.FromMinutes(60)
-                    binding.CloseTimeout = TimeSpan.FromMinutes(60)
-                    binding.OpenTimeout = TimeSpan.FromMinutes(60)
-                    binding.ReceiveTimeout = TimeSpan.FromMinutes(60)
-                    myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
+                    Try
+                        'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
+                    Dim myadress As String = "http://" & _IP & ":" & PortSOAP & "/ServiceModelSamples/service"
+                        Dim binding As New ServiceModel.BasicHttpBinding
+                        Dim Context As OperationContext = OperationContext.Current
+                        binding.MaxBufferPoolSize = 250000000
+                        binding.MaxReceivedMessageSize = Integer.MaxValue
+                        binding.MaxBufferSize = Integer.MaxValue
+                        binding.ReaderQuotas.MaxArrayLength = 250000000
+                        binding.ReaderQuotas.MaxNameTableCharCount = 250000000
+                        binding.ReaderQuotas.MaxBytesPerRead = 250000000
+                        binding.ReaderQuotas.MaxStringContentLength = 250000000
+                        binding.SendTimeout = TimeSpan.FromMinutes(60)
+                        binding.CloseTimeout = TimeSpan.FromMinutes(60)
+                        binding.OpenTimeout = TimeSpan.FromMinutes(60)
+                        binding.ReceiveTimeout = TimeSpan.FromMinutes(60)
+                        myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
 
-                    myService = myChannelFactory.CreateChannel()
+                        myService = myChannelFactory.CreateChannel()
 
-                    'Démarrage du serveur pour charger la config
-                    myService.Start()
+                        'Démarrage du serveur pour charger la config
+                        myService.Start()
 
-                Catch ex As Exception
-                    myChannelFactory.Abort()
-                    Console.WriteLine(Now & " ERREUR: Erreur lors du lancement du service SOAP: " & ex.Message)
-                End Try
+                    Catch ex As Exception
+                        myChannelFactory.Abort()
+                        Console.WriteLine(Now & " ERREUR: Erreur lors du lancement du service SOAP: " & ex.Message)
+                    End Try
 
-                Using hostFileServer As New ServiceHost(GetType(HoMIDom.HoMIDom.FileServer), fileServerAddress)
-                    hostFileServer.Open()
-                    Console.WriteLine(Now & " Démarrage du serveur de fichiers OK")
+                    Using hostFileServer As New ServiceHost(GetType(HoMIDom.HoMIDom.FileServer), fileServerAddress)
+                        hostFileServer.Open()
+                        Console.WriteLine(Now & " Démarrage du serveur de fichiers OK")
 
-                    'démarrage OK
-                    '                    Console.Beep()
-                    Console.WriteLine(" ")
-                    Console.WriteLine("******************************")
-                    Console.WriteLine("****   SERVEUR DEMARRE    ****")
-                    Console.WriteLine("******************************")
-                    Console.WriteLine(" ")
+                        'démarrage OK
+                        '                    Console.Beep()
+                        Console.WriteLine(" ")
+                        Console.WriteLine("******************************")
+                        Console.WriteLine("****   SERVEUR DEMARRE    ****")
+                        Console.WriteLine("******************************")
+                        Console.WriteLine(" ")
 
-                    Console.ReadLine()
+                        Console.ReadLine()
 
-                    'fin --> on arrete
-                    myService.Stop(_IdSrv)
+                        'fin --> on arrete
+                        myService.Stop(_IdSrv)
 
-                    hostFileServer.Close()
-                End Using
-                host.Close()
+                        hostFileServer.Close()
+                    End Using
+                    host.Close()
             End Using
         Catch ex As Exception
             MsgBox("Erreur lors du service: " & ex.Message & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.Critical, "ERREUR SERVICE")
