@@ -15,7 +15,8 @@ Partial Public Class uTestDevice
                 If y.Tag = 0 Then 'c une fonction de base
                     x.Nom = y.Content
                     For i As Integer = 0 To StkParam.Children.Count - 1
-                        Dim txt As TextBox = StkParam.Children.Item(i)
+                        Dim stk As StackPanel = StkParam.Children.Item(i)
+                        Dim txt As TextBox = stk.Children.Item(1)
                         Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
                         param.Value = txt.Text
                         x.Parametres.Add(param)
@@ -29,7 +30,8 @@ Partial Public Class uTestDevice
                     x.Parametres.Add(param)
 
                     For i As Integer = 0 To StkParam.Children.Count - 1
-                        Dim txt As TextBox = StkParam.Children.Item(i)
+                        Dim stk As StackPanel = StkParam.Children.Item(i)
+                        Dim txt As TextBox = stk.Children.Item(1)
                         Dim param1 As New HoMIDom.HoMIDom.DeviceAction.Parametre
                         param1.Value = txt.Text
                         x.Parametres.Add(param)
