@@ -6,7 +6,7 @@ Imports System.Threading
 Partial Public Class uDevice
 
     '--- Variables ------------------
-    Public Event CloseMe(ByVal MyObject As Object)
+    Public Event CloseMe(ByVal MyObject As Object, ByVal Cancel As Boolean)
     Dim _Action As EAction 'Définit si modif ou création d'un device
     Dim _DeviceId As String 'Id du device à modifier
     Dim FlagNewCmd As Boolean
@@ -193,8 +193,7 @@ Partial Public Class uDevice
 
     'Bouton Fermer
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
-        Me.Tag = 3
-        RaiseEvent CloseMe(Me)
+        RaiseEvent CloseMe(Me, True)
     End Sub
 
     'Bouton Ok
@@ -252,7 +251,7 @@ Partial Public Class uDevice
             myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text)
             SaveInZone()
             FlagChange = True
-            RaiseEvent CloseMe(Me)
+            RaiseEvent CloseMe(Me, False)
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub uDevice BtnOK_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
