@@ -352,7 +352,7 @@ Imports HoMIDom.HoMIDom.Device
                 Case "ADRESSE1"
                     If Value = " " Then retour = "l'adresse du device est obligatoire"
                     If IsNumeric(Value) = False Then retour = "l'adresse doit être numérique "
-                    If CInt(Value) < 1 Or CInt(Value) > 8 Then retour = "l'adresse doit être numérique et comprise entre 1 et 5 pour une entrée et 1 et 8 pour une sortie"
+                    If CInt(Value) < 1 Or CInt(Value) > 8 Then retour = "l'adresse doit être numérique et comprise entre 1 et 5 pour une entrée (bianire), 1 et 2 (entrée analogique) et 1 et 8 pour une sortie"
                 Case "ADRESSE2"
                     If Value = " " Then retour = "l'adresse de la carte est obligatoire"
                     If IsNumeric(Value) = False Then retour = "l'adresse de la carte doit être numérique et comprise entre 0 et 3"
@@ -446,17 +446,43 @@ Imports HoMIDom.HoMIDom.Device
 
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
-            If _Enable = False Then Exit Sub
+            If _Enable = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
+                Exit Sub
+            End If
+
+            If _IsConnect = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
+                Exit Sub
+            End If
+
+            Dim _IsAna As Boolean = False
 
             If IsNumeric(Objet.Adresse1) = False Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: l'adresse du device (Adresse1) " & Objet.Adresse1 & " n'est pas une valeur numérique")
                 Exit Sub
             End If
             Dim adr As Long = Objet.Adresse1
-            If adr < 1 Or adr > 8 Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 8")
-                Exit Sub
+
+            If Objet.Type = "SWITCH" Or Objet.Type = "APPAREIL" Then
+                If adr < 1 Or adr > 8 Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 8 pour une sortie binaire")
+                    Exit Sub
+                End If
+            Else
+                If Objet.Type = "GENERIQUEVALUE" Then
+                    If adr < 1 Or adr > 2 Then
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 2 pour une sortie analogique")
+                        Exit Sub
+                    Else
+                        _IsAna = True
+                    End If
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: le type du device " & Objet.Type & " n'est pas reconnu pour ce driver")
+                    Exit Sub
+                End If
             End If
+
             If IsNumeric(Objet.Adresse2) = False Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: l'adresse de la carte (Adresse2) " & Objet.Adresse2 & " n'est pas une valeur numérique")
                 Exit Sub
@@ -467,7 +493,12 @@ Imports HoMIDom.HoMIDom.Device
             End If
 
             SetCurrentDevice(CInt(Objet.Adresse2))
-            If Objet.Type = "SWITCH" Or Objet.Type = "APPAREIL" Then
+            If SetCurrentDevice(CInt(Objet.Adresse2)) < 0 Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse de la carte: " & Objet.Adresse2 & " n'a pas été trouvée")
+                Exit Sub
+            End If
+
+            If _IsAna = False Then
                 If Commande = "ON" Then
                     SetDigitalChannel(adr)
                 End If
@@ -475,7 +506,7 @@ Imports HoMIDom.HoMIDom.Device
                     ClearDigitalChannel(adr)
                 End If
             Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: le type du device " & Objet.Type & " n'est pas reconnu pour ce driver")
+
             End If
 
         Catch ex As Exception
