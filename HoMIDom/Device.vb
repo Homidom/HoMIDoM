@@ -588,7 +588,7 @@ Namespace HoMIDom
                                     'on vérifie que la valeur a changé de plus de precision sinon inchangé
                                     If ((_Precision <> 0) And ((tmp + _Precision) >= _Value) And ((tmp - _Precision) <= _Value)) Then
                                         'log de "inchangé précision"
-                                        _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DEVICE, "DeviceDBL Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé precision " & _ValueLast.ToString & "+-" & _Precision.ToString & ")")
+                                        _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DEVICE, "DeviceDBL Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé precision " & _Value.ToString & "+-" & _Precision.ToString & ")")
                                     Else
                                         'enregistre la nouvelle valeur
                                         _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceDBL Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString)
@@ -824,7 +824,7 @@ Namespace HoMIDom
                                     'on vérifie que la valeur a changé de plus de precision sinon inchangé
                                     If ((tmp + _Precision) >= _Value) And ((tmp - _Precision) <= _Value) Then
                                         'log de "inchangé précision"
-                                        _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DEVICE, "DeviceINT", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé precision " & _ValueLast.ToString & "+-" & _Precision.ToString & ")")
+                                        _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DEVICE, "DeviceINT", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé precision " & _Value.ToString & "+-" & _Precision.ToString & ")")
                                     Else
                                         'enregistre la nouvelle valeur
                                         _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceINT Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString)
