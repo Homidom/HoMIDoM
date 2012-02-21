@@ -28,10 +28,10 @@ Imports System.Globalization
     Dim _Protocol As String = "RF"
     Dim _IsConnect As Boolean = False
     Dim _IP_TCP As String = ""
-    Dim _Port_TCP As String = "10002"
+    Dim _Port_TCP As String = ""
     Dim _IP_UDP As String = "@"
     Dim _Port_UDP As String = "@"
-    Dim _Com As String = ""
+    Dim _Com As String = "COM2"
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "@"
     Dim _Version As String = "1.0"
