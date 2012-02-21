@@ -207,15 +207,16 @@ Class Window1
                 img.Height = 20
                 img.Width = 20
 
-                If Usr.Image <> "" And File.Exists(Usr.Image) = True Then
-                    uri = Usr.Image
+                If Trim(Usr.Image) <> "" Then
+                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(Usr.Image))
                 Else
                     uri = MyRep & "\Images\icones\user.png"
+                    bmpImage.BeginInit()
+                    bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
+                    bmpImage.EndInit()
+                    img.Source = bmpImage
                 End If
-                bmpImage.BeginInit()
-                bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
-                bmpImage.EndInit()
-                img.Source = bmpImage
+
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
@@ -337,14 +338,15 @@ Class Window1
                 stack.Orientation = Orientation.Horizontal
 
                 For Each Zon In myService.GetAllZones(IdSrv)
-                    For Each elemnt In Zon.ListElement
-                        If elemnt.ElementID = Dev.ID Then
-                            FlagZone = True
-                            Exit For
-                        End If
-                    Next
+                    If FlagZone = False Then
+                        For Each elemnt In Zon.ListElement
+                            If elemnt.ElementID = Dev.ID Then
+                                FlagZone = True
+                                Exit For
+                            End If
+                        Next
+                    End If
                 Next
-
 
                 img.Height = 20
                 img.Width = 20
@@ -352,15 +354,14 @@ Class Window1
                 img2.Width = 20
 
                 If Dev.Picture <> "" And File.Exists(Dev.Picture) = True Then
-                    uri = Dev.Picture
+                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(Dev.Picture))
                 Else
+                    bmpImage.BeginInit()
+                    bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
+                    bmpImage.EndInit()
+                    img.Source = bmpImage
                     uri = MyRep & "\Images\Devices\Defaut-128.png"
                 End If
-
-                bmpImage.BeginInit()
-                bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
-                bmpImage.EndInit()
-                img.Source = bmpImage
 
                 Dim drv As String = Dev.Name
                 drv &= " (" & myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom & ")"
@@ -384,7 +385,6 @@ Class Window1
                 label.ToolTip = tl
 
                 stack.Children.Add(img)
-
 
                 If FlagZone = False Then
                     bmpImage2.BeginInit()
