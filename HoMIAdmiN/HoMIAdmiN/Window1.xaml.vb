@@ -164,8 +164,8 @@ Class Window1
                 img.Height = 20
                 img.Width = 20
 
-                If zon.Icon <> "" Then
-                    img.Source = ConvertArrayToImage(myservice.GetByteFromImage(zon.Icon))
+                If Trim(zon.Icon) <> "" Then
+                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(zon.Icon))
                 End If
 
                 Dim label As New Label
@@ -353,14 +353,14 @@ Class Window1
                 img2.Height = 20
                 img2.Width = 20
 
-                If Dev.Picture <> "" And File.Exists(Dev.Picture) = True Then
+                If Trim(Dev.Picture) <> "" Then
                     img.Source = ConvertArrayToImage(myService.GetByteFromImage(Dev.Picture))
                 Else
+                    uri = MyRep & "\Images\Devices\Defaut-128.png"
                     bmpImage.BeginInit()
                     bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
                     bmpImage.EndInit()
                     img.Source = bmpImage
-                    uri = MyRep & "\Images\Devices\Defaut-128.png"
                 End If
 
                 Dim drv As String = Dev.Name
