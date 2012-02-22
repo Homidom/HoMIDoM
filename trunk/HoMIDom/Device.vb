@@ -640,7 +640,7 @@ Namespace HoMIDom
             End Property
 
             'Demande de Lecture au driver
-            Public Overloads Sub Read()
+            Public Sub Read()
                 Try
                     If _Enable = False Then Exit Sub
                     If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
