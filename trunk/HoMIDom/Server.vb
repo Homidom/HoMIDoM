@@ -49,6 +49,7 @@ Namespace HoMIDom
         <NonSerialized()> Shared _SMTPassword As String = "" 'password du serveur SMTP
         <NonSerialized()> Shared _SMTPmailEmetteur As String = "homidom@mail.com" 'adresse mail de l'émetteur
         <NonSerialized()> Private Shared _PortSOAP As String = "" 'Port IP de connexion SOAP
+        <NonSerialized()> Private Shared _IPSOAP As String = "localhost" 'IP de connexion SOAP
         <NonSerialized()> Dim TimerSecond As New Timers.Timer 'Timer à la seconde
         <NonSerialized()> Shared _DateTimeLastStart As Date = Now
         <NonSerialized()> Private Shared _ListExtensionAudio As New List(Of Audio.ExtensionAudio) 'Liste des extensions audio
@@ -383,6 +384,8 @@ Namespace HoMIDom
                                         _HeureLeverSoleilCorrection = list.Item(0).Attributes.Item(j).Value
                                     Case "heurecorrectioncoucher"
                                         _HeureCoucherSoleilCorrection = list.Item(0).Attributes.Item(j).Value
+                                    Case "ipsoap"
+                                        _IPSOAP = list.Item(0).Attributes.Item(j).Value
                                     Case "portsoap"
                                         _PortSOAP = list.Item(0).Attributes.Item(j).Value
                                     Case "idsrv"
@@ -1128,6 +1131,9 @@ Namespace HoMIDom
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des paramètres serveur")
                 ''------------ server
                 writer.WriteStartElement("server")
+                writer.WriteStartAttribute("ipsoap")
+                writer.WriteValue(_IPSOAP)
+                writer.WriteEndAttribute()
                 writer.WriteStartAttribute("portsoap")
                 writer.WriteValue(_PortSOAP)
                 writer.WriteEndAttribute()
