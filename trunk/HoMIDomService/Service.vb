@@ -47,31 +47,32 @@ Module Service
                 Console.WriteLine(Now & "ERREUR: Le fichier de config ou la balise ip n'ont pas été trouvé, l'adresse par défaut sera localhost !")
             End If
 
-            Dim _IP As String = Nothing
-            Dim _IPHostEntry As System.Net.IPHostEntry = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
-            Dim _ListUri(0) As Uri
-            Dim idx As Integer = 0
+            'Dim _IP As String = Nothing
+            'Dim _IPHostEntry As System.Net.IPHostEntry = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
+            'Dim _ListUri(0) As Uri
+            'Dim idx As Integer = 0
 
             ' IPAddress class contains the address of a computer on an IP network.
-            For Each _IPAddress As System.Net.IPAddress In _IPHostEntry.AddressList
-                Console.WriteLine(Now & " Adresse IP du serveur trouvée: " & _IPAddress.ToString() & " (" & _IPAddress.AddressFamily.ToString() & ")")
-                If _IPAddress.AddressFamily.ToString() = "InterNetwork" Then
-                    ReDim _ListUri(idx)
-                    Dim baseAddress As Uri = New Uri("http://" & _IPAddress.ToString() & ":" & PortSOAP & "/ServiceModelSamples/service")
-                    _ListUri(idx) = baseAddress
-                    Console.WriteLine(Now & " Adresse IP du serveur utilisée: " & _IPAddress.ToString())
-                    idx += 1
-                    If _IP Is Nothing Then _IP = _IPAddress.ToString()
-                End If
-            Next _IPAddress
+            'For Each _IPAddress As System.Net.IPAddress In _IPHostEntry.AddressList
+            '    Console.WriteLine(Now & " Adresse IP du serveur trouvée: " & _IPAddress.ToString() & " (" & _IPAddress.AddressFamily.ToString() & ")")
+            '    If _IPAddress.AddressFamily.ToString() = "InterNetwork" Then
+            '        ReDim Preserve _ListUri(idx)
+            '        Dim baseAddress As Uri = New Uri("http://" & _IPAddress.ToString() & ":" & PortSOAP & "/ServiceModelSamples/service")
+            '        _ListUri(idx) = baseAddress
+            '        Console.WriteLine(Now & " Adresse IP du serveur utilisée: " & _IPAddress.ToString())
+            '        idx += 1
+            '        If _IP Is Nothing Then _IP = _IPAddress.ToString()
+            '    End If
+            'Next _IPAddress
             'Console.WriteLine(Now & " Adresse IP du serveur utilisée: " & _IP)
 
-            'Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service")
+            Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service")
             Dim fileServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
 
-            Console.WriteLine(Now & " Adresss SOAP: " & _IP.ToString)
+            Console.WriteLine(Now & " Adresss SOAP: " & _Addrip)
 
-            Using host As New ServiceHost(GetType(Server), _ListUri)
+            Using host As New ServiceHost(GetType(Server), baseaddress)
+
                 host.CloseTimeout = TimeSpan.FromMinutes(60)
                 host.OpenTimeout = TimeSpan.FromMinutes(60)
                 AddHandler host.Faulted, AddressOf HostFaulted
@@ -85,7 +86,7 @@ Module Service
 
                 Try
                     'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
-                    Dim myadress As String = "http://" & _IP & ":" & PortSOAP & "/ServiceModelSamples/service"
+                    Dim myadress As String = "http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service"
                     Dim binding As New ServiceModel.BasicHttpBinding
                     Dim Context As OperationContext = OperationContext.Current
                     binding.MaxBufferPoolSize = 250000000
