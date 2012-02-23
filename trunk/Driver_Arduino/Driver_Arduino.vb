@@ -1,7 +1,21 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
-Imports Firmata
+Imports Firmata 'Référence à la dll Firmata
+
+'************************************************
+'INFOS 
+'************************************************
+'Le driver fonctionne de la manière suivante:
+' 
+'ETAPE1: Le driver est créé par Homidom --> lancement de la fonction Sub (pour récupérer/définir les paramètres avancés)
+'ETAPE2: Le driver est lancé par Homidom --> lancement de la fonction Start (communication, ajout des évènements, config des pins...)
+'ETAPE3:
+'          - une pin (ana ou binaire) change sur la carte --> déclenchement des fonctions DigitalMessageReceieved ou AnalogMessageReceieved
+'          - l'utilisateur active un device (ON/OFF) --> lancement de la fonction write
+'          - l'utilisateur demande la lecture d'un device --> lancement de la fonction read
+'ETAPE4: le driver est arrêté par Homidom --> lancement de la fonction stop
+'************************************************
 
 Public Class Driver_Arduino
     Implements HoMIDom.HoMIDom.IDriver
@@ -42,11 +56,11 @@ Public Class Driver_Arduino
 #End Region
 
 #Region "Declaration"
-    Dim WithEvents ArduinoVB As New Firmata.FirmataVB
+    Dim WithEvents ArduinoVB As New Firmata.FirmataVB 'Déclaration de l'objet représentant la carte (via la dll firmata)
     Dim _Baud As Integer = 57600
     Dim _RemotingPort0 As Integer = 0
     Dim _RemotingPort1 As Integer = 1
-    Dim _Pin(10) As Integer 'Pin(0)=Pin 2, 0 si entrée 1 si sortie
+    Dim _Pin(13) As Integer 'Tableau représentant les 13 pins binaire, 0 si entrée 1 si sortie
 #End Region
 
 #Region "Fonctions génériques"
@@ -95,6 +109,7 @@ Public Class Driver_Arduino
             _LabelsDriver = value
         End Set
     End Property
+
     Public Property LabelsDevice() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.LabelsDevice
         Get
             Return _LabelsDevice
@@ -103,6 +118,7 @@ Public Class Driver_Arduino
             _LabelsDevice = value
         End Set
     End Property
+
     Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
 
     Public Property Enable() As Boolean Implements HoMIDom.HoMIDom.IDriver.Enable
@@ -192,6 +208,11 @@ Public Class Driver_Arduino
         End Get
     End Property
 
+    ''' <summary>
+    ''' Aller lire une entrée
+    ''' </summary>
+    ''' <param name="Objet">Device</param>
+    ''' <remarks></remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
             If _Enable = False Then
@@ -207,16 +228,19 @@ Public Class Driver_Arduino
             Select Case Objet.Type
                 Case "CONTACT"
                     _type = 0
+                    'Aller lire une pin digital via DigitalRead(Pin as integer)
                     Dim Val As Integer = ArduinoVB.DigitalRead(CInt(Objet.Adresse1))
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
                     traitement(Val, Objet.Adresse1, _type)
                 Case "APPAREIL"
                     _type = 1
+                    'Aller lire une pin digital via DigitalRead(Pin as integer)
                     Dim Val As Integer = ArduinoVB.DigitalRead(CInt(Objet.Adresse1))
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
                     traitement(Val, Objet.Adresse1, _type)
                 Case "GENERIQUEVALUE"
                     _type = 2
+                    'Aller lire une pin analogique via AnalogRead(Pin as integer)
                     Dim Val As Integer = ArduinoVB.AnalogRead(CInt(Objet.Adresse1))
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
                     traitement(Val, Objet.Adresse1, _type)
@@ -318,21 +342,25 @@ Public Class Driver_Arduino
         End Try
     End Function
 
+    ''' <summary>
+    ''' Démarrer le driver
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
-        'cree l'objet
         Try
             If Enable = True And ArduinoVB.PortOpen = False Then
                 'récupération des paramétres avancés
                 Try
-                    _Baud = _Parametres.Item(0).Valeur
-                    _RemotingPort0 = _Parametres.Item(1).Valeur
-                    _RemotingPort1 = _Parametres.Item(2).Valeur
+                    _Baud = _Parametres.Item(0).Valeur 'Baud
+                    _RemotingPort0 = _Parametres.Item(1).Valeur 'RemotingPort0
+                    _RemotingPort1 = _Parametres.Item(2).Valeur 'RemotingPort1
 
-                    For i As Integer = 0 To 10
-                        If _Parametres.Item(i + 3).valeur <= 0 Then
-                            _Pin(i) = 0
+                    'On récupère la config des pins définie par l'utilisateur
+                    For i As Integer = 2 To 13 'on prend que les pins 2 à 13
+                        If _Parametres.Item(i + 1).valeur = 0 Then
+                            _Pin(i) = 0 'Définie en entrée
                         Else
-                            _Pin(i) = 1
+                            _Pin(i) = 1 'Définie en sortie
                         End If
                     Next
                 Catch ex As Exception
@@ -340,50 +368,46 @@ Public Class Driver_Arduino
                     _Baud = 57600
                     _RemotingPort0 = 0
                     _RemotingPort1 = 0
-                    For i = 0 To 4
+                    For i = 2 To 6
                         _Pin(i) = 0
                     Next
-                    For i = 5 To 10
+                    For i = 7 To 13
                         _Pin(i) = 1
                     Next
                 End Try
 
-                AddHandler ArduinoVB.DigitalMessageReceieved, AddressOf FirmataVB1_DigitalMessageReceieved
-                AddHandler ArduinoVB.AnalogMessageReceieved, AddressOf FirmataVB1_AnalogMessageReceieved
-                AddHandler ArduinoVB.VersionInfoReceieved, AddressOf FirmataVB1_VersionInfoReceieved
+                'On ajoute à l'objet les évènements générés par la carte (fournis par la dll)
+                AddHandler ArduinoVB.DigitalMessageReceieved, AddressOf FirmataVB1_DigitalMessageReceieved 'Evènement lors d'un changement de port Binaire
+                AddHandler ArduinoVB.AnalogMessageReceieved, AddressOf FirmataVB1_AnalogMessageReceieved 'Evènement lors d'un changement d'entrée analogique
+                AddHandler ArduinoVB.VersionInfoReceieved, AddressOf FirmataVB1_VersionInfoReceieved 'Evènement lorsque la carte envoi sa version
+
+                'Connexion à la carte
                 ArduinoVB.Connect(_Com, _Baud)
 
                 Threading.Thread.Sleep(1000)
 
+                'Si le port de communication est ouvert
                 If ArduinoVB.PortOpen = True Then
-                    ArduinoVB.QueryVersion()
+                    ArduinoVB.QueryVersion() 'Demander la version à la carte (fonction fournie par la dll) pour s'assurer qu'on discute bien avec elle
                     _IsConnect = True
                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Carte connectée sur le port:" & ArduinoVB.PortName & " Baud:" & ArduinoVB.Baud)
                     ArduinoVB.DigitalPortReport(0, _RemotingPort0) 'Activer le port0
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Activation du port 0 effectué")
                     ArduinoVB.DigitalPortReport(1, _RemotingPort1) 'Activer le port1
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Activation du port 1 effectué")
-                    'Définir les pins en entrée ou sortie
-                    For i As Integer = 0 To 10
+                    'Définir les pins 2 à 12 en entrée ou sortie
+                    For i As Integer = 2 To 13
                         If _Pin(i) = 0 Then
-                            ArduinoVB.PinMode(i + 2, Firmata.FirmataVB.INPUT)
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i + 2 & " définie en entrée")
+                            'Pin à définir en entrée via la fonction PinMid(Pin as integer, Mode as integer) --> fournie par la dll
+                            ArduinoVB.PinMode(i, Firmata.FirmataVB.INPUT)
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i & " définie en entrée")
                         Else
-                            ArduinoVB.PinMode(i + 2, Firmata.FirmataVB.OUTUPT)
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i + 2 & " définie en sortie")
+                            'Pin à définir en sortie
+                            ArduinoVB.PinMode(i, Firmata.FirmataVB.OUTUPT)
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i & " définie en sortie")
                         End If
                     Next
-                    ''Pin0 à 6 définie en entrée
-                    'For i As Integer = 2 To 6
-                    '    ArduinoVB.PinMode(i, Firmata.FirmataVB.INPUT)
-                    '    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i & " définie en entrée")
-                    'Next
-                    ''Pin 7 à 12 définie en sortie
-                    'For i As Integer = 7 To 12
-                    '    ArduinoVB.PinMode(i, Firmata.FirmataVB.OUTUPT)
-                    '    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Pin" & i & " définie en sortie")
-                    'Next
-                Else
+                Else 'Sinon on peut rien faire on est pas connecté
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le driver n'a pas réussit à se connecter à la carte")
                     _IsConnect = False
                     Exit Sub
@@ -406,12 +430,18 @@ Public Class Driver_Arduino
         End Set
     End Property
 
+    ''' <summary>
+    ''' Arrêter le driver
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         'cree l'objet
         Try
+            'On désaffecte les évènements pouvant être produit par l'objet (Arduino)
             RemoveHandler ArduinoVB.DigitalMessageReceieved, AddressOf FirmataVB1_DigitalMessageReceieved
             RemoveHandler ArduinoVB.AnalogMessageReceieved, AddressOf FirmataVB1_AnalogMessageReceieved
             RemoveHandler ArduinoVB.VersionInfoReceieved, AddressOf FirmataVB1_VersionInfoReceieved
+            'Deconnexion de la carte Arduino
             ArduinoVB.Disconnect()
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Stop", "Driver arrêté")
             _IsConnect = False
@@ -427,6 +457,14 @@ Public Class Driver_Arduino
         End Get
     End Property
 
+    ''' <summary>
+    ''' Activer une sortie
+    ''' </summary>
+    ''' <param name="Objet"></param>
+    ''' <param name="Commande"></param>
+    ''' <param name="Parametre1"></param>
+    ''' <param name="Parametre2"></param>
+    ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         If _Enable = False Then
             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Impossible de traiter cette commande car le driver n'est pas activé")
@@ -532,24 +570,33 @@ Public Class Driver_Arduino
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Déclaration du driver
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub New()
+        'Devices supportés par le driver
         _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE)
         _DeviceSupport.Add(ListeDevices.CONTACT)
         _DeviceSupport.Add(ListeDevices.APPAREIL)
 
-        _Pin(0) = 0 'Pin 2 en entrée
-        _Pin(1) = 0 'Pin 3 en entrée
-        _Pin(2) = 0 'Pin 4 en entrée
-        _Pin(3) = 0 'Pin 5 en entrée
-        _Pin(4) = 0 'Pin 6 en entrée
-        _Pin(5) = 1 'Pin 7 en sortie
-        _Pin(6) = 1 'Pin 8 en sortie
-        _Pin(7) = 1 'Pin 9 en sortie
-        _Pin(8) = 1 'Pin 10 en sortie
-        _Pin(9) = 1 'Pin 11 en sortie
-        _Pin(10) = 1 'Pin 12 en sortie
+        'On définit par défaut les pins 2 à 6 en entrée et 7 à 12 en sortie
+        _Pin(0) = -1 'Pin 0 (non utilisée)
+        _Pin(1) = -1 'Pin 1 (non utilisée)
+        _Pin(2) = 0 'Pin 2 en entrée
+        _Pin(3) = 0 'Pin 3 en entrée
+        _Pin(4) = 0 'Pin 4 en entrée
+        _Pin(5) = 0 'Pin 5 en entrée
+        _Pin(6) = 0 'Pin 6 en entrée
+        _Pin(7) = 1 'Pin 7 en sortie
+        _Pin(8) = 1 'Pin 8 en sortie
+        _Pin(9) = 1 'Pin 9 en sortie
+        _Pin(10) = 1 'Pin 10 en sortie
+        _Pin(11) = 1 'Pin 11 en sortie
+        _Pin(12) = 1 'Pin 12 en sortie
+        _Pin(13) = 1 'Pin 13 en sortie
 
-        'Paramétres avancés
+        'Paramétres avancés pouvant être définit côté Admin sur le driver
         Add_ParamAvance("Baud", "BaudRate", 57600)
         Add_ParamAvance("RemotingPort0", "Si actif (1, sinon 0) Arduino envoi régulièrement les valeurs des pins du port 0", 0)
         Add_ParamAvance("RemotingPort1", "Si actif (1, sinon 0) Arduino envoi régulièrement les valeurs des pins du port 1", 0)
@@ -564,46 +611,66 @@ Public Class Driver_Arduino
         Add_ParamAvance("Pin10", "Définit si Pin 10 est en entrée(0) ou en sortie(1)", 1)
         Add_ParamAvance("Pin11", "Définit si Pin 11 est en entrée(0) ou en sortie(1)", 1)
         Add_ParamAvance("Pin12", "Définit si Pin 12 est en entrée(0) ou en sortie(1)", 1)
+        Add_ParamAvance("Pin13", "Définit si Pin 13 est en entrée(0) ou en sortie(1)", 1)
     End Sub
 #End Region
 
 #Region "Fonctions propres au driver"
-    'Reception pin digital a changé
+
+    ''' <summary>
+    ''' Message envoyé par la carte (évènement) lorsqu'un port binaire a changée
+    ''' </summary>
+    ''' <param name="portNumber">N° du port où la pin se situe (sera =0 pour les pins 0 à 7 et =1 pour les pins suivantes)</param>
+    ''' <param name="portData">Valeur représentant la valeur du port (ex: si pin 0=1 et pin1= 1 donc 11 en binaire donne 3 en dec, la valeur de portData sera 3)</param>
+    ''' <remarks></remarks>
     Private Sub FirmataVB1_DigitalMessageReceieved(ByVal portNumber As Integer, ByVal portData As Integer)
         Try
             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DigitalMessageRecu", "PortNumber:" & portNumber & " Value:" & portData)
-            Select Case portNumber
-                Case 0 'Normal sur le port 0 les pins 2 à 6 sont en entrées
+
+            Select Case portNumber 'Quel port est concerné ?
+                Case 0 'On va aller lire les pins 2 à 7 du port 0 (on prend pas en compte les pins 0 et 1)
                     For i As Integer = 2 To 7
-                        traitement(ArduinoVB.DigitalRead(i), i, _Pin(i - 2))
+                        'la fonction DigitalRead(pin as integer) est fournie par la dll, elle permet pour une pin donnée de savoir son état 0/1
+                        traitement(ArduinoVB.DigitalRead(i), i, _Pin(i))
                     Next
-                Case 1 'Pas Normal sur le port 1 les pins 7 à 12 sont en sorties
-                    For i As Integer = 8 To 12
-                        traitement(ArduinoVB.DigitalRead(i), i, _Pin(i - 2))
+                Case 1 'On va aller lire les pins 8 à 13 du port 1 (on prend pas en compte la pin 13)
+                    For i As Integer = 8 To 13
+                        traitement(ArduinoVB.DigitalRead(i), i, _Pin(i))
                     Next
             End Select
+
         Catch ex As Exception
+            'Il y a eu une erreur lors du traitement
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " DigitalMessageReceieved", "Erreur : " & ex.ToString)
         End Try
     End Sub
 
-    'Reception de la version
+    ''' <summary>
+    ''' Retourne la version de la carte (fonction fournie par la dll)
+    ''' </summary>
+    ''' <param name="majorVersion">version majeure</param>
+    ''' <param name="minorVersion">version mineure</param>
+    ''' <remarks></remarks>
     Private Sub FirmataVB1_VersionInfoReceieved(ByVal majorVersion As Integer, ByVal minorVersion As Integer)
         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " VersionInfoReceieved", "Version:" & majorVersion & "." & minorVersion)
     End Sub
 
-    'Reception pin analogique a changé
+    ''' <summary>
+    ''' Message envoyé par la carte (évènement) lorsqu'une pin analogique a changée
+    ''' </summary>
+    ''' <param name="pin">numéro de la pin</param>
+    ''' <param name="value">valeur lue</param>
+    ''' <remarks></remarks>
     Private Sub FirmataVB1_AnalogMessageReceieved(ByVal pin As Integer, ByVal value As Integer)
         Try
             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " AnalogMessageReceieved", "Pin:" & pin & " Value:" & value)
-            traitement(value, pin, 2)
+            traitement(value, pin, 2) 'aller écrire la valeur dans le device --> Homidom
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " AnalogMessageReceieved", "Erreur : " & ex.ToString)
         End Try
     End Sub
 
-    Delegate Sub ArduinoDigitalDataCallback(ByVal PortNr As Integer, ByVal Value As Integer)
-    ''' <summary>Traite les paquets reçus</summary>
+    ''' <summary>Va écrire les valeurs dans Homidom</summary>
     ''' <remarks></remarks>
     Private Sub traitement(ByVal valeur As Integer, ByVal adresse As String, ByVal type As Integer)
         Try
@@ -613,11 +680,11 @@ Public Class Driver_Arduino
 
             Select Case type
                 Case 0 'CONTACT
-                    _Type = "CONTACT"
+                    _Type = "CONTACT" 'ENTREE
                 Case 1 'APPAREIL
-                    _Type = "APPAREIL"
+                    _Type = "APPAREIL" 'SORTIE
                 Case 2 'GENERIQUE VALUE
-                    _Type = "GENERIQUEVALUE"
+                    _Type = "GENERIQUEVALUE" 'ENTREE ANA
                 Case Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Process", "Le type de device n'appartient pas à ce driver: " & type)
                     Exit Sub
