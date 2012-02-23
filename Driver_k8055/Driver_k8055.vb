@@ -262,11 +262,20 @@ Imports HoMIDom.HoMIDom.Device
                 Exit Sub
             End If
 
-            If SetCurrentDevice(CInt(Objet.Adresse2)) <> -1 Then
+            Dim _numcarte As Integer = SetCurrentDevice(CInt(Objet.Adresse2))
+            If _numcarte <> -1 Then
+                If _numcarte <> CInt(Objet.Adresse2) Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: impossible de changer de carte N°: " & Objet.Adresse2)
+                    Exit Sub
+                End If
                 If _IsAna = True Then
-                    Objet.Value = ReadAnalogChannel(Objet.Adresse1)
+                    Dim val As Integer = ReadAnalogChannel(Objet.Adresse1)
+                    Objet.Value = val
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "K8055 Read", "Device analogique adresse:" & Objet.Adresse1 & " carte: " & Objet.Adresse2 & " Valeur: " & val)
                 Else
-                    Objet.Value = ReadDigitalChannel(Objet.Adresse1)
+                    Dim Val As Boolean = ReadDigitalChannel(Objet.Adresse1)
+                    Objet.Value = Val
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "K8055 Read", "Device binaire adresse:" & Objet.Adresse1 & " carte: " & Objet.Adresse2 & " Valeur: " & Val)
                 End If
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse de la carte: " & Objet.Adresse2 & " n'a pas été trouvée")
@@ -325,7 +334,8 @@ Imports HoMIDom.HoMIDom.Device
                 Else
                     'Write(deviceobject, Command, Param(0), Param(1))
                     Select Case UCase(Command)
-                        Case ""
+                        Case "VALEUR"
+                            Write(MyDevice, Command, Param(0), Param(1))
                         Case Else
                     End Select
                     Return True
@@ -447,12 +457,12 @@ Imports HoMIDom.HoMIDom.Device
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
             If _Enable = False Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
                 Exit Sub
             End If
 
             If _IsConnect = False Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
                 Exit Sub
             End If
 
@@ -506,7 +516,13 @@ Imports HoMIDom.HoMIDom.Device
                     ClearDigitalChannel(adr)
                 End If
             Else
-
+                If Commande = "VALEUR" Then
+                    If Parametre1 IsNot Nothing Then
+                        If IsNumeric(Parametre1) Then
+                            OutputAnalogChannel(adr, Parametre1)
+                        End If
+                    End If
+                End If
             End If
 
         Catch ex As Exception
@@ -599,12 +615,8 @@ Imports HoMIDom.HoMIDom.Device
         _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE) 'E/S ANA (Adresse Ex ou Sx)
 
         'ajout des commandes avancées pour les devices
-        'Ci-dessous un exemple
-        'Dim x As New DeviceCommande
-        'x.NameCommand = "Test"
-        'x.DescriptionCommand = "Ceci est une commande avancée de test"
-        'x.CountParam = 1
-        '_DeviceCommandPlus.Add(x)
+        Add_DeviceCommande("VALEUR", "Valeur à écrire", 1)
+
         Add_LibelleDevice("ADRESSE1", "Adresse du device", "Doit être compris entre 1 et 5 pour une entrée et 1 et 8 pour une sortie")
         Add_LibelleDevice("ADRESSE2", "Adresse de la carte", "Adresse de la carte qui doit être compris entre 0 et 3")
     End Sub
