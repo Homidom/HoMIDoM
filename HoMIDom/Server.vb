@@ -106,30 +106,38 @@ Namespace HoMIDom
                         '------------------------------------------------------------------------------------------------
                         '    MACRO/Triggers
                         '------------------------------------------------------------------------------------------------
-                        'Parcour des triggers pour vérifier si le device déclenche des macros
-                        For i As Integer = 0 To _listTriggers.Count - 1
-                            If _listTriggers.Item(i).Enable = True Then
-                                If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE And Device.id = _ListTriggers.Item(i).ConditionDeviceId And _ListTriggers.Item(i).ConditionDeviceProperty = [Property] Then 'c'est un trigger type device + enable + device concerné
-                                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", " -> " & Device.name & " est associé au trigger : " & _ListTriggers.Item(i).Nom)
-                                    'on lance toutes les macros associés
-                                    For j As Integer = 0 To _ListTriggers.Item(i).ListMacro.Count - 1
-                                        Dim _m As Macro = ReturnMacroById(_IdSrv, _ListTriggers.Item(i).ListMacro.Item(j))
-                                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", " --> " & _ListTriggers.Item(i).Nom & " Lance la macro : " & _m.Nom)
-                                        If _m IsNot Nothing Then _m.Execute(Me)
-                                        _m = Nothing
-                                    Next
+                        Try
+                            'Parcour des triggers pour vérifier si le device déclenche des macros
+                            For i As Integer = 0 To _ListTriggers.Count - 1
+                                If _ListTriggers.Item(i).Enable = True Then
+                                    If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE And Device.id = _ListTriggers.Item(i).ConditionDeviceId And _ListTriggers.Item(i).ConditionDeviceProperty = [Property] Then 'c'est un trigger type device + enable + device concerné
+                                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", " -> " & Device.name & " est associé au trigger : " & _ListTriggers.Item(i).Nom)
+                                        'on lance toutes les macros associés
+                                        For j As Integer = 0 To _ListTriggers.Item(i).ListMacro.Count - 1
+                                            Dim _m As Macro = ReturnMacroById(_IdSrv, _ListTriggers.Item(i).ListMacro.Item(j))
+                                            Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", " --> " & _ListTriggers.Item(i).Nom & " Lance la macro : " & _m.Nom)
+                                            If _m IsNot Nothing Then _m.Execute(Me)
+                                            _m = Nothing
+                                        Next
+                                    End If
                                 End If
-                            End If
-                        Next
+                            Next
+                        Catch ex As Exception
+                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Macro/Triggers Exception : " & ex.Message)
+                        End Try
 
                         '------------------------------------------------------------------------------------------------
                         '    HISTORIQUE
                         '------------------------------------------------------------------------------------------------
-                        'Ajout dans la BDD
-                        retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
-                        If Mid(retour, 1, 4) = "ERR:" Then
-                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur Requete sqlite : " & retour)
-                        End If
+                        Try
+                            'Ajout dans la BDD
+                            retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
+                            If Mid(retour, 1, 4) = "ERR:" Then
+                                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur Requete sqlite : " & retour)
+                            End If
+                        Catch ex As Exception
+                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Historique Exception : " & ex.Message)
+                        End Try
 
                         'Ancienne gestion, maintenant directement dans les devices
                         '--- si on teste la value (et non les autres propriétés d'un device) et si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
