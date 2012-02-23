@@ -109,9 +109,12 @@ Namespace HoMIDom
                         'Parcour des triggers pour vérifier si le device déclenche des macros
                         For i As Integer = 0 To _listTriggers.Count - 1
                             If _listTriggers.Item(i).Enable = True Then
-                                If _listTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE And Device.id = _listTriggers.Item(i).ConditionDeviceId And _listTriggers.Item(i).ConditionDeviceProperty = [Property] Then 'c'est un trigger type device + enable + device concerné
-                                    For j As Integer = 0 To _listTriggers.Item(i).ListMacro.Count - 1
-                                        Dim _m As Macro = ReturnMacroById(_IdSrv, _listTriggers.Item(i).ListMacro.Item(j))
+                                If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE And Device.id = _ListTriggers.Item(i).ConditionDeviceId And _ListTriggers.Item(i).ConditionDeviceProperty = [Property] Then 'c'est un trigger type device + enable + device concerné
+                                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", " -> " & Device.name & " est associé au trigger : " & _ListTriggers.Item(i).Nom)
+                                    'on lance toutes les macros associés
+                                    For j As Integer = 0 To _ListTriggers.Item(i).ListMacro.Count - 1
+                                        Dim _m As Macro = ReturnMacroById(_IdSrv, _ListTriggers.Item(i).ListMacro.Item(j))
+                                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", " --> " & _ListTriggers.Item(i).Nom & " Lance la macro : " & _m.Nom)
                                         If _m IsNot Nothing Then _m.Execute(Me)
                                         _m = Nothing
                                     Next
