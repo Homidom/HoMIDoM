@@ -118,9 +118,9 @@ Partial Public Class uDevice
 
                     If x.Type = ListeDevices.MULTIMEDIA Then
                         ListCmd.Items.Clear()
-                        For i As Integer = 0 To x.ListCommandName.Count - 1
-                            ListCmd.Items.Add(x.ListCommandName(i))
-                        Next
+                        'For i As Integer = 0 To x.ListCommandName.Count - 1
+                        '    ListCmd.Items.Add(x.ListCommandName(i))
+                        'Next
                         x = Nothing
                     Else
                         StkCde.Height = 0
@@ -481,9 +481,9 @@ Partial Public Class uDevice
     Private Sub ListCmd_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles ListCmd.SelectionChanged
         Try
             If ListCmd.SelectedIndex < 0 Then Exit Sub
-            TxtCmdName.Text = myservice.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandName(ListCmd.SelectedIndex)
-            TxtCmdData.Text = myservice.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandData(ListCmd.SelectedIndex)
-            TxtCmdRepeat.Text = myservice.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandRepeat(ListCmd.SelectedIndex)
+            'TxtCmdName.Text = myservice.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandName(ListCmd.SelectedIndex)
+            'TxtCmdData.Text = myservice.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandData(ListCmd.SelectedIndex)
+            'TxtCmdRepeat.Text = myservice.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandRepeat(ListCmd.SelectedIndex)
             TxtCmdData.Text = myservice.StartIrLearning(IdSrv)
         Catch Ex As Exception
             MessageBox.Show("Erreur ListCmd_SelectionChanged: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)

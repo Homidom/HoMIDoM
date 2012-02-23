@@ -833,17 +833,17 @@ Namespace HoMIDom
         ''' Liste des noms des commandes IR (device IR)
         ''' </summary>
         ''' <remarks></remarks>
-        Public ListCommandName As New List(Of String)
-        ''' <summary>
-        ''' Liste des données IR (device IR)
-        ''' </summary>
-        ''' <remarks></remarks>
-        Public ListCommandData As New List(Of String)
-        ''' <summary>
-        ''' Liste des valeurs de nombre de fois à envoyer la commande IR (device IR)
-        ''' </summary>
-        ''' <remarks></remarks>
-        Public ListCommandRepeat As New List(Of String)
+        Public Commandes As New List(Of Telecommande.Commandes)
+        ' ''' <summary>
+        ' ''' Liste des données IR (device IR)
+        ' ''' </summary>
+        ' ''' <remarks></remarks>
+        'Public ListCommandData As New List(Of String)
+        ' ''' <summary>
+        ' ''' Liste des valeurs de nombre de fois à envoyer la commande IR (device IR)
+        ' ''' </summary>
+        ' ''' <remarks></remarks>
+        'Public ListCommandRepeat As New List(Of String)
 
     End Class
 End Namespace

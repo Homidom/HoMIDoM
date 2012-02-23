@@ -210,7 +210,7 @@ Namespace HoMIDom
             Protected _LastEtat As Boolean = True
             Protected MyTimer As New Timers.Timer
             '<NonSerialized()> Protected _FirstTime As Boolean = True
-
+            Public Commandes As New List(Of HoMIDom.Telecommande.Commandes)
 
             ''' <summary>
             ''' Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
@@ -361,6 +361,15 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _Modele = value
+                    If _Type = "MUTIMEDIA" Then
+                        Dim a() As String = value.Split("-")
+                        If a.Length = 3 Then
+                            Dim _fab As String = a(0)
+                            Dim _mod As String = a(1)
+                            Dim _drv As String = a(2)
+                            Commandes = _Server.ReadTemplate(_fab, _mod, _drv)
+                        End If
+                    End If
                 End Set
             End Property
 
@@ -2145,8 +2154,8 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueString
 
             Public ListCommandName As New ArrayList
-            Public ListCommandData As New ArrayList
-            Public ListCommandRepeat As New ArrayList
+            'Public ListCommandData As New ArrayList
+            'Public ListCommandRepeat As New ArrayList
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -2154,57 +2163,57 @@ Namespace HoMIDom
                 _Type = "MULTIMEDIA"
                 AddHandler MyTimer.Elapsed, AddressOf Read
 
-                ListCommandName.Add("Power")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("ChannelUp")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("ChannelDown")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("VolumeUp")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("VolumeDown")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("Mute")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("Source")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("0")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("1")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("2")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("3")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("4")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("5")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("6")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("7")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("8")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
-                ListCommandName.Add("9")
-                ListCommandData.Add("0")
-                ListCommandRepeat.Add("0")
+                'ListCommandName.Add("Power")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("ChannelUp")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("ChannelDown")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("VolumeUp")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("VolumeDown")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("Mute")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("Source")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("0")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("1")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("2")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("3")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("4")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("5")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("6")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("7")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("8")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
+                'ListCommandName.Add("9")
+                'ListCommandData.Add("0")
+                'ListCommandRepeat.Add("0")
             End Sub
 
             'redéfinition car on veut rien faire
@@ -2213,11 +2222,34 @@ Namespace HoMIDom
             End Sub
 
             Public Sub SendCommand(ByVal NameCommand As String)
-                For i As Integer = 0 To ListCommandName.Count - 1
-                    If ListCommandName(i) = NameCommand Then
-                        If _Enable = False Then Exit Sub
-                        Driver.Write(Me, "SendCodeIR", ListCommandData(i), ListCommandRepeat(i))
-                        Exit For
+                'For i As Integer = 0 To ListCommandName.Count - 1
+                '    If ListCommandName(i) = NameCommand Then
+                '        If _Enable = False Then Exit Sub
+                '        Driver.Write(Me, "SendCodeIR", ListCommandData(i), ListCommandRepeat(i))
+                '        Exit For
+                '    End If
+                'Next
+            End Sub
+
+            ''' <summary>
+            ''' Envoyer une commande au driver
+            ''' </summary>
+            ''' <param name="Commande"></param>
+            ''' <remarks></remarks>
+            Public Sub EnvoyerCommande(ByVal Commande As String)
+                For i As Integer = 0 To Commandes.Count - 1
+                    If UCase(Commande) = UCase(Commandes.Item(i).Name) Then
+                        Dim code As String = ""
+                        If Adresse1 IsNot Nothing Then
+                            code = Adresse1.ToString
+                        End If
+                        code &= Commandes.Item(i).Code
+                        If Adresse2 IsNot Nothing Then
+                            code &= Adresse2.ToString
+                        End If
+                        Dim repeat As String = Commandes.Item(i).Repeat
+                        Driver.EnvoyerCode(code, repeat)
+                        Exit Sub
                     End If
                 Next
             End Sub
