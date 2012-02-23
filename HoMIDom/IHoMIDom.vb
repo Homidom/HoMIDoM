@@ -134,6 +134,21 @@ Namespace HoMIDom
         <OperationContract()> Function GetPortSOAP() As Double
 
         ''' <summary>
+        ''' Fixe l'adresse IP SOAP
+        ''' </summary>
+        ''' <param name="IdSrv">Id du Serveur</param>
+        ''' <param name="Value">Adresse IP SOAP</param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetIPSOAP(ByVal IdSrv As String, ByVal Value As String)
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetIPSOAP() As String
+
+        ''' <summary>
         ''' Retourne la date et heure du dernier démarrage du serveur
         ''' </summary>
         ''' <returns>DateTime du dernier démarrage du serveur</returns>

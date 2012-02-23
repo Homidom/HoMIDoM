@@ -641,7 +641,7 @@ Namespace HoMIDom
             End Property
 
             'Demande de Lecture au driver
-            Public Sub Read()
+            Public Overridable Sub Read()
                 Try
                     If _Enable = False Then Exit Sub
                     If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
@@ -735,6 +735,7 @@ Namespace HoMIDom
                     _Value = _ValueDef
                 End Set
             End Property
+
             'Precision de value
             Public Property Precision() As Integer
                 Get
