@@ -585,19 +585,9 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.TemplateDevice.ListCommandName">
+</member><member name="F:HoMIDom.HoMIDom.TemplateDevice.Commandes">
 	<summary>
  Liste des noms des commandes IR (device IR)
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.TemplateDevice.ListCommandData">
-	<summary>
- Liste des données IR (device IR)
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.TemplateDevice.ListCommandRepeat">
-	<summary>
- Liste des valeurs de nombre de fois à envoyer la commande IR (device IR)
  </summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.TemplateDevice">
@@ -2940,6 +2930,12 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestRead">
 	<summary>Permet de tester une commande read</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.MULTIMEDIA.EnvoyerCommande(System.String)">
+	<summary>
+ Envoyer une commande au driver
+ </summary>
+	<param name="Commande"></param>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Device">
 	<summary>Class Device, définie tous différents types de devices</summary>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<template fabricant="free" modele="freeboxv5" driver="http">
+  <commandes>
+    <cmd name="0" code="" repeat="0" />
+    <cmd name="1" code="" repeat="0" />
+    <cmd name="2" code="" repeat="0" />
+    <cmd name="3" code="" repeat="0" />
+    <cmd name="4" code="" repeat="0" />
+    <cmd name="5" code="" repeat="0" />
+    <cmd name="6" code="" repeat="0" />
+    <cmd name="7" code="" repeat="0" />
+    <cmd name="8" code="" repeat="0" />
+    <cmd name="9" code="" repeat="0" />
+    <cmd name="Power" code="" repeat="0" />
+  </commandes>
+</template>

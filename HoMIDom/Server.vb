@@ -782,20 +782,20 @@ Namespace HoMIDom
                                         If (Not list.Item(j).Attributes.GetNamedItem("formatage") Is Nothing) Then .Formatage = list.Item(j).Attributes.GetNamedItem("formatage").Value
                                     End If
                                     '-- cas spécifique du multimedia pour récupérer les commandes IR --
-                                    If _Dev.type = "MULTIMEDIA" Then
-                                        For k As Integer = 0 To list.Item(j).ChildNodes.Count - 1
-                                            If list.Item(j).ChildNodes.Item(k).Name = "commands" Then
-                                                _Dev.ListCommandName.Clear()
-                                                _Dev.ListCommandData.Clear()
-                                                _Dev.ListCommandRepeat.Clear()
-                                                For k1 As Integer = 0 To list.Item(j).ChildNodes.Item(k).ChildNodes.Count - 1
-                                                    _Dev.ListCommandName.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(0).Value)
-                                                    _Dev.ListCommandData.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(1).Value)
-                                                    _Dev.ListCommandRepeat.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(2).Value)
-                                                Next
-                                            End If
-                                        Next
-                                    End If
+                                    'If _Dev.type = "MULTIMEDIA" Then
+                                    '    For k As Integer = 0 To list.Item(j).ChildNodes.Count - 1
+                                    '        If list.Item(j).ChildNodes.Item(k).Name = "commands" Then
+                                    '            _Dev.ListCommandName.Clear()
+                                    '            _Dev.ListCommandData.Clear()
+                                    '            _Dev.ListCommandRepeat.Clear()
+                                    '            For k1 As Integer = 0 To list.Item(j).ChildNodes.Item(k).ChildNodes.Count - 1
+                                    '                _Dev.ListCommandName.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(0).Value)
+                                    '                _Dev.ListCommandData.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(1).Value)
+                                    '                _Dev.ListCommandRepeat.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(2).Value)
+                                    '            Next
+                                    '        End If
+                                    '    Next
+                                    'End If
                                     If .ID <> "" And .Name <> "" And .Adresse1 <> "" And .DriverId <> "" Then
                                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
                                         If .ID = "soleil01" Then
@@ -1494,23 +1494,23 @@ Namespace HoMIDom
                     End If
 
                     '-- Cas Code IR a ajouter pour MULTIMEDIA
-                    If _ListDevices.Item(i).Type = "MULTIMEDIA" Then
-                        writer.WriteStartElement("commands")
-                        For k As Integer = 0 To _ListDevices.Item(i).ListCommandName.Count - 1
-                            writer.WriteStartElement("command")
-                            writer.WriteStartAttribute("key")
-                            writer.WriteValue(_ListDevices.Item(i).ListCommandName(k))
-                            writer.WriteEndAttribute()
-                            writer.WriteStartAttribute("data")
-                            writer.WriteValue(_ListDevices.Item(i).ListCommandData(k))
-                            writer.WriteEndAttribute()
-                            writer.WriteStartAttribute("repeat")
-                            writer.WriteValue(_ListDevices.Item(i).ListCommandRepeat(k))
-                            writer.WriteEndAttribute()
-                            writer.WriteEndElement()
-                        Next
-                        writer.WriteEndElement()
-                    End If
+                    'If _ListDevices.Item(i).Type = "MULTIMEDIA" Then
+                    '    writer.WriteStartElement("commands")
+                    '    For k As Integer = 0 To _ListDevices.Item(i).ListCommandName.Count - 1
+                    '        writer.WriteStartElement("command")
+                    '        writer.WriteStartAttribute("key")
+                    '        writer.WriteValue(_ListDevices.Item(i).ListCommandName(k))
+                    '        writer.WriteEndAttribute()
+                    '        writer.WriteStartAttribute("data")
+                    '        writer.WriteValue(_ListDevices.Item(i).ListCommandData(k))
+                    '        writer.WriteEndAttribute()
+                    '        writer.WriteStartAttribute("repeat")
+                    '        writer.WriteValue(_ListDevices.Item(i).ListCommandRepeat(k))
+                    '        writer.WriteEndAttribute()
+                    '        writer.WriteEndElement()
+                    '    Next
+                    '    writer.WriteEndElement()
+                    'End If
                     writer.WriteEndElement()
                 Next
                 writer.WriteEndElement()
@@ -4526,11 +4526,12 @@ Namespace HoMIDom
                         End If
 
                         If .Type = Device.ListeDevices.MULTIMEDIA Then
-                            For j As Integer = 0 To _ListDevices.Item(i).listcommandname.count - 1
-                                .ListCommandName.Add(_ListDevices.Item(i).listcommandname.item(j))
-                                .ListCommandData.Add(_ListDevices.Item(i).ListCommandData.item(j))
-                                .ListCommandRepeat.Add(_ListDevices.Item(i).ListCommandRepeat.item(j))
-                            Next
+                            .Commandes = _ListDevices.Item(i).Commandes
+                            'For j As Integer = 0 To _ListDevices.Item(i).listcommandname.count - 1
+                            '    .ListCommandName.Add(_ListDevices.Item(i).listcommandname.item(j))
+                            '    .ListCommandData.Add(_ListDevices.Item(i).ListCommandData.item(j))
+                            '    .ListCommandRepeat.Add(_ListDevices.Item(i).ListCommandRepeat.item(j))
+                            'Next
                         End If
                     End With
                     _list.Add(x)
@@ -5485,11 +5486,12 @@ Namespace HoMIDom
                         End If
 
                         If retour.Type = Device.ListeDevices.MULTIMEDIA Then
-                            For j As Integer = 0 To _ListDevices.Item(i).listcommandname.count - 1
-                                retour.ListCommandName.Add(_ListDevices.Item(i).listcommandname.item(j))
-                                retour.ListCommandData.Add(_ListDevices.Item(i).ListCommandData.item(j))
-                                retour.ListCommandRepeat.Add(_ListDevices.Item(i).ListCommandRepeat.item(j))
-                            Next
+                            retour.Commandes = _ListDevices.Item(i).Commandes
+                            'For j As Integer = 0 To _ListDevices.Item(i).listcommandname.count - 1
+                            '    retour.ListCommandName.Add(_ListDevices.Item(i).listcommandname.item(j))
+                            '    retour.ListCommandData.Add(_ListDevices.Item(i).ListCommandData.item(j))
+                            '    retour.ListCommandRepeat.Add(_ListDevices.Item(i).ListCommandRepeat.item(j))
+                            'Next
                         End If
                         Exit For
                     End If
@@ -6645,6 +6647,68 @@ Namespace HoMIDom
             End Try
         End Function
 
+        Public Function SaveTemplate(ByVal IdSrv As String, ByVal Template As String, ByVal Commandes As List(Of Telecommande.Commandes)) As String
+            Try
+                Dim MyPath As String = _MonRepertoire & "\templates\"
+                Dim _Fichier As String = MyPath & LCase(Template) & ".xml"
+
+                If IO.File.Exists(_Fichier) = False Then
+                    Return "Le template " & Template & ".xml n'existe pas!"
+                    Exit Function
+                End If
+
+                Dim a() As String = Template.Split("-")
+                If a.Length <> 3 Then
+                    Return "Le nom du template " & Template & " est erroné!"
+                    Exit Function
+                End If
+
+                ''Creation du fichier XML
+                Dim writer As New XmlTextWriter(_Fichier, System.Text.Encoding.UTF8)
+                writer.WriteStartDocument(True)
+                writer.Formatting = Formatting.Indented
+                writer.Indentation = 2
+
+                writer.WriteStartElement("template")
+                writer.WriteStartAttribute("fabricant")
+                writer.WriteValue(LCase(a(0)))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("modele")
+                writer.WriteValue(LCase(a(1)))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("driver")
+                writer.WriteValue(LCase(a(2)))
+                writer.WriteEndAttribute()
+                writer.WriteStartElement("commandes")
+
+                If Commandes IsNot Nothing Then
+                    For i As Integer = 0 To Commandes.Count - 1
+                        writer.WriteStartElement("cmd")
+                        writer.WriteStartAttribute("name")
+                        writer.WriteValue(Commandes(i).Name)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("code")
+                        writer.WriteValue(Commandes(i).Code)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("repeat")
+                        writer.WriteValue(Commandes(i).Repeat)
+                        writer.WriteEndAttribute()
+                        writer.WriteEndElement()
+                    Next
+                End If
+
+                writer.WriteEndElement()
+                writer.WriteEndElement()
+
+                writer.WriteEndDocument()
+                writer.Close()
+
+                Return "0"
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTemplate", "Erreur : " & ex.Message)
+                Return ex.Message
+            End Try
+        End Function
 #End Region
 
 #Region "Log"
