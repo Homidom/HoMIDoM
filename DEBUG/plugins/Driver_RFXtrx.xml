@@ -6,20 +6,7 @@ Driver_RFXtrx
 </name>
 </assembly>
 <members>
-<member name="P:Driver_RFXtrx.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_RFXtrx.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_RFXtrx.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.GetCommandPlus">
+<member name="M:Driver_RFXtrx.Driver_RFXtrx.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
@@ -125,36 +112,24 @@ Driver_RFXtrx
 	<remarks></remarks>
 </member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ProcessReceivedChar(System.Byte)">
 	<summary>Traite chaque byte reçu</summary>
-	<param name="temp">Byte recu</param>
-	<remarks></remarks>
-</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.display_mess">
-	<summary>Decode le message pour l'envoyer aux bonnes fonctions de traitement</summary>
-	<remarks></remarks>
-</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.protocol_chacon(System.String,System.String,System.Boolean,System.Int32)">
-	<summary>Gestion du protocole CHACON - HomeEasy</summary>
-	<param name="adresse">Adresse du type 00-00-00-0 ou 0 (pour les Heaters)</param>
-	<param name="commande">commande ON, OFF, DIM, GROUP_ON, GROUP_OFF, GROUP_DIM, HEATER_ON, HEATER_OFF</param>
-	<param name="europe">Type Europe ou US ?</param>
-	<param name="dimlevel">Niveau du Dim</param>
-	<remarks></remarks>
-</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.protocol_x10(System.String,System.String)">
-	<summary>Gestion du protocole X10 RF</summary>
-	<param name="adresse">Adresse du type A1</param>
-	<param name="commande">commande ON, OFF, BRIGHT, DIM, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
-	<remarks></remarks>
-</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.protocol_arc(System.String,System.String)">
-	<summary>Gestion du protocole ARC</summary>
-	<param name="adresse">Adresse du type A1</param>
-	<param name="commande">commande ON, OFF, GROUP_ON, GROUP_OFF, CHIME</param>
-	<remarks></remarks>
-</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.protocol_waveman(System.String,System.String)">
-	<summary>Gestion du protocole WAVEMAN</summary>
-	<param name="adresse">Adresse du type A1</param>
-	<param name="commande">commande ON, OFF</param>
+	<param name="sComChar">Byte recu</param>
 	<remarks></remarks>
 </member><member name="T:Driver_RFXtrx.Driver_RFXtrx">
 	<summary>Class Driver_RFXTrx, permet de communiquer avec le RFXtrx Ethernet/COM</summary>
 	<remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
+</member><member name="P:Driver_RFXtrx.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_RFXtrx.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_RFXtrx.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member>
 </members>
 </doc>
