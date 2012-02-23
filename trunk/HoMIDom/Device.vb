@@ -413,10 +413,11 @@ Namespace HoMIDom
                 'RemoveHandler MyTimer.Elapsed, AddressOf read
             End Sub
 
-            Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+            Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param1 As Object = Nothing, Optional ByVal Param2 As Object = Nothing, Optional ByVal Param3 As Object = Nothing, Optional ByVal Param4 As Object = Nothing, Optional ByVal Param5 As Object = Nothing) As Boolean
                 Try
                     If _Enable = False Then Exit Function
                     Dim CMD As String = UCase(Command)
+                    Dim Param() As Object = {Param1, Param2, Param3, Param4, Param5}
                     Return _Driver.ExecuteCommand(Me, CMD, Param)
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device ExecuteCommand", ex.Message)
@@ -779,7 +780,7 @@ Namespace HoMIDom
             End Property
 
             'Demande de Lecture au driver
-            Public Sub Read()
+            Public Overridable Sub Read()
                 Try
                     If _Enable = False Then Exit Sub
                     If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
