@@ -6871,6 +6871,34 @@ Namespace HoMIDom
                 Return -1
             End Try
         End Function
+
+        ''' <summary>Fixer la valeur IP SOAP</summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        Public Sub SetIPSOAP(ByVal IdSrv As String, ByVal Value As String) Implements IHoMIDom.SetIPSOAP
+            If VerifIdSrv(IdSrv) = False Then
+                Exit Sub
+            End If
+
+            Try
+                _IPSOAP = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetIPSOAP", "Erreur: " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>Retourne la valeur IP SOAP</summary>
+        ''' <returns>Numero du port ou -1 si erreur</returns>
+        ''' <remarks></remarks>
+        Public Function GetIPSOAP() As String Implements IHoMIDom.GetIPSOAP
+            Try
+                Return _IPSOAP
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetIPSOAP", "Erreur: " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
 #End Region
 
 #Region "Maintenance"

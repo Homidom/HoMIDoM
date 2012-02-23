@@ -17,7 +17,11 @@
                             <Label Foreground="White" Height="28" HorizontalAlignment="Left" Name="Label19" VerticalAlignment="Top" Width="67">Id Serveur:</Label>
                                     <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtIdSrv" VerticalAlignment="Top" Width="79" ToolTip="Id du serveur" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Foreground="White" Height="28" HorizontalAlignment="Left" Name="Label28" VerticalAlignment="Top" Width="67">IP SOAP:</Label>
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtIPSOAP" VerticalAlignment="Top" Width="79" ToolTip="Permet de modifier le port SOAP du serveur à son prochain démarrage" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" >
                             <Label Foreground="White" Height="28" HorizontalAlignment="Left" Name="Label8" VerticalAlignment="Top" Width="67">Port SOAP:</Label>
                                     <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtSOAP" VerticalAlignment="Top" Width="79" ToolTip="Permet de modifier le port SOAP du serveur à son prochain démarrage" />
                         </StackPanel>

@@ -1,9 +1,15 @@
-﻿Partial Public Class uConfigServer
+﻿Imports System.Text.RegularExpressions
+
+Partial Public Class uConfigServer
     Public Event CloseMe(ByVal MyObject As Object)
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
             If IsConnect = True Then
+                If TxtIPSOAP.Text = "" Then
+                    MessageBox.Show("L'adresse IP SOAP est erronée !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Exit Sub
+                End If
                 If IsNumeric(TxtSOAP.Text) = False Or TxtSOAP.Text = "" Then
                     MessageBox.Show("Le port SOAP est erroné !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
@@ -16,31 +22,41 @@
                     MessageBox.Show("La valeur de saubegarde doit être un chiffre et positif !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
                 End If
-                If TxtSOAP.Text <> myservice.GetPortSOAP Then
+                If TxtSOAP.Text <> myService.GetPortSOAP Then
                     MessageBox.Show("Vous avez modifié le port SOAP, n'oubliez pas:" & vbCrLf & "- D'enregistrer la configuration pour qu'elle soit prise en compte au prochain démarrage" & vbCrLf & "- De redémarrer le service", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                    myservice.SetPortSOAP(IdSrv, TxtSOAP.Text)
+                    myService.SetPortSOAP(IdSrv, TxtSOAP.Text)
+                    If TxtSOAP.Text <> myService.GetPortSOAP Then
+                        MessageBox.Show("Une erreur est survenue lors du changement du port, veuillez consulter le log", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    End If
+                End If
+                If TxtIPSOAP.Text <> myService.GetIPSOAP Then
+                    MessageBox.Show("Vous avez modifié l'adresse IP SOAP (donc celle du serveur), n'oubliez pas:" & vbCrLf & "- D'enregistrer la configuration pour qu'elle soit prise en compte au prochain démarrage" & vbCrLf & "- De redémarrer le service" & vbCrLf & "- De modifier l'adresse du serveur au prochain lancement de l'admin", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    myService.SetPortSOAP(IdSrv, TxtIPSOAP.Text)
+                    If TxtIPSOAP.Text <> myService.GetIPSOAP Then
+                        MessageBox.Show("Une erreur est survenue lors du changement de l'adresse IP SOAP, veuillez consulter le log", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    End If
                 End If
                 If IsNumeric(TxtFile.Text) = False Or CDbl(TxtFile.Text) < 1 Then
                     MessageBox.Show("Veuillez saisir un numérique et positif pour la taille max du fichier de log!", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     Exit Sub
                 End If
 
-                myservice.SetIdServer(IdSrv, TxtIdSrv.Text)
+                myService.SetIdServer(IdSrv, TxtIdSrv.Text)
                 IdSrv = TxtIdSrv.Text
 
                 Dim tmpSave As Integer = TxtSave.Text
 
                 tmpSave = Format(tmpSave, "#0")
-                Dim retour As String = myservice.SetTimeSave(IdSrv, tmpSave)
+                Dim retour As String = myService.SetTimeSave(IdSrv, tmpSave)
                 If retour <> "0" Then MessageBox.Show(retour, "Erreur SetTimeSave")
-                myservice.SetLongitude(IdSrv, CDbl(TxtLong.Text.Replace(".", ",")))
-                myservice.SetLatitude(IdSrv, CDbl(TxtLat.Text.Replace(".", ",")))
-                myservice.SetHeureCorrectionLever(IdSrv, CInt(HCL.Text))
-                myservice.SetHeureCorrectionCoucher(IdSrv, CInt(HCC.Text))
-                myservice.SetSMTPMailServeur(IdSrv, TxtMail.Text)
-                myservice.SetSMTPServeur(IdSrv, TxtAdresse.Text)
-                myservice.SetSMTPLogin(IdSrv, TxtLogin.Text)
-                myservice.SetSMTPPassword(IdSrv, TxtPassword.Password)
+                myService.SetLongitude(IdSrv, CDbl(TxtLong.Text.Replace(".", ",")))
+                myService.SetLatitude(IdSrv, CDbl(TxtLat.Text.Replace(".", ",")))
+                myService.SetHeureCorrectionLever(IdSrv, CInt(HCL.Text))
+                myService.SetHeureCorrectionCoucher(IdSrv, CInt(HCC.Text))
+                myService.SetSMTPMailServeur(IdSrv, TxtMail.Text)
+                myService.SetSMTPServeur(IdSrv, TxtAdresse.Text)
+                myService.SetSMTPLogin(IdSrv, TxtLogin.Text)
+                myService.SetSMTPPassword(IdSrv, TxtPassword.Password)
                 myService.SetMaxFileSizeLog(CDbl(TxtFile.Text))
                 myService.SetMaxMonthLog(CDbl(TxtMaxLogMonth.Text))
 
@@ -132,19 +148,20 @@
         Try
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             If IsConnect = True Then
-                TxtSOAP.Text = myservice.GetPortSOAP
-                TxtLat.Text = myservice.GetLatitude
-                TxtLong.Text = myservice.GetLongitude
-                HCL.Text = myservice.GetHeureCorrectionLever
-                HCC.Text = myservice.GetHeureCorrectionCoucher
+                TxtIPSOAP.Text = myService.GetIPSOAP
+                TxtSOAP.Text = myService.GetPortSOAP
+                TxtLat.Text = myService.GetLatitude
+                TxtLong.Text = myService.GetLongitude
+                HCL.Text = myService.GetHeureCorrectionLever
+                HCC.Text = myService.GetHeureCorrectionCoucher
                 TxtIdSrv.Text = IdSrv
-                TxtSave.Text = myservice.GetTimeSave(IdSrv)
+                TxtSave.Text = myService.GetTimeSave(IdSrv)
                 TxtFile.Text = myService.GetMaxFileSizeLog
                 TxtMaxLogMonth.Text = myService.GetMaxMonthLog
 
-                TxtAdresse.Text = myservice.GetSMTPServeur(IdSrv)
-                TxtMail.Text = myservice.GetSMTPMailServeur(IdSrv)
-                TxtLogin.Text = myservice.GetSMTPLogin(IdSrv)
+                TxtAdresse.Text = myService.GetSMTPServeur(IdSrv)
+                TxtMail.Text = myService.GetSMTPMailServeur(IdSrv)
+                TxtLogin.Text = myService.GetSMTPLogin(IdSrv)
                 TxtPassword.Password = myService.GetSMTPPassword(IdSrv)
 
                 Dim _list As List(Of Boolean) = myService.GetTypeLogEnable
@@ -172,33 +189,33 @@
     Private Sub TxtMaxLogMonth_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMaxLogMonth.TextChanged
         If IsNumeric(TxtMaxLogMonth.Text) = False Then
             MessageBox.Show("Veuillez saisir un chiffre comme durée de mois maximum", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            TxtMaxLogMonth.Text = myservice.GetMaxMonthLog
+            TxtMaxLogMonth.Text = myService.GetMaxMonthLog
         End If
     End Sub
 
     Private Sub TxtFile_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtFile.TextChanged
         If IsNumeric(TxtFile.Text) = False Then
             MessageBox.Show("Veuillez saisir un chiffre comme taille maximale", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            TxtFile.Text = myservice.GetMaxFileSizeLog
+            TxtFile.Text = myService.GetMaxFileSizeLog
         End If
     End Sub
 
     Private Sub RefreshList()
         Try
             ListBox1.Items.Clear()
-            For i As Integer = 0 To myservice.GetAllRepertoiresAudio(IdSrv).Count - 1
+            For i As Integer = 0 To myService.GetAllRepertoiresAudio(IdSrv).Count - 1
                 Dim a As New CheckBox
-                a.Content = myservice.GetAllRepertoiresAudio(IdSrv).Item(i).Repertoire
-                a.IsChecked = myservice.GetAllRepertoiresAudio(IdSrv).Item(i).Enable
+                a.Content = myService.GetAllRepertoiresAudio(IdSrv).Item(i).Repertoire
+                a.IsChecked = myService.GetAllRepertoiresAudio(IdSrv).Item(i).Enable
                 ListBox1.Items.Add(a)
                 BtnDelRepertoireAudio.IsEnabled = True
             Next
 
             ListBox2.Items.Clear()
-            For i As Integer = 0 To myservice.GetAllExtensionsAudio(IdSrv).Count - 1
+            For i As Integer = 0 To myService.GetAllExtensionsAudio(IdSrv).Count - 1
                 Dim a As New CheckBox
-                a.Content = myservice.GetAllExtensionsAudio(IdSrv).Item(i).Extension
-                a.IsChecked = myservice.GetAllExtensionsAudio(IdSrv).Item(i).Enable
+                a.Content = myService.GetAllExtensionsAudio(IdSrv).Item(i).Extension
+                a.IsChecked = myService.GetAllExtensionsAudio(IdSrv).Item(i).Enable
                 ListBox2.Items.Add(a)
                 BtnDeleteExtension.IsEnabled = True
             Next
@@ -216,7 +233,7 @@
                 MessageBox.Show("Veuillez un répertoire dans la liste!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             Else
-                myservice.DeleteRepertoireAudio(IdSrv, ListBox1.SelectedItem.content)
+                myService.DeleteRepertoireAudio(IdSrv, ListBox1.SelectedItem.content)
                 RefreshList()
             End If
         Catch ex As Exception
@@ -234,7 +251,7 @@
             MessageBox.Show("Le chemin du répertoire audio ne peut être vide!", "Repertoire Audio", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         Else
-            If myservice.NewRepertoireAudio(IdSrv, dlg.SelectedPath, False) = -1 Then
+            If myService.NewRepertoireAudio(IdSrv, dlg.SelectedPath, False) = -1 Then
                 MessageBox.Show("Le chemin du répertoire audio existe déjà il ne sera pas pris en compte", "Repertoire Audio", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             Else
@@ -260,7 +277,7 @@
             Exit Sub
         End If
         retour = "." & LCase(retour)
-        If myservice.NewExtensionAudio(IdSrv, retour, False) = -1 Then
+        If myService.NewExtensionAudio(IdSrv, retour, False) = -1 Then
             MessageBox.Show("L'extension audio existe déjà elle ne sera pas pris en compte", "Extension Audio", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         Else
@@ -275,7 +292,7 @@
                 MessageBox.Show("Veuillez une extension dans la liste!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             Else
-                myservice.DeleteExtensionAudio(IdSrv, ListBox2.SelectedItem.content)
+                myService.DeleteExtensionAudio(IdSrv, ListBox2.SelectedItem.content)
                 RefreshList()
             End If
         Catch ex As Exception
