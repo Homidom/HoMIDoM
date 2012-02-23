@@ -3176,7 +3176,7 @@ Imports System.Media
 
         'WriteMessage("Signal level  = " & (recbuf(THERMOSTAT3.rssi) >> 4).ToString)
     End Sub
-    'non géré
+
     Public Sub decode_Temp()
         'Select Case recbuf(TEMP.subtype)
         '    Case TEMP.TEMP1
@@ -3193,20 +3193,18 @@ Imports System.Media
         '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(TEMP.packettype)) & ":" & Hex(recbuf(TEMP.subtype)))
         'End Select
         'WriteMessage("Sequence nbr  = " & recbuf(TEMP.seqnbr).ToString)
-        'WriteMessage("ID            = " & (recbuf(TEMP.id1) * 256 + recbuf(TEMP.id2)).ToString)
-        'If (recbuf(TEMP.tempsign) And &H80) = 0 Then
-        '    WriteMessage("Temperature   = " & Math.Round((recbuf(TEMP.temperatureh) * 256 + recbuf(TEMP.temperaturel)) / 10, 2).ToString & " °C")
-        'Else
-        '    WriteMessage("Temperature   = -" & Math.Round(((recbuf(TEMP.temperatureh) And &H7F) * 256 + recbuf(TEMP.temperaturel)) / 10, 2).ToString & " °C")
-        'End If
         'WriteMessage("Signal level  = " & (recbuf(TEMP.rssi) >> 4).ToString)
-        'If (recbuf(TEMP.battery_level) And &HF) = 0 Then
-        '    WriteMessage("Battery       = Low")
-        'Else
-        '    WriteMessage("Battery       = OK")
-        'End If
+        Dim adresse, valeur As String
+        adresse = (recbuf(TEMP.id1) * 256 + recbuf(TEMP.id2)).ToString
+        If (recbuf(TEMP.tempsign) And &H80) = 0 Then
+            valeur = Math.Round((recbuf(TEMP.temperatureh) * 256 + recbuf(TEMP.temperaturel)) / 10, 2).ToString
+        Else
+            valeur = Math.Round(((recbuf(TEMP.temperatureh) And &H7F) * 256 + recbuf(TEMP.temperaturel)) / 10, 2).ToString
+        End If
+        WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
+        If (recbuf(TEMP.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
     End Sub
-    'non géré
+
     Public Sub decode_Hum()
         'Select Case recbuf(HUM.subtype)
         '    Case HUM.HUM1
@@ -3215,8 +3213,6 @@ Imports System.Media
         '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(HUM.packettype)) & ":" & Hex(recbuf(HUM.subtype)))
         'End Select
         'WriteMessage("Sequence nbr  = " & recbuf(HUM.seqnbr).ToString)
-        'WriteMessage("ID            = " & (recbuf(HUM.id1) * 256 + recbuf(HUM.id2)).ToString)
-        'WriteMessage("Humidity      = " & recbuf(HUM.humidity).ToString)
         'Select Case recbuf(HUM.humidity_status)
         '    Case &H0
         '        WriteMessage("Status        = Dry")
@@ -3228,13 +3224,13 @@ Imports System.Media
         '        WriteMessage("Status        = Wet")
         'End Select
         'WriteMessage("Signal level  = " & (recbuf(HUM.rssi) >> 4).ToString)
-        'If (recbuf(HUM.battery_level) And &HF) = 0 Then
-        '    WriteMessage("Battery       = Low")
-        'Else
-        '    WriteMessage("Battery       = OK")
-        'End If
+        Dim adresse, valeur As String
+        adresse = (recbuf(HUM.id1) * 256 + recbuf(HUM.id2)).ToString
+        valeur = recbuf(HUM.humidity).ToString
+        WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
+        If (recbuf(HUM.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
     End Sub
-    'non géré
+
     Public Sub decode_TempHum()
         'Select Case recbuf(TEMP_HUM.subtype)
         '    Case TEMP_HUM.TH1
@@ -3255,13 +3251,6 @@ Imports System.Media
         '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(TEMP_HUM.packettype)) & ":" & Hex(recbuf(TEMP_HUM.subtype)))
         'End Select
         'WriteMessage("Sequence nbr  = " & recbuf(TEMP_HUM.seqnbr).ToString)
-        'WriteMessage("ID            = " & (recbuf(TEMP_HUM.id1) * 256 + recbuf(TEMP_HUM.id2)).ToString)
-        'If (recbuf(TEMP_HUM.tempsign) And &H80) = 0 Then
-        '    WriteMessage("Temperature   = " & Math.Round((recbuf(TEMP_HUM.temperatureh) * 256 + recbuf(TEMP_HUM.temperaturel)) / 10, 2).ToString & " °C")
-        'Else
-        '    WriteMessage("Temperature   = -" & Math.Round(((recbuf(TEMP_HUM.temperatureh) And &H7F) * 256 + recbuf(TEMP_HUM.temperaturel)) / 10, 2).ToString & " °C")
-        'End If
-        'WriteMessage("Humidity      = " & recbuf(TEMP_HUM.humidity).ToString)
         'Select Case recbuf(TEMP_HUM.humidity_status)
         '    Case &H0
         '        WriteMessage("Status        = Dry")
@@ -3273,36 +3262,21 @@ Imports System.Media
         '        WriteMessage("Status        = Wet")
         'End Select
         'WriteMessage("Signal level  = " & (recbuf(TEMP_HUM.rssi) >> 4).ToString)
-        'If recbuf(TEMP_HUM.subtype) = TEMP_HUM.TH6 Then
-        '    Select Case recbuf(TEMP_HUM.battery_level)
-        '        Case 0
-        '            WriteMessage("Battery       = 10%")
-        '        Case 1
-        '            WriteMessage("Battery       = 20%")
-        '        Case 2
-        '            WriteMessage("Battery       = 30%")
-        '        Case 3
-        '            WriteMessage("Battery       = 40%")
-        '        Case 4
-        '            WriteMessage("Battery       = 50%")
-        '        Case 5
-        '            WriteMessage("Battery       = 60%")
-        '        Case 6
-        '            WriteMessage("Battery       = 70%")
-        '        Case 7
-        '            WriteMessage("Battery       = 80%")
-        '        Case 8
-        '            WriteMessage("Battery       = 90%")
-        '        Case 9
-        '            WriteMessage("Battery       = 100%")
-        '    End Select
-        'Else
-        '    If (recbuf(TEMP_HUM.battery_level) And &HF) = 0 Then
-        '        WriteMessage("Battery       = Low")
-        '    Else
-        '        WriteMessage("Battery       = OK")
-        '    End If
-        'End If
+        Dim adresse, valeur As String
+        adresse = (recbuf(TEMP_HUM.id1) * 256 + recbuf(TEMP_HUM.id2)).ToString
+        If (recbuf(TEMP_HUM.tempsign) And &H80) = 0 Then
+            valeur = Math.Round((recbuf(TEMP_HUM.temperatureh) * 256 + recbuf(TEMP_HUM.temperaturel)) / 10, 2).ToString
+        Else
+            valeur = Math.Round(((recbuf(TEMP_HUM.temperatureh) And &H7F) * 256 + recbuf(TEMP_HUM.temperaturel)) / 10, 2).ToString
+        End If
+        WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
+        valeur = recbuf(TEMP_HUM.humidity).ToString
+        WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
+        If recbuf(TEMP_HUM.subtype) = TEMP_HUM.TH6 Then
+            If recbuf(TEMP_HUM.battery_level) = 0 Then WriteBattery(adresse) 'battery low < 10% (1=20% 2=30%....9=100%)
+        Else
+            If (recbuf(TEMP_HUM.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+        End If
     End Sub
     'non géré
     Public Sub decode_Baro()
@@ -3761,6 +3735,34 @@ Imports System.Media
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx WriteLog", ex.Message)
+        End Try
+    End Sub
+
+    Private Sub WriteBattery(ByVal adresse As String)
+        Try
+            'Dim tabletmp() As DataRow
+
+            'log tous les paquets en mode debug
+            WriteLog("DBG: WriteBattery : receive from " & adresse)
+
+            'on ne traite rien pendant les 6 premieres secondes
+            If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
+                'Recherche si un device affecté
+                Dim listedevices As New ArrayList
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
+                If (listedevices.Count >= 1) Then
+                    'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
+                    WriteLog(listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
+                Else
+                    'device pas trouvé
+                    WriteLog("ERR: Device non trouvé : RFXCOM " & adresse & ": Battery Empty")
+
+                    'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+
+                End If
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER WriteBattery", ex.Message & " --> " & adresse)
         End Try
     End Sub
 
