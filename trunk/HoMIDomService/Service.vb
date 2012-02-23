@@ -66,10 +66,12 @@ Module Service
             'Next _IPAddress
             'Console.WriteLine(Now & " Adresse IP du serveur utilisée: " & _IP)
 
-            Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service")
-            Dim fileServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
+            'Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service")
+            'Dim fileServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
+            Dim baseAddress As Uri = New Uri("http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/service")
+            Dim fileServerAddress As Uri = New Uri("http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
 
-            Console.WriteLine(Now & " Adresss SOAP: " & _Addrip)
+            Console.WriteLine(Now & " Adresss SOAP: " & Dns.GetHostName() & ":" & PortSOAP)
 
             Using host As New ServiceHost(GetType(Server), baseaddress)
 
@@ -86,7 +88,8 @@ Module Service
 
                 Try
                     'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
-                    Dim myadress As String = "http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service"
+                    'Dim myadress As String = "http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service"
+                    Dim myadress As String = "http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/service"
                     Dim binding As New ServiceModel.BasicHttpBinding
                     Dim Context As OperationContext = OperationContext.Current
                     binding.MaxBufferPoolSize = 250000000
