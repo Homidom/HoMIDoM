@@ -71,7 +71,8 @@ Module Service
             Dim baseAddress As Uri = New Uri("http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/service")
             Dim fileServerAddress As Uri = New Uri("http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
 
-            Console.WriteLine(Now & " Adresss SOAP: " & Dns.GetHostName() & ":" & PortSOAP)
+            Dim _aip() As IPAddress = Dns.GetHostAddresses(Dns.GetHostName)
+            Console.WriteLine(Now & " Adresss SOAP: " & Dns.GetHostName() & " [" & _aip(0).ToString & "] :" & PortSOAP)
 
             Using host As New ServiceHost(GetType(Server), baseaddress)
 
