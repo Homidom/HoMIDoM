@@ -66,13 +66,14 @@ Module Service
             'Next _IPAddress
             'Console.WriteLine(Now & " Adresse IP du serveur utilisée: " & _IP)
 
-            'Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service")
-            'Dim fileServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
-            Dim baseAddress As Uri = New Uri("http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/service")
-            Dim fileServerAddress As Uri = New Uri("http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
+            Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service")
+            Dim fileServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
+            'Dim baseAddress As Uri = New Uri("http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/service")
+            'Dim fileServerAddress As Uri = New Uri("http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
 
-            Dim _aip() As IPAddress = Dns.GetHostAddresses(Dns.GetHostName)
-            Console.WriteLine(Now & " Adresss SOAP: " & Dns.GetHostName() & " [" & _aip(0).ToString & "] :" & PortSOAP)
+            'Dim _aip() As IPAddress = Dns.GetHostAddresses(Dns.GetHostName)
+            'Console.WriteLine(Now & " Adresss SOAP: " & Dns.GetHostName() & " [" & _aip(0).ToString & "] :" & PortSOAP)
+            Console.WriteLine(Now & " Adresss SOAP: " & _Addrip & ":" & PortSOAP)
 
             Using host As New ServiceHost(GetType(Server), baseaddress)
 
