@@ -90,29 +90,28 @@
             If TxtSc.Text = "" Then
                 _myconditiontime &= "*#"
             Else
-                _myconditiontime &= TxtSc.Text & "#"
+                _myconditiontime &= CInt(TxtSc.Text) & "#"
             End If
             If TxtMn.Text = "" Then
                 _myconditiontime &= "*#"
             Else
-                _myconditiontime &= TxtMn.Text & "#"
+                _myconditiontime &= CInt(TxtMn.Text) & "#"
             End If
             If TxtHr.Text = "" Then
                 _myconditiontime &= "*#"
             Else
-                _myconditiontime &= TxtHr.Text & "#"
+                _myconditiontime &= CInt(TxtHr.Text) & "#"
             End If
             If TxtJr.Text = "" Then
                 _myconditiontime &= "*#"
             Else
-                _myconditiontime &= TxtJr.Text & "#"
+                _myconditiontime &= CInt(TxtJr.Text) & "#"
             End If
             If TxtMs.Text = "" Then
                 _myconditiontime &= "*#"
             Else
-                _myconditiontime &= TxtMs.Text & "#"
+                _myconditiontime &= CInt(TxtMs.Text) & "#"
             End If
-
 
             Dim _prepajr As String = ""
             If CheckBox7.IsChecked = True Then _prepajr = "0"
@@ -158,6 +157,7 @@
                     _prepajr = "6"
                 End If
             End If
+            If _prepajr = "" Then _prepajr = "*"
             _myconditiontime &= _prepajr
 
             _ListMacro.Clear()
