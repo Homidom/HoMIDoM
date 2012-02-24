@@ -3056,17 +3056,23 @@ Imports System.Globalization
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
                 If (listedevices.Count = 1) Then
-                    'un device trouvé on maj la value si la durée entre les deux receptions est > à 1.5s
-                    If (DateTime.Now - Date.Parse(listedevices.Item(0).LastChange)).TotalMilliseconds > 1500 Then
-                        If valeur = "ON" Then
-                            listedevices.Item(0).Value = True
-                        ElseIf valeur = "OFF" Then
-                            listedevices.Item(0).Value = False
-                        Else
-                            listedevices.Item(0).Value = valeur
-                        End If
+                    'un device trouvé 
+                    If STRGS.InStr(valeur, "CFG:") > 0 Then
+                        'c'est un message de config, on log juste
+                        WriteLog(listedevices.Item(0).name & " : " & valeur)
                     Else
-                        WriteLog("DBG: Reception < 1.5s de deux valeurs pour le meme composant : " & listedevices.Item(0).name & ":" & valeur)
+                        'on maj la value si la durée entre les deux receptions est > à 1.5s
+                        If (DateTime.Now - Date.Parse(listedevices.Item(0).LastChange)).TotalMilliseconds > 1500 Then
+                            If valeur = "ON" Then
+                                listedevices.Item(0).Value = True
+                            ElseIf valeur = "OFF" Then
+                                listedevices.Item(0).Value = False
+                            Else
+                                listedevices.Item(0).Value = valeur
+                            End If
+                        Else
+                            WriteLog("DBG: Reception < 1.5s de deux valeurs pour le meme composant : " & listedevices.Item(0).name & ":" & valeur)
+                        End If
                     End If
                 ElseIf (listedevices.Count > 1) Then
                     WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)

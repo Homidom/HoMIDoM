@@ -1779,345 +1779,127 @@ Imports System.Media
     Sub decode_messages()
         Try
             Select Case recbuf(1)
-                Case IRESPONSE.pType
-                    'WriteMessage("Packettype        = Interface Message")
-                    decode_InterfaceMessage()
-                Case RXRESPONSE.pType
-                    'WriteMessage("Packettype        = Receiver/Transmitter Message")
-                    decode_RecXmitMessage()
-                Case UNDECODED.pType
-                    'WriteMessage("Packettype        = UNDECODED RF Message")
-                    decode_UNDECODED()
-                Case LIGHTING1.pType
-                    'WriteMessage("Packettype    = Lighting1")
-                    decode_Lighting1()
-                Case LIGHTING2.pType
-                    'WriteMessage("Packettype    = Lighting2")
-                    decode_Lighting2()
-                Case LIGHTING3.pType
-                    'WriteMessage("Packettype    = Lighting3")
-                    decode_Lighting3()
-                Case LIGHTING4.pType
-                    'WriteMessage("Packettype    = Lighting4")
-                    decode_Lighting4()
-                Case LIGHTING5.pType
-                    'WriteMessage("Packettype    = Lighting5")
-                    decode_Lighting5()
-                Case LIGHTING6.pType
-                    'WriteMessage("Packettype    = Lighting6")
-                    decode_Lighting6()
-                Case SECURITY1.pType
-                    'WriteMessage("Packettype    = Security1")
-                    decode_Security1()
-                Case CAMERA1.pType
-                    'WriteMessage("Packettype    = Camera1")
-                    decode_Camera1()
-                Case REMOTE.pType
-                    'WriteMessage("Packettype    = Remote control & IR")
-                    decode_Remote()
-                Case THERMOSTAT1.pType
-                    'WriteMessage("Packettype    = Thermostat1")
-                    decode_Thermostat1()
-                Case THERMOSTAT2.pType
-                    'WriteMessage("Packettype    = Thermostat2")
-                    decode_Thermostat2()
-                Case THERMOSTAT3.pType
-                    'WriteMessage("Packettype    = Thermostat3")
-                    decode_Thermostat3()
-                Case TEMP.pType
-                    'WriteMessage("Packettype    = TEMP")
-                    decode_Temp()
-                Case HUM.pType
-                    'WriteMessage("Packettype    = HUM")
-                    decode_Hum()
-                Case TEMP_HUM.pType
-                    'WriteMessage("Packettype    = TEMP_HUM")
-                    decode_TempHum()
-                Case BARO.pType
-                    'WriteMessage("Packettype    = BARO")
-                    decode_Baro()
-                Case TEMP_HUM_BARO.pType
-                    'WriteMessage("Packettype    = TEMP_HUM_BARO")
-                    decode_TempHumBaro()
-                Case RAIN.pType
-                    'WriteMessage("Packettype    = RAIN")
-                    decode_Rain()
-                Case WIND.pType
-                    'WriteMessage("Packettype    = WIND")
-                    decode_Wind()
-                Case UV.pType
-                    'WriteMessage("Packettype    = UV")
-                    decode_UV()
-                Case DT.pType
-                    'WriteMessage("Packettype    = DT")
-                    decode_DateTime()
-                Case CURRENT.pType
-                    'WriteMessage("Packettype    = CURRENT")
-                    decode_Current()
-                Case ENERGY.pType
-                    'WriteMessage("Packettype    = ENERGY")
-                    decode_Energy()
-                Case GAS.pType
-                    'WriteMessage("Packettype    = GAS")
-                    decode_Gas()
-                Case WATER.pType
-                    'WriteMessage("Packettype    = WATER")
-                    decode_Water()
-                Case WEIGHT.pType
-                    'WriteMessage("Packettype    = WEIGHT")
-                    decode_Weight()
-                Case RFXSENSOR.pType
-                    'WriteMessage("Packettype    = RFXSensor")
-                    decode_RFXSensor()
-                Case RFXMETER.pType
-                    'WriteMessage("Packettype    = RFXMeter")
-                    decode_RFXMeter()
-                Case Else
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx decode_messages", "ERROR: Unknown Packet type:" & Hex(recbuf(1)))
+                Case IRESPONSE.pType : decode_InterfaceMessage()
+                Case RXRESPONSE.pType : decode_RecXmitMessage()
+                Case UNDECODED.pType : decode_UNDECODED()
+                Case LIGHTING1.pType : decode_Lighting1()
+                Case LIGHTING2.pType : decode_Lighting2()
+                Case LIGHTING3.pType : decode_Lighting3()
+                Case LIGHTING4.pType : decode_Lighting4()
+                Case LIGHTING5.pType : decode_Lighting5()
+                Case LIGHTING6.pType : decode_Lighting6()
+                Case SECURITY1.pType : decode_Security1()
+                Case CAMERA1.pType : decode_Camera1()
+                Case REMOTE.pType : decode_Remote()
+                Case THERMOSTAT1.pType : decode_Thermostat1()
+                Case THERMOSTAT2.pType : decode_Thermostat2()
+                Case THERMOSTAT3.pType : decode_Thermostat3()
+                Case TEMP.pType : decode_Temp()
+                Case HUM.pType : decode_Hum()
+                Case TEMP_HUM.pType : decode_TempHum()
+                Case BARO.pType : decode_Baro()
+                Case TEMP_HUM_BARO.pType : decode_TempHumBaro()
+                Case RAIN.pType : decode_Rain()
+                Case WIND.pType : decode_Wind()
+                Case UV.pType : decode_UV()
+                Case DT.pType : decode_DateTime()
+                Case CURRENT.pType : decode_Current()
+                Case ENERGY.pType : decode_Energy()
+                Case GAS.pType : decode_Gas()
+                Case WATER.pType : decode_Water()
+                Case WEIGHT.pType : decode_Weight()
+                Case RFXSENSOR.pType : decode_RFXSensor()
+                Case RFXMETER.pType : decode_RFXMeter()
+                Case Else : _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx decode_messages", "ERROR: Unknown Packet type:" & Hex(recbuf(1)))
             End Select
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx decode_messages", ex.ToString)
+            WriteLog("ERR: decode_messages : " & ex.Message)
         End Try
     End Sub
-    'non géré
+
     Public Sub decode_InterfaceMessage()
-        'Select Case recbuf(IRESPONSE.subtype)
-        '    Case IRESPONSE.sType
-        '        WriteMessage("subtype           = Interface Response")
-        '        WriteMessage("Sequence nbr      = " & recbuf(IRESPONSE.seqnbr).ToString)
-        '        Select Case recbuf(IRESPONSE.cmnd)
-        '            Case ICMD.STATUS, ICMD.SETMODE, ICMD.sel310, ICMD.sel315, ICMD.sel800, ICMD.sel800F, ICMD.sel830, ICMD.sel830F, ICMD.sel835, ICMD.sel835F, ICMD.sel895
-        '                WriteMessage("response on cmnd  = ", False)
-        '                Select Case recbuf(IRESPONSE.cmnd)
-        '                    Case ICMD.STATUS
-        '                        WriteMessage("Get Status")
-        '                    Case ICMD.SETMODE
-        '                        WriteMessage("Set Mode")
-        '                    Case ICMD.sel310
-        '                        WriteMessage("Select 310MHz")
-        '                    Case ICMD.sel315
-        '                        WriteMessage("Select 315MHz")
-        '                    Case ICMD.sel800
-        '                        WriteMessage("Select 868.00MHz")
-        '                    Case ICMD.sel800F
-        '                        WriteMessage("Select 868.00MHz FSK")
-        '                    Case ICMD.sel830
-        '                        WriteMessage("Select 868.30MHz")
-        '                    Case ICMD.sel830F
-        '                        WriteMessage("Select 868.30MHz FSK")
-        '                    Case ICMD.sel835
-        '                        WriteMessage("Select 868.35MHz")
-        '                    Case ICMD.sel835F
-        '                        WriteMessage("Select 868.35MHz FSK")
-        '                    Case ICMD.sel895
-        '                        WriteMessage("Select 868.95MHz")
-        '                    Case Else
-        '                        WriteMessage("Error: unknown response")
-        '                End Select
-        '                Select Case recbuf(IRESPONSE.msg1)
-        '                    Case IRESPONSE.recType310
-        '                        WriteMessage("Transceiver type  = 310MHz")
-        '                    Case IRESPONSE.recType315
-        '                        WriteMessage("Receiver type     = 315MHz")
-        '                    Case IRESPONSE.recType43392
-        '                        WriteMessage("Transceiver type  = 433.92MHz")
-        '                    Case IRESPONSE.recType86800
-        '                        WriteMessage("Receiver type     = 868.00MHz")
-        '                    Case IRESPONSE.recType86800FSK
-        '                        WriteMessage("Receiver type     = 868.00MHz FSK")
-        '                    Case IRESPONSE.recType86830
-        '                        WriteMessage("Receiver type     = 868.30MHz")
-        '                    Case IRESPONSE.recType86830FSK
-        '                        WriteMessage("Receiver type     = 868.30MHz FSK")
-        '                    Case IRESPONSE.recType86835
-        '                        WriteMessage("Receiver type     = 868.35MHz")
-        '                    Case IRESPONSE.recType86835FSK
-        '                        WriteMessage("Receiver type     = 868.35MHz FSK")
-        '                    Case IRESPONSE.recType86895
-        '                        WriteMessage("Receiver type     = 868.95MHz")
-        '                    Case Else
-        '                        WriteMessage("Receiver type     = unknown")
-        '                End Select
-        '                trxType = recbuf(IRESPONSE.msg1)
-        '                setRadioButtons()
-        '                WriteMessage("Firmware version  = " & recbuf(IRESPONSE.msg2))
+        Try
+            Dim messagelog As String = ""
+            Select Case recbuf(IRESPONSE.subtype)
+                Case IRESPONSE.sType
+                    '        WriteMessage("subtype           = Interface Response")
+                    '        WriteMessage("Sequence nbr      = " & recbuf(IRESPONSE.seqnbr).ToString)
+                    Select Case recbuf(IRESPONSE.cmnd)
+                        Case ICMD.STATUS, ICMD.SETMODE, ICMD.sel310, ICMD.sel315, ICMD.sel800, ICMD.sel800F, ICMD.sel830, ICMD.sel830F, ICMD.sel835, ICMD.sel835F, ICMD.sel895
+                            messagelog = "Interface: Command="
+                            Select Case recbuf(IRESPONSE.cmnd)
+                                Case ICMD.STATUS : messagelog &= "Get Status"
+                                Case ICMD.SETMODE : messagelog &= "Set Mode"
+                                Case ICMD.sel310 : messagelog &= "Select 310MHz"
+                                Case ICMD.sel315 : messagelog &= "Select 315MHz"
+                                Case ICMD.sel800 : messagelog &= "Select 868.00MHz"
+                                Case ICMD.sel800F : messagelog &= "Select 868.00MHz FSK"
+                                Case ICMD.sel830 : messagelog &= "Select 868.30MHz"
+                                Case ICMD.sel830F : messagelog &= "Select 868.30MHz FSK"
+                                Case ICMD.sel835 : messagelog &= "Select 868.35MHz"
+                                Case ICMD.sel835F : messagelog &= "Select 868.35MHz FSK"
+                                Case ICMD.sel895 : messagelog &= "Select 868.95MHz"
+                                Case Else : messagelog &= "Error unknown response"
+                            End Select
+                            messagelog &= ", Type="
+                            Select Case recbuf(IRESPONSE.msg1)
+                                Case IRESPONSE.recType310 : messagelog &= "Transceiver 310MHz"
+                                Case IRESPONSE.recType315 : messagelog &= "Receiver 315MHz"
+                                Case IRESPONSE.recType43392 : messagelog &= "Transceiver 433.92MHz"
+                                Case IRESPONSE.recType86800 : messagelog &= "Receiver 868.00MHz"
+                                Case IRESPONSE.recType86800FSK : messagelog &= "Receiver 868.00MHz FSK"
+                                Case IRESPONSE.recType86830 : messagelog &= "Receiver 868.30MHz"
+                                Case IRESPONSE.recType86830FSK : messagelog &= "Receiver 868.30MHz FSK"
+                                Case IRESPONSE.recType86835 : messagelog &= "Receiver 868.35MHz"
+                                Case IRESPONSE.recType86835FSK : messagelog &= "Receiver 868.35MHz FSK"
+                                Case IRESPONSE.recType86895 : messagelog &= "Receiver 868.95MHz"
+                                Case Else : messagelog &= "Receiver unknown"
+                            End Select
+                            trxType = recbuf(IRESPONSE.msg1)
+                            messagelog &= ", Firmware=" & recbuf(IRESPONSE.msg2)
+                            WriteLog(messagelog)
 
-        '                If (recbuf(IRESPONSE.msg3) And &H80) <> 0 Then
-        '                    WriteMessage("Undec             on")
-        '                    cbxUndec.Checked = True
-        '                Else
-        '                    WriteMessage("Undec             off")
-        '                End If
-
-        '                If (recbuf(IRESPONSE.msg5) And &H1) <> 0 Then
-        '                    WriteMessage("X10               enabled")
-        '                    ButtonDisableX10.Enabled = True
-        '                    cbxX10.Checked = True
-        '                Else
-        '                    WriteMessage("X10               disabled")
-        '                End If
-        '                If (recbuf(IRESPONSE.msg5) And &H2) <> 0 Then
-        '                    WriteMessage("ARC               enabled")
-        '                    ButtonDisableARC.Enabled = True
-        '                    cbxARC.Checked = True
-        '                Else
-        '                    WriteMessage("ARC               disabled")
-        '                End If
-        '                If (recbuf(IRESPONSE.msg5) And &H4) <> 0 Then
-        '                    WriteMessage("AC                enabled")
-        '                    ButtonDisableAC.Enabled = True
-        '                    cbxAC.Checked = True
-        '                Else
-        '                    WriteMessage("AC                disabled")
-        '                End If
-        '                If (recbuf(IRESPONSE.msg5) And &H8) <> 0 Then
-        '                    WriteMessage("HomeEasy EU       enabled")
-        '                    ButtonDisableHEEU.Enabled = True
-        '                    cbxHEEU.Checked = True
-        '                Else
-        '                    WriteMessage("HomeEasy EU       disabled")
-        '                End If
-        '                If (recbuf(IRESPONSE.msg5) And &H10) <> 0 Then
-        '                    WriteMessage("Ikea Koppla       enabled")
-        '                    ButtonDisableKoppla.Enabled = True
-        '                    cbxKoppla.Checked = True
-        '                Else
-        '                    WriteMessage("Ikea Koppla       disabled")
-        '                End If
-        '                If (recbuf(IRESPONSE.msg5) And &H20) <> 0 Then
-        '                    WriteMessage("Oregon Scientific enabled")
-        '                    ButtonDisableOregon.Enabled = True
-        '                    cbxOregon.Checked = True
-        '                Else
-        '                    WriteMessage("Oregon Scientific disabled")
-        '                End If
-        '                If (recbuf(IRESPONSE.msg5) And &H40) <> 0 Then
-        '                    WriteMessage("ATI               enabled")
-        '                    ButtonDisableATI.Enabled = True
-        '                    cbxATI.Checked = True
-        '                Else
-        '                    WriteMessage("ATI               disabled")
-        '                End If
-        '                If (recbuf(IRESPONSE.msg5) And &H80) <> 0 Then
-        '                    WriteMessage("Visonic           enabled")
-        '                    ButtonDisableVisonic.Enabled = True
-        '                    cbxVisonic.Checked = True
-        '                Else
-        '                    WriteMessage("Visonic           disabled")
-        '                End If
-
-        '                If (recbuf(IRESPONSE.msg4) And &H1) <> 0 Then
-        '                    WriteMessage("Mertik            enabled")
-        '                    ButtonDisableMertik.Enabled = True
-        '                    cbxMertik.Checked = True
-        '                Else
-        '                    WriteMessage("Mertik            disabled")
-        '                End If
-        '                If (recbuf(IRESPONSE.msg4) And &H2) <> 0 Then
-        '                    WriteMessage("LightwaveRF       enabled")
-        '                    ButtonDisableAD.Enabled = True
-        '                    cbxAD.Checked = True
-        '                Else
-        '                    WriteMessage("LightwaveRF       disabled")
-        '                End If
-        '                If (recbuf(IRESPONSE.msg4) And &H4) <> 0 Then
-        '                    WriteMessage("Hideki            enabled")
-        '                    ButtonDisableHideki.Enabled = True
-        '                    cbxHideki.Checked = True
-        '                Else
-        '                    WriteMessage("Hideki            disabled")
-        '                End If
-        '                If (recbuf(IRESPONSE.msg4) And &H8) <> 0 Then
-        '                    WriteMessage("La Crosse         enabled")
-        '                    ButtonDisableLaCrosse.Enabled = True
-        '                    cbxLacrosse.Checked = True
-        '                Else
-        '                    WriteMessage("La Crosse         disabled")
-        '                End If
-        '                If (recbuf(IRESPONSE.msg4) And &H10) <> 0 Then
-        '                    WriteMessage("FS20              enabled")
-        '                    ButtonDisableFS20.Enabled = True
-        '                    cbxFS20.Checked = True
-        '                Else
-        '                    WriteMessage("FS20              disabled")
-        '                End If
-        '                If (recbuf(IRESPONSE.msg4) And &H20) <> 0 Then
-        '                    WriteMessage("ProGuard          enabled")
-        '                    ButtonDisableProguard.Enabled = True
-        '                    cbxProguard.Checked = True
-        '                Else
-        '                    WriteMessage("ProGuard          disabled")
-        '                End If
-        '                If (recbuf(IRESPONSE.msg4) And &H40) <> 0 Then
-        '                    WriteMessage("Novatis           enabled")
-        '                    ButtonDisableNovatis.Enabled = True
-        '                    cbxNovatis.Checked = True
-        '                Else
-        '                    WriteMessage("Novatis           disabled")
-        '                End If
-        '                If (recbuf(IRESPONSE.msg4) And &H80) <> 0 Then
-        '                    WriteMessage("RFU protocol 7    enabled")
-        '                Else
-        '                    WriteMessage("RFU protocol 7    disabled")
-        '                End If
-
-        '            Case ICMD.ENABLEALL
-        '                WriteMessage("response on cmnd  = Enable All RF")
-        '            Case ICMD.UNDECODED
-        '                WriteMessage("response on cmnd  = UNDECODED on")
-        '                cbxUndec.Checked = True
-        '            Case ICMD.SAVE
-        '                WriteMessage("response on cmnd  = Save")
-        '            Case ICMD.DISX10
-        '                WriteMessage("response on cmnd  = Disable X10 RF")
-        '            Case ICMD.DISARC
-        '                WriteMessage("response on cmnd  = Disable ARC RF")
-        '            Case ICMD.DISAC
-        '                WriteMessage("response on cmnd  = Disable AC RF")
-        '            Case ICMD.DISHEU
-        '                WriteMessage("response on cmnd  = Disable HomeEasy EU RF")
-        '            Case ICMD.DISKOP
-        '                WriteMessage("response on cmnd  = Disable Ikea Koppla RF")
-        '            Case ICMD.DISOREGON
-        '                WriteMessage("response on cmnd  = Disable Oregon Scientific RF")
-        '            Case ICMD.DISATI
-        '                WriteMessage("response on cmnd  = Disable ATI remote RF")
-        '            Case ICMD.DISVISONIC
-        '                WriteMessage("response on cmnd  = Disable Visonic RF")
-        '            Case ICMD.DISMERTIK
-        '                WriteMessage("response on cmnd  = Disable Mertik RF")
-        '            Case ICMD.DISAD
-        '                WriteMessage("response on cmnd  = Disable AD RF")
-        '            Case ICMD.DISHID
-        '                WriteMessage("response on cmnd  = Disable Hideki RF")
-        '            Case ICMD.DISLCROS
-        '                WriteMessage("response on cmnd  = Disable La Crosse RF")
-        '            Case ICMD.DISNOVAT
-        '                WriteMessage("response on cmnd  = Disable Novatis RF")
-
-        '                'For internal use by RFXCOM only, do not use this coding.
-        '                '=========================================================
-        '            Case &H8
-        '                WriteMessage("response on cmnd  = T1")
-        '                If recbuf(IRESPONSE.msg9) = 0 Then
-        '                    WriteMessage("Not OK!")
-        '                Else
-        '                    WriteMessage("On")
-        '                End If
-
-        '            Case &H9
-        '                WriteMessage("response on cmnd  = T2")
-        '                If recbuf(IRESPONSE.msg9) = 0 Then
-        '                    WriteMessage("Not OK!")
-        '                Else
-        '                    WriteMessage("Blk On")
-        '                End If
-        '                '=========================================================
-
-        '            Case Else
-        '                WriteMessage("ERROR: Unexpected response for Packet type=" & Hex(recbuf(IRESPONSE.packettype)) & ", Sub type=" & Hex(recbuf(IRESPONSE.subtype)) & " cmnd=" & Hex(recbuf(IRESPONSE.cmnd)))
-        '        End Select
-        'End Select
+                            messagelog = "Protocole: "
+                            If (recbuf(IRESPONSE.msg3) And &H80) <> 0 Then messagelog &= "Undec=on" Else messagelog &= "Undec=off"
+                            If (recbuf(IRESPONSE.msg5) And &H1) <> 0 Then messagelog &= ", X10=on" Else messagelog &= ", X10=off"
+                            If (recbuf(IRESPONSE.msg5) And &H2) <> 0 Then messagelog &= ", ARC=on" Else messagelog &= ", ARC=off"
+                            If (recbuf(IRESPONSE.msg5) And &H4) <> 0 Then messagelog &= ", AC=on" Else messagelog &= ", AC=off"
+                            If (recbuf(IRESPONSE.msg5) And &H8) <> 0 Then messagelog &= ", HomeEasyEU=on" Else messagelog &= ", HomeEasyEU=off"
+                            If (recbuf(IRESPONSE.msg5) And &H10) <> 0 Then messagelog &= ", IkeaKoppla=on" Else messagelog &= ", IkeaKoppla=off"
+                            If (recbuf(IRESPONSE.msg5) And &H20) <> 0 Then messagelog &= ", OregonScientific=on" Else messagelog &= ", OregonScientific=off"
+                            If (recbuf(IRESPONSE.msg5) And &H40) <> 0 Then messagelog &= ", ATI=on" Else messagelog &= ", ATI=off"
+                            If (recbuf(IRESPONSE.msg5) And &H80) <> 0 Then messagelog &= ", Visonic=on" Else messagelog &= ", Visonic=off"
+                            If (recbuf(IRESPONSE.msg4) And &H1) <> 0 Then messagelog &= ", Mertik=on" Else messagelog &= ", Mertik=off"
+                            If (recbuf(IRESPONSE.msg4) And &H2) <> 0 Then messagelog &= ", LightwaveRF=on" Else messagelog &= ", LightwaveRF=off"
+                            If (recbuf(IRESPONSE.msg4) And &H4) <> 0 Then messagelog &= ", Hideki=on" Else messagelog &= ", Hideki=off"
+                            If (recbuf(IRESPONSE.msg4) And &H8) <> 0 Then messagelog &= ", LaCrosse=on" Else messagelog &= ", LaCrosse=off"
+                            If (recbuf(IRESPONSE.msg4) And &H10) <> 0 Then messagelog &= ", FS20=on" Else messagelog &= ", FS20=off"
+                            If (recbuf(IRESPONSE.msg4) And &H20) <> 0 Then messagelog &= ", ProGuard=on" Else messagelog &= ", ProGuard=off"
+                            If (recbuf(IRESPONSE.msg4) And &H40) <> 0 Then messagelog &= ", Novatis=on" Else messagelog &= ", Novatis=off"
+                            If (recbuf(IRESPONSE.msg4) And &H80) <> 0 Then messagelog &= ", RFUprotocol7=on" Else messagelog &= ", RFUprotocol7=off"
+                            WriteLog(messagelog)
+                        Case ICMD.ENABLEALL : WriteLog("Réponse à : Enable All RF")
+                        Case ICMD.UNDECODED : WriteLog("Réponse à : UNDECODED on")
+                        Case ICMD.SAVE : WriteLog("Réponse à : Save")
+                        Case ICMD.DISX10 : WriteLog("Réponse à : Disable X10 RF")
+                        Case ICMD.DISARC : WriteLog("Réponse à : Disable ARC RF")
+                        Case ICMD.DISAC : WriteLog("Réponse à : Disable AC RF")
+                        Case ICMD.DISHEU : WriteLog("Réponse à : Disable HomeEasy EU RF")
+                        Case ICMD.DISKOP : WriteLog("Réponse à : Disable Ikea Koppla RF")
+                        Case ICMD.DISOREGON : WriteLog("Réponse à : Disable Oregon Scientific RF")
+                        Case ICMD.DISATI : WriteLog("Réponse à : Disable ATI remote RF")
+                        Case ICMD.DISVISONIC : WriteLog("Réponse à : Disable Visonic RF")
+                        Case ICMD.DISMERTIK : WriteLog("Réponse à : Disable Mertik RF")
+                        Case ICMD.DISAD : WriteLog("Réponse à : Disable AD RF")
+                        Case ICMD.DISHID : WriteLog("Réponse à : Disable Hideki RF")
+                        Case ICMD.DISLCROS : WriteLog("Réponse à : Disable La Crosse RF")
+                        Case ICMD.DISNOVAT : WriteLog("Réponse à : Disable Novatis RF")
+                        Case Else : WriteLog("ERR: decode_InterfaceMessage : Données incorrectes reçues : type=" & Hex(recbuf(IRESPONSE.packettype)) & ", Sub type=" & Hex(recbuf(IRESPONSE.subtype)) & " cmnd=" & Hex(recbuf(IRESPONSE.cmnd)))
+                    End Select
+            End Select
+        Catch ex As Exception
+            WriteLog("ERR: decode_InterfaceMessage : " & ex.Message)
+        End Try
     End Sub
     'non géré
     Public Sub decode_RecXmitMessage()
@@ -2148,249 +1930,214 @@ Imports System.Media
         '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(RXRESPONSE.packettype)) & ": " & Hex(recbuf(RXRESPONSE.subtype)))
         'End Select
     End Sub
-    'non géré
+
     Public Sub decode_UNDECODED()
-        'WriteMessage("UNDECODED ", False)
-        'Select Case recbuf(UNDECODED.subtype)
-        '    Case UNDECODED.sTypeUac
-        '        WriteMessage("AC:", False)
-        '    Case UNDECODED.sTypeUarc
-        '        WriteMessage("ARC:", False)
-        '    Case UNDECODED.sTypeUati
-        '        WriteMessage("ATI:", False)
-        '    Case UNDECODED.sTypeUhideki
-        '        WriteMessage("HIDEKI:", False)
-        '    Case UNDECODED.sTypeUlacrosse
-        '        WriteMessage("LACROSSE:", False)
-        '    Case UNDECODED.sTypeUlwrf
-        '        WriteMessage("LWRF:", False)
-        '    Case UNDECODED.sTypeUmertik
-        '        WriteMessage("MERTIK:", False)
-        '    Case UNDECODED.sTypeUoregon1
-        '        WriteMessage("OREGON1:", False)
-        '    Case UNDECODED.sTypeUoregon2
-        '        WriteMessage("OREGON2:", False)
-        '    Case UNDECODED.sTypeUoregon3
-        '        WriteMessage("OREGON3:", False)
-        '    Case UNDECODED.sTypeUproguard
-        '        WriteMessage("PROGUARD:", False)
-        '    Case UNDECODED.sTypeUvisonic
-        '        WriteMessage("VISONIC:", False)
-        '    Case UNDECODED.sTypeUnec
-        '        WriteMessage("NEC:", False)
-        '    Case UNDECODED.sTypeUfs20
-        '        WriteMessage("FS20:", False)
-        '    Case UNDECODED.sTypeUnovatis
-        '        WriteMessage("NOVATIS:", False)
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(UNDECODED.packettype)) & ": " & Hex(recbuf(UNDECODED.subtype)))
-        'End Select
-        'For i = 0 To recbuf(UNDECODED.packetlength) - UNDECODED.msg1
-        '    WriteMessage(VB.Right("0" & Hex(recbuf(UNDECODED.msg1 + i)), 2), False)
-        'Next
-        'WriteMessage(" ")
-
+        Try
+            Dim messagelog As String = ""
+            messagelog = "UNDECODED "
+            Select Case recbuf(UNDECODED.subtype)
+                Case UNDECODED.sTypeUac : messagelog &= "AC:"
+                Case UNDECODED.sTypeUarc : messagelog &= "ARC:"
+                Case UNDECODED.sTypeUati : messagelog &= "ATI:"
+                Case UNDECODED.sTypeUhideki : messagelog &= "HIDEKI:"
+                Case UNDECODED.sTypeUlacrosse : messagelog &= "LACROSSE:"
+                Case UNDECODED.sTypeUlwrf : messagelog &= "LWRF:"
+                Case UNDECODED.sTypeUmertik : messagelog &= "MERTIK:"
+                Case UNDECODED.sTypeUoregon1 : messagelog &= "OREGON1:"
+                Case UNDECODED.sTypeUoregon2 : messagelog &= "OREGON2:"
+                Case UNDECODED.sTypeUoregon3 : messagelog &= "OREGON3:"
+                Case UNDECODED.sTypeUproguard : messagelog &= "PROGUARD:"
+                Case UNDECODED.sTypeUvisonic : messagelog &= "VISONIC:"
+                Case UNDECODED.sTypeUnec : messagelog &= "NEC:"
+                Case UNDECODED.sTypeUfs20 : messagelog &= "FS20:"
+                Case UNDECODED.sTypeUnovatis : messagelog &= "NOVATIS:"
+                Case Else : messagelog = "ERR: UNDECODED Unknown Sub type for Packet type=" & Hex(recbuf(UNDECODED.packettype)) & ": " & Hex(recbuf(UNDECODED.subtype))
+            End Select
+            For i = 0 To recbuf(UNDECODED.packetlength) - UNDECODED.msg1
+                messagelog &= VB.Right("0" & Hex(recbuf(UNDECODED.msg1 + i)), 2)
+            Next
+            WriteLog(messagelog)
+        Catch ex As Exception
+            WriteLog("ERR: decode_UNDECODED Exception : " & ex.Message)
+        End Try
     End Sub
-    'non géré
+
     Public Sub decode_Lighting1()
-        'Select Case recbuf(LIGHTING1.subtype)
-        '    Case LIGHTING1.sTypeX10
-        '        WriteMessage("subtype       = X10")
-        '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING1.seqnbr).ToString)
-        '        WriteMessage("housecode     = " & Chr(recbuf(LIGHTING1.housecode)))
-        '        WriteMessage("unitcode      = " & recbuf(LIGHTING1.unitcode).ToString)
-        '        WriteMessage("Command       = ", False)
-        '        Select Case recbuf(LIGHTING1.cmnd)
-        '            Case &H0
-        '                WriteMessage("Off")
-        '            Case &H1
-        '                WriteMessage("On")
-        '            Case &H2
-        '                WriteMessage("Dim")
-        '            Case &H3
-        '                WriteMessage("Bright")
-        '            Case &H5
-        '                WriteMessage("All On")
-        '            Case &H6
-        '                WriteMessage("All Off")
-        '            Case Else
-        '                WriteMessage("UNKNOWN")
-        '        End Select
-
-        '    Case LIGHTING1.sTypeARC
-        '        WriteMessage("subtype       = ARC")
-        '        WriteMessage("housecode     = " & Chr(recbuf(LIGHTING1.housecode)))
-        '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING1.seqnbr).ToString)
-        '        WriteMessage("unitcode      = " & recbuf(LIGHTING1.unitcode).ToString)
-        '        WriteMessage("Command       = ", False)
-        '        Select Case recbuf(LIGHTING1.cmnd)
-        '            Case &H0
-        '                WriteMessage("Off")
-        '            Case &H1
-        '                WriteMessage("On")
-        '            Case &H5
-        '                WriteMessage("All On")
-        '            Case &H6
-        '                WriteMessage("All Off")
-        '            Case Else
-        '                WriteMessage("UNKNOWN")
-        '        End Select
-
-        '    Case LIGHTING1.sTypeAB400D
-        '        WriteMessage("subtype       = ELRO AB400")
-        '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING1.seqnbr).ToString)
-        '        WriteMessage("housecode     = " & Chr(recbuf(LIGHTING1.housecode)))
-        '        WriteMessage("unitcode      = " & recbuf(LIGHTING1.unitcode).ToString)
-        '        WriteMessage("Command       = ", False)
-        '        Select Case recbuf(LIGHTING1.cmnd)
-        '            Case &H0
-        '                WriteMessage("Off")
-        '            Case &H1
-        '                WriteMessage("On")
-        '            Case Else
-        '                WriteMessage("UNKNOWN")
-        '        End Select
-
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING1.packettype)) & ": " & Hex(recbuf(LIGHTING1.subtype)))
-        'End Select
-        'WriteMessage("Signal level  = " & (recbuf(LIGHTING1.rssi) >> 4).ToString)
+        Try
+            Dim adresse, valeur As String
+            Select Case recbuf(LIGHTING1.subtype)
+                Case LIGHTING1.sTypeX10
+                    '        WriteMessage("subtype       = X10")
+                    '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING1.seqnbr).ToString)
+                    adresse = Chr(recbuf(LIGHTING1.housecode)) & recbuf(LIGHTING1.unitcode).ToString
+                    Select Case recbuf(LIGHTING1.cmnd)
+                        Case &H0 : valeur = "OFF"
+                        Case &H1 : valeur = "ON"
+                        Case &H2 : valeur = "DIM"
+                        Case &H3 : valeur = "BRIGHT"
+                        Case &H5 : valeur = "ALL_ON"
+                        Case &H6 : valeur = "ALL_OFF"
+                        Case Else : valeur = "UNKNOWN"
+                    End Select
+                    WriteRetour(adresse, "", valeur)
+                Case LIGHTING1.sTypeARC
+                    '        WriteMessage("subtype       = ARC")
+                    '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING1.seqnbr).ToString)
+                    adresse = Chr(recbuf(LIGHTING1.housecode)) & recbuf(LIGHTING1.unitcode).ToString
+                    Select Case recbuf(LIGHTING1.cmnd)
+                        Case &H0 : valeur = "OFF"
+                        Case &H1 : valeur = "ON"
+                        Case &H2 : valeur = "DIM"
+                        Case &H3 : valeur = "BRIGHT"
+                        Case &H5 : valeur = "ALL_ON"
+                        Case &H6 : valeur = "ALL_OFF"
+                        Case Else : valeur = "UNKNOWN"
+                    End Select
+                    WriteRetour(adresse, "", valeur)
+                Case LIGHTING1.sTypeAB400D
+                    '        WriteMessage("subtype       = ELRO AB400")
+                    '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING1.seqnbr).ToString)
+                    adresse = Chr(recbuf(LIGHTING1.housecode)) & recbuf(LIGHTING1.unitcode).ToString
+                    Select Case recbuf(LIGHTING1.cmnd)
+                        Case &H0 : valeur = "OFF"
+                        Case &H1 : valeur = "ON"
+                        Case Else : valeur = "UNKNOWN"
+                    End Select
+                    WriteRetour(adresse, "", valeur)
+                Case Else
+                    WriteLog("ERR: decode_Lighting1 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING1.packettype)) & ": " & Hex(recbuf(LIGHTING1.subtype)))
+            End Select
+            'WriteMessage("Signal level  = " & (recbuf(LIGHTING1.rssi) >> 4).ToString)
+        Catch ex As Exception
+            WriteLog("ERR: decode_Lighting1 Exception : " & ex.Message)
+        End Try
     End Sub
-    'non géré
+
     Public Sub decode_Lighting2()
-        'Select Case recbuf(LIGHTING2.subtype)
-        '    Case LIGHTING2.sTypeAC, LIGHTING2.sTypeHEU, LIGHTING2.sTypeANSLUT
-        '        Select Case recbuf(LIGHTING2.subtype)
-        '            Case LIGHTING2.sTypeAC
-        '                WriteMessage("subtype       = AC")
-        '            Case LIGHTING2.sTypeHEU
-        '                WriteMessage("subtype       = HomeEasy EU")
-        '            Case LIGHTING2.sTypeANSLUT
-        '                WriteMessage("subtype       = ANSLUT")
-        '        End Select
-        '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING2.seqnbr).ToString)
-        '        WriteMessage("ID            = " & Hex(recbuf(LIGHTING2.id1)) & VB.Right("0" & Hex(recbuf(LIGHTING2.id2)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING2.id3)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING2.id4)), 2))
-        '        WriteMessage("Unit          = " & recbuf(LIGHTING2.unitcode).ToString)
-        '        WriteMessage("Command       = ", False)
-        '        Select Case recbuf(LIGHTING2.cmnd)
-        '            Case &H0
-        '                WriteMessage("Off")
-        '            Case &H1
-        '                WriteMessage("On")
-        '            Case &H2
-        '                WriteMessage("Set Level:" & recbuf(LIGHTING2.level).ToString)
-        '            Case &H3
-        '                WriteMessage("Group Off")
-        '            Case &H4
-        '                WriteMessage("Group On")
-        '            Case &H5
-        '                WriteMessage("Set Group Level:" & recbuf(LIGHTING2.level).ToString)
-        '            Case Else
-        '                WriteMessage("UNKNOWN")
-        '        End Select
-
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING2.packettype)) & ": " & Hex(recbuf(LIGHTING2.subtype)))
-        'End Select
-        'WriteMessage("Signal level  = " & (recbuf(LIGHTING2.rssi) >> 4).ToString)
+        Try
+            Dim adresse, valeur As String
+            Select Case recbuf(LIGHTING2.subtype)
+                Case LIGHTING2.sTypeAC, LIGHTING2.sTypeHEU, LIGHTING2.sTypeANSLUT
+                    '        Select Case recbuf(LIGHTING2.subtype)
+                    '            Case LIGHTING2.sTypeAC
+                    '                WriteMessage("subtype       = AC")
+                    '            Case LIGHTING2.sTypeHEU
+                    '                WriteMessage("subtype       = HomeEasy EU")
+                    '            Case LIGHTING2.sTypeANSLUT
+                    '                WriteMessage("subtype       = ANSLUT")
+                    '        End Select
+                    '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING2.seqnbr).ToString)
+                    adresse = Hex(recbuf(LIGHTING2.id1)) & VB.Right("0" & Hex(recbuf(LIGHTING2.id2)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING2.id3)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING2.id4)), 2) & "-" & recbuf(LIGHTING2.unitcode).ToString
+                    Select Case recbuf(LIGHTING2.cmnd)
+                        Case &H0 : valeur = "OFF"
+                        Case &H1 : valeur = "ON"
+                        Case &H2 : valeur = "SET_LEVEL:" & recbuf(LIGHTING2.level).ToString
+                        Case &H3 : valeur = "GROUP_OFF"
+                        Case &H4 : valeur = "GROUP_ON"
+                        Case &H5 : valeur = "SET_GROUP_LEVEL:" & recbuf(LIGHTING2.level).ToString
+                        Case Else : valeur = "UNKNOWN"
+                    End Select
+                    WriteRetour(adresse, "", valeur)
+                Case Else : WriteLog("ERR: decode_Lighting2 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING2.packettype)) & ": " & Hex(recbuf(LIGHTING2.subtype)))
+            End Select
+            'WriteMessage("Signal level  = " & (recbuf(LIGHTING2.rssi) >> 4).ToString)
+        Catch ex As Exception
+            WriteLog("ERR: decode_Lighting2 Exception : " & ex.Message)
+        End Try
     End Sub
-    'non géré
+
     Public Sub decode_Lighting3()
-        'Select Case recbuf(LIGHTING3.subtype)
-        '    Case LIGHTING3.sTypeKoppla
-        '        WriteMessage("subtype       = Ikea Koppla")
-        '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING3.seqnbr).ToString)
-        '        WriteMessage("Command       = ", False)
-        '        Select Case recbuf(LIGHTING3.cmnd)
-        '            Case &H0
-        '                WriteMessage("Off")
-        '            Case &H1
-        '                WriteMessage("On")
-        '            Case &H20
-        '                WriteMessage("Set Level:" & recbuf(6).ToString)
-        '            Case &H21
-        '                WriteMessage("Program")
-        '            Case Else
-        '                If recbuf(LIGHTING3.cmnd) >= &H10 And recbuf(LIGHTING3.cmnd) < &H18 Then
-        '                    WriteMessage("Dim")
-        '                ElseIf recbuf(LIGHTING3.cmnd) >= &H18 And recbuf(LIGHTING3.cmnd) < &H20 Then
-        '                    WriteMessage("Bright")
-        '                Else
-        '                    WriteMessage("UNKNOWN")
-        '                End If
-        '        End Select
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING3.packettype)) & ": " & Hex(recbuf(LIGHTING3.subtype)))
-        'End Select
-        'WriteMessage("Signal level  = " & (recbuf(LIGHTING3.rssi) >> 4).ToString)
-
+        Try
+            Dim adresse, valeur As String
+            Select Case recbuf(LIGHTING3.subtype)
+                Case LIGHTING3.sTypeKoppla
+                    '        WriteMessage("subtype       = Ikea Koppla")
+                    '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING3.seqnbr).ToString)
+                    '        WriteMessage("Command       = ", False)
+                    adresse = "IKEAKOPPLA"
+                    Select Case recbuf(LIGHTING3.cmnd)
+                        Case &H0 : valeur = "OFF"
+                        Case &H1 : valeur = "ON"
+                        Case &H20 : valeur = "SET_LEVEL:" & recbuf(6).ToString
+                        Case &H21 : valeur = "PROGRAM"
+                        Case Else
+                            If recbuf(LIGHTING3.cmnd) >= &H10 And recbuf(LIGHTING3.cmnd) < &H18 Then
+                                valeur = "DIM"
+                            ElseIf recbuf(LIGHTING3.cmnd) >= &H18 And recbuf(LIGHTING3.cmnd) < &H20 Then
+                                valeur = "BRIGHT"
+                            Else
+                                valeur = "UNKNOWN"
+                            End If
+                    End Select
+                    WriteRetour(adresse, "", valeur)
+                Case Else : WriteLog("ERR: decode_Lighting3 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING3.packettype)) & ": " & Hex(recbuf(LIGHTING3.subtype)))
+            End Select
+            'WriteMessage("Signal level  = " & (recbuf(LIGHTING3.rssi) >> 4).ToString)
+        Catch ex As Exception
+            WriteLog("ERR: decode_Lighting3 Exception : " & ex.Message)
+        End Try
     End Sub
-    'non géré
+    'Not implemented
     Public Sub decode_Lighting4()
-        'WriteMessage("Not implemented")
+        Try
+            'WriteMessage("Not implemented")
+        Catch ex As Exception
+            WriteLog("ERR: decode_Lighting4 Exception : " & ex.Message)
+        End Try
     End Sub
-    'non géré
+
     Public Sub decode_Lighting5()
-        'Select Case recbuf(LIGHTING5.subtype)
-        '    Case LIGHTING5.sTypeLightwaveRF
-        '        WriteMessage("subtype       = LightwaveRF")
-        '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING5.seqnbr).ToString)
-        '        WriteMessage("ID            = " & VB.Right("0" & Hex(recbuf(LIGHTING5.id1)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING5.id2)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING5.id3)), 2))
-        '        WriteMessage("Unit          = " & recbuf(LIGHTING5.unitcode).ToString)
-        '        WriteMessage("Command       = ", False)
-        '        Select Case recbuf(LIGHTING5.cmnd)
-        '            Case &H0
-        '                WriteMessage("Off")
-        '            Case &H1
-        '                WriteMessage("On")
-        '            Case &H2
-        '                WriteMessage("Group Off")
-        '            Case &H3
-        '                WriteMessage("Group Mood 1")
-        '            Case &H4
-        '                WriteMessage("Group Mood 2")
-        '            Case &H5
-        '                WriteMessage("Group Mood 3")
-        '            Case &H6
-        '                WriteMessage("unlock")
-        '            Case &H7
-        '                WriteMessage("lock")
-        '            Case &H8
-        '                WriteMessage("all lock")
-        '            Case Else
-        '                WriteMessage("UNKNOWN")
-        '        End Select
-
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING5.packettype)) & ": " & Hex(recbuf(LIGHTING5.subtype)))
-        'End Select
-        'WriteMessage("Signal level  = " & (recbuf(LIGHTING5.rssi) >> 4).ToString)
-
+        Try
+            Dim adresse, valeur As String
+            Select Case recbuf(LIGHTING5.subtype)
+                Case LIGHTING5.sTypeLightwaveRF
+                    'WriteMessage("subtype       = LightwaveRF")
+                    'WriteMessage("Sequence nbr  = " & recbuf(LIGHTING5.seqnbr).ToString)
+                    adresse = VB.Right("0" & Hex(recbuf(LIGHTING5.id1)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING5.id2)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING5.id3)), 2) & "-" & recbuf(LIGHTING5.unitcode).ToString
+                    Select Case recbuf(LIGHTING5.cmnd)
+                        Case &H0 : valeur = "OFF"
+                        Case &H1 : valeur = "ON"
+                        Case &H2 : valeur = "GROUP_OFF"
+                        Case &H3 : valeur = "GROUP_Mood_1"
+                        Case &H4 : valeur = "GROUP_Mood_2"
+                        Case &H5 : valeur = "GROUP_Mood_3"
+                        Case &H6 : valeur = "UNLOCK"
+                        Case &H7 : valeur = "LOCK"
+                        Case &H8 : valeur = "ALL_LOCK"
+                        Case Else : valeur = "UNKNOWN"
+                    End Select
+                    WriteRetour(adresse, "", valeur)
+                Case Else : WriteLog("ERR: decode_Lighting5 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING5.packettype)) & ": " & Hex(recbuf(LIGHTING5.subtype)))
+            End Select
+            'WriteMessage("Signal level  = " & (recbuf(LIGHTING5.rssi) >> 4).ToString)
+        Catch ex As Exception
+            WriteLog("ERR: decode_Lighting5 Exception : " & ex.Message)
+        End Try
     End Sub
-    'non géré
-    Public Sub decode_Lighting6()
-        'Select Case recbuf(LIGHTING6.subtype)
-        '    Case LIGHTING6.sTypeNOVATIS
-        '        WriteMessage("subtype       = NOVATIS")
-        '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING6.seqnbr).ToString)
-        '        WriteMessage("ID            = " & Hex(recbuf(LIGHTING6.id1)) & VB.Right("0" & Hex(recbuf(LIGHTING6.id2)), 2) & _
-        '                     VB.Right("0" & Hex(recbuf(LIGHTING6.id3)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING6.id4)), 2) & _
-        '                     VB.Right("0" & Hex(recbuf(LIGHTING6.id5)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING6.id6)), 2) & _
-        '                     VB.Right("0" & Hex(recbuf(LIGHTING6.id7)), 2))
-        '        WriteMessage("Command       = ", False)
-        '        Select Case recbuf(LIGHTING6.cmnd)
-        '            Case &H0
-        '                WriteMessage("Off")
-        '            Case &H1
-        '                WriteMessage("On")
-        '            Case Else
-        '                WriteMessage("UNKNOWN")
-        '        End Select
 
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING6.packettype)) & ": " & Hex(recbuf(LIGHTING6.subtype)))
-        'End Select
-        'WriteMessage("Signal level  = " & (recbuf(LIGHTING6.rssi) >> 4).ToString)
+    Public Sub decode_Lighting6()
+        Try
+            Dim adresse, valeur As String
+            Select Case recbuf(LIGHTING6.subtype)
+                Case LIGHTING6.sTypeNOVATIS
+                    'WriteMessage("subtype       = NOVATIS")
+                    'WriteMessage("Sequence nbr  = " & recbuf(LIGHTING6.seqnbr).ToString)
+                    adresse = Hex(recbuf(LIGHTING6.id1)) & VB.Right("0" & Hex(recbuf(LIGHTING6.id2)), 2) &
+                                 VB.Right("0" & Hex(recbuf(LIGHTING6.id3)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING6.id4)), 2) & _
+                                 VB.Right("0" & Hex(recbuf(LIGHTING6.id5)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING6.id6)), 2) & _
+                                 VB.Right("0" & Hex(recbuf(LIGHTING6.id7)), 2)
+                    Select Case recbuf(LIGHTING6.cmnd)
+                        Case &H0 : valeur = "OFF"
+                        Case &H1 : valeur = "ON"
+                        Case Else : valeur = "UNKNOWN"
+                    End Select
+                    WriteRetour(adresse, "", valeur)
+                Case Else : WriteLog("ERR: decode_Lighting6 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING6.packettype)) & ": " & Hex(recbuf(LIGHTING6.subtype)))
+            End Select
+            'WriteMessage("Signal level  = " & (recbuf(LIGHTING6.rssi) >> 4).ToString)
+        Catch ex As Exception
+            WriteLog("ERR: decode_Lighting6 Exception : " & ex.Message)
+        End Try
     End Sub
     'non géré
     Public Sub decode_Security1()
@@ -3124,7 +2871,7 @@ Imports System.Media
 
         'WriteMessage("Signal level  = " & (recbuf(THERMOSTAT1.rssi) >> 4).ToString)
     End Sub
-    'non géré
+    'Not implemented
     Public Sub decode_Thermostat2()
         'WriteMessage("Not implemented")
     End Sub
@@ -3278,7 +3025,7 @@ Imports System.Media
             If (recbuf(TEMP_HUM.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
         End If
     End Sub
-    'non géré
+    'Not implemented
     Public Sub decode_Baro()
         'WriteMessage("Not implemented")
     End Sub
@@ -3465,7 +3212,7 @@ Imports System.Media
         '    WriteMessage("Battery       = OK")
         'End If
     End Sub
-    'non géré
+    'Not implemented
     Public Sub decode_DateTime()
 
     End Sub
@@ -3513,11 +3260,11 @@ Imports System.Media
         '    WriteMessage("Battery       = OK")
         'End If
     End Sub
-    'non géré
+    'Not implemented
     Public Sub decode_Gas()
         'WriteMessage("Not implemented")
     End Sub
-    'non géré
+    'Not implemented
     Public Sub decode_Water()
         'WriteMessage("Not implemented")
     End Sub
@@ -3588,136 +3335,105 @@ Imports System.Media
         'WriteMessage("Signal level  = " & (recbuf(RFXSENSOR.rssi) >> 4).ToString)
 
     End Sub
-    'non géré
+
     Public Sub decode_RFXMeter()
-        'Dim counter As Long
+        Try
+            Dim adresse, valeur As String
+            Dim counter As Long
 
-        'Select Case recbuf(RFXMETER.subtype)
-        '    Case RFXMETER.Count
-        '        WriteMessage("subtype       = RFXMeter counter")
-        '        WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
-        '        WriteMessage("ID            = " & (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString)
-        '        counter = (CLng(recbuf(RFXMETER.count1)) << 24) + (CLng(recbuf(RFXMETER.count2)) << 16) + (CLng(recbuf(RFXMETER.count3)) << 8) + recbuf(RFXMETER.count4)
-        '        WriteMessage("Counter       = " & counter.ToString)
-        '        WriteMessage("if RFXPwr     = " & (counter / 1000).ToString & " kWh")
-        '    Case RFXMETER.Interval
-        '        WriteMessage("subtype       = RFXMeter new interval time set")
-        '        WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
-        '        WriteMessage("ID            = " & (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString)
-        '        WriteMessage("Interval time = ", False)
-        '        Select Case recbuf(RFXMETER.count3)
-        '            Case &H1
-        '                WriteMessage("30 seconds")
-        '            Case &H2
-        '                WriteMessage("1 minute")
-        '            Case &H4
-        '                WriteMessage("6 minutes")
-        '            Case &H8
-        '                WriteMessage("12 minutes")
-        '            Case &H10
-        '                WriteMessage("15 minutes")
-        '            Case &H20
-        '                WriteMessage("30 minutes")
-        '            Case &H40
-        '                WriteMessage("45 minutes")
-        '            Case &H80
-        '                WriteMessage("1 hour")
-        '        End Select
-
-        '    Case RFXMETER.Calib
-        '        Select Case (recbuf(RFXMETER.count2) And &HC0)
-        '            Case &H0
-        '                WriteMessage("subtype       = Calibrate mode for channel 1")
-        '            Case &H40
-        '                WriteMessage("subtype       = Calibrate mode for channel 2")
-        '            Case &H80
-        '                WriteMessage("subtype       = Calibrate mode for channel 3")
-        '        End Select
-        '        WriteMessage("ID            = " & (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString)
-        '        counter = ((CLng(recbuf(RFXMETER.count2) And &H3F) << 16) + (CLng(recbuf(RFXMETER.count3)) << 8) + recbuf(RFXMETER.count4)) / 1000
-        '        WriteMessage("Calibrate cnt = " & counter.ToString & " msec")
-        '        WriteMessage("RFXPwr        = " & Convert.ToString(Round(1 / ((16 * counter) / (3600000 / 62.5)), 3)) & " kW", False)
-        '    Case RFXMETER.Addr
-        '        WriteMessage("subtype       = New address set, push button for next address")
-        '        WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
-        '        WriteMessage("ID            = " & (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString)
-
-        '    Case RFXMETER.CounterReset
-        '        Select Case (recbuf(RFXMETER.count2) And &HC0)
-        '            Case &H0
-        '                WriteMessage("subtype       = Push the button for next mode within 5 seconds or else RESET COUNTER channel 1 will be executed")
-        '            Case &H40
-        '                WriteMessage("subtype       = Push the button for next mode within 5 seconds or else RESET COUNTER channel 2 will be executed")
-        '            Case &H80
-        '                WriteMessage("subtype       = Push the button for next mode within 5 seconds or else RESET COUNTER channel 3 will be executed")
-        '        End Select
-        '        WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
-        '        WriteMessage("ID            = " & (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString)
-
-        '    Case RFXMETER.CounterSet
-        '        Select Case (recbuf(RFXMETER.count2) And &HC0)
-        '            Case &H0
-        '                WriteMessage("subtype       = Counter channel 1 is reset to zero")
-        '            Case &H40
-        '                WriteMessage("subtype       = Counter channel 2 is reset to zero")
-        '            Case &H80
-        '                WriteMessage("subtype       = Counter channel 3 is reset to zero")
-        '        End Select
-        '        WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
-        '        WriteMessage("ID            = " & (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString)
-        '        WriteMessage("Counter       = " & ((CLng(recbuf(RFXMETER.count1)) << 24) + (CLng(recbuf(RFXMETER.count2)) << 16) + (CLng(recbuf(RFXMETER.count3)) << 8) + recbuf(RFXMETER.count4)).ToString)
-
-        '    Case RFXMETER.SetInterval
-        '        WriteMessage("subtype       = Push the button for next mode within 5 seconds or else SET INTERVAL MODE will be entered")
-        '        WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
-        '        WriteMessage("ID            = " & (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString)
-
-        '    Case RFXMETER.SetCalib
-        '        Select Case (recbuf(RFXMETER.count2) And &HC0)
-        '            Case &H0
-        '                WriteMessage("subtype       = Push the button for next mode within 5 seconds or else CALIBRATION mode for channel 1 will be executed")
-        '            Case &H40
-        '                WriteMessage("subtype       = Push the button for next mode within 5 seconds or else CALIBRATION mode for channel 2 will be executed")
-        '            Case &H80
-        '                WriteMessage("subtype       = Push the button for next mode within 5 seconds or else CALIBRATION mode for channel 3 will be executed")
-        '        End Select
-        '        WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
-        '        WriteMessage("ID            = " & (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString)
-
-        '    Case RFXMETER.SetAddr
-        '        WriteMessage("subtype       = Push the button for next mode within 5 seconds or else SET ADDRESS MODE will be entered")
-        '        WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
-        '        WriteMessage("ID            = " & (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString)
-
-        '    Case RFXMETER.Ident
-        '        WriteMessage("subtype       = RFXMeter identification")
-        '        WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
-        '        WriteMessage("ID            = " & (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString)
-        '        WriteMessage("FW version    = " & Hex(recbuf(RFXMETER.count3)))
-        '        WriteMessage("Interval time = ", False)
-        '        Select Case recbuf(RFXMETER.count4)
-        '            Case &H1
-        '                WriteMessage("30 seconds")
-        '            Case &H2
-        '                WriteMessage("1 minute")
-        '            Case &H4
-        '                WriteMessage("6 minutes")
-        '            Case &H8
-        '                WriteMessage("12 minutes")
-        '            Case &H10
-        '                WriteMessage("15 minutes")
-        '            Case &H20
-        '                WriteMessage("30 minutes")
-        '            Case &H40
-        '                WriteMessage("45 minutes")
-        '            Case &H80
-        '                WriteMessage("1 hour")
-        '        End Select
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(RFXMETER.packettype)) & ":" & Hex(recbuf(RFXMETER.subtype)))
-        'End Select
-
-        'WriteMessage("Signal level  = " & (recbuf(RFXMETER.rssi) >> 4).ToString)
+            Select recbuf(RFXMETER.subtype)
+                Case RFXMETER.Count
+                    'WriteMessage("subtype       = RFXMeter counter")
+                    'WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
+                    adresse = (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString
+                    counter = (CLng(recbuf(RFXMETER.count1)) << 24) + (CLng(recbuf(RFXMETER.count2)) << 16) + (CLng(recbuf(RFXMETER.count3)) << 8) + recbuf(RFXMETER.count4)
+                    valeur = counter.ToString 'WriteMessage("if RFXPwr     = " & (counter / 1000).ToString & " kWh")
+                    WriteRetour(adresse, "", valeur)
+                Case RFXMETER.Interval
+                    'WriteMessage("subtype       = RFXMeter new interval time set")
+                    'WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
+                    adresse = (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString
+                    Select Case recbuf(RFXMETER.count3)
+                        Case &H1 : valeur = "Interval: 30 sec"
+                        Case &H2 : valeur = "Interval: 1 min"
+                        Case &H4 : valeur = "Interval: 6 min"
+                        Case &H8 : valeur = "Interval: 12 min"
+                        Case &H10 : valeur = "Interval: 15 min"
+                        Case &H20 : valeur = "Interval: 30 min"
+                        Case &H40 : valeur = "Interval: 45 min"
+                        Case &H80 : valeur = "Interval: 60 min"
+                        Case Else : valeur = "Interval: illegal value"
+                    End Select
+                    WriteRetour(adresse, "", "CFG: " & valeur)
+                Case RFXMETER.Calib
+                    adresse = (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString
+                    counter = ((CLng(recbuf(RFXMETER.count2) And &H3F) << 16) + (CLng(recbuf(RFXMETER.count3)) << 8) + recbuf(RFXMETER.count4)) / 1000
+                    Select Case (recbuf(RFXMETER.count2) And &HC0)
+                        Case &H0 : WriteRetour(adresse, "", "CFG: Calibrate mode for channel 1 : " & counter.ToString & " msec - RFXPwr        = " & Convert.ToString(Round(1 / ((16 * counter) / (3600000 / 62.5)), 3)) & " kW")
+                        Case &H40 : WriteRetour(adresse, "", "CFG: Calibrate mode for channel 2 : " & counter.ToString & " msec - RFXPwr        = " & Convert.ToString(Round(1 / ((16 * counter) / (3600000 / 62.5)), 3)) & " kW")
+                        Case &H80 : WriteRetour(adresse, "", "CFG: Calibrate mode for channel 3 : " & counter.ToString & " msec - RFXPwr        = " & Convert.ToString(Round(1 / ((16 * counter) / (3600000 / 62.5)), 3)) & " kW")
+                    End Select
+                Case RFXMETER.Addr
+                    'WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
+                    adresse = (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString
+                    WriteRetour(adresse, "", "CFG: New address set, push button for next address")
+                Case RFXMETER.CounterReset
+                    'WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
+                    adresse = (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString
+                    Select Case (recbuf(RFXMETER.count2) And &HC0)
+                        Case &H0 : WriteRetour(adresse, "", "CFG: Push the button for next mode within 5 seconds or else RESET COUNTER channel 1 will be executed")
+                        Case &H40 : WriteRetour(adresse, "", "CFG: Push the button for next mode within 5 seconds or else RESET COUNTER channel 2 will be executed")
+                        Case &H80 : WriteRetour(adresse, "", "CFG: Push the button for next mode within 5 seconds or else RESET COUNTER channel 3 will be executed")
+                    End Select
+                Case RFXMETER.CounterSet
+                    'WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
+                    adresse = (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString
+                    valeur = ((CLng(recbuf(RFXMETER.count1)) << 24) + (CLng(recbuf(RFXMETER.count2)) << 16) + (CLng(recbuf(RFXMETER.count3)) << 8) + recbuf(RFXMETER.count4)).ToString
+                    Select Case (recbuf(RFXMETER.count2) And &HC0)
+                        Case &H0 : WriteRetour(adresse, "", "CFG: Counter channel 1 is reset to zero - Valeur:" & valeur)
+                        Case &H40 : WriteRetour(adresse, "", "CFG: Counter channel 2 is reset to zero - Valeur:" & valeur)
+                        Case &H80 : WriteRetour(adresse, "", "CFG: Counter channel 3 is reset to zero - Valeur:" & valeur)
+                    End Select
+                Case RFXMETER.SetInterval
+                    'WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
+                    adresse = (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString
+                    WriteRetour(adresse, "", "CFG: Push the button for next mode within 5 seconds or else SET INTERVAL MODE will be entered")
+                Case RFXMETER.SetCalib
+                    'WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
+                    adresse = (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString
+                    Select Case (recbuf(RFXMETER.count2) And &HC0)
+                        Case &H0 : WriteRetour(adresse, "", "CFG: Push the button for next mode within 5 seconds or else CALIBRATION mode for channel 1 will be executed")
+                        Case &H40 : WriteRetour(adresse, "", "CFG: Push the button for next mode within 5 seconds or else CALIBRATION mode for channel 2 will be executed")
+                        Case &H80 : WriteRetour(adresse, "", "CFG: Push the button for next mode within 5 seconds or else CALIBRATION mode for channel 3 will be executed")
+                    End Select
+                Case RFXMETER.SetAddr
+                    'WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
+                    adresse = (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString
+                    WriteRetour(adresse, "", "CFG: Push the button for next mode within 5 seconds or else SET ADDRESS MODE will be entered")
+                Case RFXMETER.Ident
+                    'WriteMessage("subtype       = RFXMeter identification")
+                    'WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
+                    adresse = (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString
+                    WriteRetour(adresse, "", "CFG: FW version" & Hex(recbuf(RFXMETER.count3)))
+                    Select Case recbuf(RFXMETER.count4)
+                        Case &H1 : valeur = "Interval: 30 sec"
+                        Case &H2 : valeur = "Interval: 1 min"
+                        Case &H4 : valeur = "Interval: 6 min"
+                        Case &H8 : valeur = "Interval: 12 min"
+                        Case &H10 : valeur = "Interval: 15 min"
+                        Case &H20 : valeur = "Interval: 30 min"
+                        Case &H40 : valeur = "Interval: 45 min"
+                        Case &H80 : valeur = "Interval: 60 min"
+                        Case Else : valeur = "Interval: illegal value"
+                    End Select
+                    WriteRetour(adresse, "", "CFG: " & valeur)
+                Case Else
+                    '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(RFXMETER.packettype)) & ":" & Hex(recbuf(RFXMETER.subtype)))
+            End Select
+            'WriteMessage("Signal level  = " & (recbuf(RFXMETER.rssi) >> 4).ToString)
+        Catch ex As Exception
+            WriteLog("ERR: decode_RFXMeter Exception : " & ex.Message)
+        End Try
     End Sub
 #End Region
 
@@ -3766,7 +3482,7 @@ Imports System.Media
         End Try
     End Sub
 
-    Private Sub WriteRetour(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
+    Private Sub WriteRetourSend(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
         Try
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
 
@@ -3795,6 +3511,54 @@ Imports System.Media
                 End If
             End If
 
+        Catch ex As Exception
+            WriteLog("ERR: Writeretour Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub WriteRetour(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
+        Try
+            If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
+
+            'Forcer le . 
+            Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
+            My.Application.ChangeCulture("en-US")
+
+            'log tous les paquets en mode debug
+            'WriteLog("DBG: WriteRetour receive from " & adresse & " (" & type & ") -> " & valeur)
+
+            'on ne traite rien pendant les 15 premieres secondes
+            If DateTime.Now > DateAdd(DateInterval.Second, 15, dateheurelancement) Then
+                'Recherche si un device affecté
+                Dim listedevices As New ArrayList
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
+                If (listedevices.Count = 1) Then
+                    'un device trouvé 
+                    If STRGS.InStr(valeur, "CFG:") > 0 Then
+                        'c'est un message de config, on log juste
+                        WriteLog(listedevices.Item(0).name & " : " & valeur)
+                    Else
+                        'on maj la value si la durée entre les deux receptions est > à 1.5s
+                        If (DateTime.Now - Date.Parse(listedevices.Item(0).LastChange)).TotalMilliseconds > 1500 Then
+                            If valeur = "ON" Then
+                                listedevices.Item(0).Value = True
+                            ElseIf valeur = "OFF" Then
+                                listedevices.Item(0).Value = False
+                            Else
+                                listedevices.Item(0).Value = valeur
+                            End If
+                        Else
+                            WriteLog("DBG: Reception < 1.5s de deux valeurs pour le meme composant : " & listedevices.Item(0).name & ":" & valeur)
+                        End If
+                    End If
+                ElseIf (listedevices.Count > 1) Then
+                    WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
+                Else
+
+                    'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+
+                End If
+            End If
         Catch ex As Exception
             WriteLog("ERR: Writeretour Exception : " & ex.Message)
         End Try
