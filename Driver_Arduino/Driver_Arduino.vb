@@ -231,19 +231,22 @@ Public Class Driver_Arduino
                     'Aller lire une pin digital via DigitalRead(Pin as integer)
                     Dim Val As Integer = ArduinoVB.DigitalRead(CInt(Objet.Adresse1))
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
-                    traitement(Val, Objet.Adresse1, _type)
+                    Objet.Value = Val
+                    'traitement(Val, Objet.Adresse1, _type)
                 Case "APPAREIL"
                     _type = 1
                     'Aller lire une pin digital via DigitalRead(Pin as integer)
                     Dim Val As Integer = ArduinoVB.DigitalRead(CInt(Objet.Adresse1))
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
-                    traitement(Val, Objet.Adresse1, _type)
+                    Objet.Value = Val
+                    'traitement(Val, Objet.Adresse1, _type)
                 Case "GENERIQUEVALUE"
                     _type = 2
                     'Aller lire une pin analogique via AnalogRead(Pin as integer)
                     Dim Val As Integer = ArduinoVB.AnalogRead(CInt(Objet.Adresse1))
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
-                    traitement(Val, Objet.Adresse1, _type)
+                    Objet.Value = Val
+                    'traitement(Val, Objet.Adresse1, _type)
                 Case Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Le type de device " & Objet.Type & " n'est pas supporté pas ce driver")
                     Exit Sub
@@ -695,19 +698,20 @@ Public Class Driver_Arduino
             'un device trouvé on maj la value
             If (listedevices.Count = 1) Then
                 'correction valeur pour correspondre au type de value
-                If TypeOf listedevices.Item(0).Value Is Integer Then
-                    If valeur = 1 Then
-                        valeur = 100
-                    ElseIf valeur = 0 Then
-                        valeur = 0
-                    End If
-                Else
-                    listedevices.Item(0).Value = valeur
-                End If
+                'If TypeOf listedevices.Item(0).Value Is Integer Then
+                '    If valeur = 1 Then
+                '        valeur = 100
+                '    ElseIf valeur = 0 Then
+                '        valeur = 0
+                '    End If
+                'Else
+                listedevices.Item(0).Value = valeur
+                'End If
 
             ElseIf (listedevices.Count > 1) Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traitement", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
             Else
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " traitement", "Le device à l'adresse : " & adresse & " de type " & _Type & " nexiste pas")
                 'Le Device n'existe pas dans Homidom
             End If
         Catch ex As Exception

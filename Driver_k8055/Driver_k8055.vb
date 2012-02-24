@@ -504,7 +504,7 @@ Imports HoMIDom.HoMIDom.Device
 
             SetCurrentDevice(CInt(Objet.Adresse2))
             If SetCurrentDevice(CInt(Objet.Adresse2)) < 0 Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Read", "Erreur: l'adresse de la carte: " & Objet.Adresse2 & " n'a pas été trouvée")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Write", "Erreur: l'adresse de la carte: " & Objet.Adresse2 & " n'a pas été trouvée")
                 Exit Sub
             End If
 
