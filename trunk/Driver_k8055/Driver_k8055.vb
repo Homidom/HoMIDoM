@@ -67,6 +67,8 @@ Imports HoMIDom.HoMIDom.Device
     Private Declare Function ReadCounter Lib "k8055d.dll" (ByVal CounterNr As Integer) As Integer
     Private Declare Sub ResetCounter Lib "k8055d.dll" (ByVal CounterNr As Integer)
     Private Declare Sub SetCounterDebounceTime Lib "k8055d.dll" (ByVal CounterNr As Integer, ByVal DebounceTime As Integer)
+
+    Dim _carte(3) As Boolean
 #End Region
 
 #Region "Fonctions génériques"
@@ -399,12 +401,14 @@ Imports HoMIDom.HoMIDom.Device
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Start", "Carte 0 connectée")
                 _IsConnect = True
                 SetCurrentDevice(0)
+                _carte(0) = True
             End If
             If (k And 2) Then
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Start", "Carte 1 connectée")
                 If Not _IsConnect Then
                     _IsConnect = True
                     SetCurrentDevice(1)
+                    _carte(1) = True
                 End If
             End If
             If (k And 4) Then
@@ -412,6 +416,7 @@ Imports HoMIDom.HoMIDom.Device
                 If Not _IsConnect Then
                     _IsConnect = True
                     SetCurrentDevice(2)
+                    _carte(2) = True
                 End If
             End If
             If (k And 8) Then
@@ -419,6 +424,7 @@ Imports HoMIDom.HoMIDom.Device
                 If Not _IsConnect Then
                     _IsConnect = True
                     SetCurrentDevice(3)
+                    _carte(3) = True
                 End If
             End If
         Catch ex As Exception
@@ -439,7 +445,13 @@ Imports HoMIDom.HoMIDom.Device
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         'cree l'objet
         Try
-            CloseDevice()
+            For i As Integer = 0 To 3
+                If _carte(i) = True Then
+                    SetCurrentDevice(i)
+                    CloseDevice()
+                    _carte(i) = False
+                End If
+            Next
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Stop", "Driver arrêté")
             _IsConnect = False
         Catch ex As Exception
