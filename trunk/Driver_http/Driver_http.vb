@@ -465,10 +465,38 @@ Imports System.IO
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
-            If _Enable = False Then Exit Sub
-            If _IsConnect = False Then Exit Sub
+            If _Enable = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
+                Exit Sub
+            End If
+
+            If _IsConnect = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
+                Exit Sub
+            End If
+
+            If Objet.Type = "APPAREIL" Then
+                Select Case UCase(Command)
+                    Case "ON"
+                        If Trim(UCase(Objet.modele)) = "IPX800" Then
+                            Dim relais As Integer = CInt(Objet.Adresse1)
+                            Dim url = "http://" & Objet.Adresse2 & "/preset.htm?led" & relais & "=1"
+                            SEND_IPX800(url)
+                        End If
+                    Case "OFF"
+                        If Trim(UCase(Objet.modele)) = "IPX800" Then
+                            Dim relais As Integer = CInt(Objet.Adresse1)
+                            Dim url = "http://" & Objet.Adresse2 & "/preset.htm?led" & relais & "=0"
+                            SEND_IPX800(url)
+                        End If
+                End Select
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: le type du device " & Objet.Type & " n'est pas reconnu pour ce driver")
+                Exit Sub
+            End If
+
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: " & ex.ToString)
         End Try
     End Sub
 
@@ -633,5 +661,19 @@ Imports System.IO
             Return "Erreur: " & ex.ToString
         End Try
     End Function
+
+    Public Sub SEND_IPX800(ByVal Command As String)
+        Try
+            Dim reader As StreamReader = Nothing
+            Dim str As String = ""
+            Dim request As WebRequest = WebRequest.Create(Command)
+            Dim response As WebResponse = request.GetResponse()
+            reader = New StreamReader(response.GetResponseStream())
+            str = reader.ReadToEnd
+            reader.Close()
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " SEND_IPX800", ex.Message)
+        End Try
+    End Sub
 #End Region
 End Class
