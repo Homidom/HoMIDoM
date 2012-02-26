@@ -3,6 +3,7 @@ Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports System.Net
 Imports System.IO
+Imports System.Xml
 
 <Serializable()> Public Class Driver_http
     Implements HoMIDom.HoMIDom.IDriver
@@ -451,9 +452,41 @@ Imports System.IO
     ''' <remarks>Le device demande au driver d'aller le lire suivant son adresse</remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
-            If _Enable = False Then Exit Sub
+            If _Enable = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
+                Exit Sub
+            End If
+
+            Select Case Objet.Type
+                Case "CONTACT"
+                    If Trim(UCase(Objet.Modele)) = "IPX800" Then
+                        Dim idx As Integer = CInt(Objet.Adresse1)
+                        If idx < 0 Or idx > 7 Then
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 7 pour une entrée")
+                            Exit Sub
+                        End If
+                        Dim url As String = "http://" & Objet.Adresse2
+                        Dim elmt As String = "btn" & idx
+                        Objet.Value = GET_IPX800(url, elmt)
+                    End If
+                Case "APPAREIL"
+                    If Trim(UCase(Objet.Modele)) = "IPX800" Then
+                        Dim idx As Integer = CInt(Objet.Adresse1)
+                        If idx < 0 Or idx > 7 Then
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 7 pour une sortie")
+                            Exit Sub
+                        End If
+                        Dim url As String = "http://" & Objet.Adresse2
+                        Dim elmt As String = "led" & idx
+                        Objet.Value = GET_IPX800(url, elmt)
+                    End If
+                Case Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le Device n'est pas reconnu pour ce type " & Objet.Type)
+                    Exit Sub
+            End Select
+
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: " & ex.ToString)
         End Try
     End Sub
 
@@ -479,14 +512,19 @@ Imports System.IO
                 Select Case UCase(Command)
                     Case "ON"
                         If Trim(UCase(Objet.modele)) = "IPX800" Then
-                            Dim relais As Integer = CInt(Objet.Adresse1)
-                            Dim url = "http://" & Objet.Adresse2 & "/preset.htm?led" & relais & "=1"
+                            Dim idx As Integer = CInt(Objet.Adresse1)
+                            If idx < 0 Or idx > 7 Then
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 7 pour une sortie")
+                                Exit Sub
+                            End If
+                            Dim relais As Integer = idx
+                            Dim url As String = "http://" & Objet.Adresse2 & "/preset.htm?led" & relais & "=1"
                             SEND_IPX800(url)
                         End If
                     Case "OFF"
                         If Trim(UCase(Objet.modele)) = "IPX800" Then
                             Dim relais As Integer = CInt(Objet.Adresse1)
-                            Dim url = "http://" & Objet.Adresse2 & "/preset.htm?led" & relais & "=0"
+                            Dim url As String = "http://" & Objet.Adresse2 & "/preset.htm?led" & relais & "=0"
                             SEND_IPX800(url)
                         End If
                 End Select
@@ -675,5 +713,46 @@ Imports System.IO
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " SEND_IPX800", ex.Message)
         End Try
     End Sub
+
+    Public Function GET_IPX800(ByVal Adresse As String, ByVal Element As String) As Object
+        Try
+            Dim doc As New XmlDocument
+            Dim nodes As XmlNodeList
+            Dim retour As Object = Nothing
+
+            ' Create a new XmlDocument   
+            doc = New XmlDocument()
+
+            Dim url As New Uri(Adresse & "/status.xml")
+            Dim Request As HttpWebRequest = CType(HttpWebRequest.Create(url), System.Net.HttpWebRequest)
+            'Request.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7"
+            Dim response As Net.HttpWebResponse = CType(Request.GetResponse(), Net.HttpWebResponse)
+
+            doc.Load(response.GetResponseStream)
+            nodes = doc.SelectNodes("/response")
+            If nodes.Count > 0 Then
+                For Each node As XmlNode In nodes
+                    If node.Name = Element Then
+                        retour = node.Value
+                        If IsNumeric(retour) = False Then
+                            If LCase(retour.ToString) = "down" Then retour = 0
+                            If LCase(retour.ToString) = "up" Then retour = 1
+                        End If
+                        Exit For
+                    End If
+                Next
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "Aucun élément n'a été trouvé")
+            End If
+
+            doc = Nothing
+            nodes = Nothing
+
+            Return retour
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_IPX800", ex.Message)
+            Return Nothing
+        End Try
+    End Function
 #End Region
 End Class
