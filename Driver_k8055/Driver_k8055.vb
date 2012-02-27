@@ -379,19 +379,7 @@ Imports HoMIDom.HoMIDom.Device
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         'cree l'objet
         Try
-            'Dim h As Long
-            'Dim carte As Long = 0
-            'h = OpenDevice(carte)
-            'Select Case h
-            '    Case 0, 1, 2, 3
-            '        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8055 Start", "Carte " & Str(h) & " connectée")
-            '        _IsConnect = True
-            '    Case -1
-            '        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Start", "Carte " & Str(carte) & " non trouvée")
-            '        _IsConnect = False
-            'End Select
-
-            Dim k As Integer
+            Dim k As Integer = 0
             k = SearchDevices()
             If k = 0 Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 Start", "Aucune Carte n'a été trouvée")
