@@ -555,7 +555,7 @@ Namespace HoMIDom
             Public Sub Read()
                 Try
                     If _Enable = False Then Exit Sub
-                    If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
+                    If Driver.IsConnect() Then Driver.Read(Me)
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceBOOL Read", "Exception : " & ex.Message)
                 End Try
@@ -569,7 +569,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As Double)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not _Server.Etat_server Then
+                        If Not Server.Etat_server Then
                             _Value = tmp
                             _ValueLast = tmp
                         Else
@@ -653,7 +653,7 @@ Namespace HoMIDom
             Public Sub Read()
                 Try
                     If _Enable = False Then Exit Sub
-                    If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
+                    If Driver.IsConnect() Then Driver.Read(Me)
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceBOOL Read", "Exception : " & ex.Message)
                 End Try
@@ -674,7 +674,7 @@ Namespace HoMIDom
                             'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois (sauf si _valuemustchange = TRUE)
                             _LastChange = Now
                             If _valuemustchange And tmp = _Value Then
-                                _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceDBL Value", _Name & " : " & _Adresse1 & " : " & _Value.ToString & " (Inchangé)")
+                                _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceBool Value", _Name & " : " & _Adresse1 & " : " & _Value.ToString & " (Inchangé)")
                             Else
                                 _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceBool Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString)
                                 _ValueLast = _Value 'on garde l'ancienne value en memoire
@@ -793,7 +793,7 @@ Namespace HoMIDom
             Public Overridable Sub Read()
                 Try
                     If _Enable = False Then Exit Sub
-                    If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
+                    If Driver.IsConnect() Then Driver.Read(Me)
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceINT Read", "Exception : " & ex.Message)
                 End Try
@@ -810,39 +810,38 @@ Namespace HoMIDom
                     '    If tmp > 100 Then tmp = 100
                     '    _ValueLast = _Value 'on garde l'ancienne value en memoire
                     '    _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
-                    'If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                    If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
 
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not _Server.Etat_server Then
-                            _Value = tmp
-                            _ValueLast = tmp
-                        Else
-                            _LastChange = Now
-                            If tmp < _ValueMin Then tmp = _ValueMin 'If tmp < 0 Then tmp = 0
-                            If tmp > _ValueMax Then tmp = _ValueMax 'If tmp > 100 Then tmp = 100
-                            If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                            tmp += _Correction
+                        ''If Not _Server.Etat_server Then
+                        ''    _Value = tmp
+                        ''    _ValueLast = tmp
+                        ''Else
+                        _LastChange = Now
+                        If tmp < _ValueMin Then tmp = _ValueMin 'If tmp < 0 Then tmp = 0
+                        If tmp > _ValueMax Then tmp = _ValueMax 'If tmp > 100 Then tmp = 100
+                        If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
+                        tmp += _Correction
 
-                            If tmp = _Value Then
-                                _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceINT Value", _Name & " : " & _Adresse1 & " : " & _Value & " (Inchangé)")
+                        If tmp = _Value Then
+                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceINT Value", _Name & " : " & _Adresse1 & " : " & _Value & " (Inchangé)")
+                        Else
+                            '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                            If _LastEtat And tmp = _ValueLast Then
+                                'log de "inchangé lastetat"
+                                _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceINT", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé lastetat " & _ValueLast.ToString & ")")
                             Else
-                                '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
-                                If _LastEtat And tmp = _ValueLast Then
-                                    'log de "inchangé lastetat"
-                                    _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceINT", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé lastetat " & _ValueLast.ToString & ")")
+                                'on vérifie que la valeur a changé de plus de precision sinon inchangé
+                                If ((tmp + _Precision) >= _Value) And ((tmp - _Precision) <= _Value) Then
+                                    'log de "inchangé précision"
+                                    _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DEVICE, "DeviceINT", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé precision " & _Value.ToString & "+-" & _Precision.ToString & ")")
                                 Else
-                                    'on vérifie que la valeur a changé de plus de precision sinon inchangé
-                                    If ((tmp + _Precision) >= _Value) And ((tmp - _Precision) <= _Value) Then
-                                        'log de "inchangé précision"
-                                        _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DEVICE, "DeviceINT", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé precision " & _Value.ToString & "+-" & _Precision.ToString & ")")
-                                    Else
-                                        'enregistre la nouvelle valeur
-                                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceINT Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString)
-                                        _ValueLast = _Value 'on garde l'ancienne value en memoire
-                                        _Value = tmp
-                                        RaiseEvent DeviceChanged(Me, "Value", _Value)
-                                    End If
+                                    'enregistre la nouvelle valeur
+                                    _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceINT Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString)
+                                    _ValueLast = _Value 'on garde l'ancienne value en memoire
+                                    _Value = tmp
+                                    RaiseEvent DeviceChanged(Me, "Value", _Value)
                                 End If
                             End If
                         End If
@@ -887,7 +886,7 @@ Namespace HoMIDom
 
             Public Overridable Sub Read()
                 If _Enable = False Then Exit Sub
-                If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
+                If Driver.IsConnect() Then Driver.Read(Me)
             End Sub
 
             Public Property Value() As String
@@ -925,13 +924,14 @@ Namespace HoMIDom
                                     _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceSTR Value", _Name & " : " & _Adresse1 & " : " & tmp)
                                     _ValueLast = _Value 'on garde l'ancienne value en memoire
                                     _Value = tmp
-                                    If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                                    'If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
                                 End If
                             End If
                             'Else
                             ''log de l'info de config
                             '_Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceSTR Value", _Name & " : " & _Adresse1 & " : " & tmp)
                             'End If
+                            '
                         End If
                     Catch ex As Exception
                         _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceSTR Value", "Exception : " & ex.Message)
@@ -1721,8 +1721,22 @@ Namespace HoMIDom
             End Property
 
             Public Sub Read()
-                If _Enable = False Then Exit Sub
-                If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
+                If _Enable = False Then
+                    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "le driver n'est pas activé pour le device " & Me.Name)
+                    Exit Sub
+                End If
+
+                If Driver.IsConnect Then
+                    ' If _Server.Etat_server Then
+                    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "TEST EFFECTUE") '1234
+                    Driver.Read(Me)
+                    'Else
+                    '   _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "Le serveur n'est pas dans le bon état")
+                    'End If
+                Else
+                _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "le driver n'est pas connecté pour le device" & Me.Name)
+                End If
+
             End Sub
 
             'Contien l'avant derniere valeur
