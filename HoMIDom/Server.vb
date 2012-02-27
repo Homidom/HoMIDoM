@@ -55,7 +55,7 @@ Namespace HoMIDom
         <NonSerialized()> Private Shared _ListExtensionAudio As New List(Of Audio.ExtensionAudio) 'Liste des extensions audio
         <NonSerialized()> Private Shared _ListRepertoireAudio As New List(Of Audio.RepertoireAudio) 'Liste des répertoires audio
         <NonSerialized()> Private _ListTagAudio As New List(Of Audio.FilePlayList) ' Liste des tags des fichiers audio 
-        <NonSerialized()> Public Etat_server As Boolean = False 'etat du serveur : true = démarré
+        <NonSerialized()> Public Shared Etat_server As Boolean 'etat du serveur : true = démarré
         <NonSerialized()> Dim fsw As FileSystemWatcher
         <NonSerialized()> Dim _MaxMonthLog As Integer = 2
         <NonSerialized()> Private Shared _TypeLogEnable As New List(Of Boolean) 'True si on doit pas prendre en compte le type de log
@@ -5629,9 +5629,10 @@ Namespace HoMIDom
                         End If
                     Else
                         CallByName(x, Action.Nom, CallType.Method)
-                        Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand effectué: " & x.Name & " Command: " & Action.Nom)
+                        Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand effectué: " & x.Name & " Command: " & Action.Nom & " Aucun paramètre")
                     End If
-
+                Else
+                    Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand non effectué car le device est null: " & x.Name & " Command: " & Action.Nom)
                 End If
             Catch ex As Exception
                 Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "Erreur lors du traitemant du Sub ExecuteDeviceCommand: " & ex.ToString)
