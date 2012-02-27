@@ -522,22 +522,47 @@ Imports System.Xml
             If Objet.Type = "APPAREIL" Then
                 Select Case UCase(Command)
                     Case "ON"
-                        If Trim(UCase(Objet.modele)) = "IPX800" Then
-                            Dim idx As Integer = CInt(Objet.Adresse1)
-                            If idx < 0 Or idx > 7 Then
-                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 7 pour une sortie")
-                                Exit Sub
-                            End If
-                            Dim relais As Integer = idx
-                            Dim url As String = "http://" & Objet.Adresse2 & "/preset.htm?led" & relais & "=1"
-                            SEND_IPX800(url)
-                        End If
+                        Select Case Trim(UCase(Objet.modele))
+                            Case "IPX800"
+                                Dim idx As Integer = CInt(Objet.Adresse1)
+                                If idx < 0 Or idx > 7 Then
+                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 7 pour une sortie")
+                                    Exit Sub
+                                End If
+                                Dim relais As Integer = idx
+                                Dim url As String = "http://" & Objet.Adresse2 & "/preset.htm?led" & relais & "=1"
+                                SEND_IPX800(url)
+                            Case "ARDUINO"
+                                Dim idx As Integer = CInt(Objet.Adresse1)
+                                If idx < 1 Or idx > 4 Then
+                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et pour une sortie")
+                                    Exit Sub
+                                End If
+                                Dim relais As Integer = idx
+                                Dim url As String = "http://" & Objet.Adresse2 & "/?L=" & relais
+                                SEND_ARDUINO(url)
+                        End Select
                     Case "OFF"
-                        If Trim(UCase(Objet.modele)) = "IPX800" Then
-                            Dim relais As Integer = CInt(Objet.Adresse1)
-                            Dim url As String = "http://" & Objet.Adresse2 & "/preset.htm?led" & relais & "=0"
-                            SEND_IPX800(url)
-                        End If
+                        Select Case Trim(UCase(Objet.modele))
+                            Case "IPX800"
+                                Dim idx As Integer = CInt(Objet.Adresse1)
+                                If idx < 0 Or idx > 7 Then
+                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 7 pour une sortie")
+                                    Exit Sub
+                                End If
+                                Dim relais As Integer = idx
+                                Dim url As String = "http://" & Objet.Adresse2 & "/preset.htm?led" & relais & "=0"
+                                SEND_IPX800(url)
+                            Case "ARDUINO"
+                                Dim idx As Integer = CInt(Objet.Adresse1)
+                                If idx < 1 Or idx > 4 Then
+                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et pour une sortie")
+                                    Exit Sub
+                                End If
+                                Dim relais As Integer = idx
+                                Dim url As String = "http://" & Objet.Adresse2 & "/?L=" & relais
+                                SEND_ARDUINO(url)
+                        End Select
                 End Select
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: le type du device " & Objet.Type & " n'est pas reconnu pour ce driver")
@@ -765,5 +790,19 @@ Imports System.Xml
             Return Nothing
         End Try
     End Function
+
+    Public Sub SEND_ARDUINO(ByVal Command As String)
+        Try
+            Dim reader As StreamReader = Nothing
+            Dim str As String = ""
+            Dim request As WebRequest = WebRequest.Create(Command)
+            Dim response As WebResponse = request.GetResponse()
+            reader = New StreamReader(response.GetResponseStream())
+            str = reader.ReadToEnd
+            reader.Close()
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " SEND_ARDUINO", ex.Message)
+        End Try
+    End Sub
 #End Region
 End Class
