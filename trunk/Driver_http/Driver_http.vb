@@ -480,6 +480,17 @@ Imports System.Xml
                         Dim elmt As String = "led" & idx
                         Objet.Value = GET_IPX800(url, elmt)
                     End If
+                Case "GENERIQUEVALUE"
+                    If Trim(UCase(Objet.Modele)) = "IPX800" Then
+                        Dim idx As Integer = CInt(Objet.Adresse1)
+                        If idx < 0 Or idx > 3 Then
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 3 pour une entrée analogique")
+                            Exit Sub
+                        End If
+                        Dim url As String = "http://" & Objet.Adresse2
+                        Dim elmt As String = "analog" & idx
+                        Objet.Value = GET_IPX800(url, elmt)
+                    End If
                 Case Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le Device n'est pas reconnu pour ce type " & Objet.Type)
                     Exit Sub
