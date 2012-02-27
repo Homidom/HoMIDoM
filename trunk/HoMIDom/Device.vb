@@ -441,7 +441,7 @@ Namespace HoMIDom
                         'si timer déjà lancé, on l'arrete
                         If MyTimer.Enabled Then MyTimer.Stop()
                         'si le serveur n'a pas fini de démarrer, on décale le lancement du timer pour eviter les conflits
-                        If Not _Server.Etat_server Then System.Threading.Thread.Sleep(2000)
+                        If Not Server.Etat_server Then System.Threading.Thread.Sleep(2000)
                         MyTimer.Interval = _Refresh
                         MyTimer.Start()
                     Else
@@ -667,7 +667,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As Boolean)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not _Server.Etat_server Then
+                        If Not Server.Etat_server Then
                             _Value = tmp
                             _ValueLast = tmp
                         Else
@@ -810,7 +810,7 @@ Namespace HoMIDom
                     '    If tmp > 100 Then tmp = 100
                     '    _ValueLast = _Value 'on garde l'ancienne value en memoire
                     '    _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
-                    If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                    If Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
 
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
@@ -906,7 +906,7 @@ Namespace HoMIDom
 
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not _Server.Etat_server Then
+                        If Not Server.Etat_server Then
                             _ValueLast = tmp
                             _Value = tmp
                         Else
@@ -1727,14 +1727,14 @@ Namespace HoMIDom
                 End If
 
                 If Driver.IsConnect Then
-                    ' If _Server.Etat_server Then
-                    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "TEST EFFECTUE") '1234
-                    Driver.Read(Me)
-                    'Else
-                    '   _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "Le serveur n'est pas dans le bon état")
-                    'End If
+                    If Server.Etat_server Then
+                        _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "TEST EFFECTUE") '1234
+                        Driver.Read(Me)
+                    Else
+                        _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "Le serveur n'est pas dans le bon état")
+                    End If
                 Else
-                _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "le driver n'est pas connecté pour le device" & Me.Name)
+                    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "le driver n'est pas connecté pour le device" & Me.Name)
                 End If
 
             End Sub
@@ -1756,7 +1756,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not _Server.Etat_server Then
+                        If Not Server.Etat_server Then
                             _Value = tmp
                             _ValueLast = tmp
                         Else
@@ -1784,7 +1784,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not _Server.Etat_server Then
+                        If Not Server.Etat_server Then
                             _ConditionActuel = tmp
                         Else
                             If _ConditionActuel <> tmp Then
@@ -1808,7 +1808,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not _Server.Etat_server Then
+                        If Not Server.Etat_server Then
                             _TempActuel = tmp
                         Else
                             If _TempActuel <> tmp Then
@@ -1832,7 +1832,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not _Server.Etat_server Then
+                        If Not Server.Etat_server Then
                             _HumActuel = tmp
                         Else
                             If _HumActuel <> tmp Then
@@ -1865,7 +1865,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not _Server.Etat_server Then
+                        If Not Server.Etat_server Then
                             _VentActuel = tmp
                         Else
                             If _VentActuel <> tmp Then
@@ -1889,7 +1889,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not _Server.Etat_server Then
+                        If Not Server.Etat_server Then
                             _JourToday = tmp
                         Else
                             If _JourToday <> tmp Then
@@ -1913,7 +1913,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not _Server.Etat_server Then
+                        If Not Server.Etat_server Then
                             _MinToday = tmp
                         Else
                             If _MinToday <> tmp Then
@@ -1937,7 +1937,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not _Server.Etat_server Then
+                        If Not Server.Etat_server Then
                             _MaxToday = tmp
                         Else
                             If _MaxToday <> tmp Then
@@ -1970,7 +1970,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not _Server.Etat_server Then
+                        If Not Server.Etat_server Then
                             _ConditionToday = tmp
                         Else
                             If _ConditionToday <> tmp Then
