@@ -441,7 +441,7 @@ Namespace HoMIDom
                         'si timer déjà lancé, on l'arrete
                         If MyTimer.Enabled Then MyTimer.Stop()
                         'si le serveur n'a pas fini de démarrer, on décale le lancement du timer pour eviter les conflits
-                        If Not Server.Etat_server Then System.Threading.Thread.Sleep(2000)
+                        If Not Server.Etat_server Then System.Threading.Thread.Sleep(1500)
                         MyTimer.Interval = _Refresh
                         MyTimer.Start()
                     Else
@@ -1721,21 +1721,24 @@ Namespace HoMIDom
             End Property
 
             Public Sub Read()
-                If _Enable = False Then
-                    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "le driver n'est pas activé pour le device " & Me.Name)
-                    Exit Sub
-                End If
 
-                If Driver.IsConnect Then
-                    If Server.Etat_server Then
-                        _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "TEST EFFECTUE") '1234
-                        Driver.Read(Me)
-                    Else
-                        _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "Le serveur n'est pas dans le bon état")
-                    End If
-                Else
-                    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "le driver n'est pas connecté pour le device" & Me.Name)
-                End If
+                If _Enable = False Then Exit Sub
+                If Driver.IsConnect() And Server.Etat_server Then Driver.Read(Me)
+
+                'If _Enable = False Then
+                '   _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "le driver n'est pas activé pour le device " & Me.Name)
+                '   Exit Sub
+                'End If
+                'If Driver.IsConnect Then
+                '    If Server.Etat_server Then
+                '        _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "TEST EFFECTUE") '1234
+                '        Driver.Read(Me)
+                '    Else
+                '        _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "Le serveur n'est pas dans le bon état")
+                '    End If
+                'Else
+                '    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "le driver n'est pas connecté pour le device" & Me.Name)
+                'End If
 
             End Sub
 
