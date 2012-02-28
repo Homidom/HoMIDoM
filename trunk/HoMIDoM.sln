@@ -57,6 +57,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_RFXtrx", "Driver_RFX
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_http", "Driver_http\Driver_http.vbproj", "{3F2AFCD6-F1E0-4DE0-AD67-1087FBF90FE4}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Zwave", "Driver_Zwave\Driver_Zwave.vbproj", "{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -272,6 +274,16 @@ Global
 		{3F2AFCD6-F1E0-4DE0-AD67-1087FBF90FE4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3F2AFCD6-F1E0-4DE0-AD67-1087FBF90FE4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3F2AFCD6-F1E0-4DE0-AD67-1087FBF90FE4}.Release|x86.ActiveCfg = Release|Any CPU
+		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
