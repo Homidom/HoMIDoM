@@ -249,7 +249,7 @@
                                     <Border x:Name="grid">
                                         <ContentPresenter>
                                             <ContentPresenter.Content>
-                                                <TextBlock Margin="1,2,1,1" FontSize="11" Text="{TemplateBinding Content}" Foreground="white"/>
+                                                <TextBlock Margin="1,0,1,0" FontSize="11" Text="{TemplateBinding Content}" Foreground="white"/>
                                             </ContentPresenter.Content>
                                         </ContentPresenter>
                                     </Border>
@@ -263,7 +263,7 @@
                                         <Border Name="Border" Margin="1,1,1,0" Background="black" BorderBrush="gray" BorderThickness="2,2,2,0" CornerRadius="5,5,0,0" >
                                             <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="0" RecognizesAccessKey="True">
                                                 <ContentPresenter.LayoutTransform>
-                                                    <RotateTransform Angle="285" />
+                                                    <RotateTransform Angle="287" />
                                                 </ContentPresenter.LayoutTransform>
                                             </ContentPresenter>
                                         </Border>

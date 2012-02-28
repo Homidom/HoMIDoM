@@ -251,11 +251,11 @@ Imports System.IO.Ports
                 If Command = "" Then
                     Return False
                 Else
-                    'Write(deviceobject, Command, Param(0), Param(1))
-                    Select Case UCase(Command)
-                        Case ""
-                        Case Else
-                    End Select
+                    Write(MyDevice, Command, Param(0), Param(1))
+                    'Select Case UCase(Command)
+                    '    Case ""
+                    '    Case Else
+                    'End Select
                     Return True
                 End If
             Else
