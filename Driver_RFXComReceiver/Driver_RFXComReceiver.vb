@@ -3022,7 +3022,7 @@ Imports System.Globalization
             If _DEBUG Then WriteLog("DBG: WriteBattery : receive from " & adresse)
 
             'on ne traite rien pendant les 10 premieres secondes
-            If DateTime.Now > DateAdd(DateInterval.Second, 10, dateheurelancement) Then
+            If DateTime.Now < DateAdd(DateInterval.Second, 10, dateheurelancement) Then
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
@@ -3054,7 +3054,7 @@ Imports System.Globalization
             If _DEBUG Then WriteLog("DBG: WriteRetour : receive from " & adresse & " (" & type & ") -> " & valeur)
 
             'on ne traite rien pendant les 10 premieres secondes
-            If DateTime.Now > DateAdd(DateInterval.Second, 10, dateheurelancement) Then
+            If DateTime.Now < DateAdd(DateInterval.Second, 10, dateheurelancement) Then
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)

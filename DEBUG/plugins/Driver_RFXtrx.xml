@@ -107,9 +107,6 @@ Driver_RFXtrx
 </member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ProcessNewTCPData(System.Byte[],System.Int32,System.Int32)">
 	<summary>Traite les données IP recu</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.tmrRead_Elapsed(System.Object,System.EventArgs)">
-	<summary>xxx</summary>
-	<remarks></remarks>
 </member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ProcessReceivedChar(System.Byte)">
 	<summary>Traite chaque byte reçu</summary>
 	<param name="sComChar">Byte recu</param>

@@ -880,7 +880,7 @@ Imports System.Media
     'liste des variables de base
     Dim WithEvents RS232Port As New SerialPort
     Private gRecComPortEnabled As Boolean = False
-    Private Resettimer As Integer = 0
+    'Private Resettimer As Integer = 0
     Private trxType As Integer = 0
 
     Private recbuf(40), recbytes As Byte
@@ -899,7 +899,7 @@ Imports System.Media
 
     Private port_name As String = ""
     Private dateheurelancement As DateTime
-    Private WithEvents tmrRead As New System.Timers.Timer
+    'Private WithEvents tmrRead As New System.Timers.Timer
 
     'old
     'Private WithEvents tmrRead As New System.Timers.Timer
@@ -1556,7 +1556,7 @@ Imports System.Media
         End Try
     End Function
 
-    Public Sub SendCommand(ByVal command As Byte, ByRef message As String)
+    Private Sub SendCommand(ByVal command As Byte, ByRef message As String)
         Dim kar(ICMD.size) As Byte
         kar(ICMD.packetlength) = ICMD.size
         kar(ICMD.packettype) = ICMD.pType
@@ -1720,35 +1720,35 @@ Imports System.Media
         End Try
     End Sub
 
-    ''' <summary>xxx</summary>
-    ''' <remarks></remarks>
-    Private Sub tmrRead_Elapsed(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmrRead.Elapsed
-        Try
-            If Resettimer <= 0 Then
-                If recbytes <> 0 Then 'one or more bytes received
-                    maxticks += 1
-                    If maxticks > 3 Then 'flush buffer due to 400ms timeout
-                        maxticks = 0
-                        recbytes = 0
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx", "Buffer flushed due to timeout")
-                    End If
-                End If
-            Else
-                Resettimer = Resettimer - 1    ' decrement resettimer
-                If Resettimer = 0 Then
-                    If gRecComPortEnabled Then
-                        RS232Port.DiscardInBuffer()
-                    Else
-                        'stream.Flush() 'flush not yet supported
-                    End If
-                    SendCommand(ICMD.STATUS, "Get Status:")
-                    maxticks = 0
-                End If
-            End If
-        Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx tmrRead_Elapsed", ex.Message)
-        End Try
-    End Sub
+    ' ''' <summary>xxx</summary>
+    ' ''' <remarks></remarks>
+    'Private Sub tmrRead_Elapsed(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmrRead.Elapsed
+    '    Try
+    '        If Resettimer <= 0 Then
+    '            If recbytes <> 0 Then 'one or more bytes received
+    '                maxticks += 1
+    '                If maxticks > 3 Then 'flush buffer due to 400ms timeout
+    '                    maxticks = 0
+    '                    recbytes = 0
+    '                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx", "Buffer flushed due to timeout")
+    '                End If
+    '            End If
+    '        Else
+    '            Resettimer = Resettimer - 1    ' decrement resettimer
+    '            If Resettimer = 0 Then
+    '                If gRecComPortEnabled Then
+    '                    RS232Port.DiscardInBuffer()
+    '                Else
+    '                    'stream.Flush() 'flush not yet supported
+    '                End If
+    '                SendCommand(ICMD.STATUS, "Get Status:")
+    '                maxticks = 0
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx tmrRead_Elapsed", ex.Message)
+    '    End Try
+    'End Sub
 
     ''' <summary>Traite chaque byte reçu</summary>
     ''' <param name="sComChar">Byte recu</param>
@@ -1790,7 +1790,7 @@ Imports System.Media
 #End Region
 
 #Region "Decode messages"
-    Sub decode_messages()
+    Private Sub decode_messages()
         Try
             Select Case recbuf(1)
                 Case IRESPONSE.pType : decode_InterfaceMessage()
@@ -3478,7 +3478,7 @@ Imports System.Media
             If _DEBUG Then WriteLog("DBG: WriteBattery : receive from " & adresse)
 
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
-            If DateTime.Now > DateAdd(DateInterval.Second, 10, dateheurelancement) Then Exit Sub 'on ne traite rien pendant les 10 premieres secondes
+            If DateTime.Now < DateAdd(DateInterval.Second, 10, dateheurelancement) Then Exit Sub 'on ne traite rien pendant les 10 premieres secondes
 
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
@@ -3488,13 +3488,13 @@ Imports System.Media
                 WriteLog(listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
             Else
                 'device pas trouvé
-                WriteLog("ERR: Device non trouvé : RFXCOM " & adresse & ": Battery Empty")
+                WriteLog("ERR: Device non trouvé : " & adresse & ": Battery Empty")
 
                 'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
 
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER WriteBattery", ex.Message & " --> " & adresse)
+            WriteLog("ERR: WriteBattery Exception : " & ex.Message & " --> " & adresse)
         End Try
     End Sub
 
@@ -3542,7 +3542,7 @@ Imports System.Media
             If _DEBUG Then WriteLog("DBG: WriteRetour : receive from " & adresse & " (" & type & ") -> " & valeur)
 
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
-            If DateTime.Now > DateAdd(DateInterval.Second, 10, dateheurelancement) Then Exit Sub 'on ne traite rien pendant les 10 premieres secondes
+            If DateTime.Now < DateAdd(DateInterval.Second, 10, dateheurelancement) Then Exit Sub 'on ne traite rien pendant les 10 premieres secondes
 
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
@@ -3569,6 +3569,8 @@ Imports System.Media
             ElseIf (listedevices.Count > 1) Then
                 WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
             Else
+
+                WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
 
                 'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
 
