@@ -34,8 +34,9 @@ Partial Public Class uTestDevice
                         Dim txt As TextBox = stk.Children.Item(1)
                         Dim param1 As New HoMIDom.HoMIDom.DeviceAction.Parametre
                         param1.Value = txt.Text
-                        x.Parametres.Add(param)
+                        x.Parametres.Add(param1)
                     Next
+
                     myService.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
                 End If
             End If
