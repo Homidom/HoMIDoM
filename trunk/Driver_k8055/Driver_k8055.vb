@@ -520,7 +520,12 @@ Imports HoMIDom.HoMIDom.Device
                     If Parametre1 IsNot Nothing Then
                         If IsNumeric(Parametre1) Then
                             OutputAnalogChannel(adr, Parametre1)
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "K8055 Write", "Commande VALEUR, valeur envoyée: " & Parametre1 & " sur l'adresse: " & adr)
+                        Else
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "K8055 Write", "Erreur: Commande VALEUR, le paramètre n'est pas numérique: " & Parametre1)
                         End If
+                    Else
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "K8055 Write", "Erreur: Commande VALEUR, le paramètre est vide")
                     End If
                 End If
             End If

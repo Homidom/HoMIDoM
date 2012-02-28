@@ -232,21 +232,26 @@ Public Class Driver_Arduino
                     Dim Val As Integer = ArduinoVB.DigitalRead(CInt(Objet.Adresse1))
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
                     Objet.Value = Val
-                    'traitement(Val, Objet.Adresse1, _type)
                 Case "APPAREIL"
                     _type = 1
                     'Aller lire une pin digital via DigitalRead(Pin as integer)
                     Dim Val As Integer = ArduinoVB.DigitalRead(CInt(Objet.Adresse1))
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
                     Objet.Value = Val
-                    'traitement(Val, Objet.Adresse1, _type)
                 Case "GENERIQUEVALUE"
                     _type = 2
                     'Aller lire une pin analogique via AnalogRead(Pin as integer)
+                    If IsNumeric(Objet.Adresse1) = False Then
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Impossible d'effectuer un Read car l'adresse du device GENERIQUEVALUE n'est pas un nombre (0-5)")
+                        Exit Sub
+                    End If
+                    If CInt(Objet.Adresse1) < 0 Or CInt(Objet.Adresse1) > 5 Then
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Impossible d'effectuer un Read car l'adresse du device GENERIQUEVALUE doit être comprise entre 0 et 5")
+                        Exit Sub
+                    End If
                     Dim Val As Integer = ArduinoVB.AnalogRead(CInt(Objet.Adresse1))
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & Objet.Adresse1 & " Valeur:" & Val)
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Device:" & Objet.Name & " Adresse:" & CInt(Objet.Adresse1) & " Valeur:" & Val)
                     Objet.Value = Val
-                    'traitement(Val, Objet.Adresse1, _type)
                 Case Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Le type de device " & Objet.Type & " n'est pas supporté pas ce driver")
                     Exit Sub
