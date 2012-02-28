@@ -337,7 +337,7 @@ Imports HoMIDom.HoMIDom.Device
                     'Write(deviceobject, Command, Param(0), Param(1))
                     Select Case UCase(Command)
                         Case "VALEUR"
-                            Write(MyDevice, Command, Param(0), Param(1))
+                            Write(MyDevice, Command, Param(1), Param(2))
                         Case Else
                     End Select
                     Return True
