@@ -339,7 +339,7 @@ Imports HoMIDom.HoMIDom.Device
                             For i As Integer = 0 To Param.Length - 1
                                 _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "Param (" & i & ") : " & Param(i))
                             Next
-                            Write(MyDevice, Command, Param(1), Param(2))
+                            Write(MyDevice, Command, Param(0), Param(1))
                         Case Else
                     End Select
                     Return True
