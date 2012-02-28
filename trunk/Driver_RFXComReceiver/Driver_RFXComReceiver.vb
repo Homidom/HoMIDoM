@@ -63,6 +63,7 @@ Imports System.Globalization
 
     'param avancé
     Dim _PortBaudRate As Long = 4800
+    Dim _DEBUG As Boolean = False
 #End Region
 
 #Region "Variables Internes"
@@ -349,6 +350,7 @@ Imports System.Globalization
             'récupération des paramétres avancés
             Try
                 _PortBaudRate = _Parametres.Item(0).Valeur
+                _DEBUG = _Parametres.Item(1).Valeur
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
             End Try
@@ -563,6 +565,7 @@ Imports System.Globalization
 
             'Parametres avancés
             add_paramavance("Port BaudRate", "vitesse du port 4800 ou 38400", 4800)
+            add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
@@ -3016,10 +3019,10 @@ Imports System.Globalization
             'Dim tabletmp() As DataRow
 
             'log tous les paquets en mode debug
-            WriteLog("DBG: WriteBattery : receive from " & adresse)
+            If _DEBUG Then WriteLog("DBG: WriteBattery : receive from " & adresse)
 
-            'on ne traite rien pendant les 6 premieres secondes
-            If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
+            'on ne traite rien pendant les 10 premieres secondes
+            If DateTime.Now > DateAdd(DateInterval.Second, 10, dateheurelancement) Then
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
@@ -3048,10 +3051,10 @@ Imports System.Globalization
             My.Application.ChangeCulture("en-US")
 
             'log tous les paquets en mode debug
-            'WriteLog("DBG: WriteRetour receive from " & adresse & " (" & type & ") -> " & valeur)
+            If _DEBUG Then WriteLog("DBG: WriteRetour : receive from " & adresse & " (" & type & ") -> " & valeur)
 
-            'on ne traite rien pendant les 15 premieres secondes
-            If DateTime.Now > DateAdd(DateInterval.Second, 15, dateheurelancement) Then
+            'on ne traite rien pendant les 10 premieres secondes
+            If DateTime.Now > DateAdd(DateInterval.Second, 10, dateheurelancement) Then
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)

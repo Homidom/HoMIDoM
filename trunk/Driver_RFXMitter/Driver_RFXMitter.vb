@@ -62,7 +62,8 @@ Imports System.Globalization
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
 
     'Ajoutés dans les ppt avancés dans New()
-    Dim rfxsynchro As Boolean = True 'synchronisation avec le receiver
+    Dim _rfxsynchro As Boolean = True 'synchronisation avec le receiver
+    Dim _DEBUG As Boolean = False
 #End Region
 
 #Region "Variables Internes"
@@ -417,7 +418,8 @@ Imports System.Globalization
 
         'récupération des paramétres avancés
         Try
-            rfxsynchro = _Parametres.Item(0).Valeur
+            _rfxsynchro = _Parametres.Item(0).Valeur
+            _DEBUG = _Parametres.Item(1).Valeur
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXmitter Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
         End Try
@@ -619,6 +621,7 @@ Imports System.Globalization
         Try
             'Parametres avancés
             add_paramavance("synchro", "Synchronisation avec le receiver (True/False)", True)
+            add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
@@ -745,7 +748,7 @@ Imports System.Globalization
             ecrire(kar1)
 
             'configuration de la synchronisation avec le receiver (param avancé)
-            If rfxsynchro Then
+            If _rfxsynchro Then
                 Dim kar() As Byte = {&HF0, MODERBRB48, &HF0, MODERBRB48}
                 protocolsynchro = MODERBRB48
                 ecrire(kar)
@@ -1309,42 +1312,39 @@ Imports System.Globalization
 
     Private Sub WriteRetour(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
         Try
-            If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
-
             'Forcer le . 
             Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
             My.Application.ChangeCulture("en-US")
 
             'log tous les paquets en mode debug
-            'WriteLog("DBG: WriteRetour receive from " & adresse & " (" & type & ") -> " & valeur)
+            If _DEBUG Then WriteLog("DBG: WriteRetour receive from " & adresse & " (" & type & ") -> " & valeur)
 
-            'on ne traite rien pendant les 6 premieres secondes
-            If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
-                'Recherche si un device affecté
-                Dim listedevices As New ArrayList
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
+            If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
+            If DateTime.Now > DateAdd(DateInterval.Second, 10, dateheurelancement) Then Exit Sub 'on ne traite rien pendant les 10 premieres secondes
+
+            'Recherche si un device affecté
+            Dim listedevices As New ArrayList
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
+            If (listedevices.Count = 1) Then
+                'un device trouvé on maj la value
+                listedevices.Item(0).Value = valeur
+            ElseIf (listedevices.Count > 1) Then
+                WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
+            Else
+                'on vérifie si le device est configuré en RFXReceiver
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, "3B808B6C-25B3-11E0-A6DB-36D2DED72085", True)
                 If (listedevices.Count = 1) Then
                     'un device trouvé on maj la value
                     listedevices.Item(0).Value = valeur
-                ElseIf (listedevices.Count > 1) Then
-                    WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
                 Else
-                    'on vérifie si le device est configuré en RFXReceiver
-                    listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, "3B808B6C-25B3-11E0-A6DB-36D2DED72085", True)
-                    If (listedevices.Count = 1) Then
-                        'un device trouvé on maj la value
-                        listedevices.Item(0).Value = valeur
-                    Else
-                        WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
-                    End If
-
-
-                    'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
-
-
+                    WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
                 End If
-            End If
 
+
+                'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+
+
+            End If
         Catch ex As Exception
             WriteLog("ERR: Writeretour Exception : " & ex.Message)
         End Try
