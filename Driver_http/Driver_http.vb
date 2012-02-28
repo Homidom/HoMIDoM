@@ -796,6 +796,7 @@ Imports System.Xml
             Dim reader As StreamReader = Nothing
             Dim str As String = ""
             Dim request As WebRequest = WebRequest.Create(Command)
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " SEND_ARDUINO", "Commande envoyée: " & Command)
             Dim response As WebResponse = request.GetResponse()
             reader = New StreamReader(response.GetResponseStream())
             str = reader.ReadToEnd
