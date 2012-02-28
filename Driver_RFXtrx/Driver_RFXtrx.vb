@@ -64,8 +64,9 @@ Imports System.Media
     Dim _IdSrv As String
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
 
-    'Ajoutés dans les ppt avancés dans New()
-    Dim rfxsynchro As Boolean = True 'synchronisation avec le receiver
+    'param avancé
+    Dim _DEBUG As Boolean = False
+
 #End Region
 
 #Region "Variables Internes"
@@ -1137,6 +1138,13 @@ Imports System.Media
         '_IsConnect = True
         Dim retour As String
 
+        'récupération des paramétres avancés
+        Try
+            _DEBUG = _Parametres.Item(0).Valeur
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+        End Try
+
         'ouverture du port suivant le Port Com ou IP
         Try
             If _Com <> "" Then
@@ -1324,6 +1332,7 @@ Imports System.Media
         Try
             'Parametres avancés
             'add_paramavance("synchro", "Synchronisation avec le receiver (True/False)", True)
+            add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
@@ -1418,7 +1427,6 @@ Imports System.Media
                         RS232Port.DiscardInBuffer()
                     End If
                     gRecComPortEnabled = True
-                    dateheurelancement = DateTime.Now
                     Return ("Port " & port_name & " ouvert")
                 End If
             Else
@@ -1454,8 +1462,11 @@ Imports System.Media
         End If
         recbuf(0) = 0
         maxticks = 0
-        tmrRead.Enabled = True
 
+        ''tmrRead.Enabled = True
+        'If tmrRead.Enabled Then MyTimer.Stop()
+        'tmrRead.Interval = 100
+        'tmrRead.Start()
     End Function
 
     ''' <summary>Configurer le RFXtrx</summary>
@@ -1465,7 +1476,8 @@ Imports System.Media
         Try
             'get firmware version
             SendCommand(ICMD.RESET, "Reset receiver/transceiver:")
-            Resettimer = 5  '5 * 100ms = ignore data for 0.5 seconds
+            'Resettimer = 5  '5 * 100ms = ignore data for 0.5 seconds
+            dateheurelancement = DateTime.Now
 
             Return "Configuration OK"
         Catch ex As Exception
@@ -1481,12 +1493,14 @@ Imports System.Media
             If _IsConnect Then
                 'fermeture des ports
                 _IsConnect = False
+                'If tmrRead.Enabled Then tmrRead.Stop()
                 If tcp Then
                     client.Close()
                     stream.Close()
                     Return ("Port IP fermé")
                 Else
                     'suppression de l'attente de données à lire
+                    gRecComPortEnabled = False
                     RemoveHandler RS232Port.DataReceived, AddressOf DataReceived
                     RemoveHandler RS232Port.ErrorReceived, AddressOf ReadErrorEvent
                     If (Not (RS232Port Is Nothing)) Then ' The COM port exists.
@@ -1514,7 +1528,6 @@ Imports System.Media
                     Return ("Port " & port_name & " n'existe pas")
                 End If
                 tcp = False
-                tmrRead.Enabled = False
             End If
         Catch ex As UnauthorizedAccessException
             Return ("ERR: Port " & port_name & " IGNORE") ' The port may have been removed. Ignore.
@@ -1711,7 +1724,7 @@ Imports System.Media
     ''' <remarks></remarks>
     Private Sub tmrRead_Elapsed(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmrRead.Elapsed
         Try
-            If Resettimer = 0 Then
+            If Resettimer <= 0 Then
                 If recbytes <> 0 Then 'one or more bytes received
                     maxticks += 1
                     If maxticks > 3 Then 'flush buffer due to 400ms timeout
@@ -1742,9 +1755,10 @@ Imports System.Media
     ''' <remarks></remarks>
     Private Sub ProcessReceivedChar(ByVal sComChar As Byte)
         Try
-            If Resettimer <> 0 Then
-                Exit Sub 'ignore received characters after a reset cmd until resettimer = 0
-            End If
+            'If Resettimer <> 0 Then
+            '    Exit Sub 'ignore received characters after a reset cmd until resettimer = 0
+            'End If
+
             maxticks = 0    'reset receive timeout
 
             If recbytes = 0 Then    '1st char of a packet received
@@ -1817,7 +1831,7 @@ Imports System.Media
         End Try
     End Sub
 
-    Public Sub decode_InterfaceMessage()
+    Private Sub decode_InterfaceMessage()
         Try
             Dim messagelog As String = ""
             Select Case recbuf(IRESPONSE.subtype)
@@ -1902,7 +1916,7 @@ Imports System.Media
         End Try
     End Sub
     'non géré
-    Public Sub decode_RecXmitMessage()
+    Private Sub decode_RecXmitMessage()
         'Select Case recbuf(RXRESPONSE.subtype)
         '    Case RXRESPONSE.sTypeReceiverLockError
         '        WriteMessage("subtype           = Receiver lock error")
@@ -1931,7 +1945,7 @@ Imports System.Media
         'End Select
     End Sub
 
-    Public Sub decode_UNDECODED()
+    Private Sub decode_UNDECODED()
         Try
             Dim messagelog As String = ""
             messagelog = "UNDECODED "
@@ -1962,7 +1976,7 @@ Imports System.Media
         End Try
     End Sub
 
-    Public Sub decode_Lighting1()
+    Private Sub decode_Lighting1()
         Try
             Dim adresse, valeur As String
             Select Case recbuf(LIGHTING1.subtype)
@@ -2013,7 +2027,7 @@ Imports System.Media
         End Try
     End Sub
 
-    Public Sub decode_Lighting2()
+    Private Sub decode_Lighting2()
         Try
             Dim adresse, valeur As String
             Select Case recbuf(LIGHTING2.subtype)
@@ -2046,7 +2060,7 @@ Imports System.Media
         End Try
     End Sub
 
-    Public Sub decode_Lighting3()
+    Private Sub decode_Lighting3()
         Try
             Dim adresse, valeur As String
             Select Case recbuf(LIGHTING3.subtype)
@@ -2078,7 +2092,7 @@ Imports System.Media
         End Try
     End Sub
     'Not implemented
-    Public Sub decode_Lighting4()
+    Private Sub decode_Lighting4()
         Try
             'WriteMessage("Not implemented")
         Catch ex As Exception
@@ -2086,7 +2100,7 @@ Imports System.Media
         End Try
     End Sub
 
-    Public Sub decode_Lighting5()
+    Private Sub decode_Lighting5()
         Try
             Dim adresse, valeur As String
             Select Case recbuf(LIGHTING5.subtype)
@@ -2115,7 +2129,7 @@ Imports System.Media
         End Try
     End Sub
 
-    Public Sub decode_Lighting6()
+    Private Sub decode_Lighting6()
         Try
             Dim adresse, valeur As String
             Select Case recbuf(LIGHTING6.subtype)
@@ -2140,7 +2154,7 @@ Imports System.Media
         End Try
     End Sub
     'non géré
-    Public Sub decode_Security1()
+    Private Sub decode_Security1()
         'Select Case recbuf(SECURITY1.subtype)
         '    Case SECURITY1.SecX10
         '        WriteMessage("subtype       = X10 security")
@@ -2218,7 +2232,7 @@ Imports System.Media
         'WriteMessage("Signal level  = " & (recbuf(SECURITY1.rssi) >> 4).ToString)
     End Sub
     'non géré
-    Public Sub decode_Camera1()
+    Private Sub decode_Camera1()
         'Select Case recbuf(CAMERA1.subtype)
         '    Case CAMERA1.Ninja
         '        WriteMessage("subtype       = X10 Ninja/Robocam")
@@ -2267,7 +2281,7 @@ Imports System.Media
         'WriteMessage("Signal level  = " & (recbuf(CAMERA1.rssi) >> 4).ToString)
     End Sub
     'non géré
-    Public Sub decode_Remote()
+    Private Sub decode_Remote()
         'Select Case recbuf(REMOTE.subtype)
         '    Case REMOTE.ATI
         '        WriteMessage("subtype       = ATI Remote Wonder")
@@ -2838,7 +2852,7 @@ Imports System.Media
 
     End Sub
     'non géré
-    Public Sub decode_Thermostat1()
+    Private Sub decode_Thermostat1()
         'Select Case recbuf(THERMOSTAT1.subtype)
         '    Case THERMOSTAT1.Digimax
         '        WriteMessage("subtype       = Digimax")
@@ -2872,11 +2886,11 @@ Imports System.Media
         'WriteMessage("Signal level  = " & (recbuf(THERMOSTAT1.rssi) >> 4).ToString)
     End Sub
     'Not implemented
-    Public Sub decode_Thermostat2()
+    Private Sub decode_Thermostat2()
         'WriteMessage("Not implemented")
     End Sub
     'non géré
-    Public Sub decode_Thermostat3()
+    Private Sub decode_Thermostat3()
         'Select Case recbuf(THERMOSTAT3.subtype)
         '    Case THERMOSTAT3.MertikG6RH4T1
         '        WriteMessage("subtype       = Mertik G6R-H4T1")
@@ -2924,7 +2938,7 @@ Imports System.Media
         'WriteMessage("Signal level  = " & (recbuf(THERMOSTAT3.rssi) >> 4).ToString)
     End Sub
 
-    Public Sub decode_Temp()
+    Private Sub decode_Temp()
         'Select Case recbuf(TEMP.subtype)
         '    Case TEMP.TEMP1
         '        WriteMessage("subtype       = TEMP1 - THR128/138, THC138")
@@ -2952,7 +2966,7 @@ Imports System.Media
         If (recbuf(TEMP.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
     End Sub
 
-    Public Sub decode_Hum()
+    Private Sub decode_Hum()
         'Select Case recbuf(HUM.subtype)
         '    Case HUM.HUM1
         '        WriteMessage("subtype       = HUM1 - LaCrosse TX3")
@@ -2978,7 +2992,7 @@ Imports System.Media
         If (recbuf(HUM.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
     End Sub
 
-    Public Sub decode_TempHum()
+    Private Sub decode_TempHum()
         'Select Case recbuf(TEMP_HUM.subtype)
         '    Case TEMP_HUM.TH1
         '        WriteMessage("subtype       = TH1 - THGN122/123,/THGN132,THGR122/228/238/268")
@@ -3026,11 +3040,11 @@ Imports System.Media
         End If
     End Sub
     'Not implemented
-    Public Sub decode_Baro()
+    Private Sub decode_Baro()
         'WriteMessage("Not implemented")
     End Sub
     'non géré
-    Public Sub decode_TempHumBaro()
+    Private Sub decode_TempHumBaro()
         'Select Case recbuf(TEMP_HUM_BARO.subtype)
         '    Case TEMP_HUM_BARO.THB1
         '        WriteMessage("subtype       = THB1 - BTHR918")
@@ -3079,7 +3093,7 @@ Imports System.Media
         'End If
     End Sub
     'non géré
-    Public Sub decode_Rain()
+    Private Sub decode_Rain()
         'Select Case recbuf(RAIN.subtype)
         '    Case RAIN.RAIN1
         '        WriteMessage("subtype       = RAIN1 - RGR126/682/918")
@@ -3108,7 +3122,7 @@ Imports System.Media
         'End If
     End Sub
     'non géré
-    Public Sub decode_Wind()
+    Private Sub decode_Wind()
         'Select Case recbuf(WIND.subtype)
         '    Case WIND.WIND1
         '        WriteMessage("subtype       = WIND1 - WTGR800")
@@ -3173,7 +3187,7 @@ Imports System.Media
         'End If
     End Sub
     'non géré
-    Public Sub decode_UV()
+    Private Sub decode_UV()
         'Select Case recbuf(UV.subtype)
         '    Case UV.UV1
         '        WriteMessage("Subtype       = UV1 - UVN128, UV138")
@@ -3213,11 +3227,11 @@ Imports System.Media
         'End If
     End Sub
     'Not implemented
-    Public Sub decode_DateTime()
+    Private Sub decode_DateTime()
 
     End Sub
     'non géré
-    Public Sub decode_Current()
+    Private Sub decode_Current()
         'Select Case recbuf(CURRENT.subtype)
         '    Case CURRENT.ELEC1
         '        WriteMessage("subtype       = ELEC1 - OWL CM113, Electrisave, cent-a-meter")
@@ -3239,7 +3253,7 @@ Imports System.Media
         'End If
     End Sub
     'non géré
-    Public Sub decode_Energy()
+    Private Sub decode_Energy()
         'Select Case recbuf(ENERGY.subtype)
         '    Case ENERGY.ELEC2
         '        WriteMessage("subtype       = ELEC2 - OWL CM119, CM160")
@@ -3261,15 +3275,15 @@ Imports System.Media
         'End If
     End Sub
     'Not implemented
-    Public Sub decode_Gas()
+    Private Sub decode_Gas()
         'WriteMessage("Not implemented")
     End Sub
     'Not implemented
-    Public Sub decode_Water()
+    Private Sub decode_Water()
         'WriteMessage("Not implemented")
     End Sub
     'non géré
-    Public Sub decode_Weight()
+    Private Sub decode_Weight()
         'Select Case recbuf(WEIGHT.subtype)
         '    Case WEIGHT.WEIGHT1
         '        WriteMessage("subtype       = BWR102")
@@ -3284,7 +3298,7 @@ Imports System.Media
         'WriteMessage("Signal level  = " & (recbuf(WEIGHT.rssi) >> 4).ToString)
     End Sub
     'non géré
-    Public Sub decode_RFXSensor()
+    Private Sub decode_RFXSensor()
         'Select Case recbuf(RFXSENSOR.subtype)
         '    Case RFXSENSOR.Temp
         '        WriteMessage("subtype       = Temperature")
@@ -3336,12 +3350,12 @@ Imports System.Media
 
     End Sub
 
-    Public Sub decode_RFXMeter()
+    Private Sub decode_RFXMeter()
         Try
             Dim adresse, valeur As String
             Dim counter As Long
 
-            Select recbuf(RFXMETER.subtype)
+            Select Case recbuf(RFXMETER.subtype)
                 Case RFXMETER.Count
                     'WriteMessage("subtype       = RFXMeter counter")
                     'WriteMessage("Sequence nbr  = " & recbuf(RFXMETER.seqnbr).ToString)
@@ -3456,26 +3470,28 @@ Imports System.Media
 
     Private Sub WriteBattery(ByVal adresse As String)
         Try
-            'Dim tabletmp() As DataRow
+            'Forcer le . 
+            Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
+            My.Application.ChangeCulture("en-US")
 
             'log tous les paquets en mode debug
-            WriteLog("DBG: WriteBattery : receive from " & adresse)
+            If _DEBUG Then WriteLog("DBG: WriteBattery : receive from " & adresse)
 
-            'on ne traite rien pendant les 6 premieres secondes
-            If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
-                'Recherche si un device affecté
-                Dim listedevices As New ArrayList
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
-                If (listedevices.Count >= 1) Then
-                    'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
-                    WriteLog(listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
-                Else
-                    'device pas trouvé
-                    WriteLog("ERR: Device non trouvé : RFXCOM " & adresse & ": Battery Empty")
+            If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
+            If DateTime.Now > DateAdd(DateInterval.Second, 10, dateheurelancement) Then Exit Sub 'on ne traite rien pendant les 10 premieres secondes
 
-                    'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+            'Recherche si un device affecté
+            Dim listedevices As New ArrayList
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
+            If (listedevices.Count >= 1) Then
+                'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
+                WriteLog(listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
+            Else
+                'device pas trouvé
+                WriteLog("ERR: Device non trouvé : RFXCOM " & adresse & ": Battery Empty")
 
-                End If
+                'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER WriteBattery", ex.Message & " --> " & adresse)
@@ -3518,46 +3534,44 @@ Imports System.Media
 
     Private Sub WriteRetour(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
         Try
-            If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
-
             'Forcer le . 
             Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
             My.Application.ChangeCulture("en-US")
 
             'log tous les paquets en mode debug
-            'WriteLog("DBG: WriteRetour receive from " & adresse & " (" & type & ") -> " & valeur)
+            If _DEBUG Then WriteLog("DBG: WriteRetour : receive from " & adresse & " (" & type & ") -> " & valeur)
 
-            'on ne traite rien pendant les 15 premieres secondes
-            If DateTime.Now > DateAdd(DateInterval.Second, 15, dateheurelancement) Then
-                'Recherche si un device affecté
-                Dim listedevices As New ArrayList
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
-                If (listedevices.Count = 1) Then
-                    'un device trouvé 
-                    If STRGS.InStr(valeur, "CFG:") > 0 Then
-                        'c'est un message de config, on log juste
-                        WriteLog(listedevices.Item(0).name & " : " & valeur)
-                    Else
-                        'on maj la value si la durée entre les deux receptions est > à 1.5s
-                        If (DateTime.Now - Date.Parse(listedevices.Item(0).LastChange)).TotalMilliseconds > 1500 Then
-                            If valeur = "ON" Then
-                                listedevices.Item(0).Value = True
-                            ElseIf valeur = "OFF" Then
-                                listedevices.Item(0).Value = False
-                            Else
-                                listedevices.Item(0).Value = valeur
-                            End If
-                        Else
-                            WriteLog("DBG: Reception < 1.5s de deux valeurs pour le meme composant : " & listedevices.Item(0).name & ":" & valeur)
-                        End If
-                    End If
-                ElseIf (listedevices.Count > 1) Then
-                    WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
+            If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
+            If DateTime.Now > DateAdd(DateInterval.Second, 10, dateheurelancement) Then Exit Sub 'on ne traite rien pendant les 10 premieres secondes
+
+            'Recherche si un device affecté
+            Dim listedevices As New ArrayList
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
+            If (listedevices.Count = 1) Then
+                'un device trouvé 
+                If STRGS.InStr(valeur, "CFG:") > 0 Then
+                    'c'est un message de config, on log juste
+                    WriteLog(listedevices.Item(0).name & " : " & valeur)
                 Else
-
-                    'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
-
+                    'on maj la value si la durée entre les deux receptions est > à 1.5s
+                    If (DateTime.Now - Date.Parse(listedevices.Item(0).LastChange)).TotalMilliseconds > 1500 Then
+                        If valeur = "ON" Then
+                            listedevices.Item(0).Value = True
+                        ElseIf valeur = "OFF" Then
+                            listedevices.Item(0).Value = False
+                        Else
+                            listedevices.Item(0).Value = valeur
+                        End If
+                    Else
+                        WriteLog("DBG: Reception < 1.5s de deux valeurs pour le meme composant : " & listedevices.Item(0).name & ":" & valeur)
+                    End If
                 End If
+            ElseIf (listedevices.Count > 1) Then
+                WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
+            Else
+
+                'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+
             End If
         Catch ex As Exception
             WriteLog("ERR: Writeretour Exception : " & ex.Message)
