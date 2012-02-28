@@ -334,9 +334,11 @@ Imports HoMIDom.HoMIDom.Device
                 If Command = "" Then
                     Return False
                 Else
-                    'Write(deviceobject, Command, Param(0), Param(1))
                     Select Case UCase(Command)
                         Case "VALEUR"
+                            For i As Integer = 0 To Param.Length - 1
+                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "Param (" & i & ") : " & Param(i))
+                            Next
                             Write(MyDevice, Command, Param(1), Param(2))
                         Case Else
                     End Select
