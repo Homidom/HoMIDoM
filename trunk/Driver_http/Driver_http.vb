@@ -674,6 +674,9 @@ Imports System.Xml
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.FREEBOX)
             _DeviceSupport.Add(ListeDevices.MULTIMEDIA)
+            _DeviceSupport.Add(ListeDevices.CONTACT)
+            _DeviceSupport.Add(ListeDevices.APPAREIL)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE)
             'Parametres avancés
             'add_paramavance("nom", "Description", valeupardefaut)
 
