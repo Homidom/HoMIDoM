@@ -32,8 +32,9 @@ Public Class uAction
             ObjAction = frm.ObjAction
             frm.Close()
             RaiseEvent ChangeAction(Me.Uid)
+            Refresh_Position()
         End If
-        Refresh_Position()
+
     End Sub
 
     'Mise à jour de la position de l'action dans le timeline suite à sa valeur de timing

@@ -67,4 +67,5 @@
             myService.RunMacro(IdSrv, _MacroId)
         End If
     End Sub
+
 End Class
