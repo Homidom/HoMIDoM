@@ -582,6 +582,7 @@ Partial Public Class uDevice
         Dim _Driver As Object = myService.GetAllDrivers(IdSrv).Item(CbDriver.SelectedIndex)
 
         If _Driver IsNot Nothing Then
+            Dim mem As String = CbType.Text
             CbType.IsEnabled = True
             CbType.Items.Clear()
 
@@ -589,6 +590,7 @@ Partial Public Class uDevice
                 CbType.Items.Add(_Driver.DeviceSupport.item(j).ToString)
             Next
             CbType.IsEnabled = True
+            CbType.Text = mem
 
             If _Driver.LabelsDevice.Count > 0 Then
                 For k As Integer = 0 To _Driver.LabelsDevice.Count - 1
