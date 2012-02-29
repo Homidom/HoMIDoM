@@ -763,25 +763,36 @@ Imports System.Xml
             ' Create a new XmlDocument   
             doc = New XmlDocument()
 
+            'File.Delete("IPX800.xml")
+            'T 
+
             Dim url As New Uri(Adresse & "/status.xml")
             Dim Request As HttpWebRequest = CType(HttpWebRequest.Create(url), System.Net.HttpWebRequest)
             'Request.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7"
-            If Element.StartsWith("analog") Then
-                Threading.Thread.Sleep(1000)
-            End If
             Dim response As Net.HttpWebResponse = CType(Request.GetResponse(), Net.HttpWebResponse)
             Dim flag As Boolean = False
 
             doc.Load(response.GetResponseStream)
-            doc.Save("C:\logxml.txt")
-            nodes = doc.SelectNodes("/response")
+            doc.Save("IPX800.xml")
 
-            If nodes.Count > 0 Then
-                For Each node As XmlNode In nodes
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "Node " & node.Name & " Value=" & node.Value)
-                    If Trim(LCase(node.Name)) = Trim(LCase(Element)) Then
-                        flag = True
-                        retour = node.Value
+            Dim Line As String = ""
+            FileOpen(1, "IPX800.xml", OpenMode.Input) ' Ouvre en lecture.
+            While Not EOF(1) ' Boucler jusqu'à la fin du fichier
+                Line = LineInput(1) ' Lire chaque ligne
+                Dim a As String = "<" & Element & ">"
+                Dim b As String = Trim(Line)
+                If b.StartsWith(a) Then
+                    Dim idx1 As Integer = InStr(2, b, ">")
+                    Dim idx2 As Integer = InStr(idx1, b, "<")
+                    If idx1 > 0 And idx2 > 0 And idx2 > idx1 Then
+                        Dim idx3 As Integer = idx1 + 1
+                        Dim c As String = ""
+                        Do While Mid(b, idx3, 1) <> "<"
+                            c &= Mid(b, idx3, 1)
+                            idx3 += 1
+                        Loop
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "Trouvé " & c)
+                        retour = c
                         If IsNumeric(retour) = False Then
                             If LCase(retour.ToString) = "up" Then
                                 retour = 1
@@ -789,15 +800,38 @@ Imports System.Xml
                                 retour = 0
                             End If
                         End If
-                        Exit For
                     End If
-                Next
-                If flag = False Then
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "l'élément " & Element & " n'a pas été trouvé en l'envoyant à l'adresse " & Adresse & "/status.xml")
+                Else
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "ligne: " & b)
                 End If
-            Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "Aucun élément n'a été trouvé")
-            End If
+            End While
+            FileClose(1) ' Fermer.
+            File.Delete("IPX800.xml")
+
+            'nodes = doc.SelectNodes("response/")
+
+            'If nodes.Count > 0 Then
+            '    For Each node As XmlNode In nodes
+            '        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "Node " & node.Name & " Value=" & node.Value)
+            '        If Trim(LCase(node.Name)) = Trim(LCase(Element)) Then
+            '            flag = True
+            '            retour = node.Value
+            '            If IsNumeric(retour) = False Then
+            '                If LCase(retour.ToString) = "up" Then
+            '                    retour = 1
+            '                Else
+            '                    retour = 0
+            '                End If
+            '            End If
+            '            Exit For
+            '        End If
+            '    Next
+            '    If flag = False Then
+            '        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "l'élément " & Element & " n'a pas été trouvé en l'envoyant à l'adresse " & Adresse & "/status.xml")
+            '    End If
+            'Else
+            '    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "Aucun élément n'a été trouvé")
+            'End If
 
             doc = Nothing
             nodes = Nothing
