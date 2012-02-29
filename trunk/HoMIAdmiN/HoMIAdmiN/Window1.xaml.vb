@@ -1294,18 +1294,22 @@ Class Window1
                     Case "TreeViewDriver"  'driver
                         Dim x As New uDriver(sender.SelectedItem.uid)
                         AddHandler x.CloseMe, AddressOf UnloadControl
+                        AddHandler x.Loaded, AddressOf ControlLoaded
                         AffControlPage(x)
                     Case "TreeViewDevice"  'device
                         Dim x As New uDevice(Classe.EAction.Modifier, sender.SelectedItem.uid)
                         AddHandler x.CloseMe, AddressOf UnloadControl
+                        AddHandler x.Loaded, AddressOf ControlLoaded
                         AffControlPage(x)
                     Case "TreeViewZone"  'zone
                         Dim x As New uZone(Classe.EAction.Modifier, sender.SelectedItem.uid)
                         AddHandler x.CloseMe, AddressOf UnloadControl
+                        AddHandler x.Loaded, AddressOf ControlLoaded
                         AffControlPage(x)
                     Case "TreeViewUser"  'user
                         Dim x As New uUser(Classe.EAction.Modifier, sender.SelectedItem.uid)
                         AddHandler x.CloseMe, AddressOf UnloadControl
+                        AddHandler x.Loaded, AddressOf ControlLoaded
                         AffControlPage(x)
                     Case "TreeViewTrigger"  'trigger
                         Dim _Trig As Trigger = myService.ReturnTriggerById(IdSrv, sender.SelectedItem.uid)
@@ -1314,10 +1318,12 @@ Class Window1
                             If _Trig.Type = Trigger.TypeTrigger.TIMER Then
                                 Dim x As New uTriggerTimer(Classe.EAction.Modifier, sender.SelectedItem.uid)
                                 AddHandler x.CloseMe, AddressOf UnloadControl
+                                AddHandler x.Loaded, AddressOf ControlLoaded
                                 AffControlPage(x)
                             Else
                                 Dim x As New uTriggerDevice(Classe.EAction.Modifier, sender.SelectedItem.uid)
                                 AddHandler x.CloseMe, AddressOf UnloadControl
+                                AddHandler x.Loaded, AddressOf ControlLoaded
                                 AffControlPage(x)
                             End If
                             _Trig = Nothing
@@ -1325,15 +1331,20 @@ Class Window1
                     Case "TreeViewMacro"  'macros
                         Dim x As New uMacro(Classe.EAction.Modifier, sender.SelectedItem.uid)
                         AddHandler x.CloseMe, AddressOf UnloadControl
+                        AddHandler x.Loaded, AddressOf ControlLoaded
                         AffControlPage(x)
                     Case 6 'histo
 
                 End Select
-                Me.Cursor = Nothing
+
             End If
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+    Private Sub ControlLoaded()
+        Me.Cursor = Nothing
     End Sub
 
     ''' <summary>

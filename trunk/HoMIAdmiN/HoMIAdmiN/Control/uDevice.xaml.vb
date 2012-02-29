@@ -34,6 +34,7 @@ Partial Public Class uDevice
             If Action = EAction.Nouveau Then 'Nouveau Device
                 ImgDevice.Tag = ""
                 StkCde.Height = 0
+                CbType.IsEnabled = False
             Else 'Modification d'un Device
                 Dim x As HoMIDom.HoMIDom.TemplateDevice = myservice.ReturnDeviceByID(IdSrv, DeviceId)
 
@@ -44,6 +45,12 @@ Partial Public Class uDevice
                     ChkEnable.IsChecked = x.Enable
                     ChKSolo.IsChecked = x.Solo
                     ChKLastEtat.IsChecked = x.LastEtat
+
+                    _Driver = myService.ReturnDriverByID(IdSrv, x.DriverID)
+                    If _Driver IsNot Nothing Then
+                        CbDriver.SelectedValue = _Driver.Nom
+                    End If
+
                     CbType.SelectedValue = x.Type.ToString
                     CbType.IsEnabled = False
                     BtnRead.Visibility = Windows.Visibility.Visible
@@ -51,20 +58,6 @@ Partial Public Class uDevice
                     If CbType.SelectedValue = "FREEBOX" Then
                         Label6.Content = "Adresse Http Freebox:"
                         Label7.Content = "Code Telecommande:"
-                    End If
-
-                    'For j As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
-                    '    If myService.GetAllDrivers(IdSrv).Item(j).ID = x.DriverID Then
-                    '        _Driver = myService.GetAllDrivers(IdSrv).Item(j)
-                    '        CbDriver.SelectedValue = _Driver.Nom
-                    '        MaJDriver()
-                    '        Exit For
-                    '    End If
-                    'Next
-
-                    _Driver = myService.ReturnDriverByID(IdSrv, x.DriverID)
-                    If _Driver IsNot Nothing Then
-                        CbDriver.SelectedValue = _Driver.Nom
                     End If
 
                     TxtAdresse1.Text = x.Adresse1
@@ -306,6 +299,8 @@ Partial Public Class uDevice
 
     Private Sub CbType_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbType.MouseLeave
         Try
+
+
             TxtCorrection.Visibility = Windows.Visibility.Hidden
             TxtFormatage.Visibility = Windows.Visibility.Hidden
             TxtPrecision.Visibility = Windows.Visibility.Hidden
@@ -358,6 +353,8 @@ Partial Public Class uDevice
                 Else
                     StkCde.Height = 0
                 End If
+
+
             End If
         Catch Ex As Exception
             MessageBox.Show("Erreur lors du changement de type: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -582,10 +579,17 @@ Partial Public Class uDevice
     Private Sub MaJDriver()
         'If CbDriver.SelectedIndex < 0 Then Exit Sub
 
-        'For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
-        _Driver = myService.GetAllDrivers(IdSrv).Item(CbDriver.SelectedIndex)
-        If _Driver IsNot Nothing Then 'myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
-            '_Driver = myService.GetAllDrivers(IdSrv).Item(i)
+        Dim _Driver As Object = myService.GetAllDrivers(IdSrv).Item(CbDriver.SelectedIndex)
+
+        If _Driver IsNot Nothing Then
+            CbType.IsEnabled = True
+            CbType.Items.Clear()
+
+            For j As Integer = 0 To _Driver.DeviceSupport.count - 1
+                CbType.Items.Add(_Driver.DeviceSupport.item(j).ToString)
+            Next
+            CbType.IsEnabled = True
+
             If _Driver.LabelsDevice.Count > 0 Then
                 For k As Integer = 0 To _Driver.LabelsDevice.Count - 1
                     Select Case UCase(_Driver.LabelsDevice.Item(k).NomChamp)
