@@ -766,6 +766,9 @@ Imports System.Xml
             Dim url As New Uri(Adresse & "/status.xml")
             Dim Request As HttpWebRequest = CType(HttpWebRequest.Create(url), System.Net.HttpWebRequest)
             'Request.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7"
+            If Element.StartsWith("analog") Then
+                Threading.Thread.Sleep(1000)
+            End If
             Dim response As Net.HttpWebResponse = CType(Request.GetResponse(), Net.HttpWebResponse)
             Dim flag As Boolean = False
 
