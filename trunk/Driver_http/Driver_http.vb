@@ -472,8 +472,9 @@ Imports System.Xml
                 Case "APPAREIL"
                     If Trim(UCase(Objet.Modele)) = "IPX800" Then
                         Dim idx As Integer = CInt(Objet.Adresse1)
+                        idx = idx - 1
                         If idx < 0 Or idx > 7 Then
-                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 7 pour une sortie")
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 8 pour une sortie")
                             Exit Sub
                         End If
                         Dim url As String = "http://" & Objet.Adresse2
@@ -763,20 +764,29 @@ Imports System.Xml
             Dim Request As HttpWebRequest = CType(HttpWebRequest.Create(url), System.Net.HttpWebRequest)
             'Request.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7"
             Dim response As Net.HttpWebResponse = CType(Request.GetResponse(), Net.HttpWebResponse)
+            Dim flag As Boolean = False
 
             doc.Load(response.GetResponseStream)
             nodes = doc.SelectNodes("/response")
+
             If nodes.Count > 0 Then
                 For Each node As XmlNode In nodes
                     If node.Name = Element Then
+                        flag = True
                         retour = node.Value
                         If IsNumeric(retour) = False Then
-                            If LCase(retour.ToString) = "down" Then retour = 0
-                            If LCase(retour.ToString) = "up" Then retour = 1
+                            If LCase(retour.ToString) = "up" Then
+                                retour = 1
+                            Else
+                                retour = 0
+                            End If
                         End If
                         Exit For
                     End If
                 Next
+                If flag = False Then
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "l'élément " & Element & " n'a pas été trouvé en l'envoyant à l'adresse " & Adresse & "/status.xml")
+                End If
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "Aucun élément n'a été trouvé")
             End If
