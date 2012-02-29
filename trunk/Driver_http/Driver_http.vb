@@ -773,6 +773,7 @@ Imports System.Xml
             Dim flag As Boolean = False
 
             doc.Load(response.GetResponseStream)
+            doc.Save("C:\logxml.txt")
             nodes = doc.SelectNodes("/response")
 
             If nodes.Count > 0 Then
