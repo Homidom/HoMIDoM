@@ -778,7 +778,8 @@ Imports System.Xml
 
             If nodes.Count > 0 Then
                 For Each node As XmlNode In nodes
-                    If node.Name = Element Then
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "Node " & node.Name & " Value=" & node.Value)
+                    If Trim(LCase(node.Name)) = Trim(LCase(Element)) Then
                         flag = True
                         retour = node.Value
                         If IsNumeric(retour) = False Then
