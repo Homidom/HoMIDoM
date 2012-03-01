@@ -87,9 +87,35 @@
                     <Rectangle Height="10" />
                     <StackPanel Name="StkCde">
                         <Label Content="Commandes" Foreground="White" />
-                        <StackPanel Orientation="Horizontal" >
-                            <ListBox HorizontalAlignment="Left" Margin="1" Height="100" Name="ListCmd" Width="122.894" />
-                            <Rectangle Width="15" />
+                        <StackPanel Margin ="3" Orientation="Horizontal" >
+                                <Label Content="Template:" Foreground="White" />
+                                <ComboBox Width="150" Name="cbTemplate" />
+                                <Button Name="BtnNewTemplate" Width="25" Height="25" Content="+" />
+                                <Label Name="lbltplbase" Content="Base:" Foreground="White" Visibility="Hidden" />
+                                <ComboBox Width="90" Name="cbBase" Visibility="Hidden" SelectedIndex="0">
+                                    <ComboBoxItem Content="VIDE" />
+                                    <ComboBoxItem Content="TV" />
+                                    <ComboBoxItem Content="DVD" />
+                                    <ComboBoxItem Content="BOX" />
+                                    <ComboBoxItem Content="AUDIO" />
+                                </ComboBox>
+                                <Button Name="BtnSaveTemplate" Height="25" Content="Ok" Visibility="Hidden"/>
+                        </StackPanel>
+                            <StackPanel Name="StkNewTemplate" Orientation="Horizontal" >
+                                <Label Content="Fabriquant:" Foreground=" White" />
+                                <TextBox Name="TxtTplFab" Width="120" />
+                                <Label Content="Modele:" Foreground=" White"/>
+                                <TextBox Name="TxtTplMod" Width="120" />
+                                <Label Content="Driver:" Foreground=" White"/>
+                                <ComboBox Name="CbTplDriver" Width="60" SelectedIndex="0">
+                                    <ComboBoxItem Content="HTTP" />
+                                    <ComboBoxItem Content="IR" />
+                                    <ComboBoxItem Content="RS-232" />
+                                </ComboBox>
+                            </StackPanel>
+                                <StackPanel Name="StkCmd" Orientation="Horizontal" >
+                                <ListBox HorizontalAlignment="Left" Margin="1" Height="100" Name="ListCmd" Width="122.894" />
+                                <Rectangle Width="15" />
                             <StackPanel >
                                 <StackPanel Orientation="Horizontal" >
                                     <Label HorizontalAlignment="Left" Name="Label16" Foreground="White" Content="Nom :" />

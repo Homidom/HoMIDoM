@@ -11,6 +11,7 @@ Partial Public Class uDevice
     Dim _DeviceId As String 'Id du device à modifier
     Dim FlagNewCmd As Boolean
     Dim _Driver As HoMIDom.HoMIDom.TemplateDriver
+    Dim x As HoMIDom.HoMIDom.TemplateDevice = Nothing
 
     Public Sub New(ByVal Action As Classe.EAction, ByVal DeviceId As String)
 
@@ -20,6 +21,7 @@ Partial Public Class uDevice
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             _DeviceId = DeviceId
             _Action = Action
+            StkNewTemplate.Height = 0
 
             'Liste les type de devices dans le combo
             For Each value As ListeDevices In [Enum].GetValues(GetType(HoMIDom.HoMIDom.Device.ListeDevices))
@@ -34,9 +36,10 @@ Partial Public Class uDevice
             If Action = EAction.Nouveau Then 'Nouveau Device
                 ImgDevice.Tag = ""
                 StkCde.Height = 0
+                StkCmd.Height = 0
                 CbType.IsEnabled = False
             Else 'Modification d'un Device
-                Dim x As HoMIDom.HoMIDom.TemplateDevice = myservice.ReturnDeviceByID(IdSrv, DeviceId)
+                x = myService.ReturnDeviceByID(IdSrv, DeviceId)
 
                 If x IsNot Nothing Then 'on a trouvé le device
 
@@ -111,10 +114,31 @@ Partial Public Class uDevice
 
                     If x.Type = ListeDevices.MULTIMEDIA Then
                         ListCmd.Items.Clear()
+                        StkCmd.Height = 0
+                        Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
+                        _list = myService.GetListOfTemplate
+                        Dim idx As Integer = -1
+                        For i As Integer = 0 To _list.Count - 1
+                            Dim tpl As String = Replace(_list(i).File, ".xml", "")
+                            cbTemplate.Items.Add(tpl)
+                            If x.Modele IsNot Nothing Then
+                                If tpl = x.Modele.ToString Then
+                                    StkCmd.Height = Double.NaN
+                                    cbTemplate.IsEnabled = False
+                                    BtnNewTemplate.Visibility = Windows.Visibility.Hidden
+                                    idx = i
+                                    If x.Commandes IsNot Nothing Then
+                                        For i2 As Integer = 0 To x.Commandes.Count - 1
+                                            ListCmd.Items.Add(x.Commandes.Item(i2).Name)
+                                        Next
+                                    End If
+                                End If
+                            End If
+                        Next
+                        cbTemplate.SelectedIndex = idx
                         'For i As Integer = 0 To x.ListCommandName.Count - 1
                         '    ListCmd.Items.Add(x.ListCommandName(i))
                         'Next
-                        x = Nothing
                     Else
                         StkCde.Height = 0
                     End If
@@ -180,7 +204,7 @@ Partial Public Class uDevice
                     ListZone.Items.Add(stk)
                 Next
         Catch Ex As Exception
-            MessageBox.Show("Erreur: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur: " & Ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -241,7 +265,16 @@ Partial Public Class uDevice
                 End If
             End If
 
-            myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text)
+            If CbType.Text = "MULTIMEDIA" Then
+                If cbTemplate.Text = "" Then
+                    MessageBox.Show("Veuillez sélectionner ou ajouter un template au device!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                Else
+                    _modele = cbTemplate.Text
+                End If
+            End If
+
+            myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes)
             SaveInZone()
             FlagChange = True
             RaiseEvent CloseMe(Me, False)
@@ -350,6 +383,12 @@ Partial Public Class uDevice
 
                 If CbType.SelectedValue = "MULTIMEDIA" Then
                     StkCde.Height = Double.NaN
+                    Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
+                    _list = myService.GetListOfTemplate
+                    For i As Integer = 0 To _list.Count - 1
+                        Dim tpl As String = Replace(_list(i).File, ".xml", "")
+                        cbTemplate.Items.Add(tpl)
+                    Next
                 Else
                     StkCde.Height = 0
                 End If
@@ -380,18 +419,39 @@ Partial Public Class uDevice
                 Exit Sub
             End If
 
-            If FlagNewCmd = True Then 'nouvelle commande
-                myservice.SaveDeviceCommandIR(IdSrv, _DeviceId, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
-            Else 'modifier commande
-                myservice.SaveDeviceCommandIR(IdSrv, _DeviceId, TxtCmdName.Text, TxtCmdData.Text, TxtCmdRepeat.Text)
-            End If
+            If x IsNot Nothing Then
 
-            ListCmd.Items.Clear()
-            Dim x As Object = myservice.ReturnDeviceByID(IdSrv, _DeviceId)
-            For i As Integer = 0 To x.listcommandname.count - 1
-                ListCmd.Items.Add(x.listcommandname(i))
-            Next
-            x = Nothing
+                If FlagNewCmd = True Then 'nouvelle commande
+                    Dim _cmd As New HoMIDom.HoMIDom.Telecommande.Commandes
+                    With _cmd
+                        .Name = TxtCmdName.Text
+                        .Code = TxtCmdData.Text
+                        .Repeat = TxtCmdRepeat.Text
+                    End With
+                    x.Commandes.Add(_cmd)
+                Else 'modifier commande
+                    Dim idx As Integer = ListCmd.SelectedIndex
+                    If idx < 0 Then Exit Sub
+
+                    With x.Commandes.Item(idx)
+                        .Name = TxtCmdName.Text
+                        .Code = TxtCmdData.Text
+                        .Repeat = TxtCmdRepeat.Text
+                    End With
+                End If
+
+                Dim retour As String = myService.SaveTemplate(IdSrv, cbTemplate.Text, x.Commandes)
+                If retour <> "0" Then
+                    MessageBox.Show("Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Exit Sub
+                Else
+                    ListCmd.Items.Clear()
+                    For i2 As Integer = 0 To x.Commandes.Count - 1
+                        ListCmd.Items.Add(x.Commandes.Item(i2).Name)
+                    Next
+                End If
+
+            End If
 
             FlagNewCmd = False
         Catch Ex As Exception
@@ -402,18 +462,17 @@ Partial Public Class uDevice
     Private Sub BtnDelCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelCmd.Click
         Try
             If ListCmd.SelectedIndex >= 0 Then
-                myservice.DeleteDeviceCommandIR(IdSrv, _DeviceId, TxtCmdName.Text)
-
-                TxtCmdName.Text = ""
-                TxtCmdData.Text = ""
-                TxtCmdRepeat.Text = "0"
-                ListCmd.Items.Clear()
-
-                Dim x As Object = myservice.ReturnDeviceByID(IdSrv, _DeviceId)
-                For i As Integer = 0 To x.listcommandname.count - 1
-                    ListCmd.Items.Add(x.listcommandname(i))
-                Next
-                x = Nothing
+                x.Commandes.RemoveAt(ListCmd.SelectedIndex)
+                Dim retour As String = myService.SaveTemplate(IdSrv, cbTemplate.Text, x.Commandes)
+                If retour <> "0" Then
+                    MessageBox.Show("Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Exit Sub
+                Else
+                    ListCmd.Items.Clear()
+                    For i2 As Integer = 0 To x.Commandes.Count - 1
+                        ListCmd.Items.Add(x.Commandes.Item(i2).Name)
+                    Next
+                End If
 
             End If
         Catch Ex As Exception
@@ -477,11 +536,12 @@ Partial Public Class uDevice
 
     Private Sub ListCmd_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles ListCmd.SelectionChanged
         Try
-            If ListCmd.SelectedIndex < 0 Then Exit Sub
-            'TxtCmdName.Text = myservice.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandName(ListCmd.SelectedIndex)
-            'TxtCmdData.Text = myservice.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandData(ListCmd.SelectedIndex)
-            'TxtCmdRepeat.Text = myservice.ReturnDeviceByID(IdSrv, _DeviceId).ListCommandRepeat(ListCmd.SelectedIndex)
-            TxtCmdData.Text = myservice.StartIrLearning(IdSrv)
+            Dim i As Integer = ListCmd.SelectedIndex
+            If i < 0 Then Exit Sub
+
+            TxtCmdName.Text = x.Commandes.Item(i).Name
+            TxtCmdData.Text = x.Commandes.Item(i).Code
+            TxtCmdRepeat.Text = x.Commandes.Item(i).Repeat
         Catch Ex As Exception
             MessageBox.Show("Erreur ListCmd_SelectionChanged: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -693,5 +753,57 @@ Partial Public Class uDevice
             'Exit For
         End If
         'Next
+    End Sub
+
+    Private Sub cbTemplate_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles cbTemplate.SelectionChanged
+        If cbTemplate.SelectedIndex >= 0 Then
+
+        End If
+    End Sub
+
+    Private Sub BtnNewTemplate_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewTemplate.Click
+        StkNewTemplate.Height = Double.NaN
+        TxtTplFab.Focus()
+        BtnSaveTemplate.Visibility = Windows.Visibility.Visible
+        lbltplbase.Visibility = Windows.Visibility.Visible
+        cbBase.Visibility = Windows.Visibility.Visible
+    End Sub
+
+    Private Sub BtnSaveTemplate_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSaveTemplate.Click
+        If TxtTplFab.Text = "" Or TxtTplFab.Text = " " Or InStr(TxtTplFab.Text, "-") > 0 Then
+            MessageBox.Show("Le nom du fabricant est obligatoire et ne doit pas comporter le caractère: - ", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            TxtTplFab.Focus()
+            Exit Sub
+        End If
+        If TxtTplMod.Text = "" Or TxtTplMod.Text = " " Or InStr(TxtTplMod.Text, "-") > 0 Then
+            MessageBox.Show("Le nom du modèle est obligatoire et ne doit pas comporter le caractère: - ", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            TxtTplMod.Focus()
+            Exit Sub
+        End If
+
+        Dim mytemplate As String = LCase(TxtTplFab.Text) & "-" & LCase(TxtTplMod.Text) & "-" & LCase(CbTplDriver.Text)
+
+        Dim retour As String = myService.CreateNewTemplate(TxtTplFab.Text, TxtTplMod.Text, CbTplDriver.Text, cbBase.SelectedIndex)
+        If retour <> "0" Then
+            MessageBox.Show("Erreur lors de la création du nouveau template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Exit Sub
+        Else
+
+            StkNewTemplate.Height = 0
+            BtnSaveTemplate.Visibility = Windows.Visibility.Hidden
+            lbltplbase.Visibility = Windows.Visibility.Hidden
+            cbBase.Visibility = Windows.Visibility.Hidden
+
+            cbTemplate.Items.Clear()
+            Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
+            _list = myService.GetListOfTemplate
+            For i As Integer = 0 To _list.Count - 1
+                Dim tpl As String = Replace(_list(i).File, ".xml", "")
+                cbTemplate.Items.Add(tpl)
+            Next
+
+            cbTemplate.Text = mytemplate
+        End If
+
     End Sub
 End Class
