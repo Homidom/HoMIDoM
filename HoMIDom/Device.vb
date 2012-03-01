@@ -361,7 +361,7 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _Modele = value
-                    If _Type = "MUTIMEDIA" Then
+                    If _Type = "MULTIMEDIA" Then
                         Dim a() As String = value.Split("-")
                         If a.Length = 3 Then
                             Dim _fab As String = a(0)

@@ -4582,7 +4582,7 @@ Namespace HoMIDom
         ''' <param name="valuedef"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As Double = 0, Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0) As String Implements IHoMIDom.SaveDevice
+        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As Double = 0, Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing) As String Implements IHoMIDom.SaveDevice
             If VerifIdSrv(IdSrv) = False Then
                 Return 99
                 Exit Function
@@ -4988,6 +4988,7 @@ Namespace HoMIDom
                                 .Description = description
                                 .LastChangeDuree = lastchangeduree
                                 .LastEtat = lastEtat
+                                '   .Commandes = Commandes
                                 AddHandler o.DeviceChanged, AddressOf DeviceChange
                             End With
                             _ListDevices.Add(o)
@@ -5237,6 +5238,7 @@ Namespace HoMIDom
                             _ListDevices.Item(i).solo = solo
                             _ListDevices.Item(i).LastChangeDuree = lastchangeduree
                             _ListDevices.Item(i).LastEtat = lastEtat
+                            '_ListDevices.Item(i).Commandes = Commandes
                             _ListDevices.Item(i).Driver.newdevice(deviceId)
                             'si c'est un device de type double ou integer
                             If _ListDevices.Item(i).type = "VITESSEVENT" Or _ListDevices.Item(i).type = "UV" Or _ListDevices.Item(i).type = "TEMPERATURECONSIGNE" Or _ListDevices.Item(i).type = "TEMPERATURE" Or _ListDevices.Item(i).type = "PLUIETOTAL" Or _ListDevices.Item(i).type = "PLUIECOURANT" Or _ListDevices.Item(i).type = "LAMPE" Or _ListDevices.Item(i).type = "HUMIDITE" Or _ListDevices.Item(i).type = "GENERIQUEVALUE" Or _ListDevices.Item(i).type = "ENERGIETOTALE" Or _ListDevices.Item(i).type = "ENERGIEINSTANTANEE" Or _ListDevices.Item(i).type = "COMPTEUR" Or _ListDevices.Item(i).type = "BAROMETRE" Then
@@ -6656,7 +6658,7 @@ Namespace HoMIDom
             End Try
         End Function
 
-        Public Function SaveTemplate(ByVal IdSrv As String, ByVal Template As String, ByVal Commandes As List(Of Telecommande.Commandes)) As String
+        Public Function SaveTemplate(ByVal IdSrv As String, ByVal Template As String, ByVal Commandes As List(Of Telecommande.Commandes)) As String Implements IHoMIDom.SaveTemplate
             Try
                 Dim MyPath As String = _MonRepertoire & "\templates\"
                 Dim _Fichier As String = MyPath & LCase(Template) & ".xml"
