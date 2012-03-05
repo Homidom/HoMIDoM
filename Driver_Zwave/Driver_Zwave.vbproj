@@ -49,6 +49,9 @@
     <Reference Include="HoMIDom">
       <HintPath>..\DEBUG\HoMIDom.dll</HintPath>
     </Reference>
+    <Reference Include="OpenZWaveDotNet">
+      <HintPath>..\DEBUG\OpenZWaveDotNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -83,6 +86,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="OpenZWave.vb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="My Project\Application.myapp">

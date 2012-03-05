@@ -1,17 +1,13 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
-Imports STRGS = Microsoft.VisualBasic.Strings
-Imports System.IO.Ports
-Imports VB = Microsoft.VisualBasic
+Imports OpenZWaveDotNet
 
 
 Public Class Driver_ZWave
 
-
-
     ' Auteur : Laurent
-    ' Date : 11/01/2012
+    ' Date : 28/02/2012
 
     ''' <summary>Class Driver_ZWave, permet de communiquer avec le controleur Z-Wave</summary>
     ''' <remarks>Nécessite l'installation des pilotes fournis sur le site </remarks>
@@ -47,6 +43,16 @@ Public Class Driver_ZWave
         Dim _IdSrv As String
         Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
 
+        Private m_manager As New ZWManager
+        Private m_options As New ZWOptions
+        Private m_notification As ZWNotification
+
+        Private m_nodesReady As Boolean = False
+        Private m_homeId As UInt32 = 0
+
+        'param avancé
+        Dim _DEBUG As Boolean = False
+
         'Ajoutés dans les ppt avancés dans New()
 
 
@@ -68,6 +74,35 @@ Public Class Driver_ZWave
 
         Private mess As Boolean = False
         Private trame As Boolean = False
+
+        ' -----------------   Ajout des declarations pour OpenZWave
+        Private Structure NodeInfo
+            Dim m_homeId As UInteger
+            Dim m_nodeId As Byte
+            Dim m_polled As Boolean
+            Dim name As String
+            Dim location As String
+            'Dim m_values As  List()
+        End Structure
+
+        Private g_nodes() As NodeInfo
+        Private g_homeId As UInteger = 0
+        Private g_initFailed As Boolean = False
+        Private g_nodesQueried As Boolean = False
+        '     Private d_CriticalSection As CRITICAL_SECTION
+
+        Enum LogLevel
+            LogLevel_None
+            LogLevel_Always
+            LogLevel_Fatal
+            LogLevel_Error
+            LogLevel_Warning
+            LogLevel_Alert
+            LogLevel_Info
+            LogLevel_Detail
+            LogLevel_Debug
+            LogLevel_Internal
+        End Enum
 
 
 #End Region
@@ -232,6 +267,8 @@ Public Class Driver_ZWave
                 _StartAuto = value
             End Set
         End Property
+
+
 #End Region
 
 #Region "Fonctions génériques"
@@ -258,9 +295,15 @@ Public Class Driver_ZWave
                     If Command = "" Then
                         Return False
                     Else
-                        'Write(deviceobject, Command, Param(0), Param(1))
+                        ' Pour le Debug MyDevice,
+                        Console.WriteLine(Command, Param(0), Param(1))
                         Select Case UCase(Command)
-                            Case ""
+                            Case "SEARCHNODES"
+                                Console.WriteLine("Passage par la commande de recherche d'un device")
+
+                            Case "DIM"
+                                Console.WriteLine("Passage par la commande Dumming avec le % = " & Val(Param(0)))
+
                             Case Else
                         End Select
                         Return True
@@ -297,41 +340,55 @@ Public Class Driver_ZWave
         ''' <remarks></remarks>
         Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
             Dim retour As String = ""
+            Dim CptBoucle As Byte
 
             'ouverture du port suivant le Port Com
             Try
                 If _Com <> "" Then
-                    retour = ouvrir(_Com)
+                    ' retour = ouvrir(_Com)
+
+                    Console.WriteLine("Ouverture du port du controleur Z-Wave : " & _Com)
+                    m_options.Create(".\Config\Zwave\config\", "LogZWave.log", "")
+                    m_options.AddOptionInt("SaveLogLevel", LogLevel.LogLevel_Error)
+                    m_options.AddOptionInt("QueueLogLevel", LogLevel.LogLevel_Error)
+                    m_options.AddOptionInt("DumpTrigger", LogLevel.LogLevel_Error)
+                    m_options.AddOptionInt("PollInterval", 500)
+                    m_options.AddOptionBool("IntervalBetweenPolls", True)
+                    m_options.AddOptionBool("ValidateValueChanges", True)
+                    m_options.Lock()
+
+                    m_manager.Create()
+                    m_manager.OnNotification = (NotificationHandler(m_notification))
+                    ' Add an event handler for all the Z-Wave notifications
+
+                    ' Add a driver, this will start up the z-wave network
+                    m_manager.AddDriver("\\.\" & _Com)
+                    ' ZWave network is started, and our control of hardware can begin once all the nodes have reported in
+                    While (m_nodesReady = False And CptBoucle < 3)
+                        Console.WriteLine("Waiting loop " & CptBoucle & "  - The nodes all need to report in")
+                        System.Threading.Thread.Sleep(3000) ' Attente de 3 sec  - Info OpenZWave Wait since this process can take around 20seconds within my network
+                        CptBoucle = CptBoucle + 1
+                    End While
+
+                    ' Recuperation de la variable HomeId du controleur
+                    ' m_manager.GetControllerNodeId(g_homeId)
+                    Console.WriteLine("Configuration détectée avec le HomeId = " & g_homeId)
+
+                    'traitement du message de retour
+                    If g_initFailed Then
+                        _IsConnect = False
+
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave", "Driver non démarré : " & retour)
+                    Else
+                        _IsConnect = True
+                        retour = "Port " & _Com & " ouvert"
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", retour)
+                    End If
                 Else
                     retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
                 End If
-                'traitement du message de retour
-                If STRGS.Left(retour, 4) = "ERR:" Then
-                    _IsConnect = False
-                    retour = STRGS.Right(retour, retour.Length - 5)
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave", "Driver non démarré : " & retour)
-                Else
-                    _IsConnect = True
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", retour)
 
-                    Console.WriteLine("Attente de 15 sec")
-                    System.Threading.Thread.Sleep(15000)
 
-                    ' Pour debug
-                    Console.WriteLine("Recherche des elements du reseau ")
-                    Dim message() As Byte = {1, 3, 0, 2}
-                    SendMessage(message, True)
-
-                    Console.WriteLine("Attente de 15 sec")
-                    System.Threading.Thread.Sleep(15000)
-
-                    Console.WriteLine("Envoi du message de commande")
-                    'Dim message() As Byte
-                    Console.WriteLine(" Envoi du message d'indentification noeud 1 ")
-                    message = {1, 4, 0, 65, 1}
-                    SendMessage(message, True)
-
-                End If
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave Start", ex.Message)
                 _IsConnect = False
@@ -410,17 +467,18 @@ Public Class Driver_ZWave
 
                 If Objet.Type = "SWITCH" Or Objet.Type = "APPAREIL" Then
                     If Commande = "ON" Then
-                        SendBasicSwitch(Objet.Adresse1, 255)
+
                     End If
                     If Commande = "OFF" Then
-                        SendBasicSwitch(Objet.Adresse1, 0)
-                    End If
-                    If Commande = "VALEUR" Then
-                        If Parametre1 > 100 Then Parametre1 = 100
-                        If Parametre1 < 0 Then Parametre1 = 0
 
-                        SendBasicSwitch(Objet.Adresse1, Val(Parametre1))
                     End If
+                    'If Commande = "DIM" Then
+                    ' Console.WriteLine("Passage par la commande DIM de Write")
+                    ' If Parametre1 > 100 Then Parametre1 = 100
+                    ' If Parametre1 < 0 Then Parametre1 = 0
+
+                    'SendBasicSwitch(Objet.Adresse1, Val(Parametre1))
+                    ' End If
                 End If
 
             Catch ex As Exception
@@ -531,13 +589,16 @@ Public Class Driver_ZWave
                 'Paramétres avancés
 
                 'ajout des commandes avancées pour les devices
-                Add_DeviceCommande("VALEUR", "Valeur à écrire", 1)
+                Add_DeviceCommande("DIM", "Valeur en % d'intensité", 1)
+                Add_DeviceCommande("SEARCHNODES", "trouver les noeuds du réseau", 0)
 
                 'Libellé Driver
                 Add_LibelleDriver("HELP", "Aide...", "Ce module permet de recuperer les informations delivrées par la controleur Z-Wave ")
 
                 'Libellé Device
                 Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant de Z-Wave")
+
+
 
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave New", ex.Message)
@@ -560,23 +621,11 @@ Public Class Driver_ZWave
             Try
                 'ouverture du port
                 If Not _IsConnect Then
-                    port_name = numero
-                    port.PortName = numero 'nom du port : COM1,COM2, COM3...
 
-                    port.BaudRate = 115200 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
-                    port.Parity = IO.Ports.Parity.None ' Pas de parité 
-                    port.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
-                    port.DataBits = 8 'nombre de bit par octet
-                    port.Handshake = Handshake.None
-                    port.ReadTimeout = 3000
-                    port.WriteTimeout = 5000
-                    port.RtsEnable = True 'ligne Rts désactivé
-                    port.DtrEnable = True 'ligne Dtr désactivé
-                    port.NewLine = System.Environment.NewLine
-                    port.Open()
 
-                    AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
+                    'AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
                     mess = False
+
                     Return ("Port " & port_name & " ouvert")
                 Else
                     Return ("Port " & port_name & " dejà ouvert")
@@ -617,234 +666,57 @@ Public Class Driver_ZWave
         End Function
 
 
-        ''' <summary>Fonction d'envoi de l'acquitement du message vers le controleur ZWave</summary>
-        '''        ''' <remarks></remarks>
-        Private Sub SendACKMessage()
-            Try
-                Console.WriteLine("Envoi du ACK")
-                SendMessage({6}, False)
 
-            Catch Ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave SendACKMessage", "Exception : " & Ex.Message)
-            End Try
-        End Sub
 
-        ''' <summary>Fonction d'envoi d'une commande pour un element basique vers le controleur ZWave</summary>
-        '''        ''' <remarks></remarks>
-        Private Sub SendBasicSwitch(ByVal id As Byte, ByVal Valeur As Byte)
-            Try
-                Console.WriteLine("Envoi d'une commande Basique")
-                SendMessage({1, 9, 0, 19, id, 3, 32, 1, Valeur, 5, 0}, True)
+        Private Function GetNode(ByRef homeId As UInt32, ByRef nodeId As Byte) As NodeInfo
+            Dim localnode As New NodeInfo
 
-            Catch Ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave SendBasicSwitch", "Exception : " & Ex.Message)
-            End Try
-        End Sub
+            For Each localnode In g_nodes
+                If ((localnode.m_nodeId = nodeId) & (localnode.m_homeId = homeId)) Then
 
-        ''' <summary>Fonction d'envoi d'une commande d'identification pour un element vers le controleur ZWave</summary>
-        '''        ''' <remarks></remarks>
-        Private Sub SendBasicIdentif(ByVal id As Byte, ByVal Valeur As Byte)
-            Try
-                Console.WriteLine("Envoi d'une commande d'indentification d'un element")
-                SendMessage({1, 4, 0, 65, id}, True)
-
-            Catch Ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave SendBasicIdentif", "Exception : " & Ex.Message)
-            End Try
-        End Sub
-
-        ''' <summary>Fonction d'envoi du message vers le controleur ZWave</summary>
-        ''' <param name="Message">Caracteres du message </param>
-        ''' <param name="CalCheck">Determine si il faut calculer la checksum </param>
-        '''        ''' <remarks></remarks>
-        Private Sub SendMessage(ByVal Message() As Byte, ByVal CalCheck As Boolean)
-            Try
-                Console.WriteLine("Envoi du message")
-                If CalCheck Then
-                    Array.Resize(Message, Message.Length + 1)
-                    Message(Message.Length - 1) = CheckSumMess(Message)
-                    Console.WriteLine("La checksum est : " & Message(Message.Length - 1))
+                    Return localnode
+                Else
+                    Return Nothing
                 End If
-
-                port.Write(Message, 0, Message.Length)
-
-            Catch Ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave SendMessage", "Exception : " & Ex.Message)
-            End Try
-        End Sub
-
-        ''' <summary>Fonction lancée sur reception de données sur le port COM</summary>
-        ''' <remarks></remarks>
-        Private Sub DataReceived(ByVal sender As Object, ByVal e As SerialDataReceivedEventArgs)
-            Try
-                Console.Write("Caracteres recus : ")
-                Dim count As Integer = port.BytesToRead
-
-                Console.WriteLine("Nombre de caracteres à lire " & count)
-                If _IsConnect And count > 0 Then
-                    port.Read(BufferIn, 0, count)
-                    For i As Integer = 0 To count - 1
-                        If i = 0 And BufferIn(0) = 6 Then
-                            SendACKMessage()
-
-                        End If
-                        ProcessReceivedChar(BufferIn(i))
-                        recbuf(i) = BufferIn(i)
-                        Console.Write(BufferIn(i) & " ")
-                    Next
-                    Console.WriteLine()
-
-                End If
-                If Not (mess) Then
-                    mess = True
-                End If
+            Next
+            Return localnode
+        End Function
 
 
-                '--------------------------------------------------------------
-                'Console.WriteLine("Nombre de caracteres à lire " & count)
-                'If _IsConnect And count > 0 Then
-                ' Dim IsAck As Byte = port.ReadByte()
-                ' If IsAck = 6 Then
-                ' SendACKMessage()
-                ' Else
-                ' recbuf(0) = IsAck
-                ' port.Read(recbuf, 1, count - 1)
-                ' End If
-                ' For i As Integer = 0 To recbuf.Length - 1
-                ' Console.Write(BufferIn(i) & " ")
-                ' Next
-                ' Console.WriteLine()
+        ' Method which handles the events raised by the ZWave network
+        ' </summary>
+        ' <param name="m_notification"></param>
+        Private Function NotificationHandler(ByRef m_notification As ZWNotification)
 
-                ' End If
+            Console.WriteLine("Passage par la procedure de gestion des notifications")
+
+            If IsNothing(m_notification) Then
+                Console.WriteLine("error parametre vide")
+                Return Nothing
+            End If
+
+            Select Case (m_notification.GetType())
 
 
-            Catch Ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave Datareceived", "Exception : " & Ex.Message)
-            End Try
-        End Sub
+                Case ZWNotification.Type.ValueAdded
+                    Console.WriteLine("Passage par ValueAdded")
+                    Dim node As New NodeInfo
+                    node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
+                    If IsNothing(node) Then
 
-        ''' <summary>Rassemble un message complet pour ensuite l'envoyer à displaymess</summary>
-        ''' <param name="temp">Byte recu</param>
-        ''' <remarks></remarks>
-        Private Sub ProcessReceivedChar(ByVal temp As Byte)
-            Try
-
-                If (Not (DebutTrame) And temp = 1) Then ' SOH - Debut de trame recu
-                    Console.WriteLine("Debut de trame recu")
-                    DebutTrame = True
-                    bytecnt = 0
-                    mess = False
-
-                ElseIf (DebutTrame And temp = 10) Then ' Fin de trame recu
-                    mess = True
-                    Console.WriteLine("fin de trame recu")
-                Else 'Recuperation de l'info
-                    recbuf(bytecnt) = temp
-                    bytecnt += 1
-                End If
-
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave  ProcessReceivedChar", ex.Message)
-            End Try
-
-            Try
-                If mess Then
-                    ' Console.WriteLine("Trame recue : ")
-                    ' Process(InfoTrame)
- 
-
-                    'ElseIf mess Then ' Un message est recu ==> on le stocke
-                    '    Dim xxx As String = ""
-                    '    For i As Integer = 0 To bytecnt - 1
-                    'xxx = xxx & (ChrW(recbuf(i)))
-                    '    Next
-
-                    '     ReDim Preserve InfoTrame(messcnt)
-                    '    InfoTrame(messcnt) = xxx.ToString
-                    '    messcnt += 1
-                End If
-
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave ProcessReceivedChar - Traite Message", ex.Message)
-            End Try
-        End Sub
-
-        ''' <summary>Recomponse les messages reçu</summary>
-        ''' <remarks></remarks>
-        Private Sub Process(ByRef combuffer() As String)
-
-            Dim ZWave_adresse As String = ""
-            Dim data1 As String = ""
-            Dim InfoRec As String = ""
-
-            Dim charSeparators() As Char = {" "c}
-            Dim result() As String
-
-
-            For Each InfoRec In combuffer
-                Try
-                    ' _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Z-Wave Process", "ligne recue : " & InfoRec)
-                    result = InfoRec.Split(charSeparators, StringSplitOptions.RemoveEmptyEntries)
-
-                    If result.Count > 1 Then
-                        'ZWave_adresse = result(0))
-                        data1 = result(1)
-                        ' _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave Process : Get data", "Result : " & TeleInfo_adresse & ": " & data1)
-                    Else
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo Process", " Get data Error trame incorrecte")
+                        'node.AddValue(m_notification.GetValueID())
+                        Console.WriteLine("Node ValueAdded, " + m_manager.GetValueLabel(m_notification.GetValueID()))
                     End If
 
+            End Select
 
-                Catch ex As Exception
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Get data", " avec la valeur : " & data1 & "Exception :  " & ex.Message)
-                End Try
+            Return Nothing
 
-
-                Try
-
-                    ' Console.WriteLine("Test:#" & LTrim(UCase(TeleInfo_adresse)) & "#")
-                    'Select Case
-
-
-
-                    ' Case Else
-                    ' _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Case Teleinfo_adresse ", "Parametre non reconnu adresse : " & TeleInfo_adresse)
-
-                    ' End Select
-
-
-                Catch ex As Exception
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Traitement Exception ", "Exception : " & ex.Message)
-                End Try
-            Next
-
-        End Sub
-
-
-        ''' <summary>Calcule la checksum d'un message</summary>
-        ''' <param name="combuffer">Message recu ou a transmettre</param>
-        ''' <remarks></remarks>
-        Private Function CheckSumMess(ByRef combuffer() As Byte) As Byte
-            Try
-      
-                Dim Index As Integer = 0
-                Dim Checksum As Byte = 0
-
-                For Index = 1 To combuffer.Length - 1  ' 
-                    Checksum = Checksum Xor combuffer(Index)
-                    'Console.WriteLine(Index & " : Debug le calcul de la checksum est : " & Checksum & " pour le byte : " & combuffer(Index))
-                Next
-                Return Not (Checksum)
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZWave CheckSumMess : Traitement Exception ", "Calcul CheckSum impossible " & ex.Message)
-                ' Erreur de le calcul de la checksum.
-            End Try
-
-            Return True
         End Function
 
 
 #End Region
+
 
     End Class
 
