@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <homidom>
-  <server portsoap="7999" longitude="6.052793" latitude="49.364016" heurecorrectionlever="0" heurecorrectioncoucher="0" smtpserver="smtp.free.fr" smtpmail="contact@homidom.com" smtplogin="6,052793" smtppassword="" />
+  <server portsoap="7999" longitude="6.052793" latitude="49.364016" heurecorrectionlever="0" heurecorrectioncoucher="0" smtpserver="" smtpmail="" smtplogin="6,052793" smtppassword="" />
   <drivers>
     <driver id="9C3E7696-34F7-11E0-AEB0-53DBDED72085" nom="Foobar" enable="false" description="Multiroom audio Foobar" startauto="false" protocol="AUDIO" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="" picture=" " parametre0=" " />
     <driver id="1BB97374-34F5-11E0-BF44-48D8DED72085" nom="K8055" enable="false" description="Carte Velleman k8055" startauto="false" protocol="USB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="" refresh="0" modele="" picture="" />

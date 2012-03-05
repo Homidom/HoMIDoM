@@ -1978,7 +1978,8 @@ Imports System.Media
 
     Private Sub decode_Lighting1()
         Try
-            Dim adresse, valeur As String
+            Dim adresse As String = ""
+            Dim valeur As String = ""
             Select Case recbuf(LIGHTING1.subtype)
                 Case LIGHTING1.sTypeX10
                     '        WriteMessage("subtype       = X10")
@@ -2021,7 +2022,7 @@ Imports System.Media
                 Case Else
                     WriteLog("ERR: decode_Lighting1 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING1.packettype)) & ": " & Hex(recbuf(LIGHTING1.subtype)))
             End Select
-            'WriteMessage("Signal level  = " & (recbuf(LIGHTING1.rssi) >> 4).ToString)
+            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(LIGHTING1.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Lighting1 Exception : " & ex.Message)
         End Try
@@ -2029,7 +2030,8 @@ Imports System.Media
 
     Private Sub decode_Lighting2()
         Try
-            Dim adresse, valeur As String
+            Dim adresse As String = ""
+            Dim valeur As String = ""
             Select Case recbuf(LIGHTING2.subtype)
                 Case LIGHTING2.sTypeAC, LIGHTING2.sTypeHEU, LIGHTING2.sTypeANSLUT
                     '        Select Case recbuf(LIGHTING2.subtype)
@@ -2054,7 +2056,7 @@ Imports System.Media
                     WriteRetour(adresse, "", valeur)
                 Case Else : WriteLog("ERR: decode_Lighting2 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING2.packettype)) & ": " & Hex(recbuf(LIGHTING2.subtype)))
             End Select
-            'WriteMessage("Signal level  = " & (recbuf(LIGHTING2.rssi) >> 4).ToString)
+            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(LIGHTING2.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Lighting2 Exception : " & ex.Message)
         End Try
@@ -2062,7 +2064,8 @@ Imports System.Media
 
     Private Sub decode_Lighting3()
         Try
-            Dim adresse, valeur As String
+            Dim adresse As String = ""
+            Dim valeur As String = ""
             Select Case recbuf(LIGHTING3.subtype)
                 Case LIGHTING3.sTypeKoppla
                     '        WriteMessage("subtype       = Ikea Koppla")
@@ -2086,7 +2089,7 @@ Imports System.Media
                     WriteRetour(adresse, "", valeur)
                 Case Else : WriteLog("ERR: decode_Lighting3 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING3.packettype)) & ": " & Hex(recbuf(LIGHTING3.subtype)))
             End Select
-            'WriteMessage("Signal level  = " & (recbuf(LIGHTING3.rssi) >> 4).ToString)
+            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(LIGHTING3.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Lighting3 Exception : " & ex.Message)
         End Try
@@ -2102,7 +2105,8 @@ Imports System.Media
 
     Private Sub decode_Lighting5()
         Try
-            Dim adresse, valeur As String
+            Dim adresse As String = ""
+            Dim valeur As String = ""
             Select Case recbuf(LIGHTING5.subtype)
                 Case LIGHTING5.sTypeLightwaveRF
                     'WriteMessage("subtype       = LightwaveRF")
@@ -2123,7 +2127,7 @@ Imports System.Media
                     WriteRetour(adresse, "", valeur)
                 Case Else : WriteLog("ERR: decode_Lighting5 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING5.packettype)) & ": " & Hex(recbuf(LIGHTING5.subtype)))
             End Select
-            'WriteMessage("Signal level  = " & (recbuf(LIGHTING5.rssi) >> 4).ToString)
+            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(LIGHTING5.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Lighting5 Exception : " & ex.Message)
         End Try
@@ -2131,7 +2135,8 @@ Imports System.Media
 
     Private Sub decode_Lighting6()
         Try
-            Dim adresse, valeur As String
+            Dim adresse As String = ""
+            Dim valeur As String = ""
             Select Case recbuf(LIGHTING6.subtype)
                 Case LIGHTING6.sTypeNOVATIS
                     'WriteMessage("subtype       = NOVATIS")
@@ -2939,105 +2944,120 @@ Imports System.Media
     End Sub
 
     Private Sub decode_Temp()
-        'Select Case recbuf(TEMP.subtype)
-        '    Case TEMP.TEMP1
-        '        WriteMessage("subtype       = TEMP1 - THR128/138, THC138")
-        '    Case TEMP.TEMP2
-        '        WriteMessage("subtype       = TEMP2 - THC238/268,THN132,THWR288,THRN122,THN122,AW129/131")
-        '    Case TEMP.TEMP3
-        '        WriteMessage("subtype       = TEMP3 - THWR800")
-        '    Case TEMP.TEMP4
-        '        WriteMessage("subtype       = TEMP4 - RTHN318")
-        '    Case TEMP.TEMP5
-        '        WriteMessage("subtype       = TEMP5 - LaCrosse TX3, TX4, TX17")
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(TEMP.packettype)) & ":" & Hex(recbuf(TEMP.subtype)))
-        'End Select
-        'WriteMessage("Sequence nbr  = " & recbuf(TEMP.seqnbr).ToString)
-        'WriteMessage("Signal level  = " & (recbuf(TEMP.rssi) >> 4).ToString)
-        Dim adresse, valeur As String
-        adresse = (recbuf(TEMP.id1) * 256 + recbuf(TEMP.id2)).ToString
-        If (recbuf(TEMP.tempsign) And &H80) = 0 Then
-            valeur = Math.Round((recbuf(TEMP.temperatureh) * 256 + recbuf(TEMP.temperaturel)) / 10, 2).ToString
-        Else
-            valeur = Math.Round(((recbuf(TEMP.temperatureh) And &H7F) * 256 + recbuf(TEMP.temperaturel)) / 10, 2).ToString
-        End If
-        WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
-        If (recbuf(TEMP.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+        Try
+            'Select Case recbuf(TEMP.subtype)
+            '    Case TEMP.TEMP1
+            '        WriteMessage("subtype       = TEMP1 - THR128/138, THC138")
+            '    Case TEMP.TEMP2
+            '        WriteMessage("subtype       = TEMP2 - THC238/268,THN132,THWR288,THRN122,THN122,AW129/131")
+            '    Case TEMP.TEMP3
+            '        WriteMessage("subtype       = TEMP3 - THWR800")
+            '    Case TEMP.TEMP4
+            '        WriteMessage("subtype       = TEMP4 - RTHN318")
+            '    Case TEMP.TEMP5
+            '        WriteMessage("subtype       = TEMP5 - LaCrosse TX3, TX4, TX17")
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(TEMP.packettype)) & ":" & Hex(recbuf(TEMP.subtype)))
+            'End Select
+            'WriteMessage("Sequence nbr  = " & recbuf(TEMP.seqnbr).ToString)
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            adresse = (recbuf(TEMP.id1) * 256 + recbuf(TEMP.id2)).ToString
+            If (recbuf(TEMP.tempsign) And &H80) = 0 Then
+                valeur = Math.Round((recbuf(TEMP.temperatureh) * 256 + recbuf(TEMP.temperaturel)) / 10, 2).ToString
+            Else
+                valeur = Math.Round(((recbuf(TEMP.temperatureh) And &H7F) * 256 + recbuf(TEMP.temperaturel)) / 10, 2).ToString
+            End If
+            WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
+            If (recbuf(TEMP.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(TEMP.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+        Catch ex As Exception
+            WriteLog("ERR: decode_Temp Exception : " & ex.Message)
+        End Try
     End Sub
 
     Private Sub decode_Hum()
-        'Select Case recbuf(HUM.subtype)
-        '    Case HUM.HUM1
-        '        WriteMessage("subtype       = HUM1 - LaCrosse TX3")
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(HUM.packettype)) & ":" & Hex(recbuf(HUM.subtype)))
-        'End Select
-        'WriteMessage("Sequence nbr  = " & recbuf(HUM.seqnbr).ToString)
-        'Select Case recbuf(HUM.humidity_status)
-        '    Case &H0
-        '        WriteMessage("Status        = Dry")
-        '    Case &H1
-        '        WriteMessage("Status        = Comfortable")
-        '    Case &H2
-        '        WriteMessage("Status        = Normal")
-        '    Case &H3
-        '        WriteMessage("Status        = Wet")
-        'End Select
-        'WriteMessage("Signal level  = " & (recbuf(HUM.rssi) >> 4).ToString)
-        Dim adresse, valeur As String
-        adresse = (recbuf(HUM.id1) * 256 + recbuf(HUM.id2)).ToString
-        valeur = recbuf(HUM.humidity).ToString
-        WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
-        If (recbuf(HUM.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+        Try
+            'Select Case recbuf(HUM.subtype)
+            '    Case HUM.HUM1
+            '        WriteMessage("subtype       = HUM1 - LaCrosse TX3")
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(HUM.packettype)) & ":" & Hex(recbuf(HUM.subtype)))
+            'End Select
+            'WriteMessage("Sequence nbr  = " & recbuf(HUM.seqnbr).ToString)
+            'Select Case recbuf(HUM.humidity_status)
+            '    Case &H0
+            '        WriteMessage("Status        = Dry")
+            '    Case &H1
+            '        WriteMessage("Status        = Comfortable")
+            '    Case &H2
+            '        WriteMessage("Status        = Normal")
+            '    Case &H3
+            '        WriteMessage("Status        = Wet")
+            'End Select
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            adresse = (recbuf(HUM.id1) * 256 + recbuf(HUM.id2)).ToString
+            valeur = recbuf(HUM.humidity).ToString
+            WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
+            If (recbuf(HUM.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(HUM.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+        Catch ex As Exception
+            WriteLog("ERR: decode_Hum Exception : " & ex.Message)
+        End Try
     End Sub
 
     Private Sub decode_TempHum()
-        'Select Case recbuf(TEMP_HUM.subtype)
-        '    Case TEMP_HUM.TH1
-        '        WriteMessage("subtype       = TH1 - THGN122/123,/THGN132,THGR122/228/238/268")
-        '    Case TEMP_HUM.TH2
-        '        WriteMessage("subtype       = TH2 - THGR810")
-        '    Case TEMP_HUM.TH3
-        '        WriteMessage("subtype       = TH3 - RTGR328")
-        '    Case TEMP_HUM.TH4
-        '        WriteMessage("subtype       = TH4 - THGR328")
-        '    Case TEMP_HUM.TH5
-        '        WriteMessage("subtype       = TH5 - WTGR800")
-        '    Case TEMP_HUM.TH6
-        '        WriteMessage("subtype       = TH6 - THGR918,THGRN228,THGN500")
-        '    Case TEMP_HUM.TH7
-        '        WriteMessage("subtype       = TH7 - TFA TS34C")
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(TEMP_HUM.packettype)) & ":" & Hex(recbuf(TEMP_HUM.subtype)))
-        'End Select
-        'WriteMessage("Sequence nbr  = " & recbuf(TEMP_HUM.seqnbr).ToString)
-        'Select Case recbuf(TEMP_HUM.humidity_status)
-        '    Case &H0
-        '        WriteMessage("Status        = Dry")
-        '    Case &H1
-        '        WriteMessage("Status        = Comfortable")
-        '    Case &H2
-        '        WriteMessage("Status        = Normal")
-        '    Case &H3
-        '        WriteMessage("Status        = Wet")
-        'End Select
-        'WriteMessage("Signal level  = " & (recbuf(TEMP_HUM.rssi) >> 4).ToString)
-        Dim adresse, valeur As String
-        adresse = (recbuf(TEMP_HUM.id1) * 256 + recbuf(TEMP_HUM.id2)).ToString
-        If (recbuf(TEMP_HUM.tempsign) And &H80) = 0 Then
-            valeur = Math.Round((recbuf(TEMP_HUM.temperatureh) * 256 + recbuf(TEMP_HUM.temperaturel)) / 10, 2).ToString
-        Else
-            valeur = Math.Round(((recbuf(TEMP_HUM.temperatureh) And &H7F) * 256 + recbuf(TEMP_HUM.temperaturel)) / 10, 2).ToString
-        End If
-        WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
-        valeur = recbuf(TEMP_HUM.humidity).ToString
-        WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
-        If recbuf(TEMP_HUM.subtype) = TEMP_HUM.TH6 Then
-            If recbuf(TEMP_HUM.battery_level) = 0 Then WriteBattery(adresse) 'battery low < 10% (1=20% 2=30%....9=100%)
-        Else
-            If (recbuf(TEMP_HUM.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
-        End If
+        Try
+            'Select Case recbuf(TEMP_HUM.subtype)
+            '    Case TEMP_HUM.TH1
+            '        WriteMessage("subtype       = TH1 - THGN122/123,/THGN132,THGR122/228/238/268")
+            '    Case TEMP_HUM.TH2
+            '        WriteMessage("subtype       = TH2 - THGR810")
+            '    Case TEMP_HUM.TH3
+            '        WriteMessage("subtype       = TH3 - RTGR328")
+            '    Case TEMP_HUM.TH4
+            '        WriteMessage("subtype       = TH4 - THGR328")
+            '    Case TEMP_HUM.TH5
+            '        WriteMessage("subtype       = TH5 - WTGR800")
+            '    Case TEMP_HUM.TH6
+            '        WriteMessage("subtype       = TH6 - THGR918,THGRN228,THGN500")
+            '    Case TEMP_HUM.TH7
+            '        WriteMessage("subtype       = TH7 - TFA TS34C")
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(TEMP_HUM.packettype)) & ":" & Hex(recbuf(TEMP_HUM.subtype)))
+            'End Select
+            'WriteMessage("Sequence nbr  = " & recbuf(TEMP_HUM.seqnbr).ToString)
+            'Select Case recbuf(TEMP_HUM.humidity_status)
+            '    Case &H0
+            '        WriteMessage("Status        = Dry")
+            '    Case &H1
+            '        WriteMessage("Status        = Comfortable")
+            '    Case &H2
+            '        WriteMessage("Status        = Normal")
+            '    Case &H3
+            '        WriteMessage("Status        = Wet")
+            'End Select
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            adresse = (recbuf(TEMP_HUM.id1) * 256 + recbuf(TEMP_HUM.id2)).ToString
+            If (recbuf(TEMP_HUM.tempsign) And &H80) = 0 Then
+                valeur = Math.Round((recbuf(TEMP_HUM.temperatureh) * 256 + recbuf(TEMP_HUM.temperaturel)) / 10, 2).ToString
+            Else
+                valeur = Math.Round(((recbuf(TEMP_HUM.temperatureh) And &H7F) * 256 + recbuf(TEMP_HUM.temperaturel)) / 10, 2).ToString
+            End If
+            WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
+            valeur = recbuf(TEMP_HUM.humidity).ToString
+            WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
+            If recbuf(TEMP_HUM.subtype) = TEMP_HUM.TH6 Then
+                If recbuf(TEMP_HUM.battery_level) = 0 Then WriteBattery(adresse) 'battery low < 10% (1=20% 2=30%....9=100%)
+            Else
+                If (recbuf(TEMP_HUM.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            End If
+            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(TEMP_HUM.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+        Catch ex As Exception
+            WriteLog("ERR: decode_TempHum Exception : " & ex.Message)
+        End Try
     End Sub
     'Not implemented
     Private Sub decode_Baro()
@@ -3045,314 +3065,358 @@ Imports System.Media
     End Sub
     'non géré
     Private Sub decode_TempHumBaro()
-        'Select Case recbuf(TEMP_HUM_BARO.subtype)
-        '    Case TEMP_HUM_BARO.THB1
-        '        WriteMessage("subtype       = THB1 - BTHR918")
-        '    Case TEMP_HUM_BARO.THB2
-        '        WriteMessage("subtype       = THB2 - BTHR918N, BTHR968")
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(TEMP_HUM_BARO.packettype)) & ":" & Hex(recbuf(TEMP_HUM_BARO.subtype)))
-        'End Select
-        'WriteMessage("Sequence nbr  = " & recbuf(TEMP_HUM_BARO.seqnbr).ToString)
-        'WriteMessage("ID            = " & (recbuf(TEMP_HUM_BARO.id1) * 256 + recbuf(TEMP_HUM_BARO.id2)).ToString)
-        'If (TEMP_HUM_BARO.tempsign And &H80) = 0 Then
-        '    WriteMessage("Temperature   = " & Math.Round((recbuf(TEMP_HUM_BARO.temperatureh) * 256 + recbuf(TEMP_HUM_BARO.temperaturel)) / 10, 2).ToString & " °C")
-        'Else
-        '    WriteMessage("Temperature   = -" & Math.Round(((recbuf(TEMP_HUM_BARO.temperatureh) And &H7F) * 256 + recbuf(TEMP_HUM_BARO.temperaturel)) / 10, 2).ToString & " °C")
-        'End If
-        'WriteMessage("Humidity      = " & recbuf(TEMP_HUM_BARO.humidity).ToString)
-        'Select Case recbuf(TEMP_HUM_BARO.humidity_status)
-        '    Case &H0
-        '        WriteMessage("Status        = Dry")
-        '    Case &H1
-        '        WriteMessage("Status        = Comfortable")
-        '    Case &H2
-        '        WriteMessage("Status        = Normal")
-        '    Case &H3
-        '        WriteMessage("Status        = Wet")
-        'End Select
-        'WriteMessage("Barometer     = " & (recbuf(TEMP_HUM_BARO.baroh) * 256 + recbuf(TEMP_HUM_BARO.barol)).ToString)
-        'Select Case recbuf(TEMP_HUM_BARO.forecast)
-        '    Case &H0
-        '        WriteMessage("Forecast      = No information available")
-        '    Case &H1
-        '        WriteMessage("Forecast      = Sunny")
-        '    Case &H2
-        '        WriteMessage("Forecast      = Partly Cloudy")
-        '    Case &H3
-        '        WriteMessage("Forecast      = Cloudy")
-        '    Case &H4
-        '        WriteMessage("Forecast      = Rain")
-        'End Select
+        Try
+            'Select Case recbuf(TEMP_HUM_BARO.subtype)
+            '    Case TEMP_HUM_BARO.THB1
+            '        WriteMessage("subtype       = THB1 - BTHR918")
+            '    Case TEMP_HUM_BARO.THB2
+            '        WriteMessage("subtype       = THB2 - BTHR918N, BTHR968")
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(TEMP_HUM_BARO.packettype)) & ":" & Hex(recbuf(TEMP_HUM_BARO.subtype)))
+            'End Select
+            'WriteMessage("Sequence nbr  = " & recbuf(TEMP_HUM_BARO.seqnbr).ToString)
+            'WriteMessage("ID            = " & (recbuf(TEMP_HUM_BARO.id1) * 256 + recbuf(TEMP_HUM_BARO.id2)).ToString)
+            'If (TEMP_HUM_BARO.tempsign And &H80) = 0 Then
+            '    WriteMessage("Temperature   = " & Math.Round((recbuf(TEMP_HUM_BARO.temperatureh) * 256 + recbuf(TEMP_HUM_BARO.temperaturel)) / 10, 2).ToString & " °C")
+            'Else
+            '    WriteMessage("Temperature   = -" & Math.Round(((recbuf(TEMP_HUM_BARO.temperatureh) And &H7F) * 256 + recbuf(TEMP_HUM_BARO.temperaturel)) / 10, 2).ToString & " °C")
+            'End If
+            'WriteMessage("Humidity      = " & recbuf(TEMP_HUM_BARO.humidity).ToString)
+            'Select Case recbuf(TEMP_HUM_BARO.humidity_status)
+            '    Case &H0
+            '        WriteMessage("Status        = Dry")
+            '    Case &H1
+            '        WriteMessage("Status        = Comfortable")
+            '    Case &H2
+            '        WriteMessage("Status        = Normal")
+            '    Case &H3
+            '        WriteMessage("Status        = Wet")
+            'End Select
+            'WriteMessage("Barometer     = " & (recbuf(TEMP_HUM_BARO.baroh) * 256 + recbuf(TEMP_HUM_BARO.barol)).ToString)
+            'Select Case recbuf(TEMP_HUM_BARO.forecast)
+            '    Case &H0
+            '        WriteMessage("Forecast      = No information available")
+            '    Case &H1
+            '        WriteMessage("Forecast      = Sunny")
+            '    Case &H2
+            '        WriteMessage("Forecast      = Partly Cloudy")
+            '    Case &H3
+            '        WriteMessage("Forecast      = Cloudy")
+            '    Case &H4
+            '        WriteMessage("Forecast      = Rain")
+            'End Select
 
-        'WriteMessage("Signal level  = " & (recbuf(TEMP_HUM_BARO.rssi) >> 4).ToString)
-        'If (recbuf(TEMP_HUM_BARO.battery_level) And &HF) = 0 Then
-        '    WriteMessage("Battery       = Low")
-        'Else
-        '    WriteMessage("Battery       = OK")
-        'End If
+            'WriteMessage("Signal level  = " & (recbuf(TEMP_HUM_BARO.rssi) >> 4).ToString)
+            'If (recbuf(TEMP_HUM_BARO.battery_level) And &HF) = 0 Then
+            '    WriteMessage("Battery       = Low")
+            'Else
+            '    WriteMessage("Battery       = OK")
+            'End If
+        Catch ex As Exception
+            WriteLog("ERR: decode_TempHumBaro Exception : " & ex.Message)
+        End Try
     End Sub
     'non géré
     Private Sub decode_Rain()
-        'Select Case recbuf(RAIN.subtype)
-        '    Case RAIN.RAIN1
-        '        WriteMessage("subtype       = RAIN1 - RGR126/682/918")
-        '    Case RAIN.RAIN2
-        '        WriteMessage("subtype       = RAIN2 - PCR800")
-        '    Case RAIN.RAIN3
-        '        WriteMessage("subtype       = RAIN3 - TFA")
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(RAIN.packettype)) & ":" & Hex(recbuf(RAIN.subtype)))
-        'End Select
-        'WriteMessage("Sequence nbr  = " & recbuf(RAIN.seqnbr).ToString)
-        'WriteMessage("ID            = " & (recbuf(RAIN.id1) * 256 + recbuf(RAIN.id2)).ToString)
-        'If recbuf(RAIN.subtype) <> RAIN.RAIN3 Then
-        '    If recbuf(RAIN.subtype) = RAIN.RAIN1 Then
-        '        WriteMessage("Rain rate     = " & ((recbuf(RAIN.rainrateh) * 256) + recbuf(RAIN.rainratel)).ToString & " mm/h")
-        '    Else
-        '        WriteMessage("Rain rate     = " & (((recbuf(RAIN.rainrateh) * 256) + recbuf(RAIN.rainratel)) / 100).ToString & " mm/h")
-        '    End If
-        'End If
-        'WriteMessage("Total rain    = " & ((recbuf(RAIN.raintotal1) * 65535) + recbuf(RAIN.raintotal2) * 256 + recbuf(RAIN.raintotal3)).ToString & " mm")
-        'WriteMessage("Signal level  = " & (recbuf(RAIN.rssi) >> 4).ToString)
-        'If (recbuf(RAIN.battery_level) And &HF) = 0 Then
-        '    WriteMessage("Battery       = Low")
-        'Else
-        '    WriteMessage("Battery       = OK")
-        'End If
+        Try
+            'Select Case recbuf(RAIN.subtype)
+            '    Case RAIN.RAIN1
+            '        WriteMessage("subtype       = RAIN1 - RGR126/682/918")
+            '    Case RAIN.RAIN2
+            '        WriteMessage("subtype       = RAIN2 - PCR800")
+            '    Case RAIN.RAIN3
+            '        WriteMessage("subtype       = RAIN3 - TFA")
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(RAIN.packettype)) & ":" & Hex(recbuf(RAIN.subtype)))
+            'End Select
+            'WriteMessage("Sequence nbr  = " & recbuf(RAIN.seqnbr).ToString)
+            'WriteMessage("ID            = " & (recbuf(RAIN.id1) * 256 + recbuf(RAIN.id2)).ToString)
+            'If recbuf(RAIN.subtype) <> RAIN.RAIN3 Then
+            '    If recbuf(RAIN.subtype) = RAIN.RAIN1 Then
+            '        WriteMessage("Rain rate     = " & ((recbuf(RAIN.rainrateh) * 256) + recbuf(RAIN.rainratel)).ToString & " mm/h")
+            '    Else
+            '        WriteMessage("Rain rate     = " & (((recbuf(RAIN.rainrateh) * 256) + recbuf(RAIN.rainratel)) / 100).ToString & " mm/h")
+            '    End If
+            'End If
+            'WriteMessage("Total rain    = " & ((recbuf(RAIN.raintotal1) * 65535) + recbuf(RAIN.raintotal2) * 256 + recbuf(RAIN.raintotal3)).ToString & " mm")
+            'WriteMessage("Signal level  = " & (recbuf(RAIN.rssi) >> 4).ToString)
+            'If (recbuf(RAIN.battery_level) And &HF) = 0 Then
+            '    WriteMessage("Battery       = Low")
+            'Else
+            '    WriteMessage("Battery       = OK")
+            'End If
+        Catch ex As Exception
+            WriteLog("ERR: decode_Rain Exception : " & ex.Message)
+        End Try
     End Sub
     'non géré
     Private Sub decode_Wind()
-        'Select Case recbuf(WIND.subtype)
-        '    Case WIND.WIND1
-        '        WriteMessage("subtype       = WIND1 - WTGR800")
-        '    Case WIND.WIND2
-        '        WriteMessage("subtype       = WIND2 - WGR800")
-        '    Case WIND.WIND3
-        '        WriteMessage("subtype       = WIND3 - STR918, WGR918")
-        '    Case WIND.WIND4
-        '        WriteMessage("subtype       = WIND4 - TFA")
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(WIND.packettype)) & ":" & Hex(recbuf(WIND.subtype)))
-        'End Select
-        'WriteMessage("Sequence nbr  = " & recbuf(WIND.seqnbr).ToString)
-        'WriteMessage("ID            = " & (recbuf(WIND.id1) * 256 + recbuf(WIND.id2)).ToString)
-        'WriteMessage("Direction     = " & ((recbuf(WIND.directionh) * 256) + recbuf(WIND.directionl)).ToString & " degrees")
-        'WriteMessage("Average speed = " & (((recbuf(WIND.av_speedh) * 256) + recbuf(WIND.av_speedl)) / 10).ToString & " mtr/sec")
-        'WriteMessage("Wind gust     = " & (((recbuf(WIND.gusth) * 256) + recbuf(WIND.gustl)) / 10).ToString & " mtr/sec")
-        'If recbuf(WIND.subtype) = WIND.WIND4 Then
-        '    If (WIND.tempsign And &H80) = 0 Then
-        '        WriteMessage("Temperature   = " & Math.Round((recbuf(WIND.temperatureh) * 256 + recbuf(WIND.temperaturel)) / 10, 2).ToString & " °C")
-        '    Else
-        '        WriteMessage("Temperature   = -" & Math.Round(((recbuf(WIND.temperatureh) And &H7F) * 256 + recbuf(WIND.temperaturel)) / 10, 2).ToString & " °C")
-        '    End If
+        Try
+            'Select Case recbuf(WIND.subtype)
+            '    Case WIND.WIND1
+            '        WriteMessage("subtype       = WIND1 - WTGR800")
+            '    Case WIND.WIND2
+            '        WriteMessage("subtype       = WIND2 - WGR800")
+            '    Case WIND.WIND3
+            '        WriteMessage("subtype       = WIND3 - STR918, WGR918")
+            '    Case WIND.WIND4
+            '        WriteMessage("subtype       = WIND4 - TFA")
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(WIND.packettype)) & ":" & Hex(recbuf(WIND.subtype)))
+            'End Select
+            'WriteMessage("Sequence nbr  = " & recbuf(WIND.seqnbr).ToString)
+            'WriteMessage("ID            = " & (recbuf(WIND.id1) * 256 + recbuf(WIND.id2)).ToString)
+            'WriteMessage("Direction     = " & ((recbuf(WIND.directionh) * 256) + recbuf(WIND.directionl)).ToString & " degrees")
+            'WriteMessage("Average speed = " & (((recbuf(WIND.av_speedh) * 256) + recbuf(WIND.av_speedl)) / 10).ToString & " mtr/sec")
+            'WriteMessage("Wind gust     = " & (((recbuf(WIND.gusth) * 256) + recbuf(WIND.gustl)) / 10).ToString & " mtr/sec")
+            'If recbuf(WIND.subtype) = WIND.WIND4 Then
+            '    If (WIND.tempsign And &H80) = 0 Then
+            '        WriteMessage("Temperature   = " & Math.Round((recbuf(WIND.temperatureh) * 256 + recbuf(WIND.temperaturel)) / 10, 2).ToString & " °C")
+            '    Else
+            '        WriteMessage("Temperature   = -" & Math.Round(((recbuf(WIND.temperatureh) And &H7F) * 256 + recbuf(WIND.temperaturel)) / 10, 2).ToString & " °C")
+            '    End If
 
-        '    If (WIND.chillsign And &H80) = 0 Then
-        '        WriteMessage("Chill         = " & Math.Round((recbuf(WIND.chillh) * 256 + recbuf(WIND.chilll)) / 10, 2).ToString & " °C")
-        '    Else
-        '        WriteMessage("Chill         = -" & Math.Round(((recbuf(WIND.chillh) And &H7F) * 256 + recbuf(WIND.chilll)) / 10, 2).ToString & " °C")
-        '    End If
-        'End If
+            '    If (WIND.chillsign And &H80) = 0 Then
+            '        WriteMessage("Chill         = " & Math.Round((recbuf(WIND.chillh) * 256 + recbuf(WIND.chilll)) / 10, 2).ToString & " °C")
+            '    Else
+            '        WriteMessage("Chill         = -" & Math.Round(((recbuf(WIND.chillh) And &H7F) * 256 + recbuf(WIND.chilll)) / 10, 2).ToString & " °C")
+            '    End If
+            'End If
 
-        'WriteMessage("Signal level  = " & (recbuf(WIND.rssi) >> 4).ToString)
-        'If recbuf(WIND.subtype) = WIND.WIND3 Then
-        '    Select Case recbuf(WIND.battery_level)
-        '        Case 0
-        '            WriteMessage("Battery       = 10%")
-        '        Case 1
-        '            WriteMessage("Battery       = 20%")
-        '        Case 2
-        '            WriteMessage("Battery       = 30%")
-        '        Case 3
-        '            WriteMessage("Battery       = 40%")
-        '        Case 4
-        '            WriteMessage("Battery       = 50%")
-        '        Case 5
-        '            WriteMessage("Battery       = 60%")
-        '        Case 6
-        '            WriteMessage("Battery       = 70%")
-        '        Case 7
-        '            WriteMessage("Battery       = 80%")
-        '        Case 8
-        '            WriteMessage("Battery       = 90%")
-        '        Case 9
-        '            WriteMessage("Battery       = 100%")
-        '    End Select
-        'Else
-        '    If (recbuf(WIND.battery_level) And &HF) = 0 Then
-        '        WriteMessage("Battery       = Low")
-        '    Else
-        '        WriteMessage("Battery       = OK")
-        '    End If
-        'End If
+            'WriteMessage("Signal level  = " & (recbuf(WIND.rssi) >> 4).ToString)
+            'If recbuf(WIND.subtype) = WIND.WIND3 Then
+            '    Select Case recbuf(WIND.battery_level)
+            '        Case 0
+            '            WriteMessage("Battery       = 10%")
+            '        Case 1
+            '            WriteMessage("Battery       = 20%")
+            '        Case 2
+            '            WriteMessage("Battery       = 30%")
+            '        Case 3
+            '            WriteMessage("Battery       = 40%")
+            '        Case 4
+            '            WriteMessage("Battery       = 50%")
+            '        Case 5
+            '            WriteMessage("Battery       = 60%")
+            '        Case 6
+            '            WriteMessage("Battery       = 70%")
+            '        Case 7
+            '            WriteMessage("Battery       = 80%")
+            '        Case 8
+            '            WriteMessage("Battery       = 90%")
+            '        Case 9
+            '            WriteMessage("Battery       = 100%")
+            '    End Select
+            'Else
+            '    If (recbuf(WIND.battery_level) And &HF) = 0 Then
+            '        WriteMessage("Battery       = Low")
+            '    Else
+            '        WriteMessage("Battery       = OK")
+            '    End If
+            'End If
+        Catch ex As Exception
+            WriteLog("ERR: decode_Wind Exception : " & ex.Message)
+        End Try
     End Sub
     'non géré
     Private Sub decode_UV()
-        'Select Case recbuf(UV.subtype)
-        '    Case UV.UV1
-        '        WriteMessage("Subtype       = UV1 - UVN128, UV138")
-        '    Case UV.UV2
-        '        WriteMessage("Subtype       = UV2 - UVN800")
-        '    Case UV.UV3
-        '        WriteMessage("Subtype       = UV3 - TFA")
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(UV.packettype) & ":" & Hex(recbuf(UV.subtype)))
-        'End Select
-        'WriteMessage("Sequence nbr  = " & recbuf(UV.seqnbr).ToString)
-        'WriteMessage("ID            = " & (recbuf(UV.id1) * 256 + recbuf(UV.id2)).ToString)
-        'WriteMessage("Level         = " & (recbuf(UV.uv) / 10).ToString)
-        'If recbuf(UV.subtype) = UV.UV3 Then
-        '    If (UV.tempsign And &H80) = 0 Then
-        '        WriteMessage("Temperature   = " & Math.Round((recbuf(UV.temperatureh) * 256 + recbuf(UV.temperaturel)) / 10, 2).ToString & " °C")
-        '    Else
-        '        WriteMessage("Temperature   = -" & Math.Round(((recbuf(UV.temperatureh) And &H7F) * 256 + recbuf(UV.temperaturel)) / 10, 2).ToString & " °C")
-        '    End If
-        'End If
-        'If recbuf(UV.uv) < 3 Then
-        '    WriteMessage("Description = Low")
-        'ElseIf recbuf(UV.uv) < 6 Then
-        '    WriteMessage("Description = Medium")
-        'ElseIf recbuf(UV.uv) < 8 Then
-        '    WriteMessage("Description = High")
-        'ElseIf recbuf(UV.uv) < 11 Then
-        '    WriteMessage("Description = Very high")
-        'Else
-        '    WriteMessage("Description = Dangerous")
-        'End If
-        'WriteMessage("Signal level  = " & (recbuf(UV.rssi) >> 4).ToString)
-        'If (recbuf(UV.battery_level) And &HF) = 0 Then
-        '    WriteMessage("Battery       = Low")
-        'Else
-        '    WriteMessage("Battery       = OK")
-        'End If
+        Try
+            'Select Case recbuf(UV.subtype)
+            '    Case UV.UV1
+            '        WriteMessage("Subtype       = UV1 - UVN128, UV138")
+            '    Case UV.UV2
+            '        WriteMessage("Subtype       = UV2 - UVN800")
+            '    Case UV.UV3
+            '        WriteMessage("Subtype       = UV3 - TFA")
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(UV.packettype) & ":" & Hex(recbuf(UV.subtype)))
+            'End Select
+            'WriteMessage("Sequence nbr  = " & recbuf(UV.seqnbr).ToString)
+            'WriteMessage("ID            = " & (recbuf(UV.id1) * 256 + recbuf(UV.id2)).ToString)
+            'WriteMessage("Level         = " & (recbuf(UV.uv) / 10).ToString)
+            'If recbuf(UV.subtype) = UV.UV3 Then
+            '    If (UV.tempsign And &H80) = 0 Then
+            '        WriteMessage("Temperature   = " & Math.Round((recbuf(UV.temperatureh) * 256 + recbuf(UV.temperaturel)) / 10, 2).ToString & " °C")
+            '    Else
+            '        WriteMessage("Temperature   = -" & Math.Round(((recbuf(UV.temperatureh) And &H7F) * 256 + recbuf(UV.temperaturel)) / 10, 2).ToString & " °C")
+            '    End If
+            'End If
+            'If recbuf(UV.uv) < 3 Then
+            '    WriteMessage("Description = Low")
+            'ElseIf recbuf(UV.uv) < 6 Then
+            '    WriteMessage("Description = Medium")
+            'ElseIf recbuf(UV.uv) < 8 Then
+            '    WriteMessage("Description = High")
+            'ElseIf recbuf(UV.uv) < 11 Then
+            '    WriteMessage("Description = Very high")
+            'Else
+            '    WriteMessage("Description = Dangerous")
+            'End If
+            'WriteMessage("Signal level  = " & (recbuf(UV.rssi) >> 4).ToString)
+            'If (recbuf(UV.battery_level) And &HF) = 0 Then
+            '    WriteMessage("Battery       = Low")
+            'Else
+            '    WriteMessage("Battery       = OK")
+            'End If
+        Catch ex As Exception
+            WriteLog("ERR: decode_UV Exception : " & ex.Message)
+        End Try
     End Sub
     'Not implemented
     Private Sub decode_DateTime()
+        Try
 
+        Catch ex As Exception
+            WriteLog("ERR: decode_DateTime Exception : " & ex.Message)
+        End Try
     End Sub
     'non géré
     Private Sub decode_Current()
-        'Select Case recbuf(CURRENT.subtype)
-        '    Case CURRENT.ELEC1
-        '        WriteMessage("subtype       = ELEC1 - OWL CM113, Electrisave, cent-a-meter")
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(CURRENT.packettype)) & ":" & Hex(recbuf(CURRENT.subtype)))
-        'End Select
-        'WriteMessage("Sequence nbr  = " & recbuf(CURRENT.seqnbr).ToString)
-        'WriteMessage("ID            = " & (recbuf(CURRENT.id1) * 256 + recbuf(CURRENT.id2)).ToString)
-        'WriteMessage("Count         = " & recbuf(5).ToString)
-        'WriteMessage("Channel 1     = " & ((recbuf(CURRENT.ch1h) * 256 + recbuf(CURRENT.ch1l)) / 10).ToString & " ampere")
-        'WriteMessage("Channel 2     = " & ((recbuf(CURRENT.ch2h) * 256 + recbuf(CURRENT.ch2l)) / 10).ToString & " ampere")
-        'WriteMessage("Channel 3     = " & ((recbuf(CURRENT.ch3h) * 256 + recbuf(CURRENT.ch3l)) / 10).ToString & " ampere")
+        Try
+            'Select Case recbuf(CURRENT.subtype)
+            '    Case CURRENT.ELEC1
+            '        WriteMessage("subtype       = ELEC1 - OWL CM113, Electrisave, cent-a-meter")
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(CURRENT.packettype)) & ":" & Hex(recbuf(CURRENT.subtype)))
+            'End Select
+            'WriteMessage("Sequence nbr  = " & recbuf(CURRENT.seqnbr).ToString)
+            'WriteMessage("ID            = " & (recbuf(CURRENT.id1) * 256 + recbuf(CURRENT.id2)).ToString)
+            'WriteMessage("Count         = " & recbuf(5).ToString)
+            'WriteMessage("Channel 1     = " & ((recbuf(CURRENT.ch1h) * 256 + recbuf(CURRENT.ch1l)) / 10).ToString & " ampere")
+            'WriteMessage("Channel 2     = " & ((recbuf(CURRENT.ch2h) * 256 + recbuf(CURRENT.ch2l)) / 10).ToString & " ampere")
+            'WriteMessage("Channel 3     = " & ((recbuf(CURRENT.ch3h) * 256 + recbuf(CURRENT.ch3l)) / 10).ToString & " ampere")
 
-        'WriteMessage("Signal level  = " & (recbuf(CURRENT.rssi) >> 4).ToString)
-        'If (recbuf(CURRENT.battery_level) And &HF) = 0 Then
-        '    WriteMessage("Battery       = Low")
-        'Else
-        '    WriteMessage("Battery       = OK")
-        'End If
+            'WriteMessage("Signal level  = " & (recbuf(CURRENT.rssi) >> 4).ToString)
+            'If (recbuf(CURRENT.battery_level) And &HF) = 0 Then
+            '    WriteMessage("Battery       = Low")
+            'Else
+            '    WriteMessage("Battery       = OK")
+            'End If
+        Catch ex As Exception
+            WriteLog("ERR: decode_Current Exception : " & ex.Message)
+        End Try
     End Sub
     'non géré
     Private Sub decode_Energy()
-        'Select Case recbuf(ENERGY.subtype)
-        '    Case ENERGY.ELEC2
-        '        WriteMessage("subtype       = ELEC2 - OWL CM119, CM160")
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(ENERGY.packettype)) & ":" & Hex(recbuf(ENERGY.subtype)))
-        'End Select
-        'WriteMessage("Sequence nbr  = " & recbuf(ENERGY.seqnbr).ToString)
-        'WriteMessage("ID            = " & (recbuf(ENERGY.id1) * 256 + recbuf(ENERGY.id2)).ToString)
-        'WriteMessage("Count         = " & recbuf(ENERGY.count).ToString)
-        'WriteMessage("Instant usage = " & (recbuf(ENERGY.instant1) * 16777216 + recbuf(ENERGY.instant2) * 65536 + recbuf(ENERGY.instant3) * 256 + recbuf(ENERGY.instant4)).ToString & " Watt")
-        'WriteMessage("total usage   = " & ((recbuf(ENERGY.total1) * 1099511627776 + recbuf(ENERGY.total2) * 4294967296 + recbuf(ENERGY.total3) * 16777216 _
-        '                                   + recbuf(ENERGY.total4) * 65536 + recbuf(ENERGY.total5) * 256 + recbuf(ENERGY.total6)) / 223.666).ToString & " Wh")
+        Try
+            'Select Case recbuf(ENERGY.subtype)
+            '    Case ENERGY.ELEC2
+            '        WriteMessage("subtype       = ELEC2 - OWL CM119, CM160")
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(ENERGY.packettype)) & ":" & Hex(recbuf(ENERGY.subtype)))
+            'End Select
+            'WriteMessage("Sequence nbr  = " & recbuf(ENERGY.seqnbr).ToString)
+            'WriteMessage("ID            = " & (recbuf(ENERGY.id1) * 256 + recbuf(ENERGY.id2)).ToString)
+            'WriteMessage("Count         = " & recbuf(ENERGY.count).ToString)
+            'WriteMessage("Instant usage = " & (recbuf(ENERGY.instant1) * 16777216 + recbuf(ENERGY.instant2) * 65536 + recbuf(ENERGY.instant3) * 256 + recbuf(ENERGY.instant4)).ToString & " Watt")
+            'WriteMessage("total usage   = " & ((recbuf(ENERGY.total1) * 1099511627776 + recbuf(ENERGY.total2) * 4294967296 + recbuf(ENERGY.total3) * 16777216 _
+            '                                   + recbuf(ENERGY.total4) * 65536 + recbuf(ENERGY.total5) * 256 + recbuf(ENERGY.total6)) / 223.666).ToString & " Wh")
 
-        'WriteMessage("Signal level  = " & (recbuf(ENERGY.rssi) >> 4).ToString)
-        'If (recbuf(ENERGY.battery_level) And &HF) = 0 Then
-        '    WriteMessage("Battery       = Low")
-        'Else
-        '    WriteMessage("Battery       = OK")
-        'End If
+            'WriteMessage("Signal level  = " & (recbuf(ENERGY.rssi) >> 4).ToString)
+            'If (recbuf(ENERGY.battery_level) And &HF) = 0 Then
+            '    WriteMessage("Battery       = Low")
+            'Else
+            '    WriteMessage("Battery       = OK")
+            'End If
+        Catch ex As Exception
+            WriteLog("ERR: decode_Energy Exception : " & ex.Message)
+        End Try
     End Sub
     'Not implemented
     Private Sub decode_Gas()
-        'WriteMessage("Not implemented")
+        Try
+            'WriteMessage("Not implemented")
+        Catch ex As Exception
+            WriteLog("ERR: decode_Gas Exception : " & ex.Message)
+        End Try
     End Sub
     'Not implemented
     Private Sub decode_Water()
-        'WriteMessage("Not implemented")
+        Try
+            'WriteMessage("Not implemented")
+        Catch ex As Exception
+            WriteLog("ERR: decode_Water Exception : " & ex.Message)
+        End Try
     End Sub
     'non géré
     Private Sub decode_Weight()
-        'Select Case recbuf(WEIGHT.subtype)
-        '    Case WEIGHT.WEIGHT1
-        '        WriteMessage("subtype       = BWR102")
-        '    Case WEIGHT.WEIGHT2
-        '        WriteMessage("subtype       = GR101")
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(WEIGHT.packettype)) & ":" & Hex(recbuf(WEIGHT.subtype)))
-        'End Select
-        'WriteMessage("Sequence nbr  = " & recbuf(WEIGHT.seqnbr).ToString)
-        'WriteMessage("ID            = " & (recbuf(WEIGHT.id1) * 256 + recbuf(WEIGHT.id2)).ToString)
-        'WriteMessage("Weight        = " & ((recbuf(WEIGHT.weighthigh) * 25.6) + recbuf(WEIGHT.weightlow) / 10).ToString & " kg")
-        'WriteMessage("Signal level  = " & (recbuf(WEIGHT.rssi) >> 4).ToString)
+        Try
+            'Select Case recbuf(WEIGHT.subtype)
+            '    Case WEIGHT.WEIGHT1
+            '        WriteMessage("subtype       = BWR102")
+            '    Case WEIGHT.WEIGHT2
+            '        WriteMessage("subtype       = GR101")
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(WEIGHT.packettype)) & ":" & Hex(recbuf(WEIGHT.subtype)))
+            'End Select
+            'WriteMessage("Sequence nbr  = " & recbuf(WEIGHT.seqnbr).ToString)
+            'WriteMessage("ID            = " & (recbuf(WEIGHT.id1) * 256 + recbuf(WEIGHT.id2)).ToString)
+            'WriteMessage("Weight        = " & ((recbuf(WEIGHT.weighthigh) * 25.6) + recbuf(WEIGHT.weightlow) / 10).ToString & " kg")
+            'WriteMessage("Signal level  = " & (recbuf(WEIGHT.rssi) >> 4).ToString)
+        Catch ex As Exception
+            WriteLog("ERR: decode_Weight Exception : " & ex.Message)
+        End Try
     End Sub
     'non géré
     Private Sub decode_RFXSensor()
-        'Select Case recbuf(RFXSENSOR.subtype)
-        '    Case RFXSENSOR.Temp
-        '        WriteMessage("subtype       = Temperature")
-        '        WriteMessage("Sequence nbr  = " & recbuf(RFXSENSOR.seqnbr).ToString)
-        '        WriteMessage("ID            = " & recbuf(RFXSENSOR.id).ToString)
-        '        If (recbuf(RFXSENSOR.msg1) And &H80) = 0 Then 'positive temperature?
-        '            WriteMessage("msg           = " & Math.Round(((recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)) / 100), 2).ToString & " °C")
-        '        Else
-        '            WriteMessage("msg           = " & Math.Round((0 - ((recbuf(RFXSENSOR.msg1) And &H7F) * 256 + recbuf(RFXSENSOR.msg2)) / 100), 2).ToString & " °C")
-        '        End If
-        '    Case RFXSENSOR.AD
-        '        WriteMessage("subtype       = A/D")
-        '        WriteMessage("Sequence nbr  = " & recbuf(RFXSENSOR.seqnbr).ToString)
-        '        WriteMessage("ID            = " & recbuf(RFXSENSOR.id).ToString)
-        '        WriteMessage("msg           = " & (recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)).ToString & " mV")
-        '    Case RFXSENSOR.Volt
-        '        WriteMessage("subtype       = Voltage")
-        '        WriteMessage("Sequence nbr  = " & recbuf(RFXSENSOR.seqnbr).ToString)
-        '        WriteMessage("ID            = " & recbuf(RFXSENSOR.id).ToString)
-        '        WriteMessage("msg           = " & (recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)).ToString & " mV")
-        '    Case RFXSENSOR.Message
-        '        WriteMessage("subtype       = Message")
-        '        WriteMessage("Sequence nbr  = " & recbuf(RFXSENSOR.seqnbr).ToString)
-        '        WriteMessage("ID            = " & recbuf(RFXSENSOR.id).ToString)
-        '        Select Case recbuf(RFXSENSOR.msg2)
-        '            Case &H1
-        '                WriteMessage("msg           = sensor addresses incremented")
-        '            Case &H2
-        '                WriteMessage("msg           = battery low detected")
-        '            Case &H81
-        '                WriteMessage("msg           = no 1-wire device connected")
-        '            Case &H82
-        '                WriteMessage("msg           = 1-Wire ROM CRC error")
-        '            Case &H83
-        '                WriteMessage("msg           = 1-Wire device connected is not a DS18B20 or DS2438")
-        '            Case &H84
-        '                WriteMessage("msg           = no end of read signal received from 1-Wire device")
-        '            Case &H85
-        '                WriteMessage("msg           = 1-Wire scratchpad CRC error")
-        '            Case Else
-        '                WriteMessage("ERROR: unknown message")
-        '        End Select
+        Try
+            'Select Case recbuf(RFXSENSOR.subtype)
+            '    Case RFXSENSOR.Temp
+            '        WriteMessage("subtype       = Temperature")
+            '        WriteMessage("Sequence nbr  = " & recbuf(RFXSENSOR.seqnbr).ToString)
+            '        WriteMessage("ID            = " & recbuf(RFXSENSOR.id).ToString)
+            '        If (recbuf(RFXSENSOR.msg1) And &H80) = 0 Then 'positive temperature?
+            '            WriteMessage("msg           = " & Math.Round(((recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)) / 100), 2).ToString & " °C")
+            '        Else
+            '            WriteMessage("msg           = " & Math.Round((0 - ((recbuf(RFXSENSOR.msg1) And &H7F) * 256 + recbuf(RFXSENSOR.msg2)) / 100), 2).ToString & " °C")
+            '        End If
+            '    Case RFXSENSOR.AD
+            '        WriteMessage("subtype       = A/D")
+            '        WriteMessage("Sequence nbr  = " & recbuf(RFXSENSOR.seqnbr).ToString)
+            '        WriteMessage("ID            = " & recbuf(RFXSENSOR.id).ToString)
+            '        WriteMessage("msg           = " & (recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)).ToString & " mV")
+            '    Case RFXSENSOR.Volt
+            '        WriteMessage("subtype       = Voltage")
+            '        WriteMessage("Sequence nbr  = " & recbuf(RFXSENSOR.seqnbr).ToString)
+            '        WriteMessage("ID            = " & recbuf(RFXSENSOR.id).ToString)
+            '        WriteMessage("msg           = " & (recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)).ToString & " mV")
+            '    Case RFXSENSOR.Message
+            '        WriteMessage("subtype       = Message")
+            '        WriteMessage("Sequence nbr  = " & recbuf(RFXSENSOR.seqnbr).ToString)
+            '        WriteMessage("ID            = " & recbuf(RFXSENSOR.id).ToString)
+            '        Select Case recbuf(RFXSENSOR.msg2)
+            '            Case &H1
+            '                WriteMessage("msg           = sensor addresses incremented")
+            '            Case &H2
+            '                WriteMessage("msg           = battery low detected")
+            '            Case &H81
+            '                WriteMessage("msg           = no 1-wire device connected")
+            '            Case &H82
+            '                WriteMessage("msg           = 1-Wire ROM CRC error")
+            '            Case &H83
+            '                WriteMessage("msg           = 1-Wire device connected is not a DS18B20 or DS2438")
+            '            Case &H84
+            '                WriteMessage("msg           = no end of read signal received from 1-Wire device")
+            '            Case &H85
+            '                WriteMessage("msg           = 1-Wire scratchpad CRC error")
+            '            Case Else
+            '                WriteMessage("ERROR: unknown message")
+            '        End Select
 
-        '        WriteMessage("msg           = " & (recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)).ToString)
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(RFXSENSOR.packettype)) & ":" & Hex(recbuf(RFXSENSOR.subtype)))
-        'End Select
-        'WriteMessage("Signal level  = " & (recbuf(RFXSENSOR.rssi) >> 4).ToString)
-
+            '        WriteMessage("msg           = " & (recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)).ToString)
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(RFXSENSOR.packettype)) & ":" & Hex(recbuf(RFXSENSOR.subtype)))
+            'End Select
+            'WriteMessage("Signal level  = " & (recbuf(RFXSENSOR.rssi) >> 4).ToString)
+        Catch ex As Exception
+            WriteLog("ERR: decode_RFXSensor Exception : " & ex.Message)
+        End Try
     End Sub
 
     Private Sub decode_RFXMeter()
         Try
-            Dim adresse, valeur As String
+            Dim adresse As String = ""
+            Dim valeur As String = ""
             Dim counter As Long
 
             Select Case recbuf(RFXMETER.subtype)
@@ -3444,7 +3508,7 @@ Imports System.Media
                 Case Else
                     '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(RFXMETER.packettype)) & ":" & Hex(recbuf(RFXMETER.subtype)))
             End Select
-            'WriteMessage("Signal level  = " & (recbuf(RFXMETER.rssi) >> 4).ToString)
+            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(RFXMETER.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_RFXMeter Exception : " & ex.Message)
         End Try
