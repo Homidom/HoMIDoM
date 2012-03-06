@@ -6658,8 +6658,21 @@ Namespace HoMIDom
             End Try
         End Function
 
+        ''' <summary>
+        ''' Sauvegarde les commandes dans un template donné
+        ''' </summary>
+        ''' <param name="IdSrv">Id du Serveur</param>
+        ''' <param name="Template">Nom du template</param>
+        ''' <param name="Commandes">Liste des commandes</param>
+        ''' <returns>O si ok sinon message d'erreur</returns>
+        ''' <remarks></remarks>
         Public Function SaveTemplate(ByVal IdSrv As String, ByVal Template As String, ByVal Commandes As List(Of Telecommande.Commandes)) As String Implements IHoMIDom.SaveTemplate
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
                 Dim MyPath As String = _MonRepertoire & "\templates\"
                 Dim _Fichier As String = MyPath & LCase(Template) & ".xml"
 
@@ -6718,6 +6731,38 @@ Namespace HoMIDom
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTemplate", "Erreur : " & ex.Message)
                 Return ex.Message
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Demande au device d'envoyer une commande (telecommande) à son driver
+        ''' </summary>
+        ''' <param name="IdSrv">Id du serveur, retourne 99 si non OK</param>
+        ''' <param name="IdDevice">Id du device concerné</param>
+        ''' <param name="Commande">Nom de la Commande à envoyée</param>
+        ''' <returns>0 si Ok sinon erreur</returns>
+        ''' <remarks></remarks>
+        Public Function TelecommandeSendCommand(ByVal IdSrv As String, ByVal IdDevice As String, ByVal Commande As String) As String Implements IHoMIDom.TelecommandeSendCommand
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                Dim x As Object = Nothing
+
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).ID = IdDevice Then
+                        _ListDevices.Item(i).EnvoyerCommande(Commande)
+                        Return "0"
+                        Exit Function
+                    End If
+                Next
+
+                Return "Erreur: le device n'a pas été trouvé"
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TelecommandeSendCommand", "Erreur : " & ex.ToString)
+                Return "Erreur lors du traitement de la fonction TelecommandeSendCommand: " & ex.ToString
             End Try
         End Function
 #End Region
