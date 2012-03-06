@@ -375,11 +375,7 @@ Imports System.Globalization
                 If Command = "" Then
                     Return False
                 Else
-                    'Write(deviceobject, Command, Param(0), Param(1))
-                    Select Case UCase(Command)
-                        Case ""
-                        Case Else
-                    End Select
+                    Write(MyDevice, Command, Param(0), Param(1))
                     Return True
                 End If
             Else
@@ -504,7 +500,7 @@ Imports System.Globalization
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
             If _Enable = False Then Exit Sub
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXMitter WRITE", "Device " & Objet.Name & " <-- " & Command)
+            If _DEBUG Then WriteLog("WRITE Device " & Objet.Name & " <-- " & Command)
             'suivant le protocole, on lance la bonne fonction
             ' AC / X10 / ARC / WAVEMAN
             Select Case UCase(Objet.modele)

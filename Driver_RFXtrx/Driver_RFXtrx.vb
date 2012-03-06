@@ -1100,17 +1100,22 @@ Imports System.Media
     ''' <param name="Param"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function ExecuteCommand(ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+    Public Function ExecuteCommand(ByVal MyDevice As Object, ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+        Dim retour As Boolean = False
         Try
-            Dim retour As Boolean = False
-            If Command = "" Then
-                Return False
+            If MyDevice IsNot Nothing Then
+                'Pas de commande demandée donc erreur
+                If Command = "" Then
+                    Return False
+                Else
+                    Write(MyDevice, Command, Param(0), Param(1))
+                    Return True
+                End If
             Else
-                'Write(deviceobject, Command, Param(0), Param(1))
-                Return True
+                Return False
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS ExecuteCommand", "exception : " & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "exception : " & ex.Message)
             Return False
         End Try
     End Function
@@ -1225,21 +1230,44 @@ Imports System.Media
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
             If _Enable = False Then Exit Sub
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXtrx WRITE", "Device " & Objet.Name & " <-- " & Command)
-            ''suivant le protocole, on lance la bonne fonction
-            ''HOMEEASY / HOMEEASYUS / X10 / ARC / WAVEMAN
-            'Select Case UCase(Objet.modele)
-            '    Case "HOMEEASY"
-            '        protocol_chacon(Objet.adresse1, Command, False)
-            '    Case "X10"
-            '        protocol_x10(Objet.adresse1, Command)
-            '    Case "ARC"
-            '        protocol_arc(Objet.adresse1, Command)
-            '    Case "WAVEMAN"
-            '        protocol_waveman(Objet.Adresse1, Command)
-            '    Case Else
-            '        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx WRITE", "Protocole non géré : " & Objet.Modele.ToString.ToUpper)
-            'End Select
+            If _DEBUG Then WriteLog("WRITE Device " & Objet.Name & " <-- " & Command)
+            'suivant le protocole, on lance la bonne fonction
+            'AC / ACEU / ANSLUT / X10 / ARC / WAVEMAN / ELROAB400D / EMW200 / IMPULS
+
+            Select Case UCase(Objet.modele)
+                Case "AC" 'AC : Chacon...
+                    If IsNothing(Parametre1) Then
+                        send_AC(Objet.adresse1, Command, 0)
+                    Else
+                        send_AC(Objet.adresse1, Command, 0, Parametre1)
+                    End If
+                Case "ACEU" 'AC norme Europe
+                    If IsNothing(Parametre1) Then
+                        send_AC(Objet.adresse1, Command, 1)
+                    Else
+                        send_AC(Objet.adresse1, Command, 1, Parametre1)
+                    End If
+                Case "ANSLUT"
+                    If IsNothing(Parametre1) Then
+                        send_AC(Objet.adresse1, Command, 2)
+                    Else
+                        send_AC(Objet.adresse1, Command, 2, Parametre1)
+                    End If
+                Case "X10"
+                    send_x10(Objet.adresse1, Command)
+                Case "ARC"
+                    send_arc(Objet.adresse1, Command)
+                Case "ELROAB400D"
+                    send_ELROAB400D(Objet.adresse1, Command)
+                Case "WAVEMAN"
+                    send_WAVEMAN(Objet.Adresse1, Command)
+                Case "EMW200"
+                    send_EMW200(Objet.Adresse1, Command)
+                Case "IMPULS"
+                    send_IMPULS(Objet.Adresse1, Command)
+                Case Else
+                    WriteLog("WRITE Protocole non géré : " & Objet.Modele.ToString.ToUpper)
+            End Select
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx WRITE", ex.ToString)
         End Try
@@ -1364,17 +1392,17 @@ Imports System.Media
             'add_devicecommande("PRESETDIM", "permet de paramétrer le DIM : param1=niveau, param2=timer", 2)
 
             'Libellé Driver
-            add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
+            Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
-            add_libelledevice("ADRESSE2", "@", "")
-            add_libelledevice("SOLO", "@", "")
-            add_libelledevice("MODELE", "Protocole", "Nom du protocole à utiliser : HOMEEASY / X10 / ARC / WAVEMAN")
-            add_libelledevice("REFRESH", "@", "")
+            Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
+            Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("SOLO", "@", "")
+            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : HOMEEASY / X10 / ARC / WAVEMAN")
+            Add_LibelleDevice("REFRESH", "@", "")
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx New", ex.Message)
+            WriteLog("ERR: New Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -1447,7 +1475,7 @@ Imports System.Media
                 stream.BeginRead(TCPData, 0, 1024, AddressOf TCPDataReceived, Nothing)
                 Return "Handler IP OK"
             Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx LANCER GETSTREAM", ex.Message)
+                WriteLog("ERR: LANCER GETSTREAM Exception : " & ex.Message)
                 Return "ERR: Handler IP"
             End Try
         Else
@@ -1456,7 +1484,7 @@ Imports System.Media
                 AddHandler RS232Port.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf ReadErrorEvent)
                 Return "Handler COM OK"
             Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx LANCER Serial", ex.Message)
+                WriteLog("ERR: LANCER Serial Exception : " & ex.Message)
                 Return "ERR: Handler COM"
             End Try
         End If
@@ -1481,7 +1509,7 @@ Imports System.Media
 
             Return "Configuration OK"
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx LANCER Configuration", ex.Message)
+            WriteLog("ERR: LANCER Configuration Exception : " & ex.Message)
             Return "ERR: Configuration " & ex.Message
         End Try
     End Function
@@ -1676,7 +1704,7 @@ Imports System.Media
                 ProcessReceivedChar(RS232Port.ReadByte())
             End While
         Catch Ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx Datareceived", Ex.Message)
+            WriteLog("ERR: Datareceived Exception : " & Ex.Message)
         End Try
     End Sub
 
@@ -1688,7 +1716,7 @@ Imports System.Media
                 ProcessReceivedChar(RS232Port.ReadByte())
             End While
         Catch Ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx ERRORDatareceived", Ex.Message)
+            WriteLog("ERR: ReadErrorEvent Exception : " & Ex.Message)
         End Try
     End Sub
 
@@ -1703,7 +1731,7 @@ Imports System.Media
                 stream.BeginRead(TCPData, 0, 1024, AddressOf TCPDataReceived, Nothing)
             End If
         Catch Ex As Exception
-            WriteLog("ERR: RFXtrx TCPDatareceived : " & Ex.Message)
+            WriteLog("ERR: TCPDatareceived Exception : " & Ex.Message)
         End Try
     End Sub
 
@@ -1716,7 +1744,7 @@ Imports System.Media
                 ProcessReceivedChar(Bytes(intIndex))
             Next
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx ProcessNewTCPData", ex.Message)
+            WriteLog("ERR: ProcessNewTCPData Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -1783,7 +1811,7 @@ Imports System.Media
             End If
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx ProcessReceivedChar", ex.Message)
+            WriteLog("ERR: ProcessReceivedChar Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -3513,6 +3541,337 @@ Imports System.Media
             WriteLog("ERR: decode_RFXMeter Exception : " & ex.Message)
         End Try
     End Sub
+#End Region
+
+#Region "Send messages"
+
+    ''' <summary>Converti un house de type A, B... en byte</summary>
+    ''' <param name="housecode">HouseCode du type A (de A1)</param>
+    ''' <returns>Byte représentant le housecode</returns>
+    Private Function convert_housecode(ByVal housecode As String) As Byte
+        Try
+            Dim temp As Byte
+            Select Case housecode
+                Case "A" : temp = 0 + &H41
+                Case "B" : temp = 1 + &H41
+                Case "C" : temp = 2 + &H41
+                Case "D" : temp = 3 + &H41
+                Case "E" : temp = 4 + &H41
+                Case "F" : temp = 5 + &H41
+                Case "G" : temp = 6 + &H41
+                Case "H" : temp = 7 + &H41
+                Case "I" : temp = 8 + &H41
+                Case "J" : temp = 9 + &H41
+                Case "K" : temp = 10 + &H41
+                Case "L" : temp = 11 + &H41
+                Case "M" : temp = 12 + &H41
+                Case "N" : temp = 13 + &H41
+                Case "O" : temp = 14 + &H41
+                Case "P" : temp = 15 + &H41
+                Case Else : WriteLog("ERR: convert_housecode HouseCode Incorrect : " & housecode)
+            End Select
+            Return temp
+        Catch ex As Exception
+            WriteLog("ERR: convert_housecode Exception : " & ex.Message)
+            Return 0 + &H41
+        End Try
+    End Function
+
+    ''' <summary>Gestion du protocole X10 RF</summary>
+    ''' <param name="adresse">Adresse du type A1</param>
+    ''' <param name="commande">commande ON, OFF, BRIGHT, DIM, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
+    ''' <remarks></remarks>
+    Private Sub send_x10(ByVal adresse As String, ByVal commande As String)
+        Try
+            Dim kar(LIGHTING1.size) As Byte
+            Dim temp As String = ""
+
+            If Not (adresse.Length = 2) Then
+                WriteLog("ERR: Send X10 : Adresse invalide : " & adresse)
+                Exit Sub
+            End If
+            kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
+            kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+            Select Case commande
+                Case "OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+                Case "ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                Case "ALL_LIGHT_OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
+                Case "ALL_LIGHT_ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
+                Case "BRIGHT" : kar(LIGHTING1.cmnd) = LIGHTING1.sBright
+                Case "DIM" : kar(LIGHTING1.cmnd) = LIGHTING1.sDim
+                Case Else
+                    WriteLog("ERR: Send X10 : Commande invalide : " & commande)
+                    Exit Sub
+            End Select
+            kar(LIGHTING1.packetlength) = LIGHTING1.size
+            kar(LIGHTING1.packettype) = LIGHTING1.pType
+            kar(LIGHTING1.subtype) = 0 '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls
+            kar(LIGHTING1.seqnbr) = bytSeqNbr
+            kar(LIGHTING1.filler) = 0
+            ecrire(kar)
+            If _DEBUG Then
+                For Each bt As Byte In kar
+                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+                Next
+                WriteLog("DBG: Send X10 : commande envoyée : " & temp)
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: Send X10 Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Gestion du protocole ARC</summary>
+    ''' <param name="adresse">Adresse du type A1</param>
+    ''' <param name="commande">commande ON, OFF, GROUP_ON, GROUP_OFF, CHIME</param>
+    ''' <remarks></remarks>
+    Private Sub send_arc(ByVal adresse As String, ByVal commande As String)
+        Try
+            Dim kar(LIGHTING1.size) As Byte
+            Dim temp As String = ""
+
+            If Not (adresse.Length = 2) Then
+                WriteLog("ERR: Send ARC : Adresse invalide : " & adresse)
+                Exit Sub
+            End If
+            kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
+            kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+            Select Case commande
+                Case "OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+                Case "ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                Case "GROUP_ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
+                Case "GROUP_OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
+                Case "CHIME"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sChime
+                    kar(LIGHTING1.unitcode) = 8
+                Case Else
+                    WriteLog("ERR: Send ARC : Commande invalide : " & commande)
+                    Exit Sub
+            End Select
+            kar(LIGHTING1.packetlength) = LIGHTING1.size
+            kar(LIGHTING1.packettype) = LIGHTING1.pType
+            kar(LIGHTING1.subtype) = 1 '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls
+            kar(LIGHTING1.seqnbr) = bytSeqNbr
+            kar(LIGHTING1.filler) = 0
+            ecrire(kar)
+            If _DEBUG Then
+                For Each bt As Byte In kar
+                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+                Next
+                WriteLog("DBG: Send ARC : commande envoyée : " & temp)
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: Send ARC Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Gestion du protocole ELRO AB400D</summary>
+    ''' <param name="adresse">Adresse du type A1</param>
+    ''' <param name="commande">commande ON, OFF</param>
+    ''' <remarks></remarks>
+    Private Sub send_ELROAB400D(ByVal adresse As String, ByVal commande As String)
+        Try
+            Dim kar(LIGHTING1.size) As Byte
+            Dim temp As String = ""
+
+            If Not (adresse.Length = 2) Then
+                WriteLog("ERR: Send ELRO AB400D : Adresse invalide : " & adresse)
+                Exit Sub
+            End If
+            kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
+            kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+            Select Case commande
+                Case "OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+                Case "ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                Case Else
+                    WriteLog("ERR: Send ELRO AB400D : Commande invalide : " & commande)
+                    Exit Sub
+            End Select
+            kar(LIGHTING1.packetlength) = LIGHTING1.size
+            kar(LIGHTING1.packettype) = LIGHTING1.pType
+            kar(LIGHTING1.subtype) = 2 '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls
+            kar(LIGHTING1.seqnbr) = bytSeqNbr
+            kar(LIGHTING1.filler) = 0
+            ecrire(kar)
+            If _DEBUG Then
+                For Each bt As Byte In kar
+                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+                Next
+                WriteLog("DBG: Send ELRO AB400D : commande envoyée : " & temp)
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: Send ELRO AB400D Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Gestion du protocole WAVEMAN</summary>
+    ''' <param name="adresse">Adresse du type A1</param>
+    ''' <param name="commande">commande ON, OFF</param>
+    ''' <remarks></remarks>
+    Private Sub send_WAVEMAN(ByVal adresse As String, ByVal commande As String)
+        Try
+            Dim kar(LIGHTING1.size) As Byte
+            Dim temp As String = ""
+
+            If Not (adresse.Length = 2) Then
+                WriteLog("ERR: Send WAVEMAN : Adresse invalide : " & adresse)
+                Exit Sub
+            End If
+            kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
+            kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+            Select Case commande
+                Case "OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+                Case "ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                Case Else
+                    WriteLog("ERR: Send WAVEMAN : Commande invalide : " & commande)
+                    Exit Sub
+            End Select
+            kar(LIGHTING1.packetlength) = LIGHTING1.size
+            kar(LIGHTING1.packettype) = LIGHTING1.pType
+            kar(LIGHTING1.subtype) = 3 '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls
+            kar(LIGHTING1.seqnbr) = bytSeqNbr
+            kar(LIGHTING1.filler) = 0
+            ecrire(kar)
+            If _DEBUG Then
+                For Each bt As Byte In kar
+                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+                Next
+                WriteLog("DBG: Send WAVEMAN : commande envoyée : " & temp)
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: Send WAVEMAN Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Gestion du protocole EMW200</summary>
+    ''' <param name="adresse">Adresse du type A1 avec A/B/C et 1/2/3/4</param>
+    ''' <param name="commande">commande ON, OFF, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
+    ''' <remarks></remarks>
+    Private Sub send_EMW200(ByVal adresse As String, ByVal commande As String)
+        Try
+            Dim kar(LIGHTING1.size) As Byte
+            Dim temp As String = ""
+
+            If Not (adresse.Length = 2) Or CInt(adresse.Substring(1, 1)) > 4 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C") Then
+                WriteLog("ERR: Send EMW200 : Adresse invalide : " & adresse)
+                Exit Sub
+            End If
+            kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
+            kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+            Select Case commande
+                Case "OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+                Case "ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                Case "ALL_LIGHT_ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
+                Case "ALL_LIGHT_OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
+                Case Else
+                    WriteLog("ERR: Send EMW200 : Commande invalide : " & commande)
+                    Exit Sub
+            End Select
+            kar(LIGHTING1.packetlength) = LIGHTING1.size
+            kar(LIGHTING1.packettype) = LIGHTING1.pType
+            kar(LIGHTING1.subtype) = 4 '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls
+            kar(LIGHTING1.seqnbr) = bytSeqNbr
+            kar(LIGHTING1.filler) = 0
+            ecrire(kar)
+            If _DEBUG Then
+                For Each bt As Byte In kar
+                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+                Next
+                WriteLog("DBG: Send EMW200 : commande envoyée : " & temp)
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: Send EMW200 Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Gestion du protocole IMPULS</summary>
+    ''' <param name="adresse">Adresse du type A1</param>
+    ''' <param name="commande">commande ON, OFF</param>
+    ''' <remarks></remarks>
+    Private Sub send_IMPULS(ByVal adresse As String, ByVal commande As String)
+        Try
+            Dim kar(LIGHTING1.size) As Byte
+            Dim temp As String = ""
+
+            If Not (adresse.Length = 2) Then
+                WriteLog("ERR: Send IMPULS : Adresse invalide : " & adresse)
+                Exit Sub
+            End If
+            kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
+            kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+            Select Case commande
+                Case "OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+                Case "ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                Case Else
+                    WriteLog("ERR: Send IMPULS : Commande invalide : " & commande)
+                    Exit Sub
+            End Select
+            kar(LIGHTING1.packetlength) = LIGHTING1.size
+            kar(LIGHTING1.packettype) = LIGHTING1.pType
+            kar(LIGHTING1.subtype) = 5 '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls
+            kar(LIGHTING1.seqnbr) = bytSeqNbr
+            kar(LIGHTING1.filler) = 0
+            ecrire(kar)
+            If _DEBUG Then
+                For Each bt As Byte In kar
+                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+                Next
+                WriteLog("DBG: Send IMPULS : commande envoyée : " & temp)
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: Send IMPULS Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Gestion du protocole AC</summary>
+    ''' <param name="adresse">Adresse du type 02F4416-1</param>
+    ''' <param name="commande">commande ON, OFF, DIM, GROUP_OFF, GROUP_ON, GROUP_DIM</param>
+    ''' <param name="type">0=AC / 1=HEEU / 2=ANSLUT</param>
+    ''' <param name="dimlevel">Level pour Dim de 1 à 16</param>
+    ''' <remarks></remarks>
+    Private Sub send_AC(ByVal adresse As String, ByVal commande As String, ByVal type As Integer, Optional ByVal dimlevel As Integer = 1)
+        Try
+            Dim kar(LIGHTING2.size) As Byte
+            Dim temp As String = ""
+            If Not (adresse.Length = 9) Then
+                WriteLog("ERR: Send AC : Adresse invalide : " & adresse)
+                Exit Sub
+            End If
+            kar(LIGHTING2.packetlength) = LIGHTING2.size
+            kar(LIGHTING2.packettype) = LIGHTING2.pType
+            kar(LIGHTING2.seqnbr) = bytSeqNbr
+            kar(LIGHTING2.subtype) = type '0=AC, 1=HE EU, 2=ANSLUT
+            Select Case commande
+                Case "OFF" : kar(LIGHTING2.cmnd) = 0
+                Case "ON" : kar(LIGHTING2.cmnd) = 1
+                Case "GROUP_OFF" : kar(LIGHTING2.cmnd) = 3
+                Case "GROUP_ON" : kar(LIGHTING2.cmnd) = 4
+                Case "GROUP_DIM" : kar(LIGHTING2.cmnd) = 5
+                Case "DIM" : kar(LIGHTING2.cmnd) = 2
+                Case Else
+                    WriteLog("ERR: Send AC : Commande invalide : " & commande)
+                    Exit Sub
+            End Select
+            Dim adressetab As String() = adresse.Split("-")
+            kar(LIGHTING2.unitcode) = adressetab(1)
+            kar(LIGHTING2.id1) = adressetab(1).Substring(0, 1)
+            kar(LIGHTING2.id2) = adressetab(1).Substring(1, 2)
+            kar(LIGHTING2.id3) = adressetab(1).Substring(3, 2)
+            kar(LIGHTING2.id4) = adressetab(1).Substring(5, 2)
+            kar(LIGHTING2.level) = dimlevel
+            kar(LIGHTING2.filler) = 0
+
+            ecrire(kar)
+            If _DEBUG Then
+                For Each bt As Byte In kar
+                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+                Next
+                WriteLog("DBG: Send AC : commande envoyée : " & temp)
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: Send AC Exception : " & ex.Message)
+        End Try
+    End Sub
+
 #End Region
 
 #Region "Write"
