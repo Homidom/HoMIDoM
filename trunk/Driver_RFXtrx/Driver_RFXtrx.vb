@@ -1389,7 +1389,13 @@ Imports System.Media
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
-            'add_devicecommande("PRESETDIM", "permet de paramétrer le DIM : param1=niveau, param2=timer", 2)
+            add_devicecommande("GROUP_ON", "Protocole AC/ACEU/ARC : ON sur le groupe du composant", 2)
+            add_devicecommande("GROUP_OFF", "Protocole AC/ACEU/ARC : OFF sur le groupe du composant", 2)
+            add_devicecommande("GROUP_DIM", "Protocole AC/ACEU : DIM sur le groupe du composant", 2)
+            add_devicecommande("BRIGHT", "Protocole X10 : Bright", 2)
+            add_devicecommande("ALL_LIGHT_ON", "Protocole X10/EMW200 : ALL_LIGHT_ON", 2)
+            add_devicecommande("ALL_LIGHT_OFF", "Protocole X10/EMW200 : ALL_LIGHT_OFF", 2)
+            add_devicecommande("CHIME", "Protocole ARC : Chime", 2)
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
@@ -1398,7 +1404,7 @@ Imports System.Media
             Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : HOMEEASY / X10 / ARC / WAVEMAN")
+            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : AC / ACEU / ANSLUT / X10 / ARC / WAVEMAN / ELROAB400D / EMW200 / IMPULS", "AC|ACEU|ANSLUT|ARC|ELROAB400D|EMW200|IMPULS|WAVEMAN|X10")
             Add_LibelleDevice("REFRESH", "@", "")
 
         Catch ex As Exception
