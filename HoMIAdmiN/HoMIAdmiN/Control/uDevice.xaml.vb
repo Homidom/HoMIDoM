@@ -408,6 +408,7 @@ Partial Public Class uDevice
         TxtCmdRepeat.Text = "0"
         TxtCmdData.Text = ""
 
+        BtnNewCmd.Visibility = Windows.Visibility.Hidden
         FlagNewCmd = True
     End Sub
 
@@ -456,6 +457,7 @@ Partial Public Class uDevice
 
             End If
 
+            BtnNewCmd.Visibility = Windows.Visibility.Visible
             FlagNewCmd = False
         Catch Ex As Exception
             MessageBox.Show("Erreur BtnSaveCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -475,8 +477,11 @@ Partial Public Class uDevice
                     For i2 As Integer = 0 To x.Commandes.Count - 1
                         ListCmd.Items.Add(x.Commandes.Item(i2).Name)
                     Next
-                End If
 
+                End If
+                TxtCmdData.Text = ""
+                TxtCmdName.Text = ""
+                TxtCmdRepeat.Text = ""
             End If
         Catch Ex As Exception
             MessageBox.Show("Erreur BtnDelCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -485,18 +490,22 @@ Partial Public Class uDevice
 
     Private Sub BtnTstCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTstCmd.Click
         Try
-            Dim _Param As New ArrayList
-            Dim x As New HoMIDom.HoMIDom.DeviceAction
-            Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+            If TxtCmdName.Text = "" Or TxtCmdName.Text = " " Then
 
-            y.Value = TxtCmdName.Text
+            End If
+            MsgBox(myService.TelecommandeSendCommand(IdSrv, _DeviceId, TxtCmdName.Text))
+            'Dim _Param As New ArrayList
+            'Dim x As New HoMIDom.HoMIDom.DeviceAction
+            'Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
 
-            With x
-                .Nom = "SendCommand"
-                .Parametres.Add(y)
-            End With
+            'y.Value = TxtCmdName.Text
 
-            myservice.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
+            'With x
+            '    .Nom = "SendCommand"
+            '    .Parametres.Add(y)
+            'End With
+
+            'myService.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
         Catch Ex As Exception
             MessageBox.Show("Erreur BtnTstCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try

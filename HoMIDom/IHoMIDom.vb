@@ -964,7 +964,25 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function StartLearning(ByVal IdSrv As String, ByVal DriverId As String) As String
 
+        ''' <summary>
+        ''' Sauvegarde les commandes dans un template donné
+        ''' </summary>
+        ''' <param name="IdSrv">Id du Serveur</param>
+        ''' <param name="Template">Nom du template</param>
+        ''' <param name="Commandes">Liste des commandes</param>
+        ''' <returns>O si ok sinon message d'erreur</returns>
+        ''' <remarks></remarks>
         <OperationContract()> Function SaveTemplate(ByVal IdSrv As String, ByVal Template As String, ByVal Commandes As List(Of Telecommande.Commandes)) As String
+
+        ''' <summary>
+        ''' Demande au device d'envoyer une commande (telecommande) à son driver
+        ''' </summary>
+        ''' <param name="IdSrv">Id du serveur, retourne 99 si non OK</param>
+        ''' <param name="IdDevice">Id du device concerné</param>
+        ''' <param name="Commande">Nom de la Commande à envoyée</param>
+        ''' <returns>0 si Ok sinon erreur</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function TelecommandeSendCommand(ByVal IdSrv As String, ByVal IdDevice As String, ByVal Commande As String) As String
 #End Region
     End Interface
 
