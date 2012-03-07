@@ -28,15 +28,28 @@
             <GroupBox Header="Configuration" Margin="0,10,0,0" Name="GroupBox1">
                 <Grid>
                     <StackPanel Margin="10,10,10,10">
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Visibility="Hidden">
+                        <StackPanel Name="StkCompEmet" Orientation="Horizontal" Margin="0,0,0,5" Visibility="Hidden">
                             <Label Width="150" Content="Composant émetteur :" Foreground="White" HorizontalAlignment="Left" Name="Label4" VerticalAlignment="Top" />
                             <ComboBox Height="25" HorizontalAlignment="Left" Name="CbEmetteur" VerticalAlignment="Top" Width="450" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True" ToolTip="Composant qui lancera le module : Interrupteur / télécommande / Détecteur..."></ComboBox>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Visibility="Hidden">
+                        <StackPanel Name="StkCompRecep" Orientation="Horizontal" Margin="0,0,0,5" Visibility="Hidden">
                             <Label Width="150" Content="Composant récepteur :" Foreground="White" HorizontalAlignment="Left" Name="Label5" VerticalAlignment="Top" />
                             <ComboBox Height="25" HorizontalAlignment="Left" Name="CbRecepteur" VerticalAlignment="Top" Width="450" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True" ToolTip="Composant qui recevra l'ordre : Lampe / Appareil / Volet..."></ComboBox>
                         </StackPanel>
-
+                        <StackPanel Name="StkMulti" Orientation="Horizontal" Margin="0,0,0,5" Visibility="Hidden">
+                            <StackPanel Name="StkCompMultiEmet" Orientation="vertical" Margin="0,0,0,5" Visibility="Hidden" Width="320">
+                                <Label Width="150" Content="Composant émétteur :" Foreground="White" HorizontalAlignment="Left" Name="Label6" VerticalAlignment="Top" />
+                                <ListBox Height="200" Name="LbEmetteurMulti" HorizontalAlignment="Left" Width="280" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True" ToolTip="Composant qui recevra l'ordre : Lampe / Appareil / Volet..."></ListBox>
+                            </StackPanel>
+                            <StackPanel Name="StkCompMultiRecep" Orientation="vertical" Margin="0,0,0,5" Visibility="Hidden" Width="320">
+                                <Label Width="150" Content="Composant récepteur :" Foreground="White" HorizontalAlignment="Left" Name="Label7" VerticalAlignment="Top" />
+                                <ListBox Height="200" Name="LbRecepteurMulti" HorizontalAlignment="Left" Width="280" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True" ToolTip="Composant qui recevra l'ordre : Lampe / Appareil / Volet..."></ListBox>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Name="StkOrdre" Orientation="Horizontal" Margin="0,0,0,5" Visibility="Hidden">
+                            <Label Width="150" Content="Ordre :" Foreground="White" HorizontalAlignment="Left" Name="Label8" VerticalAlignment="Top" />
+                            <TextBox Height="21" HorizontalAlignment="Left" Name="TxtOrdre" VerticalAlignment="Top" Width="450" Background="DarkGray" BorderBrush="Black" Foreground="White" ToolTip="Nom à donner aux macros/triggers qui seront créés" />
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
             </GroupBox>
