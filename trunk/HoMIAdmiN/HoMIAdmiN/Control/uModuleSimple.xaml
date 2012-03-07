@@ -1,12 +1,48 @@
-﻿<Page x:Class="uModuleSimple"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
-      Title="uModuleSimple">
-    <Grid>
-        
+﻿<UserControl x:Class="uModuleSimple"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="700" Height="550" DataContext="{Binding}" xmlns:my="clr-namespace:WpfApplication1" Tag="MODULESIMPLE" Margin="20">
+
+    <Grid Background="#636060">
+        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
+            <StackPanel>
+                <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Modules Simples</Label>
+            </StackPanel>
+        </Border>
+        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Defaut-128.png">
+            <Image.LayoutTransform >
+                <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
+            </Image.LayoutTransform>
+        </Image>
+        <Button Content="Annuler" Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,41,12,0" Name="BtnAnnuler" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" />
+        <Button Content="Ajouter" Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,10,12,0" Name="BtnAjouter" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" />
+
+        <StackPanel Margin="12,90,12,12" >
+            <StackPanel Orientation="Horizontal">
+                <Label Width="75" Content="Type :" HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Foreground="White" />
+                <ComboBox Height="25" HorizontalAlignment="Left" Name="CbType" VerticalAlignment="Top" Width="450" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True" ToolTip="Type de module simple à créer"></ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <Label Width="75" Content="Nom :" Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" />
+                <TextBox Height="21" HorizontalAlignment="Left" Name="TxtNom" VerticalAlignment="Top" Width="450" Background="DarkGray" BorderBrush="Black" Foreground="White" ToolTip="Nom à donner aux macros/triggers qui seront créés" />
+            </StackPanel>
+            <GroupBox Header="Configuration" Margin="0,10,0,0" Name="GroupBox1">
+                <Grid>
+                    <StackPanel Margin="10,10,10,10">
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Visibility="Hidden">
+                            <Label Width="150" Content="Composant émetteur :" Foreground="White" HorizontalAlignment="Left" Name="Label4" VerticalAlignment="Top" />
+                            <ComboBox Height="25" HorizontalAlignment="Left" Name="CbEmetteur" VerticalAlignment="Top" Width="450" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True" ToolTip="Composant qui lancera le module : Interrupteur / télécommande / Détecteur..."></ComboBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Visibility="Hidden">
+                            <Label Width="150" Content="Composant récepteur :" Foreground="White" HorizontalAlignment="Left" Name="Label5" VerticalAlignment="Top" />
+                            <ComboBox Height="25" HorizontalAlignment="Left" Name="CbRecepteur" VerticalAlignment="Top" Width="450" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True" ToolTip="Composant qui recevra l'ordre : Lampe / Appareil / Volet..."></ComboBox>
+                        </StackPanel>
+
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+        <Button Height="40" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Margin="0,72.25,20,0" Name="BtnHelp" VerticalAlignment="Top" Width="40" Foreground="White" Visibility="Hidden">
+            <Image Source="/HoMIAdmiN;component/Images/aide.png" />
+        </Button>
     </Grid>
-</Page>
+</UserControl>

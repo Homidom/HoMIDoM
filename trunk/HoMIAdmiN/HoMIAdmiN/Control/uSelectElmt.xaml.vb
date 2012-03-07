@@ -15,86 +15,89 @@
         End Get
     End Property
 
-    Public Sub New(ByVal Title As String, ByVal TypeElement As Integer)
+    Public Sub New(ByVal Title As String, ByVal TypeElement As String)
 
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
+        Try
+            ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+            Select Case TypeElement
+                Case "tag_driver"
+                    Title = Replace(Title, "{TITLE}", "un Driver")
+                    _Type = 0
+                    For Each driver In myService.GetAllDrivers(IdSrv)
+                        Dim x As New uElement
+                        x.ID = driver.ID
+                        x.Image = driver.Picture
+                        x.Title = driver.Nom
+                        x.Width = 300
 
-        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        Select Case TypeElement
-            Case 0
-                Title = Replace(Title, "{TITLE}", "un Driver")
-                _Type = 0
-                For Each driver In myService.GetAllDrivers(IdSrv)
-                    Dim x As New uElement
-                    x.ID = driver.ID
-                    x.Image = driver.Picture
-                    x.Title = driver.Nom
-                    x.Width = 300
+                        ListBox1.Items.Add(x)
+                    Next
+                Case "tag_composant"
+                    Title = Replace(Title, "{TITLE}", "un Composant")
+                    _Type = 1
+                    For Each device In myService.GetAllDevices(IdSrv)
+                        Dim x As New uElement
+                        x.ID = device.ID
+                        x.Image = device.Picture
+                        x.Title = device.Name
+                        x.Width = 300
 
-                    ListBox1.Items.Add(x)
-                Next
-            Case 1
-                Title = Replace(Title, "{TITLE}", "un Composant")
-                _Type = 1
-                For Each device In myService.GetAllDevices(IdSrv)
-                    Dim x As New uElement
-                    x.ID = device.ID
-                    x.Image = device.Picture
-                    x.Title = device.Name
-                    x.Width = 300
+                        ListBox1.Items.Add(x)
+                    Next
+                Case "tag_zone"
+                    Title = Replace(Title, "{TITLE}", "une Zone")
+                    _Type = 2
+                    For Each zone In myService.GetAllZones(IdSrv)
+                        Dim x As New uElement
+                        x.ID = zone.ID
+                        x.Image = zone.Icon
+                        x.Title = zone.Name
+                        x.Width = 300
 
-                    ListBox1.Items.Add(x)
-                Next
-            Case 2
-                Title = Replace(Title, "{TITLE}", "une Zone")
-                _Type = 2
-                For Each zone In myService.GetAllZones(IdSrv)
-                    Dim x As New uElement
-                    x.ID = zone.ID
-                    x.Image = zone.Icon
-                    x.Title = zone.Name
-                    x.Width = 300
+                        ListBox1.Items.Add(x)
+                    Next
+                Case "tag_user"
+                    Title = Replace(Title, "{TITLE}", "un Utilisateur")
+                    _Type = 3
+                    For Each user In myService.GetAllUsers(IdSrv)
+                        Dim x As New uElement
+                        x.ID = user.ID
+                        x.Image = user.Image
+                        x.Title = user.Nom
+                        x.Width = 300
 
-                    ListBox1.Items.Add(x)
-                Next
-            Case 3
-                Title = Replace(Title, "{TITLE}", "un Utilisateur")
-                _Type = 3
-                For Each user In myService.GetAllUsers(IdSrv)
-                    Dim x As New uElement
-                    x.ID = user.ID
-                    x.Image = user.Image
-                    x.Title = user.Nom
-                    x.Width = 300
+                        ListBox1.Items.Add(x)
+                    Next
+                Case "tag_trigger"
+                    Title = Replace(Title, "{TITLE}", "un Trigger")
+                    _Type = 4
+                    For Each trigger In myService.GetAllTriggers(IdSrv)
+                        Dim x As New uElement
+                        x.ID = trigger.ID
+                        x.Title = trigger.Nom
+                        x.Width = 300
 
-                    ListBox1.Items.Add(x)
-                Next
-            Case 4
-                Title = Replace(Title, "{TITLE}", "un Trigger")
-                _Type = 4
-                For Each trigger In myService.GetAllTriggers(IdSrv)
-                    Dim x As New uElement
-                    x.ID = trigger.ID
-                    x.Title = trigger.Nom
-                    x.Width = 300
+                        ListBox1.Items.Add(x)
+                    Next
+                Case "tag_macro"
+                    Title = Replace(Title, "{TITLE}", "une Macro")
+                    _Type = 5
+                    For Each macro In myService.GetAllMacros(IdSrv)
+                        Dim x As New uElement
+                        x.ID = macro.ID
+                        x.Title = macro.Nom
+                        x.Width = 300
 
-                    ListBox1.Items.Add(x)
-                Next
-            Case 5
-                Title = Replace(Title, "{TITLE}", "une Macro")
-                _Type = 5
-                For Each macro In myService.GetAllMacros(IdSrv)
-                    Dim x As New uElement
-                    x.ID = macro.ID
-                    x.Title = macro.Nom
-                    x.Width = 300
+                        ListBox1.Items.Add(x)
+                    Next
+            End Select
 
-                    ListBox1.Items.Add(x)
-                Next
-        End Select
-
-        LblTitle.Content = Title
+            LblTitle.Content = Title
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de l'exécution de NewSelectElement: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnCancel_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCancel.Click
