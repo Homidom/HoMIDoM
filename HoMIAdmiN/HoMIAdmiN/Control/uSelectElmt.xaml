@@ -7,10 +7,11 @@
             MinWidth="300" MaxHeight="500">
 
     <Grid Background="#636060">
+        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0,0,0,0" />
         <StackPanel >
             <Label Name="LblTitle" Content="Sélectionner un élément:" FontSize="14" Foreground="White" />
-            <Border BorderThickness="2" BorderBrush="Black">
-                <ListBox Name="ListBox1" MinHeight="50" MaxHeight="410" Margin="2" Background="Gray" />
+            <Border BorderThickness="2" Background="DarkGray" BorderBrush="Black" Margin="3">
+                <ListBox Name="ListBox1" MinHeight="150" MaxHeight="410" Margin="1" Background="DarkGray" BorderThickness="0" Foreground="White" />
             </Border>
             <StackPanel Margin="3 " Orientation="Horizontal" HorizontalAlignment="Right" >
                 <Button Width="70" Height="22" Margin="2" Name="BtnOK" Content="OK" Template="{DynamicResource GlassButton}" Foreground="White" />

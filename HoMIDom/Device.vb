@@ -810,9 +810,10 @@ Namespace HoMIDom
                     '    If tmp > 100 Then tmp = 100
                     '    _ValueLast = _Value 'on garde l'ancienne value en memoire
                     '    _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
-                    If Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
 
                     Try
+                        If Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
                         ''If Not _Server.Etat_server Then
                         ''    _Value = tmp

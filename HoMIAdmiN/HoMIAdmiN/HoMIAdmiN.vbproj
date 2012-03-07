@@ -129,6 +129,9 @@
     <Compile Include="Control\uMacro.xaml.vb">
       <DependentUpon>uMacro.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\uModuleSimple.xaml.vb">
+      <DependentUpon>uModuleSimple.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Control\uScenario.xaml.vb">
       <DependentUpon>uScenario.xaml</DependentUpon>
     </Compile>
@@ -184,6 +187,10 @@
     <Page Include="Control\uMacro.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Control\uModuleSimple.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Control\uScenario.xaml">
       <SubType>Designer</SubType>
@@ -584,6 +591,9 @@
   <ItemGroup>
     <Resource Include="Images\export-128.png" />
     <Resource Include="Images\import-128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\module.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

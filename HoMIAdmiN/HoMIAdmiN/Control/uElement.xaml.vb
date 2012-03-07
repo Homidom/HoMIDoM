@@ -25,6 +25,7 @@ Public Class uElement
             LabelElement.Content = _Title
         End Set
     End Property
+
     Public Property IsSelect As Boolean
         Get
             Return _Select
@@ -32,12 +33,13 @@ Public Class uElement
         Set(ByVal value As Boolean)
             _Select = value
             If _Select = True Then
-                Grid1.Background = Brushes.OrangeRed
+                borderelemnt.Background = Brushes.OrangeRed
             Else
-                Grid1.Background = Brushes.DarkGray
+                borderelemnt.Background = Brushes.Gray
             End If
         End Set
     End Property
+
     Public WriteOnly Property Image As String
         Set(ByVal value As String)
             If value.Length < 10 Then Exit Property
@@ -47,11 +49,11 @@ Public Class uElement
 
     Private Sub Grid1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Grid1.MouseDown
         RaiseEvent Click(Me)
-        Grid1.Background = Brushes.OrangeRed
+        'borderelemnt.Background = Brushes.DarkGray
     End Sub
 
     Private Sub Grid1_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Grid1.MouseMove
-        Grid1.Background = Brushes.OrangeRed
+        If _Select = False Then borderelemnt.Background = Brushes.DarkGray
         'Try
         '    Dim brush As New SolidColorBrush(Colors.DarkGray)
         '    Grid1.Background = brush
@@ -75,7 +77,7 @@ Public Class uElement
     End Sub
 
     Private Sub Grid1_MouseLeave(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Grid1.MouseLeave
-        If _Select = False Then Grid1.Background = Brushes.DarkGray
+        If _Select = False Then borderelemnt.Background = Brushes.Gray
     End Sub
 
 

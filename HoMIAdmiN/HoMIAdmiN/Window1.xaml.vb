@@ -11,7 +11,7 @@ Imports System.Windows.Media.Animation
 
 Class Window1
 
-    Public Event ChangeMenu(ByVal IndexMenu As Integer)
+    Public Event menu_gerer(ByVal IndexMenu As Integer)
 
     Public Shared CanvasUser As Canvas
     Public Shared ListServer As New List(Of ClServer)
@@ -58,7 +58,18 @@ Class Window1
             spl.Close()
             spl = Nothing
 
-            AddHandler Window1.ChangeMenu, AddressOf MainMenuChange
+
+
+
+
+
+            'AddHandler Window1.menu_gerer, AddressOf MainMenuGerer
+
+
+
+
+
+
 
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             Dim dt As DispatcherTimer = New DispatcherTimer()
@@ -690,10 +701,11 @@ Class Window1
     Private Sub ShowMainMenu()
         Dim MainMenu As New uMainMenu
         MainMenu.Uid = "MAINMENU"
-        AddHandler MainMenu.ChangeMenu, AddressOf MainMenuChange
-        AddHandler MainMenu.Delete, AddressOf MainMenuDelete
-        AddHandler MainMenu.Edit, AddressOf MainMenuEdit
-        AddHandler MainMenu.Create, AddressOf MainMenuNew
+        AddHandler MainMenu.menu_gerer, AddressOf MainMenuGerer
+        AddHandler MainMenu.menu_delete, AddressOf MainMenuDelete
+        AddHandler MainMenu.menu_edit, AddressOf MainMenuEdit
+        AddHandler MainMenu.menu_create, AddressOf MainMenuNew
+        AddHandler MainMenu.menu_autre, AddressOf MainMenuAutre
         CanvasRight.Children.Add(MainMenu)
         WMainMenu = CanvasRight.ActualWidth / 2 - (MainMenu.Width / 2)
         HMainMenu = CanvasRight.ActualHeight / 2 - (MainMenu.Height / 2)
@@ -702,85 +714,31 @@ Class Window1
     End Sub
 
 #Region "MainMenu"
-    Private Sub MainMenuChange(ByVal index As Integer)
-        Me.Cursor = Cursors.Wait
-        Tabcontrol1.SelectedIndex = index
-        Select Case index
-            Case 7
-                Try
-                    If IsConnect = False Then
-                        MessageBox.Show("Impossible d'afficher le log car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                        Exit Sub
-                    End If
+    Private Sub MainMenuGerer(ByVal index As String)
+        Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                ShowMainMenu()
+                Exit Sub
+            End If
 
-                    Dim x As New uLog
-                    x.Uid = System.Guid.NewGuid.ToString()
-                    AddHandler x.CloseMe, AddressOf UnloadControl
-                    x.Width = CanvasRight.ActualWidth - 100
-                    x.Height = CanvasRight.ActualHeight - 50
-                    CanvasRight.Children.Clear()
-                    CanvasRight.Children.Add(x)
-                Catch ex As Exception
-                    MessageBox.Show("ERREUR Sub MnuViewLog: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
-            Case 9 'Multimedia Playlist
-                Try
-                    Dim x As New uPlaylist
-                    x.Uid = System.Guid.NewGuid.ToString()
-                    AddHandler x.CloseMe, AddressOf UnloadControl
-                    CanvasRight.Children.Clear()
-                    CanvasRight.Children.Add(x)
-                Catch ex As Exception
-                    MessageBox.Show("ERREUR Sub MnuPlayList: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
-            Case 10 'Configurer le serveur
-                Try
-                    Dim x As New uConfigServer
-                    x.Uid = System.Guid.NewGuid.ToString()
-                    AddHandler x.CloseMe, AddressOf UnloadControl
-                    CanvasRight.Children.Clear()
-                    CanvasRight.Children.Add(x)
-                Catch ex As Exception
-                    MessageBox.Show("ERREUR Sub MnuConfigSrv: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
-            Case 11 'Aide
-                Try
-                    Process.Start("http://www.homidom.com/documentation-c16.html")
-                Catch ex As Exception
-                    MessageBox.Show("ERREUR Sub MnuPropos: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
-            Case 12
-                Try
-                    If IsConnect = True And FlagChange Then
-
-                        If MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
-                            Try
-                                If IsConnect = False Then
-                                    MessageBox.Show("Impossible d'enregistrer la configuration car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                                Else
-                                    Dim retour As String = myService.SaveConfig(IdSrv)
-                                    If retour <> "0" Then
-                                        MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
-                                    Else
-                                        MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
-                                    End If
-                                End If
-                            Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                            End Try
-                        End If
-                    End If
-                    Me.Close()
-                    End
-                Catch ex As Exception
-                    MessageBox.Show("ERREUR Sub Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
-        End Select
-        ShowTreeView()
-        Me.Cursor = Nothing
+            Me.Cursor = Cursors.Wait
+            Select Case index
+                Case "tag_driver" : Tabcontrol1.SelectedIndex = 0
+                Case "tag_composant" : Tabcontrol1.SelectedIndex = 1
+                Case "tag_zone" : Tabcontrol1.SelectedIndex = 2
+                Case "tag_user" : Tabcontrol1.SelectedIndex = 3
+                Case "tag_trigger" : Tabcontrol1.SelectedIndex = 4
+                Case "tag_macro" : Tabcontrol1.SelectedIndex = 5
+            End Select
+            ShowTreeView()
+            Me.Cursor = Nothing
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub MainMenuGerer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
-    Private Sub MainMenuNew(ByVal index As Integer)
+    Private Sub MainMenuNew(ByVal index As String)
         Try
             _MainMenuAction = 0
 
@@ -790,88 +748,69 @@ Class Window1
                 Exit Sub
             End If
 
-            If index <= 6 Then Tabcontrol1.SelectedIndex = index
             Select Case index
-                Case 0
-
-                Case 1
+                Case "tag_composant"
                     Try
+                        Tabcontrol1.SelectedIndex = 1
                         Dim x As New uDevice(Classe.EAction.Nouveau, "")
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub NewDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
-                Case 2
+                Case "tag_zone"
                     Try
+                        Tabcontrol1.SelectedIndex = 2
                         Dim x As New uZone(Classe.EAction.Nouveau, "")
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub NewZone: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
-                Case 3
+                Case "tag_user"
                     Try
+                        Tabcontrol1.SelectedIndex = 3
                         Dim x As New uUser(Classe.EAction.Nouveau, "")
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub NewUser: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
-                Case 40
+                Case "tag_triggertimer"
                     Try
+                        Tabcontrol1.SelectedIndex = 4
                         Dim x As New uTriggerTimer(0, "")
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub NewTriggerTime: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
-                Case 41
+                Case "tag_triggerdevice"
                     Try
+                        Tabcontrol1.SelectedIndex = 4
                         Dim x As New uTriggerDevice(0, "")
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub NewTriggerDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
-                Case 5
+                Case "tag_macro"
                     Try
+                        Tabcontrol1.SelectedIndex = 5
                         Dim x As New uMacro(Classe.EAction.Nouveau, "")
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub NewMacro: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
-                Case 6
-                Case 10
-                    'MessageBox.Show("Fonctionnalité non disponible pour le moment...")
-
-                    ' Configure open file dialog box
-                    Dim dlg As New Microsoft.Win32.OpenFileDialog()
-                    dlg.FileName = "Homidom" ' Default file name
-                    dlg.DefaultExt = ".xml" ' Default file extension
-                    dlg.Filter = "Fichier de configuration (.xml)|*.xml" ' Filter files by extension
-
-                    ' Show open file dialog box
-                    Dim result As Boolean = dlg.ShowDialog()
-
-                    ' Process open file dialog box results
-                    If result = True Then
-                        ' Open document
-                        Dim filename As String = dlg.FileName
-
-                        If MessageBox.Show("Etes vous sur que le serveur puisse accéder au fichier " & filename & " que ce soit en local ou via le réseau, sinon il ne pourra pas l'importer!", "Import Config", MessageBoxButton.OKCancel, MessageBoxImage.Question) = MessageBoxResult.Cancel Then
-                            Exit Sub
-                        End If
-
-                        Dim retour As String = myService.ImportConfig(IdSrv, filename)
-                        If retour <> "0" Then
-                            MessageBox.Show(retour, "Erreur import config", MessageBoxButton.OK, MessageBoxImage.Error)
-                        Else
-                            MessageBox.Show("L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", MessageBoxButton.OK, MessageBoxImage.Information)
-                        End If
-                    End If
-
+                Case "tag_module"
+                    Try
+                        Dim x As New uModuleSimple()
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AffControlPage(x)
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub NewModule: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
             End Select
             ShowTreeView()
             _MainMenuAction = -1
@@ -880,76 +819,216 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub MainMenuDelete(ByVal index As Integer)
-        'Enregistrer la config
-        If index = 10 Then
-            Try
-                If IsConnect = False Then
-                    MessageBox.Show("Impossible d'enregistrer la config car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                    Exit Sub
-                End If
-
-                Dim retour As String = myService.SaveConfig(IdSrv)
-                If retour <> "0" Then
-                    MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
-                Else
-                    MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
-                End If
+    Private Sub MainMenuDelete(ByVal index As String)
+        Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                ShowMainMenu()
                 Exit Sub
-            Catch ex As Exception
-                MessageBox.Show("ERREUR Sub MnuSaveConfig: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-            End Try
-        End If
-
-        _MainMenuAction = 2
-        CanvasRight.Children.Clear()
-
-        Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", index)
-        Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
-        AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-        CanvasRight.Children.Add(x)
-    End Sub
-
-    Private Sub MainMenuEdit(ByVal index As Integer)
-        If index = 10 Then 'Exporter le fichier de config
-            ' Configure open file dialog box
-            Dim dlg As New Microsoft.Win32.SaveFileDialog()
-            dlg.FileName = "" ' Default file name
-            dlg.DefaultExt = ".xml" ' Default file extension
-            dlg.Filter = "Fichier de configuration (.xml)|*.xml" ' Filter files by extension
-
-            ' Show open file dialog box
-            Dim result As Boolean = dlg.ShowDialog()
-
-            ' Process open file dialog box results
-            If result = True Then
-                ' Open document
-                Dim filename As String = dlg.FileName
-                Dim retour As String = myService.ExportConfig(IdSrv)
-                If retour.StartsWith("ERREUR") Then
-                    MessageBox.Show(retour, "Erreur export config", MessageBoxButton.OK, MessageBoxImage.Error)
-                Else
-                    Dim TargetFile As StreamWriter
-                    TargetFile = New StreamWriter(filename, True)
-                    TargetFile.Write(retour)
-                    TargetFile.Close()
-                    MessageBox.Show("L'export du fichier de configuration a été effectué", "Import config", MessageBoxButton.OK, MessageBoxImage.Information)
-                End If
-
             End If
 
-            Exit Sub
-        End If
+            _MainMenuAction = 2
+            CanvasRight.Children.Clear()
 
-        _MainMenuAction = 1
-        CanvasRight.Children.Clear()
-
-        Dim x As New uSelectElmt("Choisir {TITLE} à éditer", index)
-        Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
-        AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-        CanvasRight.Children.Add(x)
-
+            Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", index)
+            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
+            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+            CanvasRight.Children.Add(x)
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de l'exécution de MainMenuDelete: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
+
+    Private Sub MainMenuEdit(ByVal index As String)
+        Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                ShowMainMenu()
+                Exit Sub
+            End If
+
+            _MainMenuAction = 1
+            CanvasRight.Children.Clear()
+
+            Dim x As New uSelectElmt("Choisir {TITLE} à éditer", index)
+            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
+            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+            CanvasRight.Children.Add(x)
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de l'exécution de MainMenuEdit: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub MainMenuAutre(ByVal index As String)
+        Try
+            If IsConnect = False Then
+                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                ShowMainMenu()
+                Exit Sub
+            End If
+
+            Me.Cursor = Cursors.Wait
+            Select Case index
+                Case "tag_histo" : Tabcontrol1.SelectedIndex = 6
+                Case "tag_config_log"
+                    Try
+                        If IsConnect = False Then
+                            MessageBox.Show("Impossible d'afficher le log car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                            Exit Sub
+                        End If
+                        Dim x As New uLog
+                        x.Uid = System.Guid.NewGuid.ToString()
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        x.Width = CanvasRight.ActualWidth - 100
+                        x.Height = CanvasRight.ActualHeight - 50
+                        CanvasRight.Children.Clear()
+                        CanvasRight.Children.Add(x)
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub MainMenuAutre log: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+
+                Case "tag_multimedia" 'Multimedia Playlist
+                    Try
+                        Dim x As New uPlaylist
+                        x.Uid = System.Guid.NewGuid.ToString()
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        CanvasRight.Children.Clear()
+                        CanvasRight.Children.Add(x)
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub MainMenuAutre Playlist: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+
+                Case "tag_config" 'Configurer le serveur
+                    Try
+                        Dim x As New uConfigServer
+                        x.Uid = System.Guid.NewGuid.ToString()
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        CanvasRight.Children.Clear()
+                        CanvasRight.Children.Add(x)
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub MainMenuAutre config: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+
+                Case "tag_aide" 'Aide
+                    Try
+                        Process.Start("http://www.homidom.com/documentation-c16.html")
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub MainMenuAutre aide: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+
+                Case "tag_quitter"
+                    Try
+                        If IsConnect = True And FlagChange Then
+
+                            If MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                                Try
+                                    If IsConnect = False Then
+                                        MessageBox.Show("Impossible d'enregistrer la configuration car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                                    Else
+                                        Dim retour As String = myService.SaveConfig(IdSrv)
+                                        If retour <> "0" Then
+                                            MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
+                                        Else
+                                            MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
+                                        End If
+                                    End If
+                                Catch ex As Exception
+                                    MessageBox.Show("ERREUR Sub Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                End Try
+                            End If
+                        End If
+                        Me.Close()
+                        End
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub MainMenuAutre Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+
+                Case "tag_config_exporter" 'Exporter le fichier de config
+                    Try
+                        ' Configure open file dialog box
+                        Dim dlg As New Microsoft.Win32.SaveFileDialog()
+                        dlg.FileName = "" ' Default file name
+                        dlg.DefaultExt = ".xml" ' Default file extension
+                        dlg.Filter = "Fichier de configuration (.xml)|*.xml" ' Filter files by extension
+
+                        ' Show open file dialog box
+                        Dim result As Boolean = dlg.ShowDialog()
+
+                        ' Process open file dialog box results
+                        If result = True Then
+                            ' Open document
+                            Dim filename As String = dlg.FileName
+                            Dim retour As String = myService.ExportConfig(IdSrv)
+                            If retour.StartsWith("ERREUR") Then
+                                MessageBox.Show(retour, "Erreur export config", MessageBoxButton.OK, MessageBoxImage.Error)
+                            Else
+                                Dim TargetFile As StreamWriter
+                                TargetFile = New StreamWriter(filename, True)
+                                TargetFile.Write(retour)
+                                TargetFile.Close()
+                                MessageBox.Show("L'export du fichier de configuration a été effectué", "Export config", MessageBoxButton.OK, MessageBoxImage.Information)
+                            End If
+                        End If
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub MainMenuAutre config_exporter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+
+                Case "tag_config_importer" 'Importer le fichier de config
+                    Try
+                        ' Configure open file dialog box
+                        Dim dlg As New Microsoft.Win32.OpenFileDialog()
+                        dlg.FileName = "Homidom" ' Default file name
+                        dlg.DefaultExt = ".xml" ' Default file extension
+                        dlg.Filter = "Fichier de configuration (.xml)|*.xml" ' Filter files by extension
+
+                        ' Show open file dialog box
+                        Dim result As Boolean = dlg.ShowDialog()
+
+                        ' Process open file dialog box results
+                        If result = True Then
+                            ' Open document
+                            Dim filename As String = dlg.FileName
+
+                            If MessageBox.Show("Etes vous sur que le serveur puisse accéder au fichier " & filename & " que ce soit en local ou via le réseau, sinon il ne pourra pas l'importer!", "Import Config", MessageBoxButton.OKCancel, MessageBoxImage.Question) = MessageBoxResult.Cancel Then
+                                Exit Sub
+                            End If
+
+                            Dim retour As String = myService.ImportConfig(IdSrv, filename)
+                            If retour <> "0" Then
+                                MessageBox.Show(retour, "Erreur import config", MessageBoxButton.OK, MessageBoxImage.Error)
+                            Else
+                                MessageBox.Show("L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", MessageBoxButton.OK, MessageBoxImage.Information)
+                            End If
+                        End If
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub MainMenuAutre config_importer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+
+                Case "tag_config_sauvegarder"
+                    Try
+                        If IsConnect = False Then
+                            MessageBox.Show("Impossible d'enregistrer la config car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                            Exit Sub
+                        End If
+
+                        Dim retour As String = myService.SaveConfig(IdSrv)
+                        If retour <> "0" Then
+                            MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
+                        Else
+                            MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
+                        End If
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub MainMenuAutre config_sauvegarder: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+
+            End Select
+            ShowTreeView()
+            Me.Cursor = Nothing
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub MainMenuAutre: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
 #End Region
 
     Private Sub UnloadSelectElmt(ByVal Objet As Object)
