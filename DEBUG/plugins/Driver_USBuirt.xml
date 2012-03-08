@@ -97,7 +97,7 @@ Driver_USBuirt
 </member><member name="M:Driver_USBuirt.Driver_USBUIRT.TimerTick">
 	<summary>Si refresh &gt;0 gestion du timer</summary>
 	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-</member><member name="M:Driver_USBuirt.Driver_USBUIRT.LearnCodeIR">
+</member><member name="M:Driver_USBuirt.Driver_USBUIRT.LearnCode">
 	<summary>Apprendre un code IR</summary>
 	<returns>Retourne le code IR</returns>
 	<remarks></remarks>
