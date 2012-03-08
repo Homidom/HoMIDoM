@@ -5,10 +5,10 @@ Namespace HoMIDom
     ''' </summary>
     ''' <remarks></remarks>
     Public Class Telecommande
-        Public Shared TemplateBOX() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power"}
-        Public Shared TemplateTV() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power"}
-        Public Shared TemplateDVD() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power"}
-        Public Shared TemplateAUDIO() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power"}
+        Public Shared TemplateBOX() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power", "VolumeUp", "VolumeDown", "Mute", "ChannelUp", "ChannelDown"}
+        Public Shared TemplateTV() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power", "VolumeUp", "VolumeDown", "Mute", "ChannelUp", "ChannelDown"}
+        Public Shared TemplateDVD() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power", "Play", "Pause", "Stop", "Avance", "Recul", "ChapitreSuivant", "ChapitrePrecedent"}
+        Public Shared TemplateAUDIO() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power""VolumeUp", "VolumeDown", "Mute", "Play", "Pause", "Stop", "Avance", "Recul"}
 
         Public Class Template
             Dim _Fabricant As String = ""

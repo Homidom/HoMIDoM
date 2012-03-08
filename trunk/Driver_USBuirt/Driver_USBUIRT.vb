@@ -471,9 +471,9 @@ Imports UsbUirt
     ''' <summary>Apprendre un code IR</summary>
     ''' <returns>Retourne le code IR</returns>
     ''' <remarks></remarks>
-    Public Function LearnCodeIR() As String
+    Public Function LearnCode() As String
         If _IsConnect = False Then
-            Return "Impossible d'apprendre le code IR le driver n'est pas connecté"
+            Return "ERREUR: Impossible d'apprendre le code IR le driver n'est pas connecté"
         Else
             Dim x As ircodeinfo
             x = wait_for_code()
@@ -533,9 +533,37 @@ Imports UsbUirt
         End Try
     End Sub
 
+
+    ''' <summary>
+    ''' Envoyer une commande IR
+    ''' </summary>
+    ''' <param name="Code"></param>
+    ''' <param name="Repeat"></param>
+    ''' <remarks></remarks>
+    Public Sub EnvoyerCode(ByVal Code As String, ByVal Repeat As Integer)
+        Try
+            If _Enable = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
+                Exit Sub
+            End If
+
+            If _IsConnect = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté")
+                Exit Sub
+            End If
+
+            If Repeat <= 0 Then Repeat = 1
+            Code = Mid(Code, 2, Len(Code) - 1)
+            mc.Transmit(Code, CodeFormat.Uuirt, Repeat, TimeSpan.Zero)
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Code IR envoyé: " & Code & " repeat: " & Repeat)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Erreur: " & ex.ToString & vbCrLf & "Code=" & Code & "  Repeat=" & Repeat)
+        End Try
+    End Sub
+
     'handler code recu
     Private Sub handler_mc_received(ByVal sender As Object, ByVal e As ReceivedEventArgs)
-        _Server.Log(TypeLog.MESSAGE, TypeSource.DRIVER, "USBUIRT", "Code IR reçu: " & e.IRCode)
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Code IR reçu: " & e.IRCode)
         Debug.WriteLine("Code recu: " & e.IRCode)
         last_received_code = e.IRCode
         RaiseEvent DriverEvent(_Nom, "CODE_RECU", e.IRCode)

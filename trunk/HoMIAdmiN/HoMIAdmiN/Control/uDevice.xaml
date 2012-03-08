@@ -130,8 +130,8 @@
                                 <StackPanel Orientation="Horizontal" >
                                     <Button Height="26.664" Margin="1" Name="BtnNewCmd" Width="67">Nouveau</Button>
                                     <Button Height="26.664" Margin="1" Name="BtnSaveCmd" Width="67">Enregistrer</Button>
-                                    <Button Height="26.664" Margin="1" Name="BtnDelCmd" Width="67">Supprimer</Button>
-                                    <Button Height="26.664" Margin="1" Name="BtnTstCmd" Width="67">Tester</Button>
+                                    <Button Height="26.664" Margin="1" Name="BtnDelCmd" Width="67" Visibility="Hidden">Supprimer</Button>
+                                    <Button Height="26.664" Margin="1" Name="BtnTstCmd" Width="67" Visibility="Hidden">Tester</Button>
                                     <Button Height="26.664" Margin="1" Name="BtnLearn" Width="67">Apprendre</Button>
                                 </StackPanel>
 

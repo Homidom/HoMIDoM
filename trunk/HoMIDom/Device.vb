@@ -2258,18 +2258,21 @@ Namespace HoMIDom
                 For i As Integer = 0 To Commandes.Count - 1
                     If UCase(Commande) = UCase(Commandes.Item(i).Name) Then
                         Dim code As String = ""
-                        If Adresse1 IsNot Nothing Then
-                            code = Adresse1.ToString
+                        If _Adresse1 <> "" Then
+                            code = code & _Adresse1
                         End If
-                        code &= Commandes.Item(i).Code
-                        If Adresse2 IsNot Nothing Then
-                            code &= Adresse2.ToString
+                        code = code & Commandes.Item(i).Code
+                        If _Adresse2 <> "" Then
+                            code = code & _Adresse2
                         End If
+
                         Dim repeat As String = Commandes.Item(i).Repeat
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "EnvoyerCommande", "La commande " & code & " Repeat " & repeat & " a été envoyée au driver")
                         Driver.EnvoyerCode(code, repeat)
                         Exit Sub
                     End If
                 Next
+                _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "EnvoyerCommande", "La commande " & Commande & " n'as pas été trouvée!!")
             End Sub
 
             Protected Overrides Sub Finalize()

@@ -711,15 +711,19 @@ Imports System.Xml
     'Insérer ci-dessous les fonctions propres au driver et nom communes (ex: start)
     Public Function EnvoyerCode(ByVal Code As String, Optional ByVal Repeat As Integer = 0) As String
         If _Enable = False Then
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCode", "Erreur: impossible d'envoyer le code, le driver http n'est pas activé")
             Return "Erreur: impossible d'envoyer le code, le driver http n'est pas activé"
             Exit Function
         End If
 
         Dim URL As String = Code
-        If Trim(URL) <> "" Then
+        If URL = "" Then
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCode", "Erreur: impossible d'envoyer le code celui-ci est vide")
             Return "Erreur: impossible d'envoyer le code celui-ci est vide"
             Exit Function
         End If
+
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCode", "Code=" & URL)
 
         Try
             Dim reader As StreamReader = Nothing
@@ -735,7 +739,7 @@ Imports System.Xml
             Next
             Return str
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " EnvoyerCode", ex.Message)
             Return "Erreur: " & ex.ToString
         End Try
     End Function
