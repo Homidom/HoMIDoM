@@ -6612,7 +6612,7 @@ Namespace HoMIDom
                                 Case "name"
                                     If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then x.Name = list.Item(i).Attributes.Item(j).Value
                                 Case "code"
-                                    If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then x.Code = list.Item(i).Attributes.Item(j).Value
+                                    If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then x.Code = HtmlDecode(list.Item(i).Attributes.Item(j).Value)
                                 Case "repeat"
                                     If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then
                                         If IsNumeric(list.Item(i).Attributes.Item(j).Value) Then x.Repeat = list.Item(i).Attributes.Item(j).Value
@@ -6712,7 +6712,7 @@ Namespace HoMIDom
                         writer.WriteValue(Commandes(i).Name)
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("code")
-                        writer.WriteValue(Commandes(i).Code)
+                        writer.WriteValue(HtmlEncode(Commandes(i).Code))
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("repeat")
                         writer.WriteValue(Commandes(i).Repeat)

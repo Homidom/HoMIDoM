@@ -806,41 +806,45 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub BtnSaveTemplate_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSaveTemplate.Click
-        If TxtTplFab.Text = "" Or TxtTplFab.Text = " " Or InStr(TxtTplFab.Text, "-") > 0 Then
-            MessageBox.Show("Le nom du fabricant est obligatoire et ne doit pas comporter le caractère: - ", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            TxtTplFab.Focus()
-            Exit Sub
-        End If
-        If TxtTplMod.Text = "" Or TxtTplMod.Text = " " Or InStr(TxtTplMod.Text, "-") > 0 Then
-            MessageBox.Show("Le nom du modèle est obligatoire et ne doit pas comporter le caractère: - ", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            TxtTplMod.Focus()
-            Exit Sub
-        End If
+        Try
 
-        Dim mytemplate As String = LCase(TxtTplFab.Text) & "-" & LCase(TxtTplMod.Text) & "-" & LCase(CbTplDriver.Text)
+            If TxtTplFab.Text = "" Or TxtTplFab.Text = " " Or InStr(TxtTplFab.Text, "-") > 0 Then
+                MessageBox.Show("Le nom du fabricant est obligatoire et ne doit pas comporter le caractère: - ", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                TxtTplFab.Focus()
+                Exit Sub
+            End If
+            If TxtTplMod.Text = "" Or TxtTplMod.Text = " " Or InStr(TxtTplMod.Text, "-") > 0 Then
+                MessageBox.Show("Le nom du modèle est obligatoire et ne doit pas comporter le caractère: - ", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                TxtTplMod.Focus()
+                Exit Sub
+            End If
 
-        Dim retour As String = myService.CreateNewTemplate(TxtTplFab.Text, TxtTplMod.Text, CbTplDriver.Text, cbBase.SelectedIndex)
-        If retour <> "0" Then
-            MessageBox.Show("Erreur lors de la création du nouveau template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        Else
+            Dim mytemplate As String = LCase(TxtTplFab.Text) & "-" & LCase(TxtTplMod.Text) & "-" & LCase(myService.GetAllDrivers(IdSrv).Item(CbDriver.SelectedIndex).Protocol)
 
-            StkNewTemplate.Height = 0
-            BtnSaveTemplate.Visibility = Windows.Visibility.Hidden
-            lbltplbase.Visibility = Windows.Visibility.Hidden
-            cbBase.Visibility = Windows.Visibility.Hidden
+            Dim retour As String = myService.CreateNewTemplate(TxtTplFab.Text, TxtTplMod.Text, myService.GetAllDrivers(IdSrv).Item(CbDriver.SelectedIndex).Protocol, cbBase.SelectedIndex)
+            If retour <> "0" Then
+                MessageBox.Show("Erreur lors de la création du nouveau template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            Else
 
-            cbTemplate.Items.Clear()
-            Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
-            _list = myService.GetListOfTemplate
-            For i As Integer = 0 To _list.Count - 1
-                Dim tpl As String = Replace(_list(i).File, ".xml", "")
-                cbTemplate.Items.Add(tpl)
-            Next
+                StkNewTemplate.Height = 0
+                BtnSaveTemplate.Visibility = Windows.Visibility.Hidden
+                lbltplbase.Visibility = Windows.Visibility.Hidden
+                cbBase.Visibility = Windows.Visibility.Hidden
 
-            cbTemplate.Text = mytemplate
-        End If
+                cbTemplate.Items.Clear()
+                Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
+                _list = myService.GetListOfTemplate
+                For i As Integer = 0 To _list.Count - 1
+                    Dim tpl As String = Replace(_list(i).File, ".xml", "")
+                    cbTemplate.Items.Add(tpl)
+                Next
 
+                cbTemplate.Text = mytemplate
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString)
+        End Try
     End Sub
 
     Private Sub TxtCmdData_TextInput(ByVal sender As Object, ByVal e As System.Windows.Input.TextCompositionEventArgs) Handles TxtCmdData.TextInput
