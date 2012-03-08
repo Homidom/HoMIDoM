@@ -44,57 +44,85 @@ Class uModuleSimple
         End Try
     End Sub
 
-
     Private Sub BtnAnnuler_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnAnnuler.Click
-        RaiseEvent CloseMe(Me)
+        Try
+            RaiseEvent CloseMe(Me)
+        Catch ex As Exception
+            MessageBox.Show("Erreur: UmoduleSimple BtnAnnuler_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnAjouter_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnAjouter.Click
+        Try
+            Select Case CbType.SelectedValue
+                Case "Associer un interrupteur/detecteur à un appareil/lampe/volet"
 
-        RaiseEvent CloseMe(Me)
+                Case "Associer des interrupteurs/detecteurs à un appareil/lampe/volet"
+
+                Case "Associer un interrupteur/detecteur à des appareils/lampes/volets"
+
+                Case "Associer des interrupteurs/detecteurs à des appareils/lampes/volets"
+
+                Case "Programmer une action sur un composant"
+
+            End Select
+            RaiseEvent CloseMe(Me)
+        Catch ex As Exception
+            MessageBox.Show("Erreur: UmoduleSimple BtnAjouter_Click: " & ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnHelp_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnHelp.Click
-        MessageBox.Show(BtnHelp.ToolTip, "Aide", MessageBoxButton.OK, MessageBoxImage.Question)
+        Try
+            MessageBox.Show("Les modules permettent de créer automatiquement des trigers et macros suivant des scénarios prédéfinis." & Chr(10) _
+                            & "Veuillez sélectionner un émetteur (un ou des composants), un récepteur (un ou des ccomposants, un timer, une commande à donner... suivant le scénario choisi", _
+                            "Aide", MessageBoxButton.OK, MessageBoxImage.Question)
+        Catch ex As Exception
+            MessageBox.Show("Erreur: UmoduleSimple BtnHelp_Click: " & ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub CbType_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbType.SelectionChanged
-        Select Case CbType.SelectedValue
-            Case "Associer un interrupteur/detecteur à un appareil/lampe/volet"
-                StkCompEmet.Visibility = Windows.Visibility.Visible
-                StkCompRecep.Visibility = Windows.Visibility.Visible
-                StkMulti.Visibility = Windows.Visibility.Collapsed
-                StkCompMultiEmet.Visibility = Windows.Visibility.Collapsed
-                StkCompMultiRecep.Visibility = Windows.Visibility.Collapsed
-                StkOrdre.Visibility = Windows.Visibility.Collapsed
-            Case "Associer des interrupteurs/detecteurs à un appareil/lampe/volet"
-                StkCompEmet.Visibility = Windows.Visibility.Collapsed
-                StkCompRecep.Visibility = Windows.Visibility.Visible
-                StkMulti.Visibility = Windows.Visibility.Visible
-                StkCompMultiEmet.Visibility = Windows.Visibility.Visible
-                StkCompMultiRecep.Visibility = Windows.Visibility.Collapsed
-                StkOrdre.Visibility = Windows.Visibility.Collapsed
-            Case "Associer un interrupteur/detecteur à des appareils/lampes/volets"
-                StkCompEmet.Visibility = Windows.Visibility.Visible
-                StkCompRecep.Visibility = Windows.Visibility.Collapsed
-                StkMulti.Visibility = Windows.Visibility.Visible
-                StkCompMultiEmet.Visibility = Windows.Visibility.Collapsed
-                StkCompMultiRecep.Visibility = Windows.Visibility.Visible
-                StkOrdre.Visibility = Windows.Visibility.Collapsed
-            Case "Associer des interrupteurs/detecteurs à des appareils/lampes/volets"
-                StkCompEmet.Visibility = Windows.Visibility.Collapsed
-                StkCompRecep.Visibility = Windows.Visibility.Collapsed
-                StkMulti.Visibility = Windows.Visibility.Visible
-                StkCompMultiEmet.Visibility = Windows.Visibility.Visible
-                StkCompMultiRecep.Visibility = Windows.Visibility.Visible
-                StkOrdre.Visibility = Windows.Visibility.Collapsed
-            Case "Programmer une action sur un composant"
-                StkCompEmet.Visibility = Windows.Visibility.Collapsed
-                StkCompRecep.Visibility = Windows.Visibility.Visible
-                StkMulti.Visibility = Windows.Visibility.Collapsed
-                StkCompMultiEmet.Visibility = Windows.Visibility.Collapsed
-                StkCompMultiRecep.Visibility = Windows.Visibility.Collapsed
-                StkOrdre.Visibility = Windows.Visibility.Visible
-        End Select
+        Try
+            Select Case CbType.SelectedValue
+                Case "Associer un interrupteur/detecteur à un appareil/lampe/volet"
+                    StkCompEmet.Visibility = Windows.Visibility.Visible
+                    StkCompRecep.Visibility = Windows.Visibility.Visible
+                    StkMulti.Visibility = Windows.Visibility.Collapsed
+                    StkCompMultiEmet.Visibility = Windows.Visibility.Collapsed
+                    StkCompMultiRecep.Visibility = Windows.Visibility.Collapsed
+                    StkOrdre.Visibility = Windows.Visibility.Collapsed
+                Case "Associer des interrupteurs/detecteurs à un appareil/lampe/volet"
+                    StkCompEmet.Visibility = Windows.Visibility.Collapsed
+                    StkCompRecep.Visibility = Windows.Visibility.Visible
+                    StkMulti.Visibility = Windows.Visibility.Visible
+                    StkCompMultiEmet.Visibility = Windows.Visibility.Visible
+                    StkCompMultiRecep.Visibility = Windows.Visibility.Collapsed
+                    StkOrdre.Visibility = Windows.Visibility.Collapsed
+                Case "Associer un interrupteur/detecteur à des appareils/lampes/volets"
+                    StkCompEmet.Visibility = Windows.Visibility.Visible
+                    StkCompRecep.Visibility = Windows.Visibility.Collapsed
+                    StkMulti.Visibility = Windows.Visibility.Visible
+                    StkCompMultiEmet.Visibility = Windows.Visibility.Collapsed
+                    StkCompMultiRecep.Visibility = Windows.Visibility.Visible
+                    StkOrdre.Visibility = Windows.Visibility.Collapsed
+                Case "Associer des interrupteurs/detecteurs à des appareils/lampes/volets"
+                    StkCompEmet.Visibility = Windows.Visibility.Collapsed
+                    StkCompRecep.Visibility = Windows.Visibility.Collapsed
+                    StkMulti.Visibility = Windows.Visibility.Visible
+                    StkCompMultiEmet.Visibility = Windows.Visibility.Visible
+                    StkCompMultiRecep.Visibility = Windows.Visibility.Visible
+                    StkOrdre.Visibility = Windows.Visibility.Collapsed
+                Case "Programmer une action sur un composant"
+                    StkCompEmet.Visibility = Windows.Visibility.Collapsed
+                    StkCompRecep.Visibility = Windows.Visibility.Visible
+                    StkMulti.Visibility = Windows.Visibility.Collapsed
+                    StkCompMultiEmet.Visibility = Windows.Visibility.Collapsed
+                    StkCompMultiRecep.Visibility = Windows.Visibility.Collapsed
+                    StkOrdre.Visibility = Windows.Visibility.Visible
+            End Select
+        Catch ex As Exception
+            MessageBox.Show("Erreur: UmoduleSimple CbType_SelectionChanged: " & ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 End Class

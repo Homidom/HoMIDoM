@@ -370,32 +370,17 @@
     <AppDesigner Include="My Project\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\01.png">
+    <Resource Include="Images_old\image003.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\image003.jpg">
+    <Resource Include="Images_old\driver-128.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\homidom_icone_moyen.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\driver-128.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Back_03.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Defaut-128.png">
+    <Resource Include="Images_old\Back_03.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
@@ -403,17 +388,12 @@
     <Resource Include="icone.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\bandeau_1_950x60.jpg">
+    <Resource Include="Images_old\bandeau_1_950x60.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\5250-128.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\user.png">
+    <Resource Include="Images_old\user.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
@@ -442,158 +422,178 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\aide.png" />
+    <Resource Include="Images_old\aide.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Lune.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\Soleil.png">
+    <Resource Include="Images_old\blockdevice-icone-7594-128.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\blockdevice-icone-7594-128.png">
+    <Resource Include="Images_old\supprimer32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\supprimer32.png">
+    <Resource Include="Images_old\arriere-zoom-128.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images_old\avant-zoom-128.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\arriere-zoom-128.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\avant-zoom-128.png">
+    <Resource Include="Images_old\e-mail-32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\e-mail-32.png">
+    <Resource Include="Images_old\horloge-128.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\horloge-128.png">
+    <Resource Include="Images_old\fleche-vers-le-haut-icone-32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\fleche-vers-le-haut-icone-32.png">
+    <Resource Include="Images_old\If01.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\If01.png">
+    <Resource Include="Images_old\script-128.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images_old\workflow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\script-128.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\workflow.png">
+    <Resource Include="Images_old\fermer-croix-supprimer-128.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\fermer-croix-supprimer-128.png">
+    <Resource Include="Images_old\bullet-fleche-vers-le-haut-32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\bullet-fleche-vers-le-haut-32.png">
+    <Resource Include="Images_old\bullet-fleche-vers-le-bas-32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\bullet-fleche-vers-le-bas-32.png">
+    <Resource Include="Images_old\lecture-48.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images_old\stop-48.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\lecture-48.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\stop-48.png">
+    <Resource Include="Images_old\ajouter-32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\ajouter-32.png">
+    <Resource Include="Images_old\ajouter-la-brique-32.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images_old\temps-ajouter-32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\ajouter-la-brique-32.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\temps-ajouter-32.png">
+    <Resource Include="Images_old\tree-48.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\tree-48.png">
+    <Resource Include="Images_old\apply-48.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\home-128.png">
+    <Resource Include="Images_old\save-icone-48.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\apply-48.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Images_old\drapeau-vert-32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\save-icone-48.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Images_old\light.png" />
+    <Resource Include="Images_old\macro.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\curve-32.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Images_old\bt_down.png" />
+    <Resource Include="Images_old\bt_up.png" />
+    <Resource Include="Images_old\cd_new.png" />
+    <Resource Include="Images_old\cd_remove.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\drapeau-vert-32.png" />
+    <Resource Include="Images_old\room.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\light.png" />
-    <Resource Include="Images\macro.png" />
+    <Resource Include="Images_old\crayon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\releve.png" />
+    <Resource Include="Images_old\config.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\bt_down.png" />
-    <Resource Include="Images\bt_up.png" />
-    <Resource Include="Images\cd_new.png" />
-    <Resource Include="Images\cd_remove.png" />
+    <Resource Include="Images_old\multimedia-128.png" />
+    <Resource Include="Images_old\sortie-128.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\room.png" />
+    <Resource Include="Images_old\export-128.png" />
+    <Resource Include="Images_old\import-128.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\crayon.png" />
+    <Resource Include="Images_old\module.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\config.png" />
+    <Resource Include="Images\Configurer_128.png" />
+    <Resource Include="Images\Courbe_128.png" />
+    <Resource Include="Images\Driver_128.png" />
+    <Resource Include="Images\Help_128.png" />
+    <Resource Include="Images\Macro_128.png" />
+    <Resource Include="Images\Quitter_128.png" />
+    <Resource Include="Images\Trigger_128.png" />
+    <Resource Include="Images\Trigger_clock_128.png" />
+    <Resource Include="Images\Trigger_device_128.png" />
+    <Resource Include="Images\User_128.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\multimedia-128.png" />
-    <Resource Include="Images\sortie-128.png" />
+    <Resource Include="Images\Fond_1024_768.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\export-128.png" />
-    <Resource Include="Images\import-128.png" />
+    <Resource Include="Images\Releve_64.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\module.png" />
+    <Resource Include="Images\Defaut_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Lune_130.png" />
+    <Resource Include="Images\Soleil_130.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Home_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Homidom_logo_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Logs_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Croix_128.png" />
+    <Resource Include="Images\save_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Homidom_banniere_817_203.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
