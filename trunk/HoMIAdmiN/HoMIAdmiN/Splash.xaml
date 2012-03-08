@@ -5,7 +5,7 @@
     
     <StackPanel >
         <Label Content="Label" Name="Label2" FontStretch="Normal" FontWeight="Bold" FontSize="24" Margin="3"/>
-        <Image Height="118"  Name="Image1" Stretch="Fill" VerticalAlignment="Top" Source="/HoMIAdmiN;component/Images/image003.jpg" Margin="3" MaxWidth="400" />
+        <Image Height="110"  Name="Image1" Stretch="Fill" VerticalAlignment="Top" Source="/HoMIAdmiN;component/Images/Homidom_banniere_817_203.png" Margin="3" MaxWidth="400" />
         <Label Content="Label" Name="Label1" Margin="3"/>        
     </StackPanel >
 </Window>
