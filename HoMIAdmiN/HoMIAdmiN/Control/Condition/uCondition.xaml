@@ -17,8 +17,8 @@
                     <ComboBoxItem Content="AND" />
                     <ComboBoxItem Content="OR" />
                 </ComboBox>
-                <Image Name="BtnUp" Width="24" Height="24" Margin="3" Source="/HoMIAdmiN;component/Images/fleche-vers-le-haut-icone-32.png" />
-                <Image Name="BtnDelete" Width="24" Height="24" Margin="3" Source="/HoMIAdmiN;component/Images/supprimer32.png" />
+                <Image Name="BtnUp" Width="24" Height="24" Margin="3" Source="/HoMIAdmiN;component/Images/Fleche_haut_32.png" />
+                <Image Name="BtnDelete" Width="24" Height="24" Margin="3" Source="/HoMIAdmiN;component/Images/supprimer_32.png" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Name="StkTime">
                 <Label Content="Date &amp; Heure" Height="24" Foreground="White" />
@@ -47,13 +47,13 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <Button HorizontalAlignment="Left" Margin="1" Name="BtnPHr" Width="35" Height="24" VerticalAlignment="Top" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                                    <Image Source="/HoMIAdmiN;component/Images/Fleche_haut_32.png" />
                                 </Button>
                                 <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnPMn" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                                    <Image Source="/HoMIAdmiN;component/Images/Fleche_haut_32.png" />
                                 </Button>
                                 <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnPSc" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                                    <Image Source="/HoMIAdmiN;component/Images/Fleche_haut_32.png" />
                                 </Button>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
@@ -63,13 +63,13 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMHr" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                                    <Image Source="/HoMIAdmiN;component/Images/Fleche_bas_32.png" />
                                 </Button>
                                 <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMMn" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                                    <Image Source="/HoMIAdmiN;component/Images/Fleche_bas_32.png" />
                                 </Button>
                                 <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMSec" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                                    <Image Source="/HoMIAdmiN;component/Images/Fleche_bas_32.png" />
                                 </Button>
                             </StackPanel>
                         </StackPanel>
@@ -81,10 +81,10 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <Button HorizontalAlignment="Left" Margin="1" Name="BtnPJr" Width="35" Height="24" VerticalAlignment="Top" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                                    <Image Source="/HoMIAdmiN;component/Images/Fleche_haut_32.png" />
                                 </Button>
                                 <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnPMs" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                                    <Image Source="/HoMIAdmiN;component/Images/Fleche_haut_32.png" />
                                 </Button>
 
                             </StackPanel>
@@ -94,10 +94,10 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMJr" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                                    <Image Source="/HoMIAdmiN;component/Images/Fleche_bas_32.png" />
                                 </Button>
                                 <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMMs" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                                    <Image Source="/HoMIAdmiN;component/Images/Fleche_bas_32.png" />
                                 </Button>
 
                             </StackPanel>

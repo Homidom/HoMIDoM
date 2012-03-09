@@ -8,7 +8,7 @@
                 <Label HorizontalAlignment="Center"  Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Utilisateur</Label>
             </StackPanel>
         </Border>
-        <Image Height="60" HorizontalAlignment="Left" Margin="11,11,0,0" Name="ImgIcon" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/user.png">
+        <Image Height="60" HorizontalAlignment="Left" Margin="11,11,0,0" Name="ImgIcon" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/user_128.png">
 
         </Image>
         <StackPanel Margin="5,85,0,0">
