@@ -6,7 +6,7 @@
             <Border Name="Border1" BorderThickness="2" BorderBrush="Gray" />
 
         <DockPanel DockPanel.Dock="Top" >
-            <Image DockPanel.Dock="Left"  Height="53" HorizontalAlignment="Left" Margin="7,1,0,0" Name="ImgDevice" Source="/HoMIAdmiN;component/Images/5250-128.png" Stretch="Fill" VerticalAlignment="Top" Width="53">
+            <Image DockPanel.Dock="Left"  Height="53" HorizontalAlignment="Left" Margin="7,1,0,0" Name="ImgDevice" Source="/HoMIAdmiN;component/Images/logs_128.png" Stretch="Fill" VerticalAlignment="Top" Width="53">
                 <Image.LayoutTransform>
                     <RotateTransform Angle="-10" CenterX="0" CenterY="0" />
                 </Image.LayoutTransform>

@@ -10,29 +10,29 @@
             <StackPanel >
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
                     <StackPanel Name="menu_driver" Width="110" Height="110" Background="Black">
-                        <Image Tag="tag_driver" Name="img_driver" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/driver-128.png" ToolTip="Gérer les drivers" />
+                        <Image Tag="tag_driver" Name="img_driver" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/Driver_128.png" ToolTip="Gérer les drivers" />
                         <Label Name="lbl_menu_driver" Content="Drivers" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Image Tag="tag_driver" Name="img_driver_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Gérer les drivers" />
-                            <Image Tag="tag_driver" Name="img_driver_editer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer un driver" />
+                            <Image Tag="tag_driver" Name="img_driver_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Configurer_32.png" ToolTip="Gérer les drivers" />
+                            <Image Tag="tag_driver" Name="img_driver_editer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Modifier_32.png" ToolTip="Editer un driver" />
                         </StackPanel>
                     </StackPanel>
                 </Border>
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
                     <StackPanel Name="menu_composant" Width="110" Height="110" Background="Black">
-                        <Image Tag="tag_composant" Name="img_composant" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/light.png" ToolTip="Gérer les composants" />
+                        <Image Tag="tag_composant" Name="img_composant" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/Composant_128.png" ToolTip="Gérer les composants" />
                         <Label Name="label_menu_composant" Content="Composants" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Image Tag="tag_composant" Name="img_composant_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Gérer les composants" />
-                            <Image Tag="tag_composant" Name="img_composant_ajouter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" ToolTip="Ajouter un composant" />
-                            <Image Tag="tag_composant" Name="img_composant_editer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer un composant" />
-                            <Image Tag="tag_composant" Name="img_composant_supprimer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" ToolTip="Supprimer un composant" />
+                            <Image Tag="tag_composant" Name="img_composant_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Configurer_32.png" ToolTip="Gérer les composants" />
+                            <Image Tag="tag_composant" Name="img_composant_ajouter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter_32.png" ToolTip="Ajouter un composant" />
+                            <Image Tag="tag_composant" Name="img_composant_editer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Modifier_32.png" ToolTip="Editer un composant" />
+                            <Image Tag="tag_composant" Name="img_composant_supprimer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Supprimer_32.png" ToolTip="Supprimer un composant" />
                         </StackPanel>
                         </StackPanel>
                 </Border>
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
                     <StackPanel Name="menu_multimedia" Width="110" Height="110" Background="Black">
-                        <Image Tag="tag_multimedia" Name="img_multimedia" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/multimedia-128.png" ToolTip="Gérer le multimedia" />
+                        <Image Tag="tag_multimedia" Name="img_multimedia" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/multimedia_128.png" ToolTip="Gérer le multimedia" />
                         <Label Name="label_menu_multimedia" Content="Multimedia" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                     </StackPanel>
                 </Border>
@@ -40,38 +40,38 @@
             <StackPanel >
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
                     <StackPanel Name="menu_zone" Width="110" Height="110" Background="Black">
-                        <Image Tag="tag_zone" Name="img_zone" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/room.png" ToolTip="Gérer les zones" />
+                        <Image Tag="tag_zone" Name="img_zone" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/Zone_128.png" ToolTip="Gérer les zones" />
                         <Label Name="label_menu_zone" Content="Zones" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Image Tag="tag_zone" Name="img_zone_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Gérer les zones" />
-                            <Image Tag="tag_zone" Name="img_zone_ajouter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" ToolTip="Ajouter une zone" />
-                            <Image Tag="tag_zone" Name="img_zone_editer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer une zone" />
-                            <Image Tag="tag_zone" Name="img_zone_supprimer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" ToolTip="Supprimer une zone" />
+                            <Image Tag="tag_zone" Name="img_zone_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Configurer_32.png" ToolTip="Gérer les zones" />
+                            <Image Tag="tag_zone" Name="img_zone_ajouter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter_32.png" ToolTip="Ajouter une zone" />
+                            <Image Tag="tag_zone" Name="img_zone_editer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Modifier_32.png" ToolTip="Editer une zone" />
+                            <Image Tag="tag_zone" Name="img_zone_supprimer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Supprimer_32.png" ToolTip="Supprimer une zone" />
                         </StackPanel>
                     </StackPanel>
                 </Border>
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
                     <StackPanel Name="menu_user" Width="110" Height="110" Background="Black">
-                        <Image Tag="tag_user" Name="img_user" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/user.png" ToolTip="Gérer les utilisateurs" />
+                        <Image Tag="tag_user" Name="img_user" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/user_128.png" ToolTip="Gérer les utilisateurs" />
                         <Label Name="label_menu_user" Content="Utilisateurs" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Image Tag="tag_user" Name="img_user_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Gérer les utilisateurs" />
-                            <Image Tag="tag_user" Name="img_user_ajouter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" ToolTip="Ajouter un utilisateur" />
-                            <Image Tag="tag_user" Name="img_user_editer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer un utilisateur" />
-                            <Image Tag="tag_user" Name="img_user_supprimer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" ToolTip="Supprimer un utilisateur" />
+                            <Image Tag="tag_user" Name="img_user_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Configurer_32.png" ToolTip="Gérer les utilisateurs" />
+                            <Image Tag="tag_user" Name="img_user_ajouter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter_32.png" ToolTip="Ajouter un utilisateur" />
+                            <Image Tag="tag_user" Name="img_user_editer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Modifier_32.png" ToolTip="Editer un utilisateur" />
+                            <Image Tag="tag_user" Name="img_user_supprimer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Supprimer_32.png" ToolTip="Supprimer un utilisateur" />
                         </StackPanel>
                     </StackPanel>
                 </Border>
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
                     <StackPanel Name="menu_config" Width="110" Height="110" Background="Black">
-                        <Image Tag="tag_config" Name="img_config" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Configurer le serveur" />
+                        <Image Tag="tag_config" Name="img_config" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/configurer_128.png" ToolTip="Configurer le serveur" />
                         <Label Name="label_menu_config" Content="Configuration" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-                            <Image Tag="tag_config_log" Name="img_config_log" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/5250-128.png" ToolTip="Consulter le log" />
-                            <Image Tag="tag_config" Name="img_config_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Configurer le serveur" />
-                            <Image Tag="tag_config_importer" Name="img_config_importer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/import-128.png" ToolTip="Importer le fichier de configuration" />
-                            <Image Tag="tag_config_exporter" Name="img_config_exporter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/export-128.png" ToolTip="Exporter le fichier de configuration" />
-                            <Image Tag="tag_config_sauvegarder" Name="img_config_sauvegarder" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/save-icone-48.png" ToolTip="Sauvegarder la configuration" />
+                            <Image Tag="tag_config_log" Name="img_config_log" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Logs_32.png" ToolTip="Consulter le log" />
+                            <Image Tag="tag_config" Name="img_config_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Configurer_32.png" ToolTip="Configurer le serveur" />
+                            <Image Tag="tag_config_importer" Name="img_config_importer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/import_32.png" ToolTip="Importer le fichier de configuration" />
+                            <Image Tag="tag_config_exporter" Name="img_config_exporter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/export_32.png" ToolTip="Exporter le fichier de configuration" />
+                            <Image Tag="tag_config_sauvegarder" Name="img_config_sauvegarder" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/save_32.png" ToolTip="Sauvegarder la configuration" />
                         </StackPanel>
                     </StackPanel>
                 </Border>
@@ -80,33 +80,33 @@
             <StackPanel >
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
                 <StackPanel  Name="menu_trigger" Width="110" Height="110" Background="Black">
-                        <Image Tag="tag_trigger" Name="img_trigger" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/drapeau-vert-32.png" ToolTip="Gérer les triggers" />
+                        <Image Tag="tag_trigger" Name="img_trigger" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/trigger_128.png" ToolTip="Gérer les triggers" />
                         <Label Name="label_menu_trigger" Content="Triggers" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Image Tag="tag_trigger" Name="img_trigger_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Gérer les tiggers" />
-                            <Image Tag="tag_triggertimer" Name="img_trigger_ajoutertimer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/temps-ajouter-32.png" ToolTip="Ajouter un trigger timer" />
-                            <Image Tag="tag_triggerdevice" Name="img_trigger_ajouterdevice" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-la-brique-32.png" ToolTip="Ajouter un trigger device" />
-                            <Image Tag="tag_trigger" Name="img_trigger_editer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer un trigger" />
-                            <Image Tag="tag_trigger" Name="img_trigger_supprimer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" ToolTip="Supprimer un trigger" />
+                            <Image Tag="tag_trigger" Name="img_trigger_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Configurer_32.png" ToolTip="Gérer les tiggers" />
+                            <Image Tag="tag_triggertimer" Name="img_trigger_ajoutertimer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/trigger_clock_128.png" ToolTip="Ajouter un trigger timer" />
+                            <Image Tag="tag_triggerdevice" Name="img_trigger_ajouterdevice" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/trigger_device_128.png" ToolTip="Ajouter un trigger device" />
+                            <Image Tag="tag_trigger" Name="img_trigger_editer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Modifier_32.png" ToolTip="Editer un trigger" />
+                            <Image Tag="tag_trigger" Name="img_trigger_supprimer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/supprimer_32.png" ToolTip="Supprimer un trigger" />
                         </StackPanel>
 
                     </StackPanel>
                 </Border>
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
                     <StackPanel Name="menu_macro" Width="110" Height="110" Background="Black">
-                        <Image Tag="tag_macro" Name="img_macro" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/macro.png" ToolTip="Gérer les macros" />
+                        <Image Tag="tag_macro" Name="img_macro" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/macro_128.png" ToolTip="Gérer les macros" />
                         <Label Name="label_menu_macro" Content="Macros" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Image Tag="tag_macro" Name="img_macro_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/config.png" ToolTip="Gérer les macros" />
-                            <Image Tag="tag_macro" Name="img_macro_ajouter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" ToolTip="Ajouter une macro" />
-                            <Image Tag="tag_macro" Name="img_macro_editer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/crayon.png" ToolTip="Editer une macro" />
-                            <Image Tag="tag_macro" Name="img_macro_supprimer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/fermer-croix-supprimer-128.png" ToolTip="Supprimer une macro" />
+                            <Image Tag="tag_macro" Name="img_macro_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Configurer_32.png" ToolTip="Gérer les macros" />
+                            <Image Tag="tag_macro" Name="img_macro_ajouter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter_32.png" ToolTip="Ajouter une macro" />
+                            <Image Tag="tag_macro" Name="img_macro_editer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Modifier_32.png" ToolTip="Editer une macro" />
+                            <Image Tag="tag_macro" Name="img_macro_supprimer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Supprimer_32.png" ToolTip="Supprimer une macro" />
                         </StackPanel>
                     </StackPanel>
                     </Border>
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
                     <StackPanel Name="menu_aide" Width="110" Height="110" Background="Black">
-                        <Image Tag="tag_aide" Name="img_aide" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/aide.png" ToolTip="Afficher l'aide Internet" />
+                        <Image Tag="tag_aide" Name="img_aide" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/Help_128.png" ToolTip="Afficher l'aide Internet" />
                         <Label Name="label_menu_aide" Content="Aide" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                     </StackPanel>
                 </Border>
@@ -115,23 +115,23 @@
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
                     <StackPanel Name="menu_histo" Width="110" Height="110" Background="Black">
                         <Border CornerRadius=" 8" >
-                             <Image Tag="tag_histo" Name="img_histo" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/curve-32.png" ToolTip="Consulter les historiques" />
+                             <Image Tag="tag_histo" Name="img_histo" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/courbe_128.png" ToolTip="Consulter les historiques" />
                         </Border>
                         <Label Name="label_menu_histo" Content="Historiques" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                     </StackPanel>
                 </Border>
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
                     <StackPanel Name="menu_module" Width="110" Height="110" Background="Black">
-                        <Image Tag="tag_module" Name="img_module" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/module.png" ToolTip="Créer un module" />
+                        <Image Tag="tag_module" Name="img_module" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/module_128.png" ToolTip="Créer un module" />
                         <Label Name="label_menu_module" Content="Module" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Image Tag="tag_module" Name="img_module_ajouter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter-32.png" ToolTip="Créer un module" />
+                            <Image Tag="tag_module" Name="img_module_ajouter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter_32.png" ToolTip="Créer un module" />
                         </StackPanel>
                     </StackPanel>
                 </Border>
                 <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
                     <StackPanel Name="menu_quitter" Width="110" Height="110" Background="Black">
-                        <Image Tag="tag_quitter" Name="img_quitter" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/sortie-128.png" ToolTip="Quitter" />
+                        <Image Tag="tag_quitter" Name="img_quitter" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/Quitter_128.png" ToolTip="Quitter" />
                         <Label Name="label_menu_quitter" Content="Quitter" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                     </StackPanel>
                 </Border>

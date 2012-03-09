@@ -13,7 +13,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
                     <Label Foreground="White" Name="Label3" VerticalAlignment="Top" Width="55" Content="Image :"></Label>
-                    <Image Margin="5" Name="ImgZone" Stretch="Fill" HorizontalAlignment="Left" Width="90" Height="90" Source="/HoMIAdmiN;component/Images/Defaut-128.png" />
+                    <Image Margin="5" Name="ImgZone" Stretch="Fill" HorizontalAlignment="Left" Width="90" Height="90" Source="/HoMIAdmiN;component/Images/Defaut_128.png" />
                 </StackPanel>
                 <Rectangle Height=" 10" />
                 <Label Content="Eléments appartenant à la zone" Foreground="White" ToolTip="Glisser un élément (device, macro ou zone) dans la liste ci-dessous" FontStyle="Oblique" FontWeight="ExtraBold" />
@@ -31,7 +31,7 @@
                 </StackPanel>
                 </StackPanel>
         </Border>
-        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgIcon" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Defaut-128.png" ToolTip="Click sur image pour la modifier">
+        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgIcon" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Defaut_128.png" ToolTip="Click sur image pour la modifier">
             <Image.LayoutTransform >
                 <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
             </Image.LayoutTransform>

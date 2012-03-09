@@ -25,13 +25,13 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                         <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnPHr" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                            <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                            <Image Source="/HoMIAdmiN;component/Images/Fleche_haut_32.png" />
                         </Button>
                         <Button HorizontalAlignment="Left" Margin="1" Name="BtnPMn" Width="35" Height="24" VerticalAlignment="Top" Template="{DynamicResource GlassButton}" Foreground="White" >
-                            <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                            <Image Source="/HoMIAdmiN;component/Images/Fleche_haut_32.png" />
                         </Button>
                         <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnPSc" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                            <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                            <Image Source="/HoMIAdmiN;component/Images/Fleche_haut_32.png" />
                         </Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
@@ -41,13 +41,13 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                         <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMHr" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                            <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                            <Image Source="/HoMIAdmiN;component/Images/Fleche_bas_32.png" />
                         </Button>
                         <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMMn" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                            <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                            <Image Source="/HoMIAdmiN;component/Images/Fleche_bas_32.png" />
                         </Button>
                         <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMSec" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                            <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                            <Image Source="/HoMIAdmiN;component/Images/Fleche_bas_32.png" />
                         </Button>
                     </StackPanel>
                         </StackPanel>
@@ -60,8 +60,8 @@
                         <Canvas  Height="400">
                             <StackPanel HorizontalAlignment="Left"  Name="StackPanel1" VerticalAlignment="Top" Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal" >
-                                    <Image Name="BtnCondiTime" Source="/HoMIAdmiN;component/Images/horloge-128.png" Height="24" Width="24" Margin="3" />
-                                    <Image Name="BtnCondiDevice" Source="/HoMIAdmiN;component/Images/blockdevice-icone-7594-128.png" Width="24" Height="24" Margin="3" />
+                                    <Image Name="BtnCondiTime" Source="/HoMIAdmiN;component/Images/horloge_128.png" Height="24" Width="24" Margin="3" />
+                                    <Image Name="BtnCondiDevice" Source="/HoMIAdmiN;component/Images/Composant_128.png" Width="24" Height="24" Margin="3" />
                                 </StackPanel>
                                 <Rectangle Height="20" />
                                 <ScrollViewer Name="ScrollViewer1" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True" Width="600" AllowDrop="True" Height="340">

@@ -8,7 +8,7 @@
             <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Driver</Label>
             </StackPanel>
         </Border>
-        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Defaut-128.png">
+        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Defaut_128.png">
             <Image.LayoutTransform >
                 <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
             </Image.LayoutTransform>
@@ -122,12 +122,8 @@
         <Button Height="25" HorizontalAlignment="Right" Margin="0,42.5,20,0" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Foreground="White">Fermer</Button>
         <Button Height="25" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Margin="0,11.25,20,0" Name="BtnOK" VerticalAlignment="Top" Width="88.75" Foreground="White">Ok</Button>
         <Button Height="40" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Margin="0,72.25,20,0" Name="BtnHelp" VerticalAlignment="Top" Width="40" Foreground="White" Visibility="Hidden">
-            <Image Source="/HoMIAdmiN;component/Images/aide.png" />
+            <Image Source="/HoMIAdmiN;component/Images/Help_128.png" />
         </Button>
-
-
-
-
 
     </Grid>
 </UserControl>
