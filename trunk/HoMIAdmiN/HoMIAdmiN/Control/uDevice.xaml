@@ -113,13 +113,13 @@
                             <StackPanel >
                                 <StackPanel Orientation="Horizontal" >
                                     <Label HorizontalAlignment="Left" Name="Label16" Foreground="White" Content="Nom :" />
-                                    <TextBox Height="21" Width="150" Name="TxtCmdName"  />
+                                    <TextBox Height="21" Width="150" Name="TxtCmdName" ToolTip="Nom de la commande" />
                                     <Label Foreground="White" HorizontalAlignment="Right" Name="Label17"  Content="Repeat :"/>
-                                    <TextBox Name="TxtCmdRepeat" Height="21" HorizontalAlignment="Right" VerticalAlignment="Top" Width="33.244" />
+                                    <TextBox Name="TxtCmdRepeat" Height="21" HorizontalAlignment="Right" VerticalAlignment="Top" Width="33.244" ToolTip="Nombre de fois à envoyer le code" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" >
                                     <Label Foreground="White" HorizontalAlignment="Right" Name="Label18" Content="Data :" />
-                                    <TextBox Width="240" Height="41" Name="TxtCmdData" />
+                                    <TextBox Width="240" Height="41" Name="TxtCmdData" ToolTip="Code à envoyer" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" >
                                     <Button Height="26.664" Margin="1" Name="BtnNewCmd" Width="67">Nouveau</Button>

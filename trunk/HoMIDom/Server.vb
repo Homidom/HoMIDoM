@@ -557,28 +557,32 @@ Namespace HoMIDom
                                             x.NumberIdentification = list.Item(i).Attributes.Item(j).Value
                                         Case "image"
                                             If list.Item(i).Attributes.Item(j).Value <> Nothing Then
-                                                x.Image = list.Item(0).Attributes.Item(j).Value
+                                                If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
+                                                    x.Image = list.Item(0).Attributes.Item(j).Value
+                                                Else
+                                                    x.Image = _MonRepertoire & "\images\users\defaut.png"
+                                                End If
                                             Else
                                                 x.Image = _MonRepertoire & "\images\users\defaut.png"
                                             End If
                                         Case "email"
-                                            x.eMail = list.Item(i).Attributes.Item(j).Value
+                                                x.eMail = list.Item(i).Attributes.Item(j).Value
                                         Case "emailautre"
-                                            x.eMailAutre = list.Item(i).Attributes.Item(j).Value
+                                                x.eMailAutre = list.Item(i).Attributes.Item(j).Value
                                         Case "telfixe"
-                                            x.TelFixe = list.Item(i).Attributes.Item(j).Value
+                                                x.TelFixe = list.Item(i).Attributes.Item(j).Value
                                         Case "telmobile"
-                                            x.TelMobile = list.Item(i).Attributes.Item(j).Value
+                                                x.TelMobile = list.Item(i).Attributes.Item(j).Value
                                         Case "telautre"
-                                            x.TelAutre = list.Item(i).Attributes.Item(j).Value
+                                                x.TelAutre = list.Item(i).Attributes.Item(j).Value
                                         Case "adresse"
-                                            x.Adresse = list.Item(i).Attributes.Item(j).Value
+                                                x.Adresse = list.Item(i).Attributes.Item(j).Value
                                         Case "ville"
-                                            x.Ville = list.Item(i).Attributes.Item(j).Value
+                                                x.Ville = list.Item(i).Attributes.Item(j).Value
                                         Case "codepostal"
-                                            x.CodePostal = list.Item(i).Attributes.Item(j).Value
+                                                x.CodePostal = list.Item(i).Attributes.Item(j).Value
                                         Case Else
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
                                 Next
                                 _ListUsers.Add(x)
@@ -755,13 +759,21 @@ Namespace HoMIDom
                                     If (Not list.Item(j).Attributes.GetNamedItem("lastchangeduree") Is Nothing) Then .LastChangeDuree = list.Item(j).Attributes.GetNamedItem("lastchangeduree").Value
                                     If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = Replace(list.Item(j).Attributes.GetNamedItem("refresh").Value, ".", ",")
                                     If (Not list.Item(j).Attributes.GetNamedItem("modele") Is Nothing) Then .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("picture") Is Nothing) Then .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
-                                    '    If list.Item(j).Attributes.GetNamedItem("picture").Value <> Nothing Then
-
-                                    '    Else
-                                    '        .Picture = _MonRepertoire & "\images\Devices\defaut.png"
-                                    '    End If
-                                    'End If
+                                    'If (Not list.Item(j).Attributes.GetNamedItem("picture") Is Nothing) Then .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
+                                    If list.Item(j).Attributes.GetNamedItem("picture").Value IsNot Nothing Then
+                                        If IO.File.Exists(.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value) Then
+                                            .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
+                                        Else
+                                            Dim fileimg As String = _MonRepertoire & "\images\Devices\" & LCase(_Dev.type) & "-defaut.png"
+                                            If IO.File.Exists(fileimg) Then
+                                                .Picture = fileimg
+                                            Else
+                                                .Picture = _MonRepertoire & "\images\Devices\defaut.png"
+                                            End If
+                                        End If
+                                    Else
+                                            .Picture = _MonRepertoire & "\images\Devices\defaut.png"
+                                    End If
                                     If (Not list.Item(j).Attributes.GetNamedItem("solo") Is Nothing) Then .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
                                     If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Replace(list.Item(j).Attributes.GetNamedItem("value").Value, ".", ",")
                                     If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = Replace(list.Item(j).Attributes.GetNamedItem("valuelast").Value, ".", ",")
