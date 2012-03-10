@@ -861,7 +861,7 @@ Class Window1
 
     Private Sub MainMenuAutre(ByVal index As String)
         Try
-            If IsConnect = False Then
+            If IsConnect = False And index <> "tag_quitter" Then
                 MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
                 ShowMainMenu()
                 Exit Sub
