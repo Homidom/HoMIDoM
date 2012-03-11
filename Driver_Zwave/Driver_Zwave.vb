@@ -2,6 +2,7 @@
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports OpenZWaveDotNet
+Imports System.ComponentModel
 
 
 Public Class Driver_ZWave
@@ -46,6 +47,7 @@ Public Class Driver_ZWave
         Private m_manager As New ZWManager
         Private m_options As New ZWOptions
         Private m_notification As ZWNotification
+        Private Shared m_nodeList As New BindingList(Of Node)()
 
         Private m_nodesReady As Boolean = False
         Private m_homeId As UInt32 = 0
@@ -62,34 +64,10 @@ Public Class Driver_ZWave
         ' Variables de gestion du port COM
         Private WithEvents port As New System.IO.Ports.SerialPort
         Private port_name As String = ""
-        Private BufferIn(8192) As Byte
-        Private DebutTrame As Boolean = False
-        Private DebutInfo As Boolean = False
-
-        Private bytecnt As Integer = 0
-        Private messcnt As Integer = 0
-        <NonSerialized()> Dim TimerSecond As New Timers.Timer 'Timer à la seconde
-        Private recbuf(300), recbytes, recbits As Byte
-        Private InfoTrame() As String
-
-        Private mess As Boolean = False
-        Private trame As Boolean = False
+        Dim MyRep As String = System.Environment.CurrentDirectory
 
         ' -----------------   Ajout des declarations pour OpenZWave
-        Private Structure NodeInfo
-            Dim m_homeId As UInteger
-            Dim m_nodeId As Byte
-            Dim m_polled As Boolean
-            Dim name As String
-            Dim location As String
-            'Dim m_values As  List()
-        End Structure
-
-        Private g_nodes() As NodeInfo
-        Private g_homeId As UInteger = 0
         Private g_initFailed As Boolean = False
-        Private g_nodesQueried As Boolean = False
-        '     Private d_CriticalSection As CRITICAL_SECTION
 
         Enum LogLevel
             LogLevel_None
@@ -103,6 +81,120 @@ Public Class Driver_ZWave
             LogLevel_Debug
             LogLevel_Internal
         End Enum
+
+
+        Public Structure Node
+
+            Shared m_id As Byte = 0
+            Public Property ID() As Byte
+                Get
+                    Return m_id
+                End Get
+                Set(ByVal value As Byte)
+                    m_id = value
+                End Set
+            End Property
+
+            Shared m_homeId As UInt32 = 0
+            Public Property HomeID() As UInt32
+                Get
+                    Return m_homeId
+                End Get
+                Set(ByVal value As UInt32)
+                    m_homeId = value
+                End Set
+            End Property
+
+            Shared m_name As String = ""
+            Public Property Name() As String
+                Get
+                    Return m_name
+                End Get
+                Set(ByVal value As String)
+                    m_name = value
+                End Set
+            End Property
+
+            Shared m_location As String = ""
+            Public Property Location() As String
+                Get
+                    Return m_location
+                End Get
+                Set(ByVal value As String)
+                    m_location = value
+                End Set
+            End Property
+
+            Shared m_label As String = ""
+            Public Property Label() As String
+                Get
+                    Return m_label
+                End Get
+                Set(ByVal value As String)
+                    m_label = value
+                End Set
+            End Property
+
+            Shared m_manufacturer As String = ""
+            Public Property Manufacturer() As String
+                Get
+                    Return m_manufacturer
+                End Get
+                Set(ByVal value As String)
+                    m_manufacturer = value
+                End Set
+            End Property
+
+            Shared m_product As String = ""
+            Public Property Product() As String
+                Get
+                    Return m_product
+                End Get
+                Set(ByVal value As String)
+                    m_product = value
+                End Set
+            End Property
+
+            Shared m_values As New List(Of ZWValueID)
+            Public ReadOnly Property Values() As List(Of ZWValueID)
+                Get
+                    Return m_values
+                End Get
+            End Property
+
+
+            Shared Sub New()
+
+            End Sub
+
+            Shared Sub AddValue(ByVal valueID As ZWValueID)
+                m_values.Add(valueID)
+            End Sub
+
+            Shared Sub RemoveValue(ByVal valueID As ZWValueID)
+                m_values.Remove(valueID)
+            End Sub
+
+
+            Shared Sub SetValue(ByVal valueID As ZWValueID)
+                Dim valueIndex As Integer = -1
+                Dim index As Integer = 0
+
+                While index < m_values.Count
+                    If m_values(index).GetId() = valueID.GetId() Then
+                        valueIndex = index
+                        Exit While
+                    End If
+                    System.Math.Max(System.Threading.Interlocked.Increment(index), index - 1)
+                End While
+
+                If valueIndex >= 0 Then
+                    m_values(valueIndex) = valueID
+                Else
+                    AddValue(valueID)
+                End If
+            End Sub
+        End Structure
 
 
 #End Region
@@ -345,43 +437,21 @@ Public Class Driver_ZWave
             'ouverture du port suivant le Port Com
             Try
                 If _Com <> "" Then
-                    ' retour = ouvrir(_Com)
-
-                    Console.WriteLine("Ouverture du port du controleur Z-Wave : " & _Com)
-                    m_options.Create(".\Config\Zwave\config\", "LogZWave.log", "")
-                    m_options.AddOptionInt("SaveLogLevel", LogLevel.LogLevel_Error)
-                    m_options.AddOptionInt("QueueLogLevel", LogLevel.LogLevel_Error)
-                    m_options.AddOptionInt("DumpTrigger", LogLevel.LogLevel_Error)
-                    m_options.AddOptionInt("PollInterval", 500)
-                    m_options.AddOptionBool("IntervalBetweenPolls", True)
-                    m_options.AddOptionBool("ValidateValueChanges", True)
-                    m_options.Lock()
-
-                    m_manager.Create()
-                    m_manager.OnNotification = (NotificationHandler(m_notification))
-                    ' Add an event handler for all the Z-Wave notifications
-
-                    ' Add a driver, this will start up the z-wave network
-                    m_manager.AddDriver("\\.\" & _Com)
+                    retour = ouvrir(_Com)
                     ' ZWave network is started, and our control of hardware can begin once all the nodes have reported in
-                    While (m_nodesReady = False And CptBoucle < 3)
-                        Console.WriteLine("Waiting loop " & CptBoucle & "  - The nodes all need to report in")
-                        System.Threading.Thread.Sleep(3000) ' Attente de 3 sec  - Info OpenZWave Wait since this process can take around 20seconds within my network
+                    While (m_nodesReady = False And CptBoucle < 5)
+                         System.Threading.Thread.Sleep(3000) ' Attente de 3 sec  - Info OpenZWave Wait since this process can take around 20seconds within my network
                         CptBoucle = CptBoucle + 1
                     End While
 
-                    ' Recuperation de la variable HomeId du controleur
-                    ' m_manager.GetControllerNodeId(g_homeId)
-                    Console.WriteLine("Configuration détectée avec le HomeId = " & g_homeId)
-
                     'traitement du message de retour
-                    If g_initFailed Then
+                    If Not (g_initFailed) Then
                         _IsConnect = False
-
+                        retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave", "Driver non démarré : " & retour)
                     Else
                         _IsConnect = True
-                        retour = "Port " & _Com & " ouvert"
+                        retour = "Port " & _Com & " ouvert - Le HomeId du Controleur est : 0x" & Convert.ToString(m_homeId, 16).ToUpper
                         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", retour)
                     End If
                 Else
@@ -621,12 +691,40 @@ Public Class Driver_ZWave
             Try
                 'ouverture du port
                 If Not _IsConnect Then
+                    Try
+                        ' Test d'ouveture du port Com du controleur 
+                        port.PortName = numero
+                        port.Open()
+                        ' Le port existe ==> le controleur est present
+                        If port.IsOpen() Then
+                            port.Close()
+                            ' Creation du controleur ZWave
+                            m_manager = New ZWManager()
+                            m_options.Create(MyRep & "\Config\Zwave\", MyRep & "\Config\logs\", "")
+                            m_options.AddOptionInt("SaveLogLevel", LogLevel.LogLevel_Info)
+                            m_options.AddOptionInt("QueueLogLevel", LogLevel.LogLevel_Error)
+                            m_options.AddOptionInt("DumpTrigger", LogLevel.LogLevel_Info)
+                            m_options.AddOptionInt("PollInterval", 500)
+                            m_options.AddOptionBool("IntervalBetweenPolls", True)
+                            m_options.AddOptionBool("ValidateValueChanges", True)
+                            m_options.Lock()
+                            m_manager.Create()
+                            ' Ajout d'un gestionnaire d'evenements()
+                            m_manager.OnNotification = New ManagedNotificationsHandler(AddressOf NotificationHandler)
+                            ' Creation du driver - Ouverture du port du controleur
+                            g_initFailed = m_manager.AddDriver("\\.\" & numero) ' Return True if driver create
+                            Return ("Port " & port_name & " ouvert")
+                        Else
+                            ' Le port n'existe pas ==> le controleur n'est pas present
+                            Return ("Port " & port_name & " fermé")
+                        End If
 
 
-                    'AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
-                    mess = False
+                    Catch ex As Exception
+                        Return ("Port " & port_name & " n'existe pas")
+                        Exit Function
+                    End Try
 
-                    Return ("Port " & port_name & " ouvert")
                 Else
                     Return ("Port " & port_name & " dejà ouvert")
                 End If
@@ -643,9 +741,14 @@ Public Class Driver_ZWave
                 If _IsConnect Then
                     If (Not (port Is Nothing)) Then ' The COM port exists.
                         If port.IsOpen Then
-                            port.DiscardOutBuffer()
-                            port.Close()
-                            port.Dispose()
+                            ' Sauvegarde de la configuration du réseau
+                            m_manager.WriteConfig(m_homeId)
+                            ' Fermeture du port du controleur 
+                            m_manager.RemoveDriver("\\.\" & _Com)
+
+                            '   port.DiscardOutBuffer()
+                            '  port.Close()
+                            ' port.Dispose()
                             _IsConnect = False
                             Return ("Port " & port_name & " fermé")
                         Else
@@ -667,53 +770,120 @@ Public Class Driver_ZWave
 
 
 
+        Sub NotificationHandler(ByVal m_notification As ZWNotification)
 
-        Private Function GetNode(ByRef homeId As UInt32, ByRef nodeId As Byte) As NodeInfo
-            Dim localnode As New NodeInfo
-
-            For Each localnode In g_nodes
-                If ((localnode.m_nodeId = nodeId) & (localnode.m_homeId = homeId)) Then
-
-                    Return localnode
-                Else
-                    Return Nothing
-                End If
-            Next
-            Return localnode
-        End Function
-
-
-        ' Method which handles the events raised by the ZWave network
-        ' </summary>
-        ' <param name="m_notification"></param>
-        Private Function NotificationHandler(ByRef m_notification As ZWNotification)
-
-            Console.WriteLine("Passage par la procedure de gestion des notifications")
-
-            If IsNothing(m_notification) Then
-                Console.WriteLine("error parametre vide")
-                Return Nothing
+            If m_notification Is Nothing Then
+                Return
             End If
 
-            Select Case (m_notification.GetType())
-
+            Select Case m_notification.[GetType]()
 
                 Case ZWNotification.Type.ValueAdded
-                    Console.WriteLine("Passage par ValueAdded")
-                    Dim node As New NodeInfo
-                    node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
-                    If IsNothing(node) Then
-
-                        'node.AddValue(m_notification.GetValueID())
-                        Console.WriteLine("Node ValueAdded, " + m_manager.GetValueLabel(m_notification.GetValueID()))
+                    Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
+                    If Not IsNothing(node) Then
+                        node.AddValue(m_notification.GetValueID())
                     End If
 
+                Case ZWNotification.Type.ValueRemoved
+                    Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
+                    If Not IsNothing(node) Then
+                        node.RemoveValue(m_notification.GetValueID())
+                    End If
+
+
+
+                Case ZWNotification.Type.ValueChanged
+                    Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
+                    If IsNothing(node) Then
+                        node.SetValue(m_notification.GetValueID())
+                    End If
+
+
+                Case ZWNotification.Type.Group
+
+
+
+
+                Case ZWNotification.Type.NodeAdded
+                    ' Add the new node to our list
+                    Dim node As New Node()
+                    node.ID = m_notification.GetNodeId()
+                    node.HomeID = m_notification.GetHomeId()
+                    m_nodeList.Add(node)
+
+                Case ZWNotification.Type.NodeRemoved
+                    For Each node As Node In m_nodeList
+                        If node.ID = m_notification.GetNodeId() Then
+                            m_nodeList.Remove(node)
+                            Exit For
+                        End If
+                    Next
+
+                Case ZWNotification.Type.NodeProtocolInfo
+                    Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
+                    If Not IsNothing(node) Then
+                        node.Label = m_manager.GetNodeType(m_homeId, node.ID)
+                    End If
+
+                Case ZWNotification.Type.NodeNaming
+                    Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
+                    If Not IsNothing(node) Then
+                        node.Manufacturer = m_manager.GetNodeManufacturerName(m_homeId, node.ID)
+                        node.Product = m_manager.GetNodeProductName(m_homeId, node.ID)
+                        node.Location = m_manager.GetNodeLocation(m_homeId, node.ID)
+                        node.Name = m_manager.GetNodeName(m_homeId, node.ID)
+                    End If
+
+
+                Case ZWNotification.Type.NodeEvent
+
+
+                Case ZWNotification.Type.PollingDisabled
+
+
+                Case ZWNotification.Type.PollingEnabled
+
+                Case ZWNotification.Type.DriverReady
+                    m_homeId = m_notification.GetHomeId()
+
+                Case ZWNotification.Type.NodeQueriesComplete
+
+                Case ZWNotification.Type.AllNodesQueried
+                    m_nodesReady = True
+
+                Case ZWNotification.Type.AwakeNodesQueried
+
             End Select
+        End Sub
 
+        '<summary>
+
+        'Gets a node based on the homeId and the nodeId
+        '</summary>
+        '<param name="homeId"></param>
+        '<param name="nodeId"></param>
+        '<returns></returns>
+        Private Shared Function GetNode(ByVal homeId As UInt32, ByVal nodeId As Byte) As Node
+
+            For Each node As Node In m_nodeList
+                If (node.ID = nodeId) AndAlso (node.HomeID = homeId) Then
+                    Return node
+                End If
+            Next
             Return Nothing
-
         End Function
 
+
+
+        Function GetValueID(ByVal node As Node, ByVal valueLabel As String) As ZWValueID
+
+            For Each valueID As ZWValueID In node.Values
+                If m_manager.GetValueLabel(valueID) = valueLabel Then
+                    Return valueID
+                End If
+            Next
+            Return Nothing
+        End Function
 
 #End Region
 
