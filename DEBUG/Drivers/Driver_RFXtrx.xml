@@ -1,0 +1,173 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Driver_RFXtrx
+</name>
+</assembly>
+<members>
+<member name="M:Driver_RFXtrx.Driver_RFXtrx.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ExecuteCommand(System.Object,System.String,System.Object[])">
+	<summary>Execute une commande avancée</summary>
+	<param name="Command"></param>
+	<param name="Param"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.VerifChamp(System.String,System.Object)">
+	<summary>Permet de vérifier si un champ est valide</summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.Start">
+	<summary>Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.Stop">
+	<summary>Arrêter le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.Restart">
+	<summary>Re-Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.Read(System.Object)">
+	<summary>Intérroger un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<remarks>pas utilisé</remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.Write(System.Object,System.String,System.Object,System.Object)">
+	<summary>Commander un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<param name="Command">La commande à passer</param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.DeleteDevice(System.String)">
+	<summary>Fonction lancée lors de la suppression d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.NewDevice(System.String)">
+	<summary>Fonction lancée lors de l'ajout d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.add_devicecommande(System.String,System.String,System.Int32)">
+	<summary>ajout des commandes avancées pour les devices</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
+	<summary>ajout Libellé pour le Driver</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
+	<summary>Ajout Libellé pour les Devices</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.add_paramavance(System.String,System.String,System.Object)">
+	<summary>ajout de parametre avancés</summary>
+	<param name="nom">Nom du parametre (sans espace)</param>
+	<param name="description">Description du parametre</param>
+	<param name="valeur">Sa valeur</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.#ctor">
+	<summary>Creation d'un objet de type</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.TimerTick">
+	<summary>Si refresh &gt;0 gestion du timer</summary>
+	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ouvrir(System.String)">
+	<summary>Ouvrir le port COM/ETHERNET</summary>
+	<param name="numero">Nom/Numero du port COM/Adresse IP: COM2</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.lancer">
+	<summary>Lances les handlers sur le port</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.configurer">
+	<summary>Configurer le RFXtrx</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.fermer">
+	<summary>Ferme la connexion au port</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ecrire(System.Byte[])">
+	<summary>ecrire sur le port</summary>
+	<param name="commande">premier paquet à envoyer</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
+	<summary>Executer lors de la reception d'une donnée sur le port</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ReadErrorEvent(System.Object,System.IO.Ports.SerialErrorReceivedEventArgs)">
+	<summary>Executer lors de la reception d'une erreur sur le port</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.TCPDataReceived(System.IAsyncResult)">
+	<summary>Executer lors de la reception d'une donnée sur le port IP</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ProcessNewTCPData(System.Byte[],System.Int32,System.Int32)">
+	<summary>Traite les données IP recu</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ProcessReceivedChar(System.Byte)">
+	<summary>Traite chaque byte reçu</summary>
+	<param name="sComChar">Byte recu</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.convert_housecode(System.String)">
+	<summary>Converti un house de type A, B... en byte</summary>
+	<param name="housecode">HouseCode du type A (de A1)</param>
+	<returns>Byte représentant le housecode</returns>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.send_x10(System.String,System.String)">
+	<summary>Gestion du protocole X10 RF</summary>
+	<param name="adresse">Adresse du type A1</param>
+	<param name="commande">commande ON, OFF, BRIGHT, DIM, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.send_arc(System.String,System.String)">
+	<summary>Gestion du protocole ARC</summary>
+	<param name="adresse">Adresse du type A1</param>
+	<param name="commande">commande ON, OFF, GROUP_ON, GROUP_OFF, CHIME</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.send_ELROAB400D(System.String,System.String)">
+	<summary>Gestion du protocole ELRO AB400D</summary>
+	<param name="adresse">Adresse du type A1</param>
+	<param name="commande">commande ON, OFF</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.send_WAVEMAN(System.String,System.String)">
+	<summary>Gestion du protocole WAVEMAN</summary>
+	<param name="adresse">Adresse du type A1</param>
+	<param name="commande">commande ON, OFF</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.send_EMW200(System.String,System.String)">
+	<summary>Gestion du protocole EMW200</summary>
+	<param name="adresse">Adresse du type A1 avec A/B/C et 1/2/3/4</param>
+	<param name="commande">commande ON, OFF, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.send_IMPULS(System.String,System.String)">
+	<summary>Gestion du protocole IMPULS</summary>
+	<param name="adresse">Adresse du type A1</param>
+	<param name="commande">commande ON, OFF</param>
+	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.send_AC(System.String,System.String,System.Int32,System.Int32)">
+	<summary>Gestion du protocole AC</summary>
+	<param name="adresse">Adresse du type 02F4416-1</param>
+	<param name="commande">commande ON, OFF, DIM, GROUP_OFF, GROUP_ON, GROUP_DIM</param>
+	<param name="type">0=AC / 1=HEEU / 2=ANSLUT</param>
+	<param name="dimlevel">Level pour Dim de 1 à 16</param>
+	<remarks></remarks>
+</member><member name="T:Driver_RFXtrx.Driver_RFXtrx">
+	<summary>Class Driver_RFXTrx, permet de communiquer avec le RFXtrx Ethernet/COM</summary>
+	<remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
+</member><member name="P:Driver_RFXtrx.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_RFXtrx.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_RFXtrx.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+</members>
+</doc>

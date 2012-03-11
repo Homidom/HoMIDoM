@@ -897,7 +897,7 @@ HoMIDom
 	<summary>Ecrire ou lance propritété/Sub d'un driver</summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.Drivers_Load">
-	<summary>Charge les drivers, donc toutes les dll dans le sous répertoire "plugins"</summary>
+	<summary>Charge les drivers, donc toutes les dll dans le sous répertoire "drivers"</summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.Drivers_Start">
 	<summary>Démarre tous les drivers dont la propriété StartAuto=True</summary>

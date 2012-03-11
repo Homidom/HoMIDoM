@@ -1994,18 +1994,18 @@ Namespace HoMIDom
             End Try
         End Sub
 
-        ''' <summary>Charge les drivers, donc toutes les dll dans le sous répertoire "plugins"</summary>
+        ''' <summary>Charge les drivers, donc toutes les dll dans le sous répertoire "drivers"</summary>
         ''' <remarks></remarks>
         Public Sub Drivers_Load()
             Try
                 Dim tx As String = ""
                 Dim dll As Reflection.Assembly
                 Dim tp As Type
-                Dim Chm As String = _MonRepertoire & "\Plugins\" 'Emplacement par défaut des plugins
+                Dim Chm As String = _MonRepertoire & "\Drivers\" 'Emplacement par défaut des drivers
 
                 Dim strFileSize As String = ""
                 Dim di As New IO.DirectoryInfo(Chm)
-                Dim aryFi As IO.FileInfo() = di.GetFiles("*.dll")
+                Dim aryFi As IO.FileInfo() = di.GetFiles("Driver_*.dll")
                 Dim fi As IO.FileInfo
 
                 'Cherche tous les fichiers dll dans le répertoie plugin
@@ -2427,28 +2427,28 @@ Namespace HoMIDom
                 Dim retour As String
 
                 'Cree les sous répertoires s'ils nexistent pas
-                If System.IO.Directory.Exists(_MonRepertoire & "\logs") = False Then
-                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\logs")
+                If System.IO.Directory.Exists(_MonRepertoire & "\Logs") = False Then
+                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\Logs")
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier logs")
                 End If
-                If System.IO.Directory.Exists(_MonRepertoire & "\captures") = False Then
+                If System.IO.Directory.Exists(_MonRepertoire & "\Captures") = False Then
                     System.IO.Directory.CreateDirectory(_MonRepertoire & "\captures")
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier captures")
                 End If
-                If System.IO.Directory.Exists(_MonRepertoire & "\config") = False Then
+                If System.IO.Directory.Exists(_MonRepertoire & "\Config") = False Then
                     System.IO.Directory.CreateDirectory(_MonRepertoire & "\config")
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier config")
                 End If
-                If System.IO.Directory.Exists(_MonRepertoire & "\images") = False Then
-                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\images")
+                If System.IO.Directory.Exists(_MonRepertoire & "\Images") = False Then
+                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\Images")
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier images")
                 End If
-                If System.IO.Directory.Exists(_MonRepertoire & "\plugins") = False Then
-                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\plugins")
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier plugins")
+                If System.IO.Directory.Exists(_MonRepertoire & "\Drivers") = False Then
+                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\Drivers")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier Drivers")
                 End If
-                If System.IO.Directory.Exists(_MonRepertoire & "\templates") = False Then
-                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\templates")
+                If System.IO.Directory.Exists(_MonRepertoire & "\Templates") = False Then
+                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\Templates")
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier templates")
                 End If
 

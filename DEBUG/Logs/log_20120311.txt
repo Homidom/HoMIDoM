@@ -1,0 +1,117 @@
+11/03/2012 19:49:28	INFO	SERVEUR	Drivers_Load	Chargement des DLL des drivers :
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - Arduino chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - DMX chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - Foobar chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - HTTP chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - K8055 chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - K8056 chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - MeteoGoogle chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - RFID chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - 1-Wire chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - OpenWebNet chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - Phidget InterfaceKit chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - PLCBUS chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - RFXCom_receiver chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - RFXMitter chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - RFXtrx chargé
+11/03/2012 19:49:29	INFO	SERVEUR	Drivers_Load	 - Teleinfo chargé
+11/03/2012 19:49:30	INFO	SERVEUR	Drivers_Load	 - USBuirt chargé
+11/03/2012 19:49:30	INFO	SERVEUR	Drivers_Load	 - Virtuel chargé
+11/03/2012 19:49:30	INFO	SERVEUR	Drivers_Load	 - X10 CM11 chargé
+11/03/2012 19:49:30	INFO	SERVEUR	Drivers_Load	 - X10 CM15 chargé
+11/03/2012 19:49:30	INFO	SERVEUR	Drivers_Load	 - ZIBASE chargé
+11/03/2012 19:49:37	ERREUR	SERVEUR	Drivers_Load	 Erreur lors du chargement des drivers: Une exception a été levée par la cible d'un appel.
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	Création du backup (.bak) du fichier de config avant chargement
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	Chargement du fichier config: D:\Domotique\Homidom\DEBUG\Config\homidom.xml
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	Paramètres du serveur chargés
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	Chargement des drivers :
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - Arduino chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - DMX chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - Foobar chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - HTTP chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - K8055 chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - K8056 chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - MeteoGoogle chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - RFID chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - 1-Wire chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - OpenWebNet chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - Phidget InterfaceKit chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - PLCBUS chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - RFXCom_receiver chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - RFXMitter chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - RFXtrx chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - Teleinfo chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - USBuirt chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - Virtuel chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - X10 CM11 chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - X10 CM15 chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - ZIBASE chargé
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	Chargement des zones :
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 -> 2 Zone(s) chargée(s)
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	Chargement des users :
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 -> 2 Users(s) chargé(s)
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	Chargement des devices :
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - Freebox (Virtuel) (a3ac5ce8-394d-4766-9686-cd6705f5e023 - a - FREEBOX)
+11/03/2012 19:49:37	INFO	SERVEUR	LoadConfig	 - Telecommande TV (USBUIRT) (e980dc05-41cf-46e5-b9c5-37bac483171f - 0 - MULTIMEDIA)
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	 - Meteo Calais (Google) (3ebcd1d4-f991-4e4f-9afa-d321dbbd9865 - calais - METEO)
+11/03/2012 19:49:39	VALEUR_INCHANGE	DEVICE	DeviceINT Value	lampe (Virtuel) : 12 : 0 (Inchangé)
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	 - lampe (Virtuel) (8efb097e-4c14-4d5e-bb83-95d32a5bc6c4 - 12 - LAMPE)
+11/03/2012 19:49:39	VALEUR_INCHANGE	DEVICE	DeviceINT Value	lustre du salon (PLCBUS) : L4 : 0 (Inchangé)
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	 - lustre du salon (PLCBUS) (c7b458fd-7eca-4bb6-8874-277ac837d3d5 - L4 - LAMPE)
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	 - temperature SAM (RFXCOM) (bb84549a-e0cf-4638-ae26-77fe22a6c228 - 49922 - TEMPERATURE)
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	 - humidite SAM (RFXCOM) (3faa8af6-955b-43da-ba07-00b3176771af - 49922 - HUMIDITE)
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	 - HP SDB (Foobar) (eb29498f-3465-4eb3-af39-743690398e10 - sdb - MULTIMEDIA)
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	 - HOMI_Jour (soleil01 - N/A - GENERIQUEBOOLEEN)
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	 -> 9 devices(s) trouvé(s)
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	Chargement des triggers :
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	 -> 3 Trigger(s) chargé(s)
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	Chargement des macros :
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	 -> 3 Macro(s) chargée(s)
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	Chargement des extensions audio :
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	 -> 1 Extension(s) Audio chargée(s)
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	Chargement des répertoires audio :
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	 -> 1 Répertoire(s) Audio chargé(s)
+11/03/2012 19:49:39	INFO	SERVEUR	LoadConfig	 Chargement de la configuration terminée
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	Démarrage des drivers :
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - Arduino non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - DMX non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - Foobar non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - HTTP non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - K8055 non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - K8056 non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - MeteoGoogle démarré
+11/03/2012 19:49:39	INFO	DRIVER	MeteoGoogle	Driver MeteoGoogle démarré
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - RFID non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - 1-Wire non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - OpenWebNet non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - Phidget InterfaceKit non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - PLCBUS non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - RFXCom_receiver non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - RFXMitter non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - RFXtrx non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - Teleinfo non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - USBuirt non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - Virtuel démarré
+11/03/2012 19:49:39	INFO	DRIVER	Virtuel Start	Driver Virtuel démarré
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - X10 CM11 non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - X10 CM15 non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	Drivers_Start	 - ZIBASE non démarré car non Auto
+11/03/2012 19:49:39	INFO	SERVEUR	MAJ_HeuresSoleil	Initialisation des heures du soleil
+11/03/2012 19:49:39	INFO	SERVEUR	MAJ_HeuresSoleil	Heure du lever : 11/03/2012 06:58:00
+11/03/2012 19:49:39	INFO	SERVEUR	MAJ_HeuresSoleil	Heure du coucher : 11/03/2012 18:35:14
+11/03/2012 19:49:39	INFO	SERVEUR	CleanLog	0 Fichier(s) log supprimé(s)
+11/03/2012 20:05:34	INFO	SERVEUR	Devices_Stop	Arrêt des devices :
+11/03/2012 20:05:34	INFO	SERVEUR	Devices_Stop	 - Freebox (Virtuel) arrété
+11/03/2012 20:05:34	INFO	SERVEUR	Devices_Stop	 - Telecommande TV (USBUIRT) arrété
+11/03/2012 20:05:34	INFO	SERVEUR	Devices_Stop	 - Meteo Calais (Google) arrété
+11/03/2012 20:05:34	INFO	SERVEUR	Devices_Stop	 - lampe (Virtuel) arrété
+11/03/2012 20:05:34	INFO	SERVEUR	Devices_Stop	 - lustre du salon (PLCBUS) arrété
+11/03/2012 20:05:34	INFO	SERVEUR	Devices_Stop	 - temperature SAM (RFXCOM) arrété
+11/03/2012 20:05:34	INFO	SERVEUR	Devices_Stop	 - humidite SAM (RFXCOM) arrété
+11/03/2012 20:05:34	INFO	SERVEUR	Devices_Stop	 - HP SDB (Foobar) arrété
+11/03/2012 20:05:34	INFO	SERVEUR	Devices_Stop	 - HOMI_Jour arrété
+11/03/2012 20:05:34	INFO	SERVEUR	Drivers_Stop	Arrêt des drivers :
+11/03/2012 20:05:34	INFO	SERVEUR	Drivers_Stop	 - MeteoGoogle : 
+11/03/2012 20:05:34	INFO	DRIVER	MeteoGoogle	Driver MeteoGoogle arrêté
+11/03/2012 20:05:35	INFO	SERVEUR	Drivers_Stop	 - Virtuel : 
+11/03/2012 20:05:35	INFO	DRIVER	Virtuel Stop	Driver Virtuel arrêté

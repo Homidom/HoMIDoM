@@ -20,7 +20,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\DEBUG\Drivers\</OutputPath>
     <DocumentationFile>Driver_Zwave.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
@@ -48,9 +48,11 @@
   <ItemGroup>
     <Reference Include="HoMIDom">
       <HintPath>..\DEBUG\HoMIDom.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="OpenZWaveDotNet">
       <HintPath>..\DEBUG\OpenZWaveDotNet.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

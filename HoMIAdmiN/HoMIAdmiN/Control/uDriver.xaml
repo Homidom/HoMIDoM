@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="654.379" Height="566" Margin="20">
 
     <Grid Margin="1" Height="560" Width="625" Visibility="Visible" Background="#636060" Opacity="0.85">
-        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0,0,0,-14">
+        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0">
             <StackPanel Height="580">
             <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Driver</Label>
             </StackPanel>
