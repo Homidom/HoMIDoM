@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Height="550" Margin="20">
 
     <Grid Margin="1" Height="550" Background="#636060" Opacity="0.85">
-        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0,0,0,-14" Height="536">
+        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0">
             <StackPanel Height="550">
                 <Label Name="Label0" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Propriétés du Serveur</Label>
             </StackPanel>

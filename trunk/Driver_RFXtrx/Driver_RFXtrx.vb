@@ -899,6 +899,10 @@ Imports System.Media
 
     Private port_name As String = ""
     Private dateheurelancement As DateTime
+    Dim adressetoint() As String = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "0A", "0B", "0C", "0D", "0E", "0F", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "1A", "1B", "1C", "1D", "1E", "1F", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "2A", "2B", "2C", "2D", "2E", "2F", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "3A", "3B", "3C", "3D", "3E", "3F", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "4A", "4B", "4C", "4D", "4E", "4F", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "5A", "5B", "5C", "5D", "5E", "5F", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "6A", "6B", "6C", "6D", "6E", "6F", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "7A", "7B", "7C", "7D", "7E", "7F", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "8A", "8B", "8C", "8D", "8E", "8F", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "9A", "9B", "9C", "9D", "9E", "9F", "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "AA", "AB", "AC", "AD", "AE", "AF", "B0", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "BA", "BB", "BC", "BD", "BE", "BF", "C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "CA", "CB", "CC", "CD", "CE", "CF", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "DA", "DB", "DC", "DD", "DE", "DF", "E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "EA", "EB", "EC", "ED", "EE", "EF", "F0", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "FA", "FB", "FC", "FD", "FE", "FF"}
+    Dim adressetoint2() As String = {"0", "1", "2", "3"}
+    Dim unittoint() As String = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"}
+    Dim messagerecu As String
     'Private WithEvents tmrRead As New System.Timers.Timer
 
     'old
@@ -915,9 +919,6 @@ Imports System.Media
     'Private protocolsynchro As Integer = MODEBRB48
     'Private ack As Boolean = False
     'Private ack_ok As Boolean = True
-    'Dim adressetoint() As String = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "0A", "0B", "0C", "0D", "0E", "0F", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "1A", "1B", "1C", "1D", "1E", "1F", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "2A", "2B", "2C", "2D", "2E", "2F", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "3A", "3B", "3C", "3D", "3E", "3F", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "4A", "4B", "4C", "4D", "4E", "4F", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "5A", "5B", "5C", "5D", "5E", "5F", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "6A", "6B", "6C", "6D", "6E", "6F", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "7A", "7B", "7C", "7D", "7E", "7F", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "8A", "8B", "8C", "8D", "8E", "8F", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "9A", "9B", "9C", "9D", "9E", "9F", "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "AA", "AB", "AC", "AD", "AE", "AF", "B0", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "BA", "BB", "BC", "BD", "BE", "BF", "C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "CA", "CB", "CC", "CD", "CE", "CF", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "DA", "DB", "DC", "DD", "DE", "DF", "E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "EA", "EB", "EC", "ED", "EE", "EF", "F0", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "FA", "FB", "FC", "FD", "FE", "FF"}
-    'Dim adressetoint2() As String = {"0", "1", "2", "3"}
-    'Dim unittoint() As String = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"}
 
 #End Region
 
@@ -1230,7 +1231,7 @@ Imports System.Media
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
             If _Enable = False Then Exit Sub
-            If _DEBUG Then WriteLog("WRITE Device " & Objet.Name & " <-- " & Command)
+            If _DEBUG Then WriteLog("DBG: WRITE Device " & Objet.Name & " <-- " & Command)
             'suivant le protocole, on lance la bonne fonction
             'AC / ACEU / ANSLUT / X10 / ARC / WAVEMAN / ELROAB400D / EMW200 / IMPULS
 
@@ -1510,7 +1511,9 @@ Imports System.Media
         Try
             'get firmware version
             SendCommand(ICMD.RESET, "Reset receiver/transceiver:")
-            'Resettimer = 5  '5 * 100ms = ignore data for 0.5 seconds
+            'configure Transceiver mode
+            SetMode()
+
             dateheurelancement = DateTime.Now
 
             Return "Configuration OK"
@@ -1809,11 +1812,15 @@ Imports System.Media
             recbytes += 1               'increment char counter
 
             If recbytes > recbuf(0) Then 'all bytes of the packet received?
-                'WriteMessage(VB.Right("0" & Hex(sComChar), 2))    ' Write the output to the screen.
+                'Write the output to the screen for DEBUG
+                messagerecu = messagerecu & VB.Right("0" & Hex(sComChar), 2)
+                If _DEBUG Then WriteLog("ERR: Message Reçu : " & messagerecu)
+                messagerecu = ""
+
                 decode_messages()  'decode message
                 recbytes = 0    'set to zero to receive next message
             Else
-                'WriteMessage(VB.Right("0" & Hex(sComChar), 2), False)   ' Write the output to the screen.
+                messagerecu = messagerecu & VB.Right("0" & Hex(sComChar), 2) 'get message recu for debug
             End If
 
         Catch ex As Exception
@@ -1949,34 +1956,25 @@ Imports System.Media
             WriteLog("ERR: decode_InterfaceMessage : " & ex.Message)
         End Try
     End Sub
-    'non géré
-    Private Sub decode_RecXmitMessage()
-        'Select Case recbuf(RXRESPONSE.subtype)
-        '    Case RXRESPONSE.sTypeReceiverLockError
-        '        WriteMessage("subtype           = Receiver lock error")
-        '        SystemSounds.Asterisk.Play()
-        '        WriteMessage("Sequence nbr      = " & recbuf(RXRESPONSE.seqnbr).ToString)
 
-        '    Case RXRESPONSE.sTypeTransmitterResponse
-        '        WriteMessage("subtype           = Transmitter Response")
-        '        WriteMessage("Sequence nbr      = " & recbuf(RXRESPONSE.seqnbr).ToString)
-        '        Select Case recbuf(RXRESPONSE.msg)
-        '            Case &H0
-        '                WriteMessage("response          = ACK, data correct transmitted")
-        '            Case &H1
-        '                WriteMessage("response          = ACK, but transmit started after 6 seconds delay anyway with RF receive data detected")
-        '            Case &H2
-        '                WriteMessage("response          = NAK, transmitter did not lock on the requested transmit frequency")
-        '                SystemSounds.Asterisk.Play()
-        '            Case &H3
-        '                WriteMessage("response          = NAK, AC address zero in id1-id4 not allowed")
-        '                SystemSounds.Asterisk.Play()
-        '            Case Else
-        '                WriteMessage("ERROR: Unexpected message type=" & Hex(recbuf(RXRESPONSE.msg)))
-        '        End Select
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(RXRESPONSE.packettype)) & ": " & Hex(recbuf(RXRESPONSE.subtype)))
-        'End Select
+    Private Sub decode_RecXmitMessage()
+        Try
+            Select recbuf(RXRESPONSE.subtype)
+                Case RXRESPONSE.sTypeReceiverLockError
+                    If _DEBUG Then WriteLog("ERR: Receiver lock error")
+                Case RXRESPONSE.sTypeTransmitterResponse
+                    Select Case recbuf(RXRESPONSE.msg)
+                        Case &H0 : If _DEBUG Then WriteLog("Transmitter Response : ACK, data correct transmitted")
+                        Case &H1 : If _DEBUG Then WriteLog("Transmitter Response : ACK, but transmit started after 6 seconds delay anyway with RF receive data detected")
+                        Case &H2 : If _DEBUG Then WriteLog("ERR: Transmitter Response : NAK, transmitter did not lock on the requested transmit frequency")
+                        Case &H3 : If _DEBUG Then WriteLog("ERR: Transmitter Response : NAK, AC address zero in id1-id4 not allowed")
+                        Case Else : If _DEBUG Then WriteLog("ERR: decode_RecXmitMessage : Type de message reçu incorrect : type=" & Hex(recbuf(RXRESPONSE.msg)))
+                    End Select
+                Case Else : If _DEBUG Then WriteLog("ERR: decode_RecXmitMessage : Données incorrectes reçues : type=" & Hex(recbuf(RXRESPONSE.packettype)) & ", Sub type=" & Hex(recbuf(RXRESPONSE.subtype)))
+            End Select
+        Catch ex As Exception
+            WriteLog("ERR: decode_RecXmitMessage : " & ex.Message)
+        End Try
     End Sub
 
     Private Sub decode_UNDECODED()
@@ -2056,7 +2054,7 @@ Imports System.Media
                 Case Else
                     WriteLog("ERR: decode_Lighting1 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING1.packettype)) & ": " & Hex(recbuf(LIGHTING1.subtype)))
             End Select
-            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(LIGHTING1.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(LIGHTING1.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Lighting1 Exception : " & ex.Message)
         End Try
@@ -2090,7 +2088,7 @@ Imports System.Media
                     WriteRetour(adresse, "", valeur)
                 Case Else : WriteLog("ERR: decode_Lighting2 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING2.packettype)) & ": " & Hex(recbuf(LIGHTING2.subtype)))
             End Select
-            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(LIGHTING2.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(LIGHTING2.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Lighting2 Exception : " & ex.Message)
         End Try
@@ -2123,7 +2121,7 @@ Imports System.Media
                     WriteRetour(adresse, "", valeur)
                 Case Else : WriteLog("ERR: decode_Lighting3 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING3.packettype)) & ": " & Hex(recbuf(LIGHTING3.subtype)))
             End Select
-            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(LIGHTING3.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(LIGHTING3.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Lighting3 Exception : " & ex.Message)
         End Try
@@ -2161,7 +2159,7 @@ Imports System.Media
                     WriteRetour(adresse, "", valeur)
                 Case Else : WriteLog("ERR: decode_Lighting5 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING5.packettype)) & ": " & Hex(recbuf(LIGHTING5.subtype)))
             End Select
-            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(LIGHTING5.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(LIGHTING5.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Lighting5 Exception : " & ex.Message)
         End Try
@@ -3004,7 +3002,7 @@ Imports System.Media
             End If
             WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
             If (recbuf(TEMP.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
-            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(TEMP.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(TEMP.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Temp Exception : " & ex.Message)
         End Try
@@ -3035,7 +3033,7 @@ Imports System.Media
             valeur = recbuf(HUM.humidity).ToString
             WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
             If (recbuf(HUM.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
-            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(HUM.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(HUM.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Hum Exception : " & ex.Message)
         End Try
@@ -3088,7 +3086,7 @@ Imports System.Media
             Else
                 If (recbuf(TEMP_HUM.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
             End If
-            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(TEMP_HUM.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(TEMP_HUM.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_TempHum Exception : " & ex.Message)
         End Try
@@ -3542,7 +3540,7 @@ Imports System.Media
                 Case Else
                     '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(RFXMETER.packettype)) & ":" & Hex(recbuf(RFXMETER.subtype)))
             End Select
-            If _DEBUG Then WriteLog("Signal Level : " & (recbuf(RFXMETER.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(RFXMETER.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_RFXMeter Exception : " & ex.Message)
         End Try
@@ -3550,6 +3548,78 @@ Imports System.Media
 #End Region
 
 #Region "Send messages"
+
+    Private Sub SetMode()
+        Try
+            Dim temp As String = ""
+            Dim paramMode As String = "201001111011111111"
+            '1 : type frequence
+            '2 : UNDEC
+            '3 : novatis
+            '4 : proguard
+            '5 : FS20
+            '6 : Lacrosse
+            '7 : Hideki
+            '8 : AD
+            '9 : Mertik
+            '10 : Visonic
+            '11 : ATI
+            '12 : Oregon
+            '13 : Koppla
+            '14 : HEEU
+            '15 : AC
+            '16 : ARC
+            '17 : X10
+
+            Dim kar(ICMD.size) As Byte
+            kar(ICMD.packetlength) = ICMD.size
+            kar(ICMD.packettype) = ICMD.pType
+            kar(ICMD.subtype) = ICMD.sType
+            kar(ICMD.seqnbr) = bytSeqNbr
+            kar(ICMD.cmnd) = ICMD.SETMODE
+            Select Case paramMode.Substring(0, 1)
+                Case 0 : kar(ICMD.msg1) = IRESPONSE.recType310
+                Case 1 : kar(ICMD.msg1) = IRESPONSE.recType315
+                Case 2 : kar(ICMD.msg1) = IRESPONSE.recType43392
+                Case 3 : kar(ICMD.msg1) = IRESPONSE.recType86830
+                Case 4 : kar(ICMD.msg1) = IRESPONSE.recType86830FSK
+                Case 5 : kar(ICMD.msg1) = IRESPONSE.recType86835
+                Case 6 : kar(ICMD.msg1) = IRESPONSE.recType86835FSK
+                Case 7 : kar(ICMD.msg1) = IRESPONSE.recType86895
+            End Select
+
+            If paramMode.Substring(1, 1) = 1 Then kar(ICMD.msg3) = &H80 Else kar(ICMD.msg3) = 0
+
+            kar(ICMD.msg4) = 0
+            If paramMode.Substring(2, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or &H40
+            If paramMode.Substring(3, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or &H20
+            If paramMode.Substring(4, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or &H10
+            If paramMode.Substring(5, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or &H8
+            If paramMode.Substring(6, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or &H4
+            If paramMode.Substring(7, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or &H2
+            If paramMode.Substring(8, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or &H1
+
+            kar(ICMD.msg5) = 0
+            If paramMode.Substring(9, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H80
+            If paramMode.Substring(10, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H40
+            If paramMode.Substring(11, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H20
+            If paramMode.Substring(12, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H10
+            If paramMode.Substring(13, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H8
+            If paramMode.Substring(14, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H4
+            If paramMode.Substring(15, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H2
+            If paramMode.Substring(16, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H1
+
+            If _DEBUG Then
+                For Each bt As Byte In kar
+                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+                Next
+                WriteLog("DBG: Setmode : Commande envoyée : " & temp)
+            End If
+            ecrire(kar)
+        Catch ex As Exception
+            WriteLog("ERR: SetMode Exception : " & ex.Message)
+        End Try
+    End Sub
 
     ''' <summary>Converti un house de type A, B... en byte</summary>
     ''' <param name="housecode">HouseCode du type A (de A1)</param>
@@ -3857,12 +3927,17 @@ Imports System.Media
                     WriteLog("ERR: Send AC : Commande invalide : " & commande)
                     Exit Sub
             End Select
-            Dim adressetab As String() = adresse.Split("-")
-            kar(LIGHTING2.unitcode) = adressetab(1)
-            kar(LIGHTING2.id1) = adressetab(1).Substring(0, 1)
-            kar(LIGHTING2.id2) = adressetab(1).Substring(1, 2)
-            kar(LIGHTING2.id3) = adressetab(1).Substring(3, 2)
-            kar(LIGHTING2.id4) = adressetab(1).Substring(5, 2)
+            Try
+                Dim adressetab As String() = adresse.Split("-")
+                kar(LIGHTING2.unitcode) = adressetab(1)
+                kar(LIGHTING2.id1) = adressetab(0).Substring(0, 1)
+                kar(LIGHTING2.id2) = Array.IndexOf(adressetoint, adressetab(0).Substring(1, 2))
+                kar(LIGHTING2.id3) = Array.IndexOf(adressetoint, adressetab(0).Substring(3, 2))
+                kar(LIGHTING2.id4) = Array.IndexOf(adressetoint, adressetab(0).Substring(5, 2))
+            Catch ex As Exception
+                WriteLog("ERR: Send AC Exception : Adresse incorrecte")
+            End Try
+
             kar(LIGHTING2.level) = dimlevel
             kar(LIGHTING2.filler) = 0
 
@@ -3874,7 +3949,7 @@ Imports System.Media
                 WriteLog("DBG: Send AC : commande envoyée : " & temp)
             End If
         Catch ex As Exception
-            WriteLog("ERR: Send AC Exception : " & ex.Message)
+            WriteLog("ERR: Send AC Exception : " & ex.ToString)
         End Try
     End Sub
 
@@ -3890,7 +3965,7 @@ Imports System.Media
             ElseIf STRGS.InStr(message, "ERR:") > 0 Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx ", STRGS.Right(message, message.Length - 4))
             Else
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx ", STRGS.Right(message, message.Length - 4))
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx ", message)
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx WriteLog", ex.Message)

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Basic Express 2010
+# Visual Studio 2010
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Foobar", "Driver_Foobar\Driver_Foobar.vbproj", "{62C5EA60-2FE8-4F56-BC66-BE2D7B14CA5B}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_k8055", "Driver_k8055\Driver_k8055.vbproj", "{B1154B53-619A-4878-8915-9A98904EEEF5}"
@@ -58,6 +58,10 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_http", "Driver_http\Driver_http.vbproj", "{3F2AFCD6-F1E0-4DE0-AD67-1087FBF90FE4}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Zwave", "Driver_Zwave\Driver_Zwave.vbproj", "{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Homidom_Install_x64", "Homidom_Install_x64\Homidom_Install_x64.vdproj", "{29ABD289-9BDB-4C7E-9B35-1E2AD6C87081}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Homidom_Install_x86", "Homidom_Install_x86\Homidom_Install_x86.vdproj", "{1F1982F7-52FB-4A3C-ACF7-23FB62B2FA61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -284,6 +288,30 @@ Global
 		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}.Release|x86.ActiveCfg = Release|Any CPU
+		{29ABD289-9BDB-4C7E-9B35-1E2AD6C87081}.Debug|Any CPU.ActiveCfg = Debug
+		{29ABD289-9BDB-4C7E-9B35-1E2AD6C87081}.Debug|Any CPU.Build.0 = Debug
+		{29ABD289-9BDB-4C7E-9B35-1E2AD6C87081}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{29ABD289-9BDB-4C7E-9B35-1E2AD6C87081}.Debug|Mixed Platforms.Build.0 = Debug
+		{29ABD289-9BDB-4C7E-9B35-1E2AD6C87081}.Debug|x86.ActiveCfg = Debug
+		{29ABD289-9BDB-4C7E-9B35-1E2AD6C87081}.Debug|x86.Build.0 = Debug
+		{29ABD289-9BDB-4C7E-9B35-1E2AD6C87081}.Release|Any CPU.ActiveCfg = Release
+		{29ABD289-9BDB-4C7E-9B35-1E2AD6C87081}.Release|Any CPU.Build.0 = Release
+		{29ABD289-9BDB-4C7E-9B35-1E2AD6C87081}.Release|Mixed Platforms.ActiveCfg = Release
+		{29ABD289-9BDB-4C7E-9B35-1E2AD6C87081}.Release|Mixed Platforms.Build.0 = Release
+		{29ABD289-9BDB-4C7E-9B35-1E2AD6C87081}.Release|x86.ActiveCfg = Release
+		{29ABD289-9BDB-4C7E-9B35-1E2AD6C87081}.Release|x86.Build.0 = Release
+		{1F1982F7-52FB-4A3C-ACF7-23FB62B2FA61}.Debug|Any CPU.ActiveCfg = Debug
+		{1F1982F7-52FB-4A3C-ACF7-23FB62B2FA61}.Debug|Any CPU.Build.0 = Debug
+		{1F1982F7-52FB-4A3C-ACF7-23FB62B2FA61}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{1F1982F7-52FB-4A3C-ACF7-23FB62B2FA61}.Debug|Mixed Platforms.Build.0 = Debug
+		{1F1982F7-52FB-4A3C-ACF7-23FB62B2FA61}.Debug|x86.ActiveCfg = Debug
+		{1F1982F7-52FB-4A3C-ACF7-23FB62B2FA61}.Debug|x86.Build.0 = Debug
+		{1F1982F7-52FB-4A3C-ACF7-23FB62B2FA61}.Release|Any CPU.ActiveCfg = Release
+		{1F1982F7-52FB-4A3C-ACF7-23FB62B2FA61}.Release|Any CPU.Build.0 = Release
+		{1F1982F7-52FB-4A3C-ACF7-23FB62B2FA61}.Release|Mixed Platforms.ActiveCfg = Release
+		{1F1982F7-52FB-4A3C-ACF7-23FB62B2FA61}.Release|Mixed Platforms.Build.0 = Release
+		{1F1982F7-52FB-4A3C-ACF7-23FB62B2FA61}.Release|x86.ActiveCfg = Release
+		{1F1982F7-52FB-4A3C-ACF7-23FB62B2FA61}.Release|x86.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

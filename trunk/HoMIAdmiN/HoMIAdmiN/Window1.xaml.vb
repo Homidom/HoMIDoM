@@ -408,6 +408,7 @@ Class Window1
                     bmpImage2.UriSource = New Uri(uri2, UriKind.Absolute)
                     bmpImage2.EndInit()
                     img2.Source = bmpImage2
+                    img2.ToolTip = "Ce composant ne fait pas partie d'une zone"
                     stack.Children.Add(img2)
                 End If
 
