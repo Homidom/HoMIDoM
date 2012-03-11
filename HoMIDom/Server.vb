@@ -503,13 +503,13 @@ Namespace HoMIDom
                                             If list.Item(i).Attributes.Item(j).Value <> Nothing Then
                                                 x.Icon = list.Item(0).Attributes.Item(j).Value
                                             Else
-                                                x.Icon = _MonRepertoire & "\images\zones\icon\Defaut.png"
+                                                x.Icon = _MonRepertoire & "\images\Icones\Zone_128.png"
                                             End If
                                         Case "image"
                                             If list.Item(i).Attributes.Item(j).Value <> Nothing Then
                                                 x.Image = list.Item(0).Attributes.Item(j).Value
                                             Else
-                                                x.Image = _MonRepertoire & "\images\zones\image\defaut.jpg"
+                                                x.Image = _MonRepertoire & "\images\Icones\Zone_Image.png"
                                             End If
                                         Case Else
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
@@ -560,10 +560,10 @@ Namespace HoMIDom
                                                 If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
                                                     x.Image = list.Item(0).Attributes.Item(j).Value
                                                 Else
-                                                    x.Image = _MonRepertoire & "\images\users\defaut.png"
+                                                    x.Image = _MonRepertoire & "\images\icones\user_128.png"
                                                 End If
                                             Else
-                                                x.Image = _MonRepertoire & "\images\users\defaut.png"
+                                                x.Image = _MonRepertoire & "\images\icones\user_128.png"
                                             End If
                                         Case "email"
                                                 x.eMail = list.Item(i).Attributes.Item(j).Value
@@ -768,11 +768,11 @@ Namespace HoMIDom
                                             If IO.File.Exists(fileimg) Then
                                                 .Picture = fileimg
                                             Else
-                                                .Picture = _MonRepertoire & "\images\Devices\defaut.png"
+                                                .Picture = _MonRepertoire & "\images\icones\composant_128.png"
                                             End If
                                         End If
                                     Else
-                                            .Picture = _MonRepertoire & "\images\Devices\defaut.png"
+                                        .Picture = _MonRepertoire & "\images\icones\composant_128.png"
                                     End If
                                     If (Not list.Item(j).Attributes.GetNamedItem("solo") Is Nothing) Then .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
                                     If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Replace(list.Item(j).Attributes.GetNamedItem("value").Value, ".", ",")
@@ -5796,8 +5796,8 @@ Namespace HoMIDom
 
             Dim myID As String = ""
 
-            If icon = "" Then icon = _MonRepertoire & "\images\zones\icon\defaut.png"
-            If image = "" Then image = _MonRepertoire & "\images\zones\image\defaut.jpg"
+            If icon = "" Then icon = _MonRepertoire & "\images\icones\Zone_128.png"
+            If image = "" Then image = _MonRepertoire & "\images\icones\Zone_Image.png"
 
             Try
                 If zoneId = "" Then

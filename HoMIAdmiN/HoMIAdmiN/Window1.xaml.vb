@@ -177,6 +177,12 @@ Class Window1
 
                 If Trim(zon.Icon) <> "" Then
                     img.Source = ConvertArrayToImage(myService.GetByteFromImage(zon.Icon))
+                Else
+                    uri = MyRep & "\Images\icones\Zone_32.png"
+                    bmpImage.BeginInit()
+                    bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
+                    bmpImage.EndInit()
+                    img.Source = bmpImage
                 End If
 
                 Dim label As New Label
@@ -221,7 +227,7 @@ Class Window1
                 If Trim(Usr.Image) <> "" Then
                     img.Source = ConvertArrayToImage(myService.GetByteFromImage(Usr.Image))
                 Else
-                    uri = MyRep & "\Images\icones\user.png"
+                    uri = MyRep & "\Images\icones\User_32.png"
                     bmpImage.BeginInit()
                     bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
                     bmpImage.EndInit()
@@ -342,7 +348,7 @@ Class Window1
                 Dim img As New Image
                 Dim img2 As New Image
                 Dim uri As String = ""
-                Dim uri2 As String = MyRep & "\Images\Devices\Defaut_NoZone.png"
+                Dim uri2 As String = MyRep & "\Images\Icones\ZoneNo_32.png"
                 Dim bmpImage As New BitmapImage()
                 Dim bmpImage2 As New BitmapImage()
                 Dim FlagZone As Boolean = False
@@ -367,7 +373,7 @@ Class Window1
                 If Trim(Dev.Picture) <> "" Then
                     img.Source = ConvertArrayToImage(myService.GetByteFromImage(Dev.Picture))
                 Else
-                    uri = MyRep & "\Images\Devices\Defaut-128.png"
+                    uri = MyRep & "\Images\Icones\Composant_32.png"
                     bmpImage.BeginInit()
                     bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
                     bmpImage.EndInit()
@@ -446,7 +452,7 @@ Class Window1
                 End If
                 label.Content = Mac.Nom
 
-                uri = MyRep & "\Images\Icones\script-128.png"
+                uri = MyRep & "\Images\Icones\Macro_32.png"
                 bmpImage.BeginInit()
                 bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
                 bmpImage.EndInit()
@@ -495,7 +501,12 @@ Class Window1
                 End If
                 label.Content = Trig.Nom
 
-                uri = MyRep & "\Images\Icones\drapeau-vert-32.png"
+                If Trig.Type = 0 Then
+                    uri = MyRep & "\Images\Icones\Trigger_clock_32.png"
+                Else
+                    uri = MyRep & "\Images\Icones\Trigger_device_32.png"
+                End If
+
                 bmpImage.BeginInit()
                 bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
                 bmpImage.EndInit()
