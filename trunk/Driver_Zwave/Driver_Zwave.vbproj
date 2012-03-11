@@ -60,6 +60,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
   <ItemGroup>
+    <Import Include="Driver_Zwave" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="OpenZWaveDotNet" />
     <Import Include="System" />
