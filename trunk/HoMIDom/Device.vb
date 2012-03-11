@@ -232,7 +232,7 @@ Namespace HoMIDom
                         Next
                     End If
 
-                    Return _MonRepertoire & "\images\devices\defaut.png"
+                    Return _MonRepertoire & "\images\Icones\Composant_128.png"
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetListOfImage", "Exception : " & ex.Message)
                     Return Nothing

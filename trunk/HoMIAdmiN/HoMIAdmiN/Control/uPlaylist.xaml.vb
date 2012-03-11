@@ -246,7 +246,7 @@ Public Class uPlaylist
             bmpImage.EndInit()
         Else
             bmpImage.BeginInit()
-            bmpImage.UriSource = New Uri("..\Images\homidom_icone_moyen.png", UriKind.Relative)
+            bmpImage.UriSource = New Uri("..\Images\Icones\Homidom_logo_128.png", UriKind.Relative)
             bmpImage.EndInit()
 
         End If
