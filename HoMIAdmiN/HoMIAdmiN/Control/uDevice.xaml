@@ -86,11 +86,11 @@
                     </StackPanel>
                     <Rectangle Height="10" />
                     <StackPanel Name="StkCde">
-                        <Label Content="Commandes" Foreground="White" />
+                        <Label Content="Telecommande Commandes" Foreground="White" FontStyle="Italic" FontWeight="SemiBold" />
                         <StackPanel Margin ="3" Orientation="Horizontal" >
                                 <Label Content="Template:" Foreground="White" />
                                 <ComboBox Width="150" Name="cbTemplate" />
-                                <Button Name="BtnNewTemplate" Width="25" Height="25" Content="+" />
+                                <Button Name="BtnNewTemplate" Width="25" Margin="2" Height="25" Content="+" Foreground="White" Template="{DynamicResource GlassButton}"/>
                                 <Label Name="lbltplbase" Content="Base:" Foreground="White" Visibility="Hidden" />
                                 <ComboBox Width="90" Name="cbBase" Visibility="Hidden" SelectedIndex="0">
                                     <ComboBoxItem Content="VIDE" />
@@ -99,34 +99,35 @@
                                     <ComboBoxItem Content="BOX" />
                                     <ComboBoxItem Content="AUDIO" />
                                 </ComboBox>
-                                <Button Name="BtnSaveTemplate" Height="25" Content="Ok" Visibility="Hidden"/>
+                                <Button Name="BtnSaveTemplate" Margin="2" Height="25" Width="25" Content="Ok" Visibility="Hidden" Foreground="White" Template="{DynamicResource GlassButton}"/>
                         </StackPanel>
                             <StackPanel Name="StkNewTemplate" Orientation="Horizontal" >
                                 <Label Content="Fabriquant:" Foreground=" White" />
-                                <TextBox Name="TxtTplFab" Width="120" />
+                                <TextBox Name="TxtTplFab" Width="120" Background="DarkGray" BorderBrush="Black" Foreground=" White"/>
                                 <Label Content="Modele:" Foreground=" White"/>
-                                <TextBox Name="TxtTplMod" Width="120" />
+                                <TextBox Name="TxtTplMod" Width="120" Background="DarkGray" BorderBrush="Black" Foreground=" White"/>
                            </StackPanel>
                                 <StackPanel Name="StkCmd" Orientation="Horizontal" >
-                                <ListBox HorizontalAlignment="Left" Margin="1" Height="100" Name="ListCmd" Width="122.894" />
+                                <Label Content="Commandes" Foreground=" White" />
+                                <ListBox HorizontalAlignment="Left" Margin="1" Height="100" Name="ListCmd" Width="122.894" Background="DarkGray" BorderBrush="Black" Foreground=" White"/>
                                 <Rectangle Width="15" />
                             <StackPanel >
                                 <StackPanel Orientation="Horizontal" >
                                     <Label HorizontalAlignment="Left" Name="Label16" Foreground="White" Content="Nom :" />
-                                    <TextBox Height="21" Width="150" Name="TxtCmdName" ToolTip="Nom de la commande" />
+                                        <TextBox Height="21" Width="150" Name="TxtCmdName" ToolTip="Nom de la commande" Background="DarkGray" BorderBrush="Black" Foreground=" White"/>
                                     <Label Foreground="White" HorizontalAlignment="Right" Name="Label17"  Content="Repeat :"/>
-                                    <TextBox Name="TxtCmdRepeat" Height="21" HorizontalAlignment="Right" VerticalAlignment="Top" Width="33.244" ToolTip="Nombre de fois à envoyer le code" />
+                                        <TextBox Name="TxtCmdRepeat" Height="21" HorizontalAlignment="Right" VerticalAlignment="Top" Width="33.244" ToolTip="Nombre de fois à envoyer le code" Background="DarkGray" BorderBrush="Black" Foreground=" White"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" >
                                     <Label Foreground="White" HorizontalAlignment="Right" Name="Label18" Content="Data :" />
-                                    <TextBox Width="240" Height="41" Name="TxtCmdData" ToolTip="Code à envoyer" />
+                                        <TextBox Width="240" Height="41" Name="TxtCmdData" ToolTip="Code à envoyer" Background="DarkGray" BorderBrush="Black" Foreground=" White"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" >
-                                    <Button Height="26.664" Margin="1" Name="BtnNewCmd" Width="67">Nouveau</Button>
-                                    <Button Height="26.664" Margin="1" Name="BtnSaveCmd" Width="67">Enregistrer</Button>
-                                    <Button Height="26.664" Margin="1" Name="BtnDelCmd" Width="67" Visibility="Hidden">Supprimer</Button>
-                                    <Button Height="26.664" Margin="1" Name="BtnTstCmd" Width="67" Visibility="Hidden">Tester</Button>
-                                    <Button Height="26.664" Margin="1" Name="BtnLearn" Width="67">Apprendre</Button>
+                                        <Button Height="26.664" Margin="2" Name="BtnNewCmd" Width="67" Foreground="White" Template="{DynamicResource GlassButton}">Nouveau</Button>
+                                        <Button Height="26.664" Margin="2" Name="BtnSaveCmd" Width="67" Foreground="White" Template="{DynamicResource GlassButton}">Enregistrer</Button>
+                                        <Button Height="26.664" Margin="2" Name="BtnDelCmd" Width="67" Visibility="Hidden" Foreground="White" Template="{DynamicResource GlassButton}">Supprimer</Button>
+                                        <Button Height="26.664" Margin="2" Name="BtnTstCmd" Width="67" Visibility="Hidden" Foreground="White" Template="{DynamicResource GlassButton}">Tester</Button>
+                                        <Button Height="26.664" Margin="2" Name="BtnLearn" Width="67" Foreground="White" Template="{DynamicResource GlassButton}">Apprendre</Button>
                                 </StackPanel>
 
                             </StackPanel>
