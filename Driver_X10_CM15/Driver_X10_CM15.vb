@@ -440,6 +440,7 @@ Public Class Driver_X10_CM15
         _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
         _DeviceSupport.Add(ListeDevices.CONTACT)
         _DeviceSupport.Add(ListeDevices.APPAREIL)
+        _DeviceSupport.Add(ListeDevices.LAMPE)
 
         'Libellé Device
         Add_LibelleDevice("ADRESSE1", "Adresse du module", "Adresse HouseCode du module (ex: C3)")

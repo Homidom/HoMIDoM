@@ -28,22 +28,42 @@ Partial Public Class uDevice
                 CbType.Items.Add(value.ToString)
             Next
 
-            'Liste les drivers dans le combo
-            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
-                CbDriver.Items.Add(myService.GetAllDrivers(IdSrv).Item(i).Nom)
-            Next
+            'Liste les drivers
+            Dim ListeDrivers = myService.GetAllDrivers(IdSrv)
 
             If Action = EAction.Nouveau Then 'Nouveau Device
+
+                'ajout de tous les drivers au combo
+                For i As Integer = 0 To ListeDrivers.Count - 1
+                    CbDriver.Items.Add(ListeDrivers.Item(i).Nom)
+                Next
+
                 FlagNewDevice = True
                 ImgDevice.Tag = ""
                 StkCde.Height = 0
                 StkCmd.Height = 0
                 CbType.IsEnabled = False
             Else 'Modification d'un Device
+
                 FlagNewDevice = False
                 x = myService.ReturnDeviceByID(IdSrv, DeviceId)
 
                 If x IsNot Nothing Then 'on a trouvé le device
+
+
+                    'ajout des drivers compatibles avec ce type de device au combo
+                    For i As Integer = 0 To ListeDrivers.Count - 1
+                        'pour chaque driver on regarde si le type est compatible
+                        If ListeDrivers.Item(i).DeviceSupport.Count > 0 Then
+                            For j As Integer = 0 To ListeDrivers.Item(i).DeviceSupport.Count - 1
+                                'MessageBox.Show(ListeDrivers.Item(i).DeviceSupport.Item(j).ToString & "-----" & x.Type.ToString)
+                                If ListeDrivers.Item(i).DeviceSupport.Item(j).ToString = x.Type.ToString Then
+                                    CbDriver.Items.Add(ListeDrivers.Item(i).Nom)
+                                    Exit For
+                                End If
+                            Next
+                        End If
+                    Next
 
                     TxtNom.Text = x.Name
                     TxtDescript.Text = x.Description
@@ -192,40 +212,40 @@ Partial Public Class uDevice
                 End If
             End If
 
-                'Liste toutes les zones dans la liste
-                For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
-                    Dim ch1 As New CheckBox
-                    Dim ch2 As New CheckBox
+            'Liste toutes les zones dans la liste
+            For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
+                Dim ch1 As New CheckBox
+                Dim ch2 As New CheckBox
 
-                    Dim stk As New StackPanel
-                    stk.Orientation = Orientation.Horizontal
+                Dim stk As New StackPanel
+                stk.Orientation = Orientation.Horizontal
 
-                    ch1.Width = 80
-                    ch1.Content = myService.GetAllZones(IdSrv).Item(i).Name
-                    ch1.ToolTip = ch1.Content
-                    ch1.Uid = myService.GetAllZones(IdSrv).Item(i).ID
-                    AddHandler ch1.Click, AddressOf ChkElement_Click
+                ch1.Width = 80
+                ch1.Content = myService.GetAllZones(IdSrv).Item(i).Name
+                ch1.ToolTip = ch1.Content
+                ch1.Uid = myService.GetAllZones(IdSrv).Item(i).ID
+                AddHandler ch1.Click, AddressOf ChkElement_Click
 
-                    ch2.Content = "Visible"
-                    ch2.ToolTip = "Visible dans la zone côté client"
-                    ch2.Visibility = Windows.Visibility.Hidden
+                ch2.Content = "Visible"
+                ch2.ToolTip = "Visible dans la zone côté client"
+                ch2.Visibility = Windows.Visibility.Hidden
 
-                    For j As Integer = 0 To myService.GetAllZones(IdSrv).Item(i).ListElement.Count - 1
-                        If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).ElementID = _DeviceId Then
-                            ch1.IsChecked = True
-                            ch2.Visibility = Windows.Visibility.Visible
+                For j As Integer = 0 To myService.GetAllZones(IdSrv).Item(i).ListElement.Count - 1
+                    If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).ElementID = _DeviceId Then
+                        ch1.IsChecked = True
+                        ch2.Visibility = Windows.Visibility.Visible
 
-                            If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).Visible = True Then
-                                ch2.IsChecked = True
-                            End If
-                            Exit For
+                        If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).Visible = True Then
+                            ch2.IsChecked = True
                         End If
-                    Next
-
-                    stk.Children.Add(ch1)
-                    stk.Children.Add(ch2)
-                    ListZone.Items.Add(stk)
+                        Exit For
+                    End If
                 Next
+
+                stk.Children.Add(ch1)
+                stk.Children.Add(ch2)
+                ListZone.Items.Add(stk)
+            Next
         Catch Ex As Exception
             MessageBox.Show("Erreur: " & Ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
