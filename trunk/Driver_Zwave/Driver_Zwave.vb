@@ -517,6 +517,9 @@ Public Class Driver_ZWave
         ''' <param name="Parametre2"></param>
         ''' <remarks></remarks>
         Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
+
+            Dim NodeTemp As New Node
+
             Try
 
                 If _Enable = False Then
@@ -537,18 +540,22 @@ Public Class Driver_ZWave
 
                 If Objet.Type = "SWITCH" Or Objet.Type = "APPAREIL" Then
                     If Commande = "ON" Then
-
+                        NodeTemp = GetNode(m_homeId, Objet.Adresse1)
+                        m_manager.SetNodeOn(m_homeId, NodeTemp.ID)
                     End If
+
                     If Commande = "OFF" Then
-
+                        NodeTemp = GetNode(m_homeId, Objet.Adresse1)
+                        m_manager.SetNodeOff(m_homeId, NodeTemp.ID)
                     End If
-                    'If Commande = "DIM" Then
-                    ' Console.WriteLine("Passage par la commande DIM de Write")
-                    ' If Parametre1 > 100 Then Parametre1 = 100
-                    ' If Parametre1 < 0 Then Parametre1 = 0
 
-                    'SendBasicSwitch(Objet.Adresse1, Val(Parametre1))
-                    ' End If
+                    If Commande = "DIM" Then
+                        If Parametre1 > 255 Then Parametre1 = 255
+                        If Parametre1 < 0 Then Parametre1 = 0
+                        Console.WriteLine("Passage par la commande DIM de Write avec la valeur : " & Parametre1)
+                        NodeTemp = GetNode(m_homeId, Objet.Adresse1)
+                        m_manager.SetNodeLevel(m_homeId, NodeTemp.ID, Parametre1)
+                    End If
                 End If
 
             Catch ex As Exception
@@ -660,7 +667,6 @@ Public Class Driver_ZWave
 
                 'ajout des commandes avancées pour les devices
                 Add_DeviceCommande("DIM", "Valeur en % d'intensité", 1)
-                Add_DeviceCommande("SEARCHNODES", "trouver les noeuds du réseau", 0)
 
                 'Libellé Driver
                 Add_LibelleDriver("HELP", "Aide...", "Ce module permet de recuperer les informations delivrées par la controleur Z-Wave ")
@@ -700,13 +706,17 @@ Public Class Driver_ZWave
                             port.Close()
                             ' Creation du controleur ZWave
                             m_manager = New ZWManager()
-                            m_options.Create(MyRep & "\Config\Zwave\", MyRep & "\Config\logs\", "")
-                            m_options.AddOptionInt("SaveLogLevel", LogLevel.LogLevel_Info)
-                            m_options.AddOptionInt("QueueLogLevel", LogLevel.LogLevel_Error)
+                            m_options.Create(MyRep & "\drivers\Zwave\", MyRep & "\Config\Zwave\", "")
+                            Console.WriteLine("Le nom du repertoire de config est : " & MyRep & "\drivers\Zwave\")
+                            m_options.AddOptionInt("SaveLogLevel", LogLevel.LogLevel_Internal)      ' Configure le niveau de sauvegarde des messages (Disque)
+                            m_options.AddOptionInt("QueueLogLevel", LogLevel.LogLevel_Error)    ' Configure le niveau de  sauvegarde des messages (RAM)
                             m_options.AddOptionInt("DumpTrigger", LogLevel.LogLevel_Info)
                             m_options.AddOptionInt("PollInterval", 500)
                             m_options.AddOptionBool("IntervalBetweenPolls", True)
                             m_options.AddOptionBool("ValidateValueChanges", True)
+                            m_options.AddOptionBool("ConsoleOutput", True)                      ' Affiche les messages sur la console
+                            m_options.AddOptionString("LogFileName", "LogZWave-" & Now, False)
+                            m_options.AddOptionBool("AppendLogFile", False)                      ' Remplace le fichier (pas d'append)   
                             m_options.Lock()
                             m_manager.Create()
                             ' Ajout d'un gestionnaire d'evenements()
