@@ -60,19 +60,7 @@ Class Window1
             spl.Close()
             spl = Nothing
 
-
-
-
-
-
             'AddHandler Window1.menu_gerer, AddressOf MainMenuGerer
-
-
-
-
-
-
-
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             Dim dt As DispatcherTimer = New DispatcherTimer()
             AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
@@ -1359,17 +1347,18 @@ Class Window1
                 Case 2 'Supprimer
                     Try
                         If Objet.retour IsNot Nothing Then
+                            Me.Cursor = Cursors.Wait
                             Dim retour As Integer
                             Dim _retour As New List(Of String)
                             _retour = myService.CanDelete(IdSrv, Objet.retour)
-                            While _retour.Count = 0
-                                Thread.Sleep(1500)
-                                _retour = myService.CanDelete(IdSrv, Objet.retour)
-                            End While
-                            While _retour(_retour.Count - 1) <> "0"
-                                Thread.Sleep(500)
-                                _retour = myService.CanDelete(IdSrv, Objet.retour)
-                            End While
+                            'While _retour.Count = 0
+                            '    Thread.Sleep(1500)
+                            '    _retour = myService.CanDelete(IdSrv, Objet.retour)
+                            'End While
+                            'While _retour(_retour.Count - 1) <> "0"
+                            '    Thread.Sleep(500)
+                            '    _retour = myService.CanDelete(IdSrv, Objet.retour)
+                            'End While
                             If _retour(0).StartsWith("ERREUR") Then
                                 MessageBox.Show(_retour(0), "Erreur CanDelete", MessageBoxButton.OK, MessageBoxImage.Error)
                                 Exit Sub
@@ -1404,6 +1393,8 @@ Class Window1
                                     retour = myService.DeleteMacro(IdSrv, Objet.retour)
                                     AffScene()
                             End Select
+
+                            Me.Cursor = Nothing
 
                             If retour = -2 Then
                                 MessageBox.Show("Vous ne pouvez pas supprimer cet élément!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)

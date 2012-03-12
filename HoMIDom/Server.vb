@@ -2042,8 +2042,7 @@ Namespace HoMIDom
                 aryFi = Nothing
                 fi = Nothing
             Catch ex As Exception
-                MsgBox("Erreur lors du chargement des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Load", " Erreur lors du chargement des drivers: " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Load", " Erreur lors du chargement des drivers: " & ex.ToString)
             End Try
         End Sub
 
@@ -3102,6 +3101,12 @@ Namespace HoMIDom
                 Dim thr As New ThreadDelete(Me, IdSrv, Id, retour)
                 Dim x As New Thread(AddressOf thr.Traite)
                 x.Start()
+                Do While retour.Count = 0
+
+                Loop
+                Do While retour(retour.Count - 1) <> "0"
+
+                Loop
                 Return retour
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CanDelete", "Erreur : " & ex.Message)
@@ -3144,7 +3149,10 @@ Namespace HoMIDom
                 'va vérifier toutes les zones
                 For i As Integer = 0 To _ListZones.Count - 1
                     For j As Integer = 0 To _ListZones.Item(i).ListElement.Count - 1
-                        If _ListZones.Item(i).ListElement.Item(j).ElementID = Id Then AddLabel(retour, "Zone: " & _ListZones.Item(i).Name)
+                        If _ListZones.Item(i).ListElement.Item(j).ElementID = Id Then
+                            AddLabel(retour, "Zone: " & _ListZones.Item(i).Name)
+                            Exit For
+                        End If
                     Next
                 Next
                 'va vérifier tous les triggers
@@ -6624,7 +6632,7 @@ Namespace HoMIDom
                                 Case "name"
                                     If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then x.Name = list.Item(i).Attributes.Item(j).Value
                                 Case "code"
-                                    If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then x.Code = HtmlDecode(list.Item(i).Attributes.Item(j).Value)
+                                    If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then x.Code = HtmlDecode(Replace(list.Item(i).Attributes.Item(j).Value, "&amp;", "&"))
                                 Case "repeat"
                                     If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then
                                         If IsNumeric(list.Item(i).Attributes.Item(j).Value) Then x.Repeat = list.Item(i).Attributes.Item(j).Value

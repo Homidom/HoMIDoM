@@ -716,6 +716,12 @@ Imports System.Xml
             Exit Function
         End If
 
+        If _IsConnect = False Then
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " EnvoyerCode", "Erreur: Impossible de traiter la commande car le driver n'est pas démarré")
+            Return "Erreur: impossible d'envoyer le code, le driver http n'est pas démarré"
+            Exit Function
+        End If
+
         Dim URL As String = Code
         If URL = "" Then
             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCode", "Erreur: impossible d'envoyer le code celui-ci est vide")
