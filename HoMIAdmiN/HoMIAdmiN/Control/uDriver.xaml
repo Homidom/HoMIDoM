@@ -57,7 +57,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White"  HorizontalAlignment="Left"  Name="Label10" VerticalAlignment="Top" Width="84">Port COM:</Label>
-                <Rectangle Width="10" />
+                <Rectangle Width="10" Name="rectcom1"/>
                 <Label Foreground="White"  Name="Label9" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84">Refresh (ms):</Label>
                 <Rectangle Width="10" />
                 <Label Width="49" Foreground="White" Name="Label11" VerticalAlignment="Top">Version:</Label>
@@ -66,7 +66,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtCom" Width="84">0</TextBox>
-                <Rectangle Width="10" />
+                <Rectangle Width="10"  Name="rectcom2" />
                 <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtRefresh" HorizontalAlignment="Right" Width="84">0</TextBox>
                 <Rectangle Width="10" />
                 <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="Black" Name="TxtVersion" Width="49" HorizontalAlignment="Left" IsEnabled="False">0</TextBox>

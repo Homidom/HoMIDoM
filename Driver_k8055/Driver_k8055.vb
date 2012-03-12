@@ -626,6 +626,10 @@ Imports HoMIDom.HoMIDom.Device
 
         Add_LibelleDevice("ADRESSE1", "Adresse du device", "Doit être compris entre 1 et 5 pour une entrée et 1 et 8 pour une sortie")
         Add_LibelleDevice("ADRESSE2", "Adresse de la carte", "Adresse de la carte qui doit être compris entre 0 et 3")
+        Add_LibelleDevice("SOLO", "@", "")
+        Add_LibelleDevice("MODELE", "@", "")
+        Add_LibelleDevice("REFRESH", "Refresh", "")
+        Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
     End Sub
 #End Region
 

@@ -22,62 +22,52 @@ Partial Public Class uDriver
             If x IsNot Nothing Then 'on a trouvé le device
                 'on cache certains champs si leur valeur est @
                 If x.IP_TCP = "@" Then
-                    Label4.Visibility = Windows.Visibility.Hidden
-                    Label4.Width = 0
-                    TxtAdrTCP.Visibility = Windows.Visibility.Hidden
-                    TxtAdrTCP.Width = 0
+                    Label4.Visibility = Windows.Visibility.Collapsed
+                    TxtAdrTCP.Visibility = Windows.Visibility.Collapsed
                 Else
                     Label4.Visibility = Windows.Visibility.Visible
                     TxtAdrTCP.Visibility = Windows.Visibility.Visible
                 End If
                 If x.Port_TCP = "@" Then
-                    Label5.Visibility = Windows.Visibility.Hidden
-                    Label5.Width = 0
-                    TxtPortTCP.Visibility = Windows.Visibility.Hidden
-                    TxtPortTCP.Width = 0
+                    Label5.Visibility = Windows.Visibility.Collapsed
+                    TxtPortTCP.Visibility = Windows.Visibility.Collapsed
                 Else
                     Label5.Visibility = Windows.Visibility.Visible
                     TxtPortTCP.Visibility = Windows.Visibility.Visible
                 End If
                 If x.IP_UDP = "@" Then
-                    Label7.Visibility = Windows.Visibility.Hidden
-                    Label7.Width = 0
-                    TxtAdrUDP.Visibility = Windows.Visibility.Hidden
-                    TxtAdrUDP.Width = 0
+                    Label7.Visibility = Windows.Visibility.Collapsed
+                    TxtAdrUDP.Visibility = Windows.Visibility.Collapsed
                 Else
                     Label7.Visibility = Windows.Visibility.Visible
                     TxtAdrUDP.Visibility = Windows.Visibility.Visible
                 End If
                 If x.Port_UDP = "@" Then
-                    Label16.Visibility = Windows.Visibility.Hidden
-                    Label16.Width = 0
-                    TxtPortUDP.Visibility = Windows.Visibility.Hidden
-                    TxtPortUDP.Width = 0
+                    Label16.Visibility = Windows.Visibility.Collapsed
+                    TxtPortUDP.Visibility = Windows.Visibility.Collapsed
                 Else
                     Label16.Visibility = Windows.Visibility.Visible
                     TxtPortUDP.Visibility = Windows.Visibility.Visible
                 End If
                 If x.COM = "@" Then
-                    Label10.Visibility = Windows.Visibility.Hidden
-                    Label10.Width = 0
-                    TxtCom.Visibility = Windows.Visibility.Hidden
-                    TxtCom.Width = 0
+                    Label10.Visibility = Windows.Visibility.Collapsed
+                    TxtCom.Visibility = Windows.Visibility.Collapsed
+                    rectcom1.Visibility = Windows.Visibility.Collapsed
+                    rectcom2.Visibility = Windows.Visibility.Collapsed
                 Else
                     Label10.Visibility = Windows.Visibility.Visible
                     TxtCom.Visibility = Windows.Visibility.Visible
                 End If
                 If x.Modele = "@" Then
-                    Label8.Visibility = Windows.Visibility.Hidden
-                    Label8.Width = 0
-                    TxtModele.Visibility = Windows.Visibility.Hidden
+                    Label8.Visibility = Windows.Visibility.Collapsed
+                    TxtModele.Visibility = Windows.Visibility.Collapsed
                 Else
                     Label8.Visibility = Windows.Visibility.Visible
                     TxtModele.Visibility = Windows.Visibility.Visible
                 End If
                 If IsNumeric(x.Refresh) = False Then
-                    Label9.Visibility = Windows.Visibility.Hidden
-                    Label9.Width = 0
-                    TxtRefresh.Visibility = Windows.Visibility.Hidden
+                    Label9.Visibility = Windows.Visibility.Collapsed
+                    TxtRefresh.Visibility = Windows.Visibility.Collapsed
                 Else
                     Label9.Visibility = Windows.Visibility.Visible
                     TxtRefresh.Visibility = Windows.Visibility.Visible
@@ -96,11 +86,11 @@ Partial Public Class uDriver
                         _ListParam.Add(x.Parametres.Item(k).Valeur)
                     Next
                 Else
-                    Label15.Visibility = Windows.Visibility.Hidden
-                    Label14.Visibility = Windows.Visibility.Hidden
-                    TxtParam.Visibility = Windows.Visibility.Hidden
-                    CbParam.Visibility = Windows.Visibility.Hidden
-                    BtnOkParam.Visibility = Windows.Visibility.Hidden
+                    Label15.Visibility = Windows.Visibility.Collapsed
+                    Label14.Visibility = Windows.Visibility.Collapsed
+                    TxtParam.Visibility = Windows.Visibility.Collapsed
+                    CbParam.Visibility = Windows.Visibility.Collapsed
+                    BtnOkParam.Visibility = Windows.Visibility.Collapsed
                 End If
 
                 TxtNom.Text = x.Nom
@@ -127,10 +117,11 @@ Partial Public Class uDriver
                     Next
                 End If
 
+                'Fonctions avancées
                 If x.DeviceAction.Count = 0 Then
-                    Label12.Visibility = Windows.Visibility.Hidden
-                    BtnAv.Visibility = Windows.Visibility.Hidden
-                    GroupBox1.Visibility = Windows.Visibility.Hidden
+                    Label12.Visibility = Windows.Visibility.Collapsed
+                    BtnAv.Visibility = Windows.Visibility.Collapsed
+                    GroupBox1.Visibility = Windows.Visibility.Collapsed
                 End If
 
                 If x.Picture <> "" And x.Picture <> " " Then
@@ -141,14 +132,14 @@ Partial Public Class uDriver
                 'si c'est le driver virtuel, on cache certains champs
                 If x.Nom = "Virtuel" Then
                     Label1.Content = "Driver SYSTEME"
-                    ChkEnable.Visibility = Windows.Visibility.Hidden
-                    CbStartAuto.Visibility = Windows.Visibility.Hidden
-                    Label8.Visibility = Windows.Visibility.Hidden
-                    TxtModele.Visibility = Windows.Visibility.Hidden
-                    Label9.Visibility = Windows.Visibility.Hidden
-                    TxtRefresh.Visibility = Windows.Visibility.Hidden
-                    Label11.Visibility = Windows.Visibility.Hidden
-                    TxtVersion.Visibility = Windows.Visibility.Hidden
+                    ChkEnable.Visibility = Windows.Visibility.Collapsed
+                    CbStartAuto.Visibility = Windows.Visibility.Collapsed
+                    Label8.Visibility = Windows.Visibility.Collapsed
+                    TxtModele.Visibility = Windows.Visibility.Collapsed
+                    Label9.Visibility = Windows.Visibility.Collapsed
+                    TxtRefresh.Visibility = Windows.Visibility.Collapsed
+                    Label11.Visibility = Windows.Visibility.Collapsed
+                    TxtVersion.Visibility = Windows.Visibility.Collapsed
                 End If
             End If
 

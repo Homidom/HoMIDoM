@@ -441,17 +441,13 @@ Public Class Driver_X10_CM15
         _DeviceSupport.Add(ListeDevices.CONTACT)
         _DeviceSupport.Add(ListeDevices.APPAREIL)
 
-        'ajout des commandes avancées pour les devices
-        'Ci-dessous un exemple
-        'Dim x As New DeviceCommande
-        'x.NameCommand = "Test"
-        'x.DescriptionCommand = "Ceci est une commande avancée de test"
-        'x.CountParam = 1
-        '_DeviceCommandPlus.Add(x)
         'Libellé Device
         Add_LibelleDevice("ADRESSE1", "Adresse du module", "Adresse HouseCode du module (ex: C3)")
         Add_LibelleDevice("ADRESSE2", "Type de module", "Type de module 0:sendplc (courant porteur), 1:sendrf (RF)")
-
+        Add_LibelleDevice("SOLO", "@", "")
+        Add_LibelleDevice("MODELE", "@", "")
+        Add_LibelleDevice("REFRESH", "Refresh", "")
+        Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
     End Sub
 #End Region

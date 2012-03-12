@@ -673,7 +673,11 @@ Public Class Driver_ZWave
 
                 'Libellé Device
                 Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant de Z-Wave")
-
+                Add_LibelleDevice("ADRESSE2", "@", "")
+                Add_LibelleDevice("SOLO", "@", "")
+                Add_LibelleDevice("MODELE", "@", "")
+                Add_LibelleDevice("REFRESH", "Refresh", "")
+                Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
 
             Catch ex As Exception

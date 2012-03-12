@@ -9,7 +9,7 @@ Partial Public Class uDevice
     Public Event CloseMe(ByVal MyObject As Object, ByVal Cancel As Boolean)
     Dim _Action As EAction 'Définit si modif ou création d'un device
     Dim _DeviceId As String 'Id du device à modifier
-    Dim FlagNewCmd As Boolean
+    Dim FlagNewCmd, FlagNewDevice As Boolean
     Dim _Driver As HoMIDom.HoMIDom.TemplateDriver
     Dim x As HoMIDom.HoMIDom.TemplateDevice = Nothing
 
@@ -34,11 +34,13 @@ Partial Public Class uDevice
             Next
 
             If Action = EAction.Nouveau Then 'Nouveau Device
+                FlagNewDevice = True
                 ImgDevice.Tag = ""
                 StkCde.Height = 0
                 StkCmd.Height = 0
                 CbType.IsEnabled = False
             Else 'Modification d'un Device
+                FlagNewDevice = False
                 x = myService.ReturnDeviceByID(IdSrv, DeviceId)
 
                 If x IsNot Nothing Then 'on a trouvé le device
@@ -90,17 +92,23 @@ Partial Public Class uDevice
                                        Or x.Type = ListeDevices.UV _
                                        Or x.Type = ListeDevices.HUMIDITE _
                                        Then
-                        TxtCorrection.Visibility = Windows.Visibility.Visible
+                        StkValueLabel.Visibility = Windows.Visibility.Visible
+                        StkValue2Label.Visibility = Windows.Visibility.Visible
+                        StkValue3Label.Visibility = Windows.Visibility.Visible
+                        StkValue.Visibility = Windows.Visibility.Visible
+                        StkValue2.Visibility = Windows.Visibility.Visible
+                        StkValue3.Visibility = Windows.Visibility.Visible
+                        'TxtCorrection.Visibility = Windows.Visibility.Visible
                         TxtCorrection.Text = x.Correction
-                        TxtFormatage.Visibility = Windows.Visibility.Visible
+                        'TxtFormatage.Visibility = Windows.Visibility.Visible
                         TxtFormatage.Text = x.Formatage
-                        TxtPrecision.Visibility = Windows.Visibility.Visible
+                        'TxtPrecision.Visibility = Windows.Visibility.Visible
                         TxtPrecision.Text = x.Precision
-                        TxtValueMax.Visibility = Windows.Visibility.Visible
+                        'TxtValueMax.Visibility = Windows.Visibility.Visible
                         TxtValueMax.Text = x.ValueMax
-                        TxtValueMin.Visibility = Windows.Visibility.Visible
+                        'TxtValueMin.Visibility = Windows.Visibility.Visible
                         TxtValueMin.Text = x.ValueMin
-                        TxtValDef.Visibility = Windows.Visibility.Visible
+                        'TxtValDef.Visibility = Windows.Visibility.Visible
                         TxtValDef.Text = x.ValueDef
                         Label10.Visibility = Windows.Visibility.Visible
                         Label11.Visibility = Windows.Visibility.Visible
@@ -109,17 +117,25 @@ Partial Public Class uDevice
                         Label14.Visibility = Windows.Visibility.Visible
                         Label15.Visibility = Windows.Visibility.Visible
                     Else
-                        TxtCorrection.Height = 0
-                        TxtFormatage.Height = 0
-                        TxtPrecision.Height = 0
-                        TxtValueMax.Height = 0
-                        TxtValueMin.Height = 0
-                        TxtValDef.Height = 0
+                        StkValueLabel.Visibility = Windows.Visibility.Collapsed
+                        StkValue2Label.Visibility = Windows.Visibility.Collapsed
+                        StkValue3Label.Visibility = Windows.Visibility.Collapsed
+                        StkValue.Visibility = Windows.Visibility.Collapsed
+                        StkValue2.Visibility = Windows.Visibility.Collapsed
+                        StkValue3.Visibility = Windows.Visibility.Collapsed
+                        'TxtCorrection.Height = 0
+                        'TxtFormatage.Height = 0
+                        'TxtPrecision.Height = 0
+                        'TxtValueMax.Height = 0
+                        'TxtValueMin.Height = 0
+                        'TxtValDef.Height = 0
                     End If
 
                     If x.Type = ListeDevices.MULTIMEDIA Then
-                        TxtModele2.Visibility = Visibility.Hidden
-                        Label8.Visibility = Windows.Visibility.Hidden
+                        TxtModele2.Visibility = Visibility.Collapsed
+                        Label8.Visibility = Windows.Visibility.Collapsed
+                        rectmodele1.Visibility = Windows.Visibility.Collapsed
+                        rectmodele2.Visibility = Windows.Visibility.Collapsed
                         ListCmd.Items.Clear()
                         StkCmd.Height = 0
                         Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
@@ -158,23 +174,23 @@ Partial Public Class uDevice
                         CbDriver.IsEditable = False
                         CbDriver.IsReadOnly = True
                         CbDriver.IsEnabled = False
-                        ChkEnable.Visibility = Windows.Visibility.Hidden
-                        ChKSolo.Visibility = Windows.Visibility.Hidden
-                        TxtAdresse1.Visibility = Windows.Visibility.Hidden
-                        TxtAdresse2.Visibility = Windows.Visibility.Hidden
-                        TxtModele.Visibility = Windows.Visibility.Hidden
-                        TxtRefresh.Visibility = Windows.Visibility.Hidden
-                        TxtLastChangeDuree.Visibility = Windows.Visibility.Hidden
-                        BtnRead.Visibility = Windows.Visibility.Hidden
-                        Label6.Visibility = Windows.Visibility.Hidden
-                        Label7.Visibility = Windows.Visibility.Hidden
-                        Label8.Visibility = Windows.Visibility.Hidden
-                        Label9.Visibility = Windows.Visibility.Hidden
-                        Label19.Visibility = Windows.Visibility.Hidden
+                        ChkEnable.Visibility = Windows.Visibility.Collapsed
+                        ChKSolo.Visibility = Windows.Visibility.Collapsed
+                        TxtAdresse1.Visibility = Windows.Visibility.Collapsed
+                        TxtAdresse2.Visibility = Windows.Visibility.Collapsed
+                        TxtModele.Visibility = Windows.Visibility.Collapsed
+                        TxtRefresh.Visibility = Windows.Visibility.Collapsed
+                        TxtLastChangeDuree.Visibility = Windows.Visibility.Collapsed
+                        BtnRead.Visibility = Windows.Visibility.Collapsed
+                        Label6.Visibility = Windows.Visibility.Collapsed
+                        Label7.Visibility = Windows.Visibility.Collapsed
+                        Label8.Visibility = Windows.Visibility.Collapsed
+                        Label9.Visibility = Windows.Visibility.Collapsed
+                        Label19.Visibility = Windows.Visibility.Collapsed
                     End If
 
                 End If
-                End If
+            End If
 
                 'Liste toutes les zones dans la liste
                 For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
@@ -678,23 +694,28 @@ Partial Public Class uDevice
         Dim _Driver As Object = myService.GetAllDrivers(IdSrv).Item(CbDriver.SelectedIndex)
 
         If _Driver IsNot Nothing Then
-            Dim mem As String = CbType.Text
-            CbType.IsEnabled = True
-            CbType.Items.Clear()
 
-            For j As Integer = 0 To _Driver.DeviceSupport.count - 1
-                CbType.Items.Add(_Driver.DeviceSupport.item(j).ToString)
-            Next
-            CbType.IsEnabled = True
-            CbType.Text = mem
+
+            'Si c'est un nouveau device, on peut modifier le type sinon non
+            If FlagNewDevice Then
+                Dim mem As String = CbType.Text
+                CbType.IsEnabled = True
+                CbType.Items.Clear()
+
+                For j As Integer = 0 To _Driver.DeviceSupport.count - 1
+                    CbType.Items.Add(_Driver.DeviceSupport.item(j).ToString)
+                Next
+                CbType.IsEnabled = True
+                CbType.Text = mem
+            End If
 
             If _Driver.LabelsDevice.Count > 0 Then
                 For k As Integer = 0 To _Driver.LabelsDevice.Count - 1
                     Select Case UCase(_Driver.LabelsDevice.Item(k).NomChamp)
                         Case "ADRESSE1"
                             If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                TxtAdresse1.Visibility = Windows.Visibility.Hidden
-                                Label6.Visibility = Windows.Visibility.Hidden
+                                TxtAdresse1.Visibility = Windows.Visibility.Collapsed
+                                Label6.Visibility = Windows.Visibility.Collapsed
                             Else
                                 Label6.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                 TxtAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
@@ -703,8 +724,8 @@ Partial Public Class uDevice
                             End If
                         Case "ADRESSE2"
                             If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                TxtAdresse2.Visibility = Windows.Visibility.Hidden
-                                Label7.Visibility = Windows.Visibility.Hidden
+                                TxtAdresse2.Visibility = Windows.Visibility.Collapsed
+                                Label7.Visibility = Windows.Visibility.Collapsed
                             Else
                                 Label7.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                 TxtAdresse2.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
@@ -713,25 +734,29 @@ Partial Public Class uDevice
                             End If
                         Case "SOLO"
                             If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                ChKSolo.Visibility = Windows.Visibility.Hidden
+                                ChKSolo.Visibility = Windows.Visibility.Collapsed
                             Else
                                 ChKSolo.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                 ChKSolo.Visibility = Windows.Visibility.Visible
                             End If
                         Case "REFRESH"
                             If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                TxtRefresh.Visibility = Windows.Visibility.Hidden
-                                Label9.Visibility = Windows.Visibility.Hidden
+                                TxtRefresh.Visibility = Windows.Visibility.Collapsed
+                                Label9.Visibility = Windows.Visibility.Collapsed
+                                rectrefresh1.Visibility = Windows.Visibility.Collapsed
+                                rectrefresh2.Visibility = Windows.Visibility.Collapsed
                             Else
                                 Label9.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                 TxtRefresh.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                 TxtRefresh.Visibility = Windows.Visibility.Visible
+                                rectrefresh1.Visibility = Windows.Visibility.Visible
+                                rectrefresh2.Visibility = Windows.Visibility.Visible
                                 Label9.Visibility = Windows.Visibility.Visible
                             End If
                         Case "LASTCHANGEDUREE"
                             If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                TxtLastChangeDuree.Visibility = Windows.Visibility.Hidden
-                                Label19.Visibility = Windows.Visibility.Hidden
+                                TxtLastChangeDuree.Visibility = Windows.Visibility.Collapsed
+                                Label19.Visibility = Windows.Visibility.Collapsed
                             Else
                                 Label19.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                 TxtLastChangeDuree.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
@@ -740,15 +765,19 @@ Partial Public Class uDevice
                             End If
                         Case "MODELE"
                             If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                TxtModele.Visibility = Windows.Visibility.Hidden
+                                TxtModele.Visibility = Windows.Visibility.Collapsed
                                 TxtModele.Tag = 0
-                                TxtModele.Width = 0
-                                TxtModele2.Visibility = Windows.Visibility.Hidden
+                                'TxtModele.Width = 0
+                                TxtModele2.Visibility = Windows.Visibility.Collapsed
                                 TxtModele2.Tag = 0
-                                TxtModele2.Width = 215
-                                Label8.Visibility = Windows.Visibility.Hidden
+                                'TxtModele2.Width = 215
+                                Label8.Visibility = Windows.Visibility.Collapsed
+                                rectmodele1.Visibility = Windows.Visibility.Collapsed
+                                rectmodele2.Visibility = Windows.Visibility.Collapsed
                             Else
                                 Label8.Visibility = Windows.Visibility.Visible
+                                rectmodele1.Visibility = Windows.Visibility.Visible
+                                rectmodele2.Visibility = Windows.Visibility.Visible
                                 If _Driver.LabelsDevice.Item(k).LabelChamp <> "" Then Label8.Content = _Driver.LabelsDevice.Item(k).LabelChamp
 
                                 If _Driver.LabelsDevice.Item(k).Parametre <> "" Then
@@ -761,26 +790,26 @@ Partial Public Class uDevice
                                         TxtModele.IsEditable = False
                                         TxtModele.Visibility = Windows.Visibility.Visible
                                         TxtModele.Tag = 1
-                                        TxtModele.Width = 215
-                                        TxtModele2.Visibility = Windows.Visibility.Hidden
+                                        'TxtModele.Width = 215
+                                        TxtModele2.Visibility = Windows.Visibility.Collapsed
                                         TxtModele2.Tag = 0
-                                        TxtModele2.Width = 0
+                                        'TxtModele2.Width = 0
                                     Else
-                                        TxtModele.Visibility = Windows.Visibility.Hidden
+                                        TxtModele.Visibility = Windows.Visibility.Collapsed
                                         TxtModele.Tag = 0
-                                        TxtModele.Width = 0
+                                        'TxtModele.Width = 0
                                         TxtModele2.Visibility = Windows.Visibility.Visible
                                         TxtModele2.Tag = 1
-                                        TxtModele2.Width = 215
+                                        'TxtModele2.Width = 215
                                         TxtModele2.Text = a(0)
                                     End If
                                 Else
-                                    TxtModele.Visibility = Windows.Visibility.Hidden
+                                    TxtModele.Visibility = Windows.Visibility.Collapsed
                                     TxtModele.Tag = 0
-                                    TxtModele.Width = 0
+                                    'TxtModele.Width = 0
                                     TxtModele2.Visibility = Windows.Visibility.Visible
                                     TxtModele2.Tag = 1
-                                    TxtModele2.Width = 215
+                                    'TxtModele2.Width = 215
                                 End If
                             End If
                     End Select

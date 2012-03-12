@@ -1410,6 +1410,7 @@ Imports System.Media
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun / AC / ACEU / ANSLUT / X10 / ARC / WAVEMAN / ELROAB400D / EMW200 / IMPULS", "aucun|AC|ACEU|ANSLUT|ARC|ELROAB400D|EMW200|IMPULS|WAVEMAN|X10")
             Add_LibelleDevice("REFRESH", "@", "")
+            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
         Catch ex As Exception
             WriteLog("ERR: New Exception : " & ex.Message)

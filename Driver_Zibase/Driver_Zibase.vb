@@ -409,7 +409,6 @@ Imports System.IO.Ports
         End Try
     End Sub
 
-
     ''' <summary>Creation d'un objet de type</summary>
     ''' <remarks></remarks>
     Public Sub New()
@@ -456,6 +455,7 @@ Imports System.IO.Ports
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
             Add_LibelleDevice("REFRESH", "@", "")
+            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase New", ex.Message)
         End Try
