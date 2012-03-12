@@ -537,6 +537,7 @@ Imports System.IO.Ports
             add_libelledevice("SOLO", "@", "")
             add_libelledevice("MODELE", "@", "")
             add_libelledevice("REFRESH", "@", "")
+            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
             'dictionnaire Commande STRING -> INT
             com_to_hex.Add("ALL_UNITS_OFF", 0)

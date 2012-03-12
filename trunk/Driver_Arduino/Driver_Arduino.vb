@@ -620,6 +620,13 @@ Public Class Driver_Arduino
         Add_ParamAvance("Pin11", "Définit si Pin 11 est en entrée(0) ou en sortie(1)", 1)
         Add_ParamAvance("Pin12", "Définit si Pin 12 est en entrée(0) ou en sortie(1)", 1)
         Add_ParamAvance("Pin13", "Définit si Pin 13 est en entrée(0) ou en sortie(1)", 1)
+
+        Add_LibelleDevice("ADRESSE1", "Adresse", "")
+        Add_LibelleDevice("ADRESSE2", "@", "")
+        Add_LibelleDevice("SOLO", "@", "")
+        Add_LibelleDevice("MODELE", "@", "")
+        Add_LibelleDevice("REFRESH", "Refresh", "")
+        Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
     End Sub
 #End Region
 

@@ -452,6 +452,11 @@ Imports UsbLibrary
             'Libellé Device
             Add_LibelleDevice("ADRESSE1", "ID de la puce", "Adresse d'identification de la puce RFID")
             Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("SOLO", "@", "")
+            Add_LibelleDevice("MODELE", "@", "")
+            Add_LibelleDevice("REFRESH", "Refresh", "")
+            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Mirror New", ex.Message)
         End Try

@@ -581,14 +581,15 @@ Imports HoMIDom.HoMIDom.Device
             'add_devicecommande("PRESETDIM", "permet de paramétrer le DIM : param1=niveau, param2=timer", 2)
 
             'Libellé Driver
-            'add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
+            Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            'add_libelledevice("ADRESSE1", "Adresse 1", "")
-            'add_libelledevice("ADRESSE2", "@", "")
-            'Add_LibelleDevice("SOLO", "@", "")
-            'Add_LibelleDevice("MODELE", "@", "")
-            'Add_LibelleDevice("REFRESH", "@", "")
+            Add_LibelleDevice("ADRESSE1", "Adresse", "")
+            Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("SOLO", "@", "")
+            Add_LibelleDevice("MODELE", "@", "")
+            Add_LibelleDevice("REFRESH", "@", "")
+            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)

@@ -575,7 +575,10 @@ Public Class Driver_X10_CM11
             'Libellé Device
             add_libelledevice("ADRESSE1", "Adresse du module", "Adresse HouseCode du module (ex: C3)")
             add_libelledevice("ADRESSE2", "@", "")
-
+            Add_LibelleDevice("SOLO", "@", "")
+            Add_LibelleDevice("MODELE", "@", "")
+            Add_LibelleDevice("REFRESH", "Refresh", "")
+            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 New", ex.Message)
         End Try

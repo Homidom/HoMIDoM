@@ -427,13 +427,13 @@ Public Class Driver_Phidget
         _DeviceSupport.Add(ListeDevices.CONTACT)
         _DeviceSupport.Add(ListeDevices.APPAREIL)
 
-        'ajout des commandes avancées pour les devices
-        'Ci-dessous un exemple
-        'Dim x As New DeviceCommande
-        'x.NameCommand = "Test"
-        'x.DescriptionCommand = "Ceci est une commande avancée de test"
-        'x.CountParam = 1
-        '_DeviceCommandPlus.Add(x)
+        Add_LibelleDevice("ADRESSE1", "Adresse", "")
+        Add_LibelleDevice("ADRESSE2", "@", "")
+        Add_LibelleDevice("SOLO", "@", "")
+        Add_LibelleDevice("MODELE", "@", "")
+        Add_LibelleDevice("REFRESH", "Refresh", "")
+        Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
+
     End Sub
 #End Region
 

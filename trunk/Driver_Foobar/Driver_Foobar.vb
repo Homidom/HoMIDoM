@@ -266,7 +266,6 @@ Imports System.Web.HttpUtility
         End Try
     End Function
 
-
     ''' <summary>Démarrer le du driver</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
@@ -669,19 +668,19 @@ Imports System.Web.HttpUtility
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.AUDIO)
 
-            'Parametres avancés
-            'Dim x As New HoMIDom.HoMIDom.Driver.Parametre
-            'x.Nom = "test"
-            'x.Description = "Description"
-            '_Parametres.Add(x)
-
             'ajout des commandes avancées pour les devices
-            'Ci-dessous un exemple
-            'Dim x As New DeviceCommande
-            'x.NameCommand = "Test Cmd"
-            'x.DescriptionCommand = "Ceci est une commande avancée de test"
-            'x.CountParam = 1
-            '_DeviceCommandPlus.Add(x)
+            'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
+
+            'Libellé Driver
+            Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
+
+            'Libellé Device
+            Add_LibelleDevice("ADRESSE1", "Instance Foobar", "Nom de l'executable à lancer")
+            Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("SOLO", "@", "")
+            Add_LibelleDevice("MODELE", "@", "")
+            Add_LibelleDevice("REFRESH", "@", "")
+            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "FOOBAR New", ex.Message)
         End Try

@@ -441,13 +441,9 @@ Imports System.Threading
             Add_LibelleDevice("ADRESSE1", "Code Ville", "Code de la ville dans météo google", "")
             Add_LibelleDevice("ADRESSE2", "@", "", "")
             Add_LibelleDevice("MODELE", "@", "", "")
-            'ajout des commandes avancées pour les devices
-            'Ci-dessous un exemple
-            'Dim x As New DeviceCommande
-            'x.NameCommand = "Test"
-            'x.DescriptionCommand = "Ceci est une commande avancée de test"
-            'x.CountParam = 1
-            '_DeviceCommandPlus.Add(x)
+            Add_LibelleDevice("SOLO", "@", "")
+            Add_LibelleDevice("REFRESH", "Refresh", "")
+            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "MeteoGoogle New", ex.Message)
         End Try

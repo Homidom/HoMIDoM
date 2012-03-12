@@ -36,7 +36,7 @@ Imports System.Globalization
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "3B808B6C-25B3-11E0-A6DB-36D2DED72085"
-    Dim _Nom As String = "RFXCom_receiver"
+    Dim _Nom As String = "RFXreceiver"
     Dim _Enable As String = False
     Dim _Description As String = "RFXCom Receiver COM, USB or Ethernet"
     Dim _StartAuto As Boolean = False
@@ -580,7 +580,7 @@ Imports System.Globalization
             add_libelledevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
             add_libelledevice("REFRESH", "@", "")
-
+            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER New", ex.Message)
         End Try

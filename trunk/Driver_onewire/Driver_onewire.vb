@@ -591,6 +591,8 @@ Public Class Driver_onewire
             Add_LibelleDevice("SOLO", "SOLO", "Permet de mettre à jour d une seule lecture tous les swicths/compteurs du même composant dans le cas d un multiswitch/compteur")
             Add_LibelleDevice("MODELE", "@", "")
             Add_LibelleDevice("REFRESH", "Refresh", "Valeur de rafraîchissement de la mesure en millisecondes")
+            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire New", ex.Message)
         End Try

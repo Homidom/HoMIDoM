@@ -688,11 +688,12 @@ Imports System.Xml
             'add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            'add_libelledevice("ADRESSE1", "Adresse 1", "")
-            'add_libelledevice("ADRESSE2", "@", "")
-            'Add_LibelleDevice("SOLO", "@", "")
-            'Add_LibelleDevice("MODELE", "@", "")
-            'Add_LibelleDevice("REFRESH", "@", "")
+            Add_LibelleDevice("ADRESSE1", "Début URL", "")
+            Add_LibelleDevice("ADRESSE2", "Fin URL (Optionnel)", "")
+            Add_LibelleDevice("SOLO", "@", "")
+            Add_LibelleDevice("MODELE", "@", "")
+            Add_LibelleDevice("REFRESH", "Refresh", "")
+            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)
