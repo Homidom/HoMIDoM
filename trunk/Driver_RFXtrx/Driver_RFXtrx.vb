@@ -1116,7 +1116,7 @@ Imports System.Media
                 Return False
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "exception : " & ex.Message)
+            WriteLog("ERR: ExecuteCommand exception : " & ex.Message)
             Return False
         End Try
     End Function
@@ -1148,7 +1148,7 @@ Imports System.Media
         Try
             _DEBUG = _Parametres.Item(0).Valeur
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+            WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
         End Try
 
         'ouverture du port suivant le Port Com ou IP
@@ -1163,30 +1163,29 @@ Imports System.Media
             'traitement du message de retour
             If STRGS.Left(retour, 4) = "ERR:" Then
                 retour = STRGS.Right(retour, retour.Length - 5)
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx", "Driver non démarré : " & retour)
+                WriteLog("ERR: Driver non démarré : " & retour)
             Else
                 'le driver est démarré, on log puis on lance les handlers
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx", "Driver démarré : " & retour)
+                WriteLog("Driver démarré : " & retour)
                 retour = lancer()
                 If STRGS.Left(retour, 4) = "ERR:" Then
-                    retour = STRGS.Right(retour, retour.Length - 5)
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx", retour & " non lancé, arrêt du driver")
+                    WriteLog("ERR: Start driver non lancé, arrêt du driver")
                     [Stop]()
                 Else
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx", retour)
+                    WriteLog(retour)
                     'les handlers sont lancés, on configure le RFXtrx
                     retour = configurer()
                     If STRGS.Left(retour, 4) = "ERR:" Then
                         retour = STRGS.Right(retour, retour.Length - 5)
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx", retour)
+                        WriteLog("ERR: Start " & retour)
                         [Stop]()
                     Else
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx", retour)
+                        WriteLog(retour)
                     End If
                 End If
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx Start", ex.Message)
+            WriteLog("ERR: Start Exception " & ex.Message)
         End Try
     End Sub
 
@@ -1198,12 +1197,12 @@ Imports System.Media
             retour = fermer()
             If STRGS.Left(retour, 4) = "ERR:" Then
                 retour = STRGS.Right(retour, retour.Length - 5)
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx Stop", retour)
+                WriteLog("Stop " & retour)
             Else
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx Stop", retour)
+                WriteLog("Stop " & retour)
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx Stop", ex.Message)
+            WriteLog("ERR: Stop Exception " & ex.Message)
         End Try
     End Sub
 
@@ -1266,11 +1265,15 @@ Imports System.Media
                     send_EMW200(Objet.Adresse1, Command)
                 Case "IMPULS"
                     send_IMPULS(Objet.Adresse1, Command)
+                Case "aucun"
+                    WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Nom)
+                Case ""
+                    WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Nom)
                 Case Else
-                    WriteLog("WRITE Protocole non géré : " & Objet.Modele.ToString.ToUpper)
+                    WriteLog("ERR: WRITE Protocole non géré : " & Objet.Modele.ToString.ToUpper)
             End Select
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx WRITE", ex.ToString)
+            WriteLog("ERR: WRITE" & ex.ToString)
         End Try
     End Sub
 
@@ -1298,7 +1301,7 @@ Imports System.Media
             x.CountParam = nbparam
             _DeviceCommandPlus.Add(x)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+            WriteLog("ERR: add_devicecommande Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -1316,7 +1319,7 @@ Imports System.Media
             y0.Parametre = Parametre
             _LabelsDriver.Add(y0)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            WriteLog("ERR: Add_LibelleDriver Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -1334,7 +1337,7 @@ Imports System.Media
             ld0.Parametre = Parametre
             _LabelsDevice.Add(ld0)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            WriteLog("ERR: Add_LibelleDevice Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -1351,7 +1354,7 @@ Imports System.Media
             x.Valeur = valeur
             _Parametres.Add(x)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS add_devicecommande", "Exception : " & ex.Message)
+            WriteLog("ERR: add_devicecommande Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -1405,7 +1408,7 @@ Imports System.Media
             Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : AC / ACEU / ANSLUT / X10 / ARC / WAVEMAN / ELROAB400D / EMW200 / IMPULS", "AC|ACEU|ANSLUT|ARC|ELROAB400D|EMW200|IMPULS|WAVEMAN|X10")
+            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun / AC / ACEU / ANSLUT / X10 / ARC / WAVEMAN / ELROAB400D / EMW200 / IMPULS", "aucun|AC|ACEU|ANSLUT|ARC|ELROAB400D|EMW200|IMPULS|WAVEMAN|X10")
             Add_LibelleDevice("REFRESH", "@", "")
 
         Catch ex As Exception
@@ -1429,8 +1432,8 @@ Imports System.Media
     Private Function ouvrir(ByVal numero As String) As String
         'Forcer le . 
         Try
-            Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
-            My.Application.ChangeCulture("en-US")
+            'Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
+            'My.Application.ChangeCulture("en-US")
             If Not _IsConnect Then
                 port_name = numero 'pour se rapeller du nom du port
                 If VB.Left(numero, 3) <> "COM" Then
@@ -1519,7 +1522,7 @@ Imports System.Media
             Return "Configuration OK"
         Catch ex As Exception
             WriteLog("ERR: LANCER Configuration Exception : " & ex.Message)
-            Return "ERR: Configuration " & ex.Message
+            Return "ERR: Configuration NOK"
         End Try
     End Function
 
@@ -1613,13 +1616,12 @@ Imports System.Media
         For Each bt As Byte In kar
             message = message + VB.Right("0" & Hex(bt), 2)
         Next
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx Ecrirecommande", message)
+        WriteLog("SendCommand : " & message)
 
         Try
             ecrire(kar)
         Catch exc As Exception
-            ' Warn the user.
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx", "SendCommand: Unable to write to port")
+            WriteLog("ERR: SendCommand: Unable to write to port")
         End Try
     End Sub
     'Private Sub ecrirecommande(ByVal kar As Byte())
@@ -1814,7 +1816,7 @@ Imports System.Media
             If recbytes > recbuf(0) Then 'all bytes of the packet received?
                 'Write the output to the screen for DEBUG
                 messagerecu = messagerecu & VB.Right("0" & Hex(sComChar), 2)
-                If _DEBUG Then WriteLog("ERR: Message Reçu : " & messagerecu)
+                If _DEBUG Then WriteLog("DBG: Message Reçu : " & messagerecu)
                 messagerecu = ""
 
                 decode_messages()  'decode message
@@ -3961,11 +3963,11 @@ Imports System.Media
         Try
             'utilise la fonction de base pour loguer un event
             If STRGS.InStr(message, "DBG:") > 0 Then
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXtrx ", STRGS.Right(message, message.Length - 4))
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXtrx", STRGS.Right(message, message.Length - 5))
             ElseIf STRGS.InStr(message, "ERR:") > 0 Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx ", STRGS.Right(message, message.Length - 4))
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx", STRGS.Right(message, message.Length - 5))
             Else
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx ", message)
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXtrx", message)
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx WriteLog", ex.Message)
@@ -3975,8 +3977,8 @@ Imports System.Media
     Private Sub WriteBattery(ByVal adresse As String)
         Try
             'Forcer le . 
-            Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
-            My.Application.ChangeCulture("en-US")
+            'Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
+            'My.Application.ChangeCulture("en-US")
 
             'log tous les paquets en mode debug
             If _DEBUG Then WriteLog("DBG: WriteBattery : receive from " & adresse)
@@ -4007,8 +4009,8 @@ Imports System.Media
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
 
             'Forcer le . 
-            Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
-            My.Application.ChangeCulture("en-US")
+            'Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
+            'My.Application.ChangeCulture("en-US")
 
             'log tous les paquets en mode debug
             'WriteLog("DBG: WriteRetour receive from " & adresse & " (" & type & ") -> " & valeur)
@@ -4039,8 +4041,8 @@ Imports System.Media
     Private Sub WriteRetour(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
         Try
             'Forcer le . 
-            Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
-            My.Application.ChangeCulture("en-US")
+            'Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
+            'My.Application.ChangeCulture("en-US")
 
             'log tous les paquets en mode debug
             If _DEBUG Then WriteLog("DBG: WriteRetour : receive from " & adresse & " (" & type & ") -> " & valeur)

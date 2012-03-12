@@ -1295,11 +1295,11 @@ Imports System.Globalization
         Try
             'utilise la fonction de base pour loguer un event
             If STRGS.InStr(message, "DBG:") > 0 Then
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXMitter ", STRGS.Right(message, message.Length - 4))
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXMitter", STRGS.Right(message, message.Length - 4))
             ElseIf STRGS.InStr(message, "ERR:") > 0 Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ", STRGS.Right(message, message.Length - 4))
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter", STRGS.Right(message, message.Length - 4))
             Else
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter ", STRGS.Right(message, message.Length - 4))
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter", STRGS.Right(message, message.Length - 4))
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter WriteLog", ex.Message)
@@ -1309,8 +1309,8 @@ Imports System.Globalization
     Private Sub WriteRetour(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
         Try
             'Forcer le . 
-            Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
-            My.Application.ChangeCulture("en-US")
+            'Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
+            'My.Application.ChangeCulture("en-US")
 
             'log tous les paquets en mode debug
             If _DEBUG Then WriteLog("DBG: WriteRetour receive from " & adresse & " (" & type & ") -> " & valeur)

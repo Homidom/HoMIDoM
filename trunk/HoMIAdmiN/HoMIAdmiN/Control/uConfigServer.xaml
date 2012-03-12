@@ -42,16 +42,16 @@
                                     <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtLat" HorizontalAlignment="Left" Width="107" Height="20" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
-                            <Label Foreground="White" Name="Label3" VerticalAlignment="Bottom">Correction Heure Lever Soleil:</Label>
-                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="HCL" Width="25" Height="19.723" VerticalAlignment="Bottom">0</TextBox>
+                                <Label Foreground="White" Name="Label3" Width="190">Correction Heure Lever Soleil:</Label>
+                                    <TextBox Background="DarkGray"  BorderBrush="Black" Foreground="White" Name="HCL" Width="25" Height="20">0</TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
-                            <Label Foreground="White" Name="Label4" VerticalAlignment="Bottom">Correction Heure Coucher Soleil:</Label>
-                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="HCC" VerticalAlignment="Bottom" Text="0"></TextBox>
+                                <Label Foreground="White" Name="Label4" Width="190">Correction Heure Coucher Soleil:</Label>
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="HCC" Text="0"></TextBox>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
-                            <Label Foreground="White" Name="Label15" VerticalAlignment="Bottom">Enregistrer automatiquement (minutes), 0=Inactif:</Label>
-                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="TxtSave" VerticalAlignment="Bottom" Text="0"></TextBox>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Foreground="White" Name="Label15" >Enregistrer automatiquement (minutes), 0=Inactif:</Label>
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="TxtSave" Text="0"></TextBox>
                         </StackPanel>
                     </StackPanel>
 
@@ -130,10 +130,10 @@
                             <Label Foreground="White" FontWeight="Bold">Paramètres SMTP</Label>
                         </GroupBox.Header>
                         <Grid Height="94">
-                            <Label Content="Adresse Mail:" Height="25" HorizontalAlignment="Left" Margin="8,0,0,0" Name="Label10" VerticalAlignment="Top" Width="83" Foreground="White" />
-                            <Label Content="Adresse SMTP:" Height="23" HorizontalAlignment="Left" Margin="8,19,0,0" Name="Label11" VerticalAlignment="Top" Width="82" Foreground="White" />
-                            <Label Content="Login:" Height="27" HorizontalAlignment="Left" Margin="8,40,0,0" Name="Label12" VerticalAlignment="Top" Width="72" Foreground="White" />
-                            <Label Content="Password:" Height="27" HorizontalAlignment="Left" Margin="8,63,0,0" Name="Label13" VerticalAlignment="Top" Width="72" Foreground="White" />
+                            <Label Content="Adresse Mail:" Height="25" HorizontalAlignment="Left" Margin="0,0,0,0" Name="Label10" VerticalAlignment="Top" Width="100" Foreground="White" />
+                            <Label Content="Adresse SMTP:" Height="23" HorizontalAlignment="Left" Margin="0,19,0,0" Name="Label11" VerticalAlignment="Top" Width="100" Foreground="White" />
+                            <Label Content="Login:" Height="27" HorizontalAlignment="Left" Margin="0,40,0,0" Name="Label12" VerticalAlignment="Top" Width="100" Foreground="White" />
+                            <Label Content="Password:" Height="27" HorizontalAlignment="Left" Margin="0,63,0,0" Name="Label13" VerticalAlignment="Top" Width="100" Foreground="White" />
                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,0,0,0" Name="TxtMail" VerticalAlignment="Top" Width="271" />
                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,22,0,0" Name="TxtAdresse" VerticalAlignment="Top" Width="271" />
                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,44,0,0" Name="TxtLogin" VerticalAlignment="Top" Width="158" />
