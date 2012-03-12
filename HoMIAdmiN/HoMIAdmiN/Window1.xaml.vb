@@ -30,6 +30,8 @@ Class Window1
     Dim myBrushRouge As New RadialGradientBrush()
     Dim flagTreeV As Boolean = False
 
+#Region "Fonctions de base"
+
     Public Sub New()
         Try
             Me.Title = "HoMIAdmiN v" & My.Application.Info.Version.ToString & " - HoMIDoM"
@@ -145,6 +147,192 @@ Class Window1
         End Try
     End Sub
 
+    Private Sub StoryBoardFinish(ByVal sender As Object, ByVal e As System.EventArgs)
+        CanvasRight.Children.Clear()
+        ShowMainMenu()
+    End Sub
+
+    Protected Overrides Sub Finalize()
+        Try
+            If ListServer.Count > 0 Then
+                'Serialize object to a text file.
+                Dim objStreamWriter As New StreamWriter(Myfile)
+                Dim x As New XmlSerializer(ListServer.GetType)
+                x.Serialize(objStreamWriter, ListServer)
+                objStreamWriter.Close()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de l'enregistrement du fichier de config xml de l'application Admin : " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+        MyBase.Finalize()
+    End Sub
+
+    ''' <summary>
+    ''' Sélection d'un serveur pour connexion dans le sous menu connexion ou au démarrage
+    ''' </summary>
+    ''' <param name="Name"></param>
+    ''' <param name="IP"></param>
+    ''' <param name="Port"></param>
+    ''' <remarks></remarks>
+    Public Function Connect_Srv(ByVal Name As String, ByVal IP As String, ByVal Port As String) As Integer
+        Try
+            myadress = "http://" & IP & ":" & Port & "/ServiceModelSamples/service"
+            MyPort = Port
+
+            Dim binding As New ServiceModel.BasicHttpBinding
+            binding.MaxBufferPoolSize = 250000000
+            binding.MaxReceivedMessageSize = 250000000
+            binding.MaxBufferSize = 250000000
+            binding.ReaderQuotas.MaxArrayLength = 250000000
+            binding.ReaderQuotas.MaxNameTableCharCount = 250000000
+            binding.ReaderQuotas.MaxBytesPerRead = 250000000
+            binding.ReaderQuotas.MaxStringContentLength = 250000000
+            binding.SendTimeout = TimeSpan.FromMinutes(60)
+            binding.CloseTimeout = TimeSpan.FromMinutes(60)
+            binding.OpenTimeout = TimeSpan.FromMinutes(60)
+            binding.ReceiveTimeout = TimeSpan.FromMinutes(60)
+
+            myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
+            myService = myChannelFactory.CreateChannel()
+            If myChannelFactory.State <> CommunicationState.Opened Then
+                MessageBox.Show("Erreur lors de la connexion au serveur", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                IsConnect = False
+                Return -1
+                Exit Function
+            Else
+                Try
+                    myService.GetTime()
+                Catch ex As Exception
+                    myChannelFactory.Abort()
+                    IsConnect = False
+                    MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & Chr(10) & Name & " - " & IP & ":" & Port, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Return -1
+                End Try
+                IsConnect = True
+                AffDriver()
+                ShowMainMenu()
+            End If
+
+            LblSrv.Content = Name
+            LblSrv.ToolTip = "Serveur courant : " & Name
+            For i As Integer = 0 To ListServer.Count - 1
+                If ListServer.Item(i).Nom = Name Then
+                    If File.Exists(ListServer.Item(i).Icon) Then
+                        Dim bmpImage As New BitmapImage()
+                        bmpImage.BeginInit()
+                        bmpImage.UriSource = New Uri(ListServer.Item(i).Icon, UriKind.Absolute)
+                        bmpImage.EndInit()
+                        ImgSrv.Source = bmpImage
+                    End If
+                End If
+            Next
+            CanvasUser = CanvasRight
+
+            Return 0
+        Catch ex As Exception
+            myChannelFactory.Abort()
+            IsConnect = False
+            MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            Return -1
+        End Try
+    End Function
+
+    Private Sub Window1_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
+        Try
+            'Connexion au serveur web
+            If File.Exists(Myfile) Then
+                Try
+                    'Deserialize text file to a new object.
+                    Dim objStreamReader As New StreamReader(Myfile)
+                    Dim x As New XmlSerializer(ListServer.GetType)
+                    ListServer = x.Deserialize(objStreamReader)
+                    objStreamReader.Close()
+                Catch ex As Exception
+                    MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml (" & Myfile & "), vérifiez que toutes les balises requisent soient présentes: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                End Try
+
+                If ListServer.Count = 0 Then 'Aucun serveur trouvé dans le fichier de config
+                    MessageBox.Show("Aucun serveur n'a été trouvé dans le fichier de config (" & Myfile & "), veuillez saisir manuellement les paramètres du serveur", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                End If
+                'on ajoute la liste des serveurs dans le menu Connexion
+            Else
+                MessageBox.Show("Le fichier de config xml de l'admin (" & Myfile & ") est absent, veuillez utiliser la connexion manuelle", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            End If
+
+            'Page de connexion
+            Do While FlagStart = False
+                PageConnexion()
+            Loop
+
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub Window1_Loaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Affiche la fenêtre de connexion
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub PageConnexion()
+        Try
+            Dim frm As New Window3
+            frm.Owner = Me
+            frm.ShowDialog()
+            If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+                If Connect_Srv(frm.TxtName.Text, frm.TxtIP.Text, frm.TxtPort.Text) <> 0 Then
+                    Exit Sub
+                End If
+                If myService.GetIdServer(IdSrv) = "99" Then
+                    MessageBox.Show("L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+                'If myService.VerifLogin(frm.TxtUsername.Text, frm.TxtPassword.Password) = False Then
+                '    MessageBox.Show("Le username ou le password sont erroné, impossible veuillez réessayer", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                'Else
+                frm.Close()
+                FlagStart = True
+                frm = Nothing
+                'End If
+            Else
+                End
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Connexion: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    'action à faire quand le serveur n'est pas connecté
+    Private Sub Serveur_notconnected_action()
+        MessageBox.Show("Action Impossible, le serveur n'est pas connecté !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+        ClearAllTreeview() 'vide le treeview
+        CloseTreeView() 'ferme le treeview
+        CanvasRight.Children.Clear()  'ferme le menu principal
+        PageConnexion() 'affiche la fenetre de connexion
+    End Sub
+
+#End Region
+
+#Region "Treeview"
+
+    Private Sub CloseTreeView()
+        DKpanel.Width = 0
+        flagTreeV = False
+    End Sub
+
+    Private Sub ShowTreeView()
+        If flagTreeV = True Then Exit Sub
+        DKpanel.Width = Double.NaN
+        Dim da3 As DoubleAnimation = New DoubleAnimation
+        da3.From = 0
+        da3.To = 1
+        da3.Duration = New Duration(TimeSpan.FromMilliseconds(600))
+        Dim sc As ScaleTransform = New ScaleTransform()
+        DKpanel.RenderTransform = sc
+        sc.BeginAnimation(ScaleTransform.ScaleXProperty, da3)
+        flagTreeV = True
+
+    End Sub
+
     Private Sub ClearAllTreeview()
         TreeViewDriver.Items.Clear()
         TreeViewDevice.Items.Clear()
@@ -155,8 +343,32 @@ Class Window1
         TreeViewHisto.Items.Clear()
     End Sub
 
+    Private Sub RefreshTreeView()
+        If IsConnect = False Then
+            'Serveur_notconnected_action()
+            Exit Sub
+        End If
 
-#Region "Affichage"
+        Me.Cursor = Cursors.Wait
+        Select Case Tabcontrol1.SelectedIndex
+            Case 0
+                AffDriver()
+            Case 1
+                AffDevice()
+            Case 2
+                AffZone()
+            Case 3
+                AffUser()
+            Case 4
+                AffTrigger()
+            Case 5
+                AffScene()
+            Case 6
+                AffHisto()
+        End Select
+        Me.Cursor = Nothing
+    End Sub
+
     'Afficher la liste des zones
     Public Sub AffZone()
         Try
@@ -574,9 +786,112 @@ Class Window1
         End Try
     End Sub
 
+    'Double Clic sur le treeview
+    Private Sub TreeView_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewDriver.MouseDoubleClick, TreeViewDevice.MouseDoubleClick, TreeViewZone.MouseDoubleClick, TreeViewUser.MouseDoubleClick, TreeViewTrigger.MouseDoubleClick, TreeViewMacro.MouseDoubleClick, TreeViewHisto.MouseDoubleClick
+        Try
+            If IsConnect = False Then
+                Serveur_notconnected_action()
+                Exit Sub
+            End If
+
+            If sender.SelectedItem IsNot Nothing Then
+                If sender.SelectedItem.uid Is Nothing Then Exit Sub
+
+                Me.Cursor = Cursors.Wait
+                Select Case sender.Name
+                    Case "TreeViewDriver"  'driver
+                        Dim x As New uDriver(sender.SelectedItem.uid)
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AddHandler x.Loaded, AddressOf ControlLoaded
+                        AffControlPage(x)
+                    Case "TreeViewDevice"  'device
+                        Dim x As New uDevice(Classe.EAction.Modifier, sender.SelectedItem.uid)
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AddHandler x.Loaded, AddressOf ControlLoaded
+                        AffControlPage(x)
+                    Case "TreeViewZone"  'zone
+                        Dim x As New uZone(Classe.EAction.Modifier, sender.SelectedItem.uid)
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AddHandler x.Loaded, AddressOf ControlLoaded
+                        AffControlPage(x)
+                    Case "TreeViewUser"  'user
+                        Dim x As New uUser(Classe.EAction.Modifier, sender.SelectedItem.uid)
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AddHandler x.Loaded, AddressOf ControlLoaded
+                        AffControlPage(x)
+                    Case "TreeViewTrigger"  'trigger
+                        Dim _Trig As Trigger = myService.ReturnTriggerById(IdSrv, sender.SelectedItem.uid)
+
+                        If _Trig IsNot Nothing Then
+                            If _Trig.Type = Trigger.TypeTrigger.TIMER Then
+                                Dim x As New uTriggerTimer(Classe.EAction.Modifier, sender.SelectedItem.uid)
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                AddHandler x.Loaded, AddressOf ControlLoaded
+                                AffControlPage(x)
+                            Else
+                                Dim x As New uTriggerDevice(Classe.EAction.Modifier, sender.SelectedItem.uid)
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                AddHandler x.Loaded, AddressOf ControlLoaded
+                                AffControlPage(x)
+                            End If
+                            _Trig = Nothing
+                        End If
+                    Case "TreeViewMacro"  'macros
+                        Dim x As New uMacro(Classe.EAction.Modifier, sender.SelectedItem.uid)
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AddHandler x.Loaded, AddressOf ControlLoaded
+                        AffControlPage(x)
+                    Case 6 'histo
+
+                End Select
+
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub TreeView_SelectedItemChanged(ByVal sender As System.Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of System.Object)) Handles TreeViewDriver.SelectedItemChanged, TreeViewDevice.SelectedItemChanged, TreeViewZone.SelectedItemChanged, TreeViewUser.SelectedItemChanged, TreeViewTrigger.SelectedItemChanged, TreeViewMacro.SelectedItemChanged, TreeViewHisto.SelectedItemChanged
+        Try
+            If IsConnect = False Then
+                Serveur_notconnected_action()
+                Exit Sub
+            End If
+
+            If Mouse.LeftButton = MouseButtonState.Pressed Then
+                If sender.SelectedItem IsNot Nothing Then
+                    Dim effects As DragDropEffects
+                    Dim obj As New DataObject()
+                    obj.SetData(GetType(String), sender.SelectedItem.uid)
+                    effects = DragDrop.DoDragDrop(sender, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+                End If
+            End If
+
+            If sender.SelectedItem IsNot Nothing Then
+                If sender.SelectedItem.uid Is Nothing Then Exit Sub
+
+                'Me.Cursor = Cursors.Wait
+                'Select Case sender.Name
+                '    Case "TreeViewDriver"  'driver
+                '    Case "TreeViewDevice"  'device
+                '    Case "TreeViewZone"  'zone
+                '    Case "TreeViewUser"  'user
+                '    Case "TreeViewTrigger"  'trigger
+                '    Case "TreeViewMacro"  'macros
+                '    Case "TreeViewHisto"  'histo
+                'End Select
+                'Me.Cursor = Nothing
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub TreeViewG_SelectedItemChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
 #End Region
 
 #Region "Drivers"
+
     Private Sub StopDriver(ByVal sender As Object, ByVal e As Input.MouseEventArgs)
         Try
             If IsConnect = False Then
@@ -613,123 +928,10 @@ Class Window1
             MessageBox.Show("ERREUR Sub BtnStart_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
 #End Region
 
-    'Décharger une fenêtre suivant son Id
-    Public Sub UnloadControl(ByVal MyControl As Object, Optional ByVal Cancel As Boolean = False)
-        Try
-            Me.Cursor = Cursors.Wait
-
-            If Cancel = False Then RefreshTreeView()
-
-            Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
-            myDoubleAnimation.From = 1.0
-            myDoubleAnimation.To = 0.0
-            myDoubleAnimation.Duration = New Duration(TimeSpan.FromSeconds(1))
-            Dim myStoryboard As Storyboard
-            myStoryboard = New Storyboard()
-            myStoryboard.Children.Add(myDoubleAnimation)
-            AddHandler myStoryboard.Completed, AddressOf StoryBoardFinish
-
-            Storyboard.SetTarget(myDoubleAnimation, MyControl)
-            Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
-            myStoryboard.Begin()
-
-            Me.Cursor = Nothing
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub UnloadControl: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    Private Sub StoryBoardFinish(ByVal sender As Object, ByVal e As System.EventArgs)
-        CanvasRight.Children.Clear()
-        ShowMainMenu()
-    End Sub
-
-    Protected Overrides Sub Finalize()
-        Try
-            If ListServer.Count > 0 Then
-                'Serialize object to a text file.
-                Dim objStreamWriter As New StreamWriter(Myfile)
-                Dim x As New XmlSerializer(ListServer.GetType)
-                x.Serialize(objStreamWriter, ListServer)
-                objStreamWriter.Close()
-            End If
-        Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'enregistrement du fichier de config xml de l'application Admin : " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-        MyBase.Finalize()
-    End Sub
-
-    ''' <summary>
-    ''' Sélection d'un serveur pour connexion dans le sous menu connexion ou au démarrage
-    ''' </summary>
-    ''' <param name="Name"></param>
-    ''' <param name="IP"></param>
-    ''' <param name="Port"></param>
-    ''' <remarks></remarks>
-    Public Function Connect_Srv(ByVal Name As String, ByVal IP As String, ByVal Port As String) As Integer
-        Try
-            myadress = "http://" & IP & ":" & Port & "/ServiceModelSamples/service"
-            MyPort = Port
-
-            Dim binding As New ServiceModel.BasicHttpBinding
-            binding.MaxBufferPoolSize = 250000000
-            binding.MaxReceivedMessageSize = 250000000
-            binding.MaxBufferSize = 250000000
-            binding.ReaderQuotas.MaxArrayLength = 250000000
-            binding.ReaderQuotas.MaxNameTableCharCount = 250000000
-            binding.ReaderQuotas.MaxBytesPerRead = 250000000
-            binding.ReaderQuotas.MaxStringContentLength = 250000000
-            binding.SendTimeout = TimeSpan.FromMinutes(60)
-            binding.CloseTimeout = TimeSpan.FromMinutes(60)
-            binding.OpenTimeout = TimeSpan.FromMinutes(60)
-            binding.ReceiveTimeout = TimeSpan.FromMinutes(60)
-
-            myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
-            myService = myChannelFactory.CreateChannel()
-            If myChannelFactory.State <> CommunicationState.Opened Then
-                MessageBox.Show("Erreur lors de la connexion au serveur", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
-                IsConnect = False
-                Return -1
-                Exit Function
-            Else
-                Try
-                    myService.GetTime()
-                Catch ex As Exception
-                    myChannelFactory.Abort()
-                    IsConnect = False
-                    MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & Chr(10) & Name & " - " & IP & ":" & Port, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
-                    Return -1
-                End Try
-                IsConnect = True
-                AffDriver()
-                ShowMainMenu()
-            End If
-
-            LblSrv.Content = Name
-            LblSrv.ToolTip = "Serveur courant : " & Name
-            For i As Integer = 0 To ListServer.Count - 1
-                If ListServer.Item(i).Nom = Name Then
-                    If File.Exists(ListServer.Item(i).Icon) Then
-                        Dim bmpImage As New BitmapImage()
-                        bmpImage.BeginInit()
-                        bmpImage.UriSource = New Uri(ListServer.Item(i).Icon, UriKind.Absolute)
-                        bmpImage.EndInit()
-                        ImgSrv.Source = bmpImage
-                    End If
-                End If
-            Next
-            CanvasUser = CanvasRight
-
-            Return 0
-        Catch ex As Exception
-            myChannelFactory.Abort()
-            IsConnect = False
-            MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
-            Return -1
-        End Try
-    End Function
+#Region "MainMenu"
 
     Private Sub ShowMainMenu()
         Dim MainMenu As New uMainMenu
@@ -746,7 +948,6 @@ Class Window1
         Canvas.SetTop(MainMenu, HMainMenu)
     End Sub
 
-#Region "MainMenu"
     Private Sub MainMenuGerer(ByVal index As String)
         Try
             If IsConnect = False Then
@@ -1059,6 +1260,8 @@ Class Window1
 
 #End Region
 
+#Region "Fenêtres et actions autres"
+
     Private Sub UnloadSelectElmt(ByVal Objet As Object)
         If Objet.retour = "CANCEL" Then
             CanvasRight.Children.Clear()
@@ -1214,12 +1417,54 @@ Class Window1
                         End If
                     Catch ex As Exception
                         MessageBox.Show("ERREUR de la suppression: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
+                    End Try
                     CanvasRight.Children.Clear()
                     ShowMainMenu()
             End Select
 
         End If
+    End Sub
+
+    Private Sub ControlLoaded()
+        Me.Cursor = Nothing
+    End Sub
+
+    ''' <summary>
+    ''' Affiche le usercontrol et l'anime
+    ''' </summary>
+    ''' <param name="Objet"></param>
+    ''' <remarks></remarks>
+    Private Sub AffControlPage(ByVal Objet As Object)
+        Objet.Uid = System.Guid.NewGuid.ToString()
+        CanvasRight.Children.Clear()
+        CanvasRight.Children.Add(Objet)
+        AnimationApparition(Objet)
+    End Sub
+
+    'Décharger une fenêtre suivant son Id
+    Public Sub UnloadControl(ByVal MyControl As Object, Optional ByVal Cancel As Boolean = False)
+        Try
+            Me.Cursor = Cursors.Wait
+
+            If Cancel = False Then RefreshTreeView()
+
+            Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
+            myDoubleAnimation.From = 1.0
+            myDoubleAnimation.To = 0.0
+            myDoubleAnimation.Duration = New Duration(TimeSpan.FromSeconds(1))
+            Dim myStoryboard As Storyboard
+            myStoryboard = New Storyboard()
+            myStoryboard.Children.Add(myDoubleAnimation)
+            AddHandler myStoryboard.Completed, AddressOf StoryBoardFinish
+
+            Storyboard.SetTarget(myDoubleAnimation, MyControl)
+            Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
+            myStoryboard.Begin()
+
+            Me.Cursor = Nothing
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub UnloadControl: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub AnimationApparition(ByVal Objet As Object)
@@ -1232,70 +1477,6 @@ Class Window1
             Objet.RenderTransform = sc
             sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
         End If
-    End Sub
-
-    Private Sub Window1_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
-        Try
-            'Connexion au serveur web
-            If File.Exists(Myfile) Then
-                Try
-                    'Deserialize text file to a new object.
-                    Dim objStreamReader As New StreamReader(Myfile)
-                    Dim x As New XmlSerializer(ListServer.GetType)
-                    ListServer = x.Deserialize(objStreamReader)
-                    objStreamReader.Close()
-                Catch ex As Exception
-                    MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml (" & Myfile & "), vérifiez que toutes les balises requisent soient présentes: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
-                End Try
-
-                If ListServer.Count = 0 Then 'Aucun serveur trouvé dans le fichier de config
-                    MessageBox.Show("Aucun serveur n'a été trouvé dans le fichier de config (" & Myfile & "), veuillez saisir manuellement les paramètres du serveur", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                End If
-                'on ajoute la liste des serveurs dans le menu Connexion
-            Else
-                MessageBox.Show("Le fichier de config xml de l'admin (" & Myfile & ") est absent, veuillez utiliser la connexion manuelle", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            End If
-
-            'Page de connexion
-            Do While FlagStart = False
-                PageConnexion()
-            Loop
-
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Window1_Loaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    ''' <summary>
-    ''' Affiche la fenêtre de connexion
-    ''' </summary>
-    ''' <remarks></remarks>
-    Private Sub PageConnexion()
-        Try
-            Dim frm As New Window3
-            frm.Owner = Me
-            frm.ShowDialog()
-            If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-                If Connect_Srv(frm.TxtName.Text, frm.TxtIP.Text, frm.TxtPort.Text) <> 0 Then
-                    Exit Sub
-                End If
-                If myService.GetIdServer(IdSrv) = "99" Then
-                    MessageBox.Show("L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                    Exit Sub
-                End If
-                'If myService.VerifLogin(frm.TxtUsername.Text, frm.TxtPassword.Password) = False Then
-                '    MessageBox.Show("Le username ou le password sont erroné, impossible veuillez réessayer", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                'Else
-                frm.Close()
-                FlagStart = True
-                frm = Nothing
-                'End If
-            Else
-                End
-            End If
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Connexion: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
     End Sub
 
     Private Sub BtnGenereGraph_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereGraph.Click
@@ -1371,144 +1552,6 @@ Class Window1
         Next
     End Sub
 
-#Region "Treeview"
-    Private Sub CloseTreeView()
-        DKpanel.Width = 0
-        flagTreeV = False
-    End Sub
-
-    Private Sub ShowTreeView()
-        If flagTreeV = True Then Exit Sub
-        DKpanel.Width = Double.NaN
-        Dim da3 As DoubleAnimation = New DoubleAnimation
-        da3.From = 0
-        da3.To = 1
-        da3.Duration = New Duration(TimeSpan.FromMilliseconds(600))
-        Dim sc As ScaleTransform = New ScaleTransform()
-        DKpanel.RenderTransform = sc
-        sc.BeginAnimation(ScaleTransform.ScaleXProperty, da3)
-        flagTreeV = True
-
-    End Sub
-
-    Private Sub TreeView_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewDriver.MouseDoubleClick, TreeViewDevice.MouseDoubleClick, TreeViewZone.MouseDoubleClick, TreeViewUser.MouseDoubleClick, TreeViewTrigger.MouseDoubleClick, TreeViewMacro.MouseDoubleClick, TreeViewHisto.MouseDoubleClick
-        Try
-            If IsConnect = False Then
-                Serveur_notconnected_action()
-                Exit Sub
-            End If
-
-            If sender.SelectedItem IsNot Nothing Then
-                If sender.SelectedItem.uid Is Nothing Then Exit Sub
-
-                Me.Cursor = Cursors.Wait
-                Select Case sender.Name
-                    Case "TreeViewDriver"  'driver
-                        Dim x As New uDriver(sender.SelectedItem.uid)
-                        AddHandler x.CloseMe, AddressOf UnloadControl
-                        AddHandler x.Loaded, AddressOf ControlLoaded
-                        AffControlPage(x)
-                    Case "TreeViewDevice"  'device
-                        Dim x As New uDevice(Classe.EAction.Modifier, sender.SelectedItem.uid)
-                        AddHandler x.CloseMe, AddressOf UnloadControl
-                        AddHandler x.Loaded, AddressOf ControlLoaded
-                        AffControlPage(x)
-                    Case "TreeViewZone"  'zone
-                        Dim x As New uZone(Classe.EAction.Modifier, sender.SelectedItem.uid)
-                        AddHandler x.CloseMe, AddressOf UnloadControl
-                        AddHandler x.Loaded, AddressOf ControlLoaded
-                        AffControlPage(x)
-                    Case "TreeViewUser"  'user
-                        Dim x As New uUser(Classe.EAction.Modifier, sender.SelectedItem.uid)
-                        AddHandler x.CloseMe, AddressOf UnloadControl
-                        AddHandler x.Loaded, AddressOf ControlLoaded
-                        AffControlPage(x)
-                    Case "TreeViewTrigger"  'trigger
-                        Dim _Trig As Trigger = myService.ReturnTriggerById(IdSrv, sender.SelectedItem.uid)
-
-                        If _Trig IsNot Nothing Then
-                            If _Trig.Type = Trigger.TypeTrigger.TIMER Then
-                                Dim x As New uTriggerTimer(Classe.EAction.Modifier, sender.SelectedItem.uid)
-                                AddHandler x.CloseMe, AddressOf UnloadControl
-                                AddHandler x.Loaded, AddressOf ControlLoaded
-                                AffControlPage(x)
-                            Else
-                                Dim x As New uTriggerDevice(Classe.EAction.Modifier, sender.SelectedItem.uid)
-                                AddHandler x.CloseMe, AddressOf UnloadControl
-                                AddHandler x.Loaded, AddressOf ControlLoaded
-                                AffControlPage(x)
-                            End If
-                            _Trig = Nothing
-                        End If
-                    Case "TreeViewMacro"  'macros
-                        Dim x As New uMacro(Classe.EAction.Modifier, sender.SelectedItem.uid)
-                        AddHandler x.CloseMe, AddressOf UnloadControl
-                        AddHandler x.Loaded, AddressOf ControlLoaded
-                        AffControlPage(x)
-                    Case 6 'histo
-
-                End Select
-
-            End If
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    Private Sub ControlLoaded()
-        Me.Cursor = Nothing
-    End Sub
-
-    ''' <summary>
-    ''' Affiche le usercontrol et l'anime
-    ''' </summary>
-    ''' <param name="Objet"></param>
-    ''' <remarks></remarks>
-    Private Sub AffControlPage(ByVal Objet As Object)
-        Objet.Uid = System.Guid.NewGuid.ToString()
-        CanvasRight.Children.Clear()
-        CanvasRight.Children.Add(Objet)
-        AnimationApparition(Objet)
-    End Sub
-
-    Private Sub TreeView_SelectedItemChanged(ByVal sender As System.Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of System.Object)) Handles TreeViewDriver.SelectedItemChanged, TreeViewDevice.SelectedItemChanged, TreeViewZone.SelectedItemChanged, TreeViewUser.SelectedItemChanged, TreeViewTrigger.SelectedItemChanged, TreeViewMacro.SelectedItemChanged, TreeViewHisto.SelectedItemChanged
-        Try
-            If IsConnect = False Then
-                Serveur_notconnected_action()
-                Exit Sub
-            End If
-
-            If Mouse.LeftButton = MouseButtonState.Pressed Then
-                If sender.SelectedItem IsNot Nothing Then
-                    Dim effects As DragDropEffects
-                    Dim obj As New DataObject()
-                    obj.SetData(GetType(String), sender.SelectedItem.uid)
-                    effects = DragDrop.DoDragDrop(sender, obj, DragDropEffects.Copy Or DragDropEffects.Move)
-                End If
-            End If
-
-            If sender.SelectedItem IsNot Nothing Then
-                If sender.SelectedItem.uid Is Nothing Then Exit Sub
-
-                'Me.Cursor = Cursors.Wait
-                'Select Case sender.Name
-                '    Case "TreeViewDriver"  'driver
-                '    Case "TreeViewDevice"  'device
-                '    Case "TreeViewZone"  'zone
-                '    Case "TreeViewUser"  'user
-                '    Case "TreeViewTrigger"  'trigger
-                '    Case "TreeViewMacro"  'macros
-                '    Case "TreeViewHisto"  'histo
-                'End Select
-                'Me.Cursor = Nothing
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub TreeViewG_SelectedItemChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-#End Region
-
     Private Sub BtnGenereReleve_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereReleve.Click
         Try
             If IsConnect = False Then
@@ -1558,32 +1601,6 @@ Class Window1
         RefreshTreeView()
     End Sub
 
-    Private Sub RefreshTreeView()
-        If IsConnect = False Then
-            'Serveur_notconnected_action()
-            Exit Sub
-        End If
-
-        Me.Cursor = Cursors.Wait
-        Select Case Tabcontrol1.SelectedIndex
-            Case 0
-                AffDriver()
-            Case 1
-                AffDevice()
-            Case 2
-                AffZone()
-            Case 3
-                AffUser()
-            Case 4
-                AffTrigger()
-            Case 5
-                AffScene()
-            Case 6
-                AffHisto()
-        End Select
-        Me.Cursor = Nothing
-    End Sub
-
     Private Sub LOG_PreviewMouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles LOG.PreviewMouseMove, ImgLog.PreviewMouseMove
         If IsConnect = True Then
             Dim list As List(Of String) = myService.Get4Log
@@ -1600,12 +1617,6 @@ Class Window1
         'RaiseEvent ChangeMenu(sender.tag)
     End Sub
 
-    Private Sub Serveur_notconnected_action()
-        MessageBox.Show("Action Impossible, le serveur n'est pas connecté !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-        ClearAllTreeview() 'vide le treeview
-        CloseTreeView() 'ferme le treeview
-        CanvasRight.Children.Clear()  'ferme le menu principal
-        PageConnexion() 'affiche la fenetre de connexion
-    End Sub
+#End Region
 
 End Class
