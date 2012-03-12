@@ -440,6 +440,7 @@ Imports System.Threading
             'Libellé Device
             Add_LibelleDevice("ADRESSE1", "Code Ville", "Code de la ville dans météo google", "")
             Add_LibelleDevice("ADRESSE2", "@", "", "")
+            Add_LibelleDevice("MODELE", "@", "", "")
             'ajout des commandes avancées pour les devices
             'Ci-dessous un exemple
             'Dim x As New DeviceCommande

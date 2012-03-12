@@ -3003,11 +3003,11 @@ Imports System.Globalization
         Try
             'utilise la fonction de base pour loguer un event
             If STRGS.InStr(message, "DBG:") > 0 Then
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXCOM_RECEIVER ", STRGS.Right(message, message.Length - 4))
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXCOM_RECEIVER", STRGS.Right(message, message.Length - 4))
             ElseIf STRGS.InStr(message, "ERR:") > 0 Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER ", STRGS.Right(message, message.Length - 4))
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER", STRGS.Right(message, message.Length - 4))
             Else
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER ", STRGS.Right(message, message.Length - 4))
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", STRGS.Right(message, message.Length - 4))
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER WriteLog", ex.Message)
@@ -3047,8 +3047,8 @@ Imports System.Globalization
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
 
             'Forcer le . 
-            Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
-            My.Application.ChangeCulture("en-US")
+            'Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
+            'My.Application.ChangeCulture("en-US")
 
             'log tous les paquets en mode debug
             If _DEBUG Then WriteLog("DBG: WriteRetour : receive from " & adresse & " (" & type & ") -> " & valeur)

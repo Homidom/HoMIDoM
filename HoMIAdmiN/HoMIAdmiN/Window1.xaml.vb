@@ -197,6 +197,7 @@ Class Window1
                     Return -1
                 End Try
                 IsConnect = True
+                Tabcontrol1.SelectedIndex = 0
                 AffDriver()
                 ShowMainMenu()
             End If
@@ -268,19 +269,23 @@ Class Window1
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 If Connect_Srv(frm.TxtName.Text, frm.TxtIP.Text, frm.TxtPort.Text) <> 0 Then
+                    frm.Close()
+                    PageConnexion()
                     Exit Sub
+                Else
+                    If myService.GetIdServer(IdSrv) = "99" Then
+                        MessageBox.Show("L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        frm.Close()
+                        Exit Sub
+                    End If
+                    'If myService.VerifLogin(frm.TxtUsername.Text, frm.TxtPassword.Password) = False Then
+                    '    MessageBox.Show("Le username ou le password sont erroné, impossible veuillez réessayer", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    'Else
+                    frm.Close()
+                    FlagStart = True
+                    frm = Nothing
+                    'End If
                 End If
-                If myService.GetIdServer(IdSrv) = "99" Then
-                    MessageBox.Show("L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                    Exit Sub
-                End If
-                'If myService.VerifLogin(frm.TxtUsername.Text, frm.TxtPassword.Password) = False Then
-                '    MessageBox.Show("Le username ou le password sont erroné, impossible veuillez réessayer", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                'Else
-                frm.Close()
-                FlagStart = True
-                frm = Nothing
-                'End If
             Else
                 End
             End If
@@ -293,7 +298,7 @@ Class Window1
     Private Sub Serveur_notconnected_action()
         MessageBox.Show("Action Impossible, le serveur n'est pas connecté !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
         ClearAllTreeview() 'vide le treeview
-        CloseTreeView() 'ferme le treeview
+        'CloseTreeView() 'ferme le treeview
         CanvasRight.Children.Clear()  'ferme le menu principal
         PageConnexion() 'affiche la fenetre de connexion
     End Sub
