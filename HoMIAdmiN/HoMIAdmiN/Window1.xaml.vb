@@ -130,7 +130,7 @@ Class Window1
                     LblConnect.Content = "Serveur non connecté"
                     LblConnect.ToolTip = Nothing
 
-                    ClearAllTreeview()
+                    Serveur_notconnected_action()
 
                     Ellipse1.Fill = myBrushVert
                 End Try
@@ -162,9 +162,11 @@ Class Window1
         Try
             TreeViewZone.Items.Clear()
             If IsConnect = False Then Exit Sub
-            CntZone.Content = myService.GetAllZones(IdSrv).Count & " Zone(s)"
 
-            For Each zon In myService.GetAllZones(IdSrv)
+            Dim ListeZones = myService.GetAllZones(IdSrv)
+            CntZone.Content = ListeZones.Count & " Zone(s)"
+
+            For Each zon In ListeZones
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -210,9 +212,11 @@ Class Window1
         Try
             TreeViewUser.Items.Clear()
             If IsConnect = False Then Exit Sub
-            CntUser.Content = myService.GetAllUsers(IdSrv).Count & " User(s)"
 
-            For Each Usr In myService.GetAllUsers(IdSrv)
+            Dim ListeUsers = myService.GetAllUsers(IdSrv)
+            CntUser.Content = ListeUsers.Count & " User(s)"
+
+            For Each Usr In ListeUsers
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -260,9 +264,11 @@ Class Window1
         Try
             TreeViewDriver.Items.Clear()
             If IsConnect = False Then Exit Sub
-            CntDriver.Content = myService.GetAllDrivers(IdSrv).Count & " Driver(s)"
 
-            For Each Drv In myService.GetAllDrivers(IdSrv)
+            Dim ListeDrivers = myService.GetAllDrivers(IdSrv)
+            CntDriver.Content = ListeDrivers.Count & " Driver(s)"
+
+            For Each Drv In ListeDrivers
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 stack.Orientation = Orientation.Horizontal
@@ -339,9 +345,11 @@ Class Window1
             TreeViewDevice.Items.Clear()
             If IsConnect = False Then Exit Sub
 
-            CntDevice.Content = myService.GetAllDevices(IdSrv).Count & " Device(s)"
+            Dim ListeDevices = myService.GetAllDevices(IdSrv)
+            Dim ListeZones = myService.GetAllZones(IdSrv)
 
-            For Each Dev In myService.GetAllDevices(IdSrv)
+            CntDevice.Content = ListeDevices.Count & " Device(s)"
+            For Each Dev In ListeDevices
                 Dim tool As String = ""
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
@@ -352,9 +360,10 @@ Class Window1
                 Dim bmpImage As New BitmapImage()
                 Dim bmpImage2 As New BitmapImage()
                 Dim FlagZone As Boolean = False
+                Dim nomdriver As String = myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom
                 stack.Orientation = Orientation.Horizontal
 
-                For Each Zon In myService.GetAllZones(IdSrv)
+                For Each Zon In ListeZones
                     If FlagZone = False Then
                         For Each elemnt In Zon.ListElement
                             If elemnt.ElementID = Dev.ID Then
@@ -381,13 +390,13 @@ Class Window1
                 End If
 
                 Dim drv As String = Dev.Name
-                drv &= " (" & myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom & ")"
+                drv &= " (" & nomdriver & ")"
 
                 tool = "Nom: " & Dev.Name & vbCrLf
                 tool &= "Enable " & Dev.Enable & vbCrLf
                 tool &= "Description: " & Dev.Description & vbCrLf
                 tool &= "Type: " & Dev.Type.ToString & vbCrLf
-                tool &= "Driver: " & myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom & vbCrLf
+                tool &= "Driver: " & nomdriver & vbCrLf
                 tool &= "Value: " & Dev.Value
 
                 Dim tl As New ToolTip
@@ -431,9 +440,11 @@ Class Window1
         Try
             TreeViewMacro.Items.Clear()
             If IsConnect = False Then Exit Sub
-            CntMacro.Content = myService.GetAllMacros(IdSrv).Count & " Macro(s)"
 
-            For Each Mac In myService.GetAllMacros(IdSrv)
+            Dim ListeMacros = myService.GetAllMacros(IdSrv)
+            CntMacro.Content = ListeMacros.Count & " Macro(s)"
+
+            For Each Mac In ListeMacros
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -480,9 +491,11 @@ Class Window1
         Try
             TreeViewTrigger.Items.Clear()
             If IsConnect = False Then Exit Sub
-            CntTrigger.Content = myService.GetAllTriggers(IdSrv).Count & " Trigger(s)"
 
-            For Each Trig In myService.GetAllTriggers(IdSrv)
+            Dim ListeTriggers = myService.GetAllTriggers(IdSrv)
+            CntTrigger.Content = ListeTriggers.Count & " Trigger(s)"
+
+            For Each Trig In ListeTriggers
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -567,7 +580,7 @@ Class Window1
     Private Sub StopDriver(ByVal sender As Object, ByVal e As Input.MouseEventArgs)
         Try
             If IsConnect = False Then
-                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Serveur_notconnected_action()
                 Exit Sub
             End If
 
@@ -586,7 +599,7 @@ Class Window1
     Private Sub StartDriver(ByVal sender As Object, ByVal e As Input.MouseEventArgs)
         Try
             If IsConnect = False Then
-                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Serveur_notconnected_action()
                 Exit Sub
             End If
 
@@ -681,6 +694,14 @@ Class Window1
                 Return -1
                 Exit Function
             Else
+                Try
+                    myService.GetTime()
+                Catch ex As Exception
+                    myChannelFactory.Abort()
+                    IsConnect = False
+                    MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & Chr(10) & Name & " - " & IP & ":" & Port, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Return -1
+                End Try
                 IsConnect = True
                 AffDriver()
                 ShowMainMenu()
@@ -729,8 +750,7 @@ Class Window1
     Private Sub MainMenuGerer(ByVal index As String)
         Try
             If IsConnect = False Then
-                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                ShowMainMenu()
+                Serveur_notconnected_action()
                 Exit Sub
             End If
 
@@ -755,8 +775,7 @@ Class Window1
             _MainMenuAction = 0
 
             If IsConnect = False Then
-                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                ShowMainMenu()
+                Serveur_notconnected_action()
                 Exit Sub
             End If
 
@@ -834,8 +853,7 @@ Class Window1
     Private Sub MainMenuDelete(ByVal index As String)
         Try
             If IsConnect = False Then
-                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                ShowMainMenu()
+                Serveur_notconnected_action()
                 Exit Sub
             End If
 
@@ -854,8 +872,7 @@ Class Window1
     Private Sub MainMenuEdit(ByVal index As String)
         Try
             If IsConnect = False Then
-                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                ShowMainMenu()
+                Serveur_notconnected_action()
                 Exit Sub
             End If
 
@@ -874,8 +891,7 @@ Class Window1
     Private Sub MainMenuAutre(ByVal index As String)
         Try
             If IsConnect = False And index <> "tag_quitter" Then
-                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
-                ShowMainMenu()
+                Serveur_notconnected_action()
                 Exit Sub
             End If
 
@@ -1049,7 +1065,7 @@ Class Window1
             ShowMainMenu()
         Else
             If IsConnect = False Then
-                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Serveur_notconnected_action()
                 Exit Sub
             End If
 
@@ -1283,6 +1299,11 @@ Class Window1
     End Sub
 
     Private Sub BtnGenereGraph_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereGraph.Click
+        If IsConnect = False Then
+            Serveur_notconnected_action()
+            Exit Sub
+        End If
+
         Dim myPane As New ZedGraph.GraphPane
         Dim ListColor As New List(Of System.Drawing.Color)
         Dim idxcolor As Integer = -1
@@ -1373,7 +1394,7 @@ Class Window1
     Private Sub TreeView_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TreeViewDriver.MouseDoubleClick, TreeViewDevice.MouseDoubleClick, TreeViewZone.MouseDoubleClick, TreeViewUser.MouseDoubleClick, TreeViewTrigger.MouseDoubleClick, TreeViewMacro.MouseDoubleClick, TreeViewHisto.MouseDoubleClick
         Try
             If IsConnect = False Then
-                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Serveur_notconnected_action()
                 Exit Sub
             End If
 
@@ -1453,7 +1474,7 @@ Class Window1
     Private Sub TreeView_SelectedItemChanged(ByVal sender As System.Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of System.Object)) Handles TreeViewDriver.SelectedItemChanged, TreeViewDevice.SelectedItemChanged, TreeViewZone.SelectedItemChanged, TreeViewUser.SelectedItemChanged, TreeViewTrigger.SelectedItemChanged, TreeViewMacro.SelectedItemChanged, TreeViewHisto.SelectedItemChanged
         Try
             If IsConnect = False Then
-                MessageBox.Show("Impossible le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                Serveur_notconnected_action()
                 Exit Sub
             End If
 
@@ -1490,6 +1511,11 @@ Class Window1
 
     Private Sub BtnGenereReleve_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereReleve.Click
         Try
+            If IsConnect = False Then
+                Serveur_notconnected_action()
+                Exit Sub
+            End If
+
             Me.Cursor = Cursors.Wait
 
             Dim _listhisto As New List(Of Historisation)
@@ -1533,6 +1559,11 @@ Class Window1
     End Sub
 
     Private Sub RefreshTreeView()
+        If IsConnect = False Then
+            'Serveur_notconnected_action()
+            Exit Sub
+        End If
+
         Me.Cursor = Cursors.Wait
         Select Case Tabcontrol1.SelectedIndex
             Case 0
@@ -1568,4 +1599,13 @@ Class Window1
     Private Sub Log_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgLog.MouseDown, LOG.MouseDown, LOG.PreviewMouseDown, ImgLog.PreviewMouseDown
         'RaiseEvent ChangeMenu(sender.tag)
     End Sub
+
+    Private Sub Serveur_notconnected_action()
+        MessageBox.Show("Action Impossible, le serveur n'est pas connecté !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+        ClearAllTreeview() 'vide le treeview
+        CloseTreeView() 'ferme le treeview
+        CanvasRight.Children.Clear()  'ferme le menu principal
+        PageConnexion() 'affiche la fenetre de connexion
+    End Sub
+
 End Class
