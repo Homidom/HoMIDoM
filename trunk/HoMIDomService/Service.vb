@@ -25,7 +25,7 @@ Module Service
 
     Sub Main()
         Try
-            Console.SetWindowSize(115, 50)
+            Console.SetWindowSize(115, 48)
             Console.SetBufferSize(200, 1000)
             Console.BackgroundColor = ConsoleColor.White 'Couleur du fond
             Console.Clear()  'Applique la couleur du fond
