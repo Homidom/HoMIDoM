@@ -56,7 +56,6 @@ Partial Public Class uDevice
                         'pour chaque driver on regarde si le type est compatible
                         If ListeDrivers.Item(i).DeviceSupport.Count > 0 Then
                             For j As Integer = 0 To ListeDrivers.Item(i).DeviceSupport.Count - 1
-                                'MessageBox.Show(ListeDrivers.Item(i).DeviceSupport.Item(j).ToString & "-----" & x.Type.ToString)
                                 If ListeDrivers.Item(i).DeviceSupport.Item(j).ToString = x.Type.ToString Then
                                     CbDriver.Items.Add(ListeDrivers.Item(i).Nom)
                                     Exit For
@@ -84,12 +83,6 @@ Partial Public Class uDevice
                     CbType.SelectedValue = x.Type.ToString
                     CbType.IsEnabled = False
                     BtnRead.Visibility = Windows.Visibility.Visible
-
-                    If CbType.SelectedValue = "FREEBOX" Then
-                        Label6.Content = "Adresse Http Freebox:"
-                        Label7.Content = "Code Telecommande:"
-                    End If
-
                     TxtAdresse1.Text = x.Adresse1
                     TxtAdresse2.Text = x.Adresse2
                     TxtModele.Text = x.Modele
@@ -421,13 +414,6 @@ Partial Public Class uDevice
                     Label15.Visibility = Windows.Visibility.Visible
                 End If
 
-                If CbType.SelectedValue = "FREEBOX" Then
-                    TxtAdresse1.Text = "http://hd1.freebox.fr"
-                    CbDriver.SelectedValue = "Virtuel"
-                    Label6.Content = "Adresse Http Freebox:"
-                    Label7.Content = "Code Telecommande:"
-                End If
-
                 If CbType.SelectedValue = "MULTIMEDIA" Then
                     TxtModele2.Visibility = Visibility.Hidden
                     Label8.Visibility = Windows.Visibility.Hidden
@@ -709,7 +695,6 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub MaJDriver()
-        'If CbDriver.SelectedIndex < 0 Then Exit Sub
 
         Dim _Driver As Object = myService.GetAllDrivers(IdSrv).Item(CbDriver.SelectedIndex)
 
@@ -838,12 +823,6 @@ Partial Public Class uDevice
             'Exit For
         End If
         'Next
-    End Sub
-
-    Private Sub cbTemplate_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles cbTemplate.SelectionChanged
-        If cbTemplate.SelectedIndex >= 0 Then
-
-        End If
     End Sub
 
     Private Sub BtnNewTemplate_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewTemplate.Click

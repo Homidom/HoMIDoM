@@ -1356,14 +1356,7 @@ Class Window1
                             Dim retour As Integer
                             Dim _retour As New List(Of String)
                             _retour = myService.CanDelete(IdSrv, Objet.retour)
-                            'While _retour.Count = 0
-                            '    Thread.Sleep(1500)
-                            '    _retour = myService.CanDelete(IdSrv, Objet.retour)
-                            'End While
-                            'While _retour(_retour.Count - 1) <> "0"
-                            '    Thread.Sleep(500)
-                            '    _retour = myService.CanDelete(IdSrv, Objet.retour)
-                            'End While
+
                             If _retour(0).StartsWith("ERREUR") Then
                                 MessageBox.Show(_retour(0), "Erreur CanDelete", MessageBoxButton.OK, MessageBoxImage.Error)
                                 Exit Sub
@@ -1374,6 +1367,7 @@ Class Window1
                                         a = a & _retour(i) & vbCrLf
                                     Next
                                     If MessageBox.Show(a, "Suppression", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.No Then
+                                        Me.Cursor = Nothing
                                         Exit Sub
                                     End If
                                 End If
@@ -1399,8 +1393,6 @@ Class Window1
                                     AffScene()
                             End Select
 
-                            Me.Cursor = Nothing
-
                             If retour = -2 Then
                                 MessageBox.Show("Vous ne pouvez pas supprimer cet élément!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                                 Exit Sub
@@ -1416,6 +1408,7 @@ Class Window1
                     End Try
                     CanvasRight.Children.Clear()
                     ShowMainMenu()
+                    Me.Cursor = Nothing
             End Select
 
         End If
