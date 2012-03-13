@@ -3101,6 +3101,7 @@ Namespace HoMIDom
                 Dim thr As New ThreadDelete(Me, IdSrv, Id, retour)
                 Dim x As New Thread(AddressOf thr.Traite)
                 x.Start()
+
                 Do While retour.Count = 0
 
                 Loop
