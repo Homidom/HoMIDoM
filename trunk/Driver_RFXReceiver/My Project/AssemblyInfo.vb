@@ -8,10 +8,10 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("Driver_RFXComReceiver")> 
+<Assembly: AssemblyTitle("Driver_RFXReceiver")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("HoMIDoM")> 
-<Assembly: AssemblyProduct("Driver_RFXComReceiver")> 
+<Assembly: AssemblyProduct("Driver_RFXReceiver")> 
 <Assembly: AssemblyCopyright("Copyright © HoMIDoM 2011")> 
 <Assembly: AssemblyTrademark("HoMIDoM")> 
 

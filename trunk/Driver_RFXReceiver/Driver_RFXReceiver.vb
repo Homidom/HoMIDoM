@@ -29,7 +29,7 @@ Imports System.Globalization
 
 ''' <summary>Class Driver_RFXComReceiver, permet de communiquer avec un RFXCOM Ethernet ou USB</summary>
 ''' <remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
-<Serializable()> Public Class Driver_RFXComReceiver
+<Serializable()> Public Class Driver_RFXReceiver
     Implements HoMIDom.HoMIDom.IDriver
 
 #Region "Variables génériques"
