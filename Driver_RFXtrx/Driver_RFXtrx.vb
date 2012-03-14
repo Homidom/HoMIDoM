@@ -326,9 +326,14 @@ Imports System.Media
         sMood1 = 3
         sMood2 = 4
         sMood3 = 5
-        sUnlock = 6
-        sLock = 7
-        sAllLock = 8
+        sMood4 = 6
+        sMood5 = 7
+        sUnlock = 10
+        sLock = 11
+        sAllLock = 12
+        sClose = 13
+        sStop = 14
+        sOpen = 15
     End Enum
 
     Enum LIGHTING6 As Byte

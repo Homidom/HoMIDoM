@@ -1,4 +1,5 @@
-﻿Imports HoMIDom.HoMIDom.Device
+﻿Imports HoMIDom.HoMIDom
+Imports HoMIDom.HoMIDom.Device
 Imports HoMIDom.HoMIDom.Api
 Imports System.IO
 
@@ -54,8 +55,24 @@ Class uModuleSimple
 
     Private Sub BtnAjouter_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnAjouter.Click
         Try
+            Dim _listeActions As New ArrayList
+            Dim _MacroId As String
+
             Select Case CbType.SelectedValue
                 Case "Associer un interrupteur/detecteur à un appareil/lampe/volet"
+                    'Creation de la macro
+                    Dim _condition As New Action.Condition
+                    _condition.Type = Action.TypeCondition.Device
+                    _condition.IdDevice = ""
+                    _condition.Operateur = Action.TypeOperateur.NONE
+
+                    Dim _actionif As New Action.ActionIf
+                    _actionif.Conditions = ""
+                    _actionif.ListTrue = ""
+                    _actionif.ListFalse = ""
+                    _listeActions.Add(_actionif)
+                    _MacroId = myService.SaveMacro(IdSrv, "", TxtNom.Text, True, "desription", _listeActions)
+                    'creation du trigger
 
                 Case "Associer des interrupteurs/detecteurs à un appareil/lampe/volet"
 

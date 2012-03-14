@@ -50,8 +50,9 @@
       <HintPath>..\DEBUG\HoMIDom.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="OpenZWaveDotNet">
-      <HintPath>..\DEBUG\OpenZWaveDotNet.dll</HintPath>
+    <Reference Include="OpenZWaveDotNet, Version=1.0.4444.32326, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DEBUG\Drivers\OpenZWaveDotNet.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -64,7 +65,6 @@
   <ItemGroup>
     <Import Include="Driver_Zwave" />
     <Import Include="Microsoft.VisualBasic" />
-    <Import Include="OpenZWaveDotNet" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
