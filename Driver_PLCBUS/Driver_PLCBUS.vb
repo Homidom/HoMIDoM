@@ -852,12 +852,25 @@ Imports System.IO.Ports
                             Return "" 'on renvoi rien car le composant n'a pas recu l'ordre
                         End If
                     Else
-                        wait(30) 'on attend 0.3s pour liberer le bus correctement
+                        wait(20) 'on attend 0.2s pour liberer le bus correctement
                     End If
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "exception : " & ex.Message & " --> " & adresse & " : " & commande & " " & data1 & "-" & data2)
                     Return "" 'on renvoi rien car il y a eu une erreur
                 End Try
+
+                'Modification du device
+                traitement("", adresse, commande, True)
+                Select Case commande
+                    Case "ON", "OFF", "BRIGHT", "BLINK", "FADE_STOP", "STATUS_REQUEST"
+                        If data1 = 0 Then traitement("OFF", adresse, commande, True) Else traitement("ON", adresse, commande, True)
+                    Case "DIM", "PRESET_DIM"
+                        traitement(data1, adresse, commande, True)
+                    Case "ALL_UNITS_OFF", "All_USER_UNITS_OFF", "ALL_LIGHTS_OFF", "All_USER_LIGHTS_OFF"
+                        traitement("OFF", adresse, commande, True)
+                    Case "ALL_LIGHTS_ON", "All_USER_LIGHTS_ON"
+                        traitement("ON", adresse, commande, True)
+                End Select
 
                 'renvoie la valeur ecrite
                 Select Case UCase(commande)
@@ -1025,10 +1038,39 @@ Imports System.IO.Ports
                                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1)
                             Case "ReceiverMasterAddressSetup", "TransmitterMasterAddressSetup"
                                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
-                            Case "ALL_UNITS_OFF", "All_USER_UNITS_OFF"
+                            Case "ALL_UNITS_OFF"
                                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
-                            Case "ALL_LIGHTS_ON", "ALL_LIGHTS_OFF", "All_USER_LIGHTS_ON", "All_USER_LIGHTS_OFF"
+                                'il faut ajouter le traitement pour tous les devices affectés pour les mettre à OFF
+
+
+
+                            Case "All_USER_UNITS_OFF"
                                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
+                                'il faut ajouter le traitement pour tous les devices affectés pour les mettre à OFF
+
+
+
+                            Case "ALL_LIGHTS_ON"
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
+                                'il faut ajouter le traitement pour tous les devices affectés pour les mettre à ON/OFF
+
+
+                            Case "ALL_LIGHTS_OFF"
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
+                                'il faut ajouter le traitement pour tous les devices affectés pour les mettre à ON/OFF
+
+
+                            Case "All_USER_LIGHTS_ON"
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
+                                'il faut ajouter le traitement pour tous les devices affectés pour les mettre à ON/OFF
+
+
+                            Case "All_USER_LIGHTS_OFF"
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- " & plcbus_commande & "-" & plcbus_adresse & " : " & data1 & "-" & data2)
+                                'il faut ajouter le traitement pour tous les devices affectés pour les mettre à ON/OFF
+
+
+
                             Case "STATUS_ON"
                                 traitement("ON", plcbus_adresse, plcbus_commande, True)
                             Case "STATUS_OFF"
