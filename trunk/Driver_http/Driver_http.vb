@@ -543,6 +543,7 @@ Imports System.Xml
                                 Dim url As String = "http://" & Objet.Adresse2 & "/?L=" & relais
                                 SEND_ARDUINO(url)
                         End Select
+                        Objet.value = True
                     Case "OFF"
                         Select Case Trim(UCase(Objet.modele))
                             Case "IPX800"
@@ -564,6 +565,7 @@ Imports System.Xml
                                 Dim url As String = "http://" & Objet.Adresse2 & "/?L=" & relais
                                 SEND_ARDUINO(url)
                         End Select
+                        Objet.value = False
                 End Select
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: le type du device " & Objet.Type & " n'est pas reconnu pour ce driver")

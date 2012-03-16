@@ -468,7 +468,27 @@ Imports HoMIDom.HoMIDom.Device
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
-            If _Enable = False Then Exit Sub
+            If _Enable = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
+                Exit Sub
+            End If
+
+            If _IsConnect = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
+                Exit Sub
+            End If
+
+            If UCase(Command) = "ON" Then
+                Objet.Value = 100
+            End If
+            If UCase(Command) = "OFF" Then
+                Objet.Value = 0
+            End If
+            If UCase(Command) = "DIM" Then
+                If Parametre1 IsNot Nothing Then
+                    Objet.Value = Parametre1
+                End If
+            End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
         End Try

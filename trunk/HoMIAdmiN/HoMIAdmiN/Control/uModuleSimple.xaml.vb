@@ -67,9 +67,9 @@ Class uModuleSimple
                     _condition.Operateur = Action.TypeOperateur.NONE
 
                     Dim _actionif As New Action.ActionIf
-                    _actionif.Conditions = ""
-                    _actionif.ListTrue = ""
-                    _actionif.ListFalse = ""
+                    _actionif.Conditions = Nothing
+                    _actionif.ListTrue = Nothing
+                    _actionif.ListFalse = Nothing
                     _listeActions.Add(_actionif)
                     _MacroId = myService.SaveMacro(IdSrv, "", TxtNom.Text, True, "desription", _listeActions)
                     'creation du trigger

@@ -486,10 +486,12 @@ Public Class Driver_Arduino
             If Objet.type = "APPAREIL" Then
                 If Commande = "ON" Then
                     ArduinoVB.DigitalWrite(Objet.Adresse1, 1)
+                    Objet.Value = True
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Activation de la pin:" & Objet.Adresse1)
                 End If
                 If Commande = "OFF" Then
                     ArduinoVB.DigitalWrite(Objet.Adresse1, 0)
+                    Objet.Value = False
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Désactivation de la pin:" & Objet.Adresse1)
                 End If
             Else

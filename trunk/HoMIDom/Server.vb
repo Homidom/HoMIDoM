@@ -5488,6 +5488,10 @@ Namespace HoMIDom
                             retour.ValueMin = _ListDevices.Item(i).valuemin
                         End If
 
+                        If retour.Type <> Device.ListeDevices.METEO And retour.Type <> Device.ListeDevices.MULTIMEDIA And retour.Type <> Device.ListeDevices.FREEBOX Then
+                            retour.Value = _ListDevices.Item(i).value
+                        End If
+
                         If retour.Type = Device.ListeDevices.METEO Then
                             retour.ConditionActuel = _ListDevices.Item(i).ConditionActuel
                             retour.ConditionJ1 = _ListDevices.Item(i).ConditionJ1

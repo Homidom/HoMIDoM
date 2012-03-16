@@ -40,7 +40,6 @@ Class Window1
     Dim _Password As String = ""
     Dim _PortSOAP As String = "8000"
     Dim _IP As String = "localhost"
-
     'XML
     Dim myxml As clsXML
     Dim list As XmlNodeList
@@ -76,7 +75,7 @@ Class Window1
         End Get
         Set(ByVal value As Boolean)
             _ShowTemperature = value
-            Affiche("Temperature", value)
+            ' Affiche("Temperature", value)
         End Set
     End Property
 
@@ -334,6 +333,8 @@ Class Window1
                                     _PortSOAP = list.Item(0).Attributes.Item(j).Value
                                 Case "ip"
                                     _IP = list.Item(0).Attributes.Item(j).Value
+                                Case "id"
+                                    IdSrv = list.Item(0).Attributes.Item(j).Value
                                 Case Else
                                     Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                             End Select
@@ -488,7 +489,12 @@ Class Window1
                                         x.Angle = list.Item(j).Attributes.Item(k).Value
                                 End Select
                             Next
-                            _ListElement.Add(x)
+                            'Si le device n'a pas été trouvé on le prend pas en compte pour le supprimer par la suite
+                            If myService.ReturnDeviceByID(IdSrv, x.ID) IsNot Nothing Then
+                                If x.ID <> "" Or x.ID <> " " Then
+                                    _ListElement.Add(x)
+                                End If
+                            End If
                         Next
                     Else
                         'MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
@@ -544,6 +550,9 @@ Class Window1
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("ip")
             writer.WriteValue(_IP)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("id")
+            writer.WriteValue(IdSrv)
             writer.WriteEndAttribute()
             writer.WriteEndElement()
 
@@ -631,6 +640,7 @@ Class Window1
             ''------------
             writer.WriteStartElement("elements")
             For i As Integer = 0 To _ListElement.Count - 1
+
                 writer.WriteStartElement("element")
                 writer.WriteStartAttribute("id")
                 writer.WriteValue(_ListElement.Item(i).ID)
@@ -951,25 +961,27 @@ Class Window1
     'Affiche la date et heure, heures levé et couché du soleil
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         Try
-            'ConnectToHomeSeer()
-            LblTime.Content = Now.ToLongDateString & " " & Now.ToShortTimeString
-            'If IsHSConnect = True Then
-            '    LblLeve.Content = Mid(hs.Sunrise, 1, 5)
-            '    LblCouche.Content = Mid(hs.Sunset, 1, 5)
-            '    LblTemp.Content = "INT: " & hs.DeviceString("T3") & "°C / EXT: " & hs.DeviceString("T2") & "°C"
-            'Else
-            If IsConnect = True And ShowSoleil = True Then
-                Dim mydate As Date
-                mydate = myService.GetHeureLeverSoleil
-                LblLeve.Content = mydate.ToShortTimeString
-                mydate = myService.GetHeureCoucherSoleil
-                LblCouche.Content = mydate.ToShortTimeString
-            Else
-                LblTemp.Content = "?"
+            If IsConnect Then
+                Dim mytime As String = myService.GetTime
+                LblTime.Content = Now.ToLongDateString & " " & mytime & " "
+                mytime = ""
+
+                If ShowSoleil = True Then
+                    Dim mydate As Date
+                    mydate = myService.GetHeureLeverSoleil
+                    LblLeve.Content = mydate.ToShortTimeString
+                    mydate = myService.GetHeureCoucherSoleil
+                    LblCouche.Content = mydate.ToShortTimeString
+                Else
+                    LblTemp.Content = "?"
+                    LblTime.Content = Now.ToLongDateString & " " & Now.ToShortTimeString
+                End If
+
             End If
-            ' End If
         Catch ex As Exception
+            IsConnect = False
             Log(TypeLog.INFO, TypeSource.CLIENT, "DispatcherTimer", "DispatcherTimer: " & ex.Message)
+            LblTime.Content = Now.ToLongDateString & " " & Now.ToShortTimeString
         End Try
     End Sub
 
@@ -981,6 +993,7 @@ Class Window1
                 Canvas1.Children.Clear()
             End If
 
+            Chk1.Visibility = Windows.Visibility.Hidden
             ImageBackGround = _ImageBackGroundDefault
 
             Dim y As uCtrlImgMnu = sender
@@ -1144,17 +1157,6 @@ Class Window1
         End
     End Sub
 
-    'Private Sub Canvas1_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles Canvas1.SizeChanged
-    '    For i As Integer = 0 To Canvas1.Children.Count - 1
-    '        Dim x As Object = Canvas1.Children.Item(i)
-    '        x.Width = Canvas1.ActualWidth
-    '        x.Height = e.NewSize.Height
-    '    Next
-    'End Sub
-
-    Private Sub Window1_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
-
-    End Sub
 
     Private Sub ShowZone(ByVal IdZone As String)
         Try
@@ -1166,6 +1168,8 @@ Class Window1
             Dim _idx As Integer = 0
 
             If IsConnect = True Then
+                Chk1.Visibility = Windows.Visibility.Visible
+
                 _CurrentIdZone = IdZone
                 If Canvas1.Children.Count > 0 Then Canvas1.Children.Clear()
 
@@ -1179,11 +1183,10 @@ Class Window1
 
                 For i As Integer = 0 To _zone.ListElement.Count - 1
                     Dim z As Zone.Element_Zone = myService.ReturnZoneByID(IdSrv, IdZone).ListElement.Item(i)
+
                     If z.Visible = True Then
                         For j As Integer = 0 To _ListElement.Count - 1
                             If _ListElement.Item(j).ID = z.ElementID And _ListElement.Item(j).ZoneId = IdZone Then
-
-
                                 'Ajouter un nouveau Control
                                 Dim x As New ContentControl
                                 Dim Trg As New TransformGroup
@@ -1209,9 +1212,10 @@ Class Window1
 
                                 _flagTrouv = True
                             End If
+
                         Next
 
-                        If _flagnew = True Or _flagTrouv = False Then
+                        If (_flagnew = True Or _flagTrouv = False) And z.ElementID.Length > 1 Then
 
                             'Ajouter un nouveau Control
                             Dim x As New ContentControl
@@ -1262,7 +1266,6 @@ Class Window1
     Private Sub Dbleclk(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs)
         'MessageBox.Show("OK")
     End Sub
-
 
     Private Sub RdB1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk1.Click
         Try
