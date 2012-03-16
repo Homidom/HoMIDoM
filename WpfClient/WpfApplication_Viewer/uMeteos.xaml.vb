@@ -47,9 +47,15 @@ Partial Public Class uMeteos
     End Sub
 
     Private Sub NewBtnMnu(ByVal id As String)
-        'Creation  du menu
-        Dim ctrl As New uMeteo(id)
-        imgStackPnl.Children.Add(ctrl)
+        Try
+
+            'Creation  du menu
+            Dim ctrl As New uMeteo(id)
+            imgStackPnl.Children.Add(ctrl)
+
+        Catch ex As Exception
+            MessageBox.Show("Erreur NewBtnMnu: " & ex.ToString)
+        End Try
     End Sub
 
     Private Sub ScrollViewer1_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ScrollViewer1.PreviewMouseDown

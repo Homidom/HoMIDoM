@@ -119,6 +119,8 @@ Public Class uWidgetEmpty
                             Dim x As New uFreeBox
                             AddHandler x.ButtonClick, AddressOf FreeTouch
                             StkPopup.Children.Add(x)
+                        Case Else
+
                     End Select
                 End If
 
@@ -264,6 +266,10 @@ Public Class uWidgetEmpty
                         LblStatus.Content = "Status: " & _dev.Value & "%"
                     Case HoMIDom.HoMIDom.Device.ListeDevices.LAMPE
                         LblStatus.Content = "Status: " & _dev.Value & "%"
+                        If StkPopup.Children.Count = 2 Then
+                            Dim x2 As uVariateur = StkPopup.Children.Item(1)
+                            x2.Value = _dev.Value
+                        End If
                     Case HoMIDom.HoMIDom.Device.ListeDevices.METEO
 
                     Case HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA
@@ -349,6 +355,12 @@ Public Class uWidgetEmpty
                 End If
                 x.Parametres = Nothing
                 myService.ExecuteDeviceCommand(IdSrv, Id, x)
+
+                If StkPopup.Children.Count > 0 Then
+                    If Popup1.IsOpen = True Then
+                        Popup1.IsOpen = False
+                    End If
+                End If
             End If
         Catch ex As Exception
             MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK)
@@ -366,6 +378,12 @@ Public Class uWidgetEmpty
                 End If
                 x.Parametres = Nothing
                 myService.ExecuteDeviceCommand(IdSrv, Id, x)
+
+                If StkPopup.Children.Count > 0 Then
+                    If Popup1.IsOpen = True Then
+                        Popup1.IsOpen = False
+                    End If
+                End If
             End If
         Catch ex As Exception
             MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK)

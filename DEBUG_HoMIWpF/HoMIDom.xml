@@ -585,19 +585,9 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.TemplateDevice.ListCommandName">
+</member><member name="F:HoMIDom.HoMIDom.TemplateDevice.Commandes">
 	<summary>
  Liste des noms des commandes IR (device IR)
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.TemplateDevice.ListCommandData">
-	<summary>
- Liste des données IR (device IR)
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.TemplateDevice.ListCommandRepeat">
-	<summary>
- Liste des valeurs de nombre de fois à envoyer la commande IR (device IR)
  </summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.TemplateDevice">
@@ -987,7 +977,7 @@ HoMIDom
 	<summary>Ecrire ou lance propritété/Sub d'un driver</summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.Drivers_Load">
-	<summary>Charge les drivers, donc toutes les dll dans le sous répertoire "plugins"</summary>
+	<summary>Charge les drivers, donc toutes les dll dans le sous répertoire "drivers"</summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.Drivers_Start">
 	<summary>Démarre tous les drivers dont la propriété StartAuto=True</summary>
@@ -1036,10 +1026,6 @@ HoMIDom
 	<param name="Fonction"></param>
 	<param name="Message"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.CreateNewFileLog(System.String)">
-	<summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
-	<param name="NewFichier"></param>
-	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.#ctor">
 	<summary>Déclaration de la class Server</summary>
 	<remarks></remarks>
@@ -1048,6 +1034,14 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.stop(System.String)">
 	<summary>Arrêt du serveur</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.CanDelete(System.String,System.String)">
+	<summary>
+ Vérifie si un élément existe dans une zone, une macro, un trigger... avant de le supprimer
+ </summary>
+	<param name="IdSrv"></param>
+	<param name="Id"></param>
+	<returns>Retourne une erreur commencant par ERREUR ou la liste des noms des macros, zones...</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetTimeSave(System.String)">
 	<summary>
@@ -1257,7 +1251,7 @@ HoMIDom
 	<summary>Retourne la liste de tous les devices</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.Double,System.String,System.Double,System.Double,System.Double,System.Double)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.Double,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes})">
 	<summary>
  Sauvegarder ou créer un device
  </summary>
@@ -1479,6 +1473,53 @@ HoMIDom
 	<param name="UserId"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetListOfTemplate">
+	<summary>
+ Retourne la liste des templates télécommande (fichier xml), présents dans le répertoire templates
+ </summary>
+	<returns>List of Templates</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.CreateNewTemplate(System.String,System.String,System.String,HoMIDom.HoMIDom.Telecommande.TypeEquipement)">
+	<summary>
+ Crée un nouveau template dans le répertoire templates
+ </summary>
+	<param name="Fabricant">nom du fabricant</param>
+	<param name="Modele">modele</param>
+	<param name="Driver">driver</param>
+	<param name="Type">Type de base, si différent de VIDE va mettre les commandes de bases par défaut</param>
+	<returns>0 si ok, sinon message d'erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ReadTemplate(System.String,System.String,System.String)">
+	<summary>
+ Recupère la liste des commandes d'un template donné
+ </summary>
+	<param name="Fabricant"></param>
+	<param name="Modele"></param>
+	<param name="Driver"></param>
+	<returns>Liste de commandes</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.StartLearning(System.String,System.String)">
+	<summary>Demander un apprentissage à un driver</summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveTemplate(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes})">
+	<summary>
+ Sauvegarde les commandes dans un template donné
+ </summary>
+	<param name="IdSrv">Id du Serveur</param>
+	<param name="Template">Nom du template</param>
+	<param name="Commandes">Liste des commandes</param>
+	<returns>O si ok sinon message d'erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.TelecommandeSendCommand(System.String,System.String,System.String)">
+	<summary>
+ Demande au device d'envoyer une commande (telecommande) à son driver
+ </summary>
+	<param name="IdSrv">Id du serveur, retourne 99 si non OK</param>
+	<param name="IdDevice">Id du device concerné</param>
+	<param name="Commande">Nom de la Commande à envoyée</param>
+	<returns>0 si Ok sinon erreur</returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetTypeLogEnable">
 	<summary>
  Retourne pour chaque type de log s'il doit être pris en compte ou non
@@ -1526,6 +1567,20 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ExportConfig(System.String)">
+	<summary>
+ Exporte le fichier de config vers une destination
+ </summary>
+	<param name="IdSrv">Id du serveur</param>
+	<returns>le fichier sous format text si ok sinon message d'erreur commençant par ERREUR</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ImportConfig(System.String,System.String)">
+	<summary>
+ Importe un fichier de config depuis une source
+ </summary>
+	<param name="Source">chemin + fichier (homidom.xml)</param>
+	<returns>"0" si ok sinon message d'erreur</returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SaveConfiguration(System.String)">
 	<summary>Sauvegarder la configuration</summary>
 	<remarks></remarks>
@@ -1535,6 +1590,14 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetPortSOAP">
 	<summary>Retourne la valeur du port SOAP</summary>
+	<returns>Numero du port ou -1 si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetIPSOAP(System.String,System.String)">
+	<summary>Fixer la valeur IP SOAP</summary>
+	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetIPSOAP">
+	<summary>Retourne la valeur IP SOAP</summary>
 	<returns>Numero du port ou -1 si erreur</returns>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Server">
@@ -1561,6 +1624,14 @@ HoMIDom
 	<summary>
  Template de Classe de type Driver pour le service web
  </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.CanDelete(System.String,System.String)">
+	<summary>
+ Vérifie si un élément existe dans une zone, une macro, un trigger... avant de le supprimer
+ </summary>
+	<param name="IdSrv"></param>
+	<param name="Id"></param>
+	<returns>Retourne une erreur commencant par ERREUR ou la liste des noms des macros, zones...</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetTimeSave(System.String)">
 	<summary>
@@ -1616,6 +1687,20 @@ HoMIDom
  </summary>
 	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExportConfig(System.String)">
+	<summary>
+ Exporte le fichier de config vers une destination
+ </summary>
+	<param name="IdSrv">Id du serveur</param>
+	<returns>0 si ok sinon message d'erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ImportConfig(System.String,System.String)">
+	<summary>
+ Importe un fichier de config depuis une source
+ </summary>
+	<param name="Source">chemin + fichier (homidom.xml)</param>
+	<returns>"0" si ok sinon message d'erreur</returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Start">
 	<summary>
  Démarre le service et charge la config
@@ -1639,6 +1724,18 @@ HoMIDom
  Retourne la valeur de port SOAP
  </summary>
 	<returns>Valeur du port SOAP</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetIPSOAP(System.String,System.String)">
+	<summary>
+ Fixe l'adresse IP SOAP
+ </summary>
+	<param name="IdSrv">Id du Serveur</param>
+	<param name="Value">Adresse IP SOAP</param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetIPSOAP">
+	<summary>
+	</summary>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetLastStartTime">
 	<summary>
@@ -1928,7 +2025,7 @@ HoMIDom
 	<param name="DeviceDriver">ID driver du device</param>
 	<returns>List de device, Nothing si non trouvé ou ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.Double,System.String,System.Double,System.Double,System.Double,System.Double)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.Double,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes})">
 	<summary>
  Créer un nouveau device ou sauvegarder la modif (si ID est complété)
  </summary>
@@ -2320,6 +2417,44 @@ HoMIDom
  </summary>
 	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
 	<param name="Value">Adresse mail du serveur SMTP</param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetListOfTemplate">
+	<summary>
+ Retourne la liste des templates télécommande (fichier xml), présents dans le répertoire templates
+ </summary>
+	<returns>List of Templates</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.CreateNewTemplate(System.String,System.String,System.String,HoMIDom.HoMIDom.Telecommande.TypeEquipement)">
+	<summary>
+ Crée un nouveau template dans le répertoire templates
+ </summary>
+	<param name="Fabricant">nom du fabricant</param>
+	<param name="Modele">modele</param>
+	<param name="Driver">driver</param>
+	<param name="Type">Type de base, si différent de VIDE va mettre les commandes de bases par défaut</param>
+	<returns>0 si ok, sinon message d'erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StartLearning(System.String,System.String)">
+	<summary>Demander un apprentissage à un driver</summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTemplate(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes})">
+	<summary>
+ Sauvegarde les commandes dans un template donné
+ </summary>
+	<param name="IdSrv">Id du Serveur</param>
+	<param name="Template">Nom du template</param>
+	<param name="Commandes">Liste des commandes</param>
+	<returns>O si ok sinon message d'erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.TelecommandeSendCommand(System.String,System.String,System.String)">
+	<summary>
+ Demande au device d'envoyer une commande (telecommande) à son driver
+ </summary>
+	<param name="IdSrv">Id du serveur, retourne 99 si non OK</param>
+	<param name="IdDevice">Id du device concerné</param>
+	<param name="Commande">Nom de la Commande à envoyée</param>
+	<returns>0 si Ok sinon erreur</returns>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.IHoMIDom">
 	<summary>
@@ -2832,8 +2967,52 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestRead">
 	<summary>Permet de tester une commande read</summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.MULTIMEDIA.EnvoyerCommande(System.String)">
+	<summary>
+ Envoyer une commande au driver
+ </summary>
+	<param name="Commande"></param>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Device">
 	<summary>Class Device, définie tous différents types de devices</summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Fabricant">
+	<summary>
+ Définit ou retourne le fabricant de l'équipement
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Modele">
+	<summary>
+ Définit ou retourne le modèle d'équipement
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Driver">
+	<summary>
+ Définit ou retourne le type de driver (ex: http, ir, rs232...)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.File">
+	<summary>
+ Donne le nom du fichier ainsi que son extension (ex: TOTO.xml)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Telecommande.TypeEquipement">
+	<summary>
+ Type d'équipement par défaut, pour définir ensuite les commandes de bases
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Telecommande">
+	<summary>
+ Class pour gérer les télécommandes
+ </summary>
 	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Zone.ID">
 	<summary>

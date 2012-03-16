@@ -9,6 +9,7 @@
         End Get
         Set(ByVal value2 As Integer)
             _Value = value2
+            ProgressBar1.Value = _Value
         End Set
     End Property
 

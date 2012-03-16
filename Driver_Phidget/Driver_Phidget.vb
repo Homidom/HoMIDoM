@@ -333,9 +333,11 @@ Public Class Driver_Phidget
             '    Case "APPAREIL" Or "GENERIQUEBOOLEEN" 'APPAREIL Or GENERIQUEBOOLEAN
             If Commande = "ON" Then
                 phidgetIFK.outputs(Objet.Adresse1) = True
+                Objet.value = True
             End If
             If Commande = "OFF" Then
                 phidgetIFK.outputs(Objet.Adresse1) = False
+                Objet.value = False
             End If
             'End Select
         Catch ex As Exception

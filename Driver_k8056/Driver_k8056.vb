@@ -329,8 +329,10 @@ Imports System.IO
                         Select Case UCase(Commande)
                             Case "ON"
                                 SetRelais(tabl(0), tabl(1))
+                                Objet.Value = True
                             Case "OFF"
                                 ClearRelais(tabl(0), tabl(1))
+                                Objet.Value = False
                             Case Else
                                 _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "k8056", "Erreur la commande du device n'est pas supporté par ce driver - device: " & Objet.name & " commande:" & Commande)
                         End Select

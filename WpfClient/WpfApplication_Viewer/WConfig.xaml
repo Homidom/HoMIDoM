@@ -122,6 +122,10 @@
                             <Label Content="Port:" MinWidth=" 35" />
                             <TextBox Name="TxtPort" Width="191" />
                         </StackPanel>
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Content="ID:" MinWidth=" 35" />
+                            <TextBox Name="TxtID" Width="191" />
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal" ></StackPanel>
                         <StackPanel Orientation="Horizontal" ></StackPanel>
                         <StackPanel Orientation="Horizontal" ></StackPanel>

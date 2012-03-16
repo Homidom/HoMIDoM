@@ -401,8 +401,10 @@ Public Class Driver_X10_CM11
             Select Case UCase(Command)
                 Case "ON"
                     ecrire(Objet.adresse1, "ON", 0)
+                    Objet.value = 100
                 Case "OFF"
                     ecrire(Objet.adresse1, "OFF", 0)
+                    Objet.value = 0
                 Case "DIM"
                     If Parametre1 IsNot Nothing Then
                         Dim x As Integer = Parametre1
@@ -413,6 +415,7 @@ Public Class Driver_X10_CM11
                             ecrire(Objet.adresse1, "ON", 0)
                         End If
                         ecrire(Objet.adresse1, "EXTENDED_CODE", x)
+                        Objet.value = x
                     End If
                 Case "OUVERTURE"
                     If Parametre1 IsNot Nothing Then
@@ -424,6 +427,7 @@ Public Class Driver_X10_CM11
                             ecrire(Objet.adresse1, "ON", 0)
                         End If
                         ecrire(Objet.adresse1, "EXTENDED_CODE", x)
+                        Objet.value = x
                     End If
             End Select
         Catch ex As Exception

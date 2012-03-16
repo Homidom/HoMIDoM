@@ -1,6 +1,6 @@
 ﻿Imports System.IO
 Imports System.Xml
-Imports System.Data.SQLite
+'Imports System.Data.SQLite
 Imports System.Data
 Imports Ionic.Zip
 Imports HoMIDom.HoMIDom
@@ -325,70 +325,70 @@ Public Class ServiceTV
 #Region "Gestion des chaines"
     'Permet de lister les chaines dans la base de données
     Public Sub ChaineFromXMLToDB()
-        MyXML = New XML(System.Environment.CurrentDirectory & "\data\complet.xml")
-        Dim liste As XmlNodeList = MyXML.SelectNodes("/tv/channel")
-        Dim a As String = ""
-        Dim b As String = ""
-        Dim SQLconnect As New SQLiteConnection()
-        Dim SQLcommand As SQLiteCommand
+        'MyXML = New XML(System.Environment.CurrentDirectory & "\data\complet.xml")
+        'Dim liste As XmlNodeList = MyXML.SelectNodes("/tv/channel")
+        'Dim a As String = ""
+        'Dim b As String = ""
+        'Dim SQLconnect As New SQLiteConnection()
+        'Dim SQLcommand As SQLiteCommand
 
-        SQLconnect.ConnectionString = "Data Source= " & System.Environment.CurrentDirectory & "\bdd\guidetv.db;"
-        SQLconnect.Open()
-        SQLcommand = SQLconnect.CreateCommand
-        SQLcommand.CommandText = "DELETE FROM chaineTV where id<>''"
-        SQLcommand.ExecuteNonQuery()
-        SQLcommand = SQLconnect.CreateCommand
-        Dim SQLreader As SQLiteDataReader
+        'SQLconnect.ConnectionString = "Data Source= " & System.Environment.CurrentDirectory & "\bdd\guidetv.db;"
+        'SQLconnect.Open()
+        'SQLcommand = SQLconnect.CreateCommand
+        'SQLcommand.CommandText = "DELETE FROM chaineTV where id<>''"
+        'SQLcommand.ExecuteNonQuery()
+        'SQLcommand = SQLconnect.CreateCommand
+        'Dim SQLreader As SQLiteDataReader
 
-        'liste toute les chaines
-        For i As Integer = 0 To liste.Count - 1
-            a = liste(i).Attributes.Item(0).Value
-            'Affiche l'ID et le nom
-            SQLcommand.CommandText = "SELECT * FROM chaineTV where ID='" & a & "'"
-            SQLreader = SQLcommand.ExecuteReader()
-            If SQLreader.HasRows = False Then
-                b = liste(i).ChildNodes.Item(0).ChildNodes.Item(0).Value
-                b = ConvertTextToHTML(b)
-                SQLreader.Close()
-                SQLcommand = SQLconnect.CreateCommand
-                SQLcommand.CommandText = "INSERT INTO chaineTV (id, nom,ico,enable,numero,categorie) VALUES ('" & a & "', '" & b & "','?','0','0','99')"
-                SQLcommand.ExecuteNonQuery()
-            End If
-        Next
-        SQLcommand.Dispose()
-        SQLconnect.Close()
-        ChargeChaineFromDB()
-        MyXML = Nothing
+        ''liste toute les chaines
+        'For i As Integer = 0 To liste.Count - 1
+        '    a = liste(i).Attributes.Item(0).Value
+        '    'Affiche l'ID et le nom
+        '    SQLcommand.CommandText = "SELECT * FROM chaineTV where ID='" & a & "'"
+        '    SQLreader = SQLcommand.ExecuteReader()
+        '    If SQLreader.HasRows = False Then
+        '        b = liste(i).ChildNodes.Item(0).ChildNodes.Item(0).Value
+        '        b = ConvertTextToHTML(b)
+        '        SQLreader.Close()
+        '        SQLcommand = SQLconnect.CreateCommand
+        '        SQLcommand.CommandText = "INSERT INTO chaineTV (id, nom,ico,enable,numero,categorie) VALUES ('" & a & "', '" & b & "','?','0','0','99')"
+        '        SQLcommand.ExecuteNonQuery()
+        '    End If
+        'Next
+        'SQLcommand.Dispose()
+        'SQLconnect.Close()
+        'ChargeChaineFromDB()
+        'MyXML = Nothing
     End Sub
 
     'Charge les chaines depuis la base de données en mémoire
     Public Sub ChargeChaineFromDB()
-        Dim SQLconnect As New SQLiteConnection()
-        Dim SQLcommand As SQLiteCommand
+        'Dim SQLconnect As New SQLiteConnection()
+        'Dim SQLcommand As SQLiteCommand
 
-        SQLconnect.ConnectionString = "Data Source= " & System.Environment.CurrentDirectory & "\bdd\guidetv.db;"
-        SQLconnect.Open()
-        SQLcommand = SQLconnect.CreateCommand
-        Dim SQLreader As SQLiteDataReader
+        'SQLconnect.ConnectionString = "Data Source= " & System.Environment.CurrentDirectory & "\bdd\guidetv.db;"
+        'SQLconnect.Open()
+        'SQLcommand = SQLconnect.CreateCommand
+        'Dim SQLreader As SQLiteDataReader
 
-        SQLcommand.CommandText = "SELECT * FROM chaineTV"
-        SQLreader = SQLcommand.ExecuteReader()
-        If SQLreader.HasRows = True Then
-            While SQLreader.Read()
-                Dim vChaine As sChaine = New sChaine
-                vChaine.Nom = SQLreader(1)
-                vChaine.ID = SQLreader(2)
-                vChaine.Ico = SQLreader(3)
-                vChaine.Enable = SQLreader(4)
-                vChaine.Numero = SQLreader(5)
-                vChaine.Categorie = SQLreader(6)
-                MyChaine.Add(vChaine)
-            End While
-        Else
-            MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "ChargeChaineFromDB: aucune chaine à charger depuis la DB!")
-        End If
-        SQLcommand.Dispose()
-        SQLconnect.Close()
+        'SQLcommand.CommandText = "SELECT * FROM chaineTV"
+        'SQLreader = SQLcommand.ExecuteReader()
+        'If SQLreader.HasRows = True Then
+        '    While SQLreader.Read()
+        '        Dim vChaine As sChaine = New sChaine
+        '        vChaine.Nom = SQLreader(1)
+        '        vChaine.ID = SQLreader(2)
+        '        vChaine.Ico = SQLreader(3)
+        '        vChaine.Enable = SQLreader(4)
+        '        vChaine.Numero = SQLreader(5)
+        '        vChaine.Categorie = SQLreader(6)
+        '        MyChaine.Add(vChaine)
+        '    End While
+        'Else
+        '    MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "ChargeChaineFromDB: aucune chaine à charger depuis la DB!")
+        'End If
+        'SQLcommand.Dispose()
+        'SQLconnect.Close()
     End Sub
 
 #End Region
@@ -424,124 +424,124 @@ Public Class ServiceTV
 
     'Permet de lister les programmes pour les chaines sélectionnées dans la base de données
     Public Sub ProgrammeFromXMLToDB()
-        MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "Chargement du fichier XML dans la base de données")
-        Try
-            MyXML = New XML(System.Environment.CurrentDirectory & "\data\complet.xml")
-            timestart = Now.ToShortTimeString
-            Dim liste As XmlNodeList
-            Dim b As String = ""
-            Dim d As String = ""
-            Dim SQLconnect As New SQLiteConnection()
-            Dim SQLcommand As SQLiteCommand
+        'MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "Chargement du fichier XML dans la base de données")
+        'Try
+        '    MyXML = New XML(System.Environment.CurrentDirectory & "\data\complet.xml")
+        '    timestart = Now.ToShortTimeString
+        '    Dim liste As XmlNodeList
+        '    Dim b As String = ""
+        '    Dim d As String = ""
+        '    Dim SQLconnect As New SQLiteConnection()
+        '    Dim SQLcommand As SQLiteCommand
 
-            SQLconnect.ConnectionString = "Data Source= " & System.Environment.CurrentDirectory & "\bdd\guidetv.db;"
-            SQLconnect.Open()
-            SQLcommand = SQLconnect.CreateCommand
-            SQLcommand.CommandText = "DELETE FROM programmeTV where idchannel<>''"
-            SQLcommand.ExecuteNonQuery()
-            SQLcommand = SQLconnect.CreateCommand
+        '    SQLconnect.ConnectionString = "Data Source= " & System.Environment.CurrentDirectory & "\bdd\guidetv.db;"
+        '    SQLconnect.Open()
+        '    SQLcommand = SQLconnect.CreateCommand
+        '    SQLcommand.CommandText = "DELETE FROM programmeTV where idchannel<>''"
+        '    SQLcommand.ExecuteNonQuery()
+        '    SQLcommand = SQLconnect.CreateCommand
 
-            'liste toute les chaines
-            For i As Integer = 0 To MyChaine.Count - 1
-                If MyChaine.Item(i).Enable = 1 Then 'cherche que les prog dont la chaine est sélectionné
-                    Console.WriteLine(Now & " Chargement des programmes pour la chaine: " & MyChaine.Item(i).Nom)
-                    liste = MyXML.SelectNodes("/tv/programme[@channel='" & MyChaine.Item(i).ID & "']")
-                    For i2 As Integer = 0 To liste.Count - 1
-                        Dim vProg As sProgramme = New sProgramme
-                        b = ""
-                        vProg.DateStart = Mid(liste(i2).Attributes.Item(0).Value, 7, 2) & "/" & Mid(liste(i2).Attributes.Item(0).Value, 5, 2) & "/" & Mid(liste(i2).Attributes.Item(0).Value, 1, 4)
-                        vProg.DateEnd = Mid(liste(i2).Attributes.Item(1).Value, 7, 2) & "/" & Mid(liste(i2).Attributes.Item(1).Value, 5, 2) & "/" & Mid(liste(i2).Attributes.Item(1).Value, 1, 4)
-                        vProg.TimeStart = Mid(liste(i2).Attributes.Item(0).Value, 9, 2) & ":" & Mid(liste(i2).Attributes.Item(0).Value, 11, 2)
-                        vProg.TimeEnd = Mid(liste(i2).Attributes.Item(1).Value, 9, 2) & ":" & Mid(liste(i2).Attributes.Item(1).Value, 11, 2)
-                        vProg.IDChannel = liste(i2).Attributes.Item(2).Value
-                        For j = 0 To liste(i2).ChildNodes.Count - 1
-                            If liste(i2).ChildNodes.Item(j).ChildNodes.Count > 1 Then
-                                Dim c As Integer
-                                For c = 0 To liste(i2).ChildNodes.Item(j).ChildNodes.Count - 1
-                                    If liste(i2).ChildNodes.Item(j).Name = "credits" Then
-                                        Select Case liste(i2).ChildNodes.Item(j).ChildNodes.Item(c).Name
-                                            Case "director" : d = "directeur"
-                                            Case "actor" : d = "acteur"
-                                        End Select
-                                        b += d & ":" & ConvertTextToHTML(liste(i2).ChildNodes.Item(j).ChildNodes.Item(c).ChildNodes.Item(0).Value & vbCrLf)
-                                    End If
-                                Next
-                                If b <> "" Then vProg.Credits = b
-                            Else
-                                Select Case liste(i2).ChildNodes.Item(j).Name
-                                    Case "title" : vProg.Titre = ConvertTextToHTML(liste(i2).ChildNodes.Item(j).ChildNodes.Item(0).Value)
-                                    Case "sub-title" : vProg.SousTitre = ConvertTextToHTML(liste(i2).ChildNodes.Item(j).ChildNodes.Item(0).Value)
-                                    Case "desc" : vProg.Description = ConvertTextToHTML(liste(i2).ChildNodes.Item(j).ChildNodes.Item(0).Value)
-                                    Case "length"
-                                        Dim lgth As Integer
-                                        If liste(i2).ChildNodes.Item(j).Attributes.Item(0).Value = "hours" Then
-                                            lgth = 60
-                                        Else
-                                            lgth = 1
-                                        End If
-                                        vProg.Duree = (liste(i2).ChildNodes.Item(j).ChildNodes.Item(0).Value * lgth)
-                                    Case "category"
-                                        If vProg.Categorie1 = "" Then
-                                            vProg.Categorie1 = ConvertTextToHTML(liste(i2).ChildNodes.Item(j).ChildNodes.Item(0).Value)
-                                        Else
-                                            vProg.Categorie2 = ConvertTextToHTML(liste(i2).ChildNodes.Item(j).ChildNodes.Item(0).Value)
-                                        End If
-                                    Case "date" : vProg.Annee = liste(i2).ChildNodes.Item(j).ChildNodes.Item(0).Value
+        '    'liste toute les chaines
+        '    For i As Integer = 0 To MyChaine.Count - 1
+        '        If MyChaine.Item(i).Enable = 1 Then 'cherche que les prog dont la chaine est sélectionné
+        '            Console.WriteLine(Now & " Chargement des programmes pour la chaine: " & MyChaine.Item(i).Nom)
+        '            liste = MyXML.SelectNodes("/tv/programme[@channel='" & MyChaine.Item(i).ID & "']")
+        '            For i2 As Integer = 0 To liste.Count - 1
+        '                Dim vProg As sProgramme = New sProgramme
+        '                b = ""
+        '                vProg.DateStart = Mid(liste(i2).Attributes.Item(0).Value, 7, 2) & "/" & Mid(liste(i2).Attributes.Item(0).Value, 5, 2) & "/" & Mid(liste(i2).Attributes.Item(0).Value, 1, 4)
+        '                vProg.DateEnd = Mid(liste(i2).Attributes.Item(1).Value, 7, 2) & "/" & Mid(liste(i2).Attributes.Item(1).Value, 5, 2) & "/" & Mid(liste(i2).Attributes.Item(1).Value, 1, 4)
+        '                vProg.TimeStart = Mid(liste(i2).Attributes.Item(0).Value, 9, 2) & ":" & Mid(liste(i2).Attributes.Item(0).Value, 11, 2)
+        '                vProg.TimeEnd = Mid(liste(i2).Attributes.Item(1).Value, 9, 2) & ":" & Mid(liste(i2).Attributes.Item(1).Value, 11, 2)
+        '                vProg.IDChannel = liste(i2).Attributes.Item(2).Value
+        '                For j = 0 To liste(i2).ChildNodes.Count - 1
+        '                    If liste(i2).ChildNodes.Item(j).ChildNodes.Count > 1 Then
+        '                        Dim c As Integer
+        '                        For c = 0 To liste(i2).ChildNodes.Item(j).ChildNodes.Count - 1
+        '                            If liste(i2).ChildNodes.Item(j).Name = "credits" Then
+        '                                Select Case liste(i2).ChildNodes.Item(j).ChildNodes.Item(c).Name
+        '                                    Case "director" : d = "directeur"
+        '                                    Case "actor" : d = "acteur"
+        '                                End Select
+        '                                b += d & ":" & ConvertTextToHTML(liste(i2).ChildNodes.Item(j).ChildNodes.Item(c).ChildNodes.Item(0).Value & vbCrLf)
+        '                            End If
+        '                        Next
+        '                        If b <> "" Then vProg.Credits = b
+        '                    Else
+        '                        Select Case liste(i2).ChildNodes.Item(j).Name
+        '                            Case "title" : vProg.Titre = ConvertTextToHTML(liste(i2).ChildNodes.Item(j).ChildNodes.Item(0).Value)
+        '                            Case "sub-title" : vProg.SousTitre = ConvertTextToHTML(liste(i2).ChildNodes.Item(j).ChildNodes.Item(0).Value)
+        '                            Case "desc" : vProg.Description = ConvertTextToHTML(liste(i2).ChildNodes.Item(j).ChildNodes.Item(0).Value)
+        '                            Case "length"
+        '                                Dim lgth As Integer
+        '                                If liste(i2).ChildNodes.Item(j).Attributes.Item(0).Value = "hours" Then
+        '                                    lgth = 60
+        '                                Else
+        '                                    lgth = 1
+        '                                End If
+        '                                vProg.Duree = (liste(i2).ChildNodes.Item(j).ChildNodes.Item(0).Value * lgth)
+        '                            Case "category"
+        '                                If vProg.Categorie1 = "" Then
+        '                                    vProg.Categorie1 = ConvertTextToHTML(liste(i2).ChildNodes.Item(j).ChildNodes.Item(0).Value)
+        '                                Else
+        '                                    vProg.Categorie2 = ConvertTextToHTML(liste(i2).ChildNodes.Item(j).ChildNodes.Item(0).Value)
+        '                                End If
+        '                            Case "date" : vProg.Annee = liste(i2).ChildNodes.Item(j).ChildNodes.Item(0).Value
 
-                                End Select
-                            End If
+        '                        End Select
+        '                    End If
 
-                        Next
-                        SQLcommand = SQLconnect.CreateCommand
-                        SQLcommand.CommandText = "INSERT INTO programmeTV (timestart, timeend,datestart,dateend,idchannel,titre,soustitre,description,duree,categorie1,categorie2,annee,credits) VALUES ('" & vProg.TimeStart & "', '" & vProg.TimeEnd & "','" & vProg.DateStart & "','" & vProg.DateEnd & "','" & vProg.IDChannel & "','" & vProg.Titre & "','" & vProg.SousTitre & "','" & vProg.Description & "','" & vProg.Duree & "','" & vProg.Categorie1 & "','" & vProg.Categorie2 & "','" & vProg.Annee & "','" & vProg.Credits & "')"
-                        SQLcommand.ExecuteNonQuery()
-                    Next
-                End If
-            Next
-            SQLcommand.Dispose()
-            SQLconnect.Close()
-            MyXML = Nothing
-            MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "Fin du chargement des programmes - start:" & timestart & " fin:" & Now.ToShortTimeString)
-        Catch e As Exception
-            MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "ChargeProgrammesFromXMLToDB Erreur: " & e.Message)
-        End Try
+        '                Next
+        '                SQLcommand = SQLconnect.CreateCommand
+        '                SQLcommand.CommandText = "INSERT INTO programmeTV (timestart, timeend,datestart,dateend,idchannel,titre,soustitre,description,duree,categorie1,categorie2,annee,credits) VALUES ('" & vProg.TimeStart & "', '" & vProg.TimeEnd & "','" & vProg.DateStart & "','" & vProg.DateEnd & "','" & vProg.IDChannel & "','" & vProg.Titre & "','" & vProg.SousTitre & "','" & vProg.Description & "','" & vProg.Duree & "','" & vProg.Categorie1 & "','" & vProg.Categorie2 & "','" & vProg.Annee & "','" & vProg.Credits & "')"
+        '                SQLcommand.ExecuteNonQuery()
+        '            Next
+        '        End If
+        '    Next
+        '    SQLcommand.Dispose()
+        '    SQLconnect.Close()
+        '    MyXML = Nothing
+        '    MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "Fin du chargement des programmes - start:" & timestart & " fin:" & Now.ToShortTimeString)
+        'Catch e As Exception
+        '    MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "ChargeProgrammesFromXMLToDB Erreur: " & e.Message)
+        'End Try
     End Sub
 
     'Charge les programmes depuis la base de données en mémoire
     Public Sub ChargeProgrammesFromDB()
-        Dim SQLconnect As New SQLiteConnection()
-        Dim SQLcommand As SQLiteCommand
+        'Dim SQLconnect As New SQLiteConnection()
+        'Dim SQLcommand As SQLiteCommand
 
-        SQLconnect.ConnectionString = "Data Source= " & System.Environment.CurrentDirectory & "\bdd\guidetv.db;"
-        SQLconnect.Open()
-        SQLcommand = SQLconnect.CreateCommand
-        Dim SQLreader As SQLiteDataReader
+        'SQLconnect.ConnectionString = "Data Source= " & System.Environment.CurrentDirectory & "\bdd\guidetv.db;"
+        'SQLconnect.Open()
+        'SQLcommand = SQLconnect.CreateCommand
+        'Dim SQLreader As SQLiteDataReader
 
-        SQLcommand.CommandText = "SELECT * FROM programmeTV"
-        SQLreader = SQLcommand.ExecuteReader()
-        If SQLreader.HasRows = True Then
-            While SQLreader.Read()
-                Dim vProgramme As sProgramme = New sProgramme
-                vProgramme.TimeStart = SQLreader(1)
-                vProgramme.TimeEnd = SQLreader(2)
-                vProgramme.DateStart = SQLreader(3)
-                vProgramme.DateEnd = SQLreader(4)
-                vProgramme.IDChannel = SQLreader(5)
-                vProgramme.Titre = SQLreader(6)
-                vProgramme.SousTitre = SQLreader(7)
-                vProgramme.Description = SQLreader(8)
-                vProgramme.Duree = SQLreader(9)
-                vProgramme.Categorie1 = SQLreader(10)
-                vProgramme.Categorie2 = SQLreader(11)
-                vProgramme.Annee = SQLreader(12)
-                vProgramme.Credits = SQLreader(13)
-                MyProgramme.Add(vProgramme)
-            End While
-        Else
-            MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "ChargeProgrammesFromDB Erreur: aucun programme à charger depuis la DB! ")
-        End If
-        SQLcommand.Dispose()
-        SQLconnect.Close()
+        'SQLcommand.CommandText = "SELECT * FROM programmeTV"
+        'SQLreader = SQLcommand.ExecuteReader()
+        'If SQLreader.HasRows = True Then
+        '    While SQLreader.Read()
+        '        Dim vProgramme As sProgramme = New sProgramme
+        '        vProgramme.TimeStart = SQLreader(1)
+        '        vProgramme.TimeEnd = SQLreader(2)
+        '        vProgramme.DateStart = SQLreader(3)
+        '        vProgramme.DateEnd = SQLreader(4)
+        '        vProgramme.IDChannel = SQLreader(5)
+        '        vProgramme.Titre = SQLreader(6)
+        '        vProgramme.SousTitre = SQLreader(7)
+        '        vProgramme.Description = SQLreader(8)
+        '        vProgramme.Duree = SQLreader(9)
+        '        vProgramme.Categorie1 = SQLreader(10)
+        '        vProgramme.Categorie2 = SQLreader(11)
+        '        vProgramme.Annee = SQLreader(12)
+        '        vProgramme.Credits = SQLreader(13)
+        '        MyProgramme.Add(vProgramme)
+        '    End While
+        'Else
+        '    MyWindow.Log(TypeLog.INFO, TypeSource.CLIENT, "ServiceTV", "ChargeProgrammesFromDB Erreur: aucun programme à charger depuis la DB! ")
+        'End If
+        'SQLcommand.Dispose()
+        'SQLconnect.Close()
     End Sub
 
 #End Region

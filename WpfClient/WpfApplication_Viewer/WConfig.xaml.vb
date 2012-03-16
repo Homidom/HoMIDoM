@@ -15,6 +15,7 @@ Public Class WConfig
         Frm.IP = TxtIP.Text
         Frm.PortSOAP = TxtPort.Text
         Frm.ListMnu = MyListMnu
+        IdSrv = TxtID.Text
         'RaiseEvent CloseControl(Me.Uid)
         DialogResult = True
     End Sub
@@ -40,7 +41,7 @@ Public Class WConfig
         'ChkServiceTV.IsChecked =F My.Settings.EnableServiceTV
         TxtIP.Text = Frm.IP
         TxtPort.Text = Frm.PortSOAP
-
+        TxtID.Text = IdSrv
         For i As Integer = 0 To Frm.ListMnu.Count - 1
             Dim x As uCtrlImgMnu = Frm.ListMnu.Item(i)
             ListMnu.Items.Add(x.Text)
