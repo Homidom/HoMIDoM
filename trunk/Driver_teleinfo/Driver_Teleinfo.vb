@@ -47,6 +47,8 @@ Public Class Driver_Teleinfo
 
 		'Ajoutés dans les ppt avancés dans New()
 
+        Dim _DEBUG As Boolean = False
+
 		#End Region
 
 #Region "Variables Internes"
@@ -299,12 +301,12 @@ Public Class Driver_Teleinfo
             Dim retour As String = ""
 
             'récupération des paramétres avancés
-            'Try
-            'TeleInfoRefresh = _Parametres.Item(0).Valeur
+            Try
+                _DEBUG = _Parametres.Item(0).Valeur
 
-            'Catch ex As Exception
-            '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
-            'End Try
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+            End Try
 
             'ouverture du port suivant le Port Com
             Try
@@ -334,8 +336,15 @@ Public Class Driver_Teleinfo
         ''' <summary>Arrêter le du driver</summary>
         ''' <remarks></remarks>
         Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
-            Try
+                Dim retour As String
 
+                Try
+                If _IsConnect Then
+                    retour = fermer()
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo Stop", retour)
+                Else
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo Stop", "Port " & _Com & " est déjà fermé")
+                End If
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo Stop", ex.Message)
             End Try
@@ -498,6 +507,9 @@ Public Class Driver_Teleinfo
                 _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE.ToString)
                 _DeviceSupport.Add(ListeDevices.ENERGIETOTALE.ToString)
 
+                'Paramétres avancés
+                Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
+
                 Add_LibelleDevice("ADRESSE1", "Adresse", "")
                 Add_LibelleDevice("ADRESSE2", "@", "")
                 Add_LibelleDevice("SOLO", "@", "")
@@ -550,11 +562,18 @@ Public Class Driver_Teleinfo
         ''' <summary>Fermer le port TeleInfo</summary>
         ''' <remarks></remarks>
         Private Function fermer() As String
+            Dim limite As UShort
             Try
                 If _IsConnect Then
+                    RemoveHandler port.DataReceived, AddressOf DataReceived
+
                     If (Not (port Is Nothing)) Then ' The COM port exists.
                         If port.IsOpen Then
-                            port.DiscardOutBuffer()
+                            port.DiscardInBuffer()
+                            limite = 0
+                            Do While (port.BytesToRead > 0 And limite < 300) ' Wait for the receipt buffer to empty.
+                                limite = limite + 1
+                            Loop
                             port.Close()
                             port.Dispose()
                             _IsConnect = False
@@ -629,11 +648,11 @@ Public Class Driver_Teleinfo
                 If trame Then
                     ' Ajout de valeurs pour debug
                     ' ReDim Preserve InfoTrame(messcnt)
-                    ' InfoTrame(messcnt) = "HCHC 000059672845 S"
-                    ' messcnt += 1
-                    ' ReDim Preserve InfoTrame(messcnt)
-                    ' InfoTrame(messcnt) = "HCHP 067159650 x"
-                    ' messcnt += 1
+                    ' InfoTrame(messcnt) = "PAPP 000059672845 S"
+                    '  messcnt += 1
+                    '  ReDim Preserve InfoTrame(messcnt)
+                    '  InfoTrame(messcnt) = "HCHP 067159650 x"
+                    '  messcnt += 1
                     Process(InfoTrame)
 
                 ElseIf mess Then ' Un message est recu ==> on le stocke
@@ -644,6 +663,9 @@ Public Class Driver_Teleinfo
 
                     ReDim Preserve InfoTrame(messcnt)
                     InfoTrame(messcnt) = xxx.ToString
+                    If _DEBUG Then
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo ProcessReceivedChar - Information recue", xxx.ToString)
+                    End If
                     messcnt += 1
                 End If
 
