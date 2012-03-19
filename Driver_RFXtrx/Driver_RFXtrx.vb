@@ -2110,7 +2110,7 @@ Imports System.Media
                 Case LIGHTING3.sTypeKoppla
                     '        WriteMessage("subtype       = Ikea Koppla")
                     '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING3.seqnbr).ToString)
-                    '        WriteMessage("Command       = ", False)
+                    '        WriteMessage("Command       = "
                     adresse = "IKEAKOPPLA"
                     Select Case recbuf(LIGHTING3.cmnd)
                         Case &H0 : valeur = "OFF"
@@ -2222,7 +2222,7 @@ Imports System.Media
         'End Select
         'WriteMessage("Sequence nbr  = " & recbuf(SECURITY1.seqnbr).ToString)
         'WriteMessage("id1-3         = " & VB.Right("0" & Hex(recbuf(SECURITY1.id1)), 2) & VB.Right("0" & Hex(recbuf(SECURITY1.id2)), 2) & VB.Right("0" & Hex(recbuf(SECURITY1.id3)), 2))
-        'WriteMessage("status        = ", False)
+        'WriteMessage("status        = "
         'Select Case recbuf(SECURITY1.status)
         '    Case SECURITY1.sStatusNormal
         '        WriteMessage("Normal")
@@ -2282,7 +2282,7 @@ Imports System.Media
         '    Case CAMERA1.Ninja
         '        WriteMessage("subtype       = X10 Ninja/Robocam")
         '        WriteMessage("Sequence nbr  = " & recbuf(CAMERA1.seqnbr).ToString)
-        '        WriteMessage("Command       = ", False)
+        '        WriteMessage("Command       = "
         '        Select Case recbuf(CAMERA1.cmnd)
         '            Case CAMERA1.sLeft
         '                WriteMessage("Left")
@@ -2327,574 +2327,305 @@ Imports System.Media
     End Sub
     'non géré
     Private Sub decode_Remote()
-        'Select Case recbuf(REMOTE.subtype)
-        '    Case REMOTE.ATI
-        '        WriteMessage("subtype       = ATI Remote Wonder")
-        '        WriteMessage("Sequence nbr  = " & recbuf(REMOTE.seqnbr).ToString)
-        '        WriteMessage("ID            = " & recbuf(REMOTE.id).ToString)
-        '        Select Case recbuf(REMOTE.cmnd)
-        '            Case &H0
-        '                WriteMessage("Command       = A", False)
-        '            Case &H1
-        '                WriteMessage("Command       = B", False)
-        '            Case &H2
-        '                WriteMessage("Command       = power", False)
-        '            Case &H3
-        '                WriteMessage("Command       = TV", False)
-        '            Case &H4
-        '                WriteMessage("Command       = DVD", False)
-        '            Case &H5
-        '                WriteMessage("Command       = ?", False)
-        '            Case &H6
-        '                WriteMessage("Command       = Guide", False)
-        '            Case &H7
-        '                WriteMessage("Command       = Drag", False)
-        '            Case &H8
-        '                WriteMessage("Command       = VOL+", False)
-        '            Case &H9
-        '                WriteMessage("Command       = VOL-", False)
-        '            Case &HA
-        '                WriteMessage("Command       = MUTE", False)
-        '            Case &HB
-        '                WriteMessage("Command       = CHAN+", False)
-        '            Case &HC
-        '                WriteMessage("Command       = CHAN-", False)
-        '            Case &HD
-        '                WriteMessage("Command       = 1", False)
-        '            Case &HE
-        '                WriteMessage("Command       = 2", False)
-        '            Case &HF
-        '                WriteMessage("Command       = 3", False)
-        '            Case &H10
-        '                WriteMessage("Command       = 4", False)
-        '            Case &H11
-        '                WriteMessage("Command       = 5", False)
-        '            Case &H12
-        '                WriteMessage("Command       = 6", False)
-        '            Case &H13
-        '                WriteMessage("Command       = 7", False)
-        '            Case &H14
-        '                WriteMessage("Command       = 8", False)
-        '            Case &H15
-        '                WriteMessage("Command       = 9", False)
-        '            Case &H16
-        '                WriteMessage("Command       = txt", False)
-        '            Case &H17
-        '                WriteMessage("Command       = 0", False)
-        '            Case &H18
-        '                WriteMessage("Command       = snapshot ESC", False)
-        '            Case &H19
-        '                WriteMessage("Command       = C", False)
-        '            Case &H1A
-        '                WriteMessage("Command       = ^", False)
-        '            Case &H1B
-        '                WriteMessage("Command       = D", False)
-        '            Case &H1C
-        '                WriteMessage("Command       = TV/RADIO", False)
-        '            Case &H1D
-        '                WriteMessage("Command       = <", False)
-        '            Case &H1E
-        '                WriteMessage("Command       = OK", False)
-        '            Case &H1F
-        '                WriteMessage("Command       = >", False)
-        '            Case &H20
-        '                WriteMessage("Command       = <-", False)
-        '            Case &H21
-        '                WriteMessage("Command       = E", False)
-        '            Case &H22
-        '                WriteMessage("Command       = v", False)
-        '            Case &H23
-        '                WriteMessage("Command       = F", False)
-        '            Case &H24
-        '                WriteMessage("Command       = Rewind", False)
-        '            Case &H25
-        '                WriteMessage("Command       = Play", False)
-        '            Case &H26
-        '                WriteMessage("Command       = Fast forward", False)
-        '            Case &H27
-        '                WriteMessage("Command       = Record", False)
-        '            Case &H28
-        '                WriteMessage("Command       = Stop", False)
-        '            Case &H29
-        '                WriteMessage("Command       = Pause", False)
+        Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
 
-        '            Case &H2C
-        '                WriteMessage("Command       = TV", False)
-        '            Case &H2D
-        '                WriteMessage("Command       = VCR", False)
-        '            Case &H2E
-        '                WriteMessage("Command       = RADIO", False)
-        '            Case &H2F
-        '                WriteMessage("Command       = TV Preview", False)
-        '            Case &H30
-        '                WriteMessage("Command       = Channel list", False)
-        '            Case &H31
-        '                WriteMessage("Command       = Video Desktop", False)
-        '            Case &H32
-        '                WriteMessage("Command       = red", False)
-        '            Case &H33
-        '                WriteMessage("Command       = green", False)
-        '            Case &H34
-        '                WriteMessage("Command       = yellow", False)
-        '            Case &H35
-        '                WriteMessage("Command       = blue", False)
-        '            Case &H36
-        '                WriteMessage("Command       = rename TAB", False)
-        '            Case &H37
-        '                WriteMessage("Command       = Acquire image", False)
-        '            Case &H38
-        '                WriteMessage("Command       = edit image", False)
-        '            Case &H39
-        '                WriteMessage("Command       = Full screen", False)
-        '            Case &H3A
-        '                WriteMessage("Command       = DVD Audio", False)
-        '            Case &H70
-        '                WriteMessage("Command       = Cursor-left", False)
-        '            Case &H71
-        '                WriteMessage("Command       = Cursor-right", False)
-        '            Case &H72
-        '                WriteMessage("Command       = Cursor-up", False)
-        '            Case &H73
-        '                WriteMessage("Command       = Cursor-down", False)
-        '            Case &H74
-        '                WriteMessage("Command       = Cursor-up-left", False)
-        '            Case &H75
-        '                WriteMessage("Command       = Cursor-up-right", False)
-        '            Case &H76
-        '                WriteMessage("Command       = Cursor-down-right", False)
-        '            Case &H77
-        '                WriteMessage("Command       = Cursor-down-left", False)
-        '            Case &H78
-        '                WriteMessage("Command       = V", False)
-        '            Case &H79
-        '                WriteMessage("Command       = V-End", False)
-        '            Case &H7C
-        '                WriteMessage("Command       = X", False)
-        '            Case &H7D
-        '                WriteMessage("Command       = X-End", False)
-        '            Case Else
-        '                WriteMessage("Command       = unknown", False)
-        '        End Select
-
-        '    Case REMOTE.ATI2
-        '        WriteMessage("subtype       = ATI Remote Wonder II")
-        '        WriteMessage("Sequence nbr  = " & recbuf(REMOTE.seqnbr).ToString)
-        '        WriteMessage("ID            = " & recbuf(REMOTE.id).ToString)
-        '        WriteMessage("Command       = ", False)
-        '        Select Case recbuf(REMOTE.cmnd)
-        '            Case &H0
-        '                WriteMessage("A", False)
-        '            Case &H1
-        '                WriteMessage("B", False)
-        '            Case &H2
-        '                WriteMessage("power", False)
-        '            Case &H3
-        '                WriteMessage("TV", False)
-        '            Case &H4
-        '                WriteMessage("DVD", False)
-        '            Case &H5
-        '                WriteMessage("?", False)
-        '            Case &H6
-        '                WriteMessage("Guide", False)
-        '            Case &H7
-        '                WriteMessage("Drag", False)
-        '            Case &H8
-        '                WriteMessage("VOL+", False)
-        '            Case &H9
-        '                WriteMessage("VOL-", False)
-        '            Case &HA
-        '                WriteMessage("MUTE", False)
-        '            Case &HB
-        '                WriteMessage("CHAN+", False)
-        '            Case &HC
-        '                WriteMessage("CHAN-", False)
-        '            Case &HD
-        '                WriteMessage("1", False)
-        '            Case &HE
-        '                WriteMessage("2", False)
-        '            Case &HF
-        '                WriteMessage("3", False)
-        '            Case &H10
-        '                WriteMessage("4", False)
-        '            Case &H11
-        '                WriteMessage("5", False)
-        '            Case &H12
-        '                WriteMessage("6", False)
-        '            Case &H13
-        '                WriteMessage("7", False)
-        '            Case &H14
-        '                WriteMessage("8", False)
-        '            Case &H15
-        '                WriteMessage("9", False)
-        '            Case &H16
-        '                WriteMessage("txt", False)
-        '            Case &H17
-        '                WriteMessage("0", False)
-        '            Case &H18
-        '                WriteMessage("Open Setup Menu", False)
-        '            Case &H19
-        '                WriteMessage("C", False)
-        '            Case &H1A
-        '                WriteMessage("^", False)
-        '            Case &H1B
-        '                WriteMessage("D", False)
-        '            Case &H1C
-        '                WriteMessage("FM", False)
-        '            Case &H1D
-        '                WriteMessage("<", False)
-        '            Case &H1E
-        '                WriteMessage("OK", False)
-        '            Case &H1F
-        '                WriteMessage(">", False)
-        '            Case &H20
-        '                WriteMessage("Max/Restore window", False)
-        '            Case &H21
-        '                WriteMessage("E", False)
-        '            Case &H22
-        '                WriteMessage("v", False)
-        '            Case &H23
-        '                WriteMessage("F", False)
-        '            Case &H24
-        '                WriteMessage("Rewind", False)
-        '            Case &H25
-        '                WriteMessage("Play", False)
-        '            Case &H26
-        '                WriteMessage("Fast forward", False)
-        '            Case &H27
-        '                WriteMessage("Record", False)
-        '            Case &H28
-        '                WriteMessage("Stop", False)
-        '            Case &H29
-        '                WriteMessage("Pause", False)
-        '            Case &H2A
-        '                WriteMessage("TV2", False)
-        '            Case &H2B
-        '                WriteMessage("Clock", False)
-        '            Case &H2C
-        '                WriteMessage("i", False)
-        '            Case &H2D
-        '                WriteMessage("ATI", False)
-        '            Case &H2E
-        '                WriteMessage("RADIO", False)
-        '            Case &H2F
-        '                WriteMessage("TV Preview", False)
-        '            Case &H30
-        '                WriteMessage("Channel list", False)
-        '            Case &H31
-        '                WriteMessage("Video Desktop", False)
-        '            Case &H32
-        '                WriteMessage("red", False)
-        '            Case &H33
-        '                WriteMessage("green", False)
-        '            Case &H34
-        '                WriteMessage("yellow", False)
-        '            Case &H35
-        '                WriteMessage("blue", False)
-        '            Case &H36
-        '                WriteMessage("rename TAB", False)
-        '            Case &H37
-        '                WriteMessage("Acquire image", False)
-        '            Case &H38
-        '                WriteMessage("edit image", False)
-        '            Case &H39
-        '                WriteMessage("Full screen", False)
-        '            Case &H3A
-        '                WriteMessage("DVD Audio", False)
-        '            Case &H70
-        '                WriteMessage("Cursor-left", False)
-        '            Case &H71
-        '                WriteMessage("Cursor-right", False)
-        '            Case &H72
-        '                WriteMessage("Cursor-up", False)
-        '            Case &H73
-        '                WriteMessage("Cursor-down", False)
-        '            Case &H74
-        '                WriteMessage("Cursor-up-left", False)
-        '            Case &H75
-        '                WriteMessage("Cursor-up-right", False)
-        '            Case &H76
-        '                WriteMessage("Cursor-down-right", False)
-        '            Case &H77
-        '                WriteMessage("Cursor-down-left", False)
-        '            Case &H78
-        '                WriteMessage("Left Mouse Button", False)
-        '            Case &H79
-        '                WriteMessage("V-End", False)
-        '            Case &H7C
-        '                WriteMessage("Right Mouse Button", False)
-        '            Case &H7D
-        '                WriteMessage("X-End", False)
-        '            Case Else
-        '                WriteMessage("unknown", False)
-        '        End Select
-        '        If (recbuf(REMOTE.toggle) And &H1) = &H1 Then
-        '            WriteMessage("  (button press = odd)")
-        '        Else
-        '            WriteMessage("  (button press = even)")
-        '        End If
-
-        '    Case REMOTE.Medion
-        '        WriteMessage("subtype       = Medion Remote")
-        '        WriteMessage("Sequence nbr  = " & recbuf(REMOTE.seqnbr).ToString)
-        '        WriteMessage("ID            = " & recbuf(REMOTE.id).ToString)
-        '        WriteMessage("Command       = ", False)
-        '        Select Case recbuf(REMOTE.cmnd)
-        '            Case &H0
-        '                WriteMessage("Mute")
-        '            Case &H1
-        '                WriteMessage("B")
-        '            Case &H2
-        '                WriteMessage("power")
-        '            Case &H3
-        '                WriteMessage("TV")
-        '            Case &H4
-        '                WriteMessage("DVD")
-        '            Case &H5
-        '                WriteMessage("Photo")
-        '            Case &H6
-        '                WriteMessage("Music")
-        '            Case &H7
-        '                WriteMessage("Drag")
-        '            Case &H8
-        '                WriteMessage("VOL-")
-        '            Case &H9
-        '                WriteMessage("VOL+")
-        '            Case &HA
-        '                WriteMessage("MUTE")
-        '            Case &HB
-        '                WriteMessage("CHAN+")
-        '            Case &HC
-        '                WriteMessage("CHAN-")
-        '            Case &HD
-        '                WriteMessage("1")
-        '            Case &HE
-        '                WriteMessage("2")
-        '            Case &HF
-        '                WriteMessage("3")
-        '            Case &H10
-        '                WriteMessage("4")
-        '            Case &H11
-        '                WriteMessage("5")
-        '            Case &H12
-        '                WriteMessage("6")
-        '            Case &H13
-        '                WriteMessage("7")
-        '            Case &H14
-        '                WriteMessage("8")
-        '            Case &H15
-        '                WriteMessage("9")
-        '            Case &H16
-        '                WriteMessage("txt")
-        '            Case &H17
-        '                WriteMessage("0")
-        '            Case &H18
-        '                WriteMessage("snapshot ESC")
-        '            Case &H19
-        '                WriteMessage("DVD MENU")
-        '            Case &H1A
-        '                WriteMessage("^")
-        '            Case &H1B
-        '                WriteMessage("Setup")
-        '            Case &H1C
-        '                WriteMessage("TV/RADIO")
-        '            Case &H1D
-        '                WriteMessage("<")
-        '            Case &H1E
-        '                WriteMessage("OK")
-        '            Case &H1F
-        '                WriteMessage(">")
-        '            Case &H20
-        '                WriteMessage("<-")
-        '            Case &H21
-        '                WriteMessage("E")
-        '            Case &H22
-        '                WriteMessage("v")
-        '            Case &H23
-        '                WriteMessage("F")
-        '            Case &H24
-        '                WriteMessage("Rewind")
-        '            Case &H25
-        '                WriteMessage("Play")
-        '            Case &H26
-        '                WriteMessage("Fast forward")
-        '            Case &H27
-        '                WriteMessage("Record")
-        '            Case &H28
-        '                WriteMessage("Stop")
-        '            Case &H29
-        '                WriteMessage("Pause")
-
-        '            Case &H2C
-        '                WriteMessage("TV")
-        '            Case &H2D
-        '                WriteMessage("VCR")
-        '            Case &H2E
-        '                WriteMessage("RADIO")
-        '            Case &H2F
-        '                WriteMessage("TV Preview")
-        '            Case &H30
-        '                WriteMessage("Channel list")
-        '            Case &H31
-        '                WriteMessage("Video Desktop")
-        '            Case &H32
-        '                WriteMessage("red")
-        '            Case &H33
-        '                WriteMessage("green")
-        '            Case &H34
-        '                WriteMessage("yellow")
-        '            Case &H35
-        '                WriteMessage("blue")
-        '            Case &H36
-        '                WriteMessage("rename TAB")
-        '            Case &H37
-        '                WriteMessage("Acquire image")
-        '            Case &H38
-        '                WriteMessage("edit image")
-        '            Case &H39
-        '                WriteMessage("Full screen")
-        '            Case &H3A
-        '                WriteMessage("DVD Audio")
-        '            Case &H70
-        '                WriteMessage("Cursor-left")
-        '            Case &H71
-        '                WriteMessage("Cursor-right")
-        '            Case &H72
-        '                WriteMessage("Cursor-up")
-        '            Case &H73
-        '                WriteMessage("Cursor-down")
-        '            Case &H74
-        '                WriteMessage("Cursor-up-left")
-        '            Case &H75
-        '                WriteMessage("Cursor-up-right")
-        '            Case &H76
-        '                WriteMessage("Cursor-down-right")
-        '            Case &H77
-        '                WriteMessage("Cursor-down-left")
-        '            Case &H78
-        '                WriteMessage("V")
-        '            Case &H79
-        '                WriteMessage("V-End")
-        '            Case &H7C
-        '                WriteMessage("X")
-        '            Case &H7D
-        '                WriteMessage("X-End")
-        '            Case Else
-        '                WriteMessage("unknown")
-        '        End Select
-
-        '    Case REMOTE.PCremote
-        '        WriteMessage("subtype       = PC Remote")
-        '        WriteMessage("Sequence nbr  = " & recbuf(REMOTE.seqnbr).ToString)
-        '        WriteMessage("ID            = " & recbuf(REMOTE.id).ToString)
-        '        WriteMessage("Command       = unknown", False)
-        '        Select Case recbuf(REMOTE.cmnd)
-        '            Case &H2
-        '                WriteMessage("0")
-        '            Case &H82
-        '                WriteMessage("1")
-        '            Case &HD1
-        '                WriteMessage("MP3")
-        '            Case &H42
-        '                WriteMessage("2")
-        '            Case &HD2
-        '                WriteMessage("DVD")
-        '            Case &HC2
-        '                WriteMessage("3")
-        '            Case &HD3
-        '                WriteMessage("CD")
-        '            Case &H22
-        '                WriteMessage("4")
-        '            Case &HD4
-        '                WriteMessage("PC or SHIFT-4")
-        '            Case &HA2
-        '                WriteMessage("5")
-        '            Case &HD5
-        '                WriteMessage("SHIFT-5")
-        '            Case &H62
-        '                WriteMessage("6")
-        '            Case &HE2
-        '                WriteMessage("7")
-        '            Case &H12
-        '                WriteMessage("8")
-        '            Case &H92
-        '                WriteMessage("9")
-        '            Case &HC0
-        '                WriteMessage("CH-")
-        '            Case &H40
-        '                WriteMessage("CH+")
-        '            Case &HE0
-        '                WriteMessage("VOL-")
-        '            Case &H60
-        '                WriteMessage("VOL+")
-        '            Case &HA0
-        '                WriteMessage("MUTE")
-        '            Case &H3A
-        '                WriteMessage("INFO")
-        '            Case &H38
-        '                WriteMessage("REW")
-        '            Case &HB8
-        '                WriteMessage("FF")
-        '            Case &HB0
-        '                WriteMessage("PLAY")
-        '            Case &H64
-        '                WriteMessage("PAUSE")
-        '            Case &H63
-        '                WriteMessage("STOP")
-        '            Case &HB6
-        '                WriteMessage("MENU")
-        '            Case &HFF
-        '                WriteMessage("REC")
-        '            Case &HC9
-        '                WriteMessage("EXIT")
-        '            Case &HD8
-        '                WriteMessage("TEXT")
-        '            Case &HD9
-        '                WriteMessage("SHIFT-TEXT")
-        '            Case &HF2
-        '                WriteMessage("TELETEXT")
-        '            Case &HD7
-        '                WriteMessage("SHIFT-TELETEXT")
-        '            Case &HBA
-        '                WriteMessage("A+B")
-        '            Case &H52
-        '                WriteMessage("ENT")
-        '            Case &HD6
-        '                WriteMessage("SHIFT-ENT")
-        '            Case &H70
-        '                WriteMessage("Cursor-left")
-        '            Case &H71
-        '                WriteMessage("Cursor-right")
-        '            Case &H72
-        '                WriteMessage("Cursor-up")
-        '            Case &H73
-        '                WriteMessage("Cursor-down")
-        '            Case &H74
-        '                WriteMessage("Cursor-up-left")
-        '            Case &H75
-        '                WriteMessage("Cursor-up-right")
-        '            Case &H76
-        '                WriteMessage("Cursor-down-right")
-        '            Case &H77
-        '                WriteMessage("Cursor-down-left")
-        '            Case &H78
-        '                WriteMessage("Left mouse")
-        '            Case &H79
-        '                WriteMessage("Left mouse-End")
-        '            Case &H7B
-        '                WriteMessage("Drag")
-        '            Case &H7C
-        '                WriteMessage("Right mouse")
-        '            Case &H7D
-        '                WriteMessage("Right mouse-End")
-        '            Case Else
-        '                WriteMessage("unknown")
-        '        End Select
-
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(REMOTE.packettype)) & ":" & Hex(recbuf(REMOTE.subtype)))
-        'End Select
-        'WriteMessage("Signal level  = " & (recbuf(REMOTE.rssi) >> 4).ToString)
-
+            Select recbuf(REMOTE.subtype)
+                Case REMOTE.ATI 'ATI Remote Wonder
+                    adresse = recbuf(REMOTE.id).ToString
+                    Select Case recbuf(REMOTE.cmnd)
+                        Case &H0 : valeur = "A"
+                        Case &H1 : valeur = "B"
+                        Case &H2 : valeur = "power"
+                        Case &H3 : valeur = "TV"
+                        Case &H4 : valeur = "DVD"
+                        Case &H5 : valeur = "?"
+                        Case &H6 : valeur = "Guide"
+                        Case &H7 : valeur = "Drag"
+                        Case &H8 : valeur = "VOL+"
+                        Case &H9 : valeur = "VOL-"
+                        Case &HA : valeur = "MUTE"
+                        Case &HB : valeur = "CHAN+"
+                        Case &HC : valeur = "CHAN-"
+                        Case &HD : valeur = "1"
+                        Case &HE : valeur = "2"
+                        Case &HF : valeur = "3"
+                        Case &H10 : valeur = "4"
+                        Case &H11 : valeur = "5"
+                        Case &H12 : valeur = "6"
+                        Case &H13 : valeur = "7"
+                        Case &H14 : valeur = "8"
+                        Case &H15 : valeur = "9"
+                        Case &H16 : valeur = "txt"
+                        Case &H17 : valeur = "0"
+                        Case &H18 : valeur = "snapshot ESC"
+                        Case &H19 : valeur = "C"
+                        Case &H1A : valeur = "^"
+                        Case &H1B : valeur = "D"
+                        Case &H1C : valeur = "TV/RADIO"
+                        Case &H1D : valeur = "<"
+                        Case &H1E : valeur = "OK"
+                        Case &H1F : valeur = ">"
+                        Case &H20 : valeur = "<-"
+                        Case &H21 : valeur = "E"
+                        Case &H22 : valeur = "v"
+                        Case &H23 : valeur = "F"
+                        Case &H24 : valeur = "Rewind"
+                        Case &H25 : valeur = "Play"
+                        Case &H26 : valeur = "Fast forward"
+                        Case &H27 : valeur = "Record"
+                        Case &H28 : valeur = "Stop"
+                        Case &H29 : valeur = "Pause"
+                        Case &H2C : valeur = "TV"
+                        Case &H2D : valeur = "VCR"
+                        Case &H2E : valeur = "RADIO"
+                        Case &H2F : valeur = "TV Preview"
+                        Case &H30 : valeur = "Channel list"
+                        Case &H31 : valeur = "Video Desktop"
+                        Case &H32 : valeur = "red"
+                        Case &H33 : valeur = "green"
+                        Case &H34 : valeur = "yellow"
+                        Case &H35 : valeur = "blue"
+                        Case &H36 : valeur = "rename TAB"
+                        Case &H37 : valeur = "Acquire image"
+                        Case &H38 : valeur = "edit image"
+                        Case &H39 : valeur = "Full screen"
+                        Case &H3A : valeur = "DVD Audio"
+                        Case &H70 : valeur = "Cursor-left"
+                        Case &H71 : valeur = "Cursor-right"
+                        Case &H72 : valeur = "Cursor-up"
+                        Case &H73 : valeur = "Cursor-down"
+                        Case &H74 : valeur = "Cursor-up-left"
+                        Case &H75 : valeur = "Cursor-up-right"
+                        Case &H76 : valeur = "Cursor-down-right"
+                        Case &H77 : valeur = "Cursor-down-left"
+                        Case &H78 : valeur = "V"
+                        Case &H79 : valeur = "V-End"
+                        Case &H7C : valeur = "X"
+                        Case &H7D : valeur = "X-End"
+                        Case Else : valeur = "unknown"
+                    End Select
+                    WriteRetour(adresse, "", valeur)
+                Case REMOTE.ATI2 'ATI Remote Wonder II
+                    adresse = recbuf(REMOTE.id).ToString
+                    Select Case recbuf(REMOTE.cmnd)
+                        Case &H0 : valeur = "A"
+                        Case &H1 : valeur = "B"
+                        Case &H2 : valeur = "power"
+                        Case &H3 : valeur = "TV"
+                        Case &H4 : valeur = "DVD"
+                        Case &H5 : valeur = "?"
+                        Case &H6 : valeur = "Guide"
+                        Case &H7 : valeur = "Drag"
+                        Case &H8 : valeur = "VOL+"
+                        Case &H9 : valeur = "VOL-"
+                        Case &HA : valeur = "MUTE"
+                        Case &HB : valeur = "CHAN+"
+                        Case &HC : valeur = "CHAN-"
+                        Case &HD : valeur = "1"
+                        Case &HE : valeur = "2"
+                        Case &HF : valeur = "3"
+                        Case &H10 : valeur = "4"
+                        Case &H11 : valeur = "5"
+                        Case &H12 : valeur = "6"
+                        Case &H13 : valeur = "7"
+                        Case &H14 : valeur = "8"
+                        Case &H15 : valeur = "9"
+                        Case &H16 : valeur = "txt"
+                        Case &H17 : valeur = "0"
+                        Case &H18 : valeur = "Open Setup Menu"
+                        Case &H19 : valeur = "C"
+                        Case &H1A : valeur = "^"
+                        Case &H1B : valeur = "D"
+                        Case &H1C : valeur = "FM"
+                        Case &H1D : valeur = "<"
+                        Case &H1E : valeur = "OK"
+                        Case &H1F : valeur = ">"
+                        Case &H20 : valeur = "Max/Restore window"
+                        Case &H21 : valeur = "E"
+                        Case &H22 : valeur = "v"
+                        Case &H23 : valeur = "F"
+                        Case &H24 : valeur = "Rewind"
+                        Case &H25 : valeur = "Play"
+                        Case &H26 : valeur = "Fast forward"
+                        Case &H27 : valeur = "Record"
+                        Case &H28 : valeur = "Stop"
+                        Case &H29 : valeur = "Pause"
+                        Case &H2A : valeur = "TV2"
+                        Case &H2B : valeur = "Clock"
+                        Case &H2C : valeur = "i"
+                        Case &H2D : valeur = ""ATI"
+                        Case &H2E : valeur = "RADIO"
+                        Case &H2F : valeur = "TV Preview"
+                        Case &H30 : valeur = "Channel list"
+                        Case &H31 : valeur = "Video Desktop"
+                        Case &H32 : valeur = "red"
+                        Case &H33 : valeur = "green"
+                        Case &H34 : valeur = "yellow"
+                        Case &H35 : valeur = "blue"
+                        Case &H36 : valeur = "rename TAB"
+                        Case &H37 : valeur = "Acquire image"
+                        Case &H38 : valeur = "edit image"
+                        Case &H39 : valeur = "Full screen"
+                        Case &H3A : valeur = "DVD Audio"
+                        Case &H70 : valeur = "Cursor-left"
+                        Case &H71 : valeur = "Cursor-right"
+                        Case &H72 : valeur = "Cursor-up"
+                        Case &H73 : valeur = "Cursor-down"
+                        Case &H74 : valeur = "Cursor-up-left"
+                        Case &H75 : valeur = "Cursor-up-right"
+                        Case &H76 : valeur = "Cursor-down-right"
+                        Case &H77 : valeur = "Cursor-down-left"
+                        Case &H78 : valeur = "Left Mouse Button"
+                        Case &H79 : valeur = "V-End"
+                        Case &H7C : valeur = "Right Mouse Button"
+                        Case &H7D : valeur = "X-End"
+                        Case Else : valeur = "unknown"
+                    End Select
+                    '        If (recbuf(REMOTE.toggle) And &H1) = &H1 Then
+                    '            WriteMessage("  (button press = odd)")
+                    '        Else
+                    '            WriteMessage("  (button press = even)")
+                    '        End If
+                    WriteRetour(adresse, "", valeur)
+                Case REMOTE.Medion 'Medion Remote
+                    adresse = recbuf(REMOTE.id).ToString
+                    Select Case recbuf(REMOTE.cmnd)
+                        Case &H0 : valeur = "Mute"
+                        Case &H1 : valeur = "B"
+                        Case &H2 : valeur = "power"
+                        Case &H3 : valeur = "TV"
+                        Case &H4 : valeur = "DVD"
+                        Case &H5 : valeur = "Photo"
+                        Case &H6 : valeur = "Music"
+                        Case &H7 : valeur = "Drag"
+                        Case &H8 : valeur = "VOL-"
+                        Case &H9 : valeur = "VOL+"
+                        Case &HA : valeur = "MUTE"
+                        Case &HB : valeur = "CHAN+"
+                        Case &HC : valeur = "CHAN-"
+                        Case &HD : valeur = "1"
+                        Case &HE : valeur = "2"
+                        Case &HF : valeur = "3"
+                        Case &H10 : valeur = "4"
+                        Case &H11 : valeur = "5"
+                        Case &H12 : valeur = "6"
+                        Case &H13 : valeur = "7"
+                        Case &H14 : valeur = "8"
+                        Case &H15 : valeur = "9"
+                        Case &H16 : valeur = "txt"
+                        Case &H17 : valeur = "0"
+                        Case &H18 : valeur = "snapshot ESC"
+                        Case &H19 : valeur = "DVD MENU"
+                        Case &H1A : valeur = "^"
+                        Case &H1B : valeur = "Setup"
+                        Case &H1C : valeur = "TV/RADIO"
+                        Case &H1D : valeur = "<"
+                        Case &H1E : valeur = "OK"
+                        Case &H1F : valeur = ">"
+                        Case &H20 : valeur = "<-"
+                        Case &H21 : valeur = "E"
+                        Case &H22 : valeur = "v"
+                        Case &H23 : valeur = "F"
+                        Case &H24 : valeur = "Rewind"
+                        Case &H25 : valeur = "Play"
+                        Case &H26 : valeur = "Fast forward"
+                        Case &H27 : valeur = "Record"
+                        Case &H28 : valeur = "Stop"
+                        Case &H29 : valeur = "Pause"
+                        Case &H2C : valeur = "V"
+                        Case &H2D : valeur = "VCR"
+                        Case &H2E : valeur = "RADIO"
+                        Case &H2F : valeur = "TV Preview"
+                        Case &H30 : valeur = "Channel list"
+                        Case &H31 : valeur = "Video Desktop"
+                        Case &H32 : valeur = "red"
+                        Case &H33 : valeur = "green"
+                        Case &H34 : valeur = "yellow"
+                        Case &H35 : valeur = "blue"
+                        Case &H36 : valeur = "rename TAB"
+                        Case &H37 : valeur = "Acquire image"
+                        Case &H38 : valeur = "edit image"
+                        Case &H39 : valeur = "Full screen"
+                        Case &H3A : valeur = "DVD Audio"
+                        Case &H70 : valeur = "Cursor-left"
+                        Case &H71 : valeur = "Cursor-right"
+                        Case &H72 : valeur = "Cursor-up"
+                        Case &H73 : valeur = "Cursor-down"
+                        Case &H74 : valeur = "Cursor-up-left"
+                        Case &H75 : valeur = "Cursor-up-right"
+                        Case &H76 : valeur = "Cursor-down-right"
+                        Case &H77 : valeur = "Cursor-down-left"
+                        Case &H78 : valeur = "V"
+                        Case &H79 : valeur = "V-End"
+                        Case &H7C : valeur = "X"
+                        Case &H7D : valeur = "X-End"
+                        Case Else : valeur = "unknown"
+                    End Select
+                    WriteRetour(adresse, "", valeur)
+                Case REMOTE.PCremote 'PC Remote
+                    adresse = recbuf(REMOTE.id).ToString
+                    Select Case recbuf(REMOTE.cmnd)
+                        Case &H2 : valeur = "0"
+                        Case &H82 : valeur = "1"
+                        Case &HD1 : valeur = "MP3"
+                        Case &H42 : valeur = "2"
+                        Case &HD2 : valeur = "DVD"
+                        Case &HC2 : valeur = "3"
+                        Case &HD3 : valeur = "CD"
+                        Case &H22 : valeur = "4"
+                        Case &HD4 : valeur = "PC or SHIFT-4"
+                        Case &HA2 : valeur = "5"
+                        Case &HD5 : valeur = "SHIFT-5"
+                        Case &H62 : valeur = "6"
+                        Case &HE2 : valeur = "7"
+                        Case &H12 : valeur = "8"
+                        Case &H92 : valeur = "9"
+                        Case &HC0 : valeur = "CH-"
+                        Case &H40 : valeur = "CH+"
+                        Case &HE0 : valeur = "VOL-"
+                        Case &H60 : valeur = "VOL+"
+                        Case &HA0 : valeur = "MUTE"
+                        Case &H3A : valeur = "INFO"
+                        Case &H38 : valeur = "REW"
+                        Case &HB8 : valeur = "FF"
+                        Case &HB0 : valeur = "PLAY"
+                        Case &H64 : valeur = "PAUSE"
+                        Case &H63 : valeur = "STOP"
+                        Case &HB6 : valeur = "MENU"
+                        Case &HFF : valeur = "REC"
+                        Case &HC9 : valeur = "EXIT"
+                        Case &HD8 : valeur = "TEXT"
+                        Case &HD9 : valeur = "SHIFT-TEXT"
+                        Case &HF2 : valeur = "TELETEXT"
+                        Case &HD7 : valeur = "SHIFT-TELETEXT"
+                        Case &HBA : valeur = "A+B"
+                        Case &H52 : valeur = "ENT"
+                        Case &HD6 : valeur = "SHIFT-ENT"
+                        Case &H70 : valeur = "Cursor-left"
+                        Case &H71 : valeur = "Cursor-right"
+                        Case &H72 : valeur = "Cursor-up"
+                        Case &H73 : valeur = "Cursor-down"
+                        Case &H74 : valeur = "Cursor-up-left"
+                        Case &H75 : valeur = "Cursor-up-right"
+                        Case &H76 : valeur = "Cursor-down-right"
+                        Case &H77 : valeur = "Cursor-down-left"
+                        Case &H78 : valeur = "Left mouse"
+                        Case &H79 : valeur = "Left mouse-End"
+                        Case &H7B : valeur = "Drag"
+                        Case &H7C : valeur = "Right mouse"
+                        Case &H7D : valeur = "Right mouse-End"
+                        Case Else : valeur = "unknown"
+                    End Select
+                    WriteRetour(adresse, "", valeur)
+                Case Else
+                    '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(REMOTE.packettype)) & ":" & Hex(recbuf(REMOTE.subtype)))
+            End Select
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(REMOTE.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+        Catch ex As Exception
+            WriteLog("ERR: decode_Temp Exception : " & ex.Message)
+        End Try
     End Sub
     'non géré
     Private Sub decode_Thermostat1()
@@ -3103,9 +2834,12 @@ Imports System.Media
     Private Sub decode_Baro()
         'WriteMessage("Not implemented")
     End Sub
-    'non géré
+
     Private Sub decode_TempHumBaro()
         Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            adresse = (recbuf(TEMP_HUM_BARO.id1) * 256 + recbuf(TEMP_HUM_BARO.id2)).ToString
             'Select Case recbuf(TEMP_HUM_BARO.subtype)
             '    Case TEMP_HUM_BARO.THB1
             '        WriteMessage("subtype       = THB1 - BTHR918")
@@ -3114,14 +2848,17 @@ Imports System.Media
             '    Case Else
             '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(TEMP_HUM_BARO.packettype)) & ":" & Hex(recbuf(TEMP_HUM_BARO.subtype)))
             'End Select
-            'WriteMessage("Sequence nbr  = " & recbuf(TEMP_HUM_BARO.seqnbr).ToString)
-            'WriteMessage("ID            = " & (recbuf(TEMP_HUM_BARO.id1) * 256 + recbuf(TEMP_HUM_BARO.id2)).ToString)
-            'If (TEMP_HUM_BARO.tempsign And &H80) = 0 Then
-            '    WriteMessage("Temperature   = " & Math.Round((recbuf(TEMP_HUM_BARO.temperatureh) * 256 + recbuf(TEMP_HUM_BARO.temperaturel)) / 10, 2).ToString & " °C")
-            'Else
-            '    WriteMessage("Temperature   = -" & Math.Round(((recbuf(TEMP_HUM_BARO.temperatureh) And &H7F) * 256 + recbuf(TEMP_HUM_BARO.temperaturel)) / 10, 2).ToString & " °C")
-            'End If
-            'WriteMessage("Humidity      = " & recbuf(TEMP_HUM_BARO.humidity).ToString)
+
+            If (TEMP_HUM_BARO.tempsign And &H80) = 0 Then
+                valeur = Math.Round((recbuf(TEMP_HUM_BARO.temperatureh) * 256 + recbuf(TEMP_HUM_BARO.temperaturel)) / 10, 2).ToString '°C
+            Else
+                valeur = Math.Round(((recbuf(TEMP_HUM_BARO.temperatureh) And &H7F) * 256 + recbuf(TEMP_HUM_BARO.temperaturel)) / 10, 2).ToString '°C
+            End If
+            WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
+
+            valeur = recbuf(TEMP_HUM_BARO.humidity).ToString
+            WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
+
             'Select Case recbuf(TEMP_HUM_BARO.humidity_status)
             '    Case &H0
             '        WriteMessage("Status        = Dry")
@@ -3132,7 +2869,10 @@ Imports System.Media
             '    Case &H3
             '        WriteMessage("Status        = Wet")
             'End Select
-            'WriteMessage("Barometer     = " & (recbuf(TEMP_HUM_BARO.baroh) * 256 + recbuf(TEMP_HUM_BARO.barol)).ToString)
+
+            valeur = (recbuf(TEMP_HUM_BARO.baroh) * 256 + recbuf(TEMP_HUM_BARO.barol)).ToString
+            WriteRetour(adresse, ListeDevices.BAROMETRE.ToString, valeur)
+
             'Select Case recbuf(TEMP_HUM_BARO.forecast)
             '    Case &H0
             '        WriteMessage("Forecast      = No information available")
@@ -3146,19 +2886,18 @@ Imports System.Media
             '        WriteMessage("Forecast      = Rain")
             'End Select
 
-            'WriteMessage("Signal level  = " & (recbuf(TEMP_HUM_BARO.rssi) >> 4).ToString)
-            'If (recbuf(TEMP_HUM_BARO.battery_level) And &HF) = 0 Then
-            '    WriteMessage("Battery       = Low")
-            'Else
-            '    WriteMessage("Battery       = OK")
-            'End If
+            If (recbuf(TEMP_HUM_BARO.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(TEMP_HUM_BARO.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_TempHumBaro Exception : " & ex.Message)
         End Try
     End Sub
-    'non géré
+
     Private Sub decode_Rain()
         Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            adresse = (recbuf(RAIN.id1) * 256 + recbuf(RAIN.id2)).ToString
             'Select Case recbuf(RAIN.subtype)
             '    Case RAIN.RAIN1
             '        WriteMessage("subtype       = RAIN1 - RGR126/682/918")
@@ -3169,29 +2908,28 @@ Imports System.Media
             '    Case Else
             '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(RAIN.packettype)) & ":" & Hex(recbuf(RAIN.subtype)))
             'End Select
-            'WriteMessage("Sequence nbr  = " & recbuf(RAIN.seqnbr).ToString)
-            'WriteMessage("ID            = " & (recbuf(RAIN.id1) * 256 + recbuf(RAIN.id2)).ToString)
-            'If recbuf(RAIN.subtype) <> RAIN.RAIN3 Then
-            '    If recbuf(RAIN.subtype) = RAIN.RAIN1 Then
-            '        WriteMessage("Rain rate     = " & ((recbuf(RAIN.rainrateh) * 256) + recbuf(RAIN.rainratel)).ToString & " mm/h")
-            '    Else
-            '        WriteMessage("Rain rate     = " & (((recbuf(RAIN.rainrateh) * 256) + recbuf(RAIN.rainratel)) / 100).ToString & " mm/h")
-            '    End If
-            'End If
-            'WriteMessage("Total rain    = " & ((recbuf(RAIN.raintotal1) * 65535) + recbuf(RAIN.raintotal2) * 256 + recbuf(RAIN.raintotal3)).ToString & " mm")
-            'WriteMessage("Signal level  = " & (recbuf(RAIN.rssi) >> 4).ToString)
-            'If (recbuf(RAIN.battery_level) And &HF) = 0 Then
-            '    WriteMessage("Battery       = Low")
-            'Else
-            '    WriteMessage("Battery       = OK")
-            'End If
+            If recbuf(RAIN.subtype) <> RAIN.RAIN3 Then
+                If recbuf(RAIN.subtype) = RAIN.RAIN1 Then
+                    valeur = ((recbuf(RAIN.rainrateh) * 256) + recbuf(RAIN.rainratel)).ToString 'mm/h
+                Else
+                    valeur = (((recbuf(RAIN.rainrateh) * 256) + recbuf(RAIN.rainratel)) / 100).ToString ' mm/h
+                End If
+                WriteRetour(adresse, ListeDevices.PLUIECOURANT.ToString, valeur)
+            End If
+            valeur = ((recbuf(RAIN.raintotal1) * 65535) + recbuf(RAIN.raintotal2) * 256 + recbuf(RAIN.raintotal3)).ToString 'mm
+            WriteRetour(adresse, ListeDevices.PLUIETOTAL.ToString, valeur)
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(RAIN.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+            If (recbuf(RAIN.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
         Catch ex As Exception
             WriteLog("ERR: decode_Rain Exception : " & ex.Message)
         End Try
     End Sub
-    'non géré
+
     Private Sub decode_Wind()
         Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            adresse = (recbuf(WIND.id1) * 256 + recbuf(WIND.id2)).ToString
             'Select Case recbuf(WIND.subtype)
             '    Case WIND.WIND1
             '        WriteMessage("subtype       = WIND1 - WTGR800")
@@ -3204,63 +2942,45 @@ Imports System.Media
             '    Case Else
             '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(WIND.packettype)) & ":" & Hex(recbuf(WIND.subtype)))
             'End Select
-            'WriteMessage("Sequence nbr  = " & recbuf(WIND.seqnbr).ToString)
-            'WriteMessage("ID            = " & (recbuf(WIND.id1) * 256 + recbuf(WIND.id2)).ToString)
-            'WriteMessage("Direction     = " & ((recbuf(WIND.directionh) * 256) + recbuf(WIND.directionl)).ToString & " degrees")
-            'WriteMessage("Average speed = " & (((recbuf(WIND.av_speedh) * 256) + recbuf(WIND.av_speedl)) / 10).ToString & " mtr/sec")
+
+            valeur = ((recbuf(WIND.directionh) * 256) + recbuf(WIND.directionl)).ToString 'direction en degré
+            WriteRetour(adresse, ListeDevices.DIRECTIONVENT.ToString, valeur)
+            valeur = (((recbuf(WIND.av_speedh) * 256) + recbuf(WIND.av_speedl)) / 10).ToString 'Vitesse en mtr/sec
+            WriteRetour(adresse, ListeDevices.VITESSEVENT.ToString, valeur)
+
             'WriteMessage("Wind gust     = " & (((recbuf(WIND.gusth) * 256) + recbuf(WIND.gustl)) / 10).ToString & " mtr/sec")
-            'If recbuf(WIND.subtype) = WIND.WIND4 Then
-            '    If (WIND.tempsign And &H80) = 0 Then
-            '        WriteMessage("Temperature   = " & Math.Round((recbuf(WIND.temperatureh) * 256 + recbuf(WIND.temperaturel)) / 10, 2).ToString & " °C")
-            '    Else
-            '        WriteMessage("Temperature   = -" & Math.Round(((recbuf(WIND.temperatureh) And &H7F) * 256 + recbuf(WIND.temperaturel)) / 10, 2).ToString & " °C")
-            '    End If
 
-            '    If (WIND.chillsign And &H80) = 0 Then
-            '        WriteMessage("Chill         = " & Math.Round((recbuf(WIND.chillh) * 256 + recbuf(WIND.chilll)) / 10, 2).ToString & " °C")
-            '    Else
-            '        WriteMessage("Chill         = -" & Math.Round(((recbuf(WIND.chillh) And &H7F) * 256 + recbuf(WIND.chilll)) / 10, 2).ToString & " °C")
-            '    End If
-            'End If
+            If recbuf(WIND.subtype) = WIND.WIND4 Then
+                If (WIND.tempsign And &H80) = 0 Then
+                    valeur = Math.Round((recbuf(WIND.temperatureh) * 256 + recbuf(WIND.temperaturel)) / 10, 2).ToString '°C
+                Else
+                    valeur = Math.Round(((recbuf(WIND.temperatureh) And &H7F) * 256 + recbuf(WIND.temperaturel)) / 10, 2).ToString '°C
+                End If
+                WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
 
-            'WriteMessage("Signal level  = " & (recbuf(WIND.rssi) >> 4).ToString)
-            'If recbuf(WIND.subtype) = WIND.WIND3 Then
-            '    Select Case recbuf(WIND.battery_level)
-            '        Case 0
-            '            WriteMessage("Battery       = 10%")
-            '        Case 1
-            '            WriteMessage("Battery       = 20%")
-            '        Case 2
-            '            WriteMessage("Battery       = 30%")
-            '        Case 3
-            '            WriteMessage("Battery       = 40%")
-            '        Case 4
-            '            WriteMessage("Battery       = 50%")
-            '        Case 5
-            '            WriteMessage("Battery       = 60%")
-            '        Case 6
-            '            WriteMessage("Battery       = 70%")
-            '        Case 7
-            '            WriteMessage("Battery       = 80%")
-            '        Case 8
-            '            WriteMessage("Battery       = 90%")
-            '        Case 9
-            '            WriteMessage("Battery       = 100%")
-            '    End Select
-            'Else
-            '    If (recbuf(WIND.battery_level) And &HF) = 0 Then
-            '        WriteMessage("Battery       = Low")
-            '    Else
-            '        WriteMessage("Battery       = OK")
-            '    End If
-            'End If
+                If (WIND.chillsign And &H80) = 0 Then
+                    '        WriteMessage("Chill         = " & Math.Round((recbuf(WIND.chillh) * 256 + recbuf(WIND.chilll)) / 10, 2).ToString & " °C")
+                Else
+                    '        WriteMessage("Chill         = -" & Math.Round(((recbuf(WIND.chillh) And &H7F) * 256 + recbuf(WIND.chilll)) / 10, 2).ToString & " °C")
+                End If
+            End If
+
+            If recbuf(WIND.subtype) = WIND.WIND3 Then
+                If recbuf(WIND.battery_level) = 0 Then WriteBattery(adresse) 'battery low < 10% (1=20% 2=30%....9=100%)
+            Else
+                If (recbuf(WIND.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            End If
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(WIND.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Wind Exception : " & ex.Message)
         End Try
     End Sub
-    'non géré
+
     Private Sub decode_UV()
         Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            adresse = (recbuf(UV.id1) * 256 + recbuf(UV.id2)).ToString
             'Select Case recbuf(UV.subtype)
             '    Case UV.UV1
             '        WriteMessage("Subtype       = UV1 - UVN128, UV138")
@@ -3271,16 +2991,19 @@ Imports System.Media
             '    Case Else
             '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(UV.packettype) & ":" & Hex(recbuf(UV.subtype)))
             'End Select
-            'WriteMessage("Sequence nbr  = " & recbuf(UV.seqnbr).ToString)
-            'WriteMessage("ID            = " & (recbuf(UV.id1) * 256 + recbuf(UV.id2)).ToString)
-            'WriteMessage("Level         = " & (recbuf(UV.uv) / 10).ToString)
-            'If recbuf(UV.subtype) = UV.UV3 Then
-            '    If (UV.tempsign And &H80) = 0 Then
-            '        WriteMessage("Temperature   = " & Math.Round((recbuf(UV.temperatureh) * 256 + recbuf(UV.temperaturel)) / 10, 2).ToString & " °C")
-            '    Else
-            '        WriteMessage("Temperature   = -" & Math.Round(((recbuf(UV.temperatureh) And &H7F) * 256 + recbuf(UV.temperaturel)) / 10, 2).ToString & " °C")
-            '    End If
-            'End If
+
+            valeur = (recbuf(UV.uv) / 10).ToString
+            WriteRetour(adresse, ListeDevices.UV.ToString, valeur)
+
+            If recbuf(UV.subtype) = UV.UV3 Then
+                If (UV.tempsign And &H80) = 0 Then
+                    valeur = Math.Round((recbuf(UV.temperatureh) * 256 + recbuf(UV.temperaturel)) / 10, 2).ToString '°C
+                Else
+                    valeur = Math.Round(((recbuf(UV.temperatureh) And &H7F) * 256 + recbuf(UV.temperaturel)) / 10, 2).ToString '°C
+                End If
+                WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
+            End If
+
             'If recbuf(UV.uv) < 3 Then
             '    WriteMessage("Description = Low")
             'ElseIf recbuf(UV.uv) < 6 Then
@@ -3292,12 +3015,9 @@ Imports System.Media
             'Else
             '    WriteMessage("Description = Dangerous")
             'End If
-            'WriteMessage("Signal level  = " & (recbuf(UV.rssi) >> 4).ToString)
-            'If (recbuf(UV.battery_level) And &HF) = 0 Then
-            '    WriteMessage("Battery       = Low")
-            'Else
-            '    WriteMessage("Battery       = OK")
-            'End If
+
+            If (recbuf(UV.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(UV.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_UV Exception : " & ex.Message)
         End Try
@@ -3310,54 +3030,55 @@ Imports System.Media
             WriteLog("ERR: decode_DateTime Exception : " & ex.Message)
         End Try
     End Sub
-    'non géré
+
     Private Sub decode_Current()
         Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            adresse = (recbuf(CURRENT.id1) * 256 + recbuf(CURRENT.id2)).ToString
             'Select Case recbuf(CURRENT.subtype)
             '    Case CURRENT.ELEC1
             '        WriteMessage("subtype       = ELEC1 - OWL CM113, Electrisave, cent-a-meter")
             '    Case Else
             '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(CURRENT.packettype)) & ":" & Hex(recbuf(CURRENT.subtype)))
             'End Select
-            'WriteMessage("Sequence nbr  = " & recbuf(CURRENT.seqnbr).ToString)
-            'WriteMessage("ID            = " & (recbuf(CURRENT.id1) * 256 + recbuf(CURRENT.id2)).ToString)
             'WriteMessage("Count         = " & recbuf(5).ToString)
-            'WriteMessage("Channel 1     = " & ((recbuf(CURRENT.ch1h) * 256 + recbuf(CURRENT.ch1l)) / 10).ToString & " ampere")
-            'WriteMessage("Channel 2     = " & ((recbuf(CURRENT.ch2h) * 256 + recbuf(CURRENT.ch2l)) / 10).ToString & " ampere")
-            'WriteMessage("Channel 3     = " & ((recbuf(CURRENT.ch3h) * 256 + recbuf(CURRENT.ch3l)) / 10).ToString & " ampere")
 
-            'WriteMessage("Signal level  = " & (recbuf(CURRENT.rssi) >> 4).ToString)
-            'If (recbuf(CURRENT.battery_level) And &HF) = 0 Then
-            '    WriteMessage("Battery       = Low")
-            'Else
-            '    WriteMessage("Battery       = OK")
-            'End If
+            valeur = ((recbuf(CURRENT.ch1h) * 256 + recbuf(CURRENT.ch1l)) / 10).ToString 'ampere channel 1
+            WriteRetour(adresse & "-1", "", valeur)
+            valeur = ((recbuf(CURRENT.ch2h) * 256 + recbuf(CURRENT.ch2h)) / 10).ToString 'ampere channel 2
+            WriteRetour(adresse & "-2", "", valeur)
+            valeur = ((recbuf(CURRENT.ch3l) * 256 + recbuf(CURRENT.ch3l)) / 10).ToString 'ampere channel 3
+            WriteRetour(adresse & "-3", "", valeur)
+
+            If (recbuf(CURRENT.battery_level) And &HF) = 0 Then WriteBattery(adresse & "-1") 'battery low
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(CURRENT.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Current Exception : " & ex.Message)
         End Try
     End Sub
-    'non géré
+
     Private Sub decode_Energy()
         Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            adresse = (recbuf(ENERGY.id1) * 256 + recbuf(ENERGY.id2)).ToString
             'Select Case recbuf(ENERGY.subtype)
             '    Case ENERGY.ELEC2
             '        WriteMessage("subtype       = ELEC2 - OWL CM119, CM160")
             '    Case Else
             '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(ENERGY.packettype)) & ":" & Hex(recbuf(ENERGY.subtype)))
             'End Select
-            'WriteMessage("Sequence nbr  = " & recbuf(ENERGY.seqnbr).ToString)
-            'WriteMessage("ID            = " & (recbuf(ENERGY.id1) * 256 + recbuf(ENERGY.id2)).ToString)
-            'WriteMessage("Count         = " & recbuf(ENERGY.count).ToString)
-            'WriteMessage("Instant usage = " & (recbuf(ENERGY.instant1) * 16777216 + recbuf(ENERGY.instant2) * 65536 + recbuf(ENERGY.instant3) * 256 + recbuf(ENERGY.instant4)).ToString & " Watt")
-            'WriteMessage("total usage   = " & ((recbuf(ENERGY.total1) * 1099511627776 + recbuf(ENERGY.total2) * 4294967296 + recbuf(ENERGY.total3) * 16777216 _
-            '                                   + recbuf(ENERGY.total4) * 65536 + recbuf(ENERGY.total5) * 256 + recbuf(ENERGY.total6)) / 223.666).ToString & " Wh")
 
-            'WriteMessage("Signal level  = " & (recbuf(ENERGY.rssi) >> 4).ToString)
-            'If (recbuf(ENERGY.battery_level) And &HF) = 0 Then
-            '    WriteMessage("Battery       = Low")
-            'Else
-            '    WriteMessage("Battery       = OK")
-            'End If
+            'WriteMessage("Count         = " & recbuf(ENERGY.count).ToString)
+
+            valeur = (recbuf(ENERGY.instant1) * 16777216 + recbuf(ENERGY.instant2) * 65536 + recbuf(ENERGY.instant3) * 256 + recbuf(ENERGY.instant4)).ToString 'Watt
+            WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE.ToString, valeur)
+            valeur = ((recbuf(ENERGY.total1) * 1099511627776 + recbuf(ENERGY.total2) * 4294967296 + recbuf(ENERGY.total3) * 16777216 + recbuf(ENERGY.total4) * 65536 + recbuf(ENERGY.total5) * 256 + recbuf(ENERGY.total6)) / 223.666).ToString 'Watt / h
+            WriteRetour(adresse, ListeDevices.ENERGIETOTALE.ToString, valeur)
+
+            If (recbuf(ENERGY.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(ENERGY.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Energy Exception : " & ex.Message)
         End Try
@@ -3378,9 +3099,12 @@ Imports System.Media
             WriteLog("ERR: decode_Water Exception : " & ex.Message)
         End Try
     End Sub
-    'non géré
+
     Private Sub decode_Weight()
         Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            adresse = (recbuf(WEIGHT.id1) * 256 + recbuf(WEIGHT.id2)).ToString
             'Select Case recbuf(WEIGHT.subtype)
             '    Case WEIGHT.WEIGHT1
             '        WriteMessage("subtype       = BWR102")
@@ -3389,10 +3113,11 @@ Imports System.Media
             '    Case Else
             '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(WEIGHT.packettype)) & ":" & Hex(recbuf(WEIGHT.subtype)))
             'End Select
-            'WriteMessage("Sequence nbr  = " & recbuf(WEIGHT.seqnbr).ToString)
-            'WriteMessage("ID            = " & (recbuf(WEIGHT.id1) * 256 + recbuf(WEIGHT.id2)).ToString)
-            'WriteMessage("Weight        = " & ((recbuf(WEIGHT.weighthigh) * 25.6) + recbuf(WEIGHT.weightlow) / 10).ToString & " kg")
-            'WriteMessage("Signal level  = " & (recbuf(WEIGHT.rssi) >> 4).ToString)
+
+            valeur = ((recbuf(WEIGHT.weighthigh) * 25.6) + recbuf(WEIGHT.weightlow) / 10).ToString 'kg
+            WriteRetour(adresse, "", valeur)
+
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(WEIGHT.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Weight Exception : " & ex.Message)
         End Try
@@ -3400,6 +3125,8 @@ Imports System.Media
     'non géré
     Private Sub decode_RFXSensor()
         Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
             'Select Case recbuf(RFXSENSOR.subtype)
             '    Case RFXSENSOR.Temp
             '        WriteMessage("subtype       = Temperature")
