@@ -133,6 +133,11 @@
                     <StackPanel Name="menu_quitter" Width="110" Height="110" Background="Black">
                         <Image Tag="tag_quitter" Name="img_quitter" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/Quitter_128.png" ToolTip="Quitter" />
                         <Label Name="label_menu_quitter" Content="Quitter" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Image Tag="tag_quitter_stop" Name="img_quitter_stop" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/stop-48.png" ToolTip="Arrêter le serveur" />
+                            <Image Tag="tag_quitter_start" Name="img_quitter_start" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/lecture-48.png" ToolTip="Démarrer le serveur" />
+                        </StackPanel>
+
                     </StackPanel>
                 </Border>
             </StackPanel>

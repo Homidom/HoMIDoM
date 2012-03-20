@@ -39,7 +39,7 @@
     'action quand on appuie sur un sous menu autre
     Private Sub Autre_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_histo.MouseDown, img_config_log.MouseDown, _
         img_config_exporter.MouseDown, img_config_importer.MouseDown, img_config_sauvegarder.MouseDown, img_quitter.MouseDown, img_aide.MouseDown, img_multimedia.MouseDown, _
-        img_config_gerer.MouseDown, img_config.MouseDown
+        img_config_gerer.MouseDown, img_config.MouseDown, img_quitter_start.MouseDown, img_quitter_stop.MouseDown
 
         RaiseEvent menu_autre(sender.tag)
     End Sub

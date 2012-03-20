@@ -1029,6 +1029,11 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.#ctor">
 	<summary>Déclaration de la class Server</summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.Restart(System.String)">
+	<summary>
+ Redémarre le service et charge la config
+ </summary>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.start">
 	<summary>Démarrage du serveur</summary>
 	<remarks></remarks>
@@ -1245,8 +1250,13 @@ HoMIDom
 	<param name="Action"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DeleteDevice(System.String,System.String)">
-	<summary>Supprimer un device de la config</summary>
+	<summary>
+ Supprimer un device de la config
+ </summary>
+	<param name="IdSrv"></param>
 	<param name="deviceId"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetAllDevices(System.String)">
 	<summary>Retourne la liste de tous les devices</summary>
 	<returns></returns>
@@ -1711,6 +1721,11 @@ HoMIDom
  Arrête le service
  </summary>
 	<param name="idSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReStart(System.String)">
+	<summary>
+ Redémarre le service et charge la config
+ </summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetPortSOAP(System.String,System.Double)">
 	<summary>

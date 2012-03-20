@@ -501,18 +501,26 @@ Namespace HoMIDom
                                             x.Name = list.Item(i).Attributes.Item(j).Value
                                         Case "icon"
                                             If list.Item(i).Attributes.Item(j).Value <> Nothing Then
-                                                x.Icon = list.Item(0).Attributes.Item(j).Value
+                                                If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
+                                                    x.Icon = list.Item(0).Attributes.Item(j).Value
+                                                Else
+                                                    x.Icon = _MonRepertoire & "\images\Icones\Zone_128.png"
+                                                End If
                                             Else
                                                 x.Icon = _MonRepertoire & "\images\Icones\Zone_128.png"
                                             End If
                                         Case "image"
                                             If list.Item(i).Attributes.Item(j).Value <> Nothing Then
-                                                x.Image = list.Item(0).Attributes.Item(j).Value
+                                                If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
+                                                    x.Image = list.Item(0).Attributes.Item(j).Value
+                                                Else
+                                                    x.Image = _MonRepertoire & "\images\Icones\Zone_Image.png"
+                                                End If
                                             Else
                                                 x.Image = _MonRepertoire & "\images\Icones\Zone_Image.png"
                                             End If
                                         Case Else
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
                                 Next
                                 If list.Item(i).HasChildNodes = True Then
@@ -986,6 +994,18 @@ Namespace HoMIDom
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListRepertoireAudio.Count & " Répertoire(s) Audio chargé(s)")
                         list = Nothing
 
+                        '******************************************
+                        'on va nettoyer les devices disparus
+                        '********************************************
+                        For Each _zone In _ListZones
+                            For Each _elmt In _zone.ListElement
+                                If ReturnDeviceById(_IdSrv, _elmt.ElementID) Is Nothing And ReturnZoneById(_IdSrv, _elmt.ElementID) Is Nothing And ReturnMacroById(_IdSrv, _elmt.ElementID) Is Nothing Then
+                                    _zone.ListElement.Remove(_elmt)
+                                End If
+                            Next
+                        Next
+
+                        Exit For
                     Next
                 Else
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Fichier de configuration non trouvé")
@@ -2419,6 +2439,19 @@ Namespace HoMIDom
 
         End Sub
 
+        ''' <summary>
+        ''' Redémarre le service et charge la config
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub Restart(ByVal IdSrv As String) Implements IHoMIDom.ReStart
+            If VerifIdSrv(IdSrv) = False Then
+                Exit Sub
+            End If
+
+            [stop](_IdSrv)
+            start()
+        End Sub
+
         ''' <summary>Démarrage du serveur</summary>
         ''' <remarks></remarks>
         Public Sub start() Implements IHoMIDom.Start
@@ -2550,6 +2583,8 @@ Namespace HoMIDom
 
                 'test log
                 CleanLog(_MaxMonthLog)
+
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Serveur démarré")
             Catch ex As Exception
                 Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Exception : " & ex.Message)
             End Try
@@ -2569,15 +2604,27 @@ Namespace HoMIDom
                 Etat_server = False
 
                 TimerSecond.Enabled = False
+                RemoveHandler TimerSecond.Elapsed, AddressOf TimerSecTick
                 TimerSecond.Dispose()
 
                 '----- Arrete les devices ----- 
                 Devices_Stop()
-                _ListDevices = Nothing
+                _ListDevices.Clear()
 
                 '----- Arrete les drivers ----- 
                 Drivers_Stop()
-                _ListDrivers = Nothing
+                _ListDrivers.Clear()
+
+                '----- Vide les variables -----
+                _ListExtensionAudio.Clear()
+                _ListGroups.Clear()
+                _ListImgDrivers.Clear()
+                _ListMacros.Clear()
+                _ListRepertoireAudio.Clear()
+                _ListTagAudio.Clear()
+                _ListTriggers.Clear()
+                _ListUsers.Clear()
+                _ListZones.Clear()
 
                 '----- Arrete les connexions Sqlite -----
                 'retour = sqlite_homidom.disconnect("homidom")
@@ -2591,6 +2638,7 @@ Namespace HoMIDom
 
                 If _CycleSave > 0 Then SaveConfig(_MonRepertoire & "\config\homidom.xml")
 
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Stop", "Serveur Arrêté")
             Catch ex As Exception
                 Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Exception : " & ex.Message)
             End Try
@@ -4386,8 +4434,14 @@ Namespace HoMIDom
 #End Region
 
 #Region "Device"
-        ''' <summary>Supprimer un device de la config</summary>
+
+        ''' <summary>
+        ''' Supprimer un device de la config
+        ''' </summary>
+        ''' <param name="IdSrv"></param>
         ''' <param name="deviceId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Function DeleteDevice(ByVal IdSrv As String, ByVal deviceId As String) As Integer Implements IHoMIDom.DeleteDevice
             If VerifIdSrv(IdSrv) = False Then
                 Return 99
