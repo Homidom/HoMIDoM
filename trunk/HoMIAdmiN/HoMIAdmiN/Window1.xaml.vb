@@ -1164,7 +1164,16 @@ Class Window1
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub MainMenuAutre Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
-
+                Case "tag_quitter_stop"
+                    If MessageBox.Show("Confirmer vous l'arrêt du serveur?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                        myService.Stop(IdSrv)
+                        RefreshTreeView()
+                    End If
+                Case "tag_quitter_start"
+                    If MessageBox.Show("Confirmer vous le démarrage du serveur?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                        myService.Start()
+                        RefreshTreeView()
+                    End If
                 Case "tag_config_exporter" 'Exporter le fichier de config
                     Try
                         ' Configure open file dialog box

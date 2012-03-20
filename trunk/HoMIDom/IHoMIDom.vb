@@ -119,6 +119,12 @@ Namespace HoMIDom
         <OperationContract()> Sub [Stop](ByVal idSrv As String)
 
         ''' <summary>
+        ''' Redémarre le service et charge la config
+        ''' </summary>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub ReStart(ByVal IdSrv As String)
+
+        ''' <summary>
         ''' Fixe la valeur de port SOAP
         ''' </summary>
         ''' <param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
