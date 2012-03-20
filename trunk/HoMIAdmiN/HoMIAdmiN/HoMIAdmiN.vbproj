@@ -520,10 +520,11 @@
     <Resource Include="Images\zoom_avant_32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\stop-48.png" />
+    <Resource Include="Images\lecture-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\lecture-48.png" />
+    <Resource Include="Images\lecture-32.png" />
+    <Resource Include="Images\stop-32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
