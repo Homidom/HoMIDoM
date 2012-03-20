@@ -514,10 +514,10 @@ Namespace HoMIDom
                                                 If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
                                                     x.Image = list.Item(0).Attributes.Item(j).Value
                                                 Else
-                                                    x.Image = _MonRepertoire & "\images\Icones\Zone_Image.png"
+                                                    x.Image = _MonRepertoire & "\images\Icones\defaut_zone.jpg"
                                                 End If
                                             Else
-                                                x.Image = _MonRepertoire & "\images\Icones\Zone_Image.png"
+                                                x.Image = _MonRepertoire & "\images\Icones\defaut_zone.jpg"
                                             End If
                                         Case Else
                                                 Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
