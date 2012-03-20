@@ -504,20 +504,20 @@ Namespace HoMIDom
                                                 If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
                                                     x.Icon = list.Item(0).Attributes.Item(j).Value
                                                 Else
-                                                    x.Icon = _MonRepertoire & "\images\Icones\Zone_128.png"
+                                                    x.Icon = _MonRepertoire & "\images\Zones\icon\defaut.png"
                                                 End If
                                             Else
-                                                x.Icon = _MonRepertoire & "\images\Icones\Zone_128.png"
+                                                x.Icon = _MonRepertoire & "\images\Zones\icon\defaut.png"
                                             End If
                                         Case "image"
                                             If list.Item(i).Attributes.Item(j).Value <> Nothing Then
                                                 If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
                                                     x.Image = list.Item(0).Attributes.Item(j).Value
                                                 Else
-                                                    x.Image = _MonRepertoire & "\images\Zones\defaut.jpg"
+                                                    x.Image = _MonRepertoire & "\images\Zones\image\defaut.jpg"
                                                 End If
                                             Else
-                                                x.Image = _MonRepertoire & "\images\Zones\defaut.jpg"
+                                                x.Image = _MonRepertoire & "\images\Zones\image\defaut.jpg"
                                             End If
                                         Case Else
                                                 Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
