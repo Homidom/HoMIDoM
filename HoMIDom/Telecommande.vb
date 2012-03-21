@@ -93,6 +93,7 @@ Namespace HoMIDom
             Dim _Name As String
             Dim _Code As String
             Dim _Repeat As Integer = 0
+            Dim _Picture As String
 
             Property Name As String
                 Get
@@ -118,6 +119,15 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As Integer)
                     _Repeat = value
+                End Set
+            End Property
+
+            Property Picture As String
+                Get
+                    Return _Picture
+                End Get
+                Set(ByVal value As String)
+                    _Picture = value
                 End Set
             End Property
         End Class

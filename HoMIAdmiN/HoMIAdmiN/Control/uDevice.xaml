@@ -120,8 +120,16 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" >
                                     <Label Foreground="White" HorizontalAlignment="Right" Name="Label18" Content="Data :" />
-                                        <TextBox Width="240" Height="41" Name="TxtCmdData" ToolTip="Code à envoyer" Background="DarkGray" BorderBrush="Black" Foreground=" White"/>
-                                </StackPanel>
+                                    <TextBox Width="240" Height="41" Name="TxtCmdData" ToolTip="Code à envoyer" Background="DarkGray" BorderBrush="Black" Foreground=" White"/>
+                                        <Label Foreground="White" HorizontalAlignment="Right" Name="Label38" Content="Picture:" />
+                                        <Canvas  Name="Canvas2" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Canvas.Background>
+                                                <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                                                </ImageBrush>
+                                            </Canvas.Background>
+                                            <Image Margin="5" Name="ImgCommande" Width="40" Height="40" />
+                                        </Canvas>
+                                    </StackPanel>
                                 <StackPanel Orientation="Horizontal" >
                                         <Button Height="26.664" Margin="2" Name="BtnNewCmd" Width="67" Foreground="White" Template="{DynamicResource GlassButton}">Nouveau</Button>
                                         <Button Height="26.664" Margin="2" Name="BtnSaveCmd" Width="67" Foreground="White" Template="{DynamicResource GlassButton}">Enregistrer</Button>
