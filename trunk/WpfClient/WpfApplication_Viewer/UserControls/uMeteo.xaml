@@ -16,11 +16,11 @@
                 <Label Width="200" Height="Auto" Margin="3" Name="LblTemps" VerticalAlignment="Top" FontSize="14" Foreground="White">?</Label>
                 <Label Height="54" HorizontalAlignment="Right" Margin="3" Name="LblTemp" VerticalAlignment="Top" Width="64" Foreground="White" FontSize="34">00°</Label>
             </StackPanel>
-                <StackPanel >
-                    <Label Height="21" Margin="2" Name="Lbl0Min" VerticalAlignment="Top" Foreground="White">Min: #</Label>
-                    <Label Foreground="White" Height="21" Margin="2" Name="Lbl0Max" VerticalAlignment="Top">Max: #</Label>
-                    <Label Foreground="White" Height="21" Margin="2" Name="LblHum" VerticalAlignment="Top">Humidité: #</Label>
-                    <Label Foreground="White" Height="21" Margin="2" Name="LblVent" VerticalAlignment="Top">Vent: #</Label>
+                <StackPanel VerticalAlignment="Top" >
+                    <Label Margin="2" Name="Lbl0Min" VerticalAlignment="Top" Foreground="White">Min: #</Label>
+                    <Label Foreground="White" Margin="2" Name="Lbl0Max" VerticalAlignment="Top">Max: #</Label>
+                    <Label Foreground="White" Margin="2" Name="LblHum" VerticalAlignment="Top">Humidité: #</Label>
+                    <Label Foreground="White" Margin="2" Name="LblVent" VerticalAlignment="Top">Vent: #</Label>
                 </StackPanel>
             <StackPanel Margin="2">
                 <StackPanel Background="DarkGray" Orientation="Horizontal" Margin="1">

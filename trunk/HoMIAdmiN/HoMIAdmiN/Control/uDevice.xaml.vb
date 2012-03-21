@@ -463,6 +463,7 @@ Partial Public Class uDevice
                         .Name = TxtCmdName.Text
                         .Code = TxtCmdData.Text
                         .Repeat = TxtCmdRepeat.Text
+                        .Picture = ImgCommande.Tag
                     End With
                     x.Commandes.Add(_cmd)
                 Else 'modifier commande
@@ -473,6 +474,7 @@ Partial Public Class uDevice
                         .Name = TxtCmdName.Text
                         .Code = TxtCmdData.Text
                         .Repeat = TxtCmdRepeat.Text
+                        .Picture = ImgCommande.Tag
                     End With
                 End If
 
@@ -600,6 +602,14 @@ Partial Public Class uDevice
             TxtCmdName.Text = x.Commandes.Item(i).Name
             TxtCmdData.Text = x.Commandes.Item(i).Code
             TxtCmdRepeat.Text = x.Commandes.Item(i).Repeat
+
+            If x.Commandes.Item(i).Picture IsNot Nothing Then
+                If x.Commandes.Item(i).Picture <> " " Then
+                    ImgCommande.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Commandes.Item(i).Picture))
+                    ImgCommande.Tag = x.Commandes.Item(i).Picture
+                End If
+
+            End If
         Catch Ex As Exception
             MessageBox.Show("Erreur ListCmd_SelectionChanged: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -877,5 +887,25 @@ Partial Public Class uDevice
 
     Private Sub TxtCmdData_TextInput(ByVal sender As Object, ByVal e As System.Windows.Input.TextCompositionEventArgs) Handles TxtCmdData.TextInput
         BtnTstCmd.Visibility = Windows.Visibility.Visible
+    End Sub
+
+    Private Sub ImgCommande_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgCommande.MouseLeftButtonDown, Canvas2.MouseLeftButtonDown
+        Try
+            Dim frm As New WindowImg
+            frm.ShowDialog()
+            If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+                Dim retour As String = frm.FileName
+                If retour <> "" Then
+                    ImgCommande.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
+                    ImgCommande.Tag = retour
+                End If
+                frm.Close()
+            Else
+                frm.Close()
+            End If
+            frm = Nothing
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub ImgCommande_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 End Class

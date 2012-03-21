@@ -410,7 +410,6 @@
   <ItemGroup>
     <Resource Include="Images\Configurer_128.png" />
     <Resource Include="Images\Courbe_128.png" />
-    <Resource Include="Images\Driver_128.png" />
     <Resource Include="Images\Help_128.png" />
     <Resource Include="Images\Macro_128.png" />
     <Resource Include="Images\Quitter_128.png" />
@@ -522,6 +521,12 @@
   <ItemGroup>
     <Resource Include="Images\Lecture_32.png" />
     <Resource Include="Images\Stop_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Driver_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\tpbtn.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

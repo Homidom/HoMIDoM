@@ -767,7 +767,6 @@ Namespace HoMIDom
                                     If (Not list.Item(j).Attributes.GetNamedItem("lastchangeduree") Is Nothing) Then .LastChangeDuree = list.Item(j).Attributes.GetNamedItem("lastchangeduree").Value
                                     If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = Replace(list.Item(j).Attributes.GetNamedItem("refresh").Value, ".", ",")
                                     If (Not list.Item(j).Attributes.GetNamedItem("modele") Is Nothing) Then .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
-                                    'If (Not list.Item(j).Attributes.GetNamedItem("picture") Is Nothing) Then .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
                                     If list.Item(j).Attributes.GetNamedItem("picture").Value IsNot Nothing Then
                                         If IO.File.Exists(.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value) Then
                                             .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
@@ -997,13 +996,13 @@ Namespace HoMIDom
                         '******************************************
                         'on va nettoyer les devices disparus
                         '********************************************
-                        For Each _zone In _ListZones
-                            For Each _elmt In _zone.ListElement
-                                If ReturnDeviceById(_IdSrv, _elmt.ElementID) Is Nothing And ReturnZoneById(_IdSrv, _elmt.ElementID) Is Nothing And ReturnMacroById(_IdSrv, _elmt.ElementID) Is Nothing Then
-                                    _zone.ListElement.Remove(_elmt)
-                                End If
-                            Next
-                        Next
+                        'For Each _zone In _ListZones
+                        '    For Each _elmt In _zone.ListElement
+                        '        If ReturnDeviceById(_IdSrv, _elmt.ElementID) Is Nothing And ReturnZoneById(_IdSrv, _elmt.ElementID) Is Nothing And ReturnMacroById(_IdSrv, _elmt.ElementID) Is Nothing Then
+                        '            _zone.ListElement.Remove(_elmt)
+                        '        End If
+                        '    Next
+                        'Next
 
                         Exit For
                     Next
@@ -6641,6 +6640,9 @@ Namespace HoMIDom
                         writer.WriteStartAttribute("repeat")
                         writer.WriteValue("0")
                         writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("picture")
+                        writer.WriteValue(_MonRepertoire & "\images\telecommande\" & _listcmd(i) & ".png")
+                        writer.WriteEndAttribute()
                         writer.WriteEndElement()
                     Next
                 End If
@@ -6695,6 +6697,14 @@ Namespace HoMIDom
                                 Case "repeat"
                                     If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then
                                         If IsNumeric(list.Item(i).Attributes.Item(j).Value) Then x.Repeat = list.Item(i).Attributes.Item(j).Value
+                                    End If
+                                Case "picture"
+                                    If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then
+                                        If IO.File.Exists(list.Item(i).Attributes.Item(j).Value) Then
+                                            x.Picture = list.Item(i).Attributes.Item(j).Value
+                                        Else
+                                            x.Picture = _MonRepertoire & "\images\telecommande\" & x.Name & ".png"
+                                        End If
                                     End If
                             End Select
                         Next
@@ -6795,6 +6805,9 @@ Namespace HoMIDom
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("repeat")
                         writer.WriteValue(Commandes(i).Repeat)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("picture")
+                        If Commandes(i).Picture IsNot Nothing Then writer.WriteValue(Commandes(i).Picture)
                         writer.WriteEndAttribute()
                         writer.WriteEndElement()
                     Next
