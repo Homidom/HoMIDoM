@@ -313,9 +313,10 @@ Imports System.Media
         id3 = 6
         unitcode = 7
         cmnd = 8
-        filler = 9 'bits 3-0
-        rssi = 9   'bits 7-4
-        size = 9
+        level = 9
+        filler = 10 'bits 3-0
+        rssi = 10   'bits 7-4
+        size = 10
 
         pType = &H14
         sTypeLightwaveRF = &H0
@@ -334,6 +335,7 @@ Imports System.Media
         sClose = 13
         sStop = 14
         sOpen = 15
+        sSetLevel = 16
     End Enum
 
     Enum LIGHTING6 As Byte
@@ -2153,15 +2155,20 @@ Imports System.Media
                     'WriteMessage("Sequence nbr  = " & recbuf(LIGHTING5.seqnbr).ToString)
                     adresse = VB.Right("0" & Hex(recbuf(LIGHTING5.id1)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING5.id2)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING5.id3)), 2) & "-" & recbuf(LIGHTING5.unitcode).ToString
                     Select Case recbuf(LIGHTING5.cmnd)
-                        Case &H0 : valeur = "OFF"
-                        Case &H1 : valeur = "ON"
-                        Case &H2 : valeur = "GROUP_OFF"
-                        Case &H3 : valeur = "GROUP_Mood_1"
-                        Case &H4 : valeur = "GROUP_Mood_2"
-                        Case &H5 : valeur = "GROUP_Mood_3"
-                        Case &H6 : valeur = "UNLOCK"
-                        Case &H7 : valeur = "LOCK"
-                        Case &H8 : valeur = "ALL_LOCK"
+                        Case LIGHTING5.sOff : valeur = "OFF"
+                        Case LIGHTING5.sOn : valeur = "ON"
+                        Case LIGHTING5.sGroupOff : valeur = "GROUP_OFF"
+                        Case LIGHTING5.sMood1 : valeur = "GROUP_Mood_1"
+                        Case LIGHTING5.sMood2 : valeur = "GROUP_Mood_2"
+                        Case LIGHTING5.sMood3 : valeur = "GROUP_Mood_3"
+                        Case LIGHTING5.sMood4 : valeur = "GROUP_Mood_4"
+                        Case LIGHTING5.sMood5 : valeur = "GROUP_Mood_5"
+                        Case LIGHTING5.sUnlock : valeur = "UNLOCK"
+                        Case LIGHTING5.sLock : valeur = "LOCK"
+                        Case LIGHTING5.sAllLock : valeur = "ALL_LOCK"
+                        Case LIGHTING5.sClose : valeur = "CLOSE_INLINE_RELAY"
+                        Case LIGHTING5.sStop : valeur = "STOP_INLINE_RELAY"
+                        Case LIGHTING5.sOpen : valeur = "OPEN_INLINE_RELAY"
                         Case Else : valeur = "UNKNOWN"
                     End Select
                     WriteRetour(adresse, "", valeur)
@@ -2193,139 +2200,106 @@ Imports System.Media
                     WriteRetour(adresse, "", valeur)
                 Case Else : WriteLog("ERR: decode_Lighting6 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING6.packettype)) & ": " & Hex(recbuf(LIGHTING6.subtype)))
             End Select
-            'WriteMessage("Signal level  = " & (recbuf(LIGHTING6.rssi) >> 4).ToString)
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(LIGHTING6.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Lighting6 Exception : " & ex.Message)
         End Try
     End Sub
-    'non géré
+
     Private Sub decode_Security1()
-        'Select Case recbuf(SECURITY1.subtype)
-        '    Case SECURITY1.SecX10
-        '        WriteMessage("subtype       = X10 security")
-        '    Case SECURITY1.SecX10M
-        '        WriteMessage("subtype       = X10 security motion")
-        '    Case SECURITY1.SecX10R
-        '        WriteMessage("subtype       = X10 security remote")
-        '    Case SECURITY1.KD101
-        '        WriteMessage("subtype       = KD101 smoke detector")
-        '    Case SECURITY1.PowercodeSensor
-        '        WriteMessage("subtype       = Visonic PowerCode sensor - primary contact")
-        '    Case SECURITY1.PowercodeMotion
-        '        WriteMessage("subtype       = Visonic PowerCode motion")
-        '    Case SECURITY1.Codesecure
-        '        WriteMessage("subtype       = Visonic CodeSecure")
-        '    Case SECURITY1.PowercodeAux
-        '        WriteMessage("subtype       = Visonic PowerCode sensor - auxiliary contact")
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(SECURITY1.packettype)) & ": " & Hex(recbuf(SECURITY1.subtype)))
-        'End Select
-        'WriteMessage("Sequence nbr  = " & recbuf(SECURITY1.seqnbr).ToString)
-        'WriteMessage("id1-3         = " & VB.Right("0" & Hex(recbuf(SECURITY1.id1)), 2) & VB.Right("0" & Hex(recbuf(SECURITY1.id2)), 2) & VB.Right("0" & Hex(recbuf(SECURITY1.id3)), 2))
-        'WriteMessage("status        = "
-        'Select Case recbuf(SECURITY1.status)
-        '    Case SECURITY1.sStatusNormal
-        '        WriteMessage("Normal")
-        '    Case SECURITY1.sStatusNormalDelayed
-        '        WriteMessage("Normal Delayed")
-        '    Case SECURITY1.sStatusAlarm
-        '        WriteMessage("Alarm")
-        '    Case SECURITY1.sStatusAlarmDelayed
-        '        WriteMessage("Alarm Delayed")
-        '    Case SECURITY1.sStatusMotion
-        '        WriteMessage("Motion")
-        '    Case SECURITY1.sStatusNoMotion
-        '        WriteMessage("No Motion")
-        '    Case SECURITY1.sStatusPanic
-        '        WriteMessage("Panic")
-        '    Case SECURITY1.sStatusPanicOff
-        '        WriteMessage("Panic End")
-        '    Case SECURITY1.sStatusTamper
-        '        WriteMessage("Tamper")
-        '    Case SECURITY1.sStatusArmAway
-        '        WriteMessage("Arm Away")
-        '    Case SECURITY1.sStatusArmAwayDelayed
-        '        WriteMessage("Arm Away Delayed")
-        '    Case SECURITY1.sStatusArmHome
-        '        WriteMessage("Arm Home")
-        '    Case SECURITY1.sStatusArmHomeDelayed
-        '        WriteMessage("Arm Home Delayed")
-        '    Case SECURITY1.sStatusDisarm
-        '        WriteMessage("Disarm")
-        '    Case SECURITY1.sStatusLightOff
-        '        WriteMessage("Light Off")
-        '    Case SECURITY1.sStatusLightOn
-        '        WriteMessage("Light On")
-        '    Case SECURITY1.sStatusLIGHTING2Off
-        '        WriteMessage("Light 2 Off")
-        '    Case SECURITY1.sStatusLIGHTING2On
-        '        WriteMessage("Light 2 On")
-        '    Case SECURITY1.sStatusDark
-        '        WriteMessage("Dark detected")
-        '    Case SECURITY1.sStatusLight
-        '        WriteMessage("Light Detected")
-        '    Case SECURITY1.sStatusBatLow
-        '        WriteMessage("Battery low MS10 or XX18 sensor")
-        '    Case SECURITY1.sStatusPairKD101
-        '        WriteMessage("Pair KD101")
-        'End Select
-        'If (recbuf(SECURITY1.battery_level) And &HF) = 0 Then
-        '    WriteMessage("battery level = Low")
-        'Else
-        '    WriteMessage("battery level = OK")
-        'End If
-        'WriteMessage("Signal level  = " & (recbuf(SECURITY1.rssi) >> 4).ToString)
+        Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            'Select Case recbuf(SECURITY1.subtype)
+            '    Case SECURITY1.SecX10
+            '        WriteMessage("subtype       = X10 security")
+            '    Case SECURITY1.SecX10M
+            '        WriteMessage("subtype       = X10 security motion")
+            '    Case SECURITY1.SecX10R
+            '        WriteMessage("subtype       = X10 security remote")
+            '    Case SECURITY1.KD101
+            '        WriteMessage("subtype       = KD101 smoke detector")
+            '    Case SECURITY1.PowercodeSensor
+            '        WriteMessage("subtype       = Visonic PowerCode sensor - primary contact")
+            '    Case SECURITY1.PowercodeMotion
+            '        WriteMessage("subtype       = Visonic PowerCode motion")
+            '    Case SECURITY1.Codesecure
+            '        WriteMessage("subtype       = Visonic CodeSecure")
+            '    Case SECURITY1.PowercodeAux
+            '        WriteMessage("subtype       = Visonic PowerCode sensor - auxiliary contact")
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(SECURITY1.packettype)) & ": " & Hex(recbuf(SECURITY1.subtype)))
+            'End Select
+
+            adresse = VB.Right("0" & Hex(recbuf(SECURITY1.id1)), 2) & VB.Right("0" & Hex(recbuf(SECURITY1.id2)), 2) & VB.Right("0" & Hex(recbuf(SECURITY1.id3)), 2)
+            Select Case recbuf(SECURITY1.status)
+                Case SECURITY1.sStatusNormal : valeur = "Normal"
+                Case SECURITY1.sStatusNormalDelayed : valeur = "Normal Delayed"
+                Case SECURITY1.sStatusAlarm : valeur = "Alarm"
+                Case SECURITY1.sStatusAlarmDelayed : valeur = "Alarm Delayed"
+                Case SECURITY1.sStatusMotion : valeur = "Motion"
+                Case SECURITY1.sStatusNoMotion : valeur = "No Motion"
+                Case SECURITY1.sStatusPanic : valeur = "Panic"
+                Case SECURITY1.sStatusPanicOff : valeur = "Panic End"
+                Case SECURITY1.sStatusTamper : valeur = "Tamper"
+                Case SECURITY1.sStatusArmAway : valeur = "Arm Away"
+                Case SECURITY1.sStatusArmAwayDelayed : valeur = "Arm Away Delayed"
+                Case SECURITY1.sStatusArmHome : valeur = "Arm Home"
+                Case SECURITY1.sStatusArmHomeDelayed : valeur = "Arm Home Delayed"
+                Case SECURITY1.sStatusDisarm : valeur = "Disarm"
+                Case SECURITY1.sStatusLightOff : valeur = "Light Off"
+                Case SECURITY1.sStatusLightOn : valeur = "Light On"
+                Case SECURITY1.sStatusLIGHTING2Off : valeur = "Light 2 Off"
+                Case SECURITY1.sStatusLIGHTING2On : valeur = "Light 2 On"
+                Case SECURITY1.sStatusDark : valeur = "Dark detected"
+                Case SECURITY1.sStatusLight : valeur = "Light Detected"
+                Case SECURITY1.sStatusBatLow : valeur = "Battery low MS10 or XX18 sensor"
+                Case SECURITY1.sStatusPairKD101 : valeur = "Pair KD101"
+            End Select
+            WriteRetour(adresse, "", valeur)
+
+            If (recbuf(SECURITY1.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(SECURITY1.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+        Catch ex As Exception
+            WriteLog("ERR: decode_Security1 Exception : " & ex.Message)
+        End Try
     End Sub
-    'non géré
+
     Private Sub decode_Camera1()
-        'Select Case recbuf(CAMERA1.subtype)
-        '    Case CAMERA1.Ninja
-        '        WriteMessage("subtype       = X10 Ninja/Robocam")
-        '        WriteMessage("Sequence nbr  = " & recbuf(CAMERA1.seqnbr).ToString)
-        '        WriteMessage("Command       = "
-        '        Select Case recbuf(CAMERA1.cmnd)
-        '            Case CAMERA1.sLeft
-        '                WriteMessage("Left")
-        '            Case CAMERA1.sRight
-        '                WriteMessage("Right")
-        '            Case CAMERA1.sUp
-        '                WriteMessage("Up")
-        '            Case CAMERA1.sDown
-        '                WriteMessage("Down")
-        '            Case CAMERA1.sPosition1
-        '                WriteMessage("Position 1")
-        '            Case CAMERA1.sProgramPosition1
-        '                WriteMessage("Position 1 program")
-        '            Case CAMERA1.sPosition2
-        '                WriteMessage("Position 2")
-        '            Case CAMERA1.sProgramPosition2
-        '                WriteMessage("Position 2 program")
-        '            Case CAMERA1.sPosition3
-        '                WriteMessage("Position 3")
-        '            Case CAMERA1.sProgramPosition3
-        '                WriteMessage("Position 3 program")
-        '            Case CAMERA1.sPosition4
-        '                WriteMessage("Position 4")
-        '            Case CAMERA1.sProgramPosition4
-        '                WriteMessage("Position 4 program")
-        '            Case CAMERA1.sCenter
-        '                WriteMessage("Center")
-        '            Case CAMERA1.sProgramCenterPosition
-        '                WriteMessage("Center program")
-        '            Case CAMERA1.sSweep
-        '                WriteMessage("Sweep")
-        '            Case CAMERA1.sProgramSweep
-        '                WriteMessage("Sweep program")
-        '            Case Else
-        '                WriteMessage("UNKNOWN")
-        '        End Select
-        '        WriteMessage("Housecode     = " & Chr(recbuf(CAMERA1.housecode)))
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(CAMERA1.packettype)) & ": " & Hex(recbuf(CAMERA1.subtype)))
-        'End Select
-        'WriteMessage("Signal level  = " & (recbuf(CAMERA1.rssi) >> 4).ToString)
+        Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            Select Case recbuf(CAMERA1.subtype)
+                Case CAMERA1.Ninja 'X10 Ninja/Robocam
+                    Select Case recbuf(CAMERA1.cmnd)
+                        Case CAMERA1.sLeft : valeur = "Left"
+                        Case CAMERA1.sRight : valeur = "Right"
+                        Case CAMERA1.sUp : valeur = "Up"
+                        Case CAMERA1.sDown : valeur = "Down"
+                        Case CAMERA1.sPosition1 : valeur = "Position 1"
+                        Case CAMERA1.sProgramPosition1 : valeur = "Position 1 program"
+                        Case CAMERA1.sPosition2 : valeur = ("Position 2")
+                        Case CAMERA1.sProgramPosition2 : valeur = "Position 2 program"
+                        Case CAMERA1.sPosition3 : valeur = "Position 3"
+                        Case CAMERA1.sProgramPosition3 : valeur = "Position 3 program"
+                        Case CAMERA1.sPosition4 : valeur = "Position 4"
+                        Case CAMERA1.sProgramPosition4 : valeur = "Position 4 program"
+                        Case CAMERA1.sCenter : valeur = "Center"
+                        Case CAMERA1.sProgramCenterPosition : valeur = "Center program"
+                        Case CAMERA1.sSweep : valeur = "Sweep"
+                        Case CAMERA1.sProgramSweep : valeur = "Sweep program"
+                        Case Else : valeur = "UNKNOWN"
+                    End Select
+                    adresse = Chr(recbuf(CAMERA1.housecode))
+                    WriteRetour(adresse, "", valeur)
+                    If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(CAMERA1.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+                Case Else : WriteLog("ERR: decode_Camera1 : Unknown Sub type for Packet type=" & Hex(recbuf(CAMERA1.packettype)) & ": " & Hex(recbuf(CAMERA1.subtype)))
+            End Select
+        Catch ex As Exception
+            WriteLog("ERR: decode_Camera1 Exception : " & ex.Message)
+        End Try
     End Sub
-    'non géré
+
     Private Sub decode_Remote()
         Try
             Dim adresse As String = ""
@@ -2455,7 +2429,7 @@ Imports System.Media
                         Case &H2A : valeur = "TV2"
                         Case &H2B : valeur = "Clock"
                         Case &H2C : valeur = "i"
-                        Case &H2D : valeur = ""ATI"
+                        Case &H2D : valeur = "ATI"
                         Case &H2E : valeur = "RADIO"
                         Case &H2F : valeur = "TV Preview"
                         Case &H30 : valeur = "Channel list"
@@ -2619,99 +2593,91 @@ Imports System.Media
                         Case Else : valeur = "unknown"
                     End Select
                     WriteRetour(adresse, "", valeur)
-                Case Else
-                    '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(REMOTE.packettype)) & ":" & Hex(recbuf(REMOTE.subtype)))
+                Case Else : WriteLog("ERR: decode_Remote : Unknown Sub type for Packet type=" & Hex(recbuf(REMOTE.packettype)) & ": " & Hex(recbuf(REMOTE.subtype)))
             End Select
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(REMOTE.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
-            WriteLog("ERR: decode_Temp Exception : " & ex.Message)
+            WriteLog("ERR: decode_Remote Exception : " & ex.Message)
         End Try
     End Sub
-    'non géré
-    Private Sub decode_Thermostat1()
-        'Select Case recbuf(THERMOSTAT1.subtype)
-        '    Case THERMOSTAT1.Digimax
-        '        WriteMessage("subtype       = Digimax")
-        '    Case THERMOSTAT1.DigimaxShort
-        '        WriteMessage("subtype       = Digimax with short format")
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(THERMOSTAT1.packettype)) & ":" & Hex(recbuf(THERMOSTAT1.subtype)))
-        'End Select
-        'WriteMessage("Sequence nbr  = " & recbuf(THERMOSTAT1.seqnbr).ToString)
-        'WriteMessage("ID            = " & ((recbuf(THERMOSTAT1.id1) * 256 + recbuf(THERMOSTAT1.id2))).ToString)
-        'WriteMessage("Temperature   = " & recbuf(THERMOSTAT1.temperature).ToString & " °C")
-        'If recbuf(THERMOSTAT1.subtype) = THERMOSTAT1.Digimax Then
-        '    WriteMessage("Set           = " & recbuf(THERMOSTAT1.set_point).ToString & " °C")
-        '    If (recbuf(THERMOSTAT1.mode) And &H80) = 0 Then
-        '        WriteMessage("Mode          = heating")
-        '    Else
-        '        WriteMessage("Mode          = Cooling")
-        '    End If
-        '    Select Case (recbuf(THERMOSTAT1.status) And &H3)
-        '        Case 0
-        '            WriteMessage("Status        = no status available")
-        '        Case 1
-        '            WriteMessage("Status        = demand")
-        '        Case 2
-        '            WriteMessage("Status        = no demand")
-        '        Case 3
-        '            WriteMessage("Status        = initializing")
-        '    End Select
-        'End If
 
-        'WriteMessage("Signal level  = " & (recbuf(THERMOSTAT1.rssi) >> 4).ToString)
+    Private Sub decode_Thermostat1()
+        Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            'Select Case recbuf(THERMOSTAT1.subtype)
+            '    Case THERMOSTAT1.Digimax
+            '        WriteMessage("subtype       = Digimax")
+            '    Case THERMOSTAT1.DigimaxShort
+            '        WriteMessage("subtype       = Digimax with short format")
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(THERMOSTAT1.packettype)) & ":" & Hex(recbuf(THERMOSTAT1.subtype)))
+            'End Select
+            adresse = ((recbuf(THERMOSTAT1.id1) * 256 + recbuf(THERMOSTAT1.id2))).ToString
+
+            valeur = recbuf(THERMOSTAT1.temperature).ToString '°C
+            WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
+
+            If recbuf(THERMOSTAT1.subtype) = THERMOSTAT1.Digimax Then
+                valeur = recbuf(THERMOSTAT1.set_point).ToString '°C
+                WriteRetour(adresse, ListeDevices.TEMPERATURECONSIGNE.ToString, valeur)
+
+                '    If (recbuf(THERMOSTAT1.mode) And &H80) = 0 Then
+                '        WriteMessage("Mode          = heating")
+                '    Else
+                '        WriteMessage("Mode          = Cooling")
+                '    End If
+                '    Select Case (recbuf(THERMOSTAT1.status) And &H3)
+                '        Case 0
+                '            WriteMessage("Status        = no status available")
+                '        Case 1
+                '            WriteMessage("Status        = demand")
+                '        Case 2
+                '            WriteMessage("Status        = no demand")
+                '        Case 3
+                '            WriteMessage("Status        = initializing")
+                '    End Select
+            End If
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(THERMOSTAT1.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+        Catch ex As Exception
+            WriteLog("ERR: decode_Thermostat1 Exception : " & ex.Message)
+        End Try
     End Sub
     'Not implemented
     Private Sub decode_Thermostat2()
         'WriteMessage("Not implemented")
     End Sub
-    'non géré
+
     Private Sub decode_Thermostat3()
-        'Select Case recbuf(THERMOSTAT3.subtype)
-        '    Case THERMOSTAT3.MertikG6RH4T1
-        '        WriteMessage("subtype       = Mertik G6R-H4T1")
-        '    Case THERMOSTAT3.MertikG6RH4TB
-        '        WriteMessage("subtype       = Mertik G6R-H4TB")
-        '    Case Else
-        '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(THERMOSTAT3.packettype)) & ":" & Hex(recbuf(THERMOSTAT3.subtype)))
-        'End Select
-        'WriteMessage("Sequence nbr  = " & recbuf(THERMOSTAT3.seqnbr).ToString)
+        Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            'Select Case recbuf(THERMOSTAT3.subtype)
+            '    Case THERMOSTAT3.MertikG6RH4T1
+            '        WriteMessage("subtype       = Mertik G6R-H4T1")
+            '    Case THERMOSTAT3.MertikG6RH4TB
+            '        WriteMessage("subtype       = Mertik G6R-H4TB")
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(THERMOSTAT3.packettype)) & ":" & Hex(recbuf(THERMOSTAT3.subtype)))
+            'End Select
+            adresse = VB.Right("0" & Hex(recbuf(THERMOSTAT3.unitcode1)), 2) & VB.Right("0" & Hex(recbuf(THERMOSTAT3.unitcode2)), 2) & VB.Right("0" & Hex(recbuf(THERMOSTAT3.unitcode3)), 2)
 
-        'WriteMessage("ID            = 0x" & VB.Right("0" & Hex(recbuf(THERMOSTAT3.unitcode1)), 2) _
-        '             & VB.Right("0" & Hex(recbuf(THERMOSTAT3.unitcode2)), 2) & VB.Right("0" & Hex(recbuf(THERMOSTAT3.unitcode3)), 2))
+            Select Case recbuf(THERMOSTAT3.cmnd)
+                Case 0 : valeur = "OFF"
+                Case 1 : valeur = "ON"
+                Case 2 : valeur = "UP"
+                Case 3 : valeur = "DOWN"
+                Case 4 : If recbuf(THERMOSTAT3.subtype) = THERMOSTAT3.MertikG6RH4T1 Then valeur = "RUN_UP" Else valeur = "2ND_OFF"
+                Case 5 : If recbuf(THERMOSTAT3.subtype) = THERMOSTAT3.MertikG6RH4T1 Then valeur = "RUN_DOWN" Else valeur = "2ND_ON"
+                Case 6 : If recbuf(THERMOSTAT3.subtype) = THERMOSTAT3.MertikG6RH4T1 Then valeur = "STOP" Else valeur = "UNKNOWN"
+                Case Else : valeur = "UNKNOWN"
+            End Select
+            WriteRetour(adresse, "", valeur)
 
-        'Select Case recbuf(THERMOSTAT3.cmnd)
-        '    Case 0
-        '        WriteMessage("Command       = Off")
-        '    Case 1
-        '        WriteMessage("Command       = On")
-        '    Case 2
-        '        WriteMessage("Command       = Up")
-        '    Case 3
-        '        WriteMessage("Command       = Down")
-        '    Case 4
-        '        If recbuf(THERMOSTAT3.subtype) = THERMOSTAT3.MertikG6RH4T1 Then
-        '            WriteMessage("Command       = Run Up")
-        '        Else
-        '            WriteMessage("Command       = 2nd Off")
-        '        End If
-        '    Case 5
-        '        If recbuf(THERMOSTAT3.subtype) = THERMOSTAT3.MertikG6RH4T1 Then
-        '            WriteMessage("Command       = Run Down")
-        '        Else
-        '            WriteMessage("Command       = 2nd On")
-        '        End If
-        '    Case 6
-        '        If recbuf(THERMOSTAT3.subtype) = THERMOSTAT3.MertikG6RH4T1 Then
-        '            WriteMessage("Command       = Stop")
-        '        Else
-        '            WriteMessage("Command       = unknown")
-        '        End If
-        '    Case Else
-        '        WriteMessage("Command       = unknown")
-        'End Select
-
-        'WriteMessage("Signal level  = " & (recbuf(THERMOSTAT3.rssi) >> 4).ToString)
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(THERMOSTAT3.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+        Catch ex As Exception
+            WriteLog("ERR: decode_Thermostat3 Exception : " & ex.Message)
+        End Try
     End Sub
 
     Private Sub decode_Temp()
@@ -3072,9 +3038,9 @@ Imports System.Media
 
             'WriteMessage("Count         = " & recbuf(ENERGY.count).ToString)
 
-            valeur = (recbuf(ENERGY.instant1) * 16777216 + recbuf(ENERGY.instant2) * 65536 + recbuf(ENERGY.instant3) * 256 + recbuf(ENERGY.instant4)).ToString 'Watt
+            valeur = (CLng(recbuf(ENERGY.instant1)) * &H1000000 + recbuf(ENERGY.instant2) * &H10000 + recbuf(ENERGY.instant3) * &H100 + recbuf(ENERGY.instant4)).ToString 'Watt
             WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE.ToString, valeur)
-            valeur = ((recbuf(ENERGY.total1) * 1099511627776 + recbuf(ENERGY.total2) * 4294967296 + recbuf(ENERGY.total3) * 16777216 + recbuf(ENERGY.total4) * 65536 + recbuf(ENERGY.total5) * 256 + recbuf(ENERGY.total6)) / 223.666).ToString 'Watt / h
+            valeur = ((CDbl(recbuf(ENERGY.total1)) * &H10000000000 + CDbl(recbuf(ENERGY.total2)) * &H100000000 + CDbl(recbuf(ENERGY.total3)) * &H1000000 + recbuf(ENERGY.total4) * &H10000 + recbuf(ENERGY.total5) * &H100 + recbuf(ENERGY.total6)) / 223.666).ToString 'Watt / h
             WriteRetour(adresse, ListeDevices.ENERGIETOTALE.ToString, valeur)
 
             If (recbuf(ENERGY.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
@@ -3122,59 +3088,46 @@ Imports System.Media
             WriteLog("ERR: decode_Weight Exception : " & ex.Message)
         End Try
     End Sub
-    'non géré
+
     Private Sub decode_RFXSensor()
         Try
             Dim adresse As String = ""
             Dim valeur As String = ""
-            'Select Case recbuf(RFXSENSOR.subtype)
-            '    Case RFXSENSOR.Temp
-            '        WriteMessage("subtype       = Temperature")
-            '        WriteMessage("Sequence nbr  = " & recbuf(RFXSENSOR.seqnbr).ToString)
-            '        WriteMessage("ID            = " & recbuf(RFXSENSOR.id).ToString)
-            '        If (recbuf(RFXSENSOR.msg1) And &H80) = 0 Then 'positive temperature?
-            '            WriteMessage("msg           = " & Math.Round(((recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)) / 100), 2).ToString & " °C")
-            '        Else
-            '            WriteMessage("msg           = " & Math.Round((0 - ((recbuf(RFXSENSOR.msg1) And &H7F) * 256 + recbuf(RFXSENSOR.msg2)) / 100), 2).ToString & " °C")
-            '        End If
-            '    Case RFXSENSOR.AD
-            '        WriteMessage("subtype       = A/D")
-            '        WriteMessage("Sequence nbr  = " & recbuf(RFXSENSOR.seqnbr).ToString)
-            '        WriteMessage("ID            = " & recbuf(RFXSENSOR.id).ToString)
-            '        WriteMessage("msg           = " & (recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)).ToString & " mV")
-            '    Case RFXSENSOR.Volt
-            '        WriteMessage("subtype       = Voltage")
-            '        WriteMessage("Sequence nbr  = " & recbuf(RFXSENSOR.seqnbr).ToString)
-            '        WriteMessage("ID            = " & recbuf(RFXSENSOR.id).ToString)
-            '        WriteMessage("msg           = " & (recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)).ToString & " mV")
-            '    Case RFXSENSOR.Message
-            '        WriteMessage("subtype       = Message")
-            '        WriteMessage("Sequence nbr  = " & recbuf(RFXSENSOR.seqnbr).ToString)
-            '        WriteMessage("ID            = " & recbuf(RFXSENSOR.id).ToString)
-            '        Select Case recbuf(RFXSENSOR.msg2)
-            '            Case &H1
-            '                WriteMessage("msg           = sensor addresses incremented")
-            '            Case &H2
-            '                WriteMessage("msg           = battery low detected")
-            '            Case &H81
-            '                WriteMessage("msg           = no 1-wire device connected")
-            '            Case &H82
-            '                WriteMessage("msg           = 1-Wire ROM CRC error")
-            '            Case &H83
-            '                WriteMessage("msg           = 1-Wire device connected is not a DS18B20 or DS2438")
-            '            Case &H84
-            '                WriteMessage("msg           = no end of read signal received from 1-Wire device")
-            '            Case &H85
-            '                WriteMessage("msg           = 1-Wire scratchpad CRC error")
-            '            Case Else
-            '                WriteMessage("ERROR: unknown message")
-            '        End Select
-
-            '        WriteMessage("msg           = " & (recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)).ToString)
-            '    Case Else
-            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(RFXSENSOR.packettype)) & ":" & Hex(recbuf(RFXSENSOR.subtype)))
-            'End Select
-            'WriteMessage("Signal level  = " & (recbuf(RFXSENSOR.rssi) >> 4).ToString)
+            Select recbuf(RFXSENSOR.subtype)
+                Case RFXSENSOR.Temp 'Temperature
+                    adresse = recbuf(RFXSENSOR.id).ToString
+                    If (recbuf(RFXSENSOR.msg1) And &H80) = 0 Then 'positive temperature?
+                        valeur = Math.Round(((recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)) / 100), 2).ToString '°C
+                    Else
+                        valeur = Math.Round((0 - ((recbuf(RFXSENSOR.msg1) And &H7F) * 256 + recbuf(RFXSENSOR.msg2)) / 100), 2).ToString '°C
+                    End If
+                    WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
+                Case RFXSENSOR.AD 'A/D
+                    adresse = recbuf(RFXSENSOR.id).ToString
+                    valeur = (recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)).ToString ' mV
+                    WriteRetour(adresse, "", valeur)
+                Case RFXSENSOR.Volt 'Voltage
+                    adresse = recbuf(RFXSENSOR.id).ToString
+                    valeur = (recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)).ToString ' mV
+                    WriteRetour(adresse, "", valeur)
+                Case RFXSENSOR.Message 'Message
+                    adresse = recbuf(RFXSENSOR.id).ToString
+                    Select Case recbuf(RFXSENSOR.msg2)
+                        Case &H1 : valeur = "sensor addresses incremented"
+                        Case &H2 : valeur = "battery low detected"
+                        Case &H81 : valeur = "no 1-wire device connected"
+                        Case &H82 : valeur = "1-Wire ROM CRC error"
+                        Case &H83 : valeur = "1-Wire device connected is not a DS18B20 or DS2438"
+                        Case &H84 : valeur = "no end of read signal received from 1-Wire device"
+                        Case &H85 : valeur = "1-Wire scratchpad CRC error"
+                        Case Else : valeur = "ERROR: unknown message"
+                    End Select
+                    WriteLog("decode_RFXSensor Message : " & valeur & " de " & adresse)
+                    valeur = (recbuf(RFXSENSOR.msg1) * 256 + recbuf(RFXSENSOR.msg2)).ToString
+                    WriteRetour(adresse, "", valeur)
+                Case Else : WriteLog("ERR: decode_RFXSensor : Unknown Sub type for Packet type=" & Hex(recbuf(RFXSENSOR.packettype)) & ": " & Hex(recbuf(RFXSENSOR.subtype)))
+            End Select
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(RFXSENSOR.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_RFXSensor Exception : " & ex.Message)
         End Try
@@ -3404,12 +3357,33 @@ Imports System.Media
             kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
             kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
             Select Case commande
-                Case "OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sOff
-                Case "ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sOn
-                Case "ALL_LIGHT_OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
-                Case "ALL_LIGHT_ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
-                Case "BRIGHT" : kar(LIGHTING1.cmnd) = LIGHTING1.sBright
-                Case "DIM" : kar(LIGHTING1.cmnd) = LIGHTING1.sDim
+                Case "OFF"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+                    WriteRetourSend(adresse, "", "OFF")
+                Case "ON"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                    WriteRetourSend(adresse, "", "ON")
+                Case "ALL_LIGHT_OFF"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
+                    WriteRetourSend(adresse, "", "OFF")
+                    'traiter toutes les lights
+
+
+
+                Case "ALL_LIGHT_ON"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
+                    WriteRetourSend(adresse, "", "ON")
+                    'traiter toutes les lights
+
+
+
+
+                Case "BRIGHT"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sBright
+                    WriteRetourSend(adresse, "", "ON")
+                Case "DIM"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sDim
+                    WriteRetourSend(adresse, "", "ON")
                 Case Else
                     WriteLog("ERR: Send X10 : Commande invalide : " & commande)
                     Exit Sub
@@ -3447,10 +3421,26 @@ Imports System.Media
             kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
             kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
             Select Case commande
-                Case "OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sOff
-                Case "ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sOn
-                Case "GROUP_ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
-                Case "GROUP_OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
+                Case "OFF"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+                    WriteRetourSend(adresse, "", "OFF")
+                Case "ON"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                    WriteRetourSend(adresse, "", "ON")
+                Case "GROUP_ON"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
+                    WriteRetourSend(adresse, "", "ON")
+                    'traiter toutes le groupe
+
+
+
+                Case "GROUP_OFF"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
+                    WriteRetourSend(adresse, "", "OFF")
+                    'traiter toutes le groupe
+
+
+
                 Case "CHIME"
                     kar(LIGHTING1.cmnd) = LIGHTING1.sChime
                     kar(LIGHTING1.unitcode) = 8
@@ -3491,8 +3481,12 @@ Imports System.Media
             kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
             kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
             Select Case commande
-                Case "OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sOff
-                Case "ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                Case "OFF"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+                    WriteRetourSend(adresse, "", "OFF")
+                Case "ON"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                    WriteRetourSend(adresse, "", "ON")
                 Case Else
                     WriteLog("ERR: Send ELRO AB400D : Commande invalide : " & commande)
                     Exit Sub
@@ -3530,8 +3524,12 @@ Imports System.Media
             kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
             kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
             Select Case commande
-                Case "OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sOff
-                Case "ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                Case "OFF"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+                    WriteRetourSend(adresse, "", "OFF")
+                Case "ON"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                    WriteRetourSend(adresse, "", "ON")
                 Case Else
                     WriteLog("ERR: Send WAVEMAN : Commande invalide : " & commande)
                     Exit Sub
@@ -3569,10 +3567,18 @@ Imports System.Media
             kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
             kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
             Select Case commande
-                Case "OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sOff
-                Case "ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sOn
-                Case "ALL_LIGHT_ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
-                Case "ALL_LIGHT_OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
+                Case "OFF"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+                    WriteRetourSend(adresse, "", "OFF")
+                Case "ON"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                    WriteRetourSend(adresse, "", "ON")
+                Case "ALL_LIGHT_ON"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
+                    WriteRetourSend(adresse, "", "ON")
+                Case "ALL_LIGHT_OFF"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
+                    WriteRetourSend(adresse, "", "OFF")
                 Case Else
                     WriteLog("ERR: Send EMW200 : Commande invalide : " & commande)
                     Exit Sub
@@ -3610,8 +3616,12 @@ Imports System.Media
             kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
             kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
             Select Case commande
-                Case "OFF" : kar(LIGHTING1.cmnd) = LIGHTING1.sOff
-                Case "ON" : kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                Case "OFF"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+                    WriteRetourSend(adresse, "", "OFF")
+                Case "ON"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+                    WriteRetourSend(adresse, "", "ON")
                 Case Else
                     WriteLog("ERR: Send IMPULS : Commande invalide : " & commande)
                     Exit Sub
@@ -3652,12 +3662,36 @@ Imports System.Media
             kar(LIGHTING2.seqnbr) = bytSeqNbr
             kar(LIGHTING2.subtype) = type '0=AC, 1=HE EU, 2=ANSLUT
             Select Case commande
-                Case "OFF" : kar(LIGHTING2.cmnd) = 0
-                Case "ON" : kar(LIGHTING2.cmnd) = 1
-                Case "GROUP_OFF" : kar(LIGHTING2.cmnd) = 3
-                Case "GROUP_ON" : kar(LIGHTING2.cmnd) = 4
-                Case "GROUP_DIM" : kar(LIGHTING2.cmnd) = 5
-                Case "DIM" : kar(LIGHTING2.cmnd) = 2
+                Case "OFF"
+                    kar(LIGHTING2.cmnd) = 0
+                    WriteRetourSend(adresse, "", "OFF")
+                Case "ON"
+                    kar(LIGHTING2.cmnd) = 1
+                    WriteRetourSend(adresse, "", "ON")
+                Case "GROUP_OFF"
+                    kar(LIGHTING2.cmnd) = 3
+                    WriteRetourSend(adresse, "", "OFF")
+                    'traiter toutes le groupe
+
+
+
+                Case "GROUP_ON"
+                    kar(LIGHTING2.cmnd) = 4
+                    WriteRetourSend(adresse, "", "ON")
+                    'traiter toutes le groupe
+
+
+
+                Case "GROUP_DIM"
+                    kar(LIGHTING2.cmnd) = 5
+                    WriteRetourSend(adresse, "", dimlevel)
+                    'traiter toutes le groupe
+
+
+
+                Case "DIM"
+                    kar(LIGHTING2.cmnd) = 2
+                    WriteRetourSend(adresse, "", dimlevel)
                 Case Else
                     WriteLog("ERR: Send AC : Commande invalide : " & commande)
                     Exit Sub
@@ -3755,14 +3789,29 @@ Imports System.Media
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
                 If (listedevices.Count = 1) Then
                     'un device trouvé on maj la value
-                    listedevices.Item(0).Value = valeur
+                    If valeur = "ON" Then
+                        If TypeOf listedevices.Item(0).Value Is Boolean Then
+                            listedevices.Item(0).Value = True
+                        ElseIf TypeOf listedevices.Item(0).Value Is Long Then
+                            listedevices.Item(0).Value = 100
+                        Else
+                            listedevices.Item(0).Value = "ON"
+                        End If
+                    ElseIf valeur = "OFF" Then
+                        If TypeOf listedevices.Item(0).Value Is Boolean Then
+                            listedevices.Item(0).Value = False
+                        ElseIf TypeOf listedevices.Item(0).Value Is Long Then
+                            listedevices.Item(0).Value = 0
+                        Else
+                            listedevices.Item(0).Value = "OFF"
+                        End If
+                    Else
+                        listedevices.Item(0).Value = valeur
+                    End If
                 ElseIf (listedevices.Count > 1) Then
                     WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
                 Else
                     WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
-
-                    'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
-
                 End If
             End If
 
@@ -3795,9 +3844,21 @@ Imports System.Media
                     'on maj la value si la durée entre les deux receptions est > à 1.5s
                     If (DateTime.Now - Date.Parse(listedevices.Item(0).LastChange)).TotalMilliseconds > 1500 Then
                         If valeur = "ON" Then
-                            listedevices.Item(0).Value = True
+                            If TypeOf listedevices.Item(0).Value Is Boolean Then
+                                listedevices.Item(0).Value = True
+                            ElseIf TypeOf listedevices.Item(0).Value Is Long Then
+                                listedevices.Item(0).Value = 100
+                            Else
+                                listedevices.Item(0).Value = "ON"
+                            End If
                         ElseIf valeur = "OFF" Then
-                            listedevices.Item(0).Value = False
+                            If TypeOf listedevices.Item(0).Value Is Boolean Then
+                                listedevices.Item(0).Value = False
+                            ElseIf TypeOf listedevices.Item(0).Value Is Long Then
+                                listedevices.Item(0).Value = 0
+                            Else
+                                listedevices.Item(0).Value = "OFF"
+                            End If
                         Else
                             listedevices.Item(0).Value = valeur
                         End If
