@@ -66,6 +66,7 @@ Imports System.Media
 
     'param avancé
     Dim _DEBUG As Boolean = False
+    Dim _PARAMMODE As String = "201001111011111111"
 
 #End Region
 
@@ -1154,6 +1155,7 @@ Imports System.Media
         'récupération des paramétres avancés
         Try
             _DEBUG = _Parametres.Item(0).Valeur
+            _PARAMMODE = _Parametres.Item(1).Valeur
         Catch ex As Exception
             WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
         End Try
@@ -1372,6 +1374,7 @@ Imports System.Media
             'Parametres avancés
             'add_paramavance("synchro", "Synchronisation avec le receiver (True/False)", True)
             add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
+            add_paramavance("ParamMode", "Paramétres (ex: 201001111011111111)", "201001111011111111")
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
@@ -1523,7 +1526,7 @@ Imports System.Media
             'get firmware version
             SendCommand(ICMD.RESET, "Reset receiver/transceiver:")
             'configure Transceiver mode
-            SetMode()
+            SetMode(_PARAMMODE)
 
             dateheurelancement = DateTime.Now
 
@@ -3237,11 +3240,11 @@ Imports System.Media
 
 #Region "Send messages"
 
-    Private Sub SetMode()
+    Private Sub SetMode(ByVal paramMode As String)
         Try
             Dim temp As String = ""
-            Dim paramMode As String = "201001111011111111"
-            '1 : type frequence
+            'paramMode
+            '1 : type frequence (310, 315, 433, 868.30, 868.30 FSK, 868.35, 868.35 FSK, 868.95)
             '2 : UNDEC
             '3 : novatis
             '4 : proguard
