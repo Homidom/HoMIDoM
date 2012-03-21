@@ -855,22 +855,27 @@ Imports System.IO.Ports
                         wait(20) 'on attend 0.2s pour liberer le bus correctement
                     End If
                 Catch ex As Exception
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "exception : " & ex.Message & " --> " & adresse & " : " & commande & " " & data1 & "-" & data2)
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Ecriture sur le port exception : " & ex.Message & " --> " & adresse & " : " & commande & " " & data1 & "-" & data2)
                     Return "" 'on renvoi rien car il y a eu une erreur
                 End Try
 
                 'Modification du device
-                traitement("", adresse, commande, True)
-                Select Case commande
-                    Case "ON", "OFF", "BRIGHT", "BLINK", "FADE_STOP", "STATUS_REQUEST"
-                        If data1 = 0 Then traitement("OFF", adresse, commande, True) Else traitement("ON", adresse, commande, True)
-                    Case "DIM", "PRESET_DIM"
-                        traitement(data1, adresse, commande, True)
-                    Case "ALL_UNITS_OFF", "All_USER_UNITS_OFF", "ALL_LIGHTS_OFF", "All_USER_LIGHTS_OFF"
-                        traitement("OFF", adresse, commande, True)
-                    Case "ALL_LIGHTS_ON", "All_USER_LIGHTS_ON"
-                        traitement("ON", adresse, commande, True)
-                End Select
+                Try
+                    traitement("", adresse, commande, True)
+                    Select Case commande
+                        Case "ON", "OFF", "BRIGHT", "BLINK", "FADE_STOP", "STATUS_REQUEST"
+                            If data1 = 0 Then traitement("OFF", adresse, commande, True) Else traitement("ON", adresse, commande, True)
+                        Case "DIM", "PRESET_DIM"
+                            traitement(data1, adresse, commande, True)
+                        Case "ALL_UNITS_OFF", "All_USER_UNITS_OFF", "ALL_LIGHTS_OFF", "All_USER_LIGHTS_OFF"
+                            traitement("OFF", adresse, commande, True)
+                        Case "ALL_LIGHTS_ON", "All_USER_LIGHTS_ON"
+                            traitement("ON", adresse, commande, True)
+                    End Select
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Modification du device exception : " & ex.Message & " --> " & adresse & " : " & commande & " " & data1 & "-" & data2)
+                    Return "" 'on renvoi rien car il y a eu une erreur
+                End Try
 
                 'renvoie la valeur ecrite
                 Select Case UCase(commande)

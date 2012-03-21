@@ -11,11 +11,11 @@ Class uModuleSimple
         InitializeComponent()
         Try
             'Ajoute les choix des modules
-            CbType.Items.Add("Associer un interrupteur/detecteur à un appareil/lampe/volet")
-            CbType.Items.Add("Associer des interrupteurs/detecteurs à un appareil/lampe/volet")
-            CbType.Items.Add("Associer un interrupteur/detecteur à des appareils/lampes/volets")
-            CbType.Items.Add("Associer des interrupteurs/detecteurs à des appareils/lampes/volets")
-            CbType.Items.Add("Programmer une action sur un composant")
+            CbType.Items.Add("Associer un interrupteur/detecteur à un appareil/lampe/volet") '0
+            CbType.Items.Add("Associer des interrupteurs/detecteurs à un appareil/lampe/volet") '1
+            CbType.Items.Add("Associer un interrupteur/detecteur à des appareils/lampes/volets") '2
+            CbType.Items.Add("Associer des interrupteurs/detecteurs à des appareils/lampes/volets") '3
+            CbType.Items.Add("Programmer une action sur un composant") '4
 
             'Ajout des devices
             For Each Device In myService.GetAllDevices(IdSrv)
@@ -57,9 +57,8 @@ Class uModuleSimple
         Try
             Dim _listeActions As New ArrayList
             Dim _MacroId As String
-
-            Select Case CbType.SelectedValue
-                Case "Associer un interrupteur/detecteur à un appareil/lampe/volet"
+            Select Case CbType.SelectedIndex
+                Case 0
                     'Creation de la macro
                     Dim _condition As New Action.Condition
                     _condition.Type = Action.TypeCondition.Device
@@ -74,13 +73,13 @@ Class uModuleSimple
                     _MacroId = myService.SaveMacro(IdSrv, "", TxtNom.Text, True, "desription", _listeActions)
                     'creation du trigger
 
-                Case "Associer des interrupteurs/detecteurs à un appareil/lampe/volet"
+                Case 1
 
-                Case "Associer un interrupteur/detecteur à des appareils/lampes/volets"
+                Case 2
 
-                Case "Associer des interrupteurs/detecteurs à des appareils/lampes/volets"
+                Case 3
 
-                Case "Programmer une action sur un composant"
+                Case 4
 
             End Select
             RaiseEvent CloseMe(Me)

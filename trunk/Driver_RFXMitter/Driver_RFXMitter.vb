@@ -893,18 +893,20 @@ Imports System.Globalization
 
             End Try
 
-            message = VB.Right("0" & Hex(kar(0)), 2)
-            intEnd = ((kar(0) And &HF8) / 8)
-            If (kar(0) And &H7) <> 0 Then
-                intEnd += 1
+            If _DEBUG Then
+                message = VB.Right("0" & Hex(kar(0)), 2)
+                intEnd = ((kar(0) And &HF8) / 8)
+                If (kar(0) And &H7) <> 0 Then
+                    intEnd += 1
+                End If
+                For intIndex = 1 To intEnd
+                    message = message + VB.Right("0" & Hex(kar(intIndex)), 2)
+                Next
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXMitter Ecrirecommande", "Exception" & message)
             End If
-            For intIndex = 1 To intEnd
-                message = message + VB.Right("0" & Hex(kar(intIndex)), 2)
-            Next
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXMitter Ecrirecommande", message)
             ack = False
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXmitter ecrirecommande", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXmitter ecrirecommande", "Exception" & ex.Message)
         End Try
     End Sub
 
@@ -1074,23 +1076,29 @@ Imports System.Globalization
                         kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(1)))
                         kar(4) = kar(4) Or &H10
                         kar(5) = 0
+                        WriteRetour(adresse, "", commande)
                     Case "OFF"
                         kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(1)))
                         kar(5) = 0
+                        WriteRetour(adresse, "", commande)
                     Case "GROUP_ON"
                         kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(1)))
                         kar(4) = kar(4) Or &H30
                         kar(5) = 0
+                        WriteRetour(adresse, "", "ON")
                     Case "GROUP_OFF"
                         kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(1)))
                         kar(4) = kar(4) Or &H20
                         kar(5) = 0
+                        WriteRetour(adresse, "", "OFF")
                     Case "DIM"
                         kar(4) = kar(4) Or CByte(Array.IndexOf(unittoint, adressetab(1)))
                         kar(5) = CByte(dimlevel) << 4
+                        WriteRetour(adresse, "", dimlevel)
                     Case "GROUP_DIM"
                         kar(4) = kar(4) Or &H20
                         kar(5) = CByte(dimlevel) << 4
+                        WriteRetour(adresse, "", dimlevel)
                 End Select
                 ecrirecommande(kar)
             Else
@@ -1101,11 +1109,13 @@ Imports System.Globalization
                         kar(1) = CByte(adresse) << 3
                         kar(1) = kar(1) Or &H4
                         kar(2) = &HD0
+                        WriteRetour(adresse, "", "ON")
                     Case "HEATER_OFF"
                         kar(0) = 12
                         kar(1) = CByte(adresse) << 3
                         kar(1) = kar(1) Or &H4
                         kar(2) = &HB0
+                        WriteRetour(adresse, "", "OFF")
                 End Select
                 ecrirecommande(kar)
             End If
@@ -1166,21 +1176,36 @@ Imports System.Globalization
                 Case "ON"
                     kar(1) = currentunit
                     kar(3) = currentdevice
+                    WriteRetour(adresse, "", commande)
                 Case "OFF"
                     kar(1) = currentunit
                     kar(3) = currentdevice Or &H20
+                    WriteRetour(adresse, "", commande)
                 Case "BRIGHT"
                     kar(1) = currentunit And &HF0
                     kar(3) = &H88
+                    WriteRetour(adresse, "", "ON")
                 Case "DIM"
                     kar(1) = currentunit And &HF0
                     kar(3) = &H98
+                    WriteRetour(adresse, "", "ON")
                 Case "ALL_LIGHT_ON"
                     kar(1) = currentunit And &HF0
                     kar(3) = &H90
+                    WriteRetour(adresse, "", "ON")
+                    'traiter toutes les lights
+
+
+
                 Case "ALL_LIGHT_OFF"
                     kar(1) = currentunit And &HF0
                     kar(3) = &H80
+                    WriteRetour(adresse, "", "OFF")
+                    'traiter toutes les lights
+
+
+
+
             End Select
             kar(0) = &H20
             kar(2) = &HFF - kar(1)
@@ -1216,6 +1241,7 @@ Imports System.Globalization
                     ch = Asc(adresse.Substring(0, 1)) - &H41
                     kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
                     ecrirecommande(kar)
+                    WriteRetour(adresse, "", commande)
                 Case "OFF"
                     kar(1) = &H14
                     ch = Int(adresse.Substring(1, adresse.Length - 1)) - 1
@@ -1229,6 +1255,7 @@ Imports System.Globalization
                     ch = Asc(adresse.Substring(0, 1)) - &H41
                     kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
                     ecrirecommande(kar)
+                    WriteRetour(adresse, "", commande)
                 Case "GROUP_ON"
                     kar(1) = &H54
                     kar(2) = &HFF
@@ -1240,6 +1267,12 @@ Imports System.Globalization
                     ch = Asc(adresse.Substring(0, 1)) - &H41
                     kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
                     ecrirecommande(kar)
+                    WriteRetour(adresse, "", "ON")
+                    'traiter toutes le groupe
+
+
+
+
                 Case "GROUP_OFF"
                     kar(1) = &H14
                     kar(2) = &HFF
@@ -1251,6 +1284,12 @@ Imports System.Globalization
                     ch = Asc(adresse.Substring(0, 1)) - &H41
                     kar(3) = &H80 Or (((ch And &H8) << 3) Or ((ch And &H4) << 2) Or ((ch And &H2) << 1) Or (ch And &H1))
                     ecrirecommande(kar)
+                    WriteRetour(adresse, "", "OFF")
+                    'traiter toutes le groupe
+
+
+
+
                 Case "CHIME"
                     kar(1) = &H55
                     kar(2) = &H15
@@ -1281,6 +1320,7 @@ Imports System.Globalization
             kar(2) = xlate(Int(adresse.Substring(1, adresse.Length - 1)) - 1)
             kar(3) = xlate(Asc(adresse.Substring(0, 1)) - &H41)
             ecrirecommande(kar)
+            WriteRetour(adresse, "", commande)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXMitter ECRIRE WAVEMAN", ex.Message)
         End Try
@@ -1323,6 +1363,22 @@ Imports System.Globalization
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
             If (listedevices.Count = 1) Then
                 'un device trouvé on maj la value
+                'correction valeur pour correspondre au type de value
+                If TypeOf listedevices.Item(0).Value Is Integer Then
+                    If valeur = "ON" Then
+                        valeur = 100
+                    ElseIf valeur = "OFF" Then
+                        valeur = 0
+                    End If
+                ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
+                    If valeur = "ON" Then
+                        valeur = True
+                    ElseIf valeur = "OFF" Then
+                        valeur = False
+                    Else
+                        valeur = True
+                    End If
+                End If
                 listedevices.Item(0).Value = valeur
             ElseIf (listedevices.Count > 1) Then
                 WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
@@ -1331,6 +1387,22 @@ Imports System.Globalization
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, "3B808B6C-25B3-11E0-A6DB-36D2DED72085", True)
                 If (listedevices.Count = 1) Then
                     'un device trouvé on maj la value
+                    'correction valeur pour correspondre au type de value
+                    If TypeOf listedevices.Item(0).Value Is Integer Then
+                        If valeur = "ON" Then
+                            valeur = 100
+                        ElseIf valeur = "OFF" Then
+                            valeur = 0
+                        End If
+                    ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
+                        If valeur = "ON" Then
+                            valeur = True
+                        ElseIf valeur = "OFF" Then
+                            valeur = False
+                        Else
+                            valeur = True
+                        End If
+                    End If
                     listedevices.Item(0).Value = valeur
                 Else
                     WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
