@@ -546,8 +546,8 @@ Public Class Driver_Teleinfo
                     'port.Handshake = Handshake.None
                     port.ReadTimeout = 3000
                     port.WriteTimeout = 5000
-                    'port.RtsEnable = False 'ligne Rts désactivé
-                    'port.DtrEnable = False 'ligne Dtr désactivé
+                    port.RtsEnable = True  'ligne Rts désactivé
+                    port.DtrEnable = True  'ligne Dtr désactivé
                     port.Open()
                     AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
                     Return ("Port " & port_name & " ouvert")
