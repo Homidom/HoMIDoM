@@ -4371,15 +4371,88 @@ Namespace HoMIDom
                 Exit Function
             End If
 
-            Dim retour As Object = Nothing
+            Dim retour As New TemplateDriver
             Try
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).Nom = DriverNom.ToUpper() Then
-                        retour = _ListDrivers.Item(i)
+                        retour.Nom = _ListDrivers.Item(i).nom
+                        retour.ID = _ListDrivers.Item(i).id
+                        retour.COM = _ListDrivers.Item(i).com
+                        retour.Description = _ListDrivers.Item(i).description
+                        retour.Enable = _ListDrivers.Item(i).enable
+                        retour.IP_TCP = _ListDrivers.Item(i).ip_tcp
+                        retour.IP_UDP = _ListDrivers.Item(i).ip_udp
+                        retour.IsConnect = _ListDrivers.Item(i).isconnect
+                        retour.Modele = _ListDrivers.Item(i).modele
+                        retour.Picture = _ListDrivers.Item(i).picture
+                        retour.Port_TCP = _ListDrivers.Item(i).port_tcp
+                        retour.Port_UDP = _ListDrivers.Item(i).port_udp
+                        retour.Protocol = _ListDrivers.Item(i).protocol
+                        retour.Refresh = _ListDrivers.Item(i).refresh
+                        retour.StartAuto = _ListDrivers.Item(i).startauto
+                        retour.Version = _ListDrivers.Item(i).version
+
+                        For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
+                            retour.DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
+                        Next
+                        For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
+                            Dim y As New Driver.Parametre
+                            y.Nom = _ListDrivers.Item(i).Parametres.item(j).nom
+                            y.Description = _ListDrivers.Item(i).Parametres.item(j).description
+                            y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
+                            retour.Parametres.Add(y)
+                        Next
+                        For j As Integer = 0 To _ListDrivers.Item(i).LabelsDriver.count - 1
+                            Dim y As New Driver.cLabels
+                            y.NomChamp = _ListDrivers.Item(i).LabelsDriver.item(j).NomChamp
+                            y.LabelChamp = _ListDrivers.Item(i).LabelsDriver.item(j).LabelChamp
+                            y.Tooltip = _ListDrivers.Item(i).LabelsDriver.item(j).Tooltip
+                            y.Parametre = _ListDrivers.Item(i).LabelsDriver.item(j).Parametre
+                            retour.LabelsDriver.Add(y)
+                        Next
+                        For j As Integer = 0 To _ListDrivers.Item(i).LabelsDevice.count - 1
+                            Dim y As New Driver.cLabels
+                            y.NomChamp = _ListDrivers.Item(i).LabelsDevice.item(j).NomChamp
+                            y.LabelChamp = _ListDrivers.Item(i).LabelsDevice.item(j).LabelChamp
+                            y.Tooltip = _ListDrivers.Item(i).LabelsDevice.item(j).Tooltip
+                            y.Parametre = _ListDrivers.Item(i).LabelsDevice.item(j).Parametre
+                            retour.LabelsDevice.Add(y)
+                        Next
+                        Dim _listactdrv As New ArrayList
+                        Dim _listactd As New List(Of String)
+                        For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
+                            _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
+                        Next
+                        If _listactd.Count > 0 Then
+                            For n As Integer = 0 To _listactd.Count - 1
+                                Dim a() As String = _listactd.Item(n).Split("|")
+                                Dim p As New DeviceAction
+                                With p
+                                    .Nom = a(0)
+                                    If a.Length > 1 Then
+                                        For t As Integer = 1 To a.Length - 1
+                                            Dim pr As New DeviceAction.Parametre
+                                            Dim b() As String = a(t).Split(":")
+                                            With pr
+                                                .Nom = b(0)
+                                                .Type = b(1)
+                                            End With
+                                            p.Parametres.Add(pr)
+                                        Next
+                                    End If
+                                End With
+                                retour.DeviceAction.Add(p)
+                            Next
+                        End If
+
+                        _listactd = Nothing
+                        _listactdrv = Nothing
+                        Return retour
+                        'Return _ListDrivers.Item(i)
                         Exit For
                     End If
                 Next
-                Return retour
+                Return Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDriverByNom", "Exception : " & ex.Message)
                 Return Nothing
