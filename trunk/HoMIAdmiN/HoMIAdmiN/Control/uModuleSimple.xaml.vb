@@ -4,6 +4,8 @@ Imports HoMIDom.HoMIDom.Api
 Imports System.IO
 
 Class uModuleSimple
+    Private listedevices
+
     Public Event CloseMe(ByVal MyObject As Object)
 
     Public Sub New()
@@ -18,7 +20,8 @@ Class uModuleSimple
             CbType.Items.Add("Programmer une action sur un composant") '4
 
             'Ajout des devices
-            For Each Device In myService.GetAllDevices(IdSrv)
+            listedevices = myService.GetAllDevices(IdSrv)
+            For Each Device In listedevices
                 CbEmetteur.Items.Add(Device.Name)
                 CbRecepteur.Items.Add(Device.Name)
 
@@ -56,22 +59,60 @@ Class uModuleSimple
     Private Sub BtnAjouter_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnAjouter.Click
         Try
             Dim _listeActions As New ArrayList
+            Dim _listeMacros As New List(Of String)
             Dim _MacroId As String
             Select Case CbType.SelectedIndex
                 Case 0
                     'Creation de la macro
+                    Dim _actionif As New Action.ActionIf
+                    _actionif.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, 0, 0, 0)
+
+                    'Creation de la condition
                     Dim _condition As New Action.Condition
                     _condition.Type = Action.TypeCondition.Device
-                    _condition.IdDevice = ""
+                    For Each Device In listedevices
+                        If CbEmetteur.SelectedItem.ToString = Device.Name Then
+                            _condition.IdDevice = Device.ID
+                            Exit For
+                        End If
+                    Next
+                    _condition.PropertyDevice = "Value"
                     _condition.Operateur = Action.TypeOperateur.NONE
+                    _condition.Value = True
+                    _actionif.Conditions.Add(_condition)
 
-                    Dim _actionif As New Action.ActionIf
-                    _actionif.Conditions = Nothing
-                    _actionif.ListTrue = Nothing
-                    _actionif.ListFalse = Nothing
+                    'creation de l'action si true/false
+                    Dim _actiontrue As New Action.ActionDevice
+                    Dim _actionfalse As New Action.ActionDevice
+                    For Each Device In listedevices
+                        If CbRecepteur.SelectedItem.ToString = Device.Name Then
+                            _actiontrue.IdDevice = Device.ID
+                            _actionfalse.IdDevice = Device.ID
+                            MsgBox("type" & Device.Type.ToString)
+                            If Device.Type.ToString = "VOLET" Then
+                                _actiontrue.Method = "MONTER"
+                                _actionfalse.Method = "DESCENDRE"
+                            Else
+                                _actiontrue.Method = "ON"
+                                _actionfalse.Method = "OFF"
+                            End If
+                            Exit For
+                        End If
+                    Next
+                    _actiontrue.Parametres.Clear()
+                    _actionfalse.Parametres.Clear()
+                    _actiontrue.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, 0, 0, 0)
+                    _actionfalse.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, 0, 0, 0)
+                    _actionif.ListTrue.Add(_actiontrue)
+                    _actionif.ListFalse.Add(_actionfalse)
+
+                    'ajout de la macro
                     _listeActions.Add(_actionif)
-                    _MacroId = myService.SaveMacro(IdSrv, "", TxtNom.Text, True, "desription", _listeActions)
+                    _MacroId = myService.SaveMacro(IdSrv, "", TxtNom.Text, True, "Macro créée depuis un Module", _listeActions)
+                    _listeMacros.Add(_MacroId)
+
                     'creation du trigger
+                    myService.SaveTrigger(IdSrv, "", TxtNom.Text, True, Trigger.TypeTrigger.DEVICE, "Trigger créé depuis un Module", "", _condition.IdDevice, "Value", _listeMacros)
 
                 Case 1
 
