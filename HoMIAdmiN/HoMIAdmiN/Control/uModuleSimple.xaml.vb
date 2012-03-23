@@ -61,68 +61,156 @@ Class uModuleSimple
             Dim _listeActions As New ArrayList
             Dim _listeMacros As New List(Of String)
             Dim _MacroId As String
-            Select Case CbType.SelectedIndex
-                Case 0
-                    'Creation de la macro
-                    Dim _actionif As New Action.ActionIf
-                    _actionif.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, 0, 0, 0)
 
-                    'Creation de la condition
-                    Dim _condition As New Action.Condition
-                    _condition.Type = Action.TypeCondition.Device
-                    For Each Device In listedevices
-                        If CbEmetteur.SelectedItem.ToString = Device.Name Then
-                            _condition.IdDevice = Device.ID
-                            Exit For
-                        End If
-                    Next
-                    _condition.PropertyDevice = "Value"
-                    _condition.Operateur = Action.TypeOperateur.NONE
-                    _condition.Value = True
-                    _actionif.Conditions.Add(_condition)
+            'Creation de la macro
+            Dim _actionif As New Action.ActionIf
+            _actionif.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, 0, 0, 0)
 
-                    'creation de l'action si true/false
-                    Dim _actiontrue As New Action.ActionDevice
-                    Dim _actionfalse As New Action.ActionDevice
-                    For Each Device In listedevices
-                        If CbRecepteur.SelectedItem.ToString = Device.Name Then
-                            _actiontrue.IdDevice = Device.ID
-                            _actionfalse.IdDevice = Device.ID
-                            MsgBox("type" & Device.Type.ToString)
-                            If Device.Type.ToString = "VOLET" Then
-                                _actiontrue.Method = "MONTER"
-                                _actionfalse.Method = "DESCENDRE"
-                            Else
-                                _actiontrue.Method = "ON"
-                                _actionfalse.Method = "OFF"
+
+            'Creation de la condition
+            If CbType.SelectedIndex = 0 Or CbType.SelectedIndex = 2 Then
+                'pour un emetteur
+                Dim _condition As New Action.Condition
+                _condition.Type = Action.TypeCondition.Device
+                For Each Device In listedevices
+                    If CbEmetteur.SelectedItem.ToString = Device.Name Then
+                        _condition.IdDevice = Device.ID
+                        Exit For
+                    End If
+                Next
+                _condition.PropertyDevice = "Value"
+                _condition.Operateur = Action.TypeOperateur.NONE
+                _condition.Value = True
+                _actionif.Conditions.Add(_condition)
+            ElseIf CbType.SelectedIndex = 1 Or CbType.SelectedIndex = 3 Then
+                'pour chaque emetteur
+                For Each emetteurstk As StackPanel In LbEmetteurMulti.Items
+                    Dim emetteur As CheckBox = emetteurstk.Children.Item(0)
+                    If emetteur.IsChecked Then
+                        Dim _condition As New Action.Condition
+                        _condition = New Action.Condition
+                        _condition.Type = Action.TypeCondition.Device
+                        For Each Device In listedevices
+                            If emetteur.Content = Device.Name Then
+                                _condition.IdDevice = Device.ID
+                                Exit For
                             End If
+                        Next
+                        _condition.PropertyDevice = "Value"
+                        _condition.Operateur = Action.TypeOperateur.AND
+                        _condition.Value = True
+                        _actionif.Conditions.Add(_condition)
+                    End If
+                Next
+            End If
+
+            'Creation de l'action si true/false
+            If CbType.SelectedIndex = 0 Or CbType.SelectedIndex = 2 Then
+                Dim _actiontrue As New Action.ActionDevice
+                Dim _actionfalse As New Action.ActionDevice
+                For Each Device In listedevices
+                    If CbRecepteur.SelectedItem.ToString = Device.Name Then
+                        _actiontrue.IdDevice = Device.ID
+                        _actionfalse.IdDevice = Device.ID
+                        If Device.Type.ToString = "VOLET" Then
+                            _actiontrue.Method = "OPEN"
+                            _actionfalse.Method = "CLOSE"
+                        Else
+                            _actiontrue.Method = "ON"
+                            _actionfalse.Method = "OFF"
+                        End If
+                        Exit For
+                    End If
+                Next
+                _actiontrue.Parametres.Clear()
+                _actionfalse.Parametres.Clear()
+                _actiontrue.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, 0, 0, 0)
+                _actionfalse.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, 0, 0, 0)
+                _actionif.ListTrue.Add(_actiontrue)
+                _actionif.ListFalse.Add(_actionfalse)
+            ElseIf CbType.SelectedIndex = 1 Or CbType.SelectedIndex = 3 Then
+                'pour chaque recepteur
+                For Each recepteurstk As StackPanel In LbRecepteurMulti.Items
+                    Dim recepteur As CheckBox = recepteurstk.Children.Item(0)
+                    If recepteur.IsChecked Then
+                        Dim _actiontrue As New Action.ActionDevice
+                        Dim _actionfalse As New Action.ActionDevice
+                        For Each Device In listedevices
+                            If recepteur.Content = Device.Name Then
+                                _actiontrue.IdDevice = Device.ID
+                                _actionfalse.IdDevice = Device.ID
+                                If Device.Type.ToString = "VOLET" Then
+                                    _actiontrue.Method = "OPEN"
+                                    _actionfalse.Method = "CLOSE"
+                                Else
+                                    _actiontrue.Method = "ON"
+                                    _actionfalse.Method = "OFF"
+                                End If
+                                Exit For
+                            End If
+                        Next
+                        _actiontrue.Parametres.Clear()
+                        _actionfalse.Parametres.Clear()
+                        _actiontrue.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, 0, 0, 0)
+                        _actionfalse.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, 0, 0, 0)
+                        _actionif.ListTrue.Add(_actiontrue)
+                        _actionif.ListFalse.Add(_actionfalse)
+                    End If
+                Next
+            End If
+
+            'ajout de la macro
+            _listeActions.Add(_actionif)
+            _MacroId = myService.SaveMacro(IdSrv, "", TxtNom.Text, True, "Macro créée depuis un Module", _listeActions)
+            _listeMacros.Add(_MacroId)
+
+            'creation du trigger
+            If CbType.SelectedIndex = 0 Or CbType.SelectedIndex = 2 Then
+                myService.SaveTrigger(IdSrv, "", TxtNom.Text, True, Trigger.TypeTrigger.DEVICE, "Trigger créé depuis un Module", "", _actionif.Conditions.Item(0).IdDevice, "Value", _listeMacros)
+            ElseIf CbType.SelectedIndex = 1 Or CbType.SelectedIndex = 3 Then
+                'creation des triggers
+                Dim nom As String = ""
+                For Each condition In _actionif.Conditions
+                    For Each Device In listedevices
+                        If condition.IdDevice = Device.ID Then
+                            nom = Device.Name
                             Exit For
                         End If
                     Next
-                    _actiontrue.Parametres.Clear()
-                    _actionfalse.Parametres.Clear()
-                    _actiontrue.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, 0, 0, 0)
-                    _actionfalse.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, 0, 0, 0)
-                    _actionif.ListTrue.Add(_actiontrue)
-                    _actionif.ListFalse.Add(_actionfalse)
+                    myService.SaveTrigger(IdSrv, "", TxtNom.Text & " :: " & nom, True, Trigger.TypeTrigger.DEVICE, "Trigger créé depuis un Module", "", condition.IdDevice, "Value", _listeMacros)
+                Next
+            End If
 
-                    'ajout de la macro
-                    _listeActions.Add(_actionif)
-                    _MacroId = myService.SaveMacro(IdSrv, "", TxtNom.Text, True, "Macro créée depuis un Module", _listeActions)
-                    _listeMacros.Add(_MacroId)
+            'Select Case CbType.SelectedIndex
+            '    Case 0
 
-                    'creation du trigger
-                    myService.SaveTrigger(IdSrv, "", TxtNom.Text, True, Trigger.TypeTrigger.DEVICE, "Trigger créé depuis un Module", "", _condition.IdDevice, "Value", _listeMacros)
 
-                Case 1
+            '        'creation du trigger
 
-                Case 2
+            '    Case 1
 
-                Case 3
 
-                Case 4
 
-            End Select
+
+
+            '    Case 2
+
+            '        For Each recepteurstk As StackPanel In LbRecepteurMulti.Items
+            '            Dim recepteur As CheckBox = recepteurstk.Children.Item(0)
+            '            If recepteur.IsChecked Then MsgBox("recepteur: " & recepteur.Content)
+            '        Next
+            '    Case 3
+            '        For Each emetteurstk As StackPanel In LbEmetteurMulti.Items
+            '            Dim emetteur As CheckBox = emetteurstk.Children.Item(0)
+            '            If emetteur.IsChecked Then MsgBox("emmeteurs: " & emetteur.Content)
+            '        Next
+            '        For Each recepteurstk As StackPanel In LbRecepteurMulti.Items
+            '            Dim recepteur As CheckBox = recepteurstk.Children.Item(0)
+            '            If recepteur.IsChecked Then MsgBox("recepteur: " & recepteur.Content)
+            '        Next
+            '    Case 4
+
+            'End Select
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
             MessageBox.Show("Erreur: UmoduleSimple BtnAjouter_Click: " & ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
