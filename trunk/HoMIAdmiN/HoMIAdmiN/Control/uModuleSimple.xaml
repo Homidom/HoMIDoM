@@ -39,7 +39,7 @@
                         <StackPanel Name="StkMulti" Orientation="Horizontal" Margin="0,0,0,5" Visibility="Hidden">
                             <StackPanel Name="StkCompMultiEmet" Orientation="vertical" Margin="0,0,0,5" Visibility="Hidden" Width="320">
                                 <Label Width="150" Content="Composant émétteur :" Foreground="White" HorizontalAlignment="Left" Name="Label6" VerticalAlignment="Top" />
-                                <ListBox Height="200" Name="LbEmetteurMulti" HorizontalAlignment="Left" Width="280" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True" ToolTip="Composant qui recevra l'ordre : Lampe / Appareil / Volet..."></ListBox>
+                                <ListBox Height="200" Name="LbEmetteurMulti" HorizontalAlignment="Left" Width="280" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True" ToolTip="Composants qui enverront l'ordre : Interrupteurs, detecteurs..."></ListBox>
                             </StackPanel>
                             <StackPanel Name="StkCompMultiRecep" Orientation="vertical" Margin="0,0,0,5" Visibility="Hidden" Width="320">
                                 <Label Width="150" Content="Composant récepteur :" Foreground="White" HorizontalAlignment="Left" Name="Label7" VerticalAlignment="Top" />
