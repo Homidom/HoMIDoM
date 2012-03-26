@@ -5648,11 +5648,6 @@ Namespace HoMIDom
 
                         If retour.Type = Device.ListeDevices.MULTIMEDIA Then
                             retour.Commandes = _ListDevices.Item(i).Commandes
-                            'For j As Integer = 0 To _ListDevices.Item(i).listcommandname.count - 1
-                            '    retour.ListCommandName.Add(_ListDevices.Item(i).listcommandname.item(j))
-                            '    retour.ListCommandData.Add(_ListDevices.Item(i).ListCommandData.item(j))
-                            '    retour.ListCommandRepeat.Add(_ListDevices.Item(i).ListCommandRepeat.item(j))
-                            'Next
                         End If
                         Exit For
                     End If
@@ -6778,6 +6773,8 @@ Namespace HoMIDom
                                         Else
                                             x.Picture = _MonRepertoire & "\images\telecommande\" & x.Name & ".png"
                                         End If
+                                    Else
+                                        x.Picture = _MonRepertoire & "\images\telecommande\" & x.Name & ".png"
                                     End If
                             End Select
                         Next

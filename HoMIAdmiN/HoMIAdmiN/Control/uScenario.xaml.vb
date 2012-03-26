@@ -52,6 +52,7 @@ Public Class uScenario
                 _ListAction.Add(value.Item(i))
                 StackPanel1.Children.Add(x)
                 Me.Dispatcher.BeginInvoke(New Affiche_Action2(AddressOf Affiche_Action))
+                x = Nothing
             Next
         End Set
     End Property
@@ -142,7 +143,8 @@ Public Class uScenario
                 StckPnlLib.Dispatcher.BeginInvoke(New Affiche_Label2(AddressOf Affiche_Label))
                 StckPnlLibTr.Dispatcher.BeginInvoke(New Affiche_Trait2(AddressOf Affiche_Trait))
             End If
-
+            x = Nothing
+            j = 0
         Next
         Me.Dispatcher.BeginInvoke(New Affiche_Action2(AddressOf Affiche_Action))
     End Sub
@@ -150,69 +152,11 @@ Public Class uScenario
     'Afficher les éléments du timeline
     Private Sub Afficher()
         Try
-            'Dim Rect As New Rectangle
-            'Rect.Width = 15
-
-            'Dim _time As DateTime
-            'Dim thr As New Thread(AddressOf Affiche_Label)
-            'thr.SetApartmentState(ApartmentState.STA)
-            'thr.Start()
             Me.Dispatcher.BeginInvoke(New Affiche_Label2(AddressOf Affiche_Label))
-            'For j As Integer = 0 To t 'ajout des labels temps
-            '    Dim x As New Label
-            '    x.FontSize = 10
-            '    x.HorizontalContentAlignment = HorizontalAlignment.Left
-            '    x.Width = 60
-            '    x.Foreground = New SolidColorBrush(Colors.White)
-            '    x.Content = _time.ToLongTimeString
-            '    StckPnlLib.Children.Add(x)
-            '    _time = _time.AddSeconds(5 * _Zoom)
-            'Next
-            'Dim x2 As New Label 'ajout d'un label vide à la fin du timeline pour avoir un espace 
-            'x2.Width = 60
-            'StckPnlLib.Children.Add(x2)
-
-
             Me.Dispatcher.BeginInvoke(New Affiche_Trait2(AddressOf Affiche_Trait))
-            'Dim thr2 As New Thread(AddressOf Affiche_Trait)
-            'thr2.SetApartmentState(ApartmentState.STA)
-            'thr2.Start()
-            'Dim flag As Boolean
-            'For j As Integer = 0 To t
-            '    Dim y1 As New Canvas
-            '    y1.Width = 60
-            '    If flag = False Then
-            '        y1.Background = New SolidColorBrush(Colors.Transparent)
-            '        flag = True
-            '    Else
-            '        y1.Background = New SolidColorBrush(Colors.Transparent)
-            '        flag = False
-            '    End If
-            '    Dim R1 As New Rectangle
-            '    R1.Fill = New SolidColorBrush(Colors.White)
-            '    R1.Width = 3
-            '    R1.Height = 16
-            '    y1.Children.Add(R1)
-            '    For k = 1 To 4
-            '        Dim R2 As New Rectangle
-            '        R2.Fill = New SolidColorBrush(Colors.White)
-            '        R2.Width = 1
-            '        R2.Height = 8
-            '        y1.Children.Add(R2)
-            '        Canvas.SetLeft(R2, k * Span)
-            '    Next
-            '    StckPnlLibTr.Children.Add(y1)
-            'Next
 
             'On affecte la valeur du Zoom à chaque action
             Me.Dispatcher.BeginInvoke(New Affiche_Action2(AddressOf Affiche_Action))
-            'If StackPanel1 IsNot Nothing Then
-            '    For i As Integer = 0 To StackPanel1.Children.Count - 1
-            '        Dim x As uAction = StackPanel1.Children.Item(i)
-            '        x.Width = (_Duree * 3600) + 100
-            '        x.Zoom = _Zoom
-            '    Next
-            'End If
 
         Catch ex As Exception
             MessageBox.Show("Erreur Affiche: " & ex.ToString)
@@ -227,6 +171,7 @@ Public Class uScenario
                 Dim x As uAction = StackPanel1.Children.Item(i)
                 x.Width = _Width '(_Duree * 60) * 60 '+ 100
                 x.Zoom = _Zoom
+                x = Nothing
             Next
         End If
     End Sub
@@ -237,22 +182,26 @@ Public Class uScenario
         Try
             If StckPnlLib IsNot Nothing Then StckPnlLib.Children.Clear()
             t = (_Duree * 60) / _Zoom
-            _Width = 130
+            '_Width = 130
             Dim _time As DateTime
             For j As Integer = 0 To (t / 5) 'ajout des labels temps
                 Dim x As New Label
-                x.FontSize = 10
-                x.HorizontalContentAlignment = HorizontalAlignment.Left
-                x.Width = 60
-                _Width += 60
-                x.Foreground = New SolidColorBrush(Colors.White)
-                x.Content = _time.ToLongTimeString
+                With x
+                    x.FontSize = 10
+                    x.HorizontalContentAlignment = HorizontalAlignment.Left
+                    x.Width = 60
+                    '_Width += 60
+                    x.Foreground = New SolidColorBrush(Colors.White)
+                    x.Content = _time.ToLongTimeString
+                End With
                 StckPnlLib.Children.Add(x)
                 _time = _time.AddSeconds(5 * _Zoom)
             Next
             Dim x2 As New Label 'ajout d'un label vide à la fin du timeline pour avoir un espace 
             x2.Width = 60
             StckPnlLib.Children.Add(x2)
+
+            x2 = Nothing
         Catch ex As Exception
             MessageBox.Show("Erreur Affiche_Label: " & ex.ToString)
         End Try
@@ -289,6 +238,7 @@ Public Class uScenario
                     Canvas.SetLeft(R2, k * Span)
                 Next
                 StckPnlLibTr.Children.Add(y1)
+                y1 = Nothing
             Next
         Catch ex As Exception
             MessageBox.Show("Erreur Affiche_Trait: " & ex.ToString)

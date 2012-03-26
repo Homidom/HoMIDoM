@@ -218,9 +218,11 @@ Public Class uCondition
         InitializeComponent()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        For i As Integer = 0 To myservice.GetAllDevices(IdSrv).Count - 1
-            CbDevice.Items.Add(myservice.GetAllDevices(IdSrv).Item(i).Name)
-        Next
+        CbDevice.ItemsSource = myService.GetAllDevices(IdSrv)
+        CbDevice.DisplayMemberPath = "Name"
+        'For i As Integer = 0 To myservice.GetAllDevices(IdSrv).Count - 1
+        ' CbDevice.Items.Add(myService.GetAllDevices(IdSrv).Item(i).Name)
+        'Next
 
     End Sub
 
