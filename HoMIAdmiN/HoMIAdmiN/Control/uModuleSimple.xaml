@@ -54,7 +54,7 @@
                 </Grid>
             </GroupBox>
         </StackPanel>
-        <Button Height="40" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Margin="0,72.25,20,0" Name="BtnHelp" VerticalAlignment="Top" Width="40" Foreground="White" Visibility="Hidden">
+        <Button Height="40" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Margin="0,72.25,20,0" Name="BtnHelp" VerticalAlignment="Top" Width="40" Foreground="White">
             <Image Source="/HoMIAdmiN;component/Images/Help_128.png" />
         </Button>
     </Grid>

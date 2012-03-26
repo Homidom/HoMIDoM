@@ -4,7 +4,7 @@ Imports HoMIDom.HoMIDom.Api
 Imports System.IO
 
 Class uModuleSimple
-    Private listedevices
+    Private listedevices, listemacros, listetriggers
 
     Public Event CloseMe(ByVal MyObject As Object)
 
@@ -12,6 +12,10 @@ Class uModuleSimple
         ' Cet appel est requis par le Concepteur Windows Form.
         InitializeComponent()
         Try
+            'récuperation de la liste des macros/trigger
+            listemacros = myService.GetAllMacros(IdSrv)
+            listetriggers = myService.GetAllTriggers(IdSrv)
+
             'Ajoute les choix des modules
             CbType.Items.Add("Associer un interrupteur/detecteur à un appareil/lampe/volet") '0
             CbType.Items.Add("Associer des interrupteurs/detecteurs à un appareil/lampe/volet") '1
@@ -61,12 +65,21 @@ Class uModuleSimple
             Dim _listeActions As New ArrayList
             Dim _listeMacros As New List(Of String)
             Dim _MacroId As String
+            Dim resultatmessage As String = ""
 
             'Creation de la macro
             Dim _actionif As New Action.ActionIf
             _actionif.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, 0, 0, 0)
 
 
+            resultatmessage = resultatmessage & "Création d'un module simple de type : " & TxtNom.Text & Chr(10)
+            Select Case CbType.SelectedIndex
+                Case 0 : resultatmessage = resultatmessage & " -> Associer un interrupteur/detecteur à un appareil/lampe/volet" & Chr(10)
+                Case 1 : resultatmessage = resultatmessage & " -> Associer des interrupteurs/detecteurs à un appareil/lampe/volet" & Chr(10)
+                Case 2 : resultatmessage = resultatmessage & " -> Associer un interrupteur/detecteur à des appareils/lampes/volets" & Chr(10)
+                Case 3 : resultatmessage = resultatmessage & " -> Associer des interrupteurs/detecteurs à des appareils/lampes/volets" & Chr(10)
+                Case 4 : resultatmessage = resultatmessage & " -> Programmer une action sur un composant" & Chr(10)
+            End Select
             'Creation de la condition
             If CbType.SelectedIndex = 0 Or CbType.SelectedIndex = 2 Then
                 'pour un emetteur
@@ -163,13 +176,16 @@ Class uModuleSimple
             _listeActions.Add(_actionif)
             _MacroId = myService.SaveMacro(IdSrv, "", TxtNom.Text, True, "Macro créée depuis un Module", _listeActions)
             _listeMacros.Add(_MacroId)
+            resultatmessage = resultatmessage & " - Une Macro : " & TxtNom.Text & Chr(10)
 
             'creation du trigger
             If CbType.SelectedIndex = 0 Or CbType.SelectedIndex = 2 Then
                 myService.SaveTrigger(IdSrv, "", TxtNom.Text, True, Trigger.TypeTrigger.DEVICE, "Trigger créé depuis un Module", "", _actionif.Conditions.Item(0).IdDevice, "Value", _listeMacros)
+                resultatmessage = resultatmessage & " - Un Trigger : " & TxtNom.Text & Chr(10)
             ElseIf CbType.SelectedIndex = 1 Or CbType.SelectedIndex = 3 Then
                 'creation des triggers
                 Dim nom As String = ""
+                resultatmessage = resultatmessage & " - Des triggers : " & TxtNom.Text & Chr(10)
                 For Each condition In _actionif.Conditions
                     For Each Device In listedevices
                         If condition.IdDevice = Device.ID Then
@@ -178,49 +194,23 @@ Class uModuleSimple
                         End If
                     Next
                     myService.SaveTrigger(IdSrv, "", TxtNom.Text & " :: " & nom, True, Trigger.TypeTrigger.DEVICE, "Trigger créé depuis un Module", "", condition.IdDevice, "Value", _listeMacros)
+                    resultatmessage = resultatmessage & "   * " & TxtNom.Text & " :: " & nom & Chr(10)
                 Next
             End If
 
-            'Select Case CbType.SelectedIndex
-            '    Case 0
-
-
-            '        'creation du trigger
-
-            '    Case 1
-
-
-
-
-
-            '    Case 2
-
-            '        For Each recepteurstk As StackPanel In LbRecepteurMulti.Items
-            '            Dim recepteur As CheckBox = recepteurstk.Children.Item(0)
-            '            If recepteur.IsChecked Then MsgBox("recepteur: " & recepteur.Content)
-            '        Next
-            '    Case 3
-            '        For Each emetteurstk As StackPanel In LbEmetteurMulti.Items
-            '            Dim emetteur As CheckBox = emetteurstk.Children.Item(0)
-            '            If emetteur.IsChecked Then MsgBox("emmeteurs: " & emetteur.Content)
-            '        Next
-            '        For Each recepteurstk As StackPanel In LbRecepteurMulti.Items
-            '            Dim recepteur As CheckBox = recepteurstk.Children.Item(0)
-            '            If recepteur.IsChecked Then MsgBox("recepteur: " & recepteur.Content)
-            '        Next
-            '    Case 4
-
             'End Select
+            MsgBox(resultatmessage, MsgBoxStyle.Information, "Création d'un module simple")
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
-            MessageBox.Show("Erreur: UmoduleSimple BtnAjouter_Click: " & ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur: ModuleSimple BtnAjouter_Click: " & ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
     Private Sub BtnHelp_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnHelp.Click
         Try
             MessageBox.Show("Les modules permettent de créer automatiquement des trigers et macros suivant des scénarios prédéfinis." & Chr(10) _
-                            & "Veuillez sélectionner un émetteur (un ou des composants), un récepteur (un ou des ccomposants, un timer, une commande à donner... suivant le scénario choisi", _
+                            & "Veuillez sélectionner un émetteur (un ou des composants), un récepteur (un ou des composants), un timer, une commande à envoyer... suivant le scénario choisi." & Chr(10) & Chr(10) _
+                            & "INFO: Un module permet uniquement de créer des triggers/macros, il faut ensuite utiliser le panneau des macros/triggers pour les modifier/supprimer",
                             "Aide", MessageBoxButton.OK, MessageBoxImage.Question)
         Catch ex As Exception
             MessageBox.Show("Erreur: UmoduleSimple BtnHelp_Click: " & ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -269,5 +259,22 @@ Class uModuleSimple
         Catch ex As Exception
             MessageBox.Show("Erreur: UmoduleSimple CbType_SelectionChanged: " & ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+    Private Sub TxtNom_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtNom.LostFocus
+        For Each Mac In listemacros
+            If Mac.Nom.ToString.ToUpper = TxtNom.Text.ToUpper Then
+                MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
+                TxtNom.Focus()
+                Exit Sub
+            End If
+        Next
+        For Each Trig In listetriggers
+            If TxtNom.Text.ToUpper = Left(Trig.Nom.ToString.ToUpper, TxtNom.Text.Length) Then
+                MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
+                TxtNom.Focus()
+                Exit Sub
+            End If
+        Next
     End Sub
 End Class

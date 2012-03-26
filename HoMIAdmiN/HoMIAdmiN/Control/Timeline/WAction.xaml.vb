@@ -67,6 +67,8 @@ Public Class WActionParametrage
                                 _condi.IdDevice = _ListuConditions.Item(j).IdDevice
                                 _condi.PropertyDevice = _ListuConditions.Item(j).PropertyDevice
                                 _condi.Value = _ListuConditions.Item(j).Value
+                                If _condi.Value.ToString.ToUpper = "ON" Then _condi.Value = True
+                                If _condi.Value.ToString.ToUpper = "OFF" Then _condi.Value = False
                             End If
                             obj.Conditions.Add(_condi)
                         Next
