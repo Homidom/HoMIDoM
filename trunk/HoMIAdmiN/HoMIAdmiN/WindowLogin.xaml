@@ -19,10 +19,10 @@
                                 <Label Content="Nom :" Width="70" Margin="1" Name="Label1" Foreground="White" FlowDirection="LeftToRight" HorizontalContentAlignment="Right" />
                                 <TextBox Name="TxtName" Width="150" TabIndex="2" Height="20" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
                                 <Button Margin="2" Name="NewSite" Height="20" Width="20" Template="{DynamicResource GlassButton}" ToolTip="Ajouter/Modifier un serveur" TabIndex="3">
-                                    <Image Source="/HoMIAdmiN;component/Images/save_48.png" ToolTip="Appliquer"/>
+                                    <Image Source="/HoMIAdmiN;component/Images/save_32.png" ToolTip="Appliquer"/>
                                 </Button>
                                 <Button Margin="2" Name="DelSite" Height="20" Width="20" Template="{DynamicResource GlassButton}" TabIndex="4">
-                                    <Image Source="/HoMIAdmiN;component/Images/croix_128.png" ToolTip="Supprimer un serveur" />
+                                    <Image Source="/HoMIAdmiN;component/Images/supprimer_32.png" ToolTip="Supprimer un serveur" />
                                 </Button>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
