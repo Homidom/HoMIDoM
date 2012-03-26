@@ -22,6 +22,7 @@ Class uModuleSimple
             CbType.Items.Add("Associer un interrupteur/detecteur à des appareils/lampes/volets") '2
             CbType.Items.Add("Associer des interrupteurs/detecteurs à des appareils/lampes/volets") '3
             CbType.Items.Add("Programmer une action sur un composant") '4
+            CbType.SelectedIndex = 0
 
             'Ajout des devices
             listedevices = myService.GetAllDevices(IdSrv)
@@ -47,6 +48,8 @@ Class uModuleSimple
                 stk2.Children.Add(y)
                 LbRecepteurMulti.Items.Add(stk2)
             Next
+            CbEmetteur.SelectedIndex = 0
+            CbRecepteur.SelectedIndex = 0
         Catch Ex As Exception
             MessageBox.Show("Erreur: UmoduleSimple New: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -67,19 +70,45 @@ Class uModuleSimple
             Dim _MacroId As String
             Dim resultatmessage As String = ""
 
+            'vérifications
+            If TxtNom.Text = "" Then
+                MsgBox("Il faut renseigner un nom de module !", MsgBoxStyle.Critical)
+                Exit Sub
+            End If
+            For Each Mac In listemacros
+                If Mac.Nom.ToString.ToUpper = TxtNom.Text.ToUpper Then
+                    MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
+                    TxtNom.Text = ""
+                    Exit Sub
+                End If
+            Next
+            For Each Trig In listetriggers
+                If TxtNom.Text.ToUpper = Split(Trig.Nom.ToString.ToUpper, " :: ")(0) Then
+                    MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
+                    TxtNom.Text = ""
+                    Exit Sub
+                End If
+                If TxtNom.Text.ToUpper = Trig.Nom.ToString.ToUpper Then
+                    MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
+                    TxtNom.Text = ""
+                    Exit Sub
+                End If
+            Next
+
             'Creation de la macro
             Dim _actionif As New Action.ActionIf
             _actionif.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, 0, 0, 0)
 
 
-            resultatmessage = resultatmessage & "Création d'un module simple de type : " & TxtNom.Text & Chr(10)
+            resultatmessage = resultatmessage & "Création d'un module simple de type : " & Chr(10)
             Select Case CbType.SelectedIndex
-                Case 0 : resultatmessage = resultatmessage & " -> Associer un interrupteur/detecteur à un appareil/lampe/volet" & Chr(10)
-                Case 1 : resultatmessage = resultatmessage & " -> Associer des interrupteurs/detecteurs à un appareil/lampe/volet" & Chr(10)
-                Case 2 : resultatmessage = resultatmessage & " -> Associer un interrupteur/detecteur à des appareils/lampes/volets" & Chr(10)
-                Case 3 : resultatmessage = resultatmessage & " -> Associer des interrupteurs/detecteurs à des appareils/lampes/volets" & Chr(10)
-                Case 4 : resultatmessage = resultatmessage & " -> Programmer une action sur un composant" & Chr(10)
+                Case 0 : resultatmessage = resultatmessage & " -> Associer un interrupteur/detecteur à un appareil/lampe/volet :" & Chr(10)
+                Case 1 : resultatmessage = resultatmessage & " -> Associer des interrupteurs/detecteurs à un appareil/lampe/volet :" & Chr(10)
+                Case 2 : resultatmessage = resultatmessage & " -> Associer un interrupteur/detecteur à des appareils/lampes/volets :" & Chr(10)
+                Case 3 : resultatmessage = resultatmessage & " -> Associer des interrupteurs/detecteurs à des appareils/lampes/volets :" & Chr(10)
+                Case 4 : resultatmessage = resultatmessage & " -> Programmer une action sur un composant :" & Chr(10)
             End Select
+
             'Creation de la condition
             If CbType.SelectedIndex = 0 Or CbType.SelectedIndex = 2 Then
                 'pour un emetteur
@@ -97,9 +126,11 @@ Class uModuleSimple
                 _actionif.Conditions.Add(_condition)
             ElseIf CbType.SelectedIndex = 1 Or CbType.SelectedIndex = 3 Then
                 'pour chaque emetteur
+                Dim nbemetteur As Integer = 0
                 For Each emetteurstk As StackPanel In LbEmetteurMulti.Items
                     Dim emetteur As CheckBox = emetteurstk.Children.Item(0)
                     If emetteur.IsChecked Then
+                        nbemetteur += 1
                         Dim _condition As New Action.Condition
                         _condition = New Action.Condition
                         _condition.Type = Action.TypeCondition.Device
@@ -115,10 +146,14 @@ Class uModuleSimple
                         _actionif.Conditions.Add(_condition)
                     End If
                 Next
+                If nbemetteur = 0 Then
+                    MsgBox("Il faut Sélectionner au moins un Emetteur !", MsgBoxStyle.Critical)
+                    Exit Sub
+                End If
             End If
 
             'Creation de l'action si true/false
-            If CbType.SelectedIndex = 0 Or CbType.SelectedIndex = 2 Then
+            If CbType.SelectedIndex = 0 Or CbType.SelectedIndex = 1 Then
                 Dim _actiontrue As New Action.ActionDevice
                 Dim _actionfalse As New Action.ActionDevice
                 For Each Device In listedevices
@@ -141,11 +176,13 @@ Class uModuleSimple
                 _actionfalse.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, 0, 0, 0)
                 _actionif.ListTrue.Add(_actiontrue)
                 _actionif.ListFalse.Add(_actionfalse)
-            ElseIf CbType.SelectedIndex = 1 Or CbType.SelectedIndex = 3 Then
+            ElseIf CbType.SelectedIndex = 2 Or CbType.SelectedIndex = 3 Then
                 'pour chaque recepteur
+                Dim nbrecepteur As Integer = 0
                 For Each recepteurstk As StackPanel In LbRecepteurMulti.Items
                     Dim recepteur As CheckBox = recepteurstk.Children.Item(0)
                     If recepteur.IsChecked Then
+                        nbrecepteur += 1
                         Dim _actiontrue As New Action.ActionDevice
                         Dim _actionfalse As New Action.ActionDevice
                         For Each Device In listedevices
@@ -170,22 +207,26 @@ Class uModuleSimple
                         _actionif.ListFalse.Add(_actionfalse)
                     End If
                 Next
+                If nbrecepteur = 0 Then
+                    MsgBox("Il faut Sélectionner au moins un Récepteur !", MsgBoxStyle.Critical)
+                    Exit Sub
+                End If
             End If
 
             'ajout de la macro
             _listeActions.Add(_actionif)
             _MacroId = myService.SaveMacro(IdSrv, "", TxtNom.Text, True, "Macro créée depuis un Module", _listeActions)
             _listeMacros.Add(_MacroId)
-            resultatmessage = resultatmessage & " - Une Macro : " & TxtNom.Text & Chr(10)
+            resultatmessage = resultatmessage & "     - Une Macro : " & TxtNom.Text & Chr(10)
 
             'creation du trigger
             If CbType.SelectedIndex = 0 Or CbType.SelectedIndex = 2 Then
                 myService.SaveTrigger(IdSrv, "", TxtNom.Text, True, Trigger.TypeTrigger.DEVICE, "Trigger créé depuis un Module", "", _actionif.Conditions.Item(0).IdDevice, "Value", _listeMacros)
-                resultatmessage = resultatmessage & " - Un Trigger : " & TxtNom.Text & Chr(10)
+                resultatmessage = resultatmessage & "     - Un Trigger : " & TxtNom.Text & Chr(10)
             ElseIf CbType.SelectedIndex = 1 Or CbType.SelectedIndex = 3 Then
                 'creation des triggers
                 Dim nom As String = ""
-                resultatmessage = resultatmessage & " - Des triggers : " & TxtNom.Text & Chr(10)
+                resultatmessage = resultatmessage & "     - Des triggers : " & Chr(10)
                 For Each condition In _actionif.Conditions
                     For Each Device In listedevices
                         If condition.IdDevice = Device.ID Then
@@ -194,7 +235,7 @@ Class uModuleSimple
                         End If
                     Next
                     myService.SaveTrigger(IdSrv, "", TxtNom.Text & " :: " & nom, True, Trigger.TypeTrigger.DEVICE, "Trigger créé depuis un Module", "", condition.IdDevice, "Value", _listeMacros)
-                    resultatmessage = resultatmessage & "   * " & TxtNom.Text & " :: " & nom & Chr(10)
+                    resultatmessage = resultatmessage & "        * " & TxtNom.Text & " :: " & nom & Chr(10)
                 Next
             End If
 
@@ -261,20 +302,32 @@ Class uModuleSimple
         End Try
     End Sub
 
-    Private Sub TxtNom_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtNom.LostFocus
-        For Each Mac In listemacros
-            If Mac.Nom.ToString.ToUpper = TxtNom.Text.ToUpper Then
-                MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
-                TxtNom.Focus()
-                Exit Sub
+    Private Sub TxtNom_LostFocus(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles TxtNom.LostFocus
+        Try
+            If TxtNom.Text <> "" Then
+                For Each Mac In listemacros
+                    If Mac.Nom.ToString.ToUpper = TxtNom.Text.ToUpper Then
+                        MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
+                        TxtNom.Text = ""
+                        Exit Sub
+                    End If
+                Next
+                For Each Trig In listetriggers
+                    'If TxtNom.Text.ToUpper = Left(Trig.Nom.ToString.ToUpper, TxtNom.Text.Length) Then
+                    If TxtNom.Text.ToUpper = Split(Trig.Nom.ToString.ToUpper, " :: ")(0) Then
+                        MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
+                        TxtNom.Text = ""
+                        Exit Sub
+                    End If
+                    If TxtNom.Text.ToUpper = Trig.Nom.ToString.ToUpper Then
+                        MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
+                        TxtNom.Text = ""
+                        Exit Sub
+                    End If
+                Next
             End If
-        Next
-        For Each Trig In listetriggers
-            If TxtNom.Text.ToUpper = Left(Trig.Nom.ToString.ToUpper, TxtNom.Text.Length) Then
-                MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
-                TxtNom.Focus()
-                Exit Sub
-            End If
-        Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur: UmoduleSimple TxtNom_LostFocus: " & ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 End Class

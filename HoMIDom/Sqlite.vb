@@ -12,7 +12,7 @@ Namespace HoMIDom
     '''    ''' <remarks></remarks> 
     ''' 
     Public Class Sqlite
-
+        Dim _Server As Server
         Private SQLconnect As New SQLiteConnection()
         Private Shared lock As New Object
         Public bdd_name As String
@@ -24,8 +24,12 @@ Namespace HoMIDom
         ''' <param name="basename">Nom de la base de donnée : homidom / medias</param>
         ''' <remarks></remarks>
         Public Sub New(ByVal basename As String)
-            bdd_name = basename
-            connecte = False
+            Try
+                bdd_name = basename
+                connecte = False
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "SQLlite:New", "Exception : " & ex.ToString)
+            End Try
         End Sub
 
         ''' <summary>Fourni l'etat d'une connexion à la bdd</summary>

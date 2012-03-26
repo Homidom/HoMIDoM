@@ -13,36 +13,37 @@ Namespace HoMIDom
         Dim _Action As Object
 
         Public Sub Execute()
-            'Gestion du délai
-            Dim t As DateTime = DateTime.Now
-            t = t.AddSeconds(_Action.timing.Second)
-            t = t.AddMinutes(_Action.timing.Minute)
-            t = t.AddHours(_Action.timing.Hour)
-            Do While DateTime.Now < t
+            Try
+                'Gestion du délai
+                Dim t As DateTime = DateTime.Now
+                t = t.AddSeconds(_Action.timing.Second)
+                t = t.AddMinutes(_Action.timing.Minute)
+                t = t.AddHours(_Action.timing.Hour)
+                Do While DateTime.Now < t
 
-            Loop
+                Loop
 
-            'On execute l'action
-            Select Case _Action.TypeAction
-                Case Action.TypeAction.ActionDevice
-                    Dim x As Action.ActionDevice = _Action
-                    Dim y As New HoMIDom.DeviceAction
-                    y.Nom = x.Method
+                'On execute l'action
+                Select Case _Action.TypeAction
+                    Case Action.TypeAction.ActionDevice
+                        Dim x As Action.ActionDevice = _Action
+                        Dim y As New HoMIDom.DeviceAction
+                        y.Nom = x.Method
 
-                    If x.Parametres IsNot Nothing Then
-                        If x.Parametres.Count > 0 Then
-                            If x.Parametres.Item(0) IsNot Nothing Then
-                                If x.Parametres.Item(0) <> "" Then
-                                    Dim y2 As New HoMIDom.DeviceAction.Parametre
-                                    y2.Value = x.Parametres.Item(0)
-                                    y.Parametres.Add(y2)
+                        If x.Parametres IsNot Nothing Then
+                            If x.Parametres.Count > 0 Then
+                                If x.Parametres.Item(0) IsNot Nothing Then
+                                    If x.Parametres.Item(0) <> "" Then
+                                        Dim y2 As New HoMIDom.DeviceAction.Parametre
+                                        y2.Value = x.Parametres.Item(0)
+                                        y.Parametres.Add(y2)
+                                    End If
                                 End If
                             End If
                         End If
-                    End If
-                    _Server.ExecuteDeviceCommand(_IdSrv, x.IdDevice, y)
+                        _Server.ExecuteDeviceCommand(_IdSrv, x.IdDevice, y)
 
-                Case Action.TypeAction.ActionIf
+                    Case Action.TypeAction.ActionIf
                         Dim x As Action.ActionIf = _Action
                         Dim flag As Boolean = False
 
@@ -288,27 +289,33 @@ Namespace HoMIDom
                                 y = Nothing
                             Next
                         End If
-                Case Action.TypeAction.ActionMacro
+                    Case Action.TypeAction.ActionMacro
                         Dim x As Action.ActionMacro = _Action
                         Dim y As Macro = _Server.ReturnMacroById(_IdSrv, x.IdMacro)
                         y.Execute(_Server)
 
-                Case Action.TypeAction.ActionMail
+                    Case Action.TypeAction.ActionMail
                         Dim x As Action.ActionMail = _Action
                         Send_email(_Server.ReturnUserById(_IdSrv, x.UserId).eMail, x.Sujet, x.Message)
 
-            End Select
+                End Select
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "Exception : " & ex.ToString)
+            End Try
         End Sub
 
         Public Sub New(ByVal Server As Server, ByVal Action As Object)
-            _Server = Server
-            _Action = Action
+            Try
+                _Server = Server
+                _Action = Action
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "New Execute", "Exception : " & ex.ToString)
+            End Try
         End Sub
 
         Public Sub Send_email(ByVal adresse As String, ByVal sujet As String, ByVal texte As String)
-            If adresse <> "" And sujet <> "" And texte <> "" And _Server.GetSMTPServeur(_IdSrv) <> "" Then
-                Try
-
+            Try
+                If adresse <> "" And sujet <> "" And texte <> "" And _Server.GetSMTPServeur(_IdSrv) <> "" Then
                     'envoi de l'email à adresse avec sujet et texte via les smtp définis dans le serveur
                     Dim email As System.Net.Mail.MailMessage = New System.Net.Mail.MailMessage()
                     email.From = New MailAddress(_Server.GetSMTPMailServeur(_IdSrv))
@@ -330,11 +337,10 @@ Namespace HoMIDom
                     _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "SendMail", "Envoi du mail effectué, Adresse:" & adresse & " Sujet: " & sujet & " Message: " & texte)
                     email = Nothing
                     mailSender = Nothing
-
-                Catch ex As Exception
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "SendMail", "Erreur lors de l'envoi du mail: " & ex.Message)
-                End Try
-            End If
+                End If
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "SendMail", "Erreur lors de l'envoi du mail: " & ex.Message)
+            End Try
         End Sub
     End Class
 End Namespace
