@@ -1,6 +1,6 @@
 ﻿<UserControl x:Class="uConfigServer"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Height="550" Margin="20">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Height="486" Margin="20">
 
     <Grid Margin="1" Height="550" Background="#636060" Opacity="0.85">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0">
