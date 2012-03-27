@@ -1,0 +1,256 @@
+﻿<UserControl x:Class="uTelecommande"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             >
+    <Grid>
+        <StackPanel Name="Num" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal" >
+                <Canvas  Name="Cmd1" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmd1" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/1.png" />
+                </Canvas>
+                <Canvas  Name="Cmd2" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmd2" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/2.png" />
+                </Canvas>
+                <Canvas  Name="Cmd3" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmd3" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/3.png" />
+                </Canvas>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Canvas  Name="Cmd4" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmd4" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/4.png" />
+                </Canvas>
+                <Canvas  Name="Cmd5" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmd5" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/5.png" />
+                </Canvas>
+                <Canvas  Name="Cmd6" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmd6" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/6.png" />
+                </Canvas>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Canvas  Name="Cmd7" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmd7" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/7.png" />
+                </Canvas>
+                <Canvas  Name="Cmd8" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmd8" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/8.png" />
+                </Canvas>
+                <Canvas  Name="Cmd9" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmd9" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/9.png" />
+                </Canvas>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Canvas  Name="Cmd0" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmd0" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/0.png" />
+                </Canvas>
+            </StackPanel>
+            <StackPanel Name="Lecture">
+                <StackPanel Orientation="Horizontal" >
+                    <Canvas  Name="CmdENR" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Canvas.Background>
+                            <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                            </ImageBrush>
+                        </Canvas.Background>
+                        <Image Margin="5" Name="ImgCmdENR" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/Enregistrer.png" />
+                    </Canvas>
+                    <Canvas  Name="CmdSTOP" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Canvas.Background>
+                            <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                            </ImageBrush>
+                        </Canvas.Background>
+                        <Image Margin="5" Name="ImgCmdSTOP" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/stop.png" />
+                    </Canvas>
+                    <Canvas  Name="CmdPLAY" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Canvas.Background>
+                            <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                            </ImageBrush>
+                        </Canvas.Background>
+                        <Image Margin="5" Name="ImgCmdPLAY" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/Play.png" />
+                    </Canvas>
+                    <Canvas  Name="CmdPAUSE" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Canvas.Background>
+                            <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                            </ImageBrush>
+                        </Canvas.Background>
+                        <Image Margin="5" Name="ImgCmdPAUSE" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/pause.png" />
+                    </Canvas>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <Canvas  Name="CmdChapM" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Canvas.Background>
+                            <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                            </ImageBrush>
+                        </Canvas.Background>
+                        <Image Margin="5" Name="ImgCmdChapM" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/ChapRetour.png" />
+                    </Canvas>
+                    <Canvas  Name="CmdRECUL" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Canvas.Background>
+                            <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                            </ImageBrush>
+                        </Canvas.Background>
+                        <Image Margin="5" Name="ImgCmdRECUL" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/Recul.png" />
+                    </Canvas>
+                    <Canvas  Name="CmdAVANCE" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Canvas.Background>
+                            <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                            </ImageBrush>
+                        </Canvas.Background>
+                        <Image Margin="5" Name="ImgCmdAVANCE" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/Avance.png" />
+                    </Canvas>
+                    <Canvas  Name="CmdChapP" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Canvas.Background>
+                            <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                            </ImageBrush>
+                        </Canvas.Background>
+                        <Image Margin="5" Name="ImgCmdChapP" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/ChapSuivant.png" />
+                    </Canvas>
+
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Name="BtnColor" >
+                <Canvas  Name="CmdRED" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmdRED" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/RED.png" />
+                </Canvas>
+                <Canvas  Name="CmdGREEN" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmdGREEN" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/GREEN.png" />
+                </Canvas>
+                <Canvas  Name="CmdBLUE" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmdBLUE" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/BLUE.png" />
+                </Canvas>
+                <Canvas  Name="CmdYELLOW" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmdYELLOW" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/YELLOW.png" />
+                </Canvas>
+                    </StackPanel>
+                            </StackPanel>
+            <StackPanel >
+                <Canvas  Name="CmdVOLP" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmdVOLP" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/VOLP.png" />
+                </Canvas>
+                <Canvas  Name="CmdVOLM" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmdVOLM" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/VOLM.png" />
+                </Canvas>
+            </StackPanel>
+            <StackPanel >
+                <Canvas  Name="CmdPRGP" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmdPRGP" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/PRGP.png" />
+                </Canvas>
+                <Canvas  Name="CmdPRGM" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmdPRGM" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/PRGM.png" />
+                </Canvas>
+            </StackPanel>
+            <StackPanel >
+                <Canvas  Name="CmdFP" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmdFP" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/FHAUT.png" />
+                </Canvas>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Canvas  Name="CmdFG" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Canvas.Background>
+                            <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                            </ImageBrush>
+                        </Canvas.Background>
+                        <Image Margin="5" Name="ImgCmdFG" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/FGAUCHE.png" />
+                    </Canvas>
+<Canvas  Name="CmdOK" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Canvas.Background>
+                            <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                            </ImageBrush>
+                        </Canvas.Background>
+                        <Image Margin="5" Name="ImgCmdOK" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/OK.png" />
+                    </Canvas>
+                    
+                    <Canvas  Name="CmdFD" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Canvas.Background>
+                            <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                            </ImageBrush>
+                        </Canvas.Background>
+                        <Image Margin="5" Name="ImgCmdFD" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/FDROITE.png" />
+                    </Canvas>
+                </StackPanel>
+                <Canvas  Name="CmdFM" Margin="3" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas.Background>
+                        <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
+                        </ImageBrush>
+                    </Canvas.Background>
+                    <Image Margin="5" Name="ImgCmdFM" Width="40" Height="40" Source="/HoMIWpF;component/Images/Telecommande/FBAS.png" />
+                </Canvas>
+
+            </StackPanel>
+            </StackPanel>
+    </Grid>
+</UserControl>
