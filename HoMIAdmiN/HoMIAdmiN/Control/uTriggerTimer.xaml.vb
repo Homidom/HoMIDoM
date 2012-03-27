@@ -250,7 +250,7 @@
                 For i As Integer = 0 To _ListMacro.Count - 1
                     Dim x As New CheckBox
                     Dim stk As New StackPanel
-                    stk.MinHeight = 25
+                    'stk.MinHeight = 25
                     stk.Margin = New Thickness(2)
                     x.Content = myService.ReturnMacroById(IdSrv, _ListMacro.Item(i)).Nom
                     stk.Uid = myService.ReturnMacroById(IdSrv, _ListMacro.Item(i)).ID
@@ -271,7 +271,7 @@
                     AddHandler x.Click, AddressOf CheckClick
                     stk.Uid = myService.GetAllMacros(IdSrv).Item(i).ID
                     x.Uid = stk.Uid
-                    stk.MinHeight = 25
+                    'stk.MinHeight = 25
                     stk.Margin = New Thickness(2)
                     stk.Children.Add(x)
                     ListBox1.Items.Add(stk)
@@ -487,7 +487,10 @@
     Private Sub TxtHr_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHr.TextChanged
         If TxtHr.Text <> "" Then
             If IsNumeric(TxtHr.Text) = False Then
-                TxtHr.Text = "00"
+                TxtHr.Text = "0"
+            ElseIf TxtHr.Text <> "" Then
+                If TxtHr.Text < 0 Then TxtHr.Text = ""
+                If TxtHr.Text > 23 Then TxtHr.Text = ""
             End If
         End If
     End Sub
@@ -495,7 +498,10 @@
     Private Sub TxtMn_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMn.TextChanged
         If TxtMn.Text <> "" Then
             If IsNumeric(TxtMn.Text) = False Then
-                TxtMn.Text = "00"
+                TxtMn.Text = "0"
+            ElseIf TxtMn.Text <> "" Then
+                If TxtMn.Text < 0 Then TxtMn.Text = ""
+                If TxtMn.Text > 59 Then TxtMn.Text = ""
             End If
         End If
     End Sub
@@ -503,7 +509,10 @@
     Private Sub TxtSc_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtSc.TextChanged
         If TxtSc.Text <> "" Then
             If IsNumeric(TxtSc.Text) = False Then
-                TxtSc.Text = "00"
+                TxtSc.Text = "0"
+            ElseIf TxtSc.Text <> "" Then
+                If TxtSc.Text < 0 Then TxtSc.Text = ""
+                If TxtSc.Text > 59 Then TxtSc.Text = ""
             End If
         End If
     End Sub
@@ -511,7 +520,10 @@
     Private Sub TxtJr_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtJr.TextChanged
         If TxtJr.Text <> "" Then
             If IsNumeric(TxtJr.Text) = False Then
-                TxtJr.Text = "01"
+                TxtJr.Text = "1"
+            ElseIf TxtJr.Text <> "" Then
+                If TxtJr.Text < 0 Then TxtJr.Text = ""
+                If TxtJr.Text > 31 Then TxtJr.Text = ""
             End If
         End If
     End Sub
@@ -519,7 +531,10 @@
     Private Sub TxtMs_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMs.TextChanged
         If TxtMs.Text <> "" Then
             If IsNumeric(TxtMs.Text) = False Then
-                TxtMs.Text = "01"
+                TxtMs.Text = "1"
+            ElseIf TxtMs.Text <> "" Then
+                If TxtMs.Text < 0 Then TxtMs.Text = ""
+                If TxtMs.Text > 12 Then TxtMs.Text = ""
             End If
         End If
     End Sub

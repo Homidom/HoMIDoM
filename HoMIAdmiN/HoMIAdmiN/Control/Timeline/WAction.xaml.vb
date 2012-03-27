@@ -127,7 +127,7 @@ Public Class WActionParametrage
                         Lbl2.Visibility = Visibility.Visible
                         Cb2.Visibility = Windows.Visibility.Visible
                         Cb2.Height = 20
-                        Txt2.Visibility = Windows.Visibility.Hidden
+                        Txt2.Visibility = Windows.Visibility.Collapsed
                         Txt2.Height = 0
                         TxtValue.Height = 21
 
@@ -158,7 +158,7 @@ Public Class WActionParametrage
                         LblValue.Visibility = Windows.Visibility.Hidden
                         Cb2.Visibility = Windows.Visibility.Hidden
                         Cb2.Height = 0
-                        Txt2.Visibility = Windows.Visibility.Hidden
+                        Txt2.Visibility = Windows.Visibility.Collapsed
                         Txt2.Height = 20
                         TxtValue.Visibility = Windows.Visibility.Hidden
 
@@ -182,7 +182,7 @@ Public Class WActionParametrage
                         Lbl2.Content = "Sujet:"
                         LblValue.Content = "Message:"
                         Txt2.Text = ""
-                        Cb2.Visibility = Windows.Visibility.Hidden
+                        Cb2.Visibility = Windows.Visibility.Collapsed
                         Cb2.Height = 0
                         Txt2.Visibility = Windows.Visibility.Visible
                         Txt2.Height = 20
