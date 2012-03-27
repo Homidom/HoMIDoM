@@ -24,7 +24,7 @@
                             <Label Content="Device :" HorizontalAlignment="Left"  Name="Label4" VerticalAlignment="Top" Width="77" Foreground="White" />
                             <ComboBox Height="25" HorizontalAlignment="Left"  Name="CbDevice" VerticalAlignment="Top" Width="174" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                             <Label Content="Propriété :" Foreground="White"  HorizontalAlignment="Left"  Name="Label5" VerticalAlignment="Top" Width="77" />
                             <ComboBox Height="25" HorizontalAlignment="Left"  Name="CbProperty" VerticalAlignment="Top" Width="174" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2"/>
                         </StackPanel>
@@ -43,7 +43,7 @@
                                 <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/fleche_bas_32.png" />
                             </Button>
                         </StackPanel>
-                        <ListBox Height="182" HorizontalAlignment="Left" Margin="9,4,0,0" Name="ListBox1" VerticalAlignment="Top" Width="205" AllowDrop="True" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                        <ListBox Height="182" HorizontalAlignment="Left" Margin="2" Name="ListBox1" VerticalAlignment="Top" Width="205" AllowDrop="True" Background="DarkGray" BorderBrush="Black" Foreground="White" ToolTip="Astuce : Pour sélectionner une macro, cliquer à droite de son nom dans le vide."/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

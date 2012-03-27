@@ -182,7 +182,7 @@
                 For i As Integer = 0 To _ListMacro.Count - 1
                     Dim x As New CheckBox
                     Dim stk As New StackPanel
-                    stk.MinHeight = 25
+                    'stk.MinHeight = 25
 
                     stk.Margin = New Thickness(2)
                     stk.Uid = myService.ReturnMacroById(IdSrv, _ListMacro.Item(i)).ID
@@ -204,7 +204,7 @@
                     AddHandler x.Click, AddressOf CheckClick
                     stk.Uid = myService.GetAllMacros(IdSrv).Item(i).ID
                     x.Uid = stk.Uid
-                    stk.MinHeight = 25
+                    'stk.MinHeight = 25
                     stk.Margin = New Thickness(2)
                     stk.Children.Add(x)
                     ListBox1.Items.Add(stk)
