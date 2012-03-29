@@ -59,6 +59,7 @@ Partial Public Class uConfigServer
                 myService.SetSMTPPassword(IdSrv, TxtPassword.Password)
                 myService.SetMaxFileSizeLog(CDbl(TxtFile.Text))
                 myService.SetMaxMonthLog(CDbl(TxtMaxLogMonth.Text))
+                myService.SetDefautVoice(CbVoice.Text)
 
                 Dim _list As New List(Of Boolean)
                 If ChkTyp0.IsChecked Then
@@ -163,6 +164,13 @@ Partial Public Class uConfigServer
                 TxtMail.Text = myService.GetSMTPMailServeur(IdSrv)
                 TxtLogin.Text = myService.GetSMTPLogin(IdSrv)
                 TxtPassword.Password = myService.GetSMTPPassword(IdSrv)
+
+                Dim idx = -1
+                For i As Integer = 0 To myService.GetAllVoice.Count - 1
+                    CbVoice.Items.Add(myService.GetAllVoice.Item(i))
+                    If myService.GetAllVoice.Item(i) = myService.GetDefautVoice Then idx = i
+                Next
+                CbVoice.SelectedIndex = idx
 
                 Dim _list As List(Of Boolean) = myService.GetTypeLogEnable
                 ChkTyp0.IsChecked = _list.Item(0)

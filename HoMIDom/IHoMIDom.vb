@@ -17,6 +17,27 @@ Namespace HoMIDom
 
 #Region "Serveur"
         ''' <summary>
+        ''' Retourne la liste des voix installées sur le serveur
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetAllVoice() As List(Of String)
+
+        ''' <summary>
+        ''' Retourne la voix par défaut
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetDefautVoice() As String
+
+        ''' <summary>
+        ''' Définit la voix par défaut
+        ''' </summary>
+        ''' <param name="Voice"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetDefautVoice(ByVal Voice As String)
+
+        ''' <summary>
         ''' Vérifie si un élément existe dans une zone, une macro, un trigger... avant de le supprimer
         ''' </summary>
         ''' <param name="IdSrv"></param>

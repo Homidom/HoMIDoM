@@ -63,6 +63,7 @@ Namespace HoMIDom
         <NonSerialized()> Shared _CycleSave As Integer  'Enregistrer toute les X minutes
         <NonSerialized()> Shared _NextTimeSave As DateTime  'Enregistrer toute les X minutes
         <NonSerialized()> Shared _Finish As Boolean  'Le serveur est prêt
+        <NonSerialized()> Shared _Voice As String  'Voix par défaut
         Private Shared lock_logwrite As New Object
 
 #End Region
@@ -431,6 +432,8 @@ Namespace HoMIDom
                                         _TypeLogEnable(9) = list.Item(0).Attributes.Item(j).Value
                                     Case "cyclesave"
                                         _CycleSave = list.Item(0).Attributes.Item(j).Value
+                                    Case "voice"
+                                        _Voice = list.Item(0).Attributes.Item(j).Value
                                     Case Else
                                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                 End Select
@@ -1242,6 +1245,9 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("cyclesave")
                 writer.WriteValue(_CycleSave)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("voice")
+                writer.WriteValue(_Voice)
                 writer.WriteEndAttribute()
                 writer.WriteEndElement()
 
@@ -3123,6 +3129,29 @@ Namespace HoMIDom
 
 #End Region
 
+#Region "Voix"
+        ''' <summary>
+        ''' Gets a list of all the Speech Synthesis voices installed on the computer.
+        ''' </summary>
+        ''' <returns>A string array of all the voices installed</returns>
+        ''' <remarks>Make sure you have the System.Speech namespace reference added to your project</remarks>
+        Function ReturnAllSpeechSynthesisVoices() As String()
+            Dim oSpeech As New System.Speech.Synthesis.SpeechSynthesizer()
+            Dim installedVoices As System.Collections.ObjectModel. _
+                                    ReadOnlyCollection(Of System.Speech.Synthesis.InstalledVoice) _
+                                    = oSpeech.GetInstalledVoices
+
+            Dim names(installedVoices.Count - 1) As String
+            For i As Integer = 0 To installedVoices.Count - 1
+                names(i) = installedVoices(i).VoiceInfo.Name
+            Next
+
+            Return names
+        End Function
+
+
+#End Region
+
 #End Region
 
 #Region "Interface Client via IHOMIDOM"
@@ -3233,6 +3262,46 @@ Namespace HoMIDom
                 If List(i) = Message Then Exit Sub
             Next
             List.Add(Message)
+        End Sub
+
+        ''' <summary>
+        ''' Retourne la liste des voix installées sur le serveur
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetAllVoice() As List(Of String) Implements IHoMIDom.GetAllVoice
+            Try
+
+                Dim strAllVoices() As String = ReturnAllSpeechSynthesisVoices()
+                Dim list As New List(Of String)
+
+                For Each Str As String In strAllVoices
+                    list.Add(Str)
+                Next
+
+                Return list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllVoice", "Erreur : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Retourne la voix par défaut
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetDefautVoice() As String Implements IHoMIDom.GetDefautVoice
+            Return _Voice
+        End Function
+
+        ''' <summary>
+        ''' Définit la voix par défaut
+        ''' </summary>
+        ''' <param name="Voice"></param>
+        ''' <remarks></remarks>
+        Public Sub SetDefautVoice(ByVal Voice As String) Implements IHoMIDom.SetDefautVoice
+            _Voice = Voice
         End Sub
 
         Private Sub VerifIdInAction(ByVal Actions As ArrayList, ByVal Id As String, ByVal NameMacro As String, ByVal Retour As List(Of String))
@@ -7237,6 +7306,7 @@ Namespace HoMIDom
             End Try
         End Function
 #End Region
+
 
 #End Region
 

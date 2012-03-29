@@ -358,7 +358,7 @@ Namespace HoMIDom
                 Dim lamachineaparler As New Speech.Synthesis.SpeechSynthesizer
                 _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Parler", "Message:" & Message)
                 With lamachineaparler
-                    .SelectVoice("ScanSoft Virginie_Dri40_16kHz")
+                    .SelectVoice(_Server.GetDefautVoice)
                     '.SetOutputToWaveFile("C:\tet.wav")
                     '.SetOutputToWaveFile(File)
                     .SpeakAsync(texte)
