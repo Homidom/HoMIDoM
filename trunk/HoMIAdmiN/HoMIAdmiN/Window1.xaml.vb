@@ -1467,13 +1467,26 @@ Class Window1
 
     Private Sub AnimationApparition(ByVal Objet As Object)
         If Objet IsNot Nothing Then
-            Dim da3 As DoubleAnimation = New DoubleAnimation
-            da3.From = 0
-            da3.To = 1
-            da3.Duration = New Duration(TimeSpan.FromMilliseconds(800))
-            Dim sc As ScaleTransform = New ScaleTransform()
-            Objet.RenderTransform = sc
-            sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
+            'Dim da3 As DoubleAnimation = New DoubleAnimation
+            'da3.From = 0
+            'da3.To = 1
+            'da3.Duration = New Duration(TimeSpan.FromMilliseconds(800))
+            'Dim sc As ScaleTransform = New ScaleTransform()
+            'Objet.RenderTransform = sc
+            'sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
+
+            Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
+            myDoubleAnimation.From = 0.0
+            myDoubleAnimation.To = 1.0
+            myDoubleAnimation.Duration = New Duration(TimeSpan.FromSeconds(1))
+            Dim myStoryboard As Storyboard
+            myStoryboard = New Storyboard()
+            myStoryboard.Children.Add(myDoubleAnimation)
+            'AddHandler myStoryboard.Completed, AddressOf StoryBoardFinish
+
+            Storyboard.SetTarget(myDoubleAnimation, Objet)
+            Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
+            myStoryboard.Begin()
         End If
     End Sub
 
