@@ -1,6 +1,7 @@
 ﻿Imports HoMIDom.HoMIDom
 Imports System.Net.Mail
 Imports System.Threading
+Imports System.Speech
 
 Namespace HoMIDom
 
@@ -298,6 +299,10 @@ Namespace HoMIDom
                         Dim x As Action.ActionMail = _Action
                         Send_email(_Server.ReturnUserById(_IdSrv, x.UserId).eMail, x.Sujet, x.Message)
 
+                    Case Action.TypeAction.ActionSpeech
+                        Dim x As Action.ActionSpeech = _Action
+                        Parler(x.Message)
+
                 End Select
             Catch ex As Exception
                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "Exception : " & ex.ToString)
@@ -340,6 +345,28 @@ Namespace HoMIDom
                 End If
             Catch ex As Exception
                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "SendMail", "Erreur lors de l'envoi du mail: " & ex.Message)
+            End Try
+        End Sub
+
+        Private Sub Parler(ByVal Message As String)
+            Dim texte As String = Message
+            'remplace les balises par la valeur
+            texte = texte.Replace("{time}", Now.ToShortTimeString)
+            texte = texte.Replace("{date}", Now.ToLongDateString)
+          
+            Try
+                Dim lamachineaparler As New Speech.Synthesis.SpeechSynthesizer
+                _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Parler", "Message:" & Message)
+                With lamachineaparler
+                    .SelectVoice("ScanSoft Virginie_Dri40_16kHz")
+                    '.SetOutputToWaveFile("C:\tet.wav")
+                    '.SetOutputToWaveFile(File)
+                    .SpeakAsync(texte)
+                End With
+                texte = Nothing
+                lamachineaparler = Nothing
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "Parler", "Erreur lors de l'annonce du message: " & Message & " : " & ex.ToString)
             End Try
         End Sub
     End Class

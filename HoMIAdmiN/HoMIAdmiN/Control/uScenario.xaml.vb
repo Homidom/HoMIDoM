@@ -106,6 +106,9 @@ Public Class uScenario
                 Case "ACTIONMAIL"
                     Dim y As New Action.ActionMail
                     x.ObjAction = y
+                Case "ACTIONSPEECH"
+                    Dim y As New Action.ActionSpeech
+                    x.ObjAction = y
                 Case "ACTIONIF"
                     Dim y As New Action.ActionIf
                     x.ObjAction = y
@@ -281,6 +284,14 @@ Public Class uScenario
         Dim obj As New DataObject()
         obj.SetData(GetType(String), "ACTIONMACRO")
         effects = DragDrop.DoDragDrop(Me.ImgActMacro, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+    End Sub
+
+    'Ajouter action PArler
+    Private Sub ImgActSpeech_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActSpeech.MouseLeftButtonDown
+        Dim effects As DragDropEffects
+        Dim obj As New DataObject()
+        obj.SetData(GetType(String), "ACTIONSPEECH")
+        effects = DragDrop.DoDragDrop(Me.ImgActSpeech, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 
     Private Sub ScrollViewer1_ScrollChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.ScrollChangedEventArgs) Handles ScrollViewer1.ScrollChanged

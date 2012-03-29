@@ -70,6 +70,10 @@ Public Class uAction
                         Label1.Content = "Mail "
                         If x.UserId IsNot Nothing Then Label1.Content = Label1.Content & "{" & myService.ReturnUserById(IdSrv, x.UserId).UserName & "}"
                         If x.Sujet IsNot Nothing Then Label2.Content = x.Sujet
+                    Case Action.TypeAction.ActionSpeech
+                        Dim x As Action.ActionSpeech = _ObjAction
+                        Label1.Content = "Parler "
+                        If x.Message IsNot Nothing Then Label2.Content = x.Message
                     Case Action.TypeAction.ActionIf
                         Dim x As Action.ActionIf = _ObjAction
                         Label1.Content = "If"
