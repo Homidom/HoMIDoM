@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="uVariateur"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             >
+
+
+    <Grid>
+        <StackPanel Orientation="Horizontal" >
+            <ProgressBar Name="ProgressBar1" Orientation="Vertical" Width="40" Height="80" Foreground="Orange" SmallChange="10" /> 
+            <StackPanel >
+                <Button Template="{DynamicResource GlassButton}" Name="BtnUp" Width="30" Height="40">
+                    <Image Source="/HoMIWpF;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                </Button>
+                <Button Template="{DynamicResource GlassButton}" Name="BtnDown" Width="30" Height="40">
+                    <Image Source="/HoMIWpF;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

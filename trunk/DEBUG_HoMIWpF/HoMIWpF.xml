@@ -6,257 +6,257 @@ HoMIWpF
 </name>
 </assembly>
 <members>
-<member name="M:WpfApplication1.uMeteos.InitializeComponent">
+<member name="M:HoMIWpF.uMeteos.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uMeteos">
+</member><member name="T:HoMIWpF.uMeteos">
 	<summary>
 uMeteos
 </summary>
-</member><member name="M:WpfApplication1.uNotes.InitializeComponent">
+</member><member name="M:HoMIWpF.uNotes.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uNotes">
+</member><member name="T:HoMIWpF.uNotes">
 	<summary>
 uNotes
 </summary>
-</member><member name="M:WpfApplication1.WConfig.InitializeComponent">
+</member><member name="M:HoMIWpF.WConfig.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.WConfig">
+</member><member name="T:HoMIWpF.WConfig">
 	<summary>
 WConfig
 </summary>
-</member><member name="M:WpfApplication1.uContact.InitializeComponent">
+</member><member name="M:HoMIWpF.uContact.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uContact">
+</member><member name="T:HoMIWpF.uContact">
 	<summary>
 uContact
 </summary>
-</member><member name="M:WpfApplication1.keyboard.InitializeComponent">
+</member><member name="M:HoMIWpF.keyboard.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.keyboard">
+</member><member name="T:HoMIWpF.keyboard">
 	<summary>
 keyboard
 </summary>
-</member><member name="M:WpfApplication1.uFreeBox.InitializeComponent">
+</member><member name="M:HoMIWpF.uFreeBox.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uFreeBox">
+</member><member name="T:HoMIWpF.uFreeBox">
 	<summary>
 uFreeBox
 </summary>
-</member><member name="M:WpfApplication1.uOnOff.InitializeComponent">
+</member><member name="M:HoMIWpF.uOnOff.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uOnOff">
+</member><member name="T:HoMIWpF.uOnOff">
 	<summary>
 uOnOff
 </summary>
-</member><member name="M:WpfApplication1.uInternet.InitializeComponent">
+</member><member name="M:HoMIWpF.uInternet.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uInternet">
+</member><member name="T:HoMIWpF.uInternet">
 	<summary>
 uInternet
 </summary>
-</member><member name="M:WpfApplication1.Window1.InitializeComponent">
+</member><member name="M:HoMIWpF.Window1.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.Window1">
+</member><member name="T:HoMIWpF.Window1">
 	<summary>
 Window1
 </summary>
-</member><member name="M:WpfApplication1.uModules.InitializeComponent">
+</member><member name="M:HoMIWpF.uModules.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uModules">
+</member><member name="T:HoMIWpF.uModules">
 	<summary>
 uModules
 </summary>
-</member><member name="M:WpfApplication1.FrmConfigChaine.InitializeComponent">
+</member><member name="M:HoMIWpF.FrmConfigChaine.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.FrmConfigChaine">
+</member><member name="T:HoMIWpF.FrmConfigChaine">
 	<summary>
 FrmConfigChaine
 </summary>
-</member><member name="M:WpfApplication1.uVariateur.InitializeComponent">
+</member><member name="M:HoMIWpF.uVariateur.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uVariateur">
+</member><member name="T:HoMIWpF.uVariateur">
 	<summary>
 uVariateur
 </summary>
-</member><member name="M:WpfApplication1.uCtrlImgMnu.InitializeComponent">
+</member><member name="M:HoMIWpF.uCtrlImgMnu.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uCtrlImgMnu">
+</member><member name="T:HoMIWpF.uCtrlImgMnu">
 	<summary>
 uCtrlImgMnu
 </summary>
-</member><member name="M:WpfApplication1.uModule.InitializeComponent">
+</member><member name="M:HoMIWpF.uModule.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uModule">
+</member><member name="T:HoMIWpF.uModule">
 	<summary>
 uModule
 </summary>
-</member><member name="M:WpfApplication1.uWidgetEmpty.InitializeComponent">
+</member><member name="M:HoMIWpF.uWidgetEmpty.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uWidgetEmpty">
+</member><member name="T:HoMIWpF.uWidgetEmpty">
 	<summary>
 uWidgetEmpty
 </summary>
-</member><member name="M:WpfApplication1.uProgrammeTV.InitializeComponent">
+</member><member name="M:HoMIWpF.uProgrammeTV.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uProgrammeTV">
+</member><member name="T:HoMIWpF.uProgrammeTV">
 	<summary>
 uProgrammeTV
 </summary>
-</member><member name="M:WpfApplication1.uWidgetONOFF.InitializeComponent">
+</member><member name="M:HoMIWpF.uWidgetONOFF.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uWidgetONOFF">
+</member><member name="T:HoMIWpF.uWidgetONOFF">
 	<summary>
 uWidgetONOFF
 </summary>
-</member><member name="M:WpfApplication1.FrmDetailProgram.InitializeComponent">
+</member><member name="M:HoMIWpF.FrmDetailProgram.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.FrmDetailProgram">
+</member><member name="T:HoMIWpF.FrmDetailProgram">
 	<summary>
 FrmDetailProgram
 </summary>
-</member><member name="M:WpfApplication1.uMeteo.InitializeComponent">
+</member><member name="M:HoMIWpF.uMeteo.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uMeteo">
+</member><member name="T:HoMIWpF.uMeteo">
 	<summary>
 uMeteo
 </summary>
-</member><member name="M:WpfApplication1.Application.InitializeComponent">
+</member><member name="M:HoMIWpF.Application.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="M:WpfApplication1.Application.Main">
+</member><member name="M:HoMIWpF.Application.Main">
 	<summary>
 Application Entry Point.
 </summary>
-</member><member name="T:WpfApplication1.Application">
+</member><member name="T:HoMIWpF.Application">
 	<summary>
 Application
 </summary>
-</member><member name="M:WpfApplication1.uTelecommande.InitializeComponent">
+</member><member name="M:HoMIWpF.uTelecommande.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uTelecommande">
+</member><member name="T:HoMIWpF.uTelecommande">
 	<summary>
 uTelecommande
 </summary>
-</member><member name="P:WpfApplication1.My.Resources.Resources.ResourceManager">
+</member><member name="P:HoMIWpF.My.Resources.Resources.ResourceManager">
 	<summary>
   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
 </summary>
-</member><member name="P:WpfApplication1.My.Resources.Resources.Culture">
+</member><member name="P:HoMIWpF.My.Resources.Resources.Culture">
 	<summary>
   Remplace la propriété CurrentUICulture du thread actuel pour toutes
   les recherches de ressources à l'aide de cette classe de ressource fortement typée.
 </summary>
-</member><member name="T:WpfApplication1.My.Resources.Resources">
+</member><member name="T:HoMIWpF.My.Resources.Resources">
 	<summary>
   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
 </summary>
-</member><member name="M:WpfApplication1.Window1.LoadConfig(System.String)">
+</member><member name="M:HoMIWpF.Window1.LoadConfig(System.String)">
 	<summary>Chargement de la config depuis le fichier XML</summary>
 	<param name="Fichier"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:WpfApplication1.Window1.SaveConfig(System.String)">
+</member><member name="M:HoMIWpF.Window1.SaveConfig(System.String)">
 	<summary>Sauvegarde de la config dans le fichier XML</summary>
 	<remarks></remarks>
-</member><member name="P:WpfApplication1.Window1.FichierLog">
+</member><member name="P:HoMIWpF.Window1.FichierLog">
 	<summary>
  Permet de connaître le chemin du fichier log
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:WpfApplication1.Window1.MaxFileSize">
+</member><member name="P:HoMIWpF.Window1.MaxFileSize">
 	<summary>
  Retourne/Fixe la Taille max du fichier log en Ko
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="T:WpfApplication1.Window1.TypeLog">
+</member><member name="T:HoMIWpF.Window1.TypeLog">
 	<summary>Indique le type du Log: si c'est une erreur, une info, un message...</summary>
 	<remarks></remarks>
-</member><member name="T:WpfApplication1.Window1.TypeSource">
+</member><member name="T:HoMIWpF.Window1.TypeSource">
 	<summary>Indique la source du log si c'est le serveur, un script, un device...</summary>
 	<remarks></remarks>
-</member><member name="M:WpfApplication1.Window1.Log(WpfApplication1.Window1.TypeLog,WpfApplication1.Window1.TypeSource,System.String,System.String)">
+</member><member name="M:HoMIWpF.Window1.Log(HoMIWpF.Window1.TypeLog,HoMIWpF.Window1.TypeSource,System.String,System.String)">
 	<summary>Ecrit un log dans le fichier log au format xml</summary>
 	<param name="TypLog"></param>
 	<param name="Source"></param>
 	<param name="Fonction"></param>
 	<param name="Message"></param>
 	<remarks></remarks>
-</member><member name="M:WpfApplication1.Window1.CreateNewFileLog(System.String)">
+</member><member name="M:HoMIWpF.Window1.CreateNewFileLog(System.String)">
 	<summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
 	<param name="NewFichier"></param>
 	<remarks></remarks>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.Application">
+</member><member name="P:HoMIWpF.My.MyWpfExtension.Application">
 	<summary>
  Retourne l'objet application pour l'application en cours d'exécution
  </summary>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.Computer">
+</member><member name="P:HoMIWpF.My.MyWpfExtension.Computer">
 	<summary>
  Retourne les informations relatives à l'ordinateur hôte.
  </summary>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.User">
+</member><member name="P:HoMIWpF.My.MyWpfExtension.User">
 	<summary>
  Retourne les informations relatives à l'utilisateur actuel. Si vous souhaitez exécuter l'application avec les 
  informations d'identification de l'utilisateur Windows, appelez My.User.InitializeWithWindowsUser().
  </summary>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.Log">
+</member><member name="P:HoMIWpF.My.MyWpfExtension.Log">
 	<summary>
  Retourne le journal de l'application. L'écouteur peut être configuré par le fichier de configuration de l'application.
  </summary>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.Windows">
+</member><member name="P:HoMIWpF.My.MyWpfExtension.Windows">
 	<summary>
  Retourne la collection de fenêtres définie dans le projet.
  </summary>
-</member><member name="T:WpfApplication1.My.MyWpfExtension">
+</member><member name="T:HoMIWpF.My.MyWpfExtension">
 	<summary>
  Module utilisé pour définir les propriétés qui sont disponibles dans l'espace de noms My pour WPF
  </summary>
 	<remarks></remarks>
-</member><member name="M:WpfApplication1.clsXML.#ctor(System.String)">
+</member><member name="M:HoMIWpF.clsXML.#ctor(System.String)">
  -----------------------------------------------------------------------------
  <summary>
  Constructeur de la classe
@@ -271,7 +271,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:WpfApplication1.clsXML.#ctor">
+</member><member name="M:HoMIWpF.clsXML.#ctor">
  -----------------------------------------------------------------------------
  <summary>
  Constructeur de la classe
@@ -285,7 +285,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="P:WpfApplication1.clsXML.leFichier">
+</member><member name="P:HoMIWpF.clsXML.leFichier">
  -----------------------------------------------------------------------------
  <summary>
  définit/retourne le nom du fichier
@@ -300,7 +300,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:WpfApplication1.clsXML.SelectValue(System.String)">
+</member><member name="M:HoMIWpF.clsXML.SelectValue(System.String)">
 	<summary>
  Retourne la valeur du premier noeud correspondant à la requête XPath.
  Cette fonction devrait être la plus utilisée car elle permet de retourner le résultat de n'importe quelle requête XPath.
@@ -316,7 +316,7 @@ uTelecommande
 	<history>
      [Gabriel]   06/06/2009  Created
  </history>
-</member><member name="M:WpfApplication1.clsXML.SetNode(System.String,System.Xml.XmlNode,System.Int32)">
+</member><member name="M:HoMIWpF.clsXML.SetNode(System.String,System.Xml.XmlNode,System.Int32)">
 	<summary>
  Remplace le premier noeud correspondant à la requête XPath par un nouveau.
  </summary>
@@ -326,7 +326,7 @@ uTelecommande
 	<history>
      [Gabriel]   06/06/2009  Created
  </history>
-</member><member name="M:WpfApplication1.clsXML.SelectFirstNode(System.String)">
+</member><member name="M:HoMIWpF.clsXML.SelectFirstNode(System.String)">
 	<summary>
  Retourne le premier noeud correspondant à la requête XPath, Nothing si aucun noeud n'est trouvé
  </summary>
@@ -336,7 +336,7 @@ uTelecommande
 	<history>
      [Gabriel]   06/06/2009  Created
  </history>
-</member><member name="M:WpfApplication1.clsXML.SelectNodes(System.String)">
+</member><member name="M:HoMIWpF.clsXML.SelectNodes(System.String)">
 	<summary>
  Retourne la liste des noeuds correspondants à la requête XPath ou Nothing si rien n'est trouvé
  </summary>
@@ -346,7 +346,7 @@ uTelecommande
 	<history>
      [Gabriel]   06/06/2009  Created
  </history>
-</member><member name="M:WpfApplication1.clsXML.getElementValue(System.String,System.Int32)">
+</member><member name="M:HoMIWpF.clsXML.getElementValue(System.String,System.Int32)">
  -----------------------------------------------------------------------------
  <summary>
  Objectif : Renvoie la valeur du n-ème élément pointé par la requête XPath
@@ -366,7 +366,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:WpfApplication1.clsXML.setElementValue(System.String,System.String,System.Int32)">
+</member><member name="M:HoMIWpF.clsXML.setElementValue(System.String,System.String,System.Int32)">
  -----------------------------------------------------------------------------
  <summary>
  Ecrit la valeur pour le n-ième élément pointé par la requête path
@@ -386,7 +386,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:WpfApplication1.clsXML.addElement(System.String,System.String,System.String,System.Int32)">
+</member><member name="M:HoMIWpF.clsXML.addElement(System.String,System.String,System.String,System.Int32)">
  -----------------------------------------------------------------------------
  <summary>
  Ajoute un element pointé par le n-ième noeud de la requête XPath
@@ -407,7 +407,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:WpfApplication1.clsXML.deleteElement(System.String,System.String,System.Int32)">
+</member><member name="M:HoMIWpF.clsXML.deleteElement(System.String,System.String,System.Int32)">
  -----------------------------------------------------------------------------
  <summary>
  supprime le n-ième element pointé par la requête XPath
@@ -426,7 +426,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:WpfApplication1.clsXML.deleteElement(System.String)">
+</member><member name="M:HoMIWpF.clsXML.deleteElement(System.String)">
  -----------------------------------------------------------------------------
  <summary>
  supprime le 1er élément pointé par la requête XPath
@@ -444,7 +444,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:WpfApplication1.clsXML.addAttribute(System.String,System.String,System.String,System.Int32)">
+</member><member name="M:HoMIWpF.clsXML.addAttribute(System.String,System.String,System.String,System.Int32)">
  -----------------------------------------------------------------------------
  <summary>
  Ajoute un attribut "nom" de valeur "valeur" n-ième élément pointé par la requête XPath
@@ -465,7 +465,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:WpfApplication1.clsXML.setAttribute(System.String,System.String,System.String,System.Int32)">
+</member><member name="M:HoMIWpF.clsXML.setAttribute(System.String,System.String,System.String,System.Int32)">
  -----------------------------------------------------------------------------
  <summary>
  Affecte à l'attribut "nom" la valeur "valeur" au n-ième élément pointé par la requête "path"
@@ -486,7 +486,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:WpfApplication1.clsXML.getAttribute(System.String,System.String,System.String,System.Int32)">
+</member><member name="M:HoMIWpF.clsXML.getAttribute(System.String,System.String,System.String,System.Int32)">
  -----------------------------------------------------------------------------
  <summary>
  Retourne la valeur de l'attribut "nom" du n-ième élément pointé par la requête "XPath"
@@ -507,7 +507,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:WpfApplication1.clsXML.createRoot(System.String,System.String)">
+</member><member name="M:HoMIWpF.clsXML.createRoot(System.String,System.String)">
  -----------------------------------------------------------------------------
  <summary>
  Ajoute l'element racine "nom"
@@ -522,7 +522,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:WpfApplication1.clsXML.createNewFile(System.String)">
+</member><member name="M:HoMIWpF.clsXML.createNewFile(System.String)">
 
  -----------------------------------------------------------------------------
  <summary>
@@ -538,7 +538,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:WpfApplication1.clsXML.getFormatedXMLString">
+</member><member name="M:HoMIWpF.clsXML.getFormatedXMLString">
  -----------------------------------------------------------------------------
  <summary>
  Permet de renvoyer sous forme de chaine le contenu du fichier XML.
@@ -553,7 +553,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:WpfApplication1.clsXML.getIndexOfElementContaining(System.String,System.String)">
+</member><member name="M:HoMIWpF.clsXML.getIndexOfElementContaining(System.String,System.String)">
  -----------------------------------------------------------------------------
  <summary>
  Renvoie l'index de l'élément pointé par XPath et de valeur valeur, -1 si pas trouvé
@@ -570,7 +570,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="M:WpfApplication1.clsXML.countElements(System.String)">
+</member><member name="M:HoMIWpF.clsXML.countElements(System.String)">
  -----------------------------------------------------------------------------
  <summary>
  Renvoie le nombre d'éléments pointés par XPath
@@ -585,7 +585,7 @@ uTelecommande
  </history>
  -----------------------------------------------------------------------------
 
-</member><member name="T:WpfApplication1.Appointment">
+</member><member name="T:HoMIWpF.Appointment">
 	<summary>
  This class is actually a stripped-down version of the actual Appointment class, which was generated using the 
  Linq-to-SQL Designer (essentially a Linq ORM to the Appointments table in the db)
