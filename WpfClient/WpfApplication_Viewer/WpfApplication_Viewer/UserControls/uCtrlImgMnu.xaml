@@ -1,9 +1,0 @@
-﻿<UserControl x:Class="uCtrlImgMnu"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Margin="5">
-            
-        <StackPanel >
-            <Image Name="Image" Stretch="Fill" Height="55" VerticalAlignment="Top" Width="55" />
-            <Label Name="Lbl" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="9" Foreground="White">TEST</Label>
-        </StackPanel>
-    </UserControl>
