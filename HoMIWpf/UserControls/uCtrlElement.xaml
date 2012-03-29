@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="uCtrlElement"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" ForceCursor="False">
+    
+    <Grid >
+
+        <Border Name="Border1" BorderThickness="2" BorderBrush="Black" CornerRadius="5" Background="Black">
+            
+            <StackPanel Name="Stk1">
+                <Popup Margin="2" Name="Popup1" HorizontalAlignment="Left" VerticalAlignment="Top"  
+                       IsOpen="False">
+                    <StackPanel Name="StkPopup" Background="#FF312D2D" MaxWidth="300" MinHeight="50">
+           
+                    </StackPanel>
+                </Popup>
+                
+                <Label Name="Lbl" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" FontSize="9" Foreground="White" >?</Label>
+                <StackPanel Orientation="Horizontal" >
+                    <Image Name="Image" Stretch="Fill" Height="40" VerticalAlignment="Center" Width="40" Source="/HoMIWpF;component/Images/script-128.png" MaxWidth="40" MaxHeight="40" />
+                    <Label Name="LblStatus" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" FontSize="9" Foreground="LightGray"  >Status: ?</Label>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid> 
+    
+</UserControl>

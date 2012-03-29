@@ -1,0 +1,102 @@
+﻿<UserControl x:Class="uNotes"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:local="clr-namespace:HoMIWpF.UAniScrollViewer"
+             Width="609" Height="700">
+    <UserControl.Resources>
+        <ControlTemplate x:Key="GlassButton" TargetType="{x:Type Button}">
+            <ControlTemplate.Resources>
+                <Storyboard x:Key="Timeline1">
+                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="glow" Storyboard.TargetProperty="(UIElement.Opacity)">
+                        <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="1"/>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+                <Storyboard x:Key="Timeline2">
+                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="glow" Storyboard.TargetProperty="(UIElement.Opacity)">
+                        <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+            </ControlTemplate.Resources>
+            <Border BorderBrush="#FFFFFFFF" BorderThickness="1,1,1,1" CornerRadius="4,4,4,4">
+                <Border x:Name="border" Background="#7F000000" BorderBrush="#FF000000" BorderThickness="1,1,1,1" CornerRadius="4,4,4,4">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.507*"/>
+                            <RowDefinition Height="0.493*"/>
+                        </Grid.RowDefinitions>
+                        <Border Opacity="0" HorizontalAlignment="Stretch" x:Name="glow" Width="Auto" Grid.RowSpan="2" CornerRadius="4,4,4,4">
+                            <Border.Background>
+                                <RadialGradientBrush>
+                                    <RadialGradientBrush.RelativeTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="1.702" ScaleY="2.243"/>
+                                            <SkewTransform AngleX="0" AngleY="0"/>
+                                            <RotateTransform Angle="0"/>
+                                            <TranslateTransform X="-0.368" Y="-0.152"/>
+                                        </TransformGroup>
+                                    </RadialGradientBrush.RelativeTransform>
+                                    <GradientStop Color="#B28DBDFF" Offset="0"/>
+                                    <GradientStop Color="#008DBDFF" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Width="Auto" Grid.RowSpan="2"/>
+                        <Border HorizontalAlignment="Stretch" Margin="0,0,0,0" x:Name="shine" Width="Auto" CornerRadius="4,4,0,0">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.494,0.889" StartPoint="0.494,0.028">
+                                    <GradientStop Color="#99FFFFFF" Offset="0"/>
+                                    <GradientStop Color="#33FFFFFF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" TargetName="shine" Value="0.4"/>
+                    <Setter Property="Background" TargetName="border" Value="#CC000000"/>
+                    <Setter Property="Visibility" TargetName="glow" Value="Hidden"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource Timeline1}"/>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard x:Name="Timeline2_BeginStoryboard" Storyboard="{StaticResource Timeline2}"/>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </UserControl.Resources>
+    
+    <Grid Width="Auto" Background="Black" Height="Auto">
+        <Canvas Height="80" Name="Canvas4" VerticalAlignment="Bottom" Background="Transparent" Width="auto" >
+            <local:AniScrollViewer x:Name="ScrollViewer1" Canvas.Left="0" Canvas.Top="0" Height="80" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" Width="585" BorderThickness="4" />
+        </Canvas>
+        <Canvas Margin="0,0,0,77" Name="Canvas1" Width="Auto" Background="Black">
+            <Canvas Background="White" Canvas.Left="10" Canvas.Top="10" Height="304" Name="CanvasImg" Width="473" VerticalAlignment="Top"></Canvas>
+            <Canvas Background="Transparent" Canvas.Left="497" Canvas.Top="29" Height="122" Name="Canvas3" Width="87" Opacity="1">
+                <Ellipse Canvas.Left="6" Canvas.Top="6" Fill="Blue" Height="32" Name="ColorBlue" Stroke="DarkGray" Width="33" StrokeThickness="2" />
+                <Ellipse Canvas.Left="6" Canvas.Top="44" Fill="Red" Height="32" Name="ColorRed" Stroke="DarkGray" Width="33" StrokeThickness="2" />
+                <Ellipse Canvas.Left="6" Canvas.Top="82" Fill="Green" Height="32" Name="ColorGreen" Stroke="DarkGray" Width="33" StrokeThickness="2" />
+                <Ellipse Canvas.Left="45" Canvas.Top="6" Fill="Black" Height="32" Name="ColorBlack" Stroke="DarkGray" Width="33" StrokeThickness="2" />
+                <Ellipse Canvas.Left="45" Canvas.Top="44" Fill="Yellow" Height="32" Name="ColorYellow" Stroke="DarkGreen" Width="33" StrokeThickness="2" />
+                <Ellipse Canvas.Left="45" Canvas.Top="82" Fill="Orange" Height="32" Name="ColorOrange" Stroke="DarkGray" Width="33" StrokeThickness="2" />
+                <Border Canvas.Left="0" Canvas.Top="0" Height="124" Name="Border1" Width="88" BorderBrush="DarkGray" BorderThickness="2" />
+            </Canvas>
+            <Canvas Background="Transparent" Canvas.Left="497" Canvas.Top="160" Height="100" Name="Canvas5" Width="88" HorizontalAlignment="Stretch">
+                <Rectangle Canvas.Left="10" Canvas.Top="10" Fill="Black" Height="2" Name="Stroke2" Stroke="Black" Width="70" StrokeThickness="2" />
+                <Rectangle Canvas.Left="10" Canvas.Top="23" Fill="Black" Height="4" Name="Stroke4" Stroke="Black" Width="70" StrokeThickness="2" />
+                <Rectangle Canvas.Left="10" Canvas.Top="40" Fill="Black" Height="6" Name="Stroke6" Stroke="Black" Width="70" StrokeThickness="2" />
+                <Rectangle Canvas.Left="10" Canvas.Top="59" Fill="Black" Height="8" Name="Stroke8" Stroke="Black" Width="70" StrokeThickness="2" />
+                <Rectangle Canvas.Left="10" Canvas.Top="80" Fill="Black" Height="10" Name="Stroke10" Stroke="DarkGray" Width="70" StrokeThickness="2" />
+                <Border Canvas.Left="0" Canvas.Top="0" Height="99" Name="Border2" Width="86" BorderThickness="2" BorderBrush="DarkGray" />
+            </Canvas>
+            <Button Canvas.Left="498" Canvas.Top="269" Height="25" Name="BtnClear" Width="87" Foreground="White" Content="Effacer" Template="{DynamicResource GlassButton}"/>
+            <Button Canvas.Left="498" Canvas.Top="299" Height="25" Name="BtnSave" Width="87" Foreground="White" Content="Enregistrer" Template="{DynamicResource GlassButton}"/>
+            <Button Canvas.Left="498" Canvas.Top="330" Height="25" Name="BtnDelete" Width="87" Foreground="White" Content="Supprimer" Template="{DynamicResource GlassButton}"/>
+            
+        </Canvas>
+    </Grid>
+</UserControl>

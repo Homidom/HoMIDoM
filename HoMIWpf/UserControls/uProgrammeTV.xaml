@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="uProgrammeTV"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:local="clr-namespace:HoMIWpF.UAniScrollViewer"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="auto" Height="auto">
+    <DockPanel Height="Auto" Name="DockPanel1" Width="Auto">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" DockPanel.Dock="Top" Background="Black">
+            <Rectangle Width=" 85"></Rectangle>
+            <StackPanel Orientation="Vertical" >
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                    <Image Height="28" Name="BtnG" Stretch="Fill" Width="32" Source="/WpfApplication_Viewer;component/Images/BtnG.png" />
+                    <Label Height="29" Name="LblDate" Width="228" Foreground="White" FontSize="16">Label</Label>
+                    <Image Height="28" Name="BtnD"  Stretch="Fill" Width="32" Source="/WpfApplication_Viewer;component/Images/btnD.png" />
+                </StackPanel>
+                <ScrollViewer Name="ScrollViewer3" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+                    <StackPanel Name="StkLabel" Orientation="Horizontal" HorizontalAlignment="Left" Background="DarkGray" CanHorizontallyScroll="True"></StackPanel>
+                </ScrollViewer> 
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Height="38" Name="Canvas4" DockPanel.Dock="Bottom" Background="Black" />
+        <ScrollViewer Name="ScrollViewer2" VerticalScrollBarVisibility="Hidden">
+        <StackPanel Name="StkLeft" Width="85" VerticalAlignment="Top" HorizontalAlignment="Right" CanVerticallyScroll="True">
+            
+        </StackPanel>
+        </ScrollViewer>
+        <local:AniScrollViewer x:Name="ScrollViewer1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Hidden">
+            <StackPanel Name="StkMid" CanVerticallyScroll="True" CanHorizontallyScroll="True" VerticalAlignment="Top">
+                
+            </StackPanel>
+        </local:AniScrollViewer>
+        
+    </DockPanel>
+</UserControl>
