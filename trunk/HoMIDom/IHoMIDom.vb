@@ -729,7 +729,7 @@ Namespace HoMIDom
         ''' <param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
         ''' <returns>List de type Macro, Nothing si ID du serveur erroné</returns>
         ''' <remarks></remarks>
-        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro))> Function GetAllMacros(ByVal IdSrv As String) As List(Of Macro)
+        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro)), ServiceKnownType(GetType(HoMIDom.Action.ActionSpeech))> Function GetAllMacros(ByVal IdSrv As String) As List(Of Macro)
 
         ''' <summary>
         ''' Retourne la macro par son ID
@@ -738,7 +738,7 @@ Namespace HoMIDom
         ''' <param name="MacroId">ID de la macro</param>
         ''' <returns>Objet de type macro, Nothing si macro non trouvée ou si ID du serveur erroné</returns>
         ''' <remarks></remarks>
-        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro))> Function ReturnMacroById(ByVal IdSrv As String, ByVal MacroId As String) As Macro
+        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro)), ServiceKnownType(GetType(HoMIDom.Action.ActionSpeech))> Function ReturnMacroById(ByVal IdSrv As String, ByVal MacroId As String) As Macro
 
         ''' <summary>
         ''' Permet de créer ou modifier une macro
@@ -751,7 +751,7 @@ Namespace HoMIDom
         ''' <param name="listactions">List des actions associées à la macro</param>
         ''' <returns>ID de la macro modifée ou créée, 99 si ID du serveur erroné</returns>
         ''' <remarks></remarks>
-        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro))> Function SaveMacro(ByVal IdSrv As String, ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal listactions As ArrayList = Nothing) As String
+        <OperationContract(), ServiceKnownType(GetType(HoMIDom.Macro)), ServiceKnownType(GetType(HoMIDom.Action.ActionDevice)), ServiceKnownType(GetType(HoMIDom.Action.ActionMail)), ServiceKnownType(GetType(HoMIDom.Action.ActionIf)), ServiceKnownType(GetType(HoMIDom.Action.ActionMacro)), ServiceKnownType(GetType(HoMIDom.Action.ActionSpeech))> Function SaveMacro(ByVal IdSrv As String, ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal listactions As ArrayList = Nothing) As String
 #End Region
 
 #Region "Trigger"

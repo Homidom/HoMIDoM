@@ -528,5 +528,8 @@
   <ItemGroup>
     <Resource Include="Images\tpbtn.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Speech-128.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

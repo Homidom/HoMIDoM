@@ -1048,6 +1048,10 @@ Namespace HoMIDom
                                     Dim o As New Action.ActionMacro
                                     _Act = o
                                     o = Nothing
+                                Case "ActionSpeech"
+                                    Dim o As New Action.ActionSpeech
+                                    _Act = o
+                                    o = Nothing
                             End Select
                             For j3 As Integer = 0 To list.ChildNodes.Item(j2).Attributes.Count - 1
                                 Select Case list.ChildNodes.Item(j2).Attributes.Item(j3).Name
@@ -1689,6 +1693,10 @@ Namespace HoMIDom
                             writer.WriteEndAttribute()
                             writer.WriteStartAttribute("message")
                             writer.WriteValue(ListActions.Item(j).Sujet)
+                            writer.WriteEndAttribute()
+                        Case Action.TypeAction.ActionSpeech
+                            writer.WriteStartAttribute("message")
+                            writer.WriteValue(ListActions.Item(j).Message)
                             writer.WriteEndAttribute()
                         Case Action.TypeAction.ActionIf
                             writer.WriteStartElement("conditions")

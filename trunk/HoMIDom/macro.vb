@@ -378,6 +378,11 @@ Namespace HoMIDom
             ''' </summary>
             ''' <remarks></remarks>
             ActionMacro = 3
+            ''' <summary>
+            ''' Action de type parler
+            ''' </summary>
+            ''' <remarks></remarks>
+            ActionSpeech = 4
         End Enum
 
         ''' <summary>
@@ -744,6 +749,40 @@ Namespace HoMIDom
                 Set(ByVal value As TypeOperateur)
                     _Operateur = value
                 End Set
+            End Property
+
+        End Class
+
+        ''' <summary>
+        ''' Action parler
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Class ActionSpeech
+            Dim _Message As String
+            Dim _Timing As DateTime
+
+            Public Property Timing As DateTime
+                Get
+                    Return _Timing
+                End Get
+                Set(ByVal value As DateTime)
+                    _Timing = value
+                End Set
+            End Property
+
+            Public Property Message As String
+                Get
+                    Return _Message
+                End Get
+                Set(ByVal value As String)
+                    _Message = value
+                End Set
+            End Property
+
+            Public ReadOnly Property TypeAction As TypeAction
+                Get
+                    Return TypeAction.ActionSpeech
+                End Get
             End Property
 
         End Class
