@@ -1050,6 +1050,12 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.stop(System.String)">
 	<summary>Arrêt du serveur</summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnAllSpeechSynthesisVoices">
+	<summary>
+ Gets a list of all the Speech Synthesis voices installed on the computer.
+ </summary>
+	<returns>A string array of all the voices installed</returns>
+	<remarks>Make sure you have the System.Speech namespace reference added to your project</remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.CanDelete(System.String,System.String)">
 	<summary>
  Vérifie si un élément existe dans une zone, une macro, un trigger... avant de le supprimer
@@ -1057,6 +1063,24 @@ HoMIDom
 	<param name="IdSrv"></param>
 	<param name="Id"></param>
 	<returns>Retourne une erreur commencant par ERREUR ou la liste des noms des macros, zones...</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetAllVoice">
+	<summary>
+ Retourne la liste des voix installées sur le serveur
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetDefautVoice">
+	<summary>
+ Retourne la voix par défaut
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetDefautVoice(System.String)">
+	<summary>
+ Définit la voix par défaut
+ </summary>
+	<param name="Voice"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetTimeSave(System.String)">
 	<summary>
@@ -1644,6 +1668,24 @@ HoMIDom
 	<summary>
  Template de Classe de type Driver pour le service web
  </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllVoice">
+	<summary>
+ Retourne la liste des voix installées sur le serveur
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetDefautVoice">
+	<summary>
+ Retourne la voix par défaut
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetDefautVoice(System.String)">
+	<summary>
+ Définit la voix par défaut
+ </summary>
+	<param name="Voice"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.CanDelete(System.String,System.String)">
 	<summary>
