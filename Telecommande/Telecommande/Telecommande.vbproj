@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
+    <ProjectGuid>{0696ace5-d9c4-4b0f-ba0d-8240791f5b71}</ProjectGuid>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Telecommande</RootNamespace>
+    <AssemblyName>Telecommande</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <MyType>Custom</MyType>
+    <ApplicationIcon>Application.ico</ApplicationIcon>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionCompare>Binary</OptionCompare>
+    <OptionStrict>Off</OptionStrict>
+    <OptionInfer>On</OptionInfer>
+    <Utf8Output>true</Utf8Output>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <IncrementalBuild>true</IncrementalBuild>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>Telecommande.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <IncrementalBuild>false</IncrementalBuild>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>Telecommande.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.vb">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.vb">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows" />
+    <Import Include="System.Windows.Controls" />
+    <Import Include="System.Windows.Data" />
+    <Import Include="System.Windows.Documents" />
+    <Import Include="System.Windows.Input" />
+    <Import Include="System.Windows.Shapes" />
+    <Import Include="System.Windows.Media" />
+    <Import Include="System.Windows.Media.Imaging" />
+    <Import Include="System.Windows.Navigation" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="My Project\AssemblyInfo.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="Application.ico">
+      <Visible>false</Visible>
+    </None>
+    <AppDesigner Include="My Project\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\0.png" />
+    <Resource Include="Images\1.png" />
+    <Resource Include="Images\2.png" />
+    <Resource Include="Images\3.png" />
+    <Resource Include="Images\4.png" />
+    <Resource Include="Images\5.png" />
+    <Resource Include="Images\6.png" />
+    <Resource Include="Images\7.png" />
+    <Resource Include="Images\8.png" />
+    <Resource Include="Images\9.png" />
+    <Resource Include="Images\Avance.png" />
+    <Resource Include="Images\BLUE.png" />
+    <Resource Include="Images\ChapRetour.png" />
+    <Resource Include="Images\ChapSuivant.png" />
+    <Resource Include="Images\Enregistrer.png" />
+    <Resource Include="Images\FBAS.png" />
+    <Resource Include="Images\FDROITE.png" />
+    <Resource Include="Images\FGAUCHE.png" />
+    <Resource Include="Images\FHAUT.png" />
+    <Resource Include="Images\GREEN.png" />
+    <Resource Include="Images\icone.ico" />
+    <Resource Include="Images\mute.png" />
+    <Resource Include="Images\OK.png" />
+    <Resource Include="Images\pause.png" />
+    <Resource Include="Images\Play.png" />
+    <Resource Include="Images\PRGM.png" />
+    <Resource Include="Images\PRGP.png" />
+    <Resource Include="Images\Recul.png" />
+    <Resource Include="Images\RED.png" />
+    <Resource Include="Images\stop.png" />
+    <Resource Include="Images\VOLM.png" />
+    <Resource Include="Images\VOLP.png" />
+    <Resource Include="Images\VolumeDown.png" />
+    <Resource Include="Images\VolumeUp.png" />
+    <Resource Include="Images\YELLOW.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath32)\Microsoft.VisualBasic.targets" />
+</Project>
