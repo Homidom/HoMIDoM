@@ -6,7 +6,15 @@ Telecommande
 </name>
 </assembly>
 <members>
-<member name="M:Telecommande.App.InitializeComponent">
+<member name="M:Telecommande.MainWindow.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:Telecommande.MainWindow">
+	<summary>
+MainWindow
+</summary>
+</member><member name="M:Telecommande.App.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
@@ -17,14 +25,6 @@ Application Entry Point.
 </member><member name="T:Telecommande.App">
 	<summary>
 App
-</summary>
-</member><member name="M:Telecommande.MainWindow.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:Telecommande.MainWindow">
-	<summary>
-MainWindow
 </summary>
 </member>
 </members>

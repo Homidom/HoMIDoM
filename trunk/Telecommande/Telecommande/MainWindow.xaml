@@ -3,8 +3,9 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
 	x:Class="MainWindow"
-	x:Name="Window" Height="768" Width="800" Icon="Images/icone.ico" Title="Télécommandes" AllowDrop="True" WindowStartupLocation="CenterScreen">
+	x:Name="Window" Height="900" Width="800" Icon="Images/icone.ico" Title="Télécommandes" AllowDrop="True" WindowStartupLocation="CenterScreen">
 	<Window.Resources>
+		<ImageBrush x:Key="ImageBrushDataSource" d:IsDataSource="True"/>
 		<ControlTemplate x:Key="ButtonControlTemplate1" TargetType="{x:Type Button}">
 			<Grid>
 				<Rectangle RadiusY="5" RadiusX="5" Stroke="Black" StrokeThickness="0" Fill="Black"/>
@@ -85,12 +86,52 @@
 		<Storyboard x:Key="OnLoaded1">
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="Window">
 				<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:1" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
 			</DoubleAnimationUsingKeyFrames>
-			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="grid_Telecommande">
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="rectangle1">
 				<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Hidden}"/>
-				<DiscreteObjectKeyFrame KeyTime="0:0:1.7" Value="{x:Static Visibility.Visible}"/>
+				<DiscreteObjectKeyFrame KeyTime="0:0:0.8" Value="{x:Static Visibility.Visible}"/>
 			</ObjectAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="rectangle1">
+				<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.4" Value="0.16"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="rectangle">
+				<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="0:0:1.2" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="rectangle">
+				<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.4" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="rectangle1">
+				<EasingColorKeyFrame KeyTime="0" Value="#33FFFFFF"/>
+				<EasingColorKeyFrame KeyTime="0:0:0.8" Value="#33FF0000"/>
+				<EasingColorKeyFrame KeyTime="0:0:1" Value="#51FFFFFF"/>
+				<EasingColorKeyFrame KeyTime="0:0:1.4" Value="White"/>
+			</ColorAnimationUsingKeyFrames>
+			<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="Window">
+				<EasingColorKeyFrame KeyTime="0" Value="Black"/>
+				<EasingColorKeyFrame KeyTime="0:0:0.8" Value="#FF4E4E4E"/>
+			</ColorAnimationUsingKeyFrames>
+			<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[3].(GradientStop.Color)" Storyboard.TargetName="rectangle">
+				<EasingColorKeyFrame KeyTime="0" Value="White"/>
+				<EasingColorKeyFrame KeyTime="0:0:1.2" Value="White"/>
+				<EasingColorKeyFrame KeyTime="0:0:1.4" Value="White"/>
+			</ColorAnimationUsingKeyFrames>
+			<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="rectangle">
+				<EasingColorKeyFrame KeyTime="0" Value="Black"/>
+				<EasingColorKeyFrame KeyTime="0:0:1.2" Value="White"/>
+				<EasingColorKeyFrame KeyTime="0:0:1.4" Value="Black"/>
+			</ColorAnimationUsingKeyFrames>
+			<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[2].(GradientStop.Color)" Storyboard.TargetName="rectangle">
+				<EasingColorKeyFrame KeyTime="0" Value="Black"/>
+				<EasingColorKeyFrame KeyTime="0:0:1.2" Value="White"/>
+				<EasingColorKeyFrame KeyTime="0:0:1.4" Value="Black"/>
+			</ColorAnimationUsingKeyFrames>
 		</Storyboard>
 		<LinearGradientBrush x:Key="HorizontalSliderThumbHoverBackgroundInverted" EndPoint="0,0" StartPoint="0,1">
 			<GradientStop Color="white" Offset="0"/>
@@ -589,12 +630,12 @@
 		</EventTrigger>
 	</Window.Triggers>
 
-	<Grid x:Name="Layout_root" Margin="0,0,8.5,1.5">
+	<Grid x:Name="Layout_root" Margin="0,0,8.5,1.5" DataContext="{Binding Source={StaticResource ImageBrushDataSource}}">
 
-		<Rectangle Stroke="Black" Width="300" Height="620" Fill="#33FFFFFF" Margin="0,40,30,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+		<Rectangle x:Name="rectangle1" Stroke="Black" Width="300" Height="800" Fill="#33FFFFFF" Margin="0,40,30,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
 
-		<Canvas HorizontalAlignment="Right" Margin="0,55,45,0" VerticalAlignment="Top" Width="270">
-			<Rectangle x:Name="rectangle" Stroke="Black" RadiusX="20" RadiusY="20" RenderTransformOrigin="0.5,0.5" Width="270" d:LayoutOverrides="Width, Margin" IsHitTestVisible="True" >
+		<Canvas x:Name="Caneva_grid" HorizontalAlignment="Right" Margin="0,55,45,0" VerticalAlignment="Top" Width="270" Height="770">
+			<Rectangle x:Name="rectangle" Stroke="Black" RadiusX="20" RadiusY="20" RenderTransformOrigin="0.5,0.5" Width="70" d:LayoutOverrides="Margin" IsHitTestVisible="True" Height="70" >
 				<Rectangle.Fill>
 					<LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
 						<LinearGradientBrush.RelativeTransform>
@@ -615,18 +656,18 @@
 					<DropShadowEffect RenderingBias="Quality" ShadowDepth="11" Opacity="0.555"/>
 				</Rectangle.Effect>
 			</Rectangle>
-			<Grid x:Name="grid_Telecommande" Width="250" d:LayoutOverrides="Width" Margin="10" ShowGridLines="True" UseLayoutRounding="True"/>
+			<Grid x:Name="grid_Telecommande" Width="50" Margin="10" ShowGridLines="True" UseLayoutRounding="True" Height="50" Focusable="True"/>
 		</Canvas>
 		<GroupBox Header="Paramètres de la grille" HorizontalAlignment="Left" Height="150" Margin="40,55.25,0,0" VerticalAlignment="Top" Width="220" Foreground="White">
 			<StackPanel Margin="8">
 				<TextBlock Height="20" Margin="8,0" TextWrapping="Wrap" Foreground="White"><Run Language="fr-fr" Text="Nombre de lignes :"/></TextBlock>
 				<StackPanel Height="27" Orientation="Horizontal" Margin="0,8,0,0">
-					<Slider x:Name="slider_Row" Height="27" Margin="0" VerticalAlignment="Top" Width="150" Cursor="Hand" Maximum="5" Interval="1" IsSnapToTickEnabled="True" OpacityMask="Black" Style="{DynamicResource SliderStyle1}" TickPlacement="TopLeft" Value="{Binding RowDefinitions, ElementName=grid_Telecommande, Mode=OneWay}"/>
+					<Slider x:Name="slider_Row" Height="27" Margin="0" VerticalAlignment="Top" Width="150" Cursor="Hand" Maximum="15" Interval="1" IsSnapToTickEnabled="True" OpacityMask="Black" Style="{DynamicResource SliderStyle1}" TickPlacement="TopLeft" Value="{Binding RowDefinitions, ElementName=grid_Telecommande, Mode=OneWay}" Minimum="1"/>
 					<Label Content="{Binding Value, ElementName=slider_Row}" Foreground="White" Width="44"/>
 				</StackPanel>
 				<TextBlock Height="20" Margin="8,0" TextWrapping="Wrap" Foreground="White"><Run Language="fr-fr" Text="Nombre de colonnes :"/></TextBlock>
 				<StackPanel Height="27" Orientation="Horizontal" Margin="0,8,0,0">
-					<Slider x:Name="slider_Column" Height="27" Margin="0" VerticalAlignment="Top" Width="150" Cursor="Hand" Maximum="15" Interval="1" IsSnapToTickEnabled="True" OpacityMask="Black" Style="{DynamicResource SliderStyle1}" TickPlacement="TopLeft"/>
+					<Slider x:Name="slider_Column" Height="27" Margin="0" VerticalAlignment="Top" Width="150" Cursor="Hand" Maximum="5" Interval="1" IsSnapToTickEnabled="True" OpacityMask="Black" Style="{DynamicResource SliderStyle1}" TickPlacement="TopLeft" Minimum="1"/>
 					<Label Content="{Binding Value, ElementName=slider_Column}" Foreground="White" Width="44"/>
 				</StackPanel>
 			</StackPanel>
@@ -641,5 +682,41 @@
 				</TransformGroup>
 			</Button.RenderTransform>
 		</Button>
+		<WrapPanel x:Name="img_Source" Margin="40,314,0,92.5" Background="Black" ItemHeight="50" ItemWidth="50" HorizontalAlignment="Left" Width="220" DataContext="{Binding Mode=OneWay}">
+			<Image x:Name="btn_0" Height="50" Source="Images/0.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/1.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/2.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/3.png" Width="50" RenderTransformOrigin="2.982,-1.675" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/4.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/5.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/6.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/7.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/8.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/9.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/Avance.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/BLUE.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/ChapRetour.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/ChapSuivant.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/Enregistrer.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/FBAS.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/FDROITE.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/FGAUCHE.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/FHAUT.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/GREEN.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/mute.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/OK.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/pause.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/Play.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/PRGM.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/PRGP.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/RED.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/Recul.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/stop.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/VOLM.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/VOLP.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/VolumeDown.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/VolumeUp.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image Height="50" Source="Images/YELLOW.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+		</WrapPanel>
 	</Grid>
 </Window>
