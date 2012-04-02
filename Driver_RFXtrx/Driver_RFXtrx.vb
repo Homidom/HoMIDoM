@@ -2031,12 +2031,13 @@ Imports System.Media
                     '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING1.seqnbr).ToString)
                     adresse = Chr(recbuf(LIGHTING1.housecode)) & recbuf(LIGHTING1.unitcode).ToString
                     Select Case recbuf(LIGHTING1.cmnd)
-                        Case &H0 : valeur = "OFF"
-                        Case &H1 : valeur = "ON"
-                        Case &H2 : valeur = "DIM"
-                        Case &H3 : valeur = "BRIGHT"
-                        Case &H5 : valeur = "ALL_ON"
-                        Case &H6 : valeur = "ALL_OFF"
+                        Case LIGHTING1.sOff : valeur = "OFF"
+                        Case LIGHTING1.sOn : valeur = "ON"
+                        Case LIGHTING1.sDim : valeur = "DIM"
+                        Case LIGHTING1.sBright : valeur = "BRIGHT"
+                        Case LIGHTING1.sAllOn : valeur = "ALL_ON"
+                        Case LIGHTING1.sAllOff : valeur = "ALL_OFF"
+                        Case LIGHTING1.sChime : valeur = "CHIME"
                         Case Else : valeur = "UNKNOWN"
                     End Select
                     WriteRetour(adresse, "", valeur)
@@ -2045,12 +2046,12 @@ Imports System.Media
                     '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING1.seqnbr).ToString)
                     adresse = Chr(recbuf(LIGHTING1.housecode)) & recbuf(LIGHTING1.unitcode).ToString
                     Select Case recbuf(LIGHTING1.cmnd)
-                        Case &H0 : valeur = "OFF"
-                        Case &H1 : valeur = "ON"
-                        Case &H2 : valeur = "DIM"
-                        Case &H3 : valeur = "BRIGHT"
-                        Case &H5 : valeur = "ALL_ON"
-                        Case &H6 : valeur = "ALL_OFF"
+                        Case LIGHTING1.sOff : valeur = "OFF"
+                        Case LIGHTING1.sOn : valeur = "ON"
+                            'Case &H2 : valeur = "DIM"
+                            'Case &H3 : valeur = "BRIGHT"
+                        Case LIGHTING1.sAllOn : valeur = "ALL_ON"
+                        Case LIGHTING1.sAllOff : valeur = "ALL_OFF"
                         Case Else : valeur = "UNKNOWN"
                     End Select
                     WriteRetour(adresse, "", valeur)
@@ -2059,8 +2060,8 @@ Imports System.Media
                     '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING1.seqnbr).ToString)
                     adresse = Chr(recbuf(LIGHTING1.housecode)) & recbuf(LIGHTING1.unitcode).ToString
                     Select Case recbuf(LIGHTING1.cmnd)
-                        Case &H0 : valeur = "OFF"
-                        Case &H1 : valeur = "ON"
+                        Case LIGHTING1.sOff : valeur = "OFF"
+                        Case LIGHTING1.sOn : valeur = "ON"
                         Case Else : valeur = "UNKNOWN"
                     End Select
                     WriteRetour(adresse, "", valeur)
@@ -3387,6 +3388,10 @@ Imports System.Media
                 Case "DIM"
                     kar(LIGHTING1.cmnd) = LIGHTING1.sDim
                     WriteRetourSend(adresse, "", "ON")
+                Case "CHIME"
+                    kar(LIGHTING1.cmnd) = LIGHTING1.sChime
+                    kar(LIGHTING1.unitcode) = 8
+                    WriteRetourSend(adresse, "", "CHIME")
                 Case Else
                     WriteLog("ERR: Send X10 : Commande invalide : " & commande)
                     Exit Sub
