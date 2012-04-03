@@ -656,8 +656,10 @@
 					<DropShadowEffect RenderingBias="Quality" ShadowDepth="11" Opacity="0.555"/>
 				</Rectangle.Effect>
 			</Rectangle>
-			<Grid x:Name="grid_Telecommande" Width="50" Margin="10" ShowGridLines="True" UseLayoutRounding="True" Height="50" Focusable="True"/>
-		</Canvas>
+            <Grid x:Name="grid_Telecommande" Width="50" Margin="10" ShowGridLines="True" UseLayoutRounding="True" Height="50"  >
+                
+            </Grid>
+        </Canvas>
 		<GroupBox Header="Paramètres de la grille" HorizontalAlignment="Left" Height="150" Margin="40,55.25,0,0" VerticalAlignment="Top" Width="220" Foreground="White">
 			<StackPanel Margin="8">
 				<TextBlock Height="20" Margin="8,0" TextWrapping="Wrap" Foreground="White"><Run Language="fr-fr" Text="Nombre de lignes :"/></TextBlock>

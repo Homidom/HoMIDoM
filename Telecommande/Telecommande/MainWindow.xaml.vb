@@ -6,6 +6,8 @@ Imports System.Windows.Documents
 Partial Public Class MainWindow
     Inherits Window
 
+
+
     Private Sub button_Click(sender As Object, e As System.Windows.RoutedEventArgs) Handles button.Click
         Dim img1 As New Image
         Dim bi1 As New BitmapImage
@@ -50,6 +52,7 @@ Partial Public Class MainWindow
             Next
         End If
 
+        Test()
     End Sub
 
     Private Sub slider_Column_PreviewMouseMove(sender As Object, e As System.Windows.Input.MouseEventArgs) Handles slider_Column.PreviewMouseMove
@@ -76,33 +79,77 @@ Partial Public Class MainWindow
             Next
         End If
 
+        Test()
     End Sub
 
-    Private Sub img_Source_MouseMove(sender As Object, e As System.Windows.Input.MouseEventArgs) Handles img_Source.MouseMove
-        If e.LeftButton = MouseButtonState.Pressed Then
-            Dim effects As DragDropEffects
-            Dim obj As New DataObject()
-            obj.SetData(GetType(Image), img_Source.Children)
-            effects = DragDrop.DoDragDrop(img_Source, obj, DragDropEffects.Copy Or DragDropEffects.Move) ' 
-        End If
-    End Sub
-
-    Private Sub grid_Telecommande_DragOver(sender As Object, e As System.Windows.DragEventArgs) Handles grid_Telecommande.DragOver
+    Private Sub CVS_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs)
         If e.Data.GetDataPresent(GetType(Image)) Then
             e.Effects = DragDropEffects.Copy
-            ' Utiliser uri comme vous le souhaitez
-
-            Dim img1 As New Image
-            Dim bi1 As New BitmapImage
-            bi1.BeginInit()
-            bi1.UriSource = New Uri((DirectCast(e.Data.GetData(GetType(Image)), String)), UriKind.Relative)
-            bi1.EndInit()
-            img1.Source = bi1
-            grid_Telecommande.Children.Add(img1)
-
         Else
             e.Effects = DragDropEffects.None
         End If
+
+    End Sub
+
+    Private Sub CVS_Drop(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs)
+        If e.Data.GetDataPresent(GetType(Image)) Then
+            If sender.children.count > 0 Then
+                Exit Sub
+            End If
+
+            e.Effects = DragDropEffects.Copy
+            ' Utiliser uri comme vous le souhaitez
+            Dim img1 As New Image
+            If InStr(e.Data.GetData(GetType(Image)).parent.GetType.ToString, "Canvas") Then
+                e.Data.GetData(GetType(Image)).parent.children.clear()
+            End If
+
+            img1.Source = e.Data.GetData(GetType(Image)).source
+            img1.AllowDrop = True
+            img1.ToolTip = sender.tag
+            AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
+            sender.Children.Add(img1)
+        Else
+            e.Effects = DragDropEffects.None
+        End If
+    End Sub
+
+    Private Sub Test()
+        For i As Integer = 0 To grid_Telecommande.RowDefinitions.Count - 1
+            For j As Integer = 0 To grid_Telecommande.ColumnDefinitions.Count - 1
+                Dim x As New Canvas
+                x.Width = 45
+                x.Height = 45
+                x.Background = Brushes.Black
+                x.AllowDrop = True
+                x.Tag = i & "|" & j
+                AddHandler x.DragOver, AddressOf CVS_DragOver
+                AddHandler x.Drop, AddressOf CVS_Drop
+                Grid.SetColumn(x, j)
+                Grid.SetRow(x, i)
+                grid_Telecommande.Children.Add(x)
+            Next
+        Next
+    End Sub
+
+    Private Sub MainWindow_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
+        Try
+            For i As Integer = 0 To img_Source.Children.Count - 1
+                Dim x As Image = img_Source.Children.Item(i)
+                x.AllowDrop = True
+                AddHandler x.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
+            Next
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub Img_MouseLeftButtonDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
+        Dim effects As DragDropEffects
+        Dim obj As New DataObject()
+        obj.SetData(GetType(Image), sender)
+        effects = DragDrop.DoDragDrop(sender, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+
 
     End Sub
 End Class
