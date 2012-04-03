@@ -29,7 +29,7 @@ Partial Public Class MainWindow
         End If
     End Sub
 
-    Private Sub slider_Row_ValueChanged(sender As Object, e As System.Windows.RoutedPropertyChangedEventArgs(Of Double)) Handles slider_Row.ValueChanged
+    Private Sub slider_Row_ValueChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Double)) Handles slider_Row.ValueChanged
         '==== Initalisation ====
         'Initialisation des lignes de la grille
         Me.grid_Telecommande.RowDefinitions.Clear()
@@ -53,7 +53,7 @@ Partial Public Class MainWindow
         Remplir()
     End Sub
 
-    Private Sub slider_Column_PreviewMouseMove(sender As Object, e As System.Windows.Input.MouseEventArgs) Handles slider_Column.PreviewMouseMove
+    Private Sub slider_Column_PreviewMouseMove(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Double)) Handles slider_Column.ValueChanged
 
         '==== Initalisation ====
         'Initialisation des colonnes de la grille
