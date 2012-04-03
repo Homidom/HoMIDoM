@@ -6,8 +6,6 @@ Imports System.Windows.Documents
 Partial Public Class MainWindow
     Inherits Window
 
-
-
     Private Sub button_Click(sender As Object, e As System.Windows.RoutedEventArgs) Handles button.Click
         Dim img1 As New Image
         Dim bi1 As New BitmapImage
@@ -31,8 +29,6 @@ Partial Public Class MainWindow
 
     Private Sub slider_Row_ValueChanged(sender As Object, e As System.Windows.RoutedPropertyChangedEventArgs(Of Double)) Handles slider_Row.ValueChanged
         '==== Initalisation ====
-        Dim i As Integer
-        i = 1
         'Initialisation des lignes de la grille
         Me.grid_Telecommande.RowDefinitions.Clear()
         Me.grid_Telecommande.Height = 50
@@ -41,7 +37,7 @@ Partial Public Class MainWindow
 
         '==== Modification de la grille et du background pour chaque division du slider ====
         If slider_Row.Value > 1 Then
-            For i = 1 To slider_Row.Value
+            For i As Integer = 1 To slider_Row.Value
                 'Augmente la hauteur de la grille
                 grid_Telecommande.Height = slider_Row.Value * 50
                 'Augmente la hauteur du background
@@ -52,14 +48,12 @@ Partial Public Class MainWindow
             Next
         End If
 
-        Test()
+        Remplir()
     End Sub
 
     Private Sub slider_Column_PreviewMouseMove(sender As Object, e As System.Windows.Input.MouseEventArgs) Handles slider_Column.PreviewMouseMove
 
         '==== Initalisation ====
-        Dim j As Integer
-        j = 1
         'Initialisation des colonnes de la grille
         Me.grid_Telecommande.ColumnDefinitions.Clear()
         Me.grid_Telecommande.Width = 50
@@ -68,7 +62,7 @@ Partial Public Class MainWindow
 
         '==== Modification de la grille et du background pour chaque division du slider ====
         If slider_Column.Value > 1 Then
-            For j = 1 To slider_Column.Value
+            For j As Integer = 1 To slider_Column.Value
                 'Augmente la largeur de la grille
                 grid_Telecommande.Width = slider_Column.Value * 50
                 'Augmente la largeur du background
@@ -79,7 +73,7 @@ Partial Public Class MainWindow
             Next
         End If
 
-        Test()
+        Remplir()
     End Sub
 
     Private Sub CVS_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs)
@@ -103,7 +97,6 @@ Partial Public Class MainWindow
             If InStr(e.Data.GetData(GetType(Image)).parent.GetType.ToString, "Canvas") Then
                 e.Data.GetData(GetType(Image)).parent.children.clear()
             End If
-
             img1.Source = e.Data.GetData(GetType(Image)).source
             img1.AllowDrop = True
             img1.ToolTip = sender.tag
@@ -114,7 +107,7 @@ Partial Public Class MainWindow
         End If
     End Sub
 
-    Private Sub Test()
+    Private Sub Remplir()
         For i As Integer = 0 To grid_Telecommande.RowDefinitions.Count - 1
             For j As Integer = 0 To grid_Telecommande.ColumnDefinitions.Count - 1
                 Dim x As New Canvas
@@ -149,7 +142,5 @@ Partial Public Class MainWindow
         Dim obj As New DataObject()
         obj.SetData(GetType(Image), sender)
         effects = DragDrop.DoDragDrop(sender, obj, DragDropEffects.Copy Or DragDropEffects.Move)
-
-
     End Sub
 End Class
