@@ -6,6 +6,8 @@ Imports System.Windows.Documents
 Partial Public Class MainWindow
     Inherits Window
 
+    Private ListButton As New List(Of ImageButton)
+
     Private Sub button_Click(sender As Object, e As System.Windows.RoutedEventArgs) Handles button.Click
         Dim img1 As New Image
         Dim bi1 As New BitmapImage
@@ -76,6 +78,50 @@ Partial Public Class MainWindow
         Remplir()
     End Sub
 
+    Private Sub Save()
+        ListButton.Clear()
+
+        For i As Integer = 0 To grid_Telecommande.Children.Count - 1
+            Dim x As Canvas = grid_Telecommande.Children.Item(i)
+            If x IsNot Nothing Then
+                If x.Children.Count <> 0 Then
+                    ListButton.Add(x.Children.Item(0))
+                End If
+            End If
+        Next
+
+        MessageBox.Show(ListButton.Count & " button(s) enregistré(s)")
+    End Sub
+
+    Private Sub Recharge()
+        Remplir()
+
+        For i As Integer = 0 To ListButton.Count - 1
+            Dim x As New Canvas
+            x.Width = 45
+            x.Height = 45
+            x.Background = Brushes.Black
+            x.AllowDrop = True
+            x.Tag = ListButton(i).Row & "|" & ListButton(i).Column
+            AddHandler x.DragOver, AddressOf CVS_DragOver
+            AddHandler x.Drop, AddressOf CVS_Drop
+            Grid.SetColumn(x, ListButton(i).Column)
+            Grid.SetRow(x, ListButton(i).Row)
+
+            Dim img1 As New ImageButton
+            img1.Source = ListButton(i).Source
+            img1.AllowDrop = True
+            img1.ToolTip = x.Tag
+            Dim a() As String = x.Tag.split("|")
+            img1.Row = a(0)
+            img1.Column = a(1)
+            AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
+            x.Children.Add(img1)
+
+            grid_Telecommande.Children.Add(x)
+        Next
+    End Sub
+
     Private Sub CVS_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs)
         If e.Data.GetDataPresent(GetType(Image)) Then
             e.Effects = DragDropEffects.Copy
@@ -93,13 +139,16 @@ Partial Public Class MainWindow
 
             e.Effects = DragDropEffects.Copy
             ' Utiliser uri comme vous le souhaitez
-            Dim img1 As New Image
+            Dim img1 As New ImageButton
             If InStr(e.Data.GetData(GetType(Image)).parent.GetType.ToString, "Canvas") Then
                 e.Data.GetData(GetType(Image)).parent.children.clear()
             End If
             img1.Source = e.Data.GetData(GetType(Image)).source
             img1.AllowDrop = True
             img1.ToolTip = sender.tag
+            Dim a() As String = sender.tag.split("|")
+            img1.Row = a(0)
+            img1.Column = a(1)
             AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
             sender.Children.Add(img1)
         Else
@@ -142,5 +191,17 @@ Partial Public Class MainWindow
         Dim obj As New DataObject()
         obj.SetData(GetType(Image), sender)
         effects = DragDrop.DoDragDrop(sender, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Button1.Click
+        Save()
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Button2.Click
+        Recharge()
+    End Sub
+
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Button3.Click
+        grid_Telecommande.Children.Clear()
     End Sub
 End Class

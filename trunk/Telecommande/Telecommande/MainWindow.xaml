@@ -720,5 +720,8 @@
 			<Image Height="50" Source="Images/VolumeUp.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
 			<Image Height="50" Source="Images/YELLOW.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
 		</WrapPanel>
-	</Grid>
+        <Button Content="Save" Height="29" HorizontalAlignment="Left" Margin="300,98,0,0" Name="Button1" VerticalAlignment="Top" Width="94" />
+        <Button Content="Recharge" Height="29" HorizontalAlignment="Left" Margin="299,176,0,0" Name="Button2" VerticalAlignment="Top" Width="95" />
+        <Button Content="Vide" Height="29" HorizontalAlignment="Left" Margin="300,141,0,0" Name="Button3" VerticalAlignment="Top" Width="95" />
+    </Grid>
 </Window>
