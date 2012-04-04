@@ -304,27 +304,27 @@
                     </Style>
                 </TabControl.Resources>
                 <TabItem Header="Driver">
-                    <DockPanel  >
+                    <DockPanel >
                         <StackPanel Orientation="Horizontal" Name="StkMnu0" DockPanel.Dock="Bottom">
-                            <Label Margin="5" Name="CntDriver" Content="0 Driver(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
+                            <Label Margin="2" Name="CntDriver" Content="0 Driver(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
                         </StackPanel>
                         <TreeView Margin="0" Name="TreeViewDriver" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
                     </DockPanel>
-                </TabItem> 
-                <TabItem Header="Composant" >
-                    <DockPanel  >
+                </TabItem>
+                <TabItem Header="Composant">
+                    <DockPanel >
                         <StackPanel Orientation="Horizontal" Name="StkMnu1" DockPanel.Dock="Bottom">
-                            <Label Margin="5" Name="CntDevice" Content="0 Device(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
-                            <Image Height="22" Margin="5" Name="TplDevImg" Stretch="Fill" Width="22" Source="/HoMIAdmiN;component/Images/Defaut_128.png" Visibility="Hidden" />
+                            <Label Margin="2" Name="CntDevice" Content="0 Device(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
+                            <Image Height="22" Margin="2" Name="TplDevImg" Stretch="Fill" Width="22" Source="/HoMIAdmiN;component/Images/Defaut_128.png" Visibility="Hidden" />
                         </StackPanel>
-                        <TreeView Name="TreeViewDevice" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" HorizontalAlignment="Stretch" Padding="0" />
+                        <TreeView Name="TreeViewDevice" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" HorizontalAlignment="Stretch" Padding="0"/>
 
                     </DockPanel> 
                 </TabItem> 
                 <TabItem Header="Zone" >
                     <DockPanel >
                         <StackPanel Orientation="Horizontal" Name="StkMnu2" DockPanel.Dock="Bottom">
-                            <Label Margin="5" Name="CntZone" Content="0 Zone(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
+                            <Label Margin="2" Name="CntZone" Content="0 Zone(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
                         </StackPanel>
                         <TreeView Margin="0" Name="TreeViewZone" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
                     </DockPanel>
@@ -332,7 +332,7 @@
                 <TabItem Header="Utilisateur">
                     <DockPanel >
                     <StackPanel Orientation="Horizontal" Name="StkMnu3" DockPanel.Dock="Bottom">
-                        <Label Margin="5" Name="CntUser" Content="0 User(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
+                        <Label Margin="2" Name="CntUser" Content="0 User(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
                     </StackPanel>
                         <TreeView Margin="0" Name="TreeViewUser" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
                     </DockPanel>
@@ -340,7 +340,7 @@
                 <TabItem Header="Trigger" >
                     <DockPanel >
                     <StackPanel Orientation="Horizontal" Name="StkMnu4" DockPanel.Dock="Bottom">
-                        <Label Margin="5" Name="CntTrigger" Content="0 Trigger(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
+                        <Label Margin="2" Name="CntTrigger" Content="0 Trigger(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
                     </StackPanel>
                         <TreeView Margin="0" Name="TreeViewTrigger" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
                     </DockPanel>
@@ -356,10 +356,10 @@
                 <TabItem Header="Historique" >
                     <DockPanel >
                     <StackPanel Orientation="Horizontal" Name="StkMnu6" DockPanel.Dock="Bottom">
-                        <Button Height="22" Margin="5" Name="BtnGenereGraph" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Générer">
+                        <Button Height="22" Margin="2" Name="BtnGenereGraph" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Générer">
                             <Image Source="/HoMIAdmiN;component/Images/courbe_128.png" />
                         </Button>
-                        <Button Height="22" Margin="5" Name="BtnGenereReleve" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Générer Relevés">
+                        <Button Height="22" Margin="2" Name="BtnGenereReleve" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Générer Relevés">
                             <Image Source="/HoMIAdmiN;component/Images/Releve_64.png" />
                         </Button>
                     </StackPanel>
@@ -370,7 +370,7 @@
        
            </DockPanel>
        
-        <Canvas Name="CanvasRight" Margin="5" >
+        <Canvas Name="CanvasRight" Margin="3,3,3,0" >
             <Canvas.Background>
                 <ImageBrush ImageSource="/HoMIAdmiN;component/Images/Fond_1024_768.png"  >
                 </ImageBrush>
