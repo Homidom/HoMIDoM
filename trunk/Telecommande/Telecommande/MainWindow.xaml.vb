@@ -81,6 +81,15 @@ Partial Public Class MainWindow
                     'Retire une ligne à la grille
                     grid_Telecommande.RowDefinitions.RemoveAt(Me.grid_Telecommande.RowDefinitions.Count - 1)
                 Next
+Retour:
+                For i As Integer = 0 To grid_Telecommande.Children.Count - 1
+                    Dim x As Canvas = grid_Telecommande.Children.Item(i)
+                    Dim a() As String = Split(x.Tag, "|")
+                    If a(0) > grid_Telecommande.RowDefinitions.Count - 1 Then
+                        grid_Telecommande.Children.RemoveAt(i)
+                        GoTo Retour
+                    End If
+                Next
             End If
             'For i As Integer = 1 To slider_Row.Value
             '    'Augmente la hauteur de la grille
@@ -146,6 +155,15 @@ Partial Public Class MainWindow
                     rectangle.Height = slider_Row.Value * 50 + 20
                     'Retire une ligne à la grille
                     grid_Telecommande.ColumnDefinitions.RemoveAt(Me.grid_Telecommande.ColumnDefinitions.Count - 1)
+                Next
+Retour:
+                For i As Integer = 0 To grid_Telecommande.Children.Count - 1
+                    Dim x As Canvas = grid_Telecommande.Children.Item(i)
+                    Dim a() As String = Split(x.Tag, "|")
+                    If a(1) > grid_Telecommande.ColumnDefinitions.Count - 1 Then
+                        grid_Telecommande.Children.RemoveAt(i)
+                        GoTo Retour
+                    End If
                 Next
             End If
             'For j As Integer = 1 To slider_Column.Value
