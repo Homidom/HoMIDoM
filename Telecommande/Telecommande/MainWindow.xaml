@@ -656,10 +656,9 @@
 					<DropShadowEffect RenderingBias="Quality" ShadowDepth="11" Opacity="0.555"/>
 				</Rectangle.Effect>
 			</Rectangle>
-            <Grid x:Name="grid_Telecommande" Width="50" Margin="10" ShowGridLines="True" UseLayoutRounding="True" Height="50"  >
+            <Grid x:Name="grid_Telecommande" Width="50" Margin="10" ShowGridLines="True" UseLayoutRounding="True" Height="50"  />
                 
-            </Grid>
-        </Canvas>
+                    </Canvas>
 		<GroupBox Header="Paramètres de la grille" HorizontalAlignment="Left" Height="150" Margin="40,55.25,0,0" VerticalAlignment="Top" Width="220" Foreground="White">
 			<StackPanel Margin="8">
 				<TextBlock Height="20" Margin="8,0" TextWrapping="Wrap" Foreground="White"><Run Language="fr-fr" Text="Nombre de lignes :"/></TextBlock>
@@ -686,7 +685,7 @@
 		</Button>
 		<WrapPanel x:Name="img_Source" Margin="40,314,0,92.5" Background="Black" ItemHeight="50" ItemWidth="50" HorizontalAlignment="Left" Width="220" DataContext="{Binding Mode=OneWay}">
 			<Image x:Name="btn_0" Height="50" Source="Images/0.png" Width="50" Margin="3" Cursor="Hand" Stretch="None" ToolTip="0"/>
-			<Image Height="50" Source="Images/1.png" Width="50" Margin="3" Cursor="Hand" Stretch="None" ToolTip="1"/>
+            <Image Height="50" Source="Images/1.png" Width="50" Margin="3" Cursor="Hand" Stretch="None" ToolTip="1"/>
 			<Image Height="50" Source="Images/2.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
 			<Image Height="50" Source="Images/3.png" Width="50" RenderTransformOrigin="2.982,-1.675" Margin="3" Cursor="Hand" Stretch="None"/>
 			<Image Height="50" Source="Images/4.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
