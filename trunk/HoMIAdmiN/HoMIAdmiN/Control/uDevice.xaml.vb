@@ -691,13 +691,6 @@ Partial Public Class uDevice
         Next
     End Sub
 
-    Private Sub CbDriver_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbDriver.MouseLeave
-        'If CbDriver.Text <> tmp Then
-        '    tmp = CbDriver.Text
-        '    MaJDriver()
-        'End If
-    End Sub
-
     Dim tmp As String = ""
 
     Private Sub CbDriver_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbDriver.SelectionChanged

@@ -939,6 +939,8 @@ Class Window1
         HMainMenu = CanvasRight.ActualHeight / 2 - (MainMenu.Height / 2)
         Canvas.SetLeft(MainMenu, WMainMenu)
         Canvas.SetTop(MainMenu, HMainMenu)
+
+        AnimationApparition(MainMenu)
     End Sub
 
     Private Sub MainMenuGerer(ByVal index As String)
@@ -1434,9 +1436,33 @@ Class Window1
     ''' <remarks></remarks>
     Private Sub AffControlPage(ByVal Objet As Object)
         Objet.Uid = System.Guid.NewGuid.ToString()
+        If CanvasRight.Children.Count > 0 Then
+            For i As Integer = 0 To CanvasRight.Children.Count - 1
+                Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
+                myDoubleAnimation.From = 1.0
+                myDoubleAnimation.To = 0.0
+                myDoubleAnimation.Duration = New Duration(TimeSpan.FromSeconds(1))
+                Dim myStoryboard As Storyboard
+                myStoryboard = New Storyboard()
+                myStoryboard.Children.Add(myDoubleAnimation)
+                AddHandler myStoryboard.Completed, AddressOf AffControlPageSuite
+
+                Storyboard.SetTarget(myDoubleAnimation, CanvasRight.Children.Item(i))
+                Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
+                myStoryboard.Begin()
+            Next
+        End If
+        Objet3 = Objet
+      
+    End Sub
+
+    Dim Objet3 As Object = Nothing
+
+    Private Sub AffControlPageSuite()
         CanvasRight.Children.Clear()
-        CanvasRight.Children.Add(Objet)
-        AnimationApparition(Objet)
+        CanvasRight.Children.Add(Objet3)
+        AnimationApparition(Objet3)
+        Objet3 = Nothing
     End Sub
 
     'Décharger une fenêtre suivant son Id
