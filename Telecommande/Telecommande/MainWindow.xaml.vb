@@ -212,12 +212,13 @@ Retour:
 
             Dim img1 As New ImageButton
             img1.Source = ListButton(i).Source
+            img1.Command = ListButton(i).Command
             img1.AllowDrop = True
-            img1.ToolTip = x.Tag
             Dim a() As String = x.Tag.split("|")
             img1.Row = a(0)
             img1.Column = a(1)
             AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
+            AddHandler img1.Delete, AddressOf DeleteButton
             x.Children.Add(img1)
 
             grid_Telecommande.Children.Add(x)
@@ -247,11 +248,12 @@ Retour:
             End If
             img1.Source = e.Data.GetData(GetType(Image)).source
             img1.AllowDrop = True
-            img1.ToolTip = sender.tag
+            img1.Command = e.Data.GetData(GetType(Image)).tooltip
             Dim a() As String = sender.tag.split("|")
             img1.Row = a(0)
             img1.Column = a(1)
             AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
+            AddHandler img1.Delete, AddressOf DeleteButton
             sender.Children.Add(img1)
         Else
             e.Effects = DragDropEffects.None
@@ -307,5 +309,18 @@ Retour:
 
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Button3.Click
         grid_Telecommande.Children.Clear()
+    End Sub
+
+    'Supprimer un bouton via menu contextuel
+    Private Sub DeleteButton(ByVal sender As Object)
+        For i As Integer = 0 To grid_Telecommande.Children.Count - 1
+            Dim x As Canvas = grid_Telecommande.Children.Item(i)
+            If x.Children.Count > 0 Then
+                If x.Children.Item(0).Uid = sender.Uid Then
+                    x.Children.Clear()
+                    Exit Sub
+                End If
+            End If
+        Next
     End Sub
 End Class
