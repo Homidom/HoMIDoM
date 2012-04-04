@@ -313,14 +313,6 @@ Retour:
 
     'Supprimer un bouton via menu contextuel
     Private Sub DeleteButton(ByVal sender As Object)
-        For i As Integer = 0 To grid_Telecommande.Children.Count - 1
-            Dim x As Canvas = grid_Telecommande.Children.Item(i)
-            If x.Children.Count > 0 Then
-                If x.Children.Item(0).Uid = sender.Uid Then
-                    x.Children.Clear()
-                    Exit Sub
-                End If
-            End If
-        Next
+        sender.parent.children.clear()
     End Sub
 End Class
