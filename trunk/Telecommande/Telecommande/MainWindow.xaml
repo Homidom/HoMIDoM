@@ -685,8 +685,8 @@
 			</Button.RenderTransform>
 		</Button>
 		<WrapPanel x:Name="img_Source" Margin="40,314,0,92.5" Background="Black" ItemHeight="50" ItemWidth="50" HorizontalAlignment="Left" Width="220" DataContext="{Binding Mode=OneWay}">
-			<Image x:Name="btn_0" Height="50" Source="Images/0.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
-			<Image Height="50" Source="Images/1.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
+			<Image x:Name="btn_0" Height="50" Source="Images/0.png" Width="50" Margin="3" Cursor="Hand" Stretch="None" ToolTip="0"/>
+			<Image Height="50" Source="Images/1.png" Width="50" Margin="3" Cursor="Hand" Stretch="None" ToolTip="1"/>
 			<Image Height="50" Source="Images/2.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
 			<Image Height="50" Source="Images/3.png" Width="50" RenderTransformOrigin="2.982,-1.675" Margin="3" Cursor="Hand" Stretch="None"/>
 			<Image Height="50" Source="Images/4.png" Width="50" Margin="3" Cursor="Hand" Stretch="None"/>
