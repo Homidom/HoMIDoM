@@ -31,51 +31,135 @@ Partial Public Class MainWindow
 
     Private Sub slider_Row_ValueChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Double)) Handles slider_Row.ValueChanged
         '==== Initalisation ====
-        'Initialisation des lignes de la grille
-        Me.grid_Telecommande.RowDefinitions.Clear()
-        Me.grid_Telecommande.Height = 50
-        'Initialisation de la hauteur du background
-        Me.rectangle.Height = 70
+
+        'Initialisation des lignes de la grille si celle-ci est vide
+        If Me.grid_Telecommande.RowDefinitions.Count = 0 Then
+            Me.grid_Telecommande.RowDefinitions.Clear()
+            Me.grid_Telecommande.Height = 50
+            'Initialisation de la hauteur du background
+            Me.rectangle.Height = 70
+        End If
 
         '==== Modification de la grille et du background pour chaque division du slider ====
         If slider_Row.Value > 1 Then
-            For i As Integer = 1 To slider_Row.Value
-                'Augmente la hauteur de la grille
-                grid_Telecommande.Height = slider_Row.Value * 50
-                'Augmente la hauteur du background
-                rectangle.Height = slider_Row.Value * 50 + 20
-                'Ajoute une ligne à la grille
-                Dim rowDef As New RowDefinition
-                grid_Telecommande.RowDefinitions.Add(rowDef)
-            Next
+            'Si la grille contient moins de ligne que définit
+            If Me.grid_Telecommande.RowDefinitions.Count < slider_Row.Value Then
+                Dim diff As Integer = slider_Row.Value - Me.grid_Telecommande.RowDefinitions.Count
+                For i As Integer = 1 To diff
+                    'Augmente la hauteur de la grille
+                    grid_Telecommande.Height = slider_Row.Value * 50
+                    'Augmente la hauteur du background
+                    rectangle.Height = slider_Row.Value * 50 + 20
+                    'Ajoute une ligne à la grille
+                    Dim rowDef As New RowDefinition
+                    grid_Telecommande.RowDefinitions.Add(rowDef)
+
+                    For j As Integer = 0 To grid_Telecommande.ColumnDefinitions.Count - 1
+                        Dim x As New Canvas
+                        x.Width = 45
+                        x.Height = 45
+                        x.Background = Brushes.Black
+                        x.AllowDrop = True
+                        x.Tag = grid_Telecommande.RowDefinitions.Count - 1 & "|" & j
+                        AddHandler x.DragOver, AddressOf CVS_DragOver
+                        AddHandler x.Drop, AddressOf CVS_Drop
+                        Grid.SetColumn(x, j)
+                        Grid.SetRow(x, grid_Telecommande.RowDefinitions.Count - 1)
+                        grid_Telecommande.Children.Add(x)
+                    Next
+
+                Next
+            End If
+            'Si la grille contient plus de ligne que définit
+            If Me.grid_Telecommande.RowDefinitions.Count > slider_Row.Value Then
+                Dim diff As Integer = Me.grid_Telecommande.RowDefinitions.Count - slider_Row.Value
+                For i As Integer = 1 To diff
+                    'Augmente la hauteur de la grille
+                    grid_Telecommande.Height = slider_Row.Value * 50
+                    'Augmente la hauteur du background
+                    rectangle.Height = slider_Row.Value * 50 + 20
+                    'Retire une ligne à la grille
+                    grid_Telecommande.RowDefinitions.RemoveAt(Me.grid_Telecommande.RowDefinitions.Count - 1)
+                Next
+            End If
+            'For i As Integer = 1 To slider_Row.Value
+            '    'Augmente la hauteur de la grille
+            '    grid_Telecommande.Height = slider_Row.Value * 50
+            '    'Augmente la hauteur du background
+            '    rectangle.Height = slider_Row.Value * 50 + 20
+            '    'Ajoute une ligne à la grille
+            '    Dim rowDef As New RowDefinition
+            '    grid_Telecommande.RowDefinitions.Add(rowDef)
+            'Next
         End If
 
-        Remplir()
+        'Remplir()
     End Sub
 
     Private Sub slider_Column_PreviewMouseMove(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Double)) Handles slider_Column.ValueChanged
 
         '==== Initalisation ====
-        'Initialisation des colonnes de la grille
-        Me.grid_Telecommande.ColumnDefinitions.Clear()
-        Me.grid_Telecommande.Width = 50
-        'Initialisation de la largeur du background
-        Me.rectangle.Width = 70
+        'Initialisation des colonnes de la grille si celle-ci est vide
+        If Me.grid_Telecommande.ColumnDefinitions.Count = 0 Then
+            Me.grid_Telecommande.ColumnDefinitions.Clear()
+            Me.grid_Telecommande.Width = 50
+            'Initialisation de la largeur du background
+            Me.rectangle.Width = 70
+        End If
 
         '==== Modification de la grille et du background pour chaque division du slider ====
         If slider_Column.Value > 1 Then
-            For j As Integer = 1 To slider_Column.Value
-                'Augmente la largeur de la grille
-                grid_Telecommande.Width = slider_Column.Value * 50
-                'Augmente la largeur du background
-                rectangle.Width = slider_Column.Value * 50 + 20
-                'Ajoute une colonne à la grille
-                Dim colDef As New ColumnDefinition
-                grid_Telecommande.ColumnDefinitions.Add(colDef)
-            Next
+            'Si la grille contient moins de ligne que définit
+            If Me.grid_Telecommande.ColumnDefinitions.Count < slider_Column.Value Then
+                Dim diff As Integer = slider_Column.Value - Me.grid_Telecommande.ColumnDefinitions.Count
+                For i As Integer = 1 To diff
+                    'Augmente la largeur de la grille
+                    grid_Telecommande.Width = slider_Column.Value * 50
+                    'Augmente la largeur du background
+                    rectangle.Width = slider_Column.Value * 50 + 20
+                    'Ajoute une colonne à la grille
+                    Dim colDef As New ColumnDefinition
+                    grid_Telecommande.ColumnDefinitions.Add(colDef)
+
+                    For j As Integer = 0 To grid_Telecommande.RowDefinitions.Count - 1
+                        Dim x As New Canvas
+                        x.Width = 45
+                        x.Height = 45
+                        x.Background = Brushes.Black
+                        x.AllowDrop = True
+                        x.Tag = j & "|" & grid_Telecommande.ColumnDefinitions.Count - 1
+                        AddHandler x.DragOver, AddressOf CVS_DragOver
+                        AddHandler x.Drop, AddressOf CVS_Drop
+                        Grid.SetColumn(x, grid_Telecommande.ColumnDefinitions.Count - 1)
+                        Grid.SetRow(x, j)
+                        grid_Telecommande.Children.Add(x)
+                    Next
+                Next
+            End If
+            'Si la grille contient plus de colonne que définit
+            If Me.grid_Telecommande.ColumnDefinitions.Count > slider_Column.Value Then
+                Dim diff As Integer = Me.grid_Telecommande.ColumnDefinitions.Count - slider_Column.Value
+                For i As Integer = 1 To diff
+                    'Augmente la hauteur de la grille
+                    grid_Telecommande.Height = slider_Row.Value * 50
+                    'Augmente la hauteur du background
+                    rectangle.Height = slider_Row.Value * 50 + 20
+                    'Retire une ligne à la grille
+                    grid_Telecommande.ColumnDefinitions.RemoveAt(Me.grid_Telecommande.ColumnDefinitions.Count - 1)
+                Next
+            End If
+            'For j As Integer = 1 To slider_Column.Value
+            '    'Augmente la largeur de la grille
+            '    grid_Telecommande.Width = slider_Column.Value * 50
+            '    'Augmente la largeur du background
+            '    rectangle.Width = slider_Column.Value * 50 + 20
+            '    'Ajoute une colonne à la grille
+            '    Dim colDef As New ColumnDefinition
+            '    grid_Telecommande.ColumnDefinitions.Add(colDef)
+            'Next
         End If
 
-        Remplir()
+        'Remplir()
     End Sub
 
     Private Sub Save()
@@ -90,7 +174,7 @@ Partial Public Class MainWindow
             End If
         Next
 
-        MessageBox.Show(ListButton.Count & " button(s) enregistré(s)")
+        'MessageBox.Show(ListButton.Count & " button(s) enregistré(s)")
     End Sub
 
     Private Sub Recharge()
@@ -181,6 +265,8 @@ Partial Public Class MainWindow
                 x.AllowDrop = True
                 AddHandler x.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
             Next
+            slider_Column.Value = 4
+            slider_Row.Value = 6
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
         End Try
