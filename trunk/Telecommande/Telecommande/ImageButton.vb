@@ -41,6 +41,7 @@
         Dim MyContextMenuFille As New MenuItem
         MyContextMenuFille.Header = "Supprimer"
         AddHandler MyContextMenuFille.Click, AddressOf _Delete
+
         MyContextMenu.Items.Add(MyContextMenuFille)
         Me.ContextMenu = MyContextMenu
     End Sub
