@@ -676,7 +676,7 @@ Imports System.Web.HttpUtility
 
             'Libellé Device
             Add_LibelleDevice("ADRESSE1", "Instance Foobar", "Nom de l'executable à lancer")
-            Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("ADRESSE2", "Paramètres http", "Adresse http du serveur Foobar si utilisation en mode serveur")
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
             Add_LibelleDevice("REFRESH", "@", "")
