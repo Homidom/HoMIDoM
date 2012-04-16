@@ -615,6 +615,7 @@ Imports System.Globalization
                     tcp = True
                     client = New TcpClient(numero, _Port_TCP)
                     _IsConnect = True
+                    dateheurelancement = DateTime.Now
                     Return ("Port IP " & port_name & ":" & _Port_TCP & " ouvert")
                 Else
                     'RFXCOM est un modele usb
@@ -959,14 +960,16 @@ Imports System.Globalization
             mess = False
             firstbyte = True
 
-            ''ONLY FOR DEBUGGING
-            'Dim valtemp As String = ""
-            Dim xxx As String = ""
-            For i As Integer = 0 To bytecnt
-                'valtemp = valtemp & recbuf(i)
-                xxx = xxx & (VB.Right("0" & Hex(recbuf(i)), 2))
-            Next
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXComReceiver display_mess", " Received data: " & xxx)
+            'ONLY FOR DEBUGGING
+            If _DEBUG Then
+                'Dim valtemp As String = ""
+                Dim xxx As String = ""
+                For i As Integer = 0 To bytecnt
+                    'valtemp = valtemp & recbuf(i)
+                    xxx = xxx & (VB.Right("0" & Hex(recbuf(i)), 2))
+                Next
+                WriteLog("DBG: display_mess : Received data: " & xxx)
+            End If
 
             If Not waitforack Then
                 If bytecnt = 4 Then
@@ -3003,11 +3006,11 @@ Imports System.Globalization
         Try
             'utilise la fonction de base pour loguer un event
             If STRGS.InStr(message, "DBG:") > 0 Then
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXCOM_RECEIVER", STRGS.Right(message, message.Length - 4))
+                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "RFXCOM_RECEIVER", STRGS.Right(message, message.Length - 4))
             ElseIf STRGS.InStr(message, "ERR:") > 0 Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER", STRGS.Right(message, message.Length - 4))
             Else
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", STRGS.Right(message, message.Length - 4))
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RFXCOM_RECEIVER", message)
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER WriteLog", ex.Message)
@@ -3022,7 +3025,7 @@ Imports System.Globalization
             If _DEBUG Then WriteLog("DBG: WriteBattery : receive from " & adresse)
 
             'on ne traite rien pendant les 10 premieres secondes
-            If DateTime.Now < DateAdd(DateInterval.Second, 10, dateheurelancement) Then
+            If DateTime.Now > DateAdd(DateInterval.Second, 10, dateheurelancement) Then
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
@@ -3054,7 +3057,7 @@ Imports System.Globalization
             If _DEBUG Then WriteLog("DBG: WriteRetour : receive from " & adresse & " (" & type & ") -> " & valeur)
 
             'on ne traite rien pendant les 10 premieres secondes
-            If DateTime.Now < DateAdd(DateInterval.Second, 10, dateheurelancement) Then
+            If DateTime.Now > DateAdd(DateInterval.Second, 10, dateheurelancement) Then
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
