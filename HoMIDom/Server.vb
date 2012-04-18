@@ -4679,6 +4679,8 @@ Namespace HoMIDom
                         .Modele = _ListDevices.Item(i).modele
                         .GetDeviceCommandePlus = _ListDevices.Item(i).GetCommandPlus
                         .Value = _ListDevices.Item(i).value
+                        .DateCreated = _ListDevices.Item(i).DateCreated
+                        .LastChange = _ListDevices.Item(i).LastChange
                         If IsNumeric(_ListDevices.Item(i).valuelast) Then .ValueLast = _ListDevices.Item(i).valuelast
 
                         _listact = ListMethod(_ListDevices.Item(i).id)
@@ -5642,6 +5644,8 @@ Namespace HoMIDom
                         retour.Refresh = _ListDevices.Item(i).refresh
                         retour.Modele = _ListDevices.Item(i).modele
                         retour.LastEtat = _ListDevices.Item(i).LastEtat
+                        retour.DateCreated = _ListDevices.Item(i).DateCreated
+                        retour.LastChange = _ListDevices.Item(i).LastChange
 
                         _listact = ListMethod(_ListDevices.Item(i).id)
                         _listact = _listact
