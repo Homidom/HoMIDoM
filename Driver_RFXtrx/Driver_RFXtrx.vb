@@ -1372,7 +1372,6 @@ Imports System.Media
     Public Sub New()
         Try
             'Parametres avancés
-            'add_paramavance("synchro", "Synchronisation avec le receiver (True/False)", True)
             add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
             add_paramavance("ParamMode", "Paramétres (ex: 201001111011111111)", "201001111011111111")
 

@@ -4,9 +4,14 @@ Imports HoMIDom.HoMIDom.Device
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports VB = Microsoft.VisualBasic
 Imports System.IO.Ports
+Imports System.Math
+Imports System.Threading
+Imports System.Globalization
+Imports System.ComponentModel
+Imports ZibaseDll
 
 ' Auteur : David
-' Date : 10/02/2011
+' Date : 18/04/2012
 
 ''' <summary>Class Driver_Zibase, permet de communiquer avec la Zibase Ethernet</summary>
 ''' <remarks>Nécessite la dll déceloppé par Planete Domotique zibase.dll</remarks>
@@ -41,9 +46,13 @@ Imports System.IO.Ports
     Dim MyTimer As New Timers.Timer
     Dim _IdSrv As String
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
+
+    'param avancé
+    Dim _DEBUG As Boolean = False
 #End Region
 
 #Region "Variables Internes"
+    Public WithEvents zba As New ZibaseDll.ZiBase
 
 #End Region
 
@@ -269,7 +278,19 @@ Imports System.IO.Ports
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
+            'récupération des paramétres avancés
+            Try
+                _DEBUG = _Parametres.Item(0).Valeur
+            Catch ex As Exception
+                WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+            End Try
 
+            Try
+                zba.StartZB()
+                WriteLog("Driver démarré")
+            Catch ex As Exception
+                WriteLog("ERR: Start Exception " & ex.Message)
+            End Try
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase Start", ex.Message)
         End Try
@@ -279,7 +300,8 @@ Imports System.IO.Ports
     ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
-
+            zba.StopZB()
+            WriteLog("Driver arrété")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase Stop", ex.Message)
         End Try
@@ -415,7 +437,7 @@ Imports System.IO.Ports
         Try
 
             'Parametres avancés
-            'add_paramavance("nom", "Description", valeupardefaut)
+            Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
@@ -470,7 +492,286 @@ Imports System.IO.Ports
 #End Region
 
 #Region "Fonctions internes"
+    'reception d'une valeur -> analyse
+    Private Sub zba_UpdateSensorInfo(ByVal seInfo As ZibaseDll.ZiBase.SensorInfo) Handles zba.UpdateSensorInfo
+        'WriteLog("DBG: " & seInfo.sID & "_" & seInfo.sType & " ----> " & seInfo.sValue)
+        traitement(seInfo.sID, seInfo.sType, seInfo.dwValue, seInfo.sValue)
+    End Sub
+    Private Sub zba_NewSensorDetected(ByVal seInfo As ZibaseDll.ZiBase.SensorInfo) Handles zba.NewSensorDetected
+        'si on detecte une nouveau device
+        'WriteLog("DBG: " & seInfo.sID & "_" & seInfo.sType & " ----> " & seInfo.sValue)
+        traitement(seInfo.sID, seInfo.sType, seInfo.dwValue, seInfo.sValue)
+    End Sub
+
+    'nouvelle zibase detecté -> Log
+    Private Sub zba_newzibasedetected(ByVal ZiInfo As ZibaseDll.ZiBase.ZibaseInfo) Handles zba.NewZibaseDetected
+        WriteLog("Nouvelle Zibase détecté : " & ZiInfo.sLabelBase & "-" & ZiInfo.lIpAddress)
+    End Sub
+
+    'la zibase a qqch à logger
+    Private Sub ZibaseLog(ByVal sMsg As String, ByVal level As Integer) Handles zba.WriteMessage
+        WriteLog("DBG: " & sMsg & " - " & level)
+    End Sub
+
+    'executer un script stocké sur la zibase
+    Public Function ExecScript(ByVal sScript As String)
+        'sScript : nom du script sur la zibase
+        Try
+            zba.ExecScript(sScript)
+            Return " -> Executé : " & sScript
+        Catch ex As Exception
+            Return "Err: ExecScript: " & ex.Message
+        End Try
+    End Function
+
+    'executer un scénario stocké sur la zibase
+    Public Function RunScenario(ByVal sCmd As String)
+        'sCmd : nom du scenario sur la zibase
+        Try
+            zba.RunScenario(sCmd)
+            Return " -> Executé : " & sCmd
+        Catch ex As Exception
+            Return "Err: RunScenario: " & ex.Message
+        End Try
+    End Function
+
+    'interroger la zibase sur l'etat d'un device
+    Public Function zba_getsensorinfo(ByVal composants_id As Integer) As String
+        'Dim sei As ZiBase.SensorInfo
+        'Dim adressetype As String() = Nothing
+        'Dim tabletmp() As DataRow
+        Try
+            'tabletmp = domos_svc.table_composants.Select("composants_id = '" & composants_id.ToString & "'")
+            'If tabletmp.GetUpperBound(0) >= 0 Then
+            '    adressetype = Split(tabletmp(0)("composants_addresse"), "_")
+            '    sei = zba.GetSensorInfo(adressetype(0), adressetype(1))
+            '    If STRGS.UCase(sei.sType) = "TEM" Then
+            '        Return sei.dwValue / 100 'si c'est une temperature on / par 100
+            '    Else
+            '        Return sei.dwValue
+            '    End If
+            'Else
+            '    'erreur d'adresse composant
+            '    Return ("ERR: GetSensorInfo : Composant non trouvé : " & composants_id.ToString)
+
+            'End If
+            Return ""
+        Catch ex As Exception
+            Return "ERR: GetSensorInfo : " & ex.Message
+        End Try
+    End Function
+
+    'ecrire device
+    Public Function Ecrirecommand(ByVal composants_adresse As String, ByVal composants_modele_nom As String, ByVal composants_divers As String, ByVal ordre As String, ByVal iDim As Integer)
+        'composants_adresse : adresse du composant
+        'composants_modele_nom : modele du composant
+        'composants_divers : adresse secondaire du composant chacon
+        'ordre : ordre à envoyer
+        'iDim: nombre de 0 à 100 pour l'ordre DIM sur chacon
+        Dim protocole As ZiBase.Protocol
+        Dim adresse, modele() As String
+        Dim valeur As String = ""
+        'Dim tabletmp() As DataRow
+
+        Try
+            modele = Split(composants_modele_nom, "_")
+            adresse = Split(composants_adresse, "_")(0)
+            Select Case UCase(modele(0))
+                Case "BROADC" : protocole = ZiBase.Protocol.PROTOCOL_BROADCAST
+                Case "CHACON"
+                    protocole = ZiBase.Protocol.PROTOCOL_CHACON
+                    adresse = composants_divers 'on a 2 adres pour chacon : reception et emission dans le champ divers
+                Case "DOMIA" : protocole = ZiBase.Protocol.PROTOCOL_DOMIA
+                Case "VIS433" : protocole = ZiBase.Protocol.PROTOCOL_VISONIC433
+                Case "VIS868" : protocole = ZiBase.Protocol.PROTOCOL_VISONIC868
+                Case "X10" : protocole = ZiBase.Protocol.PROTOCOL_X10
+                Case Else : Return ("ERR: protocole incorrect : " & modele(0))
+            End Select
+
+            'verification Adresse
+            If adresse = "" Then
+                Return ("ERR: pas d'adresse renseignée")
+            End If
+
+            'ecriture sur la zibase
+            Select Case UCase(ordre)
+                Case "ON"
+                    zba.SendCommand(adresse, ZiBase.State.STATE_ON, 0, protocole, 1)
+                    valeur = 100
+                Case "OFF"
+                    zba.SendCommand(adresse, ZiBase.State.STATE_OFF, 0, protocole, 1)
+                    valeur = 0
+                Case "DIM"
+                    If UCase(modele(0)) <> "CHACON" Then
+                        zba.SendCommand(adresse, ZiBase.State.STATE_DIM, 0, protocole, 1)
+                        valeur = 100
+                    Else
+                        zba.SendCommand(adresse, ZiBase.State.STATE_DIM, iDim, protocole, 1)
+                        valeur = iDim
+                    End If
+                Case Else
+                    Return ("ERR: ordre incorrect : " & ordre)
+            End Select
+
+            'retour normal : on renvoie la valeur
+            Return (valeur)
+
+        Catch ex As Exception
+            Return ("ERR: Zib_ecrirecommand" & ex.Message & " --> adresse:" & composants_adresse & " (" & composants_divers & ") commande:" & ordre & "-" & idim)
+        End Try
+
+    End Function
 
 #End Region
 
+#Region "Write"
+
+    Private Sub traitement(ByVal adresse As String, ByVal type As String, ByVal valeurentiere As Long, ByVal valeurstring As String)
+        Dim valeur As String = CStr(valeurentiere)
+        If [String].IsNullOrEmpty(valeurstring) Then valeurstring = " "
+        'modification des informations suivant le type
+        Select Case UCase(type)
+            Case "TEM"
+                'valeur = STRGS.Left(valeur, (valeur.Length - 2))
+                valeur = valeur / 100
+                type = "THE" 'tem Température (°C)
+                'Case "hum"
+                'valeur = STRGS.Left(valeur, (valeur.Length - 1))
+            Case "TEMC"
+                'valeur = STRGS.Left(valeur, (valeur.Length - 2))
+                valeur = valeur / 100
+                type = "THC" 'Température de consigne (Thermostat : °C)
+            Case "XSE", "BAT", "LNK", "STA" : valeur = valeurstring 'on utilise la valeur normale et non l'entier
+        End Select
+        'dans le cas des adresse du tpe M5
+        If adresse.Length = 2 Then valeur = valeurstring 'on utilise la valeur normale et non l'entier
+
+        'Action suivant le type
+        Select Case type
+            Case "bat" : If STRGS.UCase(valeur) = "LOW" Then WriteBattery(adresse) 'Niveau de batterie (Ok / Low)
+            Case "lev" : If _DEBUG Then WriteLog("DBG: Signal Level : " & valeur & " (Adresse:" & adresse & ")") 'on log le level si debug : Niveau de réception RF (1 à 5)
+            Case "lnk" : WriteLog("DBG: Etat de la connexion avec la Zibase " & adresse & " : " & valeur) 'Etat de la connexion Zibase
+            Case "" : WriteRetour(adresse, "", valeur) ' si pas de type particulier
+            Case "tem" : WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur) 'Température (°C)
+            Case "temc" : WriteRetour(adresse, ListeDevices.TEMPERATURECONSIGNE.ToString, valeur) 'Température de consigne (Thermostat : °C)
+            Case "hum" : WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur) 'Humidité (%)
+            Case "uvl" : WriteRetour(adresse, ListeDevices.UV.ToString, valeur) 'Niveau d’UV
+            Case "tra" : WriteRetour(adresse, ListeDevices.PLUIETOTAL.ToString, valeur) 'Niveau de pluie total (Total Rain)
+            Case "cra" : WriteRetour(adresse, ListeDevices.PLUIECOURANT.ToString, valeur) 'Niveau de pluie courant (Currant Rain)
+            Case "Kw" : WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE.ToString, valeur) 'Mesure d’énergie instantanée (CM119)
+            Case "kwh" : WriteRetour(adresse, ListeDevices.ENERGIETOTALE.ToString, valeur) 'Mesure d’énergie totale (CM119)
+            Case "awi" : WriteRetour(adresse, ListeDevices.VITESSEVENT.ToString, valeur) ' Mesure de la vitesse du vent
+            Case "drt" : WriteRetour(adresse, ListeDevices.DIRECTIONVENT.ToString, valeur) 'Direction du vent
+            Case "xse" : WriteRetour(adresse, "", valeur) 'detecteurs fumées/co... (Alert, Normal)
+            Case "Lnk" : WriteRetour(adresse, "", valeur) 'Etat de la connexion Zibase
+            Case "sta" : WriteRetour(adresse, ListeDevices.SWITCH.ToString, valeur) 'Status pour un switch (ON/OFF)
+            Case Else : WriteRetour(adresse & "_" & STRGS.UCase(type), "", valeur)
+        End Select
+
+    End Sub
+
+    Private Sub WriteLog(ByVal message As String)
+        Try
+            'utilise la fonction de base pour loguer un event
+            If STRGS.InStr(message, "DBG:") > 0 Then
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Zibase", STRGS.Right(message, message.Length - 5))
+            ElseIf STRGS.InStr(message, "ERR:") > 0 Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase", STRGS.Right(message, message.Length - 5))
+            Else
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Zibase", message)
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase WriteLog", ex.Message)
+        End Try
+    End Sub
+
+    Private Sub WriteBattery(ByVal adresse As String)
+        Try
+            'Forcer le . 
+            'Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
+            'My.Application.ChangeCulture("en-US")
+
+            'log tous les paquets en mode debug
+            If _DEBUG Then WriteLog("DBG: WriteBattery : receive from " & adresse)
+
+            If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
+
+            'Recherche si un device affecté
+            Dim listedevices As New ArrayList
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
+            If (listedevices.Count >= 1) Then
+                'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
+                WriteLog(listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
+            Else
+                'device pas trouvé
+                WriteLog("ERR: Device non trouvé : " & adresse & ": Battery Empty")
+
+                'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: WriteBattery Exception : " & ex.Message & " --> " & adresse)
+        End Try
+    End Sub
+
+    Private Sub WriteRetour(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
+        Try
+            'Forcer le . 
+            'Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
+            'My.Application.ChangeCulture("en-US")
+
+            'log tous les paquets en mode debug
+            If _DEBUG Then WriteLog("DBG: WriteRetour : receive from " & adresse & " (" & type & ") -> " & valeur)
+
+            If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
+
+            'Recherche si un device affecté
+            Dim listedevices As New ArrayList
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
+            If (listedevices.Count = 1) Then
+                'un device trouvé 
+                If STRGS.InStr(valeur, "CFG:") > 0 Then
+                    'c'est un message de config, on log juste
+                    WriteLog(listedevices.Item(0).name & " : " & valeur)
+                Else
+                    'on maj la value si la durée entre les deux receptions est > à 1.5s
+                    If (DateTime.Now - Date.Parse(listedevices.Item(0).LastChange)).TotalMilliseconds > 1500 Then
+                        If valeur = "ON" Then
+                            If TypeOf listedevices.Item(0).Value Is Boolean Then
+                                listedevices.Item(0).Value = True
+                            ElseIf TypeOf listedevices.Item(0).Value Is Long Then
+                                listedevices.Item(0).Value = 100
+                            Else
+                                listedevices.Item(0).Value = "ON"
+                            End If
+                        ElseIf valeur = "OFF" Then
+                            If TypeOf listedevices.Item(0).Value Is Boolean Then
+                                listedevices.Item(0).Value = False
+                            ElseIf TypeOf listedevices.Item(0).Value Is Long Then
+                                listedevices.Item(0).Value = 0
+                            Else
+                                listedevices.Item(0).Value = "OFF"
+                            End If
+                        Else
+                            listedevices.Item(0).Value = valeur
+                        End If
+                    Else
+                        WriteLog("DBG: Reception < 1.5s de deux valeurs pour le meme composant : " & listedevices.Item(0).name & ":" & valeur)
+                    End If
+                End If
+            ElseIf (listedevices.Count > 1) Then
+                WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
+            Else
+
+                WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
+
+                'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: Writeretour Exception : " & ex.Message)
+        End Try
+    End Sub
+
+#End Region
 End Class
