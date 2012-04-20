@@ -2044,29 +2044,33 @@ Namespace HoMIDom
                 'Cherche tous les fichiers dll dans le répertoie plugin
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", "Chargement des DLL des drivers :")
                 For Each fi In aryFi
-                    'chargement du plugin
-                    tx = fi.FullName   'emplacement de la dll
-                    'chargement de la dll
-                    dll = Reflection.Assembly.LoadFrom(tx)
-                    'Vérification de la présence de l'interface recherchée
-                    For Each tp In dll.GetTypes
-                        If tp.IsClass Then
-                            If tp.GetInterface("IDriver", True) IsNot Nothing Then
-                                'création de la référence au plugin
-                                Dim i1 As IDriver
-                                i1 = DirectCast(dll.CreateInstance(tp.FullName), IDriver)
-                                i1 = CType(i1, IDriver)
-                                i1.Server = Me
-                                i1.IdSrv = _IdSrv
-                                Dim pt As New Driver(Me, _IdSrv, i1.ID)
-                                _ListDrivers.Add(i1)
-                                _ListImgDrivers.Add(pt)
-                                Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " chargé")
-                                i1 = Nothing
-                                pt = Nothing
+                    Try
+                        'chargement du plugin
+                        tx = fi.FullName   'emplacement de la dll
+                        'chargement de la dll
+                        dll = Reflection.Assembly.LoadFrom(tx)
+                        'Vérification de la présence de l'interface recherchée
+                        For Each tp In dll.GetTypes
+                            If tp.IsClass Then
+                                If tp.GetInterface("IDriver", True) IsNot Nothing Then
+                                    'création de la référence au plugin
+                                    Dim i1 As IDriver
+                                    i1 = DirectCast(dll.CreateInstance(tp.FullName), IDriver)
+                                    i1 = CType(i1, IDriver)
+                                    i1.Server = Me
+                                    i1.IdSrv = _IdSrv
+                                    Dim pt As New Driver(Me, _IdSrv, i1.ID)
+                                    _ListDrivers.Add(i1)
+                                    _ListImgDrivers.Add(pt)
+                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " chargé")
+                                    i1 = Nothing
+                                    pt = Nothing
+                                End If
                             End If
-                        End If
-                    Next
+                        Next
+                    Catch ex As Exception
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Load", " Erreur lors du chargement du driver: " & fi.Name & " Err: " & ex.ToString)
+                    End Try
                 Next
 
                 dll = Nothing
