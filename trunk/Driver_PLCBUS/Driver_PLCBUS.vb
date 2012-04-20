@@ -46,6 +46,7 @@ Imports System.IO.Ports
     Dim plcack As Boolean = True 'gestion des acks ?
     Dim plctriphase As Boolean = False 'installation en triphase
     Dim plcusercode As Integer = 209 'usercode PLCBUS defaut : &HD1 / 209
+    Dim _DEBUG As Boolean = False
     'Dim plcmodele As String = "1141" '"1141" ou "1141+" si modele 1141+, utilise le checksum plutot que H3 en fin de paquet
 #End Region
 
@@ -295,6 +296,7 @@ Imports System.IO.Ports
             plcack = _Parametres.Item(0).Valeur
             plctriphase = _Parametres.Item(1).Valeur
             plcusercode = _Parametres.Item(2).Valeur
+            _DEBUG = _Parametres.Item(3).Valeur
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
         End Try
@@ -355,7 +357,7 @@ Imports System.IO.Ports
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
             If _Enable = False Then Exit Sub
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Read", "Lecture de " & Objet.Name)
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Read", "Lecture de " & Objet.Name)
             If (Objet.adresse1.ToString.Length > 1) Then
                 'c'est une adresse std on fait un status request
                 ecrire(Objet.adresse1, "STATUS_REQUEST")
@@ -499,6 +501,7 @@ Imports System.IO.Ports
             add_paramavance("ack", "Gestion du ack", True)
             add_paramavance("triphase", "Installation en triphase", False)
             add_paramavance("plcusercode", "User Code (0-255)", 209)
+            add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
 
             'ajout des commandes avancées pour les devices
             add_devicecommande("ALL_UNITS_OFF", "Eteint tous les appareils du meme range que ce device", 0)
