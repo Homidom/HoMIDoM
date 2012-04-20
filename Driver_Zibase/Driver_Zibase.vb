@@ -232,7 +232,6 @@ Imports ZibaseDll
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function ExecuteCommand(ByVal MyDevice As Object, ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
-        Dim retour As Boolean = False
         Try
             If MyDevice IsNot Nothing Then
                 'Pas de commande demandée donc erreur
@@ -241,8 +240,9 @@ Imports ZibaseDll
                 Else
                     'Write(deviceobject, Command, Param(0), Param(1))
                     Select Case UCase(Command)
-                        Case ""
-                        Case Else
+                        Case "RUN_SCENARIO" : WriteLog(ExecScript(Param(0)))
+                        Case "RUN_SCRIPT" : WriteLog(RunScenario(Param(0)))
+                        Case Else : WriteLog("ERR: ExecuteCommand : command incorrecte : " & Command)
                     End Select
                     Return True
                 End If
@@ -319,7 +319,19 @@ Imports ZibaseDll
     ''' <remarks>pas utilisé</remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
+            Dim sei As ZiBase.SensorInfo
+            Dim retour
             If _Enable = False Then Exit Sub
+            If _DEBUG Then WriteLog("DBG: WRITE Read " & Objet.Name)
+
+            sei = zba.GetSensorInfo(Objet.adresse1, Objet.Modele)
+            If STRGS.UCase(sei.sType) = "TEM" Then
+                retour = sei.dwValue / 100 'si c'est une temperature on / par 100
+            Else
+                retour = sei.dwValue
+            End If
+            WriteRetour(Objet.adresse, Objet.type.ToString, retour) 'Modification du device
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase Read", ex.Message)
         End Try
@@ -333,7 +345,18 @@ Imports ZibaseDll
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
+            Dim retour As String = ""
             If _Enable = False Then Exit Sub
+            If _DEBUG Then WriteLog("DBG: WRITE Device " & Objet.Name & " <-- " & Command)
+
+            If IsNothing(Parametre1) Then retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, "") Else retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, Parametre1)
+            If STRGS.InStr(retour, "ERR:") > 0 Then
+                WriteLog(retour)
+            Else
+                WriteRetour(Objet.adresse, Objet.type.ToString, retour) 'Modification du device
+            End If
+
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase Write", ex.Message)
         End Try
@@ -465,17 +488,18 @@ Imports ZibaseDll
             _DeviceSupport.Add(ListeDevices.VOLET.ToString)
 
             'ajout des commandes avancées pour les devices
-            'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
             'add_devicecommande("PRESETDIM", "permet de paramétrer le DIM : param1=niveau, param2=timer", 2)
+            Add_DeviceCommande("RUN_SCRIPT", "Execute le script passé en parametre", 1)
+            Add_DeviceCommande("RUN_SCENARIO", "Execute le scenario passé en parametre", 1)
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
             Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
-            Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("ADRESSE2", "Adresse secondaire", "Adresse secondaire pour certains composants")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "@", "")
+            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun / BROADC / CHACON / DOMIA / VIS433 / VIS868 / X10", "aucun|BROADC|CHACON|DOMIA|VIS433|VIS868|X10")
             Add_LibelleDevice("REFRESH", "@", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
@@ -514,84 +538,55 @@ Imports ZibaseDll
     End Sub
 
     'executer un script stocké sur la zibase
-    Public Function ExecScript(ByVal sScript As String)
+    Private Function ExecScript(ByVal sScript As String)
         'sScript : nom du script sur la zibase
         Try
             zba.ExecScript(sScript)
-            Return " -> Executé : " & sScript
+            Return "Script Executé : " & sScript
         Catch ex As Exception
-            Return "Err: ExecScript: " & ex.Message
+            Return "ERR: ExecScript: " & ex.Message
         End Try
     End Function
 
     'executer un scénario stocké sur la zibase
-    Public Function RunScenario(ByVal sCmd As String)
+    Private Function RunScenario(ByVal sCmd As String)
         'sCmd : nom du scenario sur la zibase
         Try
             zba.RunScenario(sCmd)
-            Return " -> Executé : " & sCmd
+            Return " Scenario Executé : " & sCmd
         Catch ex As Exception
-            Return "Err: RunScenario: " & ex.Message
-        End Try
-    End Function
-
-    'interroger la zibase sur l'etat d'un device
-    Public Function zba_getsensorinfo(ByVal composants_id As Integer) As String
-        'Dim sei As ZiBase.SensorInfo
-        'Dim adressetype As String() = Nothing
-        'Dim tabletmp() As DataRow
-        Try
-            'tabletmp = domos_svc.table_composants.Select("composants_id = '" & composants_id.ToString & "'")
-            'If tabletmp.GetUpperBound(0) >= 0 Then
-            '    adressetype = Split(tabletmp(0)("composants_addresse"), "_")
-            '    sei = zba.GetSensorInfo(adressetype(0), adressetype(1))
-            '    If STRGS.UCase(sei.sType) = "TEM" Then
-            '        Return sei.dwValue / 100 'si c'est une temperature on / par 100
-            '    Else
-            '        Return sei.dwValue
-            '    End If
-            'Else
-            '    'erreur d'adresse composant
-            '    Return ("ERR: GetSensorInfo : Composant non trouvé : " & composants_id.ToString)
-
-            'End If
-            Return ""
-        Catch ex As Exception
-            Return "ERR: GetSensorInfo : " & ex.Message
+            Return "ERR: RunScenario: " & ex.Message
         End Try
     End Function
 
     'ecrire device
-    Public Function Ecrirecommand(ByVal composants_adresse As String, ByVal composants_modele_nom As String, ByVal composants_divers As String, ByVal ordre As String, ByVal iDim As Integer)
+    Private Function Ecrirecommand(ByVal composants_adresse As String, ByVal composants_modele_nom As String, ByVal composants_adresse2 As String, ByVal ordre As String, ByVal iDim As Integer)
         'composants_adresse : adresse du composant
         'composants_modele_nom : modele du composant
         'composants_divers : adresse secondaire du composant chacon
         'ordre : ordre à envoyer
         'iDim: nombre de 0 à 100 pour l'ordre DIM sur chacon
+
         Dim protocole As ZiBase.Protocol
-        Dim adresse, modele() As String
+        Dim adresse As String
         Dim valeur As String = ""
-        'Dim tabletmp() As DataRow
 
         Try
-            modele = Split(composants_modele_nom, "_")
-            adresse = Split(composants_adresse, "_")(0)
-            Select Case UCase(modele(0))
+            adresse = composants_adresse 'adresse = Split(composants_adresse, "_")(0)
+            Select Case UCase(composants_modele_nom)
                 Case "BROADC" : protocole = ZiBase.Protocol.PROTOCOL_BROADCAST
                 Case "CHACON"
                     protocole = ZiBase.Protocol.PROTOCOL_CHACON
-                    adresse = composants_divers 'on a 2 adres pour chacon : reception et emission dans le champ divers
+                    adresse = composants_adresse2 'on a 2 adresses pour chacon : reception et emission dans le champ divers
                 Case "DOMIA" : protocole = ZiBase.Protocol.PROTOCOL_DOMIA
                 Case "VIS433" : protocole = ZiBase.Protocol.PROTOCOL_VISONIC433
                 Case "VIS868" : protocole = ZiBase.Protocol.PROTOCOL_VISONIC868
                 Case "X10" : protocole = ZiBase.Protocol.PROTOCOL_X10
-                Case Else : Return ("ERR: protocole incorrect : " & modele(0))
+                Case Else : Return ("ERR: protocole incorrect : " & Modele(0))
             End Select
 
             'verification Adresse
-            If adresse = "" Then
-                Return ("ERR: pas d'adresse renseignée")
-            End If
+            If adresse = "" Then Return ("ERR: pas d'adresse renseignée")
 
             'ecriture sur la zibase
             Select Case UCase(ordre)
@@ -609,19 +604,17 @@ Imports ZibaseDll
                         zba.SendCommand(adresse, ZiBase.State.STATE_DIM, iDim, protocole, 1)
                         valeur = iDim
                     End If
-                Case Else
-                    Return ("ERR: ordre incorrect : " & ordre)
+                Case Else : Return ("ERR: ordre incorrect : " & ordre)
             End Select
 
             'retour normal : on renvoie la valeur
             Return (valeur)
 
         Catch ex As Exception
-            Return ("ERR: Zib_ecrirecommand" & ex.Message & " --> adresse:" & composants_adresse & " (" & composants_divers & ") commande:" & ordre & "-" & idim)
+            Return ("ERR: Zib_ecrirecommand" & ex.Message & " --> adresse:" & composants_adresse & " (" & composants_adresse2 & ") commande:" & ordre & "-" & iDim)
         End Try
 
     End Function
-
 #End Region
 
 #Region "Write"
