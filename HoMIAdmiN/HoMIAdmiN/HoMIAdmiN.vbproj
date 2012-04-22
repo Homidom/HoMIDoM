@@ -70,6 +70,7 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -130,6 +131,7 @@
     <Compile Include="Control\Timeline\WAction.xaml.vb">
       <DependentUpon>WAction.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\uButtonTelecommande.vb" />
     <Compile Include="Control\uCtrlImgMnu.xaml.vb">
       <DependentUpon>uCtrlImgMnu.xaml</DependentUpon>
     </Compile>
@@ -150,6 +152,9 @@
     </Compile>
     <Compile Include="Control\uTriggerTimer.xaml.vb">
       <DependentUpon>uTriggerTimer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\WTelecommande.xaml.vb">
+      <DependentUpon>WTelecommande.xaml</DependentUpon>
     </Compile>
     <Compile Include="Fonctions.vb" />
     <Compile Include="Splash.xaml.vb">
@@ -275,6 +280,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Control\uElement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control\WTelecommande.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
