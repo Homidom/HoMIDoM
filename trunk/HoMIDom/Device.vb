@@ -980,6 +980,15 @@ Namespace HoMIDom
                 If _Enable = False Then Exit Sub
                 Driver.Write(Me, "OFF")
             End Sub
+
+            Public Sub Toggle()
+                If _Enable = False Then Exit Sub
+                If _Value = True Then
+                    Driver.Write(Me, "OFF")
+                Else
+                    Driver.Write(Me, "ON")
+                End If
+            End Sub
         End Class
 
         <Serializable()> Class AUDIO
@@ -1421,6 +1430,14 @@ Namespace HoMIDom
                 Driver.Write(Me, "OFF")
             End Sub
 
+            Public Sub Toggle()
+                If _Enable = False Then Exit Sub
+                If _Value = True Then
+                    Driver.Write(Me, "OFF")
+                Else
+                    Driver.Write(Me, "ON")
+                End If
+            End Sub
         End Class
 
         <Serializable()> Class GENERIQUESTRING
@@ -1656,6 +1673,15 @@ Namespace HoMIDom
             Public Sub OFF()
                 If _Enable = False Then Exit Sub
                 Driver.Write(Me, "OFF")
+            End Sub
+
+            Public Sub Toggle()
+                If _Enable = False Then Exit Sub
+                If _Value > 0 Then
+                    Driver.Write(Me, "OFF")
+                Else
+                    Driver.Write(Me, "ON")
+                End If
             End Sub
 
             'DIM
@@ -2325,6 +2351,15 @@ Namespace HoMIDom
             Public Sub OFF()
                 If _Enable = False Then Exit Sub
                 Driver.Write(Me, "OFF")
+            End Sub
+
+            Public Sub Toggle()
+                If _Enable = False Then Exit Sub
+                If _Value = True Then
+                    Driver.Write(Me, "OFF")
+                Else
+                    Driver.Write(Me, "ON")
+                End If
             End Sub
         End Class
 
