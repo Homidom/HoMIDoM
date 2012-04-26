@@ -7,7 +7,7 @@
               Margin="10" MinWidth="400">
     
     <Grid Background="#636060">
-        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0,0,0,-14">
+        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0">
             <StackPanel Height="550">
                 <Label Name="Label0" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Relevé</Label>
             </StackPanel>

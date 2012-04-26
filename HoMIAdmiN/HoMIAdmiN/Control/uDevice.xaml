@@ -25,9 +25,9 @@
                         <Label Foreground="White" Name="Label5" >Driver:</Label>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                        <ComboBox HorizontalAlignment="Left" Name="CbType" Width="215" Background="White" Foreground="Black" BorderBrush="Black" BorderThickness="2" Height="25" VerticalAlignment="Top" IsReadOnly="True" />
+                            <ComboBox HorizontalAlignment="Left" Name="CbType" Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" VerticalAlignment="Top" IsReadOnly="True" />
                         <Rectangle Width="10" />
-                            <ComboBox Background="White" BorderBrush="Black" Width="215" Foreground="Black" Name="CbDriver" BorderThickness="2" Height="25" VerticalAlignment="Top" />
+                            <ComboBox Width="215" Name="CbDriver" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" VerticalAlignment="Top" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                         <Label Foreground="White" Name="Label6" Width="215" >Adresse1:</Label>
@@ -89,7 +89,7 @@
                         <Label Content="Telecommande Commandes" Foreground="White" FontStyle="Italic" FontWeight="SemiBold" />
                         <StackPanel Margin ="3" Orientation="Horizontal" >
                                 <Label Content="Template:" Foreground="White" />
-                                <ComboBox Width="150" Name="cbTemplate" />
+                                <ComboBox Width="150" Name="cbTemplate" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" />
                                 <Button Name="BtnNewTemplate" Width="25" Margin="2" Height="25" Content="+" Foreground="White" Template="{DynamicResource GlassButton}"/>
                                 <Label Name="lbltplbase" Content="Base:" Foreground="White" Visibility="Hidden" />
                                 <ComboBox Width="90" Name="cbBase" Visibility="Hidden" SelectedIndex="0">

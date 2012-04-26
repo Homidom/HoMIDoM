@@ -324,4 +324,7 @@ Partial Public Class uConfigServer
         End If
     End Sub
 
+    Private Sub UserControl_Loaded(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
+
+    End Sub
 End Class
