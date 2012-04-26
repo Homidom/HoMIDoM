@@ -1,30 +1,41 @@
 ﻿<UserControl x:Class="uMacro"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="700" Height="529" DataContext="{Binding}" xmlns:my="clr-namespace:WpfApplication1" Tag="MACRO" Margin="20">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="700" DataContext="{Binding}" xmlns:my="clr-namespace:WpfApplication1" Tag="MACRO" Margin="20">
 
-    <Grid Background="#636060">
-        <StackPanel >
-            <Label Content="Macro" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Name="Label1" HorizontalAlignment="Center" />
-        </StackPanel>
-        <Button Content="Fermer" Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,41,12,0" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" />
-        <Button Content="Ok" Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,10,12,0" Name="BtnOK" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" />
+    <Grid Margin="1" Visibility="Visible" Background="#636060" Opacity="0.85">
+        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" >
+            <StackPanel >
+                <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Macro</Label>
+                <Rectangle Height="25" />
+                <StackPanel Orientation="Vertical" >
+                    <StackPanel Orientation="Horizontal" >
+                        <Label Width="75" Content="Nom:" HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Foreground="White" />
+                        <TextBox Height="21" HorizontalAlignment="Left" Name="TxtNom" VerticalAlignment="Top" Width="218" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
+                        <CheckBox Margin="4" Content="Enable"  HorizontalAlignment="Left" Name="cEnable" VerticalAlignment="Top" Width="70" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" >
+                        <Label Width="75" Content="Description:" Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" />
+                        <TextBox Height="21" HorizontalAlignment="Left" Name="TxtDescription" VerticalAlignment="Top" Width="349" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
+                    </StackPanel>
+                    <Rectangle Height="10" />
+                    <my:uScenario HorizontalAlignment="Left" x:Name="UScenario1" VerticalAlignment="Top" Height="390" Margin="5" />
 
-        <StackPanel Margin="12,52,0,0" >
-            <StackPanel Orientation="Horizontal" >
-                <Label Width="75" Content="Nom:" HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Foreground="White" />
-                <TextBox Height="21" HorizontalAlignment="Left" Name="TxtNom" VerticalAlignment="Top" Width="218" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
-                <CheckBox Margin="4" Content="Enable"  HorizontalAlignment="Left" Name="cEnable" VerticalAlignment="Top" Width="70" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" >
-                <Label Width="75" Content="Description:" Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" />
-                <TextBox Height="21" HorizontalAlignment="Left" Name="TxtDescription" VerticalAlignment="Top" Width="349" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
-            </StackPanel>
-            <Rectangle Height="10" />
-            <my:uScenario HorizontalAlignment="Left" x:Name="UScenario1" VerticalAlignment="Top" Height="390" Width="677" />
+
+
+                    <Button Content="Tester" Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,0,5,5" Name="BtnTest" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" />
+                </StackPanel >
+            </StackPanel >
+        </Border>
+        <Image Height="60" HorizontalAlignment="Left" Margin="17,-1,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Macro_128.png">
+            <Image.LayoutTransform >
+                <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
+            </Image.LayoutTransform>
+        </Image>
+
+        <StackPanel Margin="0,12.5,5,0" VerticalAlignment="top" HorizontalAlignment="right" Height="150">
+            <Button Margin="2" Height="25" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Name="BtnClose" VerticalAlignment="Top" Width="88.75" Foreground="White">Fermer</Button>
+            <Button Margin="2" Height="25" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Name="BtnOK" VerticalAlignment="Top" Width="88.75" Foreground="White">OK</Button>
         </StackPanel>
-             
-        
-            <Button Content="Tester" Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,72,12,0" Name="BtnTest" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" />
-        </Grid>
+    </Grid>
     
 </UserControl>
