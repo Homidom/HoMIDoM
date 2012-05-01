@@ -146,6 +146,7 @@ Partial Public Class uDevice
                     End If
 
                     If x.Type = ListeDevices.MULTIMEDIA Then
+                        BtnEditTel.Visibility = Windows.Visibility.Visible
                         TxtModele2.Visibility = Visibility.Collapsed
                         Label8.Visibility = Windows.Visibility.Collapsed
                         rectmodele1.Visibility = Windows.Visibility.Collapsed
@@ -416,6 +417,7 @@ Partial Public Class uDevice
                 End If
 
                 If CbType.SelectedValue = "MULTIMEDIA" Then
+                    BtnEditTel.Visibility = Windows.Visibility.Visible
                     TxtModele2.Visibility = Visibility.Hidden
                     Label8.Visibility = Windows.Visibility.Hidden
                     StkCde.Height = Double.NaN
@@ -911,6 +913,20 @@ Partial Public Class uDevice
             frm = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub ImgCommande_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub BtnEditTel_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnEditTel.MouseDown
+        Try
+            Dim frm As New WTelecommande(_DeviceId, CbDriver.SelectedIndex, _Driver, x)
+            frm.ShowDialog()
+            If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+           
+            Else
+                End
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR BtnEditTel_MouseDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 End Class
