@@ -36,14 +36,24 @@ namespace HoMIDroid.Activities
             EditText loginEditText = (EditText)this.FindViewById(Resource.Id.login_et_server);
             if (loginEditText != null)
             {
-                loginEditText.KeyPress = (v, k, e) =>
+                //loginEditText.KeyPress = (v, k, e) =>
+                //{
+                //    if (e.Action == KeyEventActions.Down && ((Keycode)k) == Keycode.Enter)
+                //    {
+                //        this.loginAsync();
+                //        return true;
+                //    }
+                //    return false;
+                //};
+
+                loginEditText.KeyPress += delegate(object sender, View.KeyEventArgs e)
                 {
-                    if (e.Action == KeyEventActions.Down && ((Keycode)k) == Keycode.Enter)
+                    if (e.E.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
                     {
                         this.loginAsync();
-                        return true;
+                        e.Handled = true;
                     }
-                    return false;
+                    e.Handled = false;
                 };
             }
 
@@ -51,18 +61,32 @@ namespace HoMIDroid.Activities
             EditText portEditText = (EditText)this.FindViewById(Resource.Id.login_et_server);
             if (loginEditText != null)
             {
-                portEditText.KeyPress = (v, k, e) =>
+                //portEditText.KeyPress = (v, k, e) =>
+                //{
+                //    if (e.Action == KeyEventActions.Down && ((Keycode)k) == Keycode.Enter)
+                //    {
+                //        this.loginAsync();
+                //        return true;
+                //    }
+                //    return false;
+                //};
+                portEditText.KeyPress += delegate(object sender, View.KeyEventArgs e)
                 {
-                    if (e.Action == KeyEventActions.Down && ((Keycode)k) == Keycode.Enter)
+                    if (e.E.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
                     {
                         this.loginAsync();
-                        return true;
+                        e.Handled = true;
                     }
-                    return false;
+                    e.Handled = false;
                 };
             }
 
             this.showPreferencePopup();
+        }
+
+        void loginEditText_KeyPress(object sender, View.KeyEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         void loginBtn_Click(object sender, EventArgs e)

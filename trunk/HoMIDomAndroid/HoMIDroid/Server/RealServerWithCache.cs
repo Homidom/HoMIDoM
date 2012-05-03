@@ -21,6 +21,8 @@ namespace HoMIDroid.Server
         public RealServerWithCache()
             : base()
         {
+            var app = TinyIoC.TinyIoCContainer.Current.Resolve<HmdApp>();
+            app.RefreshData += new EventHandler<EventArgs>(app_RefreshData);
         }
 
         public RealServerWithCache(string serverID, string hostName, int port = 8000)
@@ -54,6 +56,11 @@ namespace HoMIDroid.Server
         {
             this.devices = null;
             this.zones = null;
+        }
+
+        void app_RefreshData(object sender, EventArgs e)
+        {
+            this.Refresh();
         }
     }
 }

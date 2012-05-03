@@ -23,6 +23,7 @@
     <AndroidSigningStorePass>homidom2011</AndroidSigningStorePass>
     <AndroidSigningKeyAlias>homidroid</AndroidSigningKeyAlias>
     <AndroidSigningKeyPass>homidom2011</AndroidSigningKeyPass>
+    <DeployExternal>False</DeployExternal>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -156,6 +157,9 @@
     <None Include="Web References\HmdService\service2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Web References\HmdService\TelecommandeTemplate.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\HmdService\TemplateDevice.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -205,16 +209,17 @@
     <AndroidResource Include="Resources\Drawable\switch_OFF.png" />
     <AndroidResource Include="Resources\Drawable\switch_ON.png" />
     <AndroidResource Include="Resources\Drawable\logo_small.png" />
+    <AndroidResource Include="Resources\Drawable\refresh.png" />
     <None Include="Web References\HmdService\service.disco" />
   </ItemGroup>
   <ItemGroup>
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://localhost:8000/ServiceModelSamples/service">
+    <WebReferenceUrl Include="http://localhost:7999/ServiceModelSamples/service">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\HmdService\</RelPath>
-      <UpdateFromURL>http://localhost:8000/ServiceModelSamples/service</UpdateFromURL>
+      <UpdateFromURL>http://localhost:7999/ServiceModelSamples/service</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

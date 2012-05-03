@@ -1,9 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
 <wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:i0="http://HoMIDom/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Server" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://HoMIDom/" location="http://localhost:8000/ServiceModelSamples/service?wsdl=wsdl0" />
+  <wsdl:import namespace="http://HoMIDom/" location="http://localhost:7999/ServiceModelSamples/service?wsdl=wsdl0" />
   <wsdl:types />
   <wsdl:binding name="BasicHttpBinding_IHoMIDom" type="i0:IHoMIDom">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DeleteTrigger">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/DeleteTrigger" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveTrigger">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SaveTrigger" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListMethod">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ListMethod" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Get4Log">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/Get4Log" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTypeLogEnable">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetTypeLogEnable" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetTypeLogEnable">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SetTypeLogEnable" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetMaxMonthLog">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SetMaxMonthLog" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMaxMonthLog">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetMaxMonthLog" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Log">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/Log" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReturnLog">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ReturnLog" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetMaxFileSizeLog">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SetMaxFileSizeLog" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMaxFileSizeLog">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetMaxFileSizeLog" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSMTPServeur">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetSMTPServeur" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetSMTPServeur">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SetSMTPServeur" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSMTPLogin">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetSMTPLogin" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetSMTPLogin">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SetSMTPLogin" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSMTPPassword">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetSMTPPassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="SetSMTPPassword">
       <soap:operation soapAction="http://HoMIDom/IHoMIDom/SetSMTPPassword" style="document" />
       <wsdl:input>
@@ -24,6 +177,150 @@
     </wsdl:operation>
     <wsdl:operation name="SetSMTPMailServeur">
       <soap:operation soapAction="http://HoMIDom/IHoMIDom/SetSMTPMailServeur" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListOfTemplate">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetListOfTemplate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateNewTemplate">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/CreateNewTemplate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StartLearning">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/StartLearning" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveTemplate">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SaveTemplate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TelecommandeSendCommand">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/TelecommandeSendCommand" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllRepertoiresAudio">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetAllRepertoiresAudio" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllExtensionsAudio">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetAllExtensionsAudio" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteUser">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/DeleteUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerifLogin">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/VerifLogin" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassword">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ChangePassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReturnUserByUsername">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ReturnUserByUsername" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllUsers">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetAllUsers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReturnUserById">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ReturnUserById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveUser">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SaveUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllDevices">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetAllDevices" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExecuteDeviceCommand">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ExecuteDeviceCommand" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -87,6 +384,15 @@
     </wsdl:operation>
     <wsdl:operation name="StartIrLearning">
       <soap:operation soapAction="http://HoMIDom/IHoMIDom/StartIrLearning" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerifChamp">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/VerifChamp" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -301,8 +607,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="DeleteTrigger">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/DeleteTrigger" style="document" />
+    <wsdl:operation name="GetAllVoice">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetAllVoice" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -310,8 +616,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SaveTrigger">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SaveTrigger" style="document" />
+    <wsdl:operation name="GetDefautVoice">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetDefautVoice" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -319,8 +625,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ListMethod">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ListMethod" style="document" />
+    <wsdl:operation name="SetDefautVoice">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SetDefautVoice" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -328,8 +634,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="Log">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/Log" style="document" />
+    <wsdl:operation name="CanDelete">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/CanDelete" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -337,8 +643,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ReturnLog">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ReturnLog" style="document" />
+    <wsdl:operation name="GetTimeSave">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetTimeSave" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -346,62 +652,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SetMaxFileSizeLog">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SetMaxFileSizeLog" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetMaxFileSizeLog">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetMaxFileSizeLog" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetSMTPServeur">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetSMTPServeur" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SetSMTPServeur">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SetSMTPServeur" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetSMTPLogin">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetSMTPLogin" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SetSMTPLogin">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SetSMTPLogin" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetSMTPPassword">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetSMTPPassword" style="document" />
+    <wsdl:operation name="SetTimeSave">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SetTimeSave" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -463,6 +715,24 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="ExportConfig">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ExportConfig" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportConfig">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ImportConfig" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="Start">
       <soap:operation soapAction="http://HoMIDom/IHoMIDom/Start" style="document" />
       <wsdl:input>
@@ -481,6 +751,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="ReStart">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ReStart" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="SetPortSOAP">
       <soap:operation soapAction="http://HoMIDom/IHoMIDom/SetPortSOAP" style="document" />
       <wsdl:input>
@@ -492,6 +771,24 @@
     </wsdl:operation>
     <wsdl:operation name="GetPortSOAP">
       <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetPortSOAP" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetIPSOAP">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SetIPSOAP" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIPSOAP">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetIPSOAP" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -688,109 +985,10 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetAllRepertoiresAudio">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetAllRepertoiresAudio" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetAllExtensionsAudio">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetAllExtensionsAudio" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="DeleteUser">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/DeleteUser" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="VerifLogin">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/VerifLogin" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ChangePassword">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ChangePassword" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ReturnUserByUsername">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ReturnUserByUsername" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetAllUsers">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetAllUsers" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ReturnUserById">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ReturnUserById" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SaveUser">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SaveUser" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetAllDevices">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetAllDevices" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ExecuteDeviceCommand">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ExecuteDeviceCommand" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="Server">
     <wsdl:port name="BasicHttpBinding_IHoMIDom" binding="tns:BasicHttpBinding_IHoMIDom">
-      <soap:address location="http://localhost:8000/ServiceModelSamples/service" />
+      <soap:address location="http://localhost:7999/ServiceModelSamples/service" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

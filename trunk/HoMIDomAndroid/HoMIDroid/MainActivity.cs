@@ -25,6 +25,25 @@ namespace HoMIDroid
 
             this.createScreen();
         }
+
+        public override bool  OnCreateOptionsMenu(IMenu menu)
+        {
+            var refreshMenuItem = menu.Add(0, 1, 1, Resource.String.Refresh);
+            refreshMenuItem.SetIcon(Resource.Drawable.refresh);
+            return true;
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case 1:
+                    var app = TinyIoC.TinyIoCContainer.Current.Resolve<HmdApp>();
+                    app.ThrowRefreshData();
+                    return true;
+            }
+            return base.OnOptionsItemSelected(item);
+        }
         
         private void createScreen()
         {

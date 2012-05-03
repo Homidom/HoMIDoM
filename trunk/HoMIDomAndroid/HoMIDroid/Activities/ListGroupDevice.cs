@@ -23,22 +23,36 @@ namespace HoMIDroid.Activities
             base.OnCreate(bundle);
 
             this.ExpandableListView.Clickable = true;
-            this.ExpandableListView.ChildClick = new ExpandableListView.ChildClickHandler(this.childClick);
+            this.ExpandableListView.ChildClick += new EventHandler<Android.Widget.ExpandableListView.ChildClickEventArgs>(ExpandableListView_ChildClick);
+            
+            var app = TinyIoC.TinyIoCContainer.Current.Resolve<HmdApp>();
+            app.RefreshData += new EventHandler<EventArgs>(app_RefreshData);
 
             this.refresh();
         }
 
-        //protected override void OnResume()
-        //{
-        //    base.OnResume();
-        //    this.refresh();
-        //}
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            var app = TinyIoC.TinyIoCContainer.Current.Resolve<HmdApp>();
+            app.RefreshData -= new EventHandler<EventArgs>(app_RefreshData);
+        }
+
+        void app_RefreshData(object sender, EventArgs e)
+        {
+            this.refresh();
+        }
+
+        void ExpandableListView_ChildClick(object sender, ExpandableListView.ChildClickEventArgs e)
+        {
+            this.childClick(e.Parent, e.V, e.GroupPosition, e.ChildPosition, e.Id);
+        }
 
         private void refresh()
         {
             var server = TinyIoC.TinyIoCContainer.Current.Resolve<IHmdServer>();
             this.SetListAdapter(new DeviceExpandableGroupAdapter(this, server.GetDevicesByCategory()));
-
         }
 
         private bool childClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
