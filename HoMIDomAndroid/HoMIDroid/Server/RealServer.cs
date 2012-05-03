@@ -125,10 +125,10 @@ namespace HoMIDroid.Server
 
         #region Private methods
 
-        private void configure(string hostName, int port = 8000)
+        private void configure(string hostName, int port = 7999)
         {
             this._server = null; // reset current instance
-            this.Url = string.Format("http://{0}:{1}/ServiceModelSamples/service", hostName, 8000);
+            this.Url = string.Format("http://{0}:{1}/ServiceModelSamples/service", hostName, port);
         }
         private List<BO.Device> getDevices(HmdService.TemplateDevice[] list)
         {
@@ -163,6 +163,11 @@ namespace HoMIDroid.Server
                     if (isDim)
                         return this.getDimDevice(d, DeviceCategory.Switch);
                     return this.getOnOffDevice(d, DeviceCategory.Switch);
+                case HmdService.DeviceListeDevices.APPAREIL:
+                case HmdService.DeviceListeDevices.GENERIQUEBOOLEEN:
+                    return this.getOnOffDevice(d, DeviceCategory.Other);
+                case HmdService.DeviceListeDevices.VOLET:
+                    return this.getDimDevice(d, DeviceCategory.Other);
             }
             return this.getRawDevice(d);
         }
@@ -217,7 +222,8 @@ namespace HoMIDroid.Server
 
             device.Id = d._ID;
             device.Name = d._Name;
-            device.NumericValue = d._ValueDef;
+            //device.NumericValue = this.getValue(d._Value);
+            device.Value = d._Value;
             device.DeviceCategory = DeviceCategory.Other;
             device.DeviceType = DeviceType.Other;
             device.DisplayType = DisplayType.Text;
@@ -245,8 +251,12 @@ namespace HoMIDroid.Server
             switch (d._Type)
             {
                 //case HmdService.DeviceListeDevices.APPAREIL:
-                //case HmdService.DeviceListeDevices.AUDIO:
-                //case HmdService.DeviceListeDevices.BAROMETRE:
+                case HmdService.DeviceListeDevices.FREEBOX:
+                //    break;
+                case HmdService.DeviceListeDevices.AUDIO:
+                    device.DisplayType = DisplayType.Text;
+                    device.DeviceCategory = DeviceCategory.Multimedia;
+                    break;
                 //case HmdService.DeviceListeDevices.BATTERIE:
                 //case HmdService.DeviceListeDevices.COMPTEUR:
                 //case HmdService.DeviceListeDevices.CONTACT:
@@ -254,14 +264,11 @@ namespace HoMIDroid.Server
                 case HmdService.DeviceListeDevices.DETECTEUR:
                     device.DisplayType = DisplayType.Boolean;
                     break;
-                //case HmdService.DeviceListeDevices.DIRECTIONVENT:
-                //    break;
                 case HmdService.DeviceListeDevices.ENERGIEINSTANTANEE:
                 case HmdService.DeviceListeDevices.ENERGIETOTALE:
                     device.DisplayType = DisplayType.Numeric;
+                    device.DeviceCategory = DeviceCategory.Energy;
                     break;
-                //case HmdService.DeviceListeDevices.FREEBOX:
-                //    break;
                 case HmdService.DeviceListeDevices.GENERIQUEBOOLEEN:
                     device.DisplayType = DisplayType.Boolean;
                     break;
@@ -272,6 +279,7 @@ namespace HoMIDroid.Server
                     break;
                 case HmdService.DeviceListeDevices.HUMIDITE:
                     device.DisplayType = DisplayType.Percentage;
+                    device.DeviceCategory = DeviceCategory.Meteo;
                     break;
                 //case HmdService.DeviceListeDevices.METEO:
                 //case HmdService.DeviceListeDevices.MULTIMEDIA:
@@ -279,15 +287,22 @@ namespace HoMIDroid.Server
                 case HmdService.DeviceListeDevices.PLUIECOURANT:
                 case HmdService.DeviceListeDevices.PLUIETOTAL:
                     device.DisplayType = DisplayType.Numeric;
+                    device.DeviceCategory = DeviceCategory.Meteo;
                     break;
                 //case HmdService.DeviceListeDevices.TELECOMMANDE:
                 //    break;
                 case HmdService.DeviceListeDevices.TEMPERATURE:
                 case HmdService.DeviceListeDevices.TEMPERATURECONSIGNE:
                     device.DisplayType = DisplayType.Temperature;
+                    device.DeviceCategory = DeviceCategory.Meteo;
                     break;
-                //case HmdService.DeviceListeDevices.UV:
-                //case HmdService.DeviceListeDevices.VITESSEVENT:
+                case HmdService.DeviceListeDevices.BAROMETRE:
+                case HmdService.DeviceListeDevices.UV:
+                case HmdService.DeviceListeDevices.VITESSEVENT:
+                case HmdService.DeviceListeDevices.DIRECTIONVENT:
+                    device.DisplayType = DisplayType.Text;
+                    device.DeviceCategory = DeviceCategory.Meteo;
+                    break;
                 //case HmdService.DeviceListeDevices.VOLET:
                 //    break;
             }

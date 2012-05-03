@@ -10,10 +10,17 @@ namespace HoMIDroid
     [Application]
     public class HmdApp : Application
     {
-        public HmdApp(IntPtr handle)
-            : base(handle)
+        #region CTor
+        public HmdApp()
+            : base()
         {
+
         }
+        public HmdApp(IntPtr handle, Android.Runtime.JniHandleOwnership jniHandleOwnership)
+            : base(handle, jniHandleOwnership)
+        {
+        } 
+        #endregion
 
         public override void OnCreate()
         {
@@ -25,11 +32,13 @@ namespace HoMIDroid
         private void initTinyIoC()
         {
             TinyIoCContainer.Current.Register<Application>(this);
+            TinyIoCContainer.Current.Register<HmdApp>(this);
             TinyIoCContainer.Current.Register<IHmdServer>(new MixedServer(new MockServer(), new RealServer()));
         }
 
 
         public event EventHandler<StartActivityEventArgs> StartActivityRequest;
+        public event EventHandler<EventArgs> RefreshData;
 
         public class StartActivityEventArgs : EventArgs
         {
@@ -37,10 +46,15 @@ namespace HoMIDroid
             public Android.Content.Intent Intent { get; set; }
         }
 
-        public void RequestActivity(string tab, Android.Content.Intent intent)
+        //public void RequestActivity(string tab, Android.Content.Intent intent)
+        //{
+        //    if (this.StartActivityRequest != null)
+        //        this.StartActivityRequest(this, new StartActivityEventArgs() { Tab = tab, Intent = intent });
+        //}
+        public void ThrowRefreshData()
         {
-            if (this.StartActivityRequest != null)
-                this.StartActivityRequest(this, new StartActivityEventArgs() { Tab = tab, Intent = intent });
+            if (this.RefreshData != null)
+                this.RefreshData(this, EventArgs.Empty);
         }
     }
 }

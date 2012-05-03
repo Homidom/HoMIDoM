@@ -34,10 +34,16 @@ namespace HoMIDroid.Activities
                 zone = server.GetZone(zoneId);
 
             this.ExpandableListView.Clickable = true;
-            this.ExpandableListView.ChildClick = new ExpandableListView.ChildClickHandler(this.childClick);
+            //this.ExpandableListView.ChildClick = new ExpandableListView.ChildClickHandler(this.childClick);
+            this.ExpandableListView.ChildClick += new EventHandler<Android.Widget.ExpandableListView.ChildClickEventArgs>(ExpandableListView_ChildClick);
 
             if (zone != null)
                 this.SetListAdapter(new ZoneContentExpandableGroupAdapter(this, zone));
+        }
+
+        void ExpandableListView_ChildClick(object sender, ExpandableListView.ChildClickEventArgs e)
+        {
+            this.childClick(e.Parent, e.V, e.GroupPosition, e.ChildPosition, e.Id);
         }
 
         private bool childClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
