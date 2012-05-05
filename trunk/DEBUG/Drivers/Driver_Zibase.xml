@@ -99,7 +99,7 @@ Driver_Zibase
 	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
 </member><member name="T:Driver_Zibase.Driver_Zibase">
 	<summary>Class Driver_Zibase, permet de communiquer avec la Zibase Ethernet</summary>
-	<remarks>Nécessite la dll déceloppé par Planete Domotique zibase.dll</remarks>
+	<remarks>Nécessite la dll déceloppé par Planete Domotique zibasedll.dll</remarks>
 </member>
 </members>
 </doc>

@@ -14,9 +14,10 @@ Imports ZibaseDll
 ' Date : 18/04/2012
 
 ''' <summary>Class Driver_Zibase, permet de communiquer avec la Zibase Ethernet</summary>
-''' <remarks>Nécessite la dll déceloppé par Planete Domotique zibase.dll</remarks>
+''' <remarks>Nécessite la dll déceloppé par Planete Domotique zibasedll.dll</remarks>
 <Serializable()> Public Class Driver_Zibase
     Implements HoMIDom.HoMIDom.IDriver
+    Implements ISynchronizeInvoke
 
 #Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
@@ -52,7 +53,7 @@ Imports ZibaseDll
 #End Region
 
 #Region "Variables Internes"
-    Public WithEvents zba As New ZibaseDll.ZiBase
+    Private WithEvents zba As New ZibaseDll.ZiBase
 
 #End Region
 
@@ -287,7 +288,8 @@ Imports ZibaseDll
 
             Try
                 zba.StartZB()
-                WriteLog("Driver démarré")
+                _IsConnect = True
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Driver " & Me.Nom & " démarré")
             Catch ex As Exception
                 WriteLog("ERR: Start Exception " & ex.Message)
             End Try
@@ -301,7 +303,8 @@ Imports ZibaseDll
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
             zba.StopZB()
-            WriteLog("Driver arrété")
+            _IsConnect = False
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Stop", "Driver " & Me.Nom & " arrêté")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase Stop", ex.Message)
         End Try
@@ -516,6 +519,22 @@ Imports ZibaseDll
 #End Region
 
 #Region "Fonctions internes"
+
+    Public Function BeginInvoke(ByVal method As System.Delegate, ByVal args() As Object) As System.IAsyncResult Implements System.ComponentModel.ISynchronizeInvoke.BeginInvoke
+        BeginInvoke = Nothing
+    End Function
+    Public Function EndInvoke(ByVal result As System.IAsyncResult) As Object Implements System.ComponentModel.ISynchronizeInvoke.EndInvoke
+        EndInvoke = Nothing
+    End Function
+    Public Function Invoke(ByVal method As System.Delegate, ByVal args() As Object) As Object Implements System.ComponentModel.ISynchronizeInvoke.Invoke
+        Invoke = Nothing
+    End Function
+    Public ReadOnly Property InvokeRequired() As Boolean Implements System.ComponentModel.ISynchronizeInvoke.InvokeRequired
+        Get
+            Return False
+        End Get
+    End Property
+
     'reception d'une valeur -> analyse
     Private Sub zba_UpdateSensorInfo(ByVal seInfo As ZibaseDll.ZiBase.SensorInfo) Handles zba.UpdateSensorInfo
         'WriteLog("DBG: " & seInfo.sID & "_" & seInfo.sType & " ----> " & seInfo.sValue)
@@ -597,7 +616,7 @@ Imports ZibaseDll
                     zba.SendCommand(adresse, ZiBase.State.STATE_OFF, 0, protocole, 1)
                     valeur = 0
                 Case "DIM"
-                    If UCase(modele(0)) <> "CHACON" Then
+                    If UCase(Modele(0)) <> "CHACON" Then
                         zba.SendCommand(adresse, ZiBase.State.STATE_DIM, 0, protocole, 1)
                         valeur = 100
                     Else
