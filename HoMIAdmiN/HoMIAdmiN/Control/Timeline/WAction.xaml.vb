@@ -59,6 +59,14 @@ Public Class WActionParametrage
                         Dim obj As Action.ActionSpeech = _ObjAction
                         obj.Message = TxtValue.Text
                         _ObjAction = obj
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionHttp
+                        If TxtValue.Text = "" Then
+                            MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            Exit Sub
+                        End If
+                        Dim obj As Action.ActionHttp = _ObjAction
+                        obj.Commande = TxtValue.Text
+                        _ObjAction = obj
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionIf
                         Dim obj As Action.ActionIf = _ObjAction
 
@@ -230,6 +238,25 @@ Public Class WActionParametrage
                         TxtValue.Height = 80
 
                         TxtValue.Text = obj.Message
+
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionHttp
+                        Dim obj As Action.ActionHttp = _ObjAction
+
+                        'Mise en forme graphique
+                        Lbl1.Height = 0
+                        Lbl2.Height = 0
+                        LblValue.Content = "Commande:"
+                        Txt2.Text = ""
+                        Cb2.Visibility = Windows.Visibility.Collapsed
+                        Cb2.Height = 0
+                        Cb1.Visibility = Windows.Visibility.Collapsed
+                        Cb1.Height = 0
+                        Txt2.Visibility = Windows.Visibility.Visible
+                        Txt2.Height = 0
+                        TxtValue.Text = ""
+                        TxtValue.Height = 80
+
+                        TxtValue.Text = obj.Commande
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionIf
                         Me.Height = 650

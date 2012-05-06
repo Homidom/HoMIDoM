@@ -383,6 +383,12 @@ Namespace HoMIDom
             ''' </summary>
             ''' <remarks></remarks>
             ActionSpeech = 4
+
+            ''' <summary>
+            ''' Action de type commande http
+            ''' </summary>
+            ''' <remarks></remarks>
+            ActionHttp = 5
         End Enum
 
         ''' <summary>
@@ -782,6 +788,40 @@ Namespace HoMIDom
             Public ReadOnly Property TypeAction As TypeAction
                 Get
                     Return TypeAction.ActionSpeech
+                End Get
+            End Property
+
+        End Class
+
+        ''' <summary>
+        ''' Action parler
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Class ActionHttp
+            Dim _Commande As String
+            Dim _Timing As DateTime
+
+            Public Property Timing As DateTime
+                Get
+                    Return _Timing
+                End Get
+                Set(ByVal value As DateTime)
+                    _Timing = value
+                End Set
+            End Property
+
+            Public Property Commande As String
+                Get
+                    Return _Commande
+                End Get
+                Set(ByVal value As String)
+                    _Commande = value
+                End Set
+            End Property
+
+            Public ReadOnly Property TypeAction As TypeAction
+                Get
+                    Return TypeAction.ActionHttp
                 End Get
             End Property
 
