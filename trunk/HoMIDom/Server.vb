@@ -1055,6 +1055,10 @@ Namespace HoMIDom
                                     Dim o As New Action.ActionSpeech
                                     _Act = o
                                     o = Nothing
+                                Case "ActionHttp"
+                                    Dim o As New Action.ActionHttp
+                                    _Act = o
+                                    o = Nothing
                             End Select
                             For j3 As Integer = 0 To list.ChildNodes.Item(j2).Attributes.Count - 1
                                 Select Case list.ChildNodes.Item(j2).Attributes.Item(j3).Name
@@ -1072,6 +1076,8 @@ Namespace HoMIDom
                                         _Act.sujet = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                     Case "message"
                                         _Act.message = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "commande"
+                                        _Act.Commande = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                     Case "parametres"
                                         Dim b As String = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                         Dim a() As String = b.Split("|")
@@ -1703,6 +1709,10 @@ Namespace HoMIDom
                         Case Action.TypeAction.ActionSpeech
                             writer.WriteStartAttribute("message")
                             writer.WriteValue(ListActions.Item(j).Message)
+                            writer.WriteEndAttribute()
+                        Case Action.TypeAction.ActionHttp
+                            writer.WriteStartAttribute("commande")
+                            writer.WriteValue(ListActions.Item(j).Commande)
                             writer.WriteEndAttribute()
                         Case Action.TypeAction.ActionIf
                             writer.WriteStartElement("conditions")

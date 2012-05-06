@@ -74,6 +74,10 @@ Public Class uAction
                         Dim x As Action.ActionSpeech = _ObjAction
                         Label1.Content = "Parler "
                         If x.Message IsNot Nothing Then Label2.Content = x.Message
+                    Case Action.TypeAction.ActionHttp
+                        Dim x As Action.ActionHttp = _ObjAction
+                        Label1.Content = "Commande Http"
+                        If x.Commande IsNot Nothing Then Label2.Content = x.Commande
                     Case Action.TypeAction.ActionIf
                         Dim x As Action.ActionIf = _ObjAction
                         Label1.Content = "If"

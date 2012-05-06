@@ -2,6 +2,9 @@
 Imports System.Net.Mail
 Imports System.Threading
 Imports System.Speech
+Imports System.Net
+Imports System.IO
+Imports System.Xml
 
 Namespace HoMIDom
 
@@ -302,7 +305,9 @@ Namespace HoMIDom
                     Case Action.TypeAction.ActionSpeech
                         Dim x As Action.ActionSpeech = _Action
                         Parler(x.Message)
-
+                    Case Action.TypeAction.ActionHttp
+                        Dim x As Action.ActionHttp = _Action
+                        SendHttp(x.Commande)
                 End Select
             Catch ex As Exception
                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "Exception : " & ex.ToString)
@@ -317,6 +322,21 @@ Namespace HoMIDom
                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "New Execute", "Exception : " & ex.ToString)
             End Try
         End Sub
+
+        Public Sub Sendhttp(ByVal Commande As String)
+            Try
+                Dim reader As StreamReader = Nothing
+                Dim str As String = ""
+                Dim request As WebRequest = WebRequest.Create(Commande)
+                Dim response As WebResponse = request.GetResponse()
+                reader = New StreamReader(response.GetResponseStream())
+                str = reader.ReadToEnd
+                reader.Close()
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "Sendhttp", "Erreur lors de l'envoi de la commande http: " & ex.Message)
+            End Try
+        End Sub
+
 
         Public Sub Send_email(ByVal adresse As String, ByVal sujet As String, ByVal texte As String)
             Try

@@ -89,40 +89,49 @@ Public Class uScenario
     End Sub
 
     Private Sub ScrollViewer1_Drop(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles ScrollViewer1.Drop
-        If e.Data.GetDataPresent(GetType(String)) Then
-            e.Effects = DragDropEffects.Copy
+        Try
 
-            Dim uri As String = e.Data.GetData(GetType(String)).ToString
 
-            Dim x As New uAction
-            x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
-            AddHandler x.DeleteAction, AddressOf DeleteAction
-            AddHandler x.ChangeAction, AddressOf ChangeAction
-            x.Width = _Width '(_Duree * 3600) + 100 'StckPnlLib.ActualWidth
-            Select Case UCase(uri)
-                Case "ACTIONDEVICE"
-                    Dim y As New Action.ActionDevice
-                    x.ObjAction = y
-                Case "ACTIONMAIL"
-                    Dim y As New Action.ActionMail
-                    x.ObjAction = y
-                Case "ACTIONSPEECH"
-                    Dim y As New Action.ActionSpeech
-                    x.ObjAction = y
-                Case "ACTIONIF"
-                    Dim y As New Action.ActionIf
-                    x.ObjAction = y
-                Case "ACTIONMACRO"
-                    Dim y As New Action.ActionMacro
-                    x.ObjAction = y
-            End Select
-            x.Span = Span
-            x.Zoom = _Zoom
-            _ListAction.Add(x.ObjAction)
-            StackPanel1.Children.Add(x)
-        Else
-            e.Effects = DragDropEffects.None
-        End If
+            If e.Data.GetDataPresent(GetType(String)) Then
+                e.Effects = DragDropEffects.Copy
+
+                Dim uri As String = e.Data.GetData(GetType(String)).ToString
+
+                Dim x As New uAction
+                x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
+                AddHandler x.DeleteAction, AddressOf DeleteAction
+                AddHandler x.ChangeAction, AddressOf ChangeAction
+                x.Width = _Width '(_Duree * 3600) + 100 'StckPnlLib.ActualWidth
+                Select Case UCase(uri)
+                    Case "ACTIONDEVICE"
+                        Dim y As New Action.ActionDevice
+                        x.ObjAction = y
+                    Case "ACTIONMAIL"
+                        Dim y As New Action.ActionMail
+                        x.ObjAction = y
+                    Case "ACTIONSPEECH"
+                        Dim y As New Action.ActionSpeech
+                        x.ObjAction = y
+                    Case "ACTIONHTTP"
+                        Dim y As New Action.ActionHttp
+                        x.ObjAction = y
+                    Case "ACTIONIF"
+                        Dim y As New Action.ActionIf
+                        x.ObjAction = y
+                    Case "ACTIONMACRO"
+                        Dim y As New Action.ActionMacro
+                        x.ObjAction = y
+                End Select
+                x.Span = Span
+                x.Zoom = _Zoom
+                _ListAction.Add(x.ObjAction)
+                StackPanel1.Children.Add(x)
+            Else
+                e.Effects = DragDropEffects.None
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString)
+        End Try
     End Sub
 
     'Supprimer une action
@@ -291,6 +300,14 @@ Public Class uScenario
         Dim effects As DragDropEffects
         Dim obj As New DataObject()
         obj.SetData(GetType(String), "ACTIONSPEECH")
+        effects = DragDrop.DoDragDrop(Me.ImgActSpeech, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+    End Sub
+
+    'Ajouter action http
+    Private Sub ImgActHttp_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActHttp.MouseLeftButtonDown
+        Dim effects As DragDropEffects
+        Dim obj As New DataObject()
+        obj.SetData(GetType(String), "ACTIONHTTP")
         effects = DragDrop.DoDragDrop(Me.ImgActSpeech, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 
