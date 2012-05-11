@@ -2268,6 +2268,14 @@ Namespace HoMIDom
             CLIENT = 7
         End Enum
 
+        ''' <summary>Indique le type d'event : info, warning ou error</summary>
+        ''' <remarks></remarks>
+        Public Enum TypeEventLog
+            ERREUR = 1
+            WARNING = 2
+            INFORMATION = 3
+        End Enum
+
         Private Sub Write4Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
             _4Log(3) = _4Log(2)
             _4Log(2) = _4Log(1)
@@ -2418,6 +2426,25 @@ Namespace HoMIDom
                 'End SyncLock
             Catch ex As Exception
                 Console.WriteLine("Erreur lors de l'écriture d'un log: " & ex.ToString, MsgBoxStyle.Exclamation, "Erreur Serveur")
+            End Try
+        End Sub
+
+        ''' <summary>Ecrit un log dans les events Windows</summary>
+        ''' <param name="message">text to write to event log</param>
+        ''' <param name="type">1:erreur, 2:warning, 3:information</param>
+        ''' <param name="eventid"></param>
+        Public Sub LogEvent(ByVal message As String, ByVal type As TypeEventLog, Optional ByVal eventid As Integer = 0)
+            Try
+                Dim myEventLog = New EventLog()
+                myEventLog.Source = "HoMIDoM"
+                Select Case type
+                    Case TypeEventLog.ERREUR : myEventLog.WriteEntry(message, EventLogEntryType.Error, eventid)
+                    Case TypeEventLog.WARNING : myEventLog.WriteEntry(message, EventLogEntryType.Warning, eventid)
+                    Case TypeEventLog.INFORMATION : myEventLog.WriteEntry(message, EventLogEntryType.Information, eventid)
+                End Select
+                'Diagnostics.EventLog.WriteEntry("HoMIDoM", message)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LogEvent", "Exception : " & ex.ToString)
             End Try
         End Sub
 
