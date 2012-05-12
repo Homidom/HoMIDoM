@@ -307,7 +307,10 @@ Namespace HoMIDom
                         Parler(x.Message)
                     Case Action.TypeAction.ActionHttp
                         Dim x As Action.ActionHttp = _Action
-                        SendHttp(x.Commande)
+                        Sendhttp(x.Commande)
+                    Case Action.TypeAction.ActionLogEvent
+                        Dim x As Action.ActionLogEvent = _Action
+                        _Server.LogEvent(x.Message, x.Type, x.Eventid)
                 End Select
             Catch ex As Exception
                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "Exception : " & ex.ToString)

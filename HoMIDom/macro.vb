@@ -389,6 +389,12 @@ Namespace HoMIDom
             ''' </summary>
             ''' <remarks></remarks>
             ActionHttp = 5
+
+            ''' <summary>
+            ''' Action de type log windows
+            ''' </summary>
+            ''' <remarks></remarks>
+            ActionLogEvent = 6
         End Enum
 
         ''' <summary>
@@ -822,6 +828,61 @@ Namespace HoMIDom
             Public ReadOnly Property TypeAction As TypeAction
                 Get
                     Return TypeAction.ActionHttp
+                End Get
+            End Property
+
+        End Class
+
+        ''' <summary>
+        ''' Action Log windows
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Class ActionLogEvent
+            Dim _Message As String
+            Dim _type As TypeEventLog
+            Dim _eventid As Integer = 0
+            Dim _Timing As DateTime
+
+            Public Property Timing As DateTime
+                Get
+                    Return _Timing
+                End Get
+                Set(ByVal value As DateTime)
+                    _Timing = value
+                End Set
+            End Property
+
+            Public Property Message As String
+                Get
+                    Return _Message
+                End Get
+                Set(ByVal value As String)
+                    _Message = value
+                End Set
+            End Property
+
+            Public Property Type As TypeEventLog
+                Get
+                    Return _type
+                End Get
+                Set(ByVal value As TypeEventLog)
+                    _type = value
+                End Set
+            End Property
+
+            Public Property Eventid As Integer
+                Get
+                    Return _eventid
+                End Get
+                Set(ByVal value As Integer)
+                    _eventid = value
+                End Set
+            End Property
+
+
+            Public ReadOnly Property TypeAction As TypeAction
+                Get
+                    Return TypeAction.ActionLogEvent
                 End Get
             End Property
 
