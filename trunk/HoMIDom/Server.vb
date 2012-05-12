@@ -1059,6 +1059,10 @@ Namespace HoMIDom
                                     Dim o As New Action.ActionHttp
                                     _Act = o
                                     o = Nothing
+                                Case "ActionLogEvent"
+                                    Dim o As New Action.ActionLogEvent
+                                    _Act = o
+                                    o = Nothing
                             End Select
                             For j3 As Integer = 0 To list.ChildNodes.Item(j2).Attributes.Count - 1
                                 Select Case list.ChildNodes.Item(j2).Attributes.Item(j3).Name
@@ -1089,6 +1093,10 @@ Namespace HoMIDom
                                         b = Nothing
                                         a = Nothing
                                         c = Nothing
+                                    Case "type"
+                                        _Act.Type = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "eventid"
+                                        _Act.Eventid = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                 End Select
                             Next
                             If list.ChildNodes.Item(j2).HasChildNodes Then
@@ -1713,6 +1721,16 @@ Namespace HoMIDom
                         Case Action.TypeAction.ActionHttp
                             writer.WriteStartAttribute("commande")
                             writer.WriteValue(ListActions.Item(j).Commande)
+                            writer.WriteEndAttribute()
+                        Case Action.TypeAction.ActionLogEvent
+                            writer.WriteStartAttribute("message")
+                            writer.WriteValue(ListActions.Item(j).Message)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("type")
+                            writer.WriteValue(ListActions.Item(j).Type)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("eventid")
+                            writer.WriteValue(ListActions.Item(j).Eventid)
                             writer.WriteEndAttribute()
                         Case Action.TypeAction.ActionIf
                             writer.WriteStartElement("conditions")
