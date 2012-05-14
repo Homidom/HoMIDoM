@@ -20,14 +20,14 @@ Imports HoMIDom.HoMIDom.Device
     Dim _StartAuto As Boolean = False 'True si le driver doit démarrer automatiquement
     Dim _Protocol As String = "Virtuel" 'Protocole utilisé par le driver, exemple: RS232
     Dim _IsConnect As Boolean = False 'True si le driver est connecté et sans erreur
-    Dim _IP_TCP As String = "" 'Adresse IP TCP à utiliser, "@" si non applicable pour le cacher côté client
-    Dim _Port_TCP As String = "" 'Port TCP à utiliser, "@" si non applicable pour le cacher côté client
-    Dim _IP_UDP As String = "" 'Adresse IP UDP à utiliser, , "@" si non applicable pour le cacher côté client
-    Dim _Port_UDP As String = "" 'Port UDP à utiliser, , "@" si non applicable pour le cacher côté client
-    Dim _Com As String = "" 'Port COM à utiliser, , "@" si non applicable pour le cacher côté client
+    Dim _IP_TCP As String = "@" 'Adresse IP TCP à utiliser, "@" si non applicable pour le cacher côté client
+    Dim _Port_TCP As String = "@" 'Port TCP à utiliser, "@" si non applicable pour le cacher côté client
+    Dim _IP_UDP As String = "@" 'Adresse IP UDP à utiliser, , "@" si non applicable pour le cacher côté client
+    Dim _Port_UDP As String = "@" 'Port UDP à utiliser, , "@" si non applicable pour le cacher côté client
+    Dim _Com As String = "@" 'Port COM à utiliser, , "@" si non applicable pour le cacher côté client
     Dim _Refresh As Integer = 0 'Valeur à laquelle le driver doit rafraichir les valeurs des devices (ex: toutes les 200ms aller lire les devices)
     Dim _Modele As String = "Virtuel" 'Modèle du driver/interface
-    Dim _Version As String = "1.0" 'Version du driver
+    Dim _Version As String = My.Application.Info.Version.ToString 'Version du driver
     Dim _Picture As String = "" 'Image du driver (non utilisé actuellement)
     Dim _Server As HoMIDom.HoMIDom.Server 'Objet Reflètant le serveur
     Dim _DeviceSupport As New ArrayList 'Type de Device supporté par le driver

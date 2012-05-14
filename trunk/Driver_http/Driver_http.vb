@@ -25,7 +25,7 @@ Imports System.Xml
     Dim _Com As String = "@" 'Port COM à utiliser, , "@" si non applicable pour le cacher côté client
     Dim _Refresh As Integer = 0 'Valeur à laquelle le driver doit rafraichir les valeurs des devices (ex: toutes les 200ms aller lire les devices)
     Dim _Modele As String = "" 'Modèle du driver/interface
-    Dim _Version As String = "1.0" 'Version du driver
+    Dim _Version As String = My.Application.Info.Version.ToString 'Version du driver
     Dim _Picture As String = "" 'Image du driver (non utilisé actuellement)
     Dim _Server As HoMIDom.HoMIDom.Server 'Objet Reflètant le serveur
     Dim _DeviceSupport As New ArrayList 'Type de Device supporté par le driver

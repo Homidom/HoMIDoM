@@ -20,9 +20,9 @@
     <driver id="3BB1F870-3A41-11E1-B86C-0800200C9A66" nom="Teleinfo" enable="false" description="Adaptateur USB DAUGUET" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM1" refresh="0" modele="" picture="" />
     <driver id="74FD4E7C-34ED-11E0-8AC4-70CEDED72085" nom="USBuirt" enable="false" description="Emetteur/Récepteur Infrarouge sur port USB" startauto="false" protocol="IR" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="" refresh="0" modele="" picture="" />
     <driver id="DE96B466-2540-11E0-A321-65D7DFD72085" nom="Virtuel" enable="true" description="Driver Virtuel" startauto="true" protocol="Virtuel" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="" picture="" />
-    <driver id="9BC60A04-3569-11E0-B9A7-3F66DFD72085" nom="X10 CM11" enable="false" description="X10 CM11" startauto="false" protocol="COM" iptcp="" porttcp="" ipudp="@" portudp="@" com="" refresh="0" modele="CM11" picture="" />
-    <driver id="1DA44C90-353F-11E1-9B3D-78FC4824019B" nom="X10 CM15" enable="false" description="Driver X10 CM15" startauto="false" protocol="USB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="CM15" picture="" />
-    <driver id="0A94F22A-E824-11E0-B989-175F4824019B" nom="ZIBASE" enable="false" description="Zibase Ethernet" startauto="false" protocol="ETHERNET" iptcp="" porttcp="" ipudp="@" portudp="@" com="@" refresh="0" modele="" picture="" />
+    <driver id="9BC60A04-3569-11E0-B9A7-3F66DFD72085" nom="X10 CM11" enable="false" description="X10 CM11" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="" refresh="0" modele="CM11" picture="" />
+    <driver id="1DA44C90-353F-11E1-9B3D-78FC4824019B" nom="X10 CM15" enable="false" description="X10 CM15" startauto="false" protocol="USB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="CM15" picture="" />
+    <driver id="0A94F22A-E824-11E0-B989-175F4824019B" nom="ZIBASE" enable="false" description="Zibase Ethernet" startauto="false" protocol="ETHERNET" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="" picture="" />
     <driver id="57BCAA20-5CD2-11E1-AA83-88244824019B" nom="Z-Wave" enable="false" description="Controleur Z-Wave" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM1" refresh="0" modele="" picture="" />
   </drivers>
   <zones>

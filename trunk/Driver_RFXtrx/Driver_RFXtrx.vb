@@ -52,8 +52,8 @@ Imports System.Media
     Dim _Com As String = "COM2"
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "@"
-    Dim _Version As String = "1.0"
-    Dim _Picture As String = "rfxcom.png"
+    Dim _Version As String = My.Application.Info.Version.ToString
+    Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
     Dim _DeviceSupport As New ArrayList
