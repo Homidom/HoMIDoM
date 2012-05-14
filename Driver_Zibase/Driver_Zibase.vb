@@ -35,8 +35,8 @@ Imports ZibaseDll
     Dim _Port_UDP As String = "@"
     Dim _Com As String = "@"
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = "@"
-    Dim _Version As String = "1.0"
+    Dim _Modele As String = "Zibase Ethernet/Wifi V1/2"
+    Dim _Version As String = My.Application.Info.Version.ToString
     Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device

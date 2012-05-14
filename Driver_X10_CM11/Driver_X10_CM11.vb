@@ -27,7 +27,7 @@ Public Class Driver_X10_CM11
     Dim _Com As String = ""
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "CM11"
-    Dim _Version As String = "1.0"
+    Dim _Version As String = My.Application.Info.Version.ToString
     Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device

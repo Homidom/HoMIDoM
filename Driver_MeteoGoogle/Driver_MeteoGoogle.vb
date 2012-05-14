@@ -30,7 +30,7 @@ Imports System.Threading
     Dim _Com As String = "@"
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "Google Weather"
-    Dim _Version As String = "1.0"
+    Dim _Version As String = My.Application.Info.Version.ToString
     Dim _Picture As String = "meteo.png"
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
