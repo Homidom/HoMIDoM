@@ -28,10 +28,13 @@
                     For Each driver In myService.GetAllDrivers(IdSrv)
                         Dim x As New uElement
                         x.ID = driver.ID
-                        x.Image = driver.Picture
+                        If IO.File.Exists(driver.Picture) Then
+                            x.Image = driver.Picture
+                        Else
+                            x.Image = ".\images\icones\Driver_32.png"
+                        End If
                         x.Title = driver.Nom
                         x.Width = 300
-
                         ListBox1.Items.Add(x)
                     Next
                 Case "tag_composant"
@@ -40,10 +43,13 @@
                     For Each device In myService.GetAllDevices(IdSrv)
                         Dim x As New uElement
                         x.ID = device.ID
-                        x.Image = device.Picture
+                        If IO.File.Exists(device.Picture) Then
+                            x.Image = device.Picture
+                        Else
+                            x.Image = ".\images\icones\Composant_32.png"
+                        End If
                         x.Title = device.Name
                         x.Width = 300
-
                         ListBox1.Items.Add(x)
                     Next
                 Case "tag_zone"
@@ -55,7 +61,6 @@
                         x.Image = zone.Icon
                         x.Title = zone.Name
                         x.Width = 300
-
                         ListBox1.Items.Add(x)
                     Next
                 Case "tag_user"
@@ -67,7 +72,6 @@
                         x.Image = user.Image
                         x.Title = user.Nom
                         x.Width = 300
-
                         ListBox1.Items.Add(x)
                     Next
                 Case "tag_trigger"
@@ -78,7 +82,6 @@
                         x.ID = trigger.ID
                         x.Title = trigger.Nom
                         x.Width = 300
-
                         ListBox1.Items.Add(x)
                     Next
                 Case "tag_macro"
@@ -89,7 +92,6 @@
                         x.ID = macro.ID
                         x.Title = macro.Nom
                         x.Width = 300
-
                         ListBox1.Items.Add(x)
                     Next
             End Select

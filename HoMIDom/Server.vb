@@ -466,7 +466,11 @@ Namespace HoMIDom
                                     _drv.COM = list.Item(j).Attributes.GetNamedItem("com").Value
                                     _drv.Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
                                     _drv.Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
+
                                     _drv.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
+                                    If _drv.Picture = " " Or _drv.Picture = "" Or Not IO.File.Exists(_drv.Picture) Then
+                                        _drv.Picture = _MonRepertoire & "\images\icones\Driver_128.png"
+                                    End If
 
                                     For i As Integer = 0 To list.Item(j).Attributes.Count - 1
                                         Dim a As String = UCase(list.Item(j).Attributes.Item(i).Name)
