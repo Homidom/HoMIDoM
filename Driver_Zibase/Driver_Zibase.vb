@@ -553,7 +553,7 @@ Imports ZibaseDll
 
     'la zibase a qqch à logger
     Private Sub ZibaseLog(ByVal sMsg As String, ByVal level As Integer) Handles zba.WriteMessage
-        WriteLog("DBG: " & sMsg & " - " & level)
+        If _DEBUG Then WriteLog("DBG: " & sMsg & " - " & level)
     End Sub
 
     'executer un script stocké sur la zibase
@@ -664,8 +664,8 @@ Imports ZibaseDll
             Case "lev" : If _DEBUG Then WriteLog("DBG: Signal Level : " & valeur & " (Adresse:" & adresse & ")") 'on log le level si debug : Niveau de réception RF (1 à 5)
             Case "lnk" : WriteLog("DBG: Etat de la connexion avec la Zibase " & adresse & " : " & valeur) 'Etat de la connexion Zibase
             Case "" : WriteRetour(adresse, "", valeur) ' si pas de type particulier
-            Case "tem" : WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur) 'Température (°C)
-            Case "temc" : WriteRetour(adresse, ListeDevices.TEMPERATURECONSIGNE.ToString, valeur) 'Température de consigne (Thermostat : °C)
+            Case "the" : WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur) 'Température (°C)
+            Case "thc" : WriteRetour(adresse, ListeDevices.TEMPERATURECONSIGNE.ToString, valeur) 'Température de consigne (Thermostat : °C)
             Case "hum" : WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur) 'Humidité (%)
             Case "uvl" : WriteRetour(adresse, ListeDevices.UV.ToString, valeur) 'Niveau d’UV
             Case "tra" : WriteRetour(adresse, ListeDevices.PLUIETOTAL.ToString, valeur) 'Niveau de pluie total (Total Rain)
