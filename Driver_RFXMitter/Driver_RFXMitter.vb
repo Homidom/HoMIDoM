@@ -25,7 +25,7 @@ Imports System.Globalization
 ' user to criminal sanctions under applicable laws, as well as to     
 ' civil liability for the breach of the terms and conditions of this license.                                                             
 '                                                                      
-'-------------------------------------------------------------------------------------
+'------------------------------------------------------------------------------------- 
 
 ''' <summary>Class Driver_RFXMitter, permet de communiquer avec le RFXMitter Ethernet/COM</summary>
 ''' <remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>

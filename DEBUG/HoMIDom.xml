@@ -2013,9 +2013,7 @@ HoMIDom
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Audio.ExtensionAudio">
-	<summary>
- Type d'extension Audio
- </summary>
+	<summary>Type d'extension Audio</summary>
 	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Repertoire">
 	<summary>

@@ -6,9 +6,7 @@ Namespace HoMIDom
     ''' <remarks></remarks>
     <Serializable()> Public Class Audio
 
-        ''' <summary>
-        ''' Type d'extension Audio
-        ''' </summary>
+        ''' <summary>Type d'extension Audio</summary>
         ''' <remarks></remarks>
         <Serializable()> Public Class ExtensionAudio
             Dim _Extension As String

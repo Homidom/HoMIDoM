@@ -10,7 +10,7 @@ Imports System.Threading
 Imports System.Globalization
 
 ' Auteur : David
-' Date : 22/01/2011
+' Date : 22/01/2011 
 '-------------------------------------------------------------------------------------
 '                                                                     
 '                     Software License Agreement                      
