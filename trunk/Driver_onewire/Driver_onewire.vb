@@ -273,7 +273,7 @@ Public Class Driver_onewire
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
             If Not _IsConnect Then
-        'Initialisation de la cle USB 1-WIRE
+                'Initialisation de la cle USB 1-WIRE
                 '_Modele = "{DS9490B}"
                 ' _Com = "USB2"
                 Try
@@ -306,7 +306,7 @@ Public Class Driver_onewire
         Try
             If _IsConnect Then
                 _IsConnect = False
-               wir_adapter.freePort()
+                wir_adapter.freePort()
                 adapter_present = 0
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "1-Wire Stop", "Port " & _Com & " fermé")
             Else
@@ -497,8 +497,8 @@ Public Class Driver_onewire
         Try
             Dim x As New DeviceCommande
             x.NameCommand = Nom
-            x.DescriptionCommand = description
-            x.CountParam = nbparam
+            x.DescriptionCommand = Description
+            x.CountParam = NbParam
             _DeviceCommandPlus.Add(x)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
