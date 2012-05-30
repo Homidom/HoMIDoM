@@ -42,7 +42,7 @@ Imports System.Globalization
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "RF"
     Dim _IsConnect As Boolean = False
-    Dim _IP_TCP As String = ""
+    Dim _IP_TCP As String = "192.168.1.10"
     Dim _Port_TCP As String = "10002"
     Dim _IP_UDP As String = "@"
     Dim _Port_UDP As String = "@"

@@ -18,10 +18,10 @@ Imports System.Xml
     Dim _StartAuto As Boolean = False 'True si le driver doit démarrer automatiquement
     Dim _Protocol As String = "Http" 'Protocole utilisé par le driver, exemple: RS232
     Dim _IsConnect As Boolean = False 'True si le driver est connecté et sans erreur
-    Dim _IP_TCP As String = "" 'Adresse IP TCP à utiliser, "@" si non applicable pour le cacher côté client
-    Dim _Port_TCP As String = "" 'Port TCP à utiliser, "@" si non applicable pour le cacher côté client
-    Dim _IP_UDP As String = "" 'Adresse IP UDP à utiliser, , "@" si non applicable pour le cacher côté client
-    Dim _Port_UDP As String = "" 'Port UDP à utiliser, , "@" si non applicable pour le cacher côté client
+    Dim _IP_TCP As String = "@" 'Adresse IP TCP à utiliser, "@" si non applicable pour le cacher côté client
+    Dim _Port_TCP As String = "@" 'Port TCP à utiliser, "@" si non applicable pour le cacher côté client
+    Dim _IP_UDP As String = "@" 'Adresse IP UDP à utiliser, , "@" si non applicable pour le cacher côté client
+    Dim _Port_UDP As String = "@" 'Port UDP à utiliser, , "@" si non applicable pour le cacher côté client
     Dim _Com As String = "@" 'Port COM à utiliser, , "@" si non applicable pour le cacher côté client
     Dim _Refresh As Integer = 0 'Valeur à laquelle le driver doit rafraichir les valeurs des devices (ex: toutes les 200ms aller lire les devices)
     Dim _Modele As String = "" 'Modèle du driver/interface

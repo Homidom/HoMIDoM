@@ -1672,7 +1672,7 @@
                 "Message" = "8:[VSDNETMSG]"
                 "FrameworkVersion" = "8:.NETFramework,Version=v4.0"
                 "AllowLaterVersions" = "11:FALSE"
-                "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
+                "InstallUrl" = "8:http://www.microsoft.com/en-us/download/details.aspx?id=17718"
                 }
             }
         }
@@ -3334,7 +3334,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:HoMIDom, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:HoMIDom, Version=1.0.19.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_F398D6A885909B7A98C68E8B1E9507D7"
@@ -3687,7 +3687,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HoMIDoM"
         "ProductCode" = "8:{CF60B76C-0D43-4398-B791-39E98B75C348}"
-        "PackageCode" = "8:{A3EDED09-CF8C-4803-80A8-853DDBCB4883}"
+        "PackageCode" = "8:{F657899F-AF35-41A4-B41E-045030224723}"
         "UpgradeCode" = "8:{9DF9CBFF-BE0B-4AE7-BF8B-7D59044E4740}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
