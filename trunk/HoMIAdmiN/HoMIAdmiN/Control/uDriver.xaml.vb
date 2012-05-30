@@ -155,9 +155,27 @@ Partial Public Class uDriver
 
     'Bouton Ok
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        myservice.SaveDriver(IdSrv, _DriverId, TxtNom.Text, ChkEnable.IsChecked, CbStartAuto.IsChecked, TxtAdrTCP.Text, TxtPortTCP.Text, TxtAdrUDP.Text, TxtPortUDP.Text, TxtCom.Text, TxtRefresh.Text, ImgDevice.Tag, TxtModele.Text, _ListParam)
-        FlagChange = True
-        RaiseEvent CloseMe(Me)
+        Try
+            'verification of value
+            Dim verif As Boolean = True
+            'verif of PORT_COM
+            If TxtCom.Text <> "" And TxtCom.Text <> "@" Then
+                If Not (TxtCom.Text.StartsWith("COM") Or TxtCom.Text.StartsWith("USB")) Then
+                    verif = False
+                    MessageBox.Show("Le Champ COM doit être configuré avec COMx ou USBx (ou x est un entier)", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
+                End If
+            End If
+
+            'if all OK, save the driver and close window
+            If verif = True Then
+                myService.SaveDriver(IdSrv, _DriverId, TxtNom.Text, ChkEnable.IsChecked, CbStartAuto.IsChecked, TxtAdrTCP.Text, TxtPortTCP.Text, TxtAdrUDP.Text, TxtPortUDP.Text, TxtCom.Text, TxtRefresh.Text, ImgDevice.Tag, TxtModele.Text, _ListParam)
+                FlagChange = True
+                RaiseEvent CloseMe(Me)
+            End If
+        Catch ex As Exception
+            MessageBox.Show(BtnHelp.ToolTip, "Aide", MessageBoxButton.OK, MessageBoxImage.Question)
+            RaiseEvent CloseMe(Me)
+        End Try
     End Sub
 
     Private Sub TxtRefresh_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtRefresh.TextChanged

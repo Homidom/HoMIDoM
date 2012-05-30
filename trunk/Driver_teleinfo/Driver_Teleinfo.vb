@@ -32,7 +32,7 @@ Public Class Driver_Teleinfo
         Dim _Port_UDP As String = "@"
         Dim _Com As String = "COM1"
         Dim _Refresh As Integer = 0
-        Dim _Modele As String = ""
+        Dim _Modele As String = "@"
         Dim _Version As String = My.Application.Info.Version.ToString
         Dim _Picture As String = "compteur-monophase.png"
         Dim _Server As HoMIDom.HoMIDom.Server

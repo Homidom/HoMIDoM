@@ -31,7 +31,7 @@ Imports UsbLibrary
     Dim _Port_UDP As String = "@"
     Dim _Com As String = "@"
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = "RFID"
+    Dim _Modele As String = "RFID-Mirror"
     Dim _Version As String = My.Application.Info.Version.ToString
     Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server

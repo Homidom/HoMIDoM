@@ -540,7 +540,7 @@
     <Resource Include="Images\tpbtn.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Speech-128.png" />
+    <Resource Include="Images\Speech_128.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Cmd_Http_128.png" />
