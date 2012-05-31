@@ -3235,6 +3235,7 @@ Namespace HoMIDom
 
         '*** FONCTIONS ******************************************
 #Region "Serveur"
+
         ''' <summary>
         ''' Vérifie si un élément existe dans une zone, une macro, un trigger... avant de le supprimer
         ''' </summary>
