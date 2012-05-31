@@ -819,6 +819,8 @@ Public Class Driver_X10_CM11
         'adresse= adresse du composant : A1
         'commande : ON, OFF...
         'data
+        CurrentCode = Mid(adresse, 2, adresse.Length - 1)
+        CurrentHouse = Mid(adresse, 1, 1)
 
         Dim axbData(5) As Byte
         Dim ReadaxbData(1) As Byte
