@@ -15,7 +15,7 @@
                         <GradientStop Color="LightGray"  Offset="0.8" />
                 </LinearGradientBrush>
                 </Canvas.Background>
-                <Label Canvas.Left="22" Canvas.Top="-1" Content="###############" Height="23" Name="Label1" Width="Auto" />
+                <Label Canvas.Left="22" Canvas.Top="-1" Content="###############" Name="Label1" Width="Auto" />
                 <Label Canvas.Left="24" Canvas.Top="20" Content="###############" Height="23" Name="Label2" Width="Auto" FontSize="9" Foreground="Black" />
               </Canvas>
             <Image Canvas.Left="160" Canvas.Top="10" Height="27" Name="ImgDelete" Stretch="Fill" Width="25" Source="/HoMIAdmiN;component/Images/Croix_128.png" />

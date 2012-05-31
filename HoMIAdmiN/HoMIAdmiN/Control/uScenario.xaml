@@ -14,8 +14,9 @@
                 <Image Source="/HoMIAdmiN;component/Images/email_32.png" Height="32" Width="32" ToolTip="Email" Name="ImgActMail"></Image>
                 <Image Source="/HoMIAdmiN;component/Images/workflow_32.png" Height="32" Width="32" ToolTip="Si/Alors/Sinon" Name="ImgActIf"></Image>
                 <Image Source="/HoMIAdmiN;component/Images/script_32.png" Height="32" Width="32" ToolTip="Une autre Macro" Name="ImgActMacro"></Image>
-                    <Image Source="/HoMIAdmiN;component/Images/Speech-128.png" Height="32" Width="32" ToolTip="Parler" Name="ImgActSpeech"></Image>
+                    <Image Source="/HoMIAdmiN;component/Images/Speech_128.png" Height="32" Width="32" ToolTip="Parler" Name="ImgActSpeech"></Image>
                     <Image Source="/HoMIAdmiN;component/Images/Cmd_Http_128.png" Height="32" Width="32" ToolTip="Envoyer une commande http" Name="ImgActHttp"></Image>
+                    <Image Source="/HoMIAdmiN;component/Images/Logs_32.png" Height="32" Width="32" ToolTip="Log Windows" Name="ImgActLog"></Image>
                 <Rectangle Width="50"/>
                     <Image Name="ZoomPlus" Source="/HoMIAdmiN;component/Images/zoom_avant_32.png" Width="23" Height="23" />
                     <Image Name="ZoomMoins" Source="/HoMIAdmiN;component/Images/zoom_arriere_32.png" Width="23" Height="23" />

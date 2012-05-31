@@ -59,6 +59,24 @@ Public Class WActionParametrage
                         Dim obj As Action.ActionSpeech = _ObjAction
                         obj.Message = TxtValue.Text
                         _ObjAction = obj
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionLogEvent
+                        If TxtValue.Text = "" Then
+                            MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            Exit Sub
+                        End If
+                        If Cb1.SelectedIndex < 0 Then
+                            MessageBox.Show("Veuillez sélectionner un type de log !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            Exit Sub
+                        End If
+                        If IsNumeric(Txt2.Text) = False Then
+                            MessageBox.Show("L'event ID doit être numérique !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            Exit Sub
+                        End If
+                        Dim obj As Action.ActionLogEvent = _ObjAction
+                        obj.Message = TxtValue.Text
+                        obj.Eventid = Txt2.Text
+                        obj.Type = Cb1.SelectedIndex + 1
+                        _ObjAction = obj
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionHttp
                         If TxtValue.Text = "" Then
                             MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
@@ -257,6 +275,34 @@ Public Class WActionParametrage
                         TxtValue.Height = 80
 
                         TxtValue.Text = obj.Commande
+
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionLogEvent
+                        Dim obj As Action.ActionLogEvent = _ObjAction
+
+                        'Mise en forme graphique
+                        Lbl1.Content = "Type:"
+                        Lbl2.Content = "EventID:"
+                        LblValue.Content = "Message:"
+
+                        Cb1.Items.Add("ERREUR")
+                        Cb1.Items.Add("WARNING")
+                        Cb1.Items.Add("INFORMATION")
+
+                        If obj.Type > 0 Then
+                            Cb1.SelectedIndex = (obj.Type) - 1
+                        Else
+                            Cb1.SelectedIndex = 0
+                        End If
+
+                        Cb2.Visibility = Windows.Visibility.Collapsed
+                        Cb2.Height = 0
+                        Txt2.Visibility = Windows.Visibility.Visible
+                        Txt2.Height = 20
+                        Txt2.Text = obj.Eventid
+                        TxtValue.Text = ""
+                        TxtValue.Height = 80
+
+                        TxtValue.Text = obj.Message
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionIf
                         Me.Height = 650

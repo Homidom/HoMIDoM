@@ -1098,7 +1098,12 @@ Namespace HoMIDom
                                         a = Nothing
                                         c = Nothing
                                     Case "type"
-                                        _Act.Type = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                        Select Case UCase(list.ChildNodes.Item(j2).Attributes.Item(j3).Value)
+                                            Case "ERREUR" : _Act.Type = 1
+                                            Case "WARNING" : _Act.Type = 2
+                                            Case "INFORMATION" : _Act.Type = 3
+                                            Case Else : _Act.Type = 1
+                                        End Select
                                     Case "eventid"
                                         _Act.Eventid = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                 End Select
@@ -1731,7 +1736,16 @@ Namespace HoMIDom
                             writer.WriteValue(ListActions.Item(j).Message)
                             writer.WriteEndAttribute()
                             writer.WriteStartAttribute("type")
-                            writer.WriteValue(ListActions.Item(j).Type)
+                            Select Case UCase((ListActions.Item(j).Type.ToString))
+                                Case "ERREUR"
+                                    writer.WriteValue("1")
+                                Case "WARNING"
+                                    writer.WriteValue("2")
+                                Case "INFORMATION"
+                                    writer.WriteValue("3")
+                                Case Else
+                                    writer.WriteValue("1")
+                            End Select
                             writer.WriteEndAttribute()
                             writer.WriteStartAttribute("eventid")
                             writer.WriteValue(ListActions.Item(j).Eventid)

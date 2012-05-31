@@ -121,6 +121,9 @@ Public Class uScenario
                     Case "ACTIONMACRO"
                         Dim y As New Action.ActionMacro
                         x.ObjAction = y
+                    Case "ACTIONLOGEVENT"
+                        Dim y As New Action.ActionLogEvent
+                        x.ObjAction = y
                 End Select
                 x.Span = Span
                 x.Zoom = _Zoom
@@ -308,6 +311,14 @@ Public Class uScenario
         Dim effects As DragDropEffects
         Dim obj As New DataObject()
         obj.SetData(GetType(String), "ACTIONHTTP")
+        effects = DragDrop.DoDragDrop(Me.ImgActSpeech, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+    End Sub
+
+    'Ajouter action log event
+    Private Sub ImgActLog_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActLog.MouseLeftButtonDown
+        Dim effects As DragDropEffects
+        Dim obj As New DataObject()
+        obj.SetData(GetType(String), "ACTIONLOGEVENT")
         effects = DragDrop.DoDragDrop(Me.ImgActSpeech, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 
