@@ -193,7 +193,7 @@ Class Window1
                 Catch ex As Exception
                     myChannelFactory.Abort()
                     IsConnect = False
-                    MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & Chr(10) & Name & " - " & IP & ":" & Port, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                    MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & Chr(10) & Name & " - " & IP & ":" & Port & vbCrLf & "Erreur: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
                     Return -1
                 End Try
                 IsConnect = True
@@ -1453,7 +1453,7 @@ Class Window1
             Next
         End If
         Objet3 = Objet
-      
+
     End Sub
 
     Dim Objet3 As Object = Nothing

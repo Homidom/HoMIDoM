@@ -8,10 +8,21 @@ Public Class uWidgetEmpty
     Dim _macro As HoMIDom.HoMIDom.Macro = Nothing
     Dim _zone As HoMIDom.HoMIDom.Zone = Nothing
     Dim _ShowStatus As Boolean = True 'Affiche le status - Oui par défaut
-    Dim _ShowEtiqDefaut As Boolean = True 'Affiche le libellé du composant par défaut - Oui par défaut
+    Dim _ShowEtiquette As Boolean = True 'Affiche le libellé du composant par défaut - Oui par défaut
     Dim _Etiquette As String = "" 'Etiquette
+    Dim _X As Double
+    Dim _Y As Double
+    Dim _Rotation As Double
+    Dim _ModeEdition As Boolean
+    Dim _Picture As String
+    Dim _ImageBackGround As String
+    Dim _LabelStatus As String
+    Dim _DefautLabelStatus As String = "?"
+    Dim _Refresh As Integer = 1
     Dim _ColorBackGround As SolidColorBrush = New SolidColorBrush(Colors.Black)
+    Dim _Visuel As New List(Of cWidget.Visu)
     Dim _Type As cElement.WidgetType = cElement.WidgetType.VIERGE
+    Dim dt As DispatcherTimer
 
     Public Event Click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event LongClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
@@ -136,7 +147,7 @@ Public Class uWidgetEmpty
                 End If
             End If
 
-            Refresh()
+            TraiteRefresh()
         End Set
     End Property
 
@@ -146,13 +157,12 @@ Public Class uWidgetEmpty
         End Get
     End Property
 
-
-    Public Property ShowEtiquetteByDefaut As Boolean
+    Public Property ShowEtiquette As Boolean
         Get
-            Return _ShowEtiqDefaut
+            Return _ShowEtiquette
         End Get
         Set(ByVal value As Boolean)
-            _ShowEtiqDefaut = value
+            _ShowEtiquette = value
             If value = True Then
                 If _dev IsNot Nothing Then
                     Etiquette = _dev.Name
@@ -167,17 +177,77 @@ Public Class uWidgetEmpty
         End Set
     End Property
 
-    Private Sub ShowEtiquette()
-        Lbl.Content = _Etiquette
-    End Sub
-
     Public Property Etiquette As String
         Get
             Return _Etiquette
         End Get
         Set(ByVal value As String)
             _Etiquette = value
-            ShowEtiquette()
+            Lbl.Content = _Etiquette
+        End Set
+    End Property
+
+    Public Property X As Double
+        Get
+            Return _X
+        End Get
+        Set(ByVal value As Double)
+            _X = value
+        End Set
+    End Property
+
+    Public Property Y As Double
+        Get
+            Return _Y
+        End Get
+        Set(ByVal value As Double)
+            _Y = value
+        End Set
+    End Property
+
+    Public Property Rotation As Double
+        Get
+            Return _Rotation
+        End Get
+        Set(ByVal value As Double)
+            _Rotation = value
+        End Set
+    End Property
+
+    Public Property ModeEdition As Boolean
+        Get
+            Return _ModeEdition
+        End Get
+        Set(ByVal value As Boolean)
+            _ModeEdition = value
+        End Set
+    End Property
+
+    Public Property Picture As String
+        Get
+            Return _Picture
+        End Get
+        Set(ByVal value As String)
+            _Picture = value
+        End Set
+    End Property
+
+    Public Property ImageBackGround As String
+        Get
+            Return _ImageBackGround
+        End Get
+        Set(ByVal value As String)
+            _ImageBackGround = value
+        End Set
+    End Property
+
+    Public Property LabelStatus As String
+        Get
+            Return _LabelStatus
+        End Get
+        Set(ByVal value As String)
+            _LabelStatus = value
+            LblStatus.Content = value
         End Set
     End Property
 
@@ -199,6 +269,25 @@ Public Class uWidgetEmpty
         End Set
     End Property
 
+    Public Property DefautLabelStatus As String
+        Get
+            Return _DefautLabelStatus
+        End Get
+        Set(ByVal value As String)
+            _DefautLabelStatus = value
+        End Set
+    End Property
+
+    Public Property Refresh As Integer
+        Get
+            Return _Refresh
+        End Get
+        Set(ByVal value As Integer)
+            _Refresh = value
+            dt.Interval = New TimeSpan(0, 0, _Refresh)
+        End Set
+    End Property
+
     Public Property ColorBackGround As SolidColorBrush
         Get
             Return _ColorBackGround
@@ -208,19 +297,30 @@ Public Class uWidgetEmpty
         End Set
     End Property
 
+    Public Property Visuel As List(Of cWidget.Visu)
+        Get
+            Return _Visuel
+        End Get
+        Set(ByVal value As List(Of cWidget.Visu))
+            _Visuel = value
+        End Set
+    End Property
+
     Public Sub New()
 
         ' Cet appel est requis par le Concepteur Windows Form.
         InitializeComponent()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        Dim dt As DispatcherTimer = New DispatcherTimer()
+        dt = New DispatcherTimer()
         AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
-        dt.Interval = New TimeSpan(0, 0, 1)
+        dt.Interval = New TimeSpan(0, 0, _Refresh)
         dt.Start()
+
+        LblStatus.Content = DefautLabelStatus
     End Sub
 
-    Private Sub Refresh()
+    Private Sub TraiteRefresh()
         Try
             If _Id = "" Then Exit Sub
 
@@ -231,7 +331,7 @@ Public Class uWidgetEmpty
             End If
 
             If _dev IsNot Nothing Then
-                If ShowEtiquetteByDefaut And _dev.Name <> Etiquette Then
+                If ShowEtiquette And _dev.Name <> Etiquette Then
                     Etiquette = _dev.Name
                 End If
 
@@ -295,13 +395,13 @@ Public Class uWidgetEmpty
             End If
 
             If _zone IsNot Nothing Then
-                If ShowEtiquetteByDefaut And _zone.Name <> Etiquette Then
+                If ShowEtiquette And _zone.Name <> Etiquette Then
                     Etiquette = _zone.Name
                 End If
             End If
 
             If _macro IsNot Nothing Then
-                If ShowEtiquetteByDefaut And _macro.Nom <> Etiquette Then
+                If ShowEtiquette And _macro.Nom <> Etiquette Then
                     Etiquette = _macro.Nom
                 End If
             End If
@@ -311,7 +411,7 @@ Public Class uWidgetEmpty
     End Sub
 
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
-        Refresh()
+        TraiteRefresh()
     End Sub
 
     Private Sub Image_MouseLeftButtonUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Image.MouseLeftButtonUp, Stk1.MouseLeftButtonUp

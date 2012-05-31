@@ -592,6 +592,9 @@ Imports HoMIDom.HoMIDom.Device
         Try
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.FREEBOX)
+            _DeviceSupport.Add(ListeDevices.LAMPE)
+            _DeviceSupport.Add(ListeDevices.SWITCH)
+            _DeviceSupport.Add(ListeDevices.APPAREIL)
 
             'Parametres avancés
             'add_paramavance("nom", "Description", valeupardefaut)
