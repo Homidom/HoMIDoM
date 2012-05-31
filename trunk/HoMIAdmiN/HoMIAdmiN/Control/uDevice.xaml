@@ -20,15 +20,15 @@
                     <Label Foreground="White" Name="Label3">Description:</Label>
                     <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtDescript" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" />
                     <StackPanel Orientation="Horizontal" >
-                        <Label Foreground="White" Name="Label4" Width="215">Type:</Label>
-                        <Rectangle Width="10" />
-                        <Label Foreground="White" Name="Label5" >Driver:</Label>
-                    </StackPanel>
+                            <Label Foreground="White" Name="Label5"  Width="215">Driver:</Label>
+                            <Rectangle Width="10" />
+                            <Label Foreground="White" Name="Label4">Type:</Label>
+                        </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                            <ComboBox HorizontalAlignment="Left" Name="CbType" Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" VerticalAlignment="Top" IsReadOnly="True" />
-                        <Rectangle Width="10" />
                             <ComboBox Width="215" Name="CbDriver" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" VerticalAlignment="Top" />
-                    </StackPanel>
+                            <Rectangle Width="10" />
+                            <ComboBox HorizontalAlignment="Left" Name="CbType" Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" VerticalAlignment="Top" IsReadOnly="True" />
+                        </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                         <Label Foreground="White" Name="Label6" Width="215" >Adresse1:</Label>
                         <Rectangle Width="10" />
