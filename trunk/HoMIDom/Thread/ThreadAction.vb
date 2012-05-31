@@ -296,11 +296,22 @@ Namespace HoMIDom
                     Case Action.TypeAction.ActionMacro
                         Dim x As Action.ActionMacro = _Action
                         Dim y As Macro = _Server.ReturnMacroById(_IdSrv, x.IdMacro)
-                        y.Execute(_Server)
+                        If y IsNot Nothing Then
+                            y.Execute(_Server)
+                        Else
+                            _Server.Log(Server.TypeLog.MESSAGE, Server.TypeSource.SCRIPT, "ThreadAction Execute", "La macro Id:" & x.IdMacro & " n'a pas pu être trouvée donc elle ne pourra pas être lancée")
+                        End If
+
 
                     Case Action.TypeAction.ActionMail
                         Dim x As Action.ActionMail = _Action
-                        Send_email(_Server.ReturnUserById(_IdSrv, x.UserId).eMail, x.Sujet, x.Message)
+                        Dim _user As Users.User = _Server.ReturnUserById(_IdSrv, x.UserId)
+                        If _user IsNot Nothing Then
+                            Send_email(_user.eMail, x.Sujet, x.Message)
+                        Else
+                            _Server.Log(Server.TypeLog.MESSAGE, Server.TypeSource.SCRIPT, "ThreadAction Execute", "Le user Id:" & x.UserId & " n'a pas pu être trouvé, le mail ne pourra pas être donc envoyé")
+                        End If
+
 
                     Case Action.TypeAction.ActionSpeech
                         Dim x As Action.ActionSpeech = _Action

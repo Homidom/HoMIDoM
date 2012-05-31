@@ -85,7 +85,14 @@ Public Class uAction
                     Case Action.TypeAction.ActionMacro
                         Dim x As Action.ActionMacro = _ObjAction
                         Label1.Content = "Macro"
-                        If x.IdMacro IsNot Nothing Then Label2.Content = myService.ReturnMacroById(IdSrv, x.IdMacro).Nom
+                        If x.IdMacro IsNot Nothing Then
+                            Dim _macro As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, x.IdMacro)
+                            If _macro IsNot Nothing Then Label2.Content = _macro.Nom
+                        End If
+                    Case Action.TypeAction.ActionLogEvent
+                        Dim x As Action.ActionLogEvent = _ObjAction
+                        Label1.Content = "Log"
+                        If x.Message IsNot Nothing Then Label2.Content = x.Message
                 End Select
                 Refresh_Position()
             End If
