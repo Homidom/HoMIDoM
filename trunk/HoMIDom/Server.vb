@@ -2579,6 +2579,15 @@ Namespace HoMIDom
                     _TypeLogEnable.Add(False)
                 Next
 
+                'Indique la version de la dll
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version de la dll Homidom: " & GetServerVersion())
+                If System.Environment.Is64BitOperatingSystem = True Then
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version de l'OS: " & My.Computer.Info.OSFullName.ToString & " 64 Bits")
+                Else
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version de l'OS: " & My.Computer.Info.OSFullName.ToString & " 32 Bits")
+                End If
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Répertoire utilisé: " & My.Application.Info.DirectoryPath.ToString)
+                
                 'Si sauvegarde automatique
                 If _CycleSave > 0 Then _NextTimeSave = Now.AddMinutes(_CycleSave)
 
@@ -2675,6 +2684,7 @@ Namespace HoMIDom
                 CleanLog(_MaxMonthLog)
 
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Serveur démarré")
+
             Catch ex As Exception
                 Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Exception : " & ex.Message)
             End Try
@@ -3485,7 +3495,7 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetServerVersion() As String Implements IHoMIDom.GetServerVersion
-            Return My.Application.Info.Version.ToString
+            Return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString
         End Function
 
         ''' <summary>Retourne l'heure du serveur</summary>
