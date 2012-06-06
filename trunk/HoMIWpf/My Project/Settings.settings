@@ -9,7 +9,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ImgBackGround" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Documents and Settings\SPATTE\Bureau\piece.png</Value>
+      <Value Profile="(Default)"></Value>
     </Setting>
     <Setting Name="Friction" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.75</Value>

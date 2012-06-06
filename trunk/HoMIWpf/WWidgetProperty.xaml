@@ -1,0 +1,55 @@
+﻿<Window x:Class="WWidgetProperty"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+   
+    Title="WWidgetProperty" Width="320">
+    
+        <StackPanel>
+        <Label Content="Propriétés" FontSize="16" FontStretch="Normal" FontWeight="Medium" />
+        <CheckBox Name="ChkShowEtiq" Content="Afficher Etiquette" />
+            <CheckBox Name="ChkShowStatus" Content="Afficher Status" />
+            <StackPanel Orientation="Horizontal" > 
+                <Label Width="120" Content="Etiquette:" />
+                <TextBox Name="TxtEtiq" Width="150" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Width="120" Content="X:" />
+                <TextBox Name="TxtX" Width="150" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Width="120" Content="Y:" />
+                <TextBox Name="TxtY" Width="150" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Width="120" Content="Height:" />
+                <TextBox Name="TxtHeight" Width="150" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Width="120" Content="Width:" />
+                <TextBox Name="TxtWidth" Width="150" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Width="120" Content="Rotation:" />
+                <TextBox Name="TxtRotation" Width="150" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Width="120" Content="Picture:" />
+                <Image Name="ImgPicture" Width="50" Height=" 50"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Width="120" Content="Defaut Status:" />
+                <TextBox Name="TxtDefStatus" Width="150" Text="?"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Width="120" Content="Color BackGround:" />
+                <TextBox Name="TxtColorBack" Width="150" Text=""/>
+               
+            <Button Name="BtnColorSelect" Width="25" Height="25" Content="..." />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Button Name="BtnOk" Content="OK" Width="75" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
+                <Button Name="BtnCancel" Content="Annuler" Width="75" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
+            </StackPanel>
+        </StackPanel>
+
+</Window>

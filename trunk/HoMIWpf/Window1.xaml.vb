@@ -469,7 +469,7 @@ Class Window1
                     list = myxml.SelectNodes("/homidom/elements/element")
                     If list.Count > 0 Then 'présence des éléments
                         For j As Integer = 0 To list.Count - 1
-                            Dim x As New cElement
+                            Dim x As New uWidgetEmpty
 
                             For k As Integer = 0 To list.Item(j).Attributes.Count - 1
                                 Select Case list.Item(j).Attributes.Item(k).Name
@@ -486,7 +486,7 @@ Class Window1
                                     Case "height"
                                         x.Height = list.Item(j).Attributes.Item(k).Value
                                     Case "angle"
-                                        x.Angle = list.Item(j).Attributes.Item(k).Value
+                                        x.Rotation = list.Item(j).Attributes.Item(k).Value
                                 End Select
                             Next
                             'Si le device n'a pas été trouvé on le prend pas en compte pour le supprimer par la suite
@@ -661,7 +661,7 @@ Class Window1
                 writer.WriteValue(_ListElement.Item(i).Height)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute(Replace("angle", ".", ","))
-                writer.WriteValue(_ListElement.Item(i).Angle)
+                writer.WriteValue(_ListElement.Item(i).Rotation)
                 writer.WriteEndAttribute()
                 writer.WriteEndElement()
             Next
@@ -993,7 +993,8 @@ Class Window1
                 Canvas1.Children.Clear()
             End If
 
-            Chk1.Visibility = Windows.Visibility.Hidden
+            Chk1.Visibility = Windows.Visibility.Collapsed
+            Chk2.Visibility = Windows.Visibility.Collapsed
             ImageBackGround = _ImageBackGroundDefault
 
             Dim y As uCtrlImgMnu = sender
@@ -1169,6 +1170,7 @@ Class Window1
 
             If IsConnect = True Then
                 Chk1.Visibility = Windows.Visibility.Visible
+                Chk2.Visibility = Windows.Visibility.Visible
 
                 _CurrentIdZone = IdZone
                 If Canvas1.Children.Count > 0 Then Canvas1.Children.Clear()
@@ -1190,7 +1192,7 @@ Class Window1
                                 'Ajouter un nouveau Control
                                 Dim x As New ContentControl
                                 Dim Trg As New TransformGroup
-                                Dim Rot As New RotateTransform(_ListElement.Item(j).Angle)
+                                Dim Rot As New RotateTransform(_ListElement.Item(j).Rotation)
 
                                 Trg.Children.Add(Rot)
                                 x.Width = _ListElement.Item(j).Width
@@ -1202,6 +1204,11 @@ Class Window1
 
                                 Dim y As New uWidgetEmpty
                                 y.Id = z.ElementID
+                                y.Width = x.Width
+                                y.Height = x.Height
+                                y.X = _ListElement.Item(j).X
+                                y.Y = _ListElement.Item(j).Y
+                                y.Rotation = _ListElement.Item(j).Rotation
                                 y.IsHitTestVisible = True 'True:bouge pas False:Bouge
                                 AddHandler y.PreviewMouseDown, AddressOf Dbleclk
                                 AddHandler y.ShowZone, AddressOf ElementShowZone
@@ -1232,12 +1239,12 @@ Class Window1
                             _Left = (150 * _idx) + 40
 
                             'Ajoute l'élément dans la liste
-                            Dim elmt As New cElement
+                            Dim elmt As New uWidgetEmpty
                             elmt.ID = z.ElementID
                             elmt.ZoneId = IdZone
                             elmt.Width = x.Width
                             elmt.Height = x.Height
-                            elmt.Angle = 0
+                            elmt.Rotation = 0
                             elmt.X = _Left
                             elmt.Y = _Top
                             _ListElement.Add(elmt)
@@ -1272,20 +1279,27 @@ Class Window1
             If Chk1.IsChecked = True Then
                 Design = True
                 For Each child As ContentControl In Canvas1.Children
+                    Dim obj As uWidgetEmpty = child.Content
+                    obj.IsHitTestVisible = False
+                    obj = Nothing
                     Selector.SetIsSelected(child, True)
-
-                    Dim lbl As uWidgetEmpty = child.Content
-                    lbl.IsHitTestVisible = False
                 Next
             Else
                 Design = False
                 Dim a As String = ""
+
                 For Each child As ContentControl In Canvas1.Children
+                    Dim obj As uWidgetEmpty = child.Content
+                    obj.IsHitTestVisible = False
+                    obj.ModeEdition = False
+                    obj = Nothing
+
                     Selector.SetIsSelected(child, False)
 
                     'a &= child.Name & " : Left=" & Canvas1.GetLeft(child) & " Top=" & Canvas1.GetTop(child) & " Width=" & child.Width & " Height=" & child.Height & " Angle=" & child.RenderTransform.GetValue(RotateTransform.AngleProperty) & vbCrLf
                     For j As Integer = 0 To _ListElement.Count - 1
-                        If _ListElement.Item(j).ID = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                        If _ListElement.Item(j).Id = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                            _ListElement.Item(j).ModeEdition = False
                             _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
                             _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
                             _ListElement.Item(j).Width = child.Width
@@ -1297,14 +1311,14 @@ Class Window1
                                     If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
                                         Dim rt As RotateTransform = gt.Children.Item(k)
                                         If rt IsNot Nothing Then
-                                            _ListElement.Item(j).Angle = rt.Angle 'child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                                            _ListElement.Item(j).Rotation = rt.Angle 'child.RenderTransform.GetValue(RotateTransform.AngleProperty)
                                         End If
                                         Exit For
                                     End If
                                 Next
                             End If
                             If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
-                                _ListElement.Item(j).Angle = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                                _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
                             End If
                         End If
                     Next
@@ -1313,11 +1327,18 @@ Class Window1
                     lbl.IsHitTestVisible = True
 
                 Next
-                'MsgBox(a)
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur: " & ex.ToString)
         End Try
     End Sub
 
+    Private Sub Chk2_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk2.Click
+
+        For Each child As ContentControl In Canvas1.Children
+            Dim obj As uWidgetEmpty = child.Content
+            obj.ModeEdition = Chk2.IsChecked
+            obj = Nothing
+        Next
+    End Sub
 End Class

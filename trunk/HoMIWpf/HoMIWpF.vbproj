@@ -46,7 +46,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <IncrementalBuild>true</IncrementalBuild>
-    <OutputPath>..\..\DEBUG_HoMIWpF\</OutputPath>
+    <OutputPath>..\DEBUG_HoMIWpF\</OutputPath>
     <DocumentationFile>HoMIWpF.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314,42353,42354,42355</NoWarn>
     <Optimize>false</Optimize>
@@ -131,6 +131,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="WWidgetProperty.xaml.vb">
+      <DependentUpon>WWidgetProperty.xaml</DependentUpon>
+    </Compile>
     <Page Include="CtrlDevice\uFreeBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -237,10 +240,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Widget\uWidgetONOFF.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Window1.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -273,6 +272,7 @@
     <Compile Include="ResizeThumb.vb" />
     <Compile Include="RotateThumb.vb" />
     <Compile Include="ServiceTV.vb" />
+    <Compile Include="Widget\cWidget.vb" />
     <Compile Include="Widget\uWidgetEmpty.xaml.vb">
       <DependentUpon>uWidgetEmpty.xaml</DependentUpon>
     </Compile>
@@ -288,13 +288,14 @@
     <Compile Include="WConfig.xaml.vb">
       <DependentUpon>WConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Widget\uWidgetONOFF.xaml.vb">
-      <DependentUpon>uWidgetONOFF.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Window1.xaml.vb">
       <DependentUpon>Window1.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="WWidgetProperty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Import Include="System.Linq" />
