@@ -763,6 +763,21 @@ HoMIDom
  Action de type lancer une macro
  </summary>
 	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionSpeech">
+	<summary>
+ Action de type parler
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionHttp">
+	<summary>
+ Action de type commande http
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionLogEvent">
+	<summary>
+ Action de type log windows
+ </summary>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.TypeAction">
 	<summary>
  Enumération des types d'actions
@@ -868,6 +883,21 @@ HoMIDom
  Condition pour action If
  </summary>
 	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionSpeech">
+	<summary>
+ Action parler
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionHttp">
+	<summary>
+ Action parler
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionLogEvent">
+	<summary>
+ Action Log windows
+ </summary>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.log">
 	<summary>log dans les fichiers logs et base sqlite</summary>
 	<remarks></remarks>
@@ -889,9 +919,7 @@ HoMIDom
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Audio.ExtensionAudio">
-	<summary>
- Type d'extension Audio
- </summary>
+	<summary>Type d'extension Audio</summary>
 	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Repertoire">
 	<summary>
@@ -1019,6 +1047,9 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Server.TypeSource">
 	<summary>Indique la source du log si c'est le serveur, un script, un device...</summary>
 	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Server.TypeEventLog">
+	<summary>Indique le type d'event : info, warning ou error</summary>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.Log(HoMIDom.HoMIDom.Server.TypeLog,HoMIDom.HoMIDom.Server.TypeSource,System.String,System.String)">
 	<summary>Ecrit un log dans le fichier log au format xml</summary>
 	<param name="TypLog"></param>
@@ -1026,6 +1057,11 @@ HoMIDom
 	<param name="Fonction"></param>
 	<param name="Message"></param>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.LogEvent(System.String,HoMIDom.HoMIDom.Server.TypeEventLog,System.Int32)">
+	<summary>Ecrit un log dans les events Windows</summary>
+	<param name="message">text to write to event log</param>
+	<param name="type">1:erreur, 2:warning, 3:information</param>
+	<param name="eventid"></param>
 </member><member name="M:HoMIDom.HoMIDom.Server.#ctor">
 	<summary>Déclaration de la class Server</summary>
 	<remarks></remarks>
@@ -1040,6 +1076,12 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.stop(System.String)">
 	<summary>Arrêt du serveur</summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnAllSpeechSynthesisVoices">
+	<summary>
+ Gets a list of all the Speech Synthesis voices installed on the computer.
+ </summary>
+	<returns>A string array of all the voices installed</returns>
+	<remarks>Make sure you have the System.Speech namespace reference added to your project</remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.CanDelete(System.String,System.String)">
 	<summary>
  Vérifie si un élément existe dans une zone, une macro, un trigger... avant de le supprimer
@@ -1047,6 +1089,24 @@ HoMIDom
 	<param name="IdSrv"></param>
 	<param name="Id"></param>
 	<returns>Retourne une erreur commencant par ERREUR ou la liste des noms des macros, zones...</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetAllVoice">
+	<summary>
+ Retourne la liste des voix installées sur le serveur
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetDefautVoice">
+	<summary>
+ Retourne la voix par défaut
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetDefautVoice(System.String)">
+	<summary>
+ Définit la voix par défaut
+ </summary>
+	<param name="Voice"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetTimeSave(System.String)">
 	<summary>
@@ -1634,6 +1694,24 @@ HoMIDom
 	<summary>
  Template de Classe de type Driver pour le service web
  </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllVoice">
+	<summary>
+ Retourne la liste des voix installées sur le serveur
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetDefautVoice">
+	<summary>
+ Retourne la voix par défaut
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetDefautVoice(System.String)">
+	<summary>
+ Définit la voix par défaut
+ </summary>
+	<param name="Voice"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.CanDelete(System.String,System.String)">
 	<summary>

@@ -35,8 +35,9 @@
             <DockPanel >
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Height="25" Name="StkTop">
                 <Label Margin="1" Name="LblTime" FontSize="10" Foreground="White" FlowDirection="RightToLeft">Label</Label>
-                <StackPanel >
-                    <CheckBox  Name="Chk1" Content="Mode Design" Foreground="White" Visibility="Hidden" />
+                <StackPanel Orientation="Horizontal" >
+                    <CheckBox  Name="Chk1" Content="Déplacer Widget" Foreground="White" Visibility="Collapsed"  />
+                    <CheckBox  Name="Chk2" Content="Editer Widget" Foreground="White"  Visibility="Collapsed"/>
                 </StackPanel>
                 <Rectangle Width="100" />
                 <Image Margin="1" Name="ImageLeve" Stretch="Fill" Tag="Soleil" HorizontalAlignment="Right" Width="20"  Height="20" Source="/HoMIWpF;component/Images/01.png" />

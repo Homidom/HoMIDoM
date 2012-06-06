@@ -10,9 +10,9 @@ Public Class uWidgetEmpty
     Dim _ShowStatus As Boolean = True 'Affiche le status - Oui par défaut
     Dim _ShowEtiquette As Boolean = True 'Affiche le libellé du composant par défaut - Oui par défaut
     Dim _Etiquette As String = "" 'Etiquette
-    Dim _X As Double
-    Dim _Y As Double
-    Dim _Rotation As Double
+    Dim _X As Double = 0
+    Dim _Y As Double = 0
+    Dim _Rotation As Double = 0
     Dim _ModeEdition As Boolean
     Dim _Picture As String
     Dim _ImageBackGround As String
@@ -21,7 +21,8 @@ Public Class uWidgetEmpty
     Dim _Refresh As Integer = 1
     Dim _ColorBackGround As SolidColorBrush = New SolidColorBrush(Colors.Black)
     Dim _Visuel As New List(Of cWidget.Visu)
-    Dim _Type As cElement.WidgetType = cElement.WidgetType.VIERGE
+    'Dim _Type As cElement.WidgetType = cElement.WidgetType.VIERGE
+    Dim _ZoneId As String
     Dim dt As DispatcherTimer
 
     Public Event Click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
@@ -41,6 +42,7 @@ Public Class uWidgetEmpty
 
                 If _dev IsNot Nothing Then
                     Etiquette = _dev.Name
+                    _Picture = _dev.Picture
                     Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_dev.Picture))
 
                     Select Case _dev.Type
@@ -144,6 +146,7 @@ Public Class uWidgetEmpty
                     Etiquette = _zone.Name
                     Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Icon))
                     ShowStatus = False
+                    _Picture = _zone.Icon
                 End If
             End If
 
@@ -151,11 +154,20 @@ Public Class uWidgetEmpty
         End Set
     End Property
 
-    Public ReadOnly Property Type As cElement.WidgetType
+    Public Property ZoneId As String
         Get
-            Return _Type
+            Return _ZoneId
         End Get
+        Set(ByVal value As String)
+            _ZoneId = value
+        End Set
     End Property
+
+    'Public ReadOnly Property Type As cElement.WidgetType
+    '    Get
+    '        Return _Type
+    '    End Get
+    'End Property
 
     Public Property ShowEtiquette As Boolean
         Get
@@ -164,6 +176,7 @@ Public Class uWidgetEmpty
         Set(ByVal value As Boolean)
             _ShowEtiquette = value
             If value = True Then
+                Lbl.Visibility = Windows.Visibility.Visible
                 If _dev IsNot Nothing Then
                     Etiquette = _dev.Name
                 End If
@@ -173,6 +186,8 @@ Public Class uWidgetEmpty
                 If _macro IsNot Nothing Then
                     Etiquette = _macro.Nom
                 End If
+            Else
+                Lbl.Visibility = Windows.Visibility.Collapsed
             End If
         End Set
     End Property
@@ -258,9 +273,7 @@ Public Class uWidgetEmpty
         Set(ByVal value As Boolean)
             _ShowStatus = value
             If value = False Then
-                LblStatus.Visibility = Windows.Visibility.Hidden
-                LblStatus.Width = 0
-                LblStatus.Height = 0
+                LblStatus.Visibility = Windows.Visibility.Collapsed
             Else
                 LblStatus.Visibility = Windows.Visibility.Visible
                 LblStatus.Width = Double.NaN
@@ -512,21 +525,39 @@ Public Class uWidgetEmpty
     End Sub
 
     Private Sub Stk1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Stk1.MouseDown
-        If _zone IsNot Nothing Then
-            RaiseEvent ShowZone(_zone.ID)
-            Exit Sub
-        End If
-        If _macro IsNot Nothing Then
-            myService.RunMacro(IdSrv, _macro.ID)
-            Exit Sub
-        End If
-        If StkPopup.Children.Count > 0 Then
-            If Popup1.IsOpen = False Then
-                Popup1.IsOpen = True
-            Else
-                Popup1.IsOpen = False
+
+
+        If _ModeEdition Then
+            Try
+                Dim x As New WWidgetProperty(Me)
+                x.Owner = frmMere
+                x.ShowDialog()
+                If x.DialogResult.HasValue And x.DialogResult.Value Then
+                    x.Close()
+                Else
+                    x.Close()
+                End If
+
+            Catch ex As Exception
+                MessageBox.Show("Erreur: " & ex.ToString)
+            End Try
+        Else
+            If _zone IsNot Nothing Then
+                RaiseEvent ShowZone(_zone.ID)
+                Exit Sub
+            End If
+            If _macro IsNot Nothing Then
+                myService.RunMacro(IdSrv, _macro.ID)
+                Exit Sub
+            End If
+            If StkPopup.Children.Count > 0 Then
+                If Popup1.IsOpen = False Then
+                    Popup1.IsOpen = True
+                Else
+                    Popup1.IsOpen = False
+                End If
             End If
         End If
-
     End Sub
+
 End Class

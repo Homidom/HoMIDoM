@@ -72,7 +72,7 @@
     <Grid >
        <StackPanel Name="StkPanel">
             <StackPanel.Background>
-                <ImageBrush ImageSource="C:\ehome\images\Panel01.png" Stretch="Fill" />
+                <ImageBrush ImageSource="/HoMIWpF;component/Images/Panel01.png" Stretch="Fill" />
             </StackPanel.Background>
             <StackPanel Orientation="Horizontal" Tag="TITRE">
                 <Label Height="25" Name="Lbl" VerticalAlignment="Top" Foreground="White" FontSize="12" Width="210">Label</Label>
