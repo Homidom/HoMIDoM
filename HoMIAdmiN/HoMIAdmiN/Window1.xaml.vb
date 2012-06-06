@@ -1441,7 +1441,7 @@ Class Window1
                 Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
                 myDoubleAnimation.From = 1.0
                 myDoubleAnimation.To = 0.0
-                myDoubleAnimation.Duration = New Duration(TimeSpan.FromSeconds(1))
+                myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(650))
                 Dim myStoryboard As Storyboard
                 myStoryboard = New Storyboard()
                 myStoryboard.Children.Add(myDoubleAnimation)
@@ -1475,7 +1475,7 @@ Class Window1
             Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
             myDoubleAnimation.From = 1.0
             myDoubleAnimation.To = 0.0
-            myDoubleAnimation.Duration = New Duration(TimeSpan.FromSeconds(1))
+            myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(650))
             Dim myStoryboard As Storyboard
             myStoryboard = New Storyboard()
             myStoryboard.Children.Add(myDoubleAnimation)
@@ -1504,7 +1504,7 @@ Class Window1
             Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
             myDoubleAnimation.From = 0.0
             myDoubleAnimation.To = 1.0
-            myDoubleAnimation.Duration = New Duration(TimeSpan.FromSeconds(1))
+            myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(650))
             Dim myStoryboard As Storyboard
             myStoryboard = New Storyboard()
             myStoryboard.Children.Add(myDoubleAnimation)
