@@ -8,6 +8,8 @@ Public Class uCondition
     Dim _IdDevice As String
     Dim _PropertyDevice As String
     Dim _Value As Object
+    Dim MyMenuItem As New MenuItem
+    Dim mycontextmnu As New ContextMenu
 
     Public Event DeleteCondition(ByVal uid As String)
     Public Event UpCondition(ByVal uid As String)
@@ -162,7 +164,18 @@ Public Class uCondition
         End Get
         Set(ByVal value As Object)
             _Value = value
-            TxtValue.Text = value
+            If value.ToString.StartsWith("[") And value.ToString.EndsWith("]") Then
+                Dim a() As String = value.ToString.Split("|")
+                If a.Length = 3 Then
+                    TxtValue.Text = a(1) & "." & Mid(a(2), 1, Len(a(2)) - 1)
+                    TxtValue.Tag = value
+                    TxtValue.ToolTip = "Veuillez passer par le menu via le clic droit pour changer le device ou sa propriété"
+                Else
+                    TxtValue.Text = value
+                End If
+            Else
+                TxtValue.Text = value
+            End If
         End Set
     End Property
 
@@ -217,13 +230,164 @@ Public Class uCondition
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
 
-        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        CbDevice.ItemsSource = myService.GetAllDevices(IdSrv)
-        CbDevice.DisplayMemberPath = "Name"
-        'For i As Integer = 0 To myservice.GetAllDevices(IdSrv).Count - 1
-        ' CbDevice.Items.Add(myService.GetAllDevices(IdSrv).Item(i).Name)
-        'Next
+        Try
 
+            ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+            CbDevice.ItemsSource = myService.GetAllDevices(IdSrv)
+            CbDevice.DisplayMemberPath = "Name"
+            'For i As Integer = 0 To myservice.GetAllDevices(IdSrv).Count - 1
+            ' CbDevice.Items.Add(myService.GetAllDevices(IdSrv).Item(i).Name)
+            'Next
+            For Each _dev As TemplateDevice In myService.GetAllDevices(IdSrv)
+                Dim x As New MenuItem
+                x.Header = _dev.Name
+                x.Uid = _dev.ID
+
+                Select Case _dev.Type
+                    Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
+                        Dim y As New MenuItem
+                        y.Header = "Value"
+                        y.Uid = _dev.ID
+                        AddHandler y.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y)
+                    Case 17
+                        Dim y0 As New MenuItem
+                        y0.Header = ("Value")
+                        y0.Uid = _dev.ID
+                        AddHandler y0.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y0)
+                        Dim y1 As New MenuItem
+                        y1.Header = ("ConditionActuel")
+                        y1.Uid = _dev.ID
+                        AddHandler y1.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y1)
+                        Dim y2 As New MenuItem
+                        y2.Header = ("TemperatureActuel")
+                        y2.Uid = _dev.ID
+                        AddHandler y2.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y2)
+                        Dim y3 As New MenuItem
+                        y3.Header = ("HumiditeActuel")
+                        y3.Uid = _dev.ID
+                        AddHandler y3.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y3)
+                        Dim y4 As New MenuItem
+                        y4.Header = ("VentActuel")
+                        y4.Uid = _dev.ID
+                        AddHandler y4.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y4)
+                        Dim y5 As New MenuItem
+                        y5.Header = ("JourToday")
+                        y5.Uid = _dev.ID
+                        AddHandler y5.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y5)
+                        Dim y6 As New MenuItem
+                        y6.Header = ("MinToday")
+                        y6.Uid = _dev.ID
+                        AddHandler y6.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y6)
+                        Dim y7 As New MenuItem
+                        y7.Header = ("MaxToday")
+                        y7.Uid = _dev.ID
+                        AddHandler y7.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y7)
+                        Dim y8 As New MenuItem
+                        y8.Header = ("ConditionToday")
+                        y8.Uid = _dev.ID
+                        AddHandler y8.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y8)
+                        Dim y9 As New MenuItem
+                        y9.Header = ("JourJ1")
+                        y9.Uid = _dev.ID
+                        AddHandler y9.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y9)
+                        Dim y10 As New MenuItem
+                        y10.Header = ("MinJ1")
+                        y10.Uid = _dev.ID
+                        AddHandler y10.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y10)
+                        Dim y11 As New MenuItem
+                        y11.Header = ("MaxJ1")
+                        y11.Uid = _dev.ID
+                        AddHandler y11.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y11)
+                        Dim y12 As New MenuItem
+                        y12.Header = ("ConditionJ1")
+                        y12.Uid = _dev.ID
+                        AddHandler y12.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y12)
+                        Dim y13 As New MenuItem
+                        y13.Header = ("JourJ2")
+                        y13.Uid = _dev.ID
+                        AddHandler y13.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y13)
+                        Dim y14 As New MenuItem
+                        y14.Header = ("MinJ2")
+                        y14.Uid = _dev.ID
+                        AddHandler y14.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y14)
+                        Dim y15 As New MenuItem
+                        y15.Header = ("MaxJ2")
+                        y15.Uid = _dev.ID
+                        AddHandler y15.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y15)
+                        Dim y16 As New MenuItem
+                        y16.Header = ("ConditionJ2")
+                        y16.Uid = _dev.ID
+                        AddHandler y16.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y16)
+                        Dim y17 As New MenuItem
+                        y17.Header = ("JourJ3")
+                        y17.Uid = _dev.ID
+                        AddHandler y17.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y17)
+                        Dim y18 As New MenuItem
+                        y18.Header = ("MinJ3")
+                        y18.Uid = _dev.ID
+                        AddHandler y18.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y18)
+                        Dim y19 As New MenuItem
+                        y19.Header = ("MaxJ3")
+                        y19.Uid = _dev.ID
+                        AddHandler y19.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y19)
+                        Dim y20 As New MenuItem
+                        y20.Header = ("ConditionJ3")
+                        y20.Uid = _dev.ID
+                        AddHandler y20.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y20)
+
+                End Select
+                mycontextmnu.Items.Add(x)
+            Next
+
+            Dim y99 As New MenuItem
+            y99.Header = "Effacer la valeur"
+            y99.Uid = "delete99"
+            AddHandler y99.Click, AddressOf MenuItemDev_Click
+            mycontextmnu.Items.Add(y99)
+
+            TxtValue.ContextMenu = mycontextmnu
+
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub MenuItemDev_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+            If sender.uid = "delete99" Then
+                TxtValue.Text = ""
+                TxtValue.Tag = ""
+                TxtValue.ToolTip = ""
+            Else
+                TxtValue.Text = sender.parent.header & "." & sender.header
+                TxtValue.Tag = "[" & sender.uid & "|" & sender.parent.header & "|" & sender.header & "]"
+                TxtValue.ToolTip = "Veuillez passer par le menu via le clic droit pour changer le device ou sa propriété"
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString)
+        End Try
     End Sub
 
     Private Sub uCondition_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Me.MouseLeave
@@ -323,9 +487,13 @@ Public Class uCondition
                 _IdDevice = myservice.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).ID
                 _PropertyDevice = CbPropertyDevice.Text
                 _Signe = CbSigne2.SelectedIndex
-                _Value = TxtValue.Text
+                If TxtValue.Tag = "" Then
+                    _Value = TxtValue.Text
+                Else
+                    _Value = TxtValue.Tag
+                End If
             End If
-        End If
+            End If
 
 
     End Sub
@@ -684,4 +852,5 @@ Public Class uCondition
             ChkLeveS.IsChecked = False
         End If
     End Sub
+
 End Class

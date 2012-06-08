@@ -103,4 +103,5 @@ Public Class uAction
     Private Sub ImgDelete_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgDelete.MouseLeftButtonDown
         RaiseEvent DeleteAction(Me.Uid)
     End Sub
+
 End Class
