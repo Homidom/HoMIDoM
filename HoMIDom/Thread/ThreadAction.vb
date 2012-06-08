@@ -56,39 +56,51 @@ Namespace HoMIDom
 
                             If x.Conditions.Item(i).Type = Action.TypeCondition.Device Then
                                 Dim retour As Object = CallByName(_Server.ReturnRealDeviceById(x.Conditions.Item(i).IdDevice), x.Conditions.Item(i).PropertyDevice, CallType.Get)
+                                Dim retour2 As Object
+                                If x.Conditions.Item(i).Value.ToString.StartsWith("[") And x.Conditions.Item(i).Value.ToString.EndsWith("]") Then
+                                    Dim a() As String = x.Conditions.Item(i).Value.ToString.Split("|")
+                                    If a.Length = 3 Then
+                                        retour2 = CallByName(_Server.ReturnRealDeviceById(Mid(a(2), 2, Len(a(2)) - 1)), Len(a(2)) - 1, CallType.Get)
+                                    Else
+                                        retour2 = x.Conditions.Item(i).Value
+                                    End If
+                                Else
+                                    retour2 = x.Conditions.Item(i).Value
+                                End If
+
                                 Select Case x.Conditions.Item(i).Condition
                                     Case Action.TypeSigne.Egal
-                                        If retour = x.Conditions.Item(i).Value Then
+                                        If retour = retour2 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.Different
-                                        If retour <> x.Conditions.Item(i).Value Then
+                                        If retour <> retour2 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.Inferieur
-                                        If retour < x.Conditions.Item(i).Value Then
+                                        If retour < retour2 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.InferieurEgal
-                                        If retour <= x.Conditions.Item(i).Value Then
+                                        If retour <= retour2 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.Superieur
-                                        If retour > x.Conditions.Item(i).Value Then
+                                        If retour > retour2 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.SuperieurEgal
-                                        If retour > x.Conditions.Item(i).Value Then
+                                        If retour > retour2 Then
                                             result = True
                                         Else
                                             result = False
