@@ -349,8 +349,19 @@ Imports System.Web.HttpUtility
                         End If
                     Case "PLAYAUDIO"
                         If Objet.adresse2 = "" Then
-                            If Objet.Fichier = "" Then Exit Sub
+                            If Objet.Fichier = "" Then
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "FOOBAR", "Aucun fichier Audio n'a été passé en paramètre (exemple C:\test.mp3)")
+                                Exit Sub
+                            End If
+
                             Dim ProcId As Object
+                            Dim myfile As String = Objet.fichier
+                            If myfile.StartsWith(Chr(34)) = False Then
+                                myfile = Chr(34) & myfile
+                            End If
+                            If myfile.EndsWith(Chr(34)) = False Then
+                                myfile = myfile & Chr(34)
+                            End If
                             ProcId = Shell(Objet.Adresse1 & " /add " & Objet.Fichier, AppWinStyle.Hide)
                             System.Threading.Thread.Sleep(3000)
                             ProcId = Shell(Objet.Adresse1 & " /play", AppWinStyle.Hide)
