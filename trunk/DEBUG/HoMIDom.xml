@@ -778,6 +778,16 @@ HoMIDom
  Action de type log windows
  </summary>
 	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionLogEventHomidom">
+	<summary>
+ Action de type log Homidom
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionDOS">
+	<summary>
+ Action de type log Commnde Dos
+ </summary>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.TypeAction">
 	<summary>
  Enumération des types d'actions
@@ -896,6 +906,16 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Action.ActionLogEvent">
 	<summary>
  Action Log windows
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionLogEventHomidom">
+	<summary>
+ Action Log Homidom
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionDos">
+	<summary>
+ Action Dos 
  </summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.log">

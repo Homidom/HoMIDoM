@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="400" Background="Black" MinWidth="400" MinHeight="200" Width="Auto" Name="uScenario">
+             d:DesignHeight="200" d:DesignWidth="450" Background="Black" MinWidth="400" MinHeight="200" Width="Auto" Name="uScenario">
     <Grid>
         <DockPanel >
             <StackPanel DockPanel.Dock="Top" CanHorizontallyScroll="True" CanVerticallyScroll="True">
@@ -16,7 +16,9 @@
                 <Image Source="/HoMIAdmiN;component/Images/script_32.png" Height="32" Width="32" ToolTip="Une autre Macro" Name="ImgActMacro"></Image>
                     <Image Source="/HoMIAdmiN;component/Images/Speech_128.png" Height="32" Width="32" ToolTip="Parler" Name="ImgActSpeech"></Image>
                     <Image Source="/HoMIAdmiN;component/Images/Cmd_Http_128.png" Height="32" Width="32" ToolTip="Envoyer une commande http" Name="ImgActHttp"></Image>
-                    <Image Source="/HoMIAdmiN;component/Images/Logs_32.png" Height="32" Width="32" ToolTip="Log Windows" Name="ImgActLog"></Image>
+                    <Image Source="/HoMIAdmiN;component/Images/Log_Windows.png" Height="32" Width="32" ToolTip="Log Windows" Name="ImgActLog"></Image>
+                    <Image Source="/HoMIAdmiN;component/Images/Log_Homidom.png" Height="32" Width="32" ToolTip="Log Homidom" Name="ImgActLogHomidom"></Image>
+                    <Image Source="/HoMIAdmiN;component/Images/command_prompt_64.png" Height="32" Width="32" ToolTip="Commande Dos" Name="ImgActDos"></Image>
                 <Rectangle Width="50"/>
                     <Image Name="ZoomPlus" Source="/HoMIAdmiN;component/Images/zoom_avant_32.png" Width="23" Height="23" />
                     <Image Name="ZoomMoins" Source="/HoMIAdmiN;component/Images/zoom_arriere_32.png" Width="23" Height="23" />

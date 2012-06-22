@@ -61,7 +61,7 @@ Public Class WActionParametrage
                         _ObjAction = obj
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionLogEvent
                         If TxtValue.Text = "" Then
-                            MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            MessageBox.Show("Veuillez renseigner tous les champs car il n'y a pas de message !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
                         If Cb1.SelectedIndex < 0 Then
@@ -76,6 +76,33 @@ Public Class WActionParametrage
                         obj.Message = TxtValue.Text
                         obj.Eventid = Txt2.Text
                         obj.Type = Cb1.SelectedIndex + 1
+                        _ObjAction = obj
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionLogEventHomidom
+                        If TxtValue.Text = "" Then
+                            MessageBox.Show("Veuillez renseigner tous les champs car il n'y a pas de message !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            Exit Sub
+                        End If
+                        If Cb1.SelectedIndex < 0 Then
+                            MessageBox.Show("Veuillez sélectionner un type de log !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            Exit Sub
+                        End If
+                        If Txt2.Text = "" Then
+                            MessageBox.Show("Veuillez saisir le nom de la fonction !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            Exit Sub
+                        End If
+                        Dim obj As Action.ActionLogEventHomidom = _ObjAction
+                        obj.Message = TxtValue.Text
+                        obj.Fonction = Txt2.Text
+                        obj.Type = Cb1.SelectedIndex + 1
+                        _ObjAction = obj
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionDOS
+                        If Txt2.Text = "" Then
+                            MessageBox.Show("Veuillez saisir le chemin du fichier !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            Exit Sub
+                        End If
+                        Dim obj As Action.ActionDos = _ObjAction
+                        obj.Arguments = TxtValue.Text
+                        obj.Fichier = Txt2.Text
                         _ObjAction = obj
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionHttp
                         If TxtValue.Text = "" Then
@@ -242,14 +269,12 @@ Public Class WActionParametrage
                         Dim obj As Action.ActionSpeech = _ObjAction
 
                         'Mise en forme graphique
-                        Lbl1.Height = 0
-                        Lbl2.Height = 0
+                        Lbl1.Visibility = Windows.Visibility.Collapsed
+                        Lbl2.Visibility = Windows.Visibility.Collapsed
                         LblValue.Content = "Message:"
                         Txt2.Text = ""
                         Cb2.Visibility = Windows.Visibility.Collapsed
-                        Cb2.Height = 0
                         Cb1.Visibility = Windows.Visibility.Collapsed
-                        Cb1.Height = 0
                         Txt2.Visibility = Windows.Visibility.Visible
                         Txt2.Height = 0
                         TxtValue.Text = ""
@@ -261,14 +286,12 @@ Public Class WActionParametrage
                         Dim obj As Action.ActionHttp = _ObjAction
 
                         'Mise en forme graphique
-                        Lbl1.Height = 0
-                        Lbl2.Height = 0
+                        Lbl1.Visibility = Windows.Visibility.Collapsed
+                        Lbl2.Visibility = Windows.Visibility.Collapsed
                         LblValue.Content = "Commande:"
                         Txt2.Text = ""
                         Cb2.Visibility = Windows.Visibility.Collapsed
-                        Cb2.Height = 0
                         Cb1.Visibility = Windows.Visibility.Collapsed
-                        Cb1.Height = 0
                         Txt2.Visibility = Windows.Visibility.Visible
                         Txt2.Height = 0
                         TxtValue.Text = ""
@@ -303,7 +326,56 @@ Public Class WActionParametrage
                         TxtValue.Height = 80
 
                         TxtValue.Text = obj.Message
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionLogEventHomidom
+                        Dim obj As Action.ActionLogEventHomidom = _ObjAction
 
+                        'Mise en forme graphique
+                        Lbl1.Content = "Type:"
+                        Lbl2.Content = "Fonction:"
+                        LblValue.Content = "Message:"
+
+                        Cb1.Items.Add("INFO")
+                        Cb1.Items.Add("ACTION")
+                        Cb1.Items.Add("MESSAGE")
+                        Cb1.Items.Add("VALEUR_CHANGE")
+                        Cb1.Items.Add("VALEUR_INCHANGE")
+                        Cb1.Items.Add("VALEUR_INCHANGE_PRECISION")
+                        Cb1.Items.Add("VALEUR_INCHANGE_LASTETAT")
+                        Cb1.Items.Add("ERREUR")
+                        Cb1.Items.Add("ERREUR_CRITIQUE")
+                        Cb1.Items.Add("DEBUG")
+
+                        If obj.Type > 0 Then
+                            Cb1.SelectedIndex = (obj.Type) - 1
+                        Else
+                            Cb1.SelectedIndex = 0
+                        End If
+
+                        Cb2.Visibility = Windows.Visibility.Collapsed
+                        Txt2.Visibility = Windows.Visibility.Visible
+                        Txt2.Height = 20
+                        Txt2.Text = obj.Fonction
+                        TxtValue.Text = ""
+                        TxtValue.Height = 80
+                        TxtValue.Text = obj.Message
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionDOS
+                        Dim obj As Action.ActionDos = _ObjAction
+
+                        'Mise en forme graphique
+                        Lbl2.Content = "Fichier:"
+                        LblValue.Content = "Arguments:"
+
+                        Cb1.Visibility = Windows.Visibility.Collapsed
+                        Lbl1.Visibility = Windows.Visibility.Collapsed
+                        Cb2.Visibility = Windows.Visibility.Collapsed
+                        Txt2.Visibility = Windows.Visibility.Visible
+                        Txt2.Height = 20
+                        Txt2.ToolTip = "Veuillez saisir le chemin du fichier (exemple: C:\test\program.exe)"
+                        Txt2.Text = obj.Fichier
+                        TxtValue.Text = ""
+                        TxtValue.ToolTip = "Veuillez saisir les arguments associés au fichier (exemple \a -b)"
+                        TxtValue.Height = 20
+                        TxtValue.Text = obj.Arguments
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionIf
                         Me.Height = 650
                         Me.Width = 667

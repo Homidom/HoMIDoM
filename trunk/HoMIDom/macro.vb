@@ -395,6 +395,18 @@ Namespace HoMIDom
             ''' </summary>
             ''' <remarks></remarks>
             ActionLogEvent = 6
+
+            ''' <summary>
+            ''' Action de type log Homidom
+            ''' </summary>
+            ''' <remarks></remarks>
+            ActionLogEventHomidom = 7
+
+            ''' <summary>
+            ''' Action de type log Commnde Dos
+            ''' </summary>
+            ''' <remarks></remarks>
+            ActionDOS = 8
         End Enum
 
         ''' <summary>
@@ -879,10 +891,107 @@ Namespace HoMIDom
                 End Set
             End Property
 
-
             Public ReadOnly Property TypeAction As TypeAction
                 Get
                     Return TypeAction.ActionLogEvent
+                End Get
+            End Property
+
+        End Class
+
+        ''' <summary>
+        ''' Action Log Homidom
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Class ActionLogEventHomidom
+            Dim _Message As String
+            Dim _type As HoMIDom.Server.TypeLog = TypeLog.INFO
+            Dim _fonction As String
+            Dim _Timing As DateTime
+
+            Public Property Timing As DateTime
+                Get
+                    Return _Timing
+                End Get
+                Set(ByVal value As DateTime)
+                    _Timing = value
+                End Set
+            End Property
+
+            Public Property Message As String
+                Get
+                    Return _Message
+                End Get
+                Set(ByVal value As String)
+                    _Message = value
+                End Set
+            End Property
+
+            Public Property Type As HoMIDom.Server.TypeLog
+                Get
+                    Return _type
+                End Get
+                Set(ByVal value As HoMIDom.Server.TypeLog)
+                    _type = value
+                End Set
+            End Property
+
+            Public Property Fonction As String
+                Get
+                    Return _fonction
+                End Get
+                Set(ByVal value As String)
+                    _fonction = value
+                End Set
+            End Property
+
+            Public ReadOnly Property TypeAction As TypeAction
+                Get
+                    Return TypeAction.ActionLogEventHomidom
+                End Get
+            End Property
+
+        End Class
+
+        ''' <summary>
+        ''' Action Dos 
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Class ActionDos
+            Dim _Fichier As String
+            Dim _Arguments As String
+            Dim _Timing As DateTime
+
+            Public Property Timing As DateTime
+                Get
+                    Return _Timing
+                End Get
+                Set(ByVal value As DateTime)
+                    _Timing = value
+                End Set
+            End Property
+
+            Public Property Fichier As String
+                Get
+                    Return _Fichier
+                End Get
+                Set(ByVal value As String)
+                    _Fichier = value
+                End Set
+            End Property
+
+            Public Property Arguments As String
+                Get
+                    Return _Arguments
+                End Get
+                Set(ByVal value As String)
+                    _Arguments = value
+                End Set
+            End Property
+
+            Public ReadOnly Property TypeAction As TypeAction
+                Get
+                    Return TypeAction.ActionDOS
                 End Get
             End Property
 

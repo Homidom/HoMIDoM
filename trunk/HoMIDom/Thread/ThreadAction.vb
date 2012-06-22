@@ -334,6 +334,23 @@ Namespace HoMIDom
                     Case Action.TypeAction.ActionLogEvent
                         Dim x As Action.ActionLogEvent = _Action
                         _Server.LogEvent(x.Message, x.Type, x.Eventid)
+                    Case Action.TypeAction.ActionLogEventHomidom
+                        Dim x As Action.ActionLogEventHomidom = _Action
+                        _Server.Log(x.Type, HoMIDom.Server.TypeSource.SCRIPT, x.Fonction, x.Message)
+                    Case Action.TypeAction.ActionDOS
+                        Dim x As Action.ActionDos = _Action
+                        Try
+                            If File.Exists(x.Fichier) Then
+                                Dim process As Process = New Process()
+                                process.StartInfo.FileName = x.Fichier
+                                process.StartInfo.Arguments = x.Arguments
+                                process.Start()
+                            Else
+                                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "ActionDos : le fichier " & x.Fichier & " n'existe pas")
+                            End If
+                        Catch ex As Exception
+                            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "Erreur ActionDos : " & ex.ToString)
+                        End Try
                 End Select
             Catch ex As Exception
                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "Exception : " & ex.ToString)
