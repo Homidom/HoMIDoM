@@ -91,8 +91,17 @@ Public Class uAction
                         End If
                     Case Action.TypeAction.ActionLogEvent
                         Dim x As Action.ActionLogEvent = _ObjAction
-                        Label1.Content = "Log"
+                        Label1.Content = "Log Windows"
                         If x.Message IsNot Nothing Then Label2.Content = x.Message
+                    Case Action.TypeAction.ActionLogEventHomidom
+                        Dim x As Action.ActionLogEventHomidom = _ObjAction
+                        Label1.Content = "Log Homidom"
+                        If x.Message IsNot Nothing Then Label2.Content = x.Message
+                    Case Action.TypeAction.ActionDOS
+                        Dim x As Action.ActionDos = _ObjAction
+                        Label1.Content = "Commande Dos"
+                        If x.Fichier IsNot Nothing Then Label2.Content = x.Fichier
+                        If x.Arguments IsNot Nothing Then Label2.Content &= " " & x.Arguments
                 End Select
                 Refresh_Position()
             End If

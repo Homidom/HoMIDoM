@@ -124,6 +124,12 @@ Public Class uScenario
                     Case "ACTIONLOGEVENT"
                         Dim y As New Action.ActionLogEvent
                         x.ObjAction = y
+                    Case "ACTIONLOGEVENTHOMIDOM"
+                        Dim y As New Action.ActionLogEventHomidom
+                        x.ObjAction = y
+                    Case "ACTIONDOS"
+                        Dim y As New Action.ActionDos
+                        x.ObjAction = y
                 End Select
                 x.Span = Span
                 x.Zoom = _Zoom
@@ -311,15 +317,31 @@ Public Class uScenario
         Dim effects As DragDropEffects
         Dim obj As New DataObject()
         obj.SetData(GetType(String), "ACTIONHTTP")
-        effects = DragDrop.DoDragDrop(Me.ImgActSpeech, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+        effects = DragDrop.DoDragDrop(Me.ImgActHttp, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 
-    'Ajouter action log event
+    'Ajouter action log event Windows
     Private Sub ImgActLog_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActLog.MouseLeftButtonDown
         Dim effects As DragDropEffects
         Dim obj As New DataObject()
         obj.SetData(GetType(String), "ACTIONLOGEVENT")
-        effects = DragDrop.DoDragDrop(Me.ImgActSpeech, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+        effects = DragDrop.DoDragDrop(Me.ImgActLog, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+    End Sub
+
+    'Ajouter action log event Homidom
+    Private Sub ImgActLogHomidom_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActLogHomidom.MouseLeftButtonDown
+        Dim effects As DragDropEffects
+        Dim obj As New DataObject()
+        obj.SetData(GetType(String), "ACTIONLOGEVENTHOMIDOM")
+        effects = DragDrop.DoDragDrop(Me.ImgActLogHomidom, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+    End Sub
+
+    'Ajouter action Dos
+    Private Sub ImgActDos_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActDos.MouseLeftButtonDown
+        Dim effects As DragDropEffects
+        Dim obj As New DataObject()
+        obj.SetData(GetType(String), "ACTIONDOS")
+        effects = DragDrop.DoDragDrop(Me.ImgActDos, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 
     Private Sub ScrollViewer1_ScrollChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.ScrollChangedEventArgs) Handles ScrollViewer1.ScrollChanged

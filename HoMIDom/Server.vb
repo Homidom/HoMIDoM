@@ -1033,6 +1033,8 @@ Namespace HoMIDom
         End Function
 
         Private Sub LoadAction(ByVal list As XmlNode, ByVal ListAction As ArrayList)
+            Dim _typeaction As String = ""
+
             Try
                 If list.HasChildNodes Then
                     For j2 As Integer = 0 To list.ChildNodes.Count - 1
@@ -1066,6 +1068,16 @@ Namespace HoMIDom
                                 Case "ActionLogEvent"
                                     Dim o As New Action.ActionLogEvent
                                     _Act = o
+                                    _typeaction = "ActionLogEvent"
+                                    o = Nothing
+                                Case "ActionLogEventHomidom"
+                                    Dim o As New Action.ActionLogEventHomidom
+                                    _Act = o
+                                    _typeaction = "ActionLogEventHomidom"
+                                    o = Nothing
+                                Case "ActionDOS"
+                                    Dim o As New Action.ActionDos
+                                    _Act = o
                                     o = Nothing
                             End Select
                             For j3 As Integer = 0 To list.ChildNodes.Item(j2).Attributes.Count - 1
@@ -1086,6 +1098,12 @@ Namespace HoMIDom
                                         _Act.message = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                     Case "commande"
                                         _Act.Commande = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "fonction"
+                                        _Act.fonction = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "fichier"
+                                        _Act.Fichier = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "arguments"
+                                        _Act.Arguments = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                     Case "parametres"
                                         Dim b As String = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                         Dim a() As String = b.Split("|")
@@ -1098,12 +1116,28 @@ Namespace HoMIDom
                                         a = Nothing
                                         c = Nothing
                                     Case "type"
-                                        Select Case UCase(list.ChildNodes.Item(j2).Attributes.Item(j3).Value)
-                                            Case "ERREUR" : _Act.Type = 1
-                                            Case "WARNING" : _Act.Type = 2
-                                            Case "INFORMATION" : _Act.Type = 3
-                                            Case Else : _Act.Type = 1
-                                        End Select
+                                        If _typeaction = "ActionLogEvent" Then
+                                            Select Case UCase(list.ChildNodes.Item(j2).Attributes.Item(j3).Value)
+                                                Case "ERREUR" : _Act.Type = 1
+                                                Case "WARNING" : _Act.Type = 2
+                                                Case "INFORMATION" : _Act.Type = 3
+                                                Case Else : _Act.Type = 1
+                                            End Select
+                                        End If
+                                        If _typeaction = "ActionLogEventHomidom" Then
+                                            Select Case UCase(list.ChildNodes.Item(j2).Attributes.Item(j3).Value)
+                                                Case "INFO" : _Act.Type = 1
+                                                Case "ACTION" : _Act.Type = 2
+                                                Case "MESSAGE" : _Act.Type = 3
+                                                Case "VALEUR_CHANGE" : _Act.Type = 4
+                                                Case "VALEUR_INCHANGE" : _Act.Type = 5
+                                                Case "VALEUR_INCHANGE_PRECISION" : _Act.Type = 6
+                                                Case "VALEUR_INCHANGE_LASTETAT" : _Act.Type = 7
+                                                Case "ERREUR" : _Act.Type = 8
+                                                Case "ERREUR_CRITIQUE" : _Act.Type = 9
+                                                Case "DEBUG" : _Act.Type = 10
+                                            End Select
+                                        End If
                                     Case "eventid"
                                         _Act.Eventid = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                 End Select
@@ -1749,6 +1783,46 @@ Namespace HoMIDom
                             writer.WriteEndAttribute()
                             writer.WriteStartAttribute("eventid")
                             writer.WriteValue(ListActions.Item(j).Eventid)
+                            writer.WriteEndAttribute()
+                        Case Action.TypeAction.ActionLogEventHomidom
+                            writer.WriteStartAttribute("message")
+                            writer.WriteValue(ListActions.Item(j).Message)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("type")
+                            Select Case UCase((ListActions.Item(j).Type.ToString))
+                                Case "INFO"
+                                    writer.WriteValue("1")
+                                Case "ACTION"
+                                    writer.WriteValue("2")
+                                Case "MESSAGE"
+                                    writer.WriteValue("3")
+                                Case "VALEUR_CHANGE"
+                                    writer.WriteValue("4")
+                                Case "VALEUR_INCHANGE"
+                                    writer.WriteValue("5")
+                                Case "VALEUR_INCHANGE_PRECISION"
+                                    writer.WriteValue("6")
+                                Case "VALEUR_INCHANGE_LASTETAT"
+                                    writer.WriteValue("7")
+                                Case "ERREUR"
+                                    writer.WriteValue("8")
+                                Case "ERREUR_CRITIQUE"
+                                    writer.WriteValue("9")
+                                Case "DEBUG"
+                                    writer.WriteValue("10")
+                                Case Else
+                                    writer.WriteValue("1")
+                            End Select
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("fonction")
+                            writer.WriteValue(ListActions.Item(j).Fonction)
+                            writer.WriteEndAttribute()
+                        Case Action.TypeAction.ActionDOS
+                            writer.WriteStartAttribute("fichier")
+                            writer.WriteValue(ListActions.Item(j).Fichier)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("arguments")
+                            writer.WriteValue(ListActions.Item(j).Arguments)
                             writer.WriteEndAttribute()
                         Case Action.TypeAction.ActionIf
                             writer.WriteStartElement("conditions")
