@@ -21,7 +21,8 @@ Public Class WWidgetProperty
         TxtHeight.Text = Obj.Height
         TxtRotation.Text = Obj.Rotation
         TxtDefStatus.Text = Obj.DefautLabelStatus
-        TxtColorBack.Text = Obj.ColorBackGround.ToString
+        lblColor.Background = Obj.ColorBackGround
+        ColorPicker1.SelectedColor = Obj.ColorBackGround
         ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
     End Sub
 
@@ -35,8 +36,15 @@ Public Class WWidgetProperty
         Obj.Height = TxtHeight.Text
         Obj.Rotation = TxtRotation.Text
         Obj.DefautLabelStatus = TxtDefStatus.Text
+        Obj.ColorBackGround = ColorPicker1.SelectedColor
 
-        ' Obj.ColorBackGround = TxtColorBack.Text
+        For i As Integer = 0 To _ListElement.Count - 1
+            If _ListElement.Item(i).Id = Obj.Id And _ListElement.Item(i).ZoneId = Obj.ZoneId Then
+                _ListElement.Item(i) = Obj
+                Exit For
+            End If
+        Next
+
         DialogResult = True
     End Sub
 
@@ -63,8 +71,5 @@ Public Class WWidgetProperty
         End If
     End Function
 
-    Private Sub BtnColorSelect_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnColorSelect.Click
-        ShowDialog(Nothing)
 
-    End Sub
 End Class

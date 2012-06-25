@@ -4,7 +4,7 @@
     
     <Grid >
 
-        <Border Name="Border1" BorderThickness="2" BorderBrush="Black" CornerRadius="5" Background="Black">
+        <Border Name="Border1" CornerRadius="5" Background="Black">
             
             <StackPanel Name="Stk1">
                 <Popup Margin="2" Name="Popup1" HorizontalAlignment="Left" VerticalAlignment="Top"  

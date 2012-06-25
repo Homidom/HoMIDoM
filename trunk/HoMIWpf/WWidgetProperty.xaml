@@ -1,54 +1,56 @@
-﻿<Window x:Class="WWidgetProperty"
+﻿<Window xmlns:my="clr-namespace:HoMIWpF.Customcontrols"  x:Class="WWidgetProperty"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-   
-    Title="WWidgetProperty" Width="320">
-    
-        <StackPanel>
-        <Label Content="Propriétés" FontSize="16" FontStretch="Normal" FontWeight="Medium" />
-        <CheckBox Name="ChkShowEtiq" Content="Afficher Etiquette" />
-            <CheckBox Name="ChkShowStatus" Content="Afficher Status" />
-            <StackPanel Orientation="Horizontal" > 
-                <Label Width="120" Content="Etiquette:" />
+    xmlns:local="clr-namespace:HoMIWpF.Customcontrols"
+    Title="WWidgetProperty" Width="340">
+
+    <StackPanel Background="#636060" Opacity="0.85">
+        <Label Content="Propriétés" FontSize="24" FontStretch="Normal" FontWeight="Medium" FontStyle="Italic" Foreground="DarkOrange" HorizontalContentAlignment="Center" />
+        <CheckBox  Name="ChkShowEtiq" Content="Afficher Etiquette" Foreground="White" />
+        <CheckBox Name="ChkShowStatus" Content="Afficher Status" Foreground="White"/>
+            <StackPanel Orientation="Horizontal" >
+            <Label Width="120" Content="Etiquette:" Foreground="White"/>
                 <TextBox Name="TxtEtiq" Width="150" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                <Label Width="120" Content="X:" />
+            <Label Width="120" Content="X:" Foreground="White"/>
                 <TextBox Name="TxtX" Width="150" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                <Label Width="120" Content="Y:" />
+            <Label Width="120" Content="Y:" Foreground="White"/>
                 <TextBox Name="TxtY" Width="150" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                <Label Width="120" Content="Height:" />
+            <Label Width="120" Content="Height:" Foreground="White"/>
                 <TextBox Name="TxtHeight" Width="150" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                <Label Width="120" Content="Width:" />
+            <Label Width="120" Content="Width:" Foreground="White"/>
                 <TextBox Name="TxtWidth" Width="150" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                <Label Width="120" Content="Rotation:" />
+            <Label Width="120" Content="Rotation:" Foreground="White"/>
                 <TextBox Name="TxtRotation" Width="150" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                <Label Width="120" Content="Picture:" />
+            <Label Width="120" Content="Picture:" Foreground="White"/>
                 <Image Name="ImgPicture" Width="50" Height=" 50"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                <Label Width="120" Content="Defaut Status:" />
+            <Label Width="120" Content="Defaut Status:" Foreground="White"/>
                 <TextBox Name="TxtDefStatus" Width="150" Text="?"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                <Label Width="120" Content="Color BackGround:" />
-                <TextBox Name="TxtColorBack" Width="150" Text=""/>
-               
-            <Button Name="BtnColorSelect" Width="25" Height="25" Content="..." />
-            </StackPanel>
+            <Label Width="120" Content="Color BackGround:" Foreground="White"/>
             <StackPanel Orientation="Horizontal" >
-                <Button Name="BtnOk" Content="OK" Width="75" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
-                <Button Name="BtnCancel" Content="Annuler" Width="75" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
+                <Label Name="lblColor" Height="20" Width="20 "/>
+                <TextBox Name="TxtColorBack" Width="0" Text="" Background="{Binding ElementName=ColorPicker1, Path=SelectedColor}" Visibility="Collapsed" />
+                <my:Colorpicker x:Name="ColorPicker1" Width="177" />
+            </StackPanel>
+                  </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <Button Margin="3" Name="BtnOk" Content="OK" Width="75" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
+            <Button Margin="3" Name="BtnCancel" Content="Annuler" Width="75" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
             </StackPanel>
         </StackPanel>
 

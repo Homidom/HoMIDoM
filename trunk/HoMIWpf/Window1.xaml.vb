@@ -487,6 +487,20 @@ Class Window1
                                         x.Height = list.Item(j).Attributes.Item(k).Value
                                     Case "angle"
                                         x.Rotation = list.Item(j).Attributes.Item(k).Value
+                                    Case "showetiquette"
+                                        x.ShowEtiquette = list.Item(j).Attributes.Item(k).Value
+                                    Case "showstatus"
+                                        x.ShowStatus = list.Item(j).Attributes.Item(k).Value
+                                    Case "etiquette"
+                                        x.Etiquette = list.Item(j).Attributes.Item(k).Value
+                                    Case "defautlabelstatus"
+                                        x.DefautLabelStatus = list.Item(j).Attributes.Item(k).Value
+                                    Case "colorbackground"
+                                        Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
+                                        Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
+                                        Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
+                                        Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
+                                        x.ColorBackGround = New SolidColorBrush(Color.FromArgb(a, R, G, B))
                                 End Select
                             Next
                             'Si le device n'a pas été trouvé on le prend pas en compte pour le supprimer par la suite
@@ -643,25 +657,40 @@ Class Window1
 
                 writer.WriteStartElement("element")
                 writer.WriteStartAttribute("id")
-                writer.WriteValue(_ListElement.Item(i).ID)
+                writer.WriteValue(_ListElement.Item(i).Id)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("zoneid")
                 writer.WriteValue(_ListElement.Item(i).ZoneId)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("x")
-                writer.WriteValue(Replace(_ListElement.Item(i).X, ".", ","))
+                writer.WriteValue(Replace(CDbl(_ListElement.Item(i).X), ".", ","))
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("y")
-                writer.WriteValue(Replace(_ListElement.Item(i).Y, ".", ","))
+                writer.WriteValue(Replace(CDbl(_ListElement.Item(i).Y), ".", ","))
                 writer.WriteEndAttribute()
-                writer.WriteStartAttribute(Replace("width", ".", ","))
+                writer.WriteStartAttribute("width")
                 writer.WriteValue(_ListElement.Item(i).Width)
                 writer.WriteEndAttribute()
-                writer.WriteStartAttribute(Replace("height", ".", ","))
+                writer.WriteStartAttribute("height")
                 writer.WriteValue(_ListElement.Item(i).Height)
                 writer.WriteEndAttribute()
-                writer.WriteStartAttribute(Replace("angle", ".", ","))
+                writer.WriteStartAttribute("angle")
                 writer.WriteValue(_ListElement.Item(i).Rotation)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("showetiquette")
+                writer.WriteValue(_ListElement.Item(i).ShowEtiquette)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("showstatus")
+                writer.WriteValue(_ListElement.Item(i).ShowStatus)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("etiquette")
+                writer.WriteValue(_ListElement.Item(i).Etiquette)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("defautlabelstatus")
+                writer.WriteValue(_ListElement.Item(i).DefautLabelStatus)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("colorbackground")
+                writer.WriteValue(_ListElement.Item(i).ColorBackGround.ToString)
                 writer.WriteEndAttribute()
                 writer.WriteEndElement()
             Next
@@ -1204,13 +1233,18 @@ Class Window1
 
                                 Dim y As New uWidgetEmpty
                                 y.Id = z.ElementID
+                                y.ZoneId = _ListElement.Item(j).ZoneId
                                 y.Width = x.Width
                                 y.Height = x.Height
                                 y.X = _ListElement.Item(j).X
                                 y.Y = _ListElement.Item(j).Y
                                 y.Rotation = _ListElement.Item(j).Rotation
+                                y.ShowEtiquette = _ListElement.Item(j).ShowEtiquette
+                                y.ShowStatus = _ListElement.Item(j).ShowStatus
+                                y.Etiquette = _ListElement.Item(j).Etiquette
+                                y.DefautLabelStatus = _ListElement.Item(j).DefautLabelStatus
+                                y.ColorBackGround = _ListElement.Item(j).ColorBackGround
                                 y.IsHitTestVisible = True 'True:bouge pas False:Bouge
-                                AddHandler y.PreviewMouseDown, AddressOf Dbleclk
                                 AddHandler y.ShowZone, AddressOf ElementShowZone
                                 x.Content = y
                                 Canvas1.Children.Add(x)
@@ -1247,12 +1281,13 @@ Class Window1
                             elmt.Rotation = 0
                             elmt.X = _Left
                             elmt.Y = _Top
+                            elmt.ZoneId = IdZone
+
                             _ListElement.Add(elmt)
 
                             Dim y As New uWidgetEmpty
                             y.Id = z.ElementID
                             y.IsHitTestVisible = True 'True:bouge pas False:Bouge
-                            AddHandler y.PreviewMouseDown, AddressOf Dbleclk
                             x.Content = y
                             Canvas1.Children.Add(x)
                             Canvas.SetLeft(x, _Left)
@@ -1270,21 +1305,22 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub Dbleclk(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs)
-        'MessageBox.Show("OK")
-    End Sub
 
     Private Sub RdB1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk1.Click
         Try
+            'Mode déplacement
             If Chk1.IsChecked = True Then
+                Chk2.IsChecked = False
                 Design = True
                 For Each child As ContentControl In Canvas1.Children
                     Dim obj As uWidgetEmpty = child.Content
+                    obj.ModeEdition = True
                     obj.IsHitTestVisible = False
                     obj = Nothing
                     Selector.SetIsSelected(child, True)
                 Next
             Else
+                'On a finit le déplacement
                 Design = False
                 Dim a As String = ""
 
@@ -1296,10 +1332,8 @@ Class Window1
 
                     Selector.SetIsSelected(child, False)
 
-                    'a &= child.Name & " : Left=" & Canvas1.GetLeft(child) & " Top=" & Canvas1.GetTop(child) & " Width=" & child.Width & " Height=" & child.Height & " Angle=" & child.RenderTransform.GetValue(RotateTransform.AngleProperty) & vbCrLf
                     For j As Integer = 0 To _ListElement.Count - 1
                         If _ListElement.Item(j).Id = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
-                            _ListElement.Item(j).ModeEdition = False
                             _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
                             _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
                             _ListElement.Item(j).Width = child.Width
@@ -1334,6 +1368,7 @@ Class Window1
     End Sub
 
     Private Sub Chk2_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk2.Click
+        If Chk2.IsChecked = True Then Chk1.IsChecked = False
 
         For Each child As ContentControl In Canvas1.Children
             Dim obj As uWidgetEmpty = child.Content
@@ -1341,4 +1376,50 @@ Class Window1
             obj = Nothing
         Next
     End Sub
+
+    Private Sub MaJ_Element(Optional ByVal Objet As Object = Nothing)
+        Dim a As String = ""
+
+        For Each child As ContentControl In Canvas1.Children
+            Dim obj As uWidgetEmpty = child.Content
+            If Objet IsNot Nothing Then
+                obj = Objet.Content
+            End If
+            obj.IsHitTestVisible = False
+            obj.ModeEdition = False
+            obj = Nothing
+
+            Selector.SetIsSelected(child, False)
+
+            For j As Integer = 0 To _ListElement.Count - 1
+                If _ListElement.Item(j).Id = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                    _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
+                    _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
+                    _ListElement.Item(j).Width = child.Width
+                    _ListElement.Item(j).Height = child.Height
+
+                    If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
+                        Dim gt As TransformGroup = child.RenderTransform '.GetValue(RotateTransform.AngleProperty)
+                        For k = 0 To gt.Children.Count - 1
+                            If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
+                                Dim rt As RotateTransform = gt.Children.Item(k)
+                                If rt IsNot Nothing Then
+                                    _ListElement.Item(j).Rotation = rt.Angle 'child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                                End If
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
+                        _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                    End If
+                End If
+            Next
+
+            Dim lbl As uWidgetEmpty = child.Content
+            lbl.IsHitTestVisible = True
+        Next
+
+    End Sub
+
 End Class

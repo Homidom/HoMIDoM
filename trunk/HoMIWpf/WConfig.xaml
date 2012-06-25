@@ -72,13 +72,13 @@
 
     <StackPanel Margin="30" Background="DarkGray">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Label Content="Configurer" FontSize="15" Foreground="White" />
+            <Label Content="Configurer" FontSize="24" FontStretch="Normal" FontWeight="Medium" FontStyle="Italic" Foreground="DarkOrange" HorizontalContentAlignment="Center" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 
             <StackPanel >
-                <Button Margin="2" Width="60" Height="25" Content="Ok" Name="BtnOk" Template="{DynamicResource GlassButton}" Foreground="White" />
-                <Button Margin="2" Width="60" Height="25"  Content="Annuler" Name="BtnCancel" Template="{DynamicResource GlassButton}" Foreground="White" />
+                <Button Margin="2" Width="70" Height="25" Content="Ok" Name="BtnOk" Template="{DynamicResource GlassButton}" Foreground="White" />
+                <Button Margin="2" Width="70" Height="25"  Content="Annuler" Name="BtnCancel" Template="{DynamicResource GlassButton}" Foreground="White" />
             </StackPanel>
         </StackPanel>
         <TabControl>

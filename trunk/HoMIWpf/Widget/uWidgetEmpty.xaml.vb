@@ -19,7 +19,7 @@ Public Class uWidgetEmpty
     Dim _LabelStatus As String
     Dim _DefautLabelStatus As String = "?"
     Dim _Refresh As Integer = 1
-    Dim _ColorBackGround As SolidColorBrush = New SolidColorBrush(Colors.Black)
+    Dim _ColorBackGround As SolidColorBrush
     Dim _Visuel As New List(Of cWidget.Visu)
     'Dim _Type As cElement.WidgetType = cElement.WidgetType.VIERGE
     Dim _ZoneId As String
@@ -306,6 +306,7 @@ Public Class uWidgetEmpty
             Return _ColorBackGround
         End Get
         Set(ByVal value As SolidColorBrush)
+            _ColorBackGround = value
             Border1.Background = value
         End Set
     End Property
@@ -560,4 +561,7 @@ Public Class uWidgetEmpty
         End If
     End Sub
 
+    Private Sub uWidgetEmpty_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
+
+    End Sub
 End Class
