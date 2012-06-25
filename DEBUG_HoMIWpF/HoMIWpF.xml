@@ -62,6 +62,14 @@ InitializeComponent
 	<summary>
 uOnOff
 </summary>
+</member><member name="M:HoMIWpF.Customcontrols.Colorpicker.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
+	<summary>
+Colorpicker
+</summary>
 </member><member name="M:HoMIWpF.uVariateur.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -178,6 +186,10 @@ InitializeComponent
 	<summary>
 uNotes
 </summary>
+</member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
+	<summary>
+ Interaction logic for Colorpicker.xaml
+ </summary>
 </member><member name="M:HoMIWpF.clsXML.#ctor(System.String)">
  -----------------------------------------------------------------------------
  <summary>

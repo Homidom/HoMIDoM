@@ -9,6 +9,7 @@
         
        
         <ResourceDictionary>
+            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/DesignerItem.xaml"/>
                 <ResourceDictionary Source="Resources/SizeChrome.xaml"/>
@@ -23,6 +24,7 @@
     <DockPanel Background="Black">
             <Rectangle Width="50" DockPanel.Dock="Left" />
             <StackPanel Height="30" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right">
+
                 <Button Height="23" HorizontalAlignment="Right" Margin="3" Name="BtnQuit" Content="X" Width="23"  VerticalAlignment="Bottom" Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" />
             </StackPanel> 
             <Rectangle Height="130" DockPanel.Dock="Bottom"/>
@@ -34,10 +36,16 @@
         </StackPanel>
             <DockPanel >
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Height="25" Name="StkTop">
+                <Menu >
+                    <MenuItem Foreground="White" Header="Homidom" >
+                        <MenuItem Name="Chk1" Header="Déplacer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" />
+                        <MenuItem Name="Chk2" Header="Editer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" />
+                    </MenuItem> 
+                </Menu>
                 <Label Margin="1" Name="LblTime" FontSize="10" Foreground="White" FlowDirection="RightToLeft">Label</Label>
                 <StackPanel Orientation="Horizontal" >
-                    <CheckBox  Name="Chk1" Content="Déplacer Widget" Foreground="White" Visibility="Collapsed"  />
-                    <CheckBox  Name="Chk2" Content="Editer Widget" Foreground="White"  Visibility="Collapsed"/>
+                    <!--<CheckBox  Name="Chk1" Content="Déplacer Widget" Foreground="White" Visibility="Collapsed"  />
+                    <CheckBox  Name="Chk2" Content="Editer Widget" Foreground="White"  Visibility="Collapsed"/>-->
                 </StackPanel>
                 <Rectangle Width="100" />
                 <Image Margin="1" Name="ImageLeve" Stretch="Fill" Tag="Soleil" HorizontalAlignment="Right" Width="20"  Height="20" Source="/HoMIWpF;component/Images/01.png" />
