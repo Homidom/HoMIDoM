@@ -352,7 +352,7 @@ Imports ZibaseDll
             If _Enable = False Then Exit Sub
             If _DEBUG Then WriteLog("DBG: WRITE Device " & Objet.Name & " <-- " & Command)
 
-            If IsNothing(Parametre1) Then retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, "") Else retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, Parametre1)
+            If IsNothing(Parametre1) Or Parametre1 = "" Then retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, "") Else retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, Parametre1)
             If STRGS.InStr(retour, "ERR:") > 0 Then
                 WriteLog(retour)
             Else
