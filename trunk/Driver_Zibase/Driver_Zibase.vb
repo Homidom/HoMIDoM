@@ -502,7 +502,7 @@ Imports ZibaseDll
             Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
             Add_LibelleDevice("ADRESSE2", "Adresse secondaire", "Adresse secondaire pour certains composants")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun / BROADC / CHACON / DOMIA / VIS433 / VIS868 / X10", "aucun|BROADC|CHACON|DOMIA|VIS433|VIS868|X10")
+            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun / BROADC / CHACON / DOMIA / RFS10 / VIS433 / VIS868 / X10 / XDD433 / XDD868 / XDD868_INTER_SHUTTER / XDD868_BOILER_AC / XDD868_PILOT_WIRE / ZWAVE", "aucun|BROADC|CHACON|DOMIA|RFS10|VIS433|VIS868|X10|XDD868|XDD868_INTER_SHUTTER|XDD868_BOILER_AC|XDD868_PILOT_WIRE|ZWAVE")
             Add_LibelleDevice("REFRESH", "@", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
@@ -593,6 +593,8 @@ Imports ZibaseDll
         Try
             adresse = composants_adresse 'adresse = Split(composants_adresse, "_")(0)
             Select Case UCase(composants_modele_nom)
+                Case "" : protocole = ZiBase.Protocol.PROTOCOL_BROADCAST
+                Case "aucun" : protocole = ZiBase.Protocol.PROTOCOL_BROADCAST
                 Case "BROADC" : protocole = ZiBase.Protocol.PROTOCOL_BROADCAST
                 Case "CHACON"
                     protocole = ZiBase.Protocol.PROTOCOL_CHACON
@@ -601,6 +603,13 @@ Imports ZibaseDll
                 Case "VIS433" : protocole = ZiBase.Protocol.PROTOCOL_VISONIC433
                 Case "VIS868" : protocole = ZiBase.Protocol.PROTOCOL_VISONIC868
                 Case "X10" : protocole = ZiBase.Protocol.PROTOCOL_X10
+                Case "ZWAVE" : protocole = ZiBase.Protocol.PROTOCOL_ZWAVE
+                Case "RFS10" : protocole = ZiBase.Protocol.PROTOCOL_RFS10
+                Case "XDD433" : protocole = ZiBase.Protocol.PROTOCOL_X2D433
+                Case "XDD868" : protocole = ZiBase.Protocol.PROTOCOL_X2D868
+                Case "XDD868_INTER_SHUTTER" : protocole = ZiBase.Protocol.PROTOCOL_X2D868_INTER_SHUTTER
+                Case "XDD868_BOILER_AC" : protocole = ZiBase.Protocol.PROTOCOL_XDD868_BOILER_AC
+                Case "XDD868_PILOT_WIRE" : protocole = ZiBase.Protocol.PROTOCOL_XDD868_PILOT_WIRE
                 Case Else : Return ("ERR: protocole incorrect : " & Modele(0))
             End Select
 
