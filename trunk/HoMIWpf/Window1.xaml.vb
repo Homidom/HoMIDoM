@@ -473,8 +473,10 @@ Class Window1
 
                             For k As Integer = 0 To list.Item(j).Attributes.Count - 1
                                 Select Case list.Item(j).Attributes.Item(k).Name
+                                    Case "uid"
+                                        x.Uid = list.Item(j).Attributes.Item(k).Value
                                     Case "id"
-                                        x.ID = list.Item(j).Attributes.Item(k).Value
+                                        x.Id = list.Item(j).Attributes.Item(k).Value
                                     Case "zoneid"
                                         x.ZoneId = list.Item(j).Attributes.Item(k).Value
                                     Case "x"
@@ -656,7 +658,10 @@ Class Window1
             For i As Integer = 0 To _ListElement.Count - 1
 
                 writer.WriteStartElement("element")
-                writer.WriteStartAttribute("id")
+                writer.WriteStartAttribute("uid") 'ID du widget
+                writer.WriteValue(_ListElement.Item(i).Uid)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("id") 'ID de l'élément (device, zone, macro...)
                 writer.WriteValue(_ListElement.Item(i).Id)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("zoneid")
@@ -1211,10 +1216,11 @@ Class Window1
                     _flagnew = True
                 End If
 
-
+                'On parcours tous les éléments de la zone
                 For i As Integer = 0 To _zone.ListElement.Count - 1
                     Dim z As Zone.Element_Zone = myService.ReturnZoneByID(IdSrv, IdZone).ListElement.Item(i)
 
+                    'l'élément est définit comme visible dans la zone
                     If z.Visible = True Then
                         For j As Integer = 0 To _ListElement.Count - 1
                             If _ListElement.Item(j).ID = z.ElementID And _ListElement.Item(j).ZoneId = IdZone Then
@@ -1232,6 +1238,9 @@ Class Window1
                                 x.Uid = z.ElementID
 
                                 Dim y As New uWidgetEmpty
+                                If _ListElement.Item(j).Uid IsNot Nothing Then
+                                    y.Uid = _ListElement.Item(j).Uid
+                                End If
                                 y.Id = z.ElementID
                                 y.ZoneId = _ListElement.Item(j).ZoneId
                                 y.Width = x.Width
@@ -1239,6 +1248,7 @@ Class Window1
                                 y.X = _ListElement.Item(j).X
                                 y.Y = _ListElement.Item(j).Y
                                 y.Rotation = _ListElement.Item(j).Rotation
+                                y.IsEmpty = _ListElement.Item(j).IsEmpty
                                 y.ShowEtiquette = _ListElement.Item(j).ShowEtiquette
                                 y.ShowStatus = _ListElement.Item(j).ShowStatus
                                 y.Etiquette = _ListElement.Item(j).Etiquette
@@ -1256,6 +1266,7 @@ Class Window1
 
                         Next
 
+                        'Nouvel élément qui n'existe pas dans la config
                         If (_flagnew = True Or _flagTrouv = False) And z.ElementID.Length > 1 Then
 
                             'Ajouter un nouveau Control
@@ -1282,6 +1293,7 @@ Class Window1
                             elmt.X = _Left
                             elmt.Y = _Top
                             elmt.ZoneId = IdZone
+                            elmt.IsEmpty = False
 
                             _ListElement.Add(elmt)
 

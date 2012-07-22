@@ -4,6 +4,7 @@
         Dim _IdObject As String
         Dim _Methode As String
         Dim _Value As Object
+        Dim _Sound As String
 
         Public Property IdObject As String
             Get
@@ -29,6 +30,15 @@
             End Get
             Set(ByVal value2 As Object)
                 _Value = value2
+            End Set
+        End Property
+
+        Public Property Sound As String
+            Get
+                Return _Sound
+            End Get
+            Set(ByVal value As String)
+                _Sound = value
             End Set
         End Property
 
