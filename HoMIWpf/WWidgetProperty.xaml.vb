@@ -24,6 +24,8 @@ Public Class WWidgetProperty
         lblColor.Background = Obj.ColorBackGround
         ColorPicker1.SelectedColor = Obj.ColorBackGround
         ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
+
+
     End Sub
 
     Private Sub BtnOk_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOk.Click
@@ -72,4 +74,11 @@ Public Class WWidgetProperty
     End Function
 
 
+    Private Sub BtnEditAction_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnEditAction.Click
+        GrpEditAction.Visibility = Windows.Visibility.Visible
+    End Sub
+
+    Private Sub BtnEditVisu_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnEditVisu.Click
+        GrpEditVisu.Visibility = Windows.Visibility.Visible
+    End Sub
 End Class

@@ -23,10 +23,22 @@ Public Class uWidgetEmpty
     Dim _Visuel As New List(Of cWidget.Visu)
     'Dim _Type As cElement.WidgetType = cElement.WidgetType.VIERGE
     Dim _ZoneId As String
+    Dim _IsEmpty As Boolean = True
+    Dim _Action_On_Click As New List(Of cWidget.Action)
+    Dim _Action_On_LongClick As New List(Of cWidget.Action)
+    Dim _Action_GestureGaucheDroite As New List(Of cWidget.Action)
+    Dim _Action_GestureDroiteGauche As New List(Of cWidget.Action)
+    Dim _Action_GestureHautBas As New List(Of cWidget.Action)
+    Dim _Action_GestureBasHaut As New List(Of cWidget.Action)
+
     Dim dt As DispatcherTimer
 
     Public Event Click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event LongClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
+    Public Event GestureHautBas(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
+    Public Event GestureBasHaut(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
+    Public Event GestureGaucheDroite(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
+    Public Event GestureDroiteGauche(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event ShowZone(ByVal zoneid As String)
 
     Public Property Id As String
@@ -40,7 +52,10 @@ Public Class uWidgetEmpty
                 _macro = myService.ReturnMacroById(IdSrv, _Id)
                 _zone = myService.ReturnZoneByID(IdSrv, _Id)
 
+                IsEmpty = True
+
                 If _dev IsNot Nothing Then
+                    IsEmpty = False
                     Etiquette = _dev.Name
                     _Picture = _dev.Picture
                     Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_dev.Picture))
@@ -140,6 +155,7 @@ Public Class uWidgetEmpty
                 If _macro IsNot Nothing Then
                     Etiquette = _macro.Nom
                     ShowStatus = False
+                    IsEmpty = False
                 End If
 
                 If _zone IsNot Nothing Then
@@ -147,6 +163,7 @@ Public Class uWidgetEmpty
                     Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Icon))
                     ShowStatus = False
                     _Picture = _zone.Icon
+                    IsEmpty = False
                 End If
             End If
 
@@ -168,6 +185,15 @@ Public Class uWidgetEmpty
     '        Return _Type
     '    End Get
     'End Property
+
+    Public Property IsEmpty As Boolean
+        Get
+            Return _IsEmpty
+        End Get
+        Set(ByVal value As Boolean)
+            _IsEmpty = value
+        End Set
+    End Property
 
     Public Property ShowEtiquette As Boolean
         Get
@@ -320,6 +346,62 @@ Public Class uWidgetEmpty
         End Set
     End Property
 
+#Region "Property Actions"
+    Public Property Action_On_Click As List(Of cWidget.Action)
+        Get
+            Return _Action_On_Click
+        End Get
+        Set(ByVal value As List(Of cWidget.Action))
+            _Action_On_Click = value
+        End Set
+    End Property
+
+    Public Property Action_On_LongClick As List(Of cWidget.Action)
+        Get
+            Return _Action_On_LongClick
+        End Get
+        Set(ByVal value As List(Of cWidget.Action))
+            _Action_On_LongClick = value
+        End Set
+    End Property
+
+    Public Property Action_GestureGaucheDroite As List(Of cWidget.Action)
+        Get
+            Return _Action_GestureGaucheDroite
+        End Get
+        Set(ByVal value As List(Of cWidget.Action))
+            _Action_GestureGaucheDroite = value
+        End Set
+    End Property
+
+    Public Property Action_GestureDroiteGauche As List(Of cWidget.Action)
+        Get
+            Return _Action_GestureDroiteGauche
+        End Get
+        Set(ByVal value As List(Of cWidget.Action))
+            _Action_GestureDroiteGauche = value
+        End Set
+    End Property
+
+    Public Property Action_GestureHautBas As List(Of cWidget.Action)
+        Get
+            Return _Action_GestureHautBas
+        End Get
+        Set(ByVal value As List(Of cWidget.Action))
+            _Action_GestureHautBas = value
+        End Set
+    End Property
+
+    Public Property Action_GestureBasHaut As List(Of cWidget.Action)
+        Get
+            Return _Action_GestureBasHaut
+        End Get
+        Set(ByVal value As List(Of cWidget.Action))
+            _Action_GestureBasHaut = value
+        End Set
+    End Property
+#End Region
+
     Public Sub New()
 
         ' Cet appel est requis par le Concepteur Windows Form.
@@ -345,7 +427,7 @@ Public Class uWidgetEmpty
             End If
 
             If _dev IsNot Nothing Then
-                If ShowEtiquette And _dev.Name <> Etiquette Then
+                If ShowEtiquette And _dev.Name <> Etiquette And _IsEmpty = False Then
                     Etiquette = _dev.Name
                 End If
 
@@ -445,6 +527,7 @@ Public Class uWidgetEmpty
         Popup1.IsOpen = False
     End Sub
 
+#Region "Gestion des evenements provenant des popup"
     Private Sub FreeTouch(ByVal Touche As String)
         Try
             Dim x As New HoMIDom.HoMIDom.DeviceAction
@@ -524,6 +607,7 @@ Public Class uWidgetEmpty
             MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK)
         End Try
     End Sub
+#End Region
 
     Private Sub Stk1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Stk1.MouseDown
 
@@ -560,7 +644,6 @@ Public Class uWidgetEmpty
             End If
         End If
     End Sub
-
     Private Sub uWidgetEmpty_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
 
     End Sub
