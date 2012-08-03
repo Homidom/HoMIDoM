@@ -118,6 +118,14 @@ InitializeComponent
 	<summary>
 uProgrammeTV
 </summary>
+</member><member name="M:HoMIWpF.WindowImg.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.WindowImg">
+	<summary>
+WindowImg
+</summary>
 </member><member name="M:HoMIWpF.WWidgetProperty.InitializeComponent">
 	<summary>
 InitializeComponent

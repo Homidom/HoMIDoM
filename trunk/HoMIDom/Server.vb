@@ -6871,6 +6871,10 @@ Namespace HoMIDom
                                         x.Modele = list.Item(0).Attributes.Item(j).Value
                                     Case "driver"
                                         x.Driver = list.Item(0).Attributes.Item(j).Value
+                                    Case "colonne"
+                                        x.Colonne = list.Item(0).Attributes.Item(j).Value
+                                    Case "ligne"
+                                        x.Ligne = list.Item(0).Attributes.Item(j).Value
                                 End Select
                                 x.File = file.Name
                             Next
@@ -6897,7 +6901,7 @@ Namespace HoMIDom
         ''' <param name="Type">Type de base, si différent de VIDE va mettre les commandes de bases par défaut</param>
         ''' <returns>0 si ok, sinon message d'erreur</returns>
         ''' <remarks></remarks>
-        Public Function CreateNewTemplate(ByVal Fabricant As String, ByVal Modele As String, ByVal Driver As String, ByVal Type As Telecommande.TypeEquipement) As String Implements IHoMIDom.CreateNewTemplate
+        Public Function CreateNewTemplate(ByVal Fabricant As String, ByVal Modele As String, ByVal Driver As String, ByVal Type As Telecommande.TypeEquipement, ByVal Ligne As Integer, ByVal Colonne As Integer) As String Implements IHoMIDom.CreateNewTemplate
             Try
                 Dim MyPath As String = _MonRepertoire & "\templates\"
                 Dim _Fichier As String = MyPath & LCase(Fabricant) & "-" & LCase(Modele) & "-" & Trim(LCase(Driver)) & ".xml"
@@ -6923,6 +6927,12 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("driver")
                 writer.WriteValue(LCase(Driver))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("ligne")
+                writer.WriteValue(Ligne)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("colonne")
+                writer.WriteValue(Colonne)
                 writer.WriteEndAttribute()
                 writer.WriteStartElement("commandes")
 
@@ -6953,6 +6963,12 @@ Namespace HoMIDom
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("picture")
                         writer.WriteValue(_MonRepertoire & "\images\telecommande\" & _listcmd(i) & ".png")
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("row")
+                        writer.WriteValue("0")
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("column")
+                        writer.WriteValue("0")
                         writer.WriteEndAttribute()
                         writer.WriteEndElement()
                     Next
@@ -7019,6 +7035,14 @@ Namespace HoMIDom
                                     Else
                                         x.Picture = _MonRepertoire & "\images\telecommande\" & x.Name & ".png"
                                     End If
+                                Case "row"
+                                    If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then
+                                        If IsNumeric(list.Item(i).Attributes.Item(j).Value) Then x.Row = list.Item(i).Attributes.Item(j).Value
+                                    End If
+                                Case "column"
+                                    If list.Item(i).Attributes.Item(j).Value IsNot Nothing Then
+                                        If IsNumeric(list.Item(i).Attributes.Item(j).Value) Then x.Column = list.Item(i).Attributes.Item(j).Value
+                                    End If
                             End Select
                         Next
                         _list.Add(x)
@@ -7068,7 +7092,7 @@ Namespace HoMIDom
         ''' <param name="Commandes">Liste des commandes</param>
         ''' <returns>O si ok sinon message d'erreur</returns>
         ''' <remarks></remarks>
-        Public Function SaveTemplate(ByVal IdSrv As String, ByVal Template As String, ByVal Commandes As List(Of Telecommande.Commandes)) As String Implements IHoMIDom.SaveTemplate
+        Public Function SaveTemplate(ByVal IdSrv As String, ByVal Template As String, ByVal Commandes As List(Of Telecommande.Commandes), ByVal Ligne As Integer, ByVal Colonne As Integer) As String Implements IHoMIDom.SaveTemplate
             Try
                 If VerifIdSrv(IdSrv) = False Then
                     Return 99
@@ -7104,6 +7128,12 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("driver")
                 writer.WriteValue(LCase(a(2)))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("ligne")
+                writer.WriteValue(Ligne)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("colonne")
+                writer.WriteValue(Colonne)
                 writer.WriteEndAttribute()
                 writer.WriteStartElement("commandes")
 

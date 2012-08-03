@@ -19,7 +19,7 @@ Public Class Driver_HomeSeer
     Dim _Enable As String = False
     Dim _Description As String = "HomeSeer"
     Dim _StartAuto As Boolean = False
-    Dim _Protocol As String = "COM/USB"
+    Dim _Protocol As String = "TCP"
     Dim _IsConnect As Boolean = False
     Dim _IP_TCP As String = "default"
     Dim _Port_TCP As String = "81"

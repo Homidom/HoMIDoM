@@ -127,6 +127,7 @@
     <Compile Include="Control\Condition\uCondition.xaml.vb">
       <DependentUpon>uCondition.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\ImageButton.vb" />
     <Compile Include="Control\Timeline\uAction.xaml.vb">
       <DependentUpon>uAction.xaml</DependentUpon>
     </Compile>
@@ -555,7 +556,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

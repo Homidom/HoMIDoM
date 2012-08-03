@@ -20,8 +20,10 @@ Imports HoMIDom.HoMIDom
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports System.Web.HttpUtility
 Imports System.Windows.Controls.Primitives
-Imports WpfApplication1.Designer
-Imports WpfApplication1.Designer.ResizeRotateAdorner
+'Imports WpfApplication1.Designer
+Imports HoMIWpF.Designer
+Imports HoMIWpF.Designer.ResizeRotateAdorner
+'Imports WpfApplication1.Designer.ResizeRotateAdorner
 #End Region
 
 
@@ -286,7 +288,7 @@ Class Window1
             myxml = Nothing
             frmMere = Me
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString)
+            MessageBox.Show("Erreur lors du lancement de l'application: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -477,6 +479,8 @@ Class Window1
                                         x.Uid = list.Item(j).Attributes.Item(k).Value
                                     Case "id"
                                         x.Id = list.Item(j).Attributes.Item(k).Value
+                                    Case "isempty"
+                                        x.IsEmpty = list.Item(j).Attributes.Item(k).Value
                                     Case "zoneid"
                                         x.ZoneId = list.Item(j).Attributes.Item(k).Value
                                     Case "x"
@@ -505,15 +509,63 @@ Class Window1
                                         x.ColorBackGround = New SolidColorBrush(Color.FromArgb(a, R, G, B))
                                 End Select
                             Next
-                            'Si le device n'a pas été trouvé on le prend pas en compte pour le supprimer par la suite
-                            If myService.ReturnDeviceByID(IdSrv, x.ID) IsNot Nothing Then
-                                If x.ID <> "" Or x.ID <> " " Then
-                                    _ListElement.Add(x)
+
+                            If list.Item(j).HasChildNodes Then
+                                For l As Integer = 0 To list.Item(j).ChildNodes.Count - 1
+                                    If UCase(list.Item(j).ChildNodes.Item(l).Name) = "ACTIONS" Then
+                                        For m As Integer = 0 To list.Item(j).ChildNodes.Item(l).ChildNodes.Count - 1
+                                            Dim _act As New cWidget.Action
+                                            With _act
+                                                .IdObject = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(1).Value
+                                                .Methode = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(2).Value
+                                                If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value IsNot Nothing Then .Value = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value
+                                                If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(4).Value IsNot Nothing Then .Sound = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(4).Value
+                                            End With
+
+                                            Select Case list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(0).Value
+                                                Case "gestureonclick"
+                                                    x.Action_On_Click.Add(_act)
+                                                Case "gestureonlongclick"
+                                                    x.Action_On_LongClick.Add(_act)
+                                                Case "gesturehautbas"
+                                                    x.Action_GestureHautBas.Add(_act)
+                                                Case "gesturebashaut"
+                                                    x.Action_GestureBasHaut.Add(_act)
+                                                Case "gesturegauchedroite"
+                                                    x.Action_GestureGaucheDroite.Add(_act)
+                                                Case "gesturedroitegauche"
+                                                    x.Action_GestureDroiteGauche.Add(_act)
+                                            End Select
+                                        Next
+                                    End If
+                                    If UCase(list.Item(j).ChildNodes.Item(l).Name) = "VISUELS" Then
+                                        For m As Integer = 0 To list.Item(j).ChildNodes.Item(l).ChildNodes.Count - 1
+                                            Dim _act As New cWidget.Visu
+                                            With _act
+                                                .IdObject = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(0).Value
+                                                .Propriete = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(1).Value
+                                                If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(2).Value IsNot Nothing Then .Value = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(2).Value
+                                                If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value IsNot Nothing Then .Image = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value
+                                            End With
+
+                                            x.Visuel.Add(_act)
+                                        Next
+                                    End If
+                                Next
+                            End If
+
+                            If x.IsEmpty = False Then 'si c pas un widget vide
+                                If IsConnect Then
+                                    If myService.ReturnDeviceByID(IdSrv, x.Id) IsNot Nothing Then 'Si le device n'a pas été trouvé on le prend pas en compte pour le supprimer par la suite
+                                        _ListElement.Add(x)
+                                    End If
                                 End If
+                            Else
+                                _ListElement.Add(x)
                             End If
                         Next
                     Else
-                        'MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
+                        MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
                     End If
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Eléments chargés")
                     '**************
@@ -538,6 +590,7 @@ Class Window1
     ''' <remarks></remarks>
     Private Sub SaveConfig(ByVal Fichier As String)
         Try
+
             Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde de la config sous le fichier " & Fichier)
 
             ''Copy du fichier de config avant sauvegarde
@@ -664,6 +717,9 @@ Class Window1
                 writer.WriteStartAttribute("id") 'ID de l'élément (device, zone, macro...)
                 writer.WriteValue(_ListElement.Item(i).Id)
                 writer.WriteEndAttribute()
+                writer.WriteStartAttribute("isempty") 'ID de l'élément (device, zone, macro...)
+                writer.WriteValue(_ListElement.Item(i).IsEmpty)
+                writer.WriteEndAttribute()
                 writer.WriteStartAttribute("zoneid")
                 writer.WriteValue(_ListElement.Item(i).ZoneId)
                 writer.WriteEndAttribute()
@@ -697,10 +753,145 @@ Class Window1
                 writer.WriteStartAttribute("colorbackground")
                 writer.WriteValue(_ListElement.Item(i).ColorBackGround.ToString)
                 writer.WriteEndAttribute()
+
+                writer.WriteStartElement("actions")
+                For j As Integer = 0 To _ListElement.Item(i).Action_GestureBasHaut.Count - 1
+                    writer.WriteStartElement("action")
+                    writer.WriteStartAttribute("type") 'type d'action
+                    writer.WriteValue("gesturebashaut")
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("idobject") 'objet
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureBasHaut.Item(j).IdObject)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("methode") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureBasHaut.Item(j).Methode)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("value") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureBasHaut.Item(j).Value)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("sound") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureBasHaut.Item(j).Sound)
+                    writer.WriteEndAttribute()
+                    writer.WriteEndElement()
+                Next
+                For j As Integer = 0 To _ListElement.Item(i).Action_GestureDroiteGauche.Count - 1
+                    writer.WriteStartElement("action")
+                    writer.WriteStartAttribute("type") 'type d'action
+                    writer.WriteValue("gesturedroitegauche")
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("idobject") 'objet
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureDroiteGauche.Item(j).IdObject)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("methode") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureDroiteGauche.Item(j).Methode)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("value") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureDroiteGauche.Item(j).Value)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("sound") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureDroiteGauche.Item(j).Sound)
+                    writer.WriteEndAttribute()
+                    writer.WriteEndElement()
+                Next
+                For j As Integer = 0 To _ListElement.Item(i).Action_GestureGaucheDroite.Count - 1
+                    writer.WriteStartElement("action")
+                    writer.WriteStartAttribute("type") 'type d'action
+                    writer.WriteValue("gesturegauchedroite")
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("idobject") 'objet
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureGaucheDroite.Item(j).IdObject)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("methode") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureGaucheDroite.Item(j).Methode)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("value") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureGaucheDroite.Item(j).Value)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("sound") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureGaucheDroite.Item(j).Sound)
+                    writer.WriteEndAttribute()
+                    writer.WriteEndElement()
+                Next
+                For j As Integer = 0 To _ListElement.Item(i).Action_GestureHautBas.Count - 1
+                    writer.WriteStartElement("action")
+                    writer.WriteStartAttribute("type") 'type d'action
+                    writer.WriteValue("gesturehautbas")
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("idobject") 'objet
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureHautBas.Item(j).IdObject)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("methode") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureHautBas.Item(j).Methode)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("value") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureHautBas.Item(j).Value)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("sound") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_GestureHautBas.Item(j).Sound)
+                    writer.WriteEndAttribute()
+                    writer.WriteEndElement()
+                Next
+                For j As Integer = 0 To _ListElement.Item(i).Action_On_Click.Count - 1
+                    writer.WriteStartElement("action")
+                    writer.WriteStartAttribute("type") 'type d'action
+                    writer.WriteValue("gestureonclick")
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("idobject") 'objet
+                    writer.WriteValue(_ListElement.Item(i).Action_On_Click.Item(j).IdObject)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("methode") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_On_Click.Item(j).Methode)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("value") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_On_Click.Item(j).Value)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("sound") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_On_Click.Item(j).Sound)
+                    writer.WriteEndAttribute()
+                    writer.WriteEndElement()
+                Next
+                For j As Integer = 0 To _ListElement.Item(i).Action_On_LongClick.Count - 1
+                    writer.WriteStartElement("action")
+                    writer.WriteStartAttribute("type") 'type d'action
+                    writer.WriteValue("gestureonlongclick")
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("idobject") 'objet
+                    writer.WriteValue(_ListElement.Item(i).Action_On_LongClick.Item(j).IdObject)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("methode") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_On_LongClick.Item(j).Methode)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("value") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_On_LongClick.Item(j).Value)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("sound") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Action_On_LongClick.Item(j).Sound)
+                    writer.WriteEndAttribute()
+                    writer.WriteEndElement()
+                Next
+                writer.WriteEndElement()
+
+                writer.WriteStartElement("visuels")
+                For j As Integer = 0 To _ListElement.Item(i).Visuel.Count - 1
+                    writer.WriteStartElement("visuel")
+                    writer.WriteStartAttribute("idobject") 'objet
+                    writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).IdObject)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("property") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Propriete)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("value")
+                    writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Value)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("image") 'methode
+                    writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Image)
+                    writer.WriteEndAttribute()
+                    writer.WriteEndElement()
+                Next
+                writer.WriteEndElement()
                 writer.WriteEndElement()
             Next
             writer.WriteEndElement()
-
             ''FIN DES ELEMENTS------------
 
             writer.WriteEndDocument()
@@ -957,7 +1148,13 @@ Class Window1
 
             myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
             myService = myChannelFactory.CreateChannel()
-            IsConnect = True
+            Try
+                myService.GetServerVersion()
+                IsConnect = True
+            Catch ex As Exception
+                IsConnect = False
+            End Try
+
         Catch ex As Exception
             myChannelFactory.Abort()
             IsConnect = False
@@ -1029,6 +1226,7 @@ Class Window1
 
             Chk1.Visibility = Windows.Visibility.Collapsed
             Chk2.Visibility = Windows.Visibility.Collapsed
+            Chk3.Visibility = Windows.Visibility.Collapsed
             ImageBackGround = _ImageBackGroundDefault
 
             Dim y As uCtrlImgMnu = sender
@@ -1195,128 +1393,199 @@ Class Window1
 
     Private Sub ShowZone(ByVal IdZone As String)
         Try
+            'Gestion de l'erreur si le serveur n'est pas connecté
+            If IsConnect = False Then
+                MessageBox.Show("Le serveur Homidom n'est pas connecté, impossible d'afficher les éléments de la zone sélectionnée", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+
+            'Déclaration des variables
             Dim _zone As Zone
-            Dim _flagnew As Boolean
             Dim _flagTrouv As Boolean = False
             Dim _Left As Double = 0
             Dim _Top As Double = 20
             Dim _idx As Integer = 0
 
-            If IsConnect = True Then
-                Chk1.Visibility = Windows.Visibility.Visible
-                Chk2.Visibility = Windows.Visibility.Visible
+            'Init des variables communes
+            _CurrentIdZone = IdZone
+            _zone = myService.ReturnZoneByID(IdSrv, IdZone)
+            ImgBackground.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Image))
 
-                _CurrentIdZone = IdZone
-                If Canvas1.Children.Count > 0 Then Canvas1.Children.Clear()
+            'Desgin
+            Canvas1.Children.Clear()
+            Chk1.Visibility = Windows.Visibility.Visible
+            Chk2.Visibility = Windows.Visibility.Visible
+            Chk3.Visibility = Windows.Visibility.Visible
 
-                _zone = myService.ReturnZoneByID(IdSrv, IdZone)
-                ImgBackground.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Image))
+            'On parcours tous les éléments de la zone (hors widgets empty)
+            For i As Integer = 0 To _zone.ListElement.Count - 1
+                Dim z As Zone.Element_Zone = myService.ReturnZoneByID(IdSrv, IdZone).ListElement.Item(i)
 
-                If _ListElement.Count = 0 Then 'C'est la première fois que les élements sont affichés
-                    _flagnew = True
-                End If
-
-                'On parcours tous les éléments de la zone
-                For i As Integer = 0 To _zone.ListElement.Count - 1
-                    Dim z As Zone.Element_Zone = myService.ReturnZoneByID(IdSrv, IdZone).ListElement.Item(i)
-
-                    'l'élément est définit comme visible dans la zone
-                    If z.Visible = True Then
-                        For j As Integer = 0 To _ListElement.Count - 1
-                            If _ListElement.Item(j).ID = z.ElementID And _ListElement.Item(j).ZoneId = IdZone Then
-                                'Ajouter un nouveau Control
-                                Dim x As New ContentControl
-                                Dim Trg As New TransformGroup
-                                Dim Rot As New RotateTransform(_ListElement.Item(j).Rotation)
-
-                                Trg.Children.Add(Rot)
-                                x.Width = _ListElement.Item(j).Width
-                                x.Height = _ListElement.Item(j).Height
-                                x.RenderTransform = Trg
-                                x.Style = mybuttonstyle
-                                x.Tag = True
-                                x.Uid = z.ElementID
-
-                                Dim y As New uWidgetEmpty
-                                If _ListElement.Item(j).Uid IsNot Nothing Then
-                                    y.Uid = _ListElement.Item(j).Uid
-                                End If
-                                y.Id = z.ElementID
-                                y.ZoneId = _ListElement.Item(j).ZoneId
-                                y.Width = x.Width
-                                y.Height = x.Height
-                                y.X = _ListElement.Item(j).X
-                                y.Y = _ListElement.Item(j).Y
-                                y.Rotation = _ListElement.Item(j).Rotation
-                                y.IsEmpty = _ListElement.Item(j).IsEmpty
-                                y.ShowEtiquette = _ListElement.Item(j).ShowEtiquette
-                                y.ShowStatus = _ListElement.Item(j).ShowStatus
-                                y.Etiquette = _ListElement.Item(j).Etiquette
-                                y.DefautLabelStatus = _ListElement.Item(j).DefautLabelStatus
-                                y.ColorBackGround = _ListElement.Item(j).ColorBackGround
-                                y.IsHitTestVisible = True 'True:bouge pas False:Bouge
-                                AddHandler y.ShowZone, AddressOf ElementShowZone
-                                x.Content = y
-                                Canvas1.Children.Add(x)
-                                Canvas.SetLeft(x, _ListElement.Item(j).X)
-                                Canvas.SetTop(x, _ListElement.Item(j).Y)
-
-                                _flagTrouv = True
-                            End If
-
-                        Next
-
-                        'Nouvel élément qui n'existe pas dans la config
-                        If (_flagnew = True Or _flagTrouv = False) And z.ElementID.Length > 1 Then
-
+                'l'élément est définit comme visible dans la zone
+                If z.Visible = True Then
+                    For j As Integer = 0 To _ListElement.Count - 1
+                        If _ListElement.Item(j).Id = z.ElementID And _ListElement.Item(j).ZoneId = IdZone And _ListElement.Item(j).IsEmpty = False Then
                             'Ajouter un nouveau Control
                             Dim x As New ContentControl
-                            x.Width = 140
-                            x.Height = 60
+                            Dim Trg As New TransformGroup
+                            Dim Rot As New RotateTransform(_ListElement.Item(j).Rotation)
+
+                            Trg.Children.Add(Rot)
+                            x.Width = _ListElement.Item(j).Width
+                            x.Height = _ListElement.Item(j).Height
+                            x.RenderTransform = Trg
                             x.Style = mybuttonstyle
                             x.Tag = True
-                            x.Uid = z.ElementID
-
-                            If _idx = 5 Then
-                                _idx = 0
-                                _Top += 70
-                            End If
-                            _Left = (150 * _idx) + 40
-
-                            'Ajoute l'élément dans la liste
-                            Dim elmt As New uWidgetEmpty
-                            elmt.ID = z.ElementID
-                            elmt.ZoneId = IdZone
-                            elmt.Width = x.Width
-                            elmt.Height = x.Height
-                            elmt.Rotation = 0
-                            elmt.X = _Left
-                            elmt.Y = _Top
-                            elmt.ZoneId = IdZone
-                            elmt.IsEmpty = False
-
-                            _ListElement.Add(elmt)
+                            x.Uid = _ListElement.Item(j).Uid
 
                             Dim y As New uWidgetEmpty
+                            y.Uid = _ListElement.Item(j).Uid
                             y.Id = z.ElementID
+                            y.ZoneId = _ListElement.Item(j).ZoneId
+                            y.Width = x.Width
+                            y.Height = x.Height
+                            y.X = _ListElement.Item(j).X
+                            y.Y = _ListElement.Item(j).Y
+                            y.Rotation = _ListElement.Item(j).Rotation
+                            y.IsEmpty = _ListElement.Item(j).IsEmpty
+                            y.ShowEtiquette = _ListElement.Item(j).ShowEtiquette
+                            y.ShowStatus = _ListElement.Item(j).ShowStatus
+                            y.Etiquette = _ListElement.Item(j).Etiquette
+                            y.DefautLabelStatus = _ListElement.Item(j).DefautLabelStatus
+                            y.ColorBackGround = _ListElement.Item(j).ColorBackGround
                             y.IsHitTestVisible = True 'True:bouge pas False:Bouge
+                            AddHandler y.ShowZone, AddressOf ElementShowZone
                             x.Content = y
                             Canvas1.Children.Add(x)
-                            Canvas.SetLeft(x, _Left)
-                            Canvas.SetTop(x, _Top)
+                            Canvas.SetLeft(x, _ListElement.Item(j).X)
+                            Canvas.SetTop(x, _ListElement.Item(j).Y)
 
-                            _idx += 1
+                            _flagTrouv = True
+                            Exit For
                         End If
 
+                    Next
+
+                    'Nouvel élément qui n'existe pas dans la config
+                    If (_flagTrouv = False) And z.ElementID.Length > 1 Then
+
+                        'Ajouter un nouveau Control
+                        Dim x As New ContentControl
+                        x.Width = 140
+                        x.Height = 60
+                        x.Style = mybuttonstyle
+                        x.Tag = True
+                        x.Uid = System.Guid.NewGuid.ToString()
+
+                        If _idx = 5 Then
+                            _idx = 0
+                            _Top += 70
+                        End If
+                        _Left = (150 * _idx) + 40
+
+                        'Ajoute l'élément dans la liste
+                        Dim elmt As New uWidgetEmpty
+                        elmt.Id = z.ElementID
+                        elmt.Uid = x.Uid
+                        elmt.ZoneId = IdZone
+                        elmt.Width = x.Width
+                        elmt.Height = x.Height
+                        elmt.Rotation = 0
+                        elmt.X = _Left
+                        elmt.Y = _Top
+                        elmt.ZoneId = IdZone
+                        elmt.IsEmpty = False
+
+                        ' y = elmt
+                        elmt.IsHitTestVisible = True
+                        x.Content = elmt
+                        _ListElement.Add(elmt)
+
+                        Canvas1.Children.Add(x)
+                        Canvas.SetLeft(x, _Left)
+                        Canvas.SetTop(x, _Top)
+
+                        _idx += 1
                     End If
-                    _flagTrouv = False
-                Next
-            End If
+
+                End If
+                _flagTrouv = False
+            Next
+
+            'On va afficher tous les widgets empty
+            For i As Integer = 0 To _ListElement.Count - 1
+                If _ListElement.Item(i).ZoneId = IdZone And _ListElement.Item(i).IsEmpty = True Then
+                    'Ajouter un nouveau Control
+                    Dim x As New ContentControl
+                    Dim Trg As New TransformGroup
+                    Dim Rot As New RotateTransform(_ListElement.Item(i).Rotation)
+
+                    Trg.Children.Add(Rot)
+                    x.Width = _ListElement.Item(i).Width
+                    x.Height = _ListElement.Item(i).Height
+                    x.RenderTransform = Trg
+                    x.Style = mybuttonstyle
+                    x.Tag = True
+                    x.Uid = _ListElement.Item(i).Uid
+
+                    Dim y As New uWidgetEmpty
+                    y.Uid = _ListElement.Item(i).Uid
+                    y.ZoneId = _ListElement.Item(i).ZoneId
+                    y.Width = x.Width
+                    y.Height = x.Height
+                    y.X = _ListElement.Item(i).X
+                    y.Y = _ListElement.Item(i).Y
+                    y.Rotation = _ListElement.Item(i).Rotation
+                    y.IsEmpty = _ListElement.Item(i).IsEmpty
+                    y.ShowEtiquette = _ListElement.Item(i).ShowEtiquette
+                    y.ShowStatus = _ListElement.Item(i).ShowStatus
+                    y.Etiquette = _ListElement.Item(i).Etiquette
+                    y.DefautLabelStatus = _ListElement.Item(i).DefautLabelStatus
+                    y.ColorBackGround = _ListElement.Item(i).ColorBackGround
+                    y.IsHitTestVisible = True 'True:bouge pas False:Bouge
+                    y.Action_GestureBasHaut = _ListElement.Item(i).Action_GestureBasHaut
+                    y.Action_GestureDroiteGauche = _ListElement.Item(i).Action_GestureDroiteGauche
+                    y.Action_GestureGaucheDroite = _ListElement.Item(i).Action_GestureGaucheDroite
+                    y.Action_GestureHautBas = _ListElement.Item(i).Action_GestureHautBas
+                    y.Action_On_Click = _ListElement.Item(i).Action_On_Click
+                    y.Action_On_LongClick = _ListElement.Item(i).Action_On_LongClick
+                    y.Visuel = _ListElement.Item(i).Visuel
+                    AddHandler y.ShowZone, AddressOf ElementShowZone
+                    x.Content = y
+                    Canvas1.Children.Add(x)
+                    Canvas.SetLeft(x, _ListElement.Item(i).X)
+                    Canvas.SetTop(x, _ListElement.Item(i).Y)
+                End If
+            Next
         Catch ex As Exception
             MsgBox(ex.ToString)
         End Try
     End Sub
 
+    Private Sub Clone_Element(ByVal Source As uWidgetEmpty, ByVal Destination As uWidgetEmpty)
+        Destination.Uid = Source.Uid
+        Destination.Id = Source.Id
+        Destination.ZoneId = Source.ZoneId
+        Destination.Width = Source.Width
+        Destination.Height = Source.Height
+        Destination.X = Source.X
+        Destination.Y = Source.Y
+        Destination.Rotation = Source.Rotation
+        Destination.IsEmpty = Source.IsEmpty
+        Destination.ShowEtiquette = Source.ShowEtiquette
+        Destination.ShowStatus = Source.ShowStatus
+        Destination.Etiquette = Source.Etiquette
+        Destination.DefautLabelStatus = Source.DefautLabelStatus
+        Destination.ColorBackGround = Source.ColorBackGround
+        Destination.IsHitTestVisible = True 'True:bouge pas False:Bouge
+        Destination.Action_GestureBasHaut = Source.Action_GestureBasHaut
+        Destination.Action_GestureDroiteGauche = Source.Action_GestureDroiteGauche
+        Destination.Action_GestureGaucheDroite = Source.Action_GestureGaucheDroite
+        Destination.Action_GestureHautBas = Source.Action_GestureHautBas
+        Destination.Action_On_Click = Source.Action_On_Click
+        Destination.Action_On_LongClick = Source.Action_On_LongClick
+        Destination.Visuel = Source.Visuel
+    End Sub
 
     Private Sub RdB1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk1.Click
         Try
@@ -1345,7 +1614,7 @@ Class Window1
                     Selector.SetIsSelected(child, False)
 
                     For j As Integer = 0 To _ListElement.Count - 1
-                        If _ListElement.Item(j).Id = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                        If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
                             _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
                             _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
                             _ListElement.Item(j).Width = child.Width
@@ -1357,7 +1626,7 @@ Class Window1
                                     If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
                                         Dim rt As RotateTransform = gt.Children.Item(k)
                                         If rt IsNot Nothing Then
-                                            _ListElement.Item(j).Rotation = rt.Angle 'child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                                            _ListElement.Item(j).Rotation = rt.Angle
                                         End If
                                         Exit For
                                     End If
@@ -1434,4 +1703,34 @@ Class Window1
 
     End Sub
 
+
+    Private Sub NewWidgetEmpty_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetEmpty.Click
+        'Ajouter un nouveau Control
+        Dim x As New ContentControl
+        x.Width = 100
+        x.Height = 100
+        x.Style = mybuttonstyle
+        x.Tag = True
+
+        'Ajoute l'élément dans la liste
+        Dim elmt As New uWidgetEmpty
+        elmt.Uid = System.Guid.NewGuid.ToString()
+        elmt.ZoneId = _CurrentIdZone
+        elmt.Width = 100
+        elmt.Height = 100
+        elmt.Rotation = 0
+        elmt.X = 300
+        elmt.Y = 300
+        elmt.IsEmpty = True
+        elmt.ShowStatus = False
+        elmt.Etiquette = "Widget " & Canvas1.Children.Count
+        _ListElement.Add(elmt)
+
+        Dim y As New uWidgetEmpty
+        elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+        x.Content = elmt
+        Canvas1.Children.Add(x)
+        Canvas.SetLeft(x, 300)
+        Canvas.SetTop(x, 300)
+    End Sub
 End Class

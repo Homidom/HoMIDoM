@@ -49,8 +49,8 @@
                     <StackPanel Orientation="Horizontal" >
                             <ComboBox Background="White" BorderBrush="Black" Width="215" Foreground="Black" Name="TxtModele" BorderThickness="2" Height="25" VerticalAlignment="Top" IsEditable="True" Visibility="Collapsed" Tag="0" />
                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtModele2" Width="215" Tag="1" />
-                        <Rectangle Width="10" Name="rectmodele2"/>
-                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Width="75" Name="TxtRefresh">0</TextBox>
+                            <Rectangle Width="10" Name="rectmodele2"/>
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Width="75" Name="TxtRefresh">0</TextBox>
                         <Rectangle Width="10" Name="rectrefresh2"/>
                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Right" Name="TxtLastChangeDuree" Width="75">0</TextBox>
                     </StackPanel>
@@ -161,7 +161,7 @@
             <Button Margin="2" Height="25" HorizontalAlignment="Right"  Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Foreground="White">Annuler</Button>
             <Button Margin="2" Height="0" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Name="BtnSave" VerticalAlignment="Top" Width="88.75" Foreground="White">Save</Button>
             <Button Margin="2" Foreground="White" Height="25" HorizontalAlignment="Right" Name="BtnRead" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Visibility="Hidden">Tester</Button>
-            <Button Margin="2" Foreground="White" Height="25" HorizontalAlignment="Right" Name="BtnEditTel" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Visibility="Hidden">Edit</Button>
+            <Button Margin="2" Foreground="White" Height="25" Name="BtnEditTel" Template="{DynamicResource GlassButton}" Width="88.75" Visibility="Collapsed">Edit</Button>
         </StackPanel>
         
 

@@ -1679,8 +1679,10 @@ Namespace HoMIDom
                 If _Enable = False Then Exit Sub
                 If _Value > 0 Then
                     Driver.Write(Me, "OFF")
+                    _Value = 0
                 Else
                     Driver.Write(Me, "ON")
+                    _Value = 100
                 End If
             End Sub
 

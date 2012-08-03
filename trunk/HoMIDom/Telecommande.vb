@@ -15,6 +15,8 @@ Namespace HoMIDom
             Dim _Modele As String = ""
             Dim _Driver As String = ""
             Dim _File As String = ""
+            Dim _Colonne As Integer = 4
+            Dim _Ligne As Integer = 8
 
             ''' <summary>
             ''' Définit ou retourne le fabricant de l'équipement
@@ -75,6 +77,36 @@ Namespace HoMIDom
                     _File = value
                 End Set
             End Property
+
+            ''' <summary>
+            ''' Nombre de lignes de la grille du template
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property Ligne As Integer
+                Get
+                    Return _Ligne
+                End Get
+                Set(ByVal value As Integer)
+                    _Ligne = value
+                End Set
+            End Property
+
+            ''' <summary>
+            ''' Nombre de colonnes de la grille du template
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property Colonne As Integer
+                Get
+                    Return _Colonne
+                End Get
+                Set(ByVal value As Integer)
+                    _Colonne = value
+                End Set
+            End Property
         End Class
 
         ''' <summary>
@@ -94,6 +126,8 @@ Namespace HoMIDom
             Dim _Code As String
             Dim _Repeat As Integer = 0
             Dim _Picture As String
+            Dim _Row As Integer
+            Dim _Column As Integer
 
             Property Name As String
                 Get
@@ -128,6 +162,24 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _Picture = value
+                End Set
+            End Property
+
+            Public Property Row As Integer
+                Get
+                    Return _Row
+                End Get
+                Set(ByVal value As Integer)
+                    _Row = value
+                End Set
+            End Property
+
+            Public Property Column As Integer
+                Get
+                    Return _Column
+                End Get
+                Set(ByVal value As Integer)
+                    _Column = value
                 End Set
             End Property
         End Class
