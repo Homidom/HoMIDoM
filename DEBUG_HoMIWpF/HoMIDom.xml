@@ -1569,7 +1569,7 @@ HoMIDom
  </summary>
 	<returns>List of Templates</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.CreateNewTemplate(System.String,System.String,System.String,HoMIDom.HoMIDom.Telecommande.TypeEquipement)">
+</member><member name="M:HoMIDom.HoMIDom.Server.CreateNewTemplate(System.String,System.String,System.String,HoMIDom.HoMIDom.Telecommande.TypeEquipement,System.Int32,System.Int32)">
 	<summary>
  Crée un nouveau template dans le répertoire templates
  </summary>
@@ -1592,7 +1592,7 @@ HoMIDom
 	<summary>Demander un apprentissage à un driver</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveTemplate(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes})">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveTemplate(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.Int32,System.Int32)">
 	<summary>
  Sauvegarde les commandes dans un template donné
  </summary>
@@ -2537,7 +2537,7 @@ HoMIDom
  </summary>
 	<returns>List of Templates</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.CreateNewTemplate(System.String,System.String,System.String,HoMIDom.HoMIDom.Telecommande.TypeEquipement)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.CreateNewTemplate(System.String,System.String,System.String,HoMIDom.HoMIDom.Telecommande.TypeEquipement,System.Int32,System.Int32)">
 	<summary>
  Crée un nouveau template dans le répertoire templates
  </summary>
@@ -2551,7 +2551,7 @@ HoMIDom
 	<summary>Demander un apprentissage à un driver</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTemplate(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes})">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTemplate(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.Int32,System.Int32)">
 	<summary>
  Sauvegarde les commandes dans un template donné
  </summary>
@@ -3113,6 +3113,20 @@ HoMIDom
 </member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.File">
 	<summary>
  Donne le nom du fichier ainsi que son extension (ex: TOTO.xml)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Ligne">
+	<summary>
+ Nombre de lignes de la grille du template
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Colonne">
+	<summary>
+ Nombre de colonnes de la grille du template
  </summary>
 	<value></value>
 	<returns></returns>

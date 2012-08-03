@@ -32,7 +32,8 @@ Partial Public Class uDevice
             'Liste les drivers
             ListeDrivers = myService.GetAllDrivers(IdSrv)
 
-            If Action = EAction.Nouveau Then 'Nouveau Device
+            'Nouveau Device
+            If Action = EAction.Nouveau Then
 
                 'ajout de tous les drivers au combo
                 For i As Integer = 0 To ListeDrivers.Count - 1
@@ -44,13 +45,14 @@ Partial Public Class uDevice
                 StkCde.Height = 0
                 StkCmd.Height = 0
                 CbType.IsEnabled = False
-            Else 'Modification d'un Device
+
+                'Modification d'un Device
+            Else
 
                 FlagNewDevice = False
                 x = myService.ReturnDeviceByID(IdSrv, DeviceId)
 
                 If x IsNot Nothing Then 'on a trouvé le device
-
 
                     'ajout des drivers compatibles avec ce type de device au combo
                     For i As Integer = 0 To ListeDrivers.Count - 1
@@ -65,6 +67,7 @@ Partial Public Class uDevice
                         End If
                     Next
 
+                    'Affiche les propriétés du device
                     TxtNom.Text = x.Name
                     TxtDescript.Text = x.Description
                     ChkEnable.IsChecked = x.Enable
@@ -74,11 +77,6 @@ Partial Public Class uDevice
                     _Driver = myService.ReturnDriverByID(IdSrv, x.DriverID)
                     If _Driver IsNot Nothing Then
                         CbDriver.SelectedValue = _Driver.Nom
-                        If _Driver.Protocol = "IR" Then
-                            BtnLearn.Visibility = Windows.Visibility.Visible
-                        Else
-                            BtnLearn.Visibility = Windows.Visibility.Hidden
-                        End If
                     End If
 
                     CbType.SelectedValue = x.Type.ToString
@@ -112,17 +110,11 @@ Partial Public Class uDevice
                         StkValue.Visibility = Windows.Visibility.Visible
                         StkValue2.Visibility = Windows.Visibility.Visible
                         StkValue3.Visibility = Windows.Visibility.Visible
-                        'TxtCorrection.Visibility = Windows.Visibility.Visible
                         TxtCorrection.Text = x.Correction
-                        'TxtFormatage.Visibility = Windows.Visibility.Visible
                         TxtFormatage.Text = x.Formatage
-                        'TxtPrecision.Visibility = Windows.Visibility.Visible
                         TxtPrecision.Text = x.Precision
-                        'TxtValueMax.Visibility = Windows.Visibility.Visible
                         TxtValueMax.Text = x.ValueMax
-                        'TxtValueMin.Visibility = Windows.Visibility.Visible
                         TxtValueMin.Text = x.ValueMin
-                        'TxtValDef.Visibility = Windows.Visibility.Visible
                         TxtValDef.Text = x.ValueDef
                         Label10.Visibility = Windows.Visibility.Visible
                         Label11.Visibility = Windows.Visibility.Visible
@@ -137,48 +129,40 @@ Partial Public Class uDevice
                         StkValue.Visibility = Windows.Visibility.Collapsed
                         StkValue2.Visibility = Windows.Visibility.Collapsed
                         StkValue3.Visibility = Windows.Visibility.Collapsed
-                        'TxtCorrection.Height = 0
-                        'TxtFormatage.Height = 0
-                        'TxtPrecision.Height = 0
-                        'TxtValueMax.Height = 0
-                        'TxtValueMin.Height = 0
-                        'TxtValDef.Height = 0
                     End If
 
+                    StkCde.Visibility = Windows.Visibility.Collapsed
                     If x.Type = ListeDevices.MULTIMEDIA Then
                         BtnEditTel.Visibility = Windows.Visibility.Visible
                         TxtModele2.Visibility = Visibility.Collapsed
                         Label8.Visibility = Windows.Visibility.Collapsed
                         rectmodele1.Visibility = Windows.Visibility.Collapsed
                         rectmodele2.Visibility = Windows.Visibility.Collapsed
-                        ListCmd.Items.Clear()
-                        StkCmd.Height = 0
-                        Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
-                        _list = myService.GetListOfTemplate
-                        Dim idx As Integer = -1
-                        For i As Integer = 0 To _list.Count - 1
-                            Dim tpl As String = Replace(_list(i).File, ".xml", "")
-                            cbTemplate.Items.Add(tpl)
-                            If x.Modele IsNot Nothing Then
-                                If tpl = x.Modele.ToString Then
-                                    StkCmd.Height = Double.NaN
-                                    cbTemplate.IsEnabled = False
-                                    BtnNewTemplate.Visibility = Windows.Visibility.Hidden
-                                    idx = i
-                                    If x.Commandes IsNot Nothing Then
-                                        For i2 As Integer = 0 To x.Commandes.Count - 1
-                                            ListCmd.Items.Add(x.Commandes.Item(i2).Name)
-                                        Next
-                                    End If
-                                End If
-                            End If
-                        Next
-                        cbTemplate.SelectedIndex = idx
-                        'For i As Integer = 0 To x.ListCommandName.Count - 1
-                        '    ListCmd.Items.Add(x.ListCommandName(i))
-                        'Next
-                    Else
-                        StkCde.Height = 0
+                        '    ListCmd.Items.Clear()
+                        '    StkCmd.Height = 0
+                        '    Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
+                        '    _list = myService.GetListOfTemplate
+                        '    Dim idx As Integer = -1
+                        '    For i As Integer = 0 To _list.Count - 1
+                        '        Dim tpl As String = Replace(_list(i).File, ".xml", "")
+                        '        cbTemplate.Items.Add(tpl)
+                        '        If x.Modele IsNot Nothing Then
+                        '            If tpl = x.Modele.ToString Then
+                        '                StkCmd.Height = Double.NaN
+                        '                cbTemplate.IsEnabled = False
+                        '                BtnNewTemplate.Visibility = Windows.Visibility.Hidden
+                        '                idx = i
+                        '                If x.Commandes IsNot Nothing Then
+                        '                    For i2 As Integer = 0 To x.Commandes.Count - 1
+                        '                        ListCmd.Items.Add(x.Commandes.Item(i2).Name)
+                        '                    Next
+                        '                End If
+                        '            End If
+                        '        End If
+                        '    Next
+                        '    cbTemplate.SelectedIndex = idx
+                        'Else
+
                     End If
 
                     'on verifie si le device est un device systeme pour ne pas le rendre modifiable
@@ -270,8 +254,8 @@ Partial Public Class uDevice
             TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
 
             Dim _driverid As String = ""
-            For i As Integer = 0 To myservice.GetAllDrivers(IdSrv).Count - 1 'Window1.Obj.Drivers.Count - 1
-                If myservice.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
+            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
+                If myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
                     _driverid = myService.GetAllDrivers(IdSrv).Item(i).ID
                     Exit For
                 End If
@@ -302,18 +286,17 @@ Partial Public Class uDevice
             Dim result As String = ""
 
             If CbType.Text = "MULTIMEDIA" Then
-                If cbTemplate.Text = "" Then
+                If x.Modele = "" Then
                     MessageBox.Show("Veuillez sélectionner ou ajouter un template au device!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     Exit Sub
                 Else
-                    _modele = cbTemplate.Text
+                    _modele = x.Modele
                 End If
                 If _Action = EAction.Modifier Then
                     result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes)
                 Else
                     result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text)
                 End If
-
             Else
                 result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text)
             End If
@@ -422,151 +405,21 @@ Partial Public Class uDevice
                     BtnEditTel.Visibility = Windows.Visibility.Visible
                     TxtModele2.Visibility = Visibility.Hidden
                     Label8.Visibility = Windows.Visibility.Hidden
-                    StkCde.Height = Double.NaN
-                    Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
-                    _list = myService.GetListOfTemplate
-                    For i As Integer = 0 To _list.Count - 1
-                        Dim tpl As String = Replace(_list(i).File, ".xml", "")
-                        cbTemplate.Items.Add(tpl)
-                    Next
-                Else
-                    StkCde.Height = 0
+                    '    StkCde.Height = Double.NaN
+                    '    Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
+                    '    _list = myService.GetListOfTemplate
+                    '    For i As Integer = 0 To _list.Count - 1
+                    '        Dim tpl As String = Replace(_list(i).File, ".xml", "")
+                    '        cbTemplate.Items.Add(tpl)
+                    '    Next
+                    'Else
+                    '    StkCde.Height = 0
                 End If
 
 
             End If
         Catch Ex As Exception
             MessageBox.Show("Erreur lors du changement de type: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    Private Sub BtnNewCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewCmd.Click
-        TxtCmdName.Text = ""
-        TxtCmdRepeat.Text = "0"
-        TxtCmdData.Text = ""
-
-        BtnNewCmd.Visibility = Windows.Visibility.Hidden
-        FlagNewCmd = True
-    End Sub
-
-    Private Sub BtnSaveCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSaveCmd.Click
-        Try
-            If IsNumeric(TxtCmdRepeat.Text) = False Then
-                MsgBox("Numérique obligatoire pour repeat !!")
-                Exit Sub
-            End If
-            If TxtCmdName.Text = "" Or TxtCmdName.Text = " " Then
-                MsgBox("Le nom de la commande est obligatoire !!")
-                Exit Sub
-            End If
-
-            If x IsNot Nothing Then
-
-                If FlagNewCmd = True Then 'nouvelle commande
-                    Dim _cmd As New HoMIDom.HoMIDom.Telecommande.Commandes
-                    With _cmd
-                        .Name = TxtCmdName.Text
-                        .Code = TxtCmdData.Text
-                        .Repeat = TxtCmdRepeat.Text
-                        .Picture = ImgCommande.Tag
-                    End With
-                    x.Commandes.Add(_cmd)
-                Else 'modifier commande
-                    Dim idx As Integer = ListCmd.SelectedIndex
-                    If idx < 0 Then Exit Sub
-
-                    With x.Commandes.Item(idx)
-                        .Name = TxtCmdName.Text
-                        .Code = TxtCmdData.Text
-                        .Repeat = TxtCmdRepeat.Text
-                        .Picture = ImgCommande.Tag
-                    End With
-                End If
-
-                Dim retour As String = myService.SaveTemplate(IdSrv, cbTemplate.Text, x.Commandes)
-                If retour <> "0" Then
-                    MessageBox.Show("Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-                    Exit Sub
-                Else
-                    ListCmd.Items.Clear()
-                    For i2 As Integer = 0 To x.Commandes.Count - 1
-                        ListCmd.Items.Add(x.Commandes.Item(i2).Name)
-                    Next
-                End If
-
-            End If
-
-            BtnNewCmd.Visibility = Windows.Visibility.Visible
-            FlagNewCmd = False
-        Catch Ex As Exception
-            MessageBox.Show("Erreur BtnSaveCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    Private Sub BtnDelCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelCmd.Click
-        Try
-            If ListCmd.SelectedIndex >= 0 Then
-                x.Commandes.RemoveAt(ListCmd.SelectedIndex)
-                Dim retour As String = myService.SaveTemplate(IdSrv, cbTemplate.Text, x.Commandes)
-                If retour <> "0" Then
-                    MessageBox.Show("Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-                    Exit Sub
-                Else
-                    ListCmd.Items.Clear()
-                    For i2 As Integer = 0 To x.Commandes.Count - 1
-                        ListCmd.Items.Add(x.Commandes.Item(i2).Name)
-                    Next
-
-                End If
-                BtnDelCmd.Visibility = Windows.Visibility.Hidden
-                TxtCmdData.Text = ""
-                TxtCmdName.Text = ""
-                TxtCmdRepeat.Text = ""
-            End If
-        Catch Ex As Exception
-            MessageBox.Show("Erreur BtnDelCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    Private Sub BtnTstCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTstCmd.Click
-        Try
-            If TxtCmdName.Text = "" Or TxtCmdName.Text = " " Then
-
-            End If
-            Dim retour As String = myService.TelecommandeSendCommand(IdSrv, _DeviceId, TxtCmdName.Text)
-            If retour <> 0 Then
-                MessageBox.Show(retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-            End If
-            'Dim _Param As New ArrayList
-            'Dim x As New HoMIDom.HoMIDom.DeviceAction
-            'Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
-
-            'y.Value = TxtCmdName.Text
-
-            'With x
-            '    .Nom = "SendCommand"
-            '    .Parametres.Add(y)
-            'End With
-
-            'myService.ExecuteDeviceCommand(IdSrv, _DeviceId, x)
-        Catch Ex As Exception
-            MessageBox.Show("Erreur BtnTstCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    Private Sub BtnLearn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnLearn.Click
-        Try
-            If _Driver IsNot Nothing Then
-                If _Driver.Enable = True And _Driver.IsConnect Then
-                    TxtCmdData.Text = myService.StartLearning(IdSrv, _Driver.ID)
-                Else
-                    MessageBox.Show("Impossible d'apprendre un code car le driver n'est pas activé ou n'est pas connecté", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-                End If
-            Else
-                MessageBox.Show("Impossible d'apprendre un code car le driver n'a pas été trouvé", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-            End If
-        Catch Ex As Exception
-            MessageBox.Show("Erreur BtnLearnCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -597,31 +450,8 @@ Partial Public Class uDevice
         End Try
     End Sub
 
-    Private Sub ListCmd_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles ListCmd.SelectionChanged
-        Try
-            Dim i As Integer = ListCmd.SelectedIndex
-            If i < 0 Then Exit Sub
-
-            BtnDelCmd.Visibility = Windows.Visibility.Visible
-            BtnTstCmd.Visibility = Windows.Visibility.Visible
-            TxtCmdName.Text = x.Commandes.Item(i).Name
-            TxtCmdData.Text = x.Commandes.Item(i).Code
-            TxtCmdRepeat.Text = x.Commandes.Item(i).Repeat
-
-            If x.Commandes.Item(i).Picture IsNot Nothing Then
-                If x.Commandes.Item(i).Picture <> " " Then
-                    ImgCommande.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Commandes.Item(i).Picture))
-                    ImgCommande.Tag = x.Commandes.Item(i).Picture
-                End If
-
-            End If
-        Catch Ex As Exception
-            MessageBox.Show("Erreur ListCmd_SelectionChanged: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
     Private Sub BtnRead_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnRead.Click
-        If myservice.ReturnDeviceByID(IdSrv, _DeviceId).Enable = False Then
+        If myService.ReturnDeviceByID(IdSrv, _DeviceId).Enable = False Then
             MessageBox.Show("Vous ne pouvez pas exécuter de commandes car le device n'est pas activé (propriété Enable)!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             Exit Sub
         End If
@@ -668,9 +498,9 @@ Partial Public Class uDevice
             TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
 
             Dim _driverid As String = ""
-            For i As Integer = 0 To myservice.GetAllDrivers(IdSrv).Count - 1 'Window1.Obj.Drivers.Count - 1
-                If myservice.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
-                    _driverid = myservice.GetAllDrivers(IdSrv).Item(i).ID
+            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
+                If myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
+                    _driverid = myService.GetAllDrivers(IdSrv).Item(i).ID
                     Exit For
                 End If
             Next
@@ -788,10 +618,8 @@ Partial Public Class uDevice
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
                                     TxtModele.Visibility = Windows.Visibility.Collapsed
                                     TxtModele.Tag = 0
-                                    'TxtModele.Width = 0
                                     TxtModele2.Visibility = Windows.Visibility.Collapsed
                                     TxtModele2.Tag = 0
-                                    'TxtModele2.Width = 215
                                     Label8.Visibility = Windows.Visibility.Collapsed
                                     rectmodele1.Visibility = Windows.Visibility.Collapsed
                                     rectmodele2.Visibility = Windows.Visibility.Collapsed
@@ -811,26 +639,20 @@ Partial Public Class uDevice
                                             TxtModele.IsEditable = False
                                             TxtModele.Visibility = Windows.Visibility.Visible
                                             TxtModele.Tag = 1
-                                            'TxtModele.Width = 215
                                             TxtModele2.Visibility = Windows.Visibility.Collapsed
                                             TxtModele2.Tag = 0
-                                            'TxtModele2.Width = 0
                                         Else
                                             TxtModele.Visibility = Windows.Visibility.Collapsed
                                             TxtModele.Tag = 0
-                                            'TxtModele.Width = 0
                                             TxtModele2.Visibility = Windows.Visibility.Visible
                                             TxtModele2.Tag = 1
-                                            'TxtModele2.Width = 215
                                             TxtModele2.Text = a(0)
                                         End If
                                     Else
                                         TxtModele.Visibility = Windows.Visibility.Collapsed
                                         TxtModele.Tag = 0
-                                        'TxtModele.Width = 0
                                         TxtModele2.Visibility = Windows.Visibility.Visible
                                         TxtModele2.Tag = 1
-                                        'TxtModele2.Width = 215
                                     End If
                                 End If
                         End Select
@@ -844,91 +666,22 @@ Partial Public Class uDevice
         End Try
     End Sub
 
-    Private Sub BtnNewTemplate_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewTemplate.Click
-        StkNewTemplate.Height = Double.NaN
-        TxtTplFab.Focus()
-        BtnSaveTemplate.Visibility = Windows.Visibility.Visible
-        lbltplbase.Visibility = Windows.Visibility.Visible
-        cbBase.Visibility = Windows.Visibility.Visible
-    End Sub
-
-    Private Sub BtnSaveTemplate_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSaveTemplate.Click
+    Private Sub BtnEditTel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnEditTel.Click
         Try
-
-            If TxtTplFab.Text = "" Or TxtTplFab.Text = " " Or InStr(TxtTplFab.Text, "-") > 0 Then
-                MessageBox.Show("Le nom du fabricant est obligatoire et ne doit pas comporter le caractère: - ", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                TxtTplFab.Focus()
-                Exit Sub
-            End If
-            If TxtTplMod.Text = "" Or TxtTplMod.Text = " " Or InStr(TxtTplMod.Text, "-") > 0 Then
-                MessageBox.Show("Le nom du modèle est obligatoire et ne doit pas comporter le caractère: - ", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                TxtTplMod.Focus()
-                Exit Sub
-            End If
-
-            Dim mytemplate As String = LCase(TxtTplFab.Text) & "-" & LCase(TxtTplMod.Text) & "-" & LCase(myService.GetAllDrivers(IdSrv).Item(CbDriver.SelectedIndex).Protocol)
-
-            Dim retour As String = myService.CreateNewTemplate(TxtTplFab.Text, TxtTplMod.Text, myService.GetAllDrivers(IdSrv).Item(CbDriver.SelectedIndex).Protocol, cbBase.SelectedIndex)
-            If retour <> "0" Then
-                MessageBox.Show("Erreur lors de la création du nouveau template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                Exit Sub
-            Else
-
-                StkNewTemplate.Height = 0
-                BtnSaveTemplate.Visibility = Windows.Visibility.Hidden
-                lbltplbase.Visibility = Windows.Visibility.Hidden
-                cbBase.Visibility = Windows.Visibility.Hidden
-
-                cbTemplate.Items.Clear()
-                Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
-                _list = myService.GetListOfTemplate
-                For i As Integer = 0 To _list.Count - 1
-                    Dim tpl As String = Replace(_list(i).File, ".xml", "")
-                    cbTemplate.Items.Add(tpl)
-                Next
-
-                cbTemplate.Text = mytemplate
-            End If
-        Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString)
-        End Try
-    End Sub
-
-    Private Sub TxtCmdData_TextInput(ByVal sender As Object, ByVal e As System.Windows.Input.TextCompositionEventArgs) Handles TxtCmdData.TextInput
-        BtnTstCmd.Visibility = Windows.Visibility.Visible
-    End Sub
-
-    Private Sub ImgCommande_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgCommande.MouseLeftButtonDown, Canvas2.MouseLeftButtonDown
-        Try
-            Dim frm As New WindowImg
+            Dim frm As New WTelecommande(_DeviceId, CbDriver.SelectedIndex, _Driver, x)
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-                Dim retour As String = frm.FileName
-                If retour <> "" Then
-                    ImgCommande.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
-                    ImgCommande.Tag = retour
+                'MsgBox(x.Commandes.Count)
+                If x.Modele <> "" And x.Commandes.Count = 0 Then
+                    BtnEditTel.Visibility = Windows.Visibility.Collapsed
                 End If
                 frm.Close()
             Else
                 frm.Close()
             End If
-            frm = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub ImgCommande_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("ERREUR BtnEditTel_MouseDown: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
-    Private Sub BtnEditTel_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnEditTel.MouseDown
-        Try
-            Dim frm As New WTelecommande(_DeviceId, CbDriver.SelectedIndex, _Driver, x)
-            frm.ShowDialog()
-            If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-           
-            Else
-                End
-            End If
-        Catch ex As Exception
-            MessageBox.Show("ERREUR BtnEditTel_MouseDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
 End Class

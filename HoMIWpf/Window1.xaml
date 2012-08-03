@@ -37,9 +37,15 @@
             <DockPanel >
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Height="25" Name="StkTop">
                 <Menu >
-                    <MenuItem Foreground="White" Header="Homidom" >
+                    <MenuItem Header="Homidom" >
+                        <MenuItem.Icon>
+                            <Image Source="/HoMIWpF;component/icone.ico" />
+                        </MenuItem.Icon>
                         <MenuItem Name="Chk1" Header="Déplacer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" />
                         <MenuItem Name="Chk2" Header="Editer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" />
+                        <MenuItem Name="Chk3" Header="Ajouter" Visibility="Collapsed" >
+                            <MenuItem Name="NewWidgetEmpty" Header="Nouveau Widget Vide" />
+                            </MenuItem> 
                     </MenuItem> 
                 </Menu>
                 <Label Margin="1" Name="LblTime" FontSize="10" Foreground="White" FlowDirection="RightToLeft">Label</Label>

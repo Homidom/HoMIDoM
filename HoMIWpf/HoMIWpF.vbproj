@@ -134,6 +134,9 @@
     <Compile Include="UserControls\CustomControl.xaml.vb">
       <DependentUpon>CustomControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WindowImg.xaml.vb">
+      <DependentUpon>WindowImg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WWidgetProperty.xaml.vb">
       <DependentUpon>WWidgetProperty.xaml</DependentUpon>
     </Compile>
@@ -299,6 +302,10 @@
       <DependentUpon>Window1.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="WindowImg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WWidgetProperty.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
