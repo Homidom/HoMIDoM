@@ -634,7 +634,7 @@
         </EventTrigger>
     </Window.Triggers>
 
-    <Grid x:Name="Layout_root" Margin="0,0,8.5,1.5" DataContext="{Binding Source={StaticResource ImageBrushDataSource}}">
+    <Grid x:Name="Layout_root" Margin="2" DataContext="{Binding Source={StaticResource ImageBrushDataSource}}">
    
         <StackPanel Orientation="Horizontal">
             <StackPanel Name="StkCde" HorizontalAlignment="Left" MaxWidth="275">
@@ -729,18 +729,10 @@
                
             </StackPanel>
          </StackPanel>
+            
             <Rectangle x:Name="rectangle1" Stroke="Black" Width="0" Height="0" Fill="#33FFFFFF" Margin="0,40,30,0" HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Collapsed" />
 
-
-            <StackPanel>
-                <Button x:Name="button" Content="Fermer" RenderTransformOrigin="0.5,0.5" Height="30.5" Margin="2" VerticalAlignment="Top"/>
-                <Button Content="Save" Height="29" HorizontalAlignment="Left" Margin="2" Name="BtnSaveGrid" VerticalAlignment="Top" Width="94" />
-                <Button Content="Recharge" Height="29" HorizontalAlignment="Left" Margin="2" Name="BtnRechargeGrid" VerticalAlignment="Top" Width="95" />
-                <Button Content="Vide" Height="29" HorizontalAlignment="Left" Margin="2" Name="BtnVide" VerticalAlignment="Top" Width="95" />
-
-            </StackPanel>
-
-            <Canvas x:Name="Caneva_grid" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Top" Width="270" Height="500" Background="#33FFFFFF">
+            <Canvas x:Name="Caneva_grid" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" MinWidth="270" MinHeight="500" Background="#33FFFFFF">
                 <Rectangle x:Name="rectangle" Stroke="Black" RadiusX="20" RadiusY="20" RenderTransformOrigin="0.5,0.5" Width="70" d:LayoutOverrides="Margin" IsHitTestVisible="True" Height="70" >
                     <Rectangle.Fill>
                         <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
@@ -766,6 +758,10 @@
                 <Grid x:Name="grid_Telecommande" Width="50" Margin="10" ShowGridLines="True" UseLayoutRounding="True" Height="50"  />
 
             </Canvas>
+
+            <StackPanel>
+                <Button x:Name="button" Content="Fermer" RenderTransformOrigin="0.5,0.5" Width="60" Height="30.5" Margin="3" VerticalAlignment="Top" Template="{DynamicResource GlassButton}" Foreground="White" />
+            </StackPanel>
 
         </StackPanel>
         
