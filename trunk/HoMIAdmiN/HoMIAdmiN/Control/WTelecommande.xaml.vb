@@ -68,17 +68,6 @@
                     End With
                 End If
 
-                Dim retour As String = myService.SaveTemplate(IdSrv, cbTemplate.Text, x.Commandes, slider_Row.Value, slider_Column.Value)
-                If retour <> "0" Then
-                    MessageBox.Show("Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-                    Exit Sub
-                Else
-                    ListCmd.Items.Clear()
-                    For i2 As Integer = 0 To x.Commandes.Count - 1
-                        ListCmd.Items.Add(x.Commandes.Item(i2).Name)
-                    Next
-                End If
-
             End If
 
             BtnNewCmd.Visibility = Windows.Visibility.Visible
@@ -170,6 +159,13 @@
                 If retour <> "" Then
                     ImgCommande.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
                     ImgCommande.Tag = retour
+
+                    Dim idx As Integer = ListCmd.SelectedIndex
+                    If idx >= 0 Then
+                        With x.Commandes.Item(idx)
+                            .Picture = ImgCommande.Tag
+                        End With
+                    End If
                 End If
                 frm.Close()
             Else
@@ -226,7 +222,22 @@
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub ImgCommande_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgCommande.MouseLeftButtonDown, Canvas2.MouseLeftButtonDown
+    Private Sub ImgCommande_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgCommande.MouseLeftButtonDown ', Canvas2.MouseLeftButtonDown
+        For i As Integer = 0 To grid_Telecommande.Children.Count - 1
+            Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
+
+            If cvs IsNot Nothing Then
+                If cvs.Children.Count <> 0 Then
+                    Dim y As ImageButton = cvs.Children.Item(0)
+                    If ListCmd.SelectedValue = y.Command Then
+                        MessageBox.Show("Vous ne pouvez pas inclure cette commande dans la grille car elle y est déjà utilisée!", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
+                        Exit Sub
+                    End If
+
+                End If
+            End If
+        Next
+
         If ImgCommande.Source IsNot Nothing Then
             Dim effects As DragDropEffects
             Dim obj As New DataObject()
@@ -351,13 +362,15 @@
                         TxtTplFab.Text = _list.Item(i).Fabricant
                         TxtTplMod.Text = _list.Item(i).Modele
                         idx = i
-                        _Col = _list.Item(i).Ligne
-                        _Row = _list.Item(i).Colonne
+                        _Col = _list.Item(i).Colonne
+                        _Row = _list.Item(i).Ligne
 
                         If x.Commandes IsNot Nothing Then
                             GrpCmd.Visibility = Windows.Visibility.Visible
+
                             For i2 As Integer = 0 To x.Commandes.Count - 1
                                 ListCmd.Items.Add(x.Commandes.Item(i2).Name)
+
                             Next
                         End If
                     End If
@@ -439,15 +452,6 @@ Retour:
                         End If
                     Next
                 End If
-                'For i As Integer = 1 To slider_Row.Value
-                '    'Augmente la hauteur de la grille
-                '    grid_Telecommande.Height = slider_Row.Value * 50
-                '    'Augmente la hauteur du background
-                '    rectangle.Height = slider_Row.Value * 50 + 20
-                '    'Ajoute une ligne à la grille
-                '    Dim rowDef As New RowDefinition
-                '    grid_Telecommande.RowDefinitions.Add(rowDef)
-                'Next
             End If
 
             'Remplir()
@@ -521,15 +525,6 @@ Retour:
                         End If
                     Next
                 End If
-                'For j As Integer = 1 To slider_Column.Value
-                '    'Augmente la largeur de la grille
-                '    grid_Telecommande.Width = slider_Column.Value * 50
-                '    'Augmente la largeur du background
-                '    rectangle.Width = slider_Column.Value * 50 + 20
-                '    'Ajoute une colonne à la grille
-                '    Dim colDef As New ColumnDefinition
-                '    grid_Telecommande.ColumnDefinitions.Add(colDef)
-                'Next
             End If
 
             'Remplir()
@@ -542,15 +537,13 @@ Retour:
         ListButton.Clear()
 
         For i As Integer = 0 To grid_Telecommande.Children.Count - 1
-            Dim x As Canvas = grid_Telecommande.Children.Item(i)
-            If x IsNot Nothing Then
-                If x.Children.Count <> 0 Then
-                    ListButton.Add(x.Children.Item(0))
+            Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
+            If cvs IsNot Nothing Then
+                If cvs.Children.Count <> 0 Then
+                    ListButton.Add(cvs.Children.Item(0))
                 End If
             End If
         Next
-
-        'MessageBox.Show(ListButton.Count & " button(s) enregistré(s)")
     End Sub
 
     Private Sub Recharge()
@@ -606,8 +599,10 @@ Retour:
                     e.Data.GetData(GetType(Image)).parent.children.clear()
                 End If
                 img1.Source = e.Data.GetData(GetType(Image)).source
+                img1.Tag = e.Data.GetData(GetType(Image)).Tag
                 img1.AllowDrop = True
-                img1.Command = e.Data.GetData(GetType(Image)).tooltip
+                img1.Command = ListCmd.SelectedValue
+                img1.ToolTip = ListCmd.SelectedValue
                 Dim a() As String = sender.tag.split("|")
                 img1.Row = a(0)
                 img1.Column = a(1)
@@ -643,6 +638,13 @@ Retour:
     'Supprimer un bouton via menu contextuel
     Private Sub DeleteButton(ByVal sender As Object)
         sender.parent.children.clear()
+
+        For i As Integer = 0 To x.Commandes.Count - 1
+            If x.Commandes(i).Name = sender.command Then
+                x.Commandes(i).Row = -1
+                x.Commandes(i).Column = -1
+            End If
+        Next
     End Sub
 
     Private Sub Img_MouseLeftButtonDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
@@ -652,31 +654,84 @@ Retour:
         effects = DragDrop.DoDragDrop(sender, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 
+    'Fermer
     Private Sub button_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles button.Click
         x.Modele = cbTemplate.Text
+
+        For i As Integer = 0 To grid_Telecommande.Children.Count - 1
+            Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
+
+            If cvs IsNot Nothing Then
+                If cvs.Children.Count <> 0 Then
+                    For j As Integer = 0 To x.Commandes.Count - 1
+
+                        Dim y As ImageButton = cvs.Children.Item(0)
+                        If x.Commandes(j).Name = y.Command Then
+                            x.Commandes(j).Row = y.Row
+                            x.Commandes(j).Column = y.Column
+                            Exit For
+                        End If
+                    Next
+                End If
+            End If
+        Next
+
+        If cbTemplate.Text <> "" Then
+            Dim retour As String = myService.SaveTemplate(IdSrv, cbTemplate.Text, x.Commandes, slider_Row.Value, slider_Column.Value)
+            If retour <> "0" Then
+                MessageBox.Show("Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            End If
+        End If
         DialogResult = True
     End Sub
 
-    'Sauvegarder la grille
-    Private Sub BtnSaveGrid_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSaveGrid.Click
-        Save()
-    End Sub
 
-    'Vider la grille
-    Private Sub BtnVide_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnVide.Click
-        grid_Telecommande.Children.Clear()
-    End Sub
 
-    'Recharger la grille
-    Private Sub BtnRechargeGrid_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnRechargeGrid.Click
-        Recharge()
-    End Sub
 #End Region
 
     Private Sub WTelecommande_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         Try
             slider_Column.Value = _Col
             slider_Row.Value = _Row
+
+            If x.Commandes IsNot Nothing Then
+                GrpCmd.Visibility = Windows.Visibility.Visible
+
+                Remplir()
+
+                For i2 As Integer = 0 To x.Commandes.Count - 1
+
+                    If x.Commandes.Item(i2).Row > 0 And x.Commandes.Item(i2).Column > 0 Then
+                        Dim cvs As New Canvas
+                        cvs.Width = 45
+                        cvs.Height = 45
+                        cvs.Background = Brushes.Black
+                        cvs.AllowDrop = True
+                        cvs.Tag = x.Commandes.Item(i2).Row & "|" & x.Commandes.Item(i2).Column 'ListButton(i).Row & "|" & ListButton(i).Column
+                        AddHandler cvs.DragOver, AddressOf CVS_DragOver
+                        AddHandler cvs.Drop, AddressOf CVS_Drop
+                        Grid.SetColumn(cvs, x.Commandes.Item(i2).Column) ' ListButton(i).Column)
+                        Grid.SetRow(cvs, x.Commandes.Item(i2).Row) 'ListButton(i).Row)
+
+                        Dim img1 As New ImageButton
+                        img1.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Commandes.Item(i2).Picture))
+                        img1.Tag = x.Commandes.Item(i2).Picture
+                        img1.Command = x.Commandes.Item(i2).Name
+
+                        img1.AllowDrop = True
+                        Dim a() As String = cvs.Tag.split("|")
+                        img1.Row = a(0)
+                        img1.Column = a(1)
+                        img1.HorizontalAlignment = Windows.HorizontalAlignment.Stretch
+                        img1.VerticalAlignment = Windows.VerticalAlignment.Stretch
+                        AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
+                        AddHandler img1.Delete, AddressOf DeleteButton
+                        cvs.Children.Add(img1)
+
+                        grid_Telecommande.Children.Add(cvs)
+                    End If
+                Next
+            End If
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
         End Try
@@ -692,8 +747,8 @@ Retour:
 
                 TxtTplFab.Text = _list.Item(cbTemplate.SelectedIndex).Fabricant
                 TxtTplMod.Text = _list.Item(cbTemplate.SelectedIndex).Modele
-                slider_Column.Value = _list.Item(cbTemplate.SelectedIndex).Ligne
-                slider_Row.Value = _list.Item(cbTemplate.SelectedIndex).Colonne
+                slider_Column.Value = _list.Item(cbTemplate.SelectedIndex).Colonne
+                slider_Row.Value = _list.Item(cbTemplate.SelectedIndex).Ligne
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur: " & ex.ToString)

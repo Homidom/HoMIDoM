@@ -126,8 +126,8 @@ Namespace HoMIDom
             Dim _Code As String
             Dim _Repeat As Integer = 0
             Dim _Picture As String
-            Dim _Row As Integer
-            Dim _Column As Integer
+            Dim _Row As Integer = -1
+            Dim _Column As Integer = -1
 
             Property Name As String
                 Get
