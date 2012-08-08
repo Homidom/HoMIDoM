@@ -27,17 +27,18 @@ Partial Public Class uMeteos
         InitializeComponent()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        imgStackPnl.HorizontalAlignment = HorizontalAlignment.Left
-        imgStackPnl.VerticalAlignment = VerticalAlignment.Center
-        imgStackPnl.Orientation = Orientation.Horizontal
+        With imgStackPnl
+            .HorizontalAlignment = HorizontalAlignment.Left
+            .VerticalAlignment = VerticalAlignment.Center
+            .Orientation = Orientation.Horizontal
+        End With
 
         'Creation  du menu
         Try
-            For i As Integer = 0 To myService.GetAllDevices(IdSrv).Count - 1
-                If myService.GetAllDevices(IdSrv).Item(i).Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO Then
-                    NewBtnMnu(myService.GetAllDevices(IdSrv).Item(i).ID)
+            For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In myService.GetAllDevices(IdSrv)
+                If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True Then
+                    NewBtnMnu(ObjMeteo.ID)
                 End If
-
             Next
         Catch ex As Exception
             MsgBox("Error updating meteo: " & ex.Message)
@@ -48,7 +49,6 @@ Partial Public Class uMeteos
 
     Private Sub NewBtnMnu(ByVal id As String)
         Try
-
             'Creation  du menu
             Dim ctrl As New uMeteo(id)
             imgStackPnl.Children.Add(ctrl)
