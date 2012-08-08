@@ -4330,9 +4330,11 @@ Namespace HoMIDom
             End If
 
             Dim _list As New List(Of TemplateDriver)
+
             Try
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     Dim x As New TemplateDriver
+
                     With x
                         .Nom = _ListDrivers.Item(i).nom
                         .ID = _ListDrivers.Item(i).id
@@ -4410,6 +4412,7 @@ Namespace HoMIDom
                 Next
                 _list.Sort(AddressOf sortDriver)
                 Return _list
+
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllDrivers", "Exception : " & ex.Message)
                 Return Nothing
@@ -4831,6 +4834,7 @@ Namespace HoMIDom
                             Case "VITESSEVENT" : .Type = Device.ListeDevices.VITESSEVENT
                             Case "VOLET" : .Type = Device.ListeDevices.VOLET
                         End Select
+
                         .Description = _ListDevices.Item(i).description
                         .Adresse1 = _ListDevices.Item(i).adresse1
                         .Adresse2 = _ListDevices.Item(i).adresse2
@@ -4923,17 +4927,15 @@ Namespace HoMIDom
 
                         If .Type = Device.ListeDevices.MULTIMEDIA Then
                             .Commandes = _ListDevices.Item(i).Commandes
-                            'For j As Integer = 0 To _ListDevices.Item(i).listcommandname.count - 1
-                            '    .ListCommandName.Add(_ListDevices.Item(i).listcommandname.item(j))
-                            '    .ListCommandData.Add(_ListDevices.Item(i).ListCommandData.item(j))
-                            '    .ListCommandRepeat.Add(_ListDevices.Item(i).ListCommandRepeat.item(j))
-                            'Next
                         End If
                     End With
+
                     _list.Add(x)
                 Next
+
                 _list.Sort(AddressOf sortDevice)
                 Return _list
+
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllDevices", "Exception : " & ex.ToString)
                 Return Nothing
@@ -4971,638 +4973,171 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As Double = 0, Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing) As String Implements IHoMIDom.SaveDevice
+            'Vérification de l'Id du serveur pour accepter le traitement
             If VerifIdSrv(IdSrv) = False Then
                 Return 99
                 Exit Function
             End If
 
-            Dim myID As String
+            'Déclaration des variables
+            Dim myID As String = ""
+
+
             Try
+                'Test si c'est un nouveau device
                 If deviceId = "" Then 'C'est un nouveau device
                     myID = Api.GenerateGUID
+
+                    Dim MyNewObj As Object = Nothing
+
                     'Suivant chaque type de device
                     Select Case UCase(type)
                         Case "TEMPERATURE"
                             Dim o As New Device.TEMPERATURE(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                .Correction = correction
-                                .Formatage = formatage
-                                .Precision = precision
-                                .ValueMax = valuemax
-                                .ValueMin = valuemin
-                                .ValueDef = valuedef
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "HUMIDITE"
                             Dim o As New Device.HUMIDITE(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                .Correction = correction
-                                .Formatage = formatage
-                                .Precision = precision
-                                .ValueMax = valuemax
-                                .ValueMin = valuemin
-                                .ValueDef = valuedef
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "BATTERIE"
                             Dim o As New Device.BATTERIE(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "TEMPERATURECONSIGNE"
                             Dim o As New Device.TEMPERATURECONSIGNE(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                .Correction = correction
-                                .Formatage = formatage
-                                .Precision = precision
-                                .ValueMax = valuemax
-                                .ValueMin = valuemin
-                                .ValueDef = valuedef
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "ENERGIETOTALE"
                             Dim o As New Device.ENERGIETOTALE(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                .Correction = correction
-                                .Formatage = formatage
-                                .Precision = precision
-                                .ValueMax = valuemax
-                                .ValueMin = valuemin
-                                .ValueDef = valuedef
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "ENERGIEINSTANTANEE"
                             Dim o As New Device.ENERGIEINSTANTANEE(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                .Correction = correction
-                                .Formatage = formatage
-                                .Precision = precision
-                                .ValueMax = valuemax
-                                .ValueMin = valuemin
-                                .ValueDef = valuedef
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "PLUIETOTAL"
                             Dim o As New Device.PLUIETOTAL(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                .Correction = correction
-                                .Formatage = formatage
-                                .Precision = precision
-                                .ValueMax = valuemax
-                                .ValueMin = valuemin
-                                .ValueDef = valuedef
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "PLUIECOURANT"
                             Dim o As New Device.PLUIECOURANT(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                .Correction = correction
-                                .Formatage = formatage
-                                .Precision = precision
-                                .ValueMax = valuemax
-                                .ValueMin = valuemin
-                                .ValueDef = valuedef
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "VITESSEVENT"
                             Dim o As New Device.VITESSEVENT(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                .Correction = correction
-                                .Formatage = formatage
-                                .Precision = precision
-                                .ValueMax = valuemax
-                                .ValueMin = valuemin
-                                .ValueDef = valuedef
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "DIRECTIONVENT"
                             Dim o As New Device.DIRECTIONVENT(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "UV"
                             Dim o As New Device.UV(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                .Correction = correction
-                                .Formatage = formatage
-                                .Precision = precision
-                                .ValueMax = valuemax
-                                .ValueMin = valuemin
-                                .ValueDef = valuedef
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "APPAREIL"
                             Dim o As New Device.APPAREIL(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "LAMPE"
                             Dim o As New Device.LAMPE(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                .Correction = correction
-                                .Formatage = formatage
-                                .Precision = precision
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "CONTACT"
                             Dim o As New Device.CONTACT(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "METEO"
                             Dim o As New Device.METEO(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "AUDIO"
                             Dim o As New Device.AUDIO(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "MULTIMEDIA"
                             Dim o As New Device.MULTIMEDIA(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                '   .Commandes = Commandes
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "FREEBOX"
                             Dim o As New Device.FREEBOX(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "VOLET"
                             Dim o As New Device.VOLET(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                .Correction = correction
-                                .Formatage = formatage
-                                .Precision = precision
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "BAROMETRE"
                             Dim o As New Device.BAROMETRE(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                .Correction = correction
-                                .Formatage = formatage
-                                .Precision = precision
-                                .ValueMax = valuemax
-                                .ValueMin = valuemin
-                                .ValueDef = valuedef
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "COMPTEUR"
                             Dim o As New Device.COMPTEUR(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                .Correction = correction
-                                .Formatage = formatage
-                                .Precision = precision
-                                .ValueMax = valuemax
-                                .ValueMin = valuemin
-                                .ValueDef = valuedef
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "DETECTEUR"
                             Dim o As New Device.DETECTEUR(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "GENERIQUEBOOLEEN"
                             Dim o As New Device.GENERIQUEBOOLEEN(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "GENERIQUESTRING"
                             Dim o As New Device.GENERIQUESTRING(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "GENERIQUEVALUE"
                             Dim o As New Device.GENERIQUEVALUE(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                .Correction = correction
-                                .Formatage = formatage
-                                .Precision = precision
-                                .ValueMax = valuemax
-                                .ValueMin = valuemin
-                                .ValueDef = valuedef
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "SWITCH"
                             Dim o As New Device.SWITCH(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
                         Case "TELECOMMANDE"
                             Dim o As New Device.TELECOMMANDE(Me)
-                            With o
-                                .ID = myID
-                                .Name = name
-                                .DateCreated = Now
-                                .Picture = image
-                                .Adresse1 = address1
-                                .Adresse2 = address2
-                                .Enable = enable
-                                .DriverID = driverid
-                                .Modele = modele
-                                .Refresh = refresh
-                                .Solo = solo
-                                .Description = description
-                                .LastChangeDuree = lastchangeduree
-                                .LastEtat = lastEtat
-                                AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            End With
-                            _ListDevices.Add(o)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
                             o.Driver.newdevice(deviceId)
+                            MyNewObj = o
                     End Select
+
+                    'Propriétés communes
+                    With MyNewObj
+                        .ID = myID
+                        .Name = name
+                        .DateCreated = Now
+                        .Picture = image
+                        .Adresse1 = address1
+                        .Adresse2 = address2
+                        .Enable = enable
+                        .DriverID = driverid
+                        .Modele = modele
+                        .Refresh = refresh
+                        .Solo = solo
+                        .Description = description
+                        .LastChangeDuree = lastchangeduree
+                        .LastEtat = lastEtat
+                    End With
+
+                    If UCase(type) = "GENERIQUEVALUE" Or "COMPTEUR" Or "BAROMETRE" Or "LAMPE" Or "UV" Or "VITESSEVENT" Or "PLUIECOURANT" Or "PLUIETOTAL" Or "ENERGIEINSTANTANEE" Or "ENERGIETOTALE" Or "TEMPERATURECONSIGNE" Or "HUMIDITE" Or "TEMPERATURE" Then
+                        With MyNewObj
+                            .Correction = correction
+                            .Formatage = formatage
+                            .Precision = precision
+                            .ValueMax = valuemax
+                            .ValueMin = valuemin
+                            .ValueDef = valuedef
+                        End With
+                    End If
+
+
+                    _ListDevices.Add(MyNewObj)
+
+                    'Libére la mémoire de la variable
+                    MyNewObj = Nothing
+
                 Else 'Device Existant
                     myID = deviceId
                     For i As Integer = 0 To _ListDevices.Count - 1
@@ -5626,8 +5161,8 @@ Namespace HoMIDom
                             _ListDevices.Item(i).solo = solo
                             _ListDevices.Item(i).LastChangeDuree = lastchangeduree
                             _ListDevices.Item(i).LastEtat = lastEtat
-                            '_ListDevices.Item(i).Commandes = Commandes
                             _ListDevices.Item(i).Driver.newdevice(deviceId)
+
                             'si c'est un device de type double ou integer
                             If _ListDevices.Item(i).type = "VITESSEVENT" Or _ListDevices.Item(i).type = "UV" Or _ListDevices.Item(i).type = "TEMPERATURECONSIGNE" Or _ListDevices.Item(i).type = "TEMPERATURE" Or _ListDevices.Item(i).type = "PLUIETOTAL" Or _ListDevices.Item(i).type = "PLUIECOURANT" Or _ListDevices.Item(i).type = "LAMPE" Or _ListDevices.Item(i).type = "HUMIDITE" Or _ListDevices.Item(i).type = "GENERIQUEVALUE" Or _ListDevices.Item(i).type = "ENERGIETOTALE" Or _ListDevices.Item(i).type = "ENERGIEINSTANTANEE" Or _ListDevices.Item(i).type = "COMPTEUR" Or _ListDevices.Item(i).type = "BAROMETRE" Then
                                 _ListDevices.Item(i).Correction = correction
@@ -5768,6 +5303,7 @@ Namespace HoMIDom
                         retour.Name = _ListDevices.Item(i).name
                         retour.Enable = _ListDevices.Item(i).enable
                         retour.GetDeviceCommandePlus = _ListDevices.Item(i).GetCommandPlus
+
                         Select Case UCase(_ListDevices.Item(i).type)
                             Case "APPAREIL" : retour.Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
                             Case "AUDIO" : retour.Type = Device.ListeDevices.AUDIO
@@ -5797,6 +5333,7 @@ Namespace HoMIDom
                             Case "VITESSEVENT" : retour.Type = Device.ListeDevices.VITESSEVENT
                             Case "VOLET" : retour.Type = Device.ListeDevices.VOLET
                         End Select
+
                         retour.Description = _ListDevices.Item(i).description
                         retour.Adresse1 = _ListDevices.Item(i).adresse1
                         retour.Adresse2 = _ListDevices.Item(i).adresse2
@@ -5920,6 +5457,8 @@ Namespace HoMIDom
                         Exit For
                     End If
                 Next
+
+                'Si pas trouvé on retourne rien
                 Return Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnRealDeviceById", "Exception : " & ex.Message)

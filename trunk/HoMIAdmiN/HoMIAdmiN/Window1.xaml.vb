@@ -1435,8 +1435,10 @@ Class Window1
     ''' <param name="Objet"></param>
     ''' <remarks></remarks>
     Private Sub AffControlPage(ByVal Objet As Object)
-        Objet.Uid = System.Guid.NewGuid.ToString()
+        'Objet.Uid = System.Guid.NewGuid.ToString()
+
         If CanvasRight.Children.Count > 0 Then
+
             For i As Integer = 0 To CanvasRight.Children.Count - 1
                 Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
                 myDoubleAnimation.From = 1.0
@@ -1450,8 +1452,10 @@ Class Window1
                 Storyboard.SetTarget(myDoubleAnimation, CanvasRight.Children.Item(i))
                 Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
                 myStoryboard.Begin()
+
             Next
         End If
+
         Objet3 = Objet
 
     End Sub
