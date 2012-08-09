@@ -289,6 +289,15 @@ Namespace HoMIDom
 #Region "Fonctions/Sub propres au serveur"
 
 #Region "Serveur"
+
+        'Public Function SaveFileToSrv(ByVal File As Object) As String
+        '    Try
+
+        '    Catch ex As Exception
+        '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveFileToSrv", "Exception : " & ex.ToString)
+        '    End Try
+        'End Function
+
         ''' <summary>
         ''' Vérifie si l'IDsrv est correct, retourne True si ok
         ''' </summary>
@@ -2622,6 +2631,11 @@ Namespace HoMIDom
             Try
                 Dim retour As String
 
+                'Charge les types de log
+                For i As Integer = 0 To 9
+                    _TypeLogEnable.Add(False)
+                Next
+
                 'Cree les sous répertoires s'ils nexistent pas
                 If System.IO.Directory.Exists(_MonRepertoire & "\Logs") = False Then
                     System.IO.Directory.CreateDirectory(_MonRepertoire & "\Logs")
@@ -2639,6 +2653,10 @@ Namespace HoMIDom
                     System.IO.Directory.CreateDirectory(_MonRepertoire & "\Images")
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier images")
                 End If
+                If System.IO.Directory.Exists(_MonRepertoire & "\Images\User") = False Then
+                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\Images\User")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier images\User")
+                End If
                 If System.IO.Directory.Exists(_MonRepertoire & "\Drivers") = False Then
                     System.IO.Directory.CreateDirectory(_MonRepertoire & "\Drivers")
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier Drivers")
@@ -2647,11 +2665,6 @@ Namespace HoMIDom
                     System.IO.Directory.CreateDirectory(_MonRepertoire & "\Templates")
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier templates")
                 End If
-
-                'Charge les types de log
-                For i As Integer = 0 To 9
-                    _TypeLogEnable.Add(False)
-                Next
 
                 'Indique la version de la dll
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version de la dll Homidom: " & GetServerVersion())
@@ -4242,10 +4255,12 @@ Namespace HoMIDom
                     Exit Function
                 End If
 
+
                 If driverId = "DE96B466-2540-11E0-A321-65D7DFD72085" Then
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDriver", "La suppression du driver Virtuel est impossible")
                     Return -1
                 End If
+
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).Id = driverId Then
                         _ListDrivers.RemoveAt(i)
@@ -4253,6 +4268,7 @@ Namespace HoMIDom
                         Exit For
                     End If
                 Next
+
                 Return -1
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDriver", "Exception : " & ex.Message)
@@ -4493,6 +4509,7 @@ Namespace HoMIDom
             End If
 
             Dim retour As New TemplateDriver
+
             Try
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).ID = DriverId Then
@@ -4690,8 +4707,8 @@ Namespace HoMIDom
                         _listactd = Nothing
                         _listactdrv = Nothing
                         Return retour
-                        'Return _ListDrivers.Item(i)
                         Exit For
+
                     End If
                 Next
                 Return Nothing
@@ -4770,6 +4787,7 @@ Namespace HoMIDom
                             Return -2
                             Exit Function
                         End If
+
                         'on arrete le timer en forçant le refresh à 0
                         _ListDevices.Item(i).refresh = 0
                         _ListDevices.Item(i).driver.deletedevice(deviceId)
@@ -4778,6 +4796,7 @@ Namespace HoMIDom
                         Exit Function
                     End If
                 Next
+
                 Return -1
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDevice", "Exception : " & ex.Message)
@@ -4795,6 +4814,7 @@ Namespace HoMIDom
             End If
 
             Dim _list As New List(Of TemplateDevice)
+
             Try
                 For i As Integer = 0 To _ListDevices.Count - 1
                     Dim x As New TemplateDevice
