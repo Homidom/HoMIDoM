@@ -14,12 +14,14 @@ Partial Public Class uLog
 
     Private Sub RefreshLog()
         Try
+            'Variables
+            Dim _LigneIgnorees As Integer = 0
             Me.Cursor = Cursors.Wait
 
             If IsConnect = True Then
                 Dim TargetFile As StreamWriter
                 TargetFile = New StreamWriter("log.txt", False)
-                TargetFile.Write(myservice.ReturnLog)
+                TargetFile.Write(myService.ReturnLog)
                 TargetFile.Close()
 
                 Dim tr As TextReader = New StreamReader("log.txt")
@@ -27,37 +29,42 @@ Partial Public Class uLog
 
                 While tr.Peek() >= 0
                     Try
-
                         Dim line As String = tr.ReadLine()
 
                         Dim tmp As String() = line.Trim.Split(vbTab)
-                        Dim data As String()=Nothing
+                        Dim data As String() = Nothing
 
-                        If tmp.Length < 6 Then
+                        If tmp.Length < 6 And tmp.Length > 3 Then
                             If tmp(4).Length > 255 Then tmp(4) = Mid(tmp(4), 1, 255)
                             data = tmp
                         Else
-                            MessageBox.Show("Une ligne a été supprimée du log car elle ne respecte pas le format: " & tmp.Length)
+                            _LigneIgnorees += 1
                         End If
 
                         ' creates a dictionary where the column name is the key and
                         '    and the data is the value
                         Dim sensorData As New Dictionary(Of String, Object)
 
-                        For i As Integer = 0 To data.Length - 1
-                            sensorData(keys(i)) = data(i)
-                        Next
+                        If data IsNot Nothing Then
+                            For i As Integer = 0 To data.Length - 1
+                                sensorData(keys(i)) = data(i)
+                            Next
+                            ligneLog.Add(sensorData)
+                        End If
 
-                        ligneLog.Add(sensorData)
                         sensorData = Nothing
                         lineCount += 1
                     Catch ex As Exception
-                        ' MessageBox.Show("Erreur lors de la ligne du fichier log: " & ex.ToString)
+                        MessageBox.Show("Erreur lors de la ligne du fichier log: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
                 End While
             End If
 
             Try
+                If _LigneIgnorees > 0 Then
+                    MessageBox.Show(_LigneIgnorees & " ligne(s) du log ne seront pas prises en compte car elles ne respectent pas le format attendu, veuillez consultez le fichier log sur le serveur pour avoir la totalité")
+                End If
+
                 DGW.DataContext = ligneLog
             Catch ex As Exception
                 MessageBox.Show("Erreur: " & ex.ToString)

@@ -22,7 +22,6 @@ Partial Public Class uDevice
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             _DeviceId = DeviceId
             _Action = Action
-            StkNewTemplate.Height = 0
 
             'Liste les type de devices dans le combo
             For Each value As ListeDevices In [Enum].GetValues(GetType(HoMIDom.HoMIDom.Device.ListeDevices))
@@ -42,8 +41,6 @@ Partial Public Class uDevice
 
                 FlagNewDevice = True
                 ImgDevice.Tag = ""
-                StkCde.Height = 0
-                StkCmd.Height = 0
                 CbType.IsEnabled = False
 
                 'Modification d'un Device
@@ -131,7 +128,6 @@ Partial Public Class uDevice
                         StkValue3.Visibility = Windows.Visibility.Collapsed
                     End If
 
-                    StkCde.Visibility = Windows.Visibility.Collapsed
                     If x.Type = ListeDevices.MULTIMEDIA Then
                         BtnEditTel.Visibility = Windows.Visibility.Visible
                         TxtModele2.Visibility = Visibility.Collapsed
@@ -405,15 +401,6 @@ Partial Public Class uDevice
                     BtnEditTel.Visibility = Windows.Visibility.Visible
                     TxtModele2.Visibility = Visibility.Hidden
                     Label8.Visibility = Windows.Visibility.Hidden
-                    '    StkCde.Height = Double.NaN
-                    '    Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
-                    '    _list = myService.GetListOfTemplate
-                    '    For i As Integer = 0 To _list.Count - 1
-                    '        Dim tpl As String = Replace(_list(i).File, ".xml", "")
-                    '        cbTemplate.Items.Add(tpl)
-                    '    Next
-                    'Else
-                    '    StkCde.Height = 0
                 End If
 
 

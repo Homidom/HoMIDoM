@@ -21,7 +21,6 @@ Public Class uWidgetEmpty
     Dim _Refresh As Integer = 1
     Dim _ColorBackGround As SolidColorBrush = Brushes.Black
     Dim _Visuel As New List(Of cWidget.Visu)
-    'Dim _Type As cElement.WidgetType = cElement.WidgetType.VIERGE
     Dim _ZoneId As String
     Dim _IsEmpty As Boolean = True
     Dim _Action_On_Click As New List(Of cWidget.Action)
@@ -665,8 +664,5 @@ Public Class uWidgetEmpty
                 End If
             End If
         End If
-    End Sub
-    Private Sub uWidgetEmpty_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
-
     End Sub
 End Class
