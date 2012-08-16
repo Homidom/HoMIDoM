@@ -226,6 +226,33 @@ Class Window1
         End Try
     End Function
 
+    Private Sub Window1_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
+        Try
+            If IsConnect = True And FlagChange Then
+
+                If MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                    Try
+                        If IsConnect = False Then
+                            MessageBox.Show("Impossible d'enregistrer la configuration car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                        Else
+                            Dim retour As String = myService.SaveConfig(IdSrv)
+                            If retour <> "0" Then
+                                MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
+                            Else
+                                MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
+                            End If
+                        End If
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub Unloaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
+                End If
+            End If
+            End
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub Unloaded Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
     Private Sub Window1_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         Try
             'Connexion au serveur web

@@ -5141,17 +5141,17 @@ Namespace HoMIDom
                         .LastEtat = lastEtat
                     End With
 
-                    If UCase(type) = "GENERIQUEVALUE" Or "COMPTEUR" Or "BAROMETRE" Or "LAMPE" Or "UV" Or "VITESSEVENT" Or "PLUIECOURANT" Or "PLUIETOTAL" Or "ENERGIEINSTANTANEE" Or "ENERGIETOTALE" Or "TEMPERATURECONSIGNE" Or "HUMIDITE" Or "TEMPERATURE" Then
-                        With MyNewObj
-                            .Correction = correction
-                            .Formatage = formatage
-                            .Precision = precision
-                            .ValueMax = valuemax
-                            .ValueMin = valuemin
-                            .ValueDef = valuedef
-                        End With
-                    End If
-
+                    Select Case UCase(type)
+                        Case "GENERIQUEVALUE", "COMPTEUR", "BAROMETRE", "LAMPE", "UV", "VITESSEVENT", "PLUIECOURANT", "PLUIETOTAL", "ENERGIEINSTANTANEE", "ENERGIETOTALE", "TEMPERATURECONSIGNE", "HUMIDITE", "TEMPERATURE"
+                            With MyNewObj
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
+                                .ValueMax = valuemax
+                                .ValueMin = valuemin
+                                .ValueDef = valuedef
+                            End With
+                    End Select
 
                     _ListDevices.Add(MyNewObj)
 
@@ -5199,7 +5199,7 @@ Namespace HoMIDom
                 'génération de l'event
                 Return myID
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDevice", "Exception : " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDevice", "Exception : " & ex.ToString)
                 Return "-1"
             End Try
         End Function
