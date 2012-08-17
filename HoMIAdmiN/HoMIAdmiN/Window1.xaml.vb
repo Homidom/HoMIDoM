@@ -167,6 +167,11 @@ Class Window1
             myadress = "http://" & IP & ":" & Port & "/ServiceModelSamples/service"
             MyPort = Port
 
+            If UrlIsValid(myadress) = False Then
+                MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & Chr(10) & Name & " - " & IP & ":" & Port & vbCrLf & "Veuillez vérifier que celui-ci est démarré", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Return -1
+            End If
+
             Dim binding As New ServiceModel.BasicHttpBinding
             binding.MaxBufferPoolSize = 250000000
             binding.MaxReceivedMessageSize = 250000000
