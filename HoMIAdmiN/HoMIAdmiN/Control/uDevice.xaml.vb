@@ -355,8 +355,6 @@ Partial Public Class uDevice
 
     Private Sub CbType_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbType.MouseLeave
         Try
-
-
             TxtCorrection.Visibility = Windows.Visibility.Hidden
             TxtFormatage.Visibility = Windows.Visibility.Hidden
             TxtPrecision.Visibility = Windows.Visibility.Hidden

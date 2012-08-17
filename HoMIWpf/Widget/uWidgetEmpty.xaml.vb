@@ -29,7 +29,6 @@ Public Class uWidgetEmpty
     Dim _Action_GestureDroiteGauche As New List(Of cWidget.Action)
     Dim _Action_GestureHautBas As New List(Of cWidget.Action)
     Dim _Action_GestureBasHaut As New List(Of cWidget.Action)
-
     Dim dt As DispatcherTimer
 
     Public Event Click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
@@ -231,6 +230,11 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Double)
             _X = value
+
+            If Me.Parent IsNot Nothing Then
+                Dim x As ContentControl = Me.Parent
+                Canvas.SetLeft(x, value)
+            End If
         End Set
     End Property
 
@@ -240,6 +244,11 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Double)
             _Y = value
+
+            If Me.Parent IsNot Nothing Then
+                Dim x As ContentControl = Me.Parent
+                Canvas.SetTop(x, value)
+            End If
         End Set
     End Property
 
@@ -249,6 +258,13 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Double)
             _Rotation = value
+            If Me.Parent IsNot Nothing Then
+                Dim x As ContentControl = Me.Parent
+                Dim Trg As New TransformGroup
+                Dim Rot As New RotateTransform(value)
+                Trg.Children.Add(Rot)
+                x.RenderTransform = Trg
+            End If
         End Set
     End Property
 
@@ -340,6 +356,34 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As List(Of cWidget.Visu))
             _Visuel = value
+        End Set
+    End Property
+
+    Public Shadows Property Width As Double
+        Get
+            Return MyBase.Width
+        End Get
+        Set(ByVal value As Double)
+            MyBase.Width = value
+
+            If Me.Parent IsNot Nothing Then
+                Dim x As ContentControl = Me.Parent
+                x.Width = value
+            End If
+        End Set
+    End Property
+
+    Public Shadows Property Height As Double
+        Get
+            Return MyBase.Height
+        End Get
+        Set(ByVal value As Double)
+            MyBase.Height = value
+
+            If Me.Parent IsNot Nothing Then
+                Dim x As ContentControl = Me.Parent
+                x.Height = value
+            End If
         End Set
     End Property
 
