@@ -502,10 +502,12 @@ Imports System.Xml
                         Dim xmlDoc As New XmlDocument()
                         xmlDoc.Load(Objet.Adresse1)
                         Dim itemNodes As XmlNodeList = xmlDoc.SelectNodes("//rss/channel/item")
+                        Dim result As String = ""
                         For Each itemNode As XmlNode In itemNodes
                             Dim titleNode As XmlNode = itemNode.SelectSingleNode(Objet.Adresse2)
-                            Objet.Value &= titleNode.InnerText & vbCrLf
+                            result &= titleNode.InnerText & vbCrLf
                         Next
+                        Objet.Value = result
                     End If
                 Case Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le Device n'est pas reconnu pour ce type " & Objet.Type)
