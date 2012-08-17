@@ -492,6 +492,21 @@ Imports System.Xml
                         Dim elmt As String = "analog" & idx
                         Objet.Value = GET_IPX800(url, elmt)
                     End If
+                Case "GENERIQUESTRING"
+                    If Trim(UCase(Objet.Modele)) = "RSS" Then
+                        If Objet.Adresse1 = "" Or Objet.Adresse2 = "" Then
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: les adresses du device Adresse1 (adresse http du flux rss) et Adresse2 (nom de l'item à lire) doivent être renseignés")
+                            Exit Sub
+                        End If
+
+                        Dim xmlDoc As New XmlDocument()
+                        xmlDoc.Load(Objet.Adresse1)
+                        Dim itemNodes As XmlNodeList = xmlDoc.SelectNodes("//rss/channel/item")
+                        For Each itemNode As XmlNode In itemNodes
+                            Dim titleNode As XmlNode = itemNode.SelectSingleNode(Objet.Adresse2)
+                            Objet.Value &= titleNode.InnerText & vbCrLf
+                        Next
+                    End If
                 Case Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le Device n'est pas reconnu pour ce type " & Objet.Type)
                     Exit Sub
@@ -679,6 +694,8 @@ Imports System.Xml
             _DeviceSupport.Add(ListeDevices.CONTACT)
             _DeviceSupport.Add(ListeDevices.APPAREIL)
             _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE)
+            _DeviceSupport.Add(ListeDevices.GENERIQUESTRING)
+
             'Parametres avancés
             'add_paramavance("nom", "Description", valeupardefaut)
 
@@ -693,7 +710,7 @@ Imports System.Xml
             Add_LibelleDevice("ADRESSE1", "Début URL", "")
             Add_LibelleDevice("ADRESSE2", "Fin URL (Optionnel)", "")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "@", "")
+            Add_LibelleDevice("MODELE", "Modele", "modèle du device: IPX800,RSS,Arduino")
             Add_LibelleDevice("REFRESH", "Refresh", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
