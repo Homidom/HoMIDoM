@@ -103,8 +103,9 @@ Public Class uAction
                         If x.Fichier IsNot Nothing Then Label2.Content = x.Fichier
                         If x.Arguments IsNot Nothing Then Label2.Content &= " " & x.Arguments
                     Case Action.TypeAction.ActionVB
+                        Dim x As Action.ActionVB = _ObjAction
                         Label1.Content = "Script VB"
-                        Label2.Content = ""
+                        If x.Label IsNot Nothing Then Label2.Content = x.Label
                 End Select
                 Refresh_Position()
             End If

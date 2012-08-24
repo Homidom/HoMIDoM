@@ -1117,6 +1117,8 @@ Namespace HoMIDom
                                         _Act.Fichier = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                     Case "arguments"
                                         _Act.Arguments = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "label"
+                                        _Act.label = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                     Case "script"
                                         _Act.Script = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                     Case "parametres"
@@ -1777,6 +1779,9 @@ Namespace HoMIDom
                             writer.WriteValue(ListActions.Item(j).Message)
                             writer.WriteEndAttribute()
                         Case Action.TypeAction.ActionVB
+                            writer.WriteStartAttribute("label")
+                            writer.WriteValue(ListActions.Item(j).Label)
+                            writer.WriteEndAttribute()
                             writer.WriteStartAttribute("script")
                             writer.WriteValue(ListActions.Item(j).Script)
                             writer.WriteEndAttribute()

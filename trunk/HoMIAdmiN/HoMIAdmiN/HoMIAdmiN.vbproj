@@ -459,7 +459,6 @@
     <Resource Include="Images\Homidom_banniere_817_203.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Fleche_bas_32.png" />
     <Resource Include="Images\Fleche_haut_32.png" />
   </ItemGroup>
   <ItemGroup>
@@ -555,6 +554,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\VBS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Fleche_bas_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\bullet-fleche-vers-le-bas-32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
