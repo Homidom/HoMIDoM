@@ -198,6 +198,7 @@ Namespace HoMIDom
             <NonSerialized()> Protected _Driver As Object
             Protected _Description As String = ""
             Protected _Type As String = ""
+            Protected _TypeGenerique As String = "GENERIQUE"
             Protected _Adresse1 As String = ""
             Protected _Adresse2 As String = ""
             Protected _DateCreated As Date = Now
@@ -299,6 +300,13 @@ Namespace HoMIDom
 
             'TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
             Public ReadOnly Property Type() As String
+                Get
+                    Return _Type
+                End Get
+            End Property
+
+            'GENERIQUE|STRING|INTEGER|BOOLEEN|DOUBLE…
+            Public ReadOnly Property TypeGenerique() As String
                 Get
                     Return _Type
                 End Get
@@ -468,8 +476,9 @@ Namespace HoMIDom
             Protected _Precision As Double = 0
             Protected _Correction As Double = 0
             Protected _Formatage As String = ""
+            Protected Shadows _TypeGenerique As String = "DOUBLE"
 
-            'Contien l'avant derniere valeur
+            'Contient l'avant derniere valeur
             Public Property ValueLast() As Double
                 Get
                     Return _ValueLast
@@ -624,6 +633,7 @@ Namespace HoMIDom
             Protected _Value As Boolean = False
             Protected _ValueLast As Boolean = False
             Protected _valuemustchange As Boolean = False 'si true alors value n'est modifié que si la valeur change
+            Protected Shadows _TypeGenerique As String = "BOOLEEN"
 
             'Contien l'avant derniere valeur
             Public Property ValueLast() As Double
@@ -703,6 +713,7 @@ Namespace HoMIDom
             Protected _Precision As Integer = 0
             Protected _Correction As Integer = 0
             Protected _Formatage As String = ""
+            Protected Shadows _TypeGenerique As String = "INTEGER"
 
             'Contien l'avant derniere valeur
             Public Property ValueLast() As Integer
@@ -861,6 +872,7 @@ Namespace HoMIDom
 
             Protected _Value As String = ""
             Protected _ValueLast As String = ""
+            Protected Shadows _TypeGenerique As String = "STRING"
 
             'Contient l'avant derniere valeur
             Public Property ValueLast() As String
