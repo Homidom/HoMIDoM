@@ -499,8 +499,8 @@ Imports ZibaseDll
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
-            Add_LibelleDevice("ADRESSE2", "Adresse secondaire", "Adresse secondaire pour certains composants")
+            Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant au format XX0000000")
+            Add_LibelleDevice("ADRESSE2", "Adresse Emission", "Adresse d'emission pour certains composants")
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun / BROADC / CHACON / DOMIA / RFS10 / VIS433 / VIS868 / X10 / XDD433 / XDD868 / XDD868_INTER_SHUTTER / XDD868_BOILER_AC / XDD868_PILOT_WIRE / ZWAVE", "aucun|BROADC|CHACON|DOMIA|RFS10|VIS433|VIS868|X10|XDD868|XDD868_INTER_SHUTTER|XDD868_BOILER_AC|XDD868_PILOT_WIRE|ZWAVE")
             Add_LibelleDevice("REFRESH", "@", "")
@@ -582,7 +582,7 @@ Imports ZibaseDll
     Private Function Ecrirecommand(ByVal composants_adresse As String, ByVal composants_modele_nom As String, ByVal composants_adresse2 As String, ByVal ordre As String, ByVal iDim As Integer)
         'composants_adresse : adresse du composant
         'composants_modele_nom : modele du composant
-        'composants_divers : adresse secondaire du composant chacon
+        'composants_adresse2 : adresse secondaire du composant chacon
         'ordre : ordre à envoyer
         'iDim: nombre de 0 à 100 pour l'ordre DIM sur chacon
 
@@ -591,14 +591,16 @@ Imports ZibaseDll
         Dim valeur As String = ""
 
         Try
-            adresse = composants_adresse 'adresse = Split(composants_adresse, "_")(0)
+            adresse = composants_adresse2 'adresse = Split(composants_adresse, "_")(0)
+            If adresse = "" Then adresse = composants_adresse
+
             Select Case UCase(composants_modele_nom)
                 Case "" : protocole = ZiBase.Protocol.PROTOCOL_BROADCAST
                 Case "aucun" : protocole = ZiBase.Protocol.PROTOCOL_BROADCAST
                 Case "BROADC" : protocole = ZiBase.Protocol.PROTOCOL_BROADCAST
                 Case "CHACON"
                     protocole = ZiBase.Protocol.PROTOCOL_CHACON
-                    adresse = composants_adresse2 'on a 2 adresses pour chacon : reception et emission dans le champ divers
+                    'adresse = composants_adresse2 'on a 2 adresses pour chacon : reception et emission dans le champ divers
                 Case "DOMIA" : protocole = ZiBase.Protocol.PROTOCOL_DOMIA
                 Case "VIS433" : protocole = ZiBase.Protocol.PROTOCOL_VISONIC433
                 Case "VIS868" : protocole = ZiBase.Protocol.PROTOCOL_VISONIC868
