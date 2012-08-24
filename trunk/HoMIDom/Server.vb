@@ -1088,6 +1088,10 @@ Namespace HoMIDom
                                     Dim o As New Action.ActionDos
                                     _Act = o
                                     o = Nothing
+                                Case "ActionVB"
+                                    Dim o As New Action.ActionVB
+                                    _Act = o
+                                    o = Nothing
                             End Select
                             For j3 As Integer = 0 To list.ChildNodes.Item(j2).Attributes.Count - 1
                                 Select Case list.ChildNodes.Item(j2).Attributes.Item(j3).Name
@@ -1113,6 +1117,8 @@ Namespace HoMIDom
                                         _Act.Fichier = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                     Case "arguments"
                                         _Act.Arguments = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "script"
+                                        _Act.Script = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                     Case "parametres"
                                         Dim b As String = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                         Dim a() As String = b.Split("|")
@@ -1770,6 +1776,10 @@ Namespace HoMIDom
                             writer.WriteStartAttribute("message")
                             writer.WriteValue(ListActions.Item(j).Message)
                             writer.WriteEndAttribute()
+                        Case Action.TypeAction.ActionVB
+                            writer.WriteStartAttribute("script")
+                            writer.WriteValue(ListActions.Item(j).Script)
+                            writer.WriteEndAttribute()
                         Case Action.TypeAction.ActionHttp
                             writer.WriteStartAttribute("commande")
                             writer.WriteValue(ListActions.Item(j).Commande)
@@ -2039,7 +2049,7 @@ Namespace HoMIDom
 
                 Next
             Catch ex As Exception
-                MsgBox("Erreur lors de l arret des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
+                'MsgBox("Erreur lors de l arret des devices: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Devices_Stop", " -> Erreur lors de l'arret des devices: " & ex.Message)
             End Try
         End Sub
@@ -2227,7 +2237,7 @@ Namespace HoMIDom
                     End If
                 Next
             Catch ex As Exception
-                MsgBox("Erreur lors du démarrage des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
+                'MsgBox("Erreur lors du démarrage des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Start", " -> Erreur lors du démarrage des drivers: " & ex.Message)
             End Try
         End Sub
@@ -2245,7 +2255,7 @@ Namespace HoMIDom
                     End If
                 Next
             Catch ex As Exception
-                MsgBox("Erreur lors de l arret des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
+                'MsgBox("Erreur lors de l arret des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Stop", " -> Erreur lors de l'arret des drivers: " & ex.Message)
             End Try
         End Sub
@@ -3231,75 +3241,75 @@ Namespace HoMIDom
 #End Region
 
 #Region "Bibliotheques"
-        Public Sub SearchTag()
-            Try
-                For i As Integer = 0 To _ListRepertoireAudio.Count - 1
-                    '  Dim x As New Thread(AddressOf FileTagRepload(_ListRepertoireAudio.Item(i).Repertoire))
-                Next
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SearchTag", "Exception : " & ex.Message)
-            End Try
-        End Sub
+        'Public Sub SearchTag()
+        '    Try
+        '        For i As Integer = 0 To _ListRepertoireAudio.Count - 1
+        '            '  Dim x As New Thread(AddressOf FileTagRepload(_ListRepertoireAudio.Item(i).Repertoire))
+        '        Next
+        '    Catch ex As Exception
+        '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SearchTag", "Exception : " & ex.Message)
+        '    End Try
+        'End Sub
 
-        Public Class ThreadSearchTag
-            Dim _Repertoire As String
-            Dim _mylist As List(Of Audio.FilePlayList)
+        'Public Class ThreadSearchTag
+        '    Dim _Repertoire As String
+        '    Dim _mylist As List(Of Audio.FilePlayList)
 
-            Sub New(ByVal Repertoire As String)
-                _Repertoire = Repertoire
-            End Sub
-
-
-            '''' <summary>Fonction de chargement des tags des fichiers audio des repertoires contenus dans la liste active </summary>
-            '''' <remarks>Recupere les fichiers Audios selon les extensions actives</remarks>
-            Sub FileTagRepload()
-
-                ' Créér une reference du dossier
-                Dim di As New DirectoryInfo(_Repertoire)
-
-                ' Pour chacune des extensions
-                For cpt2 = 0 To _ListExtensionAudio.Count - 1
-
-                    Dim _extension As String = _ListExtensionAudio.Item(cpt2).Extension
-                    Dim _extensionenable As Boolean = _ListExtensionAudio.Item(cpt2).Enable
-
-                    ' Recupere la liste des fichiers du repertoire si l'extension est active
-                    If _extensionenable Then ' Extension active 
-                        ' Recuperation des fichiers du repertoire
-                        Dim fiArr As FileInfo() = di.GetFiles("*" & _extension, SearchOption.TopDirectoryOnly)
-
-                        ' Boucle sur tous les fichiers du repertoire
-                        For i = 0 To fiArr.Length - 1
-                            Dim ii = i
-                            Dim Resultat = (From FileAudio In _mylist Where FileAudio.SourceWpath = fiArr(ii).FullName Select FileAudio).Count
-                            If Resultat = 0 Then
-                                Dim X As TagLib.File
-                                ' Recupere les tags du fichier Audio 
-                                X = TagLib.File.Create(fiArr(i).FullName)
-                                Dim a As New Audio.FilePlayList(X.Tag.Title, X.Tag.FirstPerformer, X.Tag.Album, X.Tag.Year, X.Tag.Comment, X.Tag.FirstGenre,
-                                                          System.Convert.ToString(X.Properties.Duration.Minutes) & ":" & System.Convert.ToString(Format(X.Properties.Duration.Seconds, "00")),
-                                                          fiArr(i).Name, fiArr(i).FullName, X.Tag.Track)
-
-                                _mylist.Add(a)
-
-                                a = Nothing
-                                X = Nothing
-                            End If
-                        Next
-                    End If
-                Next
-            End Sub
-
-        End Class
+        '    Sub New(ByVal Repertoire As String)
+        '        _Repertoire = Repertoire
+        '    End Sub
 
 
-        Public Sub OnChanged(ByVal source As Object, ByVal e As FileSystemEventArgs)
+        '    '''' <summary>Fonction de chargement des tags des fichiers audio des repertoires contenus dans la liste active </summary>
+        '    '''' <remarks>Recupere les fichiers Audios selon les extensions actives</remarks>
+        '    Sub FileTagRepload()
 
-        End Sub
+        '        ' Créér une reference du dossier
+        '        Dim di As New DirectoryInfo(_Repertoire)
 
-        Public Sub OnRenamed(ByVal source As Object, ByVal e As RenamedEventArgs)
+        '        ' Pour chacune des extensions
+        '        For cpt2 = 0 To _ListExtensionAudio.Count - 1
 
-        End Sub
+        '            Dim _extension As String = _ListExtensionAudio.Item(cpt2).Extension
+        '            Dim _extensionenable As Boolean = _ListExtensionAudio.Item(cpt2).Enable
+
+        '            ' Recupere la liste des fichiers du repertoire si l'extension est active
+        '            If _extensionenable Then ' Extension active 
+        '                ' Recuperation des fichiers du repertoire
+        '                Dim fiArr As FileInfo() = di.GetFiles("*" & _extension, SearchOption.TopDirectoryOnly)
+
+        '                ' Boucle sur tous les fichiers du repertoire
+        '                For i = 0 To fiArr.Length - 1
+        '                    Dim ii = i
+        '                    Dim Resultat = (From FileAudio In _mylist Where FileAudio.SourceWpath = fiArr(ii).FullName Select FileAudio).Count
+        '                    If Resultat = 0 Then
+        '                        Dim X As TagLib.File
+        '                        ' Recupere les tags du fichier Audio 
+        '                        X = TagLib.File.Create(fiArr(i).FullName)
+        '                        Dim a As New Audio.FilePlayList(X.Tag.Title, X.Tag.FirstPerformer, X.Tag.Album, X.Tag.Year, X.Tag.Comment, X.Tag.FirstGenre,
+        '                                                  System.Convert.ToString(X.Properties.Duration.Minutes) & ":" & System.Convert.ToString(Format(X.Properties.Duration.Seconds, "00")),
+        '                                                  fiArr(i).Name, fiArr(i).FullName, X.Tag.Track)
+
+        '                        _mylist.Add(a)
+
+        '                        a = Nothing
+        '                        X = Nothing
+        '                    End If
+        '                Next
+        '            End If
+        '        Next
+        '    End Sub
+
+        'End Class
+
+
+        'Public Sub OnChanged(ByVal source As Object, ByVal e As FileSystemEventArgs)
+
+        'End Sub
+
+        'Public Sub OnRenamed(ByVal source As Object, ByVal e As RenamedEventArgs)
+
+        'End Sub
 
 #End Region
 
@@ -3410,14 +3420,14 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListZones.Count - 1
                     For j As Integer = 0 To _ListZones.Item(i).ListElement.Count - 1
                         If _ListZones.Item(i).ListElement.Item(j).ElementID = Id Then
-                            AddLabel(retour, "Zone: " & _ListZones.Item(i).Name)
+                            AddLabel(retour, "- La zone: " & _ListZones.Item(i).Name)
                             Exit For
                         End If
                     Next
                 Next
                 'va vérifier tous les triggers
                 For i As Integer = 0 To _ListTriggers.Count - 1
-                    If _ListTriggers.Item(i).ConditionDeviceId = Id Then AddLabel(retour, "Trigger: " & _ListTriggers.Item(i).Nom)
+                    If _ListTriggers.Item(i).ConditionDeviceId = Id Then AddLabel(retour, "- Le trigger: " & _ListTriggers.Item(i).Nom)
                 Next
                 'va vérifier toutes les macros
                 For i As Integer = 0 To _ListMacros.Count - 1

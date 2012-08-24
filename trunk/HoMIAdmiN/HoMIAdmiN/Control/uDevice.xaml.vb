@@ -49,6 +49,8 @@ Partial Public Class uDevice
                 FlagNewDevice = False
                 x = myService.ReturnDeviceByID(IdSrv, DeviceId)
 
+                MessageBox.Show(x.Value.GetType.ToString)
+
                 If x IsNot Nothing Then 'on a trouvé le device
 
                     'ajout des drivers compatibles avec ce type de device au combo

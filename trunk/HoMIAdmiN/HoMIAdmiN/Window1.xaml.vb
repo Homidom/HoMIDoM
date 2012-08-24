@@ -80,6 +80,7 @@ Class Window1
         Try
             If IsConnect = True Then
                 Try
+
                     'Modifie la date et Heure
                     Dim mytime As String = myService.GetTime
                     LblStatus.Content = Now.ToLongDateString & " " & mytime & " "
@@ -120,9 +121,12 @@ Class Window1
                     LblConnect.Content = "Serveur non connecté"
                     LblConnect.ToolTip = Nothing
 
-                    Serveur_notconnected_action()
+                    MessageBox.Show("La communication a été perdue avec le serveur, veuillez vérifier que celui-ci est toujours actif", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    ClearAllTreeview() 'vide le treeview
+                    CanvasRight.Children.Clear()  'ferme le menu principal
+                    PageConnexion() 'affiche la fenetre de connexion
 
-                    Ellipse1.Fill = myBrushVert
+                    Ellipse1.Fill = myBrushRouge
                 End Try
             Else
                 LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString & "      "
@@ -1145,11 +1149,13 @@ Class Window1
 
                 Case "tag_multimedia" 'Multimedia Playlist
                     Try
-                        Dim x As New uPlaylist
-                        x.Uid = System.Guid.NewGuid.ToString()
-                        AddHandler x.CloseMe, AddressOf UnloadControl
-                        CanvasRight.Children.Clear()
-                        CanvasRight.Children.Add(x)
+                        MessageBox.Show("Désolé cette fonctionnalité n'est pas encore disponible...", "INFO", MessageBoxButton.OK, MessageBoxImage.Information)
+                        Exit Select
+                        'Dim x As New uPlaylist
+                        'x.Uid = System.Guid.NewGuid.ToString()
+                        'AddHandler x.CloseMe, AddressOf UnloadControl
+                        'CanvasRight.Children.Clear()
+                        'CanvasRight.Children.Add(x)
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub MainMenuAutre Playlist: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
@@ -1405,7 +1411,7 @@ Class Window1
                                 Exit Sub
                             Else
                                 If _retour(0) <> "0" Then
-                                    Dim a As String = "Attention confirmez vous de supprimer cet élément car il est utilisé dans: " & vbCrLf
+                                    Dim a As String = "Attention !! Confirmez vous de supprimer cet élément car il est utilisé dans: " & vbCrLf
                                     For i As Integer = 0 To _retour.Count - 2
                                         a = a & _retour(i) & vbCrLf
                                     Next

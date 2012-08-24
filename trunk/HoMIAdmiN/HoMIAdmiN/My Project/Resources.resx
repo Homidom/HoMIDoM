@@ -121,4 +121,42 @@
   <data name="Defaut_Img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Defaut_128.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ExempleVBS" xml:space="preserve">
+    <value>'EXEMPLE *******************************************
+'***************************************************
+
+Imports System
+Imports System.IO
+Imports System.Windows.Forms
+Imports Microsoft.VisualBasic
+Imports Homidom
+
+Namespace Dynam
+ 'Ne pas supprimer cette class
+ Public Class DynamicCode
+   
+  'Ne pas supprimer cette function 
+  Public Function ExecuteCode(paramarray prmParameters() as object) as object
+   Dim objTest as new TestClass
+   Dim strTest as String=objTest.Test
+   Dim Serveur as Homidom.Homidom.server
+
+   Serveur=prmParameters(0)
+   MessageBox.Show(strTest)
+   MessageBox.Show(1*2*3)
+   MessageBox.Show( "You passed in parameter: " &amp; Serveur.GetTime)
+  End Function
+
+ End Class
+ 
+ 'Exemple de class perso
+ Public Class TestClass
+
+  Public Function Test()
+   Return "Hello World"
+  End function
+
+ End class
+End Namespace</value>
+  </data>
 </root>

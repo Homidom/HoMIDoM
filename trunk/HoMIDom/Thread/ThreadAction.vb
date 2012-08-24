@@ -5,6 +5,8 @@ Imports System.Speech
 Imports System.Net
 Imports System.IO
 Imports System.Xml
+Imports System.Reflection
+Imports System.CodeDom.Compiler
 
 Namespace HoMIDom
 
@@ -324,6 +326,9 @@ Namespace HoMIDom
                             _Server.Log(Server.TypeLog.MESSAGE, Server.TypeSource.SCRIPT, "ThreadAction Execute", "Le user Id:" & x.UserId & " n'a pas pu être trouvé, le mail ne pourra pas être donc envoyé")
                         End If
 
+                    Case Action.TypeAction.ActionVB
+                        Dim x As Action.ActionVB = _Action
+                        ExecuteScript(x.Script)
 
                     Case Action.TypeAction.ActionSpeech
                         Dim x As Action.ActionSpeech = _Action
@@ -430,6 +435,69 @@ Namespace HoMIDom
                 lamachineaparler = Nothing
             Catch ex As Exception
                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "Parler", "Erreur lors de l'annonce du message: " & Message & " : " & ex.ToString)
+            End Try
+        End Sub
+
+        Private Sub ExecuteScript(ByVal ScriptSource As String)
+            '
+            ' Instantiate the VB compiler.
+            '
+            Dim objCodeCompiler As ICodeCompiler = New VBCodeProvider().CreateCompiler
+
+            '
+            ' Pass parameters into the compiler.
+            '
+            Dim objCompilerParameters As New CompilerParameters
+            objCompilerParameters.ReferencedAssemblies.Add("System.dll")
+            objCompilerParameters.ReferencedAssemblies.Add("System.Windows.Forms.dll")
+            objCompilerParameters.ReferencedAssemblies.Add("Microsoft.VisualBasic.dll")
+            objCompilerParameters.ReferencedAssemblies.Add("Homidom.dll")
+            objCompilerParameters.GenerateInMemory = True
+
+            '
+            ' Get te source code and compile it.
+            '
+            Dim strCode As String = ScriptSource
+            Dim objCompileResults As CompilerResults = objCodeCompiler.CompileAssemblyFromSource(objCompilerParameters, strCode)
+
+            '
+            ' Check for compiler errors.
+            '
+            If objCompileResults.Errors.HasErrors Then
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "ExecuteScript", "Erreur lors de l'execution du script: Line>" & objCompileResults.Errors(0).Line.ToString & ", " & objCompileResults.Errors(0).ErrorText)
+                Exit Sub
+            End If
+
+            '
+            ' Get a reference to the assembly.
+            '
+            Dim objAssembly As System.Reflection.Assembly = objCompileResults.CompiledAssembly
+
+            '
+            ' Create an instance of the DynamicCode class referenced in the source code.
+            '
+            Dim objTheClass As Object = objAssembly.CreateInstance("Dynam.DynamicCode")
+
+            If objTheClass Is Nothing Then
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "ExecuteScript", "Unable to load class.")
+                Exit Sub
+            End If
+
+            '
+            ' Create a parameter to be passed into the ExecuteCode function in class DynamicCode.
+            '
+            Dim objFunctionParameters(0) As Object
+            objFunctionParameters(0) = _Server
+
+            '
+            ' Call the DynamicCode.ExecuteCode
+            '
+            Try
+                Dim objResult As Object = objTheClass.GetType.InvokeMember("ExecuteCode", _
+                                BindingFlags.InvokeMethod, Nothing, objTheClass, objFunctionParameters)
+
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "ExecuteScript", "Error:" & ex.Message)
             End Try
         End Sub
     End Class

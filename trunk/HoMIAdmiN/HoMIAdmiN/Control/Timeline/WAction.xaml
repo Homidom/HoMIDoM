@@ -7,14 +7,14 @@
     <Grid Background="#636060" Height="590">
         <StackPanel Margin="0,0,0,5">
             <StackPanel Orientation="Horizontal" >
-            <StackPanel Margin="5" Name="StkProperty" Height="154">
+            <StackPanel Margin="5" Name="StkProperty" >
                     <Label Height="25" Content="###:" HorizontalAlignment="Left"  Name="Lbl1" VerticalAlignment="Top" Foreground="Orange" FontSize="14" />
                     <ComboBox Height="25" HorizontalAlignment="Left" Name="Cb1" VerticalAlignment="Top" Width="200" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2"/>
                     <Label Height="25" Content="###:" Foreground="Orange" HorizontalAlignment="Left" Name="Lbl2" VerticalAlignment="Top" FontSize="14" FontFamily="Tahoma" />
                     <ComboBox Height="25" HorizontalAlignment="Left" Name="Cb2" VerticalAlignment="Top" Width="200" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2"/>
                     <TextBox Height="25" HorizontalAlignment="Left" Name="Txt2" VerticalAlignment="Top" Width="199" Visibility="Collapsed" />
                     <Label Height="25" Content="Valeur:" FontFamily="Tahoma" FontSize="14" Foreground="Orange" HorizontalAlignment="Left" Name="LblValue" VerticalAlignment="Top" />
-                    <TextBox Height="25" HorizontalAlignment="Left"  Name="TxtValue" VerticalAlignment="Top" Width="199" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
+                    <TextBox Height="25" HorizontalAlignment="Left"  Name="TxtValue" VerticalAlignment="Top" Width="199" Background="DarkGray" BorderBrush="Black" Foreground="White" AcceptsReturn="True" />
             </StackPanel>
             <StackPanel Margin="5">
                     <Label Content="Delai:" FontSize="14" Foreground="Orange" />
