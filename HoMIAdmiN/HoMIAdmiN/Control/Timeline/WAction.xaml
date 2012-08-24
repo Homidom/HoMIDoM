@@ -1,11 +1,10 @@
 ﻿<Window x:Class="WActionParametrage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Paramétrer Action" Height="633" Width="644" ResizeMode="NoResize" ShowInTaskbar="True" WindowStyle="ToolWindow" Name="WActionDevice" WindowStartupLocation="CenterOwner" xmlns:my="clr-namespace:WpfApplication1" Topmost="False">
+    Title="Paramétrer Action" ShowInTaskbar="True" WindowStyle="ToolWindow" Name="WActionDevice" WindowStartupLocation="CenterOwner" xmlns:my="clr-namespace:WpfApplication1" Topmost="False" SizeToContent="WidthAndHeight">
 
-
-    <Grid Background="#636060" Height="590">
-        <StackPanel Margin="0,0,0,5">
+    <Grid Background="#636060" >
+        <StackPanel Margin="2">
             <StackPanel Orientation="Horizontal" >
             <StackPanel Margin="5" Name="StkProperty" >
                     <Label Height="25" Content="###:" HorizontalAlignment="Left"  Name="Lbl1" VerticalAlignment="Top" Foreground="Orange" FontSize="14" />
@@ -41,13 +40,13 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                         <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMHr" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                            <Image Source="/HoMIAdmiN;component/Images/Fleche_bas_32.png" />
+                            <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
                         </Button>
                         <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMMn" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                            <Image Source="/HoMIAdmiN;component/Images/Fleche_bas_32.png" />
+                            <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
                         </Button>
                         <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMSec" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                            <Image Source="/HoMIAdmiN;component/Images/Fleche_bas_32.png" />
+                            <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
                         </Button>
                     </StackPanel>
                         </StackPanel>

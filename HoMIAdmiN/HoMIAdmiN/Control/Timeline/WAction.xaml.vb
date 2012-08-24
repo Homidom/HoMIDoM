@@ -31,42 +31,53 @@ Public Class WActionParametrage
                         obj.IdDevice = Cb1.SelectedItem.Id
                         obj.Method = Cb2.Text
                         obj.Parametres.Clear()
+
                         If TxtValue.Text <> "" Then obj.Parametres.Add(TxtValue.Text)
                         _ObjAction = obj
+
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionMacro
                         If Cb1.SelectedIndex < 0 Then
                             MessageBox.Show("Veuillez sélectionner une macro !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
+
                         Dim obj As Action.ActionMacro = _ObjAction
                         obj.IdMacro = Cb1.SelectedItem.ID
                         _ObjAction = obj
+
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionMail
                         If Cb1.SelectedIndex < 0 Or Txt2.Text = "" Or TxtValue.Text = "" Then
                             MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
+
                         Dim obj As Action.ActionMail = _ObjAction
                         obj.UserId = Cb1.SelectedItem.ID
                         obj.Sujet = Txt2.Text
                         obj.Message = TxtValue.Text
                         _ObjAction = obj
+
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionSpeech
                         If TxtValue.Text = "" Then
                             MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
+
                         Dim obj As Action.ActionSpeech = _ObjAction
                         obj.Message = TxtValue.Text
                         _ObjAction = obj
+
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionVB
-                        If TxtValue.Text = "" Then
+                        If TxtValue.Text = "" Or Txt2.Text = "" Then
                             MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
+
                         Dim obj As Action.ActionVB = _ObjAction
                         obj.Script = TxtValue.Text
+                        obj.Label = Txt2.Text
                         _ObjAction = obj
+
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionLogEvent
                         If TxtValue.Text = "" Then
                             MessageBox.Show("Veuillez renseigner tous les champs car il n'y a pas de message !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
@@ -80,11 +91,13 @@ Public Class WActionParametrage
                             MessageBox.Show("L'event ID doit être numérique !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
+
                         Dim obj As Action.ActionLogEvent = _ObjAction
                         obj.Message = TxtValue.Text
                         obj.Eventid = Txt2.Text
                         obj.Type = Cb1.SelectedIndex + 1
                         _ObjAction = obj
+
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionLogEventHomidom
                         If TxtValue.Text = "" Then
                             MessageBox.Show("Veuillez renseigner tous les champs car il n'y a pas de message !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
@@ -98,28 +111,34 @@ Public Class WActionParametrage
                             MessageBox.Show("Veuillez saisir le nom de la fonction !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
+
                         Dim obj As Action.ActionLogEventHomidom = _ObjAction
                         obj.Message = TxtValue.Text
                         obj.Fonction = Txt2.Text
                         obj.Type = Cb1.SelectedIndex + 1
                         _ObjAction = obj
+
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionDOS
                         If Txt2.Text = "" Then
                             MessageBox.Show("Veuillez saisir le chemin du fichier !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
+
                         Dim obj As Action.ActionDos = _ObjAction
                         obj.Arguments = TxtValue.Text
                         obj.Fichier = Txt2.Text
                         _ObjAction = obj
+
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionHttp
                         If TxtValue.Text = "" Then
                             MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
+
                         Dim obj As Action.ActionHttp = _ObjAction
                         obj.Commande = TxtValue.Text
                         _ObjAction = obj
+
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionIf
                         Dim obj As Action.ActionIf = _ObjAction
 
@@ -144,6 +163,7 @@ Public Class WActionParametrage
                         obj.ListTrue = UScenario1.Items
                         obj.ListFalse = UScenario2.Items
                         _ObjAction = obj
+
                 End Select
                 _ObjAction.Timing = New System.DateTime(Now.Year, Now.Month, Now.Day, TxtHr.Text, TxtMn.Text, TxtSc.Text)
             End If
@@ -175,16 +195,14 @@ Public Class WActionParametrage
         InitializeComponent()
 
         Try
-
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             _ObjAction = ObjAction
             Dim _typ As Action.TypeAction
 
             If _ObjAction IsNot Nothing Then
                 _typ = _ObjAction.TypeAction
-                Me.Height = 250
-                Me.Width = 500
-                TabControl1.Visibility = Windows.Visibility.Hidden
+
+                TabControl1.Visibility = Windows.Visibility.Collapsed
 
                 Select Case _typ
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionDevice
@@ -195,12 +213,10 @@ Public Class WActionParametrage
                         Lbl2.Content = "Action:"
                         Lbl2.Visibility = Visibility.Visible
                         Cb2.Visibility = Windows.Visibility.Visible
-                        Cb2.Height = 20
                         Txt2.Visibility = Windows.Visibility.Collapsed
-                        Txt2.Height = 0
-                        TxtValue.Height = 21
+                        TxtValue.Height = 25
 
-                        Cb1.ItemsSource = myservice.GetAllDevices(IdSrv)
+                        Cb1.ItemsSource = myService.GetAllDevices(IdSrv)
                         Cb1.DisplayMemberPath = "Name"
 
                         If obj.IdDevice IsNot Nothing Then
@@ -223,15 +239,14 @@ Public Class WActionParametrage
 
                         'Mise en forme graphique
                         Lbl1.Content = "Macro:"
-                        Lbl2.Visibility = Visibility.Hidden
-                        LblValue.Visibility = Windows.Visibility.Hidden
-                        Cb2.Visibility = Windows.Visibility.Hidden
-                        Cb2.Height = 0
+                        Lbl2.Visibility = Visibility.Collapsed
+                        LblValue.Visibility = Windows.Visibility.Collapsed
+                        Cb2.Visibility = Windows.Visibility.Collapsed
                         Txt2.Visibility = Windows.Visibility.Collapsed
-                        Txt2.Height = 20
-                        TxtValue.Visibility = Windows.Visibility.Hidden
+                        Txt2.Height = 25
+                        TxtValue.Visibility = Windows.Visibility.Collapsed
 
-                        Cb1.ItemsSource = myservice.GetAllMacros(IdSrv)
+                        Cb1.ItemsSource = myService.GetAllMacros(IdSrv)
                         Cb1.DisplayMemberPath = "Nom"
 
                         Dim a As String = ""
@@ -252,17 +267,16 @@ Public Class WActionParametrage
                         LblValue.Content = "Message:"
                         Txt2.Text = ""
                         Cb2.Visibility = Windows.Visibility.Collapsed
-                        Cb2.Height = 0
                         Txt2.Visibility = Windows.Visibility.Visible
-                        Txt2.Height = 20
+                        Txt2.Height = 25
                         TxtValue.Text = ""
                         TxtValue.Height = 80
 
-                        Cb1.ItemsSource = myservice.GetAllUsers(IdSrv)
+                        Cb1.ItemsSource = myService.GetAllUsers(IdSrv)
                         Cb1.DisplayMemberPath = "UserName"
 
                         If obj.UserId IsNot Nothing Then
-                            Dim _user As Users.User = myservice.ReturnUserById(IdSrv, obj.UserId)
+                            Dim _user As Users.User = myService.ReturnUserById(IdSrv, obj.UserId)
 
                             For i As Integer = 0 To Cb1.Items.Count - 1
                                 If _user.UserName = Cb1.Items(i).Username Then
@@ -283,8 +297,7 @@ Public Class WActionParametrage
                         Txt2.Text = ""
                         Cb2.Visibility = Windows.Visibility.Collapsed
                         Cb1.Visibility = Windows.Visibility.Collapsed
-                        Txt2.Visibility = Windows.Visibility.Visible
-                        Txt2.Height = 0
+                        Txt2.Visibility = Windows.Visibility.Collapsed
                         TxtValue.Text = ""
                         TxtValue.Height = 80
 
@@ -292,24 +305,22 @@ Public Class WActionParametrage
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionVB
                         Dim obj As Action.ActionVB = _ObjAction
 
-                        Me.Height = 500
-                        Me.Width = 667
-
                         'Mise en forme graphique
                         Lbl1.Visibility = Windows.Visibility.Collapsed
-                        Lbl2.Visibility = Windows.Visibility.Collapsed
+                        Lbl2.Content = "Label:"
+                        Lbl2.Visibility = Windows.Visibility.Visible
                         LblValue.Content = "Code:"
-                        Txt2.Text = ""
                         Cb2.Visibility = Windows.Visibility.Collapsed
                         Cb1.Visibility = Windows.Visibility.Collapsed
                         Txt2.Visibility = Windows.Visibility.Visible
-                        Txt2.Height = 0
+                        Txt2.Height = 25
                         TxtValue.Text = ""
-                        TxtValue.Height = 300
-                        TxtValue.Width = 400
+                        TxtValue.Height = 400
+                        TxtValue.Width = 650
                         TxtValue.VerticalScrollBarVisibility = ScrollBarVisibility.Auto
                         TxtValue.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto
 
+                        Txt2.Text = obj.Label
                         TxtValue.Text = obj.Script
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionHttp
                         Dim obj As Action.ActionHttp = _ObjAction
@@ -349,12 +360,13 @@ Public Class WActionParametrage
                         Cb2.Visibility = Windows.Visibility.Collapsed
                         Cb2.Height = 0
                         Txt2.Visibility = Windows.Visibility.Visible
-                        Txt2.Height = 20
+                        Txt2.Height = 25
                         Txt2.Text = obj.Eventid
                         TxtValue.Text = ""
                         TxtValue.Height = 80
 
                         TxtValue.Text = obj.Message
+
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionLogEventHomidom
                         Dim obj As Action.ActionLogEventHomidom = _ObjAction
 
@@ -382,11 +394,12 @@ Public Class WActionParametrage
 
                         Cb2.Visibility = Windows.Visibility.Collapsed
                         Txt2.Visibility = Windows.Visibility.Visible
-                        Txt2.Height = 20
+                        Txt2.Height = 25
                         Txt2.Text = obj.Fonction
                         TxtValue.Text = ""
                         TxtValue.Height = 80
                         TxtValue.Text = obj.Message
+
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionDOS
                         Dim obj As Action.ActionDos = _ObjAction
 
@@ -398,28 +411,25 @@ Public Class WActionParametrage
                         Lbl1.Visibility = Windows.Visibility.Collapsed
                         Cb2.Visibility = Windows.Visibility.Collapsed
                         Txt2.Visibility = Windows.Visibility.Visible
-                        Txt2.Height = 20
+                        Txt2.Height = 25
                         Txt2.ToolTip = "Veuillez saisir le chemin du fichier (exemple: C:\test\program.exe)"
                         Txt2.Text = obj.Fichier
                         TxtValue.Text = ""
                         TxtValue.ToolTip = "Veuillez saisir les arguments associés au fichier (exemple \a -b)"
-                        TxtValue.Height = 20
+                        TxtValue.Height = 25
                         TxtValue.Text = obj.Arguments
+
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionIf
-                        Me.Height = 650
-                        Me.Width = 667
-                        StkProperty.Height = 0
-                        StkProperty.Width = 0
+
+                        StkProperty.Visibility = Windows.Visibility.Collapsed
                         TabControl1.Visibility = Windows.Visibility.Visible
-                        Cb2.Visibility = Windows.Visibility.Hidden
-                        Cb2.Height = 0
-                        Cb1.Visibility = Windows.Visibility.Hidden
-                        Txt2.Visibility = Windows.Visibility.Hidden
-                        Txt2.Height = 0
-                        TxtValue.Visibility = Windows.Visibility.Hidden
-                        Lbl1.Visibility = Windows.Visibility.Hidden
-                        Lbl2.Visibility = Windows.Visibility.Hidden
-                        LblValue.Visibility = Windows.Visibility.Hidden
+                        'Cb2.Visibility = Windows.Visibility.Collapsed
+                        'Cb1.Visibility = Windows.Visibility.Collapsed
+                        'Txt2.Visibility = Windows.Visibility.Collapsed
+                        'TxtValue.Visibility = Windows.Visibility.Hidden
+                        'Lbl1.Visibility = Windows.Visibility.Hidden
+                        'Lbl2.Visibility = Windows.Visibility.Hidden
+                        'LblValue.Visibility = Windows.Visibility.Hidden
 
                         Dim obj As Action.ActionIf = _ObjAction
 

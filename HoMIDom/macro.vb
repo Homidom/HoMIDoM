@@ -1008,7 +1008,8 @@ Namespace HoMIDom
         ''' </summary>
         ''' <remarks></remarks>
         Public Class ActionVB
-            Dim _Script As String
+            Dim _Label As String 'Description du code
+            Dim _Script As String 'Code script à executer
             Dim _Timing As DateTime
 
             Public Property Timing As DateTime
@@ -1026,6 +1027,15 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _Script = value
+                End Set
+            End Property
+
+            Public Property Label As String
+                Get
+                    Return _Label
+                End Get
+                Set(ByVal value As String)
+                    _Label = value
                 End Set
             End Property
 
