@@ -130,6 +130,10 @@ Public Class uScenario
                     Case "ACTIONDOS"
                         Dim y As New Action.ActionDos
                         x.ObjAction = y
+                    Case "ACTIONVB"
+                        Dim y As New Action.ActionVB
+                        y.Script = My.Resources.ExempleVBS
+                        x.ObjAction = y
                 End Select
                 x.Span = Span
                 x.Zoom = _Zoom
@@ -342,6 +346,14 @@ Public Class uScenario
         Dim obj As New DataObject()
         obj.SetData(GetType(String), "ACTIONDOS")
         effects = DragDrop.DoDragDrop(Me.ImgActDos, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+    End Sub
+
+    'Ajouter action VB
+    Private Sub ImgActVB_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActVB.MouseLeftButtonDown
+        Dim effects As DragDropEffects
+        Dim obj As New DataObject()
+        obj.SetData(GetType(String), "ACTIONVB")
+        effects = DragDrop.DoDragDrop(Me.ImgActVB, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 
     Private Sub ScrollViewer1_ScrollChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.ScrollChangedEventArgs) Handles ScrollViewer1.ScrollChanged

@@ -244,23 +244,36 @@
 
     Private Sub RemplirMacro()
         Try
+            Dim _ListIDMacroDelete As New List(Of String) 'Liste des macro à supprimer si elles n'existent plus
+
             ListBox1.Items.Clear()
 
             If _ListMacro IsNot Nothing Then
-                For i As Integer = 0 To _ListMacro.Count - 1
+                For Each _IDMacro As String In _ListMacro
                     Dim x As New CheckBox
                     Dim stk As New StackPanel
-                    'stk.MinHeight = 25
-                    stk.Margin = New Thickness(2)
-                    x.Content = myService.ReturnMacroById(IdSrv, _ListMacro.Item(i)).Nom
-                    stk.Uid = myService.ReturnMacroById(IdSrv, _ListMacro.Item(i)).ID
-                    x.Uid = stk.Uid
-                    x.IsChecked = True
-                    AddHandler x.Click, AddressOf CheckClick
-                    stk.Children.Add(x)
-                    ListBox1.Items.Add(stk)
+                    Dim _macro As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _IDMacro)
+
+                    'Vérifie que la mcro existe toujours
+                    If _macro IsNot Nothing Then
+                        stk.Margin = New Thickness(2)
+                        x.Content = _macro.Nom
+                        stk.Uid = _macro.ID
+                        x.Uid = stk.Uid
+                        x.IsChecked = True
+                        AddHandler x.Click, AddressOf CheckClick
+                        stk.Children.Add(x)
+                        ListBox1.Items.Add(stk)
+                    Else
+                        _ListIDMacroDelete.Add(_IDMacro)
+                    End If
                 Next
             End If
+
+            'Supprime la macro rattachée si elle n'existe plus
+            For Each _IDmacro As String In _ListIDMacroDelete
+                _ListMacro.Remove(_IDmacro)
+            Next
 
             For i As Integer = 0 To myService.GetAllMacros(IdSrv).Count - 1
                 If IsInList(myService.GetAllMacros(IdSrv).Item(i).ID) = False Then
@@ -271,7 +284,6 @@
                     AddHandler x.Click, AddressOf CheckClick
                     stk.Uid = myService.GetAllMacros(IdSrv).Item(i).ID
                     x.Uid = stk.Uid
-                    'stk.MinHeight = 25
                     stk.Margin = New Thickness(2)
                     stk.Children.Add(x)
                     ListBox1.Items.Add(stk)

@@ -102,6 +102,9 @@ Public Class uAction
                         Label1.Content = "Commande Dos"
                         If x.Fichier IsNot Nothing Then Label2.Content = x.Fichier
                         If x.Arguments IsNot Nothing Then Label2.Content &= " " & x.Arguments
+                    Case Action.TypeAction.ActionVB
+                        Label1.Content = "Script VB"
+                        Label2.Content = ""
                 End Select
                 Refresh_Position()
             End If

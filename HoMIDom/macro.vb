@@ -407,6 +407,12 @@ Namespace HoMIDom
             ''' </summary>
             ''' <remarks></remarks>
             ActionDOS = 8
+
+            ''' <summary>
+            ''' Action de type ScriptVB
+            ''' </summary>
+            ''' <remarks></remarks>
+            ActionVB = 9
         End Enum
 
         ''' <summary>
@@ -992,6 +998,40 @@ Namespace HoMIDom
             Public ReadOnly Property TypeAction As TypeAction
                 Get
                     Return TypeAction.ActionDOS
+                End Get
+            End Property
+
+        End Class
+
+        ''' <summary>
+        ''' Action Dos 
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Class ActionVB
+            Dim _Script As String
+            Dim _Timing As DateTime
+
+            Public Property Timing As DateTime
+                Get
+                    Return _Timing
+                End Get
+                Set(ByVal value As DateTime)
+                    _Timing = value
+                End Set
+            End Property
+
+            Public Property Script As String
+                Get
+                    Return _Script
+                End Get
+                Set(ByVal value As String)
+                    _Script = value
+                End Set
+            End Property
+
+            Public ReadOnly Property TypeAction As TypeAction
+                Get
+                    Return TypeAction.ActionVB
                 End Get
             End Property
 

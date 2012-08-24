@@ -59,6 +59,14 @@ Public Class WActionParametrage
                         Dim obj As Action.ActionSpeech = _ObjAction
                         obj.Message = TxtValue.Text
                         _ObjAction = obj
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionVB
+                        If TxtValue.Text = "" Then
+                            MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            Exit Sub
+                        End If
+                        Dim obj As Action.ActionVB = _ObjAction
+                        obj.Script = TxtValue.Text
+                        _ObjAction = obj
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionLogEvent
                         If TxtValue.Text = "" Then
                             MessageBox.Show("Veuillez renseigner tous les champs car il n'y a pas de message !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
@@ -281,7 +289,28 @@ Public Class WActionParametrage
                         TxtValue.Height = 80
 
                         TxtValue.Text = obj.Message
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionVB
+                        Dim obj As Action.ActionVB = _ObjAction
 
+                        Me.Height = 500
+                        Me.Width = 667
+
+                        'Mise en forme graphique
+                        Lbl1.Visibility = Windows.Visibility.Collapsed
+                        Lbl2.Visibility = Windows.Visibility.Collapsed
+                        LblValue.Content = "Code:"
+                        Txt2.Text = ""
+                        Cb2.Visibility = Windows.Visibility.Collapsed
+                        Cb1.Visibility = Windows.Visibility.Collapsed
+                        Txt2.Visibility = Windows.Visibility.Visible
+                        Txt2.Height = 0
+                        TxtValue.Text = ""
+                        TxtValue.Height = 300
+                        TxtValue.Width = 400
+                        TxtValue.VerticalScrollBarVisibility = ScrollBarVisibility.Auto
+                        TxtValue.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto
+
+                        TxtValue.Text = obj.Script
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionHttp
                         Dim obj As Action.ActionHttp = _ObjAction
 
