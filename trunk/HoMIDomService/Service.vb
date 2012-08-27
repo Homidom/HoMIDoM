@@ -25,7 +25,15 @@ Module Service
 
     Sub Main()
         Try
-            Console.SetWindowSize(115, 48)
+            Dim largeur As Integer = Console.WindowWidth
+            Dim hauteur As Integer = Console.WindowHeight
+
+            Try
+                Console.SetWindowSize(115, 48)
+            Catch ex As Exception
+                Console.SetWindowSize(largeur, hauteur)
+            End Try
+
             Console.SetBufferSize(200, 1000)
             Console.BackgroundColor = ConsoleColor.White 'Couleur du fond
             Console.Clear()  'Applique la couleur du fond
@@ -75,7 +83,7 @@ Module Service
             'Console.WriteLine(Now & " Adresss SOAP: " & Dns.GetHostName() & " [" & _aip(0).ToString & "] :" & PortSOAP)
             Console.WriteLine(Now & " Adresss SOAP: " & _Addrip & ":" & PortSOAP)
 
-            Using host As New ServiceHost(GetType(Server), baseaddress)
+            Using host As New ServiceHost(GetType(Server), baseAddress)
 
                 host.CloseTimeout = TimeSpan.FromMinutes(60)
                 host.OpenTimeout = TimeSpan.FromMinutes(60)
