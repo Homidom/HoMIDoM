@@ -67,7 +67,7 @@
                         <Image Tag="tag_config" Name="img_config" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/configurer_128.png" ToolTip="Configurer le serveur" />
                         <Label Name="label_menu_config" Content="Configuration" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-                            <Image Tag="tag_config_log" Name="img_config_log" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Logs_32.png" ToolTip="Consulter le log" />
+                            <Image Tag="tag_config_log" Name="img_config_log" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Log_32.png" ToolTip="Consulter le log" />
                             <Image Tag="tag_config" Name="img_config_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Configurer_32.png" ToolTip="Configurer le serveur" />
                             <Image Tag="tag_config_importer" Name="img_config_importer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/import_32.png" ToolTip="Importer le fichier de configuration" />
                             <Image Tag="tag_config_exporter" Name="img_config_exporter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/export_32.png" ToolTip="Exporter le fichier de configuration" />

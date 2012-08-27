@@ -405,12 +405,6 @@ Window3
   Recherche une chaîne localisée semblable à 'EXEMPLE *******************************************
 '***************************************************
 
-Imports System
-Imports System.IO
-Imports System.Windows.Forms
-Imports Microsoft.VisualBasic
-Imports Homidom
-
 Namespace Dynam
  'Ne pas supprimer cette class
  Public Class DynamicCode
@@ -419,7 +413,12 @@ Namespace Dynam
   Public Function ExecuteCode(paramarray prmParameters() as object) as object
    Dim objTest as new TestClass
    Dim strTest as String=objTest.Test
-   Dim Serveur as  [le reste de la chaîne a été tronqué]";.
+   Dim Serveur as Homidom.Homidom.server
+
+   Serveur=prmParameters(0)
+   MessageBox.Show(strTest)
+   MessageBox.Show(1*2*3)
+   M [le reste de la chaîne a été tronqué]";.
 </summary>
 </member><member name="T:WpfApplication1.My.Resources.Resources">
 	<summary>
