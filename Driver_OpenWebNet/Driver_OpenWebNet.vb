@@ -7,6 +7,7 @@ Imports Microsoft.Win32
 Imports HoMIDom
 Imports HoMIDom.HoMIDom.Device
 Imports HoMIDom.HoMIDom.Server
+Imports OpenWebNet
 
 ' Driver OpenWebNEt
 ' Auteur : Seb
@@ -25,8 +26,8 @@ Imports HoMIDom.HoMIDom.Server
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "OpenWebNet"
     Dim _IsConnect As Boolean = False
-    Dim _IP_TCP As String = "@"
-    Dim _Port_TCP As String = "@"
+    Dim _IP_TCP As String = "192.168.0.15"
+    Dim _Port_TCP As String = "20000"
     Dim _IP_UDP As String = "@"
     Dim _Port_UDP As String = "@"
     Dim _Com As String = "@"
@@ -43,16 +44,18 @@ Imports HoMIDom.HoMIDom.Server
     Dim MyTimer As New Timers.Timer
     Dim _idSrv As String
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
+
 #End Region
 
 #Region "Variables internes"
-
+    Dim Gateway As OpenWebNet.WebServer
+    'Dim Gateway2 As OpenWebNet.UsbGateway
 #End Region
 
 #Region "Propriétés génériques"
     Public WriteOnly Property IdSrv As String Implements HoMIDom.HoMIDom.IDriver.IdSrv
         Set(ByVal value As String)
-            _idsrv = value
+            _idSrv = value
         End Set
     End Property
 
@@ -115,7 +118,11 @@ Imports HoMIDom.HoMIDom.Server
     End Property
     Public Property IP_TCP() As String Implements HoMIDom.HoMIDom.IDriver.IP_TCP
         Get
-            Return _IP_TCP
+            If _IP_TCP = "" Then
+                Return "192.168.0.15"
+            Else
+                Return _IP_TCP
+            End If
         End Get
         Set(ByVal value As String)
             _IP_TCP = value
@@ -157,7 +164,11 @@ Imports HoMIDom.HoMIDom.Server
     End Property
     Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
-            Return _Port_TCP
+            If _Port_TCP = "" Then
+                Return "20000"
+            Else
+                Return _Port_TCP
+            End If
         End Get
         Set(ByVal value As Object)
             _Port_TCP = value
@@ -270,9 +281,25 @@ Imports HoMIDom.HoMIDom.Server
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
-            _IsConnect = True
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "OpenWebNet", "Driver " & Me.Nom & " démarré")
+            If _IP_TCP <> "" And _Port_TCP <> "" Then
+                Gateway = New WebServer(_IP_TCP, _Port_TCP, OpenSocketType.Command)
+                AddHandler Gateway.DataReceived, AddressOf Gateway_DataReceived
+                AddHandler Gateway.MessageReceived, AddressOf Gateway_MessageReceived
+                Gateway.Connect()
+                _IsConnect = True
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "OpenWebNet", "Driver " & Me.Nom & " démarré")
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Start", "L'adresse IP et/ou le port ne sont pas renseignés")
+            End If
+            'If _Com <> "" Then
+            '    Gateway2 = New UsbGateway(_Com)
+            '    AddHandler Gateway2.DataReceived, AddressOf Gateway_DataReceived
+            '    AddHandler Gateway2.MessageReceived, AddressOf Gateway_MessageReceived
+            '    Gateway2.Connect()
+            'End If
+            
         Catch ex As Exception
+            _IsConnect = False
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Start", ex.Message)
         End Try
     End Sub
@@ -281,6 +308,8 @@ Imports HoMIDom.HoMIDom.Server
     ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
+            If Gateway.IsConnected Then Gateway.Disconnect()
+            ''If Gateway2.IsConnected Then Gateway2.Disconnect()
             _IsConnect = False
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "OpenWebNet", "Driver " & Me.Nom & " arrêté")
         Catch ex As Exception
@@ -314,6 +343,38 @@ Imports HoMIDom.HoMIDom.Server
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
+            If _Enable = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
+                Exit Sub
+            End If
+
+            If _IsConnect = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
+                Exit Sub
+            End If
+
+            Dim MyGateway As Object = Nothing
+            If Gateway.IsConnected Then MyGateway = Gateway
+            ' If Gateway2.IsConnected Then MyGateway = Gateway2
+
+            Select Case Objet.Type
+                Case "APPAREIL", "LAMPE"
+                    Select Case UCase(Command)
+                        Case "ON"
+                            Gateway.LightingLightON(Objet.Adresse1)
+                            Objet.value = True
+                        Case "OFF"
+                            Gateway.LightingLightOFF(Objet.Adresse1)
+                            Objet.value = False
+                        Case "DIM"
+                            Gateway.LightingDimmerStrenght(Objet.Adresse1, Parametre1)
+                            Objet.value = Parametre1
+                    End Select
+             
+                Case Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: le type du device " & Objet.Type & " n'est pas reconnu pour ce driver")
+                    Exit Sub
+            End Select
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Write", ex.Message)
@@ -418,8 +479,9 @@ Imports HoMIDom.HoMIDom.Server
         Try
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL)
+            _DeviceSupport.Add(ListeDevices.LAMPE)
 
-            Add_LibelleDevice("ADRESSE1", "Adresse", "")
+            Add_LibelleDevice("ADRESSE1", "Adresse (WHERE)", "")
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
@@ -440,7 +502,13 @@ Imports HoMIDom.HoMIDom.Server
 #End Region
 
 #Region "Fonctions internes"
+    Private Sub Gateway_DataReceived(ByVal sender As Object, ByVal e As OpenWebNetDataEventArgs)
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "OpenWebNet Gateway_DataReceived", e.Data)
+    End Sub
 
+    Private Sub Gateway_MessageReceived(ByVal sender As Object, ByVal e As OpenWebNetDataEventArgs)
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "OpenWebNet Gateway_MessageReceived", e.Data)
+    End Sub
 #End Region
 
 End Class
