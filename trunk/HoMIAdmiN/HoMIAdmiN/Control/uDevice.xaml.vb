@@ -1,7 +1,9 @@
-﻿Imports HoMIDom.HoMIDom.Device
+﻿Imports HoMIDom.HoMIDom
+Imports HoMIDom.HoMIDom.Device
 Imports HoMIDom.HoMIDom.Api
 Imports System.IO
 Imports System.Threading
+
 
 Partial Public Class uDevice
 
@@ -48,8 +50,6 @@ Partial Public Class uDevice
 
                 FlagNewDevice = False
                 x = myService.ReturnDeviceByID(IdSrv, DeviceId)
-
-                MessageBox.Show(x.Value.GetType.ToString)
 
                 If x IsNot Nothing Then 'on a trouvé le device
 
@@ -136,31 +136,6 @@ Partial Public Class uDevice
                         Label8.Visibility = Windows.Visibility.Collapsed
                         rectmodele1.Visibility = Windows.Visibility.Collapsed
                         rectmodele2.Visibility = Windows.Visibility.Collapsed
-                        '    ListCmd.Items.Clear()
-                        '    StkCmd.Height = 0
-                        '    Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
-                        '    _list = myService.GetListOfTemplate
-                        '    Dim idx As Integer = -1
-                        '    For i As Integer = 0 To _list.Count - 1
-                        '        Dim tpl As String = Replace(_list(i).File, ".xml", "")
-                        '        cbTemplate.Items.Add(tpl)
-                        '        If x.Modele IsNot Nothing Then
-                        '            If tpl = x.Modele.ToString Then
-                        '                StkCmd.Height = Double.NaN
-                        '                cbTemplate.IsEnabled = False
-                        '                BtnNewTemplate.Visibility = Windows.Visibility.Hidden
-                        '                idx = i
-                        '                If x.Commandes IsNot Nothing Then
-                        '                    For i2 As Integer = 0 To x.Commandes.Count - 1
-                        '                        ListCmd.Items.Add(x.Commandes.Item(i2).Name)
-                        '                    Next
-                        '                End If
-                        '            End If
-                        '        End If
-                        '    Next
-                        '    cbTemplate.SelectedIndex = idx
-                        'Else
-
                     End If
 
                     'on verifie si le device est un device systeme pour ne pas le rendre modifiable
@@ -186,43 +161,54 @@ Partial Public Class uDevice
                         Label19.Visibility = Windows.Visibility.Collapsed
                     End If
 
-                End If
-            End If
+                    Dim _devhisto As New List(Of HoMIDom.HoMIDom.Historisation)
+                    _devhisto = myService.GetAllListHisto(IdSrv)
 
-            'Liste toutes les zones dans la liste
-            For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
-                Dim ch1 As New CheckBox
-                Dim ch2 As New CheckBox
-
-                Dim stk As New StackPanel
-                stk.Orientation = Orientation.Horizontal
-
-                ch1.Width = 80
-                ch1.Content = myService.GetAllZones(IdSrv).Item(i).Name
-                ch1.ToolTip = ch1.Content
-                ch1.Uid = myService.GetAllZones(IdSrv).Item(i).ID
-                AddHandler ch1.Click, AddressOf ChkElement_Click
-
-                ch2.Content = "Visible"
-                ch2.ToolTip = "Visible dans la zone côté client"
-                ch2.Visibility = Windows.Visibility.Hidden
-
-                For j As Integer = 0 To myService.GetAllZones(IdSrv).Item(i).ListElement.Count - 1
-                    If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).ElementID = _DeviceId Then
-                        ch1.IsChecked = True
-                        ch2.Visibility = Windows.Visibility.Visible
-
-                        If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).Visible = True Then
-                            ch2.IsChecked = True
-                        End If
-                        Exit For
+                    If _devhisto IsNot Nothing Then
+                        For i As Integer = 0 To _devhisto.Count - 1
+                            If _devhisto(i).IdDevice = DeviceId And UCase(_devhisto(i).Nom) = "VALUE" Then
+                                BtnHisto.Visibility = Windows.Visibility.Visible
+                                Exit For
+                            End If
+                        Next
                     End If
-                Next
+                End If
+                End If
 
-                stk.Children.Add(ch1)
-                stk.Children.Add(ch2)
-                ListZone.Items.Add(stk)
-            Next
+                'Liste toutes les zones dans la liste
+                For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
+                    Dim ch1 As New CheckBox
+                    Dim ch2 As New CheckBox
+
+                    Dim stk As New StackPanel
+                    stk.Orientation = Orientation.Horizontal
+
+                    ch1.Width = 80
+                    ch1.Content = myService.GetAllZones(IdSrv).Item(i).Name
+                    ch1.ToolTip = ch1.Content
+                    ch1.Uid = myService.GetAllZones(IdSrv).Item(i).ID
+                    AddHandler ch1.Click, AddressOf ChkElement_Click
+
+                    ch2.Content = "Visible"
+                    ch2.ToolTip = "Visible dans la zone côté client"
+                    ch2.Visibility = Windows.Visibility.Hidden
+
+                    For j As Integer = 0 To myService.GetAllZones(IdSrv).Item(i).ListElement.Count - 1
+                        If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).ElementID = _DeviceId Then
+                            ch1.IsChecked = True
+                            ch2.Visibility = Windows.Visibility.Visible
+
+                            If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).Visible = True Then
+                                ch2.IsChecked = True
+                            End If
+                            Exit For
+                        End If
+                    Next
+
+                    stk.Children.Add(ch1)
+                    stk.Children.Add(ch2)
+                    ListZone.Items.Add(stk)
+                Next
         Catch Ex As Exception
             MessageBox.Show("Erreur: " & Ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -671,4 +657,28 @@ Partial Public Class uDevice
         End Try
     End Sub
 
+    Private Sub BtnHisto_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnHisto.Click
+        Try
+            If IsConnect = False Then
+                Exit Sub
+            End If
+
+            Me.Cursor = Cursors.Wait
+
+            Dim _listhisto As New List(Of Historisation)
+
+            _listhisto = myService.GetHisto(IdSrv, "Value", _DeviceId)
+
+            If _listhisto IsNot Nothing Then
+                Dim x As New uReleve(_listhisto, TxtNom.Text)
+                x.Uid = System.Guid.NewGuid.ToString()
+                AddHandler x.CloseMe, AddressOf UnloadControl
+                Window1.CanvasUser.Children.Add(x)
+            End If
+
+            Me.Cursor = Nothing
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de la génération du relevé: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
 End Class

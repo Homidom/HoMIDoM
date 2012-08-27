@@ -87,7 +87,7 @@
                     <Rectangle Height="10" />
                 </StackPanel>
                     <StackPanel >
-                        <Rectangle Height="80"/>
+                        <Rectangle Height="133"/>
                         <Label Content="Zones" Foreground="White" />
                         <ListBox Background="DarkGray" BorderBrush="Black" Name="ListZone" Margin="5" Padding="2" Width="150" Height="180" ToolTip="Liste des zones pour lesquels le composant y est associé" />
                     </StackPanel>
@@ -100,12 +100,13 @@
             </Image.LayoutTransform>
         </Image>
 
-        <StackPanel Margin="0,12.5,5,0" VerticalAlignment="top" HorizontalAlignment="right" Height="150">
-            <Button Margin="2" Height="25" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Name="BtnOK" VerticalAlignment="Top" Width="88.75" Foreground="White">Sauvegarder</Button>
-            <Button Margin="2" Height="25" HorizontalAlignment="Right"  Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Foreground="White">Annuler</Button>
-            <Button Margin="2" Height="0" HorizontalAlignment="Right" Template="{DynamicResource GlassButton}" Name="BtnSave" VerticalAlignment="Top" Width="88.75" Foreground="White">Save</Button>
-            <Button Margin="2" Foreground="White" Height="25" HorizontalAlignment="Right" Name="BtnRead" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" Visibility="Hidden">Tester</Button>
+        <StackPanel Margin="5" VerticalAlignment="top" HorizontalAlignment="right" Height="180">
+            <Button Margin="2" Height="25" Template="{DynamicResource GlassButton}" Name="BtnOK" Width="88.75" Foreground="White">Sauvegarder</Button>
+            <Button Margin="2" Height="25" Name="BtnClose" Template="{DynamicResource GlassButton}" Width="88.75" Foreground="White">Annuler</Button>
+            <Button Margin="2" Height="25" Template="{DynamicResource GlassButton}" Name="BtnSave" Width="88.75" Foreground="White">Save</Button>
+            <Button Margin="2" Foreground="White" Height="25" Name="BtnRead" Template="{DynamicResource GlassButton}" Width="88.75" Visibility="Collapsed">Tester</Button>
             <Button Margin="2" Foreground="White" Height="25" Name="BtnEditTel" Template="{DynamicResource GlassButton}" Width="88.75" Visibility="Collapsed">Edit</Button>
+            <Button Margin="2" Foreground="White" Height="25" Name="BtnHisto" Template="{DynamicResource GlassButton}" Width="88.75" Visibility="Collapsed">Historique</Button>
         </StackPanel>
         
 

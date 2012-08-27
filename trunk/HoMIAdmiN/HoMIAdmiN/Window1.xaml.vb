@@ -8,6 +8,7 @@ Imports System.Xml.Serialization
 Imports System.Threading
 Imports System.Reflection.Assembly
 Imports System.Windows.Media.Animation
+Imports System.ComponentModel
 
 Class Window1
 
@@ -810,6 +811,9 @@ Class Window1
                     TreeViewHisto.Items.Add(y)
                 Next
             End If
+
+            TreeViewHisto.Items.SortDescriptions.Clear()
+            TreeViewHisto.Items.SortDescriptions.Add(New SortDescription("Content", ListSortDirection.Ascending))
         Catch ex As Exception
 
         End Try
