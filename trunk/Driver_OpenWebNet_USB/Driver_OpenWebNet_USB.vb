@@ -13,24 +13,24 @@ Imports OpenWebNet
 ' Auteur : Seb
 ' Date : 10/02/2011
 
-<Serializable()> Public Class Driver_OpenWebNet
+<Serializable()> Public Class Driver_OpenWebNet_USB
     Implements HoMIDom.HoMIDom.IDriver
 
 #Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
-    Dim _ID As String = "4A4774AA-34F7-11E0-B665-ADDADED72085"
+    Dim _ID As String = "CFA6D042-F10B-11E1-83CF-BDFE6088709B"
     Dim _Nom As String = "OpenWebNet"
     Dim _Enable As String = False
     Dim _Description As String = "Driver OpenWebNet"
     Dim _StartAuto As Boolean = False
-    Dim _Protocol As String = "OpenWebNet"
+    Dim _Protocol As String = "OpenWebNet USB"
     Dim _IsConnect As Boolean = False
-    Dim _IP_TCP As String = "192.168.0.15"
-    Dim _Port_TCP As String = "20000"
+    Dim _IP_TCP As String = "@"
+    Dim _Port_TCP As String = "@"
     Dim _IP_UDP As String = "@"
     Dim _Port_UDP As String = "@"
-    Dim _Com As String = "@"
+    Dim _Com As String = "COM3"
     Dim _Refresh As Integer = 0
     Dim _Modele As String = ""
     Dim _Version As String = My.Application.Info.Version.ToString
@@ -44,12 +44,10 @@ Imports OpenWebNet
     Dim MyTimer As New Timers.Timer
     Dim _idSrv As String
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
-
 #End Region
 
 #Region "Variables internes"
-    Dim Gateway As OpenWebNet.WebServer
-    'Dim Gateway2 As OpenWebNet.UsbGateway
+    Dim Gateway As OpenWebNet.UsbGateway
 #End Region
 
 #Region "Propriétés génériques"
@@ -118,11 +116,7 @@ Imports OpenWebNet
     End Property
     Public Property IP_TCP() As String Implements HoMIDom.HoMIDom.IDriver.IP_TCP
         Get
-            If _IP_TCP = "" Then
-                Return "192.168.0.15"
-            Else
-                Return _IP_TCP
-            End If
+            Return _IP_TCP
         End Get
         Set(ByVal value As String)
             _IP_TCP = value
@@ -164,11 +158,7 @@ Imports OpenWebNet
     End Property
     Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
-            If _Port_TCP = "" Then
-                Return "20000"
-            Else
-                Return _Port_TCP
-            End If
+            Return _Port_TCP
         End Get
         Set(ByVal value As Object)
             _Port_TCP = value
@@ -281,23 +271,28 @@ Imports OpenWebNet
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
-            If _IP_TCP <> "" And _Port_TCP <> "" Then
-                Gateway = New WebServer(_IP_TCP, _Port_TCP, OpenSocketType.Command)
-                AddHandler Gateway.DataReceived, AddressOf Gateway_DataReceived
-                AddHandler Gateway.MessageReceived, AddressOf Gateway_MessageReceived
-                Gateway.Connect()
-                _IsConnect = True
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "OpenWebNet", "Driver " & Me.Nom & " démarré")
+            If _Com <> "" Then
+                Gateway = New UsbGateway(_Com)
             Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Start", "L'adresse IP et/ou le port ne sont pas renseignés")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Start", "Le port COM n'est pas renseigné")
+                Exit Sub
             End If
+
+            AddHandler Gateway.DataReceived, AddressOf GatewayCommand_DataReceived
+            AddHandler Gateway.MessageReceived, AddressOf GatewayCommand_MessageReceived
+
+            Gateway.Connect()
+
+            _IsConnect = True
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "OpenWebNet", "Driver " & Me.Nom & " démarré")
+
             'If _Com <> "" Then
             '    Gateway2 = New UsbGateway(_Com)
             '    AddHandler Gateway2.DataReceived, AddressOf Gateway_DataReceived
             '    AddHandler Gateway2.MessageReceived, AddressOf Gateway_MessageReceived
             '    Gateway2.Connect()
             'End If
-            
+
         Catch ex As Exception
             _IsConnect = False
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Start", ex.Message)
@@ -308,8 +303,8 @@ Imports OpenWebNet
     ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
-            If Gateway.IsConnected Then Gateway.Disconnect()
-            ''If Gateway2.IsConnected Then Gateway2.Disconnect()
+            Gateway.Disconnect()
+
             _IsConnect = False
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "OpenWebNet", "Driver " & Me.Nom & " arrêté")
         Catch ex As Exception
@@ -354,7 +349,7 @@ Imports OpenWebNet
             End If
 
             Dim MyGateway As Object = Nothing
-            If Gateway.IsConnected Then MyGateway = Gateway
+            'If Gateway.IsConnected Then MyGateway = Gateway
             ' If Gateway2.IsConnected Then MyGateway = Gateway2
 
             Select Case Objet.Type
@@ -370,14 +365,25 @@ Imports OpenWebNet
                             Gateway.LightingDimmerStrenght(Objet.Adresse1, Parametre1)
                             Objet.value = Parametre1
                     End Select
-             
+                Case "VOLET"
+                    Select Case UCase(Command)
+                        Case "ON"
+                            Gateway.AutomationUp("100")
+                            Objet.value = True
+                        Case "OFF"
+                            Gateway.AutomationDown("0")
+                            Objet.value = False
+                        Case "DIM"
+                            Gateway.AutomationStop(Parametre1)
+                            Objet.value = Parametre1
+                    End Select
                 Case Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: le type du device " & Objet.Type & " n'est pas reconnu pour ce driver")
                     Exit Sub
             End Select
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Write", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
         End Try
     End Sub
 
@@ -412,8 +418,8 @@ Imports OpenWebNet
         Try
             Dim x As New DeviceCommande
             x.NameCommand = Nom
-            x.DescriptionCommand = description
-            x.CountParam = nbparam
+            x.DescriptionCommand = Description
+            x.CountParam = NbParam
             _DeviceCommandPlus.Add(x)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
@@ -502,12 +508,58 @@ Imports OpenWebNet
 #End Region
 
 #Region "Fonctions internes"
-    Private Sub Gateway_DataReceived(ByVal sender As Object, ByVal e As OpenWebNetDataEventArgs)
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "OpenWebNet Gateway_DataReceived", e.Data)
+    Private Sub GatewayCommand_DataReceived(ByVal sender As Object, ByVal e As OpenWebNetDataEventArgs)
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "OpenWebNet Gateway_DataReceived", "Command: " & e.Data)
     End Sub
 
-    Private Sub Gateway_MessageReceived(ByVal sender As Object, ByVal e As OpenWebNetDataEventArgs)
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "OpenWebNet Gateway_MessageReceived", e.Data)
+    Private Sub GatewayCommand_MessageReceived(ByVal sender As Object, ByVal e As OpenWebNetDataEventArgs)
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "OpenWebNet Gateway_MessageReceived", "Command: " & e.Data)
+    End Sub
+
+    Private Sub GatewayMonitor_DataReceived(ByVal sender As Object, ByVal e As OpenWebNetDataEventArgs)
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "OpenWebNet Gateway_DataReceived", "Monitor: " & e.Data)
+
+        Dim a() As String = e.Data.Split("*")
+        If a.Length >= 4 Then
+            Dim _WHO As Integer = CInt(a(1))
+            Dim _WHAT As Integer = CInt(a(2))
+            Dim _WHERE As Integer = CInt(a(3))
+
+            Select Case _WHO
+                Case 0 'SCENARIOS
+                Case 1 'LAMPE
+                Case 2 'AUTOMATION
+                Case 3 'POWER MANAGEMENT
+                Case 4 'HEATING ADJUSTEMENT
+                Case 7 'MULTIMEDIA
+                Case 13 'INTERFACE DEVICE WITH THE OUTSIDE
+                Case 16 'SOUND SYSTEM
+                Case 1004 'DIAGNOSTIC OF HEATING ADJUSTEMENT
+            End Select
+
+            'Recherche si un device affecté
+            Dim listedevices As New ArrayList
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idSrv, _WHERE, "", Me._ID, True)
+            'un device trouvé on maj la value
+            If (listedevices.Count = 1) Then
+                'correction valeur pour correspondre au type de value
+                If TypeOf listedevices.Item(0).Value Is Integer Then
+                    listedevices.Item(0).Value = _WHAT
+                End If
+            ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
+                If _WHAT = 1 Then
+                    listedevices.Item(0).Value = True
+                Else
+                    listedevices.Item(0).Value = True
+                End If
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GatewayMonitor_DataReceived", "Aucun ou Plusieurs devices correspondent à : " & _WHERE)
+            End If
+        End If
+    End Sub
+
+    Private Sub GatewayMonitor_MessageReceived(ByVal sender As Object, ByVal e As OpenWebNetDataEventArgs)
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "OpenWebNet Gateway_MessageReceived", "Monitor: " & e.Data)
     End Sub
 #End Region
 
