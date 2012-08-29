@@ -66,7 +66,7 @@ Imports System.Media
 
     'param avancé
     Dim _DEBUG As Boolean = False
-    Dim _PARAMMODE As String = "201001111011111111"
+    Dim _PARAMMODE As String = "20000111101111111111111111"
 
 #End Region
 
@@ -113,7 +113,7 @@ Imports System.Media
         DISHID = &H1A ' disable receiving of Hideki
         DISLCROS = &H1B ' disable receiving of La Crosse
         DISFS20 = &H1C ' disable receiving of FS20
-        DISNOVAT = &H1D ' disable receiving of Novatis
+        'DISNOVAT = &H1D ' disable receiving of Novatis
 
         sel310 = &H50 ' select 310MHz in the 310/315 transceiver
         sel315 = &H51 ' select 315MHz in the 310/315 transceiver
@@ -155,6 +155,33 @@ Imports System.Media
         recType86835 = &H59
         recType86835FSK = &H5A
         recType86895 = &H5B
+
+        msg3_undec = &H80
+        msg3_RFU6 = &H40
+        msg3_RFU5 = &H20
+        msg3_RFU4 = &H10
+        msg3_RFU3 = &H8
+        msg3_FINEOFFSET = &H4
+        msg3_RUBICSON = &H2
+        msg3_AE = &H1
+
+        msg4_BlindsT1 = &H80
+        msg4_BlindsT0 = &H40
+        msg4_PROGUARD = &H20
+        msg4_FS20 = &H10
+        msg4_LCROS = &H8
+        msg4_HID = &H4
+        msg4_AD = &H2
+        msg4_MERTIK = &H1
+
+        msg5_VISONIC = &H80
+        msg5_ATI = &H40
+        msg5_OREGON = &H20
+        msg5_MEI = &H10
+        msg5_HEU = &H8
+        msg5_AC = &H4
+        msg5_ARC = &H2
+        msg5_X10 = &H1
     End Enum
 
     Enum RXRESPONSE As Byte
@@ -185,7 +212,7 @@ Imports System.Media
         sTypeUati = &H2
         sTypeUhideki = &H3
         sTypeUlacrosse = &H4
-        sTypeUlwrf = &H5
+        sTypeUad = &H5
         sTypeUmertik = &H6
         sTypeUoregon1 = &H7
         sTypeUoregon2 = &H8
@@ -194,7 +221,10 @@ Imports System.Media
         sTypeUvisonic = &HB
         sTypeUnec = &HC
         sTypeUfs20 = &HD
-        sTypeUnovatis = &HE
+        sTypeUblinds = &HF
+        sTypeUrubicson = &H10
+        sTypeUae = &H11
+        sTypeUfineoffset = &H12
     End Enum
 
     Enum LIGHTING1 As Byte
@@ -216,6 +246,8 @@ Imports System.Media
         sTypeWaveman = &H3
         sTypeEMW200 = &H4
         sTypeIMPULS = &H5
+        sTypeRisingSun = &H6
+        sTypePhilips = &H7
 
         sOff = 0
         sOn = 1
@@ -321,10 +353,12 @@ Imports System.Media
 
         pType = &H14
         sTypeLightwaveRF = &H0
+        sTypeEMW100 = &H1
 
         sOff = 0
         sOn = 1
         sGroupOff = 2
+        sLearn = 2
         sMood1 = 3
         sMood2 = 4
         sMood3 = 5
@@ -346,22 +380,22 @@ Imports System.Media
         seqnbr = 3
         id1 = 4
         id2 = 5
-        id3 = 6
-        id4 = 7
-        id5 = 8
-        id6 = 9
-        id7 = 10
-        cmnd = 11
-        filler2 = 12 'bits 3-0
-        rssi = 12   'bits 7-4
-        size = 12
+        groupcode = 6
+        unitcode = 7
+        cmnd = 8
+        cmndseqnbr = 9
+        rfu = 10
+        filler = 11 'bits 3-0
+        rssi = 11   'bits 7-4
+        size = 11
 
         pType = &H15
-        sTypeNOVATIS = &H0
+        sTypeBlyss = &H0
 
-        sOff = 0
-        sOn = 1
-        sPair = 2
+        sOn = 0
+        sOff = 1
+        sGroupOn = 2
+        sGroupOff = 3
     End Enum
 
     Enum CURTAIN1 As Byte
@@ -383,6 +417,32 @@ Imports System.Media
         sClose = 1
         sStop = 2
         sProgram = 3
+    End Enum
+
+    Enum BLINDS1 As Byte
+        packetlength = 0
+        packettype = 1
+        subtype = 2
+        seqnbr = 3
+        id1 = 4
+        id2 = 5
+        id3 = 6
+        unitcode = 7
+        cmnd = 8
+        filler = 9 'bits 3-0
+        rssi = 9   'bits 7-4
+        size = 9
+
+        'types for Blindss
+        pType = &H19
+        BlindsT0 = &H0    'RollerTrol or Hasta new
+        BlindsT1 = &H1    'Hasta old
+
+        sOpen = 0
+        sClose = 1
+        sStop = 2
+        sConfirm = 3
+        sLimit = 4
     End Enum
 
     Enum SECURITY1 As Byte
@@ -409,6 +469,7 @@ Imports System.Media
         PowercodeMotion = &H5
         Codesecure = &H6
         PowercodeAux = &H7
+        Meiantech = &H8
 
         'status security
         sStatusNormal = &H0
@@ -419,7 +480,6 @@ Imports System.Media
         sStatusNoMotion = &H5
         sStatusPanic = &H6
         sStatusPanicOff = &H7
-        sStatusTamper = &H8
         sStatusArmAway = &H9
         sStatusArmAwayDelayed = &HA
         sStatusArmHome = &HB
@@ -433,6 +493,12 @@ Imports System.Media
         sStatusLight = &H15
         sStatusBatLow = &H16
         sStatusPairKD101 = &H17
+        sStatusNormalTamper = &H80
+        sStatusNormalDelayedTamper = &H81
+        sStatusAlarmTamper = &H82
+        sStatusAlarmDelayedTamper = &H83
+        sStatusMotionTamper = &H84
+        sStatusNoMotionTamper = &H85
     End Enum
 
     Enum CAMERA1 As Byte
@@ -476,16 +542,17 @@ Imports System.Media
         id = 4
         cmnd = 5
         toggle = 6       'bit 0
-        filler = 6       'bits 3-1
+        cmndtype = 6       'bits 3-1
         rssi = 6         'bits 7-4
         size = 6
 
         'Remotes
         pType = &H30
         ATI = &H0
-        ATI2 = &H1
+        ATIplus = &H1
         Medion = &H2
         PCremote = &H3
+        ATIrw2 = &H4
     End Enum
 
     Enum THERMOSTAT1 As Byte
@@ -581,6 +648,11 @@ Imports System.Media
         TEMP3 = &H3  'THWR800
         TEMP4 = &H4  'RTHN318
         TEMP5 = &H5  'LaCrosse TX3
+        TEMP6 = &H6  'TS15C
+        TEMP7 = &H7  'Viking 02811
+        TEMP8 = &H8  'WS2300
+        TEMP9 = &H9  'RUBiCSON
+        TEMP10 = &HA   'TFA 30.3133
     End Enum
 
     Enum HUM As Byte
@@ -599,6 +671,7 @@ Imports System.Media
         'humidity
         pType = &H51
         HUM1 = &H1  'LaCrosse TX3
+        HUM2 = &H2  'LaCrosse WS2300
     End Enum
 
     Enum TEMP_HUM As Byte
@@ -620,12 +693,14 @@ Imports System.Media
         'temperature+humidity
         pType = &H52
         TH1 = &H1    'THGN122/123,/THGN132,THGR122/228/238/268
-        TH2 = &H2    'THGR810
+        TH2 = &H2    'THGR810/THGN800
         TH3 = &H3    'RTGR328
         TH4 = &H4    'THGR328
         TH5 = &H5    'WTGR800
         TH6 = &H6    'THGR918,THGRN228,THGN500
-        TH7 = &H7    'TFA TS34C
+        TH7 = &H7    'TFA TS34C, Cresta
+        TH8 = &H8    'Esic
+        TH9 = &H9    'viking 02038
     End Enum
 
     Enum BARO As Byte
@@ -679,6 +754,8 @@ Imports System.Media
         RAIN1 = &H1   'RGR126/682/918
         RAIN2 = &H2   'PCR800
         RAIN3 = &H3   'TFA
+        RAIN4 = &H4   'UPM
+        RAIN5 = &H5   'WS2300
     End Enum
 
     Enum WIND As Byte
@@ -710,6 +787,8 @@ Imports System.Media
         WIND2 = &H2   'WGR800
         WIND3 = &H3   'STR918,WGR918
         WIND4 = &H4   'TFA
+        WIND5 = &H5   'UPM
+        WIND6 = &H6   'WS2300
     End Enum
 
     Enum UV As Byte
@@ -885,6 +964,27 @@ Imports System.Media
         Ident = &HF
     End Enum
 
+    Enum FS20 As Byte
+        packetlength = 0
+        packettype = 1
+        subtype = 2
+        seqnbr = 3
+        hc1 = 4
+        hc2 = 5
+        addr = 6
+        cmd1 = 7
+        cmd2 = 8
+        filler = 9 'bits 3-0
+        rssi = 9   'bits 7-4
+        size = 9
+
+        'FS20
+        pType = &H72
+        sTypeFS20 = &H0
+        sTypeFHT8V = &H1
+        sTypeFHT80 = &H2
+    End Enum
+
     'liste des variables de base
     Dim WithEvents RS232Port As New SerialPort
     Private gRecComPortEnabled As Boolean = False
@@ -896,6 +996,8 @@ Imports System.Media
     Private message As String
     Private bytSeqNbr As Byte = 0
     Private bytRemoteToggle As Byte = 0
+    Private bytFWversion As Byte
+    Private bytCmndSeqNbr As Byte = 0
 
     Private client As TcpClient
     Private stream As NetworkStream
@@ -1241,39 +1343,47 @@ Imports System.Media
             If _Enable = False Then Exit Sub
             If _DEBUG Then WriteLog("DBG: WRITE Device " & Objet.Name & " <-- " & Command)
             'suivant le protocole, on lance la bonne fonction
-            'AC / ACEU / ANSLUT / X10 / ARC / WAVEMAN / ELROAB400D / EMW200 / IMPULS
+            'AC / ACEU / ANSLUT / ARC / BLYSS / ELROAB400D / EMW100 / EMW200 / IMPULS / LIGHTWAVERF / PHILIPS / WAVEMAN / X10
 
             Select Case UCase(Objet.modele)
                 Case "AC" 'AC : Chacon...
                     If IsNothing(Parametre1) Then
-                        send_AC(Objet.adresse1, Command, 0)
+                        send_Lighting2(Objet.adresse1, Command, LIGHTING2.sTypeAC)
                     Else
-                        send_AC(Objet.adresse1, Command, 0, Parametre1)
+                        send_Lighting2(Objet.adresse1, Command, LIGHTING2.sTypeAC, Parametre1)
                     End If
                 Case "ACEU" 'AC norme Europe
                     If IsNothing(Parametre1) Then
-                        send_AC(Objet.adresse1, Command, 1)
+                        send_Lighting2(Objet.adresse1, Command, LIGHTING2.sTypeHEU)
                     Else
-                        send_AC(Objet.adresse1, Command, 1, Parametre1)
+                        send_Lighting2(Objet.adresse1, Command, LIGHTING2.sTypeHEU, Parametre1)
                     End If
                 Case "ANSLUT"
                     If IsNothing(Parametre1) Then
-                        send_AC(Objet.adresse1, Command, 2)
+                        send_Lighting2(Objet.adresse1, Command, LIGHTING2.sTypeANSLUT)
                     Else
-                        send_AC(Objet.adresse1, Command, 2, Parametre1)
+                        send_Lighting2(Objet.adresse1, Command, LIGHTING2.sTypeANSLUT, Parametre1)
                     End If
-                Case "X10"
-                    send_x10(Objet.adresse1, Command)
                 Case "ARC"
-                    send_arc(Objet.adresse1, Command)
+                    send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypeARC)
+                Case "BLYSS"
+                    send_lighting6(Objet.adresse1, Command, LIGHTING6.sTypeBlyss)
                 Case "ELROAB400D"
-                    send_ELROAB400D(Objet.adresse1, Command)
-                Case "WAVEMAN"
-                    send_WAVEMAN(Objet.Adresse1, Command)
+                    send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypeAB400D)
+                Case "EMW100"
+                    send_lighting5(Objet.Adresse1, Command, LIGHTING5.sTypeEMW100, Parametre1)
                 Case "EMW200"
-                    send_EMW200(Objet.Adresse1, Command)
+                    send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypeEMW200)
                 Case "IMPULS"
-                    send_IMPULS(Objet.Adresse1, Command)
+                    send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypeIMPULS)
+                Case "LIGHTWAVERF"
+                    send_lighting5(Objet.Adresse1, Command, LIGHTING5.sTypeLightwaveRF, Parametre1)
+                Case "PHILIPS"
+                    send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypePhilips)
+                Case "WAVEMAN"
+                    send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypeWaveman)
+                Case "X10"
+                    send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypeX10)
                 Case "aucun"
                     WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Nom)
                 Case ""
@@ -1402,12 +1512,12 @@ Imports System.Media
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
-            add_devicecommande("GROUP_ON", "Protocole AC/ACEU/ARC : ON sur le groupe du composant", 2)
-            add_devicecommande("GROUP_OFF", "Protocole AC/ACEU/ARC : OFF sur le groupe du composant", 2)
+            add_devicecommande("GROUP_ON", "Protocole AC/ACEU/ARC/BLYSS : ON sur le groupe du composant", 2)
+            add_devicecommande("GROUP_OFF", "Protocole AC/ACEU/ARC/BLYSS : OFF sur le groupe du composant", 2)
             add_devicecommande("GROUP_DIM", "Protocole AC/ACEU : DIM sur le groupe du composant", 2)
             add_devicecommande("BRIGHT", "Protocole X10 : Bright", 2)
-            add_devicecommande("ALL_LIGHT_ON", "Protocole X10/EMW200 : ALL_LIGHT_ON", 2)
-            add_devicecommande("ALL_LIGHT_OFF", "Protocole X10/EMW200 : ALL_LIGHT_OFF", 2)
+            add_devicecommande("ALL_LIGHT_ON", "Protocole X10/EMW200/PHILIPS : ALL_LIGHT_ON", 2)
+            add_devicecommande("ALL_LIGHT_OFF", "Protocole X10/EMW200/PHILIPS : ALL_LIGHT_OFF", 2)
             add_devicecommande("CHIME", "Protocole ARC : Chime", 2)
 
             'Libellé Driver
@@ -1417,7 +1527,7 @@ Imports System.Media
             Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun / AC / ACEU / ANSLUT / X10 / ARC / WAVEMAN / ELROAB400D / EMW200 / IMPULS", "aucun|AC|ACEU|ANSLUT|ARC|ELROAB400D|EMW200|IMPULS|WAVEMAN|X10")
+            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun/AC/ACEU/ANSLUT/ARC/BLYSS/ELROAB400D/EMW100/EMW200/LIGHTWAVERF/IMPULS/PHILIPS/WAVEMAN/X10", "aucun|AC|ACEU|ANSLUT|ARC|BLYSS|ELROAB400D|EMW100|EMW200|IMPULS|LIGHTWAVERF|PHILIPS|WAVEMAN|X10")
             Add_LibelleDevice("REFRESH", "@", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
@@ -1857,6 +1967,7 @@ Imports System.Media
                 Case LIGHTING6.pType : decode_Lighting6()
                 Case SECURITY1.pType : decode_Security1()
                 Case CAMERA1.pType : decode_Camera1()
+                Case BLINDS1.pType : decode_BLINDS1()
                 Case REMOTE.pType : decode_Remote()
                 Case THERMOSTAT1.pType : decode_Thermostat1()
                 Case THERMOSTAT2.pType : decode_Thermostat2()
@@ -1877,6 +1988,7 @@ Imports System.Media
                 Case WEIGHT.pType : decode_Weight()
                 Case RFXSENSOR.pType : decode_RFXSensor()
                 Case RFXMETER.pType : decode_RFXMeter()
+                Case FS20.pType : decode_FS20()
                 Case Else : _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx decode_messages", "ERROR: Unknown Packet type:" & Hex(recbuf(1)))
             End Select
         Catch ex As Exception
@@ -1924,26 +2036,53 @@ Imports System.Media
                             End Select
                             trxType = recbuf(IRESPONSE.msg1)
                             messagelog &= ", Firmware=" & recbuf(IRESPONSE.msg2)
+                            messagelog &= ", Hardware=" & recbuf(IRESPONSE.msg6) & "." & recbuf(IRESPONSE.msg7)
                             WriteLog(messagelog)
+                            bytFWversion = recbuf(IRESPONSE.msg2)
 
                             messagelog = "Protocole: "
-                            If (recbuf(IRESPONSE.msg3) And &H80) <> 0 Then messagelog &= "Undec=on" Else messagelog &= "Undec=off"
-                            If (recbuf(IRESPONSE.msg5) And &H1) <> 0 Then messagelog &= ", X10=on" Else messagelog &= ", X10=off"
-                            If (recbuf(IRESPONSE.msg5) And &H2) <> 0 Then messagelog &= ", ARC=on" Else messagelog &= ", ARC=off"
-                            If (recbuf(IRESPONSE.msg5) And &H4) <> 0 Then messagelog &= ", AC=on" Else messagelog &= ", AC=off"
-                            If (recbuf(IRESPONSE.msg5) And &H8) <> 0 Then messagelog &= ", HomeEasyEU=on" Else messagelog &= ", HomeEasyEU=off"
-                            If (recbuf(IRESPONSE.msg5) And &H10) <> 0 Then messagelog &= ", IkeaKoppla=on" Else messagelog &= ", IkeaKoppla=off"
-                            If (recbuf(IRESPONSE.msg5) And &H20) <> 0 Then messagelog &= ", OregonScientific=on" Else messagelog &= ", OregonScientific=off"
-                            If (recbuf(IRESPONSE.msg5) And &H40) <> 0 Then messagelog &= ", ATI=on" Else messagelog &= ", ATI=off"
-                            If (recbuf(IRESPONSE.msg5) And &H80) <> 0 Then messagelog &= ", Visonic=on" Else messagelog &= ", Visonic=off"
-                            If (recbuf(IRESPONSE.msg4) And &H1) <> 0 Then messagelog &= ", Mertik=on" Else messagelog &= ", Mertik=off"
-                            If (recbuf(IRESPONSE.msg4) And &H2) <> 0 Then messagelog &= ", LightwaveRF=on" Else messagelog &= ", LightwaveRF=off"
-                            If (recbuf(IRESPONSE.msg4) And &H4) <> 0 Then messagelog &= ", Hideki=on" Else messagelog &= ", Hideki=off"
-                            If (recbuf(IRESPONSE.msg4) And &H8) <> 0 Then messagelog &= ", LaCrosse=on" Else messagelog &= ", LaCrosse=off"
-                            If (recbuf(IRESPONSE.msg4) And &H10) <> 0 Then messagelog &= ", FS20=on" Else messagelog &= ", FS20=off"
-                            If (recbuf(IRESPONSE.msg4) And &H20) <> 0 Then messagelog &= ", ProGuard=on" Else messagelog &= ", ProGuard=off"
-                            If (recbuf(IRESPONSE.msg4) And &H40) <> 0 Then messagelog &= ", Novatis=on" Else messagelog &= ", Novatis=off"
-                            If (recbuf(IRESPONSE.msg4) And &H80) <> 0 Then messagelog &= ", RFUprotocol7=on" Else messagelog &= ", RFUprotocol7=off"
+                            'If (recbuf(IRESPONSE.msg3) And &H80) <> 0 Then messagelog &= "Undec=on" Else messagelog &= "Undec=off"
+                            'If (recbuf(IRESPONSE.msg5) And &H1) <> 0 Then messagelog &= ", X10=on" Else messagelog &= ", X10=off"
+                            'If (recbuf(IRESPONSE.msg5) And &H2) <> 0 Then messagelog &= ", ARC=on" Else messagelog &= ", ARC=off"
+                            'If (recbuf(IRESPONSE.msg5) And &H4) <> 0 Then messagelog &= ", AC=on" Else messagelog &= ", AC=off"
+                            'If (recbuf(IRESPONSE.msg5) And &H8) <> 0 Then messagelog &= ", HomeEasyEU=on" Else messagelog &= ", HomeEasyEU=off"
+                            'If (recbuf(IRESPONSE.msg5) And &H10) <> 0 Then messagelog &= ", Meiantech=on" Else messagelog &= ", Meiantech=off"
+                            'If (recbuf(IRESPONSE.msg5) And &H20) <> 0 Then messagelog &= ", OregonScientific=on" Else messagelog &= ", OregonScientific=off"
+                            'If (recbuf(IRESPONSE.msg5) And &H40) <> 0 Then messagelog &= ", ATI=on" Else messagelog &= ", ATI=off"
+                            'If (recbuf(IRESPONSE.msg5) And &H80) <> 0 Then messagelog &= ", Visonic=on" Else messagelog &= ", Visonic=off"
+                            'If (recbuf(IRESPONSE.msg4) And &H1) <> 0 Then messagelog &= ", Mertik=on" Else messagelog &= ", Mertik=off"
+                            'If (recbuf(IRESPONSE.msg4) And &H2) <> 0 Then messagelog &= ", LightwaveRF=on" Else messagelog &= ", LightwaveRF=off"
+                            'If (recbuf(IRESPONSE.msg4) And &H4) <> 0 Then messagelog &= ", Hideki=on" Else messagelog &= ", Hideki=off"
+                            'If (recbuf(IRESPONSE.msg4) And &H8) <> 0 Then messagelog &= ", LaCrosse=on" Else messagelog &= ", LaCrosse=off"
+                            'If (recbuf(IRESPONSE.msg4) And &H10) <> 0 Then messagelog &= ", FS20=on" Else messagelog &= ", FS20=off"
+                            'If (recbuf(IRESPONSE.msg4) And &H20) <> 0 Then messagelog &= ", ProGuard=on" Else messagelog &= ", ProGuard=off"
+                            'If (recbuf(IRESPONSE.msg4) And &H40) <> 0 Then messagelog &= ", Novatis=on" Else messagelog &= ", Novatis=off"
+                            'If (recbuf(IRESPONSE.msg4) And &H80) <> 0 Then messagelog &= ", RFUprotocol7=on" Else messagelog &= ", RFUprotocol7=off"
+
+                            If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_undec) <> 0 Then messagelog &= "Undec=on" Else messagelog &= "Undec=off"
+                            If (recbuf(IRESPONSE.msg5) And IRESPONSE.msg5_X10) <> 0 Then messagelog &= ", X10=on" Else messagelog &= ", X10=off"
+                            If (recbuf(IRESPONSE.msg5) And IRESPONSE.msg5_ARC) <> 0 Then messagelog &= ", ARC=on" Else messagelog &= ", ARC=off"
+                            If (recbuf(IRESPONSE.msg5) And IRESPONSE.msg5_AC) <> 0 Then messagelog &= ", AC=on" Else messagelog &= ", AC=off"
+                            If (recbuf(IRESPONSE.msg5) And IRESPONSE.msg5_HEU) <> 0 Then messagelog &= ", HomeEasyEU=on" Else messagelog &= ", HomeEasyEU=off"
+                            If (recbuf(IRESPONSE.msg5) And IRESPONSE.msg5_MEI) <> 0 Then messagelog &= ", Meiantech=on" Else messagelog &= ", Meiantech=off"
+                            If (recbuf(IRESPONSE.msg5) And IRESPONSE.msg5_OREGON) <> 0 Then messagelog &= ", OregonScientific=on" Else messagelog &= ", OregonScientific=off"
+                            If (recbuf(IRESPONSE.msg5) And IRESPONSE.msg5_ATI) <> 0 Then messagelog &= ", ATI=on" Else messagelog &= ", ATI=off"
+                            If (recbuf(IRESPONSE.msg5) And IRESPONSE.msg5_VISONIC) <> 0 Then messagelog &= ", Visonic=on" Else messagelog &= ", Visonic=off"
+                            If (recbuf(IRESPONSE.msg4) And IRESPONSE.msg4_MERTIK) <> 0 Then messagelog &= ", Mertik=on" Else messagelog &= ", Mertik=off"
+                            If (recbuf(IRESPONSE.msg4) And IRESPONSE.msg4_AD) <> 0 Then messagelog &= ", AD=on" Else messagelog &= ", AD=off"
+                            If (recbuf(IRESPONSE.msg4) And IRESPONSE.msg4_HID) <> 0 Then messagelog &= ", Hideki=on" Else messagelog &= ", Hideki=off"
+                            If (recbuf(IRESPONSE.msg4) And IRESPONSE.msg4_LCROS) <> 0 Then messagelog &= ", LaCrosse=on" Else messagelog &= ", LaCrosse=off"
+                            If (recbuf(IRESPONSE.msg4) And IRESPONSE.msg4_FS20) <> 0 Then messagelog &= ", FS20=on" Else messagelog &= ", FS20=off"
+                            If (recbuf(IRESPONSE.msg4) And IRESPONSE.msg4_PROGUARD) <> 0 Then messagelog &= ", ProGuard=on" Else messagelog &= ", ProGuard=off"
+                            If (recbuf(IRESPONSE.msg4) And IRESPONSE.msg4_BlindsT0) <> 0 Then messagelog &= ", BlindsT0=on" Else messagelog &= ", BlindsT0=off"
+                            If (recbuf(IRESPONSE.msg4) And IRESPONSE.msg4_BlindsT1) <> 0 Then messagelog &= ", BlindsT1=on" Else messagelog &= ", BlindsT1=off"
+                            If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_AE) <> 0 Then messagelog &= ", AE=on" Else messagelog &= ", AE=off"
+                            If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_RUBICSON) <> 0 Then messagelog &= ", RUBiCSON=on" Else messagelog &= ", RUBiCSON=off"
+                            If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_FINEOFFSET) <> 0 Then messagelog &= ", FineOffset=on" Else messagelog &= ", FineOffset=off"
+                            If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_RFU3) <> 0 Then messagelog &= ", RFUprotocol3=on" Else messagelog &= ", RFUprotocol3=off"
+                            If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_RFU4) <> 0 Then messagelog &= ", RFUprotocol4=on" Else messagelog &= ", RFUprotocol4=off"
+                            If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_RFU5) <> 0 Then messagelog &= ", RFUprotocol5=on" Else messagelog &= ", RFUprotocol5=off"
+                            If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_RFU6) <> 0 Then messagelog &= ", RFUprotocol6=on" Else messagelog &= ", RFUprotocol6=off"
                             WriteLog(messagelog)
                         Case ICMD.ENABLEALL : WriteLog("Réponse à : Enable All RF")
                         Case ICMD.UNDECODED : WriteLog("Réponse à : UNDECODED on")
@@ -1952,7 +2091,7 @@ Imports System.Media
                         Case ICMD.DISARC : WriteLog("Réponse à : Disable ARC RF")
                         Case ICMD.DISAC : WriteLog("Réponse à : Disable AC RF")
                         Case ICMD.DISHEU : WriteLog("Réponse à : Disable HomeEasy EU RF")
-                        Case ICMD.DISKOP : WriteLog("Réponse à : Disable Ikea Koppla RF")
+                        Case ICMD.DISKOP : WriteLog("Réponse à : Disable Meiantech RF")
                         Case ICMD.DISOREGON : WriteLog("Réponse à : Disable Oregon Scientific RF")
                         Case ICMD.DISATI : WriteLog("Réponse à : Disable ATI remote RF")
                         Case ICMD.DISVISONIC : WriteLog("Réponse à : Disable Visonic RF")
@@ -1960,7 +2099,7 @@ Imports System.Media
                         Case ICMD.DISAD : WriteLog("Réponse à : Disable AD RF")
                         Case ICMD.DISHID : WriteLog("Réponse à : Disable Hideki RF")
                         Case ICMD.DISLCROS : WriteLog("Réponse à : Disable La Crosse RF")
-                        Case ICMD.DISNOVAT : WriteLog("Réponse à : Disable Novatis RF")
+                            'Case ICMD.DISNOVAT : WriteLog("Réponse à : Disable Novatis RF")
                         Case Else : WriteLog("ERR: decode_InterfaceMessage : Données incorrectes reçues : type=" & Hex(recbuf(IRESPONSE.packettype)) & ", Sub type=" & Hex(recbuf(IRESPONSE.subtype)) & " cmnd=" & Hex(recbuf(IRESPONSE.cmnd)))
                     End Select
             End Select
@@ -1999,7 +2138,7 @@ Imports System.Media
                 Case UNDECODED.sTypeUati : messagelog &= "ATI:"
                 Case UNDECODED.sTypeUhideki : messagelog &= "HIDEKI:"
                 Case UNDECODED.sTypeUlacrosse : messagelog &= "LACROSSE:"
-                Case UNDECODED.sTypeUlwrf : messagelog &= "LWRF:"
+                Case UNDECODED.sTypeUad : messagelog &= "AD:"
                 Case UNDECODED.sTypeUmertik : messagelog &= "MERTIK:"
                 Case UNDECODED.sTypeUoregon1 : messagelog &= "OREGON1:"
                 Case UNDECODED.sTypeUoregon2 : messagelog &= "OREGON2:"
@@ -2008,7 +2147,10 @@ Imports System.Media
                 Case UNDECODED.sTypeUvisonic : messagelog &= "VISONIC:"
                 Case UNDECODED.sTypeUnec : messagelog &= "NEC:"
                 Case UNDECODED.sTypeUfs20 : messagelog &= "FS20:"
-                Case UNDECODED.sTypeUnovatis : messagelog &= "NOVATIS:"
+                Case UNDECODED.sTypeUblinds : messagelog &= "Blinds:"
+                Case UNDECODED.sTypeUrubicson : messagelog &= "RUBICSON:"
+                Case UNDECODED.sTypeUae : messagelog &= "AE:"
+                Case UNDECODED.sTypeUfineoffset : messagelog &= "FineOffset:"
                 Case Else : messagelog = "ERR: UNDECODED Unknown Sub type for Packet type=" & Hex(recbuf(UNDECODED.packettype)) & ": " & Hex(recbuf(UNDECODED.subtype))
             End Select
             For i = 0 To recbuf(UNDECODED.packetlength) - UNDECODED.msg1
@@ -2090,12 +2232,12 @@ Imports System.Media
                     '        WriteMessage("Sequence nbr  = " & recbuf(LIGHTING2.seqnbr).ToString)
                     adresse = Hex(recbuf(LIGHTING2.id1)) & VB.Right("0" & Hex(recbuf(LIGHTING2.id2)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING2.id3)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING2.id4)), 2) & "-" & recbuf(LIGHTING2.unitcode).ToString
                     Select Case recbuf(LIGHTING2.cmnd)
-                        Case &H0 : valeur = "OFF"
-                        Case &H1 : valeur = "ON"
-                        Case &H2 : valeur = "SET_LEVEL:" & recbuf(LIGHTING2.level).ToString
-                        Case &H3 : valeur = "GROUP_OFF"
-                        Case &H4 : valeur = "GROUP_ON"
-                        Case &H5 : valeur = "SET_GROUP_LEVEL:" & recbuf(LIGHTING2.level).ToString
+                        Case LIGHTING2.sOff : valeur = "OFF"
+                        Case LIGHTING2.sOn : valeur = "ON"
+                        Case LIGHTING2.sSetLevel : valeur = "SET_LEVEL:" & recbuf(LIGHTING2.level).ToString
+                        Case LIGHTING2.sGroupOff : valeur = "GROUP_OFF"
+                        Case LIGHTING2.sGroupOn : valeur = "GROUP_ON"
+                        Case LIGHTING2.sSetGroupLevel : valeur = "SET_GROUP_LEVEL:" & recbuf(LIGHTING2.level).ToString
                         Case Else : valeur = "UNKNOWN"
                     End Select
                     WriteRetour(adresse, "", valeur)
@@ -2172,9 +2314,23 @@ Imports System.Media
                         Case LIGHTING5.sClose : valeur = "CLOSE_INLINE_RELAY"
                         Case LIGHTING5.sStop : valeur = "STOP_INLINE_RELAY"
                         Case LIGHTING5.sOpen : valeur = "OPEN_INLINE_RELAY"
+                        Case LIGHTING5.sSetLevel : valeur = CInt((recbuf(LIGHTING5.level) * 3.2)).ToString 'Dim level "Set dim level to: " & CInt((recbuf(LIGHTING5.level) * 3.2)).ToString & "%"
                         Case Else : valeur = "UNKNOWN"
                     End Select
                     WriteRetour(adresse, "", valeur)
+                Case LIGHTING5.sTypeEMW100
+                    'WriteMessage("subtype       = EMW100")
+                    'WriteMessage("Sequence nbr  = " & recbuf(LIGHTING5.seqnbr).ToString)
+                    adresse = VB.Right("0" & Hex(recbuf(LIGHTING5.id2)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING5.id3)), 2)
+                    'WriteMessage("Unit          = " & recbuf(LIGHTING5.unitcode).ToString)
+                    'WriteMessage("Command       = ", False)
+                    Select Case recbuf(LIGHTING5.cmnd)
+                        Case LIGHTING5.sOff : valeur = "OFF"
+                        Case LIGHTING5.sOn : valeur = "ON"
+                        Case LIGHTING5.sLearn : valeur = "LEARN"
+                        Case Else : valeur = "UNKNOWN"
+                    End Select
+
                 Case Else : WriteLog("ERR: decode_Lighting5 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING5.packettype)) & ": " & Hex(recbuf(LIGHTING5.subtype)))
             End Select
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(LIGHTING5.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
@@ -2188,16 +2344,22 @@ Imports System.Media
             Dim adresse As String = ""
             Dim valeur As String = ""
             Select Case recbuf(LIGHTING6.subtype)
-                Case LIGHTING6.sTypeNOVATIS
-                    'WriteMessage("subtype       = NOVATIS")
+                Case LIGHTING6.sTypeBlyss
+                    'WriteMessage("subtype       = BLYSS")
                     'WriteMessage("Sequence nbr  = " & recbuf(LIGHTING6.seqnbr).ToString)
-                    adresse = Hex(recbuf(LIGHTING6.id1)) & VB.Right("0" & Hex(recbuf(LIGHTING6.id2)), 2) &
-                                 VB.Right("0" & Hex(recbuf(LIGHTING6.id3)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING6.id4)), 2) & _
-                                 VB.Right("0" & Hex(recbuf(LIGHTING6.id5)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING6.id6)), 2) & _
-                                 VB.Right("0" & Hex(recbuf(LIGHTING6.id7)), 2)
+                    adresse = VB.Right("0" & Hex(recbuf(LIGHTING6.id1)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING6.id2)), 2)
+                    'WriteMessage("groupcode     = " & Chr(recbuf(LIGHTING6.groupcode)))
+                    'WriteMessage("unitcode      = " & recbuf(LIGHTING6.unitcode).ToString)
                     Select Case recbuf(LIGHTING6.cmnd)
                         Case &H0 : valeur = "OFF"
                         Case &H1 : valeur = "ON"
+                        Case Else : valeur = "UNKNOWN"
+                    End Select
+                    Select Case recbuf(LIGHTING6.cmnd)
+                        Case LIGHTING6.sOff : valeur = "OFF"
+                        Case LIGHTING6.sOn : valeur = "ON"
+                        Case LIGHTING6.sGroupOff : valeur = "GROUP_OFF"
+                        Case LIGHTING6.sGroupOn : valeur = "GROUP_ON"
                         Case Else : valeur = "UNKNOWN"
                     End Select
                     WriteRetour(adresse, "", valeur)
@@ -2230,6 +2392,8 @@ Imports System.Media
             '        WriteMessage("subtype       = Visonic CodeSecure")
             '    Case SECURITY1.PowercodeAux
             '        WriteMessage("subtype       = Visonic PowerCode sensor - auxiliary contact")
+            '   Case SECURITY1.Meiantech
+            '        WriteMessage("subtype       = Meiantech")
             '    Case Else
             '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(SECURITY1.packettype)) & ": " & Hex(recbuf(SECURITY1.subtype)))
             'End Select
@@ -2244,7 +2408,6 @@ Imports System.Media
                 Case SECURITY1.sStatusNoMotion : valeur = "No Motion"
                 Case SECURITY1.sStatusPanic : valeur = "Panic"
                 Case SECURITY1.sStatusPanicOff : valeur = "Panic End"
-                Case SECURITY1.sStatusTamper : valeur = "Tamper"
                 Case SECURITY1.sStatusArmAway : valeur = "Arm Away"
                 Case SECURITY1.sStatusArmAwayDelayed : valeur = "Arm Away Delayed"
                 Case SECURITY1.sStatusArmHome : valeur = "Arm Home"
@@ -2258,10 +2421,17 @@ Imports System.Media
                 Case SECURITY1.sStatusLight : valeur = "Light Detected"
                 Case SECURITY1.sStatusBatLow : valeur = "Battery low MS10 or XX18 sensor"
                 Case SECURITY1.sStatusPairKD101 : valeur = "Pair KD101"
+                Case SECURITY1.sStatusNormalTamper : valeur = "Normal + Tamper"
+                Case SECURITY1.sStatusNormalDelayedTamper : valeur = "Normal Delayed + Tamper"
+                Case SECURITY1.sStatusAlarmTamper : valeur = "Alarm + Tamper"
+                Case SECURITY1.sStatusAlarmDelayedTamper : valeur = "Alarm Delayed + Tamper"
+                Case SECURITY1.sStatusMotionTamper : valeur = "Motion + Tamper"
+                Case SECURITY1.sStatusNoMotionTamper : valeur = "No Motion + Tamper"
             End Select
             WriteRetour(adresse, "", valeur)
-
-            If (recbuf(SECURITY1.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If recbuf(SECURITY1.subtype) <> SECURITY1.KD101 Then    'KD101 does not support battery low indication
+                If (recbuf(SECURITY1.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            End If
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(SECURITY1.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Security1 Exception : " & ex.Message)
@@ -2300,6 +2470,41 @@ Imports System.Media
             End Select
         Catch ex As Exception
             WriteLog("ERR: decode_Camera1 Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    Public Sub decode_BLINDS1()
+        Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            'Select Case recbuf(BLINDS1.subtype)
+            '    Case BLINDS1.BlindsT0
+            '        WriteMessage("subtype       = Safy / RollerTrol / Hasta new")
+            '    Case BLINDS1.BlindsT1
+            '        WriteMessage("subtype       = Hasta old")
+            '    Case Else
+            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(BLINDS1.packettype)) & ": " & Hex(recbuf(BLINDS1.subtype)))
+            'End Select
+            'WriteMessage("Sequence nbr  = " & recbuf(BLINDS1.seqnbr).ToString)
+            adresse = VB.Right("0" & Hex(recbuf(BLINDS1.id1)), 2) & VB.Right("0" & Hex(recbuf(BLINDS1.id2)), 2) & VB.Right("0" & Hex(recbuf(BLINDS1.id3)), 2)
+            'If recbuf(BLINDS1.unitcode) = 15 Then
+            '    WriteMessage("Unit          = All")
+            'Else
+            '    WriteMessage("Unit          = " & recbuf(BLINDS1.unitcode).ToString)
+            'End If
+
+            Select Case recbuf(BLINDS1.cmnd)
+                Case BLINDS1.sOpen : valeur = "OPEN"
+                Case BLINDS1.sStop : valeur = "STOP"
+                Case BLINDS1.sClose : valeur = "CLOSE"
+                Case BLINDS1.sConfirm : valeur = "CONFIRM"
+                Case BLINDS1.sLimit : valeur = "Set Limit"
+                Case Else : valeur = "UNKNOWN"
+            End Select
+            WriteRetour(adresse, "", valeur)
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(BLINDS1.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+        Catch ex As Exception
+            WriteLog("ERR: decode_BLINDS1 Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -2384,7 +2589,7 @@ Imports System.Media
                         Case Else : valeur = "unknown"
                     End Select
                     WriteRetour(adresse, "", valeur)
-                Case REMOTE.ATI2 'ATI Remote Wonder II
+                Case REMOTE.ATIplus 'ATI Remote Wonder Plus
                     adresse = recbuf(REMOTE.id).ToString
                     Select Case recbuf(REMOTE.cmnd)
                         Case &H0 : valeur = "A"
@@ -2458,6 +2663,84 @@ Imports System.Media
                         Case &H79 : valeur = "V-End"
                         Case &H7C : valeur = "Right Mouse Button"
                         Case &H7D : valeur = "X-End"
+                        Case Else : valeur = "unknown"
+                    End Select
+                    '        If (recbuf(REMOTE.toggle) And &H1) = &H1 Then
+                    '            WriteMessage("  (button press = odd)")
+                    '        Else
+                    '            WriteMessage("  (button press = even)")
+                    '        End If
+                    WriteRetour(adresse, "", valeur)
+                Case REMOTE.ATIrw2 'ATI Remote Wonder II
+                    adresse = recbuf(REMOTE.id).ToString
+                    'Select Case recbuf(REMOTE.cmndtype) And &HE
+                    '    Case &H0 : WriteMessage("PC")
+                    '    Case &H2 : WriteMessage("AUX1")
+                    '    Case &H4 : WriteMessage("AUX2")
+                    '    Case &H6 : WriteMessage("AUX3")
+                    '    Case &H8 : WriteMessage("AUX4")
+                    '    Case Else : WriteMessage("unknown")
+                    'End Select
+                    Select Case recbuf(REMOTE.cmnd)
+                        Case &H0 : valeur = "A"
+                        Case &H1 : valeur = "B"
+                        Case &H2 : valeur = "power"
+                        Case &H3 : valeur = "TV"
+                        Case &H4 : valeur = "DVD"
+                        Case &H5 : valeur = "?"
+                        Case &H6 : valeur = "Guide"
+                        Case &H7 : valeur = "Drag"
+                        Case &H8 : valeur = "VOL+"
+                        Case &H9 : valeur = "VOL-"
+                        Case &HA : valeur = "MUTE"
+                        Case &HB : valeur = "CHAN+"
+                        Case &HC : valeur = "CHAN-"
+                        Case &HD : valeur = "1"
+                        Case &HE : valeur = "2"
+                        Case &HF : valeur = "3"
+                        Case &H10 : valeur = "4"
+                        Case &H11 : valeur = "5"
+                        Case &H12 : valeur = "6"
+                        Case &H13 : valeur = "7"
+                        Case &H14 : valeur = "8"
+                        Case &H15 : valeur = "9"
+                        Case &H16 : valeur = "txt"
+                        Case &H17 : valeur = "0"
+                        Case &H18 : valeur = "Open Setup Menu"
+                        Case &H19 : valeur = "C"
+                        Case &H1A : valeur = "^"
+                        Case &H1B : valeur = "D"
+                        Case &H1C : valeur = "FM"
+                        Case &H1D : valeur = "<"
+                        Case &H1E : valeur = "OK"
+                        Case &H1F : valeur = ">"
+                        Case &H20 : valeur = "Max/Restore window"
+                        Case &H21 : valeur = "E"
+                        Case &H22 : valeur = "v"
+                        Case &H23 : valeur = "F"
+                        Case &H24 : valeur = "Rewind"
+                        Case &H25 : valeur = "Play"
+                        Case &H26 : valeur = "Fast forward"
+                        Case &H27 : valeur = "Record"
+                        Case &H28 : valeur = "Stop"
+                        Case &H29 : valeur = "Pause"
+                        Case &H2C : valeur = "i"
+                        Case &H2D : valeur = "ATI"
+                        Case &H3B : valeur = "PC"
+                        Case &H3C : valeur = "AUX1"
+                        Case &H3D : valeur = "AUX2"
+                        Case &H3E : valeur = "AUX3"
+                        Case &H3F : valeur = "AUX4"
+                        Case &H70 : valeur = "Cursor-left"
+                        Case &H71 : valeur = "Cursor-right"
+                        Case &H72 : valeur = "Cursor-up"
+                        Case &H73 : valeur = "Cursor-down"
+                        Case &H74 : valeur = "Cursor-up-left"
+                        Case &H75 : valeur = "Cursor-up-right"
+                        Case &H76 : valeur = "Cursor-down-right"
+                        Case &H77 : valeur = "Cursor-down-left"
+                        Case &H78 : valeur = "Left Mouse Button"
+                        Case &H7C : valeur = "Right Mouse Button"
                         Case Else : valeur = "unknown"
                     End Select
                     '        If (recbuf(REMOTE.toggle) And &H1) = &H1 Then
@@ -2749,23 +3032,45 @@ Imports System.Media
 
     Private Sub decode_TempHum()
         Try
-            'Select Case recbuf(TEMP_HUM.subtype)
-            '    Case TEMP_HUM.TH1
-            '        WriteMessage("subtype       = TH1 - THGN122/123,/THGN132,THGR122/228/238/268")
+            '   Case TEMP_HUM.TH1
+            '    WriteMessage("subtype       = TH1 - THGN122/123,/THGN132,THGR122/228/238/268")
+            '    WriteMessage("                channel " & recbuf(TEMP_HUM.id2).ToString)
             '    Case TEMP_HUM.TH2
-            '        WriteMessage("subtype       = TH2 - THGR810")
+            '    WriteMessage("subtype       = TH2 - THGR810,THGN800")
+            '    WriteMessage("                channel " & recbuf(TEMP_HUM.id2).ToString)
             '    Case TEMP_HUM.TH3
-            '        WriteMessage("subtype       = TH3 - RTGR328")
+            '    WriteMessage("subtype       = TH3 - RTGR328")
+            '    WriteMessage("                channel " & recbuf(TEMP_HUM.id2).ToString)
             '    Case TEMP_HUM.TH4
-            '        WriteMessage("subtype       = TH4 - THGR328")
+            '    WriteMessage("subtype       = TH4 - THGR328")
+            '    WriteMessage("                channel " & recbuf(TEMP_HUM.id2).ToString)
             '    Case TEMP_HUM.TH5
-            '        WriteMessage("subtype       = TH5 - WTGR800")
+            '    WriteMessage("subtype       = TH5 - WTGR800")
             '    Case TEMP_HUM.TH6
-            '        WriteMessage("subtype       = TH6 - THGR918,THGRN228,THGN500")
+            '    WriteMessage("subtype       = TH6 - THGR918,THGRN228,THGN500")
+            '    WriteMessage("                channel " & recbuf(TEMP_HUM.id2).ToString)
             '    Case TEMP_HUM.TH7
-            '        WriteMessage("subtype       = TH7 - TFA TS34C")
+            '    WriteMessage("subtype       = TH7 - Cresta, TFA TS34C")
+            '    If recbuf(TEMP_HUM.id1) < &H40 Then
+            '        WriteMessage("                channel 1")
+            '    ElseIf recbuf(TEMP_HUM.id1) < &H60 Then
+            '        WriteMessage("                channel 2")
+            '    ElseIf recbuf(TEMP_HUM.id1) < &H80 Then
+            '        WriteMessage("                channel 3")
+            '    ElseIf recbuf(TEMP_HUM.id1) > &H9F And TEMP_HUM.id1 < &HC0 Then
+            '        WriteMessage("                channel 4")
+            '    ElseIf recbuf(TEMP_HUM.id1) < &HE0 Then
+            '        WriteMessage("                channel 5")
+            '    Else
+            '        WriteMessage("                channel ??")
+            '    End If
+            '    Case TEMP_HUM.TH8
+            '    WriteMessage("subtype       = TH8 - WT260,WT260H,WT440H,WT450,WT450H")
+            '    WriteMessage("                channel " & recbuf(TEMP_HUM.id2).ToString)
+            '    Case TEMP_HUM.TH9
+            '    WriteMessage("subtype       = TH9 - Viking 02038, 02035 (02035 has no humidity)")
             '    Case Else
-            '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(TEMP_HUM.packettype)) & ":" & Hex(recbuf(TEMP_HUM.subtype)))
+            '    WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(TEMP_HUM.packettype)) & ":" & Hex(recbuf(TEMP_HUM.subtype)))
             'End Select
             'WriteMessage("Sequence nbr  = " & recbuf(TEMP_HUM.seqnbr).ToString)
             'Select Case recbuf(TEMP_HUM.humidity_status)
@@ -2874,17 +3179,22 @@ Imports System.Media
             '        WriteMessage("subtype       = RAIN2 - PCR800")
             '    Case RAIN.RAIN3
             '        WriteMessage("subtype       = RAIN3 - TFA")
+            '    Case RAIN.RAIN4
+            '        WriteMessage("subtype       = RAIN4 - UPM RG700")
+            '    Case RAIN.RAIN5
+            '        WriteMessage("subtype       = RAIN5 - LaCrosse WS2300")
             '    Case Else
             '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(RAIN.packettype)) & ":" & Hex(recbuf(RAIN.subtype)))
             'End Select
-            If recbuf(RAIN.subtype) <> RAIN.RAIN3 Then
-                If recbuf(RAIN.subtype) = RAIN.RAIN1 Then
-                    valeur = ((recbuf(RAIN.rainrateh) * 256) + recbuf(RAIN.rainratel)).ToString 'mm/h
-                Else
-                    valeur = (((recbuf(RAIN.rainrateh) * 256) + recbuf(RAIN.rainratel)) / 100).ToString ' mm/h
-                End If
+            If recbuf(RAIN.subtype) = RAIN.RAIN1 Then
+                valeur = ((recbuf(RAIN.rainrateh) * 256) + recbuf(RAIN.rainratel)).ToString 'mm/h
+                WriteRetour(adresse, ListeDevices.PLUIECOURANT.ToString, valeur)
+            ElseIf recbuf(RAIN.subtype) = RAIN.RAIN2 Then
+                valeur = (((recbuf(RAIN.rainrateh) * 256) + recbuf(RAIN.rainratel)) / 100).ToString ' mm/h
                 WriteRetour(adresse, ListeDevices.PLUIECOURANT.ToString, valeur)
             End If
+
+
             valeur = ((recbuf(RAIN.raintotal1) * 65535) + recbuf(RAIN.raintotal2) * 256 + recbuf(RAIN.raintotal3)).ToString 'mm
             WriteRetour(adresse, ListeDevices.PLUIETOTAL.ToString, valeur)
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(RAIN.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
@@ -2908,14 +3218,21 @@ Imports System.Media
             '        WriteMessage("subtype       = WIND3 - STR918, WGR918")
             '    Case WIND.WIND4
             '        WriteMessage("subtype       = WIND4 - TFA")
+            '    Case WIND.WIND5
+            '        WriteMessage("subtype       = WIND5 - UPM WDS500")
+            '    Case WIND.WIND6
+            '        WriteMessage("subtype       = WIND6 - LaCrosse WS2300")
             '    Case Else
             '        WriteMessage("ERROR: Unknown Sub type for Packet type=" & Hex(recbuf(WIND.packettype)) & ":" & Hex(recbuf(WIND.subtype)))
             'End Select
 
             valeur = ((recbuf(WIND.directionh) * 256) + recbuf(WIND.directionl)).ToString 'direction en degré
             WriteRetour(adresse, ListeDevices.DIRECTIONVENT.ToString, valeur)
-            valeur = (((recbuf(WIND.av_speedh) * 256) + recbuf(WIND.av_speedl)) / 10).ToString 'Vitesse en mtr/sec
-            WriteRetour(adresse, ListeDevices.VITESSEVENT.ToString, valeur)
+            If recbuf(WIND.subtype) <> WIND.WIND5 Then
+                'valeur = (((recbuf(WIND.av_speedh) * 256) + recbuf(WIND.av_speedl)) / 10).ToString 'Vitesse en mtr/sec
+                valeur = (((recbuf(WIND.av_speedh) * 256) + recbuf(WIND.av_speedl)) * 0.36).ToString 'Vitesse en km/hr
+                WriteRetour(adresse, ListeDevices.VITESSEVENT.ToString, valeur)
+            End If
 
             'WriteMessage("Wind gust     = " & (((recbuf(WIND.gusth) * 256) + recbuf(WIND.gustl)) / 10).ToString & " mtr/sec")
 
@@ -3236,6 +3553,132 @@ Imports System.Media
             WriteLog("ERR: decode_RFXMeter Exception : " & ex.Message)
         End Try
     End Sub
+
+    Private Sub decode_FS20()
+        Try
+            Dim adresse As String = ""
+            Dim valeur As String = ""
+            Select Case recbuf(FS20.subtype)
+                Case FS20.sTypeFS20
+                    'WriteMessage("subtype       = FS20")
+                    'WriteMessage("Sequence nbr  = " & recbuf(FS20.seqnbr).ToString)
+                    'WriteMessage("House code    = " & VB.Right("0" & Hex(recbuf(FS20.hc1)), 2) & VB.Right("0" & Hex(recbuf(FS20.hc2)), 2))
+                    'WriteMessage("Address       = " & VB.Right("0" & Hex(recbuf(FS20.addr)), 2))
+                    adresse = VB.Right("0" & Hex(recbuf(FS20.hc1)), 2) & VB.Right("0" & Hex(recbuf(FS20.hc2)), 2) & VB.Right("0" & Hex(recbuf(FS20.addr)), 2)
+                    Select Case (recbuf(FS20.cmd1) And &H1F)
+                        Case &H0 : valeur = "0"
+                        Case &H1 : valeur = "6.25"
+                        Case &H2 : valeur = "12.5"
+                        Case &H3 : valeur = "18.75"
+                        Case &H4 : valeur = "2"
+                        Case &H5 : valeur = "31.25"
+                        Case &H6 : valeur = "37.5"
+                        Case &H7 : valeur = "43.75"
+                        Case &H8 : valeur = "50"
+                        Case &H9 : valeur = "56.25"
+                        Case &HA : valeur = "62.5"
+                        Case &HB : valeur = "68.75"
+                        Case &HC : valeur = "75"
+                        Case &HD : valeur = "81.25"
+                        Case &HE : valeur = "87.5"
+                        Case &HF : valeur = "93.75"
+                        Case &H10 : valeur = "100"
+                        Case &H11 : valeur = "ON" 'On ( at last dim level set)"
+                        Case &H12 : valeur = "TOGGLE" '"Toggle between Off and On (last dim level set)"
+                        Case &H13 : valeur = "BRIGHT" '"Bright one step"
+                        Case &H14 : valeur = "DIM" 'Dim one step"
+                        Case &H15 : valeur = "START_DIM_CYCLE" 'Start dim cycle"
+                        Case &H16 : valeur = "Program(Timer)"
+                        Case &H17 : valeur = "Request status from a bidirectional device"
+                        Case &H18 : valeur = "OFF for timer period"
+                        Case &H19 : valeur = "ON (100%) for timer period"
+                        Case &H1A : valeur = "ON ( at last dim level set) for timer period"
+                        Case &H1B : valeur = "RESET"
+                        Case Else : valeur = "ERROR: Unknown"
+                    End Select
+                    'If (recbuf(FS20.cmd1) And &H80) = 0 Then
+                    '    WriteMessage("                command to receiver")
+                    'Else
+                    '    WriteMessage("                response from receiver")
+                    'End If
+                    'If (recbuf(FS20.cmd1) And &H40) = 0 Then
+                    '    WriteMessage("                unidirectional command")
+                    'Else
+                    '    WriteMessage("                bidirectional command")
+                    'End If
+                    'If (recbuf(FS20.cmd1) And &H20) = 0 Then
+                    '    WriteMessage("                additional cmd2 byte not present")
+                    'Else
+                    '    WriteMessage("                additional cmd2 byte present")
+                    'End If
+                    'If (recbuf(FS20.cmd1) And &H20) <> 0 Then
+                    '    WriteMessage("Cmd2          = " & VB.Right("0" & Hex(recbuf(FS20.cmd2)), 2))
+                    'End If
+                    WriteRetour(adresse, "", valeur)
+                Case FS20.sTypeFHT8V
+                    'WriteMessage("subtype       = FHT 8V valve")
+                    'WriteMessage("Sequence nbr  = " & recbuf(FS20.seqnbr).ToString)
+                    'WriteMessage("House code    = " & VB.Right("0" & Hex(recbuf(FS20.hc1)), 2) & VB.Right("0" & Hex(recbuf(FS20.hc2)), 2))
+                    'WriteMessage("Address       = " & VB.Right("0" & Hex(recbuf(FS20.addr)), 2))
+                    adresse = VB.Right("0" & Hex(recbuf(FS20.hc1)), 2) & VB.Right("0" & Hex(recbuf(FS20.hc2)), 2) & VB.Right("0" & Hex(recbuf(FS20.addr)), 2)
+                    'If (recbuf(FS20.cmd1) And &H80) = 0 Then
+                    '    WriteMessage("new command")
+                    'Else
+                    '    WriteMessage("repeated command")
+                    'End If
+                    'If (recbuf(FS20.cmd1) And &H40) = 0 Then
+                    '    WriteMessage("                unidirectional command")
+                    'Else
+                    '    WriteMessage("                bidirectional command")
+                    'End If
+                    'If (recbuf(FS20.cmd1) And &H20) = 0 Then
+                    '    WriteMessage("                additional cmd2 byte not present")
+                    'Else
+                    '    WriteMessage("                additional cmd2 byte present")
+                    'End If
+                    'If (recbuf(FS20.cmd1) And &H10) = 0 Then
+                    '    WriteMessage("                battery empty beep not enabled")
+                    'Else
+                    '    WriteMessage("                enable battery empty beep")
+                    'End If
+                    Select Case (recbuf(FS20.cmd1) And &HF)
+                        Case &H0 : valeur = "Synchronize now : valve position: " & VB.Right("0" & Hex(recbuf(FS20.cmd2)), 2) & " is " & (CInt(recbuf(FS20.cmd2) / 2.55)).ToString & "%"
+                        Case &H1 : valeur = "open valve"
+                        Case &H2 : valeur = "close valve"
+                        Case &H6 : valeur = "open valve at percentage level : valve position: " & VB.Right("0" & Hex(recbuf(FS20.cmd2)), 2) & " is " & (CInt(recbuf(FS20.cmd2) / 2.55)).ToString & "%"
+                        Case &H8 : valeur = "relative offset (cmd2 bit 7=direction, bit 5-0 offset value)"
+                        Case &HA : valeur = "decalcification cycle : valve position: " & VB.Right("0" & Hex(recbuf(FS20.cmd2)), 2) & " is " & (CInt(recbuf(FS20.cmd2) / 2.55)).ToString & "%"
+                        Case &HC : valeur = "synchronization active : count down is " & (recbuf(FS20.cmd2) >> 1).ToString & " seconds"
+                        Case &HE : valeur = "test, drive valve and produce an audible signal"
+                        Case &HF : valeur = "pair valve (cmd2 bit 7-1 is count down in seconds, bit 0=1) : count down is " & recbuf(FS20.cmd2) >> 1 & " seconds"
+                        Case Else : valeur = "ERROR: Unknown"
+                    End Select
+                    WriteRetour(adresse, "", valeur)
+                Case FS20.sTypeFHT80
+                    'WriteMessage("subtype       = FHT80 door/window sensor")
+                    'WriteMessage("Sequence nbr  = " & recbuf(FS20.seqnbr).ToString)
+                    'WriteMessage("House code    = " & VB.Right("0" & Hex(recbuf(FS20.hc1)), 2) & VB.Right("0" & Hex(recbuf(FS20.hc2)), 2))
+                    'WriteMessage("Address       = " & VB.Right("0" & Hex(recbuf(FS20.addr)), 2))
+                    adresse = VB.Right("0" & Hex(recbuf(FS20.hc1)), 2) & VB.Right("0" & Hex(recbuf(FS20.hc2)), 2) & VB.Right("0" & Hex(recbuf(FS20.addr)), 2)
+                    Select Case (recbuf(FS20.cmd1) And &HF)
+                        Case &H1 : valeur = "OPEN"
+                        Case &H2 : valeur = "CLOSED"
+                        Case &HC : valeur = "CFG: synchronization active"
+                        Case Else : valeur = "ERROR: Unknown command"
+                    End Select
+                    'If (recbuf(FS20.cmd1) And &H80) = 0 Then
+                    '    WriteMessage("                new command")
+                    'Else
+                    '    WriteMessage("                repeated command")
+                    'End If
+                    WriteRetour(adresse, "", valeur)
+                Case Else : WriteLog("ERR: Unknown Sub type for Packet type=" & Hex(recbuf(FS20.packettype)) & ":" & Hex(recbuf(FS20.subtype)))
+            End Select
+            If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(FS20.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
+        Catch ex As Exception
+            WriteLog("ERR: decode_FS20 Exception : " & ex.Message)
+        End Try
+    End Sub
 #End Region
 
 #Region "Send messages"
@@ -3246,7 +3689,7 @@ Imports System.Media
             'paramMode
             '1 : type frequence (310, 315, 433, 868.30, 868.30 FSK, 868.35, 868.35 FSK, 868.95)
             '2 : UNDEC
-            '3 : novatis
+            '3 : novatis --> NOT USED ANYMORE
             '4 : proguard
             '5 : FS20
             '6 : Lacrosse
@@ -3256,11 +3699,23 @@ Imports System.Media
             '10 : Visonic
             '11 : ATI
             '12 : Oregon
-            '13 : Koppla
+            '13 : Meiantech
             '14 : HEEU
             '15 : AC
             '16 : ARC
             '17 : X10
+
+            '18 : BlindsT0
+            '19 : RFU6
+            '20 : RFU5
+            '21 : RFU4
+            '22 : RFU3
+            '23 : FINEOFFSET
+            '24 : RUBICSON
+            '25 : AE
+            '26 : BlindsT1
+
+            If paramMode.Length <> 26 Then paramMode = "20000111101111111111111111"
 
             Dim kar(ICMD.size) As Byte
             kar(ICMD.packetlength) = ICMD.size
@@ -3268,6 +3723,8 @@ Imports System.Media
             kar(ICMD.subtype) = ICMD.sType
             kar(ICMD.seqnbr) = bytSeqNbr
             kar(ICMD.cmnd) = ICMD.SETMODE
+
+            'type frequence
             Select Case paramMode.Substring(0, 1)
                 Case 0 : kar(ICMD.msg1) = IRESPONSE.recType310
                 Case 1 : kar(ICMD.msg1) = IRESPONSE.recType315
@@ -3279,27 +3736,43 @@ Imports System.Media
                 Case 7 : kar(ICMD.msg1) = IRESPONSE.recType86895
             End Select
 
+            'UNDEC
             If paramMode.Substring(1, 1) = 1 Then kar(ICMD.msg3) = &H80 Else kar(ICMD.msg3) = 0
 
-            kar(ICMD.msg4) = 0
-            If paramMode.Substring(2, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or &H40
-            If paramMode.Substring(3, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or &H20
-            If paramMode.Substring(4, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or &H10
-            If paramMode.Substring(5, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or &H8
-            If paramMode.Substring(6, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or &H4
-            If paramMode.Substring(7, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or &H2
-            If paramMode.Substring(8, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or &H1
+            If paramMode.Substring(17, 1) = 1 Then
+                'All other protocol receiving is disabled if BlindsT0 enabled, BlindsT0 receive is only used to read the address code of the remote
+                kar(ICMD.msg4) = 0
+                kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_BlindsT0
+                kar(ICMD.msg5) = 0
+            Else
+                If paramMode.Substring(18, 1) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU6
+                If paramMode.Substring(19, 1) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU5
+                If paramMode.Substring(20, 1) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU4
+                If paramMode.Substring(21, 1) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU3
+                If paramMode.Substring(22, 1) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_FINEOFFSET
+                If paramMode.Substring(23, 1) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RUBICSON
+                If paramMode.Substring(24, 1) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_AE
 
-            kar(ICMD.msg5) = 0
-            If paramMode.Substring(9, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H80
-            If paramMode.Substring(10, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H40
-            If paramMode.Substring(11, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H20
-            If paramMode.Substring(12, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H10
-            If paramMode.Substring(13, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H8
-            If paramMode.Substring(14, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H4
-            If paramMode.Substring(15, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H2
-            If paramMode.Substring(16, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or &H1
+                kar(ICMD.msg4) = 0
+                If paramMode.Substring(25, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_BlindsT1
+                If paramMode.Substring(3, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_PROGUARD
+                If paramMode.Substring(4, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_FS20
+                If paramMode.Substring(5, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_LCROS
+                If paramMode.Substring(6, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_HID
+                If paramMode.Substring(7, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_AD
+                If paramMode.Substring(8, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_MERTIK
 
+                kar(ICMD.msg5) = 0
+                If paramMode.Substring(9, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_VISONIC
+                If paramMode.Substring(10, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_ATI
+                If paramMode.Substring(11, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_OREGON
+                If paramMode.Substring(12, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_MEI
+                If paramMode.Substring(13, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_HEU
+                If paramMode.Substring(14, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_AC
+                If paramMode.Substring(15, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_ARC
+                If paramMode.Substring(16, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_X10
+
+            End If
             If _DEBUG Then
                 For Each bt As Byte In kar
                     temp = temp & VB.Right("0" & Hex(bt), 2) & " "
@@ -3344,21 +3817,51 @@ Imports System.Media
         End Try
     End Function
 
-    ''' <summary>Gestion du protocole X10 RF</summary>
+    ''' <summary>Gestion du protocole X10/ARC/ELRO AB400D/Waveman/EMW200/Impuls/RisingSun/Philips SBC</summary>
     ''' <param name="adresse">Adresse du type A1</param>
     ''' <param name="commande">commande ON, OFF, BRIGHT, DIM, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
+    ''' <param name="type">0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls, 6=RisingSun, 7=Philips SBC</param>
     ''' <remarks></remarks>
-    Private Sub send_x10(ByVal adresse As String, ByVal commande As String)
+    Private Sub send_lighting1(ByVal adresse As String, ByVal commande As String, ByVal type As Integer)
         Try
             Dim kar(LIGHTING1.size) As Byte
             Dim temp As String = ""
 
+            'verification format adresse
             If Not (adresse.Length = 2) Then
-                WriteLog("ERR: Send X10 : Adresse invalide : " & adresse)
+                WriteLog("ERR: Send lighting1 : Adresse invalide : " & adresse)
                 Exit Sub
             End If
+            Select Case type
+                Case LIGHTING1.sTypeX10, LIGHTING1.sTypeARC, LIGHTING1.sTypeWaveman
+                    If CInt(adresse.Substring(1, 1)) > 16 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C" And adresse.Substring(0, 1) <> "D" And adresse.Substring(0, 1) <> "E" And adresse.Substring(0, 1) <> "F" And adresse.Substring(0, 1) <> "G" And adresse.Substring(0, 1) <> "H" And adresse.Substring(0, 1) <> "I" And adresse.Substring(0, 1) <> "J" And adresse.Substring(0, 1) <> "K" And adresse.Substring(0, 1) <> "L" And adresse.Substring(0, 1) <> "M" And adresse.Substring(0, 1) <> "N" And adresse.Substring(0, 1) <> "O" And adresse.Substring(0, 1) <> "P") Then
+                        WriteLog("ERR: Send lighting1 : Adresse (X10, ARC, Waveman) invalide : " & adresse)
+                        Exit Sub
+                    End If
+                Case LIGHTING1.sTypeAB400D, LIGHTING1.sTypeIMPULS
+                    If CInt(adresse.Substring(1, 1)) > 64 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C" And adresse.Substring(0, 1) <> "D" And adresse.Substring(0, 1) <> "E" And adresse.Substring(0, 1) <> "F" And adresse.Substring(0, 1) <> "G" And adresse.Substring(0, 1) <> "H" And adresse.Substring(0, 1) <> "I" And adresse.Substring(0, 1) <> "J" And adresse.Substring(0, 1) <> "K" And adresse.Substring(0, 1) <> "L" And adresse.Substring(0, 1) <> "M" And adresse.Substring(0, 1) <> "N" And adresse.Substring(0, 1) <> "O" And adresse.Substring(0, 1) <> "P") Then
+                        WriteLog("ERR: Send lighting1 : Adresse (ELRO AB400D, Impuls) invalide : " & adresse)
+                        Exit Sub
+                    End If
+                Case LIGHTING1.sTypeEMW200
+                    If CInt(adresse.Substring(1, 1)) > 4 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C") Then
+                        WriteLog("ERR: Send lighting1 : Adresse (EMW200) invalide : " & adresse)
+                        Exit Sub
+                    End If
+                Case LIGHTING1.sTypePhilips
+                    If CInt(adresse.Substring(1, 1)) > 8 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C" And adresse.Substring(0, 1) <> "D" And adresse.Substring(0, 1) <> "E" And adresse.Substring(0, 1) <> "F" And adresse.Substring(0, 1) <> "G" And adresse.Substring(0, 1) <> "H" And adresse.Substring(0, 1) <> "I" And adresse.Substring(0, 1) <> "J" And adresse.Substring(0, 1) <> "K" And adresse.Substring(0, 1) <> "L" And adresse.Substring(0, 1) <> "M" And adresse.Substring(0, 1) <> "N" And adresse.Substring(0, 1) <> "O" And adresse.Substring(0, 1) <> "P") Then
+                        WriteLog("ERR: Send lighting1 : Adresse (ELRO AB400D, Impuls) invalide : " & adresse)
+                        Exit Sub
+                    End If
+            End Select
+
+            kar(LIGHTING1.packetlength) = LIGHTING1.size
+            kar(LIGHTING1.packettype) = LIGHTING1.pType
+            kar(LIGHTING1.subtype) = type
+            kar(LIGHTING1.seqnbr) = bytSeqNbr
             kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
             kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+
             Select Case commande
                 Case "OFF"
                     kar(LIGHTING1.cmnd) = LIGHTING1.sOff
@@ -3367,307 +3870,87 @@ Imports System.Media
                     kar(LIGHTING1.cmnd) = LIGHTING1.sOn
                     WriteRetourSend(adresse, "", "ON")
                 Case "ALL_LIGHT_OFF"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
-                    WriteRetourSend(adresse, "", "OFF")
-                    'traiter toutes les lights
+                    If type = LIGHTING1.sTypeX10 Or type = LIGHTING1.sTypeEMW200 Or type = LIGHTING1.sTypePhilips Or type = LIGHTING1.sTypeARC Then
+                        kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
+                        WriteRetourSend(adresse, "", "OFF")
+                        'traiter toutes les lights
 
 
-
+                    Else
+                        WriteLog("ERR: Send lighting1 : Commande ALL_LIGHT_OFF indisponible pour ce protocole")
+                        Exit Sub
+                    End If
                 Case "ALL_LIGHT_ON"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
-                    WriteRetourSend(adresse, "", "ON")
-                    'traiter toutes les lights
+                    If type = LIGHTING1.sTypeX10 Or type = LIGHTING1.sTypeEMW200 Or type = LIGHTING1.sTypePhilips Or type = LIGHTING1.sTypeARC Then
+                        kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
+                        WriteRetourSend(adresse, "", "ON")
+                        'traiter toutes les lights
 
 
-
-
+                    Else
+                        WriteLog("ERR: Send lighting1 : Commande ALL_LIGHT_ON indisponible pour ce protocole")
+                        Exit Sub
+                    End If
                 Case "BRIGHT"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sBright
-                    WriteRetourSend(adresse, "", "ON")
+                    If type = LIGHTING1.sTypeX10 Then
+                        kar(LIGHTING1.cmnd) = LIGHTING1.sBright
+                        WriteRetourSend(adresse, "", "ON")
+                    Else
+                        WriteLog("ERR: Send lighting1 : Commande BRIGHT indisponible pour ce protocole")
+                        Exit Sub
+                    End If
                 Case "DIM"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sDim
-                    WriteRetourSend(adresse, "", "ON")
+                    If type = LIGHTING1.sTypeX10 Then
+                        kar(LIGHTING1.cmnd) = LIGHTING1.sDim
+                        WriteRetourSend(adresse, "", "ON")
+                    Else
+                        WriteLog("ERR: Send lighting1 : Commande DIM indisponible pour ce protocole")
+                        Exit Sub
+                    End If
                 Case "CHIME"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sChime
-                    kar(LIGHTING1.unitcode) = 8
-                    WriteRetourSend(adresse, "", "CHIME")
+                    If type = LIGHTING1.sTypeARC Then
+                        kar(LIGHTING1.cmnd) = LIGHTING1.sChime
+                        kar(LIGHTING1.unitcode) = 8
+                        WriteRetourSend(adresse, "", "CHIME")
+                    Else
+                        WriteLog("ERR: Send lighting1 : Commande CHIME indisponible pour ce protocole")
+                        Exit Sub
+                    End If
                 Case Else
-                    WriteLog("ERR: Send X10 : Commande invalide : " & commande)
+                    WriteLog("ERR: Send lighting1 : Commande invalide : " & commande)
                     Exit Sub
             End Select
-            kar(LIGHTING1.packetlength) = LIGHTING1.size
-            kar(LIGHTING1.packettype) = LIGHTING1.pType
-            kar(LIGHTING1.subtype) = 0 '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls
-            kar(LIGHTING1.seqnbr) = bytSeqNbr
             kar(LIGHTING1.filler) = 0
             ecrire(kar)
             If _DEBUG Then
                 For Each bt As Byte In kar
                     temp = temp & VB.Right("0" & Hex(bt), 2) & " "
                 Next
-                WriteLog("DBG: Send X10 : commande envoyée : " & temp)
+                WriteLog("DBG: Send lighting1 : commande envoyée : " & temp)
             End If
         Catch ex As Exception
-            WriteLog("ERR: Send X10 Exception : " & ex.Message)
+            WriteLog("ERR: Send lighting1 Exception : " & ex.Message)
         End Try
     End Sub
 
-    ''' <summary>Gestion du protocole ARC</summary>
-    ''' <param name="adresse">Adresse du type A1</param>
-    ''' <param name="commande">commande ON, OFF, GROUP_ON, GROUP_OFF, CHIME</param>
-    ''' <remarks></remarks>
-    Private Sub send_arc(ByVal adresse As String, ByVal commande As String)
-        Try
-            Dim kar(LIGHTING1.size) As Byte
-            Dim temp As String = ""
-
-            If Not (adresse.Length = 2) Then
-                WriteLog("ERR: Send ARC : Adresse invalide : " & adresse)
-                Exit Sub
-            End If
-            kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
-            kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
-            Select Case commande
-                Case "OFF"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sOff
-                    WriteRetourSend(adresse, "", "OFF")
-                Case "ON"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sOn
-                    WriteRetourSend(adresse, "", "ON")
-                Case "GROUP_ON"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
-                    WriteRetourSend(adresse, "", "ON")
-                    'traiter toutes le groupe
-
-
-
-                Case "GROUP_OFF"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
-                    WriteRetourSend(adresse, "", "OFF")
-                    'traiter toutes le groupe
-
-
-
-                Case "CHIME"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sChime
-                    kar(LIGHTING1.unitcode) = 8
-                Case Else
-                    WriteLog("ERR: Send ARC : Commande invalide : " & commande)
-                    Exit Sub
-            End Select
-            kar(LIGHTING1.packetlength) = LIGHTING1.size
-            kar(LIGHTING1.packettype) = LIGHTING1.pType
-            kar(LIGHTING1.subtype) = 1 '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls
-            kar(LIGHTING1.seqnbr) = bytSeqNbr
-            kar(LIGHTING1.filler) = 0
-            ecrire(kar)
-            If _DEBUG Then
-                For Each bt As Byte In kar
-                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
-                Next
-                WriteLog("DBG: Send ARC : commande envoyée : " & temp)
-            End If
-        Catch ex As Exception
-            WriteLog("ERR: Send ARC Exception : " & ex.Message)
-        End Try
-    End Sub
-
-    ''' <summary>Gestion du protocole ELRO AB400D</summary>
-    ''' <param name="adresse">Adresse du type A1</param>
-    ''' <param name="commande">commande ON, OFF</param>
-    ''' <remarks></remarks>
-    Private Sub send_ELROAB400D(ByVal adresse As String, ByVal commande As String)
-        Try
-            Dim kar(LIGHTING1.size) As Byte
-            Dim temp As String = ""
-
-            If Not (adresse.Length = 2) Then
-                WriteLog("ERR: Send ELRO AB400D : Adresse invalide : " & adresse)
-                Exit Sub
-            End If
-            kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
-            kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
-            Select Case commande
-                Case "OFF"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sOff
-                    WriteRetourSend(adresse, "", "OFF")
-                Case "ON"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sOn
-                    WriteRetourSend(adresse, "", "ON")
-                Case Else
-                    WriteLog("ERR: Send ELRO AB400D : Commande invalide : " & commande)
-                    Exit Sub
-            End Select
-            kar(LIGHTING1.packetlength) = LIGHTING1.size
-            kar(LIGHTING1.packettype) = LIGHTING1.pType
-            kar(LIGHTING1.subtype) = 2 '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls
-            kar(LIGHTING1.seqnbr) = bytSeqNbr
-            kar(LIGHTING1.filler) = 0
-            ecrire(kar)
-            If _DEBUG Then
-                For Each bt As Byte In kar
-                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
-                Next
-                WriteLog("DBG: Send ELRO AB400D : commande envoyée : " & temp)
-            End If
-        Catch ex As Exception
-            WriteLog("ERR: Send ELRO AB400D Exception : " & ex.Message)
-        End Try
-    End Sub
-
-    ''' <summary>Gestion du protocole WAVEMAN</summary>
-    ''' <param name="adresse">Adresse du type A1</param>
-    ''' <param name="commande">commande ON, OFF</param>
-    ''' <remarks></remarks>
-    Private Sub send_WAVEMAN(ByVal adresse As String, ByVal commande As String)
-        Try
-            Dim kar(LIGHTING1.size) As Byte
-            Dim temp As String = ""
-
-            If Not (adresse.Length = 2) Then
-                WriteLog("ERR: Send WAVEMAN : Adresse invalide : " & adresse)
-                Exit Sub
-            End If
-            kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
-            kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
-            Select Case commande
-                Case "OFF"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sOff
-                    WriteRetourSend(adresse, "", "OFF")
-                Case "ON"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sOn
-                    WriteRetourSend(adresse, "", "ON")
-                Case Else
-                    WriteLog("ERR: Send WAVEMAN : Commande invalide : " & commande)
-                    Exit Sub
-            End Select
-            kar(LIGHTING1.packetlength) = LIGHTING1.size
-            kar(LIGHTING1.packettype) = LIGHTING1.pType
-            kar(LIGHTING1.subtype) = 3 '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls
-            kar(LIGHTING1.seqnbr) = bytSeqNbr
-            kar(LIGHTING1.filler) = 0
-            ecrire(kar)
-            If _DEBUG Then
-                For Each bt As Byte In kar
-                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
-                Next
-                WriteLog("DBG: Send WAVEMAN : commande envoyée : " & temp)
-            End If
-        Catch ex As Exception
-            WriteLog("ERR: Send WAVEMAN Exception : " & ex.Message)
-        End Try
-    End Sub
-
-    ''' <summary>Gestion du protocole EMW200</summary>
-    ''' <param name="adresse">Adresse du type A1 avec A/B/C et 1/2/3/4</param>
-    ''' <param name="commande">commande ON, OFF, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
-    ''' <remarks></remarks>
-    Private Sub send_EMW200(ByVal adresse As String, ByVal commande As String)
-        Try
-            Dim kar(LIGHTING1.size) As Byte
-            Dim temp As String = ""
-
-            If Not (adresse.Length = 2) Or CInt(adresse.Substring(1, 1)) > 4 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C") Then
-                WriteLog("ERR: Send EMW200 : Adresse invalide : " & adresse)
-                Exit Sub
-            End If
-            kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
-            kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
-            Select Case commande
-                Case "OFF"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sOff
-                    WriteRetourSend(adresse, "", "OFF")
-                Case "ON"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sOn
-                    WriteRetourSend(adresse, "", "ON")
-                Case "ALL_LIGHT_ON"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
-                    WriteRetourSend(adresse, "", "ON")
-                Case "ALL_LIGHT_OFF"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
-                    WriteRetourSend(adresse, "", "OFF")
-                Case Else
-                    WriteLog("ERR: Send EMW200 : Commande invalide : " & commande)
-                    Exit Sub
-            End Select
-            kar(LIGHTING1.packetlength) = LIGHTING1.size
-            kar(LIGHTING1.packettype) = LIGHTING1.pType
-            kar(LIGHTING1.subtype) = 4 '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls
-            kar(LIGHTING1.seqnbr) = bytSeqNbr
-            kar(LIGHTING1.filler) = 0
-            ecrire(kar)
-            If _DEBUG Then
-                For Each bt As Byte In kar
-                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
-                Next
-                WriteLog("DBG: Send EMW200 : commande envoyée : " & temp)
-            End If
-        Catch ex As Exception
-            WriteLog("ERR: Send EMW200 Exception : " & ex.Message)
-        End Try
-    End Sub
-
-    ''' <summary>Gestion du protocole IMPULS</summary>
-    ''' <param name="adresse">Adresse du type A1</param>
-    ''' <param name="commande">commande ON, OFF</param>
-    ''' <remarks></remarks>
-    Private Sub send_IMPULS(ByVal adresse As String, ByVal commande As String)
-        Try
-            Dim kar(LIGHTING1.size) As Byte
-            Dim temp As String = ""
-
-            If Not (adresse.Length = 2) Then
-                WriteLog("ERR: Send IMPULS : Adresse invalide : " & adresse)
-                Exit Sub
-            End If
-            kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
-            kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
-            Select Case commande
-                Case "OFF"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sOff
-                    WriteRetourSend(adresse, "", "OFF")
-                Case "ON"
-                    kar(LIGHTING1.cmnd) = LIGHTING1.sOn
-                    WriteRetourSend(adresse, "", "ON")
-                Case Else
-                    WriteLog("ERR: Send IMPULS : Commande invalide : " & commande)
-                    Exit Sub
-            End Select
-            kar(LIGHTING1.packetlength) = LIGHTING1.size
-            kar(LIGHTING1.packettype) = LIGHTING1.pType
-            kar(LIGHTING1.subtype) = 5 '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls
-            kar(LIGHTING1.seqnbr) = bytSeqNbr
-            kar(LIGHTING1.filler) = 0
-            ecrire(kar)
-            If _DEBUG Then
-                For Each bt As Byte In kar
-                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
-                Next
-                WriteLog("DBG: Send IMPULS : commande envoyée : " & temp)
-            End If
-        Catch ex As Exception
-            WriteLog("ERR: Send IMPULS Exception : " & ex.Message)
-        End Try
-    End Sub
-
-    ''' <summary>Gestion du protocole AC</summary>
+    ''' <summary>Gestion du protocole AC / HEEU / ANSLUT</summary>
     ''' <param name="adresse">Adresse du type 02F4416-1</param>
     ''' <param name="commande">commande ON, OFF, DIM, GROUP_OFF, GROUP_ON, GROUP_DIM</param>
     ''' <param name="type">0=AC / 1=HEEU / 2=ANSLUT</param>
     ''' <param name="dimlevel">Level pour Dim de 1 à 16</param>
     ''' <remarks></remarks>
-    Private Sub send_AC(ByVal adresse As String, ByVal commande As String, ByVal type As Integer, Optional ByVal dimlevel As Integer = 1)
+    Private Sub send_Lighting2(ByVal adresse As String, ByVal commande As String, ByVal type As Integer, Optional ByVal dimlevel As Integer = 1)
         Try
             Dim kar(LIGHTING2.size) As Byte
             Dim temp As String = ""
             If Not (adresse.Length = 9) Then
-                WriteLog("ERR: Send AC : Adresse invalide : " & adresse)
+                WriteLog("ERR: Send Lighting2 : Adresse invalide : " & adresse)
                 Exit Sub
             End If
             kar(LIGHTING2.packetlength) = LIGHTING2.size
             kar(LIGHTING2.packettype) = LIGHTING2.pType
             kar(LIGHTING2.seqnbr) = bytSeqNbr
-            kar(LIGHTING2.subtype) = type '0=AC, 1=HE EU, 2=ANSLUT
+            kar(LIGHTING2.subtype) = type
             Select Case commande
                 Case "OFF"
                     kar(LIGHTING2.cmnd) = 0
@@ -3711,7 +3994,7 @@ Imports System.Media
                 kar(LIGHTING2.id3) = Array.IndexOf(adressetoint, adressetab(0).Substring(3, 2))
                 kar(LIGHTING2.id4) = Array.IndexOf(adressetoint, adressetab(0).Substring(5, 2))
             Catch ex As Exception
-                WriteLog("ERR: Send AC Exception : Adresse incorrecte")
+                WriteLog("ERR: Send Lighting2 Exception : Adresse incorrecte")
             End Try
 
             kar(LIGHTING2.level) = dimlevel
@@ -3722,12 +4005,516 @@ Imports System.Media
                 For Each bt As Byte In kar
                     temp = temp & VB.Right("0" & Hex(bt), 2) & " "
                 Next
-                WriteLog("DBG: Send AC : commande envoyée : " & temp)
+                WriteLog("DBG: Send Lighting2 : commande envoyée : " & temp)
             End If
         Catch ex As Exception
-            WriteLog("ERR: Send AC Exception : " & ex.ToString)
+            WriteLog("ERR: Send Lighting2 Exception : " & ex.ToString)
         End Try
     End Sub
+
+    ''' <summary>Gestion du protocole EMW100 / LIGHTWAVERF</summary>
+    ''' <param name="adresse">Adresse du type FFFFFF-1</param>
+    ''' <param name="commande">commande ON, OFF, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
+    ''' <param name="type">0=EMW100 / 1=LIGHTWAVERF</param>
+    ''' <param name="dimlevel">Level pour Dim de 1 à 31</param>
+    ''' <remarks></remarks>
+    Private Sub send_lighting5(ByVal adresse As String, ByVal commande As String, ByVal type As Integer, Optional ByVal dimlevel As Integer = 1)
+        Try
+            Dim kar(LIGHTING5.size) As Byte
+            Dim temp As String = ""
+
+            If Not (adresse.Length = 8) Then
+                WriteLog("ERR: Send lighting5 : Adresse invalide : " & adresse)
+                Exit Sub
+            End If
+
+            kar(LIGHTING5.packetlength) = LIGHTING5.size
+            kar(LIGHTING5.packettype) = LIGHTING5.pType
+            kar(LIGHTING5.subtype) = type '0=EMW100 / 1=LIGHTWAVERF
+            kar(LIGHTING2.seqnbr) = bytSeqNbr
+            Try
+                Dim adressetab As String() = adresse.Split("-")
+                kar(LIGHTING5.unitcode) = adressetab(1)
+                kar(LIGHTING5.id1) = adressetab(0).Substring(0, 2)
+                kar(LIGHTING5.id2) = Array.IndexOf(adressetoint, adressetab(0).Substring(2, 2))
+                kar(LIGHTING5.id3) = Array.IndexOf(adressetoint, adressetab(0).Substring(4, 2))
+            Catch ex As Exception
+                WriteLog("ERR: Send lighting5 Exception : Adresse incorrecte")
+            End Try
+
+            Select Case commande
+                Case "OFF"
+                    kar(LIGHTING5.cmnd) = LIGHTING5.sOff
+                    WriteRetourSend(adresse, "", "OFF")
+                Case "ON"
+                    kar(LIGHTING5.cmnd) = LIGHTING5.sOn
+                    WriteRetourSend(adresse, "", "ON")
+                Case "GROUP_OFF"
+                    kar(LIGHTING5.cmnd) = LIGHTING5.sGroupOff
+                    WriteRetourSend(adresse, "", "OFF")
+                    'traiter tout le groupe
+
+                    'commandes restantes à dev pour EMW100 : Mood1/Mood2/Mood3/Mood4/Mood5/Unlock/Lock/All Lock/Close relay/Stop relay/Open relay/Set Level
+                    'commandes restantes à dev pour LIGHTWAVERF : Learn
+
+                Case Else
+                    WriteLog("ERR: Send lighting5 : Commande invalide : " & commande)
+                    Exit Sub
+            End Select
+
+            If kar(LIGHTING5.cmnd) = LIGHTING5.sSetLevel Then
+                kar(LIGHTING5.level) = dimlevel
+            Else
+                kar(LIGHTING5.level) = 0
+            End If
+            kar(LIGHTING5.filler) = 0
+            If kar(LIGHTING5.cmnd) = 8 Or kar(LIGHTING5.cmnd) = 9 Then 'not used commands
+                Exit Sub
+            End If
+            If kar(LIGHTING5.id1) = 0 And kar(LIGHTING5.id2) = 0 And kar(LIGHTING5.id3) = 0 Then
+                WriteLog("ERR: Send lighting5 : Adresse invalide : " & adresse)
+                Exit Sub
+            End If
+
+            ecrire(kar)
+            If _DEBUG Then
+                For Each bt As Byte In kar
+                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+                Next
+                WriteLog("DBG: Send lighting5 : commande envoyée : " & temp)
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: Send lighting5 Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Gestion du protocole BLYSS</summary>
+    ''' <param name="adresse">Adresse du type FFFF-A1  avec A1 A/D et 1/4</param>
+    ''' <param name="commande">commande ON, OFF</param>
+    ''' <param name="type">0=BLYSS</param>
+    ''' <remarks></remarks>
+    Private Sub send_lighting6(ByVal adresse As String, ByVal commande As String, ByVal type As Integer)
+        Try
+            Dim kar(LIGHTING6.size) As Byte
+            Dim temp As String = ""
+
+            If Not (adresse.Length = 7) Then
+                WriteLog("ERR: Send lighting6 : Adresse invalide : " & adresse)
+                Exit Sub
+            End If
+
+            kar(LIGHTING6.packetlength) = LIGHTING6.size
+            kar(LIGHTING6.packettype) = LIGHTING6.pType
+            kar(LIGHTING6.subtype) = 0 '0=BLYSS
+            kar(LIGHTING6.seqnbr) = bytSeqNbr
+            Try
+                Dim adressetab As String() = adresse.Split("-")
+                kar(LIGHTING6.groupcode) = convert_housecode(adressetab(1).Substring(0, 1))
+                kar(LIGHTING6.unitcode) = adressetab(1).Substring(1, 1)
+                kar(LIGHTING6.id1) = adressetab(0).Substring(0, 2)
+                kar(LIGHTING6.id2) = Array.IndexOf(adressetoint, adressetab(0).Substring(2, 2))
+            Catch ex As Exception
+                WriteLog("ERR: Send lighting6 Exception : Adresse incorrecte")
+            End Try
+
+            Select Case commande
+                Case "OFF"
+                    kar(LIGHTING6.cmnd) = LIGHTING6.sOff
+                    WriteRetourSend(adresse, "", "OFF")
+                Case "ON"
+                    kar(LIGHTING6.cmnd) = LIGHTING6.sOn
+                    WriteRetourSend(adresse, "", "ON")
+                Case "GROUP_OFF"
+                    kar(LIGHTING6.cmnd) = LIGHTING6.sGroupOff
+                    WriteRetourSend(adresse, "", "OFF")
+                Case "GROUP_ON"
+                    kar(LIGHTING6.cmnd) = LIGHTING6.sGroupOff
+                    WriteRetourSend(adresse, "", "OFF")
+                Case Else
+                    WriteLog("ERR: Send lighting6 : Commande invalide : " & commande)
+                    Exit Sub
+            End Select
+
+            kar(LIGHTING6.cmndseqnbr) = bytCmndSeqNbr
+            bytCmndSeqNbr += 1
+            If bytCmndSeqNbr > 4 Then
+                bytCmndSeqNbr = 0
+            End If
+            kar(LIGHTING6.rfu) = 0
+            kar(LIGHTING6.filler) = 0
+
+            If kar(LIGHTING6.id1) = 0 And kar(LIGHTING6.id2) = 0 Then
+                WriteLog("ERR: Send lighting6 : Adresse invalide : " & adresse)
+                Exit Sub
+            End If
+
+            ecrire(kar)
+            If _DEBUG Then
+                For Each bt As Byte In kar
+                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+                Next
+                WriteLog("DBG: Send lighting6 : commande envoyée : " & temp)
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: Send lighting6 Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    'OLD
+    ' ''' <summary>Gestion du protocole X10 RF</summary>
+    ' ''' <param name="adresse">Adresse du type A1</param>
+    ' ''' <param name="commande">commande ON, OFF, BRIGHT, DIM, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
+    ' ''' <remarks></remarks>
+    'Private Sub send_x10(ByVal adresse As String, ByVal commande As String)
+    '    Try
+    '        Dim kar(LIGHTING1.size) As Byte
+    '        Dim temp As String = ""
+
+    '        If Not (adresse.Length = 2) Then
+    '            WriteLog("ERR: Send X10 : Adresse invalide : " & adresse)
+    '            Exit Sub
+    '        End If
+    '        kar(LIGHTING1.packetlength) = LIGHTING1.size
+    '        kar(LIGHTING1.packettype) = LIGHTING1.pType
+    '        kar(LIGHTING1.subtype) = 0  '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls, 6=RisingSun, 7=Philips SBC
+    '        kar(LIGHTING1.seqnbr) = bytSeqNbr
+    '        kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
+    '        kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+    '        Select Case commande
+    '            Case "OFF"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+    '                WriteRetourSend(adresse, "", "OFF")
+    '            Case "ON"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+    '                WriteRetourSend(adresse, "", "ON")
+    '            Case "ALL_LIGHT_OFF"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
+    '                WriteRetourSend(adresse, "", "OFF")
+    '                'traiter toutes les lights
+
+
+
+    '            Case "ALL_LIGHT_ON"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
+    '                WriteRetourSend(adresse, "", "ON")
+    '                'traiter toutes les lights
+
+
+
+
+    '            Case "BRIGHT"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sBright
+    '                WriteRetourSend(adresse, "", "ON")
+    '            Case "DIM"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sDim
+    '                WriteRetourSend(adresse, "", "ON")
+    '            Case "CHIME"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sChime
+    '                kar(LIGHTING1.unitcode) = 8
+    '                WriteRetourSend(adresse, "", "CHIME")
+    '            Case Else
+    '                WriteLog("ERR: Send X10 : Commande invalide : " & commande)
+    '                Exit Sub
+    '        End Select
+    '        kar(LIGHTING1.filler) = 0
+    '        ecrire(kar)
+    '        If _DEBUG Then
+    '            For Each bt As Byte In kar
+    '                temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+    '            Next
+    '            WriteLog("DBG: Send X10 : commande envoyée : " & temp)
+    '        End If
+    '    Catch ex As Exception
+    '        WriteLog("ERR: Send X10 Exception : " & ex.Message)
+    '    End Try
+    'End Sub
+
+    ' ''' <summary>Gestion du protocole ARC</summary>
+    ' ''' <param name="adresse">Adresse du type A1</param>
+    ' ''' <param name="commande">commande ON, OFF, GROUP_ON, GROUP_OFF, CHIME</param>
+    ' ''' <remarks></remarks>
+    'Private Sub send_arc(ByVal adresse As String, ByVal commande As String)
+    '    Try
+    '        Dim kar(LIGHTING1.size) As Byte
+    '        Dim temp As String = ""
+
+    '        If Not (adresse.Length = 2) Then
+    '            WriteLog("ERR: Send ARC : Adresse invalide : " & adresse)
+    '            Exit Sub
+    '        End If
+    '        kar(LIGHTING1.packetlength) = LIGHTING1.size
+    '        kar(LIGHTING1.packettype) = LIGHTING1.pType
+    '        kar(LIGHTING1.subtype) = 1  '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls, 6=RisingSun, 7=Philips SBC
+    '        kar(LIGHTING1.seqnbr) = bytSeqNbr
+    '        kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
+    '        kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+    '        Select Case commande
+    '            Case "OFF"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+    '                WriteRetourSend(adresse, "", "OFF")
+    '            Case "ON"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+    '                WriteRetourSend(adresse, "", "ON")
+    '            Case "GROUP_ON"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
+    '                WriteRetourSend(adresse, "", "ON")
+    '                'traiter toutes le groupe
+
+
+
+    '            Case "GROUP_OFF"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
+    '                WriteRetourSend(adresse, "", "OFF")
+    '                'traiter toutes le groupe
+
+
+
+    '            Case "CHIME"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sChime
+    '                kar(LIGHTING1.unitcode) = 8
+    '            Case Else
+    '                WriteLog("ERR: Send ARC : Commande invalide : " & commande)
+    '                Exit Sub
+    '        End Select
+    '        kar(LIGHTING1.filler) = 0
+    '        ecrire(kar)
+    '        If _DEBUG Then
+    '            For Each bt As Byte In kar
+    '                temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+    '            Next
+    '            WriteLog("DBG: Send ARC : commande envoyée : " & temp)
+    '        End If
+    '    Catch ex As Exception
+    '        WriteLog("ERR: Send ARC Exception : " & ex.Message)
+    '    End Try
+    'End Sub
+
+    ' ''' <summary>Gestion du protocole ELRO AB400D</summary>
+    ' ''' <param name="adresse">Adresse du type A1</param>
+    ' ''' <param name="commande">commande ON, OFF</param>
+    ' ''' <remarks></remarks>
+    'Private Sub send_ELROAB400D(ByVal adresse As String, ByVal commande As String)
+    '    Try
+    '        Dim kar(LIGHTING1.size) As Byte
+    '        Dim temp As String = ""
+
+    '        If Not (adresse.Length = 2) Then
+    '            WriteLog("ERR: Send ELRO AB400D : Adresse invalide : " & adresse)
+    '            Exit Sub
+    '        End If
+    '        kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
+    '        kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+    '        Select Case commande
+    '            Case "OFF"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+    '                WriteRetourSend(adresse, "", "OFF")
+    '            Case "ON"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+    '                WriteRetourSend(adresse, "", "ON")
+    '            Case Else
+    '                WriteLog("ERR: Send ELRO AB400D : Commande invalide : " & commande)
+    '                Exit Sub
+    '        End Select
+    '        kar(LIGHTING1.packetlength) = LIGHTING1.size
+    '        kar(LIGHTING1.packettype) = LIGHTING1.pType
+    '        kar(LIGHTING1.subtype) = 2  '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls, 6=RisingSun, 7=Philips SBC
+    '        kar(LIGHTING1.seqnbr) = bytSeqNbr
+    '        kar(LIGHTING1.filler) = 0
+    '        ecrire(kar)
+    '        If _DEBUG Then
+    '            For Each bt As Byte In kar
+    '                temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+    '            Next
+    '            WriteLog("DBG: Send ELRO AB400D : commande envoyée : " & temp)
+    '        End If
+    '    Catch ex As Exception
+    '        WriteLog("ERR: Send ELRO AB400D Exception : " & ex.Message)
+    '    End Try
+    'End Sub
+
+    ' ''' <summary>Gestion du protocole WAVEMAN</summary>
+    ' ''' <param name="adresse">Adresse du type A1</param>
+    ' ''' <param name="commande">commande ON, OFF</param>
+    ' ''' <remarks></remarks>
+    'Private Sub send_WAVEMAN(ByVal adresse As String, ByVal commande As String)
+    '    Try
+    '        Dim kar(LIGHTING1.size) As Byte
+    '        Dim temp As String = ""
+
+    '        If Not (adresse.Length = 2) Then
+    '            WriteLog("ERR: Send WAVEMAN : Adresse invalide : " & adresse)
+    '            Exit Sub
+    '        End If
+    '        kar(LIGHTING1.packetlength) = LIGHTING1.size
+    '        kar(LIGHTING1.packettype) = LIGHTING1.pType
+    '        kar(LIGHTING1.subtype) = 3  '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls, 6=RisingSun, 7=Philips SBC
+    '        kar(LIGHTING1.seqnbr) = bytSeqNbr
+    '        kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
+    '        kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+    '        Select Case commande
+    '            Case "OFF"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+    '                WriteRetourSend(adresse, "", "OFF")
+    '            Case "ON"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+    '                WriteRetourSend(adresse, "", "ON")
+    '            Case Else
+    '                WriteLog("ERR: Send WAVEMAN : Commande invalide : " & commande)
+    '                Exit Sub
+    '        End Select
+    '        kar(LIGHTING1.filler) = 0
+    '        ecrire(kar)
+    '        If _DEBUG Then
+    '            For Each bt As Byte In kar
+    '                temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+    '            Next
+    '            WriteLog("DBG: Send WAVEMAN : commande envoyée : " & temp)
+    '        End If
+    '    Catch ex As Exception
+    '        WriteLog("ERR: Send WAVEMAN Exception : " & ex.Message)
+    '    End Try
+    'End Sub
+
+    ' ''' <summary>Gestion du protocole EMW200</summary>
+    ' ''' <param name="adresse">Adresse du type A1 avec A/B/C et 1/2/3/4</param>
+    ' ''' <param name="commande">commande ON, OFF, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
+    ' ''' <remarks></remarks>
+    'Private Sub send_EMW200(ByVal adresse As String, ByVal commande As String)
+    '    Try
+    '        Dim kar(LIGHTING1.size) As Byte
+    '        Dim temp As String = ""
+
+    '        If Not (adresse.Length = 2) Or CInt(adresse.Substring(1, 1)) > 4 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C") Then
+    '            WriteLog("ERR: Send EMW200 : Adresse invalide : " & adresse)
+    '            Exit Sub
+    '        End If
+    '        kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
+    '        kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+    '        Select Case commande
+    '            Case "OFF"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+    '                WriteRetourSend(adresse, "", "OFF")
+    '            Case "ON"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+    '                WriteRetourSend(adresse, "", "ON")
+    '            Case "ALL_LIGHT_ON"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
+    '                WriteRetourSend(adresse, "", "ON")
+    '            Case "ALL_LIGHT_OFF"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
+    '                WriteRetourSend(adresse, "", "OFF")
+    '            Case Else
+    '                WriteLog("ERR: Send EMW200 : Commande invalide : " & commande)
+    '                Exit Sub
+    '        End Select
+    '        kar(LIGHTING1.packetlength) = LIGHTING1.size
+    '        kar(LIGHTING1.packettype) = LIGHTING1.pType
+    '        kar(LIGHTING1.subtype) = 4  '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls, 6=RisingSun, 7=Philips SBC
+    '        kar(LIGHTING1.seqnbr) = bytSeqNbr
+    '        kar(LIGHTING1.filler) = 0
+    '        ecrire(kar)
+    '        If _DEBUG Then
+    '            For Each bt As Byte In kar
+    '                temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+    '            Next
+    '            WriteLog("DBG: Send EMW200 : commande envoyée : " & temp)
+    '        End If
+    '    Catch ex As Exception
+    '        WriteLog("ERR: Send EMW200 Exception : " & ex.Message)
+    '    End Try
+    'End Sub
+
+    ' ''' <summary>Gestion du protocole IMPULS</summary>
+    ' ''' <param name="adresse">Adresse du type A1</param>
+    ' ''' <param name="commande">commande ON, OFF</param>
+    ' ''' <remarks></remarks>
+    'Private Sub send_IMPULS(ByVal adresse As String, ByVal commande As String)
+    '    Try
+    '        Dim kar(LIGHTING1.size) As Byte
+    '        Dim temp As String = ""
+
+    '        If Not (adresse.Length = 2) Then
+    '            WriteLog("ERR: Send IMPULS : Adresse invalide : " & adresse)
+    '            Exit Sub
+    '        End If
+    '        kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
+    '        kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+    '        Select Case commande
+    '            Case "OFF"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+    '                WriteRetourSend(adresse, "", "OFF")
+    '            Case "ON"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+    '                WriteRetourSend(adresse, "", "ON")
+    '            Case Else
+    '                WriteLog("ERR: Send IMPULS : Commande invalide : " & commande)
+    '                Exit Sub
+    '        End Select
+    '        kar(LIGHTING1.packetlength) = LIGHTING1.size
+    '        kar(LIGHTING1.packettype) = LIGHTING1.pType
+    '        kar(LIGHTING1.subtype) = 5  '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls, 6=RisingSun, 7=Philips SBC
+    '        kar(LIGHTING1.seqnbr) = bytSeqNbr
+    '        kar(LIGHTING1.filler) = 0
+    '        ecrire(kar)
+    '        If _DEBUG Then
+    '            For Each bt As Byte In kar
+    '                temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+    '            Next
+    '            WriteLog("DBG: Send IMPULS : commande envoyée : " & temp)
+    '        End If
+    '    Catch ex As Exception
+    '        WriteLog("ERR: Send IMPULS Exception : " & ex.Message)
+    '    End Try
+    'End Sub
+
+    ' ''' <summary>Gestion du protocole Philips</summary>
+    ' ''' <param name="adresse">Adresse du type A1 avec A-P et 1-8</param>
+    ' ''' <param name="commande">commande ON, OFF, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
+    ' ''' <remarks></remarks>
+    'Private Sub send_PHILIPS(ByVal adresse As String, ByVal commande As String)
+    '    Try
+    '        Dim kar(LIGHTING1.size) As Byte
+    '        Dim temp As String = ""
+
+    '        If Not (adresse.Length = 2) Or CInt(adresse.Substring(1, 1)) > 8 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C" And adresse.Substring(0, 1) <> "D" And adresse.Substring(0, 1) <> "E" And adresse.Substring(0, 1) <> "F" And adresse.Substring(0, 1) <> "G" And adresse.Substring(0, 1) <> "H" And adresse.Substring(0, 1) <> "I" And adresse.Substring(0, 1) <> "J" And adresse.Substring(0, 1) <> "K" And adresse.Substring(0, 1) <> "L" And adresse.Substring(0, 1) <> "M" And adresse.Substring(0, 1) <> "N" And adresse.Substring(0, 1) <> "O" And adresse.Substring(0, 1) <> "P") Then
+    '            WriteLog("ERR: Send PHILIPS : Adresse invalide : " & adresse)
+    '            Exit Sub
+    '        End If
+    '        kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
+    '        kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+    '        Select Case commande
+    '            Case "OFF"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sOff
+    '                WriteRetourSend(adresse, "", "OFF")
+    '            Case "ON"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sOn
+    '                WriteRetourSend(adresse, "", "ON")
+    '            Case "ALL_LIGHT_ON"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sAllOn
+    '                WriteRetourSend(adresse, "", "ON")
+    '            Case "ALL_LIGHT_OFF"
+    '                kar(LIGHTING1.cmnd) = LIGHTING1.sAllOff
+    '                WriteRetourSend(adresse, "", "OFF")
+    '            Case Else
+    '                WriteLog("ERR: Send PHILIPS : Commande invalide : " & commande)
+    '                Exit Sub
+    '        End Select
+    '        kar(LIGHTING1.packetlength) = LIGHTING1.size
+    '        kar(LIGHTING1.packettype) = LIGHTING1.pType
+    '        kar(LIGHTING1.subtype) = 7 '0=X10, 1=ARC, 2=ELRO AB400D, 3=Waveman, 4=EMW200, 5=Impuls, 6=RisingSun, 7=Philips SBC
+    '        kar(LIGHTING1.seqnbr) = bytSeqNbr
+    '        kar(LIGHTING1.filler) = 0
+    '        ecrire(kar)
+    '        If _DEBUG Then
+    '            For Each bt As Byte In kar
+    '                temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+    '            Next
+    '            WriteLog("DBG: Send PHILIPS : commande envoyée : " & temp)
+    '        End If
+    '    Catch ex As Exception
+    '        WriteLog("ERR: Send PHILIPS Exception : " & ex.Message)
+    '    End Try
+    'End Sub
 
 #End Region
 
