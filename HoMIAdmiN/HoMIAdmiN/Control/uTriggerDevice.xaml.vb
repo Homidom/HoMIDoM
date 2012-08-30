@@ -10,41 +10,46 @@
     End Sub
 
     Public Sub New(ByVal Action As Classe.EAction, ByVal TriggerId As String)
+        Try
 
-        ' Cet appel est requis par le concepteur.
-        InitializeComponent()
 
-        Mouse.OverrideCursor = Cursors.Wait
+            ' Cet appel est requis par le concepteur.
+            InitializeComponent()
 
-        _Action = Action
-        _TriggerId = TriggerId
+            Mouse.OverrideCursor = Cursors.Wait
 
-        CbDevice.ItemsSource = myservice.GetAllDevices(IdSrv)
-        CbDevice.DisplayMemberPath = "Name"
+            _Action = Action
+            _TriggerId = TriggerId
 
-        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        If _Action = EAction.Nouveau Then 'Nouveau Trigger
+            CbDevice.ItemsSource = myService.GetAllDevices(IdSrv)
+            CbDevice.DisplayMemberPath = "Name"
 
-        Else 'Modifier Trigger
-            Dim x As HoMIDom.HoMIDom.Trigger = myservice.ReturnTriggerById(IdSrv, _TriggerId)
+            ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+            If _Action = EAction.Nouveau Then 'Nouveau Trigger
 
-            If x IsNot Nothing Then
-                TxtNom.Text = x.Nom
-                ChkEnable.IsChecked = x.Enable
-                TxtDescription.Text = x.Description
-                For i As Integer = 0 To CbDevice.Items.Count
-                    If CbDevice.Items(i).ID = x.ConditionDeviceId Then
-                        CbDevice.SelectedIndex = i
-                        CbProperty.Text = x.ConditionDeviceProperty
-                        Exit For
-                    End If
-                Next
-                _ListMacro = x.ListMacro
+            Else 'Modifier Trigger
+                Dim x As HoMIDom.HoMIDom.Trigger = myService.ReturnTriggerById(IdSrv, _TriggerId)
+
+                If x IsNot Nothing Then
+                    TxtNom.Text = x.Nom
+                    ChkEnable.IsChecked = x.Enable
+                    TxtDescription.Text = x.Description
+                    For i As Integer = 0 To CbDevice.Items.Count - 1
+                        If CbDevice.Items(i).ID = x.ConditionDeviceId Then
+                            CbDevice.SelectedIndex = i
+                            CbProperty.Text = x.ConditionDeviceProperty
+                            Exit For
+                        End If
+                    Next
+                    _ListMacro = x.ListMacro
+                End If
+
             End If
-
-        End If
-        RemplirMacro()
-        Mouse.OverrideCursor = Nothing
+            RemplirMacro()
+            Mouse.OverrideCursor = Nothing
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de l'ouverture de la fenêtre triggerdevice, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
