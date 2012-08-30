@@ -45,10 +45,32 @@ Public Class WindowImg
                 stk.Children.Add(lbl)
                 ListBoxImg.Items.Add(stk)
             Catch ex As Exception
-                MessageBox.Show(ex.ToString)
+                MessageBox.Show("Erreur: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
             End Try
         Next
     End Sub
 
 
+    'Private Sub BtnUpload_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnUpload.Click
+    '    Try
+    '        ' Configure open file dialog box
+    '        Dim dlg As New Microsoft.Win32.SaveFileDialog()
+    '        dlg.FileName = "" ' Default file name
+
+    '        ' Show open file dialog box
+    '        Dim result As Boolean = dlg.ShowDialog()
+
+    '        ' Process open file dialog box results
+    '        If result = True Then
+    '            ' Open document
+    '            Dim filename As String = dlg.FileName
+    '            Dim fstream As IO.FileStream = New IO.FileStream(dlg.FileName, IO.FileMode.Open)
+    '            Dim x As New HoMIDom.HoMIDom.FileData(fstream)
+    '            myService.UploadFile(x, dlg.FileNames(0))
+    '            fstream.Close()
+    '        End If
+    '    Catch ex As Exception
+    '        MessageBox.Show("Erreur: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+    '    End Try
+    'End Sub
 End Class

@@ -24,6 +24,7 @@ Namespace HoMIDom
     ''' <remarks></remarks>
     <Serializable()> Public Class Server
         Implements HoMIDom.IHoMIDom 'implémente l'interface dans cette class
+        ' Implements HoMIDom.ICallBack
 
 #Region "Declaration des variables"
 
@@ -264,15 +265,15 @@ Namespace HoMIDom
         Private Sub VerifTimeDevice()
             'on checke si il y a cron à faire
             Try
-                For i As Integer = 0 To _listTriggers.Count() - 1
-                    If _listTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
-                        If _listTriggers.Item(i).Enable = True Then
-                            If _listTriggers.Item(i).Prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss") Then
-                                _listTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
+                For i As Integer = 0 To _ListTriggers.Count() - 1
+                    If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
+                        If _ListTriggers.Item(i).Enable = True Then
+                            If _ListTriggers.Item(i).Prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss") Then
+                                _ListTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
                                 'lancement des macros associées
-                                For j As Integer = 0 To _listTriggers.Item(i).ListMacro.Count - 1
+                                For j As Integer = 0 To _ListTriggers.Item(i).ListMacro.Count - 1
                                     'on cherche la macro et on la lance en testant ces conditions
-                                    Dim _m As Macro = ReturnMacroById(_IdSrv, _listTriggers.Item(i).ListMacro.Item(j))
+                                    Dim _m As Macro = ReturnMacroById(_IdSrv, _ListTriggers.Item(i).ListMacro.Item(j))
                                     If _m IsNot Nothing Then _m.Execute(Me)
                                     _m = Nothing
                                 Next
@@ -536,7 +537,7 @@ Namespace HoMIDom
                                                 x.Image = _MonRepertoire & "\images\Zones\image\defaut.jpg"
                                             End If
                                         Case Else
-                                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
                                 Next
                                 If list.Item(i).HasChildNodes = True Then
@@ -590,23 +591,23 @@ Namespace HoMIDom
                                                 x.Image = _MonRepertoire & "\images\icones\user_128.png"
                                             End If
                                         Case "email"
-                                                x.eMail = list.Item(i).Attributes.Item(j).Value
+                                            x.eMail = list.Item(i).Attributes.Item(j).Value
                                         Case "emailautre"
-                                                x.eMailAutre = list.Item(i).Attributes.Item(j).Value
+                                            x.eMailAutre = list.Item(i).Attributes.Item(j).Value
                                         Case "telfixe"
-                                                x.TelFixe = list.Item(i).Attributes.Item(j).Value
+                                            x.TelFixe = list.Item(i).Attributes.Item(j).Value
                                         Case "telmobile"
-                                                x.TelMobile = list.Item(i).Attributes.Item(j).Value
+                                            x.TelMobile = list.Item(i).Attributes.Item(j).Value
                                         Case "telautre"
-                                                x.TelAutre = list.Item(i).Attributes.Item(j).Value
+                                            x.TelAutre = list.Item(i).Attributes.Item(j).Value
                                         Case "adresse"
-                                                x.Adresse = list.Item(i).Attributes.Item(j).Value
+                                            x.Adresse = list.Item(i).Attributes.Item(j).Value
                                         Case "ville"
-                                                x.Ville = list.Item(i).Attributes.Item(j).Value
+                                            x.Ville = list.Item(i).Attributes.Item(j).Value
                                         Case "codepostal"
-                                                x.CodePostal = list.Item(i).Attributes.Item(j).Value
+                                            x.CodePostal = list.Item(i).Attributes.Item(j).Value
                                         Case Else
-                                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
                                 Next
                                 _ListUsers.Add(x)
@@ -919,7 +920,7 @@ Namespace HoMIDom
                                         Next
                                     End If
                                 End If
-                                _listTriggers.Add(x)
+                                _ListTriggers.Add(x)
                             Next
                         Else
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucun trigger enregistré dans le fichier de config")
@@ -2689,7 +2690,7 @@ Namespace HoMIDom
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version de l'OS: " & My.Computer.Info.OSFullName.ToString & " 32 Bits")
                 End If
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Répertoire utilisé: " & My.Application.Info.DirectoryPath.ToString)
-                
+
                 'Si sauvegarde automatique
                 If _CycleSave > 0 Then _NextTimeSave = Now.AddMinutes(_CycleSave)
 
@@ -3499,18 +3500,18 @@ Namespace HoMIDom
                 For j As Integer = 0 To Actions.Count - 1
                     Select Case Actions.Item(j).TypeAction
                         Case Action.TypeAction.ActionDevice
-                            If Actions.Item(j).IdDevice = Id Then AddLabel(Retour, "Macro: " & NameMacro)
+                            If Actions.Item(j).IdDevice = Id Then AddLabel(Retour, "- La Macro: " & NameMacro)
                         Case Action.TypeAction.ActionIf
                             Dim x As Action.ActionIf = Actions.Item(j)
                             For k As Integer = 0 To x.Conditions.Count - 1
-                                If x.Conditions.Item(k).IdDevice = Id Then AddLabel(Retour, "Macro: " & NameMacro)
+                                If x.Conditions.Item(k).IdDevice = Id Then AddLabel(Retour, "- La Macro: " & NameMacro)
                             Next
                             VerifIdInAction(x.ListTrue, Id, NameMacro, Retour)
                             VerifIdInAction(x.ListFalse, Id, NameMacro, Retour)
                         Case Action.TypeAction.ActionMail
-                            If Actions.Item(j).UserId = Id Then AddLabel(Retour, "Macro: " & NameMacro)
+                            If Actions.Item(j).UserId = Id Then AddLabel(Retour, "- La Macro: " & NameMacro)
                         Case Action.TypeAction.ActionMacro
-                            If Actions.Item(j).IdMacro = Id Then AddLabel(Retour, "Macro: " & NameMacro)
+                            If Actions.Item(j).IdMacro = Id Then AddLabel(Retour, "- La Macro: " & NameMacro)
                     End Select
                 Next
             Catch ex As Exception
@@ -3684,6 +3685,39 @@ Namespace HoMIDom
             End Try
         End Function
 
+        'Public Sub UploadFile(ByVal request As FileData, ByVal namefile As String) Implements IHoMIDom.UploadFile
+        '    Try
+        '        If System.IO.Directory.Exists(_MonRepertoire & "\Images\myimages") = False Then
+        '            System.IO.Directory.CreateDirectory(_MonRepertoire & "\myimages")
+        '            Log(TypeLog.INFO, TypeSource.SERVEUR, "UploadFile", "Création du dossier myimages")
+        '        End If
+
+        '        Dim outstream As FileStream = IO.File.Open(_MonRepertoire & "\images\myimages\" & namefile, FileMode.Create, FileAccess.Write)
+        '        Dim content() As Byte
+        '        ReDim content(0)
+        '        Const bufferLen As Integer = 4096
+        '        Dim buffer(bufferLen) As Byte
+        '        Dim count As Integer = 0
+
+        '        count = request.Stream.Read(buffer, 0, bufferLen)
+
+        '        While (count > 0)
+
+        '            Try
+        '                outstream.Write(buffer, 0, count)
+        '                count = request.Stream.Read(buffer, 0, bufferLen)
+        '            Catch ex As Exception
+        '                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Upload", "Exception : " & ex.Message)
+        '            End Try
+        '        End While
+
+        '        outstream.Close()
+
+        '        request.Stream.Close()
+        '    Catch ex As Exception
+        '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Upload", "Exception : " & ex.Message)
+        '    End Try
+        'End Sub
 #End Region
 
 #Region "Historisation"
@@ -3693,15 +3727,6 @@ Namespace HoMIDom
                     Return Nothing
                     Exit Function
                 End If
-
-                'If Not sqlite_homidom.getconnecte Then
-                '    Dim retour2 As String = sqlite_homidom.connect()
-                '    If retour2.StartsWith("ERR:") Then
-                '        Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "GetAllListHisto", "Erreur lors de la connexion à la BDD Homidom : " & retour2)
-                '    Else
-                '        Log(TypeLog.INFO, TypeSource.SERVEUR, "GetAllListHisto", "Connexion à la BDD Homidom : " & retour2)
-                '    End If
-                'End If
 
                 Dim result As New DataTable
                 result.TableName = "ListHisto"
@@ -3737,16 +3762,6 @@ Namespace HoMIDom
                     Return Nothing
                     Exit Function
                 End If
-
-                'If Not sqlite_homidom.connecte Then
-                '    Dim retour2 As String = sqlite_homidom.connect()
-                '    If retour2.StartsWith("ERR:") Then
-                '        Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "GetHisto", "Erreur lors de la connexion à la BDD Homidom : " & retour2)
-                '    Else
-                '        Log(TypeLog.INFO, TypeSource.SERVEUR, "GetHisto", "Connexion à la BDD Homidom : " & retour2)
-                '    End If
-                '    retour2 = Nothing
-                'End If
 
                 Dim result As New DataTable("HistoDB")
                 Dim retour As String = ""
@@ -5044,7 +5059,6 @@ Namespace HoMIDom
 
             'Déclaration des variables
             Dim myID As String = ""
-
 
             Try
                 'Test si c'est un nouveau device
@@ -7191,8 +7205,16 @@ Namespace HoMIDom
         End Function
 #End Region
 
+#Region "CallBack"
+        'Private ReadOnly Property Callback() As ICallBack
+        '    Get
+        '        Return OperationContext.Current.GetCallbackChannel(Of ICallBack)()
+        '    End Get
+        'End Property
 
 #End Region
+#End Region
+
 
     End Class
 

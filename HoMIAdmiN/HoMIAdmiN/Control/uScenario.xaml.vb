@@ -143,7 +143,7 @@ Public Class uScenario
                 e.Effects = DragDropEffects.None
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString)
+            MessageBox.Show("Erreur: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -228,7 +228,7 @@ Public Class uScenario
 
             x2 = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur Affiche_Label: " & ex.ToString)
+            MessageBox.Show("Erreur Affiche_Label: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 

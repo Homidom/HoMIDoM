@@ -41,7 +41,7 @@
                                     <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/fleche_haut_32.png"  />
                                 </Button>
                                 <Button Name="DownMacro" Template="{DynamicResource GlassButton}" ToolTip="Descendre la macro" Margin="2">
-                                    <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/fleche_bas_32.png" />
+                                    <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
                                 </Button>
                             </StackPanel>
                             <ListBox Height="182" HorizontalAlignment="Left" Margin="2" Name="ListBox1" VerticalAlignment="Top" Width="205" AllowDrop="True" Background="DarkGray" BorderBrush="Black" Foreground="White" ToolTip="Astuce : Pour sélectionner une macro, cliquer à droite de son nom dans le vide."/>

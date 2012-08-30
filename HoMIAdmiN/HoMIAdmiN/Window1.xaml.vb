@@ -967,20 +967,24 @@ Class Window1
 #Region "MainMenu"
 
     Private Sub ShowMainMenu()
-        Dim MainMenu As New uMainMenu
-        MainMenu.Uid = "MAINMENU"
-        AddHandler MainMenu.menu_gerer, AddressOf MainMenuGerer
-        AddHandler MainMenu.menu_delete, AddressOf MainMenuDelete
-        AddHandler MainMenu.menu_edit, AddressOf MainMenuEdit
-        AddHandler MainMenu.menu_create, AddressOf MainMenuNew
-        AddHandler MainMenu.menu_autre, AddressOf MainMenuAutre
-        CanvasRight.Children.Add(MainMenu)
-        WMainMenu = CanvasRight.ActualWidth / 2 - (MainMenu.Width / 2)
-        HMainMenu = CanvasRight.ActualHeight / 2 - (MainMenu.Height / 2)
-        Canvas.SetLeft(MainMenu, WMainMenu)
-        Canvas.SetTop(MainMenu, HMainMenu)
+        Try
+            Dim MainMenu As New uMainMenu
+            MainMenu.Uid = "MAINMENU"
+            AddHandler MainMenu.menu_gerer, AddressOf MainMenuGerer
+            AddHandler MainMenu.menu_delete, AddressOf MainMenuDelete
+            AddHandler MainMenu.menu_edit, AddressOf MainMenuEdit
+            AddHandler MainMenu.menu_create, AddressOf MainMenuNew
+            AddHandler MainMenu.menu_autre, AddressOf MainMenuAutre
+            CanvasRight.Children.Add(MainMenu)
+            WMainMenu = CanvasRight.ActualWidth / 2 - (MainMenu.Width / 2)
+            HMainMenu = CanvasRight.ActualHeight / 2 - (MainMenu.Height / 2)
+            Canvas.SetLeft(MainMenu, WMainMenu)
+            Canvas.SetTop(MainMenu, HMainMenu)
 
-        AnimationApparition(MainMenu)
+            AnimationApparition(MainMenu)
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub ShowMainMenu: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub MainMenuGerer(ByVal index As String)
@@ -1309,162 +1313,166 @@ Class Window1
 #Region "Fenêtres et actions autres"
 
     Private Sub UnloadSelectElmt(ByVal Objet As Object)
-        If Objet.retour = "CANCEL" Then
-            CanvasRight.Children.Clear()
-            ShowMainMenu()
-        Else
-            If IsConnect = False Then
-                Serveur_notconnected_action()
-                Exit Sub
-            End If
+        Try
+            If Objet.retour = "CANCEL" Then
+                CanvasRight.Children.Clear()
+                ShowMainMenu()
+            Else
+                If IsConnect = False Then
+                    Serveur_notconnected_action()
+                    Exit Sub
+                End If
 
-            Select Case _MainMenuAction
-                Case 1 'Edit
-                    Try
-                        If Objet.retour IsNot Nothing Then
+                Select Case _MainMenuAction
+                    Case 1 'Edit
+                        Try
+                            If Objet.retour IsNot Nothing Then
 
-                            Me.Cursor = Cursors.Wait
-                            Select Case Objet.Type
-                                Case 0 'driver
-                                    Dim x As New uDriver(Objet.retour)
-                                    x.Uid = System.Guid.NewGuid.ToString()
-                                    AddHandler x.CloseMe, AddressOf UnloadControl
-                                    CanvasRight.Children.Clear()
-                                    CanvasRight.Children.Add(x)
+                                Me.Cursor = Cursors.Wait
+                                Select Case Objet.Type
+                                    Case 0 'driver
+                                        Dim x As New uDriver(Objet.retour)
+                                        x.Uid = System.Guid.NewGuid.ToString()
+                                        AddHandler x.CloseMe, AddressOf UnloadControl
+                                        CanvasRight.Children.Clear()
+                                        CanvasRight.Children.Add(x)
 
-                                    AnimationApparition(x)
-                                Case 1 'device
-                                    Dim x As New uDevice(Classe.EAction.Modifier, Objet.retour)
-                                    x.Uid = System.Guid.NewGuid.ToString()
-                                    AddHandler x.CloseMe, AddressOf UnloadControl
-                                    CanvasRight.Children.Clear()
-                                    CanvasRight.Children.Add(x)
+                                        AnimationApparition(x)
+                                    Case 1 'device
+                                        Dim x As New uDevice(Classe.EAction.Modifier, Objet.retour)
+                                        x.Uid = System.Guid.NewGuid.ToString()
+                                        AddHandler x.CloseMe, AddressOf UnloadControl
+                                        CanvasRight.Children.Clear()
+                                        CanvasRight.Children.Add(x)
 
-                                    AnimationApparition(x)
-                                Case 2 'zone
-                                    Dim x As New uZone(Classe.EAction.Modifier, Objet.retour)
-                                    x.Uid = System.Guid.NewGuid.ToString()
-                                    AddHandler x.CloseMe, AddressOf UnloadControl
-                                    CanvasRight.Children.Clear()
-                                    CanvasRight.Children.Add(x)
+                                        AnimationApparition(x)
+                                    Case 2 'zone
+                                        Dim x As New uZone(Classe.EAction.Modifier, Objet.retour)
+                                        x.Uid = System.Guid.NewGuid.ToString()
+                                        AddHandler x.CloseMe, AddressOf UnloadControl
+                                        CanvasRight.Children.Clear()
+                                        CanvasRight.Children.Add(x)
 
-                                    AnimationApparition(x)
-                                Case 3 'user
-                                    Dim x As New uUser(Classe.EAction.Modifier, Objet.retour)
-                                    x.Uid = System.Guid.NewGuid.ToString()
-                                    AddHandler x.CloseMe, AddressOf UnloadControl
-                                    CanvasRight.Children.Clear()
-                                    CanvasRight.Children.Add(x)
+                                        AnimationApparition(x)
+                                    Case 3 'user
+                                        Dim x As New uUser(Classe.EAction.Modifier, Objet.retour)
+                                        x.Uid = System.Guid.NewGuid.ToString()
+                                        AddHandler x.CloseMe, AddressOf UnloadControl
+                                        CanvasRight.Children.Clear()
+                                        CanvasRight.Children.Add(x)
 
-                                    AnimationApparition(x)
+                                        AnimationApparition(x)
 
-                                Case 4 'trigger
-                                    Dim _Trig As Trigger = myService.ReturnTriggerById(IdSrv, Objet.retour)
+                                    Case 4 'trigger
+                                        Dim _Trig As Trigger = myService.ReturnTriggerById(IdSrv, Objet.retour)
 
-                                    If _Trig IsNot Nothing Then
-                                        If _Trig.Type = Trigger.TypeTrigger.TIMER Then
-                                            Dim x As New uTriggerTimer(Classe.EAction.Modifier, Objet.retour)
-                                            x.Uid = System.Guid.NewGuid.ToString()
-                                            AddHandler x.CloseMe, AddressOf UnloadControl
-                                            CanvasRight.Children.Clear()
-                                            CanvasRight.Children.Add(x)
+                                        If _Trig IsNot Nothing Then
+                                            If _Trig.Type = Trigger.TypeTrigger.TIMER Then
+                                                Dim x As New uTriggerTimer(Classe.EAction.Modifier, Objet.retour)
+                                                x.Uid = System.Guid.NewGuid.ToString()
+                                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                                CanvasRight.Children.Clear()
+                                                CanvasRight.Children.Add(x)
 
-                                            AnimationApparition(x)
+                                                AnimationApparition(x)
 
-                                        Else
-                                            Dim x As New uTriggerDevice(Classe.EAction.Modifier, Objet.retour)
-                                            x.Uid = System.Guid.NewGuid.ToString()
-                                            AddHandler x.CloseMe, AddressOf UnloadControl
-                                            CanvasRight.Children.Clear()
-                                            CanvasRight.Children.Add(x)
+                                            Else
+                                                Dim x As New uTriggerDevice(Classe.EAction.Modifier, Objet.retour)
+                                                x.Uid = System.Guid.NewGuid.ToString()
+                                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                                CanvasRight.Children.Clear()
+                                                CanvasRight.Children.Add(x)
 
-                                            AnimationApparition(x)
+                                                AnimationApparition(x)
+                                            End If
+                                            _Trig = Nothing
                                         End If
-                                        _Trig = Nothing
-                                    End If
-                                Case 5 'macros
+                                    Case 5 'macros
 
-                                    Dim x As New uMacro(Classe.EAction.Modifier, Objet.retour)
-                                    x.Uid = System.Guid.NewGuid.ToString()
-                                    AddHandler x.CloseMe, AddressOf UnloadControl
-                                    CanvasRight.Children.Clear()
-                                    CanvasRight.Children.Add(x)
+                                        Dim x As New uMacro(Classe.EAction.Modifier, Objet.retour)
+                                        x.Uid = System.Guid.NewGuid.ToString()
+                                        AddHandler x.CloseMe, AddressOf UnloadControl
+                                        CanvasRight.Children.Clear()
+                                        CanvasRight.Children.Add(x)
 
-                                    AnimationApparition(x)
-                                Case 6 'histo
+                                        AnimationApparition(x)
+                                    Case 6 'histo
 
-                            End Select
+                                End Select
 
-                            ShowTreeView()
+                                ShowTreeView()
 
-                            Me.Cursor = Nothing
-                        End If
-                    Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                    End Try
-                Case 2 'Supprimer
-                    Try
-                        If Objet.retour IsNot Nothing Then
-                            Me.Cursor = Cursors.Wait
-                            Dim retour As Integer
-                            Dim _retour As New List(Of String)
-                            _retour = myService.CanDelete(IdSrv, Objet.retour)
+                                Me.Cursor = Nothing
+                            End If
+                        Catch ex As Exception
+                            MessageBox.Show("ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        End Try
+                    Case 2 'Supprimer
+                        Try
+                            If Objet.retour IsNot Nothing Then
+                                Me.Cursor = Cursors.Wait
+                                Dim retour As Integer
+                                Dim _retour As New List(Of String)
+                                _retour = myService.CanDelete(IdSrv, Objet.retour)
 
-                            If _retour(0).StartsWith("ERREUR") Then
-                                MessageBox.Show(_retour(0), "Erreur CanDelete", MessageBoxButton.OK, MessageBoxImage.Error)
-                                Exit Sub
-                            Else
-                                If _retour(0) <> "0" Then
-                                    Dim a As String = "Attention !! Confirmez vous de supprimer cet élément car il est utilisé dans: " & vbCrLf
-                                    For i As Integer = 0 To _retour.Count - 2
-                                        a = a & _retour(i) & vbCrLf
-                                    Next
-                                    If MessageBox.Show(a, "Suppression", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.No Then
-                                        Me.Cursor = Nothing
-                                        Exit Sub
+                                If _retour(0).StartsWith("ERREUR") Then
+                                    MessageBox.Show(_retour(0), "Erreur CanDelete", MessageBoxButton.OK, MessageBoxImage.Error)
+                                    Exit Sub
+                                Else
+                                    If _retour(0) <> "0" Then
+                                        Dim a As String = "Attention !! Confirmez vous de supprimer cet élément car il est utilisé dans: " & vbCrLf
+                                        For i As Integer = 0 To _retour.Count - 2
+                                            a = a & _retour(i) & vbCrLf
+                                        Next
+                                        If MessageBox.Show(a, "Suppression", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.No Then
+                                            Me.Cursor = Nothing
+                                            Exit Sub
+                                        End If
                                     End If
                                 End If
-                            End If
 
 
-                            Select Case Objet.Type
-                                Case 0
-                                Case 1
-                                    retour = myService.DeleteDevice(IdSrv, Objet.retour)
-                                    AffDevice()
-                                Case 2
-                                    retour = myService.DeleteZone(IdSrv, Objet.retour)
-                                    AffZone()
-                                Case 3
-                                    retour = myService.DeleteUser(IdSrv, Objet.retour)
-                                    AffUser()
-                                Case 4
-                                    retour = myService.DeleteTrigger(IdSrv, Objet.retour)
-                                    AffTrigger()
-                                Case 5
-                                    retour = myService.DeleteMacro(IdSrv, Objet.retour)
-                                    AffScene()
-                            End Select
+                                Select Case Objet.Type
+                                    Case 0
+                                    Case 1
+                                        retour = myService.DeleteDevice(IdSrv, Objet.retour)
+                                        AffDevice()
+                                    Case 2
+                                        retour = myService.DeleteZone(IdSrv, Objet.retour)
+                                        AffZone()
+                                    Case 3
+                                        retour = myService.DeleteUser(IdSrv, Objet.retour)
+                                        AffUser()
+                                    Case 4
+                                        retour = myService.DeleteTrigger(IdSrv, Objet.retour)
+                                        AffTrigger()
+                                    Case 5
+                                        retour = myService.DeleteMacro(IdSrv, Objet.retour)
+                                        AffScene()
+                                End Select
 
-                            If retour = -2 Then
-                                MessageBox.Show("Vous ne pouvez pas supprimer cet élément!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                                Exit Sub
+                                If retour = -2 Then
+                                    MessageBox.Show("Vous ne pouvez pas supprimer cet élément!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                    Exit Sub
+                                Else
+                                    FlagChange = True
+                                End If
+
                             Else
-                                FlagChange = True
+                                MessageBox.Show("Veuillez sélectionner un élément à supprimer!")
                             End If
+                        Catch ex As Exception
+                            MessageBox.Show("ERREUR de la suppression: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        End Try
+                        CanvasRight.Children.Clear()
+                        ShowMainMenu()
+                        Me.Cursor = Nothing
+                End Select
 
-                        Else
-                            MessageBox.Show("Veuillez sélectionner un élément à supprimer!")
-                        End If
-                    Catch ex As Exception
-                        MessageBox.Show("ERREUR de la suppression: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                    End Try
-                    CanvasRight.Children.Clear()
-                    ShowMainMenu()
-                    Me.Cursor = Nothing
-            End Select
-
-        End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub UnloadSelectElmt: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub ControlLoaded()
@@ -1563,76 +1571,80 @@ Class Window1
     End Sub
 
     Private Sub BtnGenereGraph_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereGraph.Click
-        If IsConnect = False Then
-            Serveur_notconnected_action()
-            Exit Sub
-        End If
-
-        Dim myPane As New ZedGraph.GraphPane
-        Dim ListColor As New List(Of System.Drawing.Color)
-        Dim idxcolor As Integer = -1
-
-
-        ListColor.Add(System.Drawing.Color.Blue)
-        ListColor.Add(System.Drawing.Color.Red)
-        ListColor.Add(System.Drawing.Color.Green)
-        ListColor.Add(System.Drawing.Color.Yellow)
-        ListColor.Add(System.Drawing.Color.Orange)
-        ListColor.Add(System.Drawing.Color.Violet)
-        ListColor.Add(System.Drawing.Color.DarkBlue)
-        ListColor.Add(System.Drawing.Color.DarkRed)
-        ListColor.Add(System.Drawing.Color.DarkGreen)
-        ListColor.Add(System.Drawing.Color.Turquoise)
-        ListColor.Add(System.Drawing.Color.DarkOrange)
-        ListColor.Add(System.Drawing.Color.DarkViolet)
-
-        For i As Integer = 0 To TreeViewHisto.Items.Count - 1
-            Dim chk As CheckBox = TreeViewHisto.Items(i)
-
-            If chk.IsChecked = True Then
-                Dim _listhisto As New List(Of Historisation)
-                _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
-
-                Dim listpoint As New ZedGraph.PointPairList
-                For j As Integer = 0 To _listhisto.Count - 1
-                    If IsNumeric(_listhisto.Item(j).Value) = False Then
-                        listpoint = Nothing
-                        Exit For
-                    End If
-                    listpoint.Add(New ZedGraph.PointPair(_listhisto.Item(j).DateTime.ToOADate, _listhisto.Item(j).Value))
-                Next
-
-                Dim courbe As ZedGraph.LineItem
-                idxcolor += 1
-                If idxcolor = ListColor.Count - 1 Then idxcolor = 0
-
-                courbe = myPane.AddCurve(chk.Content, listpoint, ListColor(idxcolor), ZedGraph.SymbolType.None)
-                courbe.Line.Width = 1
+        Try
+            If IsConnect = False Then
+                Serveur_notconnected_action()
+                Exit Sub
             End If
 
+            Dim myPane As New ZedGraph.GraphPane
+            Dim ListColor As New List(Of System.Drawing.Color)
+            Dim idxcolor As Integer = -1
 
-            myPane.Chart.Fill = New ZedGraph.Fill(System.Drawing.Color.FromArgb(240, 245, 250), System.Drawing.Color.FromArgb(210, 230, 240), -90) 'fond dégradé
 
-            'Axe X
-            myPane.XAxis.Type = ZedGraph.AxisType.Date
-            myPane.XAxis.Scale.Format = "dd-MM-yy HH:mm" '"dd-MMM-yy HH:mm:ss"
-            myPane.XAxis.MajorGrid.Color = System.Drawing.Color.LightGray
-            myPane.XAxis.MajorGrid.PenWidth = 1
-            myPane.XAxis.MajorGrid.IsVisible = True
+            ListColor.Add(System.Drawing.Color.Blue)
+            ListColor.Add(System.Drawing.Color.Red)
+            ListColor.Add(System.Drawing.Color.Green)
+            ListColor.Add(System.Drawing.Color.Yellow)
+            ListColor.Add(System.Drawing.Color.Orange)
+            ListColor.Add(System.Drawing.Color.Violet)
+            ListColor.Add(System.Drawing.Color.DarkBlue)
+            ListColor.Add(System.Drawing.Color.DarkRed)
+            ListColor.Add(System.Drawing.Color.DarkGreen)
+            ListColor.Add(System.Drawing.Color.Turquoise)
+            ListColor.Add(System.Drawing.Color.DarkOrange)
+            ListColor.Add(System.Drawing.Color.DarkViolet)
 
-            'Axe Y
-            myPane.YAxis.MajorGrid.Color = System.Drawing.Color.LightGray
-            myPane.YAxis.MajorGrid.PenWidth = 1
-            myPane.YAxis.MajorGrid.IsVisible = True
+            For i As Integer = 0 To TreeViewHisto.Items.Count - 1
+                Dim chk As CheckBox = TreeViewHisto.Items(i)
 
-            Dim x As New uHisto(myPane)
-            x.Uid = System.Guid.NewGuid.ToString()
-            x.Width = CanvasRight.ActualWidth - 100
-            x.Height = CanvasRight.ActualHeight - 50
-            AddHandler x.CloseMe, AddressOf UnloadControl
-            CanvasRight.Children.Clear()
-            CanvasRight.Children.Add(x)
-        Next
+                If chk.IsChecked = True Then
+                    Dim _listhisto As New List(Of Historisation)
+                    _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
+
+                    Dim listpoint As New ZedGraph.PointPairList
+                    For j As Integer = 0 To _listhisto.Count - 1
+                        If IsNumeric(_listhisto.Item(j).Value) = False Then
+                            listpoint = Nothing
+                            Exit For
+                        End If
+                        listpoint.Add(New ZedGraph.PointPair(_listhisto.Item(j).DateTime.ToOADate, _listhisto.Item(j).Value))
+                    Next
+
+                    Dim courbe As ZedGraph.LineItem
+                    idxcolor += 1
+                    If idxcolor = ListColor.Count - 1 Then idxcolor = 0
+
+                    courbe = myPane.AddCurve(chk.Content, listpoint, ListColor(idxcolor), ZedGraph.SymbolType.None)
+                    courbe.Line.Width = 1
+                End If
+
+
+                myPane.Chart.Fill = New ZedGraph.Fill(System.Drawing.Color.FromArgb(240, 245, 250), System.Drawing.Color.FromArgb(210, 230, 240), -90) 'fond dégradé
+
+                'Axe X
+                myPane.XAxis.Type = ZedGraph.AxisType.Date
+                myPane.XAxis.Scale.Format = "dd-MM-yy HH:mm" '"dd-MMM-yy HH:mm:ss"
+                myPane.XAxis.MajorGrid.Color = System.Drawing.Color.LightGray
+                myPane.XAxis.MajorGrid.PenWidth = 1
+                myPane.XAxis.MajorGrid.IsVisible = True
+
+                'Axe Y
+                myPane.YAxis.MajorGrid.Color = System.Drawing.Color.LightGray
+                myPane.YAxis.MajorGrid.PenWidth = 1
+                myPane.YAxis.MajorGrid.IsVisible = True
+
+                Dim x As New uHisto(myPane)
+                x.Uid = System.Guid.NewGuid.ToString()
+                x.Width = CanvasRight.ActualWidth - 100
+                x.Height = CanvasRight.ActualHeight - 50
+                AddHandler x.CloseMe, AddressOf UnloadControl
+                CanvasRight.Children.Clear()
+                CanvasRight.Children.Add(x)
+            Next
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub BtnGenereGraph_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnGenereReleve_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereReleve.Click
@@ -1696,10 +1708,9 @@ Class Window1
         End If
     End Sub
 
-    Private Sub Log_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgLog.MouseDown, LOG.MouseDown, LOG.PreviewMouseDown, ImgLog.PreviewMouseDown
-        'RaiseEvent ChangeMenu(sender.tag)
-    End Sub
-
 #End Region
 
 End Class
+
+
+

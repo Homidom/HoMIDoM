@@ -18,6 +18,14 @@ Namespace HoMIDom
 #Region "Serveur"
 
         ''' <summary>
+        ''' Upload un fichier
+        ''' </summary>
+        ''' <param name="request"></param>
+        ''' <param name="namefile">nom du fichier avec son extension</param>
+        ''' <remarks></remarks>
+        '<OperationContract()> Sub UploadFile(ByVal request As FileData, ByVal namefile As String)
+
+        ''' <summary>
         ''' Retourne la liste des voix installées sur le serveur
         ''' </summary>
         ''' <returns></returns>
@@ -1014,4 +1022,5 @@ Namespace HoMIDom
 #End Region
     End Interface
 
+    
 End Namespace

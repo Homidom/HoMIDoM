@@ -76,6 +76,7 @@ Module Service
 
             Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service")
             Dim fileServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
+            'Dim CallBackAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/callback")
             'Dim baseAddress As Uri = New Uri("http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/service")
             'Dim fileServerAddress As Uri = New Uri("http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
 

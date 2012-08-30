@@ -55,14 +55,14 @@ Partial Public Class uLog
                         sensorData = Nothing
                         lineCount += 1
                     Catch ex As Exception
-                        MessageBox.Show("Erreur lors de la ligne du fichier log: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                        MessageBox.Show("Erreur lors de la ligne du fichier log: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
                 End While
             End If
 
             Try
                 If _LigneIgnorees > 0 Then
-                    MessageBox.Show(_LigneIgnorees & " ligne(s) du log ne seront pas prises en compte car elles ne respectent pas le format attendu, veuillez consultez le fichier log sur le serveur pour avoir la totalité")
+                    MessageBox.Show(_LigneIgnorees & " ligne(s) du log ne seront pas prises en compte car elles ne respectent pas le format attendu, veuillez consultez le fichier log sur le serveur pour avoir la totalité", "INFO", MessageBoxButton.OK, MessageBoxImage.Information)
                 End If
 
                 DGW.DataContext = ligneLog
@@ -73,7 +73,7 @@ Partial Public Class uLog
             'Supression du fichier temporaire
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de la récuppération du fichier log: " & ex.ToString)
+            MessageBox.Show("Erreur lors de la récuppération du fichier log: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -84,7 +84,7 @@ Partial Public Class uLog
             col1.Binding = New Binding(String.Format("[{0}]", headerText))
             DGW.Columns.Add(col1)
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString)
+            MessageBox.Show("Erreur Sub CreateGridColumn: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -102,7 +102,7 @@ Partial Public Class uLog
 
             RefreshLog()
         Catch ex As Exception
-            MessageBox.Show("Erreur lors sur la fonction New de uLog: " & ex.ToString)
+            MessageBox.Show("Erreur lors sur la fonction New de uLog: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -112,7 +112,6 @@ Partial Public Class uLog
 
     Private Sub DGW_LoadingRow(ByVal sender As Object, ByVal e As System.Windows.Controls.DataGridRowEventArgs) Handles DGW.LoadingRow
         Try
-            'Dim RowDataContaxt As System.Data.DataRowView = TryCast(e.Row.DataContext, System.Data.DataRowView)
             Dim RowDataContaxt As Dictionary(Of String, Object) = TryCast(e.Row.DataContext, Dictionary(Of String, Object))
             If RowDataContaxt IsNot Nothing Then
                 'If RowDataContaxt.Row.IsNull(1) = False Then
@@ -151,7 +150,7 @@ Partial Public Class uLog
             End If
 
         Catch ex As Exception
-            MsgBox("Err: " & ex.ToString)
+            MessageBox.Show("Erreur DGW_LoadingRow: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
