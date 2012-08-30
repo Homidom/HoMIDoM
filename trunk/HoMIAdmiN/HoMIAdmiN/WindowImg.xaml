@@ -8,6 +8,7 @@
             <ListBox Margin="5"  Name="ListBoxImg" Height="350" Width="450" Background="DarkGray" />
             <Rectangle Height="10" />
             <StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Right">
+                <!--<Button Name="BtnUpload" Height="25" Template="{DynamicResource GlassButton}" Margin="2" Content="Upload" Width="70" Foreground="White" />-->
                 <Button Name="BtnOK" Height="25" Template="{DynamicResource GlassButton}" Margin="2" Content="Ouvrir" Width="70" Foreground="White" />
                 <Button Name="BtnCancel" Height="25" Template="{DynamicResource GlassButton}" Margin="2" Content="Annuler" Width="70" Foreground="White" />
             </StackPanel >

@@ -51,64 +51,68 @@ Public Class uAction
             Return _ObjAction
         End Get
         Set(ByVal value As Object)
-            _ObjAction = value
+            Try
+                _ObjAction = value
 
-            If _ObjAction IsNot Nothing Then
-                Dim i As Action.TypeAction = _ObjAction.TypeAction
-                Select Case i
-                    Case Action.TypeAction.ActionDevice
-                        Dim x As Action.ActionDevice = _ObjAction
-                        Label1.Content = "Device"
-                        If x.IdDevice IsNot Nothing Then
-                            If myService.ReturnDeviceByID(IdSrv, x.IdDevice) IsNot Nothing Then
-                                Label1.Content = myService.ReturnDeviceByID(IdSrv, x.IdDevice).Name
+                If _ObjAction IsNot Nothing Then
+                    Dim i As Action.TypeAction = _ObjAction.TypeAction
+                    Select Case i
+                        Case Action.TypeAction.ActionDevice
+                            Dim x As Action.ActionDevice = _ObjAction
+                            Label1.Content = "Device"
+                            If x.IdDevice IsNot Nothing Then
+                                If myService.ReturnDeviceByID(IdSrv, x.IdDevice) IsNot Nothing Then
+                                    Label1.Content = myService.ReturnDeviceByID(IdSrv, x.IdDevice).Name
+                                End If
                             End If
-                        End If
-                        If x.Method IsNot Nothing Then Label2.Content = x.Method
-                    Case Action.TypeAction.ActionMail
-                        Dim x As Action.ActionMail = _ObjAction
-                        Label1.Content = "Mail "
-                        If x.UserId IsNot Nothing Then Label1.Content = Label1.Content & "{" & myService.ReturnUserById(IdSrv, x.UserId).UserName & "}"
-                        If x.Sujet IsNot Nothing Then Label2.Content = x.Sujet
-                    Case Action.TypeAction.ActionSpeech
-                        Dim x As Action.ActionSpeech = _ObjAction
-                        Label1.Content = "Parler "
-                        If x.Message IsNot Nothing Then Label2.Content = x.Message
-                    Case Action.TypeAction.ActionHttp
-                        Dim x As Action.ActionHttp = _ObjAction
-                        Label1.Content = "Commande Http"
-                        If x.Commande IsNot Nothing Then Label2.Content = x.Commande
-                    Case Action.TypeAction.ActionIf
-                        Dim x As Action.ActionIf = _ObjAction
-                        Label1.Content = "If"
-                        Label2.Content = ""
-                    Case Action.TypeAction.ActionMacro
-                        Dim x As Action.ActionMacro = _ObjAction
-                        Label1.Content = "Macro"
-                        If x.IdMacro IsNot Nothing Then
-                            Dim _macro As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, x.IdMacro)
-                            If _macro IsNot Nothing Then Label2.Content = _macro.Nom
-                        End If
-                    Case Action.TypeAction.ActionLogEvent
-                        Dim x As Action.ActionLogEvent = _ObjAction
-                        Label1.Content = "Log Windows"
-                        If x.Message IsNot Nothing Then Label2.Content = x.Message
-                    Case Action.TypeAction.ActionLogEventHomidom
-                        Dim x As Action.ActionLogEventHomidom = _ObjAction
-                        Label1.Content = "Log Homidom"
-                        If x.Message IsNot Nothing Then Label2.Content = x.Message
-                    Case Action.TypeAction.ActionDOS
-                        Dim x As Action.ActionDos = _ObjAction
-                        Label1.Content = "Commande Dos"
-                        If x.Fichier IsNot Nothing Then Label2.Content = x.Fichier
-                        If x.Arguments IsNot Nothing Then Label2.Content &= " " & x.Arguments
-                    Case Action.TypeAction.ActionVB
-                        Dim x As Action.ActionVB = _ObjAction
-                        Label1.Content = "Script VB"
-                        If x.Label IsNot Nothing Then Label2.Content = x.Label
-                End Select
-                Refresh_Position()
-            End If
+                            If x.Method IsNot Nothing Then Label2.Content = x.Method
+                        Case Action.TypeAction.ActionMail
+                            Dim x As Action.ActionMail = _ObjAction
+                            Label1.Content = "Mail "
+                            If x.UserId IsNot Nothing Then Label1.Content = Label1.Content & "{" & myService.ReturnUserById(IdSrv, x.UserId).UserName & "}"
+                            If x.Sujet IsNot Nothing Then Label2.Content = x.Sujet
+                        Case Action.TypeAction.ActionSpeech
+                            Dim x As Action.ActionSpeech = _ObjAction
+                            Label1.Content = "Parler "
+                            If x.Message IsNot Nothing Then Label2.Content = x.Message
+                        Case Action.TypeAction.ActionHttp
+                            Dim x As Action.ActionHttp = _ObjAction
+                            Label1.Content = "Commande Http"
+                            If x.Commande IsNot Nothing Then Label2.Content = x.Commande
+                        Case Action.TypeAction.ActionIf
+                            Dim x As Action.ActionIf = _ObjAction
+                            Label1.Content = "If"
+                            Label2.Content = ""
+                        Case Action.TypeAction.ActionMacro
+                            Dim x As Action.ActionMacro = _ObjAction
+                            Label1.Content = "Macro"
+                            If x.IdMacro IsNot Nothing Then
+                                Dim _macro As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, x.IdMacro)
+                                If _macro IsNot Nothing Then Label2.Content = _macro.Nom
+                            End If
+                        Case Action.TypeAction.ActionLogEvent
+                            Dim x As Action.ActionLogEvent = _ObjAction
+                            Label1.Content = "Log Windows"
+                            If x.Message IsNot Nothing Then Label2.Content = x.Message
+                        Case Action.TypeAction.ActionLogEventHomidom
+                            Dim x As Action.ActionLogEventHomidom = _ObjAction
+                            Label1.Content = "Log Homidom"
+                            If x.Message IsNot Nothing Then Label2.Content = x.Message
+                        Case Action.TypeAction.ActionDOS
+                            Dim x As Action.ActionDos = _ObjAction
+                            Label1.Content = "Commande Dos"
+                            If x.Fichier IsNot Nothing Then Label2.Content = x.Fichier
+                            If x.Arguments IsNot Nothing Then Label2.Content &= " " & x.Arguments
+                        Case Action.TypeAction.ActionVB
+                            Dim x As Action.ActionVB = _ObjAction
+                            Label1.Content = "Script VB"
+                            If x.Label IsNot Nothing Then Label2.Content = x.Label
+                    End Select
+                    Refresh_Position()
+                End If
+            Catch ex As Exception
+                MessageBox.Show("Erreur Property ObjAction: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
         End Set
     End Property
 

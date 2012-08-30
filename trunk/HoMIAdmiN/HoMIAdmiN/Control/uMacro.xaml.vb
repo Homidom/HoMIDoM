@@ -32,7 +32,7 @@
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Erreur dans uMacro - New: " & ex.ToString, "Erreur", MessageBoxButton.OK)
+            MessageBox.Show("Erreur dans uMacro - New: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 

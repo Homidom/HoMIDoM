@@ -19,7 +19,7 @@ Partial Public Class uDriver
 
             x = myservice.ReturnDriverByID(IdSrv, DriverId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
 
-            If x IsNot Nothing Then 'on a trouvé le device
+            If x IsNot Nothing Then 'on a trouvé le driver
                 'on cache certains champs si leur valeur est @
                 If x.IP_TCP = "@" Then
                     Label4.Visibility = Windows.Visibility.Collapsed
