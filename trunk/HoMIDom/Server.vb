@@ -4807,6 +4807,21 @@ Namespace HoMIDom
                         _ListDevices.Item(i).refresh = 0
                         _ListDevices.Item(i).driver.deletedevice(deviceId)
                         _ListDevices.RemoveAt(i)
+
+
+                        'va vérifier toutes les zones
+                        For j As Integer = 0 To _ListZones.Count - 1
+                            DeleteDeviceToZone(IdSrv, _ListZones.Item(j).ID, deviceId)
+                        Next
+                        'va vérifier tous les triggers
+                        For j As Integer = 0 To _ListTriggers.Count - 1
+                            DeleteDeviceToTrigger(IdSrv, _ListTriggers.Item(j).ID, deviceId)
+                        Next
+                        'va vérifier toutes les actions des macros
+                        For j As Integer = 0 To _ListMacros.Count - 1
+                            DeleteIDToAction(IdSrv, _ListMacros.Item(j).ListActions, deviceId)
+                        Next
+
                         DeleteDevice = 0
                         Exit Function
                     End If
@@ -4817,6 +4832,19 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDevice", "Exception : " & ex.Message)
                 Return -1
             End Try
+        End Function
+
+        Private Function DeviceInZone(ByVal IdDevice As Integer) As Integer
+            Dim retour As Integer = -1
+
+            For i As Integer = 0 To _ListZones.Count - 1
+                For j As Integer = 0 To _ListZones.Item(i).ListElement.Count - 1
+                    If _ListZones.Item(i).ListElement.Item(j).ElementID = IdDevice Then
+                        retour = j
+                        Exit For
+                    End If
+                Next
+            Next
         End Function
 
         ''' <summary>Retourne la liste de tous les devices</summary>
@@ -5859,6 +5887,59 @@ Namespace HoMIDom
 #End Region
 
 #Region "Macro"
+        ''' <summary>supprimer un id dans une liste d'actions</summary>
+        ''' <param name="Actions"></param>
+        ''' <param name="Id"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function DeleteIDToAction(ByVal IdSrv As String, ByVal Actions As ArrayList, ByVal Id As String) As String
+            If VerifIdSrv(IdSrv) = False Then
+                Return 99
+                Exit Function
+            End If
+
+            Dim _retour As String = -1
+            Try
+                For j As Integer = 0 To Actions.Count - 1
+                    Select Case Actions.Item(j).TypeAction
+                        Case Action.TypeAction.ActionDevice
+                            If Actions.Item(j).IdDevice = Id Then
+                                Actions.Item(j).IdDevice = ""
+                                _retour = 0
+                            End If
+
+                        Case Action.TypeAction.ActionIf
+                            Dim x As Action.ActionIf = Actions.Item(j)
+                            For k As Integer = 0 To x.Conditions.Count - 1
+                                If x.Conditions.Item(k).IdDevice = Id Then
+                                    x.Conditions.Item(k).IdDevice = ""
+                                    _retour = 0
+                                End If
+                            Next
+                            DeleteIDToAction(IdSrv, x.ListTrue, Id)
+                            DeleteIDToAction(IdSrv, x.ListFalse, Id)
+
+                        Case Action.TypeAction.ActionMail
+                            If Actions.Item(j).UserId = Id Then
+                                Actions.Item(j).UserId = ""
+                                _retour = 0
+                            End If
+
+                        Case Action.TypeAction.ActionMacro
+                            If Actions.Item(j).IdMacro = Id Then
+                                Actions.Item(j).IdMacro = ""
+                                _retour = 0
+                            End If
+                    End Select
+                Next
+
+                Return _retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDeviceToZone", "Exception : " & ex.Message)
+                Return "-1"
+            End Try
+        End Function
+
         ''' <summary>Supprimer une macro de la config</summary>
         ''' <param name="macroId"></param>
         Public Function DeleteMacro(ByVal IdSrv As String, ByVal macroId As String) As Integer Implements IHoMIDom.DeleteMacro
@@ -5999,6 +6080,33 @@ Namespace HoMIDom
 #End Region
 
 #Region "Trigger"
+        ''' <summary>supprimer un device à une zone</summary>
+        ''' <param name="TriggerId"></param>
+        ''' <param name="DeviceId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function DeleteDeviceToTrigger(ByVal IdSrv As String, ByVal TriggerId As String, ByVal DeviceId As String) As String
+            If VerifIdSrv(IdSrv) = False Then
+                Return 99
+                Exit Function
+            End If
+
+            Dim _Trigger As Trigger = ReturnTriggerById(_IdSrv, TriggerId)
+            Dim _retour As String = -1
+            Try
+                If _Trigger IsNot Nothing Then
+                    If _Trigger.ConditionDeviceId = DeviceId Then
+                        _Trigger.ConditionDeviceId = ""
+                    End If
+                    _retour = 0
+                End If
+                Return _retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDeviceToZone", "Exception : " & ex.Message)
+                Return "-1"
+            End Try
+        End Function
+
         ''' <summary>Supprimer un trigger de la config</summary>
         ''' <param name="triggerId"></param>
         Public Function DeleteTrigger(ByVal IdSrv As String, ByVal triggerId As String) As Integer Implements IHoMIDom.DeleteTrigger
