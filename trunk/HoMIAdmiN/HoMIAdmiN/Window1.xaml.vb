@@ -516,6 +516,15 @@ Class Window1
                 stack.Orientation = Orientation.Horizontal
                 stack.HorizontalAlignment = HorizontalAlignment.Left
                 Dim Graph As Object
+                Dim bmpImage As New BitmapImage()
+                Dim img As New Image
+
+                img.Height = 32
+                img.Width = 32
+                img.Margin = New Thickness(2)
+                If Trim(Drv.Picture) <> "" Then
+                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(Drv.Picture))
+                End If
 
                 If Drv.IsConnect = True Then
                     Dim Rect As New Polygon
@@ -564,6 +573,7 @@ Class Window1
                 End If
                 label.Content = Drv.Nom
 
+                stack.Children.Add(img)
                 stack.Children.Add(Graph)
                 stack.Children.Add(label)
 

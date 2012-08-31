@@ -19,15 +19,15 @@
                 <Label Content="Eléments appartenant à la zone" Foreground="White" ToolTip="Glisser un élément (device, macro ou zone) dans la liste ci-dessous" FontStyle="Oblique" FontWeight="ExtraBold" />
                 <StackPanel Orientation="Horizontal" >
                     <Rectangle Width="10" />
-                    <Label Content="Devices" Foreground="White" Width="200" Margin="3" />
-                    <Label Content="Zones" Foreground="White" Width="200" Margin="3" />
-                    <Label Content="Macros" Foreground="White" Width="200" Margin="3" />
+                    <Label Content="Devices" Foreground="White" Width="250" Margin="3" />
+                    <Label Content="Zones" Foreground="White" Width="250" Margin="3" />
+                    <Label Content="Macros" Foreground="White" Width="250" Margin="3" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
                     <Rectangle Width="10" />
-                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxDevice" Width="200" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
-                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxZone" Width="200" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
-                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxMacro" Width="200" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
+                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxDevice" Width="250" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
+                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxZone" Width="250" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
+                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxMacro" Width="250" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
                 </StackPanel>
                 </StackPanel>
         </Border>

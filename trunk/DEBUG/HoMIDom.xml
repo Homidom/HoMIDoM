@@ -1737,6 +1737,15 @@ HoMIDom
  Template de Classe de type Driver pour le service web
  </summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.UploadFile(System.String,System.Byte[],System.String)">
+	<summary>
+ Upload un fichier
+ </summary>
+	<param name="IdSrv"></param>
+	<param name="byteData"></param>
+	<param name="Namefile"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllVoice">
 	<summary>
  Retourne la liste des voix installées sur le serveur
