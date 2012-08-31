@@ -271,7 +271,7 @@ Imports System.Web.HttpUtility
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
             For i As Integer = 0 To _Server.Devices.Count - 1
-                If _Server.Devices.Item(i).Type = "AUDIO" And _Server.Devices.Item(i).Adresse1 <> "" Then
+                If _Server.Devices.Item(i).Type = "AUDIO" And _Server.Devices.Item(i).Adresse1 <> "" And _Server.Devices.Item(i).Enable = True Then
                     If File.Exists(_Server.Devices.Item(i).Adresse1) Then
                         Dim ProcId As Object = Shell(_Server.Devices.Item(i).Adresse1 & " /hide", AppWinStyle.Hide)
                     End If
