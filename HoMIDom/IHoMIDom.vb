@@ -17,13 +17,16 @@ Namespace HoMIDom
 
 #Region "Serveur"
 
+
         ''' <summary>
         ''' Upload un fichier
         ''' </summary>
-        ''' <param name="request"></param>
-        ''' <param name="namefile">nom du fichier avec son extension</param>
+        ''' <param name="IdSrv"></param>
+        ''' <param name="byteData"></param>
+        ''' <param name="Namefile"></param>
+        ''' <returns></returns>
         ''' <remarks></remarks>
-        '<OperationContract()> Sub UploadFile(ByVal request As FileData, ByVal namefile As String)
+        <OperationContract()> Function UploadFile(ByVal IdSrv As String, ByVal byteData As Byte(), ByVal Namefile As String) As String
 
         ''' <summary>
         ''' Retourne la liste des voix installées sur le serveur

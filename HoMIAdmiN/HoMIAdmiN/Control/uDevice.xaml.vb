@@ -45,8 +45,8 @@ Partial Public Class uDevice
                 ImgDevice.Tag = ""
                 CbType.IsEnabled = False
 
-                'Modification d'un Device
-            Else
+
+            Else 'Modification d'un Device
 
                 FlagNewDevice = False
                 x = myService.ReturnDeviceByID(IdSrv, DeviceId)
@@ -173,42 +173,50 @@ Partial Public Class uDevice
                         Next
                     End If
                 End If
-                End If
+            End If
 
                 'Liste toutes les zones dans la liste
-                For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
-                    Dim ch1 As New CheckBox
-                    Dim ch2 As New CheckBox
+            For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
+                Dim ch1 As New CheckBox
+                Dim ch2 As New CheckBox
+                Dim ImgZone As New Image
 
-                    Dim stk As New StackPanel
-                    stk.Orientation = Orientation.Horizontal
+                Dim stk As New StackPanel
+                stk.Orientation = Orientation.Horizontal
 
-                    ch1.Width = 80
-                    ch1.Content = myService.GetAllZones(IdSrv).Item(i).Name
-                    ch1.ToolTip = ch1.Content
-                    ch1.Uid = myService.GetAllZones(IdSrv).Item(i).ID
-                    AddHandler ch1.Click, AddressOf ChkElement_Click
+                ImgZone.Width = 32
+                ImgZone.Height = 32
+                ImgZone.Margin = New Thickness(2)
+                ImgZone.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.GetAllZones(IdSrv).Item(i).Icon))
 
-                    ch2.Content = "Visible"
-                    ch2.ToolTip = "Visible dans la zone côté client"
-                    ch2.Visibility = Windows.Visibility.Hidden
+                ch1.Width = 80
+                ch1.Content = myService.GetAllZones(IdSrv).Item(i).Name
+                ch1.ToolTip = ch1.Content
+                ch1.Uid = myService.GetAllZones(IdSrv).Item(i).ID
+                AddHandler ch1.Click, AddressOf ChkElement_Click
 
-                    For j As Integer = 0 To myService.GetAllZones(IdSrv).Item(i).ListElement.Count - 1
-                        If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).ElementID = _DeviceId Then
-                            ch1.IsChecked = True
-                            ch2.Visibility = Windows.Visibility.Visible
+                ch2.Content = "Visible"
+                ch2.ToolTip = "Visible dans la zone côté client"
+                ch2.Visibility = Windows.Visibility.Collapsed
 
-                            If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).Visible = True Then
-                                ch2.IsChecked = True
-                            End If
-                            Exit For
+                For j As Integer = 0 To myService.GetAllZones(IdSrv).Item(i).ListElement.Count - 1
+                    If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).ElementID = _DeviceId Then
+
+                        ch1.IsChecked = True
+                        ch2.Visibility = Windows.Visibility.Visible
+
+                        If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).Visible = True Then
+                            ch2.IsChecked = True
                         End If
-                    Next
-
-                    stk.Children.Add(ch1)
-                    stk.Children.Add(ch2)
-                    ListZone.Items.Add(stk)
+                        Exit For
+                    End If
                 Next
+
+                stk.Children.Add(ImgZone)
+                stk.Children.Add(ch1)
+                stk.Children.Add(ch2)
+                ListZone.Items.Add(stk)
+            Next
         Catch Ex As Exception
             MessageBox.Show("Erreur: " & Ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -298,8 +306,8 @@ Partial Public Class uDevice
         Try
             For i As Integer = 0 To ListZone.Items.Count - 1
                 Dim stk As StackPanel = ListZone.Items(i)
-                Dim x1 As CheckBox = stk.Children.Item(0)
-                Dim X2 As CheckBox = stk.Children.Item(1)
+                Dim x1 As CheckBox = stk.Children.Item(1)
+                Dim x2 As CheckBox = stk.Children.Item(2)
                 Dim trv As Boolean = False
 
                 For Each dev In myservice.GetDeviceInZone(IdSrv, x1.Uid)
@@ -489,11 +497,11 @@ Partial Public Class uDevice
 
     Private Sub ChkElement_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs)
         For Each stk As StackPanel In ListZone.Items
-            Dim x As CheckBox = stk.Children.Item(0)
+            Dim x As CheckBox = stk.Children.Item(1)
             If x.IsChecked = True Then
-                stk.Children.Item(1).Visibility = Windows.Visibility.Visible
+                stk.Children.Item(2).Visibility = Windows.Visibility.Visible
             Else
-                stk.Children.Item(1).Visibility = Windows.Visibility.Hidden
+                stk.Children.Item(2).Visibility = Windows.Visibility.Collapsed
             End If
         Next
     End Sub
@@ -681,4 +689,5 @@ Partial Public Class uDevice
             MessageBox.Show("Erreur lors de la génération du relevé: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
 End Class

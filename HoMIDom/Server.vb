@@ -478,6 +478,12 @@ Namespace HoMIDom
                                     _drv.Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
 
                                     _drv.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
+                                    If IO.File.Exists(_MonRepertoire & "\images\drivers\" & _drv.Nom & ".png") Then
+                                        _drv.Picture = _MonRepertoire & "\images\drivers\" & _drv.Nom & ".png"
+                                    End If
+                                    If IO.File.Exists(_MonRepertoire & "\images\drivers\" & _drv.Nom & ".jpg") Then
+                                        _drv.Picture = _MonRepertoire & "\images\drivers\" & _drv.Nom & ".jpg"
+                                    End If
                                     If _drv.Picture = " " Or _drv.Picture = "" Or Not IO.File.Exists(_drv.Picture) Then
                                         _drv.Picture = _MonRepertoire & "\images\icones\Driver_128.png"
                                     End If
@@ -3685,39 +3691,34 @@ Namespace HoMIDom
             End Try
         End Function
 
-        'Public Sub UploadFile(ByVal request As FileData, ByVal namefile As String) Implements IHoMIDom.UploadFile
-        '    Try
-        '        If System.IO.Directory.Exists(_MonRepertoire & "\Images\myimages") = False Then
-        '            System.IO.Directory.CreateDirectory(_MonRepertoire & "\myimages")
-        '            Log(TypeLog.INFO, TypeSource.SERVEUR, "UploadFile", "Création du dossier myimages")
-        '        End If
+        Public Function UploadFile(ByVal IdSrv As String, ByVal byteData As Byte(), ByVal Namefile As String) As String Implements IHoMIDom.UploadFile
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
 
-        '        Dim outstream As FileStream = IO.File.Open(_MonRepertoire & "\images\myimages\" & namefile, FileMode.Create, FileAccess.Write)
-        '        Dim content() As Byte
-        '        ReDim content(0)
-        '        Const bufferLen As Integer = 4096
-        '        Dim buffer(bufferLen) As Byte
-        '        Dim count As Integer = 0
+                If System.IO.Directory.Exists(_MonRepertoire & "\Images\myimages") = False Then
+                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\Images\myimages")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "UploadFile", "Création du dossier myimages")
+                End If
 
-        '        count = request.Stream.Read(buffer, 0, bufferLen)
+                If IO.File.Exists(_MonRepertoire & "\images\myimages\" & Namefile) Then
+                    Return "Le fichier " & Namefile & " existe déjà veuillez le renommer"
+                    Exit Function
+                End If
 
-        '        While (count > 0)
+                Dim oFileStream As System.IO.FileStream
+                oFileStream = New System.IO.FileStream(_MonRepertoire & "\images\myimages\" & Namefile, System.IO.FileMode.Create)
+                oFileStream.Write(byteData, 0, byteData.Length)
+                oFileStream.Close()
 
-        '            Try
-        '                outstream.Write(buffer, 0, count)
-        '                count = request.Stream.Read(buffer, 0, bufferLen)
-        '            Catch ex As Exception
-        '                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Upload", "Exception : " & ex.Message)
-        '            End Try
-        '        End While
-
-        '        outstream.Close()
-
-        '        request.Stream.Close()
-        '    Catch ex As Exception
-        '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Upload", "Exception : " & ex.Message)
-        '    End Try
-        'End Sub
+                Return 0
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Upload", "Exception : " & ex.ToString)
+                Return ex.Message
+            End Try
+        End Function
 #End Region
 
 #Region "Historisation"

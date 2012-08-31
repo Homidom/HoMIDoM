@@ -53,8 +53,8 @@ Partial Public Class uZone
             Next
             For j As Integer = 0 To ListBxZone.Items.Count - 1
                 y = ListBxZone.Items(j)
-                x1 = y.Children.Item(0)
-                x2 = y.Children.Item(1)
+                x1 = y.Children.Item(1)
+                x2 = y.Children.Item(2)
                 If x1.IsChecked = True Then
                     Dim z As New Zone.Element_Zone(x1.Uid, x2.IsChecked)
                     _ListIdSelect.Add(z)
@@ -62,8 +62,8 @@ Partial Public Class uZone
             Next
             For j As Integer = 0 To ListBxMacro.Items.Count - 1
                 y = ListBxMacro.Items(j)
-                x1 = y.Children.Item(0)
-                x2 = y.Children.Item(1)
+                x1 = y.Children.Item(1)
+                x2 = y.Children.Item(2)
                 If x1.IsChecked = True Then
                     Dim z As New Zone.Element_Zone(x1.Uid, x2.IsChecked)
                     _ListIdSelect.Add(z)
@@ -86,97 +86,125 @@ Partial Public Class uZone
         ImgIcon.Tag = ""
         ImgZone.Tag = ""
 
-        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        If Action = EAction.Nouveau Then 'Nouvelle Zone
+        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent
+        Try
 
-        Else 'Modifier zone
-            Dim x As Zone = myservice.ReturnZoneByID(IdSrv, ZoneId)
-            Dim _list As New List(Of Integer)
 
-            _ZoneId = ZoneId
-            If x IsNot Nothing Then
-                TxtName.Text = x.Name
+            If Action = EAction.Nouveau Then 'Nouvelle Zone
 
-                For j As Integer = 0 To x.ListElement.Count - 1
-                    _ListIdSelect.Add(x.ListElement.Item(j))
-                Next
+            Else 'Modifier zone
 
-                If x.Image <> "" And x.Image <> " " Then
-                    ImgZone.Source = ConvertArrayToImage(myservice.GetByteFromImage(x.Image))
-                    ImgZone.Tag = x.Image
-                End If
+                Dim x As Zone = myService.ReturnZoneByID(IdSrv, ZoneId)
+                Dim _list As New List(Of Integer)
 
-                If x.Icon <> "" And x.Icon <> "" And x.Icon <> " " Then
-                    ImgIcon.Source = ConvertArrayToImage(myservice.GetByteFromImage(x.Icon))
-                    ImgIcon.Tag = x.Icon
+                _ZoneId = ZoneId
+                If x IsNot Nothing Then
+                    TxtName.Text = x.Name
+
+                    For j As Integer = 0 To x.ListElement.Count - 1
+                        _ListIdSelect.Add(x.ListElement.Item(j))
+                    Next
+
+                    If x.Image <> "" And x.Image <> " " Then
+                        ImgZone.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Image))
+                        ImgZone.Tag = x.Image
+                    End If
+
+                    If x.Icon <> "" And x.Icon <> "" And x.Icon <> " " Then
+                        ImgIcon.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Icon))
+                        ImgIcon.Tag = x.Icon
+                    End If
                 End If
             End If
-        End If
 
-        For Each Device In myservice.GetAllDevices(IdSrv)
-            Dim stk As New StackPanel
-            stk.Orientation = Orientation.Horizontal
+            'liste les devices
+            For Each Device In myService.GetAllDevices(IdSrv)
+                Dim stk As New StackPanel
+                stk.Orientation = Orientation.Horizontal
 
-            Dim x As New CheckBox
-            x.Content = Device.Name
-            x.ToolTip = Device.Name
-            x.Uid = Device.ID
-            x.Width = 110
-            AddHandler x.Click, AddressOf ChkElement_Click
-            stk.Children.Add(x)
+                'Affiche l'image du device
+                Dim z As New Image
+                z.Width = 32
+                z.Height = 32
+                z.Margin = New Thickness(2)
+                z.Source = ConvertArrayToImage(myService.GetByteFromImage(Device.Picture))
+                stk.Children.Add(z)
 
-            Dim y As New CheckBox
-            y.Content = "Visible"
-            y.ToolTip = "Visible côté client"
-            y.Visibility = Windows.Visibility.Hidden
-            stk.Children.Add(y)
+                'Affiche le device
+                Dim x As New CheckBox
+                x.Content = Device.Name
+                x.ToolTip = Device.Name
+                x.Uid = Device.ID
+                x.Width = 110
+                AddHandler x.Click, AddressOf ChkElement_Click
+                stk.Children.Add(x)
 
-            ListBxDevice.Items.Add(stk)
-        Next
+                'Affiche si le device est visible
+                Dim y As New CheckBox
+                y.Content = "Visible"
+                y.ToolTip = "Visible côté client"
+                y.Visibility = Windows.Visibility.Hidden
+                stk.Children.Add(y)
 
-        For Each Zone In myservice.GetAllZones(IdSrv)
-            Dim stk As New StackPanel
-            stk.Orientation = Orientation.Horizontal
+                ListBxDevice.Items.Add(stk)
+            Next
 
-            Dim x As New CheckBox
-            x.Content = Zone.Name
-            If Zone.Name = TxtName.Text Then x.IsEnabled = False
-            x.ToolTip = Zone.Name
-            x.Uid = Zone.ID
-            x.Width = 110
-            AddHandler x.Click, AddressOf ChkElement_Click
-            stk.Children.Add(x)
+            'liste les zones
+            For Each Zone In myService.GetAllZones(IdSrv)
+                Dim stk As New StackPanel
+                stk.Orientation = Orientation.Horizontal
 
-            Dim y As New CheckBox
-            y.Content = "Visible"
-            y.ToolTip = "Visible côté client"
-            y.Visibility = Windows.Visibility.Hidden
-            stk.Children.Add(y)
+                'Affiche l'image du device
+                Dim z As New Image
+                z.Width = 32
+                z.Height = 32
+                z.Margin = New Thickness(2)
+                z.Source = ConvertArrayToImage(myService.GetByteFromImage(Zone.Icon))
+                stk.Children.Add(z)
 
-            ListBxZone.Items.Add(stk)
-        Next
+                Dim x As New CheckBox
+                x.Content = Zone.Name
+                If Zone.Name = TxtName.Text Then x.IsEnabled = False
+                x.ToolTip = Zone.Name
+                x.Uid = Zone.ID
+                x.Width = 110
+                AddHandler x.Click, AddressOf ChkElement_Click
+                stk.Children.Add(x)
 
-        For Each Macro In myservice.GetAllMacros(IdSrv)
-            Dim stk As New StackPanel
-            stk.Orientation = Orientation.Horizontal
+                Dim y As New CheckBox
+                y.Content = "Visible"
+                y.ToolTip = "Visible côté client"
+                y.Visibility = Windows.Visibility.Hidden
+                stk.Children.Add(y)
 
-            Dim x As New CheckBox
-            x.Content = Macro.Nom
-            x.ToolTip = Macro.Nom
-            x.Uid = Macro.ID
-            x.Width = 110
-            AddHandler x.Click, AddressOf ChkElement_Click
-            stk.Children.Add(x)
+                ListBxZone.Items.Add(stk)
+            Next
 
-            Dim y As New CheckBox
-            y.Content = "Visible"
-            y.ToolTip = "Visible côté client"
-            y.Visibility = Windows.Visibility.Hidden
-            stk.Children.Add(y)
+            For Each Macro In myService.GetAllMacros(IdSrv)
+                Dim stk As New StackPanel
+                stk.Orientation = Orientation.Horizontal
 
-            ListBxMacro.Items.Add(stk)
-        Next
-        RefreshLists()
+                Dim x As New CheckBox
+                x.Content = Macro.Nom
+                x.ToolTip = Macro.Nom
+                x.Uid = Macro.ID
+                x.Width = 110
+                AddHandler x.Click, AddressOf ChkElement_Click
+                stk.Children.Add(x)
+
+                Dim y As New CheckBox
+                y.Content = "Visible"
+                y.ToolTip = "Visible côté client"
+                y.Visibility = Windows.Visibility.Collapsed
+                stk.Children.Add(y)
+
+                ListBxMacro.Items.Add(stk)
+            Next
+
+            RefreshLists()
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub RefreshLists()
@@ -188,8 +216,8 @@ Partial Public Class uZone
 
             For j As Integer = 0 To ListBxDevice.Items.Count - 1
                 stk = ListBxDevice.Items(j)
-                x = stk.Children.Item(0)
-                y = stk.Children.Item(1)
+                x = stk.Children.Item(1)
+                y = stk.Children.Item(2)
 
                 If x.Uid = _ListIdSelect.Item(i).ElementID Then
                     x.IsChecked = True
@@ -205,8 +233,8 @@ Partial Public Class uZone
 
             For j As Integer = 0 To ListBxZone.Items.Count - 1
                 stk = ListBxZone.Items(j)
-                x = stk.Children.Item(0)
-                y = stk.Children.Item(1)
+                x = stk.Children.Item(1)
+                y = stk.Children.Item(2)
                 If x.Uid = _ListIdSelect.Item(i).ElementID Then
                     x.IsChecked = True
                     y.Visibility = Windows.Visibility.Visible
@@ -221,10 +249,11 @@ Partial Public Class uZone
                     y.Visibility = Windows.Visibility.Hidden
                 End If
             Next
+
             For j As Integer = 0 To ListBxMacro.Items.Count - 1
                 stk = ListBxMacro.Items(j)
-                x = stk.Children.Item(0)
-                y = stk.Children.Item(1)
+                x = stk.Children.Item(1)
+                y = stk.Children.Item(2)
                 If x.Uid = _ListIdSelect.Item(i).ElementID Then
                     x.IsChecked = True
                     y.Visibility = Windows.Visibility.Visible
@@ -291,35 +320,27 @@ Partial Public Class uZone
 
 
     Private Sub ChkElement_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs)
+        Dim _dest As ListBox = Nothing
+
         If InStr(UCase(sender.parent.parent.name), "DEVICE") > 0 Then
-            For Each stk As StackPanel In ListBxDevice.Items
-                Dim x As CheckBox = stk.Children.Item(0)
-                If x.IsChecked = True Then
-                    stk.Children.Item(1).Visibility = Windows.Visibility.Visible
-                Else
-                    stk.Children.Item(1).Visibility = Windows.Visibility.Hidden
-                End If
-            Next
+            _dest = ListBxDevice
         End If
+
         If InStr(UCase(sender.parent.parent.name), "ZONE") > 0 Then
-            For Each stk As StackPanel In ListBxZone.Items
-                Dim x As CheckBox = stk.Children.Item(0)
-                If x.IsChecked = True Then
-                    stk.Children.Item(1).Visibility = Windows.Visibility.Visible
-                Else
-                    stk.Children.Item(1).Visibility = Windows.Visibility.Hidden
-                End If
-            Next
+            _dest = ListBxZone
         End If
+
         If InStr(UCase(sender.parent.parent.name), "MACRO") > 0 Then
-            For Each stk As StackPanel In ListBxMacro.Items
-                Dim x As CheckBox = stk.Children.Item(0)
-                If x.IsChecked = True Then
-                    stk.Children.Item(1).Visibility = Windows.Visibility.Visible
-                Else
-                    stk.Children.Item(1).Visibility = Windows.Visibility.Hidden
-                End If
-            Next
+            _dest = ListBxMacro
         End If
+
+        For Each stk As StackPanel In _dest.Items
+            Dim x As CheckBox = stk.Children.Item(1)
+            If x.IsChecked = True Then
+                stk.Children.Item(2).Visibility = Windows.Visibility.Visible
+            Else
+                stk.Children.Item(2).Visibility = Windows.Visibility.Collapsed
+            End If
+        Next
     End Sub
 End Class
