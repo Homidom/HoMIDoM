@@ -1,0 +1,853 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="Trigger">
+    <xs:sequence>
+      <xs:element name="_ConditionDeviceId" nillable="true" type="xs:string" />
+      <xs:element name="_ConditionDeviceProperty" nillable="true" type="xs:string" />
+      <xs:element name="_ConditionTime" nillable="true" type="xs:string" />
+      <xs:element name="_Description" nillable="true" type="xs:string" />
+      <xs:element name="_Enable" type="xs:boolean" />
+      <xs:element name="_ID" nillable="true" type="xs:string" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" name="_ListMacro" nillable="true" type="q1:ArrayOfstring" />
+      <xs:element name="_Nom" nillable="true" type="xs:string" />
+      <xs:element name="_Prochainedateheure" type="xs:dateTime" />
+      <xs:element name="_Type" type="tns:Trigger.TypeTrigger" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Trigger" nillable="true" type="tns:Trigger" />
+  <xs:simpleType name="Trigger.TypeTrigger">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="TIMER" />
+      <xs:enumeration value="DEVICE" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Trigger.TypeTrigger" nillable="true" type="tns:Trigger.TypeTrigger" />
+  <xs:simpleType name="Server.TypeLog">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="INFO">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ACTION">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MESSAGE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="VALEUR_CHANGE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="VALEUR_INCHANGE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">5</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="VALEUR_INCHANGE_PRECISION">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">6</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="VALEUR_INCHANGE_LASTETAT">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">7</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ERREUR">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">8</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ERREUR_CRITIQUE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">9</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DEBUG">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">10</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Server.TypeLog" nillable="true" type="tns:Server.TypeLog" />
+  <xs:simpleType name="Server.TypeSource">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SERVEUR">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SCRIPT">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="TRIGGER">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DEVICE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DRIVER">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">5</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SOAP">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">6</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CLIENT">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">7</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Server.TypeSource" nillable="true" type="tns:Server.TypeSource" />
+  <xs:complexType name="ArrayOfTelecommande.Template">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Telecommande.Template" nillable="true" type="tns:Telecommande.Template" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTelecommande.Template" nillable="true" type="tns:ArrayOfTelecommande.Template" />
+  <xs:complexType name="Telecommande.Template">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Colonne" type="xs:int" />
+      <xs:element minOccurs="0" name="Driver" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Fabricant" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="File" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Ligne" type="xs:int" />
+      <xs:element minOccurs="0" name="Modele" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Telecommande.Template" nillable="true" type="tns:Telecommande.Template" />
+  <xs:simpleType name="Telecommande.TypeEquipement">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="VIDE" />
+      <xs:enumeration value="TV" />
+      <xs:enumeration value="DVD" />
+      <xs:enumeration value="AUDIO" />
+      <xs:enumeration value="BOX" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Telecommande.TypeEquipement" nillable="true" type="tns:Telecommande.TypeEquipement" />
+  <xs:complexType name="ArrayOfTelecommande.Commandes">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Telecommande.Commandes" nillable="true" type="tns:Telecommande.Commandes" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTelecommande.Commandes" nillable="true" type="tns:ArrayOfTelecommande.Commandes" />
+  <xs:complexType name="Telecommande.Commandes">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Column" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Picture" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Repeat" type="xs:int" />
+      <xs:element minOccurs="0" name="Row" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Telecommande.Commandes" nillable="true" type="tns:Telecommande.Commandes" />
+  <xs:complexType name="ArrayOfAudio.RepertoireAudio">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Audio.RepertoireAudio" nillable="true" type="tns:Audio.RepertoireAudio" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAudio.RepertoireAudio" nillable="true" type="tns:ArrayOfAudio.RepertoireAudio" />
+  <xs:complexType name="Audio.RepertoireAudio">
+    <xs:sequence>
+      <xs:element name="_Enable" type="xs:boolean" />
+      <xs:element name="_Repertoire" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Audio.RepertoireAudio" nillable="true" type="tns:Audio.RepertoireAudio" />
+  <xs:complexType name="ArrayOfAudio.ExtensionAudio">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Audio.ExtensionAudio" nillable="true" type="tns:Audio.ExtensionAudio" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAudio.ExtensionAudio" nillable="true" type="tns:ArrayOfAudio.ExtensionAudio" />
+  <xs:complexType name="Audio.ExtensionAudio">
+    <xs:sequence>
+      <xs:element name="_Enable" type="xs:boolean" />
+      <xs:element name="_Extension" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Audio.ExtensionAudio" nillable="true" type="tns:Audio.ExtensionAudio" />
+  <xs:complexType name="Users.User">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Adresse" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CodePostal" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Image" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Nom" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NumberIdentification" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Prenom" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Profil" type="tns:Users.TypeProfil" />
+      <xs:element minOccurs="0" name="TelAutre" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TelFixe" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TelMobile" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Ville" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="eMail" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="eMailAutre" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Users.User" nillable="true" type="tns:Users.User" />
+  <xs:simpleType name="Users.TypeProfil">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="invite" />
+      <xs:enumeration value="user" />
+      <xs:enumeration value="admin" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Users.TypeProfil" nillable="true" type="tns:Users.TypeProfil" />
+  <xs:complexType name="ArrayOfUsers.User">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Users.User" nillable="true" type="tns:Users.User" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfUsers.User" nillable="true" type="tns:ArrayOfUsers.User" />
+  <xs:complexType name="ArrayOfTemplateDevice">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TemplateDevice" nillable="true" type="tns:TemplateDevice" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTemplateDevice" nillable="true" type="tns:ArrayOfTemplateDevice" />
+  <xs:complexType name="TemplateDevice">
+    <xs:sequence>
+      <xs:element name="Commandes" nillable="true" type="tns:ArrayOfTelecommande.Commandes" />
+      <xs:element name="_Adresse1" nillable="true" type="xs:string" />
+      <xs:element name="_Adresse2" nillable="true" type="xs:string" />
+      <xs:element name="_ConditionActuel" nillable="true" type="xs:string" />
+      <xs:element name="_ConditionJ1" nillable="true" type="xs:string" />
+      <xs:element name="_ConditionJ2" nillable="true" type="xs:string" />
+      <xs:element name="_ConditionJ3" nillable="true" type="xs:string" />
+      <xs:element name="_ConditionToday" nillable="true" type="xs:string" />
+      <xs:element name="_Correction" type="xs:double" />
+      <xs:element name="_DateCreated" type="xs:dateTime" />
+      <xs:element name="_Description" nillable="true" type="xs:string" />
+      <xs:element name="_DeviceAction" nillable="true" type="tns:ArrayOfDeviceAction" />
+      <xs:element name="_DriverId" nillable="true" type="xs:string" />
+      <xs:element name="_Enable" type="xs:boolean" />
+      <xs:element name="_Formatage" nillable="true" type="xs:string" />
+      <xs:element name="_HumActuel" nillable="true" type="xs:string" />
+      <xs:element name="_ID" nillable="true" type="xs:string" />
+      <xs:element name="_IconActuel" nillable="true" type="xs:string" />
+      <xs:element name="_IconJ1" nillable="true" type="xs:string" />
+      <xs:element name="_IconJ2" nillable="true" type="xs:string" />
+      <xs:element name="_IconJ3" nillable="true" type="xs:string" />
+      <xs:element name="_IconToday" nillable="true" type="xs:string" />
+      <xs:element name="_JourJ1" nillable="true" type="xs:string" />
+      <xs:element name="_JourJ2" nillable="true" type="xs:string" />
+      <xs:element name="_JourJ3" nillable="true" type="xs:string" />
+      <xs:element name="_JourToday" nillable="true" type="xs:string" />
+      <xs:element name="_LastChange" type="xs:dateTime" />
+      <xs:element name="_LastChangeDuree" type="xs:int" />
+      <xs:element name="_LastEtat" type="xs:boolean" />
+      <xs:element name="_ListCommandPlus" nillable="true" type="tns:ArrayOfDevice.DeviceCommande" />
+      <xs:element name="_MaxJ1" nillable="true" type="xs:string" />
+      <xs:element name="_MaxJ2" nillable="true" type="xs:string" />
+      <xs:element name="_MaxJ3" nillable="true" type="xs:string" />
+      <xs:element name="_MaxToday" nillable="true" type="xs:string" />
+      <xs:element name="_MinJ1" nillable="true" type="xs:string" />
+      <xs:element name="_MinJ2" nillable="true" type="xs:string" />
+      <xs:element name="_MinJ3" nillable="true" type="xs:string" />
+      <xs:element name="_MinToday" nillable="true" type="xs:string" />
+      <xs:element name="_Modele" nillable="true" type="xs:string" />
+      <xs:element name="_Name" nillable="true" type="xs:string" />
+      <xs:element name="_Picture" nillable="true" type="xs:string" />
+      <xs:element name="_Precision" type="xs:double" />
+      <xs:element name="_Refresh" type="xs:double" />
+      <xs:element name="_Solo" type="xs:boolean" />
+      <xs:element name="_TempActuel" nillable="true" type="xs:string" />
+      <xs:element name="_Type" type="tns:Device.ListeDevices" />
+      <xs:element name="_Value" nillable="true" type="xs:anyType" />
+      <xs:element name="_ValueDef" type="xs:double" />
+      <xs:element name="_ValueLast" type="xs:double" />
+      <xs:element name="_ValueMax" type="xs:double" />
+      <xs:element name="_ValueMin" type="xs:double" />
+      <xs:element name="_VentActuel" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TemplateDevice" nillable="true" type="tns:TemplateDevice" />
+  <xs:complexType name="ArrayOfDeviceAction">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DeviceAction" nillable="true" type="tns:DeviceAction" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDeviceAction" nillable="true" type="tns:ArrayOfDeviceAction" />
+  <xs:complexType name="DeviceAction">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Nom" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Parametres" nillable="true" type="tns:ArrayOfDeviceAction.Parametre" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DeviceAction" nillable="true" type="tns:DeviceAction" />
+  <xs:complexType name="ArrayOfDeviceAction.Parametre">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DeviceAction.Parametre" nillable="true" type="tns:DeviceAction.Parametre" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDeviceAction.Parametre" nillable="true" type="tns:ArrayOfDeviceAction.Parametre" />
+  <xs:complexType name="DeviceAction.Parametre">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Nom" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Value" nillable="true" type="xs:anyType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DeviceAction.Parametre" nillable="true" type="tns:DeviceAction.Parametre" />
+  <xs:complexType name="ArrayOfDevice.DeviceCommande">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Device.DeviceCommande" nillable="true" type="tns:Device.DeviceCommande" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDevice.DeviceCommande" nillable="true" type="tns:ArrayOfDevice.DeviceCommande" />
+  <xs:complexType name="Device.DeviceCommande">
+    <xs:sequence>
+      <xs:element name="_CountParam" type="xs:int" />
+      <xs:element name="_DescriptionCommand" nillable="true" type="xs:string" />
+      <xs:element name="_NameCommand" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Device.DeviceCommande" nillable="true" type="tns:Device.DeviceCommande" />
+  <xs:simpleType name="Device.ListeDevices">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="APPAREIL">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="AUDIO">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BAROMETRE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BATTERIE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="COMPTEUR">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">5</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CONTACT">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">6</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DETECTEUR">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">7</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DIRECTIONVENT">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">8</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ENERGIEINSTANTANEE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">9</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ENERGIETOTALE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">10</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="FREEBOX">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">11</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="GENERIQUEBOOLEEN">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">12</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="GENERIQUESTRING">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">13</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="GENERIQUEVALUE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">14</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="HUMIDITE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">15</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="LAMPE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">16</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="METEO">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">17</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MULTIMEDIA">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">18</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PLUIECOURANT">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">19</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PLUIETOTAL">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">20</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SWITCH">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">21</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="TELECOMMANDE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">22</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="TEMPERATURE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">23</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="TEMPERATURECONSIGNE">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">24</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="UV">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">25</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="VITESSEVENT">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">26</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="VOLET">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">27</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Device.ListeDevices" nillable="true" type="tns:Device.ListeDevices" />
+  <xs:complexType name="ArrayOfTemplateDriver">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TemplateDriver" nillable="true" type="tns:TemplateDriver" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTemplateDriver" nillable="true" type="tns:ArrayOfTemplateDriver" />
+  <xs:complexType name="TemplateDriver">
+    <xs:sequence>
+      <xs:element name="_Com" nillable="true" type="xs:string" />
+      <xs:element name="_Description" nillable="true" type="xs:string" />
+      <xs:element name="_DeviceAction" nillable="true" type="tns:ArrayOfDeviceAction" />
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" name="_DeviceSupport" nillable="true" type="q2:ArrayOfstring" />
+      <xs:element name="_Enable" type="xs:boolean" />
+      <xs:element name="_ID" nillable="true" type="xs:string" />
+      <xs:element name="_IP_TCP" nillable="true" type="xs:string" />
+      <xs:element name="_IP_UDP" nillable="true" type="xs:string" />
+      <xs:element name="_IsConnect" type="xs:boolean" />
+      <xs:element name="_LabelsDevice" nillable="true" type="tns:ArrayOfDriver.cLabels" />
+      <xs:element name="_LabelsDriver" nillable="true" type="tns:ArrayOfDriver.cLabels" />
+      <xs:element name="_Modele" nillable="true" type="xs:string" />
+      <xs:element name="_Nom" nillable="true" type="xs:string" />
+      <xs:element name="_Parametres" nillable="true" type="tns:ArrayOfDriver.Parametre" />
+      <xs:element name="_Picture" nillable="true" type="xs:string" />
+      <xs:element name="_Port_TCP" nillable="true" type="xs:string" />
+      <xs:element name="_Port_UDP" nillable="true" type="xs:string" />
+      <xs:element name="_Protocol" nillable="true" type="xs:string" />
+      <xs:element name="_Refresh" type="xs:int" />
+      <xs:element name="_Startauto" type="xs:boolean" />
+      <xs:element name="_Version" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TemplateDriver" nillable="true" type="tns:TemplateDriver" />
+  <xs:complexType name="ArrayOfDriver.cLabels">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Driver.cLabels" nillable="true" type="tns:Driver.cLabels" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDriver.cLabels" nillable="true" type="tns:ArrayOfDriver.cLabels" />
+  <xs:complexType name="Driver.cLabels">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="LabelChamp" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NomChamp" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Parametre" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Tooltip" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Driver.cLabels" nillable="true" type="tns:Driver.cLabels" />
+  <xs:complexType name="ArrayOfDriver.Parametre">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Driver.Parametre" nillable="true" type="tns:Driver.Parametre" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDriver.Parametre" nillable="true" type="tns:ArrayOfDriver.Parametre" />
+  <xs:complexType name="Driver.Parametre">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Nom" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Valeur" nillable="true" type="xs:anyType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Driver.Parametre" nillable="true" type="tns:Driver.Parametre" />
+  <xs:complexType name="ArrayOfZone">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Zone" nillable="true" type="tns:Zone" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfZone" nillable="true" type="tns:ArrayOfZone" />
+  <xs:complexType name="Zone">
+    <xs:sequence>
+      <xs:element name="_Icon" nillable="true" type="xs:string" />
+      <xs:element name="_Id" nillable="true" type="xs:string" />
+      <xs:element name="_Image" nillable="true" type="xs:string" />
+      <xs:element name="_ListElement" nillable="true" type="tns:ArrayOfZone.Element_Zone" />
+      <xs:element name="_Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Zone" nillable="true" type="tns:Zone" />
+  <xs:complexType name="ArrayOfZone.Element_Zone">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Zone.Element_Zone" nillable="true" type="tns:Zone.Element_Zone" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfZone.Element_Zone" nillable="true" type="tns:ArrayOfZone.Element_Zone" />
+  <xs:complexType name="Zone.Element_Zone">
+    <xs:sequence>
+      <xs:element name="_ElementID" nillable="true" type="xs:string" />
+      <xs:element name="_Visible" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Zone.Element_Zone" nillable="true" type="tns:Zone.Element_Zone" />
+  <xs:complexType name="Action.ActionSpeech">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Timing" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Action.ActionSpeech" nillable="true" type="tns:Action.ActionSpeech" />
+  <xs:complexType name="Action.ActionDos">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Arguments" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Fichier" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Timing" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Action.ActionDos" nillable="true" type="tns:Action.ActionDos" />
+  <xs:complexType name="Macro">
+    <xs:sequence>
+      <xs:element name="_Description" nillable="true" type="xs:string" />
+      <xs:element name="_Enable" type="xs:boolean" />
+      <xs:element name="_ID" nillable="true" type="xs:string" />
+      <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" name="_ListActions" nillable="true" type="q3:ArrayOfanyType" />
+      <xs:element name="_Nom" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Macro" nillable="true" type="tns:Macro" />
+  <xs:complexType name="Action.ActionLogEvent">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Eventid" type="xs:int" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Timing" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Type" type="tns:Server.TypeEventLog" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Action.ActionLogEvent" nillable="true" type="tns:Action.ActionLogEvent" />
+  <xs:simpleType name="Server.TypeEventLog">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ERREUR">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="WARNING">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="INFORMATION">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Server.TypeEventLog" nillable="true" type="tns:Server.TypeEventLog" />
+  <xs:complexType name="Action.ActionLogEventHomidom">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Fonction" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Timing" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Type" type="tns:Server.TypeLog" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Action.ActionLogEventHomidom" nillable="true" type="tns:Action.ActionLogEventHomidom" />
+  <xs:complexType name="Action.ActionHttp">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Commande" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Timing" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Action.ActionHttp" nillable="true" type="tns:Action.ActionHttp" />
+  <xs:complexType name="Action.ActionMacro">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IdMacro" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Timing" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Action.ActionMacro" nillable="true" type="tns:Action.ActionMacro" />
+  <xs:complexType name="Action.ActionIf">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Conditions" nillable="true" type="tns:ArrayOfAction.Condition" />
+      <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ListFalse" nillable="true" type="q4:ArrayOfanyType" />
+      <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ListTrue" nillable="true" type="q5:ArrayOfanyType" />
+      <xs:element minOccurs="0" name="Timing" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Action.ActionIf" nillable="true" type="tns:Action.ActionIf" />
+  <xs:complexType name="ArrayOfAction.Condition">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Action.Condition" nillable="true" type="tns:Action.Condition" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAction.Condition" nillable="true" type="tns:ArrayOfAction.Condition" />
+  <xs:complexType name="Action.Condition">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Condition" type="tns:Action.TypeSigne" />
+      <xs:element minOccurs="0" name="DateTime" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IdDevice" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Operateur" type="tns:Action.TypeOperateur" />
+      <xs:element minOccurs="0" name="PropertyDevice" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Type" type="tns:Action.TypeCondition" />
+      <xs:element minOccurs="0" name="Value" nillable="true" type="xs:anyType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Action.Condition" nillable="true" type="tns:Action.Condition" />
+  <xs:simpleType name="Action.TypeSigne">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Egal" />
+      <xs:enumeration value="Inferieur" />
+      <xs:enumeration value="InferieurEgal" />
+      <xs:enumeration value="Superieur" />
+      <xs:enumeration value="SuperieurEgal" />
+      <xs:enumeration value="Different" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Action.TypeSigne" nillable="true" type="tns:Action.TypeSigne" />
+  <xs:simpleType name="Action.TypeOperateur">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NONE" />
+      <xs:enumeration value="AND" />
+      <xs:enumeration value="OR" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Action.TypeOperateur" nillable="true" type="tns:Action.TypeOperateur" />
+  <xs:simpleType name="Action.TypeCondition">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="DateTime" />
+      <xs:enumeration value="Device" />
+      <xs:enumeration value="Parenthese" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Action.TypeCondition" nillable="true" type="tns:Action.TypeCondition" />
+  <xs:complexType name="Action.ActionMail">
+    <xs:sequence>
+      <xs:element name="_Message" nillable="true" type="xs:string" />
+      <xs:element name="_Sujet" nillable="true" type="xs:string" />
+      <xs:element name="_Timing" type="xs:dateTime" />
+      <xs:element name="_UserId" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Action.ActionMail" nillable="true" type="tns:Action.ActionMail" />
+  <xs:complexType name="Action.ActionDevice">
+    <xs:sequence>
+      <xs:element name="_IdDevice" nillable="true" type="xs:string" />
+      <xs:element name="_Method" nillable="true" type="xs:string" />
+      <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" name="_Parametres" nillable="true" type="q6:ArrayOfanyType" />
+      <xs:element name="_Timing" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Action.ActionDevice" nillable="true" type="tns:Action.ActionDevice" />
+  <xs:complexType name="Action.ActionVB">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Label" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Script" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Timing" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Action.ActionVB" nillable="true" type="tns:Action.ActionVB" />
+  <xs:complexType name="ArrayOfMacro">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Macro" nillable="true" type="tns:Macro" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMacro" nillable="true" type="tns:ArrayOfMacro" />
+  <xs:complexType name="ArrayOfTrigger">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Trigger" nillable="true" type="tns:Trigger" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTrigger" nillable="true" type="tns:ArrayOfTrigger" />
+  <xs:complexType name="ArrayOfImageFile">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ImageFile" nillable="true" type="tns:ImageFile" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfImageFile" nillable="true" type="tns:ArrayOfImageFile" />
+  <xs:complexType name="ImageFile">
+    <xs:sequence>
+      <xs:element name="_FileName" nillable="true" type="xs:string" />
+      <xs:element name="_Path" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ImageFile" nillable="true" type="tns:ImageFile" />
+  <xs:complexType name="ArrayOfHistorisation">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Historisation" nillable="true" type="tns:Historisation" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfHistorisation" nillable="true" type="tns:ArrayOfHistorisation" />
+  <xs:complexType name="Historisation">
+    <xs:sequence>
+      <xs:element name="_datetime" type="xs:dateTime" />
+      <xs:element name="_iddevice" nillable="true" type="xs:string" />
+      <xs:element name="_nom" nillable="true" type="xs:string" />
+      <xs:element name="_select" type="xs:boolean" />
+      <xs:element name="_value" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Historisation" nillable="true" type="tns:Historisation" />
+</xs:schema>

@@ -1,0 +1,1615 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://HoMIDom/" elementFormDefault="qualified" targetNamespace="http://HoMIDom/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" />
+  <xs:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:element name="ReturnTriggerById">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="TriggerId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnTriggerByIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnTriggerByIdResult" nillable="true" type="q1:Trigger" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteTrigger">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="triggerId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteTriggerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteTriggerResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveTrigger">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="triggerId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="nom" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="enable" type="xs:boolean" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="TypeTrigger" type="q2:Trigger.TypeTrigger" />
+        <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="conditiontimer" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="deviceid" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="deviceproperty" nillable="true" type="xs:string" />
+        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="macro" nillable="true" type="q3:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveTriggerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SaveTriggerResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ListMethod">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeviceId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ListMethodResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ListMethodResult" nillable="true" type="q4:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Get4Log">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Get4LogResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Get4LogResult" nillable="true" type="q5:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTypeLogEnable">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTypeLogEnableResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetTypeLogEnableResult" nillable="true" type="q6:ArrayOfboolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetTypeLogEnable">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ListTypeLogEnable" nillable="true" type="q7:ArrayOfboolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetTypeLogEnableResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetMaxMonthLog">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="Month" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetMaxMonthLogResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetMaxMonthLog">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetMaxMonthLogResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetMaxMonthLogResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Log">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="TypLog" type="q8:Server.TypeLog" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Source" type="q9:Server.TypeSource" />
+        <xs:element minOccurs="0" name="Fonction" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LogResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnLog">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="Requete" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnLogResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ReturnLogResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetMaxFileSizeLog">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="Value" type="xs:long" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetMaxFileSizeLogResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetMaxFileSizeLog">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetMaxFileSizeLogResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetMaxFileSizeLogResult" type="xs:long" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSMTPServeur">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSMTPServeurResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetSMTPServeurResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetSMTPServeur">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetSMTPServeurResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSMTPLogin">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSMTPLoginResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetSMTPLoginResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetSMTPLogin">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetSMTPLoginResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSMTPPassword">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSMTPPasswordResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetSMTPPasswordResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetSMTPPassword">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetSMTPPasswordResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSMTPMailServeur">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSMTPMailServeurResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetSMTPMailServeurResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetSMTPMailServeur">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetSMTPMailServeurResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetListOfTemplate">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetListOfTemplateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetListOfTemplateResult" nillable="true" type="q10:ArrayOfTelecommande.Template" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateNewTemplate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="Fabricant" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Modele" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Driver" nillable="true" type="xs:string" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Type" type="q11:Telecommande.TypeEquipement" />
+        <xs:element minOccurs="0" name="Ligne" type="xs:int" />
+        <xs:element minOccurs="0" name="Colonne" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateNewTemplateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CreateNewTemplateResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartLearning">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DriverId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartLearningResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="StartLearningResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveTemplate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Template" nillable="true" type="xs:string" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Commandes" nillable="true" type="q12:ArrayOfTelecommande.Commandes" />
+        <xs:element minOccurs="0" name="Ligne" type="xs:int" />
+        <xs:element minOccurs="0" name="Colonne" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveTemplateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SaveTemplateResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TelecommandeSendCommand">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IdDevice" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Commande" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TelecommandeSendCommandResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="TelecommandeSendCommandResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EnableRepertoireAudio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NomRepertoire" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Enable" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EnableRepertoireAudioResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="EnableRepertoireAudioResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllRepertoiresAudio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllRepertoiresAudioResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllRepertoiresAudioResult" nillable="true" type="q13:ArrayOfAudio.RepertoireAudio" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllExtensionsAudio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllExtensionsAudioResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllExtensionsAudioResult" nillable="true" type="q14:ArrayOfAudio.ExtensionAudio" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteUser">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteUserResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteUserResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VerifLogin">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VerifLoginResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="VerifLoginResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangePassword">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="OldPassword" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ConfirmNewPassword" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangePasswordResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ChangePasswordResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnUserByUsername">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnUserByUsernameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnUserByUsernameResult" nillable="true" type="q15:Users.User" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllUsers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllUsersResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllUsersResult" nillable="true" type="q16:ArrayOfUsers.User" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnUserById">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="UserId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnUserByIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnUserByIdResult" nillable="true" type="q17:Users.User" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveUser">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Profil" type="q18:Users.TypeProfil" />
+        <xs:element minOccurs="0" name="Nom" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Prenom" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NumberIdentification" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Image" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="eMail" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="eMailAutre" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="TelFixe" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="TelMobile" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="TelAutre" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Adresse" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Ville" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CodePostal" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveUserResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SaveUserResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllDevices">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllDevicesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllDevicesResult" nillable="true" type="q19:ArrayOfTemplateDevice" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExecuteDeviceCommand">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeviceId" nillable="true" type="xs:string" />
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Action" nillable="true" type="q20:DeviceAction" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExecuteDeviceCommandResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteDevice">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="deviceId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteDeviceResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteDeviceResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteDeviceCommandIR">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="deviceId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CmdName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteDeviceCommandIRResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteDeviceCommandIRResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnDeviceByID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Id" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnDeviceByIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnDeviceByIDResult" nillable="true" type="q21:TemplateDevice" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnDeviceByAdresse1TypeDriver">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeviceAdresse" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeviceType" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeviceDriver" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Enable" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnDeviceByAdresse1TypeDriverResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q22="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ReturnDeviceByAdresse1TypeDriverResult" nillable="true" type="q22:ArrayOfanyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveDevice">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="deviceId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="address1" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="enable" type="xs:boolean" />
+        <xs:element minOccurs="0" name="solo" type="xs:boolean" />
+        <xs:element minOccurs="0" name="driverid" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="type" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="refresh" type="xs:int" />
+        <xs:element minOccurs="0" name="address2" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="image" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="modele" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="lastchangeduree" type="xs:int" />
+        <xs:element minOccurs="0" name="lastEtat" type="xs:boolean" />
+        <xs:element minOccurs="0" name="correction" type="xs:double" />
+        <xs:element minOccurs="0" name="formatage" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="precision" type="xs:double" />
+        <xs:element minOccurs="0" name="valuemax" type="xs:double" />
+        <xs:element minOccurs="0" name="valuemin" type="xs:double" />
+        <xs:element minOccurs="0" name="valuedef" type="xs:double" />
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Commandes" nillable="true" type="q23:ArrayOfTelecommande.Commandes" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveDeviceResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SaveDeviceResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveDeviceCommandIR">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="deviceId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CmdName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CmdData" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CmdRepeat" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveDeviceCommandIRResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SaveDeviceCommandIRResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartIrLearning">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartIrLearningResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="StartIrLearningResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VerifChamp">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="Idsrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DriverId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Champ" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Value" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VerifChampResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="VerifChampResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllDrivers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllDriversResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllDriversResult" nillable="true" type="q24:ArrayOfTemplateDriver" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExecuteDriverCommand">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DriverId" nillable="true" type="xs:string" />
+        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Action" nillable="true" type="q25:DeviceAction" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExecuteDriverCommandResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnDriverByID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Id" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnDriverByIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnDriverByIDResult" nillable="true" type="q26:TemplateDriver" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteDriver">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="driverId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteDriverResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteDriverResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnDriverByNom">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnDriverByNomResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ReturnDriverByNomResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveDriver">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="driverId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="enable" type="xs:boolean" />
+        <xs:element minOccurs="0" name="startauto" type="xs:boolean" />
+        <xs:element minOccurs="0" name="iptcp" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="porttcp" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ipudp" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="portudp" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="com" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="refresh" type="xs:int" />
+        <xs:element minOccurs="0" name="picture" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="modele" nillable="true" type="xs:string" />
+        <xs:element xmlns:q27="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Parametres" nillable="true" type="q27:ArrayOfanyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveDriverResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SaveDriverResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StopDriver">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DriverId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StopDriverResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartDriver">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DriverId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartDriverResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ZoneIsEmpty">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="zoneId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ZoneIsEmptyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ZoneIsEmptyResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteZone">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="zoneId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteZoneResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteZoneResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllZones">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllZonesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllZonesResult" nillable="true" type="q28:ArrayOfZone" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDeviceInZone">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="zoneId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDeviceInZoneResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetDeviceInZoneResult" nillable="true" type="q29:ArrayOfTemplateDevice" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnZoneByID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Id" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnZoneByIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnZoneByIDResult" nillable="true" type="q30:Zone" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveZone">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="zoneId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ListElement" nillable="true" type="q31:ArrayOfZone.Element_Zone" />
+        <xs:element minOccurs="0" name="icon" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="image" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveZoneResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SaveZoneResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddDeviceToZone">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ZoneId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeviceId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Visible" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddDeviceToZoneResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AddDeviceToZoneResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteDeviceToZone">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ZoneId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeviceId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteDeviceToZoneResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteDeviceToZoneResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteMacro">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="macroId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteMacroResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteMacroResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RunMacro">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Id" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RunMacroResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllMacros">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllMacrosResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllMacrosResult" nillable="true" type="q32:ArrayOfMacro" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnMacroById">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="MacroId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReturnMacroByIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnMacroByIdResult" nillable="true" type="q33:Macro" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveMacro">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="macroId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="nom" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="enable" type="xs:boolean" />
+        <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+        <xs:element xmlns:q34="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="listactions" nillable="true" type="q34:ArrayOfanyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveMacroResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SaveMacroResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllTriggers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllTriggersResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllTriggersResult" nillable="true" type="q35:ArrayOfTrigger" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UploadFile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="byteData" nillable="true" type="xs:base64Binary" />
+        <xs:element minOccurs="0" name="Namefile" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UploadFileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UploadFileResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllVoice">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllVoiceResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q36="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetAllVoiceResult" nillable="true" type="q36:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDefautVoice">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDefautVoiceResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetDefautVoiceResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetDefautVoice">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="Voice" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetDefautVoiceResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CanDelete">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Id" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CanDeleteResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q37="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="CanDeleteResult" nillable="true" type="q37:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTimeSave">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTimeSaveResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetTimeSaveResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetTimeSave">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Value" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetTimeSaveResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SetTimeSaveResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetIdServer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetIdServerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetIdServerResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetIdServer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetIdServerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SetIdServerResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetServerVersion">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetServerVersionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetServerVersionResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTime">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTimeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetTimeResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MessageToServer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MessageToServerResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveConfig">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveConfigResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SaveConfigResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExportConfig">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExportConfigResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ExportConfigResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ImportConfig">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Source" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ImportConfigResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ImportConfigResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Start">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Stop">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StopResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReStart">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReStartResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetPortSOAP">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Value" type="xs:double" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetPortSOAPResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPortSOAP">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPortSOAPResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetPortSOAPResult" type="xs:double" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetIPSOAP">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetIPSOAPResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetIPSOAP">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetIPSOAPResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetIPSOAPResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLastStartTime">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLastStartTimeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetLastStartTimeResult" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHeureLeverSoleil">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHeureLeverSoleilResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetHeureLeverSoleilResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHeureCoucherSoleil">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHeureCoucherSoleilResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetHeureCoucherSoleilResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLongitude">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLongitudeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetLongitudeResult" type="xs:double" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetLongitude">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Value" type="xs:double" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetLongitudeResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLatitude">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLatitudeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetLatitudeResult" type="xs:double" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetLatitude">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Value" type="xs:double" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetLatitudeResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHeureCorrectionCoucher">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHeureCorrectionCoucherResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetHeureCorrectionCoucherResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetHeureCorrectionCoucher">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Value" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetHeureCorrectionCoucherResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHeureCorrectionLever">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHeureCorrectionLeverResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetHeureCorrectionLeverResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetHeureCorrectionLever">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Value" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetHeureCorrectionLeverResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetByteFromImage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="file" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetByteFromImageResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetByteFromImageResult" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetListOfImage">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetListOfImageResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q38="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetListOfImageResult" nillable="true" type="q38:ArrayOfImageFile" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllListHisto">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllListHistoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q39="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllListHistoResult" nillable="true" type="q39:ArrayOfHistorisation" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHisto">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Source" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="idDevice" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHistoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q40="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetHistoResult" nillable="true" type="q40:ArrayOfHistorisation" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteExtensionAudio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NomExtension" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteExtensionAudioResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteExtensionAudioResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewExtensionAudio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NomExtension" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Enable" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewExtensionAudioResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="NewExtensionAudioResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EnableExtensionAudio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NomExtension" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Enable" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EnableExtensionAudioResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="EnableExtensionAudioResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteRepertoireAudio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NomRepertoire" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteRepertoireAudioResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteRepertoireAudioResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewRepertoireAudio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NomRepertoire" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Enable" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewRepertoireAudioResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="NewRepertoireAudioResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
