@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:7999/ServiceModelSamples/service?xsd=xsd2" filename="service.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.DiscoveryDocumentReference" url="http://localhost:7999/ServiceModelSamples/service?disco" filename="service.disco" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://localhost:7999/ServiceModelSamples/service?wsdl=wsdl0" filename="service.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://localhost:7999/ServiceModelSamples/service?wsdl" filename="Server.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:7999/ServiceModelSamples/service?xsd=xsd1" filename="service0.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:7999/ServiceModelSamples/service?xsd=xsd0" filename="service1.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:7999/ServiceModelSamples/service?xsd=xsd3" filename="service2.xsd" />
+  </Results>
+</DiscoveryClientResultsFile>
