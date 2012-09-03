@@ -36,16 +36,16 @@ Partial Public Class uZone
 
     Private Sub SaveElement()
         Try
-
-            _ListIdSelect.Clear()
             Dim y As StackPanel
             Dim x1 As CheckBox
             Dim x2 As CheckBox
 
+            _ListIdSelect.Clear()
+
             For j As Integer = 0 To ListBxDevice.Items.Count - 1
                 y = ListBxDevice.Items(j)
-                x1 = y.Children.Item(0)
-                x2 = y.Children.Item(1)
+                x1 = y.Children.Item(1)
+                x2 = y.Children.Item(2)
                 If x1.IsChecked = True Then
                     Dim z As New Zone.Element_Zone(x1.Uid, x2.IsChecked)
                     _ListIdSelect.Add(z)
@@ -62,8 +62,8 @@ Partial Public Class uZone
             Next
             For j As Integer = 0 To ListBxMacro.Items.Count - 1
                 y = ListBxMacro.Items(j)
-                x1 = y.Children.Item(1)
-                x2 = y.Children.Item(2)
+                x1 = y.Children.Item(0)
+                x2 = y.Children.Item(1)
                 If x1.IsChecked = True Then
                     Dim z As New Zone.Element_Zone(x1.Uid, x2.IsChecked)
                     _ListIdSelect.Add(z)
@@ -124,8 +124,8 @@ Partial Public Class uZone
 
                 'Affiche l'image du device
                 Dim z As New Image
-                z.Width = 32
-                z.Height = 32
+                z.Width = 20
+                z.Height = 20
                 z.Margin = New Thickness(2)
                 z.Source = ConvertArrayToImage(myService.GetByteFromImage(Device.Picture))
                 stk.Children.Add(z)
@@ -135,13 +135,12 @@ Partial Public Class uZone
                 x.Content = Device.Name
                 x.ToolTip = Device.Name
                 x.Uid = Device.ID
-                x.Width = 110
+                x.Width = 185
                 AddHandler x.Click, AddressOf ChkElement_Click
                 stk.Children.Add(x)
 
                 'Affiche si le device est visible
                 Dim y As New CheckBox
-                y.Content = "Visible"
                 y.ToolTip = "Visible côté client"
                 y.Visibility = Windows.Visibility.Hidden
                 stk.Children.Add(y)
@@ -154,10 +153,10 @@ Partial Public Class uZone
                 Dim stk As New StackPanel
                 stk.Orientation = Orientation.Horizontal
 
-                'Affiche l'image du device
+                'Affiche l'image de la zone
                 Dim z As New Image
-                z.Width = 32
-                z.Height = 32
+                z.Width = 20
+                z.Height = 20
                 z.Margin = New Thickness(2)
                 z.Source = ConvertArrayToImage(myService.GetByteFromImage(Zone.Icon))
                 stk.Children.Add(z)
@@ -167,12 +166,11 @@ Partial Public Class uZone
                 If Zone.Name = TxtName.Text Then x.IsEnabled = False
                 x.ToolTip = Zone.Name
                 x.Uid = Zone.ID
-                x.Width = 110
+                x.Width = 195
                 AddHandler x.Click, AddressOf ChkElement_Click
                 stk.Children.Add(x)
 
                 Dim y As New CheckBox
-                y.Content = "Visible"
                 y.ToolTip = "Visible côté client"
                 y.Visibility = Windows.Visibility.Hidden
                 stk.Children.Add(y)
@@ -188,12 +186,11 @@ Partial Public Class uZone
                 x.Content = Macro.Nom
                 x.ToolTip = Macro.Nom
                 x.Uid = Macro.ID
-                x.Width = 110
+                x.Width = 215
                 AddHandler x.Click, AddressOf ChkElement_Click
                 stk.Children.Add(x)
 
                 Dim y As New CheckBox
-                y.Content = "Visible"
                 y.ToolTip = "Visible côté client"
                 y.Visibility = Windows.Visibility.Collapsed
                 stk.Children.Add(y)
@@ -244,16 +241,13 @@ Partial Public Class uZone
                         y.IsChecked = False
                     End If
                     Exit For
-                Else
-                    x.IsChecked = False
-                    y.Visibility = Windows.Visibility.Hidden
                 End If
             Next
 
             For j As Integer = 0 To ListBxMacro.Items.Count - 1
                 stk = ListBxMacro.Items(j)
-                x = stk.Children.Item(1)
-                y = stk.Children.Item(2)
+                x = stk.Children.Item(0)
+                y = stk.Children.Item(1)
                 If x.Uid = _ListIdSelect.Item(i).ElementID Then
                     x.IsChecked = True
                     y.Visibility = Windows.Visibility.Visible
@@ -263,9 +257,6 @@ Partial Public Class uZone
                         y.IsChecked = False
                     End If
                     Exit For
-                Else
-                    x.IsChecked = False
-                    y.Visibility = Windows.Visibility.Hidden
                 End If
             Next
         Next
@@ -321,6 +312,8 @@ Partial Public Class uZone
 
     Private Sub ChkElement_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs)
         Dim _dest As ListBox = Nothing
+        Dim idx0 As Integer = 1
+        Dim idx1 As Integer = 2
 
         If InStr(UCase(sender.parent.parent.name), "DEVICE") > 0 Then
             _dest = ListBxDevice
@@ -332,14 +325,19 @@ Partial Public Class uZone
 
         If InStr(UCase(sender.parent.parent.name), "MACRO") > 0 Then
             _dest = ListBxMacro
+            idx0 = 0
+            idx1 = 1
         End If
 
         For Each stk As StackPanel In _dest.Items
-            Dim x As CheckBox = stk.Children.Item(1)
+            Dim x As CheckBox = stk.Children.Item(idx0)
+            Dim y As CheckBox = stk.Children.Item(idx1)
             If x.IsChecked = True Then
-                stk.Children.Item(2).Visibility = Windows.Visibility.Visible
+                y.Visibility = Windows.Visibility.Visible
+                y.IsChecked = True
             Else
-                stk.Children.Item(2).Visibility = Windows.Visibility.Collapsed
+                y.Visibility = Windows.Visibility.Collapsed
+                y.IsChecked = False
             End If
         Next
     End Sub
