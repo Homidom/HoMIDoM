@@ -25,9 +25,9 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
                     <Rectangle Width="10" />
-                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxDevice" Width="250" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
-                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxZone" Width="250" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
-                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxMacro" Width="250" Height="200" AllowDrop="True" Grid.ColumnSpan="2" />
+                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxDevice" Width="250" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
+                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxZone" Width="250" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
+                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxMacro" Width="250" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
                 </StackPanel>
                 </StackPanel>
         </Border>
