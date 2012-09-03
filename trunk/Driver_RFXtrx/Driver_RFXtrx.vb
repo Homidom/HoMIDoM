@@ -66,7 +66,7 @@ Imports System.Media
 
     'param avancé
     Dim _DEBUG As Boolean = False
-    Dim _PARAMMODE As String = "20000111101111111111111111"
+    Dim _PARAMMODE As String = "2000011110111111111111111"
 
 #End Region
 
