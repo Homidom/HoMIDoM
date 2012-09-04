@@ -6,61 +6,13 @@ HoMIWpF
 </name>
 </assembly>
 <members>
-<member name="M:HoMIWpF.uWidgetEmpty.InitializeComponent">
+<member name="M:HoMIWpF.uCtrlImgMnu.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIWpF.uWidgetEmpty">
+</member><member name="T:HoMIWpF.uCtrlImgMnu">
 	<summary>
-uWidgetEmpty
-</summary>
-</member><member name="M:HoMIWpF.uModule.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIWpF.uModule">
-	<summary>
-uModule
-</summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
-	<summary>
-CreateInstance
-</summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
-	<summary>
-GetPropertyValue
-</summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
-	<summary>
-SetPropertyValue
-</summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
-	<summary>
-CreateDelegate
-</summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
-	<summary>
-AddEventHandler
-</summary>
-</member><member name="T:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper">
-	<summary>
-GeneratedInternalTypeHelper
-</summary>
-</member><member name="M:HoMIWpF.keyboard.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIWpF.keyboard">
-	<summary>
-keyboard
-</summary>
-</member><member name="M:HoMIWpF.uMeteo.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIWpF.uMeteo">
-	<summary>
-uMeteo
+uCtrlImgMnu
 </summary>
 </member><member name="M:HoMIWpF.uInternet.InitializeComponent">
 	<summary>
@@ -70,37 +22,13 @@ InitializeComponent
 	<summary>
 uInternet
 </summary>
-</member><member name="M:HoMIWpF.uTelecommande.InitializeComponent">
+</member><member name="M:HoMIWpF.uMeteo.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIWpF.uTelecommande">
+</member><member name="T:HoMIWpF.uMeteo">
 	<summary>
-uTelecommande
-</summary>
-</member><member name="M:HoMIWpF.uOnOff.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIWpF.uOnOff">
-	<summary>
-uOnOff
-</summary>
-</member><member name="M:HoMIWpF.Customcontrols.Colorpicker.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
-	<summary>
-Colorpicker
-</summary>
-</member><member name="M:HoMIWpF.uVariateur.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIWpF.uVariateur">
-	<summary>
-uVariateur
+uMeteo
 </summary>
 </member><member name="M:HoMIWpF.uMeteos.InitializeComponent">
 	<summary>
@@ -110,13 +38,21 @@ InitializeComponent
 	<summary>
 uMeteos
 </summary>
-</member><member name="M:HoMIWpF.uContact.InitializeComponent">
+</member><member name="M:HoMIWpF.uOnOff.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIWpF.uContact">
+</member><member name="T:HoMIWpF.uOnOff">
 	<summary>
-uContact
+uOnOff
+</summary>
+</member><member name="M:HoMIWpF.uNotes.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.uNotes">
+	<summary>
+uNotes
 </summary>
 </member><member name="M:HoMIWpF.Application.InitializeComponent">
 	<summary>
@@ -130,29 +66,13 @@ Application Entry Point.
 	<summary>
 Application
 </summary>
-</member><member name="M:HoMIWpF.uFreeBox.InitializeComponent">
+</member><member name="M:HoMIWpF.WConfig.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIWpF.uFreeBox">
+</member><member name="T:HoMIWpF.WConfig">
 	<summary>
-uFreeBox
-</summary>
-</member><member name="M:HoMIWpF.uProgrammeTV.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIWpF.uProgrammeTV">
-	<summary>
-uProgrammeTV
-</summary>
-</member><member name="M:HoMIWpF.WindowImg.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIWpF.WindowImg">
-	<summary>
-WindowImg
+WConfig
 </summary>
 </member><member name="M:HoMIWpF.WWidgetProperty.InitializeComponent">
 	<summary>
@@ -162,29 +82,29 @@ InitializeComponent
 	<summary>
 WWidgetProperty
 </summary>
-</member><member name="M:HoMIWpF.WConfig.InitializeComponent">
+</member><member name="M:HoMIWpF.uTelecommande.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIWpF.WConfig">
+</member><member name="T:HoMIWpF.uTelecommande">
 	<summary>
-WConfig
+uTelecommande
 </summary>
-</member><member name="M:HoMIWpF.FrmConfigChaine.InitializeComponent">
+</member><member name="M:HoMIWpF.keyboard.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIWpF.FrmConfigChaine">
+</member><member name="T:HoMIWpF.keyboard">
 	<summary>
-FrmConfigChaine
+keyboard
 </summary>
-</member><member name="M:HoMIWpF.uModules.InitializeComponent">
+</member><member name="M:HoMIWpF.uContact.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIWpF.uModules">
+</member><member name="T:HoMIWpF.uContact">
 	<summary>
-uModules
+uContact
 </summary>
 </member><member name="M:HoMIWpF.Window1.InitializeComponent">
 	<summary>
@@ -194,6 +114,50 @@ InitializeComponent
 	<summary>
 Window1
 </summary>
+</member><member name="M:HoMIWpF.WindowImg.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.WindowImg">
+	<summary>
+WindowImg
+</summary>
+</member><member name="M:HoMIWpF.uFreeBox.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.uFreeBox">
+	<summary>
+uFreeBox
+</summary>
+</member><member name="M:HoMIWpF.uModule.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.uModule">
+	<summary>
+uModule
+</summary>
+</member><member name="M:HoMIWpF.uVariateur.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.uVariateur">
+	<summary>
+uVariateur
+</summary>
+</member><member name="M:HoMIWpF.Customcontrols.Colorpicker.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="M:HoMIWpF.FrmConfigChaine.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.FrmConfigChaine">
+	<summary>
+FrmConfigChaine
+</summary>
 </member><member name="M:HoMIWpF.FrmDetailProgram.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -202,26 +166,60 @@ InitializeComponent
 	<summary>
 FrmDetailProgram
 </summary>
-</member><member name="M:HoMIWpF.uCtrlImgMnu.InitializeComponent">
+</member><member name="M:HoMIWpF.uModules.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIWpF.uCtrlImgMnu">
+</member><member name="T:HoMIWpF.uModules">
 	<summary>
-uCtrlImgMnu
+uModules
 </summary>
-</member><member name="M:HoMIWpF.uNotes.InitializeComponent">
+</member><member name="M:HoMIWpF.uProgrammeTV.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIWpF.uNotes">
+</member><member name="T:HoMIWpF.uProgrammeTV">
 	<summary>
-uNotes
+uProgrammeTV
+</summary>
+</member><member name="M:HoMIWpF.uWidgetEmpty.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.uWidgetEmpty">
+	<summary>
+uWidgetEmpty
 </summary>
 </member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
 	<summary>
  Interaction logic for Colorpicker.xaml
  </summary>
+</member><member name="P:HoMIWpF.My.MyWpfExtension.Application">
+	<summary>
+ Retourne l'objet application pour l'application en cours d'exécution
+ </summary>
+</member><member name="P:HoMIWpF.My.MyWpfExtension.Computer">
+	<summary>
+ Retourne les informations relatives à l'ordinateur hôte.
+ </summary>
+</member><member name="P:HoMIWpF.My.MyWpfExtension.User">
+	<summary>
+ Retourne les informations relatives à l'utilisateur actuel. Si vous souhaitez exécuter l'application avec les 
+ informations d'identification de l'utilisateur Windows, appelez My.User.InitializeWithWindowsUser().
+ </summary>
+</member><member name="P:HoMIWpF.My.MyWpfExtension.Log">
+	<summary>
+ Retourne le journal de l'application. L'écouteur peut être configuré par le fichier de configuration de l'application.
+ </summary>
+</member><member name="P:HoMIWpF.My.MyWpfExtension.Windows">
+	<summary>
+ Retourne la collection de fenêtres définie dans le projet.
+ </summary>
+</member><member name="T:HoMIWpF.My.MyWpfExtension">
+	<summary>
+ Module utilisé pour définir les propriétés qui sont disponibles dans l'espace de noms My pour WPF
+ </summary>
+	<remarks></remarks>
 </member><member name="M:HoMIWpF.clsXML.#ctor(System.String)">
  -----------------------------------------------------------------------------
  <summary>
@@ -551,6 +549,15 @@ uNotes
  </history>
  -----------------------------------------------------------------------------
 
+</member><member name="T:HoMIWpF.Appointment">
+	<summary>
+ This class is actually a stripped-down version of the actual Appointment class, which was generated using the 
+ Linq-to-SQL Designer (essentially a Linq ORM to the Appointments table in the db)
+ </summary>
+	<remarks>Obviously, you should use your own appointment object/classes, and change the code-behind in MonthView.xaml.vb to
+ support a List(Of T) where T is whatever the System.Type is for your appointment class.
+ </remarks>
+	<author>Kirk Davis, February 2009 (in like, 4 hours, and it shows!)</author>
 </member><member name="M:HoMIWpF.Window1.LoadConfig(System.String)">
 	<summary>Chargement de la config depuis le fichier XML</summary>
 	<param name="Fichier"></param>
@@ -590,41 +597,6 @@ uNotes
 	<summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
 	<param name="NewFichier"></param>
 	<remarks></remarks>
-</member><member name="P:HoMIWpF.My.MyWpfExtension.Application">
-	<summary>
- Retourne l'objet application pour l'application en cours d'exécution
- </summary>
-</member><member name="P:HoMIWpF.My.MyWpfExtension.Computer">
-	<summary>
- Retourne les informations relatives à l'ordinateur hôte.
- </summary>
-</member><member name="P:HoMIWpF.My.MyWpfExtension.User">
-	<summary>
- Retourne les informations relatives à l'utilisateur actuel. Si vous souhaitez exécuter l'application avec les 
- informations d'identification de l'utilisateur Windows, appelez My.User.InitializeWithWindowsUser().
- </summary>
-</member><member name="P:HoMIWpF.My.MyWpfExtension.Log">
-	<summary>
- Retourne le journal de l'application. L'écouteur peut être configuré par le fichier de configuration de l'application.
- </summary>
-</member><member name="P:HoMIWpF.My.MyWpfExtension.Windows">
-	<summary>
- Retourne la collection de fenêtres définie dans le projet.
- </summary>
-</member><member name="T:HoMIWpF.My.MyWpfExtension">
-	<summary>
- Module utilisé pour définir les propriétés qui sont disponibles dans l'espace de noms My pour WPF
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIWpF.Appointment">
-	<summary>
- This class is actually a stripped-down version of the actual Appointment class, which was generated using the 
- Linq-to-SQL Designer (essentially a Linq ORM to the Appointments table in the db)
- </summary>
-	<remarks>Obviously, you should use your own appointment object/classes, and change the code-behind in MonthView.xaml.vb to
- support a List(Of T) where T is whatever the System.Type is for your appointment class.
- </remarks>
-	<author>Kirk Davis, February 2009 (in like, 4 hours, and it shows!)</author>
 </member><member name="P:HoMIWpF.My.Resources.Resources.ResourceManager">
 	<summary>
   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
