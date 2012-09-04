@@ -30,9 +30,6 @@ D:\Homidom\Driver_OpenWebNet_USB\bin\Debug\NCrontab.dll
 D:\Homidom\Driver_OpenWebNet_USB\bin\Debug\HoMIDom.pdb
 D:\Homidom\Driver_OpenWebNet_USB\bin\Debug\HoMIDom.xml
 D:\Homidom\Driver_OpenWebNet_USB\bin\Debug\OpenWebNet.pdb
-D:\Homidom\Driver_OpenWebNet_USB\bin\Debug\ZedGraph.xml
-D:\Homidom\Driver_OpenWebNet_USB\bin\Debug\System.Data.SQLite.pdb
-D:\Homidom\Driver_OpenWebNet_USB\bin\Debug\System.Data.SQLite.xml
 D:\Homidom\Driver_OpenWebNet_USB\obj\Debug\ResolveAssemblyReference.cache
 D:\Homidom\Driver_OpenWebNet_USB\obj\Debug\Driver_OpenWebNet_USB.Resources.resources
 D:\Homidom\Driver_OpenWebNet_USB\obj\Debug\GenerateResource.read.1.tlog

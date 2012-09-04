@@ -150,6 +150,10 @@ uVariateur
 	<summary>
 InitializeComponent
 </summary>
+</member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
+	<summary>
+Colorpicker
+</summary>
 </member><member name="M:HoMIWpF.FrmConfigChaine.InitializeComponent">
 	<summary>
 InitializeComponent
