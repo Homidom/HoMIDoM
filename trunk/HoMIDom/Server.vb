@@ -480,14 +480,10 @@ Namespace HoMIDom
                                     _drv.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
                                     If IO.File.Exists(_MonRepertoire & "\images\drivers\" & _drv.Nom & ".png") Then
                                         _drv.Picture = _MonRepertoire & "\images\drivers\" & _drv.Nom & ".png"
-                                    End If
-                                    If IO.File.Exists(_MonRepertoire & "\images\drivers\" & _drv.Nom & ".jpg") Then
-                                        _drv.Picture = _MonRepertoire & "\images\drivers\" & _drv.Nom & ".jpg"
-                                    End If
-                                    If _drv.Picture = " " Or _drv.Picture = "" Or Not IO.File.Exists(_drv.Picture) Then
+                                    Else
                                         _drv.Picture = _MonRepertoire & "\images\icones\Driver_128.png"
                                     End If
-
+                                    
                                     For i As Integer = 0 To list.Item(j).Attributes.Count - 1
                                         Dim a As String = UCase(list.Item(j).Attributes.Item(i).Name)
                                         If a.StartsWith("PARAMETRE") Then
@@ -1378,13 +1374,13 @@ Namespace HoMIDom
                     writer.WriteStartAttribute("modele")
                     writer.WriteValue(_ListDrivers.Item(i).modele)
                     writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("picture")
-                    If _ListDrivers.Item(i).Picture IsNot Nothing Then
-                        writer.WriteValue(_ListDrivers.Item(i).Picture)
-                    Else
-                        writer.WriteValue(" ")
-                    End If
-                    writer.WriteEndAttribute()
+                    'writer.WriteStartAttribute("picture")
+                    'If _ListDrivers.Item(i).Picture IsNot Nothing Then
+                    '    writer.WriteValue(_ListDrivers.Item(i).Picture)
+                    'Else
+                    '    writer.WriteValue(" ")
+                    'End If
+                    'writer.WriteEndAttribute()
                     If _ListDrivers.Item(i).Parametres IsNot Nothing Then
                         For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
                             writer.WriteStartAttribute("parametre" & j)

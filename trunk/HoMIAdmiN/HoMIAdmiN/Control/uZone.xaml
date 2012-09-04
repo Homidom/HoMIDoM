@@ -17,17 +17,46 @@
                 </StackPanel>
                 <Rectangle Height=" 10" />
                 <Label Content="Eléments appartenant à la zone" Foreground="White" ToolTip="Glisser un élément (device, macro ou zone) dans la liste ci-dessous" FontStyle="Oblique" FontWeight="ExtraBold" />
-                <StackPanel Orientation="Horizontal" >
-                    <Rectangle Width="10" />
-                    <Label Content="Devices" Foreground="White" Width="250" Margin="3" />
-                    <Label Content="Zones" Foreground="White" Width="250" Margin="3" />
-                    <Label Content="Macros" Foreground="White" Width="250" Margin="3" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" >
-                    <Rectangle Width="10" />
-                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxDevice" Width="250" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
-                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxZone" Width="250" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
-                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxMacro" Width="250" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Margin="2">
+                        <Label Content="Devices" Foreground="White" Width="250" FontWeight="SemiBold" />
+                        <Label Content="Visible" Foreground="White" FontSize="10" HorizontalContentAlignment="Right" />
+                        <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxDevice" Width="250" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
+                        <StackPanel.Background>
+                            <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                                <GradientStop Color="#35000000" Offset="0.576" />
+                                <GradientStop Color="Gray" Offset="1" />
+                                <GradientStop Color="#9A7F7F7F" Offset="0.788" />
+                            </LinearGradientBrush>
+                        </StackPanel.Background>
+
+                    </StackPanel >
+                    <StackPanel Margin="2">
+                        <Label Content="Zones" Foreground="White" Width="250" FontWeight="SemiBold"/>
+                        <Label Content="Visible" Foreground="White" FontSize="10" HorizontalContentAlignment="Right" />
+                        <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxZone" Width="250" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
+                        <StackPanel.Background>
+                            <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                                <GradientStop Color="#35000000" Offset="0.576" />
+                                <GradientStop Color="Gray" Offset="1" />
+                                <GradientStop Color="#9A7F7F7F" Offset="0.788" />
+                            </LinearGradientBrush>
+                        </StackPanel.Background>
+
+                    </StackPanel>
+                    <StackPanel Margin="2">
+                        <Label Content="Macros" Foreground="White" Width="250"  FontWeight="SemiBold"/>
+                        <Label Content="Visible" Foreground="White" FontSize="10" HorizontalContentAlignment="Right" />
+                        <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxMacro" Width="250" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
+                        <StackPanel.Background>
+                            <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                                <GradientStop Color="#35000000" Offset="0.576" />
+                                <GradientStop Color="Gray" Offset="1" />
+                                <GradientStop Color="#9A7F7F7F" Offset="0.788" />
+                            </LinearGradientBrush>
+                        </StackPanel.Background>
+
+                    </StackPanel>
                 </StackPanel>
                 </StackPanel>
         </Border>

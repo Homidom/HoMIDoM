@@ -139,6 +139,9 @@
     <Compile Include="Control\uCtrlImgMnu.xaml.vb">
       <DependentUpon>uCtrlImgMnu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\uDevice.xaml.vb">
+      <DependentUpon>uDevice.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Control\uHisto.xaml.vb">
       <DependentUpon>uHisto.xaml</DependentUpon>
     </Compile>
@@ -156,6 +159,9 @@
     </Compile>
     <Compile Include="Control\uTriggerTimer.xaml.vb">
       <DependentUpon>uTriggerTimer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control\uZone.xaml.vb">
+      <DependentUpon>uZone.xaml</DependentUpon>
     </Compile>
     <Compile Include="Control\WTelecommande.xaml.vb">
       <DependentUpon>WTelecommande.xaml</DependentUpon>
@@ -196,6 +202,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Control\uCtrlImgMnu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Control\uDevice.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -241,12 +251,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Control\uDevice.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Control\uLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -260,12 +264,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Control\uTestDevice.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Control\uZone.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
@@ -286,6 +284,10 @@
     <Page Include="Control\uElement.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control\uZone.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Control\WTelecommande.xaml">
       <SubType>Designer</SubType>
@@ -347,9 +349,6 @@
     <Compile Include="Control\uConfigServer.xaml.vb">
       <DependentUpon>uConfigServer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Control\uDevice.xaml.vb">
-      <DependentUpon>uDevice.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Control\uLog.xaml.vb">
       <DependentUpon>uLog.xaml</DependentUpon>
     </Compile>
@@ -358,9 +357,6 @@
     </Compile>
     <Compile Include="Control\uTestDevice.xaml.vb">
       <DependentUpon>uTestDevice.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Control\uZone.xaml.vb">
-      <DependentUpon>uZone.xaml</DependentUpon>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb">
       <SubType>Code</SubType>
