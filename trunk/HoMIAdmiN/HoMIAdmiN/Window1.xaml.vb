@@ -434,6 +434,21 @@ Class Window1
                 label.Foreground = New SolidColorBrush(Colors.White)
                 label.Content = zon.Name & " {" & zon.ListElement.Count & " éléments}"
 
+                Dim ctxMenu As New ContextMenu
+                Dim mnu0 As New MenuItem
+                mnu0.Header = "Modifier"
+                mnu0.Tag = 0
+                mnu0.Uid = zon.ID
+                AddHandler mnu0.Click, AddressOf MnuitemZon_Click
+                ctxMenu.Items.Add(mnu0)
+                Dim mnu1 As New MenuItem
+                mnu1.Header = "Supprimer"
+                mnu1.Tag = 1
+                mnu1.Uid = zon.ID
+                AddHandler mnu1.Click, AddressOf MnuitemZon_Click
+                ctxMenu.Items.Add(mnu1)
+                label.ContextMenu = ctxMenu
+
                 stack.Children.Add(img)
                 stack.Children.Add(label)
 
@@ -447,6 +462,29 @@ Class Window1
 
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffZone: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    'Gère les menus click droit sur les zones
+    Private Sub MnuitemZon_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+            If IsConnect = False Then
+                Serveur_notconnected_action()
+                Exit Sub
+            End If
+
+            Select Case sender.tag
+                Case 0 'Modifier
+                    Dim x As New uZone(Classe.EAction.Modifier, sender.uid)
+                    AddHandler x.CloseMe, AddressOf UnloadControl
+                    AddHandler x.Loaded, AddressOf ControlLoaded
+                    AffControlPage(x)
+                Case 1 'Supprimer
+                    DeleteElement(sender.uid, 2)
+            End Select
+
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub MnuitemZon_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -486,6 +524,21 @@ Class Window1
                 label.Foreground = New SolidColorBrush(Colors.White)
                 label.Content = Usr.UserName
 
+                Dim ctxMenu As New ContextMenu
+                Dim mnu0 As New MenuItem
+                mnu0.Header = "Modifier"
+                mnu0.Tag = 0
+                mnu0.Uid = Usr.ID
+                AddHandler mnu0.Click, AddressOf MnuitemUsr_Click
+                ctxMenu.Items.Add(mnu0)
+                Dim mnu1 As New MenuItem
+                mnu1.Header = "Supprimer"
+                mnu1.Tag = 1
+                mnu1.Uid = Usr.ID
+                AddHandler mnu1.Click, AddressOf MnuitemUsr_Click
+                ctxMenu.Items.Add(mnu1)
+                label.ContextMenu = ctxMenu
+
                 stack.Children.Add(img)
                 stack.Children.Add(label)
 
@@ -499,6 +552,29 @@ Class Window1
 
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffUser: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    'Gère les menus click droit sur les users
+    Private Sub MnuitemUsr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+            If IsConnect = False Then
+                Serveur_notconnected_action()
+                Exit Sub
+            End If
+
+            Select Case sender.tag
+                Case 0 'Modifier
+                    Dim x As New uUser(Classe.EAction.Modifier, sender.uid)
+                    AddHandler x.CloseMe, AddressOf UnloadControl
+                    AddHandler x.Loaded, AddressOf ControlLoaded
+                    AffControlPage(x)
+                Case 1 'Supprimer
+                    DeleteElement(sender.uid, 3)
+            End Select
+
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub MnuitemUsr_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -519,9 +595,10 @@ Class Window1
                 Dim Graph As Object
                 Dim bmpImage As New BitmapImage()
                 Dim img As New Image
+                Dim tool As New Label
 
-                img.Height = 32
-                img.Width = 32
+                img.Height = 20
+                img.Width = 20
                 img.Margin = New Thickness(2)
                 If Trim(Drv.Picture) <> "" Then
                     img.Source = ConvertArrayToImage(myService.GetByteFromImage(Drv.Picture))
@@ -573,6 +650,45 @@ Class Window1
                     label.Foreground = New SolidColorBrush(Colors.Black)
                 End If
                 label.Content = Drv.Nom
+                tool.Content = "Nom: " & Drv.Nom & vbCrLf
+                tool.Content &= "Enable " & Drv.Enable & vbCrLf
+                tool.Content &= "Description: " & Drv.Description & vbCrLf
+                If Drv.Modele <> "" Then tool.Content &= "Modele: " & Drv.Modele & vbCrLf
+
+                Dim tl As New ToolTip
+                Dim imgpopup As New Image
+                Dim stkpopup As New StackPanel
+
+                imgpopup.Width = 45
+                imgpopup.Height = 45
+                imgpopup.Source = img.Source
+
+                stkpopup.Children.Add(imgpopup)
+                stkpopup.Children.Add(tool)
+
+                tl.Content = stkpopup
+                label.ToolTip = tl
+
+                Dim ctxMenu As New ContextMenu
+                Dim mnu0 As New MenuItem
+                mnu0.Header = "Démarrer"
+                mnu0.Tag = 0
+                mnu0.Uid = Drv.ID
+                AddHandler mnu0.Click, AddressOf MnuitemDrv_Click
+                ctxMenu.Items.Add(mnu0)
+                Dim mnu1 As New MenuItem
+                mnu1.Header = "Arrêter"
+                mnu1.Tag = 1
+                mnu1.Uid = Drv.ID
+                AddHandler mnu1.Click, AddressOf MnuitemDrv_Click
+                ctxMenu.Items.Add(mnu1)
+                Dim mnu2 As New MenuItem
+                mnu2.Header = "Modifier"
+                mnu2.Tag = 2
+                mnu2.Uid = Drv.ID
+                AddHandler mnu2.Click, AddressOf MnuitemDrv_Click
+                ctxMenu.Items.Add(mnu2)
+                label.ContextMenu = ctxMenu
 
                 stack.Children.Add(img)
                 stack.Children.Add(Graph)
@@ -592,6 +708,42 @@ Class Window1
         End Try
     End Sub
 
+    'Gère les menus click droit sur les drivers
+    Private Sub MnuitemDrv_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+            If IsConnect = False Then
+                Serveur_notconnected_action()
+                Exit Sub
+            End If
+
+            Select Case sender.tag
+                Case 0 'Démarrer
+                    If myService.ReturnDriverByID(IdSrv, sender.uid).Enable = True Then
+                        myService.StartDriver(IdSrv, sender.uid)
+                        AffDriver()
+                    Else
+                        MessageBox.Show("Le driver ne peut être démarré car sa propriété Enable est à False!", "Avertissement", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    End If
+                Case 1 'Arrêter
+                    If sender.uid = "DE96B466-2540-11E0-A321-65D7DFD72085" Then
+                        MessageBox.Show("Vous ne pouvez pas arrêter ce driver", "Information", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                        Exit Sub
+                    End If
+
+                    myService.StopDriver(IdSrv, sender.uid)
+                    AffDriver()
+                Case 2 'Modifier
+                    Dim x As New uDriver(sender.uid)
+                    AddHandler x.CloseMe, AddressOf UnloadControl
+                    AddHandler x.Loaded, AddressOf ControlLoaded
+                    AffControlPage(x)
+            End Select
+
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub MnuitemDrv_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
     'Afficher la liste des devices
     Public Sub AffDevice()
         Try
@@ -603,7 +755,7 @@ Class Window1
 
             CntDevice.Content = ListeDevices.Count & " Device(s)"
             For Each Dev In ListeDevices
-                Dim tool As String = ""
+                Dim tool As New Label
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -645,15 +797,26 @@ Class Window1
                 Dim drv As String = Dev.Name
                 drv &= " (" & nomdriver & ")"
 
-                tool = "Nom: " & Dev.Name & vbCrLf
-                tool &= "Enable " & Dev.Enable & vbCrLf
-                tool &= "Description: " & Dev.Description & vbCrLf
-                tool &= "Type: " & Dev.Type.ToString & vbCrLf
-                tool &= "Driver: " & nomdriver & vbCrLf
-                tool &= "Value: " & Dev.Value
+                tool.Content = "Nom: " & Dev.Name & vbCrLf
+                tool.Content &= "Enable " & Dev.Enable & vbCrLf
+                tool.Content &= "Description: " & Dev.Description & vbCrLf
+                tool.Content &= "Type: " & Dev.Type.ToString & vbCrLf
+                tool.Content &= "Driver: " & nomdriver & vbCrLf
+                tool.Content &= "Value: " & Dev.Value
 
                 Dim tl As New ToolTip
-                tl.Content = tool
+                Dim imgpopup As New Image
+                Dim stkpopup As New StackPanel
+
+                imgpopup.Width = 45
+                imgpopup.Height = 45
+                imgpopup.Source = img.Source
+
+                stkpopup.Children.Add(imgpopup)
+                stkpopup.Children.Add(tool)
+
+                tl.Content = stkpopup
+
                 Dim label As New Label
                 If Dev.Enable = True Then
                     label.Foreground = New SolidColorBrush(Colors.White)
@@ -662,6 +825,48 @@ Class Window1
                 End If
                 label.Content = drv
                 label.ToolTip = tl
+
+                Dim ctxMenu As New ContextMenu
+                Dim mnu0 As New MenuItem
+                mnu0.Header = "Modifier"
+                mnu0.Tag = 0
+                mnu0.Uid = Dev.ID
+                AddHandler mnu0.Click, AddressOf MnuitemDev_Click
+                ctxMenu.Items.Add(mnu0)
+                Dim mnu1 As New MenuItem
+                mnu1.Header = "Enable"
+                mnu1.Tag = 1
+                mnu1.Uid = Dev.ID
+                AddHandler mnu1.Click, AddressOf MnuitemDev_Click
+                ctxMenu.Items.Add(mnu1)
+                Dim mnu2 As New MenuItem
+                mnu2.Header = "Disable"
+                mnu2.Tag = 2
+                mnu2.Uid = Dev.ID
+                AddHandler mnu2.Click, AddressOf MnuitemDev_Click
+                ctxMenu.Items.Add(mnu2)
+                Dim _DevHisto As Boolean = AsHisto(Dev.ID)
+                Dim mnu3 As New MenuItem
+                mnu3.Header = "Relevé"
+                mnu3.Tag = 3
+                mnu3.Uid = Dev.ID
+                If _DevHisto = False Then mnu3.IsEnabled = False
+                AddHandler mnu3.Click, AddressOf MnuitemDev_Click
+                ctxMenu.Items.Add(mnu3)
+                Dim mnu4 As New MenuItem
+                mnu4.Header = "Graphe"
+                mnu4.Tag = 4
+                mnu4.Uid = Dev.ID
+                If _DevHisto = False Then mnu4.IsEnabled = False
+                AddHandler mnu4.Click, AddressOf MnuitemDev_Click
+                ctxMenu.Items.Add(mnu4)
+                Dim mnu5 As New MenuItem
+                mnu5.Header = "Supprimer"
+                mnu5.Tag = 5
+                mnu5.Uid = Dev.ID
+                AddHandler mnu5.Click, AddressOf MnuitemDev_Click
+                ctxMenu.Items.Add(mnu5)
+                label.ContextMenu = ctxMenu
 
                 stack.Children.Add(img)
 
@@ -685,6 +890,134 @@ Class Window1
             Next
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffDevice: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    'Retourne True su le device a des histo de type Value
+    Private Function AsHisto(ByVal Deviceid As String) As Boolean
+        Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
+        Dim retour As Boolean = False
+        x = myService.GetAllListHisto(IdSrv)
+
+        For Each _histo As HoMIDom.HoMIDom.Historisation In x
+            If _histo.IdDevice = Deviceid And UCase(_histo.Nom) = "VALUE" Then
+                retour = True
+                Exit For
+            End If
+        Next
+
+        Return retour
+    End Function
+
+    'Retourne True si le device a plusieurs histo sur des propriétés différents
+    Private Function AsMultiHisto(ByVal Deviceid As String) As Boolean
+        Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
+        Dim retour As Boolean = False
+        Dim tmp As Boolean = False
+        Dim _name As String = ""
+        x = myService.GetAllListHisto(IdSrv)
+
+        For Each _histo As HoMIDom.HoMIDom.Historisation In x
+            If _histo.IdDevice = Deviceid And _name = "" Then
+                _name = _histo.Nom
+            ElseIf _histo.IdDevice = Deviceid And _name <> _histo.Nom Then
+                retour = True
+            End If
+        Next
+
+        Return retour
+    End Function
+
+    'Gère les menus click droit sur les devices
+    Private Sub MnuitemDev_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+            If IsConnect = False Then
+                Serveur_notconnected_action()
+                Exit Sub
+            End If
+
+            Select Case sender.tag
+                Case 0 'Modifier
+                    Dim x As New uDevice(Classe.EAction.Modifier, sender.uid)
+                    AddHandler x.CloseMe, AddressOf UnloadControl
+                    AddHandler x.Loaded, AddressOf ControlLoaded
+                    AffControlPage(x)
+                Case 1 'Enable
+                    Dim x As TemplateDevice = myService.ReturnDeviceByID(IdSrv, sender.uid)
+                    myService.SaveDevice(IdSrv, sender.uid, x.Name, x.Adresse1, True, x.Solo, x.DriverID, x.Type.ToString, x.Refresh)
+                Case 2 'Disable
+                    Dim x As TemplateDevice = myService.ReturnDeviceByID(IdSrv, sender.uid)
+                    myService.SaveDevice(IdSrv, sender.uid, x.Name, x.Adresse1, False, x.Solo, x.DriverID, x.Type.ToString, x.Refresh)
+                Case 3 'Relevé
+                    Me.Cursor = Cursors.Wait
+
+                    Dim _listhisto As New List(Of Historisation)
+
+                    _listhisto = myService.GetHisto(IdSrv, "Value", sender.uid)
+
+                    If _listhisto IsNot Nothing Then
+                        Dim x As New uReleve(_listhisto, myService.ReturnDeviceByID(IdSrv, sender.uid).Name)
+                        x.Uid = System.Guid.NewGuid.ToString()
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        Window1.CanvasUser.Children.Add(x)
+                    End If
+
+                    Me.Cursor = Nothing
+                Case 4 'Graphe
+                    Dim myPane As New ZedGraph.GraphPane
+                    Dim ListColor As New List(Of System.Drawing.Color)
+                    Dim idxcolor As Integer = -1
+
+                    ListColor.Add(System.Drawing.Color.Blue)
+
+                    Dim _listhisto As New List(Of Historisation)
+                    _listhisto = myService.GetHisto(IdSrv, "Value", sender.uid)
+
+                    Dim listpoint As New ZedGraph.PointPairList
+                    For j As Integer = 0 To _listhisto.Count - 1
+                        If IsNumeric(_listhisto.Item(j).Value) = False Then
+                            listpoint = Nothing
+                            Exit For
+                        End If
+                        listpoint.Add(New ZedGraph.PointPair(_listhisto.Item(j).DateTime.ToOADate, _listhisto.Item(j).Value))
+                    Next
+
+                    Dim courbe As ZedGraph.LineItem
+                    idxcolor += 1
+                    If idxcolor = ListColor.Count - 1 Then idxcolor = 0
+
+                    courbe = myPane.AddCurve(myService.ReturnDeviceByID(IdSrv, sender.uid).Name, listpoint, ListColor(idxcolor), ZedGraph.SymbolType.None)
+                    courbe.Line.Width = 1
+
+
+                    myPane.Chart.Fill = New ZedGraph.Fill(System.Drawing.Color.FromArgb(240, 245, 250), System.Drawing.Color.FromArgb(210, 230, 240), -90) 'fond dégradé
+
+                    'Axe X
+                    myPane.XAxis.Type = ZedGraph.AxisType.Date
+                    myPane.XAxis.Scale.Format = "dd-MM-yy HH:mm" '"dd-MMM-yy HH:mm:ss"
+                    myPane.XAxis.MajorGrid.Color = System.Drawing.Color.LightGray
+                    myPane.XAxis.MajorGrid.PenWidth = 1
+                    myPane.XAxis.MajorGrid.IsVisible = True
+
+                    'Axe Y
+                    myPane.YAxis.MajorGrid.Color = System.Drawing.Color.LightGray
+                    myPane.YAxis.MajorGrid.PenWidth = 1
+                    myPane.YAxis.MajorGrid.IsVisible = True
+
+                    Dim x As New uHisto(myPane)
+                    x.Uid = System.Guid.NewGuid.ToString()
+                    x.Width = CanvasRight.ActualWidth - 100
+                    x.Height = CanvasRight.ActualHeight - 50
+                    AddHandler x.CloseMe, AddressOf UnloadControl
+                    CanvasRight.Children.Clear()
+                    CanvasRight.Children.Add(x)
+
+                Case 5 'Supprimer
+                    DeleteElement(sender.uid, 1)
+            End Select
+
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub MnuitemDev_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -717,6 +1050,21 @@ Class Window1
                 End If
                 label.Content = Mac.Nom
 
+                Dim ctxMenu As New ContextMenu
+                Dim mnu0 As New MenuItem
+                mnu0.Header = "Modifier"
+                mnu0.Tag = 0
+                mnu0.Uid = Mac.ID
+                AddHandler mnu0.Click, AddressOf MnuitemMac_Click
+                ctxMenu.Items.Add(mnu0)
+                Dim mnu1 As New MenuItem
+                mnu1.Header = "Supprimer"
+                mnu1.Tag = 1
+                mnu1.Uid = Mac.ID
+                AddHandler mnu1.Click, AddressOf MnuitemMac_Click
+                ctxMenu.Items.Add(mnu1)
+                label.ContextMenu = ctxMenu
+
                 uri = MyRep & "\Images\Icones\Macro_32.png"
                 bmpImage.BeginInit()
                 bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
@@ -736,6 +1084,29 @@ Class Window1
 
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffScene: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    'Gère les menus click droit sur les macros
+    Private Sub MnuitemMac_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+            If IsConnect = False Then
+                Serveur_notconnected_action()
+                Exit Sub
+            End If
+
+            Select Case sender.tag
+                Case 0 'Modifier
+                    Dim x As New uMacro(Classe.EAction.Modifier, sender.uid)
+                    AddHandler x.CloseMe, AddressOf UnloadControl
+                    AddHandler x.Loaded, AddressOf ControlLoaded
+                    AffControlPage(x)
+                Case 1 'Supprimer
+                    DeleteElement(sender.uid, 5)
+            End Select
+
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub MnuitemMac_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -768,6 +1139,21 @@ Class Window1
                 End If
                 label.Content = Trig.Nom
 
+                Dim ctxMenu As New ContextMenu
+                Dim mnu0 As New MenuItem
+                mnu0.Header = "Modifier"
+                mnu0.Tag = 0
+                mnu0.Uid = Trig.ID
+                AddHandler mnu0.Click, AddressOf MnuitemTrig_Click
+                ctxMenu.Items.Add(mnu0)
+                Dim mnu1 As New MenuItem
+                mnu1.Header = "Supprimer"
+                mnu1.Tag = 1
+                mnu1.Uid = Trig.ID
+                AddHandler mnu1.Click, AddressOf MnuitemTrig_Click
+                ctxMenu.Items.Add(mnu1)
+                label.ContextMenu = ctxMenu
+
                 If Trig.Type = 0 Then
                     uri = MyRep & "\Images\Icones\Trigger_clock_32.png"
                 Else
@@ -795,6 +1181,41 @@ Class Window1
         End Try
     End Sub
 
+    'Gère les menus click droit sur les triggers
+    Private Sub MnuitemTrig_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+            If IsConnect = False Then
+                Serveur_notconnected_action()
+                Exit Sub
+            End If
+
+            Select Case sender.tag
+                Case 0 'Modifier
+                    Dim _Trig As Trigger = myService.ReturnTriggerById(IdSrv, sender.uid)
+
+                    If _Trig IsNot Nothing Then
+                        If _Trig.Type = Trigger.TypeTrigger.TIMER Then
+                            Dim x As New uTriggerTimer(Classe.EAction.Modifier, sender.uid)
+                            AddHandler x.CloseMe, AddressOf UnloadControl
+                            AddHandler x.Loaded, AddressOf ControlLoaded
+                            AffControlPage(x)
+                        Else
+                            Dim x As New uTriggerDevice(Classe.EAction.Modifier, sender.uid)
+                            AddHandler x.CloseMe, AddressOf UnloadControl
+                            AddHandler x.Loaded, AddressOf ControlLoaded
+                            AffControlPage(x)
+                        End If
+                        _Trig = Nothing
+                    End If
+                Case 1 'Supprimer
+                    DeleteElement(sender.uid, 4)
+            End Select
+
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub MnuitemTrig_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
     'Afficher la liste des historisations
     Public Sub AffHisto()
         Try
@@ -802,47 +1223,68 @@ Class Window1
 
             Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
             Dim ListeDevices = myService.GetAllDevices(IdSrv)
+
             x = myService.GetAllListHisto(IdSrv)
 
             If ListeDevices IsNot Nothing Then
                 For Each _dev As TemplateDevice In ListeDevices
+                    Dim IsNode As Boolean = False
+                    Dim parent = New TreeViewItem
                     Dim y As New CheckBox
-                    y.Content = _dev.Name
-                    y.Foreground = New SolidColorBrush(Colors.White)
-                    y.Background = New SolidColorBrush(Colors.DarkGray)
-                    y.BorderBrush = New SolidColorBrush(Colors.Black)
-                    y.Margin = New Thickness(-15, 1, 0, 0)
-                    y.IsEnabled = False
-                    y.Uid = _dev.ID
+                    Dim trv As Boolean = False
+
+                    If AsMultiHisto(_dev.ID) Then 'le device a différents historique
+                        parent.Header = _dev.Name
+                        parent.Foreground = New SolidColorBrush(Colors.White)
+                        IsNode = True
+                    Else
+                        y.Content = _dev.Name
+                        y.Foreground = New SolidColorBrush(Colors.White)
+                        y.Background = New SolidColorBrush(Colors.DarkGray)
+                        y.BorderBrush = New SolidColorBrush(Colors.Black)
+                        y.Margin = New Thickness(-15, 1, 0, 0)
+                        y.IsEnabled = False
+                        y.Uid = _dev.ID
+                    End If
 
                     If x IsNot Nothing Then
                         For i As Integer = 0 To x.Count - 1
 
                             Dim a As Historisation = x.Item(i)
 
-                            If _dev.ID = a.IdDevice Then
-                                Dim b As String = _dev.Name
-
-                                If a.Nom <> "Value" Then
-                                    y.Content &= ": " & a.Nom
-                                End If
-
+                            If _dev.ID = a.IdDevice And IsNode = False Then
                                 y.Tag = a.Nom
                                 y.IsEnabled = True
+                                TreeViewHisto.Items.Add(y)
+                                trv = True
+                            ElseIf _dev.ID = a.IdDevice And IsNode = True Then
+                                Dim y1 As New CheckBox
+                                y1.Content = _dev.Name
+                                y1.Foreground = New SolidColorBrush(Colors.White)
+                                y1.Background = New SolidColorBrush(Colors.DarkGray)
+                                y1.BorderBrush = New SolidColorBrush(Colors.Black)
+                                y1.Margin = New Thickness(-15, 1, 0, 0)
+                                y1.Uid = _dev.ID
 
-                                Exit For
+                                y1.Content = a.Nom
+
+                                y1.Tag = a.Nom
+                                parent.Items.Add(y1)
+                                trv = True
                             End If
                         Next
-                        TreeViewHisto.Items.Add(y)
+                        If IsNode Then
+                            TreeViewHisto.Items.Add(parent)
+                        End If
                     End If
-
+                    If trv = False Then TreeViewHisto.Items.Add(y)
                 Next
             End If
 
             TreeViewHisto.Items.SortDescriptions.Clear()
             TreeViewHisto.Items.SortDescriptions.Add(New SortDescription("Content", ListSortDirection.Ascending))
         Catch ex As Exception
-
+            MessageBox.Show("ERREUR Sub AffHisto: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -902,7 +1344,7 @@ Class Window1
                         AddHandler x.Loaded, AddressOf ControlLoaded
                         AffControlPage(x)
                     Case "TreeViewHisto" 'histo
-
+                        Me.Cursor = Nothing
                 End Select
 
             End If
@@ -1423,71 +1865,75 @@ Class Window1
                             MessageBox.Show("ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                         End Try
                     Case 2 'Supprimer
-                        Try
-                            If Objet.retour IsNot Nothing Then
-                                Me.Cursor = Cursors.Wait
-                                Dim retour As Integer
-                                Dim _retour As New List(Of String)
-                                _retour = myService.CanDelete(IdSrv, Objet.retour)
-
-                                If _retour(0).StartsWith("ERREUR") Then
-                                    MessageBox.Show(_retour(0), "Erreur CanDelete", MessageBoxButton.OK, MessageBoxImage.Error)
-                                    Exit Sub
-                                Else
-                                    If _retour(0) <> "0" Then
-                                        Dim a As String = "Attention !! Confirmez vous de supprimer cet élément car il est utilisé dans: " & vbCrLf
-                                        For i As Integer = 0 To _retour.Count - 2
-                                            a = a & _retour(i) & vbCrLf
-                                        Next
-                                        If MessageBox.Show(a, "Suppression", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.No Then
-                                            Me.Cursor = Nothing
-                                            Exit Sub
-                                        End If
-                                    End If
-                                End If
-
-
-                                Select Case Objet.Type
-                                    Case 0
-                                    Case 1
-                                        retour = myService.DeleteDevice(IdSrv, Objet.retour)
-                                        AffDevice()
-                                    Case 2
-                                        retour = myService.DeleteZone(IdSrv, Objet.retour)
-                                        AffZone()
-                                    Case 3
-                                        retour = myService.DeleteUser(IdSrv, Objet.retour)
-                                        AffUser()
-                                    Case 4
-                                        retour = myService.DeleteTrigger(IdSrv, Objet.retour)
-                                        AffTrigger()
-                                    Case 5
-                                        retour = myService.DeleteMacro(IdSrv, Objet.retour)
-                                        AffScene()
-                                End Select
-
-                                If retour = -2 Then
-                                    MessageBox.Show("Vous ne pouvez pas supprimer cet élément!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                                    Exit Sub
-                                Else
-                                    FlagChange = True
-                                End If
-
-                            Else
-                                MessageBox.Show("Veuillez sélectionner un élément à supprimer!")
-                            End If
-                        Catch ex As Exception
-                            MessageBox.Show("ERREUR de la suppression: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                        End Try
-                        CanvasRight.Children.Clear()
-                        ShowMainMenu()
-                        Me.Cursor = Nothing
+                        DeleteElement(Objet.retour, Objet.Type)
                 End Select
 
             End If
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub UnloadSelectElmt: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+    Private Sub DeleteElement(ByVal ID As String, ByVal Type As Integer)
+        Try
+            If ID IsNot Nothing Then
+                Me.Cursor = Cursors.Wait
+                Dim retour As Integer
+                Dim _retour As New List(Of String)
+                _retour = myService.CanDelete(IdSrv, ID)
+
+                If _retour(0).StartsWith("ERREUR") Then
+                    MessageBox.Show(_retour(0), "Erreur CanDelete", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Exit Sub
+                Else
+                    If _retour(0) <> "0" Then
+                        Dim a As String = "Attention !! Confirmez vous de supprimer cet élément car il est utilisé dans: " & vbCrLf
+                        For i As Integer = 0 To _retour.Count - 2
+                            a = a & _retour(i) & vbCrLf
+                        Next
+                        If MessageBox.Show(a, "Suppression", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.No Then
+                            Me.Cursor = Nothing
+                            Exit Sub
+                        End If
+                    End If
+                End If
+
+
+                Select Case Type
+                    Case 0
+                    Case 1
+                        retour = myService.DeleteDevice(IdSrv, ID)
+                        AffDevice()
+                    Case 2
+                        retour = myService.DeleteZone(IdSrv, ID)
+                        AffZone()
+                    Case 3
+                        retour = myService.DeleteUser(IdSrv, ID)
+                        AffUser()
+                    Case 4
+                        retour = myService.DeleteTrigger(IdSrv, ID)
+                        AffTrigger()
+                    Case 5
+                        retour = myService.DeleteMacro(IdSrv, ID)
+                        AffScene()
+                End Select
+
+                If retour = -2 Then
+                    MessageBox.Show("Vous ne pouvez pas supprimer cet élément!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                Else
+                    FlagChange = True
+                End If
+
+            Else
+                MessageBox.Show("Veuillez sélectionner un élément à supprimer!")
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR de la suppression: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+        CanvasRight.Children.Clear()
+        ShowMainMenu()
+        Me.Cursor = Nothing
     End Sub
 
     Private Sub ControlLoaded()
@@ -1596,7 +2042,6 @@ Class Window1
             Dim ListColor As New List(Of System.Drawing.Color)
             Dim idxcolor As Integer = -1
 
-
             ListColor.Add(System.Drawing.Color.Blue)
             ListColor.Add(System.Drawing.Color.Red)
             ListColor.Add(System.Drawing.Color.Green)
@@ -1611,52 +2056,84 @@ Class Window1
             ListColor.Add(System.Drawing.Color.DarkViolet)
 
             For i As Integer = 0 To TreeViewHisto.Items.Count - 1
-                Dim chk As CheckBox = TreeViewHisto.Items(i)
+                Dim chk As CheckBox
 
-                If chk.IsChecked = True Then
-                    Dim _listhisto As New List(Of Historisation)
-                    _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
+                If TreeViewHisto.Items(i).GetType.ToString.Contains("CheckBox") Then
+                    chk = TreeViewHisto.Items(i)
 
-                    Dim listpoint As New ZedGraph.PointPairList
-                    For j As Integer = 0 To _listhisto.Count - 1
-                        If IsNumeric(_listhisto.Item(j).Value) = False Then
-                            listpoint = Nothing
-                            Exit For
+                    If chk.IsChecked = True Then
+                        Dim _listhisto As New List(Of Historisation)
+                        _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
+
+                        Dim listpoint As New ZedGraph.PointPairList
+                        For j As Integer = 0 To _listhisto.Count - 1
+                            If IsNumeric(_listhisto.Item(j).Value) = False Then
+                                listpoint = Nothing
+                                Exit For
+                            End If
+                            listpoint.Add(New ZedGraph.PointPair(_listhisto.Item(j).DateTime.ToOADate, CDbl(_listhisto.Item(j).Value)))
+                        Next
+
+                        Dim courbe As ZedGraph.LineItem
+                        idxcolor += 1
+                        If idxcolor = ListColor.Count - 1 Then idxcolor = 0
+
+                        courbe = myPane.AddCurve(chk.Content, listpoint, ListColor(idxcolor), ZedGraph.SymbolType.None)
+                        courbe.Line.Width = 1
+                    End If
+
+                    myPane.Chart.Fill = New ZedGraph.Fill(System.Drawing.Color.FromArgb(240, 245, 250), System.Drawing.Color.FromArgb(210, 230, 240), -90) 'fond dégradé
+                Else 'il a des enfants
+                    Dim trv1 As TreeViewItem = TreeViewHisto.Items(i)
+                    For j1 As Integer = 0 To trv1.Items.Count - 1
+                        chk = trv1.Items(j1)
+
+                        If chk.IsChecked = True Then
+                            Dim _listhisto As New List(Of Historisation)
+                            _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
+
+                            Dim listpoint As New ZedGraph.PointPairList
+                            For j As Integer = 0 To _listhisto.Count - 1
+                                If IsNumeric(_listhisto.Item(j).Value) = False Then
+                                    listpoint = Nothing
+                                    Exit For
+                                End If
+                                listpoint.Add(New ZedGraph.PointPair(_listhisto.Item(j).DateTime.ToOADate, CDbl(_listhisto.Item(j).Value)))
+                            Next
+
+                            Dim courbe As ZedGraph.LineItem
+                            idxcolor += 1
+                            If idxcolor = ListColor.Count - 1 Then idxcolor = 0
+
+                            courbe = myPane.AddCurve(chk.Content, listpoint, ListColor(idxcolor), ZedGraph.SymbolType.None)
+                            courbe.Line.Width = 1
                         End If
-                        listpoint.Add(New ZedGraph.PointPair(_listhisto.Item(j).DateTime.ToOADate, _listhisto.Item(j).Value))
+
+                        myPane.Chart.Fill = New ZedGraph.Fill(System.Drawing.Color.FromArgb(240, 245, 250), System.Drawing.Color.FromArgb(210, 230, 240), -90) 'fond dégradé
                     Next
-
-                    Dim courbe As ZedGraph.LineItem
-                    idxcolor += 1
-                    If idxcolor = ListColor.Count - 1 Then idxcolor = 0
-
-                    courbe = myPane.AddCurve(chk.Content, listpoint, ListColor(idxcolor), ZedGraph.SymbolType.None)
-                    courbe.Line.Width = 1
                 End If
-
-
-                myPane.Chart.Fill = New ZedGraph.Fill(System.Drawing.Color.FromArgb(240, 245, 250), System.Drawing.Color.FromArgb(210, 230, 240), -90) 'fond dégradé
-
-                'Axe X
-                myPane.XAxis.Type = ZedGraph.AxisType.Date
-                myPane.XAxis.Scale.Format = "dd-MM-yy HH:mm" '"dd-MMM-yy HH:mm:ss"
-                myPane.XAxis.MajorGrid.Color = System.Drawing.Color.LightGray
-                myPane.XAxis.MajorGrid.PenWidth = 1
-                myPane.XAxis.MajorGrid.IsVisible = True
-
-                'Axe Y
-                myPane.YAxis.MajorGrid.Color = System.Drawing.Color.LightGray
-                myPane.YAxis.MajorGrid.PenWidth = 1
-                myPane.YAxis.MajorGrid.IsVisible = True
-
-                Dim x As New uHisto(myPane)
-                x.Uid = System.Guid.NewGuid.ToString()
-                x.Width = CanvasRight.ActualWidth - 100
-                x.Height = CanvasRight.ActualHeight - 50
-                AddHandler x.CloseMe, AddressOf UnloadControl
-                CanvasRight.Children.Clear()
-                CanvasRight.Children.Add(x)
             Next
+
+            'Axe X
+            myPane.XAxis.Type = ZedGraph.AxisType.Date
+            myPane.XAxis.Scale.Format = "dd-MM-yy HH:mm" '"dd-MMM-yy HH:mm:ss"
+            myPane.XAxis.MajorGrid.Color = System.Drawing.Color.LightGray
+            myPane.XAxis.MajorGrid.PenWidth = 1
+            myPane.XAxis.MajorGrid.IsVisible = True
+
+            'Axe Y
+            myPane.YAxis.MajorGrid.Color = System.Drawing.Color.LightGray
+            myPane.YAxis.MajorGrid.PenWidth = 1
+            myPane.YAxis.MajorGrid.IsVisible = True
+
+            Dim x As New uHisto(myPane)
+            x.Uid = System.Guid.NewGuid.ToString()
+            x.Width = CanvasRight.ActualWidth - 100
+            x.Height = CanvasRight.ActualHeight - 50
+            AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
+            CanvasRight.Children.Add(x)
+
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub BtnGenereGraph_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1676,19 +2153,41 @@ Class Window1
             Dim lbl As String = ""
 
             For i As Integer = 0 To TreeViewHisto.Items.Count - 1
-                Dim chk As CheckBox = TreeViewHisto.Items(i)
+                Dim chk As CheckBox
 
-                If chk.IsChecked = True And _Two = False Then
-                    _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
-                    lbl = chk.Content
-                    _Two = True
-                Else
-                    If chk.IsChecked = True And _Two = True Then
-                        Me.Cursor = Nothing
-                        MessageBox.Show("Seul un élément peut être affiché dans les relevés!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                        Exit Sub
+                If TreeViewHisto.Items(i).GetType.ToString.Contains("CheckBox") Then
+                    chk = TreeViewHisto.Items(i)
+
+                    If chk.IsChecked = True And _Two = False Then
+                        _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
+                        lbl = chk.Content
+                        _Two = True
+                    Else
+                        If chk.IsChecked = True And _Two = True Then
+                            Me.Cursor = Nothing
+                            MessageBox.Show("Seul un élément peut être affiché dans les relevés!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            Exit Sub
+                        End If
                     End If
+                Else
+                    Dim trv1 As TreeViewItem = TreeViewHisto.Items(i)
+                    For j1 As Integer = 0 To trv1.Items.Count - 1
+                        chk = trv1.Items(j1)
+
+                        If chk.IsChecked = True And _Two = False Then
+                            _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
+                            lbl = chk.Content
+                            _Two = True
+                        Else
+                            If chk.IsChecked = True And _Two = True Then
+                                Me.Cursor = Nothing
+                                MessageBox.Show("Seul un élément peut être affiché dans les relevés!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                Exit Sub
+                            End If
+                        End If
+                    Next
                 End If
+
             Next
 
             If _listhisto IsNot Nothing And _Two Then
