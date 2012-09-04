@@ -477,7 +477,7 @@ Namespace HoMIDom
                                     _drv.Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
                                     _drv.Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
 
-                                    _drv.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
+                                    ' _drv.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
                                     If IO.File.Exists(_MonRepertoire & "\images\drivers\" & _drv.Nom & ".png") Then
                                         _drv.Picture = _MonRepertoire & "\images\drivers\" & _drv.Nom & ".png"
                                     Else
