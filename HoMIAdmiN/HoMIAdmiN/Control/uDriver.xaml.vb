@@ -185,24 +185,24 @@ Partial Public Class uDriver
         End If
     End Sub
 
-    Private Sub ImgDevice_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgDevice.MouseLeftButtonDown
-        Try
-            Dim frm As New WindowImg
-            frm.ShowDialog()
-            If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-                Dim retour As String = frm.FileName
-                If retour <> "" Then
-                    ImgDevice.Source = ConvertArrayToImage(myservice.GetByteFromImage(retour))
-                    ImgDevice.Tag = retour
-                End If
-                frm.Close()
-            Else
-                frm.Close()
-            End If
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub ImgDevice_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
+    'Private Sub ImgDevice_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgDevice.MouseLeftButtonDown
+    '    Try
+    '        Dim frm As New WindowImg
+    '        frm.ShowDialog()
+    '        If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+    '            Dim retour As String = frm.FileName
+    '            If retour <> "" Then
+    '                ImgDevice.Source = ConvertArrayToImage(myservice.GetByteFromImage(retour))
+    '                ImgDevice.Tag = retour
+    '            End If
+    '            frm.Close()
+    '        Else
+    '            frm.Close()
+    '        End If
+    '    Catch ex As Exception
+    '        MessageBox.Show("ERREUR Sub ImgDevice_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+    '    End Try
+    'End Sub
 
     Private Sub UnloadControl(ByVal MyControl As Object)
         For i As Integer = 0 To Window1.CanvasUser.Children.Count - 1

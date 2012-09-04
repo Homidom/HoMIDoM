@@ -799,27 +799,43 @@ Class Window1
     Public Sub AffHisto()
         Try
             TreeViewHisto.Items.Clear()
+
             Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
+            Dim ListeDevices = myService.GetAllDevices(IdSrv)
             x = myService.GetAllListHisto(IdSrv)
 
-            If x IsNot Nothing Then
-                For i As Integer = 0 To x.Count - 1
+            If ListeDevices IsNot Nothing Then
+                For Each _dev As TemplateDevice In ListeDevices
                     Dim y As New CheckBox
-                    Dim a As Historisation = x.Item(i)
-                    Dim b As String = myService.ReturnDeviceByID(IdSrv, a.IdDevice).Name
-                    If b = "" Then b = "?"
-                    If a.Nom = "Value" Then
-                        y.Content = b
-                    Else
-                        y.Content = b & ": " & a.Nom
-                    End If
-                    y.Tag = a.Nom
-                    y.Uid = a.IdDevice
+                    y.Content = _dev.Name
                     y.Foreground = New SolidColorBrush(Colors.White)
                     y.Background = New SolidColorBrush(Colors.DarkGray)
                     y.BorderBrush = New SolidColorBrush(Colors.Black)
                     y.Margin = New Thickness(-15, 1, 0, 0)
-                    TreeViewHisto.Items.Add(y)
+                    y.IsEnabled = False
+                    y.Uid = _dev.ID
+
+                    If x IsNot Nothing Then
+                        For i As Integer = 0 To x.Count - 1
+
+                            Dim a As Historisation = x.Item(i)
+
+                            If _dev.ID = a.IdDevice Then
+                                Dim b As String = _dev.Name
+
+                                If a.Nom <> "Value" Then
+                                    y.Content &= ": " & a.Nom
+                                End If
+
+                                y.Tag = a.Nom
+                                y.IsEnabled = True
+
+                                Exit For
+                            End If
+                        Next
+                        TreeViewHisto.Items.Add(y)
+                    End If
+
                 Next
             End If
 
@@ -885,7 +901,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AddHandler x.Loaded, AddressOf ControlLoaded
                         AffControlPage(x)
-                    Case 6 'histo
+                    Case "TreeViewHisto" 'histo
 
                 End Select
 
@@ -913,18 +929,6 @@ Class Window1
 
             If sender.SelectedItem IsNot Nothing Then
                 If sender.SelectedItem.uid Is Nothing Then Exit Sub
-
-                'Me.Cursor = Cursors.Wait
-                'Select Case sender.Name
-                '    Case "TreeViewDriver"  'driver
-                '    Case "TreeViewDevice"  'device
-                '    Case "TreeViewZone"  'zone
-                '    Case "TreeViewUser"  'user
-                '    Case "TreeViewTrigger"  'trigger
-                '    Case "TreeViewMacro"  'macros
-                '    Case "TreeViewHisto"  'histo
-                'End Select
-                'Me.Cursor = Nothing
             End If
 
         Catch ex As Exception
@@ -1680,6 +1684,7 @@ Class Window1
                     _Two = True
                 Else
                     If chk.IsChecked = True And _Two = True Then
+                        Me.Cursor = Nothing
                         MessageBox.Show("Seul un élément peut être affiché dans les relevés!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                         Exit Sub
                     End If
