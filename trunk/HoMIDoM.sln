@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Basic Express 2010
+# Visual Studio 2010
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Foobar", "Driver_Foobar\Driver_Foobar.vbproj", "{62C5EA60-2FE8-4F56-BC66-BE2D7B14CA5B}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_k8055", "Driver_k8055\Driver_k8055.vbproj", "{B1154B53-619A-4878-8915-9A98904EEEF5}"
@@ -17,8 +17,6 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_OneWire", "Driver_on
 	ProjectSection(ProjectDependencies) = postProject
 		{1F0CE8B5-5BA9-4704-8B5E-52682635F803} = {1F0CE8B5-5BA9-4704-8B5E-52682635F803}
 	EndProjectSection
-EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_OpenWebNet", "Driver_OpenWebNet\Driver_OpenWebNet.vbproj", "{53F1CB03-DD58-4A63-B308-B099A47E9E86}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_PLCBUS", "Driver_PLCBUS\Driver_PLCBUS.vbproj", "{DBF3A25F-E50B-40F9-A7D3-312BC11CB08A}"
 EndProject
@@ -56,12 +54,24 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Zwave", "Driver_Zwave\Driver_Zwave.vbproj", "{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Homidom_Install_x64", "Homidom_Install_x64\Homidom_Install_x64.vdproj", "{29ABD289-9BDB-4C7E-9B35-1E2AD6C87081}"
+	ProjectSection(ProjectDependencies) = postProject
+		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD} = {37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}
+		{B2E1A76D-CCD9-4C87-B0A2-FA23396D78D0} = {B2E1A76D-CCD9-4C87-B0A2-FA23396D78D0}
+	EndProjectSection
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Homidom_Install_x86", "Homidom_Install_x86\Homidom_Install_x86.vdproj", "{1F1982F7-52FB-4A3C-ACF7-23FB62B2FA61}"
+	ProjectSection(ProjectDependencies) = postProject
+		{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD} = {37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}
+		{B2E1A76D-CCD9-4C87-B0A2-FA23396D78D0} = {B2E1A76D-CCD9-4C87-B0A2-FA23396D78D0}
+	EndProjectSection
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_RFXReceiver", "Driver_RFXReceiver\Driver_RFXReceiver.vbproj", "{42022F14-ACC9-44BD-B5AF-E2F6ABCFE9A4}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HoMIWpF", "HoMIWpf\HoMIWpF.vbproj", "{B2E1A76D-CCD9-4C87-B0A2-FA23396D78D0}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_OpenWebNet_USB", "Driver_OpenWebNet_USB\Driver_OpenWebNet_USB.vbproj", "{E579A0E8-350D-48FE-B852-C5ABB2FCDF35}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_OpenWebNet_IP", "Driver_OpenWebNet_IP\Driver_OpenWebNet_IP.vbproj", "{53F1CB03-DD58-4A63-B308-B099A47E9E86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -122,13 +132,6 @@ Global
 		{B0602976-1274-4BDB-8158-9A655821E14D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0602976-1274-4BDB-8158-9A655821E14D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B0602976-1274-4BDB-8158-9A655821E14D}.Release|x86.ActiveCfg = Release|Any CPU
-		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Release|x86.ActiveCfg = Release|Any CPU
 		{DBF3A25F-E50B-40F9-A7D3-312BC11CB08A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DBF3A25F-E50B-40F9-A7D3-312BC11CB08A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{DBF3A25F-E50B-40F9-A7D3-312BC11CB08A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
@@ -312,6 +315,26 @@ Global
 		{B2E1A76D-CCD9-4C87-B0A2-FA23396D78D0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B2E1A76D-CCD9-4C87-B0A2-FA23396D78D0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B2E1A76D-CCD9-4C87-B0A2-FA23396D78D0}.Release|x86.ActiveCfg = Release|Any CPU
+		{E579A0E8-350D-48FE-B852-C5ABB2FCDF35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E579A0E8-350D-48FE-B852-C5ABB2FCDF35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E579A0E8-350D-48FE-B852-C5ABB2FCDF35}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E579A0E8-350D-48FE-B852-C5ABB2FCDF35}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E579A0E8-350D-48FE-B852-C5ABB2FCDF35}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E579A0E8-350D-48FE-B852-C5ABB2FCDF35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E579A0E8-350D-48FE-B852-C5ABB2FCDF35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E579A0E8-350D-48FE-B852-C5ABB2FCDF35}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E579A0E8-350D-48FE-B852-C5ABB2FCDF35}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E579A0E8-350D-48FE-B852-C5ABB2FCDF35}.Release|x86.ActiveCfg = Release|Any CPU
+		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{53F1CB03-DD58-4A63-B308-B099A47E9E86}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
