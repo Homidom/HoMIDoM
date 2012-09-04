@@ -537,7 +537,7 @@ Imports System.Threading
 
                 If node.HasChildNodes = True Then
                     For Each _child As XmlNode In node
-                        Console.WriteLine(_child.Name & ":" & _child.FirstChild.Value)
+                        'Console.WriteLine(_child.Name & ":" & _child.FirstChild.Value)
                         Select Case _child.Name
                             Case "hi"
                                 Select Case idx
