@@ -2464,6 +2464,18 @@ Namespace HoMIDom
                 Driver.Write(Me, "OFF")
             End Sub
 
+            'Ouvrir volet
+            Public Sub [ON]()
+                If _Enable = False Then Exit Sub
+                Driver.Write(Me, "ON")
+            End Sub
+
+            'Fermer Volet
+            Public Sub OFF()
+                If _Enable = False Then Exit Sub
+                Driver.Write(Me, "OFF")
+            End Sub
+
             'Ouvrir/Fermer % Volet
             Public Sub [OUVERTURE](ByVal Variation As Integer)
                 If Variation < 0 Then
