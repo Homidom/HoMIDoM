@@ -30,6 +30,7 @@ Class Window1
     Dim myBrushVert As New RadialGradientBrush()
     Dim myBrushRouge As New RadialGradientBrush()
     Dim flagTreeV As Boolean = False
+    Dim ListeHisto As New List(Of HoMIDom.HoMIDom.Historisation)
 
 #Region "Fonctions de base"
 
@@ -643,6 +644,8 @@ Class Window1
                     Graph = Rect
                 End If
 
+
+                '**************************** POPUP ***************************
                 Dim label As New Label
                 If Drv.Enable = True Then
                     label.Foreground = New SolidColorBrush(Colors.White)
@@ -669,19 +672,24 @@ Class Window1
                 tl.Content = stkpopup
                 label.ToolTip = tl
 
+                '*************************** CLIC DROIT **************************
                 Dim ctxMenu As New ContextMenu
-                Dim mnu0 As New MenuItem
-                mnu0.Header = "Démarrer"
-                mnu0.Tag = 0
-                mnu0.Uid = Drv.ID
-                AddHandler mnu0.Click, AddressOf MnuitemDrv_Click
-                ctxMenu.Items.Add(mnu0)
-                Dim mnu1 As New MenuItem
-                mnu1.Header = "Arrêter"
-                mnu1.Tag = 1
-                mnu1.Uid = Drv.ID
-                AddHandler mnu1.Click, AddressOf MnuitemDrv_Click
-                ctxMenu.Items.Add(mnu1)
+                If Drv.IsConnect = False Then
+                    Dim mnu0 As New MenuItem
+                    mnu0.Header = "Démarrer"
+                    mnu0.Tag = 0
+                    mnu0.Uid = Drv.ID
+                    AddHandler mnu0.Click, AddressOf MnuitemDrv_Click
+                    ctxMenu.Items.Add(mnu0)
+                    If Drv.Enable = False Then mnu0.IsEnabled = False
+                Else
+                    Dim mnu1 As New MenuItem
+                    mnu1.Header = "Arrêter"
+                    mnu1.Tag = 1
+                    mnu1.Uid = Drv.ID
+                    AddHandler mnu1.Click, AddressOf MnuitemDrv_Click
+                    ctxMenu.Items.Add(mnu1)
+                End If
                 Dim mnu2 As New MenuItem
                 mnu2.Header = "Modifier"
                 mnu2.Tag = 2
@@ -752,6 +760,7 @@ Class Window1
 
             Dim ListeDevices = myService.GetAllDevices(IdSrv)
             Dim ListeZones = myService.GetAllZones(IdSrv)
+            ListeHisto = myService.GetAllListHisto(IdSrv)
 
             CntDevice.Content = ListeDevices.Count & " Device(s)"
             For Each Dev In ListeDevices
@@ -833,18 +842,21 @@ Class Window1
                 mnu0.Uid = Dev.ID
                 AddHandler mnu0.Click, AddressOf MnuitemDev_Click
                 ctxMenu.Items.Add(mnu0)
-                Dim mnu1 As New MenuItem
-                mnu1.Header = "Enable"
-                mnu1.Tag = 1
-                mnu1.Uid = Dev.ID
-                AddHandler mnu1.Click, AddressOf MnuitemDev_Click
-                ctxMenu.Items.Add(mnu1)
-                Dim mnu2 As New MenuItem
-                mnu2.Header = "Disable"
-                mnu2.Tag = 2
-                mnu2.Uid = Dev.ID
-                AddHandler mnu2.Click, AddressOf MnuitemDev_Click
-                ctxMenu.Items.Add(mnu2)
+                If Dev.Enable = False Then
+                    Dim mnu1 As New MenuItem
+                    mnu1.Header = "Enable"
+                    mnu1.Tag = 1
+                    mnu1.Uid = Dev.ID
+                    AddHandler mnu1.Click, AddressOf MnuitemDev_Click
+                    ctxMenu.Items.Add(mnu1)
+                Else
+                    Dim mnu2 As New MenuItem
+                    mnu2.Header = "Disable"
+                    mnu2.Tag = 2
+                    mnu2.Uid = Dev.ID
+                    AddHandler mnu2.Click, AddressOf MnuitemDev_Click
+                    ctxMenu.Items.Add(mnu2)
+                End If
                 Dim _DevHisto As Boolean = AsHisto(Dev.ID)
                 Dim mnu3 As New MenuItem
                 mnu3.Header = "Relevé"
@@ -895,11 +907,11 @@ Class Window1
 
     'Retourne True su le device a des histo de type Value
     Private Function AsHisto(ByVal Deviceid As String) As Boolean
-        Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
+        'Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
         Dim retour As Boolean = False
-        x = myService.GetAllListHisto(IdSrv)
+        'x = myService.GetAllListHisto(IdSrv)
 
-        For Each _histo As HoMIDom.HoMIDom.Historisation In x
+        For Each _histo As HoMIDom.HoMIDom.Historisation In ListeHisto
             If _histo.IdDevice = Deviceid And UCase(_histo.Nom) = "VALUE" Then
                 retour = True
                 Exit For
