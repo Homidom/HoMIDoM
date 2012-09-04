@@ -957,9 +957,11 @@ Class Window1
                 Case 1 'Enable
                     Dim x As TemplateDevice = myService.ReturnDeviceByID(IdSrv, sender.uid)
                     myService.SaveDevice(IdSrv, sender.uid, x.Name, x.Adresse1, True, x.Solo, x.DriverID, x.Type.ToString, x.Refresh)
+                    AffDevice()
                 Case 2 'Disable
                     Dim x As TemplateDevice = myService.ReturnDeviceByID(IdSrv, sender.uid)
                     myService.SaveDevice(IdSrv, sender.uid, x.Name, x.Adresse1, False, x.Solo, x.DriverID, x.Type.ToString, x.Refresh)
+                    AffDevice()
                 Case 3 'Relevé
                     Me.Cursor = Cursors.Wait
 
