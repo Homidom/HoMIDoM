@@ -10,9 +10,9 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("Driver_HomeSeer")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("CVO-Europe")> 
+<Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("Driver_HomeSeer")> 
-<Assembly: AssemblyCopyright("Copyright © CVO-Europe 2012")> 
+<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2012")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
