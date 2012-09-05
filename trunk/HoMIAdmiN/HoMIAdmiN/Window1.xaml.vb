@@ -674,28 +674,43 @@ Class Window1
 
                 '*************************** CLIC DROIT **************************
                 Dim ctxMenu As New ContextMenu
-                If Drv.IsConnect = False Then
-                    Dim mnu0 As New MenuItem
-                    mnu0.Header = "Démarrer"
-                    mnu0.Tag = 0
-                    mnu0.Uid = Drv.ID
-                    AddHandler mnu0.Click, AddressOf MnuitemDrv_Click
-                    ctxMenu.Items.Add(mnu0)
-                    If Drv.Enable = False Then mnu0.IsEnabled = False
-                Else
+                If Drv.Enable = False Then
                     Dim mnu1 As New MenuItem
-                    mnu1.Header = "Arrêter"
-                    mnu1.Tag = 1
+                    mnu1.Header = "Enable"
+                    mnu1.Tag = 3
                     mnu1.Uid = Drv.ID
                     AddHandler mnu1.Click, AddressOf MnuitemDrv_Click
                     ctxMenu.Items.Add(mnu1)
+                Else
+                    Dim mnu2 As New MenuItem
+                    mnu2.Header = "Disable"
+                    mnu2.Tag = 4
+                    mnu2.Uid = Drv.ID
+                    AddHandler mnu2.Click, AddressOf MnuitemDrv_Click
+                    ctxMenu.Items.Add(mnu2)
                 End If
-                Dim mnu2 As New MenuItem
-                mnu2.Header = "Modifier"
-                mnu2.Tag = 2
-                mnu2.Uid = Drv.ID
-                AddHandler mnu2.Click, AddressOf MnuitemDrv_Click
-                ctxMenu.Items.Add(mnu2)
+                If Drv.IsConnect = False Then
+                    Dim mnu3 As New MenuItem
+                    mnu3.Header = "Démarrer"
+                    mnu3.Tag = 0
+                    mnu3.Uid = Drv.ID
+                    AddHandler mnu3.Click, AddressOf MnuitemDrv_Click
+                    ctxMenu.Items.Add(mnu3)
+                    If Drv.Enable = False Then mnu3.IsEnabled = False
+                Else
+                    Dim mnu4 As New MenuItem
+                    mnu4.Header = "Arrêter"
+                    mnu4.Tag = 1
+                    mnu4.Uid = Drv.ID
+                    AddHandler mnu4.Click, AddressOf MnuitemDrv_Click
+                    ctxMenu.Items.Add(mnu4)
+                End If
+                Dim mnu5 As New MenuItem
+                mnu5.Header = "Modifier"
+                mnu5.Tag = 2
+                mnu5.Uid = Drv.ID
+                AddHandler mnu5.Click, AddressOf MnuitemDrv_Click
+                ctxMenu.Items.Add(mnu5)
                 label.ContextMenu = ctxMenu
 
                 stack.Children.Add(img)
@@ -745,6 +760,14 @@ Class Window1
                     AddHandler x.CloseMe, AddressOf UnloadControl
                     AddHandler x.Loaded, AddressOf ControlLoaded
                     AffControlPage(x)
+                Case 3 'Enable
+                    Dim x As TemplateDriver = myService.ReturnDriverByID(IdSrv, sender.uid)
+                    myService.SaveDriver(IdSrv, sender.uid, x.Nom, True, x.StartAuto, x.IP_TCP, x.Port_TCP, x.IP_UDP, x.Port_UDP, x.COM, x.Refresh, x.Picture, x.Modele)
+                    AffDriver()
+                Case 4 'Disable
+                    Dim x As TemplateDriver = myService.ReturnDriverByID(IdSrv, sender.uid)
+                    myService.SaveDriver(IdSrv, sender.uid, x.Nom, False, x.StartAuto, x.IP_TCP, x.Port_TCP, x.IP_UDP, x.Port_UDP, x.COM, x.Refresh, x.Picture, x.Modele)
+                    AffDriver()
             End Select
 
         Catch ex As Exception
@@ -806,6 +829,7 @@ Class Window1
                 Dim drv As String = Dev.Name
                 drv &= " (" & nomdriver & ")"
 
+                '*************************** TOOL TIP **************************
                 tool.Content = "Nom: " & Dev.Name & vbCrLf
                 tool.Content &= "Enable " & Dev.Enable & vbCrLf
                 tool.Content &= "Description: " & Dev.Description & vbCrLf
@@ -835,6 +859,7 @@ Class Window1
                 label.Content = drv
                 label.ToolTip = tl
 
+                '*************************** CLIC DROIT **************************
                 Dim ctxMenu As New ContextMenu
                 Dim mnu0 As New MenuItem
                 mnu0.Header = "Modifier"
