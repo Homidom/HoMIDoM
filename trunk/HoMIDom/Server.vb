@@ -394,69 +394,74 @@ Namespace HoMIDom
                         '******************************************
                         'on va chercher les paramètres du serveur
                         '******************************************
-                        list = myxml.SelectNodes("/homidom/server")
-                        If list.Count > 0 Then 'présence des paramètres du server
-                            For j As Integer = 0 To list.Item(0).Attributes.Count - 1
-                                Select Case list.Item(0).Attributes.Item(j).Name
-                                    Case "longitude"
-                                        _Longitude = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
-                                    Case "latitude"
-                                        _Latitude = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
-                                    Case "heurecorrectionlever"
-                                        _HeureLeverSoleilCorrection = list.Item(0).Attributes.Item(j).Value
-                                    Case "heurecorrectioncoucher"
-                                        _HeureCoucherSoleilCorrection = list.Item(0).Attributes.Item(j).Value
-                                    Case "ipsoap"
-                                        _IPSOAP = list.Item(0).Attributes.Item(j).Value
-                                    Case "portsoap"
-                                        _PortSOAP = list.Item(0).Attributes.Item(j).Value
-                                    Case "idsrv"
-                                        _IdSrv = list.Item(0).Attributes.Item(j).Value
-                                    Case "smtpserver"
-                                        _SMTPServeur = list.Item(0).Attributes.Item(j).Value
-                                    Case "smtpmail"
-                                        _SMTPmailEmetteur = list.Item(0).Attributes.Item(j).Value
-                                    Case "smtplogin"
-                                        _SMTPLogin = list.Item(0).Attributes.Item(j).Value
-                                    Case "smtppassword"
-                                        _SMTPassword = list.Item(0).Attributes.Item(j).Value
-                                    Case "log0"
-                                        _TypeLogEnable(0) = list.Item(0).Attributes.Item(j).Value
-                                    Case "log1"
-                                        _TypeLogEnable(1) = list.Item(0).Attributes.Item(j).Value
-                                    Case "log2"
-                                        _TypeLogEnable(2) = list.Item(0).Attributes.Item(j).Value
-                                    Case "log3"
-                                        _TypeLogEnable(3) = list.Item(0).Attributes.Item(j).Value
-                                    Case "log4"
-                                        _TypeLogEnable(4) = list.Item(0).Attributes.Item(j).Value
-                                    Case "log5"
-                                        _TypeLogEnable(5) = list.Item(0).Attributes.Item(j).Value
-                                    Case "log6"
-                                        _TypeLogEnable(6) = list.Item(0).Attributes.Item(j).Value
-                                    Case "log7"
-                                        _TypeLogEnable(7) = list.Item(0).Attributes.Item(j).Value
-                                    Case "log8"
-                                        _TypeLogEnable(8) = list.Item(0).Attributes.Item(j).Value
-                                    Case "log9"
-                                        _TypeLogEnable(9) = list.Item(0).Attributes.Item(j).Value
-                                    Case "cyclesave"
-                                        _CycleSave = list.Item(0).Attributes.Item(j).Value
-                                    Case "voice"
-                                        _Voice = list.Item(0).Attributes.Item(j).Value
-                                    Case Else
-                                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
-                                End Select
-                            Next
-                        Else
-                            MsgBox("Il manque les paramètres du serveur dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur serveur")
-                        End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du serveur chargés")
+                        Try
+                            list = myxml.SelectNodes("/homidom/server")
+                            If list.Count > 0 Then 'présence des paramètres du server
+                                For j As Integer = 0 To list.Item(0).Attributes.Count - 1
+                                    Select Case list.Item(0).Attributes.Item(j).Name
+                                        Case "longitude"
+                                            _Longitude = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
+                                        Case "latitude"
+                                            _Latitude = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
+                                        Case "heurecorrectionlever"
+                                            _HeureLeverSoleilCorrection = list.Item(0).Attributes.Item(j).Value
+                                        Case "heurecorrectioncoucher"
+                                            _HeureCoucherSoleilCorrection = list.Item(0).Attributes.Item(j).Value
+                                        Case "ipsoap"
+                                            _IPSOAP = list.Item(0).Attributes.Item(j).Value
+                                        Case "portsoap"
+                                            _PortSOAP = list.Item(0).Attributes.Item(j).Value
+                                        Case "idsrv"
+                                            _IdSrv = list.Item(0).Attributes.Item(j).Value
+                                        Case "smtpserver"
+                                            _SMTPServeur = list.Item(0).Attributes.Item(j).Value
+                                        Case "smtpmail"
+                                            _SMTPmailEmetteur = list.Item(0).Attributes.Item(j).Value
+                                        Case "smtplogin"
+                                            _SMTPLogin = list.Item(0).Attributes.Item(j).Value
+                                        Case "smtppassword"
+                                            _SMTPassword = list.Item(0).Attributes.Item(j).Value
+                                        Case "log0"
+                                            _TypeLogEnable(0) = list.Item(0).Attributes.Item(j).Value
+                                        Case "log1"
+                                            _TypeLogEnable(1) = list.Item(0).Attributes.Item(j).Value
+                                        Case "log2"
+                                            _TypeLogEnable(2) = list.Item(0).Attributes.Item(j).Value
+                                        Case "log3"
+                                            _TypeLogEnable(3) = list.Item(0).Attributes.Item(j).Value
+                                        Case "log4"
+                                            _TypeLogEnable(4) = list.Item(0).Attributes.Item(j).Value
+                                        Case "log5"
+                                            _TypeLogEnable(5) = list.Item(0).Attributes.Item(j).Value
+                                        Case "log6"
+                                            _TypeLogEnable(6) = list.Item(0).Attributes.Item(j).Value
+                                        Case "log7"
+                                            _TypeLogEnable(7) = list.Item(0).Attributes.Item(j).Value
+                                        Case "log8"
+                                            _TypeLogEnable(8) = list.Item(0).Attributes.Item(j).Value
+                                        Case "log9"
+                                            _TypeLogEnable(9) = list.Item(0).Attributes.Item(j).Value
+                                        Case "cyclesave"
+                                            _CycleSave = list.Item(0).Attributes.Item(j).Value
+                                        Case "voice"
+                                            _Voice = list.Item(0).Attributes.Item(j).Value
+                                        Case Else
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                    End Select
+                                Next
+                            Else
+                                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Erreur : Il manque les paramètres du serveur dans le fichier de config !!")
+                            End If
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du serveur chargés")
+                        Catch ex As Exception
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement de la configuraion du serveur : " & ex.ToString)
+                        End Try
 
                         '********************************
                         'on va chercher les drivers
                         '*********************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des drivers :")
+                        try
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des drivers :")
                         list = Nothing
                         list = myxml.SelectNodes("/homidom/drivers/driver")
 
@@ -483,7 +488,7 @@ Namespace HoMIDom
                                     Else
                                         _drv.Picture = _MonRepertoire & "\images\icones\Driver_128.png"
                                     End If
-                                    
+
                                     For i As Integer = 0 To list.Item(j).Attributes.Count - 1
                                         Dim a As String = UCase(list.Item(j).Attributes.Item(i).Name)
                                         If a.StartsWith("PARAMETRE") Then
@@ -502,465 +507,487 @@ Namespace HoMIDom
                         Else
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun driver n'est enregistré dans le fichier de config")
                         End If
+                        Catch ex As Exception
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des drivers : " & ex.ToString)
+                        End Try
 
                         '******************************************
                         'on va chercher les zones
                         '******************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des zones :")
-                        list = Nothing
-                        list = myxml.SelectNodes("/homidom/zones/zone")
-                        If list.Count > 0 Then 'présence des zones
-                            For i As Integer = 0 To list.Count - 1
-                                Dim x As New Zone
-                                For j As Integer = 0 To list.Item(i).Attributes.Count - 1
-                                    Select Case list.Item(i).Attributes.Item(j).Name
-                                        Case "id"
-                                            x.ID = list.Item(i).Attributes.Item(j).Value
-                                        Case "name"
-                                            x.Name = list.Item(i).Attributes.Item(j).Value
-                                        Case "icon"
-                                            If list.Item(i).Attributes.Item(j).Value <> Nothing Then
-                                                If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
-                                                    x.Icon = list.Item(0).Attributes.Item(j).Value
+                        Try
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des zones :")
+                            list = Nothing
+                            list = myxml.SelectNodes("/homidom/zones/zone")
+                            If list.Count > 0 Then 'présence des zones
+                                For i As Integer = 0 To list.Count - 1
+                                    Dim x As New Zone
+                                    For j As Integer = 0 To list.Item(i).Attributes.Count - 1
+                                        Select Case list.Item(i).Attributes.Item(j).Name
+                                            Case "id"
+                                                x.ID = list.Item(i).Attributes.Item(j).Value
+                                            Case "name"
+                                                x.Name = list.Item(i).Attributes.Item(j).Value
+                                            Case "icon"
+                                                If list.Item(i).Attributes.Item(j).Value <> Nothing Then
+                                                    If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
+                                                        x.Icon = list.Item(0).Attributes.Item(j).Value
+                                                    Else
+                                                        x.Icon = _MonRepertoire & "\images\Zones\icon\defaut.png"
+                                                    End If
                                                 Else
                                                     x.Icon = _MonRepertoire & "\images\Zones\icon\defaut.png"
                                                 End If
-                                            Else
-                                                x.Icon = _MonRepertoire & "\images\Zones\icon\defaut.png"
-                                            End If
-                                        Case "image"
-                                            If list.Item(i).Attributes.Item(j).Value <> Nothing Then
-                                                If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
-                                                    x.Image = list.Item(0).Attributes.Item(j).Value
+                                            Case "image"
+                                                If list.Item(i).Attributes.Item(j).Value <> Nothing Then
+                                                    If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
+                                                        x.Image = list.Item(0).Attributes.Item(j).Value
+                                                    Else
+                                                        x.Image = _MonRepertoire & "\images\Zones\image\defaut.jpg"
+                                                    End If
                                                 Else
                                                     x.Image = _MonRepertoire & "\images\Zones\image\defaut.jpg"
                                                 End If
-                                            Else
-                                                x.Image = _MonRepertoire & "\images\Zones\image\defaut.jpg"
-                                            End If
-                                        Case Else
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
-                                    End Select
-                                Next
-                                If list.Item(i).HasChildNodes = True Then
-                                    For k As Integer = 0 To list.Item(i).ChildNodes.Count - 1
-                                        If list.Item(i).ChildNodes.Item(k).Name = "element" Then
-                                            Dim _dev As New Zone.Element_Zone(list.Item(i).ChildNodes.Item(k).Attributes(0).Value, list.Item(i).ChildNodes.Item(k).Attributes(1).Value)
-                                            x.ListElement.Add(_dev)
-                                        End If
+                                            Case Else
+                                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                        End Select
                                     Next
-                                End If
-                                _ListZones.Add(x)
-                            Next
-                        Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucune zone enregistrée dans le fichier de config")
-                        End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListZones.Count & " Zone(s) chargée(s)")
+                                    If list.Item(i).HasChildNodes = True Then
+                                        For k As Integer = 0 To list.Item(i).ChildNodes.Count - 1
+                                            If list.Item(i).ChildNodes.Item(k).Name = "element" Then
+                                                Dim _dev As New Zone.Element_Zone(list.Item(i).ChildNodes.Item(k).Attributes(0).Value, list.Item(i).ChildNodes.Item(k).Attributes(1).Value)
+                                                x.ListElement.Add(_dev)
+                                            End If
+                                        Next
+                                    End If
+                                    _ListZones.Add(x)
+                                Next
+                            Else
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucune zone enregistrée dans le fichier de config")
+                            End If
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListZones.Count & " Zone(s) chargée(s)")
+                        Catch ex As Exception
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des zones : " & ex.ToString)
+                        End Try
 
                         '******************************************
                         'on va chercher les users
                         '******************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des users :")
-                        list = Nothing
-                        list = myxml.SelectNodes("/homidom/users/user")
-                        If list.Count > 0 Then 'présence des users
-                            For i As Integer = 0 To list.Count - 1
-                                Dim x As New Users.User
-                                For j As Integer = 0 To list.Item(i).Attributes.Count - 1
-                                    Select Case list.Item(i).Attributes.Item(j).Name
-                                        Case "id"
-                                            x.ID = list.Item(i).Attributes.Item(j).Value
-                                        Case "username"
-                                            x.UserName = list.Item(i).Attributes.Item(j).Value
-                                        Case "nom"
-                                            x.Nom = list.Item(i).Attributes.Item(j).Value
-                                        Case "prenom"
-                                            x.Prenom = list.Item(i).Attributes.Item(j).Value
-                                        Case "profil"
-                                            x.Profil = list.Item(i).Attributes.Item(j).Value
-                                        Case "password"
-                                            x.Password = list.Item(i).Attributes.Item(j).Value
-                                        Case "numberidentification"
-                                            x.NumberIdentification = list.Item(i).Attributes.Item(j).Value
-                                        Case "image"
-                                            If list.Item(i).Attributes.Item(j).Value <> Nothing Then
-                                                If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
-                                                    x.Image = list.Item(0).Attributes.Item(j).Value
+                        Try
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des users :")
+                            list = Nothing
+                            list = myxml.SelectNodes("/homidom/users/user")
+                            If list.Count > 0 Then 'présence des users
+                                For i As Integer = 0 To list.Count - 1
+                                    Dim x As New Users.User
+                                    For j As Integer = 0 To list.Item(i).Attributes.Count - 1
+                                        Select Case list.Item(i).Attributes.Item(j).Name
+                                            Case "id"
+                                                x.ID = list.Item(i).Attributes.Item(j).Value
+                                            Case "username"
+                                                x.UserName = list.Item(i).Attributes.Item(j).Value
+                                            Case "nom"
+                                                x.Nom = list.Item(i).Attributes.Item(j).Value
+                                            Case "prenom"
+                                                x.Prenom = list.Item(i).Attributes.Item(j).Value
+                                            Case "profil"
+                                                x.Profil = list.Item(i).Attributes.Item(j).Value
+                                            Case "password"
+                                                x.Password = list.Item(i).Attributes.Item(j).Value
+                                            Case "numberidentification"
+                                                x.NumberIdentification = list.Item(i).Attributes.Item(j).Value
+                                            Case "image"
+                                                If list.Item(i).Attributes.Item(j).Value <> Nothing Then
+                                                    If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
+                                                        x.Image = list.Item(0).Attributes.Item(j).Value
+                                                    Else
+                                                        x.Image = _MonRepertoire & "\images\icones\user_128.png"
+                                                    End If
                                                 Else
                                                     x.Image = _MonRepertoire & "\images\icones\user_128.png"
                                                 End If
-                                            Else
-                                                x.Image = _MonRepertoire & "\images\icones\user_128.png"
-                                            End If
-                                        Case "email"
-                                            x.eMail = list.Item(i).Attributes.Item(j).Value
-                                        Case "emailautre"
-                                            x.eMailAutre = list.Item(i).Attributes.Item(j).Value
-                                        Case "telfixe"
-                                            x.TelFixe = list.Item(i).Attributes.Item(j).Value
-                                        Case "telmobile"
-                                            x.TelMobile = list.Item(i).Attributes.Item(j).Value
-                                        Case "telautre"
-                                            x.TelAutre = list.Item(i).Attributes.Item(j).Value
-                                        Case "adresse"
-                                            x.Adresse = list.Item(i).Attributes.Item(j).Value
-                                        Case "ville"
-                                            x.Ville = list.Item(i).Attributes.Item(j).Value
-                                        Case "codepostal"
-                                            x.CodePostal = list.Item(i).Attributes.Item(j).Value
-                                        Case Else
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
-                                    End Select
+                                            Case "email"
+                                                x.eMail = list.Item(i).Attributes.Item(j).Value
+                                            Case "emailautre"
+                                                x.eMailAutre = list.Item(i).Attributes.Item(j).Value
+                                            Case "telfixe"
+                                                x.TelFixe = list.Item(i).Attributes.Item(j).Value
+                                            Case "telmobile"
+                                                x.TelMobile = list.Item(i).Attributes.Item(j).Value
+                                            Case "telautre"
+                                                x.TelAutre = list.Item(i).Attributes.Item(j).Value
+                                            Case "adresse"
+                                                x.Adresse = list.Item(i).Attributes.Item(j).Value
+                                            Case "ville"
+                                                x.Ville = list.Item(i).Attributes.Item(j).Value
+                                            Case "codepostal"
+                                                x.CodePostal = list.Item(i).Attributes.Item(j).Value
+                                            Case Else
+                                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                        End Select
+                                    Next
+                                    _ListUsers.Add(x)
                                 Next
-                                _ListUsers.Add(x)
-                            Next
-                        Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Création du user admin par défaut !!")
-                            SaveUser(_IdSrv, "", "Admin", "password", Users.TypeProfil.admin, "Administrateur", "Admin")
-                        End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListUsers.Count & " Users(s) chargé(s)")
-
-
-                        '******************************************
-                        'on va chercher les devices
-                        '********************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des devices :")
-                        list = Nothing
-                        list = myxml.SelectNodes("/homidom/devices/device")
-                        Dim trvSoleil As Boolean = False
-
-                        If list.Count > 0 Then 'présence d'un device
-                            For j As Integer = 0 To list.Count - 1
-                                Dim _Dev As Object = Nothing
-
-                                'Suivant chaque type de device
-                                Select Case UCase(list.Item(j).Attributes.GetNamedItem("type").Value)
-                                    Case "APPAREIL"
-                                        Dim o As New Device.APPAREIL(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "AUDIO"
-                                        Dim o As New Device.AUDIO(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "BAROMETRE"
-                                        Dim o As New Device.BAROMETRE(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "BATTERIE"
-                                        Dim o As New Device.BATTERIE(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "COMPTEUR"
-                                        Dim o As New Device.COMPTEUR(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "CONTACT"
-                                        Dim o As New Device.CONTACT(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "DETECTEUR"
-                                        Dim o As New Device.DETECTEUR(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "DIRECTIONVENT"
-                                        Dim o As New Device.DIRECTIONVENT(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "ENERGIEINSTANTANEE"
-                                        Dim o As New Device.ENERGIEINSTANTANEE(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "ENERGIETOTALE"
-                                        Dim o As New Device.ENERGIETOTALE(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "FREEBOX"
-                                        Dim o As New Device.FREEBOX(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "GENERIQUEBOOLEEN"
-                                        Dim o As New Device.GENERIQUEBOOLEEN(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "GENERIQUESTRING"
-                                        Dim o As New Device.GENERIQUESTRING(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "GENERIQUEVALUE"
-                                        Dim o As New Device.GENERIQUEVALUE(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "HUMIDITE"
-                                        Dim o As New Device.HUMIDITE(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "LAMPE"
-                                        Dim o As New Device.LAMPE(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "METEO"
-                                        Dim o As New Device.METEO(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "MULTIMEDIA"
-                                        Dim o As New Device.MULTIMEDIA(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "PLUIECOURANT"
-                                        Dim o As New Device.PLUIECOURANT(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "PLUIETOTAL"
-                                        Dim o As New Device.PLUIETOTAL(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "SWITCH"
-                                        Dim o As New Device.SWITCH(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "TELECOMMANDE"
-                                        Dim o As New Device.TELECOMMANDE(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "TEMPERATURE"
-                                        Dim o As New Device.TEMPERATURE(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "TEMPERATURECONSIGNE"
-                                        Dim o As New Device.TEMPERATURECONSIGNE(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "UV"
-                                        Dim o As New Device.UV(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "VITESSEVENT"
-                                        Dim o As New Device.VITESSEVENT(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                    Case "VOLET"
-                                        Dim o As New Device.VOLET(Me)
-                                        AddHandler o.DeviceChanged, AddressOf DeviceChange
-                                        _Dev = o
-                                        o = Nothing
-                                End Select
-
-                                With _Dev
-                                    'Affectation des valeurs sur les propriétés génériques
-                                    If (Not list.Item(j).Attributes.GetNamedItem("id") Is Nothing) Then .ID = list.Item(j).Attributes.GetNamedItem("id").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("name") Is Nothing) Then .Name = list.Item(j).Attributes.GetNamedItem("name").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("enable") Is Nothing) Then .Enable = list.Item(j).Attributes.GetNamedItem("enable").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("driverid") Is Nothing) Then .DriverId = list.Item(j).Attributes.GetNamedItem("driverid").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("description") Is Nothing) Then .Description = list.Item(j).Attributes.GetNamedItem("description").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("adresse1") Is Nothing) Then .Adresse1 = list.Item(j).Attributes.GetNamedItem("adresse1").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("adresse2") Is Nothing) Then .Adresse2 = list.Item(j).Attributes.GetNamedItem("adresse2").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("datecreated") Is Nothing) Then .DateCreated = list.Item(j).Attributes.GetNamedItem("datecreated").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("lastchange") Is Nothing) Then .LastChange = list.Item(j).Attributes.GetNamedItem("lastchange").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("lastchangeduree") Is Nothing) Then .LastChangeDuree = list.Item(j).Attributes.GetNamedItem("lastchangeduree").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = Replace(list.Item(j).Attributes.GetNamedItem("refresh").Value, ".", ",")
-                                    If (Not list.Item(j).Attributes.GetNamedItem("modele") Is Nothing) Then .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
-                                    If list.Item(j).Attributes.GetNamedItem("picture").Value IsNot Nothing Then
-                                        If IO.File.Exists(.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value) Then
-                                            .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
-                                        Else
-                                            Dim fileimg As String = _MonRepertoire & "\images\Devices\" & LCase(_Dev.type) & "-defaut.png"
-                                            If IO.File.Exists(fileimg) Then
-                                                .Picture = fileimg
-                                            Else
-                                                .Picture = _MonRepertoire & "\images\icones\composant_128.png"
-                                            End If
-                                        End If
-                                    Else
-                                        .Picture = _MonRepertoire & "\images\icones\composant_128.png"
-                                    End If
-                                    If (Not list.Item(j).Attributes.GetNamedItem("solo") Is Nothing) Then .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
-                                    If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Replace(list.Item(j).Attributes.GetNamedItem("value").Value, ".", ",")
-                                    If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = Replace(list.Item(j).Attributes.GetNamedItem("valuelast").Value, ".", ",")
-                                    If (Not list.Item(j).Attributes.GetNamedItem("lastetat") Is Nothing) Then .LastEtat = list.Item(j).Attributes.GetNamedItem("lastetat").Value
-                                    '-- propriétés generique value --
-                                    If _Dev.Type = "BAROMETRE" _
-                                    Or _Dev.Type = "COMPTEUR" _
-                                    Or _Dev.Type = "ENERGIEINSTANTANEE" _
-                                    Or _Dev.Type = "ENERGIETOTALE" _
-                                    Or _Dev.Type = "GENERIQUEVALUE" _
-                                    Or _Dev.Type = "HUMIDITE" _
-                                    Or _Dev.Type = "LAMPE" _
-                                    Or _Dev.Type = "PLUIECOURANT" _
-                                    Or _Dev.Type = "PLUIETOTAL" _
-                                    Or _Dev.Type = "TEMPERATURE" _
-                                    Or _Dev.Type = "TEMPERATURECONSIGNE" _
-                                    Or _Dev.Type = "VITESSEVENT" _
-                                    Or _Dev.Type = "UV" _
-                                    Or _Dev.Type = "VOLET" _
-                                    Then
-                                        If (Not list.Item(j).Attributes.GetNamedItem("valuemin") Is Nothing) Then .ValueMin = list.Item(j).Attributes.GetNamedItem("valuemin").Value
-                                        If (Not list.Item(j).Attributes.GetNamedItem("valuemax") Is Nothing) Then .ValueMax = list.Item(j).Attributes.GetNamedItem("valuemax").Value
-                                        If (Not list.Item(j).Attributes.GetNamedItem("valuedef") Is Nothing) Then .ValueDef = list.Item(j).Attributes.GetNamedItem("valuedef").Value
-                                        If (Not list.Item(j).Attributes.GetNamedItem("precision") Is Nothing) Then .Precision = list.Item(j).Attributes.GetNamedItem("precision").Value
-                                        If (Not list.Item(j).Attributes.GetNamedItem("correction") Is Nothing) Then .Correction = list.Item(j).Attributes.GetNamedItem("correction").Value
-                                        If (Not list.Item(j).Attributes.GetNamedItem("formatage") Is Nothing) Then .Formatage = list.Item(j).Attributes.GetNamedItem("formatage").Value
-                                    End If
-                                    '-- cas spécifique du multimedia pour récupérer les commandes IR --
-                                    'If _Dev.type = "MULTIMEDIA" Then
-                                    '    For k As Integer = 0 To list.Item(j).ChildNodes.Count - 1
-                                    '        If list.Item(j).ChildNodes.Item(k).Name = "commands" Then
-                                    '            _Dev.ListCommandName.Clear()
-                                    '            _Dev.ListCommandData.Clear()
-                                    '            _Dev.ListCommandRepeat.Clear()
-                                    '            For k1 As Integer = 0 To list.Item(j).ChildNodes.Item(k).ChildNodes.Count - 1
-                                    '                _Dev.ListCommandName.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(0).Value)
-                                    '                _Dev.ListCommandData.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(1).Value)
-                                    '                _Dev.ListCommandRepeat.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(2).Value)
-                                    '            Next
-                                    '        End If
-                                    '    Next
-                                    'End If
-                                    If .ID <> "" And .Name <> "" And .Adresse1 <> "" And .DriverId <> "" Then
-                                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
-                                        If .ID = "soleil01" Then
-                                            trvSoleil = True
-                                        End If
-                                    Else
-                                        _Dev.Enable = False
-                                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", " -> Erreur lors du chargement du device (information incomplete -> Disable) " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
-                                    End If
-                                End With
-                                _ListDevices.Add(_Dev)
-                                _Dev = Nothing
-                            Next
-                            If trvSoleil = False Then
-                                Dim _Devs As New Device.GENERIQUEBOOLEEN(Me)
-                                _Devs.ID = "soleil01"
-                                _Devs.Name = "HOMI_Jour"
-                                _Devs.Enable = True
-                                _Devs.Adresse1 = "N/A"
-                                _Devs.Description = "Levé/Couché du soleil : True si il fait jour"
-                                _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
-                                _ListDevices.Add(_Devs)
-                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
-                                _Devs = Nothing
+                            Else
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Création de l'utilisateur admin par défaut !!")
+                                SaveUser(_IdSrv, "", "Admin", "password", Users.TypeProfil.admin, "Administrateur", "Admin")
                             End If
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListDevices.Count & " devices(s) trouvé(s)")
-                        Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucun device enregistré dans le fichier de config")
-                        End If
-                        list = Nothing
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListUsers.Count & " Utilisateur(s) chargé(s)")
+                        Catch ex As Exception
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des utilisateurs : " & ex.ToString)
+                        End Try
+
+                        '********************************************
+                        'on va chercher les composants
+                        '********************************************
+                        Try
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des composants :")
+                            list = Nothing
+                            list = myxml.SelectNodes("/homidom/devices/device")
+                            Dim trvSoleil As Boolean = False
+
+                            If list.Count > 0 Then 'présence d'un composant
+                                For j As Integer = 0 To list.Count - 1
+                                    Dim _Dev As Object = Nothing
+
+                                    'Suivant chaque type de device
+                                    Select Case UCase(list.Item(j).Attributes.GetNamedItem("type").Value)
+                                        Case "APPAREIL"
+                                            Dim o As New Device.APPAREIL(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "AUDIO"
+                                            Dim o As New Device.AUDIO(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "BAROMETRE"
+                                            Dim o As New Device.BAROMETRE(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "BATTERIE"
+                                            Dim o As New Device.BATTERIE(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "COMPTEUR"
+                                            Dim o As New Device.COMPTEUR(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "CONTACT"
+                                            Dim o As New Device.CONTACT(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "DETECTEUR"
+                                            Dim o As New Device.DETECTEUR(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "DIRECTIONVENT"
+                                            Dim o As New Device.DIRECTIONVENT(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "ENERGIEINSTANTANEE"
+                                            Dim o As New Device.ENERGIEINSTANTANEE(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "ENERGIETOTALE"
+                                            Dim o As New Device.ENERGIETOTALE(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "FREEBOX"
+                                            Dim o As New Device.FREEBOX(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "GENERIQUEBOOLEEN"
+                                            Dim o As New Device.GENERIQUEBOOLEEN(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "GENERIQUESTRING"
+                                            Dim o As New Device.GENERIQUESTRING(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "GENERIQUEVALUE"
+                                            Dim o As New Device.GENERIQUEVALUE(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "HUMIDITE"
+                                            Dim o As New Device.HUMIDITE(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "LAMPE"
+                                            Dim o As New Device.LAMPE(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "METEO"
+                                            Dim o As New Device.METEO(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "MULTIMEDIA"
+                                            Dim o As New Device.MULTIMEDIA(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "PLUIECOURANT"
+                                            Dim o As New Device.PLUIECOURANT(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "PLUIETOTAL"
+                                            Dim o As New Device.PLUIETOTAL(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "SWITCH"
+                                            Dim o As New Device.SWITCH(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "TELECOMMANDE"
+                                            Dim o As New Device.TELECOMMANDE(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "TEMPERATURE"
+                                            Dim o As New Device.TEMPERATURE(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "TEMPERATURECONSIGNE"
+                                            Dim o As New Device.TEMPERATURECONSIGNE(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "UV"
+                                            Dim o As New Device.UV(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "VITESSEVENT"
+                                            Dim o As New Device.VITESSEVENT(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                        Case "VOLET"
+                                            Dim o As New Device.VOLET(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
+                                    End Select
+
+                                    With _Dev
+                                        'Affectation des valeurs sur les propriétés génériques
+                                        If (Not list.Item(j).Attributes.GetNamedItem("id") Is Nothing) Then .ID = list.Item(j).Attributes.GetNamedItem("id").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("name") Is Nothing) Then .Name = list.Item(j).Attributes.GetNamedItem("name").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("enable") Is Nothing) Then .Enable = list.Item(j).Attributes.GetNamedItem("enable").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("driverid") Is Nothing) Then .DriverId = list.Item(j).Attributes.GetNamedItem("driverid").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("description") Is Nothing) Then .Description = list.Item(j).Attributes.GetNamedItem("description").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("adresse1") Is Nothing) Then .Adresse1 = list.Item(j).Attributes.GetNamedItem("adresse1").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("adresse2") Is Nothing) Then .Adresse2 = list.Item(j).Attributes.GetNamedItem("adresse2").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("datecreated") Is Nothing) Then .DateCreated = list.Item(j).Attributes.GetNamedItem("datecreated").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("lastchange") Is Nothing) Then .LastChange = list.Item(j).Attributes.GetNamedItem("lastchange").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("lastchangeduree") Is Nothing) Then .LastChangeDuree = list.Item(j).Attributes.GetNamedItem("lastchangeduree").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = Replace(list.Item(j).Attributes.GetNamedItem("refresh").Value, ".", ",")
+                                        If (Not list.Item(j).Attributes.GetNamedItem("modele") Is Nothing) Then .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
+                                        If list.Item(j).Attributes.GetNamedItem("picture").Value IsNot Nothing Then
+                                            If IO.File.Exists(.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value) Then
+                                                .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
+                                            Else
+                                                Dim fileimg As String = _MonRepertoire & "\images\Devices\" & LCase(_Dev.type) & "-defaut.png"
+                                                If IO.File.Exists(fileimg) Then
+                                                    .Picture = fileimg
+                                                Else
+                                                    .Picture = _MonRepertoire & "\images\icones\composant_128.png"
+                                                End If
+                                            End If
+                                        Else
+                                            .Picture = _MonRepertoire & "\images\icones\composant_128.png"
+                                        End If
+                                        If (Not list.Item(j).Attributes.GetNamedItem("solo") Is Nothing) Then .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Replace(list.Item(j).Attributes.GetNamedItem("value").Value, ".", ",")
+                                        If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = Replace(list.Item(j).Attributes.GetNamedItem("valuelast").Value, ".", ",")
+                                        If (Not list.Item(j).Attributes.GetNamedItem("lastetat") Is Nothing) Then .LastEtat = list.Item(j).Attributes.GetNamedItem("lastetat").Value
+                                        '-- propriétés generique value --
+                                        If _Dev.Type = "BAROMETRE" _
+                                        Or _Dev.Type = "COMPTEUR" _
+                                        Or _Dev.Type = "ENERGIEINSTANTANEE" _
+                                        Or _Dev.Type = "ENERGIETOTALE" _
+                                        Or _Dev.Type = "GENERIQUEVALUE" _
+                                        Or _Dev.Type = "HUMIDITE" _
+                                        Or _Dev.Type = "LAMPE" _
+                                        Or _Dev.Type = "PLUIECOURANT" _
+                                        Or _Dev.Type = "PLUIETOTAL" _
+                                        Or _Dev.Type = "TEMPERATURE" _
+                                        Or _Dev.Type = "TEMPERATURECONSIGNE" _
+                                        Or _Dev.Type = "VITESSEVENT" _
+                                        Or _Dev.Type = "UV" _
+                                        Or _Dev.Type = "VOLET" _
+                                        Then
+                                            If (Not list.Item(j).Attributes.GetNamedItem("valuemin") Is Nothing) Then .ValueMin = list.Item(j).Attributes.GetNamedItem("valuemin").Value
+                                            If (Not list.Item(j).Attributes.GetNamedItem("valuemax") Is Nothing) Then .ValueMax = list.Item(j).Attributes.GetNamedItem("valuemax").Value
+                                            If (Not list.Item(j).Attributes.GetNamedItem("valuedef") Is Nothing) Then .ValueDef = list.Item(j).Attributes.GetNamedItem("valuedef").Value
+                                            If (Not list.Item(j).Attributes.GetNamedItem("precision") Is Nothing) Then .Precision = list.Item(j).Attributes.GetNamedItem("precision").Value
+                                            If (Not list.Item(j).Attributes.GetNamedItem("correction") Is Nothing) Then .Correction = list.Item(j).Attributes.GetNamedItem("correction").Value
+                                            If (Not list.Item(j).Attributes.GetNamedItem("formatage") Is Nothing) Then .Formatage = list.Item(j).Attributes.GetNamedItem("formatage").Value
+                                        End If
+                                        '-- cas spécifique du multimedia pour récupérer les commandes IR --
+                                        'If _Dev.type = "MULTIMEDIA" Then
+                                        '    For k As Integer = 0 To list.Item(j).ChildNodes.Count - 1
+                                        '        If list.Item(j).ChildNodes.Item(k).Name = "commands" Then
+                                        '            _Dev.ListCommandName.Clear()
+                                        '            _Dev.ListCommandData.Clear()
+                                        '            _Dev.ListCommandRepeat.Clear()
+                                        '            For k1 As Integer = 0 To list.Item(j).ChildNodes.Item(k).ChildNodes.Count - 1
+                                        '                _Dev.ListCommandName.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(0).Value)
+                                        '                _Dev.ListCommandData.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(1).Value)
+                                        '                _Dev.ListCommandRepeat.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(2).Value)
+                                        '            Next
+                                        '        End If
+                                        '    Next
+                                        'End If
+                                        If .ID <> "" And .Name <> "" And .Adresse1 <> "" And .DriverId <> "" Then
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
+                                            If .ID = "soleil01" Then
+                                                trvSoleil = True
+                                            End If
+                                        Else
+                                            _Dev.Enable = False
+                                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", " -> Erreur lors du chargement du composant (information incomplete -> Disable) " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
+                                        End If
+                                    End With
+                                    _ListDevices.Add(_Dev)
+                                    _Dev = Nothing
+                                Next
+                                If trvSoleil = False Then
+                                    Dim _Devs As New Device.GENERIQUEBOOLEEN(Me)
+                                    _Devs.ID = "soleil01"
+                                    _Devs.Name = "HOMI_Jour"
+                                    _Devs.Enable = True
+                                    _Devs.Adresse1 = "N/A"
+                                    _Devs.Description = "Levé/Couché du soleil : True si il fait jour"
+                                    _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
+                                    _ListDevices.Add(_Devs)
+                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
+                                    _Devs = Nothing
+                                End If
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListDevices.Count & " composant(s) trouvé(s)")
+                            Else
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucun composant enregistré dans le fichier de config")
+                            End If
+                            list = Nothing
+                        Catch ex As Exception
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des Composants : " & ex.ToString)
+                        End Try
 
                         '******************************************
                         'on va chercher les triggers
                         '******************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des triggers :")
-                        list = Nothing
-                        list = myxml.SelectNodes("/homidom/triggers/trigger")
-                        If list.Count > 0 Then 'présence des triggers
-                            For i As Integer = 0 To list.Count - 1
-                                Dim x As New Trigger
-                                x._Server = Me
-                                For j1 As Integer = 0 To list.Item(i).Attributes.Count - 1
-                                    Select Case list.Item(i).Attributes.Item(j1).Name
-                                        Case "id"
-                                            x.ID = list.Item(i).Attributes.Item(j1).Value
-                                        Case "nom"
-                                            x.Nom = list.Item(i).Attributes.Item(j1).Value
-                                        Case "enable"
-                                            x.Enable = list.Item(i).Attributes.Item(j1).Value
-                                        Case "type"
-                                            If list.Item(i).Attributes.Item(j1).Value = "0" Then
-                                                x.Type = Trigger.TypeTrigger.TIMER
-                                            Else
-                                                x.Type = Trigger.TypeTrigger.DEVICE
-                                            End If
-                                        Case "description"
-                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(i).Attributes.Item(j1).Value
-                                        Case "conditiontime"
-                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionTime = list.Item(i).Attributes.Item(j1).Value
-                                        Case "conditiondeviceid"
-                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionDeviceId = list.Item(i).Attributes.Item(j1).Value
-                                        Case "conditiondeviceproperty"
-                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionDeviceProperty = list.Item(i).Attributes.Item(j1).Value
-                                        Case "prochainedateheure"
-                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Prochainedateheure = list.Item(i).Attributes.Item(j1).Value
-                                        Case Else
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant au trigger est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
-                                    End Select
-                                Next
-                                If list.Item(i).HasChildNodes = True Then
-                                    If list.Item(i).ChildNodes.Item(0).Name = "macros" And list.Item(i).ChildNodes.Item(0).HasChildNodes Then
-                                        For k9 As Integer = 0 To list.Item(i).ChildNodes.Item(0).ChildNodes.Count - 1
-                                            If list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k9).Name = "macro" Then
-                                                If list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k9).Attributes.Count > 0 And list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k9).Attributes.Item(0).Name = "id" Then
-                                                    x.ListMacro.Add(list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k9).Attributes.Item(0).Value)
+                        Try
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des triggers :")
+                            list = Nothing
+                            list = myxml.SelectNodes("/homidom/triggers/trigger")
+                            If list.Count > 0 Then 'présence des triggers
+                                For i As Integer = 0 To list.Count - 1
+                                    Dim x As New Trigger
+                                    x._Server = Me
+                                    For j1 As Integer = 0 To list.Item(i).Attributes.Count - 1
+                                        Select Case list.Item(i).Attributes.Item(j1).Name
+                                            Case "id"
+                                                x.ID = list.Item(i).Attributes.Item(j1).Value
+                                            Case "nom"
+                                                x.Nom = list.Item(i).Attributes.Item(j1).Value
+                                            Case "enable"
+                                                x.Enable = list.Item(i).Attributes.Item(j1).Value
+                                            Case "type"
+                                                If list.Item(i).Attributes.Item(j1).Value = "0" Then
+                                                    x.Type = Trigger.TypeTrigger.TIMER
+                                                Else
+                                                    x.Type = Trigger.TypeTrigger.DEVICE
                                                 End If
-                                            End If
-                                        Next
+                                            Case "description"
+                                                If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(i).Attributes.Item(j1).Value
+                                            Case "conditiontime"
+                                                If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionTime = list.Item(i).Attributes.Item(j1).Value
+                                            Case "conditiondeviceid"
+                                                If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionDeviceId = list.Item(i).Attributes.Item(j1).Value
+                                            Case "conditiondeviceproperty"
+                                                If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionDeviceProperty = list.Item(i).Attributes.Item(j1).Value
+                                            Case "prochainedateheure"
+                                                If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Prochainedateheure = list.Item(i).Attributes.Item(j1).Value
+                                            Case Else
+                                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant au trigger est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
+                                        End Select
+                                    Next
+                                    If list.Item(i).HasChildNodes = True Then
+                                        If list.Item(i).ChildNodes.Item(0).Name = "macros" And list.Item(i).ChildNodes.Item(0).HasChildNodes Then
+                                            For k9 As Integer = 0 To list.Item(i).ChildNodes.Item(0).ChildNodes.Count - 1
+                                                If list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k9).Name = "macro" Then
+                                                    If list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k9).Attributes.Count > 0 And list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k9).Attributes.Item(0).Name = "id" Then
+                                                        x.ListMacro.Add(list.Item(i).ChildNodes.Item(0).ChildNodes.Item(k9).Attributes.Item(0).Value)
+                                                    End If
+                                                End If
+                                            Next
+                                        End If
                                     End If
-                                End If
-                                _ListTriggers.Add(x)
-                            Next
-                        Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucun trigger enregistré dans le fichier de config")
-                        End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListTriggers.Count & " Trigger(s) chargé(s)")
-                        list = Nothing
+                                    _ListTriggers.Add(x)
+                                Next
+                            Else
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucun trigger enregistré dans le fichier de config")
+                            End If
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListTriggers.Count & " Trigger(s) chargé(s)")
+                            list = Nothing
+                        Catch ex As Exception
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des triggers : " & ex.ToString)
+                        End Try
 
                         '******************************************
                         'on va chercher les macros
                         '******************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des macros :")
-                        list = Nothing
-                        list = myxml.SelectNodes("/homidom/macros/macro")
-                        If list.Count > 0 Then 'présence des macros
-                            For i As Integer = 0 To list.Count - 1
-                                Dim x As New Macro
-                                For j1 As Integer = 0 To list.Item(i).Attributes.Count - 1
-                                    Select Case list.Item(i).Attributes.Item(j1).Name
-                                        Case "id"
-                                            x.ID = list.Item(i).Attributes.Item(j1).Value
-                                        Case "nom"
-                                            x.Nom = list.Item(i).Attributes.Item(j1).Value
-                                        Case "enable"
-                                            x.Enable = list.Item(i).Attributes.Item(j1).Value
-                                        Case "description"
-                                            If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(0).Attributes.Item(j1).Value
-                                        Case Else
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la macro est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
-                                    End Select
+                        Try
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des macros :")
+                            list = Nothing
+                            list = myxml.SelectNodes("/homidom/macros/macro")
+                            If list.Count > 0 Then 'présence des macros
+                                For i As Integer = 0 To list.Count - 1
+                                    Dim x As New Macro
+                                    For j1 As Integer = 0 To list.Item(i).Attributes.Count - 1
+                                        Select Case list.Item(i).Attributes.Item(j1).Name
+                                            Case "id"
+                                                x.ID = list.Item(i).Attributes.Item(j1).Value
+                                            Case "nom"
+                                                x.Nom = list.Item(i).Attributes.Item(j1).Value
+                                            Case "enable"
+                                                x.Enable = list.Item(i).Attributes.Item(j1).Value
+                                            Case "description"
+                                                If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(0).Attributes.Item(j1).Value
+                                            Case Else
+                                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la macro est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
+                                        End Select
+                                    Next
+                                    LoadAction(list.Item(i), x.ListActions)
+                                    _ListMacros.Add(x)
                                 Next
-                                LoadAction(list.Item(i), x.ListActions)
-                                _ListMacros.Add(x)
-                            Next
-                        Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucune macro enregistrée dans le fichier de config")
-                        End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListMacros.Count & " Macro(s) chargée(s)")
-                        list = Nothing
+                            Else
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucune macro enregistrée dans le fichier de config")
+                            End If
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListMacros.Count & " Macro(s) chargée(s)")
+                            list = Nothing
+                        Catch ex As Exception
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des macros : " & ex.ToString)
+                        End Try
 
                         '******************************************
                         'on va chercher des extensions audios
@@ -2057,7 +2084,6 @@ Namespace HoMIDom
 
                 Next
             Catch ex As Exception
-                'MsgBox("Erreur lors de l arret des devices: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Devices_Stop", " -> Erreur lors de l'arret des devices: " & ex.Message)
             End Try
         End Sub
@@ -2245,7 +2271,6 @@ Namespace HoMIDom
                     End If
                 Next
             Catch ex As Exception
-                'MsgBox("Erreur lors du démarrage des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Start", " -> Erreur lors du démarrage des drivers: " & ex.Message)
             End Try
         End Sub
@@ -2263,7 +2288,6 @@ Namespace HoMIDom
                     End If
                 Next
             Catch ex As Exception
-                'MsgBox("Erreur lors de l arret des drivers: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Stop", " -> Erreur lors de l'arret des drivers: " & ex.Message)
             End Try
         End Sub
@@ -4785,7 +4809,7 @@ Namespace HoMIDom
                     End If
                 End If
             Catch ex As Exception
-                MsgBox("Erreur lors du traitement de la commande ExecuteDriverCommand: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ExecuteDriverCommand", "Erreur lors du traitement de la commande ExecuteDriverCommand: " & ex.Message)
             End Try
         End Sub
 
