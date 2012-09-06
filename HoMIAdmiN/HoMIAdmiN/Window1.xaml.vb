@@ -436,6 +436,9 @@ Class Window1
                 label.Content = zon.Name & " {" & zon.ListElement.Count & " éléments}"
 
                 Dim ctxMenu As New ContextMenu
+                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                ctxMenu.Background = System.Windows.Media.Brushes.LightGray
+                ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
                 Dim mnu0 As New MenuItem
                 mnu0.Header = "Modifier"
                 mnu0.Tag = 0
@@ -526,6 +529,9 @@ Class Window1
                 label.Content = Usr.UserName
 
                 Dim ctxMenu As New ContextMenu
+                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                ctxMenu.Background = System.Windows.Media.Brushes.LightGray
+                ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
                 Dim mnu0 As New MenuItem
                 mnu0.Header = "Modifier"
                 mnu0.Tag = 0
@@ -659,6 +665,9 @@ Class Window1
                 If Drv.Modele <> "" Then tool.Content &= "Modele: " & Drv.Modele & vbCrLf
 
                 Dim tl As New ToolTip
+                tl.Foreground = System.Windows.Media.Brushes.White
+                tl.Background = System.Windows.Media.Brushes.WhiteSmoke
+                tl.BorderBrush = System.Windows.Media.Brushes.Black
                 Dim imgpopup As New Image
                 Dim stkpopup As New StackPanel
 
@@ -674,6 +683,9 @@ Class Window1
 
                 '*************************** CLIC DROIT **************************
                 Dim ctxMenu As New ContextMenu
+                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                ctxMenu.Background = System.Windows.Media.Brushes.LightGray
+                ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
                 If Drv.Enable = False Then
                     Dim mnu1 As New MenuItem
                     mnu1.Header = "Enable"
@@ -838,6 +850,9 @@ Class Window1
                 tool.Content &= "Value: " & Dev.Value
 
                 Dim tl As New ToolTip
+                tl.Foreground = System.Windows.Media.Brushes.White
+                tl.Background = System.Windows.Media.Brushes.WhiteSmoke
+                tl.BorderBrush = System.Windows.Media.Brushes.Black
                 Dim imgpopup As New Image
                 Dim stkpopup As New StackPanel
 
@@ -861,6 +876,9 @@ Class Window1
 
                 '*************************** CLIC DROIT **************************
                 Dim ctxMenu As New ContextMenu
+                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                ctxMenu.Background = System.Windows.Media.Brushes.LightGray
+                ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
                 Dim mnu0 As New MenuItem
                 mnu0.Header = "Modifier"
                 mnu0.Tag = 0
@@ -1060,7 +1078,7 @@ Class Window1
         End Try
     End Sub
 
-    'Afficher la liste des scenes
+    'Afficher la liste des macros
     Public Sub AffScene()
         Try
             TreeViewMacro.Items.Clear()
@@ -1090,6 +1108,9 @@ Class Window1
                 label.Content = Mac.Nom
 
                 Dim ctxMenu As New ContextMenu
+                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                ctxMenu.Background = System.Windows.Media.Brushes.LightGray
+                ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
                 Dim mnu0 As New MenuItem
                 mnu0.Header = "Modifier"
                 mnu0.Tag = 0
@@ -1179,6 +1200,9 @@ Class Window1
                 label.Content = Trig.Nom
 
                 Dim ctxMenu As New ContextMenu
+                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                ctxMenu.Background = System.Windows.Media.Brushes.LightGray
+                ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
                 Dim mnu0 As New MenuItem
                 mnu0.Header = "Modifier"
                 mnu0.Tag = 0
