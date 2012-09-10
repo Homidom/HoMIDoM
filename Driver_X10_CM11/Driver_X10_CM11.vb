@@ -654,8 +654,6 @@ Public Class Driver_X10_CM11
                             Exit Sub
                         End If
 
-                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", Inbyte & " bytes à traiter")
-
                         'On attend de recevoir le reste
                         Time_Out = 0
                         Do While Time_Out <= 20 And port.BytesToRead < Inbyte
@@ -672,12 +670,6 @@ Public Class Driver_X10_CM11
 
                         Dim trame(Inbyte - 1) As Byte
                         port.Read(trame, 0, Inbyte)
-
-                        'Dim tramerecue As String = ""
-                        'For j As Integer = 0 To trame.Length - 1
-                        'tramerecue &= CInt(trame(j)).ToString & " "
-                        'Next
-                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Trame recue: " & tramerecue)
 
                         TraiteLire(trame)
                         AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
@@ -703,6 +695,7 @@ Public Class Driver_X10_CM11
     ''' <remarks></remarks>
     Private Sub TraiteLire(ByVal Data() As Byte)
         Try
+            If OutPortDevice = False Then Exit Sub
 
             Dim Recieved_Function As String = ""
             Dim Recieved_FAMask As String = ""
@@ -819,8 +812,6 @@ Public Class Driver_X10_CM11
         'adresse= adresse du composant : A1
         'commande : ON, OFF...
         'data
-        CurrentCode = Mid(adresse, 2, adresse.Length - 1)
-        CurrentHouse = Mid(adresse, 1, 1)
 
         Dim axbData(5) As Byte
         Dim ReadaxbData(1) As Byte
@@ -833,6 +824,9 @@ Public Class Driver_X10_CM11
 
                 'suppression de l'attente de données à lire
                 RemoveHandler port.DataReceived, AddressOf DataReceived
+
+                CurrentCode = Mid(adresse, 2, adresse.Length - 1)
+                CurrentHouse = Mid(adresse, 1, 1)
 
                 Try
                     'composition des messages à envoyer
@@ -871,14 +865,6 @@ Public Class Driver_X10_CM11
                     Dim donnee2 As Byte() = {axbData(2)}
                     port.Write(donnee2, 0, 1)
 
-                    'on lit la reponse Interface ready
-                    'System.Threading.Thread.Sleep(500)
-                    'ReadaxbData(0) = port.ReadByte()
-                    'If (ReadaxbData(0) <> INFERFACE_READY) Then
-                    '    OutPortDevice = False
-                    '    Return ("ERR: X10: INTERFACE NOT READY")
-                    'End If
-
                     Dim donnee3 As Byte() = {axbData(3), axbData(4)}
                     nbboucle = 0
                     Do
@@ -900,14 +886,8 @@ Public Class Driver_X10_CM11
 
                     'on envoie le ack
                     port.Write(donnee2, 0, 1)
-
-                    'on lit la reponse Interface ready
-                    'System.Threading.Thread.Sleep(500)
-                    'ReadaxbData(0) = port.ReadByte()
-                    'If (ReadaxbData(0) <> INFERFACE_READY) Then
-                    '    OutPortDevice = False
-                    '    Return ("ERR: X10: INTERFACE NOT READY")
-                    'End If
+                    'on rend la main
+                    OutPortDevice = False
 
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 ecrire", "ERR: X10: " & ex.ToString)
