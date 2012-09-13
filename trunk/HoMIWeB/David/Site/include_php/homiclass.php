@@ -23,6 +23,23 @@ class HomidomClass {
 		return $this->_homidomsoap->GetTime();
 	}
 
+	public function ExecuteDeviceCommand($deviceid, $actionnom, $actionparametre){
+		
+		//echo "methodes: <br />";
+		//$x=$this->_homidomsoap->ListMethod($deviceid);
+		//print_r($x);
+		If ($actionparametre=="") {
+			return $this->_homidomsoap->ExecuteDeviceCommand($deviceid,array('Nom'=>"$actionnom",'Parametres'=>""));
+		} else {
+			$Parametres=array('DeviceAction'=>array('Nom'=>"",'Type'=>"",'Value'=>"$actionparametre"));
+			return $this->_homidomsoap->ExecuteDeviceCommandSimple($deviceid,array('Nom'=>"$actionnom",'Param1'=>"$actionparametre"));
+			//$x=$this->_homidomsoap->ExecuteDeviceCommand($deviceid,array('Nom'=>"$actionnom",'Parametres'=>array($Parametres)));
+			//$this->_homidomsoap->tracer();
+			return $x;
+		}
+		
+	}
+	
 	public function RefreshBddDevice(){
 		$x=$this->_homidomsoap->GetAllDevices();
 		for($i = 0; $i < count($x); $i++){
@@ -56,7 +73,7 @@ class HomidomClass {
 // 			$x[$i]->_TempActuel
 // 			$x[$i]->_VentActuel
 			
-			$sql = "SELECT * from devices where id='".$x[$i]->_ID."'";
+			$sql = "SELECT * from devices where ssid='".$x[$i]->_ID."'";
 			$res = mysql_query ($sql);
 			if(mysql_num_rows($res)>0){
 				//Trouvé : mise à jour
@@ -64,11 +81,11 @@ class HomidomClass {
 				$res = mysql_query($sql);
 			} else {
 				//Non trouvé : Ajoute
-				$sql = "INSERT INTO devices(id,name,type,adresse1,adresse2,value) VALUES ('".$x[$i]->_ID."','".$x[$i]->_Name."','".$x[$i]->_Type.",'".$x[$i]->_Adresse1."','".$x[$i]->_Adresse2."','".$x[$i]->_Value."')";
+				$sql = "INSERT INTO devices(ssid,name,type,adresse1,adresse2,value) VALUES ('".$x[$i]->_ID."','".$x[$i]->_Name."','".$x[$i]->_Type."','".$x[$i]->_Adresse1."','".$x[$i]->_Adresse2."','".$x[$i]->_Value."')";
 				$res = mysql_query($sql);
 			}
 		}
-		
+		return "OK";
 	}
 
 }

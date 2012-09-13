@@ -482,6 +482,15 @@ Namespace HoMIDom
         <OperationContract()> Sub ExecuteDeviceCommand(ByVal IdSrv As String, ByVal DeviceId As String, ByVal Action As DeviceAction)
 
         ''' <summary>
+        ''' Execute une commande (COMMAND) d'un device (DeviceID) associés à des paramètres (Param)
+        ''' </summary>
+        ''' <param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+        ''' <param name="DeviceId">ID du device</param>
+        ''' <param name="Action">Action (de type Action) à exécutée (ex: "ON", "OFF", "DIM",100...)</param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub ExecuteDeviceCommandSimple(ByVal IdSrv As String, ByVal DeviceId As String, ByVal Action As DeviceActionSimple)
+
+        ''' <summary>
         ''' Supprimer un device
         ''' </summary>
         ''' <param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>

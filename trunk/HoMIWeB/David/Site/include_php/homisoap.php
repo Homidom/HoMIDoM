@@ -53,7 +53,7 @@ class HomidomSoap {
 	/*--------------------------
 	----------- TRACE ----------
 	--------------------------*/
-    private function tracer() {
+    public function tracer() {
         if ($this->_trace) {
             echo "<pre>\n";
             echo "Request :".htmlspecialchars($this->_client->__getLastRequest()) ."\n";
@@ -463,7 +463,7 @@ class HomidomSoap {
 	public function GetAllDevices(){
         if($this->_connecte) {
             $reponse= $this->_client->GetAllDevices(array('IdSrv'=>"$this->_idserver"));
-            $this->tracer();
+            /*$this->tracer();*/
             return $reponse->GetAllDevicesResult->TemplateDevice;  
         } else {
             return "";
@@ -472,8 +472,19 @@ class HomidomSoap {
 	
 	public function ExecuteDeviceCommand($deviceid, $action){
         if($this->_connecte) {
-            $reponse= $this->_client->ExecuteDeviceCommand(array('IdSrv'=>"$this->_idserver", 'DeviceId'=>"$deviceid", 'Action'=>"$action"));
-            return $reponse->ExecuteDeviceCommandResult;  
+            $reponse= $this->_client->ExecuteDeviceCommand(array('IdSrv'=>"$this->_idserver", 'DeviceId'=>"$deviceid", 'Action'=>$action));
+            /*return $reponse->ExecuteDeviceCommandResult;  */
+            return "OK";
+        } else {
+            return "";
+        }
+    }
+	
+    public function ExecuteDeviceCommandSimple($deviceid, $action){
+        if($this->_connecte) {
+            $reponse= $this->_client->ExecuteDeviceCommand(array('IdSrv'=>"$this->_idserver", 'DeviceId'=>"$deviceid", 'Action'=>$action));
+            /*return $reponse->ExecuteDeviceCommandResult;  */
+            return "OK";
         } else {
             return "";
         }
