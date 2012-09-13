@@ -1687,6 +1687,7 @@ Namespace HoMIDom
                 Driver.Write(Me, "OFF")
             End Sub
 
+            'Toggle
             Public Sub Toggle()
                 If _Enable = False Then Exit Sub
                 If _Value > 0 Then

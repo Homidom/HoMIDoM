@@ -60,4 +60,36 @@
         End Class
     End Class
 
+    Public Class DeviceActionSimple
+        Dim _Nom As String
+        Dim _Param1 As String
+        Dim _Param2 As String
+
+        Public Property Nom() As String
+            Get
+                Return _Nom
+            End Get
+            Set(ByVal value As String)
+                _Nom = value
+            End Set
+        End Property
+        Public Property Param1() As String
+            Get
+                Return _Param1
+            End Get
+            Set(ByVal value As String)
+                _Param1 = value
+            End Set
+        End Property
+        Public Property Param2() As String
+            Get
+                Return _Param2
+            End Get
+            Set(ByVal value As String)
+                _Param2 = value
+            End Set
+        End Property
+
+    End Class
+
 End Namespace
