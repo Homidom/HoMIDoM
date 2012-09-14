@@ -37,6 +37,7 @@ Imports ZibaseDll
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "Zibase Ethernet/Wifi V1/2"
     Dim _Version As String = My.Application.Info.Version.ToString
+    Dim _OsPlatform As String = "3264"
     Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
@@ -204,6 +205,11 @@ Imports ZibaseDll
     Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
         Get
             Return _Version
+        End Get
+    End Property
+    Public ReadOnly Property OsPlatform() As String Implements HoMIDom.HoMIDom.IDriver.OsPlatform
+        Get
+            Return _OsPlatform
         End Get
     End Property
     Public Property StartAuto() As Boolean Implements HoMIDom.HoMIDom.IDriver.StartAuto

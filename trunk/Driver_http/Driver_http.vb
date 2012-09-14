@@ -26,6 +26,7 @@ Imports System.Xml
     Dim _Refresh As Integer = 0 'Valeur à laquelle le driver doit rafraichir les valeurs des devices (ex: toutes les 200ms aller lire les devices)
     Dim _Modele As String = "" 'Modèle du driver/interface
     Dim _Version As String = My.Application.Info.Version.ToString 'Version du driver
+    Dim _OsPlatform As String = "3264" 'plateforme compatible 32 64 ou 3264 bits
     Dim _Picture As String = "" 'Image du driver (non utilisé actuellement)
     Dim _Server As HoMIDom.HoMIDom.Server 'Objet Reflètant le serveur
     Dim _DeviceSupport As New ArrayList 'Type de Device supporté par le driver
@@ -334,6 +335,12 @@ Imports System.Xml
     Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
         Get
             Return _Version
+        End Get
+    End Property
+
+    Public ReadOnly Property OsPlatform() As String Implements HoMIDom.HoMIDom.IDriver.OsPlatform
+        Get
+            Return _OsPlatform
         End Get
     End Property
 

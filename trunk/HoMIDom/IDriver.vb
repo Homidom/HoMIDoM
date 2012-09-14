@@ -29,6 +29,7 @@
         Property Refresh() As Integer
         Property Modele() As String
         ReadOnly Property Version() As String
+        ReadOnly Property OsPlatform() As String
         Property Picture() As String
         ReadOnly Property DeviceSupport() As ArrayList
         Property Parametres() As ArrayList

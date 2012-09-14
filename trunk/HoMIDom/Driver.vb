@@ -190,6 +190,12 @@
             End Get
         End Property
 
+        Public ReadOnly Property OsPlatform() As String
+            Get
+                Return _Server.ReturnDriver(_ID).Item(18)
+            End Get
+        End Property
+
         Public Sub New(ByVal Serveur As Server, ByVal SrvId As String, ByVal DriverId As String)
             _Server = Serveur
             _ID = DriverId

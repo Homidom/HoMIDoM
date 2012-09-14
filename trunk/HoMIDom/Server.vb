@@ -65,6 +65,7 @@ Namespace HoMIDom
         <NonSerialized()> Shared _NextTimeSave As DateTime  'Enregistrer toute les X minutes
         <NonSerialized()> Shared _Finish As Boolean  'Le serveur est prêt
         <NonSerialized()> Shared _Voice As String  'Voix par défaut
+        <NonSerialized()> Private Shared _OsPlatForm As String  '32 ou 64 bits
         Private Shared lock_logwrite As New Object
 
 #End Region
@@ -480,7 +481,7 @@ Namespace HoMIDom
                                     _drv.Port_UDP = list.Item(j).Attributes.GetNamedItem("portudp").Value
                                     _drv.COM = list.Item(j).Attributes.GetNamedItem("com").Value
                                     _drv.Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
-                                    _drv.Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
+                                        _drv.Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
 
                                     ' _drv.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
                                     If IO.File.Exists(_MonRepertoire & "\images\drivers\" & _drv.Nom & ".png") Then
@@ -2134,6 +2135,7 @@ Namespace HoMIDom
                         tabl.Add(_ListDrivers.Item(i).DeviceSupport)
                         tabl.Add(_ListDrivers.Item(i).Parametres)
                         tabl.Add(_ListDrivers.Item(i).Labels)
+                        tabl.Add(_ListDrivers.Item(i).OsPlatform)
                         Return tabl
                         Exit For
                     End If
@@ -2232,12 +2234,17 @@ Namespace HoMIDom
                                     i1 = CType(i1, IDriver)
                                     i1.Server = Me
                                     i1.IdSrv = _IdSrv
-                                    Dim pt As New Driver(Me, _IdSrv, i1.ID)
-                                    _ListDrivers.Add(i1)
-                                    _ListImgDrivers.Add(pt)
-                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " chargé (Version : " & i1.Version & ")")
+                                    'Si le driver est prevu pour la plateforme de l'OS, on le charge
+                                    If i1.OsPlatform.Contains(_OsPlatForm) Then
+                                        Dim pt As New Driver(Me, _IdSrv, i1.ID)
+                                        _ListDrivers.Add(i1)
+                                        _ListImgDrivers.Add(pt)
+                                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " chargé (Version : " & i1.Version & " - " & i1.OsPlatform & ")")
+                                        pt = Nothing
+                                    Else
+                                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " non chargé, Platforme " & _OsPlatForm & " non géré (Version : " & i1.Version & " - " & i1.OsPlatform & ")")
+                                    End If
                                     i1 = Nothing
-                                    pt = Nothing
                                 End If
                             End If
                         Next
@@ -2651,6 +2658,8 @@ Namespace HoMIDom
         ''' <summary>Déclaration de la class Server</summary>
         ''' <remarks></remarks>
         Public Sub New()
+            'Check If Homidom Run in 32 or 64 bits
+            If IntPtr.Size = 8 Then _OsPlatForm = "64" Else _OsPlatForm = "32"
 
         End Sub
 
