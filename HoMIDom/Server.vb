@@ -3816,13 +3816,173 @@ Namespace HoMIDom
                         Return Nothing
                     End If
                 Else
-                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllListHisto", retour)
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHisto", retour)
                     result = Nothing
                     _list = Nothing
                     Return Nothing
                 End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHisto", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Retourne un datatable d'historique d'un device suivant sa propriété (source) puis suivant une date de début et de fin
+        ''' </summary>
+        ''' <param name="IdSrv">ID du serveur</param>
+        ''' <param name="idDevice">ID du device</param>
+        ''' <param name="Source">Source du device (ex: Value)</param>
+        ''' <param name="DateStart">Date de départ</param>
+        ''' <param name="DateEnd">Date de fin</param>
+        ''' <returns>Datatable</returns>
+        ''' <remarks></remarks>
+        Public Function GetHistoDeviceSource(ByVal IdSrv As String, ByVal idDevice As String, ByVal Source As String, Optional ByVal DateStart As String = "", Optional ByVal DateEnd As String = "") As List(Of Historisation) Implements IHoMIDom.GetHistoDeviceSource
+            Try
+                'On vérifie que l'id du serveur est correct pour lancer la fonction sinon erreur
+                If VerifIdSrv(IdSrv) = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHistoDeviceSource", "L'Id du serveur est erroné")
+                    Return Nothing
+                    Exit Function
+                End If
+
+                'On vérifie que datestart et dateend sont bien des dates sinon erreur
+                If (IsDate(DateStart) = False And DateStart <> "") Or (IsDate(DateEnd) = False And DateEnd <> "") Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHistoDeviceSource", "Erreur DateStart ou DateEnd doivent être une date")
+                    Return Nothing
+                    Exit Function
+                End If
+
+                'Variables
+                Dim result As New DataTable("HistoDB")
+                Dim retour As String = ""
+                Dim commande As String = ""
+                Dim _list As New List(Of Historisation)
+
+                'Prépare la requête sql suivant datestart et dateend
+                If DateStart = "" And DateEnd = "" Then
+                    commande = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' ;"
+                End If
+                If DateStart <> "" And DateEnd = "" Then
+                    commande = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure>='" & DateStart & "';"
+                End If
+                If DateStart = "" And DateEnd <> "" Then
+                    commande = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure<='" & DateEnd & "';"
+                End If
+                If DateStart <> "" And DateEnd <> "" Then
+                    commande = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure>='" & DateStart & "' and dateheure<='" & DateEnd & "';"
+                End If
+
+                'execute la requête sql
+                retour = sqlite_homidom.query(commande, result, "")
+
+                'Vérifie que la requête n'apas générée d'erreur
+                If UCase(Mid(retour, 1, 3)) = "ERR" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHistoDeviceSource", retour)
+                Else
+                    For i As Integer = 0 To result.Rows.Count - 1
+                        Dim a As New Historisation
+                        a.Nom = result.Rows.Item(i).Item(2).ToString
+                        a.IdDevice = result.Rows.Item(i).Item(1).ToString
+                        a.DateTime = CDate(result.Rows.Item(i).Item(3).ToString)
+                        a.Value = result.Rows.Item(i).Item(4).ToString
+                        _list.Add(a)
+                    Next
+                End If
+
+                result = Nothing
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHistoDeviceSource", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+
+        ''' <summary>
+        ''' Permet de savoir si un device a des hostiques associés dans la BD
+        ''' </summary>
+        ''' <param name="IdDevice"></param>
+        ''' <param name="Source"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function DeviceAsHisto(ByVal IdDevice As String, Optional ByVal Source As String = "") As Boolean Implements IHoMIDom.DeviceAsHisto
+            Try
+                Dim result As New DataTable("HistoDB")
+                Dim retour As String = ""
+                Dim commande As String
+                Dim _list As New List(Of Historisation)
+                Dim rtr As Boolean = False
+
+                If Source = "" Then
+                    commande = "select * from historiques where device_id='" & IdDevice & "' ;"
+                Else
+                    commande = "select * from historiques where source='" & Source & "' and device_id='" & IdDevice & "' ;"
+                End If
+
+                retour = sqlite_homidom.query(commande, result, "")
+
+                If UCase(Mid(retour, 1, 3)) <> "ERR" Then
+                    If result IsNot Nothing Then
+                        If result.Rows.Count = 0 Then
+                            rtr = False
+                        Else
+                            rtr = True
+                        End If
+                    Else
+                        rtr = False
+                    End If
+                Else
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceAsHisto", "Erreur: " & retour)
+                    rtr = False
+                End If
+
+                result = Nothing
+                _list = Nothing
+                Return rtr
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceAsHisto", "Exception : " & ex.Message)
+                Return False
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Retourne un dictionnary retourant en clé l'id du device et la valeur True/False s'il contient des historiques
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function DevicesAsHisto() As Dictionary(Of String, Boolean) Implements IHoMIDom.DevicesAsHisto
+            Try
+                Dim Retour As New Dictionary(Of String, Boolean)
+                Dim commande As String
+                Dim IdDevice As String
+                Dim result As New DataTable("HistoDB")
+                Dim retourDB As String
+
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    IdDevice = _ListDevices.Item(i).ID
+                    commande = "select * from historiques where device_id='" & IdDevice & "' ;"
+                    retourDB = sqlite_homidom.query(commande, result, "")
+
+                    If UCase(Mid(retourDB, 1, 3)) <> "ERR" Then
+                        If result IsNot Nothing Then
+                            If result.Rows.Count = 0 Then
+                                Retour.Add(IdDevice, False)
+                            Else
+                                Retour.Add(IdDevice, True)
+                            End If
+                        Else
+                            Retour.Add(IdDevice, False)
+                        End If
+                    Else
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DevicesAsHisto", "Erreur: " & retourDB)
+                        Exit For
+                    End If
+                Next
+
+                Return Retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DevicesAsHisto", "Exception : " & ex.Message)
                 Return Nothing
             End Try
         End Function
@@ -4866,6 +5026,8 @@ Namespace HoMIDom
                         For j As Integer = 0 To _ListMacros.Count - 1
                             DeleteIDToAction(IdSrv, _ListMacros.Item(j).ListActions, deviceId)
                         Next
+                        'Supprime l'historique du device dans la bdd
+                        DeleteDeviceToBD(deviceId)
 
                         DeleteDevice = 0
                         Exit Function
@@ -4878,6 +5040,29 @@ Namespace HoMIDom
                 Return -1
             End Try
         End Function
+
+        ''' <summary>
+        ''' Supprime un device dans la bdd de l'historique
+        ''' </summary>
+        ''' <param name="DeviceId"></param>
+        ''' <remarks></remarks>
+        Private Sub DeleteDeviceToBD(ByVal DeviceId As String)
+            Try
+                Dim commande As String
+                Dim result As New DataTable("HistoDB")
+                Dim retourDB As String
+
+                commande = "delete * from historiques where device_id='" & DeviceId & "' ;"
+                retourDB = sqlite_homidom.nonquery(commande, Nothing)
+
+                If UCase(Mid(retourDB, 1, 3)) = "ERR" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDeviceToBD", "Erreur: " & retourDB)
+                End If
+
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDeviceToBD", "Erreur : " & ex.Message)
+            End Try
+        End Sub
 
         Private Function DeviceInZone(ByVal IdDevice As Integer) As Integer
             Dim retour As Integer = -1
@@ -7313,14 +7498,6 @@ Namespace HoMIDom
         End Function
 #End Region
 
-#Region "CallBack"
-        'Private ReadOnly Property Callback() As ICallBack
-        '    Get
-        '        Return OperationContext.Current.GetCallbackChannel(Of ICallBack)()
-        '    End Get
-        'End Property
-
-#End Region
 #End Region
 
 

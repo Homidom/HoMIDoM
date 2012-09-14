@@ -359,9 +359,7 @@
                         <Button Height="22" Margin="2" Name="BtnGenereGraph" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Générer">
                             <Image Source="/HoMIAdmiN;component/Images/courbe_128.png" Name="Image1" />
                         </Button>
-                        <Button Height="22" Margin="2" Name="BtnGenereReleve" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Générer Relevés">
-                            <Image Source="/HoMIAdmiN;component/Images/Releve_64.png" />
-                        </Button>
+                       
                     </StackPanel>
                     <TreeView Margin="0" Name="TreeViewHisto" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
                     </DockPanel>

@@ -287,6 +287,34 @@ Namespace HoMIDom
 
 #Region "Historisation"
         ''' <summary>
+        ''' Retourne un dictionnary retourant en clé l'id du device et la valeur True/False s'il contient des historiques
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function DevicesAsHisto() As Dictionary(Of String, Boolean)
+
+        ''' <summary>
+        ''' Retourne un datatable d'historique d'un device suivant sa propriété (source) puis suivant une date de début et de fin
+        ''' </summary>
+        ''' <param name="IdSrv">ID du serveur</param>
+        ''' <param name="idDevice">ID du device</param>
+        ''' <param name="Source">Source du device (ex: Value)</param>
+        ''' <param name="DateStart">Date de départ</param>
+        ''' <param name="DateEnd">Date de fin</param>
+        ''' <returns>Datatable</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetHistoDeviceSource(ByVal IdSrv As String, ByVal idDevice As String, ByVal Source As String, Optional ByVal DateStart As String = "", Optional ByVal DateEnd As String = "") As List(Of Historisation)
+
+        ''' <summary>
+        ''' Retourne True si le device comporte des historiques
+        ''' </summary>
+        ''' <param name="IdDevice">ID du device</param>
+        ''' <param name="Source">Option propriété du device (ex: Value)</param>
+        ''' <returns>True si comporte des historiques</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function DeviceAsHisto(ByVal IdDevice As String, Optional ByVal Source As String = "") As Boolean
+
+        ''' <summary>
         ''' Retourne la liste des sources histo (source et id) présents dans la base de données Homidom
         ''' </summary>
         ''' <param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
