@@ -572,6 +572,8 @@ Public Class Driver_onewire
 
     Public Sub New()
         Try
+            _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
             _DeviceSupport.Add(ListeDevices.CONTACT.ToString)

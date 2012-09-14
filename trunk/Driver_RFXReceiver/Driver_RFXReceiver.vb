@@ -544,6 +544,8 @@ Imports System.Globalization
     ''' <remarks></remarks>
     Public Sub New()
         Try
+            _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
             _DeviceSupport.Add(ListeDevices.BAROMETRE.ToString)
@@ -578,14 +580,14 @@ Imports System.Globalization
             'add_devicecommande("PRESETDIM", "permet de paramétrer le DIM : param1=niveau, param2=timer", 2)
 
             'Libellé Driver
-            add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
+            Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole: L1, 0F25E-01...")
-            add_libelledevice("ADRESSE2", "@", "")
-            add_libelledevice("SOLO", "@", "")
+            Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole: L1, 0F25E-01...")
+            Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
-            add_libelledevice("REFRESH", "@", "")
+            Add_LibelleDevice("REFRESH", "@", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER New", ex.Message)

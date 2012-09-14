@@ -592,6 +592,8 @@ Public Class Driver_Arduino
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub New()
+        _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
         'Devices supportés par le driver
         _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE)
         _DeviceSupport.Add(ListeDevices.CONTACT)

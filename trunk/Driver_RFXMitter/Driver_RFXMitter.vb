@@ -621,6 +621,8 @@ Imports System.Globalization
     ''' <remarks></remarks>
     Public Sub New()
         Try
+            _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
             'Parametres avancés
             add_paramavance("synchro", "Synchronisation avec le receiver (True/False)", True)
             add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
@@ -642,14 +644,14 @@ Imports System.Globalization
             add_devicecommande("CHIME", "Protocole ARC : Chime", 2)
 
             'Libellé Driver
-            add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
+            Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
-            add_libelledevice("ADRESSE2", "@", "")
-            add_libelledevice("SOLO", "@", "")
+            Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
+            Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : AC / ACEU / X10 / ARC / WAVEMAN", "AC|ACEU|ARC|WAVEMAN|X10")
-            add_libelledevice("REFRESH", "@", "")
+            Add_LibelleDevice("REFRESH", "@", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXmitter New", ex.Message)

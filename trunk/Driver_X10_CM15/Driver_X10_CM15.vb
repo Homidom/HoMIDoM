@@ -443,6 +443,8 @@ Public Class Driver_X10_CM15
     End Sub
 
     Public Sub New()
+        _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
         _DeviceSupport.Add(ListeDevices.SWITCH)
         _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
         _DeviceSupport.Add(ListeDevices.CONTACT)

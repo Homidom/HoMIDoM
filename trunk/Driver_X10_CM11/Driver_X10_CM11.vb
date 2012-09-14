@@ -517,6 +517,8 @@ Public Class Driver_X10_CM11
     ''' <remarks></remarks>
     Public Sub New()
         Try
+            _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
             house_to_hex.Add("A", &H60)
             house_to_hex.Add("B", &HE0)
             house_to_hex.Add("C", &H20)
@@ -580,11 +582,11 @@ Public Class Driver_X10_CM11
             'add_devicecommande("COMMANDE", "DESCRIPTION", 0)
 
             'Libellé Driver
-            add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
+            Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            add_libelledevice("ADRESSE1", "Adresse du module", "Adresse HouseCode du module (ex: C3)")
-            add_libelledevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("ADRESSE1", "Adresse du module", "Adresse HouseCode du module (ex: C3)")
+            Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
             Add_LibelleDevice("REFRESH", "Refresh", "")

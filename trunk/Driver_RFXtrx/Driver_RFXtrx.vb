@@ -1487,6 +1487,8 @@ Imports System.Media
     ''' <remarks></remarks>
     Public Sub New()
         Try
+            _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
             'Parametres avancés
             add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
             add_paramavance("ParamMode", "Paramétres (ex: 201001111011111111)", "201001111011111111")

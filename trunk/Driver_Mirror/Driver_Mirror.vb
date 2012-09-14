@@ -451,6 +451,8 @@ Imports UsbLibrary
     ''' <remarks></remarks>
     Public Sub New()
         Try
+            _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
             _DeviceSupport.Add(ListeDevices.SWITCH)

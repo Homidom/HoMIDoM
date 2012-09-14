@@ -665,6 +665,8 @@ Public Class Driver_ZWave
         ''' <remarks></remarks>
         Public Sub New()
             Try
+                _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
                 ''liste des devices compatibles
                 _DeviceSupport.Add(ListeDevices.SWITCH) 'SORTIE
                 _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN) 'ENTREE
