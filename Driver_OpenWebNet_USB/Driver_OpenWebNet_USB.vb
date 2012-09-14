@@ -489,6 +489,8 @@ Imports OpenWebNet
     ''' <remarks></remarks>
     Public Sub New()
         Try
+            _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL)
             _DeviceSupport.Add(ListeDevices.LAMPE)

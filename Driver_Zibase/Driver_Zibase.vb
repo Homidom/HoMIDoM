@@ -467,6 +467,7 @@ Imports ZibaseDll
     ''' <remarks></remarks>
     Public Sub New()
         Try
+            _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
 
             'Parametres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)

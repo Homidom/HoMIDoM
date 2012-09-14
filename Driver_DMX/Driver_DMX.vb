@@ -417,6 +417,8 @@ Imports System.IO
     End Sub
 
     Public Sub New()
+        _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
         _DeviceSupport.Add(ListeDevices.LAMPE)
 
         'ajout des commandes avancées pour les devices

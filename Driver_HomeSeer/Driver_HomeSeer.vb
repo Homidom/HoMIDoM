@@ -506,6 +506,8 @@ Public Class Driver_HomeSeer
     ''' <remarks></remarks>
     Public Sub New()
         Try
+            _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
             'Parametres avancés
             Add_ParamAvance("Login", "Login de connexion", "default")
             Add_ParamAvance("Password", "Password de connexion", "default")

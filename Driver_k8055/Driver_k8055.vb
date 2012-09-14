@@ -626,6 +626,8 @@ Imports HoMIDom.HoMIDom.Device
     End Sub
 
     Public Sub New()
+        _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
         _DeviceSupport.Add(ListeDevices.SWITCH) 'SORTIE
         _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN) 'ENTREE
         _DeviceSupport.Add(ListeDevices.APPAREIL) 'SORTIE

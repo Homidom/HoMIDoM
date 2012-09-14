@@ -495,6 +495,8 @@ Imports System.IO.Ports
     ''' <remarks></remarks>
     Public Sub New()
         Try
+            _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
             'Liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
             _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
@@ -538,14 +540,14 @@ Imports System.IO.Ports
             'add_devicecommande("ReportOnlyOnIdPulse3Phase", "", 0)
 
             'Libellé Driver
-            add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
+            Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            add_libelledevice("ADRESSE1", "Adresse", "Adresse du composant de type L1 ou L")
-            add_libelledevice("ADRESSE2", "@", "")
-            add_libelledevice("SOLO", "@", "")
-            add_libelledevice("MODELE", "@", "")
-            add_libelledevice("REFRESH", "@", "")
+            Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant de type L1 ou L")
+            Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("SOLO", "@", "")
+            Add_LibelleDevice("MODELE", "@", "")
+            Add_LibelleDevice("REFRESH", "@", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
             'dictionnaire Commande STRING -> INT
