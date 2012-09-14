@@ -7,6 +7,7 @@ Namespace HoMIDom
 
     <ServiceContract(Namespace:="http://HoMIDom/")> Public Interface IFileServer
         <OperationContract()> Function Download(ByVal Fichier As RequestFileData) As FileData
+
     End Interface
 
     <Serializable()> Public Class FileServer
@@ -19,6 +20,7 @@ Namespace HoMIDom
             End If
             Return Nothing
         End Function
+
     End Class
 
     ''' <summary>

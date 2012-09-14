@@ -31,7 +31,6 @@ Class Window1
     Dim myBrushVert As New RadialGradientBrush()
     Dim myBrushRouge As New RadialGradientBrush()
     Dim flagTreeV As Boolean = False
-    Dim ListeHisto As New List(Of HoMIDom.HoMIDom.Historisation)
     Dim DevicesAsHisto As New Dictionary(Of String, Boolean)
 
 #Region "Fonctions de base"
@@ -797,7 +796,6 @@ Class Window1
 
             Dim ListeDevices = myService.GetAllDevices(IdSrv)
             Dim ListeZones = myService.GetAllZones(IdSrv)
-            ListeHisto = myService.GetAllListHisto(IdSrv)
             DevicesAsHisto = myService.DevicesAsHisto
 
             CntDevice.Content = ListeDevices.Count & " Device(s)"
@@ -944,21 +942,6 @@ Class Window1
         End Try
     End Sub
 
-    'Retourne True su le device a des histo de type Value
-    Private Function AsHisto(ByVal Deviceid As String) As Boolean
-        'Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
-        Dim retour As Boolean = False
-        'x = myService.GetAllListHisto(IdSrv)
-
-        For Each _histo As HoMIDom.HoMIDom.Historisation In ListeHisto
-            If _histo.IdDevice = Deviceid And UCase(_histo.Nom) = "VALUE" Then
-                retour = True
-                Exit For
-            End If
-        Next
-
-        Return retour
-    End Function
 
     'Retourne True si le device a plusieurs histo sur des propriétés différents
     Private Function AsMultiHisto(ByVal Deviceid As String) As Boolean
@@ -1898,7 +1881,7 @@ Class Window1
                         For i As Integer = 0 To _retour.Count - 2
                             a = a & _retour(i) & vbCrLf
                         Next
-                        If AsHisto(ID) Then
+                        If myService.DeviceAsHisto(ID) Then
                             a = a & "- Historiques" & vbCrLf
                         End If
                         If MessageBox.Show(a, "Suppression", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.No Then
