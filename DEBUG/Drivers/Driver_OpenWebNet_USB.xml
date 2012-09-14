@@ -6,20 +6,7 @@ Driver_OpenWebNet_USB
 </name>
 </assembly>
 <members>
-<member name="P:Driver_OpenWebNet_USB.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_OpenWebNet_USB.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_OpenWebNet_USB.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member><member name="M:Driver_OpenWebNet_USB.Driver_OpenWebNet_USB.GetCommandPlus">
+<member name="M:Driver_OpenWebNet_USB.Driver_OpenWebNet_USB.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
@@ -97,6 +84,19 @@ Driver_OpenWebNet_USB
 </member><member name="M:Driver_OpenWebNet_USB.Driver_OpenWebNet_USB.TimerTick">
 	<summary>Si refresh &gt;0 gestion du timer</summary>
 	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+</member><member name="P:Driver_OpenWebNet_USB.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_OpenWebNet_USB.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_OpenWebNet_USB.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member>
 </members>
 </doc>
