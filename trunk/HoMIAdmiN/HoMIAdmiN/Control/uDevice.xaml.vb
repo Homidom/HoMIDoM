@@ -673,17 +673,18 @@ Partial Public Class uDevice
 
             Me.Cursor = Cursors.Wait
 
-            Dim _listhisto As New List(Of Historisation)
+            If myService.DeviceAsHisto(_DeviceId, "Value") Then
+                Dim Devices As New Dictionary(Of String, String)
+                Devices.Add(_DeviceId, "Value")
 
-            _listhisto = myService.GetHisto(IdSrv, "Value", _DeviceId)
-
-            If _listhisto IsNot Nothing Then
-                Dim x As New uReleve(_listhisto, TxtNom.Text)
+                Dim x As New uHisto(Devices)
                 x.Uid = System.Guid.NewGuid.ToString()
+                x.Width = Window1.CanvasUser.ActualWidth - 100
+                x.Height = Window1.CanvasUser.ActualHeight - 50
                 AddHandler x.CloseMe, AddressOf UnloadControl
                 Window1.CanvasUser.Children.Add(x)
-            End If
 
+            End If
             Me.Cursor = Nothing
         Catch ex As Exception
             MessageBox.Show("Erreur lors de la génération du relevé: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)

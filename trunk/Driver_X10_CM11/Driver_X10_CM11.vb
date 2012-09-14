@@ -129,7 +129,9 @@ Public Class Driver_X10_CM11
             _LabelsDevice = value
         End Set
     End Property
+
     Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
+
     Public Property Enable() As Boolean Implements HoMIDom.HoMIDom.IDriver.Enable
         Get
             Return _Enable
@@ -317,9 +319,6 @@ Public Class Driver_X10_CM11
                 port.Parity = IO.Ports.Parity.None 'pas de parité
                 port.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
                 port.DataBits = 8 'nombre de bit par octet
-                'port.Encoding = System.Text.Encoding.GetEncoding(1252)  'Extended ASCII (8-bits)
-                'port.ReadBufferSize = CInt(4096)
-                'port.ReceivedBytesThreshold = 1
                 port.StopBits = StopBits.One
                 port.Handshake = IO.Ports.Handshake.XOnXOff
                 port.ReadTimeout = 5000
@@ -327,11 +326,7 @@ Public Class Driver_X10_CM11
                 AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
                 AddHandler port.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf m_serialPort_ErrorReceived)
                 port.Open()
-                'If port.IsOpen Then
-                '    port.DtrEnable = True
-                '    port.RtsEnable = True
-                '    port.DiscardInBuffer()
-                'End If
+
                 _IsConnect = True
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "X10 Start", "Port " & _Com & " ouvert")
             Else
@@ -404,23 +399,24 @@ Public Class Driver_X10_CM11
         Try
             If _Enable = False Then Exit Sub
             If _IsConnect = False Then Exit Sub
+
             Select Case UCase(Command)
                 Case "ON"
-                    ecrire(Objet.adresse1, "ON", 0)
+                    ecrire(Objet.Adresse1, "ON", 0)
                     Objet.value = 100
                 Case "OFF"
-                    ecrire(Objet.adresse1, "OFF", 0)
+                    ecrire(Objet.Adresse1, "OFF", 0)
                     Objet.value = 0
                 Case "DIM"
                     If Parametre1 IsNot Nothing Then
                         Dim x As Integer = Parametre1
                         If x <= 0 Then
-                            ecrire(Objet.adresse1, "OFF", 0)
+                            ecrire(Objet.Adresse1, "OFF", 0)
                         End If
                         If x >= 100 Then
-                            ecrire(Objet.adresse1, "ON", 0)
+                            ecrire(Objet.Adresse1, "ON", 0)
                         End If
-                        ecrire(Objet.adresse1, "EXTENDED_CODE", x)
+                        ecrire(Objet.Adresse1, "EXTENDED_CODE", x)
                         Objet.value = x
                     End If
                 Case "OUVERTURE"
@@ -733,7 +729,7 @@ Public Class Driver_X10_CM11
             Recieved_FAMask = Int2Bin(CInt(trame(0)))
             Recieved_FAMask = StrReverse(Recieved_FAMask)
 
-            For i = 1 To trame.Length - 1
+            For i As Integer = 1 To trame.Length - 1
                 Dim Bin As String = Int2Bin(CInt(trame(i)))
                 CurrentHouse = GetHouse(Mid(Bin, 1, 4))
 
@@ -874,6 +870,7 @@ Public Class Driver_X10_CM11
                     port.Write(donnee2, 0, 1)
 
                     Dim donnee3 As Byte() = {axbData(3), axbData(4)}
+
                     nbboucle = 0
                     Do
                         'ecriture de la H6 + valeur du DIM et housecode-commandecode

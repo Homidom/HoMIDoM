@@ -4,6 +4,7 @@ Imports HoMIDom.HoMIDom
 Imports System.ServiceModel
 Imports System.IO
 Imports System.Xml
+Imports System.Data
 Imports System.Xml.Serialization
 Imports System.Threading
 Imports System.Reflection.Assembly
@@ -31,6 +32,7 @@ Class Window1
     Dim myBrushRouge As New RadialGradientBrush()
     Dim flagTreeV As Boolean = False
     Dim ListeHisto As New List(Of HoMIDom.HoMIDom.Historisation)
+    Dim DevicesAsHisto As New Dictionary(Of String, Boolean)
 
 #Region "Fonctions de base"
 
@@ -796,6 +798,7 @@ Class Window1
             Dim ListeDevices = myService.GetAllDevices(IdSrv)
             Dim ListeZones = myService.GetAllZones(IdSrv)
             ListeHisto = myService.GetAllListHisto(IdSrv)
+            DevicesAsHisto = myService.DevicesAsHisto
 
             CntDevice.Content = ListeDevices.Count & " Device(s)"
             For Each Dev In ListeDevices
@@ -900,16 +903,9 @@ Class Window1
                     AddHandler mnu2.Click, AddressOf MnuitemDev_Click
                     ctxMenu.Items.Add(mnu2)
                 End If
-                Dim _DevHisto As Boolean = AsHisto(Dev.ID)
-                Dim mnu3 As New MenuItem
-                mnu3.Header = "Relevé"
-                mnu3.Tag = 3
-                mnu3.Uid = Dev.ID
-                If _DevHisto = False Then mnu3.IsEnabled = False
-                AddHandler mnu3.Click, AddressOf MnuitemDev_Click
-                ctxMenu.Items.Add(mnu3)
+                Dim _DevHisto As Boolean = myService.DeviceAsHisto(Dev.ID)
                 Dim mnu4 As New MenuItem
-                mnu4.Header = "Graphe"
+                mnu4.Header = "Historique"
                 mnu4.Tag = 4
                 mnu4.Uid = Dev.ID
                 If _DevHisto = False Then mnu4.IsEnabled = False
@@ -1005,63 +1001,11 @@ Class Window1
                     Dim x As TemplateDevice = myService.ReturnDeviceByID(IdSrv, sender.uid)
                     myService.SaveDevice(IdSrv, sender.uid, x.Name, x.Adresse1, False, x.Solo, x.DriverID, x.Type.ToString, x.Refresh)
                     AffDevice()
-                Case 3 'Relevé
-                    Me.Cursor = Cursors.Wait
-
-                    Dim _listhisto As New List(Of Historisation)
-
-                    _listhisto = myService.GetHisto(IdSrv, "Value", sender.uid)
-
-                    If _listhisto IsNot Nothing Then
-                        Dim x As New uReleve(_listhisto, myService.ReturnDeviceByID(IdSrv, sender.uid).Name)
-                        x.Uid = System.Guid.NewGuid.ToString()
-                        AddHandler x.CloseMe, AddressOf UnloadControl
-                        Window1.CanvasUser.Children.Add(x)
-                    End If
-
-                    Me.Cursor = Nothing
                 Case 4 'Graphe
-                    Dim myPane As New ZedGraph.GraphPane
-                    Dim ListColor As New List(Of System.Drawing.Color)
-                    Dim idxcolor As Integer = -1
+                    Dim Devices As New Dictionary(Of String, String)
+                    Devices.Add(sender.uid, "Value")
 
-                    ListColor.Add(System.Drawing.Color.Blue)
-
-                    Dim _listhisto As New List(Of Historisation)
-                    _listhisto = myService.GetHisto(IdSrv, "Value", sender.uid)
-
-                    Dim listpoint As New ZedGraph.PointPairList
-                    For j As Integer = 0 To _listhisto.Count - 1
-                        If IsNumeric(_listhisto.Item(j).Value) = False Then
-                            listpoint = Nothing
-                            Exit For
-                        End If
-                        listpoint.Add(New ZedGraph.PointPair(_listhisto.Item(j).DateTime.ToOADate, _listhisto.Item(j).Value))
-                    Next
-
-                    Dim courbe As ZedGraph.LineItem
-                    idxcolor += 1
-                    If idxcolor = ListColor.Count - 1 Then idxcolor = 0
-
-                    courbe = myPane.AddCurve(myService.ReturnDeviceByID(IdSrv, sender.uid).Name, listpoint, ListColor(idxcolor), ZedGraph.SymbolType.None)
-                    courbe.Line.Width = 1
-
-
-                    myPane.Chart.Fill = New ZedGraph.Fill(System.Drawing.Color.FromArgb(240, 245, 250), System.Drawing.Color.FromArgb(210, 230, 240), -90) 'fond dégradé
-
-                    'Axe X
-                    myPane.XAxis.Type = ZedGraph.AxisType.Date
-                    myPane.XAxis.Scale.Format = "dd-MM-yy HH:mm" '"dd-MMM-yy HH:mm:ss"
-                    myPane.XAxis.MajorGrid.Color = System.Drawing.Color.LightGray
-                    myPane.XAxis.MajorGrid.PenWidth = 1
-                    myPane.XAxis.MajorGrid.IsVisible = True
-
-                    'Axe Y
-                    myPane.YAxis.MajorGrid.Color = System.Drawing.Color.LightGray
-                    myPane.YAxis.MajorGrid.PenWidth = 1
-                    myPane.YAxis.MajorGrid.IsVisible = True
-
-                    Dim x As New uHisto(myPane)
+                    Dim x As New uHisto(Devices)
                     x.Uid = System.Guid.NewGuid.ToString()
                     x.Width = CanvasRight.ActualWidth - 100
                     x.Height = CanvasRight.ActualHeight - 50
@@ -1954,6 +1898,9 @@ Class Window1
                         For i As Integer = 0 To _retour.Count - 2
                             a = a & _retour(i) & vbCrLf
                         Next
+                        If AsHisto(ID) Then
+                            a = a & "- Historiques" & vbCrLf
+                        End If
                         If MessageBox.Show(a, "Suppression", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.No Then
                             Me.Cursor = Nothing
                             Exit Sub
@@ -2101,22 +2048,11 @@ Class Window1
                 Exit Sub
             End If
 
-            Dim myPane As New ZedGraph.GraphPane
-            Dim ListColor As New List(Of System.Drawing.Color)
-            Dim idxcolor As Integer = -1
+            Me.Cursor = Cursors.Wait
 
-            ListColor.Add(System.Drawing.Color.Blue)
-            ListColor.Add(System.Drawing.Color.Red)
-            ListColor.Add(System.Drawing.Color.Green)
-            ListColor.Add(System.Drawing.Color.Yellow)
-            ListColor.Add(System.Drawing.Color.Orange)
-            ListColor.Add(System.Drawing.Color.Violet)
-            ListColor.Add(System.Drawing.Color.DarkBlue)
-            ListColor.Add(System.Drawing.Color.DarkRed)
-            ListColor.Add(System.Drawing.Color.DarkGreen)
-            ListColor.Add(System.Drawing.Color.Turquoise)
-            ListColor.Add(System.Drawing.Color.DarkOrange)
-            ListColor.Add(System.Drawing.Color.DarkViolet)
+           
+            Dim Devices As New Dictionary(Of String, String)
+
 
             For i As Integer = 0 To TreeViewHisto.Items.Count - 1
                 Dim chk As CheckBox
@@ -2125,71 +2061,23 @@ Class Window1
                     chk = TreeViewHisto.Items(i)
 
                     If chk.IsChecked = True Then
-                        Dim _listhisto As New List(Of Historisation)
-                        _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
-
-                        Dim listpoint As New ZedGraph.PointPairList
-                        For j As Integer = 0 To _listhisto.Count - 1
-                            If IsNumeric(_listhisto.Item(j).Value) = False Then
-                                listpoint = Nothing
-                                Exit For
-                            End If
-                            listpoint.Add(New ZedGraph.PointPair(_listhisto.Item(j).DateTime.ToOADate, CDbl(_listhisto.Item(j).Value)))
-                        Next
-
-                        Dim courbe As ZedGraph.LineItem
-                        idxcolor += 1
-                        If idxcolor = ListColor.Count - 1 Then idxcolor = 0
-
-                        courbe = myPane.AddCurve(chk.Content, listpoint, ListColor(idxcolor), ZedGraph.SymbolType.None)
-                        courbe.Line.Width = 1
+                        Devices.Add(chk.Uid, chk.Tag)
                     End If
 
-                    myPane.Chart.Fill = New ZedGraph.Fill(System.Drawing.Color.FromArgb(240, 245, 250), System.Drawing.Color.FromArgb(210, 230, 240), -90) 'fond dégradé
                 Else 'il a des enfants
                     Dim trv1 As TreeViewItem = TreeViewHisto.Items(i)
                     For j1 As Integer = 0 To trv1.Items.Count - 1
                         chk = trv1.Items(j1)
 
                         If chk.IsChecked = True Then
-                            Dim _listhisto As New List(Of Historisation)
-                            _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
-
-                            Dim listpoint As New ZedGraph.PointPairList
-                            For j As Integer = 0 To _listhisto.Count - 1
-                                If IsNumeric(_listhisto.Item(j).Value) = False Then
-                                    listpoint = Nothing
-                                    Exit For
-                                End If
-                                listpoint.Add(New ZedGraph.PointPair(_listhisto.Item(j).DateTime.ToOADate, CDbl(_listhisto.Item(j).Value)))
-                            Next
-
-                            Dim courbe As ZedGraph.LineItem
-                            idxcolor += 1
-                            If idxcolor = ListColor.Count - 1 Then idxcolor = 0
-
-                            courbe = myPane.AddCurve(chk.Content, listpoint, ListColor(idxcolor), ZedGraph.SymbolType.None)
-                            courbe.Line.Width = 1
+                            Devices.Add(chk.Uid, chk.Tag)
                         End If
 
-                        myPane.Chart.Fill = New ZedGraph.Fill(System.Drawing.Color.FromArgb(240, 245, 250), System.Drawing.Color.FromArgb(210, 230, 240), -90) 'fond dégradé
                     Next
                 End If
             Next
 
-            'Axe X
-            myPane.XAxis.Type = ZedGraph.AxisType.Date
-            myPane.XAxis.Scale.Format = "dd-MM-yy HH:mm" '"dd-MMM-yy HH:mm:ss"
-            myPane.XAxis.MajorGrid.Color = System.Drawing.Color.LightGray
-            myPane.XAxis.MajorGrid.PenWidth = 1
-            myPane.XAxis.MajorGrid.IsVisible = True
-
-            'Axe Y
-            myPane.YAxis.MajorGrid.Color = System.Drawing.Color.LightGray
-            myPane.YAxis.MajorGrid.PenWidth = 1
-            myPane.YAxis.MajorGrid.IsVisible = True
-
-            Dim x As New uHisto(myPane)
+            Dim x As New uHisto(Devices)
             x.Uid = System.Guid.NewGuid.ToString()
             x.Width = CanvasRight.ActualWidth - 100
             x.Height = CanvasRight.ActualHeight - 50
@@ -2197,72 +2085,9 @@ Class Window1
             CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
 
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub BtnGenereGraph_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    Private Sub BtnGenereReleve_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereReleve.Click
-        Try
-            If IsConnect = False Then
-                Serveur_notconnected_action()
-                Exit Sub
-            End If
-
-            Me.Cursor = Cursors.Wait
-
-            Dim _listhisto As New List(Of Historisation)
-            Dim _Two As Boolean = False
-            Dim lbl As String = ""
-
-            For i As Integer = 0 To TreeViewHisto.Items.Count - 1
-                Dim chk As CheckBox
-
-                If TreeViewHisto.Items(i).GetType.ToString.Contains("CheckBox") Then
-                    chk = TreeViewHisto.Items(i)
-
-                    If chk.IsChecked = True And _Two = False Then
-                        _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
-                        lbl = chk.Content
-                        _Two = True
-                    Else
-                        If chk.IsChecked = True And _Two = True Then
-                            Me.Cursor = Nothing
-                            MessageBox.Show("Seul un élément peut être affiché dans les relevés!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                            Exit Sub
-                        End If
-                    End If
-                Else
-                    Dim trv1 As TreeViewItem = TreeViewHisto.Items(i)
-                    For j1 As Integer = 0 To trv1.Items.Count - 1
-                        chk = trv1.Items(j1)
-
-                        If chk.IsChecked = True And _Two = False Then
-                            _listhisto = myService.GetHisto(IdSrv, chk.Tag, chk.Uid)
-                            lbl = chk.Content
-                            _Two = True
-                        Else
-                            If chk.IsChecked = True And _Two = True Then
-                                Me.Cursor = Nothing
-                                MessageBox.Show("Seul un élément peut être affiché dans les relevés!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                                Exit Sub
-                            End If
-                        End If
-                    Next
-                End If
-
-            Next
-
-            If _listhisto IsNot Nothing And _Two Then
-                Dim x As New uReleve(_listhisto, lbl)
-                x.Uid = System.Guid.NewGuid.ToString()
-                AddHandler x.CloseMe, AddressOf UnloadControl
-                CanvasRight.Children.Clear()
-                CanvasRight.Children.Add(x)
-            End If
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de la génération du relevé: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("ERREUR Sub BtnGenereGraph_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
