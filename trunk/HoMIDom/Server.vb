@@ -53,9 +53,6 @@ Namespace HoMIDom
         <NonSerialized()> Private Shared _IPSOAP As String = "localhost" 'IP de connexion SOAP
         <NonSerialized()> Dim TimerSecond As New Timers.Timer 'Timer à la seconde
         <NonSerialized()> Shared _DateTimeLastStart As Date = Now
-        <NonSerialized()> Private Shared _ListExtensionAudio As New List(Of Audio.ExtensionAudio) 'Liste des extensions audio
-        <NonSerialized()> Private Shared _ListRepertoireAudio As New List(Of Audio.RepertoireAudio) 'Liste des répertoires audio
-        <NonSerialized()> Private _ListTagAudio As New List(Of Audio.FilePlayList) ' Liste des tags des fichiers audio 
         <NonSerialized()> Public Shared Etat_server As Boolean 'etat du serveur : true = démarré
         <NonSerialized()> Dim fsw As FileSystemWatcher
         <NonSerialized()> Dim _MaxMonthLog As Integer = 2
@@ -990,67 +987,6 @@ Namespace HoMIDom
                             Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des macros : " & ex.ToString)
                         End Try
 
-                        '******************************************
-                        'on va chercher des extensions audios
-                        '******************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des extensions audio :")
-                        list = Nothing
-                        list = myxml.SelectNodes("/homidom/audios/extension")
-                        If list.Count > 0 Then 'présence des extension
-                            For i As Integer = 0 To list.Count - 1
-                                Dim x As New Audio.ExtensionAudio
-                                For j As Integer = 0 To list.Item(i).Attributes.Count - 1
-                                    Select Case list.Item(i).Attributes.Item(j).Name
-                                        Case "extension"
-                                            x.Extension = list.Item(i).Attributes.Item(j).Value
-                                        Case "enable"
-                                            x.Enable = list.Item(i).Attributes.Item(j).Value
-                                        Case Else
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à une extension audio est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
-                                    End Select
-                                Next
-                                _ListExtensionAudio.Add(x)
-                            Next
-                        End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListExtensionAudio.Count & " Extension(s) Audio chargée(s)")
-                        list = Nothing
-
-                        '******************************************
-                        'on va chercher les répertoires audios
-                        '******************************************
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des répertoires audio :")
-                        list = Nothing
-                        list = myxml.SelectNodes("/homidom/audios/repertoire")
-                        If list.Count > 0 Then 'présence des répertoires
-                            For i As Integer = 0 To list.Count - 1
-                                Dim x As New Audio.RepertoireAudio
-                                For j As Integer = 0 To list.Item(i).Attributes.Count - 1
-                                    Select Case list.Item(i).Attributes.Item(j).Name
-                                        Case "repertoire"
-                                            x.Repertoire = list.Item(i).Attributes.Item(j).Value
-                                        Case "enable"
-                                            x.Enable = list.Item(i).Attributes.Item(j).Value
-                                        Case Else
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à un répertoire audio est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
-                                    End Select
-                                Next
-                                _ListRepertoireAudio.Add(x)
-                            Next
-                        End If
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListRepertoireAudio.Count & " Répertoire(s) Audio chargé(s)")
-                        list = Nothing
-
-                        '******************************************
-                        'on va nettoyer les devices disparus
-                        '********************************************
-                        'For Each _zone In _ListZones
-                        '    For Each _elmt In _zone.ListElement
-                        '        If ReturnDeviceById(_IdSrv, _elmt.ElementID) Is Nothing And ReturnZoneById(_IdSrv, _elmt.ElementID) Is Nothing And ReturnMacroById(_IdSrv, _elmt.ElementID) Is Nothing Then
-                        '            _zone.ListElement.Remove(_elmt)
-                        '        End If
-                        '    Next
-                        'Next
-
                         Exit For
                     Next
                 Else
@@ -1520,33 +1456,6 @@ Namespace HoMIDom
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("codepostal")
                     writer.WriteValue(_ListUsers.Item(i).CodePostal)
-                    writer.WriteEndAttribute()
-                    writer.WriteEndElement()
-                Next
-                writer.WriteEndElement()
-
-                ''------------
-                ''Sauvegarde des extensions audios
-                ''------------
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des extensions et répertoires audio")
-                writer.WriteStartElement("audios")
-                For i As Integer = 0 To _ListExtensionAudio.Count - 1
-                    writer.WriteStartElement("extension")
-                    writer.WriteStartAttribute("extension")
-                    writer.WriteValue(_ListExtensionAudio.Item(i).Extension)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("enable")
-                    writer.WriteValue(_ListExtensionAudio.Item(i).Enable)
-                    writer.WriteEndAttribute()
-                    writer.WriteEndElement()
-                Next
-                For i As Integer = 0 To _ListRepertoireAudio.Count - 1
-                    writer.WriteStartElement("repertoire")
-                    writer.WriteStartAttribute("repertoire")
-                    writer.WriteValue(_ListRepertoireAudio.Item(i).Repertoire)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("enable")
-                    writer.WriteValue(_ListRepertoireAudio.Item(i).Enable)
                     writer.WriteEndAttribute()
                     writer.WriteEndElement()
                 Next
@@ -2854,12 +2763,9 @@ Namespace HoMIDom
                 _ListDrivers.Clear()
 
                 '----- Vide les variables -----
-                _ListExtensionAudio.Clear()
                 _ListGroups.Clear()
                 _ListImgDrivers.Clear()
                 _ListMacros.Clear()
-                _ListRepertoireAudio.Clear()
-                _ListTagAudio.Clear()
                 _ListTriggers.Clear()
                 _ListUsers.Clear()
                 _ListZones.Clear()
@@ -3989,229 +3895,6 @@ Namespace HoMIDom
 #End Region
 
 #Region "Audio"
-        ''' <summary>Supprimer une extension Audio</summary>
-        ''' <param name="NomExtension"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function DeleteExtensionAudio(ByVal IdSrv As String, ByVal NomExtension As String) As Integer Implements IHoMIDom.DeleteExtensionAudio
-            Try
-                If VerifIdSrv(IdSrv) = False Then
-                    Return 99
-                    Exit Function
-                End If
-
-                Dim retour As Integer = -1
-                For i As Integer = 0 To _ListExtensionAudio.Count - 1
-                    If NomExtension = _ListExtensionAudio.Item(i).Extension Then
-                        _ListExtensionAudio.RemoveAt(i)
-                        retour = 0
-                        Exit For
-                    End If
-                Next
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteExtensionAudio", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>
-        ''' Ajouter une nouvelle extension audio
-        ''' </summary>
-        ''' <param name="NomExtension"></param>
-        ''' <param name="Enable"></param>
-        ''' <returns>-1 si déjà existant</returns>
-        ''' <remarks></remarks>
-        Public Function NewExtensionAudio(ByVal IdSrv As String, ByVal NomExtension As String, Optional ByVal Enable As Boolean = False) As Integer Implements IHoMIDom.NewExtensionAudio
-            Try
-                If VerifIdSrv(IdSrv) = False Then
-                    Return 99
-                    Exit Function
-                End If
-
-                For i As Integer = 0 To _ListExtensionAudio.Count - 1
-                    If _ListExtensionAudio.Item(i).Extension = NomExtension Then
-                        Return -1
-                        Exit Function
-                    End If
-                Next
-                Dim x As New Audio.ExtensionAudio
-                x.Extension = NomExtension
-                x.Enable = Enable
-                _ListExtensionAudio.Add(x)
-                Return 0
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "NewExtensionAudio", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>
-        ''' Active ou désactive une extension Audio
-        ''' </summary>
-        ''' <param name="NomExtension"></param>
-        ''' <param name="Enable"></param>
-        ''' <returns>-1 si Extension non trouvée</returns>
-        ''' <remarks></remarks>
-        Public Function EnableExtensionAudio(ByVal IdSrv As String, ByVal NomExtension As String, ByVal Enable As Boolean) As Integer Implements IHoMIDom.EnableExtensionAudio
-            Try
-                If VerifIdSrv(IdSrv) = False Then
-                    Return 99
-                    Exit Function
-                End If
-
-                Dim retour As Integer = -1
-                For i As Integer = 0 To _ListExtensionAudio.Count - 1
-                    If _ListExtensionAudio.Item(i).Extension = NomExtension Then
-                        _ListExtensionAudio.Item(i).Enable = Enable
-                        retour = 0
-                    End If
-                Next
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "EnableExtensionAudio", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>
-        ''' Supprimer un répertoire Audio
-        ''' </summary>
-        ''' <param name="NomRepertoire"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function DeleteRepertoireAudio(ByVal IdSrv As String, ByVal NomRepertoire As String) As Integer Implements IHoMIDom.DeleteRepertoireAudio
-            Try
-                If VerifIdSrv(IdSrv) = False Then
-                    Return 99
-                    Exit Function
-                End If
-
-                Dim retour As Integer = -1
-                For i As Integer = 0 To _ListRepertoireAudio.Count - 1
-                    If NomRepertoire = _ListRepertoireAudio.Item(i).Repertoire Then
-                        _ListRepertoireAudio.RemoveAt(i)
-                        retour = 0
-                        Exit For
-                    End If
-                Next
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteRepertoireAudio", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>
-        ''' Ajouter un nouveau répertoire audio
-        ''' </summary>
-        ''' <param name="NomRepertoire"></param>
-        ''' <param name="Enable"></param>
-        ''' <returns>-1 si déjà existant</returns>
-        ''' <remarks></remarks>
-        Public Function NewRepertoireAudio(ByVal IdSrv As String, ByVal NomRepertoire As String, Optional ByVal Enable As Boolean = False) As Integer Implements IHoMIDom.NewRepertoireAudio
-            Try
-                If VerifIdSrv(IdSrv) = False Then
-                    Return 99
-                    Exit Function
-                End If
-
-                For i As Integer = 0 To _ListRepertoireAudio.Count - 1
-                    If _ListRepertoireAudio.Item(i).Repertoire = NomRepertoire Then
-                        Return -1
-                        Exit Function
-                    End If
-                Next
-                Dim x As New Audio.RepertoireAudio
-                x.Repertoire = NomRepertoire
-                x.Enable = Enable
-                _ListRepertoireAudio.Add(x)
-                Return 0
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "NewRepertoireAudio", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>
-        ''' Active ou désactive un répertoire Audio
-        ''' </summary>
-        ''' <param name="NomRepertoire"></param>
-        ''' <param name="Enable"></param>
-        ''' <returns>-1 si répertoire non trouvé</returns>
-        ''' <remarks></remarks>
-        Public Function EnableRepertoireAudio(ByVal IdSrv As String, ByVal NomRepertoire As String, ByVal Enable As Boolean) As Integer Implements IHoMIDom.EnableRepertoireAudio
-            Try
-                If VerifIdSrv(IdSrv) = False Then
-                    Return 99
-                    Exit Function
-                End If
-
-                Dim retour As Integer = -1
-                For i As Integer = 0 To _ListRepertoireAudio.Count - 1
-                    If _ListRepertoireAudio.Item(i).Repertoire = NomRepertoire Then
-                        _ListRepertoireAudio.Item(i).Enable = Enable
-                        retour = 0
-                    End If
-                Next
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "EnableRepertoireAudio", "Exception : " & ex.Message)
-                Return -1
-            End Try
-        End Function
-
-        ''' <summary>Retourne la liste de tous les répertoires audio</summary>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Function GetAllRepertoiresAudio(ByVal IdSrv As String) As List(Of Audio.RepertoireAudio) Implements IHoMIDom.GetAllRepertoiresAudio
-            Try
-                If VerifIdSrv(IdSrv) = False Then
-                    Return Nothing
-                    Exit Function
-                End If
-
-                Dim _list As New List(Of Audio.RepertoireAudio)
-                For i As Integer = 0 To _ListRepertoireAudio.Count - 1
-                    Dim x As New Audio.RepertoireAudio
-                    With x
-                        .Repertoire = _ListRepertoireAudio.Item(i).Repertoire
-                        .Enable = _ListRepertoireAudio.Item(i).Enable
-                    End With
-                    _list.Add(x)
-                Next
-                Return _list
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllRepertoiresAudio", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
-
-        ''' <summary>Retourne la liste de toutes les extensions audio</summary>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Function GetAllExtensionsAudio(ByVal IdSrv As String) As List(Of Audio.ExtensionAudio) Implements IHoMIDom.GetAllExtensionsAudio
-            Try
-                If VerifIdSrv(IdSrv) = False Then
-                    Return Nothing
-                    Exit Function
-                End If
-
-                Dim _list As New List(Of Audio.ExtensionAudio)
-                For i As Integer = 0 To _ListExtensionAudio.Count - 1
-                    Dim x As New Audio.ExtensionAudio
-                    With x
-                        .Extension = _ListExtensionAudio.Item(i).Extension
-                        .Enable = _ListExtensionAudio.Item(i).Enable
-                    End With
-                    _list.Add(x)
-                Next
-                Return _list
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllExtensionsAudio", "Exception : " & ex.Message)
-                Return Nothing
-            End Try
-        End Function
 #End Region
 
 #Region "SMTP"
