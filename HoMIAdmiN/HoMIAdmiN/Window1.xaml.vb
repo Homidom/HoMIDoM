@@ -663,6 +663,7 @@ Class Window1
                 tool.Content = "Nom: " & Drv.Nom & vbCrLf
                 tool.Content &= "Enable " & Drv.Enable & vbCrLf
                 tool.Content &= "Description: " & Drv.Description & vbCrLf
+                tool.Content &= "Version: " & Drv.Version & vbCrLf
                 If Drv.Modele <> "" Then tool.Content &= "Modele: " & Drv.Modele & vbCrLf
 
                 Dim tl As New ToolTip
