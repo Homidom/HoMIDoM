@@ -97,30 +97,6 @@
                             </GroupBox>
                         </StackPanel>
                         <StackPanel VerticalAlignment="Top" Margin="3,0,0,0">
-                            <GroupBox Name="GroupBox3" Margin="2" Height="145" VerticalAlignment="Top" >
-                                <GroupBox.Header>
-                                    <Label Foreground="White" FontWeight="Bold">Liste des répertoires Audio à scanner</Label>
-                                </GroupBox.Header>
-                                <StackPanel >
-                                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Margin="3" Name="ListBox1" Width="330" Height="80"/>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                        <Button Height="23" Margin="2" Name="BtnNewRepertoire" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Foreground="White" HorizontalAlignment="Left" Width="64">Nouveau</Button>
-                                        <Button Height="23" Margin="2" Name="BtnDelRepertoireAudio" VerticalAlignment="Bottom" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Width="64" Foreground="White">Supprimer</Button>
-                                    </StackPanel>
-                                </StackPanel >
-                            </GroupBox>
-                            <GroupBox Name="GroupBox22" Margin="2">
-                                <GroupBox.Header>
-                                    <Label Foreground="White" FontWeight="Bold">Liste des extensions Audio à utiliser lors du scan</Label>
-                                </GroupBox.Header>
-                                <StackPanel Orientation="Horizontal" >
-                                    <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Margin="3" Name="ListBox2" Width="146" Height="50"/>
-                                    <StackPanel >
-                                        <Button Content="Nouveau" Foreground="White" Height="23" HorizontalAlignment="Left" Margin="2" Name="BtnNewExension" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="64" />
-                                        <Button Content="Supprimer" Foreground="White" Height="23" HorizontalAlignment="Right" Margin="2" Name="BtnDeleteExtension" Template="{DynamicResource GlassButton}" VerticalAlignment="Bottom" Width="64" />
-                                    </StackPanel>
-                                </StackPanel>
-                            </GroupBox>
                             <GroupBox Name="GroupBox23" Margin="2">
                                 <GroupBox.Header>
                                     <Label Foreground="White" FontWeight="Bold">Paramètres SMTP</Label>

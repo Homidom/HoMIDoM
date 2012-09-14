@@ -253,12 +253,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Control\uPlaylist.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Control\uTestDevice.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -347,9 +341,6 @@
     </Compile>
     <Compile Include="Control\uLog.xaml.vb">
       <DependentUpon>uLog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Control\uPlaylist.xaml.vb">
-      <DependentUpon>uPlaylist.xaml</DependentUpon>
     </Compile>
     <Compile Include="Control\uTestDevice.xaml.vb">
       <DependentUpon>uTestDevice.xaml</DependentUpon>
