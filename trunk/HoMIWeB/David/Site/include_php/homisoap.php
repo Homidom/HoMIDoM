@@ -1,4 +1,13 @@
 <?php
+/*----------------------------------------------------
+
+HOMIDOM SOAP PHP CLASS
+Class PHP to communiquate with the Homidom Server
+
+Version : 1.01
+Date    : 14/09/2012
+
+----------------------------------------------------*/
 
 class HomidomSoap {
     public $_port = "7999";
@@ -482,8 +491,7 @@ class HomidomSoap {
 	
     public function ExecuteDeviceCommandSimple($deviceid, $action){
         if($this->_connecte) {
-            $reponse= $this->_client->ExecuteDeviceCommand(array('IdSrv'=>"$this->_idserver", 'DeviceId'=>"$deviceid", 'Action'=>$action));
-            /*return $reponse->ExecuteDeviceCommandResult;  */
+            $reponse= $this->_client->ExecuteDeviceCommandSimple(array('IdSrv'=>"$this->_idserver", 'DeviceId'=>"$deviceid", 'Action'=>$action));
             return "OK";
         } else {
             return "";

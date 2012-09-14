@@ -32,11 +32,31 @@ class HomidomClass {
 			return $this->_homidomsoap->ExecuteDeviceCommand($deviceid,array('Nom'=>"$actionnom",'Parametres'=>""));
 		} else {
 			$Parametres=array('DeviceAction'=>array('Nom'=>"",'Type'=>"",'Value'=>"$actionparametre"));
-			return $this->_homidomsoap->ExecuteDeviceCommandSimple($deviceid,array('Nom'=>"$actionnom",'Param1'=>"$actionparametre"));
+			return $this->_homidomsoap->ExecuteDeviceCommand($deviceid,array('Nom'=>"$actionnom",'Parametres'=>$Parametres));
 			//$x=$this->_homidomsoap->ExecuteDeviceCommand($deviceid,array('Nom'=>"$actionnom",'Parametres'=>array($Parametres)));
 			//$this->_homidomsoap->tracer();
 			return $x;
 		}
+		
+	}
+	
+	public function ExecuteDeviceCommandSimple($deviceid, $actionnom, $actionparametre1, $actionparametre2){
+		
+		//echo "methodes: <br />";
+		//$x=$this->_homidomsoap->ListMethod($deviceid);
+		//print_r($x);
+		/*If ($actionparametre1=="" && $actionparametre2=="") {
+			return $this->_homidomsoap->ExecuteDeviceCommandSimple($deviceid,array('Nom'=>"$actionnom",'Param1'=>"$actionparametre1",'Param2'=>"$actionparametre2"));
+		} else {
+			$Parametres=array('DeviceAction'=>array('Nom'=>"",'Type'=>"",'Value'=>"$actionparametre"));
+			return $this->_homidomsoap->ExecuteDeviceCommandSimple($deviceid,array('Nom'=>"$actionnom",'Param1'=>"$actionparametre",'Param2'=>""));
+			//$x=$this->_homidomsoap->ExecuteDeviceCommand($deviceid,array('Nom'=>"$actionnom",'Parametres'=>array($Parametres)));
+			//$this->_homidomsoap->tracer();
+			return $x;
+		}
+		*/
+		
+		return $this->_homidomsoap->ExecuteDeviceCommandSimple($deviceid,array('Nom'=>"$actionnom",'Param1'=>"$actionparametre1",'Param2'=>"$actionparametre2"));
 		
 	}
 	

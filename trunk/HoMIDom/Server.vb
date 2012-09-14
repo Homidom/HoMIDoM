@@ -5719,29 +5719,29 @@ Namespace HoMIDom
                             End If
                         Next
                         If verifaction = False Then
-                            Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand non effectué car la commande " & Action.Nom & " n'existe pas pour le composant : " & x.Name)
+                            Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "Non effectué car la commande " & Action.Nom & " n'existe pas pour le composant : " & x.Name)
                             Exit Sub
                         End If
                     Catch ex As Exception
-                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ExecuteDeviceCommand", "Verification Action Exception : " & ex.Message)
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "Verification Action Exception : " & ex.Message)
                     End Try
 
                     'on lance l'action
                     If Action.Param2 <> "" Then
                         _retour = CallByName(x, Action.Nom, CallType.Method, Action.Param1, Action.Param2)
-                        Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand effectué: " & x.Name & " Command: " & Action.Nom & " Parametre1/2: " & Action.Param1 & "/" & Action.Param2)
-                    ElseIf Action.Param2 <> "" Then
+                        Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "Effectué: " & x.Name & " Command: " & Action.Nom & " Parametre1/2: " & Action.Param1 & "/" & Action.Param2)
+                    ElseIf Action.Param1 <> "" Then
                         _retour = CallByName(x, Action.Nom, CallType.Method, Action.Param1)
-                        Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand effectué: " & x.Name & " Command: " & Action.Nom & " Parametre1: " & Action.Param1)
+                        Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "Effectué: " & x.Name & " Command: " & Action.Nom & " Parametre1: " & Action.Param1)
                     Else
                         _retour = CallByName(x, Action.Nom, CallType.Method)
-                        Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand effectué: " & x.Name & " Command: " & Action.Nom & " sans parametre")
+                        Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "Effectué: " & x.Name & " Command: " & Action.Nom & " sans parametre")
                     End If
                 Else
-                    Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand non effectué car le composant n'a pas été trouvé : " & DeviceId)
+                    Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "ExecuteDeviceCommandSimple non effectué car le composant n'a pas été trouvé : " & DeviceId)
                 End If
             Catch ex As Exception
-                Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "Erreur lors du traitemant du Sub ExecuteDeviceCommand: " & ex.ToString)
+                Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "Erreur lors du traitemant : " & ex.ToString)
             End Try
         End Sub
 

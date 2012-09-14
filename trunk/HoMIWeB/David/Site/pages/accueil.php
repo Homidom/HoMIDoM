@@ -32,8 +32,8 @@ echo "<div class='cadresl'>";
 
 $homidom = new HomidomClass("localhost", "7999", "123456789",true);
 echo "Update de la BDD locale : " . $homidom->RefreshBddDevice();
-//echo "Test execute commande : " . $homidom->ExecuteDeviceCommand("e8e8a771-e20a-4379-963c-f8b380348d91","ON","");
-echo "Test execute commande : " . $homidom->ExecuteDeviceCommand("e8e8a771-e20a-4379-963c-f8b380348d91","DIM","80");
+echo "Test execute commande : " . $homidom->ExecuteDeviceCommandSimple("e8e8a771-e20a-4379-963c-f8b380348d91","ON","","");
+echo "Test execute commande : " . $homidom->ExecuteDeviceCommandSimple("e8e8a771-e20a-4379-963c-f8b380348d91","DIM","80","");
 echo "</div>";
 
 
