@@ -13,7 +13,7 @@ Imports System.IO
 Imports System.Media
 
 ' Auteur : David
-' Date : 22/01/2011
+' Date : 17/09/2012
 '-------------------------------------------------------------------------------------
 '                                                                     
 '                     Software License Agreement                      
@@ -67,7 +67,7 @@ Imports System.Media
 
     'param avancé
     Dim _DEBUG As Boolean = False
-    Dim _PARAMMODE As String = "2000011110111111111111111"
+    Dim _PARAMMODE As String = "20011111111111111011111111"
 
 #End Region
 
@@ -1491,7 +1491,7 @@ Imports System.Media
 
             'Parametres avancés
             add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
-            add_paramavance("ParamMode", "Paramétres (ex: 201001111011111111)", "201001111011111111")
+            add_paramavance("ParamMode", "Paramétres (ex: 20011111111111111011111111)", "20011111111111111011111111")
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
@@ -3694,16 +3694,16 @@ Imports System.Media
     Private Sub SetMode(ByVal paramMode As String)
         Try
             Dim temp As String = ""
-            'paramMode
+            'paramMode 20011111111111111011111111  
             '1 : type frequence (310, 315, 433, 868.30, 868.30 FSK, 868.35, 868.35 FSK, 868.95)
             '2 : UNDEC
-            '3 : novatis --> NOT USED ANYMORE
+            '3 : novatis --> NOT USED ANYMORE 200
             '4 : proguard
             '5 : FS20
             '6 : Lacrosse
             '7 : Hideki
             '8 : AD
-            '9 : Mertik
+            '9 : Mertik 111111
             '10 : Visonic
             '11 : ATI
             '12 : Oregon
@@ -3711,7 +3711,7 @@ Imports System.Media
             '14 : HEEU
             '15 : AC
             '16 : ARC
-            '17 : X10
+            '17 : X10 11111111
 
             '18 : BlindsT0
             '19 : RFU6
@@ -3723,7 +3723,7 @@ Imports System.Media
             '25 : AE
             '26 : BlindsT1
 
-            If paramMode.Length <> 26 Then paramMode = "20000111101111111111111111"
+            If paramMode.Length <> 26 Then paramMode = "20011111111111111011111111"
 
             Dim kar(ICMD.size) As Byte
             kar(ICMD.packetlength) = ICMD.size
