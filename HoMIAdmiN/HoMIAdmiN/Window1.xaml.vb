@@ -986,8 +986,10 @@ Class Window1
                     myService.SaveDevice(IdSrv, sender.uid, x.Name, x.Adresse1, False, x.Solo, x.DriverID, x.Type.ToString, x.Refresh)
                     AffDevice()
                 Case 4 'Graphe
-                    Dim Devices As New Dictionary(Of String, String)
-                    Devices.Add(sender.uid, "Value")
+                    Dim Devices As New List(Of Dictionary(Of String, String))
+                    Dim y As New Dictionary(Of String, String)
+                    y.Add(sender.uid, "Value")
+                    Devices.Add(y)
 
                     Dim x As New uHisto(Devices)
                     x.Uid = System.Guid.NewGuid.ToString()
@@ -2034,9 +2036,8 @@ Class Window1
 
             Me.Cursor = Cursors.Wait
 
-           
-            Dim Devices As New Dictionary(Of String, String)
-
+            Dim Devices As New List(Of Dictionary(Of String, String))
+            
 
             For i As Integer = 0 To TreeViewHisto.Items.Count - 1
                 Dim chk As CheckBox
@@ -2045,7 +2046,9 @@ Class Window1
                     chk = TreeViewHisto.Items(i)
 
                     If chk.IsChecked = True Then
-                        Devices.Add(chk.Uid, chk.Tag)
+                        Dim y As New Dictionary(Of String, String)
+                        y.Add(chk.Uid, chk.Tag)
+                        Devices.Add(y)
                     End If
 
                 Else 'il a des enfants
@@ -2054,7 +2057,9 @@ Class Window1
                         chk = trv1.Items(j1)
 
                         If chk.IsChecked = True Then
-                            Devices.Add(chk.Uid, chk.Tag)
+                            Dim y As New Dictionary(Of String, String)
+                            y.Add(chk.Uid, chk.Tag)
+                            Devices.Add(y)
                         End If
 
                     Next
@@ -2063,14 +2068,15 @@ Class Window1
 
             Dim x As New uHisto(Devices)
             x.Uid = System.Guid.NewGuid.ToString()
-            x.Width = CanvasRight.ActualWidth - 100
-            x.Height = CanvasRight.ActualHeight - 50
+            x.Width = CanvasRight.ActualWidth - 50
+            x.Height = CanvasRight.ActualHeight - 20
             AddHandler x.CloseMe, AddressOf UnloadControl
             CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
 
             Me.Cursor = Nothing
         Catch ex As Exception
+            Me.Cursor = Nothing
             MessageBox.Show("ERREUR Sub BtnGenereGraph_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
