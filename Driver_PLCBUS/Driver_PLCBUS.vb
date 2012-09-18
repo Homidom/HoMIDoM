@@ -547,7 +547,7 @@ Imports System.IO.Ports
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
-            Add_LibelleDevice("REFRESH", "@", "")
+            Add_LibelleDevice("REFRESH", "Fastpooling/STATUS_REQUEST (Secondes)", "Permet de faire un STATUS_REQUEST (ex: L2) ou du fastpooling (ex: 'L')")
             Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
             'dictionnaire Commande STRING -> INT
