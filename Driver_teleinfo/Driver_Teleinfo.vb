@@ -70,7 +70,7 @@ Public Class Driver_Teleinfo
         Private trame As Boolean = False
 
         Dim ADCO, OPTARIF, ISOUSC, HCHC, HCHP,
-         BASE, PTEC, PEJP, IMAX, PAPP, HHPHC, IINST, MOTDETAT As String
+         BASE, PTEC, PEJP, IMAX, PAPP, HHPHC, IINST, MOTDETAT, IINST1, IINST2, IINST3, IMAX1, IMAX2, IMAX3, PMAX, PPAP, PPOT As String
 
 
 #End Region
@@ -757,6 +757,34 @@ Public Class Driver_Teleinfo
                         Case "MOTDETAT"
                             MOTDETAT = data1
 
+                            ' Pour compteur linky triphasé
+                        Case "IINST1"
+                            IINST1 = data1
+
+                        Case "IINST2"
+                            IINST2 = data1
+
+                        Case "IINST3"
+                            IINST3 = data1
+
+                        Case "IMAX1"
+                            IMAX1 = data1
+
+                        Case "IMAX2"
+                            IMAX2 = data1
+
+                        Case "IMAX3"
+                            IMAX3 = data1
+
+                        Case "PMAX"
+                            PMAX = data1
+
+                        Case "PPAP"
+                            PPAP = data1
+
+                        Case "PPOT"
+                            PPOT = data1
+
                         Case Else
                             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Case Teleinfo_adresse ", "Parametre non reconnu adresse : " & TeleInfo_adresse)
 
@@ -818,6 +846,35 @@ Public Class Driver_Teleinfo
 
                     Case "MOTDETAT"
                         retour = MOTDETAT
+
+                        ' compteur linky triphasé
+                    Case "IINST1"
+                        retour = IINST1
+
+                    Case "IINST2"
+                        retour = IINST2
+
+                    Case "IINST3"
+                        retour = IINST3
+
+                    Case "IMAX1"
+                        retour = IMAX1
+
+                    Case "IMAX2"
+                        retour = IMAX2
+
+                    Case "IMAX3"
+                        retour = IMAX3
+
+                    Case "PMAX"
+                        retour = PMAX
+
+                    Case "PPAP"
+                        retour = PPAP
+
+                    Case "PPOT"
+                        retour = PPOT
+
 
                     Case Else
                         retour = "-1"
