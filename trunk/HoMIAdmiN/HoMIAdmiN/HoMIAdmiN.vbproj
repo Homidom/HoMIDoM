@@ -549,6 +549,16 @@
     <Resource Include="Images\Log_128.png" />
     <Resource Include="Images\Log_32.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\bar_chart.png" />
+    <Resource Include="Images\Line20Chart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\pie_chart.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>

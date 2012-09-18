@@ -3776,7 +3776,7 @@ Namespace HoMIDom
                     commande = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure<='" & DateEnd & "';"
                 End If
                 If DateStart <> "" And DateEnd <> "" Then
-                    commande = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure>='" & DateStart & "' and dateheure<='" & DateEnd & "';"
+                    commande = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure between '" & DateStart & "' and '" & DateEnd & "';"
                 End If
 
                 'execute la requête sql
@@ -4961,6 +4961,15 @@ Namespace HoMIDom
             Try
                 'Test si c'est un nouveau device
                 If deviceId = "" Then 'C'est un nouveau device
+
+                    For i1 As Integer = 0 To _ListDevices.Count - 1
+                        If _ListDevices.Item(i1).name = name Then
+                            Return 98
+                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDevice", "Le nom du device: " & name & " existe déjà impossible de l'enregister")
+                            Exit Function
+                        End If
+                    Next
+
                     myID = Api.GenerateGUID
 
                     Dim MyNewObj As Object = Nothing

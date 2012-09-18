@@ -674,8 +674,9 @@ Partial Public Class uDevice
             Me.Cursor = Cursors.Wait
 
             If myService.DeviceAsHisto(_DeviceId, "Value") Then
-                Dim Devices As New Dictionary(Of String, String)
-                Devices.Add(_DeviceId, "Value")
+                Dim Devices As New List(Of Dictionary(Of String, String))
+                Dim y As New Dictionary(Of String, String)
+                y.Add(_DeviceId, "Value")
 
                 Dim x As New uHisto(Devices)
                 x.Uid = System.Guid.NewGuid.ToString()

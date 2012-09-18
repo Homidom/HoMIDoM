@@ -16,13 +16,41 @@
                 <Button Foreground="White" DockPanel.Dock="Right"  Height="25" HorizontalAlignment="Right" Margin="2" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Fermer</Button>
                 <Label HorizontalAlignment="Center" Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Historisation</Label>
             </DockPanel>
-        <TabControl  Name="TabControl1">
-            <TabItem Header="Graphe " >
-                <chartingToolkit:Chart Name="Chart1" MinWidth="800" MinHeight="500" Margin="3" FontSize="9" />
-            </TabItem >
-            
-        </TabControl>
-            <StackPanel Height="5" DockPanel.Dock="Bottom" />
+        <DockPanel DockPanel.Dock=" Top">
+            <StackPanel Orientation="Horizontal" >
+                <Label Content="Debut:" Foreground="White"/>
+                <DatePicker Name="DateStartSelect"/>
+                <Label Content="Fin:" Foreground="White"/>
+                <DatePicker Name="DateFinSelect"/>
+
+                <Label Content="Format:" Foreground="White"/>
+                <StackPanel Orientation="Horizontal" >
+                    <RadioButton Name="ChkLine" IsChecked="True">
+                    <Image Width=" 20" Height=" 20" Source="/HoMIAdmiN;component/Images/Line20Chart.png" Stretch="Fill"></Image>
+                </RadioButton>
+                <RadioButton Name="ChkHisto" >
+                    <Image Width=" 20" Height=" 20" Source="/HoMIAdmiN;component/Images/bar_chart.png" Stretch="Fill"></Image>
+                </RadioButton>
+                    <RadioButton Name="ChkPie" >
+                        <Image Width=" 20" Height=" 20" Source="/HoMIAdmiN;component/Images/pie_chart.png" Stretch="Fill"></Image>
+                    </RadioButton>
+                </StackPanel>
+                <Rectangle Width=" 20"/>
+                <Button Height="20" Width="20" Name="Refresh" ToolTip="Filtrer" Template="{DynamicResource GlassButton}">
+                        <Image Name="ImgRefrsh" Source="/HoMIAdmiN;component/Images/Refresh.png"/>
+                </Button>
+                
+            </StackPanel>
+        </DockPanel>
+            <StackPanel DockPanel.Dock="Bottom" >
+            <TabControl  Name="TabControl1">
+                <TabItem Header="Graphe " >
+                    <chartingToolkit:Chart Name="Chart1" MinWidth="900" MinHeight="500" Margin="3" FontSize="9" />
+                </TabItem >
+
+            </TabControl>
+
+        </StackPanel>  
             
     </DockPanel>
 
