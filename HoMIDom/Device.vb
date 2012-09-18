@@ -449,7 +449,7 @@ Namespace HoMIDom
                         'si timer déjà lancé, on l'arrete
                         If MyTimer.Enabled Then MyTimer.Stop()
                         'si le serveur n'a pas fini de démarrer, on décale le lancement du timer pour eviter les conflits
-                        If Not Server.Etat_server Then System.Threading.Thread.Sleep(1500)
+                        If Not Server.Etat_server Then System.Threading.Thread.Sleep(1100)
                         MyTimer.Interval = _Refresh
                         MyTimer.Start()
                     Else
