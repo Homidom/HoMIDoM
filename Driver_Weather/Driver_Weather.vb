@@ -496,13 +496,13 @@ Imports System.Threading
                     For Each _child As XmlNode In node
                         Select Case _child.Name
                             Case "tmp"
-                                objet.TemperatureActuel = _child.FirstChild.Value
+                                If IsNumeric(_child.FirstChild.Value) Then objet.TemperatureActuel = _child.FirstChild.Value
                             Case "t"
                                 objet.ConditionActuel = Traduire(_child.FirstChild.Value)
                             Case "icon"
                                 objet.IconActuel = ExtractFile(_child.FirstChild.Value)
                             Case "hmid"
-                                objet.HumiditeActuel = _child.FirstChild.Value
+                                If IsNumeric(_child.FirstChild.Value) Then objet.HumiditeActuel = _child.FirstChild.Value
                             Case "s"
                                 objet.VentActuel = _child.FirstChild.Value
                         End Select
@@ -511,13 +511,13 @@ Imports System.Threading
                                 ' If _child2.Name.StartsWith("#text") = False Then Console.WriteLine(_child2.Name & ":" & _child2.InnerText)
                                 Select Case _child.Name
                                     Case "tmp"
-                                        objet.TemperatureActuel = _child2.InnerText
+                                        If IsNumeric(_child.FirstChild.Value) Then objet.TemperatureActuel = _child2.InnerText
                                     Case "t"
                                         objet.ConditionActuel = Traduire(_child2.InnerText)
                                     Case "icon"
                                         objet.IconActuel = _child2.InnerText
                                     Case "hmid"
-                                        objet.HumiditeActuel = _child2.InnerText
+                                        If IsNumeric(_child.FirstChild.Value) Then objet.HumiditeActuel = _child2.InnerText
                                     Case "s"
                                         objet.VentActuel = _child2.InnerText
                                 End Select
@@ -550,24 +550,24 @@ Imports System.Threading
                             Case "hi"
                                 Select Case idx
                                     Case 0
-                                        objet.MaxToday = _child.FirstChild.Value
+                                        If IsNumeric(_child.FirstChild.Value) Then objet.MaxToday = _child.FirstChild.Value
                                     Case 1
-                                        objet.MaxJ1 = _child.FirstChild.Value
+                                        If IsNumeric(_child.FirstChild.Value) Then objet.MaxJ1 = _child.FirstChild.Value
                                     Case 2
-                                        objet.MaxJ2 = _child.FirstChild.Value
+                                        If IsNumeric(_child.FirstChild.Value) Then objet.MaxJ2 = _child.FirstChild.Value
                                     Case 3
-                                        objet.MaxJ3 = _child.FirstChild.Value
+                                        If IsNumeric(_child.FirstChild.Value) Then objet.MaxJ3 = _child.FirstChild.Value
                                 End Select
                             Case "low"
                                 Select Case idx
                                     Case 0
-                                        objet.MinToday = _child.FirstChild.Value
+                                        If IsNumeric(_child.FirstChild.Value) Then objet.MinToday = _child.FirstChild.Value
                                     Case 1
-                                        objet.MinJ1 = _child.FirstChild.Value
+                                        If IsNumeric(_child.FirstChild.Value) Then objet.MinJ1 = _child.FirstChild.Value
                                     Case 2
-                                        objet.MinJ2 = _child.FirstChild.Value
+                                        If IsNumeric(_child.FirstChild.Value) Then objet.MinJ2 = _child.FirstChild.Value
                                     Case 3
-                                        objet.MinJ3 = _child.FirstChild.Value
+                                        If IsNumeric(_child.FirstChild.Value) Then objet.MinJ3 = _child.FirstChild.Value
                                 End Select
                             Case "icon"
                                 Select Case idx
@@ -598,24 +598,24 @@ Imports System.Threading
                                     Case "hi"
                                         Select Case idx
                                             Case 0
-                                                objet.MaxToday = _child2.InnerText
+                                                If IsNumeric(_child.FirstChild.Value) Then objet.MaxToday = _child2.InnerText
                                             Case 1
-                                                objet.MaxJ1 = _child2.InnerText
+                                                If IsNumeric(_child.FirstChild.Value) Then objet.MaxJ1 = _child2.InnerText
                                             Case 2
-                                                objet.MaxJ2 = _child2.InnerText
+                                                If IsNumeric(_child.FirstChild.Value) Then objet.MaxJ2 = _child2.InnerText
                                             Case 3
-                                                objet.MaxJ3 = _child2.InnerText
+                                                If IsNumeric(_child.FirstChild.Value) Then objet.MaxJ3 = _child2.InnerText
                                         End Select
                                     Case "low"
                                         Select Case idx
                                             Case 0
-                                                objet.MinToday = _child2.InnerText
+                                                If IsNumeric(_child.FirstChild.Value) Then objet.MinToday = _child2.InnerText
                                             Case 1
-                                                objet.MinJ1 = _child2.InnerText
+                                                If IsNumeric(_child.FirstChild.Value) Then objet.MinJ1 = _child2.InnerText
                                             Case 2
-                                                objet.MinJ2 = _child2.InnerText
+                                                If IsNumeric(_child.FirstChild.Value) Then objet.MinJ2 = _child2.InnerText
                                             Case 3
-                                                objet.MinJ3 = _child2.InnerText
+                                                If IsNumeric(_child.FirstChild.Value) Then objet.MinJ3 = _child2.InnerText
                                         End Select
                                     Case "icon"
                                         Select Case idx
