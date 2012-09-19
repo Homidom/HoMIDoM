@@ -474,24 +474,28 @@ Public Class Driver_X10_CM15
 
         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RecvAction", "RecvAction: " & bszRecv & " " & vParm1 & " " & vParm2 & " " & vParm3 & " " & vParm4 & " " & vParm5)
 
-        If vParm3 <> "" Then
+        If vParm1 <> "" Then
             Try
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, vParm2, "", Me._ID, True)
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, vParm1, "", Me._ID, True)
                 'un device trouvé on maj la value
                 If (listedevices.Count = 1) Then
                     'correction valeur pour correspondre au type de value
                     If TypeOf listedevices.Item(0).Value Is Integer Then
-                        If UCase(vParm3) = "ON" Then
+                        If UCase(vParm2) = "ON" Then
                             listedevices.Item(0).Value = 100
-                        ElseIf UCase(vParm3) = "OFF" Then
+                        ElseIf UCase(vParm2) = "OFF" Then
                             listedevices.Item(0).Value = 0
+                        ElseIf UCase(vParm2) = "DIM" And IsNumeric(vParm3) Then
+                            listedevices.Item(0).Value += vParm3
+                        ElseIf UCase(vParm2) = "BRIGHT" And IsNumeric(vParm3) Then
+                            listedevices.Item(0).Value -= vParm3
                         End If
                     ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
-                        If UCase(vParm3) = "ON" Then
+                        If UCase(vParm2) = "ON" Then
                             listedevices.Item(0).Value = True
-                        ElseIf UCase(vParm3) = "OFF" Then
+                        ElseIf UCase(vParm2) = "OFF" Then
                             listedevices.Item(0).Value = False
                         Else
                             listedevices.Item(0).Value = True
