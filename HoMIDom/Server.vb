@@ -1836,6 +1836,7 @@ Namespace HoMIDom
 #End Region
 
 #Region "Device"
+
         ''' <summary>Arretes les devices (Handlers)</summary>
         ''' <remarks></remarks>
         Public Sub Devices_Stop()

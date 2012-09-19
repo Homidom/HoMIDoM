@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
              mc:Ignorable="d" 
             Margin="10" >
            
@@ -17,7 +18,8 @@
                 <Label HorizontalAlignment="Center" Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Historisation</Label>
             </DockPanel>
         <DockPanel DockPanel.Dock=" Top">
-            <StackPanel Orientation="Horizontal" >
+            <StackPanel >
+                <StackPanel Orientation="Horizontal" >
                 <Label Content="Debut:" Foreground="White"/>
                 <DatePicker Name="DateStartSelect"/>
                 <Label Content="Fin:" Foreground="White"/>
@@ -35,17 +37,41 @@
                         <Image Width=" 20" Height=" 20" Source="/HoMIAdmiN;component/Images/pie_chart.png" Stretch="Fill"></Image>
                     </RadioButton>
                 </StackPanel>
+                <Label Content="Max Data:" Foreground="White"/>
+                <TextBox Name="TxtMaxData" Width="40" Text="1000"/>
                 <Rectangle Width=" 20"/>
                 <Button Height="20" Width="20" Name="Refresh" ToolTip="Filtrer" Template="{DynamicResource GlassButton}">
                         <Image Name="ImgRefrsh" Source="/HoMIAdmiN;component/Images/Refresh.png"/>
                 </Button>
-                
+                <Button Height="20" Width="20" Name="BtnSave" Margin="3" ToolTip="Sauvegarder" Template="{DynamicResource GlassButton}">
+                    <Image Source="/HoMIAdmiN;component/Images/save_32.png"/>
+                </Button>
+
+            </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <Label Content="Graphique   " Foreground="White" />
+                    <Label Content="BackColor:" Foreground="White" />
+                    <ComboBox Name="CbBackColor" Width="80" SelectedIndex="0">
+                        <ComboBoxItem Content="Blanc" />
+                        <ComboBoxItem Content="Bleu" />
+                        <ComboBoxItem Content="Jaune" />
+                        <ComboBoxItem Content="Rouge" />
+                        <ComboBoxItem Content="Vert" />
+                        <ComboBoxItem Content="Gris" />
+                        <ComboBoxItem Content="Transparent" />
+                    </ComboBox>
+                </StackPanel>
             </StackPanel>
         </DockPanel>
             <StackPanel DockPanel.Dock="Bottom" >
             <TabControl  Name="TabControl1">
                 <TabItem Header="Graphe " >
-                    <chartingToolkit:Chart Name="Chart1" MinWidth="900" MinHeight="500" Margin="3" FontSize="9" />
+                    <StackPanel Orientation="Horizontal" >
+                    <!--<chartingToolkit:Chart Name="Chart1" MinWidth="500" MinHeight="500" Margin="3" FontSize="9" />-->
+                        <WindowsFormsHost Name="Test" > 
+                       
+                    </WindowsFormsHost> 
+                    </StackPanel>
                 </TabItem >
 
             </TabControl>
