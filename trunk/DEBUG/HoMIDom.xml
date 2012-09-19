@@ -2416,6 +2416,12 @@ HoMIDom
 	<param name="resultat">Arralist contenant la liste des résultats</param>
 	<returns>String si OK, String "ERR:..." si erreur</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.count(System.String,System.Int32@)">
+	<summary>Compte le nombre de resultat</summary>
+	<param name="commande">ex : SELECT COUNT(*) FROM table WHERE col1 = 'xxx'</param>
+	<param name="resultat">Nombre de resultat</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Sqlite">
 	<summary>      
  Classe de gestion des base de données sqlite     

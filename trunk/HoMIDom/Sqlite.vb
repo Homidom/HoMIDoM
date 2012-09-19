@@ -206,5 +206,45 @@ Namespace HoMIDom
                 Return "ERR: Erreur lors de la query " & commande & " Erreur: " & ex.ToString
             End Try
         End Function
+
+        ''' <summary>Compte le nombre de resultat</summary>          
+        ''' <param name="commande">ex : SELECT COUNT(*) FROM table WHERE col1 = 'xxx'</param>          
+        ''' <param name="resultat">Nombre de resultat</param>          
+        ''' <returns>String si OK, String "ERR:..." si erreur</returns>          
+        ''' <remarks></remarks>          
+        Public Function count(ByVal commande As String, ByRef resultat As Integer) As String
+            Dim SQLcommand As SQLiteCommand
+            Dim resultattemp As Integer = 0
+            Try
+                connect()
+
+                'on vérifie si on est connecté à la BDD   
+                If SQLconnect.State = ConnectionState.Open Then
+                    'on vérifie si la commande n'est pas vide  
+                    If commande IsNot Nothing And commande <> "" Then
+                        SQLcommand = SQLconnect.CreateCommand
+                        SQLcommand.CommandText = commande
+
+                        'lock pour etre sur de ne pas faire deux operations en meme temps
+                        SyncLock lock
+                            resultattemp = SQLcommand.ExecuteScalar()
+                        End SyncLock
+
+                        resultat = resultattemp
+                        disconnect()
+                        Return "Commande éxécutée avec succés : " & commande
+                    Else
+                        disconnect()
+                        Return "ERR: La commande est vide"
+                    End If
+                Else
+                    connecte = False
+                    Return "ERR: Non connecté à la BDD " & bdd_name
+                End If
+            Catch ex As Exception
+                Return "ERR: Erreur lors de la query Count " & commande & " Erreur: " & ex.ToString
+            End Try
+        End Function
+
     End Class
 End Namespace

@@ -814,6 +814,7 @@ Class Window1
                 Dim nomdriver As String = myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom
                 stack.Orientation = Orientation.Horizontal
 
+                'verification si le device fait parti d'une zone
                 For Each Zon In ListeZones
                     If FlagZone = False Then
                         For Each elemnt In Zon.ListElement
