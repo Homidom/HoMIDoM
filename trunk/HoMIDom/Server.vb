@@ -5479,13 +5479,22 @@ Namespace HoMIDom
         Function ListMethod(ByVal DeviceId As String) As List(Of String) Implements IHoMIDom.ListMethod
             Dim _list As New List(Of String)
             Try
+                'recherche du device
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).ID = DeviceId Then
-                        For j As Integer = 0 To Api.ListMethod(_ListDevices.Item(i)).Count - 1
-                            _list.Add(Api.ListMethod(_ListDevices.Item(i)).Item(j).ToString)
+                        'device trouvé : _ListDevices.Item(i)
+
+                        'on récupéres les méthodes classiques
+                        Dim _listmethod As ArrayList
+                        _listmethod = Api.ListMethod(_ListDevices.Item(i))
+                        For j As Integer = 0 To _listmethod.Count - 1
+                            _list.Add(_listmethod.Item(j).ToString)
                         Next
+
+                        Exit For
                     End If
                 Next
+
                 Return _list
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ListMethod", "Exception : " & ex.Message)
@@ -5536,23 +5545,38 @@ Namespace HoMIDom
             Dim verifaction As Boolean = False
 
             Try
+                'recherche du device
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).ID = DeviceId Then
+                        'device trouvé : _ListDevices.Item(i)
                         x = _ListDevices.Item(i)
                         Exit For
                     End If
                 Next
 
                 If x IsNot Nothing Then
-
                     'On vérifie si l'action existe avant de la lancer
                     Try
-                        For j As Integer = 0 To Api.ListMethod(x).Count - 1
-                            '_list.Add(Api.ListMethod(x).Item(j).ToString)
-                            If (Api.ListMethod(x).Item(j).ToString.StartsWith(Action.Nom, StringComparison.CurrentCultureIgnoreCase)) Then
+                        'on verifie les methodes classiques
+                        'Dim _listmethod As ArrayList
+                        '_listmethod = Api.ListMethod(x)
+                        'For j As Integer = 0 To _listmethod.Count - 1
+                        '    If (_listmethod.Item(j).ToString.StartsWith(Action.Nom, StringComparison.CurrentCultureIgnoreCase)) Then
+                        '        verifaction = True
+                        '    End If
+                        'Next
+                        For i As Integer = 0 To x.DeviceAction.Count - 1
+                            If (x.DeviceAction.Item(i).Nom.ToString.StartsWith(Action.Nom, StringComparison.CurrentCultureIgnoreCase)) Then
                                 verifaction = True
                             End If
                         Next
+                        'on verifie les methodes avancées (du driver)
+                        For i As Integer = 0 To x.GetDeviceCommandePlus.Count - 1
+                            If (x.GetDeviceCommandePlus.Item(i).NameCommand.ToString.StartsWith(Action.Nom, StringComparison.CurrentCultureIgnoreCase)) Then
+                                verifaction = True
+                            End If
+                        Next
+
                         If verifaction = False Then
                             Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand non effectué car la commande " & Action.Nom & " n'existe pas pour le composant : " & x.Name)
                             Exit Sub
