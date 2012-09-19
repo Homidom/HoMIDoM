@@ -293,7 +293,7 @@ Partial Public Class uDevice
                 result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text)
             End If
 
-            If result = 98 Then
+            If result = "98" Then
                 MessageBox.Show("Le nom du device: " & TxtNom.Text & " existe déjà impossible de l'enregister", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                 Exit Sub
             End If
