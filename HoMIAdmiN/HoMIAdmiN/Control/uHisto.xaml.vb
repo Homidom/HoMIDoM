@@ -60,7 +60,7 @@ Public Class uHisto
             Dim Chart2 As New System.Windows.Forms.DataVisualization.Charting.Chart()
             ' Add a chart area.
             Chart2.ChartAreas.Add("Default")
-            Chart2.Width = 930
+            Chart2.Width = 925
             Chart2.Height = 500
 
             Dim legend1 As New Legend
