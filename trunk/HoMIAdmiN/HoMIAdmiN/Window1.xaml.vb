@@ -1249,6 +1249,22 @@ Class Window1
                                 y.Tag = a.Nom
                                 y.Foreground = New SolidColorBrush(Colors.White)
                                 y.IsEnabled = True
+
+                                '*************************** CLIC DROIT **************************
+                                Dim ctxMenu As New ContextMenu
+                                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                                ctxMenu.Background = System.Windows.Media.Brushes.LightGray
+                                ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
+                                Dim mnu0 As New MenuItem
+                                mnu0.Header = "Afficher"
+                                mnu0.Tag = 0
+                                mnu0.Uid = _dev.ID
+                                AddHandler mnu0.Click, AddressOf MnuitemHisto_Click
+                                ctxMenu.Items.Add(mnu0)
+                                y.ContextMenu = ctxMenu
+
+                                AddHandler y.MouseDoubleClick, AddressOf MnuitemHisto_Click
+
                                 TreeViewHisto.Items.Add(y)
                                 trv = True
                             ElseIf _dev.ID = a.IdDevice And IsNode = True Then
@@ -1259,10 +1275,24 @@ Class Window1
                                 y1.BorderBrush = New SolidColorBrush(Colors.Black)
                                 y1.Margin = New Thickness(-15, 1, 0, 0)
                                 y1.Uid = _dev.ID
-
                                 y1.Content = a.Nom
-
                                 y1.Tag = a.Nom
+
+                                '*************************** CLIC DROIT **************************
+                                Dim ctxMenu As New ContextMenu
+                                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                                ctxMenu.Background = System.Windows.Media.Brushes.LightGray
+                                ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
+                                Dim mnu0 As New MenuItem
+                                mnu0.Header = "Afficher"
+                                mnu0.Tag = 0
+                                mnu0.Uid = _dev.ID
+                                AddHandler mnu0.Click, AddressOf MnuitemHisto_Click
+                                ctxMenu.Items.Add(mnu0)
+                                y1.ContextMenu = ctxMenu
+
+                                AddHandler y1.MouseDoubleClick, AddressOf MnuitemHisto_Click
+
                                 parent.Items.Add(y1)
                                 trv = True
                             End If
@@ -1279,6 +1309,63 @@ Class Window1
             TreeViewHisto.Items.SortDescriptions.Add(New SortDescription("Content", ListSortDirection.Ascending))
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffHisto: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    'Gère les menus click droit sur les histo
+    Private Sub MnuitemHisto_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+            If IsConnect = False Then
+                Serveur_notconnected_action()
+                Exit Sub
+            End If
+
+
+            Dim Devices As New List(Of Dictionary(Of String, String))
+            Dim y As New Dictionary(Of String, String)
+            y.Add(sender.uid, "Value")
+            Devices.Add(y)
+
+            Dim x As New uHisto(Devices)
+            x.Uid = System.Guid.NewGuid.ToString()
+            x.Width = CanvasRight.ActualWidth - 100
+            x.Height = CanvasRight.ActualHeight - 50
+            AddHandler x.CloseMe, AddressOf UnloadControl
+            CanvasRight.Children.Clear()
+            CanvasRight.Children.Add(x)
+
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub MnuitemHisto_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    'Gère les menus Double click droit sur les histo
+    Private Sub MnuitemHisto_DoubleClick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+            If IsConnect = False Then
+                Serveur_notconnected_action()
+                Exit Sub
+            End If
+
+            Select Case sender.tag
+                Case 0 'Graphe
+                    Dim Devices As New List(Of Dictionary(Of String, String))
+                    Dim y As New Dictionary(Of String, String)
+                    y.Add(sender.uid, "Value")
+                    Devices.Add(y)
+
+                    Dim x As New uHisto(Devices)
+                    x.Uid = System.Guid.NewGuid.ToString()
+                    x.Width = CanvasRight.ActualWidth - 100
+                    x.Height = CanvasRight.ActualHeight - 50
+                    AddHandler x.CloseMe, AddressOf UnloadControl
+                    CanvasRight.Children.Clear()
+                    CanvasRight.Children.Add(x)
+
+            End Select
+
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub MnuitemHisto_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
