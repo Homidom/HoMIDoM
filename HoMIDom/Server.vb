@@ -5451,6 +5451,27 @@ Namespace HoMIDom
             End Try
         End Function
 
+        ''' <summary>Retourne un device par son nom</summary>
+        ''' <param name="Name"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnRealDeviceByName(ByVal Name As String) As Object
+            Try
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If UCase(_ListDevices.Item(i).Name) = UCase(Name) Then
+                        Return _ListDevices.Item(i)
+                        Exit Function
+                    End If
+                Next
+
+                'Si pas trouvé on retourne rien
+                Return Nothing
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnRealDeviceByName", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
         ''' <summary>liste les méthodes d'un device depuis son ID</summary>
         ''' <param name="DeviceId"></param>
         ''' <returns></returns>
