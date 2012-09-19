@@ -2063,7 +2063,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _MaxJ1 <> value Then
                         _MaxJ1 = value
-                         'RaiseEvent DeviceChanged(Me, "MaxJ1", value)
+                        'RaiseEvent DeviceChanged(Me, "MaxJ1", value)
                     End If
                 End Set
             End Property
@@ -2084,7 +2084,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _ConditionJ1 <> value Then
                         _ConditionJ1 = value
-                        ' RaiseEvent DeviceChanged(Me, "ConditionJ1", value)
+                        'RaiseEvent DeviceChanged(Me, "ConditionJ1", value)
                     End If
                 End Set
             End Property
