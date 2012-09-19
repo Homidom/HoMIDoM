@@ -3815,37 +3815,50 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Function DeviceAsHisto(ByVal IdDevice As String, Optional ByVal Source As String = "") As Boolean Implements IHoMIDom.DeviceAsHisto
             Try
-                Dim result As New DataTable("HistoDB")
-                Dim retour As String = ""
                 Dim commande As String
-                Dim _list As New List(Of Historisation)
+                Dim retour As String = ""
                 Dim rtr As Boolean = False
+                Dim result As Integer = 0
+
+                'OLD CODE : COULD BE DELETED WHILE CONFIRM THAT IT WORKS
+                'Dim result As New DataTable("HistoDB")
+                'Dim _list As New List(Of Historisation)
+                'If Source = "" Then
+                '    commande = "select * from historiques where device_id='" & IdDevice & "' ;"
+                'Else
+                '    commande = "select * from historiques where source='" & Source & "' and device_id='" & IdDevice & "' ;"
+                'End If
+                'retour = sqlite_homidom.query(commande, result, "")
+                'If UCase(Mid(retour, 1, 3)) <> "ERR" Then
+                '    If result IsNot Nothing Then
+                '        If result.Rows.Count = 0 Then
+                '            rtr = False
+                '        Else
+                '            rtr = True
+                '        End If
+                '    Else
+                '        rtr = False
+                '    End If
+                'Else
+                '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceAsHisto", "Erreur: " & retour)
+                '    rtr = False
+                'End If
+                'result = Nothing
+                '_list = Nothing
+
+
 
                 If Source = "" Then
-                    commande = "select * from historiques where device_id='" & IdDevice & "' ;"
+                    commande = "SELECT COUNT(*) FROM historiques WHERE device_id='" & IdDevice & "' ;"
                 Else
-                    commande = "select * from historiques where source='" & Source & "' and device_id='" & IdDevice & "' ;"
+                    commande = "SELECT COUNT(*) FROM historiques WHERE source='" & Source & "' and device_id='" & IdDevice & "' ;"
                 End If
-
-                retour = sqlite_homidom.query(commande, result, "")
-
+                retour = sqlite_homidom.count(commande, result)
                 If UCase(Mid(retour, 1, 3)) <> "ERR" Then
-                    If result IsNot Nothing Then
-                        If result.Rows.Count = 0 Then
-                            rtr = False
-                        Else
-                            rtr = True
-                        End If
-                    Else
-                        rtr = False
-                    End If
+                    If result > 0 Then rtr = True
                 Else
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceAsHisto", "Erreur: " & retour)
-                    rtr = False
                 End If
-
-                result = Nothing
-                _list = Nothing
                 Return rtr
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceAsHisto", "Exception : " & ex.Message)
@@ -3863,21 +3876,39 @@ Namespace HoMIDom
                 Dim Retour As New Dictionary(Of String, Boolean)
                 Dim commande As String
                 Dim IdDevice As String
-                Dim result As New DataTable("HistoDB")
+                Dim result As Integer = 0
                 Dim retourDB As String
+
+                'Dim result As New DataTable("HistoDB")
+
 
                 For i As Integer = 0 To _ListDevices.Count - 1
                     IdDevice = _ListDevices.Item(i).ID
-                    commande = "select * from historiques where device_id='" & IdDevice & "' ;"
-                    retourDB = sqlite_homidom.query(commande, result, "")
 
+                    'OLD CODE : COULD BE DELETED WHILE CONFIRM THAT IT WORKS
+                    'commande = "select * from historiques where device_id='" & IdDevice & "' ;"
+                    'retourDB = sqlite_homidom.query(commande, result, "")
+
+                    'If UCase(Mid(retourDB, 1, 3)) <> "ERR" Then
+                    '    If result IsNot Nothing Then
+                    '        If result.Rows.Count = 0 Then
+                    '            Retour.Add(IdDevice, False)
+                    '        Else
+                    '            Retour.Add(IdDevice, True)
+                    '        End If
+                    '    Else
+                    '        Retour.Add(IdDevice, False)
+                    '    End If
+                    'Else
+                    '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DevicesAsHisto", "Erreur: " & retourDB)
+                    '    Exit For
+                    'End If
+
+                    commande = "SELECT COUNT(*) FROM historiques WHERE device_id='" & IdDevice & "' ;"
+                    retourDB = sqlite_homidom.count(commande, result)
                     If UCase(Mid(retourDB, 1, 3)) <> "ERR" Then
-                        If result IsNot Nothing Then
-                            If result.Rows.Count = 0 Then
-                                Retour.Add(IdDevice, False)
-                            Else
-                                Retour.Add(IdDevice, True)
-                            End If
+                        If result > 0 Then
+                            Retour.Add(IdDevice, True)
                         Else
                             Retour.Add(IdDevice, False)
                         End If
@@ -5558,13 +5589,6 @@ Namespace HoMIDom
                     'On vérifie si l'action existe avant de la lancer
                     Try
                         'on verifie les methodes classiques
-                        'Dim _listmethod As ArrayList
-                        '_listmethod = Api.ListMethod(x)
-                        'For j As Integer = 0 To _listmethod.Count - 1
-                        '    If (_listmethod.Item(j).ToString.StartsWith(Action.Nom, StringComparison.CurrentCultureIgnoreCase)) Then
-                        '        verifaction = True
-                        '    End If
-                        'Next
                         For i As Integer = 0 To x.DeviceAction.Count - 1
                             If (x.DeviceAction.Item(i).Nom.ToString.StartsWith(Action.Nom, StringComparison.CurrentCultureIgnoreCase)) Then
                                 verifaction = True
@@ -5644,9 +5668,15 @@ Namespace HoMIDom
 
                     'On vérifie si l'action existe avant de la lancer
                     Try
-                        For j As Integer = 0 To Api.ListMethod(x).Count - 1
-                            '_list.Add(Api.ListMethod(x).Item(j).ToString)
-                            If (Api.ListMethod(x).Item(j).ToString.StartsWith(Action.Nom, StringComparison.CurrentCultureIgnoreCase)) Then
+                        'on verifie les methodes classiques
+                        For i As Integer = 0 To x.DeviceAction.Count - 1
+                            If (x.DeviceAction.Item(i).Nom.ToString.StartsWith(Action.Nom, StringComparison.CurrentCultureIgnoreCase)) Then
+                                verifaction = True
+                            End If
+                        Next
+                        'on verifie les methodes avancées (du driver)
+                        For i As Integer = 0 To x.GetDeviceCommandePlus.Count - 1
+                            If (x.GetDeviceCommandePlus.Item(i).NameCommand.ToString.StartsWith(Action.Nom, StringComparison.CurrentCultureIgnoreCase)) Then
                                 verifaction = True
                             End If
                         Next
