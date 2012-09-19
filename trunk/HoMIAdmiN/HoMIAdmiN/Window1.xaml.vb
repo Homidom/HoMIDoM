@@ -944,14 +944,13 @@ Class Window1
         End Try
     End Sub
 
-
     'Retourne True si le device a plusieurs histo sur des propriétés différents
-    Private Function AsMultiHisto(ByVal Deviceid As String) As Boolean
-        Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
+    Private Function AsMultiHisto(ByVal Deviceid As String, ByVal x As List(Of HoMIDom.HoMIDom.Historisation)) As Boolean
+        'Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
         Dim retour As Boolean = False
         Dim tmp As Boolean = False
         Dim _name As String = ""
-        x = myService.GetAllListHisto(IdSrv)
+        'x = myService.GetAllListHisto(IdSrv)
 
         For Each _histo As HoMIDom.HoMIDom.Historisation In x
             If _histo.IdDevice = Deviceid And _name = "" Then
@@ -1227,13 +1226,13 @@ Class Window1
                     Dim y As New CheckBox
                     Dim trv As Boolean = False
 
-                    If AsMultiHisto(_dev.ID) Then 'le device a différents historique
+                    If AsMultiHisto(_dev.ID, x) Then 'le device a différents historique
                         parent.Header = _dev.Name
                         parent.Foreground = New SolidColorBrush(Colors.White)
                         IsNode = True
                     Else
                         y.Content = _dev.Name
-                        y.Foreground = New SolidColorBrush(Colors.Gray)
+                        y.Foreground = New SolidColorBrush(Colors.DimGray)
                         y.Background = New SolidColorBrush(Colors.DarkGray)
                         y.BorderBrush = New SolidColorBrush(Colors.Black)
                         y.Margin = New Thickness(-15, 1, 0, 0)
@@ -1248,6 +1247,7 @@ Class Window1
 
                             If _dev.ID = a.IdDevice And IsNode = False Then
                                 y.Tag = a.Nom
+                                y.Foreground = New SolidColorBrush(Colors.White)
                                 y.IsEnabled = True
                                 TreeViewHisto.Items.Add(y)
                                 trv = True
