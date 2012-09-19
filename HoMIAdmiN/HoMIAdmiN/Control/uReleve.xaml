@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-              Margin="10" MinWidth="400">
+              Margin="2" MinWidth="400">
     
     <Grid Background="#636060">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0">

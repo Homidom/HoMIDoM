@@ -20,7 +20,7 @@ Public Class uHisto
         Try
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
 
-            DateStartSelect.DisplayDate = "01/01/2000" 'Now.Date.AddDays(-7)
+            DateStartSelect.DisplayDate = Now.Date.AddDays(-7).ToString '"01/01/2012"
             DateFinSelect.DisplayDate = Now.Date.AddDays(1).ToString
 
             _Devices = Devices
@@ -57,7 +57,7 @@ Public Class uHisto
             Dim Chart2 As New System.Windows.Forms.DataVisualization.Charting.Chart()
             ' Add a chart area.
             Chart2.ChartAreas.Add("Default")
-            Chart2.Width = 1000
+            Chart2.Width = 965
             Chart2.Height = 500
 
             Dim legend1 As New Legend
@@ -149,6 +149,23 @@ Public Class uHisto
             Chart2.ChartAreas("Default").CursorX.IsUserSelectionEnabled = True
             Chart2.ChartAreas("Default").AxisX.ScaleView.Zoomable = True
             Chart2.ChartAreas("Default").AxisX.ScrollBar.IsPositionedInside = True
+
+            Select Case CbBackColor.SelectedIndex
+                Case 0
+                    Chart2.ChartAreas("Default").BackColor = Color.White
+                Case 1
+                    Chart2.ChartAreas("Default").BackColor = Color.LightBlue
+                Case 2
+                    Chart2.ChartAreas("Default").BackColor = Color.LightYellow
+                Case 3
+                    Chart2.ChartAreas("Default").BackColor = Color.Red
+                Case 4
+                    Chart2.ChartAreas("Default").BackColor = Color.LightGreen
+                Case 5
+                    Chart2.ChartAreas("Default").BackColor = Color.LightGray
+                Case 6
+                    Chart2.ChartAreas("Default").BackColor = Color.Transparent
+            End Select
 
             ' Add the chart to the Windows Form Host.
             Test.Child = Chart2

@@ -6,77 +6,150 @@
              xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
              mc:Ignorable="d" 
             Margin="10" >
-           
-        <DockPanel Background="#636060">
+
+    <DockPanel Background="#636060" Opacity="0.85">
+        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0">
             <DockPanel DockPanel.Dock="Top" >
-                <Image DockPanel.Dock="Left"  Height="40" HorizontalAlignment="Left" Margin="7,1,0,0" Name="ImgDevice" Source="/HoMIAdmiN;component/Images/Courbe_128.png" Stretch="Fill" VerticalAlignment="Top" Width="40">
-                    <Image.LayoutTransform>
-                        <RotateTransform Angle="-10" CenterX="0" CenterY="0" />
-                    </Image.LayoutTransform>
-                </Image>
-                <Button Foreground="White" DockPanel.Dock="Right"  Height="25" HorizontalAlignment="Right" Margin="2" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Fermer</Button>
-                <Label HorizontalAlignment="Center" Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Historisation</Label>
-            </DockPanel>
-        <DockPanel DockPanel.Dock=" Top">
-            <StackPanel >
-                <StackPanel Orientation="Horizontal" >
-                <Label Content="Debut:" Foreground="White"/>
-                <DatePicker Name="DateStartSelect"/>
-                <Label Content="Fin:" Foreground="White"/>
-                <DatePicker Name="DateFinSelect"/>
+                <DockPanel DockPanel.Dock="Top" >
+                    <Image DockPanel.Dock="Left"  Height="40" HorizontalAlignment="Left" Margin="7,1,0,0" Name="ImgDevice" Source="/HoMIAdmiN;component/Images/Courbe_128.png" Stretch="Fill" VerticalAlignment="Top" Width="40">
+                        <Image.LayoutTransform>
+                            <RotateTransform Angle="-10" CenterX="0" CenterY="0" />
+                        </Image.LayoutTransform>
+                    </Image>
+                    <Button Foreground="White" DockPanel.Dock="Right"  Height="25" HorizontalAlignment="Right" Margin="2" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Fermer</Button>
+                    <Label HorizontalAlignment="Center" Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Historisation</Label>
+                </DockPanel>
+                <DockPanel DockPanel.Dock=" Top">
+                    <StackPanel >
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="2">
+                            <Label Content="Debut:" Foreground="White" VerticalAlignment="center"/>
+                            <DatePicker Name="DateStartSelect" Width="150" VerticalAlignment="Center" BorderBrush="{x:Null}" />
+                            <Label Content="Fin:" Foreground="White" VerticalAlignment="center"/>
+                            <DatePicker Name="DateFinSelect" Width="150" VerticalAlignment="Center" BorderBrush="{x:Null}" />
 
-                <Label Content="Format:" Foreground="White"/>
-                <StackPanel Orientation="Horizontal" >
-                    <RadioButton Name="ChkLine" IsChecked="True">
-                    <Image Width=" 20" Height=" 20" Source="/HoMIAdmiN;component/Images/Line20Chart.png" Stretch="Fill"></Image>
-                </RadioButton>
-                <RadioButton Name="ChkHisto" >
-                    <Image Width=" 20" Height=" 20" Source="/HoMIAdmiN;component/Images/bar_chart.png" Stretch="Fill"></Image>
-                </RadioButton>
-                    <RadioButton Name="ChkPie" >
-                        <Image Width=" 20" Height=" 20" Source="/HoMIAdmiN;component/Images/pie_chart.png" Stretch="Fill"></Image>
-                    </RadioButton>
-                </StackPanel>
-                <Label Content="Max Data:" Foreground="White"/>
-                <TextBox Name="TxtMaxData" Width="40" Text="1000"/>
-                <Rectangle Width=" 20"/>
-                <Button Height="20" Width="20" Name="Refresh" ToolTip="Filtrer" Template="{DynamicResource GlassButton}">
-                        <Image Name="ImgRefrsh" Source="/HoMIAdmiN;component/Images/Refresh.png"/>
-                </Button>
-                <Button Height="20" Width="20" Name="BtnSave" Margin="3" ToolTip="Sauvegarder" Template="{DynamicResource GlassButton}">
-                    <Image Source="/HoMIAdmiN;component/Images/save_32.png"/>
-                </Button>
+                            <Rectangle Width="15"/>
+                            <Label Content="Format:" Foreground="White" VerticalAlignment="center"/>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <RadioButton Name="ChkLine" IsChecked="True" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
+                                    <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/Line20Chart.png" Stretch="Fill"></Image>
+                                </RadioButton>
+                                <RadioButton Name="ChkHisto" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
+                                    <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/bar_chart.png" Stretch="Fill"></Image>
+                                </RadioButton>
+                                <RadioButton Name="ChkPie" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
+                                    <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/pie_chart.png" Stretch="Fill"></Image>
+                                </RadioButton>
+                            </StackPanel>
+                            <Rectangle Width="15"/>
+                            <Label Content="Max Data:" Foreground="White" VerticalAlignment="center"/>
+                            <TextBox Name="TxtMaxData" Width="40" Text="1000" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" TextAlignment="Center"/>
+                            <Rectangle Width="15"/>
+                            <Button Height="25" Width="25" Name="Refresh" ToolTip="Rafraichir le graphe" Template="{DynamicResource GlassButton}">
+                                <Image Name="ImgRefrsh" Source="/HoMIAdmiN;component/Images/Refresh.png"/>
+                            </Button>
+                            <Rectangle Width="15"/>
+                            <Button Height="25" Width="25" Name="BtnSave" Margin="3" ToolTip="Sauvegarder le graphe" Template="{DynamicResource GlassButton}">
+                                <Image Source="/HoMIAdmiN;component/Images/save_32.png"/>
+                            </Button>
 
-            </StackPanel>
-                <StackPanel Orientation="Horizontal" >
-                    <Label Content="Graphique   " Foreground="White" />
-                    <Label Content="BackColor:" Foreground="White" />
-                    <ComboBox Name="CbBackColor" Width="80" SelectedIndex="0">
-                        <ComboBoxItem Content="Blanc" />
-                        <ComboBoxItem Content="Bleu" />
-                        <ComboBoxItem Content="Jaune" />
-                        <ComboBoxItem Content="Rouge" />
-                        <ComboBoxItem Content="Vert" />
-                        <ComboBoxItem Content="Gris" />
-                        <ComboBoxItem Content="Transparent" />
-                    </ComboBox>
-                </StackPanel>
-            </StackPanel>
-        </DockPanel>
-            <StackPanel DockPanel.Dock="Bottom" >
-            <TabControl  Name="TabControl1">
-                <TabItem Header="Graphe " >
-                    <StackPanel Orientation="Horizontal" >
-                    <!--<chartingToolkit:Chart Name="Chart1" MinWidth="500" MinHeight="500" Margin="3" FontSize="9" />-->
-                        <WindowsFormsHost Name="Test" > 
-                       
-                    </WindowsFormsHost> 
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="2,2,2,10">
+                            <Label Content="Graphique   " Foreground="White" />
+                            <Label Content="BackColor:" Foreground="White" />
+                            <ComboBox Name="CbBackColor" Width="80" SelectedIndex="5" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2">
+                                <ComboBoxItem Content="Blanc" />
+                                <ComboBoxItem Content="Bleu" />
+                                <ComboBoxItem Content="Jaune" />
+                                <ComboBoxItem Content="Rouge" />
+                                <ComboBoxItem Content="Vert" />
+                                <ComboBoxItem Content="Gris" />
+                                <ComboBoxItem Content="Transparent" />
+                            </ComboBox>
+                        </StackPanel>
                     </StackPanel>
-                </TabItem >
+                </DockPanel>
+                <StackPanel DockPanel.Dock="Bottom" >
+                    <TabControl  Name="TabControl1" Margin="2" Background="black">
+                        <TabControl.Resources>
+                        <Style TargetType="{x:Type TabItem}">
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="HeaderTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <Border x:Name="grid">
+                                            <ContentPresenter>
+                                                <ContentPresenter.Content>
+                                                    <TextBlock Margin="1,0,1,0" FontSize="11" Text="{TemplateBinding Content}" Foreground="white"/>
+                                                </ContentPresenter.Content>
+                                            </ContentPresenter>
+                                        </Border>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type TabItem}">
+                                        <Grid>
+                                            <Border Name="Border" Margin="1,1,1,0" Background="black" BorderBrush="gray" BorderThickness="2,2,2,0" CornerRadius="5,5,0,0" >
+                                                <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="10,3,10,5" RecognizesAccessKey="True">
+                                                    <ContentPresenter.LayoutTransform>
+                                                        <RotateTransform Angle="0" />
+                                                    </ContentPresenter.LayoutTransform>
+                                                </ContentPresenter>
+                                            </Border>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Panel.ZIndex" Value="100" />
+                                                <Setter TargetName="Border" Property="Background" Value="#FF615D5D" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
 
-            </TabControl>
+                        <Style TargetType="TreeView">
+                            <Setter Property="OverridesDefaultStyle" Value="True" />
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+                            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="TreeView">
+                                        <Border Name="Border" CornerRadius="0" BorderThickness="0">
+                                            <Border.BorderBrush>
+                                                <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
+                                            </Border.BorderBrush>
+                                            <Border.Background>
+                                                <SolidColorBrush Color="#FF514D4D" />
+                                            </Border.Background>
+                                            <ScrollViewer Focusable="False" CanContentScroll="False" Padding="0">
+                                                <ItemsPresenter />
+                                            </ScrollViewer>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        </TabControl.Resources>
 
-        </StackPanel>  
+                        <TabItem Header="Graphe " >
+                            <StackPanel Orientation="Horizontal" >
+                                <!--<chartingToolkit:Chart Name="Chart1" MinWidth="500" MinHeight="500" Margin="3" FontSize="9" />-->
+                                <WindowsFormsHost Name="Test" >
+
+                                </WindowsFormsHost>
+                            </StackPanel>
+                        </TabItem >
+
+                    </TabControl>
+
+                </StackPanel>
+            </DockPanel>
+        </Border>
+        
             
     </DockPanel>
 
