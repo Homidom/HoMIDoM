@@ -7075,8 +7075,8 @@ Namespace HoMIDom
                     Dim XmlDoc As XmlDocument = New XmlDocument()
                     XmlDoc.Load(_MonRepertoire & "\logs\log.xml")
                 End If
-                If retour.Length > 5000000 Then
-                    Dim retour2 As String = Mid(retour, retour.Length - 8001, 8000)
+                If retour.Length > 1000000 Then
+                    Dim retour2 As String = Mid(retour, retour.Length - 1000001, 1000000)
                     retour = "Erreur, trop de ligne à traiter depuis le log seules les dernières lignes seront affichées, merci de consulter le fichier sur le serveur par en avoir la totalité!!" & vbCrLf & vbCrLf & retour2
                     Return retour
                 End If
