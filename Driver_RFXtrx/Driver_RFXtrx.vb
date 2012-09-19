@@ -2091,6 +2091,7 @@ Imports System.Media
                             If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_RFU4) <> 0 Then messagelog &= ", RFUprotocol4=on" Else messagelog &= ", RFUprotocol4=off"
                             If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_RFU5) <> 0 Then messagelog &= ", RFUprotocol5=on" Else messagelog &= ", RFUprotocol5=off"
                             If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_RFU6) <> 0 Then messagelog &= ", RFUprotocol6=on" Else messagelog &= ", RFUprotocol6=off"
+
                             WriteLog(messagelog)
                         Case ICMD.ENABLEALL : WriteLog("Réponse à : Enable All RF")
                         Case ICMD.UNDECODED : WriteLog("Réponse à : UNDECODED on")
@@ -3723,7 +3724,13 @@ Imports System.Media
             '25 : AE
             '26 : BlindsT1
 
-            If paramMode.Length <> 26 Then paramMode = "20011111111111111011111111"
+            If paramMode.Length <> 26 Then
+                WriteLog("ERR: Setmode : ParamMode incorrect : " & paramMode & " (valeur par défaut utilisée : 20011111111111111011111111)")
+                paramMode = "20011111111111111011111111"
+            Else
+                WriteLog("DBG: Setmode : ParamMode utilisé : " & paramMode)
+            End If
+
 
             Dim kar(ICMD.size) As Byte
             kar(ICMD.packetlength) = ICMD.size
