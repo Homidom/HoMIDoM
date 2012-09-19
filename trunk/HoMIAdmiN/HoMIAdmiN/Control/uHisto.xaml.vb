@@ -21,9 +21,12 @@ Public Class uHisto
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
 
             DateStartSelect.DisplayDate = Now.Date.AddDays(-7).ToString '"01/01/2012"
+            DateStartSelect.Text = Now.Date.AddDays(-7).ToString '"01/01/2012"
             DateFinSelect.DisplayDate = Now.Date.AddDays(1).ToString
+            DateFinSelect.Text = Now.Date.AddDays(1).ToString
 
             _Devices = Devices
+
             Update_Graphe()
 
         Catch ex As Exception
@@ -57,7 +60,7 @@ Public Class uHisto
             Dim Chart2 As New System.Windows.Forms.DataVisualization.Charting.Chart()
             ' Add a chart area.
             Chart2.ChartAreas.Add("Default")
-            Chart2.Width = 965
+            Chart2.Width = 930
             Chart2.Height = 500
 
             Dim legend1 As New Legend
@@ -84,8 +87,8 @@ Public Class uHisto
             For Each _item In _Devices
                 For Each kvp As KeyValuePair(Of String, String) In _item
                     Dim _namedevice As String = myService.ReturnDeviceByID(IdSrv, kvp.Key).Name
-                    Dim datestart As String = DateStartSelect.DisplayDate
-                    Dim dateend As String = DateFinSelect.DisplayDate
+                    Dim datestart As String = DateStartSelect.Text
+                    Dim dateend As String = DateFinSelect.Text 'displaydate
 
                     Dim a() As String = datestart.Split("/")
                     If a.Length = 3 Then
