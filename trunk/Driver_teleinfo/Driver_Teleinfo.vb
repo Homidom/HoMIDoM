@@ -70,7 +70,10 @@ Public Class Driver_Teleinfo
         Private trame As Boolean = False
 
         Dim ADCO, OPTARIF, ISOUSC, HCHC, HCHP,
-         BASE, PTEC, PEJP, IMAX, PAPP, HHPHC, IINST, MOTDETAT, IINST1, IINST2, IINST3, IMAX1, IMAX2, IMAX3, PMAX, PPAP, PPOT As String
+         BASE, PTEC, PEJP, IMAX, PAPP, HHPHC, IINST, MOTDETAT, IINST1, IINST2, IINST3, IMAX1, IMAX2, IMAX3, PMAX, PPOT As String
+        Dim ADIR1, ADIR2, ADIR3, ADPS, BBRHCJB, BBRHCJR, BBRHCJW, BBRHPJB, BBRHPJR, BBRHPJW, DEMAIN, EJPHN, EJPHPM As String
+
+
 
 
 #End Region
@@ -779,11 +782,49 @@ Public Class Driver_Teleinfo
                         Case "PMAX"
                             PMAX = data1
 
-                        Case "PPAP"
-                            PPAP = data1
-
                         Case "PPOT"
                             PPOT = data1
+
+                        Case "ADIR1"
+                            ADIR1 = data1
+
+                        Case "ADIR2"
+                            ADIR2 = data1
+
+                        Case "ADIR3"
+                            ADIR3 = data1
+
+                        Case "ADPS"
+                            ADPS = data1
+
+                        Case "BBRHCJB"
+                            BBRHCJB = data1
+
+                        Case "BBRHCJR"
+                            BBRHCJR = data1
+
+                        Case "BBRHCJW"
+                            BBRHCJW = data1
+
+                        Case "BBRHPJB"
+                            BBRHPJB = data1
+
+                        Case "BBRHPJR"
+                            BBRHPJR = data1
+
+                        Case "BBRHPJW"
+                            BBRHPJW = data1
+
+                        Case "DEMAIN"
+                            DEMAIN = data1
+
+                        Case "EJPHN"
+                            EJPHN = data1
+
+                        Case "EJPHPM"
+                            EJPHPM = data1
+
+
 
                         Case Else
                             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Case Teleinfo_adresse ", "Parametre non reconnu adresse : " & TeleInfo_adresse)
@@ -869,11 +910,47 @@ Public Class Driver_Teleinfo
                     Case "PMAX"
                         retour = PMAX
 
-                    Case "PPAP"
-                        retour = PPAP
-
                     Case "PPOT"
                         retour = PPOT
+
+                    Case "ADIR1"
+                        retour = ADIR1
+
+                    Case "ADIR2"
+                        retour = ADIR2
+
+                    Case "ADIR3"
+                        retour = ADIR3
+
+                    Case "ADPS"
+                        retour = ADPS
+
+                    Case "BBRHCJB"
+                        retour = BBRHCJB
+
+                    Case "BBRHCJR"
+                        retour = BBRHCJR
+
+                    Case "BBRHCJW"
+                        retour = BBRHCJW
+
+                    Case "BBRHPJB"
+                        retour = BBRHPJB
+
+                    Case "BBRHPJR"
+                        retour = BBRHPJR
+
+                    Case "BBRHPJW"
+                        retour = BBRHPJW
+
+                    Case "DEMAIN"
+                        retour = DEMAIN
+
+                    Case "EJPHN"
+                        retour = EJPHN
+
+                    Case "EJPHPM"
+                        retour = EJPHPM
 
 
                     Case Else
