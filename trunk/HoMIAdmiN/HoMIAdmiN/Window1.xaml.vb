@@ -799,6 +799,7 @@ Class Window1
             Dim ListeZones = myService.GetAllZones(IdSrv)
             DevicesAsHisto = myService.DevicesAsHisto
 
+
             CntDevice.Content = ListeDevices.Count & " Device(s)"
             For Each Dev In ListeDevices
                 Dim tool As New Label
@@ -903,7 +904,10 @@ Class Window1
                     AddHandler mnu2.Click, AddressOf MnuitemDev_Click
                     ctxMenu.Items.Add(mnu2)
                 End If
-                Dim _DevHisto As Boolean = myService.DeviceAsHisto(Dev.ID)
+                ' Dim _DevHisto As Boolean = myService.DeviceAsHisto(Dev.ID)
+
+                Dim _DevHisto As Boolean = DevicesAsHisto(Dev.ID)
+
                 Dim mnu4 As New MenuItem
                 mnu4.Header = "Historique"
                 mnu4.Tag = 4
@@ -1333,36 +1337,6 @@ Class Window1
             AddHandler x.CloseMe, AddressOf UnloadControl
             CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
-
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MnuitemHisto_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    'Gère les menus Double click droit sur les histo
-    Private Sub MnuitemHisto_DoubleClick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
-        Try
-            If IsConnect = False Then
-                Serveur_notconnected_action()
-                Exit Sub
-            End If
-
-            Select Case sender.tag
-                Case 0 'Graphe
-                    Dim Devices As New List(Of Dictionary(Of String, String))
-                    Dim y As New Dictionary(Of String, String)
-                    y.Add(sender.uid, "Value")
-                    Devices.Add(y)
-
-                    Dim x As New uHisto(Devices)
-                    x.Uid = System.Guid.NewGuid.ToString()
-                    x.Width = CanvasRight.ActualWidth - 100
-                    x.Height = CanvasRight.ActualHeight - 50
-                    AddHandler x.CloseMe, AddressOf UnloadControl
-                    CanvasRight.Children.Clear()
-                    CanvasRight.Children.Add(x)
-
-            End Select
 
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub MnuitemHisto_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
