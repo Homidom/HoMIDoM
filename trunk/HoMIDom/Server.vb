@@ -4964,7 +4964,7 @@ Namespace HoMIDom
                 If deviceId = "" Then 'C'est un nouveau device
 
                     For i1 As Integer = 0 To _ListDevices.Count - 1
-                        If _ListDevices.Item(i1).name = name Then
+                        If LCase(_ListDevices.Item(i1).name) = LCase(name) Then
                             Return 98
                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDevice", "Le nom du device: " & name & " existe déjà impossible de l'enregister")
                             Exit Function
