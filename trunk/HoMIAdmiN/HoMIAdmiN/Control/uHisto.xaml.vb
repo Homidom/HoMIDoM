@@ -21,7 +21,7 @@ Public Class uHisto
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
 
             DateStartSelect.DisplayDate = "01/01/2000" 'Now.Date.AddDays(-7)
-            DateFinSelect.DisplayDate = Now.Date.ToString
+            DateFinSelect.DisplayDate = Now.Date.AddDays(1).ToString
 
             _Devices = Devices
             Update_Graphe()
