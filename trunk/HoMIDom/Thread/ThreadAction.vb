@@ -373,9 +373,10 @@ Namespace HoMIDom
 
         Public Sub Sendhttp(ByVal Commande As String)
             Try
+
                 Dim reader As StreamReader = Nothing
                 Dim str As String = ""
-                Dim request As WebRequest = WebRequest.Create(Commande)
+                Dim request As WebRequest = WebRequest.Create(DecodeCommand(Commande))
                 Dim response As WebResponse = request.GetResponse()
                 reader = New StreamReader(response.GetResponseStream())
                 str = reader.ReadToEnd
@@ -394,7 +395,7 @@ Namespace HoMIDom
                     email.From = New MailAddress(_Server.GetSMTPMailServeur(_IdSrv))
                     email.To.Add(adresse)
                     email.Subject = sujet
-                    email.Body = texte
+                    email.Body = DecodeCommand(texte)
                     Dim mailSender As New System.Net.Mail.SmtpClient(_Server.GetSMTPServeur(_IdSrv))
 
                     If _Server.GetSMTPLogin(_IdSrv) <> "" Then
@@ -421,10 +422,11 @@ Namespace HoMIDom
             'remplace les balises par la valeur
             texte = texte.Replace("{time}", Now.ToShortTimeString)
             texte = texte.Replace("{date}", Now.ToLongDateString)
-          
+            texte = DecodeCommand(texte)
+
             Try
                 Dim lamachineaparler As New Speech.Synthesis.SpeechSynthesizer
-                _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Parler", "Message:" & Message)
+                _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Parler", "Message:" & texte)
                 With lamachineaparler
                     .SelectVoice(_Server.GetDefautVoice)
                     '.SetOutputToWaveFile("C:\tet.wav")
@@ -500,5 +502,47 @@ Namespace HoMIDom
                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "ExecuteScript", "Error:" & ex.Message)
             End Try
         End Sub
+
+        Public Function DecodeCommand(ByVal Command As String) As String
+            Try
+                Dim startcmd As Integer = InStr(1, Command, "<")
+                Dim endcmd As Integer = InStr(1, Command, ">")
+                Dim retour As String = Command
+
+                Do While startcmd > 0 And endcmd > 0
+                    Dim _device As String = Mid(Command, startcmd + 1, endcmd - startcmd - 1)
+                    Dim Tabl() As String = _device.Split(".")
+
+                    If Tabl.Length = 1 Then
+                        Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
+                        If x IsNot Nothing Then
+                            _device = x.Value
+                        Else
+                            _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "DecodeCommand", "Device: " & Tabl(0) & " non trouvé")
+                        End If
+                    ElseIf Tabl.Length = 2 Then
+                        Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
+                        If x IsNot Nothing Then
+                            Dim value As Object = CallByName(x, Tabl(1), CallType.Get)
+                            _device = value
+                        End If
+                    End If
+
+                    Dim start As String = Mid(Command, 1, startcmd - 1)
+                    Dim fin As String = Mid(Command, endcmd + 1, Command.Length - endcmd)
+                    Dim newcmd As String = start & _device & fin
+
+                    retour = newcmd
+                    startcmd = InStr(endcmd + 1, Command, "<")
+                    endcmd = InStr(startcmd + 1, Command, ">")
+                Loop
+
+                Return retour
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "DecodeCommand", "Error:" & ex.ToString)
+                Return Command
+            End Try
+        End Function
+
     End Class
 End Namespace
