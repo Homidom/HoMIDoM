@@ -5577,13 +5577,14 @@ Namespace HoMIDom
 
             Try
                 'recherche du device
-                For i As Integer = 0 To _ListDevices.Count - 1
-                    If _ListDevices.Item(i).ID = DeviceId Then
-                        'device trouvé : _ListDevices.Item(i)
-                        x = _ListDevices.Item(i)
-                        Exit For
-                    End If
-                Next
+                'For i As Integer = 0 To _ListDevices.Count - 1
+                '    If _ListDevices.Item(i).ID = DeviceId Then
+                '        'device trouvé : _ListDevices.Item(i)
+                '        x = _ListDevices.Item(i)
+                '        Exit For
+                '    End If
+                'Next
+                x = ReturnDeviceById(IdSrv, DeviceId)
 
                 If x IsNot Nothing Then
                     'On vérifie si l'action existe avant de la lancer
@@ -5610,14 +5611,21 @@ Namespace HoMIDom
                     End Try
 
                     'on lance l'action
+                    For i As Integer = 0 To _ListDevices.Count - 1
+                        If _ListDevices.Item(i).ID = DeviceId Then
+                            'device trouvé : _ListDevices.Item(i)
+                            x = _ListDevices.Item(i)
+                            Exit For
+                        End If
+                    Next
                     If Action.Parametres IsNot Nothing Then
-                        Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand parametres count: " & Action.Parametres.Count)
+                        Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "parametres count: " & Action.Parametres.Count)
 
                         If Action.Parametres.Count > 0 Then
                             Select Case Action.Parametres.Count
                                 Case 1
                                     _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value)
-                                    Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand effectué: " & x.Name & " Command: " & Action.Nom & " Parametre: " & Action.Parametres.Item(0).Value)
+                                    Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "effectué: " & x.Name & " Command: " & Action.Nom & " Parametre: " & Action.Parametres.Item(0).Value)
                                 Case 2
                                     _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value)
                                 Case 3
@@ -5629,17 +5637,17 @@ Namespace HoMIDom
                             End Select
                         Else
                             CallByName(x, Action.Nom, CallType.Method)
-                            Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand effectué: " & x.Name & " Command: " & Action.Nom)
+                            Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "effectué: " & x.Name & " Command: " & Action.Nom)
                         End If
                     Else
                         CallByName(x, Action.Nom, CallType.Method)
-                        Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand effectué: " & x.Name & " Command: " & Action.Nom & " Aucun paramètre")
+                        Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "effectué: " & x.Name & " Command: " & Action.Nom & " Aucun paramètre")
                     End If
                 Else
-                    Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand non effectué car le composant n'a pas été trouvé : " & DeviceId)
+                    Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "non effectué car le composant n'a pas été trouvé : " & DeviceId)
                 End If
             Catch ex As Exception
-                Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "Erreur lors du traitemant du Sub ExecuteDeviceCommand: " & ex.ToString)
+                Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "Erreur lors du traitemant : " & ex.ToString)
             End Try
         End Sub
 
@@ -5657,12 +5665,14 @@ Namespace HoMIDom
             Dim verifaction As Boolean = False
 
             Try
-                For i As Integer = 0 To _ListDevices.Count - 1
-                    If _ListDevices.Item(i).ID = DeviceId Then
-                        x = _ListDevices.Item(i)
-                        Exit For
-                    End If
-                Next
+                'recherche du device
+                'For i As Integer = 0 To _ListDevices.Count - 1
+                '    If _ListDevices.Item(i).ID = DeviceId Then
+                '        x = _ListDevices.Item(i)
+                '        Exit For
+                '    End If
+                'Next
+                x = ReturnDeviceById(IdSrv, DeviceId)
 
                 If x IsNot Nothing Then
 
@@ -5689,6 +5699,13 @@ Namespace HoMIDom
                     End Try
 
                     'on lance l'action
+                    For i As Integer = 0 To _ListDevices.Count - 1
+                        If _ListDevices.Item(i).ID = DeviceId Then
+                            'device trouvé : _ListDevices.Item(i)
+                            x = _ListDevices.Item(i)
+                            Exit For
+                        End If
+                    Next
                     If Action.Param2 <> "" Then
                         _retour = CallByName(x, Action.Nom, CallType.Method, Action.Param1, Action.Param2)
                         Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "Effectué: " & x.Name & " Command: " & Action.Nom & " Parametre1/2: " & Action.Param1 & "/" & Action.Param2)
