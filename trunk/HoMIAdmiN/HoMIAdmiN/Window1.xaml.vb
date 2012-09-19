@@ -1232,7 +1232,7 @@ Class Window1
                         IsNode = True
                     Else
                         y.Content = _dev.Name
-                        y.Foreground = New SolidColorBrush(Colors.White)
+                        y.Foreground = New SolidColorBrush(Colors.Gray)
                         y.Background = New SolidColorBrush(Colors.DarkGray)
                         y.BorderBrush = New SolidColorBrush(Colors.Black)
                         y.Margin = New Thickness(-15, 1, 0, 0)
