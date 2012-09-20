@@ -41,6 +41,12 @@
                                 </RadioButton>
                             </StackPanel>
                             <Rectangle Width="15"/>
+                            <Label Content="BackColor:" Foreground="White" VerticalAlignment="Center" />
+                            <ComboBox Background="DarkGray" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="2" Foreground="White" Name="ComboBoxMoyenne" SelectedIndex="0" Width="80">
+                                <ComboBoxItem Content="Aucune" />
+                                <ComboBoxItem Content="Heure" />
+                                <ComboBoxItem Content="Jour" />
+                            </ComboBox>
                             <Label Content="Max Data:" Foreground="White" VerticalAlignment="center"/>
                             <TextBox Name="TxtMaxData" Width="40" Text="1000" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" TextAlignment="Center"/>
                             <Rectangle Width="15"/>
@@ -53,10 +59,10 @@
                             </Button>
 
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="2,2,2,10">
-                            <Label Content="Graphique   " Foreground="White" />
-                            <Label Content="BackColor:" Foreground="White" />
-                            <ComboBox Name="CbBackColor" Width="80" SelectedIndex="5" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="2,2,2,10">
+                            <Label Content="Graphique   " Foreground="White" VerticalAlignment="Center" />
+                            <Label Content="BackColor:" Foreground="White" VerticalAlignment="Center" />
+                            <ComboBox Name="CbBackColor" Width="80" VerticalAlignment="Center" SelectedIndex="5" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2">
                                 <ComboBoxItem Content="Blanc" />
                                 <ComboBoxItem Content="Bleu" />
                                 <ComboBoxItem Content="Jaune" />

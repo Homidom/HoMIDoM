@@ -3742,9 +3742,10 @@ Namespace HoMIDom
         ''' <param name="Source">Source du device (ex: Value)</param>
         ''' <param name="DateStart">Date de départ</param>
         ''' <param name="DateEnd">Date de fin</param>
+        ''' <param name="Moyenne">Moyenne par "heure" "jour" ou rien ""</param>
         ''' <returns>Datatable</returns>
         ''' <remarks></remarks>
-        Public Function GetHistoDeviceSource(ByVal IdSrv As String, ByVal idDevice As String, ByVal Source As String, Optional ByVal DateStart As String = "", Optional ByVal DateEnd As String = "") As List(Of Historisation) Implements IHoMIDom.GetHistoDeviceSource
+        Public Function GetHistoDeviceSource(ByVal IdSrv As String, ByVal idDevice As String, ByVal Source As String, Optional ByVal DateStart As String = "", Optional ByVal DateEnd As String = "", Optional ByVal Moyenne As String = "") As List(Of Historisation) Implements IHoMIDom.GetHistoDeviceSource
             Try
                 'On vérifie que l'id du serveur est correct pour lancer la fonction sinon erreur
                 If VerifIdSrv(IdSrv) = False Then
@@ -3764,35 +3765,57 @@ Namespace HoMIDom
                 Dim result As New DataTable("HistoDB")
                 Dim retour As String = ""
                 Dim commande As String = ""
+                Dim request_valeur As String = "*"
+                Dim request_groupby As String = ""
                 Dim _list As New List(Of Historisation)
+
+                'prepare la requête suivant les moyennes
+                Select Case UCase(Moyenne)
+                    Case "HEURE"
+                        'request_valeur = "device_id,source,DATE_FORMAT(`dateheure`,  '%Y/%m/%d %H' ) as dateheure, AVG(`valeur`)"
+                        'request_groupby = " GROUP BY DATE_FORMAT(`dateheure`,  '%Y/%m/%d %H' )"
+                        request_valeur = "device_id,source,strftime('%Y-%m-%d %H:%M:%S',dateheure), AVG(`valeur`)"
+                        request_groupby = " GROUP BY strftime('%Y-%m-%d %H',dateheure)"
+                    Case "JOUR"
+                        'request_valeur = "device_id,source,DATE_FORMAT(`dateheure`,  '%Y/%m/%d' ) as dateheure, AVG(`valeur`)"
+                        'request_groupby = " GROUP BY DATE_FORMAT(`dateheure`,  '%Y/%m/%d' )"
+                        request_valeur = "device_id,source,date(dateheure), AVG(`valeur`)"
+                        request_groupby = " GROUP BY date(dateheure)"
+                    Case "", "AUCUNE"
+                        request_valeur = "device_id,source,dateheure,valeur"
+                        request_groupby = ""
+                    Case Else
+                        request_valeur = "device_id,source,dateheure,valeur"
+                        request_groupby = ""
+                End Select
 
                 'Prépare la requête sql suivant datestart et dateend
                 If DateStart = "" And DateEnd = "" Then
-                    commande = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' ;"
+                    commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "'" & request_groupby & ";"
                 End If
                 If DateStart <> "" And DateEnd = "" Then
-                    commande = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure>='" & DateStart & "';"
+                    commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure>='" & DateStart & "'" & request_groupby & ";"
                 End If
                 If DateStart = "" And DateEnd <> "" Then
-                    commande = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure<='" & DateEnd & "';"
+                    commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure<='" & DateEnd & "'" & request_groupby & ";"
                 End If
                 If DateStart <> "" And DateEnd <> "" Then
-                    commande = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure between '" & DateStart & "' and '" & DateEnd & "';"
+                    commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure between '" & DateStart & "' and '" & DateEnd & "'" & request_groupby & ";"
                 End If
 
                 'execute la requête sql
                 retour = sqlite_homidom.query(commande, result, "")
 
-                'Vérifie que la requête n'apas générée d'erreur
+                'Vérifie que la requête n'a pas générée d'erreur
                 If UCase(Mid(retour, 1, 3)) = "ERR" Then
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHistoDeviceSource", retour)
                 Else
                     For i As Integer = 0 To result.Rows.Count - 1
                         Dim a As New Historisation
-                        a.Nom = result.Rows.Item(i).Item(2).ToString
-                        a.IdDevice = result.Rows.Item(i).Item(1).ToString
-                        a.DateTime = CDate(result.Rows.Item(i).Item(3).ToString)
-                        a.Value = result.Rows.Item(i).Item(4).ToString
+                        a.IdDevice = result.Rows.Item(i).Item(0).ToString
+                        a.Nom = result.Rows.Item(i).Item(1).ToString
+                        a.DateTime = CDate(result.Rows.Item(i).Item(2).ToString)
+                        a.Value = result.Rows.Item(i).Item(3).ToString
                         _list.Add(a)
                     Next
                 End If
