@@ -89,50 +89,38 @@ Public Class uHisto
                     Dim _namedevice As String = myService.ReturnDeviceByID(IdSrv, kvp.Key).Name
                     Dim datestart As String = DateStartSelect.Text
                     Dim dateend As String = DateFinSelect.Text 'displaydate
+                    Dim moyenne As String = ComboBoxMoyenne.Text
 
+                    'Recuperation des historiques
                     Dim a() As String = datestart.Split("/")
-                    If a.Length = 3 Then
-                        datestart = a(2) & "-" & a(1) & "-" & a(0)
-                    Else
-                        datestart = ""
-                    End If
+                    If a.Length = 3 Then datestart = a(2) & "-" & a(1) & "-" & a(0) Else datestart = ""
                     a = dateend.Split("/")
-                    If a.Length = 3 Then
-                        dateend = a(2) & "-" & a(1) & "-" & a(0)
-                    Else
-                        dateend = ""
-                    End If
+                    If a.Length = 3 Then dateend = a(2) & "-" & a(1) & "-" & a(0) Else dateend = ""
+                    result = myService.GetHistoDeviceSource(IdSrv, kvp.Key, kvp.Value, datestart, dateend, moyenne)
 
-                    result = myService.GetHistoDeviceSource(IdSrv, kvp.Key, kvp.Value, datestart, dateend)
-
-                    ' Add a series with some data points.
+                    'Construction de la serie dans le graphe
                     Dim series As New System.Windows.Forms.DataVisualization.Charting.Series(_namedevice & ": " & kvp.Value)
-
                     Dim cnt As Integer = 0
                     For Each data As Historisation In result
                         series.Points.AddXY(data.DateTime, data.Value)
                         cnt += 1
                         If cnt > _MaxData Then Exit For
                     Next
-
                     series.BorderWidth = 3
                     Chart2.Series.Add(series)
 
+                    'Tableau de valeur
                     Dim _Tabitem As New TabItem
-                    _Tabitem.Header = _namedevice & ":" & kvp.Value
-
+                    If kvp.Value = "Value" Then _Tabitem.Header = _namedevice Else _Tabitem.Header = _namedevice & ":" & kvp.Value
                     Dim _Releve As New uReleve(result, _namedevice & ": " & kvp.Value)
                     _Tabitem.Content = _Releve
-
                     TabControl1.Items.Add(_Tabitem)
-
                 Next kvp
             Next
 
             If ChkLine.IsChecked Then
                 For i As Integer = 0 To Chart2.Series.Count - 1
                     Chart2.Series(i).ChartType = SeriesChartType.Line
-
                 Next
             ElseIf ChkHisto.IsChecked Then
                 For i As Integer = 0 To Chart2.Series.Count - 1
@@ -154,20 +142,13 @@ Public Class uHisto
             Chart2.ChartAreas("Default").AxisX.ScrollBar.IsPositionedInside = True
 
             Select Case CbBackColor.SelectedIndex
-                Case 0
-                    Chart2.ChartAreas("Default").BackColor = Color.White
-                Case 1
-                    Chart2.ChartAreas("Default").BackColor = Color.LightBlue
-                Case 2
-                    Chart2.ChartAreas("Default").BackColor = Color.LightYellow
-                Case 3
-                    Chart2.ChartAreas("Default").BackColor = Color.Red
-                Case 4
-                    Chart2.ChartAreas("Default").BackColor = Color.LightGreen
-                Case 5
-                    Chart2.ChartAreas("Default").BackColor = Color.LightGray
-                Case 6
-                    Chart2.ChartAreas("Default").BackColor = Color.Transparent
+                Case 0 : Chart2.ChartAreas("Default").BackColor = Color.White
+                Case 1 : Chart2.ChartAreas("Default").BackColor = Color.LightBlue
+                Case 2 : Chart2.ChartAreas("Default").BackColor = Color.LightYellow
+                Case 3 : Chart2.ChartAreas("Default").BackColor = Color.Red
+                Case 4 : Chart2.ChartAreas("Default").BackColor = Color.LightGreen
+                Case 5 : Chart2.ChartAreas("Default").BackColor = Color.LightGray
+                Case 6 : Chart2.ChartAreas("Default").BackColor = Color.Transparent
             End Select
 
             ' Add the chart to the Windows Form Host.
@@ -175,8 +156,8 @@ Public Class uHisto
             _CurrentChart = Chart2
 
             Me.Cursor = Nothing
-
         Catch ex As Exception
+            Me.Cursor = Nothing
             MessageBox.Show("Erreur uHisto Update_Graphe: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub

@@ -303,7 +303,7 @@ Namespace HoMIDom
         ''' <param name="DateEnd">Date de fin</param>
         ''' <returns>Datatable</returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetHistoDeviceSource(ByVal IdSrv As String, ByVal idDevice As String, ByVal Source As String, Optional ByVal DateStart As String = "", Optional ByVal DateEnd As String = "") As List(Of Historisation)
+        <OperationContract()> Function GetHistoDeviceSource(ByVal IdSrv As String, ByVal idDevice As String, ByVal Source As String, Optional ByVal DateStart As String = "", Optional ByVal DateEnd As String = "", Optional ByVal Moyenne As String = "") As List(Of Historisation)
 
         ''' <summary>
         ''' Retourne True si le device comporte des historiques
