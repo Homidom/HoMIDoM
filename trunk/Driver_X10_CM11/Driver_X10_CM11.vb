@@ -678,9 +678,43 @@ Public Class Driver_X10_CM11
                         TraiteLire(trame)
                         AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
                     Case CM11_CLOCK_REQ
-                        ' Power failure macro refresh request (Chr165 = 0xA5) Erreur CM11
-                        ' Power fail/recovery detected.
-                        port.Write(ACK_DEF_CM11) '0xfb
+                        ' this is a *clock set request*, i.e. the CM11 is requesting that
+                        ' we set its internal clock...
+
+                        ' feedback to application
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "CLOCK REQUEST")
+
+                        ' set <reply> to a *clock set reply* to send to the CM11...
+                        Dim now As DateTime = DateTime.Now
+                        Dim minutes As Integer = now.Hour * 60 + now.Minute
+                        Dim startOfYear As New DateTime(now.Year, 1, 1)
+                        Dim dayOfYear As Integer = CInt((now - startOfYear).TotalDays)
+                        ' set-time header:
+                        ' seconds component of current time
+                        ' (minute-of-day component of current time) % 120
+                        ' (minute-of-day component of current time) / 120
+                        ' low order 8 bits of day of the year
+                        ' high order bit of day of the year in MSB,
+                        ' day of week specified by setting bit 0 (Sunday)
+                        ' through 7 (Saturday)
+                        ' monitored house code in upper 4 bits; bit 3 is
+                        ' reserved; bit 2 is battery timer clear flag;
+                        ' bit 1 is monitored status clear flag; bit 0 is
+                        ' timer purge flag
+                        Dim reply As Byte() = New Byte() {&H9B, CByte(now.Second), CByte(minutes Mod 120), CByte(minutes \ 120), CByte(dayOfYear And &HFF), CByte(((dayOfYear And &H100) >> 1) Or (1 << CInt(now.DayOfWeek))), _
+                         CByte(&H60)}
+
+                        ' write <reply> to the CM11
+                        port.Write(reply, 0, reply.Count)
+
+                        ' the CM11 will send one 0xA5 request every second after power-up,
+                        ' so it's not unusual for a series of these to be present in the
+                        ' serial input buffer; for efficiency, delete all remaining 0xA5
+                        ' bytes in the input buffer
+                        While port.ReadByte() = &HA5
+                            port.ReadByte()
+                        End While
+
                     Case CP10_CLOCK_REQ
 
                     Case Else
