@@ -134,6 +134,13 @@
                             </StackPanel>
                         </TabItem >
 
+                        <TabItem Header="Soutenir le projet" >
+                            <StackPanel Orientation="Vertical" VerticalAlignment="top" HorizontalAlignment="center">
+                                <Label Content="Soutenir HoMIDoM" FontStretch="Normal" FontSize="15" Foreground="white"/>
+                                <TextBlock Height="170" Name="TexteSoutien" Text="En cours de rédaction" FontStretch="Normal" Margin="3" Foreground="white" />
+                                <Button Content="Faire un don" Foreground="White" Height="24.293" Name="BtnSoutien" Template="{DynamicResource GlassButton}" Width="87.169" />
+                            </StackPanel>
+                        </TabItem >
                     </TabControl>
 
                 </StackPanel>

@@ -40,6 +40,17 @@ Partial Public Class uHelp
             listesdivers.Text &= "Nb Macros : " & myService.GetAllMacros(IdSrv).Count()
             listesdivers.Text &= "Nb Triggers : " & myService.GetAllTriggers(IdSrv).Count()
 
+            TexteSoutien.Text = "Pourquoi faire un don ?"
+            TexteSoutien.Text &= "Le projet HoMIDoM est un projet géré par plusieurs personnes volontaires et bénévoles." & vbCrLf
+            TexteSoutien.Text &= "Le but étant de proposer au plus grand nombre une véritable solution de domotique gratuite." & vbCrLf
+            TexteSoutien.Text &= "Pour pouvoir fonctionner et promouvoir notre solution, nous devons investir dans différentes ressources : matériels (achats personnels aux frais de chacun) mais aussi par exemple un hébergement et un nom de domaine." & vbCrLf
+            TexteSoutien.Text &= "Cette dernière partie a un coût de quelques dizaines d'euros par an." & vbCrLf
+            TexteSoutien.Text &= "Si vous souhaitez soutenir notre projet pour nous aider à le développer encore plus et à le promouvoir, ou tout simplement nous remercier du travail accompli qui, nous l'espérons, vous rendra la domotique plus facile et accessible, pensez à faire un don, aussi petit soit-il." & vbCrLf
+            TexteSoutien.Text &= "Combien donner ?" & vbCrLf
+            TexteSoutien.Text &= "Ce que vous souhaitez, le but des dons n'étant pas de devenir millionnaire :) mais de pouvoir uniquement réduire voir rembourser les frais inhérents au fonctionnement du projet." & vbCrLf
+            TexteSoutien.Text &= "Comment ?" & vbCrLf
+            TexteSoutien.Text &= "Vous pouvez faire un don simplement et librement via Paypal depuis notre site web ci-dessous : " & vbCrLf
+
         Catch ex As Exception
             MessageBox.Show("Erreur lors sur la fonction New de uHelp: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -57,6 +68,8 @@ Partial Public Class uHelp
     Private Sub BtnAideForum_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnAideForum.Click
         Process.Start("http://www.homidom.com/le-forum-c24.html")
     End Sub
-
+    Private Sub BtnSoutien_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSoutien.Click
+        Process.Start("http://www.homidom.com/Dons-c29.html")
+    End Sub
 
 End Class
