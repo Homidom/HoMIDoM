@@ -851,6 +851,7 @@ Class Window1
                 tool.Content &= "Description: " & Dev.Description & vbCrLf
                 tool.Content &= "Type: " & Dev.Type.ToString & vbCrLf
                 tool.Content &= "Driver: " & nomdriver & vbCrLf
+                tool.Content &= "Date MAJ: " & Dev.LastChange & vbCrLf
                 tool.Content &= "Value: " & Dev.Value
 
                 Dim tl As New ToolTip
