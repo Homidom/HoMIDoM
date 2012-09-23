@@ -517,6 +517,8 @@ Public Class Driver_Teleinfo
                 ''liste des devices compatibles
                 _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE.ToString)
                 _DeviceSupport.Add(ListeDevices.ENERGIETOTALE.ToString)
+                _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
+                _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE.ToString)
 
                 'Paramétres avancés
                 Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
@@ -657,13 +659,6 @@ Public Class Driver_Teleinfo
 
             Try
                 If trame Then
-                    ' Ajout de valeurs pour debug
-                    ' ReDim Preserve InfoTrame(messcnt)
-                    ' InfoTrame(messcnt) = "PAPP 000059672845 S"
-                    '  messcnt += 1
-                    '  ReDim Preserve InfoTrame(messcnt)
-                    '  InfoTrame(messcnt) = "HCHP 067159650 x"
-                    '  messcnt += 1
                     Process(InfoTrame)
 
                 ElseIf mess Then ' Un message est recu ==> on le stocke
@@ -675,7 +670,7 @@ Public Class Driver_Teleinfo
                     ReDim Preserve InfoTrame(messcnt)
                     InfoTrame(messcnt) = xxx.ToString
                     If _DEBUG Then
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo ProcessReceivedChar - Information recue", xxx.ToString)
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Teleinfo ProcessReceivedChar - Information recue", xxx.ToString)
                     End If
                     messcnt += 1
                 End If
@@ -964,9 +959,6 @@ Public Class Driver_Teleinfo
             End Try
             Return retour
         End Function
-
-
-
 
 #End Region
 
