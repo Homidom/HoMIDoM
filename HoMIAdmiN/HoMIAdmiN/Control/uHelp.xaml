@@ -89,17 +89,30 @@
                             <StackPanel Orientation="Vertical" VerticalAlignment="top" HorizontalAlignment="center">
                                 <Label Content="Homidom" Name="TTitre" FontStretch="Normal" FontWeight="Bold" FontSize="24" Margin="3" Foreground="white"/>
                                 <Label Content="Recherche de la version en cours" Name="TVersion" FontStretch="Normal" FontSize="15" Foreground="white"/>
-                                <TextBlock Height="215" Name="Texte" Text="En cours de rédaction" Foreground="white" />
-                                
-                                <Image Height="110"  Name="Logo" Stretch="Fill" VerticalAlignment="Top" Source="/HoMIAdmiN;component/Images/Homidom_banniere_817_203.png" Margin="3" MaxWidth="400" />
-                                
+                                <TextBlock Height="170" Name="Texte" Text="En cours de rédaction" FontStretch="Normal" Margin="3" Foreground="white" />
+                                <DockPanel Background="white">
+                                    <Image Margin="5" Height="110"  Name="Logo" Stretch="Fill" VerticalAlignment="Top" Source="/HoMIAdmiN;component/Images/Homidom_banniere_817_203.png" MaxWidth="400" />
+                                </DockPanel>
                             </StackPanel>
                         </TabItem >
 
                         <TabItem Header="Version" >
-                            <StackPanel Orientation="vertical" HorizontalAlignment="left" >
-                                <Label Content="Version des Drivers et Programmes :" Name="Versions" FontStretch="Normal" FontWeight="Bold" FontSize="12" Margin="3" Foreground="white"/>
-                                <TextBlock Height="345" Name="listesversions" Text="Recherche en cours..." Foreground="white"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="left" >
+                                <GroupBox Header="Version des Drivers" Height="370" Name="GroupBox1" Width="230" Foreground="white" Margin="3">
+                                    <Grid>
+                                        <TextBlock Name="listesversionsdrivers" Text="Recherche en cours..." Foreground="white" IsManipulationEnabled="True" />
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Header="Détail des Programmes" Height="370" Name="GroupBox2" Width="230" Foreground="white" Margin="3">
+                                    <Grid>
+                                        <TextBlock Name="listesversionsprogrammes" Text="Recherche en cours..." Foreground="white" />
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Header="Divers" Height="370" Name="GroupBox3" Width="230" Foreground="white" Margin="3">
+                                    <Grid>
+                                        <TextBlock Name="listesdivers" Text="Recherche en cours..." Foreground="white" />
+                                    </Grid>
+                                </GroupBox>
                             </StackPanel>
                         </TabItem >
 

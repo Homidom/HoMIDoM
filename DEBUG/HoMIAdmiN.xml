@@ -110,6 +110,14 @@ InitializeComponent
 	<summary>
 uElement
 </summary>
+</member><member name="M:WpfApplication1.uHelp.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uHelp">
+	<summary>
+uHelp
+</summary>
 </member><member name="M:WpfApplication1.uModuleSimple.InitializeComponent">
 	<summary>
 InitializeComponent

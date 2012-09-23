@@ -1494,6 +1494,12 @@ Class Window1
             Canvas.SetLeft(MainMenu, WMainMenu)
             Canvas.SetTop(MainMenu, HMainMenu)
 
+            'Affichage des dernieres erreurs et composants non a jour
+            MainMenu.txtlasterror.Items.Clear()
+            MainMenu.txtlasterror.Items.Add("Recherche en cours")
+            MainMenu.txtlastdevice.Items.Clear()
+            MainMenu.txtlastdevice.Items.Add("Recherche en cours")
+
             AnimationApparition(MainMenu)
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub ShowMainMenu: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -1694,7 +1700,11 @@ Class Window1
 
                 Case "tag_aide" 'Aide
                     Try
-                        Process.Start("http://www.homidom.com/documentation-c16.html")
+                        Dim x As New uHelp
+                        x.Uid = System.Guid.NewGuid.ToString()
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        CanvasRight.Children.Clear()
+                        CanvasRight.Children.Add(x)
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub MainMenuAutre aide: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
