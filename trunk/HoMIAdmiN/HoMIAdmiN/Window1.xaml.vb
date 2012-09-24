@@ -891,6 +891,14 @@ Class Window1
                 Dim label As New Label
                 If Dev.Enable = True Then
                     label.Foreground = New SolidColorBrush(Colors.White)
+                    'on verifie si la composant n'est pas à jour depuis au moins lastchangeduree
+                    If Dev.LastChangeDuree > 0 Then
+                        Dim X As Date = Dev.LastChange
+                        X.AddHours(CInt(Dev.LastChangeDuree))
+                        If X < Now Then
+                            label.Foreground = New SolidColorBrush(Colors.Red)
+                        End If
+                    End If
                 Else
                     label.Foreground = New SolidColorBrush(Colors.Black)
                 End If
