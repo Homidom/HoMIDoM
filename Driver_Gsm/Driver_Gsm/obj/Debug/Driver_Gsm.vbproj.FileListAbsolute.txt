@@ -1,0 +1,10 @@
+C:\Users\fabien\HomiDom\Driver_Gsm\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\fabien\HomiDom\Driver_Gsm\obj\Debug\Driver_Gsm.Resources.resources
+C:\Users\fabien\HomiDom\Driver_Gsm\obj\Debug\GenerateResource.read.1.tlog
+C:\Users\fabien\HomiDom\Driver_Gsm\obj\Debug\GenerateResource.write.1.tlog
+C:\Users\fabien\HomiDom\DEBUG\Drivers\Driver_Gsm.dll
+C:\Users\fabien\HomiDom\DEBUG\Drivers\Driver_Gsm.pdb
+C:\Users\fabien\HomiDom\DEBUG\Drivers\Driver_Gsm.xml
+C:\Users\fabien\HomiDom\Driver_Gsm\obj\Debug\Driver_Gsm.dll
+C:\Users\fabien\HomiDom\Driver_Gsm\obj\Debug\Driver_Gsm.xml
+C:\Users\fabien\HomiDom\Driver_Gsm\obj\Debug\Driver_Gsm.pdb
