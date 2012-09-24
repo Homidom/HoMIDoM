@@ -34,19 +34,38 @@ Namespace HoMIDom
                     Case Action.TypeAction.ActionDevice
                         Dim x As Action.ActionDevice = _Action
                         Dim y As New HoMIDom.DeviceAction
-                        y.Nom = x.Method
 
-                        If x.Parametres IsNot Nothing Then
-                            If x.Parametres.Count > 0 Then
-                                If x.Parametres.Item(0) IsNot Nothing Then
-                                    If x.Parametres.Item(0) <> "" Then
-                                        Dim y2 As New HoMIDom.DeviceAction.Parametre
-                                        y2.Value = x.Parametres.Item(0)
-                                        y.Parametres.Add(y2)
+                        If x.Method.StartsWith("{") And x.Method.EndsWith("}") Then
+                            'c'est une commande avancée
+                            Dim _cmdav As String = Mid(x.Method, 2, x.Method.Length - 2)
+                            y.Nom = "ExecuteCommand"
+
+                            Dim param As New DeviceAction.Parametre
+                            param.Value = _cmdav
+                            y.Parametres.Add(param)
+
+                            If x.Parametres.Count > 1 Then
+                                Dim param1 As New DeviceAction.Parametre
+                                param1.Value = x.Parametres.Item(1)
+                                y.Parametres.Add(param1)
+                            End If
+                        Else
+                            'C'est une commande standard
+                            y.Nom = x.Method
+
+                            If x.Parametres IsNot Nothing Then
+                                If x.Parametres.Count > 0 Then
+                                    If x.Parametres.Item(0) IsNot Nothing Then
+                                        If x.Parametres.Item(0) <> "" Then
+                                            Dim y2 As New HoMIDom.DeviceAction.Parametre
+                                            y2.Value = x.Parametres.Item(0)
+                                            y.Parametres.Add(y2)
+                                        End If
                                     End If
                                 End If
                             End If
                         End If
+
                         _Server.ExecuteDeviceCommand(_IdSrv, x.IdDevice, y)
 
                     Case Action.TypeAction.ActionIf
