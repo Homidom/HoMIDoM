@@ -57,7 +57,9 @@ Namespace HoMIDom
         <NonSerialized()> Dim fsw As FileSystemWatcher
         <NonSerialized()> Dim _MaxMonthLog As Integer = 2
         <NonSerialized()> Private Shared _TypeLogEnable As New List(Of Boolean) 'True si on doit pas prendre en compte le type de log
-        <NonSerialized()> Shared _4Log(3) As String  'Le serveur est prêt
+        <NonSerialized()> Shared _4Log(3) As String  'Table des 4 derniers logs
+        <NonSerialized()> Shared _4LogError(3) As String  'Table des 4 derniers logs en alerte ou erreur
+        <NonSerialized()> Shared _DevicesNoMAJ As New List(Of String)  'Table des devices non à jour
         <NonSerialized()> Shared _CycleSave As Integer  'Enregistrer toute les X minutes
         <NonSerialized()> Shared _NextTimeSave As DateTime  'Enregistrer toute les X minutes
         <NonSerialized()> Shared _Finish As Boolean  'Le serveur est prêt
@@ -239,9 +241,9 @@ Namespace HoMIDom
                 End If
 
                 '---- Actions à effectuer toutes les heures ----
-                'If ladate.Minute = 59 And ladate.Second = 59 Then
-
-                'End If
+                If ladate.Minute = 59 And ladate.Second = 59 Then
+                    SearchDeviceNoMaJ()
+                End If
 
                 '---- Actions à effectuer à minuit ----
                 If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
@@ -842,6 +844,14 @@ Namespace HoMIDom
                                             If (Not list.Item(j).Attributes.GetNamedItem("formatage") Is Nothing) Then .Formatage = list.Item(j).Attributes.GetNamedItem("formatage").Value
                                         End If
                                         '-- cas spécifique du multimedia pour récupérer les commandes IR --
+                                        'Verifie si prob de MaJ
+                                        If .LastChangeDuree > 0 Then
+                                            Dim X As Date = .LastChange
+                                            X.AddHours(CInt(.LastChangeDuree))
+                                            If X < Now Then
+                                                _DevicesNoMAJ.Add(.Name)
+                                            End If
+                                        End If
                                         'If _Dev.type = "MULTIMEDIA" Then
                                         '    For k As Integer = 0 To list.Item(j).ChildNodes.Count - 1
                                         '        If list.Item(j).ChildNodes.Item(k).Name = "commands" Then
@@ -2354,11 +2364,34 @@ Namespace HoMIDom
             INFORMATION = 3
         End Enum
 
+        ''' <summary>
+        ''' Insère dans une table le dernier log
+        ''' </summary>
+        ''' <param name="TypLog"></param>
+        ''' <param name="Source"></param>
+        ''' <param name="Fonction"></param>
+        ''' <param name="Message"></param>
+        ''' <remarks></remarks>
         Private Sub Write4Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
             _4Log(3) = _4Log(2)
             _4Log(2) = _4Log(1)
             _4Log(1) = _4Log(0)
             _4Log(0) = Now & " - " & TypLog.ToString & " - " & Source.ToString & " - " & Fonction & " - " & Message
+        End Sub
+
+        ''' <summary>
+        ''' Insère dans une table le dernier log de type erreur ou alerte
+        ''' </summary>
+        ''' <param name="TypLog"></param>
+        ''' <param name="Source"></param>
+        ''' <param name="Fonction"></param>
+        ''' <param name="Message"></param>
+        ''' <remarks></remarks>
+        Private Sub Write4LogError(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
+            _4LogError(3) = _4LogError(2)
+            _4LogError(2) = _4LogError(1)
+            _4LogError(1) = _4LogError(0)
+            _4LogError(0) = Now & " - " & TypLog.ToString & " - " & Source.ToString & " - " & Fonction & " - " & Message
         End Sub
 
         ''' <summary>Ecrit un log dans le fichier log au format xml</summary>
@@ -2375,6 +2408,10 @@ Namespace HoMIDom
                 'on affiche dans la console
                 Console.WriteLine(Now & " " & TypLog.ToString & " " & Source.ToString & " " & Fonction & " " & Message)
                 Write4Log(TypLog, Source, Fonction, Message)
+
+                If TypLog = TypeLog.ERREUR Or TypLog = TypeLog.ERREUR_CRITIQUE Then
+                    Write4LogError(TypLog, Source, Fonction, Message)
+                End If
 
                 'écriture dans un fichier texte
                 _FichierLog = _MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt"
@@ -2685,9 +2722,6 @@ Namespace HoMIDom
                 TimerSecond.Interval = 1000
                 AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
                 TimerSecond.Enabled = True
-
-                'test avec graphe
-                '.grapher_courbe("test", "Temperature extérieure", 800, 400)
 
                 'Change l'etat du server
                 Etat_server = True
@@ -4723,6 +4757,37 @@ Namespace HoMIDom
 #End Region
 
 #Region "Device"
+        ''' <summary>
+        ''' Retourne la liste des devices non à jour
+        ''' </summary>
+        ''' <param name="idsrv"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetDeviceNoMaJ(ByVal idsrv) As List(Of String) Implements IHoMIDom.GetDeviceNoMaJ
+            Return _DevicesNoMAJ
+        End Function
+
+        ''' <summary>
+        ''' Cherche les devices non à jour (lancé toutes les heures)
+        ''' </summary>
+        ''' <remarks></remarks>
+        Private Sub SearchDeviceNoMaJ()
+            Try
+                _DevicesNoMAJ.Clear()
+
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).LastChangeDuree > 0 Then
+                        Dim X As Date = _ListDevices.Item(i).LastChange
+                        X.AddHours(CInt(_ListDevices.Item(i).LastChangeDuree))
+                        If X < Now Then
+                            _DevicesNoMAJ.Add(_ListDevices.Item(i).name)
+                        End If
+                    End If
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SearchDeviceNoMaJ", "Exception : " & ex.Message)
+            End Try
+        End Sub
 
         ''' <summary>
         ''' Supprimer un device de la config
@@ -7057,6 +7122,22 @@ Namespace HoMIDom
             list.Add(_4Log(1))
             list.Add(_4Log(2))
             list.Add(_4Log(3))
+
+            Return list
+        End Function
+
+        ''' <summary>
+        ''' Retourne les 4 logs en erreur les plus récents (du plus récent au plus ancien)
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function Get4LogError() As List(Of String) Implements IHoMIDom.Get4LogError
+            Dim list As New List(Of String)
+
+            list.Add(_4LogError(0))
+            list.Add(_4LogError(1))
+            list.Add(_4LogError(2))
+            list.Add(_4LogError(3))
 
             Return list
         End Function

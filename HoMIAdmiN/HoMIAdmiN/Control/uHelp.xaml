@@ -86,9 +86,9 @@
                         </TabControl.Resources>
 
                         <TabItem Header="A propos" >
-                            <StackPanel Orientation="Vertical" VerticalAlignment="top" HorizontalAlignment="center">
+                            <StackPanel Orientation="Vertical" VerticalAlignment="top" HorizontalAlignment="center" MaxWidth="400">
                                 <Label Content="Homidom" Name="TTitre" FontStretch="Normal" FontWeight="Bold" FontSize="24" Margin="3" Foreground="white"/>
-                                <Label Content="Recherche de la version en cours" Name="TVersion" FontStretch="Normal" FontSize="15" Foreground="white"/>
+                                <TextBlock Text="Recherche de la version en cours" Name="TVersion" FontStretch="Normal" FontSize="15" Foreground="white" MaxWidth=" 400"/>
                                 <TextBlock Height="170" Name="Texte" Text="En cours de rédaction" FontStretch="Normal" Margin="3" Foreground="white" />
                                 <DockPanel Background="white">
                                     <Image Margin="5" Height="110"  Name="Logo" Stretch="Fill" VerticalAlignment="Top" Source="/HoMIAdmiN;component/Images/Homidom_banniere_817_203.png" MaxWidth="400" />
