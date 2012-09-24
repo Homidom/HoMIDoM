@@ -178,10 +178,20 @@ Public Class WActionParametrage
         Try
             If _ObjAction.TypeAction = Action.TypeAction.ActionDevice Then
                 If Cb1.SelectedItem IsNot Nothing Then
-                    Cb2.ItemsSource = Nothing
-                    Cb2.Items.Clear()
-                    Cb2.ItemsSource = Cb1.SelectedItem.DeviceAction
-                    Cb2.DisplayMemberPath = "Nom"
+                    'Ajout des commandes standard
+                    For i As Integer = 0 To Cb1.SelectedItem.DeviceAction.Count - 1
+                        Cb2.Items.Add(Cb1.SelectedItem.DeviceAction.Item(i).Nom)
+                    Next
+
+                    'Ajout des commandes avancées
+                    For i As Integer = 0 To Cb1.SelectedItem.GetDeviceCommandePlus.Count - 1
+                        Cb2.Items.Add("{" & Cb1.SelectedItem.GetDeviceCommandePlus.Item(i).NameCommand & "}")
+                    Next
+
+                    'Cb2.ItemsSource = Nothing
+                    'Cb2.Items.Clear()
+                    'Cb2.ItemsSource = Cb1.SelectedItem.DeviceAction
+                    'Cb2.DisplayMemberPath = "Nom"
                 End If
             End If
         Catch ex As Exception
@@ -227,7 +237,7 @@ Public Class WActionParametrage
                                 End If
                             Next
                             For i As Integer = 0 To Cb2.Items.Count - 1
-                                If obj.Method = Cb2.Items(i).Nom Then
+                                If obj.Method = Cb2.Items(i).ToString Then
                                     Cb2.SelectedIndex = i
                                     Exit For
                                 End If
@@ -473,22 +483,41 @@ Public Class WActionParametrage
 
     Private Sub Cb2_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles Cb2.SelectionChanged
         Try
-            LblValue.Visibility = Windows.Visibility.Hidden
-            TxtValue.Visibility = Windows.Visibility.Hidden
+            LblValue.Visibility = Windows.Visibility.Collapsed
+            TxtValue.Visibility = Windows.Visibility.Collapsed
 
             If Cb1.SelectedIndex < 0 Then Exit Sub
             If Cb2.SelectedIndex < 0 Then Exit Sub
 
+            Cb2.ToolTip = ""
             Dim Idx As Integer = Cb2.SelectedIndex
-            For j As Integer = 0 To myservice.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).DeviceAction.Item(Idx).Parametres.Count - 1
-                Select Case j
-                    Case 0
-                        LblValue.Content = Cb1.SelectedItem.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
-                        LblValue.Visibility = Windows.Visibility.Visible
-                        TxtValue.ToolTip = Cb1.SelectedItem.DeviceAction.Item(Idx).Parametres.Item(j).Type
-                        TxtValue.Visibility = Windows.Visibility.Visible
-                End Select
-            Next
+
+            If Cb2.SelectedValue.ToString.StartsWith("{") And Cb2.SelectedValue.ToString.EndsWith("}") Then
+                'c'est une commande avancée
+                Dim _cmdav As String = Mid(Cb2.SelectedValue.ToString, 2, Cb2.SelectedValue.ToString.Length - 2)
+                For j As Integer = 0 To myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).GetDeviceCommandePlus.Count - 1
+                    If myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).GetDeviceCommandePlus.Item(j).NameCommand = _cmdav Then
+                        Cb2.ToolTip = myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).GetDeviceCommandePlus.Item(j).DescriptionCommand
+                        If myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).GetDeviceCommandePlus.Item(j).CountParam > 0 Then
+                            LblValue.Content = "Parametre:"
+                            LblValue.Visibility = Windows.Visibility.Visible
+                            TxtValue.Visibility = Windows.Visibility.Visible
+                            Exit For
+                        End If
+                    End If
+                Next
+            Else
+                'c'est une commande standard
+                For j As Integer = 0 To myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).DeviceAction.Item(Idx).Parametres.Count - 1
+                    Select Case j
+                        Case 0
+                            LblValue.Content = Cb1.SelectedItem.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                            LblValue.Visibility = Windows.Visibility.Visible
+                            TxtValue.ToolTip = Cb1.SelectedItem.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                            TxtValue.Visibility = Windows.Visibility.Visible
+                    End Select
+                Next
+            End If
         Catch ex As Exception
             MessageBox.Show("Erreur Cb2_selectionChanged: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
