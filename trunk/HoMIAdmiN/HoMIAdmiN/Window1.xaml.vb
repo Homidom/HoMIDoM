@@ -820,11 +820,10 @@ Class Window1
 
             CntDevice.Content = ListeDevices.Count & " Device(s)"
             For Each Dev In ListeDevices
-                Dim tool As New Label
+
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
-                Dim img2 As New Image
                 Dim uri As String = ""
                 Dim uri2 As String = MyRep & "\Images\Icones\ZoneNo_32.png"
                 Dim bmpImage As New BitmapImage()
@@ -833,61 +832,7 @@ Class Window1
                 Dim nomdriver As String = myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom
                 stack.Orientation = Orientation.Horizontal
 
-                'verification si le device fait parti d'une zone
-                For Each Zon In ListeZones
-                    If FlagZone = False Then
-                        For Each elemnt In Zon.ListElement
-                            If elemnt.ElementID = Dev.ID Then
-                                FlagZone = True
-                                Exit For
-                            End If
-                        Next
-                    End If
-                Next
-
-                img.Height = 20
-                img.Width = 20
-                img2.Height = 20
-                img2.Width = 20
-
-                If Trim(Dev.Picture) <> "" Then
-                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(Dev.Picture))
-                Else
-                    uri = MyRep & "\Images\Icones\Composant_32.png"
-                    bmpImage.BeginInit()
-                    bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
-                    bmpImage.EndInit()
-                    img.Source = bmpImage
-                End If
-
-                Dim drv As String = Dev.Name
-                drv &= " (" & nomdriver & ")"
-
-                '*************************** TOOL TIP **************************
-                tool.Content = "Nom: " & Dev.Name & vbCrLf
-                tool.Content &= "Enable " & Dev.Enable & vbCrLf
-                tool.Content &= "Description: " & Dev.Description & vbCrLf
-                tool.Content &= "Type: " & Dev.Type.ToString & vbCrLf
-                tool.Content &= "Driver: " & nomdriver & vbCrLf
-                tool.Content &= "Date MAJ: " & Dev.LastChange & vbCrLf
-                tool.Content &= "Value: " & Dev.Value
-
-                Dim tl As New ToolTip
-                tl.Foreground = System.Windows.Media.Brushes.White
-                tl.Background = System.Windows.Media.Brushes.WhiteSmoke
-                tl.BorderBrush = System.Windows.Media.Brushes.Black
-                Dim imgpopup As New Image
-                Dim stkpopup As New StackPanel
-
-                imgpopup.Width = 45
-                imgpopup.Height = 45
-                imgpopup.Source = img.Source
-
-                stkpopup.Children.Add(imgpopup)
-                stkpopup.Children.Add(tool)
-
-                tl.Content = stkpopup
-
+                'creation du label
                 Dim label As New Label
                 If Dev.Enable = True Then
                     label.Foreground = New SolidColorBrush(Colors.White)
@@ -900,9 +845,73 @@ Class Window1
                         End If
                     End If
                 Else
-                    label.Foreground = New SolidColorBrush(Colors.Black)
+                    label.Foreground = New SolidColorBrush(Colors.Yellow)
                 End If
-                label.Content = drv
+                label.Content = Dev.Name & " (" & nomdriver & ")"
+
+                'gestion de l'image du composant dans le menu
+                img.Height = 20
+                img.Width = 20
+                If Trim(Dev.Picture) <> "" Then
+                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(Dev.Picture))
+                Else
+                    uri = MyRep & "\Images\Icones\Composant_32.png"
+                    bmpImage.BeginInit()
+                    bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
+                    bmpImage.EndInit()
+                    img.Source = bmpImage
+                End If
+                stack.Children.Add(img)
+
+                'verification si le device fait parti d'une zone
+                For Each Zon In ListeZones
+                    If FlagZone = False Then
+                        For Each elemnt In Zon.ListElement
+                            If elemnt.ElementID = Dev.ID Then
+                                FlagZone = True
+                                Exit For
+                            End If
+                        Next
+                    End If
+                Next
+                If FlagZone = False Then
+                    Dim img2 As New Image
+                    img2.Height = 20
+                    img2.Width = 20
+                    bmpImage2.BeginInit()
+                    bmpImage2.UriSource = New Uri(uri2, UriKind.Absolute)
+                    bmpImage2.EndInit()
+                    img2.Source = bmpImage2
+                    img2.ToolTip = "Ce composant ne fait pas partie d'une zone"
+                    stack.Children.Add(img2)
+                End If
+
+                '*************************** TOOL TIP **************************
+                Dim tl As New ToolTip
+                tl.Foreground = System.Windows.Media.Brushes.White
+                tl.Background = System.Windows.Media.Brushes.WhiteSmoke
+                tl.BorderBrush = System.Windows.Media.Brushes.Black
+
+                Dim stkpopup As New StackPanel
+
+                Dim tool As New Label
+                tool.Content = "Nom: " & Dev.Name & vbCrLf
+                tool.Content &= "Enable " & Dev.Enable & vbCrLf
+                tool.Content &= "Description: " & Dev.Description & vbCrLf
+                tool.Content &= "Type: " & Dev.Type.ToString & vbCrLf
+                tool.Content &= "Driver: " & nomdriver & vbCrLf
+                tool.Content &= "Date MAJ: " & Dev.LastChange & vbCrLf
+                tool.Content &= "Value: " & Dev.Value
+                stkpopup.Children.Add(tool)
+
+                Dim imgpopup As New Image
+                imgpopup.Width = 45
+                imgpopup.Height = 45
+                imgpopup.Source = img.Source
+                stkpopup.Children.Add(imgpopup)
+
+                tl.Content = stkpopup
+
                 label.ToolTip = tl
 
                 '*************************** CLIC DROIT **************************
@@ -931,10 +940,7 @@ Class Window1
                     AddHandler mnu2.Click, AddressOf MnuitemDev_Click
                     ctxMenu.Items.Add(mnu2)
                 End If
-                ' Dim _DevHisto As Boolean = myService.DeviceAsHisto(Dev.ID)
-
                 Dim _DevHisto As Boolean = DevicesAsHisto(Dev.ID)
-
                 Dim mnu4 As New MenuItem
                 mnu4.Header = "Historique"
                 mnu4.Tag = 4
@@ -948,26 +954,16 @@ Class Window1
                 mnu5.Uid = Dev.ID
                 AddHandler mnu5.Click, AddressOf MnuitemDev_Click
                 ctxMenu.Items.Add(mnu5)
+
                 label.ContextMenu = ctxMenu
 
-                stack.Children.Add(img)
 
-                If FlagZone = False Then
-                    bmpImage2.BeginInit()
-                    bmpImage2.UriSource = New Uri(uri2, UriKind.Absolute)
-                    bmpImage2.EndInit()
-                    img2.Source = bmpImage2
-                    img2.ToolTip = "Ce composant ne fait pas partie d'une zone"
-                    stack.Children.Add(img2)
-                End If
-
+                '********************** Ajout du label au stackpanel puis treeview *********************
                 stack.Children.Add(label)
-
-                newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
+                newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Uid = Dev.ID
-                Dim marg As New Thickness(-12, 0, 0, 0)
-                newchild.Margin = marg
+                newchild.Margin = New Thickness(-12, 0, 0, 0)
                 TreeViewDevice.Items.Add(newchild)
             Next
         Catch ex As Exception
