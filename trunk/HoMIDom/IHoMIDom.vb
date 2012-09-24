@@ -306,13 +306,13 @@ Namespace HoMIDom
         <OperationContract()> Function GetHistoDeviceSource(ByVal IdSrv As String, ByVal idDevice As String, ByVal Source As String, Optional ByVal DateStart As String = "", Optional ByVal DateEnd As String = "", Optional ByVal Moyenne As String = "") As List(Of Historisation)
 
         ''' <summary>
-        ''' Retourne True si le device comporte des historiques
+        ''' Retourne le nombre d'historiques d'un device
         ''' </summary>
         ''' <param name="IdDevice">ID du device</param>
         ''' <param name="Source">Option propriété du device (ex: Value)</param>
-        ''' <returns>True si comporte des historiques</returns>
+        ''' <returns>nombre historiques</returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function DeviceAsHisto(ByVal IdDevice As String, Optional ByVal Source As String = "") As Boolean
+        <OperationContract()> Function DeviceAsHisto(ByVal IdDevice As String, Optional ByVal Source As String = "") As Long
 
         ''' <summary>
         ''' Retourne la liste des sources histo (source et id) présents dans la base de données Homidom

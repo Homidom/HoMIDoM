@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<template fabricant="foscam" modele="fi8918w" driver="http">
+  <commandes>
+    <cmd name="Camera vue Normale" code="camera_control.cgi?param=5&amp;amp;value=0" repeat="0" />
+    <cmd name="Camera vue Flip" code="camera_control.cgi?param=5&amp;amp;value=1" repeat="0" />
+    <cmd name="Camera vue Mirror" code="camera_control.cgi?param=5&amp;amp;value=2 " repeat="0" />
+    <cmd name="Camera vue Flip et Mirror" code="camera_control.cgi?param=5&amp;amp;value=3" repeat="0" />
+  </commandes>
+</template>

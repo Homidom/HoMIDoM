@@ -3787,20 +3787,16 @@ Namespace HoMIDom
             End Try
         End Function
 
-
-        ''' <summary>
-        ''' Permet de savoir si un device a des hostiques associés dans la BD
-        ''' </summary>
+        ''' <summary>Permet de savoir si un device a des hostiques associés dans la BD</summary>
         ''' <param name="IdDevice"></param>
         ''' <param name="Source"></param>
-        ''' <returns></returns>
+        ''' <returns>true si le composant a un historique</returns>
         ''' <remarks></remarks>
-        Public Function DeviceAsHisto(ByVal IdDevice As String, Optional ByVal Source As String = "") As Boolean Implements IHoMIDom.DeviceAsHisto
+        Public Function DeviceAsHisto(ByVal IdDevice As String, Optional ByVal Source As String = "") As Long Implements IHoMIDom.DeviceAsHisto
             Try
                 Dim commande As String
                 Dim retour As String = ""
-                Dim rtr As Boolean = False
-                Dim result As Integer = 0
+                Dim result As Long = 0
 
                 'OLD CODE : COULD BE DELETED WHILE CONFIRM THAT IT WORKS
                 'Dim result As New DataTable("HistoDB")
@@ -3836,12 +3832,10 @@ Namespace HoMIDom
                     commande = "SELECT COUNT(*) FROM historiques WHERE source='" & Source & "' and device_id='" & IdDevice & "' ;"
                 End If
                 retour = sqlite_homidom.count(commande, result)
-                If UCase(Mid(retour, 1, 3)) <> "ERR" Then
-                    If result > 0 Then rtr = True
-                Else
+                If UCase(Mid(retour, 1, 3)) = "ERR" Then
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceAsHisto", "Erreur: " & retour)
                 End If
-                Return rtr
+                Return result
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceAsHisto", "Exception : " & ex.Message)
                 Return False
