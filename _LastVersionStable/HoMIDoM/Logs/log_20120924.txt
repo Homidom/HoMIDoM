@@ -1,0 +1,282 @@
+24/09/2012 14:02:45	INFO	SERVEUR	Start	Création du dossier images\User
+24/09/2012 14:02:45	INFO	SERVEUR	INFO	Version de la dll Homidom: 1.0.158.0
+24/09/2012 14:02:45	INFO	SERVEUR	INFO	Version de l'OS: Microsoft Windows Server 2008 R2 Enterprise  64 Bits
+24/09/2012 14:02:45	INFO	SERVEUR	INFO	Répertoire utilisé: E:\Homidom_Test2
+24/09/2012 14:02:45	INFO	SERVEUR	Drivers_Load	Chargement des DLL des drivers :
+24/09/2012 14:02:45	INFO	SERVEUR	Drivers_Load	 - Arduino chargé (Version : 1.0.4.0 - 3264)
+24/09/2012 14:02:45	INFO	SERVEUR	Drivers_Load	 - DMX chargé (Version : 1.0.2.0 - 3264)
+24/09/2012 14:02:45	INFO	SERVEUR	Drivers_Load	 - Foobar chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:02:45	INFO	SERVEUR	Drivers_Load	 - HOMESEER chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - HTTP chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - K8055 chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - K8056 chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - RFID chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - 1-Wire chargé (Version : 1.0.4.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - OpenWebNet IP chargé (Version : 1.0.4.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - OpenWebNet USB chargé (Version : 1.0.5.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - Phidget InterfaceKit chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - PLCBUS chargé (Version : 1.0.5.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - RFXMitter chargé (Version : 1.0.5.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - RFXreceiver chargé (Version : 1.0.5.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - RFXtrx chargé (Version : 1.0.10.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - Teleinfo chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - USBuirt chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - Virtuel chargé (Version : 1.0.2.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - MeteoWeather chargé (Version : 1.0.4.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - X10 CM11 chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - X10 CM15 chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - ZIBASE chargé (Version : 1.0.9.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Load	 - Z-Wave chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:02:46	INFO	SERVEUR	LoadConfig	Création du backup (.bak) du fichier de config avant chargement
+24/09/2012 14:02:46	INFO	SERVEUR	LoadConfig	Chargement du fichier config: E:\Homidom_Test2\Config\homidom.xml
+24/09/2012 14:02:46	ERREUR_CRITIQUE	SERVEUR	LoadConfig	Erreur lors du chargement de la configuraion du serveur : System.NullReferenceException: Object reference not set to an instance of an object.
+   at HoMIDom.HoMIDom.XML.SelectNodes(String xpath)
+   at HoMIDom.HoMIDom.Server.LoadConfig(String Fichier)
+24/09/2012 14:02:46	INFO	SERVEUR	LoadConfig	Chargement des drivers :
+24/09/2012 14:02:46	ERREUR_CRITIQUE	SERVEUR	LoadConfig	Erreur lors du chargement des drivers : System.NullReferenceException: Object reference not set to an instance of an object.
+   at HoMIDom.HoMIDom.XML.SelectNodes(String xpath)
+   at HoMIDom.HoMIDom.Server.LoadConfig(String Fichier)
+24/09/2012 14:02:46	INFO	SERVEUR	LoadConfig	Chargement des zones :
+24/09/2012 14:02:46	ERREUR_CRITIQUE	SERVEUR	LoadConfig	Erreur lors du chargement des zones : System.NullReferenceException: Object reference not set to an instance of an object.
+   at HoMIDom.HoMIDom.XML.SelectNodes(String xpath)
+   at HoMIDom.HoMIDom.Server.LoadConfig(String Fichier)
+24/09/2012 14:02:46	INFO	SERVEUR	LoadConfig	Chargement des users :
+24/09/2012 14:02:46	ERREUR_CRITIQUE	SERVEUR	LoadConfig	Erreur lors du chargement des utilisateurs : System.NullReferenceException: Object reference not set to an instance of an object.
+   at HoMIDom.HoMIDom.XML.SelectNodes(String xpath)
+   at HoMIDom.HoMIDom.Server.LoadConfig(String Fichier)
+24/09/2012 14:02:46	INFO	SERVEUR	LoadConfig	Chargement des composants :
+24/09/2012 14:02:46	ERREUR_CRITIQUE	SERVEUR	LoadConfig	Erreur lors du chargement des Composants : System.NullReferenceException: Object reference not set to an instance of an object.
+   at HoMIDom.HoMIDom.XML.SelectNodes(String xpath)
+   at HoMIDom.HoMIDom.Server.LoadConfig(String Fichier)
+24/09/2012 14:02:46	INFO	SERVEUR	LoadConfig	Chargement des triggers :
+24/09/2012 14:02:46	ERREUR_CRITIQUE	SERVEUR	LoadConfig	Erreur lors du chargement des triggers : System.NullReferenceException: Object reference not set to an instance of an object.
+   at HoMIDom.HoMIDom.XML.SelectNodes(String xpath)
+   at HoMIDom.HoMIDom.Server.LoadConfig(String Fichier)
+24/09/2012 14:02:46	INFO	SERVEUR	LoadConfig	Chargement des macros :
+24/09/2012 14:02:46	ERREUR_CRITIQUE	SERVEUR	LoadConfig	Erreur lors du chargement des macros : System.NullReferenceException: Object reference not set to an instance of an object.
+   at HoMIDom.HoMIDom.XML.SelectNodes(String xpath)
+   at HoMIDom.HoMIDom.Server.LoadConfig(String Fichier)
+24/09/2012 14:02:46	INFO	SERVEUR	LoadConfig	 Chargement de la configuration terminée
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	Démarrage des drivers :
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - Arduino non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - DMX non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - Foobar non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - HOMESEER non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - HTTP non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - K8055 non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - K8056 non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - RFID non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - 1-Wire non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - OpenWebNet IP non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - OpenWebNet USB non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - Phidget InterfaceKit non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - PLCBUS non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - RFXMitter non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - RFXreceiver non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - RFXtrx non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - Teleinfo non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - USBuirt non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - Virtuel non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - MeteoWeather non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - X10 CM11 non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - X10 CM15 non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - ZIBASE non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	Drivers_Start	 - Z-Wave non démarré car non Auto
+24/09/2012 14:02:46	INFO	SERVEUR	MAJ_HeuresSoleil	Initialisation des heures du soleil
+24/09/2012 14:02:46	INFO	SERVEUR	MAJ_HeuresSoleil	Heure du lever : 24/09/2012 07:48:00
+24/09/2012 14:02:46	INFO	SERVEUR	MAJ_HeuresSoleil	Heure du coucher : 24/09/2012 19:54:40
+24/09/2012 14:02:46	INFO	SERVEUR	CleanLog	0 Fichier(s) log supprimé(s)
+24/09/2012 14:02:46	INFO	SERVEUR	Start	Serveur démarré
+24/09/2012 14:03:09	INFO	SERVEUR	INFO	Version de la dll Homidom: 1.0.158.0
+24/09/2012 14:03:09	INFO	SERVEUR	INFO	Version de l'OS: Microsoft Windows Server 2008 R2 Enterprise  64 Bits
+24/09/2012 14:03:09	INFO	SERVEUR	INFO	Répertoire utilisé: E:\Homidom_Test2
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	Chargement des DLL des drivers :
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - Arduino chargé (Version : 1.0.4.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - DMX chargé (Version : 1.0.2.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - Foobar chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - HOMESEER chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - HTTP chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - K8055 chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - K8056 chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - RFID chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - 1-Wire chargé (Version : 1.0.4.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - OpenWebNet IP chargé (Version : 1.0.4.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - OpenWebNet USB chargé (Version : 1.0.5.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - Phidget InterfaceKit chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - PLCBUS chargé (Version : 1.0.5.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - RFXMitter chargé (Version : 1.0.5.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - RFXreceiver chargé (Version : 1.0.5.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - RFXtrx chargé (Version : 1.0.10.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - Teleinfo chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - USBuirt chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - Virtuel chargé (Version : 1.0.2.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - MeteoWeather chargé (Version : 1.0.4.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - X10 CM11 chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - X10 CM15 chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - ZIBASE chargé (Version : 1.0.9.0 - 3264)
+24/09/2012 14:03:09	INFO	SERVEUR	Drivers_Load	 - Z-Wave chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:03:10	INFO	SERVEUR	LoadConfig	Création du backup (.bak) du fichier de config avant chargement
+24/09/2012 14:03:10	INFO	SERVEUR	LoadConfig	Chargement du fichier config: E:\Homidom_Test2\Config\homidom.xml
+24/09/2012 14:03:10	ERREUR_CRITIQUE	SERVEUR	LoadConfig	Erreur lors du chargement de la configuraion du serveur : System.NullReferenceException: Object reference not set to an instance of an object.
+   at HoMIDom.HoMIDom.XML.SelectNodes(String xpath)
+   at HoMIDom.HoMIDom.Server.LoadConfig(String Fichier)
+24/09/2012 14:03:10	INFO	SERVEUR	LoadConfig	Chargement des drivers :
+24/09/2012 14:03:10	ERREUR_CRITIQUE	SERVEUR	LoadConfig	Erreur lors du chargement des drivers : System.NullReferenceException: Object reference not set to an instance of an object.
+   at HoMIDom.HoMIDom.XML.SelectNodes(String xpath)
+   at HoMIDom.HoMIDom.Server.LoadConfig(String Fichier)
+24/09/2012 14:03:10	INFO	SERVEUR	LoadConfig	Chargement des zones :
+24/09/2012 14:03:10	ERREUR_CRITIQUE	SERVEUR	LoadConfig	Erreur lors du chargement des zones : System.NullReferenceException: Object reference not set to an instance of an object.
+   at HoMIDom.HoMIDom.XML.SelectNodes(String xpath)
+   at HoMIDom.HoMIDom.Server.LoadConfig(String Fichier)
+24/09/2012 14:03:10	INFO	SERVEUR	LoadConfig	Chargement des users :
+24/09/2012 14:03:10	ERREUR_CRITIQUE	SERVEUR	LoadConfig	Erreur lors du chargement des utilisateurs : System.NullReferenceException: Object reference not set to an instance of an object.
+   at HoMIDom.HoMIDom.XML.SelectNodes(String xpath)
+   at HoMIDom.HoMIDom.Server.LoadConfig(String Fichier)
+24/09/2012 14:03:10	INFO	SERVEUR	LoadConfig	Chargement des composants :
+24/09/2012 14:03:10	ERREUR_CRITIQUE	SERVEUR	LoadConfig	Erreur lors du chargement des Composants : System.NullReferenceException: Object reference not set to an instance of an object.
+   at HoMIDom.HoMIDom.XML.SelectNodes(String xpath)
+   at HoMIDom.HoMIDom.Server.LoadConfig(String Fichier)
+24/09/2012 14:03:10	INFO	SERVEUR	LoadConfig	Chargement des triggers :
+24/09/2012 14:03:10	ERREUR_CRITIQUE	SERVEUR	LoadConfig	Erreur lors du chargement des triggers : System.NullReferenceException: Object reference not set to an instance of an object.
+   at HoMIDom.HoMIDom.XML.SelectNodes(String xpath)
+   at HoMIDom.HoMIDom.Server.LoadConfig(String Fichier)
+24/09/2012 14:03:10	INFO	SERVEUR	LoadConfig	Chargement des macros :
+24/09/2012 14:03:10	ERREUR_CRITIQUE	SERVEUR	LoadConfig	Erreur lors du chargement des macros : System.NullReferenceException: Object reference not set to an instance of an object.
+   at HoMIDom.HoMIDom.XML.SelectNodes(String xpath)
+   at HoMIDom.HoMIDom.Server.LoadConfig(String Fichier)
+24/09/2012 14:03:10	INFO	SERVEUR	LoadConfig	 Chargement de la configuration terminée
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	Démarrage des drivers :
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - Arduino non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - DMX non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - Foobar non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - HOMESEER non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - HTTP non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - K8055 non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - K8056 non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - RFID non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - 1-Wire non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - OpenWebNet IP non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - OpenWebNet USB non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - Phidget InterfaceKit non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - PLCBUS non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - RFXMitter non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - RFXreceiver non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - RFXtrx non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - Teleinfo non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - USBuirt non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - Virtuel non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - MeteoWeather non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - X10 CM11 non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - X10 CM15 non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - ZIBASE non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	Drivers_Start	 - Z-Wave non démarré car non Auto
+24/09/2012 14:03:10	INFO	SERVEUR	MAJ_HeuresSoleil	Initialisation des heures du soleil
+24/09/2012 14:03:10	INFO	SERVEUR	MAJ_HeuresSoleil	Heure du lever : 24/09/2012 07:48:00
+24/09/2012 14:03:10	INFO	SERVEUR	MAJ_HeuresSoleil	Heure du coucher : 24/09/2012 19:54:40
+24/09/2012 14:03:10	INFO	SERVEUR	CleanLog	0 Fichier(s) log supprimé(s)
+24/09/2012 14:03:10	INFO	SERVEUR	Start	Serveur démarré
+24/09/2012 14:07:12	INFO	SERVEUR	INFO	Version de la dll Homidom: 1.0.158.0
+24/09/2012 14:07:12	INFO	SERVEUR	INFO	Version de l'OS: Microsoft Windows Server 2008 R2 Enterprise  64 Bits
+24/09/2012 14:07:12	INFO	SERVEUR	INFO	Répertoire utilisé: E:\Homidom_Test2
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	Chargement des DLL des drivers :
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - Arduino chargé (Version : 1.0.4.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - DMX chargé (Version : 1.0.2.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - Foobar chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - HOMESEER chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - HTTP chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - K8055 chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - K8056 chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - RFID chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - 1-Wire chargé (Version : 1.0.4.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - OpenWebNet IP chargé (Version : 1.0.4.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - OpenWebNet USB chargé (Version : 1.0.5.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - Phidget InterfaceKit chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - PLCBUS chargé (Version : 1.0.5.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - RFXMitter chargé (Version : 1.0.5.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - RFXreceiver chargé (Version : 1.0.5.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - RFXtrx chargé (Version : 1.0.10.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - Teleinfo chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - USBuirt chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - Virtuel chargé (Version : 1.0.2.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - MeteoWeather chargé (Version : 1.0.4.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - X10 CM11 chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - X10 CM15 chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - ZIBASE chargé (Version : 1.0.9.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Load	 - Z-Wave chargé (Version : 1.0.3.0 - 3264)
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	Création du backup (.bak) du fichier de config avant chargement
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	Chargement du fichier config: E:\Homidom_Test2\Config\homidom.xml
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	Paramètres du serveur chargés
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	Chargement des drivers :
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - Arduino chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - DMX chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - Foobar chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - HTTP chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - K8055 chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - K8056 chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - RFID chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - 1-Wire chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - OpenWebNet IP chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - Phidget InterfaceKit chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - PLCBUS chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - RFXreceiver chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - RFXMitter chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - RFXtrx chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - Teleinfo chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - USBuirt chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - Virtuel chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - X10 CM11 chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - X10 CM15 chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - ZIBASE chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - Z-Wave chargé
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	Chargement des zones :
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 -> Aucune zone enregistrée dans le fichier de config
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 -> 0 Zone(s) chargée(s)
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	Chargement des users :
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 -> 2 Utilisateur(s) chargé(s)
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	Chargement des composants :
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 - HOMI_Jour (soleil01 - N/A - GENERIQUEBOOLEEN)
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 -> 1 composant(s) trouvé(s)
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	Chargement des triggers :
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 -> Aucun trigger enregistré dans le fichier de config
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 -> 0 Trigger(s) chargé(s)
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	Chargement des macros :
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 -> Aucune macro enregistrée dans le fichier de config
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 -> 0 Macro(s) chargée(s)
+24/09/2012 14:07:12	INFO	SERVEUR	LoadConfig	 Chargement de la configuration terminée
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	Démarrage des drivers :
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - Arduino non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - DMX non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - Foobar non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - HOMESEER non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - HTTP non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - K8055 non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - K8056 non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - RFID non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - 1-Wire non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - OpenWebNet IP non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - OpenWebNet USB non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - Phidget InterfaceKit non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - PLCBUS non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - RFXMitter non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - RFXreceiver non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - RFXtrx non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - Teleinfo non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - USBuirt non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - Virtuel démarré
+24/09/2012 14:07:12	INFO	DRIVER	Virtuel Start	Driver Virtuel démarré
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - MeteoWeather non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - X10 CM11 non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - X10 CM15 non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - ZIBASE non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	Drivers_Start	 - Z-Wave non démarré car non Auto
+24/09/2012 14:07:12	INFO	SERVEUR	MAJ_HeuresSoleil	Initialisation des heures du soleil
+24/09/2012 14:07:12	INFO	SERVEUR	MAJ_HeuresSoleil	Heure du lever : 24/09/2012 07:25:00
+24/09/2012 14:07:12	INFO	SERVEUR	MAJ_HeuresSoleil	Heure du coucher : 24/09/2012 19:28:21
+24/09/2012 14:07:12	INFO	SERVEUR	CleanLog	0 Fichier(s) log supprimé(s)
+24/09/2012 14:07:12	INFO	SERVEUR	Start	Serveur démarré
+24/09/2012 14:07:41	INFO	SERVEUR	Devices_Stop	Arrêt des devices :
+24/09/2012 14:07:41	INFO	SERVEUR	Devices_Stop	 - HOMI_Jour arrété
+24/09/2012 14:07:41	INFO	SERVEUR	Drivers_Stop	Arrêt des drivers :
+24/09/2012 14:07:41	INFO	SERVEUR	Drivers_Stop	 - Virtuel : 
+24/09/2012 14:07:41	INFO	DRIVER	Virtuel Stop	Driver Virtuel arrêté
+24/09/2012 14:07:41	INFO	SERVEUR	Stop	Serveur Arrêté

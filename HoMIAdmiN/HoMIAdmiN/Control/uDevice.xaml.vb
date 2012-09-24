@@ -161,21 +161,12 @@ Partial Public Class uDevice
                         Label19.Visibility = Windows.Visibility.Collapsed
                     End If
 
-                    Dim _devhisto As New List(Of HoMIDom.HoMIDom.Historisation)
-                    _devhisto = myService.GetAllListHisto(IdSrv)
-
-                    If _devhisto IsNot Nothing Then
-                        For i As Integer = 0 To _devhisto.Count - 1
-                            If _devhisto(i).IdDevice = DeviceId And UCase(_devhisto(i).Nom) = "VALUE" Then
-                                BtnHisto.Visibility = Windows.Visibility.Visible
-                                Exit For
-                            End If
-                        Next
-                    End If
+                    'affiche du bouton Historique si le device a un historique
+                    If myService.DeviceAsHisto(DeviceId) > 0 Then BtnHisto.Visibility = Windows.Visibility.Visible
                 End If
             End If
 
-                'Liste toutes les zones dans la liste
+            'Liste toutes les zones dans la liste
             For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
                 Dim ch1 As New CheckBox
                 Dim ch2 As New CheckBox
@@ -490,7 +481,7 @@ Partial Public Class uDevice
                     Exit For
                 End If
             Next
-            myservice.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
+            myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
             SaveInZone()
 
             BtnRead.Visibility = Windows.Visibility.Visible

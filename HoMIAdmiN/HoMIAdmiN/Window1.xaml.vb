@@ -31,7 +31,6 @@ Class Window1
     Dim myBrushVert As New RadialGradientBrush()
     Dim myBrushRouge As New RadialGradientBrush()
     Dim flagTreeV As Boolean = False
-    Dim DevicesAsHisto As New Dictionary(Of String, Boolean)
     Dim flagShowMainMenu As Boolean = False
 
 #Region "Fonctions de base"
@@ -815,8 +814,6 @@ Class Window1
 
             Dim ListeDevices = myService.GetAllDevices(IdSrv)
             Dim ListeZones = myService.GetAllZones(IdSrv)
-            DevicesAsHisto = myService.DevicesAsHisto
-
 
             CntDevice.Content = ListeDevices.Count & " Device(s)"
             For Each Dev In ListeDevices
@@ -831,6 +828,7 @@ Class Window1
                 Dim FlagZone As Boolean = False
                 Dim nomdriver As String = myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom
                 stack.Orientation = Orientation.Horizontal
+                Dim _nbhisto As Boolean = myService.DeviceAsHisto(Dev.ID)
 
                 'creation du label
                 Dim label As New Label
@@ -901,6 +899,7 @@ Class Window1
                 tool.Content &= "Type: " & Dev.Type.ToString & vbCrLf
                 tool.Content &= "Driver: " & nomdriver & vbCrLf
                 tool.Content &= "Date MAJ: " & Dev.LastChange & vbCrLf
+                tool.Content &= "Nb Histo: " & _nbhisto & vbCrLf
                 tool.Content &= "Value: " & Dev.Value
                 stkpopup.Children.Add(tool)
 
@@ -940,12 +939,11 @@ Class Window1
                     AddHandler mnu2.Click, AddressOf MnuitemDev_Click
                     ctxMenu.Items.Add(mnu2)
                 End If
-                Dim _DevHisto As Boolean = DevicesAsHisto(Dev.ID)
                 Dim mnu4 As New MenuItem
                 mnu4.Header = "Historique"
                 mnu4.Tag = 4
                 mnu4.Uid = Dev.ID
-                If _DevHisto = False Then mnu4.IsEnabled = False
+                If _nbhisto <= 0 Then mnu4.IsEnabled = False
                 AddHandler mnu4.Click, AddressOf MnuitemDev_Click
                 ctxMenu.Items.Add(mnu4)
                 Dim mnu5 As New MenuItem
