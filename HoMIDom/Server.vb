@@ -5689,6 +5689,8 @@ Namespace HoMIDom
                                 verifaction = True
                             End If
                         Next
+                        'si c'est ExecuteCommand on laisse passer
+                        If Action.Nom = "ExecuteCommand" Then verifaction = True
 
                         If verifaction = False Then
                             Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "ExecuteDeviceCommand non effectué car la commande " & Action.Nom & " n'existe pas pour le composant : " & x.Name)
