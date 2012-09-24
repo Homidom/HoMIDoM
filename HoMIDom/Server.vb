@@ -2405,6 +2405,8 @@ Namespace HoMIDom
 
                 If _TypeLogEnable(TypLog - 1) = True Then Exit Sub
 
+                Message = DelRep(Message)
+
                 'on affiche dans la console
                 Console.WriteLine(Now & " " & TypLog.ToString & " " & Source.ToString & " " & Fonction & " " & Message)
                 Write4Log(TypLog, Source, Fonction, Message)
@@ -2435,114 +2437,37 @@ Namespace HoMIDom
                     Console.WriteLine(Now & " " & TypLog & " SERVER LOG ERROR Exception : " & ex.ToString)
                 End Try
 
-
-                'Dim Fichier As FileInfo
-                ''Vérifie si le fichier log existe sinon le crée
-                'If IO.File.Exists(_File) Then
-                '    Fichier = New FileInfo(_File)
-                '    'Vérifie si le fichier est trop gros si oui, on l'archive
-                '    If (Fichier.Length / 1000) > _MaxFileSize Then
-                '        Dim filearchive As String = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                '        IO.File.Move(_File, filearchive)
-                '    End If
-                'Else
-                '    CreateNewFileLog(_File)
-                '    Fichier = New FileInfo(_File)
-                'End If
-
-                ''Dim timeout As DateTime = Now.AddSeconds(3)
-                ''Do While FileIsOpen(_File) = True And Now < timeout
-
-                ''Loop
-
-                ''If Now = timeout And FileIsOpen(_File) = True Then
-                ''    Console.WriteLine(Now & " Impossible d'écrire dans le fichier log car il est toujours en ouvert, création d'un nouveau fichier log")
-                ''    Dim filearchive As String
-                ''    filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                ''    IO.File.Move(_File, filearchive)
-                ''    CreateNewFileLog(_File)
-                ''    Fichier = New FileInfo(_File)
-                ''End If
-
-                'Dim xmldoc As New XmlDocument()
-
-                'SyncLock lock_logwrite
-                '    'Ecrire le log
-                '    Try
-                '        Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
-                '        Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
-                '        Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
-                '        Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
-                '        Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
-                '        Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
-
-                '        'on affecte les attributs à l'élément
-                '        elelog.SetAttributeNode(atttime)
-                '        elelog.SetAttributeNode(atttype)
-                '        elelog.SetAttributeNode(attsrc)
-                '        elelog.SetAttributeNode(attfct)
-                '        elelog.SetAttributeNode(attmsg)
-
-                '        'on affecte les valeur
-                '        elelog.SetAttribute("time", Now)
-                '        elelog.SetAttribute("type", TypLog)
-                '        elelog.SetAttribute("source", Source)
-                '        elelog.SetAttribute("fonction", HtmlEncode(Fonction))
-                '        elelog.SetAttribute("message", HtmlEncode(Message))
-
-                '        'SyncLock lock_logwrite
-                '        xmldoc.Load(_File) 'ouvre le fichier xml
-                '        Dim root As XmlElement = xmldoc.Item("logs")
-                '        root.AppendChild(elelog)
-                '        'on enregistre le fichier xml
-                '        xmldoc.Save(_File)
-                '        xmldoc = Nothing
-                '        'End SyncLock
-
-                '    Catch ex As Exception 'Le fichier xml est corrompu ou comporte des caractères non supportés par xml
-                '        Console.WriteLine(Now & " Impossible d'écrire dans le fichier log un nouveau fichier à été créé: " & ex.Message)
-                '        Dim filearchive As String
-                '        filearchive = Mid(_File, 1, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                '        IO.File.Move(_File, filearchive)
-                '        CreateNewFileLog(_File)
-                '        Fichier = New FileInfo(_File)
-
-                '        xmldoc.Load(_File) 'ouvre le fichier xml
-                '        Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
-                '        Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
-                '        Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
-                '        Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
-                '        Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
-                '        Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
-
-                '        'on affecte les attributs à l'élément
-                '        elelog.SetAttributeNode(atttime)
-                '        elelog.SetAttributeNode(atttype)
-                '        elelog.SetAttributeNode(attsrc)
-                '        elelog.SetAttributeNode(attfct)
-                '        elelog.SetAttributeNode(attmsg)
-
-                '        'on affecte les valeur
-                '        elelog.SetAttribute("time", Now)
-                '        elelog.SetAttribute("type", TypLog)
-                '        elelog.SetAttribute("source", Source)
-                '        elelog.SetAttribute("fonction", Fonction)
-                '        elelog.SetAttribute("message", HtmlEncode(Message))
-
-                '        Dim root As XmlElement = xmldoc.Item("logs")
-                '        root.AppendChild(elelog)
-
-                '        'on enregistre le fichier xml
-                '        xmldoc.Save(_File)
-                '        xmldoc = Nothing
-                '    End Try
-
-                '    Fichier = Nothing
-                'End SyncLock
             Catch ex As Exception
                 Console.WriteLine("Erreur lors de l'écriture d'un log: " & ex.ToString, MsgBoxStyle.Exclamation, "Erreur Serveur")
             End Try
         End Sub
+
+        ''' <summary>
+        ''' Supprime le répertoire du développeur
+        ''' </summary>
+        ''' <param name="Message"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Private Function DelRep(ByVal Message As String) As String
+            Try
+                Dim start As Integer = InStr(UCase(Message), "C:\")
+                Dim newmess As String = Message
+
+                If start = 0 Then
+                    start = InStr(UCase(Message), "D:\")
+                End If
+
+                If start <> 0 Then
+                    Dim newstart As Integer = InStr(LCase(Message), "\homidom\")
+                    newmess = Mid(Message, 1, 3) & "..." & Mid(Message, newstart, Message.Length - newstart + 1)
+                End If
+
+                Return newmess
+            Catch ex As Exception
+                Return Message
+            End Try
+        End Function
+
 
         ''' <summary>Ecrit un log dans les events Windows</summary>
         ''' <param name="message">text to write to event log</param>
