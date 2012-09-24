@@ -14,7 +14,7 @@ Partial Public Class uHelp
 
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             Ttitre.Content = My.Application.Info.Title
-            TVersion.Content = "Version:" & My.Application.Info.Version.ToString & " (" & My.Application.Info.Copyright & ")"
+            TVersion.Text = "Version:" & My.Application.Info.Version.ToString & " (" & My.Application.Info.Copyright & ")"
             Texte.Text = "HoMIDoM est le logiciel complet entiérement gratuit de gestion de système domotique multi-technologies pour la maison sous Microsoft Windows."
             Texte.Text &= "C'est un projet Open-Source (libre) proposé gratuitement à toute la communauté sous licence GNU GPL v2 !"
 

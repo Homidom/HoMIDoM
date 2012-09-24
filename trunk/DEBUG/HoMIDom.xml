@@ -1075,6 +1075,24 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Server.TypeEventLog">
 	<summary>Indique le type d'event : info, warning ou error</summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.Write4Log(HoMIDom.HoMIDom.Server.TypeLog,HoMIDom.HoMIDom.Server.TypeSource,System.String,System.String)">
+	<summary>
+ Insère dans une table le dernier log
+ </summary>
+	<param name="TypLog"></param>
+	<param name="Source"></param>
+	<param name="Fonction"></param>
+	<param name="Message"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.Write4LogError(HoMIDom.HoMIDom.Server.TypeLog,HoMIDom.HoMIDom.Server.TypeSource,System.String,System.String)">
+	<summary>
+ Insère dans une table le dernier log de type erreur ou alerte
+ </summary>
+	<param name="TypLog"></param>
+	<param name="Source"></param>
+	<param name="Fonction"></param>
+	<param name="Message"></param>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.Log(HoMIDom.HoMIDom.Server.TypeLog,HoMIDom.HoMIDom.Server.TypeSource,System.String,System.String)">
 	<summary>Ecrit un log dans le fichier log au format xml</summary>
 	<param name="TypLog"></param>
@@ -1307,6 +1325,18 @@ HoMIDom
 	<summary>Permet d'exécuter une commande Sub d'un Driver</summary>
 	<param name="DriverId"></param>
 	<param name="Action"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetDeviceNoMaJ(System.Object)">
+	<summary>
+ Retourne la liste des devices non à jour
+ </summary>
+	<param name="idsrv"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SearchDeviceNoMaJ">
+	<summary>
+ Cherche les devices non à jour (lancé toutes les heures)
+ </summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DeleteDevice(System.String,System.String)">
 	<summary>
@@ -1632,6 +1662,12 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.Get4Log">
 	<summary>
  Retourne les 4 logs les plus récents (du plus récent au plus ancien)
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.Get4LogError">
+	<summary>
+ Retourne les 4 logs en erreur les plus récents (du plus récent au plus ancien)
  </summary>
 	<returns></returns>
 	<remarks></remarks>
@@ -2405,6 +2441,12 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Get4Log">
 	<summary>
  Retourne les 4 logs les plus récents (du plus récent au plus ancien)
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Get4LogError">
+	<summary>
+ Retourne les 4 logs en erreur les plus récents (du plus récent au plus ancien)
  </summary>
 	<returns></returns>
 	<remarks></remarks>

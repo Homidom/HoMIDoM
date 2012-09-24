@@ -32,6 +32,7 @@ Class Window1
     Dim myBrushRouge As New RadialGradientBrush()
     Dim flagTreeV As Boolean = False
     Dim DevicesAsHisto As New Dictionary(Of String, Boolean)
+    Dim flagShowMainMenu As Boolean = False
 
 #Region "Fonctions de base"
 
@@ -116,6 +117,23 @@ Class Window1
                     LOG.ToolTip = a
                     ImgLog.ToolTip = a
                     LOG.Content = Mid(list(0), 1, 100) & "..."
+
+                    If flagShowMainMenu Then
+                        Try
+                            Dim MainMenu As uMainMenu = CanvasRight.Children.Item(0)
+                            'Affichage des dernieres erreurs et composants non a jour
+                            MainMenu.txtlasterror.Items.Clear()
+                            If myService.Get4LogError.Count > 0 Then
+                                For Each logerror As String In myService.Get4LogError
+                                    MainMenu.txtlasterror.Items.Add(logerror)
+                                Next
+                            Else
+                                MainMenu.txtlasterror.Items.Add("Aucune")
+                            End If
+                        Catch ex As Exception
+
+                        End Try
+                    End If
 
                     Ellipse1.Fill = myBrushVert
                 Catch ex As Exception
@@ -1498,9 +1516,17 @@ Class Window1
             MainMenu.txtlasterror.Items.Clear()
             MainMenu.txtlasterror.Items.Add("Recherche en cours")
             MainMenu.txtlastdevice.Items.Clear()
-            MainMenu.txtlastdevice.Items.Add("Recherche en cours")
+
+            If myService.GetDeviceNoMaJ(IdSrv).Count > 0 Then
+                For Each _dev In myService.GetDeviceNoMaJ(IdSrv)
+                    MainMenu.txtlastdevice.Items.Add(_dev)
+                Next
+            Else
+                MainMenu.txtlastdevice.Items.Add("Aucun")
+            End If
 
             AnimationApparition(MainMenu)
+            flagShowMainMenu = True
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub ShowMainMenu: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1837,6 +1863,8 @@ Class Window1
 
     Private Sub UnloadSelectElmt(ByVal Objet As Object)
         Try
+            flagShowMainMenu = False
+
             If Objet.retour = "CANCEL" Then
                 CanvasRight.Children.Clear()
                 ShowMainMenu()
@@ -2053,7 +2081,7 @@ Class Window1
     Public Sub UnloadControl(ByVal MyControl As Object, Optional ByVal Cancel As Boolean = False)
         Try
             Me.Cursor = Cursors.Wait
-
+            flagShowMainMenu = False
             If Cancel = False Then RefreshTreeView()
 
             Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
