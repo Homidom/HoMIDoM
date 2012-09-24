@@ -19,10 +19,10 @@ Partial Public Class uHelp
             Texte.Text &= "C'est un projet Open-Source (libre) proposé gratuitement à toute la communauté sous licence GNU GPL v2 !"
 
             'affiche la liste des drivers
-            listesversionsdrivers.Items.Clear()
+            listesversionsdrivers.Text = ""
             Dim ListeDrivers = myService.GetAllDrivers(IdSrv)
             For Each Drv As TemplateDriver In ListeDrivers
-                listesversionsdrivers.Items.Add(Drv.Nom & " : " & Drv.Version)
+                listesversionsdrivers.Text = listesversionsdrivers.Text & Drv.Nom & " : " & Drv.Version & vbCrLf
             Next
 
             'affiche les programmes

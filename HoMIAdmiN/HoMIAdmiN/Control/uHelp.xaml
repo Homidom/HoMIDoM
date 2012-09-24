@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="uHelp"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" MinWidth="740" MinHeight="485" Margin="5">
-    
-    <DockPanel Background="#636060">
+
+    <DockPanel Background="#636060" Opacity="0.85">
         <Border Name="Border1" BorderThickness="2" BorderBrush="Gray">
             <DockPanel>
             <DockPanel DockPanel.Dock="Top" >
@@ -100,17 +100,17 @@
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="left" >
                                 <GroupBox Header="Version des Drivers" Height="370" Name="GroupBox1" Width="230" Foreground="white" Margin="3">
                                     <Grid>
-                                        <ListBox Background="Black" Foreground="white" BorderBrush="Black" BorderThickness="0" Name="listesversionsdrivers"/>
+                                        <TextBlock Name="listesversionsdrivers" Text="Recherche en cours..." Foreground="white" IsManipulationEnabled="True" />
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Header="Détail des Programmes" Height="370" Name="GroupBox2" Width="230" Foreground="white" Margin="3">
                                     <Grid>
-                                        <TextBlock Name="listesversionsprogrammes" Text="Recherche en cours..." Foreground="white" />
+                                        <TextBlock Name="listesversionsprogrammes" Text="Recherche en cours..." Foreground="white" IsManipulationEnabled="True" />
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Header="Divers" Height="370" Name="GroupBox3" Width="230" Foreground="white" Margin="3">
                                     <Grid>
-                                        <TextBlock Name="listesdivers" Text="Recherche en cours..." Foreground="white" />
+                                        <TextBlock Name="listesdivers" Text="Recherche en cours..." Foreground="white" IsManipulationEnabled="True" />
                                     </Grid>
                                 </GroupBox>
                             </StackPanel>
