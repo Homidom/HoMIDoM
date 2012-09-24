@@ -2451,7 +2451,7 @@ Namespace HoMIDom
 
                 If start <> 0 Then
                     Dim newstart As Integer = InStr(LCase(Message), "\homidom\")
-                    newmess = Mid(Message, 1, 3) & "..." & Mid(Message, newstart, Message.Length - newstart + 1)
+                    newmess = Mid(Message, 1, start + 2) & "..." & Mid(Message, newstart, Message.Length - newstart + 1)
                 End If
 
                 Return newmess
