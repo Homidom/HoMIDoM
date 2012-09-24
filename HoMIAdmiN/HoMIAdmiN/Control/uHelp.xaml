@@ -89,7 +89,7 @@
                             <StackPanel Orientation="Vertical" VerticalAlignment="top" HorizontalAlignment="center" MaxWidth="400">
                                 <Label Content="Homidom" Name="TTitre" FontStretch="Normal" FontWeight="Bold" FontSize="24" Margin="3" Foreground="white"/>
                                 <TextBlock Text="Recherche de la version en cours" Name="TVersion" FontStretch="Normal" FontSize="15" Foreground="white" MaxWidth=" 400"/>
-                                <TextBlock Height="170" Name="Texte" Text="En cours de rédaction" FontStretch="Normal" Margin="3" Foreground="white" />
+                                <TextBlock Height="170" Name="Texte" Text="En cours de rédaction" FontStretch="Normal" Margin="3" Foreground="white" MaxWidth=" 400" TextWrapping="Wrap" />
                                 <DockPanel Background="white">
                                     <Image Margin="5" Height="110"  Name="Logo" Stretch="Fill" VerticalAlignment="Top" Source="/HoMIAdmiN;component/Images/Homidom_banniere_817_203.png" MaxWidth="400" />
                                 </DockPanel>
@@ -137,7 +137,9 @@
                         <TabItem Header="Soutenir le projet" >
                             <StackPanel Orientation="Vertical" VerticalAlignment="top" HorizontalAlignment="center">
                                 <Label Content="Soutenir HoMIDoM" FontStretch="Normal" FontSize="15" Foreground="white"/>
-                                <TextBlock Height="170" Name="TexteSoutien" Text="En cours de rédaction" FontStretch="Normal" Margin="3" Foreground="white" />
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="300" Margin="5">
+                                    <TextBlock Name="TexteSoutien" Text="En cours de rédaction" FontStretch="Normal" Margin="3" Foreground="white" MaxWidth="600" TextWrapping="Wrap"  VerticalAlignment="Top" />
+                                </ScrollViewer>
                                 <Button Content="Faire un don" Foreground="White" Height="24.293" Name="BtnSoutien" Template="{DynamicResource GlassButton}" Width="87.169" />
                             </StackPanel>
                         </TabItem >
