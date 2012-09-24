@@ -648,7 +648,6 @@ Partial Public Class uDevice
             Dim frm As New WTelecommande(_DeviceId, CbDriver.SelectedIndex, _Driver, x)
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-                'MsgBox(x.Commandes.Count)
                 If x.Modele <> "" And x.Commandes.Count = 0 Then
                     BtnEditTel.Visibility = Windows.Visibility.Collapsed
                 End If
