@@ -129,12 +129,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_19B5F52F53ED4D55B6C8DDDB8AF8BBC4"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_1B8B5E2120F14A9386C6DBF16F361144"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -185,12 +179,6 @@
         {
         "MsmKey" = "8:_24666C591F1BA68CA51C374C11B4D8B6"
         "OwnerKey" = "8:_18DA20D7A953450E91B5AD67CC9EE60A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_24666C591F1BA68CA51C374C11B4D8B6"
-        "OwnerKey" = "8:_19B5F52F53ED4D55B6C8DDDB8AF8BBC4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -550,12 +538,6 @@
         "Entry"
         {
         "MsmKey" = "8:_7DB0B4A32E9050F56E457331446FFE9F"
-        "OwnerKey" = "8:_19B5F52F53ED4D55B6C8DDDB8AF8BBC4"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7DB0B4A32E9050F56E457331446FFE9F"
         "OwnerKey" = "8:_2E6B697EAEAA404D8E33D3D631558694"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -701,12 +683,6 @@
         {
         "MsmKey" = "8:_83A002555A474BBCE29F430BACDEF164"
         "OwnerKey" = "8:_18DA20D7A953450E91B5AD67CC9EE60A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_83A002555A474BBCE29F430BACDEF164"
-        "OwnerKey" = "8:_19B5F52F53ED4D55B6C8DDDB8AF8BBC4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1168,12 +1144,6 @@
         "Entry"
         {
         "MsmKey" = "8:_F398D6A885909B7A98C68E8B1E9507D7"
-        "OwnerKey" = "8:_19B5F52F53ED4D55B6C8DDDB8AF8BBC4"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F398D6A885909B7A98C68E8B1E9507D7"
         "OwnerKey" = "8:_2E6B697EAEAA404D8E33D3D631558694"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1337,12 +1307,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_18DA20D7A953450E91B5AD67CC9EE60A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_19B5F52F53ED4D55B6C8DDDB8AF8BBC4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -4505,34 +4469,6 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{E45EDD1D-4BED-4782-9050-D42EF782C28E}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_19B5F52F53ED4D55B6C8DDDB8AF8BBC4"
-            {
-            "SourcePath" = "8:..\\Driver_MeteoGoogle\\obj\\Debug\\Driver_MeteoGoogle.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_F5D70B3C33924F6786B681CFAE12DCB6"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{9D3367A7-70FC-482F-83DA-56E9534C4A5F}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

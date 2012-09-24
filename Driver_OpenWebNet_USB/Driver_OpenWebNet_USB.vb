@@ -20,9 +20,9 @@ Imports OpenWebNet
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "CFA6D042-F10B-11E1-83CF-BDFE6088709B"
-    Dim _Nom As String = "OpenWebNet"
+    Dim _Nom As String = "OpenWebNet USB"
     Dim _Enable As String = False
-    Dim _Description As String = "Driver OpenWebNet"
+    Dim _Description As String = "Driver OpenWebNet USB"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "OpenWebNet USB"
     Dim _IsConnect As Boolean = False
