@@ -1223,12 +1223,10 @@ HoMIDom
 	<returns>Datatable</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DeviceAsHisto(System.String,System.String)">
-	<summary>
- Permet de savoir si un device a des hostiques associés dans la BD
- </summary>
+	<summary>Permet de savoir si un device a des hostiques associés dans la BD</summary>
 	<param name="IdDevice"></param>
 	<param name="Source"></param>
-	<returns></returns>
+	<returns>true si le composant a un historique</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DevicesAsHisto">
 	<summary>
@@ -2011,11 +2009,11 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeviceAsHisto(System.String,System.String)">
 	<summary>
- Retourne True si le device comporte des historiques
+ Retourne le nombre d'historiques d'un device
  </summary>
 	<param name="IdDevice">ID du device</param>
 	<param name="Source">Option propriété du device (ex: Value)</param>
-	<returns>True si comporte des historiques</returns>
+	<returns>nombre historiques</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllListHisto(System.String)">
 	<summary>

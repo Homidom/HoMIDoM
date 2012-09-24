@@ -1510,6 +1510,9 @@ Namespace HoMIDom
                     writer.WriteStartAttribute("lastchange")
                     writer.WriteValue(_ListDevices.Item(i).lastchange)
                     writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("lastchangeduree")
+                    writer.WriteValue(_ListDevices.Item(i).LastChangeDuree)
+                    writer.WriteEndAttribute()
                     writer.WriteStartAttribute("refresh")
                     writer.WriteValue(_ListDevices.Item(i).refresh)
                     writer.WriteEndAttribute()
@@ -1566,24 +1569,6 @@ Namespace HoMIDom
                         writer.WriteEndAttribute()
                     End If
 
-                    '-- Cas Code IR a ajouter pour MULTIMEDIA
-                    'If _ListDevices.Item(i).Type = "MULTIMEDIA" Then
-                    '    writer.WriteStartElement("commands")
-                    '    For k As Integer = 0 To _ListDevices.Item(i).ListCommandName.Count - 1
-                    '        writer.WriteStartElement("command")
-                    '        writer.WriteStartAttribute("key")
-                    '        writer.WriteValue(_ListDevices.Item(i).ListCommandName(k))
-                    '        writer.WriteEndAttribute()
-                    '        writer.WriteStartAttribute("data")
-                    '        writer.WriteValue(_ListDevices.Item(i).ListCommandData(k))
-                    '        writer.WriteEndAttribute()
-                    '        writer.WriteStartAttribute("repeat")
-                    '        writer.WriteValue(_ListDevices.Item(i).ListCommandRepeat(k))
-                    '        writer.WriteEndAttribute()
-                    '        writer.WriteEndElement()
-                    '    Next
-                    '    writer.WriteEndElement()
-                    'End If
                     writer.WriteEndElement()
                 Next
                 writer.WriteEndElement()
@@ -4862,6 +4847,8 @@ Namespace HoMIDom
                         .Value = _ListDevices.Item(i).value
                         .DateCreated = _ListDevices.Item(i).DateCreated
                         .LastChange = _ListDevices.Item(i).LastChange
+                        .LastChangeDuree = _ListDevices.Item(i).LastChangeDuree
+
                         If IsNumeric(_ListDevices.Item(i).valuelast) Then .ValueLast = _ListDevices.Item(i).valuelast
 
                         _listact = ListMethod(_ListDevices.Item(i).id)
@@ -5368,6 +5355,7 @@ Namespace HoMIDom
                         retour.LastEtat = _ListDevices.Item(i).LastEtat
                         retour.DateCreated = _ListDevices.Item(i).DateCreated
                         retour.LastChange = _ListDevices.Item(i).LastChange
+                        retour.LastChangeDuree = _ListDevices.Item(i).LastChangeDuree
 
                         _listact = ListMethod(_ListDevices.Item(i).id)
                         _listact = _listact
