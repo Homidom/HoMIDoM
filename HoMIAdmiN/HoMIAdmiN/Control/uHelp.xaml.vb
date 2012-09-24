@@ -19,26 +19,26 @@ Partial Public Class uHelp
             Texte.Text &= "C'est un projet Open-Source (libre) proposé gratuitement à toute la communauté sous licence GNU GPL v2 !"
 
             'affiche la liste des drivers
-            listesversionsdrivers.Text = ""
+            listesversionsdrivers.Items.Clear()
             Dim ListeDrivers = myService.GetAllDrivers(IdSrv)
             For Each Drv As TemplateDriver In ListeDrivers
-                listesversionsdrivers.Text = listesversionsdrivers.Text & Drv.Nom & " : " & Drv.Version & vbCrLf
+                listesversionsdrivers.Items.Add(Drv.Nom & " : " & Drv.Version)
             Next
 
             'affiche les programmes
             listesversionsprogrammes.Text = ""
-            listesversionsdrivers.Text &= " HoMIAdmiN : " & My.Application.Info.Version.ToString & vbCrLf
-            listesversionsdrivers.Text &= " HoMIDomService : " & myService.GetServerVersion() & vbCrLf
-            listesversionsdrivers.Text &= " Service démarré : " & myService.GetLastStartTime & vbCrLf
-            listesversionsdrivers.Text &= " Heure du serveur : " & myService.GetTime & vbCrLf
-            listesversionsdrivers.Text &= " Port SOAP utilisé : " & myService.GetPortSOAP & vbCrLf
+            listesversionsprogrammes.Text &= " HoMIAdmiN : " & My.Application.Info.Version.ToString & vbCrLf
+            listesversionsprogrammes.Text &= " HoMIDomService : " & myService.GetServerVersion() & vbCrLf
+            listesversionsprogrammes.Text &= " Service démarré : " & myService.GetLastStartTime & vbCrLf
+            listesversionsprogrammes.Text &= " Heure du serveur : " & myService.GetTime & vbCrLf
+            listesversionsprogrammes.Text &= " Port SOAP utilisé : " & myService.GetPortSOAP & vbCrLf
 
             'affiche des infos sur la config
             listesdivers.Text = ""
-            listesdivers.Text &= "Nb Composants : " & myService.GetAllDevices(IdSrv).Count()
-            listesdivers.Text &= "Nb Zones : " & myService.GetAllZones(IdSrv).Count()
-            listesdivers.Text &= "Nb Macros : " & myService.GetAllMacros(IdSrv).Count()
-            listesdivers.Text &= "Nb Triggers : " & myService.GetAllTriggers(IdSrv).Count()
+            listesdivers.Text &= "Nb Composants : " & myService.GetAllDevices(IdSrv).Count() & vbCrLf
+            listesdivers.Text &= "Nb Zones : " & myService.GetAllZones(IdSrv).Count() & vbCrLf
+            listesdivers.Text &= "Nb Macros : " & myService.GetAllMacros(IdSrv).Count() & vbCrLf
+            listesdivers.Text &= "Nb Triggers : " & myService.GetAllTriggers(IdSrv).Count() & vbCrLf
 
             TexteSoutien.Text = "Pourquoi faire un don ?"
             TexteSoutien.Text &= "Le projet HoMIDoM est un projet géré par plusieurs personnes volontaires et bénévoles." & vbCrLf

@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Fabien GALERNE")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("Driver_Gsm")> 
-<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2011")> 
+<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2012")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
