@@ -2390,15 +2390,22 @@ Namespace HoMIDom
 
                 If _TypeLogEnable(TypLog - 1) = True Then Exit Sub
 
-                Message = DelRep(Message)
 
                 'on affiche dans la console
                 Console.WriteLine(Now & " " & TypLog.ToString & " " & Source.ToString & " " & Fonction & " " & Message)
                 Write4Log(TypLog, Source, Fonction, Message)
 
-                If TypLog = TypeLog.ERREUR Or TypLog = TypeLog.ERREUR_CRITIQUE Then
-                    Write4LogError(TypLog, Source, Fonction, Message)
-                End If
+                Select Case TypLog
+                    Case TypeLog.ERREUR
+                        Write4LogError(TypLog, Source, Fonction, Message)
+                        Message = DelRep(Message)
+                    Case TypeLog.ERREUR_CRITIQUE
+                        Write4LogError(TypLog, Source, Fonction, Message)
+                        Message = DelRep(Message)
+                    Case TypeLog.DEBUG
+                        Write4LogError(TypLog, Source, Fonction, Message)
+                        Message = DelRep(Message)
+                End Select
 
                 'écriture dans un fichier texte
                 _FichierLog = _MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt"

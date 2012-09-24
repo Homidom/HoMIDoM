@@ -1751,11 +1751,13 @@ Class Window1
                                             MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
                                         Else
                                             MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
+                                            FlagChange = False
                                         End If
                                     End If
                                 Catch ex As Exception
                                     MessageBox.Show("ERREUR Sub Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                                 End Try
+
                             End If
                         End If
                         Me.Close()
@@ -2107,14 +2109,6 @@ Class Window1
 
     Private Sub AnimationApparition(ByVal Objet As Object)
         If Objet IsNot Nothing Then
-            'Dim da3 As DoubleAnimation = New DoubleAnimation
-            'da3.From = 0
-            'da3.To = 1
-            'da3.Duration = New Duration(TimeSpan.FromMilliseconds(800))
-            'Dim sc As ScaleTransform = New ScaleTransform()
-            'Objet.RenderTransform = sc
-            'sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
-
             Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
             myDoubleAnimation.From = 0.0
             myDoubleAnimation.To = 1.0
