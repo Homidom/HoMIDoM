@@ -25,7 +25,7 @@
                             <Label Foreground="White" Name="Label4">Type:</Label>
                         </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                            <ComboBox Width="215" Name="CbDriver" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" VerticalAlignment="Top" />
+                            <ComboBox Width="215" Name="CbDriver" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" VerticalAlignment="Top" ToolTip="Liste des drivers actifs"/>
                             <Rectangle Width="10" />
                             <ComboBox HorizontalAlignment="Left" Name="CbType" Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" VerticalAlignment="Top" IsReadOnly="True" />
                         </StackPanel>

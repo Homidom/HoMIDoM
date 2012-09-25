@@ -4,11 +4,19 @@
     Public Event menu_create(ByVal IndexMenu As String)
     Public Event menu_edit(ByVal IndexMenu As String)
     Public Event menu_autre(ByVal IndexMenu As String)
+    Public Event menu_contextmenu(ByVal IndexMenu As String)
+
+    'action quand on appuie sur une icone principale
+    Private Sub Gerer_ContextMenu(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_driver.MouseDown, img_composant.MouseDown, _
+        img_zone.MouseDown, img_user.MouseDown, img_trigger.MouseDown, img_macro.MouseDown
+
+        RaiseEvent menu_contextmenu(sender.tag)
+    End Sub
 
     'action quand on appuie sur un sous menu Gérer
-    Private Sub Gerer_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_driver.MouseDown, img_composant.MouseDown, _
-        img_composant_gerer.MouseDown, img_zone.MouseDown, img_zone_gerer.MouseDown, img_user.MouseDown, img_user_gerer.MouseDown, img_trigger.MouseDown, _
-        img_trigger_gerer.MouseDown, img_macro.MouseDown, img_macro_gerer.MouseDown, img_driver_gerer.MouseDown
+    Private Sub Gerer_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles _
+        img_composant_gerer.MouseDown, img_zone_gerer.MouseDown, img_user_gerer.MouseDown, _
+        img_trigger_gerer.MouseDown, img_macro_gerer.MouseDown, img_driver_gerer.MouseDown
 
         RaiseEvent menu_gerer(sender.tag)
     End Sub
