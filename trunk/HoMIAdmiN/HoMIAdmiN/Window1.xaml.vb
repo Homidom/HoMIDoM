@@ -828,7 +828,7 @@ Class Window1
                 Dim FlagZone As Boolean = False
                 Dim nomdriver As String = myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom
                 stack.Orientation = Orientation.Horizontal
-                Dim _nbhisto As Boolean = myService.DeviceAsHisto(Dev.ID)
+                Dim _nbhisto As Long = myService.DeviceAsHisto(Dev.ID)
 
                 'creation du label
                 Dim label As New Label
@@ -1502,6 +1502,8 @@ Class Window1
     Private Sub ShowMainMenu()
         Try
             Dim MainMenu As New uMainMenu
+            Dim listdevicenomaj As List(Of String)
+
             MainMenu.Uid = "MAINMENU"
             AddHandler MainMenu.menu_gerer, AddressOf MainMenuGerer
             AddHandler MainMenu.menu_delete, AddressOf MainMenuDelete
@@ -1519,13 +1521,19 @@ Class Window1
             MainMenu.txtlasterror.Items.Add("Recherche en cours")
             MainMenu.txtlastdevice.Items.Clear()
 
-            If myService.GetDeviceNoMaJ(IdSrv).Count > 0 Then
-                For Each _dev In myService.GetDeviceNoMaJ(IdSrv)
-                    MainMenu.txtlastdevice.Items.Add(_dev)
-                Next
-            Else
-                MainMenu.txtlastdevice.Items.Add("Aucun")
-            End If
+            Try
+                listdevicenomaj = myService.GetDeviceNoMaJ(IdSrv)
+                MainMenu.txtlastdevice.Items.Clear()
+                If listdevicenomaj.Count > 0 Then
+                    For Each _dev In listdevicenomaj
+                        MainMenu.txtlastdevice.Items.Add(_dev)
+                    Next
+                Else
+                    MainMenu.txtlastdevice.Items.Add("Aucun")
+                End If
+            Catch ex As Exception
+                MessageBox.Show("ERREUR Sub ShowMainMenu: Device en Erreurs : " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
 
             AnimationApparition(MainMenu)
             flagShowMainMenu = True
@@ -2108,20 +2116,32 @@ Class Window1
     End Sub
 
     Private Sub AnimationApparition(ByVal Objet As Object)
-        If Objet IsNot Nothing Then
-            Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
-            myDoubleAnimation.From = 0.0
-            myDoubleAnimation.To = 1.0
-            myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(650))
-            Dim myStoryboard As Storyboard
-            myStoryboard = New Storyboard()
-            myStoryboard.Children.Add(myDoubleAnimation)
-            'AddHandler myStoryboard.Completed, AddressOf StoryBoardFinish
+        Try
+            If Objet IsNot Nothing Then
+                'Dim da3 As DoubleAnimation = New DoubleAnimation
+                'da3.From = 0
+                'da3.To = 1
+                'da3.Duration = New Duration(TimeSpan.FromMilliseconds(800))
+                'Dim sc As ScaleTransform = New ScaleTransform()
+                'Objet.RenderTransform = sc
+                'sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
 
-            Storyboard.SetTarget(myDoubleAnimation, Objet)
-            Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
-            myStoryboard.Begin()
-        End If
+                Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
+                myDoubleAnimation.From = 0.0
+                myDoubleAnimation.To = 1.0
+                myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(650))
+                Dim myStoryboard As Storyboard
+                myStoryboard = New Storyboard()
+                myStoryboard.Children.Add(myDoubleAnimation)
+                'AddHandler myStoryboard.Completed, AddressOf StoryBoardFinish
+
+                Storyboard.SetTarget(myDoubleAnimation, Objet)
+                Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
+                myStoryboard.Begin()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub AnimationApparition: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnGenereGraph_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereGraph.Click

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <homidom>
-  <server ipsoap="localhost" portsoap="7999" idsrv="123456789" longitude="6.052793" latitude="49.364016" heurecorrectionlever="0" heurecorrectioncoucher="0" smtpserver="" smtpmail="" smtplogin="" smtppassword="" log0="false" log1="false" log2="false" log3="false" log4="false" log5="false" log6="false" log7="false" log8="false" log9="false" cyclesave="0" />
+  <server ipsoap="localhost" portsoap="7999" idsrv="123456789" longitude="6.052793" latitude="49.364016" heurecorrectionlever="0" heurecorrectioncoucher="0" smtpserver="" smtpmail="" smtplogin="" smtppassword="" log0="false" log1="false" log2="false" log3="false" log4="false" log5="false" log6="false" log7="false" log8="false" log9="false" cyclesave="5" />
   <drivers>
     <driver id="958D5812-390B-11E1-A6F7-D4CA4724019B" nom="Arduino" enable="false" description="Arduino" startauto="false" protocol="RS232" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM2" refresh="0" modele="Arduino" picture="" parametre0="57600" parametre1="0" parametre2="0" parametre3="0" parametre4="0" parametre5="0" parametre6="0" parametre7="0" parametre8="1" parametre9="1" parametre10="1" parametre11="1" parametre12="1" parametre13="1" parametre14="1" />
     <driver id="75FD72EA-105A-11E1-8441-8B144824019B" nom="DMX" enable="false" description="Controleur DMX" startauto="false" protocol="USB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="DMX" picture="" />

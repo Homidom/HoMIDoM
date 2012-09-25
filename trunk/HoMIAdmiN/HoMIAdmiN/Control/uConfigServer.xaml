@@ -49,7 +49,7 @@
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground=" White" Content="Voix par défaut: " />
-                                        <ComboBox Name="CbVoice" Width="150" />
+                                        <ComboBox Name="CbVoice" Width="150" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" />
                                     </StackPanel>
                                 </StackPanel>
                             </GroupBox>
@@ -86,7 +86,7 @@
                                                 <StackPanel >
                                                     <CheckBox Name="ChkTyp7" Content="Erreur" Background="DarkGray" BorderBrush="Black" Foreground="White" />
                                                     <CheckBox Name="ChkTyp8" Content="Erreur-Critique" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                                    <CheckBox Name="ChkTyp9" Content="DEBUG" Foreground="White" />
+                                                    <CheckBox Name="ChkTyp9" Content="DEBUG" Background="DarkGray" BorderBrush="Black" Foreground="White" />
                                                 </StackPanel>
                                                 <StackPanel ></StackPanel>
                                             </StackPanel>

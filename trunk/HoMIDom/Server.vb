@@ -4762,7 +4762,7 @@ Namespace HoMIDom
                 Dim result As New DataTable("HistoDB")
                 Dim retourDB As String
 
-                commande = "delete * from historiques where device_id='" & DeviceId & "' ;"
+                commande = "delete from historiques where device_id='" & DeviceId & "' ;"
                 retourDB = sqlite_homidom.nonquery(commande, Nothing)
 
                 If UCase(Mid(retourDB, 1, 3)) = "ERR" Then
