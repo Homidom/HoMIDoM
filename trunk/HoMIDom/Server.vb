@@ -7131,7 +7131,7 @@ Namespace HoMIDom
                 End If
 
                 Dim retour As String
-                Dim SR As New StreamReader(_MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt")
+                Dim SR As New StreamReader(_MonRepertoire & "\Config\homidom.xml")
                 retour = SR.ReadToEnd()
                 SR.Close()
                 Return retour

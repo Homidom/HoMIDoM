@@ -1847,7 +1847,7 @@ Class Window1
                                 MessageBox.Show(retour, "Erreur export config", MessageBoxButton.OK, MessageBoxImage.Error)
                             Else
                                 Dim TargetFile As StreamWriter
-                                TargetFile = New StreamWriter(filename, True)
+                                TargetFile = New StreamWriter(filename, False)
                                 TargetFile.Write(retour)
                                 TargetFile.Close()
                                 MessageBox.Show("L'export du fichier de configuration a été effectué", "Export config", MessageBoxButton.OK, MessageBoxImage.Information)
