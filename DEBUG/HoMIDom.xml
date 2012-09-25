@@ -686,15 +686,15 @@ HoMIDom
 	<param name="DeviceId">ID du device</param>
 	<returns>Retourne pour chaque élément de la liste NOMDELAMETHODE|Parametre1:TypeParametre1|Parametre2:TypeParametre2...</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Get4Log">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetLastLogs">
 	<summary>
- Retourne les 4 logs les plus récents (du plus récent au plus ancien)
+ Retourne les derniers logs les plus récents (du plus récent au plus ancien)
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Get4LogError">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetLastLogsError">
 	<summary>
- Retourne les 4 logs en erreur les plus récents (du plus récent au plus ancien)
+ Retourne les derniers logs en erreur les plus récents (du plus récent au plus ancien)
  </summary>
 	<returns></returns>
 	<remarks></remarks>
@@ -952,7 +952,7 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Server.TypeEventLog">
 	<summary>Indique le type d'event : info, warning ou error</summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.Write4Log(HoMIDom.HoMIDom.Server.TypeLog,HoMIDom.HoMIDom.Server.TypeSource,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.WriteLastLogs(HoMIDom.HoMIDom.Server.TypeLog,HoMIDom.HoMIDom.Server.TypeSource,System.String,System.String)">
 	<summary>
  Insère dans une table le dernier log
  </summary>
@@ -961,7 +961,7 @@ HoMIDom
 	<param name="Fonction"></param>
 	<param name="Message"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.Write4LogError(HoMIDom.HoMIDom.Server.TypeLog,HoMIDom.HoMIDom.Server.TypeSource,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.WriteLastLogsError(HoMIDom.HoMIDom.Server.TypeLog,HoMIDom.HoMIDom.Server.TypeSource,System.String,System.String)">
 	<summary>
  Insère dans une table le dernier log de type erreur ou alerte
  </summary>
@@ -1541,13 +1541,13 @@ HoMIDom
  </summary>
 	<param name="ListTypeLogEnable"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.Get4Log">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetLastLogs">
 	<summary>
- Retourne les 4 logs les plus récents (du plus récent au plus ancien)
+ Retourne les derniers logs les plus récents (du plus récent au plus ancien)
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.Get4LogError">
+</member><member name="M:HoMIDom.HoMIDom.Server.GetLastLogsError">
 	<summary>
  Retourne les 4 logs en erreur les plus récents (du plus récent au plus ancien)
  </summary>

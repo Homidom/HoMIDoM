@@ -107,7 +107,7 @@ Class Window1
                     LCS.Content = mydate.ToShortTimeString
 
                     'Modifie les LOG
-                    Dim list As List(Of String) = myService.Get4Log
+                    Dim list As List(Of String) = myService.GetLastLogs
                     Dim a As String = ""
                     For i As Integer = 0 To list.Count - 1
                         a &= list(i)
@@ -122,8 +122,9 @@ Class Window1
                             Dim MainMenu As uMainMenu = CanvasRight.Children.Item(0)
                             'Affichage des dernieres erreurs et composants non a jour
                             MainMenu.txtlasterror.Items.Clear()
-                            If myService.Get4LogError.Count > 0 Then
-                                For Each logerror As String In myService.Get4LogError
+                            list = myService.GetLastLogsError
+                            If list.Count > 0 Then
+                                For Each logerror As String In list
                                     MainMenu.txtlasterror.Items.Add(logerror)
                                 Next
                             Else
@@ -2208,7 +2209,7 @@ Class Window1
 
     Private Sub LOG_PreviewMouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles LOG.PreviewMouseMove, ImgLog.PreviewMouseMove
         If IsConnect = True Then
-            Dim list As List(Of String) = myService.Get4Log
+            Dim list As List(Of String) = myService.GetLastLogs
             Dim a As String = ""
             For i As Integer = 0 To list.Count - 1
                 a &= list(i)

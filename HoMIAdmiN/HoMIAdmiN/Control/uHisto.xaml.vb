@@ -20,7 +20,7 @@ Public Class uHisto
         Try
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
 
-            DateStartSelect.DisplayDate = Now.Date.AddDays(-7).ToString '"01/01/2012"
+            DateStartSelect.DisplayDate = Now.Date.AddDays(-31).ToString '"01/01/2012"
             DateStartSelect.Text = Now.Date.AddDays(-7).ToString '"01/01/2012"
             DateFinSelect.DisplayDate = Now.Date.AddDays(1).ToString
             DateFinSelect.Text = Now.Date.AddDays(1).ToString
