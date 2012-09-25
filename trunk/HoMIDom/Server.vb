@@ -57,8 +57,8 @@ Namespace HoMIDom
         <NonSerialized()> Dim fsw As FileSystemWatcher
         <NonSerialized()> Dim _MaxMonthLog As Integer = 2
         <NonSerialized()> Private Shared _TypeLogEnable As New List(Of Boolean) 'True si on doit pas prendre en compte le type de log
-        <NonSerialized()> Shared _4Log(3) As String  'Table des 4 derniers logs
-        <NonSerialized()> Shared _4LogError(3) As String  'Table des 4 derniers logs en alerte ou erreur
+        <NonSerialized()> Shared _LastLogs(9) As String  'Table des derniers logs
+        <NonSerialized()> Shared _LastLogsError(9) As String  'Table des derniers logs en alerte ou erreur
         <NonSerialized()> Shared _DevicesNoMAJ As New List(Of String)  'Table des devices non à jour
         <NonSerialized()> Shared _CycleSave As Integer  'Enregistrer toute les X minutes
         <NonSerialized()> Shared _NextTimeSave As DateTime  'Enregistrer toute les X minutes
@@ -2357,11 +2357,11 @@ Namespace HoMIDom
         ''' <param name="Fonction"></param>
         ''' <param name="Message"></param>
         ''' <remarks></remarks>
-        Private Sub Write4Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
-            _4Log(3) = _4Log(2)
-            _4Log(2) = _4Log(1)
-            _4Log(1) = _4Log(0)
-            _4Log(0) = Now & " - " & TypLog.ToString & " - " & Source.ToString & " - " & Fonction & " - " & Message
+        Private Sub WriteLastLogs(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
+            For i = (_LastLogs.Count - 1) To 1 Step -1
+                _LastLogs(i) = _LastLogs(i - 1)
+            Next
+            _LastLogs(0) = Now & " - " & TypLog.ToString & " - " & Source.ToString & " - " & Fonction & " - " & Message
         End Sub
 
         ''' <summary>
@@ -2372,11 +2372,11 @@ Namespace HoMIDom
         ''' <param name="Fonction"></param>
         ''' <param name="Message"></param>
         ''' <remarks></remarks>
-        Private Sub Write4LogError(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
-            _4LogError(3) = _4LogError(2)
-            _4LogError(2) = _4LogError(1)
-            _4LogError(1) = _4LogError(0)
-            _4LogError(0) = Now & " - " & TypLog.ToString & " - " & Source.ToString & " - " & Fonction & " - " & Message
+        Private Sub WriteLastLogsError(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
+            For i = (_LastLogsError.Count - 1) To 1 Step -1
+                _LastLogsError(i) = _LastLogsError(i - 1)
+            Next
+            _LastLogsError(0) = Now & " - " & TypLog.ToString & " - " & Source.ToString & " - " & Fonction & " - " & Message
         End Sub
 
         ''' <summary>Ecrit un log dans le fichier log au format xml</summary>
@@ -2392,14 +2392,14 @@ Namespace HoMIDom
 
                 'on affiche dans la console
                 Console.WriteLine(Now & " " & TypLog.ToString & " " & Source.ToString & " " & Fonction & " " & Message)
-                Write4Log(TypLog, Source, Fonction, Message)
+                WriteLastLogs(TypLog, Source, Fonction, Message)
 
                 Select Case TypLog
                     Case TypeLog.ERREUR
-                        Write4LogError(TypLog, Source, Fonction, Message)
+                        WriteLastLogsError(TypLog, Source, Fonction, Message)
                         Message = DelRep(Message)
                     Case TypeLog.ERREUR_CRITIQUE
-                        Write4LogError(TypLog, Source, Fonction, Message)
+                        WriteLastLogsError(TypLog, Source, Fonction, Message)
                         Message = DelRep(Message)
                 End Select
 
@@ -7023,18 +7023,15 @@ Namespace HoMIDom
         End Sub
 
         ''' <summary>
-        ''' Retourne les 4 logs les plus récents (du plus récent au plus ancien)
+        ''' Retourne les derniers logs les plus récents (du plus récent au plus ancien)
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function Get4Log() As List(Of String) Implements IHoMIDom.Get4Log
+        Public Function GetLastLogs() As List(Of String) Implements IHoMIDom.GetLastLogs
             Dim list As New List(Of String)
-
-            list.Add(_4Log(0))
-            list.Add(_4Log(1))
-            list.Add(_4Log(2))
-            list.Add(_4Log(3))
-
+            For i = 0 To (_LastLogs.Count - 1)
+                list.Add(_LastLogs(i))
+            Next
             Return list
         End Function
 
@@ -7043,14 +7040,11 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function Get4LogError() As List(Of String) Implements IHoMIDom.Get4LogError
+        Public Function GetLastLogsError() As List(Of String) Implements IHoMIDom.GetLastLogsError
             Dim list As New List(Of String)
-
-            list.Add(_4LogError(0))
-            list.Add(_4LogError(1))
-            list.Add(_4LogError(2))
-            list.Add(_4LogError(3))
-
+            For i = 0 To (_LastLogsError.Count - 1)
+                list.Add(_LastLogsError(i))
+            Next
             Return list
         End Function
 

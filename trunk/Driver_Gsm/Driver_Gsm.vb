@@ -59,7 +59,7 @@ Imports System.Management
     Dim _Modele As String = "GSM"
     Dim _Version As String = My.Application.Info.Version.ToString
     Dim _OsPlatform As String = "3264"
-    Dim _Picture As String = "gsm.png"
+    Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _DeviceSupport As New ArrayList
     Dim _Device As HoMIDom.HoMIDom.Device
