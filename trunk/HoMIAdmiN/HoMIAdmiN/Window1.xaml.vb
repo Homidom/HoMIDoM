@@ -1553,29 +1553,149 @@ Class Window1
             Me.Cursor = Cursors.Wait
 
             'on affiche le context menu correspondant
-            Select Case index
-                Case "tag_driver"
+            Select Case index.Substring(0, 3)
+                Case "drv"
+                    Select Case index
+                        Case "drv_gerer"
 
-                Case "tag_composant"
+                            Tabcontrol1.SelectedIndex = 0
+                        Case "drv_modifier"
+                            _MainMenuAction = 1
+                            CanvasRight.Children.Clear()
+                            Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_driver")
+                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
+                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                            CanvasRight.Children.Add(x)
+                    End Select
+                Case "cpt"
+                    Tabcontrol1.SelectedIndex = 1
+                    Select Case index
+                        Case "cpt_gerer"
 
-                Case "tag_zone"
+                        Case "cpt_modifier"
+                            _MainMenuAction = 1
+                            CanvasRight.Children.Clear()
+                            Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_composant")
+                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
+                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                            CanvasRight.Children.Add(x)
+                        Case "cpt_ajouter"
+                            Dim x As New uDevice(Classe.EAction.Nouveau, "")
+                            AddHandler x.CloseMe, AddressOf UnloadControl
+                            AffControlPage(x)
+                        Case "cpt_supprimer"
+                            _MainMenuAction = 2
+                            CanvasRight.Children.Clear()
+                            Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_composant")
+                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
+                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                            CanvasRight.Children.Add(x)
+                    End Select
+                Case "zon"
+                    Tabcontrol1.SelectedIndex = 2
+                    Select Case index
+                        Case "zon_gerer"
 
-                Case "tag_user"
+                        Case "zon_modifier"
+                            _MainMenuAction = 1
+                            CanvasRight.Children.Clear()
+                            Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_zone")
+                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
+                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                            CanvasRight.Children.Add(x)
+                        Case "zon_ajouter"
+                            Tabcontrol1.SelectedIndex = 2
+                            Dim x As New uZone(Classe.EAction.Nouveau, "")
+                            AddHandler x.CloseMe, AddressOf UnloadControl
+                            AffControlPage(x)
+                        Case "zon_supprimer"
+                            _MainMenuAction = 2
+                            CanvasRight.Children.Clear()
+                            Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_zone")
+                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
+                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                            CanvasRight.Children.Add(x)
+                    End Select
+                Case "usr"
+                    Tabcontrol1.SelectedIndex = 3
+                    Select Case index
+                        Case "usr_gerer"
 
-                Case "tag_trigger"
+                        Case "usr_modifier"
+                            _MainMenuAction = 1
+                            CanvasRight.Children.Clear()
+                            Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_user")
+                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
+                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                            CanvasRight.Children.Add(x)
+                        Case "usr_ajouter"
+                            Tabcontrol1.SelectedIndex = 3
+                            Dim x As New uZone(Classe.EAction.Nouveau, "")
+                            AddHandler x.CloseMe, AddressOf UnloadControl
+                            AffControlPage(x)
+                        Case "usr_supprimer"
+                            _MainMenuAction = 2
+                            CanvasRight.Children.Clear()
+                            Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_user")
+                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
+                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                            CanvasRight.Children.Add(x)
+                    End Select
+                Case "trg"
+                    Tabcontrol1.SelectedIndex = 4
+                    Select Case index
+                        Case "trg_gerer"
 
-                Case "tag_macro"
+                        Case "trg_modifier"
+                            _MainMenuAction = 1
+                            CanvasRight.Children.Clear()
+                            Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_trigger")
+                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
+                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                            CanvasRight.Children.Add(x)
+                        Case "trg_ajouter_timer"
+                            Tabcontrol1.SelectedIndex = 3
+                            Dim x As New uTriggerTimer(0, "")
+                            AddHandler x.CloseMe, AddressOf UnloadControl
+                            AffControlPage(x)
+                        Case "trg_ajouter_composant"
+                            Tabcontrol1.SelectedIndex = 3
+                            Dim x As New uTriggerDevice(0, "")
+                            AddHandler x.CloseMe, AddressOf UnloadControl
+                            AffControlPage(x)
+                        Case "trg_supprimer"
+                            _MainMenuAction = 2
+                            CanvasRight.Children.Clear()
+                            Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_trigger")
+                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
+                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                            CanvasRight.Children.Add(x)
+                    End Select
+                Case "mac"
+                    Tabcontrol1.SelectedIndex = 5
+                    Select Case index
+                        Case "mac_gerer"
 
-            End Select
-
-            'affichage du treeview correspondant
-            Select Case index
-                Case "tag_driver" : Tabcontrol1.SelectedIndex = 0
-                Case "tag_composant" : Tabcontrol1.SelectedIndex = 1
-                Case "tag_zone" : Tabcontrol1.SelectedIndex = 2
-                Case "tag_user" : Tabcontrol1.SelectedIndex = 3
-                Case "tag_trigger" : Tabcontrol1.SelectedIndex = 4
-                Case "tag_macro" : Tabcontrol1.SelectedIndex = 5
+                        Case "mac_modifier"
+                            _MainMenuAction = 1
+                            CanvasRight.Children.Clear()
+                            Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_macro")
+                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
+                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                            CanvasRight.Children.Add(x)
+                        Case "mac_ajouter"
+                            Tabcontrol1.SelectedIndex = 3
+                            Dim x As New uMacro(Classe.EAction.Nouveau, "")
+                            AddHandler x.CloseMe, AddressOf UnloadControl
+                            AffControlPage(x)
+                        Case "mac_supprimer"
+                            _MainMenuAction = 2
+                            CanvasRight.Children.Clear()
+                            Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_macro")
+                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
+                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                            CanvasRight.Children.Add(x)
+                    End Select
             End Select
             ShowTreeView()
             Me.Cursor = Nothing
@@ -1626,7 +1746,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub NewDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        MessageBox.Show("ERREUR Sub MainMenuNew Composants: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
                 Case "tag_zone"
                     Try
@@ -1635,7 +1755,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub NewZone: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        MessageBox.Show("ERREUR Sub MainMenuNew Zone: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
                 Case "tag_user"
                     Try
@@ -1644,7 +1764,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub NewUser: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        MessageBox.Show("ERREUR Sub MainMenuNew User: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
                 Case "tag_triggertimer"
                     Try
@@ -1653,7 +1773,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub NewTriggerTime: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        MessageBox.Show("ERREUR Sub MainMenuNew TriggerTime: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
                 Case "tag_triggerdevice"
                     Try
@@ -1662,7 +1782,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub NewTriggerDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        MessageBox.Show("ERREUR Sub MainMenuNew TriggerDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
                 Case "tag_macro"
                     Try
@@ -1671,7 +1791,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub NewMacro: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        MessageBox.Show("ERREUR Sub MainMenuNew Macro: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
                 Case "tag_module"
                     Try
@@ -1679,7 +1799,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub NewModule: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        MessageBox.Show("ERREUR Sub MainMenuNew Module: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
             End Select
             ShowTreeView()
