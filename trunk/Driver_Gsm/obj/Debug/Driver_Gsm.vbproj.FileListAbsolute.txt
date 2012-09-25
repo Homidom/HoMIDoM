@@ -8,3 +8,13 @@ C:\Users\fabien\HomiDom\DEBUG\Drivers\Driver_Gsm.xml
 C:\Users\fabien\HomiDom\Driver_Gsm\obj\Debug\Driver_Gsm.dll
 C:\Users\fabien\HomiDom\Driver_Gsm\obj\Debug\Driver_Gsm.xml
 C:\Users\fabien\HomiDom\Driver_Gsm\obj\Debug\Driver_Gsm.pdb
+D:\Domotique\Homidom\DEBUG\Drivers\Driver_Gsm.dll
+D:\Domotique\Homidom\DEBUG\Drivers\Driver_Gsm.pdb
+D:\Domotique\Homidom\DEBUG\Drivers\Driver_Gsm.xml
+D:\Domotique\Homidom\Driver_Gsm\obj\Debug\ResolveAssemblyReference.cache
+D:\Domotique\Homidom\Driver_Gsm\obj\Debug\Driver_Gsm.Resources.resources
+D:\Domotique\Homidom\Driver_Gsm\obj\Debug\GenerateResource.read.1.tlog
+D:\Domotique\Homidom\Driver_Gsm\obj\Debug\GenerateResource.write.1.tlog
+D:\Domotique\Homidom\Driver_Gsm\obj\Debug\Driver_Gsm.dll
+D:\Domotique\Homidom\Driver_Gsm\obj\Debug\Driver_Gsm.xml
+D:\Domotique\Homidom\Driver_Gsm\obj\Debug\Driver_Gsm.pdb

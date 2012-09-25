@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Basic Express 2010
+# Visual Studio 2010
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Foobar", "Driver_Foobar\Driver_Foobar.vbproj", "{62C5EA60-2FE8-4F56-BC66-BE2D7B14CA5B}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_k8055", "Driver_k8055\Driver_k8055.vbproj", "{B1154B53-619A-4878-8915-9A98904EEEF5}"
@@ -75,7 +75,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Weather", "Driver_We
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_OpenWebNet_IP", "Driver_OpenWebNet_IP\Driver_OpenWebNet_IP.vbproj", "{53F1CB03-DD58-4A63-B308-B099A47E9E86}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Gsm", "Driver_Gsm\Driver_Gsm\Driver_Gsm.vbproj", "{3FF36C8E-49D2-4BBC-BF08-94AC1560F0D5}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Gsm", "Driver_Gsm\Driver_Gsm.vbproj", "{3FF36C8E-49D2-4BBC-BF08-94AC1560F0D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -367,9 +367,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_UseGlobalSettings = False
-		BuildVersion_BuildVersioningStyle = None.None.Increment.None
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.Increment.None
+		BuildVersion_UseGlobalSettings = False
 	EndGlobalSection
 EndGlobal
