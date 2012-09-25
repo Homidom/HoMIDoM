@@ -1553,6 +1553,20 @@ Class Window1
             Me.Cursor = Cursors.Wait
 
             'on affiche le context menu correspondant
+            Select Case index
+                Case "tag_driver"
+
+                Case "tag_composant"
+
+                Case "tag_zone"
+
+                Case "tag_user"
+
+                Case "tag_trigger"
+
+                Case "tag_macro"
+
+            End Select
 
             'affichage du treeview correspondant
             Select Case index
