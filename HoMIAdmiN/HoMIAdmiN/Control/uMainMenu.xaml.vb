@@ -51,4 +51,53 @@
 
         RaiseEvent menu_autre(sender.tag)
     End Sub
+
+    Sub New()
+
+        ' Cet appel est requis par le concepteur.
+        InitializeComponent()
+
+        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+
+        'ContextMenu Drivers
+        Dim ctxMenudrv As New ContextMenu
+        ctxMenudrv.Foreground = System.Windows.Media.Brushes.White
+        ctxMenudrv.Background = System.Windows.Media.Brushes.LightGray
+        ctxMenudrv.BorderBrush = System.Windows.Media.Brushes.Black
+        Dim mnu1 As New MenuItem
+        mnu1.Header = "Gérer"
+        mnu1.Tag = "driver"
+        mnu1.Uid = "driver_gerer"
+        AddHandler mnu1.Click, AddressOf menu_contextmenuclick
+        ctxMenudrv.Items.Add(mnu1)
+        Dim mnu2 As New MenuItem
+        mnu2.Header = "Modifier"
+        mnu2.Tag = "driver"
+        mnu2.Uid = "driver_modifier"
+        AddHandler mnu2.Click, AddressOf menu_contextmenuclick
+        ctxMenudrv.Items.Add(mnu2)
+        img_driver.ContextMenu = ctxMenudrv
+
+    End Sub
+
+    Private Sub menu_contextmenuclick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Select Case sender.tag
+            Case "driver"
+                Select Case sender.uid
+                    Case "driver_gerer"
+
+                    Case "driver_modifier"
+
+                End Select
+            Case "composants"
+                Select Case sender.uid
+                    Case "composants_gerer"
+
+                    Case "composants_modifier"
+
+                    Case "composants_supprimer"
+
+                End Select
+        End Select
+    End Sub
 End Class
