@@ -1506,6 +1506,7 @@ Class Window1
             Dim listdevicenomaj As List(Of String)
 
             MainMenu.Uid = "MAINMENU"
+            AddHandler MainMenu.menu_contextmenu, AddressOf MainMenucontextmenu
             AddHandler MainMenu.menu_gerer, AddressOf MainMenuGerer
             AddHandler MainMenu.menu_delete, AddressOf MainMenuDelete
             AddHandler MainMenu.menu_edit, AddressOf MainMenuEdit
@@ -1543,6 +1544,32 @@ Class Window1
         End Try
     End Sub
 
+    Private Sub MainMenuContextmenu(ByVal index As String)
+        Try
+            If IsConnect = False Then
+                Serveur_notconnected_action()
+                Exit Sub
+            End If
+            Me.Cursor = Cursors.Wait
+
+            'on affiche le context menu correspondant
+
+            'affichage du treeview correspondant
+            Select Case index
+                Case "tag_driver" : Tabcontrol1.SelectedIndex = 0
+                Case "tag_composant" : Tabcontrol1.SelectedIndex = 1
+                Case "tag_zone" : Tabcontrol1.SelectedIndex = 2
+                Case "tag_user" : Tabcontrol1.SelectedIndex = 3
+                Case "tag_trigger" : Tabcontrol1.SelectedIndex = 4
+                Case "tag_macro" : Tabcontrol1.SelectedIndex = 5
+            End Select
+            ShowTreeView()
+            Me.Cursor = Nothing
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub MainMenuGerer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
     Private Sub MainMenuGerer(ByVal index As String)
         Try
             If IsConnect = False Then
@@ -1551,6 +1578,8 @@ Class Window1
             End If
 
             Me.Cursor = Cursors.Wait
+
+            'affichage du treeview correspondant
             Select Case index
                 Case "tag_driver" : Tabcontrol1.SelectedIndex = 0
                 Case "tag_composant" : Tabcontrol1.SelectedIndex = 1

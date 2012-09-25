@@ -26,7 +26,7 @@ Public Class Driver_onewire
     Dim _Port_UDP As String = "@"
     Dim _Com As String = "USB1"
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = "@"
+    Dim _Modele As String = "{DS9490}"
     Dim _Version As String = My.Application.Info.Version.ToString
     Dim _OsPlatform As String = "3264"
     Dim _Picture As String = ""

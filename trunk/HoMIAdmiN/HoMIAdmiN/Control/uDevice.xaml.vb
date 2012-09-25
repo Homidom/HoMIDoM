@@ -36,9 +36,9 @@ Partial Public Class uDevice
             'Nouveau Device
             If Action = EAction.Nouveau Then
 
-                'ajout de tous les drivers au combo
+                'ajout de tous les drivers actif au combo
                 For i As Integer = 0 To ListeDrivers.Count - 1
-                    CbDriver.Items.Add(ListeDrivers.Item(i).Nom)
+                    If ListeDrivers.Item(i).Enable Then CbDriver.Items.Add(ListeDrivers.Item(i).Nom)
                 Next
 
                 FlagNewDevice = True
@@ -53,13 +53,15 @@ Partial Public Class uDevice
 
                 If x IsNot Nothing Then 'on a trouvé le device
 
+                    _Driver = myService.ReturnDriverByID(IdSrv, x.DriverID)
                     'ajout des drivers compatibles avec ce type de device au combo
                     For i As Integer = 0 To ListeDrivers.Count - 1
                         'pour chaque driver on regarde si le type est compatible
                         If ListeDrivers.Item(i).DeviceSupport.Count > 0 Then
                             For j As Integer = 0 To ListeDrivers.Item(i).DeviceSupport.Count - 1
                                 If ListeDrivers.Item(i).DeviceSupport.Item(j).ToString = x.Type.ToString Then
-                                    CbDriver.Items.Add(ListeDrivers.Item(i).Nom)
+                                    'on ajoute le drier a la liste si il est enable ou si il correspond à notre device
+                                    If ListeDrivers.Item(i).Enable Or ListeDrivers.Item(i).Nom = _Driver.Nom Then CbDriver.Items.Add(ListeDrivers.Item(i).Nom)
                                     Exit For
                                 End If
                             Next
@@ -73,7 +75,6 @@ Partial Public Class uDevice
                     ChKSolo.IsChecked = x.Solo
                     ChKLastEtat.IsChecked = x.LastEtat
 
-                    _Driver = myService.ReturnDriverByID(IdSrv, x.DriverID)
                     If _Driver IsNot Nothing Then
                         CbDriver.SelectedValue = _Driver.Nom
                     End If
