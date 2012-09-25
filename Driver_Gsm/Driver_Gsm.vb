@@ -71,7 +71,7 @@ Imports System.Management
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
 
     'param avancé
-    'Dim _DEBUG As Boolean = False
+    Dim _DEBUG As Boolean = False
     'Dim _PARAMMODE As String = "-----"
 
 
@@ -349,6 +349,13 @@ Imports System.Management
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
 
         Dim retour As String
+        'récupération des paramétres avancés
+        Try
+            _DEBUG = _Parametres.Item(0).Valeur
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+        End Try
+
         Try
 
             If _Com <> "" Then
@@ -364,8 +371,6 @@ Imports System.Management
 
         End Try
     End Sub
-
-
 
     ''' <summary>Arrêter le du driver</summary>
     ''' <remarks></remarks>
@@ -641,7 +646,7 @@ Imports System.Management
             Add_DeviceCommande("SEND", "envoi un SMS", 2)
             Add_DeviceCommande("RECEIVE", "recevoir un ou des SMS", 0)
   
-            ' Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", True)
+            Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", True)
 
             'ajout des commandes avancées pour les devices
 
