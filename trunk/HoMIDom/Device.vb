@@ -937,7 +937,7 @@ Namespace HoMIDom
                                     _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceSTR Value", _Name & " : " & _Adresse1 & " : " & tmp)
                                     _ValueLast = _Value 'on garde l'ancienne value en memoire
                                     _Value = tmp
-                                    'If _Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                                    RaiseEvent DeviceChanged(Me, "Value", _Value)
                                 End If
                             End If
                             'Else
