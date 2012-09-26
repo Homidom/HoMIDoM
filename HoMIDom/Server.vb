@@ -2390,6 +2390,8 @@ Namespace HoMIDom
 
                 If _TypeLogEnable(TypLog - 1) = True Then Exit Sub
 
+                Message = DelRep(Message)
+
                 'on affiche dans la console
                 Console.WriteLine(Now & " " & TypLog.ToString & " " & Source.ToString & " " & Fonction & " " & Message)
                 WriteLastLogs(TypLog, Source, Fonction, Message)
@@ -2397,10 +2399,8 @@ Namespace HoMIDom
                 Select Case TypLog
                     Case TypeLog.ERREUR
                         WriteLastLogsError(TypLog, Source, Fonction, Message)
-                        Message = DelRep(Message)
                     Case TypeLog.ERREUR_CRITIQUE
                         WriteLastLogsError(TypLog, Source, Fonction, Message)
-                        Message = DelRep(Message)
                 End Select
 
                 'écriture dans un fichier texte
