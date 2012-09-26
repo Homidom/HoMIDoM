@@ -275,8 +275,9 @@ Class Window1
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub Unloaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
-                    FlagChange = False
+
                 End If
+                FlagChange = False
             End If
             End
         Catch ex As Exception
@@ -1923,7 +1924,6 @@ Class Window1
                                             MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
                                         Else
                                             MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
-                                            FlagChange = False
                                         End If
                                     End If
                                 Catch ex As Exception
@@ -1931,6 +1931,7 @@ Class Window1
                                 End Try
 
                             End If
+                            FlagChange = False
                         End If
                         Me.Close()
                         End
