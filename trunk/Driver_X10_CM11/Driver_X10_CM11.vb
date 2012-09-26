@@ -633,8 +633,8 @@ Public Class Driver_X10_CM11
 
                         Do While Time_Out <= 20
                             'L'interface demande au pc de lui envoyer des données et on doit répondre 
-                            Dim donnee As Byte() = {&HC3}
-                            port.Write(donnee, 0, 1)
+                            Dim donnee As Byte = COMPUTER_READY
+                            port.Write(donnee)
 
                             '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 DataReceived", "Le serveur a repondu OK")
                             System.Threading.Thread.Sleep(200)
@@ -919,17 +919,18 @@ Public Class Driver_X10_CM11
 
                     'le chesksum n'a jamais été bon
                     If nbboucle >= 4 Then
-                        OutPortDevice = False
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 ecrire", "ERR: X10 : cheksum non valide")
+                    Else
+                        'on envoie le ack
+                        port.Write(donnee2, 0, 1)
                     End If
 
-                    'on envoie le ack
-                    port.Write(donnee2, 0, 1)
                     'on rend la main
                     OutPortDevice = False
 
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 ecrire", "ERR: X10: " & ex.ToString)
+                    OutPortDevice = False
                 End Try
             Else
                 OutPortDevice = False
