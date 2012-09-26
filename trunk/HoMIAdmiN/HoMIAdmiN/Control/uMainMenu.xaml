@@ -143,7 +143,7 @@
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel Name="affichestats" Width="488" Height="125" Orientation="Horizontal">
+            <StackPanel Name="affichestats" Orientation="Horizontal">
                 <GroupBox Header="Dernières Erreurs" Height="122" Name="groupBox1" Width="239" Margin="0,0,3,0" Foreground="white" BorderThickness="2" BorderBrush="Gray">
                     <ListBox Background="Black" Foreground="white" BorderBrush="Black" BorderThickness="0" Name="txtlasterror" Height="100"/>
                 </GroupBox>
