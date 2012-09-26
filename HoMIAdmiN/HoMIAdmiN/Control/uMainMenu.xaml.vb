@@ -239,6 +239,17 @@
             ctxMenuMacro.Items.Add(mnu54)
             img_macro.ContextMenu = ctxMenuMacro
 
+
+            If My.Settings.ShowLogError = True Then
+                groupBox1.Visibility = Windows.Visibility.Visible
+            Else
+                groupBox1.Visibility = Windows.Visibility.Collapsed
+            End If
+            If My.Settings.ShowDeviceNoMaJ = True Then
+                groupBox2.Visibility = Windows.Visibility.Visible
+            Else
+                groupBox2.Visibility = Windows.Visibility.Collapsed
+            End If
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub uMainMenu New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try

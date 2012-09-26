@@ -51,6 +51,10 @@
                                         <Label Foreground=" White" Content="Voix par défaut: " />
                                         <ComboBox Name="CbVoice" Width="150" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" />
                                     </StackPanel>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <CheckBox Name="ChKShowLogError" Content="Afficher Log Erreur  " Foreground="White"/>
+                                        <CheckBox Name="ChkShowDeviceNoMaJ" Content="Afficher Devices Non à jour" Foreground="White"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </GroupBox>
                             <GroupBox Name="GroupBox4" Width="389" Margin="2" Height="189">
