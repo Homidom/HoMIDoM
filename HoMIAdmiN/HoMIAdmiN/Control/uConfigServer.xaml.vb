@@ -115,6 +115,10 @@ Partial Public Class uConfigServer
 
                 myService.SetTypeLogEnable(_list)
 
+                My.Settings.ShowLogError = ChKShowLogError.IsChecked
+                My.Settings.ShowDeviceNoMaJ = ChkShowDeviceNoMaJ.IsChecked
+                My.Settings.Save()
+
                 FlagChange = True
             End If
             RaiseEvent CloseMe(Me)
@@ -174,6 +178,8 @@ Partial Public Class uConfigServer
                 ChkTyp8.IsChecked = _list.Item(8)
                 ChkTyp9.IsChecked = _list.Item(9)
 
+                ChKShowLogError.IsChecked = My.Settings.ShowLogError
+                ChkShowDeviceNoMaJ.IsChecked = My.Settings.ShowDeviceNoMaJ
             End If
 
         Catch ex As Exception
