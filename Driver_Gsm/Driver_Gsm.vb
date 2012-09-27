@@ -280,7 +280,7 @@ Imports System.Management
     ''' <remarks></remarks>
     ''' 
     Public Function ExecuteCommand(ByVal MyDevice As Object, ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & "ExecuteCommand", MyDevice.ToString & " , " & Command)
+        '  _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & "ExecuteCommand", MyDevice.ToString & " , " & Command)
 
         Dim retour As Boolean = False
         Try
@@ -290,8 +290,7 @@ Imports System.Management
                 If Command = "" Then
                     Return False
                 Else
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & "ExecuteCommand", Param(0) & " , " & Param(1))
-                    '     Write(MyDevice, Command, Param(0), Param(1))
+                    ' _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & "ExecuteCommand", Param(0) & " , " & Param(1))
                     Write(MyDevice, Command, Param(0), Param(1))
                     ' Select Case UCase(Command)
                     '     Case ""
@@ -417,8 +416,8 @@ Imports System.Management
 
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
 
-        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "writeSmsSubmitPdu", Command)
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "writeSmsSubmitPdu", "param : " & Parametre1 & "," & Parametre2)
+        '  _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "writeSmsSubmitPdu", Command)
+        ' _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "writeSmsSubmitPdu", "param : " & Parametre1 & "," & Parametre2)
 
         'Parametre1 = phoneNumber
         'Parametre2 = TxtMsg
@@ -487,7 +486,7 @@ Imports System.Management
 
 
                 Case "RECEIVE"
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "Receive")
+                    ' _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "Receive")
                     comm = New GsmCommMain(port_name.Substring(3), port.BaudRate, "100")
                     Try
                         comm.Open()
@@ -506,9 +505,9 @@ Imports System.Management
                                 For Each Message In messages
                                     MsgLocation = Message.Index
                                     '     TextBox1.Text = TextBox1.Text & vbCrLf & Message.Data.UserDataText '& (Message.Status).ToString & (Message.Storage).ToString & (Message.Index).ToString
-                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM SmsReceive", Message.Data.UserDataText)
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM SmsReceive", " message recu: " & Message.Data.UserDataText)
                                     ' Message.Data.UserDataText) '& (Message.Status).ToString & (Message.Storage).ToString & (Message.Index).ToString
-                                    '  counter = counter + 1
+                                    counter = counter + 1
                                     'Thread.Sleep(1000)
                                     Try
                                         comm.DeleteMessage(MsgLocation, PhoneStorageType.Phone)
@@ -519,6 +518,11 @@ Imports System.Management
                                         messages = Nothing
                                     End Try
                                 Next
+                                If counter = 0 Then
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM SmsReceive", "Aucun message n'a été recu")
+                                End If
+
+
                                 Exit Sub
                                 '    End If
 
@@ -528,7 +532,7 @@ Imports System.Management
                                 ' End If
                             Catch ex As GsmComm.GsmCommunication.CommException
                                 ' IsConnected = False
-                                Debug.Print("error:" & ex.InnerException.Message)
+                                'Debug.Print("error:" & ex.InnerException.Message)
                                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM SmsReceive", "error:" & ex.InnerException.Message)
                                 If comm.IsOpen = True Then
                                     comm.Close()
