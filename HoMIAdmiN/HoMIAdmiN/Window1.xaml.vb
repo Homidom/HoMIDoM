@@ -1556,146 +1556,373 @@ Class Window1
             'on affiche le context menu correspondant
             Select Case index.Substring(0, 3)
                 Case "drv"
+                    Tabcontrol1.SelectedIndex = 0
                     Select Case index
                         Case "drv_gerer"
-
-                            Tabcontrol1.SelectedIndex = 0
                         Case "drv_modifier"
-                            _MainMenuAction = 1
-                            CanvasRight.Children.Clear()
-                            Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_driver")
-                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
-                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                            CanvasRight.Children.Add(x)
+                            Try
+                                _MainMenuAction = 1
+                                CanvasRight.Children.Clear()
+                                Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_driver")
+                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
+                                AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                                CanvasRight.Children.Add(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu Driver Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                     End Select
                 Case "cpt"
                     Tabcontrol1.SelectedIndex = 1
                     Select Case index
                         Case "cpt_gerer"
-
                         Case "cpt_modifier"
-                            _MainMenuAction = 1
-                            CanvasRight.Children.Clear()
-                            Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_composant")
-                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
-                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                            CanvasRight.Children.Add(x)
+                            Try
+                                _MainMenuAction = 1
+                                CanvasRight.Children.Clear()
+                                Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_composant")
+                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
+                                AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                                CanvasRight.Children.Add(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu COMPOSANTS Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                         Case "cpt_ajouter"
-                            Dim x As New uDevice(Classe.EAction.Nouveau, "")
-                            AddHandler x.CloseMe, AddressOf UnloadControl
-                            AffControlPage(x)
+                            Try
+                                Dim x As New uDevice(Classe.EAction.Nouveau, "")
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                AffControlPage(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu COMPOSANTS Ajouter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                         Case "cpt_supprimer"
-                            _MainMenuAction = 2
-                            CanvasRight.Children.Clear()
-                            Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_composant")
-                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
-                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                            CanvasRight.Children.Add(x)
+                            Try
+                                _MainMenuAction = 2
+                                CanvasRight.Children.Clear()
+                                Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_composant")
+                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
+                                AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                                CanvasRight.Children.Add(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu COMPOSANTS Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                     End Select
                 Case "zon"
                     Tabcontrol1.SelectedIndex = 2
                     Select Case index
                         Case "zon_gerer"
-
                         Case "zon_modifier"
-                            _MainMenuAction = 1
-                            CanvasRight.Children.Clear()
-                            Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_zone")
-                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
-                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                            CanvasRight.Children.Add(x)
+                            Try
+                                _MainMenuAction = 1
+                                CanvasRight.Children.Clear()
+                                Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_zone")
+                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
+                                AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                                CanvasRight.Children.Add(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu ZONE Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                         Case "zon_ajouter"
-                            Tabcontrol1.SelectedIndex = 2
-                            Dim x As New uZone(Classe.EAction.Nouveau, "")
-                            AddHandler x.CloseMe, AddressOf UnloadControl
-                            AffControlPage(x)
+                            Try
+                                Tabcontrol1.SelectedIndex = 2
+                                Dim x As New uZone(Classe.EAction.Nouveau, "")
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                AffControlPage(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu ZONE Ajouter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                         Case "zon_supprimer"
-                            _MainMenuAction = 2
-                            CanvasRight.Children.Clear()
-                            Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_zone")
-                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
-                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                            CanvasRight.Children.Add(x)
+                            Try
+                                _MainMenuAction = 2
+                                CanvasRight.Children.Clear()
+                                Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_zone")
+                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
+                                AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                                CanvasRight.Children.Add(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu ZONE Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                     End Select
                 Case "usr"
                     Tabcontrol1.SelectedIndex = 3
                     Select Case index
                         Case "usr_gerer"
-
                         Case "usr_modifier"
-                            _MainMenuAction = 1
-                            CanvasRight.Children.Clear()
-                            Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_user")
-                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
-                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                            CanvasRight.Children.Add(x)
+                            Try
+                                _MainMenuAction = 1
+                                CanvasRight.Children.Clear()
+                                Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_user")
+                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
+                                AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                                CanvasRight.Children.Add(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu USER Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                         Case "usr_ajouter"
-                            Tabcontrol1.SelectedIndex = 3
-                            Dim x As New uZone(Classe.EAction.Nouveau, "")
-                            AddHandler x.CloseMe, AddressOf UnloadControl
-                            AffControlPage(x)
+                            Try
+                                Tabcontrol1.SelectedIndex = 3
+                                Dim x As New uZone(Classe.EAction.Nouveau, "")
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                AffControlPage(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu USER Ajouter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                         Case "usr_supprimer"
-                            _MainMenuAction = 2
-                            CanvasRight.Children.Clear()
-                            Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_user")
-                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
-                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                            CanvasRight.Children.Add(x)
+                            Try
+                                _MainMenuAction = 2
+                                CanvasRight.Children.Clear()
+                                Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_user")
+                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
+                                AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                                CanvasRight.Children.Add(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu USER Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                     End Select
                 Case "trg"
                     Tabcontrol1.SelectedIndex = 4
                     Select Case index
                         Case "trg_gerer"
-
                         Case "trg_modifier"
-                            _MainMenuAction = 1
-                            CanvasRight.Children.Clear()
-                            Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_trigger")
-                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
-                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                            CanvasRight.Children.Add(x)
+                            Try
+                                _MainMenuAction = 1
+                                CanvasRight.Children.Clear()
+                                Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_trigger")
+                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
+                                AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                                CanvasRight.Children.Add(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu TRIGGER Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                         Case "trg_ajouter_timer"
-                            Tabcontrol1.SelectedIndex = 3
-                            Dim x As New uTriggerTimer(0, "")
-                            AddHandler x.CloseMe, AddressOf UnloadControl
-                            AffControlPage(x)
+                            Try
+                                Tabcontrol1.SelectedIndex = 3
+                                Dim x As New uTriggerTimer(0, "")
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                AffControlPage(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu TRIGGER Ajouer Timer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                         Case "trg_ajouter_composant"
-                            Tabcontrol1.SelectedIndex = 3
-                            Dim x As New uTriggerDevice(0, "")
-                            AddHandler x.CloseMe, AddressOf UnloadControl
-                            AffControlPage(x)
+                            Try
+                                Tabcontrol1.SelectedIndex = 3
+                                Dim x As New uTriggerDevice(0, "")
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                AffControlPage(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu TRIGGER Ajouter Composant: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                         Case "trg_supprimer"
-                            _MainMenuAction = 2
-                            CanvasRight.Children.Clear()
-                            Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_trigger")
-                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
-                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                            CanvasRight.Children.Add(x)
+                            Try
+                                _MainMenuAction = 2
+                                CanvasRight.Children.Clear()
+                                Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_trigger")
+                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
+                                AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                                CanvasRight.Children.Add(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu TRIGGER Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                     End Select
                 Case "mac"
                     Tabcontrol1.SelectedIndex = 5
                     Select Case index
                         Case "mac_gerer"
-
                         Case "mac_modifier"
-                            _MainMenuAction = 1
-                            CanvasRight.Children.Clear()
-                            Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_macro")
-                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
-                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                            CanvasRight.Children.Add(x)
+                            Try
+                                _MainMenuAction = 1
+                                CanvasRight.Children.Clear()
+                                Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_macro")
+                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
+                                AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                                CanvasRight.Children.Add(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu MACRO Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                         Case "mac_ajouter"
-                            Tabcontrol1.SelectedIndex = 3
-                            Dim x As New uMacro(Classe.EAction.Nouveau, "")
-                            AddHandler x.CloseMe, AddressOf UnloadControl
-                            AffControlPage(x)
+                            Try
+                                Tabcontrol1.SelectedIndex = 3
+                                Dim x As New uMacro(Classe.EAction.Nouveau, "")
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                AffControlPage(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu MACRO ajouter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                         Case "mac_supprimer"
-                            _MainMenuAction = 2
-                            CanvasRight.Children.Clear()
-                            Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_macro")
-                            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
-                            AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                            CanvasRight.Children.Add(x)
+                            Try
+                                _MainMenuAction = 2
+                                CanvasRight.Children.Clear()
+                                Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_macro")
+                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
+                                AddHandler x.CloseMe, AddressOf UnloadSelectElmt
+                                CanvasRight.Children.Add(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu MACRO Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
+                    End Select
+                Case "cfg"
+                    Select Case index
+                        Case "cfg_log"
+                            Try
+                                Dim x As New uLog
+                                x.Uid = System.Guid.NewGuid.ToString()
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                x.Width = CanvasRight.ActualWidth - 100
+                                x.Height = CanvasRight.ActualHeight - 50
+                                CanvasRight.Children.Clear()
+                                CanvasRight.Children.Add(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu LOG: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
+                        Case "cfg_configurer"
+                            Try
+                                Dim x As New uConfigServer
+                                x.Uid = System.Guid.NewGuid.ToString()
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                CanvasRight.Children.Clear()
+                                CanvasRight.Children.Add(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu Configurer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
+                        Case "cfg_importer"
+                            Try
+                                ' Configure open file dialog box
+                                Dim dlg As New Microsoft.Win32.OpenFileDialog()
+                                dlg.FileName = "Homidom" ' Default file name
+                                dlg.DefaultExt = ".xml" ' Default file extension
+                                dlg.Filter = "Fichier de configuration (.xml)|*.xml" ' Filter files by extension
+                                ' Show open file dialog box
+                                Dim result As Boolean = dlg.ShowDialog()
+                                ' Process open file dialog box results
+                                If result = True Then
+                                    ' Open document
+                                    Dim filename As String = dlg.FileName
+                                    If MessageBox.Show("Etes vous sur que le serveur puisse accéder au fichier " & filename & " que ce soit en local ou via le réseau, sinon il ne pourra pas l'importer!", "Import Config", MessageBoxButton.OKCancel, MessageBoxImage.Question) = MessageBoxResult.Cancel Then Exit Sub
+                                    Dim retour As String = myService.ImportConfig(IdSrv, filename)
+                                    If retour <> "0" Then
+                                        MessageBox.Show(retour, "Erreur import config", MessageBoxButton.OK, MessageBoxImage.Error)
+                                    Else
+                                        MessageBox.Show("L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", MessageBoxButton.OK, MessageBoxImage.Information)
+                                    End If
+                                End If
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuAutre config_importer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
+                        Case "cfg_exporter"
+                            Try
+                                ' Configure open file dialog box
+                                Dim dlg As New Microsoft.Win32.SaveFileDialog()
+                                dlg.FileName = "" ' Default file name
+                                dlg.DefaultExt = ".xml" ' Default file extension
+                                dlg.Filter = "Fichier de configuration (.xml)|*.xml" ' Filter files by extension
+                                ' Show open file dialog box
+                                Dim result As Boolean = dlg.ShowDialog()
+                                ' Process open file dialog box results
+                                If result = True Then
+                                    ' Open document
+                                    Dim filename As String = dlg.FileName
+                                    Dim retour As String = myService.ExportConfig(IdSrv)
+                                    If retour.StartsWith("ERREUR") Then
+                                        MessageBox.Show(retour, "Erreur export config", MessageBoxButton.OK, MessageBoxImage.Error)
+                                    Else
+                                        Dim TargetFile As StreamWriter
+                                        TargetFile = New StreamWriter(filename, False)
+                                        TargetFile.Write(retour)
+                                        TargetFile.Close()
+                                        MessageBox.Show("L'export du fichier de configuration a été effectué", "Export config", MessageBoxButton.OK, MessageBoxImage.Information)
+                                    End If
+                                End If
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu config_exporter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
+                        Case "cfg_sauvegarder"
+                            Try
+                                If IsConnect = False Then
+                                    MessageBox.Show("Impossible d'enregistrer la config car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                                    Exit Sub
+                                End If
+
+                                Dim retour As String = myService.SaveConfig(IdSrv)
+                                If retour <> "0" Then
+                                    MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
+                                Else
+                                    MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
+                                    FlagChange = False
+                                End If
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu config_sauvegarder: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
+                    End Select
+                Case "qit"
+                    Select Case index
+                        Case "qit_quitter"
+                            Try
+                                If IsConnect = True And FlagChange Then
+                                    If MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                                        If IsConnect = False Then
+                                            MessageBox.Show("Impossible d'enregistrer la configuration car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                                        Else
+                                            Dim retour As String = myService.SaveConfig(IdSrv)
+                                            If retour <> "0" Then
+                                                MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
+                                            Else
+                                                MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
+                                            End If
+                                        End If
+                                    End If
+                                    FlagChange = False
+                                End If
+                                Me.Close()
+                                End
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
+                        Case "qit_stop"
+                            Try
+                                If MessageBox.Show("Confirmer vous l'arrêt du serveur?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                                    myService.Stop(IdSrv)
+                                    RefreshTreeView()
+                                End If
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu STOP: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
+                        Case "qit_start"
+                            Try
+                                If MessageBox.Show("Confirmer vous le démarrage du serveur?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
+                                    myService.Start()
+                                    RefreshTreeView()
+                                End If
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu START: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
+                    End Select
+                Case "hst"
+                    Tabcontrol1.SelectedIndex = 6
+                    Select Case index
+                        Case "hst_gérer"
+                    End Select
+                Case "aid"
+                    Select Case index
+                        Case "aid_gérer"
+                            Try
+                                Dim x As New uHelp
+                                x.Uid = System.Guid.NewGuid.ToString()
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                CanvasRight.Children.Clear()
+                                CanvasRight.Children.Add(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu aide gérer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
+                    End Select
+                Case "mod"
+                    Select Case index
+                        Case "mod_ajouter"
+                            Try
+                                Dim x As New uModuleSimple()
+                                AddHandler x.CloseMe, AddressOf UnloadControl
+                                AffControlPage(x)
+                            Catch ex As Exception
+                                MessageBox.Show("ERREUR Sub MainMenuContextmenu Module ajouter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            End Try
                     End Select
             End Select
             ShowTreeView()
