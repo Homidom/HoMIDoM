@@ -7,50 +7,48 @@
     Public Event menu_contextmenu(ByVal IndexMenu As String)
 
     'action quand on appuie sur une icone principale
-    Private Sub Gerer_ContextMenu(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_driver.MouseDown, img_composant.MouseDown, _
-        img_zone.MouseDown, img_user.MouseDown, img_trigger.MouseDown, img_macro.MouseDown
-
+    Private Sub Gerer_ContextMenu(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_driver.MouseLeftButtonDown, _
+        img_composant.MouseLeftButtonDown, img_zone.MouseLeftButtonDown, img_user.MouseLeftButtonDown, img_trigger.MouseLeftButtonDown, img_macro.MouseLeftButtonDown
         RaiseEvent menu_gerer(sender.tag)
     End Sub
 
     'action quand on appuie sur un sous menu Gérer
-    Private Sub Gerer_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles _
-        img_composant_gerer.MouseDown, img_zone_gerer.MouseDown, img_user_gerer.MouseDown, _
-        img_trigger_gerer.MouseDown, img_macro_gerer.MouseDown, img_driver_gerer.MouseDown
-
+    Private Sub Gerer_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles _
+        img_composant_gerer.MouseLeftButtonDown, img_zone_gerer.MouseLeftButtonDown, img_user_gerer.MouseLeftButtonDown, _
+        img_trigger_gerer.MouseLeftButtonDown, img_macro_gerer.MouseLeftButtonDown, img_driver_gerer.MouseLeftButtonDown
         RaiseEvent menu_gerer(sender.tag)
     End Sub
 
     'action quand on appuie sur un sous menu Supprimer
-    Private Sub Delete_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_composant_supprimer.MouseDown, _
-        img_macro_supprimer.MouseDown, img_trigger_supprimer.MouseDown, img_user_supprimer.MouseDown, img_zone_supprimer.MouseDown
-
+    Private Sub Delete_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_composant_supprimer.MouseLeftButtonDown, _
+        img_macro_supprimer.MouseLeftButtonDown, img_trigger_supprimer.MouseLeftButtonDown, img_user_supprimer.MouseLeftButtonDown, img_zone_supprimer.MouseLeftButtonDown
         'Attention 1002 correspond à enregistrer la config et non supprimer
         RaiseEvent menu_delete(sender.tag)
     End Sub
 
     'action quand on appuie sur un sous menu Créer
-    Private Sub Create_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_composant_ajouter.MouseDown, img_user_ajouter.MouseDown, _
-        img_zone_ajouter.MouseDown, img_macro_ajouter.MouseDown, img_trigger_ajouterdevice.MouseDown, img_trigger_ajoutertimer.MouseDown, img_module_ajouter.MouseDown, _
-        img_module.MouseDown
-
+    Private Sub Create_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_composant_ajouter.MouseLeftButtonDown, _
+        img_user_ajouter.MouseLeftButtonDown, img_zone_ajouter.MouseLeftButtonDown, img_macro_ajouter.MouseLeftButtonDown, img_trigger_ajouterdevice.MouseLeftButtonDown, _
+        img_trigger_ajoutertimer.MouseLeftButtonDown, img_module_ajouter.MouseLeftButtonDown, img_module.MouseLeftButtonDown
         RaiseEvent menu_create(sender.tag)
     End Sub
 
     'action quand on appuie sur un sous menu Editer
-    Private Sub Edit_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_composant_editer.MouseDown, img_zone_editer.MouseDown, _
-        img_driver_editer.MouseDown, img_macro_editer.MouseDown, img_trigger_editer.MouseDown, img_user_editer.MouseDown
-
+    Private Sub Edit_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_composant_editer.MouseLeftButtonDown, _
+        img_zone_editer.MouseLeftButtonDown, img_driver_editer.MouseLeftButtonDown, img_macro_editer.MouseLeftButtonDown, img_trigger_editer.MouseLeftButtonDown, _
+        img_user_editer.MouseLeftButtonDown
         RaiseEvent menu_edit(sender.tag)
     End Sub
 
     'action quand on appuie sur un sous menu autre
-    Private Sub Autre_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_histo.MouseDown, img_config_log.MouseDown, _
-        img_config_exporter.MouseDown, img_config_importer.MouseDown, img_config_sauvegarder.MouseDown, img_quitter.MouseDown, img_aide.MouseDown, img_multimedia.MouseDown, _
-        img_config_gerer.MouseDown, img_config.MouseDown, img_quitter_start.MouseDown, img_quitter_stop.MouseDown
-
+    Private Sub Autre_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_histo.MouseLeftButtonDown, _
+        img_config.MouseLeftButtonDown, img_config_log.MouseLeftButtonDown, img_config_exporter.MouseLeftButtonDown, img_config_importer.MouseLeftButtonDown, _
+        img_config_sauvegarder.MouseLeftButtonDown, img_aide.MouseLeftButtonDown, img_multimedia.MouseDown, img_config_gerer.MouseLeftButtonDown, _
+        img_quitter.MouseLeftButtonDown, img_quitter_start.MouseLeftButtonDown, img_quitter_stop.MouseLeftButtonDown
         RaiseEvent menu_autre(sender.tag)
     End Sub
+
+
 
     Sub New()
         ' Cet appel est requis par le concepteur.
@@ -64,25 +62,30 @@
             ctxMenudrv.Foreground = System.Windows.Media.Brushes.White
             ctxMenudrv.Background = System.Windows.Media.Brushes.LightGray
             ctxMenudrv.BorderBrush = System.Windows.Media.Brushes.Black
-            Dim mnu1 As New MenuItem
-            mnu1.Header = "Gérer"
-            mnu1.Tag = "drv"
-            mnu1.Uid = "drv_gerer"
-            AddHandler mnu1.Click, AddressOf menu_contextmenuclick
-            ctxMenudrv.Items.Add(mnu1)
-            Dim mnu2 As New MenuItem
-            mnu2.Header = "Modifier"
-            mnu2.Tag = "drv"
-            mnu2.Uid = "drv_modifier"
-            AddHandler mnu2.Click, AddressOf menu_contextmenuclick
-            ctxMenudrv.Items.Add(mnu2)
-            img_driver.ContextMenu = ctxMenudrv
+            Dim mnu00 As New MenuItem
+            mnu00.Header = "DRIVERS"
+            ctxMenudrv.Items.Add(mnu00)
+            Dim mnu01 As New MenuItem
+            mnu01.Header = "Gérer"
+            mnu01.Tag = "drv"
+            mnu01.Uid = "drv_gerer"
+            AddHandler mnu01.Click, AddressOf menu_contextmenuclick
+            ctxMenudrv.Items.Add(mnu01)
+            Dim mnu02 As New MenuItem
+            mnu02.Header = "Modifier"
+            mnu02.Tag = "drv"
+            mnu02.Uid = "drv_modifier"
+            AddHandler mnu02.Click, AddressOf menu_contextmenuclick
+            ctxMenudrv.Items.Add(mnu02)
+            menu_driver.ContextMenu = ctxMenudrv
 
-            'ContextMenu Drivers
+            'ContextMenu Composants
             Dim ctxMenuComposants As New ContextMenu
             ctxMenuComposants.Foreground = System.Windows.Media.Brushes.White
             ctxMenuComposants.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuComposants.BorderBrush = System.Windows.Media.Brushes.Black
+            Dim mnu10 As New MenuItem
+            mnu10.Header = "COMPOSANTS"
             Dim mnu11 As New MenuItem
             mnu11.Header = "Gérer"
             mnu11.Tag = "cpt"
@@ -107,13 +110,15 @@
             mnu14.Uid = "cpt_supprimer"
             AddHandler mnu14.Click, AddressOf menu_contextmenuclick
             ctxMenuComposants.Items.Add(mnu14)
-            img_composant.ContextMenu = ctxMenuComposants
+            menu_composant.ContextMenu = ctxMenuComposants
 
             'ContextMenu Zone
             Dim ctxMenuZone As New ContextMenu
             ctxMenuZone.Foreground = System.Windows.Media.Brushes.White
             ctxMenuZone.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuZone.BorderBrush = System.Windows.Media.Brushes.Black
+            Dim mnu20 As New MenuItem
+            mnu20.Header = "ZONES"
             Dim mnu21 As New MenuItem
             mnu21.Header = "Gérer"
             mnu21.Tag = "zon"
@@ -138,13 +143,15 @@
             mnu24.Uid = "zon_supprimer"
             AddHandler mnu24.Click, AddressOf menu_contextmenuclick
             ctxMenuZone.Items.Add(mnu24)
-            img_zone.ContextMenu = ctxMenuZone
+            menu_zone.ContextMenu = ctxMenuZone
 
             'ContextMenu user
             Dim ctxMenuUser As New ContextMenu
             ctxMenuUser.Foreground = System.Windows.Media.Brushes.White
             ctxMenuUser.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuUser.BorderBrush = System.Windows.Media.Brushes.Black
+            Dim mnu30 As New MenuItem
+            mnu30.Header = "UTILISATEURS"
             Dim mnu31 As New MenuItem
             mnu31.Header = "Gérer"
             mnu31.Tag = "usr"
@@ -169,13 +176,15 @@
             mnu34.Uid = "usr_supprimer"
             AddHandler mnu24.Click, AddressOf menu_contextmenuclick
             ctxMenuUser.Items.Add(mnu34)
-            img_user.ContextMenu = ctxMenuUser
+            menu_user.ContextMenu = ctxMenuUser
 
             'ContextMenu Trigger
             Dim ctxMenuTrigger As New ContextMenu
             ctxMenuTrigger.Foreground = System.Windows.Media.Brushes.White
             ctxMenuTrigger.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuTrigger.BorderBrush = System.Windows.Media.Brushes.Black
+            Dim mnu40 As New MenuItem
+            mnu40.Header = "TRIGGERS"
             Dim mnu41 As New MenuItem
             mnu41.Header = "Gérer"
             mnu41.Tag = "trg"
@@ -206,7 +215,7 @@
             mnu45.Uid = "trg_supprimer"
             AddHandler mnu45.Click, AddressOf menu_contextmenuclick
             ctxMenuTrigger.Items.Add(mnu45)
-            img_trigger.ContextMenu = ctxMenuTrigger
+            menu_trigger.ContextMenu = ctxMenuTrigger
 
             'ContextMenu macro
             Dim ctxMenuMacro As New ContextMenu
@@ -237,8 +246,108 @@
             mnu54.Uid = "mac_supprimer"
             AddHandler mnu54.Click, AddressOf menu_contextmenuclick
             ctxMenuMacro.Items.Add(mnu54)
-            img_macro.ContextMenu = ctxMenuMacro
+            menu_macro.ContextMenu = ctxMenuMacro
 
+            'ContextMenu Config
+            Dim ctxMenuConfig As New ContextMenu
+            ctxMenuConfig.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuConfig.Background = System.Windows.Media.Brushes.LightGray
+            ctxMenuConfig.BorderBrush = System.Windows.Media.Brushes.Black
+            Dim mnu61 As New MenuItem
+            mnu61.Header = "Consulter les logs"
+            mnu61.Tag = "cfg"
+            mnu61.Uid = "cfg_log"
+            AddHandler mnu61.Click, AddressOf menu_contextmenuclick
+            ctxMenuConfig.Items.Add(mnu61)
+            Dim mnu62 As New MenuItem
+            mnu62.Header = "Configurer le serveur"
+            mnu62.Tag = "cfg"
+            mnu62.Uid = "cfg_configurer"
+            AddHandler mnu62.Click, AddressOf menu_contextmenuclick
+            ctxMenuConfig.Items.Add(mnu62)
+            Dim mnu63 As New MenuItem
+            mnu63.Header = "Importer le fichier de configuration"
+            mnu63.Tag = "cfg"
+            mnu63.Uid = "cfg_importer"
+            AddHandler mnu63.Click, AddressOf menu_contextmenuclick
+            ctxMenuConfig.Items.Add(mnu63)
+            Dim mnu64 As New MenuItem
+            mnu64.Header = "Exporter le fichier de configuration"
+            mnu64.Tag = "cfg"
+            mnu64.Uid = "cfg_exporter"
+            AddHandler mnu64.Click, AddressOf menu_contextmenuclick
+            ctxMenuConfig.Items.Add(mnu64)
+            Dim mnu65 As New MenuItem
+            mnu65.Header = "Sauvegarder la configuration"
+            mnu65.Tag = "cfg"
+            mnu65.Uid = "cfg_sauvegarder"
+            AddHandler mnu65.Click, AddressOf menu_contextmenuclick
+            ctxMenuConfig.Items.Add(mnu65)
+            menu_config.ContextMenu = ctxMenuConfig
+
+            'ContextMenu Quitter
+            Dim ctxMenuQuitter As New ContextMenu
+            ctxMenuQuitter.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuQuitter.Background = System.Windows.Media.Brushes.LightGray
+            ctxMenuQuitter.BorderBrush = System.Windows.Media.Brushes.Black
+            Dim mnu71 As New MenuItem
+            mnu71.Header = "Quitter l'interface"
+            mnu71.Tag = "qit"
+            mnu71.Uid = "qit_quitter"
+            AddHandler mnu71.Click, AddressOf menu_contextmenuclick
+            ctxMenuQuitter.Items.Add(mnu71)
+            Dim mnu72 As New MenuItem
+            mnu72.Header = "Arrêter le serveur"
+            mnu72.Tag = "qit"
+            mnu72.Uid = "qit_stop"
+            AddHandler mnu72.Click, AddressOf menu_contextmenuclick
+            ctxMenuQuitter.Items.Add(mnu72)
+            Dim mnu73 As New MenuItem
+            mnu73.Header = "Démarrer le serveur"
+            mnu73.Tag = "qit"
+            mnu73.Uid = "qit_start"
+            AddHandler mnu73.Click, AddressOf menu_contextmenuclick
+            ctxMenuQuitter.Items.Add(mnu73)
+            menu_quitter.ContextMenu = ctxMenuQuitter
+
+            'ContextMenu Histo
+            Dim ctxMenuHisto As New ContextMenu
+            ctxMenuHisto.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuHisto.Background = System.Windows.Media.Brushes.LightGray
+            ctxMenuHisto.BorderBrush = System.Windows.Media.Brushes.Black
+            Dim mnu81 As New MenuItem
+            mnu81.Header = "Visualiser"
+            mnu81.Tag = "hst"
+            mnu81.Uid = "hst_gérer"
+            AddHandler mnu81.Click, AddressOf menu_contextmenuclick
+            ctxMenuHisto.Items.Add(mnu81)
+            menu_histo.ContextMenu = ctxMenuHisto
+
+            'ContextMenu Aide
+            Dim ctxMenuAide As New ContextMenu
+            ctxMenuAide.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuAide.Background = System.Windows.Media.Brushes.LightGray
+            ctxMenuAide.BorderBrush = System.Windows.Media.Brushes.Black
+            Dim mnu91 As New MenuItem
+            mnu91.Header = "Visualiser"
+            mnu91.Tag = "aid"
+            mnu91.Uid = "aid_gérer"
+            AddHandler mnu91.Click, AddressOf menu_contextmenuclick
+            ctxMenuAide.Items.Add(mnu91)
+            menu_aide.ContextMenu = ctxMenuAide
+
+            'ContextMenu Module
+            Dim ctxMenuModule As New ContextMenu
+            ctxMenuModule.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuModule.Background = System.Windows.Media.Brushes.LightGray
+            ctxMenuModule.BorderBrush = System.Windows.Media.Brushes.Black
+            Dim mnu101 As New MenuItem
+            mnu101.Header = "Ajouter"
+            mnu101.Tag = "mod"
+            mnu101.Uid = "mod_ajouter"
+            AddHandler mnu101.Click, AddressOf menu_contextmenuclick
+            ctxMenuModule.Items.Add(mnu101)
+            menu_module.ContextMenu = ctxMenuModule
 
             If My.Settings.ShowLogError = True Then
                 groupBox1.Visibility = Windows.Visibility.Visible
