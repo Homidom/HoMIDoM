@@ -9,6 +9,8 @@ Public Class uScenario
     Dim t As Double
     Dim _Width As Double = 0
 
+    Public Event AsChange()
+
     'Duree max du timeline en minutes
     Public Property Duree As Integer
         Get
@@ -139,6 +141,7 @@ Public Class uScenario
                 x.Zoom = _Zoom
                 _ListAction.Add(x.ObjAction)
                 StackPanel1.Children.Add(x)
+                RaiseEvent AsChange()
             Else
                 e.Effects = DragDropEffects.None
             End If
@@ -156,6 +159,7 @@ Public Class uScenario
                 Exit For
             End If
         Next
+        RaiseEvent AsChange()
     End Sub
 
     'Mise à jour d'une action
@@ -172,6 +176,7 @@ Public Class uScenario
             j = 0
         Next
         Me.Dispatcher.BeginInvoke(New Affiche_Action2(AddressOf Affiche_Action))
+        RaiseEvent AsChange()
     End Sub
 
     'Afficher les éléments du timeline
@@ -290,6 +295,7 @@ Public Class uScenario
         Dim obj As New DataObject()
         obj.SetData(GetType(String), "ACTIONMAIL")
         effects = DragDrop.DoDragDrop(Me.ImgActMail, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+
     End Sub
 
     'Ajouter action if

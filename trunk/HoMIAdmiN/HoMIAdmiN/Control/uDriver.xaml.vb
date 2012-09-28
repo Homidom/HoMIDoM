@@ -215,7 +215,7 @@ Partial Public Class uDriver
     End Sub
 
     Private Sub BtnAv_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnAv.Click
-        If GroupBox1.Visibility = Windows.Visibility.Hidden Then
+        If GroupBox1.Visibility = Windows.Visibility.Collapsed Then
             BtnAv.Content = "<<"
             GroupBox1.Visibility = Windows.Visibility.Visible
             CbCmd.Items.Clear()
@@ -227,7 +227,7 @@ Partial Public Class uDriver
         Else
             CbCmd.Items.Clear()
             BtnAv.Content = ">>"
-            GroupBox1.Visibility = Windows.Visibility.Hidden
+            GroupBox1.Visibility = Windows.Visibility.Collapsed
         End If
     End Sub
 
