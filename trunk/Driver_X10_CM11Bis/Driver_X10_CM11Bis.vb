@@ -282,7 +282,7 @@ Public Class Driver_X10_CM11Bis
         Try
             If Not _IsConnect Then
                 Dim trv As Boolean = False
-                Dim _ports As String = ""
+                Dim _ports As String = "<AUCUN>"
 
                 If _Com = "" Or _Com = " " Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 Start", "Le port COM est vide veuillez le renseigner")
