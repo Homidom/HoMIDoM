@@ -17,10 +17,10 @@ Partial Public Class uDevice
     Dim ListeDrivers
 
     Public Sub New(ByVal Action As Classe.EAction, ByVal DeviceId As String)
-
-        ' Cet appel est requis par le Concepteur Windows Form.
-        InitializeComponent()
         Try
+            ' Cet appel est requis par le Concepteur Windows Form.
+            InitializeComponent()
+
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             _DeviceId = DeviceId
             _Action = Action

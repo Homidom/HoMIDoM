@@ -31,6 +31,8 @@
                 End If
             End If
 
+            AddHandler UScenario1.AsChange, AddressOf Scenario_AsChange
+
         Catch ex As Exception
             MessageBox.Show("Erreur dans uMacro - New: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -66,6 +68,10 @@
         If _MacroId <> "" And IsConnect Then
             myService.RunMacro(IdSrv, _MacroId)
         End If
+    End Sub
+
+    Sub Scenario_AsChange()
+        BtnTest.Visibility = Windows.Visibility.Collapsed
     End Sub
 
 End Class

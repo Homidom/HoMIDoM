@@ -475,6 +475,7 @@ Public Class WActionParametrage
                 TxtMn.Text = Format(t1, "00")
                 t1 = _ObjAction.timing.Second
                 TxtSc.Text = Format(t1, "00")
+
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur New: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
