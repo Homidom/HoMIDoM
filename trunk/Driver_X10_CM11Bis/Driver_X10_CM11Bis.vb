@@ -368,18 +368,21 @@ Public Class Driver_X10_CM11Bis
                 Case "OFF"
                     cm11.Execute(Objet.Adresse1 & " Off")
                     Objet.value = 0
-                    'Case "DIM"
-                    '    If Parametre1 IsNot Nothing Then
-                    '        Dim x As Integer = Parametre1
-                    '        If x <= 0 Then
-                    '            ecrire(Objet.Adresse1, "OFF", 0)
-                    '        End If
-                    '        If x >= 100 Then
-                    '            ecrire(Objet.Adresse1, "ON", 0)
-                    '        End If
-                    '        ecrire(Objet.Adresse1, "EXTENDED_CODE", x)
-                    '        Objet.value = x
-                    '    End If
+                Case "DIM"
+                    If Parametre1 IsNot Nothing Then
+                        Dim x As Integer = Parametre1
+                        If x <= 0 Then
+                            cm11.Execute(Objet.Adresse1 & " Off")
+                        End If
+                        If x >= 100 Then
+                            cm11.Execute(Objet.Adresse1 & " On")
+                        End If
+                        If 0 < x < 100 Then
+                            cm11.Execute(Objet.Adresse1 & " Dim" & x)
+                        End If
+                        'ecrire(Objet.Adresse1, "EXTENDED_CODE", x)
+                        Objet.value = x
+                    End If
                 Case "OUVERTURE"
                     If Parametre1 IsNot Nothing Then
                         Dim x As Integer = Parametre1
@@ -388,6 +391,9 @@ Public Class Driver_X10_CM11Bis
                         End If
                         If x >= 100 Then
                             cm11.Execute(Objet.Adresse1 & " On")
+                        End If
+                        If 0 < x < 100 Then
+                            cm11.Execute(Objet.Adresse1 & " Dim" & x)
                         End If
                         'ecrire(Objet.adresse1, "EXTENDED_CODE", x)
                         Objet.value = x
@@ -557,6 +563,7 @@ Public Class Driver_X10_CM11Bis
     ''' </summary>
     Private Sub cm11_DimReceived(ByVal address As String, ByVal percent As Integer)
         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " cm11_DimReceived", "address:" & address & " percent:" & percent)
+        traitement("DIM", address, percent)
     End Sub
 
     ''' <summary>
@@ -623,7 +630,7 @@ Public Class Driver_X10_CM11Bis
 
     ''' <summary>Traite les paquets reçus</summary>
     ''' <remarks></remarks>
-    Private Sub traitement(ByVal valeur As String, ByVal adresse As String)
+    Private Sub traitement(ByVal valeur As String, ByVal adresse As String, Optional ByVal data As Integer = 0)
         valeur = UCase(valeur)
         If valeur <> "" Then
             Try
@@ -639,6 +646,8 @@ Public Class Driver_X10_CM11Bis
                             valeur = 100
                         ElseIf valeur = "OFF" Then
                             valeur = 0
+                        ElseIf valeur = "DIM" Then
+                            valeur = data
                         End If
                     ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
                         If valeur = "ON" Then
