@@ -6,7 +6,20 @@ Driver_X10_CM11Bis
 </name>
 </assembly>
 <members>
-<member name="M:Driver_X10_CM11Bis.Driver_X10_CM11Bis.GetCommandPlus">
+<member name="P:Driver_X10_CM11Bis.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_X10_CM11Bis.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_X10_CM11Bis.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:Driver_X10_CM11Bis.Driver_X10_CM11Bis.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
@@ -125,22 +138,9 @@ Driver_X10_CM11Bis
  Called when communication with the CM11 hardware fails, or the hardware
  itself fails.
  </summary>
-</member><member name="M:Driver_X10_CM11Bis.Driver_X10_CM11Bis.traitement(System.String,System.String)">
+</member><member name="M:Driver_X10_CM11Bis.Driver_X10_CM11Bis.traitement(System.String,System.String,System.Int32)">
 	<summary>Traite les paquets reçus</summary>
 	<remarks></remarks>
-</member><member name="P:Driver_X10_CM11Bis.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_X10_CM11Bis.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_X10_CM11Bis.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
 </member>
 </members>
 </doc>
