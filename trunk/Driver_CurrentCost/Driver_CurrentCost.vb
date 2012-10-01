@@ -302,18 +302,33 @@ Public Class Driver_CurrentCost
 
                 serialPortObj = New SerialPort()
                 serialPortObj.PortName = _Com
-                serialPortObj.BaudRate = 9600
+                serialPortObj.BaudRate = 57600
+                serialPortObj.Parity = Parity.None
+                serialPortObj.DataBits = 8
+                serialPortObj.StopBits = 1
                 serialPortObj.ReadTimeout = 12000
                 serialPortObj.DtrEnable = True
 
                 AddHandler serialPortObj.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf serialPortObj_ErrorReceived)
+                AddHandler serialPortObj.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
 
                 serialPortObj.Open()
-
                 _IsConnect = True
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.nom & " Start", "Port " & _Com & " ouvert")
+
+                Dim update As New CurrentCostUpdate(serialPortObj.ReadLine())
+
+                If update.ValidUpdate Then
+                    traitement("tmpr", update.Temperature)
+                    traitement("ch1", update.Channel1Watts)
+                    traitement("ch2", update.Channel2Watts)
+                    traitement("ch3", update.Channel3Watts)
+                    traitement("time", update.Time)
+                End If
+
+
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Port " & _Com & " ouvert")
             Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.nom & " Start", "Port " & _Com & " déjà ouvert")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Port " & _Com & " déjà ouvert")
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", ex.ToString)
@@ -327,7 +342,6 @@ Public Class Driver_CurrentCost
             If _IsConnect Then
                 serialPortObj.Close()
                 _IsConnect = False
-
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.nom & " Stop", ex.Message)
@@ -483,49 +497,55 @@ Public Class Driver_CurrentCost
         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Error: " & e.ToString)
     End Sub
 
+    ''' <summary>
+    ''' Traite les infos reçus
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub DataReceived(ByVal sender As Object, ByVal e As SerialDataReceivedEventArgs)
+        Try
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "Données reçues")
+
+            Dim update As New CurrentCostUpdate(serialPortObj.ReadLine())
+
+            If update.ValidUpdate Then
+                traitement("tmpr", update.Temperature)
+                traitement("ch1", update.Channel1Watts)
+                traitement("ch2", update.Channel2Watts)
+                traitement("ch3", update.Channel3Watts)
+                traitement("time", update.Time)
+            Else
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "Update non réussi")
+            End If
+        Catch Ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Datareceived", "Erreur:" & Ex.ToString)
+        End Try
+    End Sub
+
+
     ''' <summary>Traite les paquets reçus</summary>
     ''' <remarks></remarks>
-    Private Sub traitement(ByVal valeur As String, ByVal adresse As String, Optional ByVal data As Integer = 0)
-        valeur = UCase(valeur)
-        If valeur <> "" Then
-            Try
-                'Recherche si un device affecté
-                Dim listedevices As New ArrayList
+    Private Sub traitement(ByVal adresse As String, ByVal data As Object)
+        Try
+            'Recherche si un device affecté
+            Dim listedevices As New ArrayList
 
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
-                'un device trouvé on maj la value
-                If (listedevices.Count = 1) Then
-                    'correction valeur pour correspondre au type de value
-                    If TypeOf listedevices.Item(0).Value Is Integer Then
-                        If valeur = "ON" Then
-                            valeur = 100
-                        ElseIf valeur = "OFF" Then
-                            valeur = 0
-                        ElseIf valeur = "DIM" Then
-                            valeur = data
-                        End If
-                    ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
-                        If valeur = "ON" Then
-                            valeur = True
-                        ElseIf valeur = "OFF" Then
-                            valeur = False
-                        Else
-                            valeur = True
-                        End If
-                    End If
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
+            'un device trouvé on maj la value
+            If (listedevices.Count = 1) Then
+                'correction valeur pour correspondre au type de value
+                listedevices.Item(0).Value = data
 
-                    listedevices.Item(0).Value = valeur
+            ElseIf (listedevices.Count > 1) Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Process", "Plusieurs devices correspondent à : " & adresse)
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Process", "Device non trouvé : " & adresse & ":" & adresse)
 
-                ElseIf (listedevices.Count > 1) Then
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.nom & " Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
-                Else
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.nom & " Process", "Device non trouvé : " & adresse & ":" & valeur)
-
-                End If
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.nom & " traitement", "Exception : " & ex.Message & " --> " & adresse & " : " & valeur)
-            End Try
-        End If
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traitement", "Exception : " & ex.Message & " --> " & adresse & " : " & data)
+        End Try
     End Sub
 
 #End Region
