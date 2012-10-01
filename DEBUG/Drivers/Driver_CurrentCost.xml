@@ -1,0 +1,103 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Driver_CurrentCost
+</name>
+</assembly>
+<members>
+<member name="M:Driver_CurrentCost.Driver_CurrentCost.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.ExecuteCommand(System.Object,System.String,System.Object[])">
+	<summary>Execute une commande avancée</summary>
+	<param name="MyDevice">Objet représentant le Device </param>
+	<param name="Command">Nom de la commande avancée à éxécuter</param>
+	<param name="Param">tableau de paramétres</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.Start">
+	<summary>Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.Stop">
+	<summary>Arrêter le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.Restart">
+	<summary>Re-Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.Read(System.Object)">
+	<summary>Intérroger un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<remarks>pas utilisé</remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.Write(System.Object,System.String,System.Object,System.Object)">
+	<summary>Commander un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<param name="Command">La commande à passer</param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.DeleteDevice(System.String)">
+	<summary>Fonction lancée lors de la suppression d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.NewDevice(System.String)">
+	<summary>Fonction lancée lors de l'ajout d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.add_devicecommande(System.String,System.String,System.Int32)">
+	<summary>ajout des commandes avancées pour les devices</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
+	<summary>ajout Libellé pour le Driver</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
+	<summary>Ajout Libellé pour les Devices</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.#ctor">
+	<summary>Creation d'un objet de type</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.TimerTick">
+	<summary>Si refresh &gt;0 gestion du timer</summary>
+	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
+	<summary>
+ Traite les infos reçus
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.traitement(System.String,System.Object)">
+	<summary>Traite les paquets reçus</summary>
+	<remarks></remarks>
+</member><member name="P:Driver_CurrentCost.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_CurrentCost.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_CurrentCost.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+</members>
+</doc>
