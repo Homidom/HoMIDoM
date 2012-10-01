@@ -62,9 +62,6 @@
             ctxMenudrv.Foreground = System.Windows.Media.Brushes.White
             ctxMenudrv.Background = System.Windows.Media.Brushes.LightGray
             ctxMenudrv.BorderBrush = System.Windows.Media.Brushes.Black
-            Dim mnu00 As New MenuItem
-            mnu00.Header = "DRIVERS"
-            ctxMenudrv.Items.Add(mnu00)
             Dim mnu01 As New MenuItem
             mnu01.Header = "Gérer"
             mnu01.Tag = "drv"
@@ -84,8 +81,6 @@
             ctxMenuComposants.Foreground = System.Windows.Media.Brushes.White
             ctxMenuComposants.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuComposants.BorderBrush = System.Windows.Media.Brushes.Black
-            Dim mnu10 As New MenuItem
-            mnu10.Header = "COMPOSANTS"
             Dim mnu11 As New MenuItem
             mnu11.Header = "Gérer"
             mnu11.Tag = "cpt"
@@ -117,8 +112,6 @@
             ctxMenuZone.Foreground = System.Windows.Media.Brushes.White
             ctxMenuZone.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuZone.BorderBrush = System.Windows.Media.Brushes.Black
-            Dim mnu20 As New MenuItem
-            mnu20.Header = "ZONES"
             Dim mnu21 As New MenuItem
             mnu21.Header = "Gérer"
             mnu21.Tag = "zon"
@@ -150,8 +143,6 @@
             ctxMenuUser.Foreground = System.Windows.Media.Brushes.White
             ctxMenuUser.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuUser.BorderBrush = System.Windows.Media.Brushes.Black
-            Dim mnu30 As New MenuItem
-            mnu30.Header = "UTILISATEURS"
             Dim mnu31 As New MenuItem
             mnu31.Header = "Gérer"
             mnu31.Tag = "usr"
@@ -183,8 +174,6 @@
             ctxMenuTrigger.Foreground = System.Windows.Media.Brushes.White
             ctxMenuTrigger.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuTrigger.BorderBrush = System.Windows.Media.Brushes.Black
-            Dim mnu40 As New MenuItem
-            mnu40.Header = "TRIGGERS"
             Dim mnu41 As New MenuItem
             mnu41.Header = "Gérer"
             mnu41.Tag = "trg"
