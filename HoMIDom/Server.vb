@@ -482,12 +482,7 @@ Namespace HoMIDom
                                     _drv.Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
                                         _drv.Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
 
-                                    ' _drv.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
-                                    If IO.File.Exists(_MonRepertoire & "\images\drivers\" & _drv.Nom & ".png") Then
-                                        _drv.Picture = _MonRepertoire & "\images\drivers\" & _drv.Nom & ".png"
-                                    Else
-                                        _drv.Picture = _MonRepertoire & "\images\icones\Driver_128.png"
-                                    End If
+
 
                                     For i As Integer = 0 To list.Item(j).Attributes.Count - 1
                                         Dim a As String = UCase(list.Item(j).Attributes.Item(i).Name)
@@ -1348,13 +1343,6 @@ Namespace HoMIDom
                     writer.WriteStartAttribute("modele")
                     writer.WriteValue(_ListDrivers.Item(i).modele)
                     writer.WriteEndAttribute()
-                    'writer.WriteStartAttribute("picture")
-                    'If _ListDrivers.Item(i).Picture IsNot Nothing Then
-                    '    writer.WriteValue(_ListDrivers.Item(i).Picture)
-                    'Else
-                    '    writer.WriteValue(" ")
-                    'End If
-                    'writer.WriteEndAttribute()
                     If _ListDrivers.Item(i).Parametres IsNot Nothing Then
                         For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
                             writer.WriteStartAttribute("parametre" & j)
@@ -2139,6 +2127,13 @@ Namespace HoMIDom
                                     i1 = CType(i1, IDriver)
                                     i1.Server = Me
                                     i1.IdSrv = _IdSrv
+
+                                    If IO.File.Exists(_MonRepertoire & "\images\drivers\" & i1.Nom & ".png") Then
+                                        i1.Picture = _MonRepertoire & "\images\drivers\" & i1.Nom & ".png"
+                                    Else
+                                        i1.Picture = _MonRepertoire & "\images\icones\Driver_128.png"
+                                    End If
+
                                     'Si le driver est prevu pour la plateforme de l'OS, on le charge
                                     If i1.OsPlatform.Contains(_OsPlatForm) Then
                                         Dim pt As New Driver(Me, _IdSrv, i1.ID)
