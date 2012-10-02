@@ -58,7 +58,7 @@
                         <Label Foreground="White" Name="Label8" VerticalAlignment="Top" Width="100">Modele:</Label>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                        <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtCom" Width="84">0</TextBox>
+                        <ComboBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtCom" Width="84">0</ComboBox>
                         <Rectangle Width="10"  Name="rectcom2" />
                         <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtRefresh" HorizontalAlignment="Right" Width="84">0</TextBox>
                         <Rectangle Width="10" />

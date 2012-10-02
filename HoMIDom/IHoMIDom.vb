@@ -16,7 +16,12 @@ Namespace HoMIDom
 
 
 #Region "Serveur"
-
+        ''' <summary>
+        ''' Retourne la liste des ports com dispo sur le serveur
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetPortComDispo() As String()
 
         ''' <summary>
         ''' Upload un fichier
