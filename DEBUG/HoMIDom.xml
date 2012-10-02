@@ -1138,6 +1138,11 @@ HoMIDom
  </summary>
 	<param name="Value"></param>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetSaveRealTime">
+	<summary>
+ Demande au serveur si on sauvegarde en temps réel
+ </summary>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetPortComDispo">
 	<summary>
  Retourne la liste des ports com dispo sur le serveur

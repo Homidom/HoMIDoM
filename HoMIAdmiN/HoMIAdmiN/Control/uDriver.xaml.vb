@@ -175,7 +175,6 @@ Partial Public Class uDriver
             If verif = True Then
                 myService.SaveDriver(IdSrv, _DriverId, TxtNom.Text, ChkEnable.IsChecked, CbStartAuto.IsChecked, TxtAdrTCP.Text, TxtPortTCP.Text, TxtAdrUDP.Text, TxtPortUDP.Text, TxtCom.Text, TxtRefresh.Text, ImgDevice.Tag, TxtModele.Text, _ListParam)
                 FlagChange = True
-                SaveRealTime()
                 RaiseEvent CloseMe(Me)
             End If
         Catch ex As Exception

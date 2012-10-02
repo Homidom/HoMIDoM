@@ -73,7 +73,6 @@
             End If
 
             FlagChange = True
-            SaveRealTime()
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'enregistrement du trigger, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)

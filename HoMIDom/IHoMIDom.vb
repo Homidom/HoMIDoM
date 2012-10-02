@@ -16,6 +16,12 @@ Namespace HoMIDom
 
 
 #Region "Serveur"
+        ''' <summary>
+        ''' Demande au serveur si on sauvegarde en temps réel
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetSaveRealTime() As Boolean
 
         ''' <summary>
         ''' Indique au serveur si on enregistre en temps réel
