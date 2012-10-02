@@ -1,6 +1,7 @@
 ﻿#Region "Imports"
 Imports System
 Imports System.IO
+Imports System.IO.Ports
 Imports System.Data
 Imports System.Data.Linq
 Imports System.Xml
@@ -3248,6 +3249,22 @@ Namespace HoMIDom
 
         '*** FONCTIONS ******************************************
 #Region "Serveur"
+
+        ''' <summary>
+        ''' Retourne la liste des ports com dispo sur le serveur
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetPortComDispo() As String() Implements IHoMIDom.GetPortComDispo
+            Try
+                Dim portNames As String() = SerialPort.GetPortNames()
+                Array.Sort(portNames)
+                Return portNames
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetPortComDispo", "Erreur : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
 
         ''' <summary>
         ''' Vérifie si un élément existe dans une zone, une macro, un trigger... avant de le supprimer

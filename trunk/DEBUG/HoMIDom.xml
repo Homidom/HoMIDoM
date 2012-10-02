@@ -1132,6 +1132,12 @@ HoMIDom
  </summary>
 	<returns>A string array of all the voices installed</returns>
 	<remarks>Make sure you have the System.Speech namespace reference added to your project</remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetPortComDispo">
+	<summary>
+ Retourne la liste des ports com dispo sur le serveur
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.CanDelete(System.String,System.String)">
 	<summary>
  Vérifie si un élément existe dans une zone, une macro, un trigger... avant de le supprimer
@@ -1762,6 +1768,12 @@ HoMIDom
 	<summary>
  Template de Classe de type Driver pour le service web
  </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetPortComDispo">
+	<summary>
+ Retourne la liste des ports com dispo sur le serveur
+ </summary>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.UploadFile(System.String,System.Byte[],System.String)">
 	<summary>

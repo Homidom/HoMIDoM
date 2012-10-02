@@ -1,6 +1,7 @@
 ﻿Imports HoMIDom.HoMIDom.Device
 Imports HoMIDom.HoMIDom.Api
 Imports System.IO
+Imports System.IO.Ports
 
 Partial Public Class uDriver
     '--- Variables ------------------
@@ -57,6 +58,10 @@ Partial Public Class uDriver
                 Else
                     Label10.Visibility = Windows.Visibility.Visible
                     TxtCom.Visibility = Windows.Visibility.Visible
+
+                    For Each serialPortName As String In myService.GetPortComDispo
+                        TxtCom.Items.Add(serialPortName)
+                    Next
                 End If
                 If x.Modele = "@" Then
                     Label8.Visibility = Windows.Visibility.Collapsed
