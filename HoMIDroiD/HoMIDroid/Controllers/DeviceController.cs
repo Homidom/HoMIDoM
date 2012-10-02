@@ -71,22 +71,14 @@ namespace HoMIDroid.Controllers
                     return typeof(DeviceDim);
             }
 
-            //if (    this.Device.DeviceCategory == DeviceCategory.Light
-            //    ||  this.Device.DeviceCategory == DeviceCategory.Switch
-            //    ||  this.Device.DeviceCategory == DeviceCategory.Energy)
-            //{
-                
-            //}
-            //else
-            //{
-
-            //}
-
             return null; // No view available
         }
 
         private int getViewLayout(Device device)
         {
+            if (device.IsReadOnly)
+                return Resource.Layout.ListItemBasicDevice;
+
             switch (device.DeviceType)
             {
                 case DeviceType.OnOff:
@@ -106,9 +98,9 @@ namespace HoMIDroid.Controllers
                     btnView.CheckedChange += delegate(object sender, CompoundButton.CheckedChangeEventArgs e)
                     {
                         if (e.IsChecked)
-                            this.Device.ExecuteAction<OnAction>();
+                            this.Device.On();
                         else
-                            this.Device.ExecuteAction<OffAction>();
+                            this.Device.Off();
                     };
                 }
             }

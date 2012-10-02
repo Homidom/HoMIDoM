@@ -217,6 +217,48 @@ namespace HoMIDroid.BO
         }
     }
 
+    public class OpenAction : DeviceAction
+    {
+        #region CTor
+        public OpenAction()
+            : base("OPEN", "Ouverture")
+        {
+        }
+
+        public OpenAction(string caption)
+            : base("OPEN", caption)
+        {
+        }
+        #endregion
+
+        public override bool Visit(Device device)
+        {
+            device.NumericValue = 100;
+            return base.Visit(device);
+        }
+    }
+
+    public class CloseAction : DeviceAction
+    {
+        #region CTor
+        public CloseAction()
+            : base("CLOSE", "Fermeture")
+        {
+        }
+
+        public CloseAction(string caption)
+            : base("CLOSE", caption)
+        {
+        }
+        #endregion
+
+        public override bool Visit(Device device)
+        {
+            device.NumericValue = 0;
+            return base.Visit(device);
+        }
+    }
+
     public class RawAction : DeviceAction
     {
         public HmdService.DeviceAction Raw { get; private set; }

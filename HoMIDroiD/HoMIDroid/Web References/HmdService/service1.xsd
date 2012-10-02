@@ -1,45 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://HoMIDom/" elementFormDefault="qualified" targetNamespace="http://HoMIDom/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" />
-  <xs:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:element name="DeleteTrigger">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="triggerId" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="DeleteTriggerResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="DeleteTriggerResult" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SaveTrigger">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="triggerId" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="nom" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="enable" type="xs:boolean" />
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="TypeTrigger" type="q1:Trigger.TypeTrigger" />
-        <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="conditiontimer" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="deviceid" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="deviceproperty" nillable="true" type="xs:string" />
-        <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="macro" nillable="true" type="q2:ArrayOfstring" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SaveTriggerResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="SaveTriggerResult" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xs:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" />
   <xs:element name="ListMethod">
     <xs:complexType>
       <xs:sequence>
@@ -50,19 +12,31 @@
   <xs:element name="ListMethodResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ListMethodResult" nillable="true" type="q3:ArrayOfstring" />
+        <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ListMethodResult" nillable="true" type="q1:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="Get4Log">
+  <xs:element name="GetLastLogs">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="Get4LogResponse">
+  <xs:element name="GetLastLogsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Get4LogResult" nillable="true" type="q4:ArrayOfstring" />
+        <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetLastLogsResult" nillable="true" type="q2:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLastLogsError">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLastLogsErrorResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetLastLogsErrorResult" nillable="true" type="q3:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -74,14 +48,14 @@
   <xs:element name="GetTypeLogEnableResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetTypeLogEnableResult" nillable="true" type="q5:ArrayOfboolean" />
+        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetTypeLogEnableResult" nillable="true" type="q4:ArrayOfboolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SetTypeLogEnable">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ListTypeLogEnable" nillable="true" type="q6:ArrayOfboolean" />
+        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ListTypeLogEnable" nillable="true" type="q5:ArrayOfboolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -117,8 +91,8 @@
   <xs:element name="Log">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="TypLog" type="q7:Server.TypeLog" />
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Source" type="q8:Server.TypeSource" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="TypLog" type="q6:Server.TypeLog" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Source" type="q7:Server.TypeSource" />
         <xs:element minOccurs="0" name="Fonction" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
       </xs:sequence>
@@ -283,7 +257,7 @@
   <xs:element name="GetListOfTemplateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetListOfTemplateResult" nillable="true" type="q9:ArrayOfTelecommande.Template" />
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetListOfTemplateResult" nillable="true" type="q8:ArrayOfTelecommande.Template" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -293,7 +267,9 @@
         <xs:element minOccurs="0" name="Fabricant" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="Modele" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="Driver" nillable="true" type="xs:string" />
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Type" type="q10:Telecommande.TypeEquipement" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Type" type="q9:Telecommande.TypeEquipement" />
+        <xs:element minOccurs="0" name="Ligne" type="xs:int" />
+        <xs:element minOccurs="0" name="Colonne" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -324,7 +300,9 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="Template" nillable="true" type="xs:string" />
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Commandes" nillable="true" type="q11:ArrayOfTelecommande.Commandes" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Commandes" nillable="true" type="q10:ArrayOfTelecommande.Commandes" />
+        <xs:element minOccurs="0" name="Ligne" type="xs:int" />
+        <xs:element minOccurs="0" name="Colonne" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -348,64 +326,6 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="TelecommandeSendCommandResult" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetAllRepertoiresAudio">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetAllRepertoiresAudioResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllRepertoiresAudioResult" nillable="true" type="q12:ArrayOfAudio.RepertoireAudio" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetAllExtensionsAudio">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetAllExtensionsAudioResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllExtensionsAudioResult" nillable="true" type="q13:ArrayOfAudio.ExtensionAudio" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="DeleteUser">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="DeleteUserResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="DeleteUserResult" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="VerifLogin">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="VerifLoginResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="VerifLoginResult" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -438,7 +358,7 @@
   <xs:element name="ReturnUserByUsernameResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnUserByUsernameResult" nillable="true" type="q14:Users.User" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnUserByUsernameResult" nillable="true" type="q11:Users.User" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -452,7 +372,7 @@
   <xs:element name="GetAllUsersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllUsersResult" nillable="true" type="q15:ArrayOfUsers.User" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllUsersResult" nillable="true" type="q12:ArrayOfUsers.User" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -467,7 +387,7 @@
   <xs:element name="ReturnUserByIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnUserByIdResult" nillable="true" type="q16:Users.User" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnUserByIdResult" nillable="true" type="q13:Users.User" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -478,7 +398,7 @@
         <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
-        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Profil" type="q17:Users.TypeProfil" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Profil" type="q14:Users.TypeProfil" />
         <xs:element minOccurs="0" name="Nom" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="Prenom" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="NumberIdentification" nillable="true" type="xs:string" />
@@ -501,6 +421,20 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetDeviceNoMaJ">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idsrv" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDeviceNoMaJResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetDeviceNoMaJResult" nillable="true" type="q15:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetAllDevices">
     <xs:complexType>
       <xs:sequence>
@@ -511,7 +445,7 @@
   <xs:element name="GetAllDevicesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllDevicesResult" nillable="true" type="q18:ArrayOfTemplateDevice" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllDevicesResult" nillable="true" type="q16:ArrayOfTemplateDevice" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -520,11 +454,25 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="DeviceId" nillable="true" type="xs:string" />
-        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Action" nillable="true" type="q19:DeviceAction" />
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Action" nillable="true" type="q17:DeviceAction" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ExecuteDeviceCommandResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExecuteDeviceCommandSimple">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeviceId" nillable="true" type="xs:string" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Action" nillable="true" type="q18:DeviceActionSimple" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExecuteDeviceCommandSimpleResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
@@ -571,7 +519,7 @@
   <xs:element name="ReturnDeviceByIDResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnDeviceByIDResult" nillable="true" type="q20:TemplateDevice" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnDeviceByIDResult" nillable="true" type="q19:TemplateDevice" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -589,7 +537,7 @@
   <xs:element name="ReturnDeviceByAdresse1TypeDriverResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q21="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ReturnDeviceByAdresse1TypeDriverResult" nillable="true" type="q21:ArrayOfanyType" />
+        <xs:element xmlns:q20="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ReturnDeviceByAdresse1TypeDriverResult" nillable="true" type="q20:ArrayOfanyType" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -617,7 +565,7 @@
         <xs:element minOccurs="0" name="valuemax" type="xs:double" />
         <xs:element minOccurs="0" name="valuemin" type="xs:double" />
         <xs:element minOccurs="0" name="valuedef" type="xs:double" />
-        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Commandes" nillable="true" type="q22:ArrayOfTelecommande.Commandes" />
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Commandes" nillable="true" type="q21:ArrayOfTelecommande.Commandes" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -687,7 +635,7 @@
   <xs:element name="GetAllDriversResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllDriversResult" nillable="true" type="q23:ArrayOfTemplateDriver" />
+        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllDriversResult" nillable="true" type="q22:ArrayOfTemplateDriver" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -696,7 +644,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="DriverId" nillable="true" type="xs:string" />
-        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Action" nillable="true" type="q24:DeviceAction" />
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="Action" nillable="true" type="q23:DeviceAction" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -716,7 +664,7 @@
   <xs:element name="ReturnDriverByIDResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnDriverByIDResult" nillable="true" type="q25:TemplateDriver" />
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnDriverByIDResult" nillable="true" type="q24:TemplateDriver" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -766,7 +714,7 @@
         <xs:element minOccurs="0" name="refresh" type="xs:int" />
         <xs:element minOccurs="0" name="picture" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="modele" nillable="true" type="xs:string" />
-        <xs:element xmlns:q26="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Parametres" nillable="true" type="q26:ArrayOfanyType" />
+        <xs:element xmlns:q25="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Parametres" nillable="true" type="q25:ArrayOfanyType" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -843,7 +791,7 @@
   <xs:element name="GetAllZonesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllZonesResult" nillable="true" type="q27:ArrayOfZone" />
+        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllZonesResult" nillable="true" type="q26:ArrayOfZone" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -858,7 +806,7 @@
   <xs:element name="GetDeviceInZoneResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetDeviceInZoneResult" nillable="true" type="q28:ArrayOfTemplateDevice" />
+        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetDeviceInZoneResult" nillable="true" type="q27:ArrayOfTemplateDevice" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -873,7 +821,7 @@
   <xs:element name="ReturnZoneByIDResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnZoneByIDResult" nillable="true" type="q29:Zone" />
+        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnZoneByIDResult" nillable="true" type="q28:Zone" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -883,7 +831,7 @@
         <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="zoneId" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
-        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ListElement" nillable="true" type="q30:ArrayOfZone.Element_Zone" />
+        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ListElement" nillable="true" type="q29:ArrayOfZone.Element_Zone" />
         <xs:element minOccurs="0" name="icon" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="image" nillable="true" type="xs:string" />
       </xs:sequence>
@@ -967,7 +915,7 @@
   <xs:element name="GetAllMacrosResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllMacrosResult" nillable="true" type="q31:ArrayOfMacro" />
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllMacrosResult" nillable="true" type="q30:ArrayOfMacro" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -982,7 +930,7 @@
   <xs:element name="ReturnMacroByIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnMacroByIdResult" nillable="true" type="q32:Macro" />
+        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnMacroByIdResult" nillable="true" type="q31:Macro" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -994,7 +942,7 @@
         <xs:element minOccurs="0" name="nom" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="enable" type="xs:boolean" />
         <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
-        <xs:element xmlns:q33="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="listactions" nillable="true" type="q33:ArrayOfanyType" />
+        <xs:element xmlns:q32="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="listactions" nillable="true" type="q32:ArrayOfanyType" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1015,7 +963,7 @@
   <xs:element name="GetAllTriggersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllTriggersResult" nillable="true" type="q34:ArrayOfTrigger" />
+        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllTriggersResult" nillable="true" type="q33:ArrayOfTrigger" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1030,7 +978,61 @@
   <xs:element name="ReturnTriggerByIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnTriggerByIdResult" nillable="true" type="q35:Trigger" />
+        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="ReturnTriggerByIdResult" nillable="true" type="q34:Trigger" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteTrigger">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="triggerId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteTriggerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteTriggerResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveTrigger">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="triggerId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="nom" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="enable" type="xs:boolean" />
+        <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="TypeTrigger" type="q35:Trigger.TypeTrigger" />
+        <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="conditiontimer" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="deviceid" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="deviceproperty" nillable="true" type="xs:string" />
+        <xs:element xmlns:q36="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="macro" nillable="true" type="q36:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveTriggerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SaveTriggerResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UploadFile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="byteData" nillable="true" type="xs:base64Binary" />
+        <xs:element minOccurs="0" name="Namefile" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UploadFileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UploadFileResult" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1042,7 +1044,7 @@
   <xs:element name="GetAllVoiceResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q36="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetAllVoiceResult" nillable="true" type="q36:ArrayOfstring" />
+        <xs:element xmlns:q37="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetAllVoiceResult" nillable="true" type="q37:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1081,7 +1083,7 @@
   <xs:element name="CanDeleteResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q37="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="CanDeleteResult" nillable="true" type="q37:ArrayOfstring" />
+        <xs:element xmlns:q38="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="CanDeleteResult" nillable="true" type="q38:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1464,7 +1466,53 @@
   <xs:element name="GetListOfImageResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q38="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetListOfImageResult" nillable="true" type="q38:ArrayOfImageFile" />
+        <xs:element xmlns:q39="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetListOfImageResult" nillable="true" type="q39:ArrayOfImageFile" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DevicesAsHisto">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DevicesAsHistoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q40="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DevicesAsHistoResult" nillable="true" type="q40:ArrayOfKeyValueOfstringboolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHistoDeviceSource">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="idDevice" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Source" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DateStart" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DateEnd" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Moyenne" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHistoDeviceSourceResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q41="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetHistoDeviceSourceResult" nillable="true" type="q41:ArrayOfHistorisation" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeviceAsHisto">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IdDevice" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Source" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeviceAsHistoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeviceAsHistoResult" type="xs:long" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1478,7 +1526,7 @@
   <xs:element name="GetAllListHistoResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q39="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllListHistoResult" nillable="true" type="q39:ArrayOfHistorisation" />
+        <xs:element xmlns:q42="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetAllListHistoResult" nillable="true" type="q42:ArrayOfHistorisation" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1494,101 +1542,37 @@
   <xs:element name="GetHistoResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q40="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetHistoResult" nillable="true" type="q40:ArrayOfHistorisation" />
+        <xs:element xmlns:q43="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" minOccurs="0" name="GetHistoResult" nillable="true" type="q43:ArrayOfHistorisation" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DeleteExtensionAudio">
+  <xs:element name="DeleteUser">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="NomExtension" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="DeleteExtensionAudioResponse">
+  <xs:element name="DeleteUserResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="DeleteExtensionAudioResult" type="xs:int" />
+        <xs:element minOccurs="0" name="DeleteUserResult" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="NewExtensionAudio">
+  <xs:element name="VerifLogin">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="NomExtension" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="Enable" type="xs:boolean" />
+        <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="NewExtensionAudioResponse">
+  <xs:element name="VerifLoginResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="NewExtensionAudioResult" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="EnableExtensionAudio">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="NomExtension" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="Enable" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="EnableExtensionAudioResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="EnableExtensionAudioResult" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="DeleteRepertoireAudio">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="NomRepertoire" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="DeleteRepertoireAudioResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="DeleteRepertoireAudioResult" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="NewRepertoireAudio">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="NomRepertoire" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="Enable" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="NewRepertoireAudioResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="NewRepertoireAudioResult" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="EnableRepertoireAudio">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="IdSrv" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="NomRepertoire" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="Enable" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="EnableRepertoireAudioResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="EnableRepertoireAudioResult" type="xs:int" />
+        <xs:element minOccurs="0" name="VerifLoginResult" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

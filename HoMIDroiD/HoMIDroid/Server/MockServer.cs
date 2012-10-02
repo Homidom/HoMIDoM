@@ -207,6 +207,16 @@ namespace HoMIDroid.Server
                 Id = "9"
             });
 
+            list.Add(new NumericDevice()
+            {
+                Name = "Mon volet",
+                DeviceType = DeviceType.Other,
+                DisplayType = DisplayType.Boolean,
+                NumericValue = 1102,
+                DeviceCategory = DeviceCategory.Other,
+                Id = "9"
+            });
+
             return list;
         }
     }

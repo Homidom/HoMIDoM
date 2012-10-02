@@ -30,6 +30,13 @@ namespace HoMIDroid.BO
         public DeviceCategory   DeviceCategory  { get; set; }
         public DisplayType      DisplayType     { get; set; }
         public string           Id              { get; set; }
+        public bool             IsReadOnly      
+        {
+            get
+            {
+                return this.Actions.Count == 0;
+            }
+        }
         public double?          NumericValue    
         {
             get { return this.valueNumeric; }
@@ -94,18 +101,37 @@ namespace HoMIDroid.BO
 
         public bool ExecuteAction<T>() where T : DeviceAction
         {
-            var q = from a in this.Actions
-                    where a.GetType() == typeof(T)
-                    select a;
-
-            if (q.Count() > 0)
-                return q.First().Visit(this);
+            var action = this.retrieveAction<T>();
+            if (action != null)
+                return action.Visit(this);
             return false;
         }
         public bool ExecuteDefaultAction()
         {
             if (this.DefautAction != null)
                 return this.DefautAction.Visit(this);
+            return false;
+        }
+
+        public bool On()
+        {
+            var action = this.retrieveAction<OpenAction>();
+            if (action == null)
+                action = this.retrieveAction<OnAction>();
+
+            if (action != null)
+                return action.Visit(this);
+            return false;
+        }
+
+        public bool Off()
+        {
+            var action = this.retrieveAction<CloseAction>();
+            if (action == null)
+                action = this.retrieveAction<OffAction>();
+
+            if (action != null)
+                return action.Visit(this);
             return false;
         }
 
@@ -118,6 +144,15 @@ namespace HoMIDroid.BO
         {
             if (this.ValueChanged != null)
                 this.ValueChanged(this, e);
+        }
+
+        private DeviceAction retrieveAction<T>() where T : DeviceAction
+        {
+            var q = from a in this.Actions
+                    where a.GetType() == typeof(T)
+                    select a;
+
+            return q.FirstOrDefault();
         }
     }
 }

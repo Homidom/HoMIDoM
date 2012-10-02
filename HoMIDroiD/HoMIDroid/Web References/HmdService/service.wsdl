@@ -4,33 +4,27 @@
     <xsd:schema targetNamespace="http://HoMIDom/Imports">
       <xsd:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd0" namespace="http://HoMIDom/" />
       <xsd:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" />
-      <xsd:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IHoMIDom_DeleteTrigger_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteTrigger" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteTrigger_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteTriggerResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveTrigger_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveTrigger" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveTrigger_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveTriggerResponse" />
-  </wsdl:message>
   <wsdl:message name="IHoMIDom_ListMethod_InputMessage">
     <wsdl:part name="parameters" element="tns:ListMethod" />
   </wsdl:message>
   <wsdl:message name="IHoMIDom_ListMethod_OutputMessage">
     <wsdl:part name="parameters" element="tns:ListMethodResponse" />
   </wsdl:message>
-  <wsdl:message name="IHoMIDom_Get4Log_InputMessage">
-    <wsdl:part name="parameters" element="tns:Get4Log" />
+  <wsdl:message name="IHoMIDom_GetLastLogs_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLastLogs" />
   </wsdl:message>
-  <wsdl:message name="IHoMIDom_Get4Log_OutputMessage">
-    <wsdl:part name="parameters" element="tns:Get4LogResponse" />
+  <wsdl:message name="IHoMIDom_GetLastLogs_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLastLogsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetLastLogsError_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLastLogsError" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetLastLogsError_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLastLogsErrorResponse" />
   </wsdl:message>
   <wsdl:message name="IHoMIDom_GetTypeLogEnable_InputMessage">
     <wsdl:part name="parameters" element="tns:GetTypeLogEnable" />
@@ -158,30 +152,6 @@
   <wsdl:message name="IHoMIDom_TelecommandeSendCommand_OutputMessage">
     <wsdl:part name="parameters" element="tns:TelecommandeSendCommandResponse" />
   </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllRepertoiresAudio_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllRepertoiresAudio" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllRepertoiresAudio_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllRepertoiresAudioResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllExtensionsAudio_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllExtensionsAudio" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllExtensionsAudio_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllExtensionsAudioResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteUser_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteUser" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteUser_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteUserResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_VerifLogin_InputMessage">
-    <wsdl:part name="parameters" element="tns:VerifLogin" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_VerifLogin_OutputMessage">
-    <wsdl:part name="parameters" element="tns:VerifLoginResponse" />
-  </wsdl:message>
   <wsdl:message name="IHoMIDom_ChangePassword_InputMessage">
     <wsdl:part name="parameters" element="tns:ChangePassword" />
   </wsdl:message>
@@ -212,6 +182,12 @@
   <wsdl:message name="IHoMIDom_SaveUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveUserResponse" />
   </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetDeviceNoMaJ_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDeviceNoMaJ" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetDeviceNoMaJ_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDeviceNoMaJResponse" />
+  </wsdl:message>
   <wsdl:message name="IHoMIDom_GetAllDevices_InputMessage">
     <wsdl:part name="parameters" element="tns:GetAllDevices" />
   </wsdl:message>
@@ -223,6 +199,12 @@
   </wsdl:message>
   <wsdl:message name="IHoMIDom_ExecuteDeviceCommand_OutputMessage">
     <wsdl:part name="parameters" element="tns:ExecuteDeviceCommandResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ExecuteDeviceCommandSimple_InputMessage">
+    <wsdl:part name="parameters" element="tns:ExecuteDeviceCommandSimple" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ExecuteDeviceCommandSimple_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ExecuteDeviceCommandSimpleResponse" />
   </wsdl:message>
   <wsdl:message name="IHoMIDom_DeleteDevice_InputMessage">
     <wsdl:part name="parameters" element="tns:DeleteDevice" />
@@ -409,6 +391,24 @@
   </wsdl:message>
   <wsdl:message name="IHoMIDom_ReturnTriggerById_OutputMessage">
     <wsdl:part name="parameters" element="tns:ReturnTriggerByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteTrigger_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteTrigger" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteTrigger_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteTriggerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveTrigger_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveTrigger" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveTrigger_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveTriggerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_UploadFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:UploadFile" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_UploadFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UploadFileResponse" />
   </wsdl:message>
   <wsdl:message name="IHoMIDom_GetAllVoice_InputMessage">
     <wsdl:part name="parameters" element="tns:GetAllVoice" />
@@ -614,6 +614,24 @@
   <wsdl:message name="IHoMIDom_GetListOfImage_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetListOfImageResponse" />
   </wsdl:message>
+  <wsdl:message name="IHoMIDom_DevicesAsHisto_InputMessage">
+    <wsdl:part name="parameters" element="tns:DevicesAsHisto" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DevicesAsHisto_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DevicesAsHistoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetHistoDeviceSource_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetHistoDeviceSource" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetHistoDeviceSource_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetHistoDeviceSourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeviceAsHisto_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeviceAsHisto" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeviceAsHisto_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeviceAsHistoResponse" />
+  </wsdl:message>
   <wsdl:message name="IHoMIDom_GetAllListHisto_InputMessage">
     <wsdl:part name="parameters" element="tns:GetAllListHisto" />
   </wsdl:message>
@@ -626,58 +644,30 @@
   <wsdl:message name="IHoMIDom_GetHisto_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetHistoResponse" />
   </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteExtensionAudio_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteExtensionAudio" />
+  <wsdl:message name="IHoMIDom_DeleteUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteUser" />
   </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteExtensionAudio_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteExtensionAudioResponse" />
+  <wsdl:message name="IHoMIDom_DeleteUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteUserResponse" />
   </wsdl:message>
-  <wsdl:message name="IHoMIDom_NewExtensionAudio_InputMessage">
-    <wsdl:part name="parameters" element="tns:NewExtensionAudio" />
+  <wsdl:message name="IHoMIDom_VerifLogin_InputMessage">
+    <wsdl:part name="parameters" element="tns:VerifLogin" />
   </wsdl:message>
-  <wsdl:message name="IHoMIDom_NewExtensionAudio_OutputMessage">
-    <wsdl:part name="parameters" element="tns:NewExtensionAudioResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_EnableExtensionAudio_InputMessage">
-    <wsdl:part name="parameters" element="tns:EnableExtensionAudio" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_EnableExtensionAudio_OutputMessage">
-    <wsdl:part name="parameters" element="tns:EnableExtensionAudioResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteRepertoireAudio_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteRepertoireAudio" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteRepertoireAudio_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteRepertoireAudioResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_NewRepertoireAudio_InputMessage">
-    <wsdl:part name="parameters" element="tns:NewRepertoireAudio" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_NewRepertoireAudio_OutputMessage">
-    <wsdl:part name="parameters" element="tns:NewRepertoireAudioResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_EnableRepertoireAudio_InputMessage">
-    <wsdl:part name="parameters" element="tns:EnableRepertoireAudio" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_EnableRepertoireAudio_OutputMessage">
-    <wsdl:part name="parameters" element="tns:EnableRepertoireAudioResponse" />
+  <wsdl:message name="IHoMIDom_VerifLogin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:VerifLoginResponse" />
   </wsdl:message>
   <wsdl:portType name="IHoMIDom">
-    <wsdl:operation name="DeleteTrigger">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteTrigger" message="tns:IHoMIDom_DeleteTrigger_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteTriggerResponse" message="tns:IHoMIDom_DeleteTrigger_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaveTrigger">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveTrigger" message="tns:IHoMIDom_SaveTrigger_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveTriggerResponse" message="tns:IHoMIDom_SaveTrigger_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="ListMethod">
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ListMethod" message="tns:IHoMIDom_ListMethod_InputMessage" />
       <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ListMethodResponse" message="tns:IHoMIDom_ListMethod_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="Get4Log">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/Get4Log" message="tns:IHoMIDom_Get4Log_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/Get4LogResponse" message="tns:IHoMIDom_Get4Log_OutputMessage" />
+    <wsdl:operation name="GetLastLogs">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetLastLogs" message="tns:IHoMIDom_GetLastLogs_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetLastLogsResponse" message="tns:IHoMIDom_GetLastLogs_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLastLogsError">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetLastLogsError" message="tns:IHoMIDom_GetLastLogsError_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetLastLogsErrorResponse" message="tns:IHoMIDom_GetLastLogsError_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetTypeLogEnable">
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetTypeLogEnable" message="tns:IHoMIDom_GetTypeLogEnable_InputMessage" />
@@ -763,22 +753,6 @@
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/TelecommandeSendCommand" message="tns:IHoMIDom_TelecommandeSendCommand_InputMessage" />
       <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/TelecommandeSendCommandResponse" message="tns:IHoMIDom_TelecommandeSendCommand_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetAllRepertoiresAudio">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllRepertoiresAudio" message="tns:IHoMIDom_GetAllRepertoiresAudio_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllRepertoiresAudioResponse" message="tns:IHoMIDom_GetAllRepertoiresAudio_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetAllExtensionsAudio">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllExtensionsAudio" message="tns:IHoMIDom_GetAllExtensionsAudio_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllExtensionsAudioResponse" message="tns:IHoMIDom_GetAllExtensionsAudio_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="DeleteUser">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteUser" message="tns:IHoMIDom_DeleteUser_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteUserResponse" message="tns:IHoMIDom_DeleteUser_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="VerifLogin">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/VerifLogin" message="tns:IHoMIDom_VerifLogin_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/VerifLoginResponse" message="tns:IHoMIDom_VerifLogin_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="ChangePassword">
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ChangePassword" message="tns:IHoMIDom_ChangePassword_InputMessage" />
       <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ChangePasswordResponse" message="tns:IHoMIDom_ChangePassword_OutputMessage" />
@@ -799,6 +773,10 @@
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveUser" message="tns:IHoMIDom_SaveUser_InputMessage" />
       <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveUserResponse" message="tns:IHoMIDom_SaveUser_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetDeviceNoMaJ">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetDeviceNoMaJ" message="tns:IHoMIDom_GetDeviceNoMaJ_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetDeviceNoMaJResponse" message="tns:IHoMIDom_GetDeviceNoMaJ_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetAllDevices">
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllDevices" message="tns:IHoMIDom_GetAllDevices_InputMessage" />
       <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllDevicesResponse" message="tns:IHoMIDom_GetAllDevices_OutputMessage" />
@@ -806,6 +784,10 @@
     <wsdl:operation name="ExecuteDeviceCommand">
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDeviceCommand" message="tns:IHoMIDom_ExecuteDeviceCommand_InputMessage" />
       <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDeviceCommandResponse" message="tns:IHoMIDom_ExecuteDeviceCommand_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ExecuteDeviceCommandSimple">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDeviceCommandSimple" message="tns:IHoMIDom_ExecuteDeviceCommandSimple_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDeviceCommandSimpleResponse" message="tns:IHoMIDom_ExecuteDeviceCommandSimple_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="DeleteDevice">
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDevice" message="tns:IHoMIDom_DeleteDevice_InputMessage" />
@@ -930,6 +912,18 @@
     <wsdl:operation name="ReturnTriggerById">
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnTriggerById" message="tns:IHoMIDom_ReturnTriggerById_InputMessage" />
       <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnTriggerByIdResponse" message="tns:IHoMIDom_ReturnTriggerById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTrigger">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteTrigger" message="tns:IHoMIDom_DeleteTrigger_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteTriggerResponse" message="tns:IHoMIDom_DeleteTrigger_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveTrigger">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveTrigger" message="tns:IHoMIDom_SaveTrigger_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveTriggerResponse" message="tns:IHoMIDom_SaveTrigger_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UploadFile">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/UploadFile" message="tns:IHoMIDom_UploadFile_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/UploadFileResponse" message="tns:IHoMIDom_UploadFile_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetAllVoice">
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllVoice" message="tns:IHoMIDom_GetAllVoice_InputMessage" />
@@ -1067,6 +1061,18 @@
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetListOfImage" message="tns:IHoMIDom_GetListOfImage_InputMessage" />
       <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetListOfImageResponse" message="tns:IHoMIDom_GetListOfImage_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="DevicesAsHisto">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DevicesAsHisto" message="tns:IHoMIDom_DevicesAsHisto_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DevicesAsHistoResponse" message="tns:IHoMIDom_DevicesAsHisto_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetHistoDeviceSource">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetHistoDeviceSource" message="tns:IHoMIDom_GetHistoDeviceSource_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetHistoDeviceSourceResponse" message="tns:IHoMIDom_GetHistoDeviceSource_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeviceAsHisto">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeviceAsHisto" message="tns:IHoMIDom_DeviceAsHisto_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeviceAsHistoResponse" message="tns:IHoMIDom_DeviceAsHisto_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetAllListHisto">
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllListHisto" message="tns:IHoMIDom_GetAllListHisto_InputMessage" />
       <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllListHistoResponse" message="tns:IHoMIDom_GetAllListHisto_OutputMessage" />
@@ -1075,29 +1081,13 @@
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetHisto" message="tns:IHoMIDom_GetHisto_InputMessage" />
       <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetHistoResponse" message="tns:IHoMIDom_GetHisto_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="DeleteExtensionAudio">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteExtensionAudio" message="tns:IHoMIDom_DeleteExtensionAudio_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteExtensionAudioResponse" message="tns:IHoMIDom_DeleteExtensionAudio_OutputMessage" />
+    <wsdl:operation name="DeleteUser">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteUser" message="tns:IHoMIDom_DeleteUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteUserResponse" message="tns:IHoMIDom_DeleteUser_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="NewExtensionAudio">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/NewExtensionAudio" message="tns:IHoMIDom_NewExtensionAudio_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/NewExtensionAudioResponse" message="tns:IHoMIDom_NewExtensionAudio_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="EnableExtensionAudio">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/EnableExtensionAudio" message="tns:IHoMIDom_EnableExtensionAudio_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/EnableExtensionAudioResponse" message="tns:IHoMIDom_EnableExtensionAudio_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="DeleteRepertoireAudio">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteRepertoireAudio" message="tns:IHoMIDom_DeleteRepertoireAudio_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteRepertoireAudioResponse" message="tns:IHoMIDom_DeleteRepertoireAudio_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="NewRepertoireAudio">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/NewRepertoireAudio" message="tns:IHoMIDom_NewRepertoireAudio_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/NewRepertoireAudioResponse" message="tns:IHoMIDom_NewRepertoireAudio_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="EnableRepertoireAudio">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/EnableRepertoireAudio" message="tns:IHoMIDom_EnableRepertoireAudio_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/EnableRepertoireAudioResponse" message="tns:IHoMIDom_EnableRepertoireAudio_OutputMessage" />
+    <wsdl:operation name="VerifLogin">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/VerifLogin" message="tns:IHoMIDom_VerifLogin_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/VerifLoginResponse" message="tns:IHoMIDom_VerifLogin_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

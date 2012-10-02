@@ -124,10 +124,10 @@
     <AndroidResource Include="Resources\Layout\ListItemBasicDevice.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <None Include="Web References\HmdService\AudioExtensionAudio.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HmdService\AudioRepertoireAudio.datasource">
+    <AndroidResource Include="Resources\Layout\index.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <None Include="Web References\HmdService\ArrayOfKeyValueOfstringbooleanKeyValueOfstringboolean.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\HmdService\Historisation.datasource">
