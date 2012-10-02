@@ -59,7 +59,7 @@ Public Class uAction
                     Select Case i
                         Case Action.TypeAction.ActionDevice
                             Dim x As Action.ActionDevice = _ObjAction
-                            Label1.Content = "Device"
+                            Label1.Content = "Composant"
                             If x.IdDevice IsNot Nothing Then
                                 If myService.ReturnDeviceByID(IdSrv, x.IdDevice) IsNot Nothing Then
                                     Label1.Content = myService.ReturnDeviceByID(IdSrv, x.IdDevice).Name

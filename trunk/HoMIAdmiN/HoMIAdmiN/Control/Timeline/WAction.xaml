@@ -14,7 +14,7 @@
                     <Label Height="25" Content="###:" Foreground="Orange" HorizontalAlignment="Left" Name="Lbl2" VerticalAlignment="Top" FontSize="14" FontFamily="Tahoma" />
                     <ComboBox Height="25" HorizontalAlignment="Left" Name="Cb2" VerticalAlignment="Top" Width="200"  BorderBrush="Black" BorderThickness="2"/>
                     <TextBox Height="25" HorizontalAlignment="Left" Name="Txt2" VerticalAlignment="Top" Width="199" Visibility="Collapsed" />
-                    <Label Height="25" Content="Valeur:" FontFamily="Tahoma" FontSize="14" Foreground="Orange" HorizontalAlignment="Left" Name="LblValue" VerticalAlignment="Top" />
+                    <Label Height="25" Content="Parametre:" FontFamily="Tahoma" FontSize="14" Foreground="Orange" HorizontalAlignment="Left" Name="LblValue" VerticalAlignment="Top" />
                     <TextBox Height="25" HorizontalAlignment="Left"  Name="TxtValue" VerticalAlignment="Top" Width="199" Background="DarkGray" BorderBrush="Black" Foreground="White" AcceptsReturn="True" />
             </StackPanel>
             <StackPanel Margin="5">
