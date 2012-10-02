@@ -1866,10 +1866,11 @@ Class Window1
                                                 MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
                                             Else
                                                 MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
+                                                FlagChange = False
                                             End If
                                         End If
                                     End If
-                                    FlagChange = False
+
                                 End If
                                 Me.Close()
                                 End

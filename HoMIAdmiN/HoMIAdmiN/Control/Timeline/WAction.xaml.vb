@@ -219,7 +219,7 @@ Public Class WActionParametrage
                         Dim obj As Action.ActionDevice = _ObjAction
 
                         'Mise en forme graphique
-                        Lbl1.Content = "Device:"
+                        Lbl1.Content = "Composant:"
                         Lbl2.Content = "Action:"
                         Lbl2.Visibility = Visibility.Visible
                         Cb2.Visibility = Windows.Visibility.Visible
@@ -433,13 +433,6 @@ Public Class WActionParametrage
 
                         StkProperty.Visibility = Windows.Visibility.Collapsed
                         TabControl1.Visibility = Windows.Visibility.Visible
-                        'Cb2.Visibility = Windows.Visibility.Collapsed
-                        'Cb1.Visibility = Windows.Visibility.Collapsed
-                        'Txt2.Visibility = Windows.Visibility.Collapsed
-                        'TxtValue.Visibility = Windows.Visibility.Hidden
-                        'Lbl1.Visibility = Windows.Visibility.Hidden
-                        'Lbl2.Visibility = Windows.Visibility.Hidden
-                        'LblValue.Visibility = Windows.Visibility.Hidden
 
                         Dim obj As Action.ActionIf = _ObjAction
 
