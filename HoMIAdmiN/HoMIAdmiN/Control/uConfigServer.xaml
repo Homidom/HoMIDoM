@@ -65,7 +65,7 @@
                                     </StackPanel>
                                 </StackPanel>
                             </GroupBox>
-                            <GroupBox Name="GroupBox4" Width="389" Margin="2" Height="169">
+                            <GroupBox Name="GroupBox4" Width="389" Margin="2" >
                                 <GroupBox.Header>
                                     <Label Foreground="White" FontWeight="Bold">Paramètres Log</Label>
                                 </GroupBox.Header>
@@ -79,7 +79,7 @@
                                             <Label Content="Conservation ancien log (mois):" Name="Label14" Margin="1" Foreground="White" Width="180" />
                                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Name="TxtMaxLogMonth" Width="50" />
                                         </StackPanel>
-                                        <GroupBox Height="90">
+                                        <GroupBox >
                                             <GroupBox.Header>
                                                 <Label Foreground="White" FontWeight="Bold">Type de Log à prendre en compte</Label>
                                             </GroupBox.Header>
