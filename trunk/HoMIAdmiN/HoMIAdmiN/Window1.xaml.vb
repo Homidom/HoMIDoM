@@ -973,11 +973,9 @@ Class Window1
 
     'Retourne True si le device a plusieurs histo sur des propriétés différents
     Private Function AsMultiHisto(ByVal Deviceid As String, ByVal x As List(Of HoMIDom.HoMIDom.Historisation)) As Boolean
-        'Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
         Dim retour As Boolean = False
         Dim tmp As Boolean = False
         Dim _name As String = ""
-        'x = myService.GetAllListHisto(IdSrv)
 
         For Each _histo As HoMIDom.HoMIDom.Historisation In x
             If _histo.IdDevice = Deviceid And _name = "" Then
@@ -2077,11 +2075,6 @@ Class Window1
                     Try
                         MessageBox.Show("Désolé cette fonctionnalité n'est pas encore disponible...", "INFO", MessageBoxButton.OK, MessageBoxImage.Information)
                         Exit Select
-                        'Dim x As New uPlaylist
-                        'x.Uid = System.Guid.NewGuid.ToString()
-                        'AddHandler x.CloseMe, AddressOf UnloadControl
-                        'CanvasRight.Children.Clear()
-                        'CanvasRight.Children.Add(x)
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub MainMenuAutre Playlist: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
@@ -2417,7 +2410,6 @@ Class Window1
     ''' <param name="Objet"></param>
     ''' <remarks></remarks>
     Private Sub AffControlPage(ByVal Objet As Object)
-        'Objet.Uid = System.Guid.NewGuid.ToString()
 
         If CanvasRight.Children.Count > 0 Then
 
@@ -2480,14 +2472,6 @@ Class Window1
     Private Sub AnimationApparition(ByVal Objet As Object)
         Try
             If Objet IsNot Nothing Then
-                'Dim da3 As DoubleAnimation = New DoubleAnimation
-                'da3.From = 0
-                'da3.To = 1
-                'da3.Duration = New Duration(TimeSpan.FromMilliseconds(800))
-                'Dim sc As ScaleTransform = New ScaleTransform()
-                'Objet.RenderTransform = sc
-                'sc.BeginAnimation(ScaleTransform.ScaleYProperty, da3)
-
                 Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
                 myDoubleAnimation.From = 0.0
                 myDoubleAnimation.To = 1.0
@@ -2495,7 +2479,6 @@ Class Window1
                 Dim myStoryboard As Storyboard
                 myStoryboard = New Storyboard()
                 myStoryboard.Children.Add(myDoubleAnimation)
-                'AddHandler myStoryboard.Completed, AddressOf StoryBoardFinish
 
                 Storyboard.SetTarget(myDoubleAnimation, Objet)
                 Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
