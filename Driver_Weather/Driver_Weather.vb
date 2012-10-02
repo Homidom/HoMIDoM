@@ -47,6 +47,9 @@ Imports System.Threading
     Dim _tempsentrereponse As Integer = 1500
     Dim _ignoreadresse As Boolean = False
     Dim _lastetat As Boolean = True
+
+    'param avancé
+    Dim _DEBUG As Boolean = False
 #End Region
 
 #Region "Variables internes"
@@ -286,6 +289,14 @@ Imports System.Threading
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
+            'récupération des paramétres avancés
+            Try
+                _DEBUG = _Parametres.Item(0).Valeur
+            Catch ex As Exception
+                _DEBUG = False
+                _Parametres.Item(0).Valeur = False
+            End Try
+
             _IsConnect = True
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " démarré")
         Catch ex As Exception
@@ -441,7 +452,7 @@ Imports System.Threading
             _DeviceSupport.Add(ListeDevices.METEO)
 
             'Parametres avancés
-            Add_ParamAvance("test", "description", Nothing)
+            Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
@@ -656,9 +667,7 @@ Imports System.Threading
             doc = Nothing
             nodes = Nothing
 
-
-       
-            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GOOGLEMETEO", "MAJ Meteo effectuée pour " & objet.name)
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GOOGLEMETEO", "MAJ Meteo effectuée pour " & objet.name)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEOWeather", "Erreur Lors de la MaJ de " & objet.name & " : " & ex.Message)
         End Try

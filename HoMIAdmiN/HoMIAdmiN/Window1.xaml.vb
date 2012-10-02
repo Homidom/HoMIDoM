@@ -1562,11 +1562,9 @@ Class Window1
                         Case "drv_modifier"
                             Try
                                 _MainMenuAction = 1
-                                CanvasRight.Children.Clear()
                                 Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_driver")
-                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                                CanvasRight.Children.Add(x)
+                                AffControlPage(x)
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub MainMenuContextmenu Driver Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                             End Try
@@ -1578,11 +1576,9 @@ Class Window1
                         Case "cpt_modifier"
                             Try
                                 _MainMenuAction = 1
-                                CanvasRight.Children.Clear()
                                 Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_composant")
-                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                                CanvasRight.Children.Add(x)
+                                AffControlPage(x)
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub MainMenuContextmenu COMPOSANTS Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                             End Try
@@ -1597,11 +1593,9 @@ Class Window1
                         Case "cpt_supprimer"
                             Try
                                 _MainMenuAction = 2
-                                CanvasRight.Children.Clear()
                                 Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_composant")
-                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                                CanvasRight.Children.Add(x)
+                                AffControlPage(x)
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub MainMenuContextmenu COMPOSANTS Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                             End Try
@@ -1613,11 +1607,9 @@ Class Window1
                         Case "zon_modifier"
                             Try
                                 _MainMenuAction = 1
-                                CanvasRight.Children.Clear()
                                 Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_zone")
-                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                                CanvasRight.Children.Add(x)
+                                AffControlPage(x)
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub MainMenuContextmenu ZONE Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                             End Try
@@ -1633,11 +1625,9 @@ Class Window1
                         Case "zon_supprimer"
                             Try
                                 _MainMenuAction = 2
-                                CanvasRight.Children.Clear()
                                 Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_zone")
-                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                                CanvasRight.Children.Add(x)
+                                AffControlPage(x)
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub MainMenuContextmenu ZONE Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                             End Try
@@ -1649,11 +1639,9 @@ Class Window1
                         Case "usr_modifier"
                             Try
                                 _MainMenuAction = 1
-                                CanvasRight.Children.Clear()
                                 Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_user")
-                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                                CanvasRight.Children.Add(x)
+                                AffControlPage(x)
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub MainMenuContextmenu USER Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                             End Try
@@ -1669,11 +1657,9 @@ Class Window1
                         Case "usr_supprimer"
                             Try
                                 _MainMenuAction = 2
-                                CanvasRight.Children.Clear()
                                 Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_user")
-                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                                CanvasRight.Children.Add(x)
+                                AffControlPage(x)
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub MainMenuContextmenu USER Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                             End Try
@@ -1685,11 +1671,9 @@ Class Window1
                         Case "trg_modifier"
                             Try
                                 _MainMenuAction = 1
-                                CanvasRight.Children.Clear()
                                 Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_trigger")
-                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                                CanvasRight.Children.Add(x)
+                                AffControlPage(x)
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub MainMenuContextmenu TRIGGER Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                             End Try
@@ -1714,11 +1698,9 @@ Class Window1
                         Case "trg_supprimer"
                             Try
                                 _MainMenuAction = 2
-                                CanvasRight.Children.Clear()
                                 Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_trigger")
-                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                                CanvasRight.Children.Add(x)
+                                AffControlPage(x)
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub MainMenuContextmenu TRIGGER Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                             End Try
@@ -1730,11 +1712,9 @@ Class Window1
                         Case "mac_modifier"
                             Try
                                 _MainMenuAction = 1
-                                CanvasRight.Children.Clear()
                                 Dim x As New uSelectElmt("Choisir {TITLE} à éditer", "tag_macro")
-                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                                CanvasRight.Children.Add(x)
+                                AffControlPage(x)
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub MainMenuContextmenu MACRO Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                             End Try
@@ -1750,11 +1730,9 @@ Class Window1
                         Case "mac_supprimer"
                             Try
                                 _MainMenuAction = 2
-                                CanvasRight.Children.Clear()
                                 Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", "tag_macro")
-                                Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-                                CanvasRight.Children.Add(x)
+                                AffControlPage(x)
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub MainMenuContextmenu MACRO Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                             End Try
@@ -1768,8 +1746,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                 x.Width = CanvasRight.ActualWidth - 100
                                 x.Height = CanvasRight.ActualHeight - 50
-                                CanvasRight.Children.Clear()
-                                CanvasRight.Children.Add(x)
+                                AffControlPage(x)
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub MainMenuContextmenu LOG: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                             End Try
@@ -1778,8 +1755,7 @@ Class Window1
                                 Dim x As New uConfigServer
                                 x.Uid = System.Guid.NewGuid.ToString()
                                 AddHandler x.CloseMe, AddressOf UnloadControl
-                                CanvasRight.Children.Clear()
-                                CanvasRight.Children.Add(x)
+                                AffControlPage(x)
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub MainMenuContextmenu Configurer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                             End Try
@@ -1908,8 +1884,7 @@ Class Window1
                                 Dim x As New uHelp
                                 x.Uid = System.Guid.NewGuid.ToString()
                                 AddHandler x.CloseMe, AddressOf UnloadControl
-                                CanvasRight.Children.Clear()
-                                CanvasRight.Children.Add(x)
+                                AffControlPage(x)
                             Catch ex As Exception
                                 MessageBox.Show("ERREUR Sub MainMenuContextmenu aide gérer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                             End Try
@@ -2046,12 +2021,10 @@ Class Window1
             End If
 
             _MainMenuAction = 2
-            CanvasRight.Children.Clear()
 
             Dim x As New uSelectElmt("Choisir {TITLE} à supprimer", index)
-            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2))
             AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-            CanvasRight.Children.Add(x)
+            AffControlPage(x)
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'exécution de MainMenuDelete: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -2065,12 +2038,10 @@ Class Window1
             End If
 
             _MainMenuAction = 1
-            CanvasRight.Children.Clear()
 
             Dim x As New uSelectElmt("Choisir {TITLE} à éditer", index)
-            Canvas.SetLeft(x, CanvasRight.ActualWidth / 2 - (x.ActualWidth / 2) - 200)
             AddHandler x.CloseMe, AddressOf UnloadSelectElmt
-            CanvasRight.Children.Add(x)
+            AffControlPage(x)
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'exécution de MainMenuEdit: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -2097,8 +2068,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         x.Width = CanvasRight.ActualWidth - 100
                         x.Height = CanvasRight.ActualHeight - 50
-                        CanvasRight.Children.Clear()
-                        CanvasRight.Children.Add(x)
+                        AffControlPage(x)
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub MainMenuAutre log: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
@@ -2121,8 +2091,7 @@ Class Window1
                         Dim x As New uConfigServer
                         x.Uid = System.Guid.NewGuid.ToString()
                         AddHandler x.CloseMe, AddressOf UnloadControl
-                        CanvasRight.Children.Clear()
-                        CanvasRight.Children.Add(x)
+                        AffControlPage(x)
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub MainMenuAutre config: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
@@ -2132,8 +2101,7 @@ Class Window1
                         Dim x As New uHelp
                         x.Uid = System.Guid.NewGuid.ToString()
                         AddHandler x.CloseMe, AddressOf UnloadControl
-                        CanvasRight.Children.Clear()
-                        CanvasRight.Children.Add(x)
+                        AffControlPage(x)
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub MainMenuAutre aide: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
