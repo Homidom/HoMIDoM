@@ -176,7 +176,6 @@ Public Class Driver_ZWave
                 m_values.Remove(valueID)
             End Sub
 
-
             Shared Sub SetValue(ByVal valueID As ZWValueID)
                 Dim valueIndex As Integer = -1
                 Dim index As Integer = 0
@@ -387,22 +386,31 @@ Public Class Driver_ZWave
         ''' <remarks></remarks>
         Public Function ExecuteCommand(ByVal MyDevice As Object, ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
             Dim retour As Boolean = False
+            Dim NodeTemp As New Node
+
             Try
                 If MyDevice IsNot Nothing Then
                     'Pas de commande demandée donc erreur
                     If Command = "" Then
                         Return False
                     Else
-                        ' Pour le Debug MyDevice,
-                        Console.WriteLine(Command, Param(0), Param(1))
+                   
                         Select Case UCase(Command)
                             Case "SEARCHNODES"
                                 Console.WriteLine("Passage par la commande de recherche d'un device")
 
                             Case "DIM"
-                                Console.WriteLine("Passage par la commande Dumming avec le % = " & Val(Param(0)))
+                                If Param(0) <> "" Then
+                                    If Param(0) > 100 Then Param(0) = 100
+                                    If Param(0) < 0 Then Param(0) = 0
+                                    NodeTemp = GetNode(m_homeId, MyDevice.Adresse1)
+                                    m_manager.SetNodeLevel(m_homeId, NodeTemp.ID, Param(0))
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "Passage par la commande Dumming avec le % = " & Val(Param(0)))
+
+                                End If
 
                             Case Else
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "La commande " & UCase(Command) & " n'existe pas")
                         End Select
                         Return True
                     End If
@@ -439,19 +447,30 @@ Public Class Driver_ZWave
         Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
             Dim retour As String = ""
             Dim CptBoucle As Byte
+            Dim ValeurRetour As Integer
+
+            'récupération des paramétres avancés
+            Try
+                _DEBUG = _Parametres.Item(0).Valeur
+
+            Catch ex As Exception
+                _DEBUG = False
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave Start", "Erreur dans les paramétres avancés. utilisation des valeurs par défaut" & ex.Message)
+            End Try
 
             'ouverture du port suivant le Port Com
             Try
                 If _Com <> "" Then
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Demarrage du pilote Z-Wave, ceci peut prendre plusieurs secondes", retour)
                     retour = ouvrir(_Com)
                     ' ZWave network is started, and our control of hardware can begin once all the nodes have reported in
-                    While (m_nodesReady = False And CptBoucle < 5)
-                         System.Threading.Thread.Sleep(3000) ' Attente de 3 sec  - Info OpenZWave Wait since this process can take around 20seconds within my network
+                    While (m_nodesReady = False And CptBoucle < 10)
+                        System.Threading.Thread.Sleep(3000) ' Attente de 3 sec  - Info OpenZWave Wait since this process can take around 20seconds within some network
                         CptBoucle = CptBoucle + 1
                     End While
 
                     'traitement du message de retour
-                    If Not (g_initFailed) Then
+                    If Not (g_initFailed) Then ' le demarrage le controleur a échoué
                         _IsConnect = False
                         retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave", "Driver non démarré : " & retour)
@@ -459,6 +478,9 @@ Public Class Driver_ZWave
                         _IsConnect = True
                         retour = "Port " & _Com & " ouvert - Le HomeId du Controleur est : 0x" & Convert.ToString(m_homeId, 16).ToUpper
                         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", retour)
+                        For i = 0 To m_nodeList.Count - 1
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave : Node ", m_nodeList(i).ID & " de type " & m_nodeList(i).Product & " :  " & m_nodeList(i).Manufacturer & " label  " & m_nodeList(i).Label)
+                        Next
                     End If
                 Else
                     retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
@@ -478,7 +500,14 @@ Public Class Driver_ZWave
         ''' <summary>Arrêter le du driver</summary>
         ''' <remarks></remarks>
         Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
+            Dim retour As String
             Try
+                If _IsConnect Then
+                    retour = fermer()
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave Stop", retour)
+                Else
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave Stop", "Port " & _Com & " est déjà fermé")
+                End If
 
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave Stop", ex.Message)
@@ -497,22 +526,64 @@ Public Class Driver_ZWave
         ''' <remarks>pas utilisé</remarks>
         Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
 
+            Dim NodeTemp As New Node
+            Dim ValueTemp As ZWValueID
+            Dim ValeurBool As Boolean
+            Dim ValeurRetour As Integer
+
             Try
-                If _Enable = False Then Exit Sub
-                If _IsConnect = False Then Exit Sub
+                If _Enable = False Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZWave Read", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
+                    Exit Sub
+                End If
 
-                If Objet IsNot Nothing Then
-                    Select Case Objet.Type
+                If _IsConnect = False Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZWave Read", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté")
+                    Exit Sub
+                End If
 
-                        Case Else
+                NodeTemp = GetNode(m_homeId, Objet.Adresse1)
 
-                    End Select
+                If IsNothing(NodeTemp) Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZWave Read", "Erreur: l'adresse du device (Adresse1) " & Objet.Adresse1 & " n'existe pas")
+                Else
+                    If Objet IsNot Nothing Then
+                        If NodeTemp.Values.Count Then
+                            If _DEBUG Then
+                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "Le nombre de valeurs est de : " & NodeTemp.Values.Count)
+                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "La valeur n°" & NodeTemp.Values.Count & " a pour Id : " & NodeTemp.Values(0).GetId())
+                            End If
 
+                            Select Case Objet.Type
+
+                                Case "SWITCH", "APPAREIL"
+                                    m_manager.GetValueAsInt(NodeTemp.Values(0), Objet.value)
+
+                                Case "GENERIQUEBOOLEEN", "CONTACT"
+                                    Dim retour As Boolean
+                                    m_manager.GetValueAsBool(NodeTemp.Values(0), Objet.value)
+
+                                Case "GENERIQUESTRING"
+                                    m_manager.GetValueAsString(NodeTemp.Values(0), Objet.value)
+
+
+                                Case Else
+                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZWave Read", "Erreur: Type de l'objet " & Objet.Adresse1 & " non supporté")
+                            End Select
+                            NodeTemp.Values.RemoveRange(0, 1)
+
+                        Else
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "Pas de valeur trouvée")
+                            Exit Sub
+                        End If
+
+
+                    End If
                 End If
 
 
             Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo Read", ex.Message)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave Read", ex.Message)
             End Try
         End Sub
 
@@ -534,15 +605,14 @@ Public Class Driver_ZWave
                 End If
 
                 If _IsConnect = False Then
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZWave Write", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZWave Write", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté")
                     Exit Sub
                 End If
+
                 If IsNumeric(Objet.Adresse1) = False Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZWave Write", "Erreur: l'adresse du device (Adresse1) " & Objet.Adresse1 & " n'est pas une valeur numérique")
                     Exit Sub
                 End If
-
-                Dim adr As Long = Objet.Adresse1
 
                 If Objet.Type = "SWITCH" Or Objet.Type = "APPAREIL" Then
                     If Commande = "ON" Then
@@ -555,13 +625,6 @@ Public Class Driver_ZWave
                         m_manager.SetNodeOff(m_homeId, NodeTemp.ID)
                     End If
 
-                    If Commande = "DIM" Then
-                        If Parametre1 > 255 Then Parametre1 = 255
-                        If Parametre1 < 0 Then Parametre1 = 0
-                        Console.WriteLine("Passage par la commande DIM de Write avec la valeur : " & Parametre1)
-                        NodeTemp = GetNode(m_homeId, Objet.Adresse1)
-                        m_manager.SetNodeLevel(m_homeId, NodeTemp.ID, Parametre1)
-                    End If
                 End If
 
             Catch ex As Exception
@@ -668,10 +731,13 @@ Public Class Driver_ZWave
                 _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
 
                 ''liste des devices compatibles
+                _DeviceSupport.Add(ListeDevices.APPAREIL) 'SORTIE     
                 _DeviceSupport.Add(ListeDevices.SWITCH) 'SORTIE
                 _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN) 'ENTREE
-                _DeviceSupport.Add(ListeDevices.APPAREIL) 'SORTIE
+                _DeviceSupport.Add(ListeDevices.GENERIQUESTRING) 'ENTREE
+
                 'Paramétres avancés
+                Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
 
                 'ajout des commandes avancées pour les devices
                 Add_DeviceCommande("DIM", "Valeur en % d'intensité", 1)
@@ -702,6 +768,8 @@ Public Class Driver_ZWave
 #End Region
 
 #Region "Fonctions internes"
+
+        '-----------------------------------------------------------------------------
         ''' <summary>Ouvrir le port Z-Wave</summary>
         ''' <param name="numero">Nom/Numero du port COM: COM2</param>
         ''' <remarks></remarks>
@@ -717,18 +785,26 @@ Public Class Driver_ZWave
                         If port.IsOpen() Then
                             port.Close()
                             ' Creation du controleur ZWave
+                            m_options = New ZWOptions()
                             m_manager = New ZWManager()
-                            m_options.Create(MyRep & "\drivers\Zwave\", MyRep & "\Config\Zwave\", "")
-                            Console.WriteLine("Le nom du repertoire de config est : " & MyRep & "\drivers\Zwave\")
-                            m_options.AddOptionInt("SaveLogLevel", LogLevel.LogLevel_Internal)      ' Configure le niveau de sauvegarde des messages (Disque)
-                            m_options.AddOptionInt("QueueLogLevel", LogLevel.LogLevel_Error)    ' Configure le niveau de  sauvegarde des messages (RAM)
-                            m_options.AddOptionInt("DumpTrigger", LogLevel.LogLevel_Info)
+                            m_options.Create(MyRep & "\Drivers\Zwave\", MyRep & "\Drivers\Zwave\", "")   ' MyRep & "\Config\Zwave\"
+                            ' Console.WriteLine("Le nom du repertoire de config est : " & MyRep & "\drivers\Zwave\")
+                            If _DEBUG Then
+                                m_options.AddOptionInt("SaveLogLevel", LogLevel.LogLevel_Detail)      ' Configure le niveau de sauvegarde des messages (Disque)
+                                m_options.AddOptionInt("QueueLogLevel", LogLevel.LogLevel_Debug)     ' Configure le niveau de  sauvegarde des messages (RAM)
+                                m_options.AddOptionInt("DumpTrigger", LogLevel.LogLevel_Error)       ' Internal niveau de debug
+                            Else
+                                m_options.AddOptionInt("SaveLogLevel", LogLevel.LogLevel_Debug)      ' Configure le niveau de sauvegarde des messages (Disque)
+                                m_options.AddOptionInt("QueueLogLevel", LogLevel.LogLevel_Debug)    ' Configure le niveau de  sauvegarde des messages (RAM)
+                                m_options.AddOptionInt("DumpTrigger", LogLevel.LogLevel_Debug)
+                            End If
+                            m_options.AddOptionBool("ConsoleOutput", True) ' Affiche les messages sur la console
+                            m_options.AddOptionString("LogFileName", "LogZWave-" & Now, False)
+                            m_options.AddOptionBool("AppendLogFile", False)                      ' Remplace le fichier (pas d'append)   
                             m_options.AddOptionInt("PollInterval", 500)
                             m_options.AddOptionBool("IntervalBetweenPolls", True)
                             m_options.AddOptionBool("ValidateValueChanges", True)
-                            m_options.AddOptionBool("ConsoleOutput", True)                      ' Affiche les messages sur la console
-                            m_options.AddOptionString("LogFileName", "LogZWave-" & Now, False)
-                            m_options.AddOptionBool("AppendLogFile", False)                      ' Remplace le fichier (pas d'append)   
+
                             m_options.Lock()
                             m_manager.Create()
                             ' Ajout d'un gestionnaire d'evenements()
@@ -755,36 +831,33 @@ Public Class Driver_ZWave
             End Try
 
         End Function
-
+ 
         ''' <summary>Fermer le port Z-Wave</summary>
         ''' <remarks></remarks>
         Private Function fermer() As String
             Try
                 If _IsConnect Then
                     If (Not (port Is Nothing)) Then ' The COM port exists.
-                        If port.IsOpen Then
-                            ' Sauvegarde de la configuration du réseau
-                            m_manager.WriteConfig(m_homeId)
-                            ' Fermeture du port du controleur 
-                            m_manager.RemoveDriver("\\.\" & _Com)
+                        ' Sauvegarde de la configuration du réseau
+                        m_manager.WriteConfig(m_homeId)
+                        ' Fermeture du port du controleur 
+                        m_manager.RemoveDriver("\\.\" & _Com)
+                        m_manager.Destroy()
+                        m_options.Destroy()
+                        port.Dispose()
+                        port.Close()
 
-                            '   port.DiscardOutBuffer()
-                            '  port.Close()
-                            ' port.Dispose()
-                            _IsConnect = False
-                            Return ("Port " & port_name & " fermé")
-                        Else
-                            Return ("Port " & port_name & "  est déjà fermé")
-                        End If
+                        _IsConnect = False
+                        Return ("Port " & _Com & " fermé")
+                        
                     Else
-                        Return ("Port " & port_name & " n'existe pas")
+                        Return ("Port " & _Com & " n'existe pas")
                     End If
                 Else
-                    Return ("Port " & port_name & "  est déjà fermé (port_ouvert=false)")
+                    Return ("Port " & _Com & "  est déjà fermé (port_ouvert=false)")
                 End If
             Catch ex As UnauthorizedAccessException
-                Return ("ERR: Port " & port_name & " IGNORE")
-                ' The port may have been removed. Ignore.
+                Return ("ERR: Port " & _Com & " IGNORE")
             End Try
 
             Return True
