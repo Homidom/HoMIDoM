@@ -1,44 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <homidom>
-  <server ipsoap="localhost" portsoap="7999" idsrv="123456789" longitude="6.052793" latitude="49.364016" heurecorrectionlever="0" heurecorrectioncoucher="0" smtpserver="" smtpmail="" smtplogin="" smtppassword="" log0="false" log1="false" log2="false" log3="false" log4="false" log5="false" log6="false" log7="false" log8="false" log9="false" cyclesave="5" />
+  <server ipsoap="localhost" portsoap="7999" idsrv="123456789" longitude="6.052793" latitude="49.364016" heurecorrectionlever="0" heurecorrectioncoucher="0" smtpserver="" smtpmail="" smtplogin="" smtppassword="" log0="false" log1="false" log2="false" log3="false" log4="false" log5="false" log6="false" log7="false" log8="false" log9="false" cyclesave="5" voice="" />
   <drivers>
-    <driver id="958D5812-390B-11E1-A6F7-D4CA4724019B" nom="Arduino" enable="false" description="Arduino" startauto="false" protocol="RS232" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM2" refresh="0" modele="Arduino" picture="" parametre0="57600" parametre1="0" parametre2="0" parametre3="0" parametre4="0" parametre5="0" parametre6="0" parametre7="0" parametre8="1" parametre9="1" parametre10="1" parametre11="1" parametre12="1" parametre13="1" parametre14="1" />
-    <driver id="75FD72EA-105A-11E1-8441-8B144824019B" nom="DMX" enable="false" description="Controleur DMX" startauto="false" protocol="USB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="DMX" picture="" />
-    <driver id="9C3E7696-34F7-11E0-AEB0-53DBDED72085" nom="Foobar" enable="false" description="Multiroom audio Foobar" startauto="false" protocol="AUDIO" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="" picture=" " />
-    <driver id="D04010DA-5E22-11E1-A742-4E4A4824019B" nom="HTTP" enable="false" description="Driver Http" startauto="false" protocol="Http" iptcp="" porttcp="" ipudp="" portudp="" com="@" refresh="0" modele="" picture="" />
-    <driver id="1BB97374-34F5-11E0-BF44-48D8DED72085" nom="K8055" enable="false" description="Carte Velleman k8055" startauto="false" protocol="USB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="" refresh="0" modele="" picture="" />
-    <driver id="22FED268-34F6-11E0-A23E-80D9DED72085" nom="K8056" enable="false" description="Carte Velleman k8056" startauto="false" protocol="RS232" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="" refresh="0" modele="" picture="" />
-    <driver id="30E229A2-34F1-11E0-BDFE-9FD3DED72085" nom="RFID" enable="false" description="Récepteur Rfid mir:ror" startauto="false" protocol="RFID" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="" picture="" />
-    <driver id="6DAA2DE2-0545-11E1-B580-3CCD4824019B" nom="1-Wire" enable="false" description="Adaptateur 1-wire USB / COM" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="USB1" refresh="0" modele="{DS9490}" picture=" " />
-    <driver id="4A4774AA-34F7-11E0-B665-ADDADED72085" nom="OpenWebNet" enable="false" description="Driver OpenWebNet" startauto="false" protocol="OpenWebNet" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="" picture="" />
-    <driver id="10160480-24B7-11E1-ACF1-C9F34824019B" nom="Phidget InterfaceKit" enable="false" description="PhidgetInterfaceKit 0/16/16" startauto="false" protocol="USB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="PhidgetInterfaceKit 0/16/16" picture="" />
-    <driver id="5AEDF3A8-3568-11E0-9DEC-D164DFD72085" nom="PLCBUS" enable="false" description="PLCBUS COM / USB (PLC1141)" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM9" refresh="0" modele="1141" picture="" parametre0="true" parametre1="false" parametre2="209" />
-    <driver id="3B808B6C-25B3-11E0-A6DB-36D2DED72085" nom="RFXCom_receiver" enable="false" description="RFXCom Receiver COM, USB or Ethernet" startauto="false" protocol="RF" iptcp="192.168.1.6" porttcp="10001" ipudp="@" portudp="@" com="" refresh="0" modele="m" picture="" parametre0="4800" parametre1="false" />
-    <driver id="C2B6AA22-77E7-11E0-A193-47D34824019B" nom="RFXMitter" enable="false" description="RFXMitter USB/Ethernet Interface" startauto="false" protocol="RF" iptcp="192.168.1.6" porttcp="10002" ipudp="@" portudp="@" com="@" refresh="0" modele="" picture=" " parametre0="true" parametre1="false" />
-    <driver id="3D9D5D42-475B-11E1-B117-64314824019B" nom="RFXtrx" enable="false" description="RFXtrx USB/Ethernet Interface" startauto="false" protocol="RF" iptcp="" porttcp="" ipudp="@" portudp="@" com="COM15" refresh="0" modele="@" picture="" parametre0="True" />
-    <driver id="3BB1F870-3A41-11E1-B86C-0800200C9A66" nom="Teleinfo" enable="false" description="Adaptateur USB DAUGUET" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM1" refresh="0" modele="" picture="" />
-    <driver id="74FD4E7C-34ED-11E0-8AC4-70CEDED72085" nom="USBuirt" enable="false" description="Emetteur/Récepteur Infrarouge sur port USB" startauto="false" protocol="IR" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="" refresh="0" modele="" picture="" />
-    <driver id="DE96B466-2540-11E0-A321-65D7DFD72085" nom="Virtuel" enable="true" description="Driver Virtuel" startauto="true" protocol="Virtuel" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="" picture="" />
-    <driver id="9BC60A04-3569-11E0-B9A7-3F66DFD72085" nom="X10 CM11" enable="false" description="X10 CM11" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="" refresh="0" modele="CM11" picture="" />
-    <driver id="1DA44C90-353F-11E1-9B3D-78FC4824019B" nom="X10 CM15" enable="false" description="X10 CM15" startauto="false" protocol="USB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="CM15" picture="" />
-    <driver id="0A94F22A-E824-11E0-B989-175F4824019B" nom="ZIBASE" enable="false" description="Zibase Ethernet" startauto="false" protocol="ETHERNET" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="" picture="" />
-    <driver id="57BCAA20-5CD2-11E1-AA83-88244824019B" nom="Z-Wave" enable="false" description="Controleur Z-Wave" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM1" refresh="0" modele="" picture="" />
+    <driver id="958D5812-390B-11E1-A6F7-D4CA4724019B" nom="Arduino" enable="false" description="Arduino" startauto="false" protocol="RS232" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM2" refresh="0" modele="Arduino" parametre0="57600" parametre1="0" parametre2="0" parametre3="0" parametre4="0" parametre5="0" parametre6="0" parametre7="0" parametre8="1" parametre9="1" parametre10="1" parametre11="1" parametre12="1" parametre13="1" parametre14="1" />
+    <driver id="DACF8CE4-0AD2-11E2-A9F7-43F86188709B" nom="CurrentCost" enable="false" description="Driver CurrentCost" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="" refresh="0" modele="v1" />
+    <driver id="75FD72EA-105A-11E1-8441-8B144824019B" nom="DMX" enable="false" description="Controleur DMX" startauto="false" protocol="USB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="DMX" />
+    <driver id="9C3E7696-34F7-11E0-AEB0-53DBDED72085" nom="Foobar" enable="false" description="Multiroom audio Foobar" startauto="false" protocol="AUDIO" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="" />
+    <driver id="596AD836-FA1D-11E1-BDE2-639C6188709B" nom="GSM" enable="false" description="Driver GSM" startauto="false" protocol="GSM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM6" refresh="0" modele="GSM" parametre0="true" />
+    <driver id="B89008E6-DB04-11E1-A6C1-35956188709B" nom="HOMESEER" enable="false" description="HomeSeer" startauto="false" protocol="TCP" iptcp="default" porttcp="81" ipudp="@" portudp="@" com="@" refresh="0" modele="HS2" parametre0="default" parametre1="default" />
+    <driver id="D04010DA-5E22-11E1-A742-4E4A4824019B" nom="HTTP" enable="false" description="Driver Http" startauto="false" protocol="Http" iptcp="" porttcp="" ipudp="" portudp="" com="@" refresh="0" modele="" />
+    <driver id="1BB97374-34F5-11E0-BF44-48D8DED72085" nom="K8055" enable="false" description="Carte Velleman k8055" startauto="false" protocol="USB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="" refresh="0" modele="" />
+    <driver id="22FED268-34F6-11E0-A23E-80D9DED72085" nom="K8056" enable="false" description="Carte Velleman k8056" startauto="false" protocol="RS232" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="" refresh="0" modele="" />
+    <driver id="30E229A2-34F1-11E0-BDFE-9FD3DED72085" nom="RFID" enable="false" description="Récepteur Rfid mir:ror" startauto="false" protocol="RFID" iptcp="" porttcp="" ipudp="" portudp="" com="" refresh="0" modele="" />
+    <driver id="6DAA2DE2-0545-11E1-B580-3CCD4824019B" nom="1-Wire" enable="false" description="Adaptateur 1-wire USB / COM" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="USB1" refresh="0" modele="{DS9490}" />
+    <driver id="4A4774AA-34F7-11E0-B665-ADDADED72085" nom="OpenWebNet IP" enable="false" description="Driver OpenWebNet IP" startauto="false" protocol="OpenWebNet IP" iptcp="192.168.0.15" porttcp="20000" ipudp="" portudp="" com="" refresh="0" modele="" />
+    <driver id="CFA6D042-F10B-11E1-83CF-BDFE6088709B" nom="OpenWebNet USB" enable="false" description="Driver OpenWebNet USB" startauto="false" protocol="OpenWebNet USB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM3" refresh="0" modele="" />
+    <driver id="10160480-24B7-11E1-ACF1-C9F34824019B" nom="Phidget InterfaceKit" enable="false" description="PhidgetInterfaceKit 0/16/16" startauto="false" protocol="USB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="PhidgetInterfaceKit 0/16/16" />
+    <driver id="5AEDF3A8-3568-11E0-9DEC-D164DFD72085" nom="PLCBUS" enable="false" description="PLCBUS COM / USB (PLC1141)" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM9" refresh="0" modele="1141" parametre0="true" parametre1="false" parametre2="209" parametre3="false" />
+    <driver id="C2B6AA22-77E7-11E0-A193-47D34824019B" nom="RFXMitter" enable="false" description="RFXMitter USB/Ethernet Interface" startauto="false" protocol="RF" iptcp="192.168.1.6" porttcp="10002" ipudp="@" portudp="@" com="@" refresh="0" modele="" parametre0="true" parametre1="false" />
+    <driver id="3B808B6C-25B3-11E0-A6DB-36D2DED72085" nom="RFXreceiver" enable="false" description="RFXCom Receiver COM, USB or Ethernet" startauto="false" protocol="RF" iptcp="192.168.1.6" porttcp="10001" ipudp="@" portudp="@" com="" refresh="0" modele="m" parametre0="4800" parametre1="false" />
+    <driver id="3D9D5D42-475B-11E1-B117-64314824019B" nom="RFXtrx" enable="false" description="RFXtrx USB/Ethernet Interface" startauto="false" protocol="RF" iptcp="" porttcp="" ipudp="@" portudp="@" com="COM15" refresh="0" modele="@" parametre0="True" parametre1="20011111111111111011111111" />
+    <driver id="3BB1F870-3A41-11E1-B86C-0800200C9A66" nom="Teleinfo" enable="false" description="Adaptateur USB DAUGUET" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM1" refresh="0" modele="" parametre0="false" />
+    <driver id="74FD4E7C-34ED-11E0-8AC4-70CEDED72085" nom="USBuirt" enable="false" description="Emetteur/Récepteur Infrarouge sur port USB" startauto="false" protocol="IR" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="" refresh="0" modele="" />
+    <driver id="DE96B466-2540-11E0-A321-65D7DFD72085" nom="Virtuel" enable="true" description="Driver Virtuel" startauto="true" protocol="Virtuel" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="" />
+    <driver id="8B8EFC7E-F66D-11E1-AD40-71AF6188709B" nom="MeteoWeather" enable="false" description="Meteo provenant de Weather Channel" startauto="false" protocol="WEB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="Google Weather" parametre0="false" />
+    <driver id="9BC60A04-3569-11E0-B9A7-3F66DFD72085" nom="X10 CM11" enable="false" description="X10 CM11" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="" refresh="0" modele="CM11" />
+    <driver id="1DA44C90-353F-11E1-9B3D-78FC4824019B" nom="X10 CM15" enable="false" description="Driver X10 CM15" startauto="false" protocol="USB" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="CM15" />
+    <driver id="0A94F22A-E824-11E0-B989-175F4824019B" nom="ZIBASE" enable="false" description="Zibase Ethernet" startauto="false" protocol="ETHERNET" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="" parametre0="false" />
+    <driver id="57BCAA20-5CD2-11E1-AA83-88244824019B" nom="Z-Wave" enable="false" description="Controleur Z-Wave" startauto="false" protocol="COM" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="COM1" refresh="0" modele="" />
   </drivers>
-  <zones>
-  </zones>
+  <zones />
   <users>
-    <user id="f1da9939-3419-47a9-a0b3-f69a1c62e3cf" username="Admin" nom="Administrateur" prenom="Admin" profil="2" password="PAvsrAy++QJoiwy5JaPK9bqiqALOdu18pAdW5z/lljk=" numberidentification="" image=" " email="Admin@mail.com" emailautre="" telfixe="" telmobile="" telautre="" adresse="" ville="" codepostal="" />
-    <user id="9410175d-814e-415a-82ec-a50f6afc2f61" username="test" nom="test" prenom="test" profil="0" password="UE+LNYJ0vEk=" numberidentification="" image=" " email="mail@mail.com" emailautre="" telfixe="" telmobile="" telautre="" adresse="" ville="" codepostal="" />
+    <user id="f1da9939-3419-47a9-a0b3-f69a1c62e3cf" username="Admin" nom="Administrateur" prenom="Admin" profil="2" password="PAvsrAy++QJoiwy5JaPK9bqiqALOdu18pAdW5z/lljk=" numberidentification="" image="E:\Homidom_Test\images\icones\user_128.png" email="Admin@mail.com" emailautre="" telfixe="" telmobile="" telautre="" adresse="" ville="" codepostal="" />
+    <user id="9410175d-814e-415a-82ec-a50f6afc2f61" username="test" nom="test" prenom="test" profil="0" password="UE+LNYJ0vEk=" numberidentification="" image="E:\Homidom_Test\images\icones\user_128.png" email="mail@mail.com" emailautre="" telfixe="" telmobile="" telautre="" adresse="" ville="" codepostal="" />
   </users>
-  <audios>
-    <extension extension=".mp3" enable="True" />
-    <repertoire repertoire="C:\" enable="true" />
-  </audios>
   <devices>
-    <device id="soleil01" name="HOMI_Jour" enable="true" driverid="DE96B466-2540-11E0-A321-65D7DFD72085" description="Levé/Couché du soleil : True si il fait jour" type="GENERIQUEBOOLEEN" adresse1="N/A" adresse2="" datecreated="2012-02-28T18:31:24.0966797+01:00" lastchange="2012-02-28T18:31:24.0966797+01:00" refresh="0" modele="" picture=" " solo="true" value="false" lastetat="true" />
+    <device id="soleil01" name="HOMI_Jour" enable="true" driverid="DE96B466-2540-11E0-A321-65D7DFD72085" description="Levé/Couché du soleil : True si il fait jour" type="GENERIQUEBOOLEEN" adresse1="N/A" adresse2="" datecreated="2012-02-28T18:31:24.0966797+01:00" lastchange="2012-02-28T18:31:24.0966797+01:00" lastchangeduree="0" refresh="0" modele="" picture="E:\Homidom_Test\images\icones\composant_128.png" solo="true" value="true" lastetat="true" />
   </devices>
-  <triggers>
-  </triggers>
-  <macros>
-  </macros>
+  <triggers />
+  <macros />
 </homidom>

@@ -100,7 +100,7 @@
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Margin="5" VerticalAlignment="top" HorizontalAlignment="right" Height="180">
-                        <Button Margin="2" Height="25" Template="{DynamicResource GlassButton}" Name="BtnOK" Width="88.75" Foreground="White" ToolTip="Sauvegarder et Fermer la fenêtre">Valider</Button>
+                        <Button Margin="2" Height="50" Template="{DynamicResource GlassButton}" Name="BtnOK" Width="88.75" Foreground="White" ToolTip="Sauvegarder et Fermer la fenêtre"><TextBlock TextWrapping="Wrap" TextAlignment="center">Sauvegarder Fermer</TextBlock> </Button>
                         <Button Margin="2" Height="25" Name="BtnClose" Template="{DynamicResource GlassButton}" Width="88.75" Foreground="White" ToolTip="Fermer la fenêtre sans sauvegarder">Annuler</Button>
                         <Button Margin="2" Height="25" Template="{DynamicResource GlassButton}" Name="BtnSave" Width="88.75" Foreground="White" ToolTip="Sauvegarder sans fermer la fenêtre">Sauvegarder</Button>
                         <Button Margin="2" Foreground="White" Height="25" Name="BtnRead" Template="{DynamicResource GlassButton}" Width="88.75" Visibility="Collapsed">Tester</Button>
