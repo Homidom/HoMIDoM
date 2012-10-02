@@ -2387,6 +2387,7 @@ Class Window1
                     Exit Sub
                 Else
                     FlagChange = True
+                    SaveRealTime()
                 End If
 
             Else
@@ -2562,6 +2563,7 @@ Class Window1
             LOG.ToolTip = a
         End If
     End Sub
+
 
 #End Region
 

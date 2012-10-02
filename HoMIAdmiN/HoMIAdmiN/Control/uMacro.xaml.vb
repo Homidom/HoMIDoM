@@ -49,15 +49,14 @@
                 Dim tabl As New ArrayList
                 tabl = UScenario1.Items
                 _MacroId = myService.SaveMacro(IdSrv, "", TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
-                FlagChange = True
-                RaiseEvent CloseMe(Me)
             Else
                 Dim tabl As New ArrayList
                 tabl = UScenario1.Items
-                _MacroId = myservice.SaveMacro(IdSrv, _MacroId, TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
-                FlagChange = True
-                RaiseEvent CloseMe(Me)
+                _MacroId = myService.SaveMacro(IdSrv, _MacroId, TxtNom.Text, cEnable.IsChecked, TxtDescription.Text, tabl)
             End If
+
+            FlagChange = True
+            SaveRealTime()
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'enregistrement de la macro, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)

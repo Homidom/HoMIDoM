@@ -117,9 +117,11 @@ Partial Public Class uConfigServer
 
                 My.Settings.ShowLogError = ChKShowLogError.IsChecked
                 My.Settings.ShowDeviceNoMaJ = ChkShowDeviceNoMaJ.IsChecked
+                My.Settings.SaveRealTime = ChKSaveRealTime.IsChecked
                 My.Settings.Save()
 
                 FlagChange = True
+                SaveRealTime()
             End If
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
@@ -180,6 +182,7 @@ Partial Public Class uConfigServer
 
                 ChKShowLogError.IsChecked = My.Settings.ShowLogError
                 ChkShowDeviceNoMaJ.IsChecked = My.Settings.ShowDeviceNoMaJ
+                ChKSaveRealTime.IsChecked = My.Settings.SaveRealTime
             End If
 
         Catch ex As Exception

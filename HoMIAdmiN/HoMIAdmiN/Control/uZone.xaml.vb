@@ -28,6 +28,7 @@ Partial Public Class uZone
             SaveElement()
             myservice.SaveZone(IdSrv, _ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag.ToString, ImgZone.Tag.ToString)
             FlagChange = True
+            SaveRealTime()
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'enregistrement de la zone, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)

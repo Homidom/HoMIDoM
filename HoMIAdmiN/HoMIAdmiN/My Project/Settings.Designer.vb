@@ -124,6 +124,18 @@ Partial Friend NotInheritable Class MySettings
             Me("ShowLogError") = value
         End Set
     End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+    Public Property SaveRealTime() As Boolean
+        Get
+            Return CType(Me("SaveRealTime"),Boolean)
+        End Get
+        Set
+            Me("SaveRealTime") = value
+        End Set
+    End Property
 End Class
 
 Namespace My
