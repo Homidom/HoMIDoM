@@ -108,6 +108,10 @@ namespace HoMIDroid.Server
         {
             try
             {
+                var serverAction = action.ToServerAction(device);
+
+                Android.Util.Log.Error("HoMIDroid.Server.RealServer", string.Format("Executing '{0}' on '{1}'", serverAction.Nom, device.Id));
+
                 this.Server.ExecuteDeviceCommand(this.ServerID, device.Id, action.ToServerAction(device));
 
                 //var updated = this.GetDevice(device.Id);
@@ -152,22 +156,25 @@ namespace HoMIDroid.Server
                 isDim = (d._DeviceAction.Count(a => (a.Nom == "DIM")) > 0);
             }
 
-            switch (d._Type)
-            {
-                case HmdService.DeviceListeDevices.LAMPE:
-                    if (isDim)
-                        return this.getDimDevice(d, DeviceCategory.Light);
-                    return this.getOnOffDevice(d, DeviceCategory.Light);
+            if (d._DeviceAction.Count(a => !a.Nom.Equals("Read", StringComparison.CurrentCultureIgnoreCase)) > 0)
+            { // Not a read-only device
+                switch (d._Type)
+                {
+                    case HmdService.DeviceListeDevices.LAMPE:
+                        if (isDim)
+                            return this.getDimDevice(d, DeviceCategory.Light);
+                        return this.getOnOffDevice(d, DeviceCategory.Light);
 
-                case HmdService.DeviceListeDevices.SWITCH:
-                    if (isDim)
-                        return this.getDimDevice(d, DeviceCategory.Switch);
-                    return this.getOnOffDevice(d, DeviceCategory.Switch);
-                case HmdService.DeviceListeDevices.APPAREIL:
-                case HmdService.DeviceListeDevices.GENERIQUEBOOLEEN:
-                    return this.getOnOffDevice(d, DeviceCategory.Other);
-                case HmdService.DeviceListeDevices.VOLET:
-                    return this.getDimDevice(d, DeviceCategory.Other);
+                    case HmdService.DeviceListeDevices.SWITCH:
+                        if (isDim)
+                            return this.getDimDevice(d, DeviceCategory.Switch);
+                        return this.getOnOffDevice(d, DeviceCategory.Switch);
+                    case HmdService.DeviceListeDevices.APPAREIL:
+                    case HmdService.DeviceListeDevices.GENERIQUEBOOLEEN:
+                        return this.getOnOffDevice(d, DeviceCategory.Other);
+                    case HmdService.DeviceListeDevices.VOLET:
+                        return this.getOnOffDevice(d, DeviceCategory.Other);
+                }
             }
             return this.getRawDevice(d);
         }
@@ -304,6 +311,8 @@ namespace HoMIDroid.Server
                     device.DeviceCategory = DeviceCategory.Meteo;
                     break;
                 //case HmdService.DeviceListeDevices.VOLET:
+                //    device.DisplayType = DisplayType.Boolean;
+                //    device.DeviceCategory = DeviceCategory.Other;
                 //    break;
             }
 
@@ -311,7 +320,8 @@ namespace HoMIDroid.Server
         }
         private OnOffDevice getOnOffDevice(HmdService.TemplateDevice d, DeviceCategory deviceCategory)
         {
-            return new OnOffDevice()
+            var useOpenClose = d._DeviceAction.Count(a => a.Nom == "OPEN") > 0;
+            return new OnOffDevice(useOpenClose)
             {
                 Id = d._ID,
                 Name = d._Name,

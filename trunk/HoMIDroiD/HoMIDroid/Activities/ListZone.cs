@@ -30,7 +30,7 @@ namespace HoMIDroid.Activities
             this.ListView.TextFilterEnabled = true;
             this.ListView.Clickable = true;
 
-            this.ListView.ItemClick += delegate(object sender, ItemEventArgs args)
+            this.ListView.ItemClick += delegate(object sender, Android.Widget.AdapterView.ItemClickEventArgs args)
             {
                 var zone = this.ListAdapter.GetItem(args.Position) as Zone;
                 if (zone != null)

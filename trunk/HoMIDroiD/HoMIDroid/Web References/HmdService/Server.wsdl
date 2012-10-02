@@ -4,24 +4,6 @@
   <wsdl:types />
   <wsdl:binding name="BasicHttpBinding_IHoMIDom" type="i0:IHoMIDom">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="DeleteTrigger">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/DeleteTrigger" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SaveTrigger">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SaveTrigger" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="ListMethod">
       <soap:operation soapAction="http://HoMIDom/IHoMIDom/ListMethod" style="document" />
       <wsdl:input>
@@ -31,8 +13,17 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="Get4Log">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/Get4Log" style="document" />
+    <wsdl:operation name="GetLastLogs">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetLastLogs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastLogsError">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetLastLogsError" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -229,42 +220,6 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetAllRepertoiresAudio">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetAllRepertoiresAudio" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetAllExtensionsAudio">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetAllExtensionsAudio" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="DeleteUser">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/DeleteUser" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="VerifLogin">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/VerifLogin" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="ChangePassword">
       <soap:operation soapAction="http://HoMIDom/IHoMIDom/ChangePassword" style="document" />
       <wsdl:input>
@@ -310,6 +265,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetDeviceNoMaJ">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetDeviceNoMaJ" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetAllDevices">
       <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetAllDevices" style="document" />
       <wsdl:input>
@@ -321,6 +285,15 @@
     </wsdl:operation>
     <wsdl:operation name="ExecuteDeviceCommand">
       <soap:operation soapAction="http://HoMIDom/IHoMIDom/ExecuteDeviceCommand" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExecuteDeviceCommandSimple">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/ExecuteDeviceCommandSimple" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -600,6 +573,33 @@
     </wsdl:operation>
     <wsdl:operation name="ReturnTriggerById">
       <soap:operation soapAction="http://HoMIDom/IHoMIDom/ReturnTriggerById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTrigger">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/DeleteTrigger" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveTrigger">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/SaveTrigger" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UploadFile">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/UploadFile" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -913,6 +913,33 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="DevicesAsHisto">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/DevicesAsHisto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHistoDeviceSource">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetHistoDeviceSource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeviceAsHisto">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/DeviceAsHisto" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetAllListHisto">
       <soap:operation soapAction="http://HoMIDom/IHoMIDom/GetAllListHisto" style="document" />
       <wsdl:input>
@@ -931,8 +958,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="DeleteExtensionAudio">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/DeleteExtensionAudio" style="document" />
+    <wsdl:operation name="DeleteUser">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/DeleteUser" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -940,44 +967,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="NewExtensionAudio">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/NewExtensionAudio" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="EnableExtensionAudio">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/EnableExtensionAudio" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="DeleteRepertoireAudio">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/DeleteRepertoireAudio" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="NewRepertoireAudio">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/NewRepertoireAudio" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="EnableRepertoireAudio">
-      <soap:operation soapAction="http://HoMIDom/IHoMIDom/EnableRepertoireAudio" style="document" />
+    <wsdl:operation name="VerifLogin">
+      <soap:operation soapAction="http://HoMIDom/IHoMIDom/VerifLogin" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

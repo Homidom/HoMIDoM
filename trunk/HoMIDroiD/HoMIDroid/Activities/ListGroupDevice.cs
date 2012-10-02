@@ -46,7 +46,7 @@ namespace HoMIDroid.Activities
 
         void ExpandableListView_ChildClick(object sender, ExpandableListView.ChildClickEventArgs e)
         {
-            this.childClick(e.Parent, e.V, e.GroupPosition, e.ChildPosition, e.Id);
+            this.childClick(e.Parent, e.ClickedView, e.GroupPosition, e.ChildPosition, e.Id);
         }
 
         private void refresh()

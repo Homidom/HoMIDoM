@@ -48,7 +48,7 @@ namespace HoMIDroid.Activities
 
                 loginEditText.KeyPress += delegate(object sender, View.KeyEventArgs e)
                 {
-                    if (e.E.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
+                    if (e.Event.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
                     {
                         this.loginAsync();
                         e.Handled = true;
@@ -72,7 +72,7 @@ namespace HoMIDroid.Activities
                 //};
                 portEditText.KeyPress += delegate(object sender, View.KeyEventArgs e)
                 {
-                    if (e.E.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
+                    if (e.Event.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
                     {
                         this.loginAsync();
                         e.Handled = true;

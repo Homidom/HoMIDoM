@@ -25,15 +25,33 @@ namespace HoMIDroid.BO.Devices
         }
 
         public OnOffDevice()
+            : this(false)
+        {
+        }
+
+
+
+        public OnOffDevice(bool useOpenCloseActions)
         {
             this.DeviceType = BO.DeviceType.OnOff;
             this.DisplayType = BO.DisplayType.Boolean;
 
-            this.Actions = new List<DeviceAction>()
+            if (useOpenCloseActions)
             {
-                DeviceAction.Get<OnAction>(),
-                DeviceAction.Get<OffAction>()
-            };
+                this.Actions = new List<DeviceAction>()
+                {
+                    DeviceAction.Get<OpenAction>(),
+                    DeviceAction.Get<CloseAction>()
+                };
+            }
+            else
+            {
+                this.Actions = new List<DeviceAction>()
+                {
+                    DeviceAction.Get<OnAction>(),
+                    DeviceAction.Get<OffAction>()
+                };
+            }
         }
     }
 }
