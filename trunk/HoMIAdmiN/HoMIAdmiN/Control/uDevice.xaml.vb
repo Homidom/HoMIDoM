@@ -293,7 +293,6 @@ Partial Public Class uDevice
             If _DeviceId = "" Then _DeviceId = result
             SaveInZone()
             FlagChange = True
-            SaveRealTime()
             RaiseEvent CloseMe(Me, False)
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub uDevice BtnOK_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)

@@ -362,6 +362,10 @@ Namespace HoMIDom
 #End Region
 
 #Region "Configuration"
+        Private Sub SaveRealTime()
+            If _SaveRealTime Then SaveConfig(_MonRepertoire & "\config\homidom.xml")
+        End Sub
+
         ''' <summary>Chargement de la config depuis le fichier XML</summary>
         ''' <param name="Fichier"></param>
         ''' <returns></returns>
@@ -447,6 +451,8 @@ Namespace HoMIDom
                                             _CycleSave = list.Item(0).Attributes.Item(j).Value
                                         Case "voice"
                                             _Voice = list.Item(0).Attributes.Item(j).Value
+                                        Case "saverealtime"
+                                            _SaveRealTime = list.Item(0).Attributes.Item(j).Value
                                         Case Else
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
@@ -462,48 +468,48 @@ Namespace HoMIDom
                         '********************************
                         'on va chercher les drivers
                         '*********************************
-                        try
+                        Try
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des drivers :")
-                        list = Nothing
-                        list = myxml.SelectNodes("/homidom/drivers/driver")
+                            list = Nothing
+                            list = myxml.SelectNodes("/homidom/drivers/driver")
 
-                        If list.Count > 0 Then 'présence d'un ou des driver(s)
-                            For j As Integer = 0 To list.Count - 1
-                                'on récupère l'id du driver
-                                Dim _IdDriver = list.Item(j).Attributes.Item(0).Value
-                                Dim _drv As IDriver = ReturnDrvById(_IdSrv, _IdDriver)
+                            If list.Count > 0 Then 'présence d'un ou des driver(s)
+                                For j As Integer = 0 To list.Count - 1
+                                    'on récupère l'id du driver
+                                    Dim _IdDriver = list.Item(j).Attributes.Item(0).Value
+                                    Dim _drv As IDriver = ReturnDrvById(_IdSrv, _IdDriver)
 
-                                If _drv IsNot Nothing Then
-                                    _drv.Enable = list.Item(j).Attributes.GetNamedItem("enable").Value
-                                    _drv.StartAuto = list.Item(j).Attributes.GetNamedItem("startauto").Value
-                                    _drv.IP_TCP = list.Item(j).Attributes.GetNamedItem("iptcp").Value
-                                    _drv.Port_TCP = list.Item(j).Attributes.GetNamedItem("porttcp").Value
-                                    _drv.IP_UDP = list.Item(j).Attributes.GetNamedItem("ipudp").Value
-                                    _drv.Port_UDP = list.Item(j).Attributes.GetNamedItem("portudp").Value
-                                    _drv.COM = list.Item(j).Attributes.GetNamedItem("com").Value
-                                    _drv.Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
+                                    If _drv IsNot Nothing Then
+                                        _drv.Enable = list.Item(j).Attributes.GetNamedItem("enable").Value
+                                        _drv.StartAuto = list.Item(j).Attributes.GetNamedItem("startauto").Value
+                                        _drv.IP_TCP = list.Item(j).Attributes.GetNamedItem("iptcp").Value
+                                        _drv.Port_TCP = list.Item(j).Attributes.GetNamedItem("porttcp").Value
+                                        _drv.IP_UDP = list.Item(j).Attributes.GetNamedItem("ipudp").Value
+                                        _drv.Port_UDP = list.Item(j).Attributes.GetNamedItem("portudp").Value
+                                        _drv.COM = list.Item(j).Attributes.GetNamedItem("com").Value
+                                        _drv.Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
                                         _drv.Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
 
 
 
-                                    For i As Integer = 0 To list.Item(j).Attributes.Count - 1
-                                        Dim a As String = UCase(list.Item(j).Attributes.Item(i).Name)
-                                        If a.StartsWith("PARAMETRE") Then
-                                            Dim idx As Integer = Mid(a, 10, Len(a) - 9)
-                                            If idx < _drv.Parametres.Count Then
-                                                _drv.Parametres.Item(idx).valeur = list.Item(j).Attributes.Item(i).Value
+                                        For i As Integer = 0 To list.Item(j).Attributes.Count - 1
+                                            Dim a As String = UCase(list.Item(j).Attributes.Item(i).Name)
+                                            If a.StartsWith("PARAMETRE") Then
+                                                Dim idx As Integer = Mid(a, 10, Len(a) - 9)
+                                                If idx < _drv.Parametres.Count Then
+                                                    _drv.Parametres.Item(idx).valeur = list.Item(j).Attributes.Item(i).Value
+                                                End If
                                             End If
-                                        End If
-                                        a = Nothing
-                                    Next
+                                            a = Nothing
+                                        Next
 
-                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _drv.Nom & " chargé")
-                                    _drv = Nothing
-                                End If
-                            Next
-                        Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun driver n'est enregistré dans le fichier de config")
-                        End If
+                                        Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _drv.Nom & " chargé")
+                                        _drv = Nothing
+                                    End If
+                                Next
+                            Else
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun driver n'est enregistré dans le fichier de config")
+                            End If
                         Catch ex As Exception
                             Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des drivers : " & ex.ToString)
                         End Try
@@ -1296,6 +1302,9 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("voice")
                 writer.WriteValue(_Voice)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("saverealtime")
+                writer.WriteValue(_SaveRealTime)
                 writer.WriteEndAttribute()
                 writer.WriteEndElement()
 
@@ -3261,6 +3270,14 @@ Namespace HoMIDom
         End Sub
 
         ''' <summary>
+        ''' Demande au serveur si on sauvegarde en temps réel
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Function GetSaveRealTime() As Boolean Implements IHoMIDom.GetSaveRealTime
+            Return _SaveRealTime
+        End Function
+
+        ''' <summary>
         ''' Retourne la liste des ports com dispo sur le serveur
         ''' </summary>
         ''' <returns></returns>
@@ -4187,6 +4204,7 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).Id = driverId Then
                         _ListDrivers.RemoveAt(i)
+                        SaveRealTime()
                         Return 0
                         Exit For
                     End If
@@ -4411,6 +4429,7 @@ Namespace HoMIDom
                                 _ListDrivers.Item(i).parametres.item(j).valeur = Parametres.Item(j)
                             Next
                         End If
+                        SaveRealTime()
                     End If
                 Next
                 'génération de l'event
@@ -4763,6 +4782,7 @@ Namespace HoMIDom
                         'Supprime l'historique du device dans la bdd
                         DeleteDeviceToBD(deviceId)
 
+                        SaveRealTime()
                         DeleteDevice = 0
                         Exit Function
                     End If
@@ -5171,6 +5191,7 @@ Namespace HoMIDom
                     End Select
 
                     _ListDevices.Add(MyNewObj)
+                    SaveRealTime()
 
                     'Libére la mémoire de la variable
                     MyNewObj = Nothing
@@ -5209,6 +5230,7 @@ Namespace HoMIDom
                                 _ListDevices.Item(i).ValueMin = valuemin
                                 _ListDevices.Item(i).ValueDef = valuedef
                             End If
+                            SaveRealTime()
                             Exit For 'on a trouvé le device, on arrete donc de le chercher.
                         End If
                     Next
@@ -5242,7 +5264,6 @@ Namespace HoMIDom
                                 _ListDevices.Item(i).ListCommanddata.removeat(j)
                                 _ListDevices.Item(i).ListCommandrepeat.removeat(j)
                                 Return 0
-                                'génération de l'event
                                 Exit Function
                             End If
                         Next
@@ -5286,6 +5307,7 @@ Namespace HoMIDom
                             _ListDevices.Item(i).listcommanddata.add(CmdData)
                             _ListDevices.Item(i).listcommandrepeat.add(CmdRepeat)
                         End If
+                        SaveRealTime()
                     End If
                 Next
                 Return 0
@@ -5763,6 +5785,7 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListZones.Count - 1
                     If _ListZones.Item(i).ID = zoneId Then
                         _ListZones.RemoveAt(i)
+                        SaveRealTime()
                         DeleteZone = 0
                         Exit Function
                     End If
@@ -5906,6 +5929,7 @@ Namespace HoMIDom
                     End With
                     myID = x.ID
                     _ListZones.Add(x)
+                    SaveRealTime()
                 Else
                     'zone Existante
                     myID = zoneId
@@ -5915,6 +5939,7 @@ Namespace HoMIDom
                             _ListZones.Item(i).Icon = icon
                             _ListZones.Item(i).Image = image
                             _ListZones.Item(i).ListElement = ListElement
+                            SaveRealTime()
                         End If
                     Next
                 End If
@@ -6068,6 +6093,7 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListMacros.Count - 1
                     If _ListMacros.Item(i).ID = macroId Then
                         _ListMacros.RemoveAt(i)
+                        SaveRealTime()
                         DeleteMacro = 0
                         Exit Function
                     End If
@@ -6143,6 +6169,7 @@ Namespace HoMIDom
                     End With
                     myID = x.ID
                     _ListMacros.Add(x)
+                    SaveRealTime()
                 Else
                     'macro Existante
                     myID = macroId
@@ -6152,6 +6179,7 @@ Namespace HoMIDom
                             _ListMacros.Item(i).Enable = enable
                             _ListMacros.Item(i).Description = description
                             _ListMacros.Item(i).ListActions = listactions
+                            SaveRealTime()
                         End If
                     Next
                 End If
@@ -6235,6 +6263,7 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListTriggers.Count - 1
                     If _ListTriggers.Item(i).ID = triggerId Then
                         _ListTriggers.RemoveAt(i)
+                        SaveRealTime()
                         DeleteTrigger = 0
                         Exit Function
                     End If
@@ -6333,6 +6362,7 @@ Namespace HoMIDom
                     End With
                     myID = x.ID
                     _ListTriggers.Add(x)
+                    SaveRealTime()
                     x = Nothing
                 Else
                     'trigger Existante
@@ -6352,6 +6382,7 @@ Namespace HoMIDom
                                     _ListTriggers.Item(i).ConditionDeviceProperty = deviceproperty
                             End Select
                             If macro IsNot Nothing Then _ListTriggers.Item(i).ListMacro = macro
+                            SaveRealTime()
                         End If
                     Next
                 End If
@@ -6398,6 +6429,7 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListUsers.Count - 1
                     If _ListUsers.Item(i).ID = userId Then
                         _ListUsers.RemoveAt(i)
+                        SaveRealTime()
                         DeleteUser = 0
                         Exit Function
                     End If
@@ -6527,6 +6559,7 @@ Namespace HoMIDom
                     End With
                     myID = x.ID
                     _ListUsers.Add(x)
+                    SaveRealTime()
                 Else
                     'user Existant
                     myID = userId
@@ -6547,6 +6580,7 @@ Namespace HoMIDom
                             _ListUsers.Item(i).TelMobile = TelMobile
                             _ListUsers.Item(i).UserName = UserName
                             _ListUsers.Item(i).Ville = Ville
+                            SaveRealTime()
                         End If
                     Next
                 End If

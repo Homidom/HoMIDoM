@@ -228,6 +228,8 @@ Class Window1
                 End Try
                 IsConnect = True
                 Tabcontrol1.SelectedIndex = 0
+                My.Settings.SaveRealTime = myService.GetSaveRealTime
+                My.Settings.Save()
                 AffDriver()
                 ShowMainMenu()
             End If
@@ -2387,7 +2389,6 @@ Class Window1
                     Exit Sub
                 Else
                     FlagChange = True
-                    SaveRealTime()
                 End If
 
             Else

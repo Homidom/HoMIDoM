@@ -56,7 +56,6 @@
             End If
 
             FlagChange = True
-            SaveRealTime()
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'enregistrement de la macro, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
