@@ -19,6 +19,7 @@
 
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
+
         Try
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             Select Case TypeElement
