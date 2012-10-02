@@ -17,50 +17,55 @@
                                 <StackPanel >
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" Height="28" HorizontalAlignment="Left" Name="Label19" VerticalAlignment="Top" Width="67">Id Serveur:</Label>
-                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtIdSrv" Width="100" ToolTip="Id du serveur" />
+                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtIdSrv" Width="150" ToolTip="Id du serveur" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" Height="28" HorizontalAlignment="Left" Name="Label28" VerticalAlignment="Top" Width="67">IP SOAP:</Label>
-                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtIPSOAP" Width="100" ToolTip="Permet de modifier le port SOAP du serveur à son prochain démarrage" />
+                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtIPSOAP" Width="150" ToolTip="Permet de modifier le port SOAP du serveur à son prochain démarrage" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" Height="28" HorizontalAlignment="Left" Name="Label8" VerticalAlignment="Top" Width="67">Port SOAP:</Label>
-                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtSOAP" Width="100" ToolTip="Permet de modifier le port SOAP du serveur à son prochain démarrage" />
+                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtSOAP" Width="150" ToolTip="Permet de modifier le port SOAP du serveur à son prochain démarrage" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
                                         <Label HorizontalAlignment="Left" Name="Label1" Width="67" Foreground="White" VerticalAlignment="Top">Longitude:</Label>
-                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtLong" Height="20" HorizontalAlignment="Left" Width="100" />
+                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtLong" Height="20" HorizontalAlignment="Left" Width="150" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" HorizontalAlignment="Left"  Name="Label2" Width="67">Latitude:</Label>
-                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtLat" HorizontalAlignment="Left" Width="100" Height="20" />
+                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtLat" HorizontalAlignment="Left" Width="150" Height="20" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" Name="Label3" Width="190">Correction Heure Lever Soleil:</Label>
-                                        <TextBox Background="DarkGray"  BorderBrush="Black" Foreground="White" Name="HCL" Width="25" Height="20">0</TextBox>
+                                        <TextBox Background="DarkGray"  BorderBrush="Black" Foreground="White" Name="HCL" Width="26" Height="20" TextAlignment="center" Text="0" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" Name="Label4" Width="190">Correction Heure Coucher Soleil:</Label>
-                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="HCC" Text="0"></TextBox>
+                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="26" Name="HCC" Text="0" TextAlignment="center" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
-                                        <Label Foreground="White" Name="Label15" >Enregistrer automatiquement (minutes), 0=Inactif:</Label>
-                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="TxtSave" Text="0"></TextBox>
+                                        <Label Foreground="White" Name="Label15" Width="190">Sauvegarder automatiquement:</Label>
+                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="TxtSave" Text="0"  TextAlignment="center" />
+                                        <Label Foreground="White"> (en minutes, 0=Inactif)</Label>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="center">
+                                        <Label Foreground="White" Width="190">Sauvegarder en temps réel:</Label>
+                                        <CheckBox Name="ChKSaveRealTime" IsChecked="True" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
-                                        <CheckBox Content="Sauvegarder en temps réel" Name="ChKSaveRealTime" IsChecked=" True" Foreground="White" />
+                                        <Label Foreground="White" Width="190">Menu principal, afficher:</Label>
+                                        <StackPanel>
+                                            <CheckBox Name="ChKShowLogError" Content="Logs en Erreur  " Height="15" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" IsChecked="True" />
+                                            <CheckBox Name="ChkShowDeviceNoMaJ" Content="Composants non à jour" Height="15" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" IsChecked="True" />
+                                        </StackPanel>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" >
-                                        <Label Foreground=" White" Content="Voix par défaut: " />
-                                        <ComboBox Name="CbVoice" Width="150" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" >
-                                        <CheckBox Name="ChKShowLogError" Content="Afficher Log Erreur  " Foreground="White"/>
-                                        <CheckBox Name="ChkShowDeviceNoMaJ" Content="Afficher Devices Non à jour" Foreground="White"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Foreground=" White" Content="Voix par défaut:" VerticalAlignment="center" Width="100"/>
+                                        <ComboBox Name="CbVoice" Width="150" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="24" />
                                     </StackPanel>
                                 </StackPanel>
                             </GroupBox>
-                            <GroupBox Name="GroupBox4" Width="389" Margin="2" Height="189">
+                            <GroupBox Name="GroupBox4" Width="389" Margin="2" Height="169">
                                 <GroupBox.Header>
                                     <Label Foreground="White" FontWeight="Bold">Paramètres Log</Label>
                                 </GroupBox.Header>
@@ -68,13 +73,13 @@
                                     <StackPanel >
                                         <StackPanel Orientation="Horizontal" >
                                             <Label Content="Taille max du fichier Log (Ko):" Name="Label22" Margin="1" Foreground="White" Width="180" />
-                                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="24" Name="TxtFile" Width="143" />
+                                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Name="TxtFile" Width="143" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" >
                                             <Label Content="Conservation ancien log (mois):" Name="Label14" Margin="1" Foreground="White" Width="180" />
-                                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="24" Name="TxtMaxLogMonth" Width="50" />
+                                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Name="TxtMaxLogMonth" Width="50" />
                                         </StackPanel>
-                                        <GroupBox Height="99">
+                                        <GroupBox Height="90">
                                             <GroupBox.Header>
                                                 <Label Foreground="White" FontWeight="Bold">Type de Log à prendre en compte</Label>
                                             </GroupBox.Header>
@@ -115,8 +120,8 @@
                                     <Label Content="Password:" Height="27" HorizontalAlignment="Left" Margin="0,63,0,0" Name="Label13" VerticalAlignment="Top" Width="100" Foreground="White" />
                                     <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,2,0,0" Name="TxtMail" VerticalAlignment="Top" Width="230" />
                                     <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,24,0,0" Name="TxtAdresse" VerticalAlignment="Top" Width="230" />
-                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,46,0,0" Name="TxtLogin" VerticalAlignment="Top" Width="158" />
-                                    <PasswordBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,68,0,0" Name="TxtPassword" VerticalAlignment="Top" Width="158" />
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,46,0,0" Name="TxtLogin" VerticalAlignment="Top" Width="230" />
+                                    <PasswordBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,68,0,0" Name="TxtPassword" VerticalAlignment="Top" Width="230" />
                                 </Grid>
                             </GroupBox>
                         </StackPanel>
