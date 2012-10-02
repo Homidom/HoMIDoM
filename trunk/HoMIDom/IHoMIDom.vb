@@ -16,6 +16,14 @@ Namespace HoMIDom
 
 
 #Region "Serveur"
+
+        ''' <summary>
+        ''' Indique au serveur si on enregistre en temps réel
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetSaveRealTime(ByVal Value As Boolean)
+
         ''' <summary>
         ''' Retourne la liste des ports com dispo sur le serveur
         ''' </summary>
