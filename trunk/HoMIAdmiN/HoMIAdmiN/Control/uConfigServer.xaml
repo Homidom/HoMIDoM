@@ -48,6 +48,9 @@
                                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="TxtSave" Text="0"></TextBox>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
+                                        <CheckBox Content="Sauvegarder en temps réel" Name="ChKSaveRealTime" IsChecked=" True" Foreground="White" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" >
                                         <Label Foreground=" White" Content="Voix par défaut: " />
                                         <ComboBox Name="CbVoice" Width="150" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" />
                                     </StackPanel>

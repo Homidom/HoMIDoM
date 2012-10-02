@@ -21,6 +21,7 @@ Partial Public Class uUser
 
             myservice.SaveUser(IdSrv, _UserId, TxtUsername.Text, TxtPassword.Password, ComboProfil.SelectedIndex, TxtNom.Text, TxtPrenom.Text, TxtIden.Text, ImgIcon.Tag, TxteMail.Text, TxteMailAutre.Text, TxtTelFixe.Text, TxtTelMobile.Text, TxtTelAutre.Text, TxtAdresse.Text, TxtVille.Text, TxtCodePostal.Text)
             FlagChange = True
+            SaveRealTime()
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'enregistrement du user, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)

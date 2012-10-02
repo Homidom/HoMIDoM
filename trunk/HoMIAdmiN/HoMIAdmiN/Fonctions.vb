@@ -29,4 +29,10 @@ Module Fonctions
         Return bValid
     End Function
 
+    Public Sub SaveRealTime()
+        If IsConnect And My.Settings.SaveRealTime Then
+            Dim retour As String = myService.SaveConfig(IdSrv)
+            If retour = "0" Then FlagChange = False
+        End If
+    End Sub
 End Module

@@ -169,13 +169,13 @@
 
             If _Action = EAction.Nouveau Then
                 myservice.SaveTrigger(IdSrv, "", TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
-                FlagChange = True
-                RaiseEvent CloseMe(Me)
             Else
-                myservice.SaveTrigger(IdSrv, _TriggerId, TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
-                FlagChange = True
-                RaiseEvent CloseMe(Me)
+                myService.SaveTrigger(IdSrv, _TriggerId, TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
             End If
+
+            FlagChange = True
+            SaveRealTime()
+            RaiseEvent CloseMe(Me)
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'enregistrement du trigger, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
