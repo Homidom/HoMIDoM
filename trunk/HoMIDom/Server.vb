@@ -2697,7 +2697,7 @@ Namespace HoMIDom
                 If _CycleSave > 0 Then SaveConfig(_MonRepertoire & "\config\homidom.xml")
 
                 TimerSecond.Enabled = False
-                RemoveHandler TimerSecond.Elapsed, AddressOf TimerSecTick
+                'RemoveHandler TimerSecond.Elapsed, AddressOf TimerSecTick
                 TimerSecond.Dispose()
 
                 '----- Arrete les devices ----- 
