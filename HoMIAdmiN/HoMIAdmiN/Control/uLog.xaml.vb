@@ -70,7 +70,7 @@ Partial Public Class uLog
                 MessageBox.Show("Erreur: " & ex.ToString)
             End Try
 
-            'Supression du fichier temporaire
+
             Me.Cursor = Nothing
         Catch ex As Exception
             MessageBox.Show("Erreur lors de la récuppération du fichier log: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -154,5 +154,35 @@ Partial Public Class uLog
         End Try
     End Sub
 
+    Private Sub ExportLog()
+        Try
+            ' Configure open file dialog box
+            Dim dlg As New Microsoft.Win32.SaveFileDialog()
+            dlg.FileName = "Log" ' Default file name
+            dlg.DefaultExt = ".txt" ' Default file extension
+            dlg.Filter = "Fichier log (.txt)|*.txt" ' Filter files by extension
+            ' Show open file dialog box
+            Dim result As Boolean = dlg.ShowDialog()
+            ' Process open file dialog box results
+            If result = True Then
+                ' Open document
+                Dim filename As String = dlg.FileName
+                Dim retour As String = myService.ReturnLog
+                If retour.StartsWith("ERREUR") Then
+                    MessageBox.Show(retour, "Erreur ReturnLog", MessageBoxButton.OK, MessageBoxImage.Error)
+                Else
+                    Dim TargetFile As StreamWriter
+                    TargetFile = New StreamWriter(filename, False)
+                    TargetFile.Write(retour)
+                    TargetFile.Close()
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur ExportLog: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
 
+    Private Sub BtnExportLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnExportLog.Click
+        ExportLog()
+    End Sub
 End Class
