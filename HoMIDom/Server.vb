@@ -2693,6 +2693,8 @@ Namespace HoMIDom
                 'on change l'etat du server pour ne plus lancer de traitement
                 Etat_server = False
 
+                If _CycleSave > 0 Then SaveConfig(_MonRepertoire & "\config\homidom.xml")
+
                 TimerSecond.Enabled = False
                 RemoveHandler TimerSecond.Elapsed, AddressOf TimerSecTick
                 TimerSecond.Dispose()
@@ -2723,7 +2725,7 @@ Namespace HoMIDom
                 '    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Medias : " & retour)
                 'End If
 
-                If _CycleSave > 0 Then SaveConfig(_MonRepertoire & "\config\homidom.xml")
+
 
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Stop", "Serveur Arrêté")
             Catch ex As Exception
