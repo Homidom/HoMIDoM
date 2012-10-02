@@ -2,6 +2,7 @@
 Imports HoMIDom.HoMIDom.Api
 Imports System.IO
 Imports System.IO.Ports
+Imports System.Text.RegularExpressions
 
 Partial Public Class uDriver
     '--- Variables ------------------
@@ -166,8 +167,32 @@ Partial Public Class uDriver
             'verif of PORT_COM
             If TxtCom.Text <> "" And TxtCom.Text <> "@" Then
                 If Not (TxtCom.Text.StartsWith("COM") Or TxtCom.Text.StartsWith("USB")) Then
-                    verif = False
                     MessageBox.Show("Le Champ COM doit être configuré avec COMx ou USBx (ou x est un entier)", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Exit Sub
+                End If
+            End If
+            If TxtPortTCP.Text <> "" And TxtPortTCP.Text <> "@" Then
+                If IsValidPortIP(TxtPortTCP.Text) = False Then
+                    MessageBox.Show("Le Port TCP doit être compris entre 0 et 65535", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Exit Sub
+                End If
+            End If
+            If TxtPortUDP.Text <> "" And TxtPortUDP.Text <> "@" Then
+                If IsValidPortIP(TxtPortUDP.Text) = False Then
+                    MessageBox.Show("Le Port UDP doit être compris entre 0 et 65535", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Exit Sub
+                End If
+            End If
+            If TxtAdrTCP.Text <> "" And TxtAdrTCP.Text <> "@" Then
+                If IsValidIP(TxtAdrTCP.Text) = False Then
+                    MessageBox.Show("L'adresse IP doit être au format xx.xx.xx.xx", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Exit Sub
+                End If
+            End If
+            If TxtAdrUDP.Text <> "" And TxtAdrUDP.Text <> "@" Then
+                If IsValidIP(TxtAdrUDP.Text) = False Then
+                    MessageBox.Show("L'adresse UDP doit être au format xx.xx.xx.xx", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Exit Sub
                 End If
             End If
 
@@ -325,4 +350,58 @@ Partial Public Class uDriver
     Private Sub BtnHelp_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnHelp.Click
         MessageBox.Show(BtnHelp.ToolTip, "Aide", MessageBoxButton.OK, MessageBoxImage.Question)
     End Sub
+
+    Private Function IsValidIP(ByVal addr As String) As Boolean
+        If addr = "" Or addr = " " Then
+            Return True
+            Exit Function
+        End If
+
+        'create our match pattern
+        Dim pattern As String = "^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\." & _
+        "([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$"
+        'create our Regular Expression object
+        Dim check As New Text.RegularExpressions.Regex(pattern)
+        'boolean variable to hold the status
+        Dim valid As Boolean = False
+        'check to make sure an ip address was provided
+        If addr = "" Then
+            'no address provided so return false
+            valid = False
+        Else
+            'address provided so use the IsMatch Method
+            'of the Regular Expression object
+            valid = check.IsMatch(addr, 0)
+        End If
+        'return the results
+        Return (valid)
+    End Function
+
+    Private Function IsValidPortIP(ByVal addr As String) As Boolean
+        Dim valid As Boolean = False
+        Dim _addr As Integer
+
+        If addr = "" Or addr = " " Then
+            Return True
+            Exit Function
+        End If
+
+        If IsNumeric(addr) = False Then
+            valid = False
+        Else
+            _addr = CInt(addr)
+            If _addr < 0 Then
+                valid = False
+            Else
+                If _addr > 65535 Then
+                    valid = False
+                Else
+                    valid = True
+                End If
+            End If
+        End If
+
+        Return valid
+    End Function
+
 End Class
