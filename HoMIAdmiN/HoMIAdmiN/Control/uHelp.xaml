@@ -100,7 +100,9 @@
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="left" >
                                 <GroupBox Header="Version des Drivers" Height="370" Name="GroupBox1" Width="230" Foreground="white" Margin="3">
                                     <Grid>
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto">
                                         <TextBlock Name="listesversionsdrivers" Text="Recherche en cours..." Foreground="white" IsManipulationEnabled="True" />
+                                        </ScrollViewer>
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Header="Détail des Programmes" Height="370" Name="GroupBox2" Width="230" Foreground="white" Margin="3">
