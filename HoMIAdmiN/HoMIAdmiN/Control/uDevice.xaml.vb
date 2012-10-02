@@ -81,6 +81,7 @@ Partial Public Class uDevice
 
                     CbType.SelectedValue = x.Type.ToString
                     CbType.IsEnabled = False
+                    CbType.Foreground = Brushes.Black
                     BtnRead.Visibility = Windows.Visibility.Visible
                     TxtAdresse1.Text = x.Adresse1
                     TxtAdresse2.Text = x.Adresse2
