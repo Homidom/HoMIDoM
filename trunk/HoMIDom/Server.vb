@@ -1210,7 +1210,7 @@ Namespace HoMIDom
                     Dim _file As String = Fichier.Replace(".xml", "")
                     If IO.File.Exists(_file & ".sav") = True Then IO.File.Delete(_file & ".sav")
                     IO.File.Copy(_file & ".xml", _file & ".sav")
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création de sauvegarde (.sav) du fichier de config avant sauvegarde")
+                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "LoadConfig", "Création de sauvegarde (.sav) du fichier de config avant sauvegarde")
                 Catch ex As Exception
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
                 End Try
@@ -1223,7 +1223,7 @@ Namespace HoMIDom
 
                 writer.WriteStartElement("homidom")
 
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des paramètres serveur")
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des paramètres serveur")
                 ''------------ server
                 writer.WriteStartElement("server")
                 writer.WriteStartAttribute("ipsoap")
@@ -1300,7 +1300,7 @@ Namespace HoMIDom
                 ''-------------------
                 ''------------drivers
                 ''------------------
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des drivers")
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des drivers")
                 writer.WriteStartElement("drivers")
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     writer.WriteStartElement("driver")
@@ -1361,7 +1361,7 @@ Namespace HoMIDom
                 ''------------
                 ''Sauvegarde des zones
                 ''------------
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des zones")
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des zones")
                 writer.WriteStartElement("zones")
                 For i As Integer = 0 To _ListZones.Count - 1
                     writer.WriteStartElement("zone")
@@ -1396,7 +1396,7 @@ Namespace HoMIDom
                 ''------------
                 ''Sauvegarde des users
                 ''------------
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des users")
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des users")
                 writer.WriteStartElement("users")
                 For i As Integer = 0 To _ListUsers.Count - 1
                     writer.WriteStartElement("user")
@@ -1462,7 +1462,7 @@ Namespace HoMIDom
                 ''------------
                 ''Sauvegarde des devices
                 ''------------
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des devices")
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des devices")
                 writer.WriteStartElement("devices")
                 For i As Integer = 0 To _ListDevices.Count - 1
                     'Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", " - " & _ListDevices.Item(i).name)
@@ -1564,7 +1564,7 @@ Namespace HoMIDom
                 ''------------
                 ''Sauvegarde des triggers
                 ''------------
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des triggers")
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des triggers")
                 writer.WriteStartElement("triggers")
                 For i As Integer = 0 To _ListTriggers.Count - 1
                     writer.WriteStartElement("trigger")
@@ -1619,7 +1619,7 @@ Namespace HoMIDom
                 ''------------
                 ''Sauvegarde des macros
                 ''------------
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des macros")
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des macros")
                 writer.WriteStartElement("macros")
                 For i As Integer = 0 To _ListMacros.Count - 1
                     writer.WriteStartElement("macro")
@@ -1643,7 +1643,7 @@ Namespace HoMIDom
 
                 writer.WriteEndDocument()
                 writer.Close()
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde terminée")
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde terminée")
                 Return True
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: " & ex.Message)
