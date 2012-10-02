@@ -49,6 +49,7 @@ Partial Public Class uConfigServer
                 tmpSave = Format(tmpSave, "#0")
                 Dim retour As String = myService.SetTimeSave(IdSrv, tmpSave)
                 If retour <> "0" Then MessageBox.Show(retour, "Erreur SetTimeSave")
+
                 myService.SetLongitude(IdSrv, CDbl(TxtLong.Text.Replace(".", ",")))
                 myService.SetLatitude(IdSrv, CDbl(TxtLat.Text.Replace(".", ",")))
                 myService.SetHeureCorrectionLever(IdSrv, CInt(HCL.Text))
@@ -60,6 +61,7 @@ Partial Public Class uConfigServer
                 myService.SetMaxFileSizeLog(CDbl(TxtFile.Text))
                 myService.SetMaxMonthLog(CDbl(TxtMaxLogMonth.Text))
                 myService.SetDefautVoice(CbVoice.Text)
+                myService.SetSaveRealTime(ChKSaveRealTime.IsChecked)
 
                 Dim _list As New List(Of Boolean)
                 If ChkTyp0.IsChecked Then

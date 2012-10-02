@@ -67,6 +67,7 @@ Namespace HoMIDom
         <NonSerialized()> Shared _Voice As String  'Voix par défaut
         <NonSerialized()> Private Shared _OsPlatForm As String  '32 ou 64 bits
         Private Shared lock_logwrite As New Object
+        <NonSerialized()> Shared _SaveRealTime As Boolean = True 'True si on enregistre en temps réel
 
 #End Region
 
@@ -2694,7 +2695,7 @@ Namespace HoMIDom
                 'on change l'etat du server pour ne plus lancer de traitement
                 Etat_server = False
 
-                If _CycleSave > 0 Then SaveConfig(_MonRepertoire & "\config\homidom.xml")
+                If _CycleSave > 0 Or _SaveRealTime Then SaveConfig(_MonRepertoire & "\config\homidom.xml")
 
                 TimerSecond.Enabled = False
                 'RemoveHandler TimerSecond.Elapsed, AddressOf TimerSecTick
@@ -3249,6 +3250,15 @@ Namespace HoMIDom
 
         '*** FONCTIONS ******************************************
 #Region "Serveur"
+
+        ''' <summary>
+        ''' Indique au serveur si on sauvegarde en temps réel
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        Public Sub SetSaveRealTime(ByVal Value As Boolean) Implements IHoMIDom.SetSaveRealTime
+            _SaveRealTime = Value
+        End Sub
 
         ''' <summary>
         ''' Retourne la liste des ports com dispo sur le serveur
