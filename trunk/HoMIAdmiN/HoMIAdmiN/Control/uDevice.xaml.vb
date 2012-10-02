@@ -148,6 +148,7 @@ Partial Public Class uDevice
                         CbDriver.IsEditable = False
                         CbDriver.IsReadOnly = True
                         CbDriver.IsEnabled = False
+                        CbDriver.Foreground = Brushes.Black
                         ChkEnable.Visibility = Windows.Visibility.Collapsed
                         ChKSolo.Visibility = Windows.Visibility.Collapsed
                         TxtAdresse1.Visibility = Windows.Visibility.Collapsed

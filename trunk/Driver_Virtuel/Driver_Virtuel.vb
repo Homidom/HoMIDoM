@@ -603,6 +603,10 @@ Imports HoMIDom.HoMIDom.Device
             _DeviceSupport.Add(ListeDevices.LAMPE)
             _DeviceSupport.Add(ListeDevices.SWITCH)
             _DeviceSupport.Add(ListeDevices.APPAREIL)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
+            _DeviceSupport.Add(ListeDevices.GENERIQUESTRING)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE)
+
 
             'Parametres avancés
             'add_paramavance("nom", "Description", valeupardefaut)
