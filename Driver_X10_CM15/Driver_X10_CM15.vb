@@ -337,19 +337,18 @@ Public Class Driver_X10_CM15
         Try
             Dim TypeDev As String = "sendplc"
 
-            'Select Case Objet.Adresse2.ToString
-            '    Case "0" Or " " Or ""
-            '        TypeDev = "sendplc"
-            '    Case "1"
-            '        TypeDev = "sendrf"
-            '    Case "2"
-            '        TypeDev = "sendsecurerf"
-            '    Case "3"
-            '        TypeDev = "sendsecurehomecontrolrf"
-            '    Case Else
-            '        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur le type de device (adresse2) est inconnu (0--3): " & Objet.adresse2)
-            '        Exit Sub
-            'End Select
+            Select Case Objet.Adresse2.ToString
+                Case "0" Or " " Or ""
+                    TypeDev = "sendplc"
+                Case "1"
+                    TypeDev = "sendrf"
+                Case "2"
+                    TypeDev = "sendsecurerf"
+                Case "3"
+                    TypeDev = "sendsecurehomecontrolrf"
+                Case Else
+                    TypeDev = "sendplc"
+            End Select
             If Commande = "ON" Then
                 ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " on")
             End If
