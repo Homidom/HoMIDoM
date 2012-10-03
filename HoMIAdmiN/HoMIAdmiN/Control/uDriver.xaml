@@ -58,7 +58,7 @@
                         <Label Foreground="White" Name="Label8" VerticalAlignment="Top" Width="100">Modele:</Label>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                        <ComboBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtCom" Width="84">0</ComboBox>
+                        <ComboBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtCom" Width="84" IsEditable="True">0</ComboBox>
                         <Rectangle Width="10"  Name="rectcom2" />
                         <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtRefresh" HorizontalAlignment="Right" Width="84">0</TextBox>
                         <Rectangle Width="10" />
@@ -112,7 +112,7 @@
                 </StackPanel>
             </StackPanel>
         </Border>
-        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Source="/HoMIAdmiN;component/Images/Defaut_128.png">
+        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgDevice" Width="60" VerticalAlignment="Top" Source="/HoMIAdmiN;component/Images/Defaut_128.png">
             <Image.LayoutTransform >
                 <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
             </Image.LayoutTransform>
