@@ -392,7 +392,7 @@ Imports System.IO.Ports
         Dim sendtwice As Boolean = False
         Try
             If _Enable = False Then Exit Sub
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Write", "Ecriture de " & Objet.Name)
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Write", "Ecriture de " & Objet.Name)
             If Parametre1 Is Nothing Then Parametre1 = 0
             If Parametre2 Is Nothing Then Parametre2 = 0
             If Objet.type = "APPAREIL" Or Objet.type = "LAMPE" Then sendtwice = True

@@ -810,7 +810,7 @@ Class Window1
         End Try
     End Sub
 
-    'Afficher la liste des devices
+    'Afficher la liste des composants
     Public Sub AffDevice()
         Try
             TreeViewDevice.Items.Clear()
@@ -847,7 +847,7 @@ Class Window1
                         End If
                     End If
                 Else
-                    label.Foreground = New SolidColorBrush(Colors.Yellow)
+                    label.Foreground = New SolidColorBrush(Colors.Black)
                 End If
                 label.Content = Dev.Name & " (" & nomdriver & ")"
 

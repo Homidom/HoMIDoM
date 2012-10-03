@@ -391,9 +391,14 @@ Public Class Driver_Arduino
                 AddHandler ArduinoVB.VersionInfoReceieved, AddressOf FirmataVB1_VersionInfoReceieved 'Evènement lorsque la carte envoi sa version
 
                 'Connexion à la carte
-                ArduinoVB.Connect(_Com, _Baud)
+                Try
+                    ArduinoVB.Connect(_Com, _Baud)
+                    Threading.Thread.Sleep(1000)
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur lors de la connexion au port COM: " & ex.ToString)
+                    _IsConnect = False
+                End Try
 
-                Threading.Thread.Sleep(1000)
 
                 'Si le port de communication est ouvert
                 If ArduinoVB.PortOpen = True Then
