@@ -46,7 +46,7 @@ Namespace HoMIDom
 
                             If x.Parametres.Count > 1 Then
                                 Dim param1 As New DeviceAction.Parametre
-                                param1.Value = x.Parametres.Item(1)
+                                param1.Value = x.Parametres.Item(0)
                                 y.Parametres.Add(param1)
                             End If
                         Else
