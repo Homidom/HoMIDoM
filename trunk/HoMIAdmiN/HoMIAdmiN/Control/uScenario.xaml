@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="550" Background="Black" MinWidth="400" MinHeight="200" MaxWidth="700" Name="uScenario" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
+             d:DesignHeight="200" d:DesignWidth="550" Background="Black" MinWidth="400" MinHeight="200" Name="uScenario" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
     <Grid>
         <DockPanel >
             <StackPanel DockPanel.Dock="Top" CanHorizontallyScroll="True" CanVerticallyScroll="True">
@@ -35,13 +35,13 @@
 
             <Canvas Width="5" DockPanel.Dock="Right"  />
 
-            <ScrollViewer DockPanel.Dock="Top"  Name="ScrollViewer2"  HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" MaxWidth="600">
+            <ScrollViewer DockPanel.Dock="Top"  Name="ScrollViewer2"  HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" >
                 <StackPanel CanHorizontallyScroll="True">
                     <StackPanel HorizontalAlignment="Left"  Name="StckPnlLib" VerticalAlignment="Top" Orientation="Horizontal" Background="DarkGray" CanHorizontallyScroll="True"/>
                     <StackPanel Background="DarkGray" Height="22" HorizontalAlignment="Left"  Name="StckPnlLibTr" Orientation="Horizontal" VerticalAlignment="Top" CanHorizontallyScroll="True"  />
                 </StackPanel>
             </ScrollViewer>
-            <ScrollViewer  MinHeight="100" MaxWidth="600" Name="ScrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" AllowDrop="True"  >
+            <ScrollViewer  MinHeight="100" Name="ScrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" AllowDrop="True"  >
                 <StackPanel HorizontalAlignment="Left" MinHeight="100" Name="StackPanel1" VerticalAlignment="Top"  CanHorizontallyScroll=" True" CanVerticallyScroll=" True"/>
             </ScrollViewer>
             

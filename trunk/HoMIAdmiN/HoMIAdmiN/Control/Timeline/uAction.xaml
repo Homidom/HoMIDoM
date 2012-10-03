@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Height="50" Width="215">
+             mc:Ignorable="d" Height="50" Width="915">
     <Grid>
         <Canvas Name="Fond" Background="#FFC2CCDB" Margin="2">
             <Canvas Width="161" Height="46" Name="Rectangle1">
