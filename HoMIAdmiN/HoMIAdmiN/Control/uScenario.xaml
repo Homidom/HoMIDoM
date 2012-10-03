@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="450" Background="Black" MinWidth="400" MinHeight="200" Width="Auto" Name="uScenario">
+             d:DesignHeight="200" d:DesignWidth="550" Background="Black" MinWidth="400" MinHeight="200" MaxWidth="700" Name="uScenario" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" VerticalContentAlignment="Top">
     <Grid>
         <DockPanel >
             <StackPanel DockPanel.Dock="Top" CanHorizontallyScroll="True" CanVerticallyScroll="True">
@@ -20,7 +20,7 @@
                     <Image Source="/HoMIAdmiN;component/Images/Log_Homidom.png" Height="32" Width="32" ToolTip="Log Homidom" Name="ImgActLogHomidom"></Image>
                     <Image Source="/HoMIAdmiN;component/Images/command_prompt_64.png" Height="32" Width="32" ToolTip="Commande Dos" Name="ImgActDos"></Image>
                     <Image Source="/HoMIAdmiN;component/Images/VBS.png" Height="32" Width="32" ToolTip="Script VB" Name="ImgActVB"></Image>
-                <Rectangle Width="50"/>
+                    <Rectangle Width="50"/>
                     <Image Name="ZoomPlus" Source="/HoMIAdmiN;component/Images/zoom_avant_32.png" Width="23" Height="23" />
                     <Image Name="ZoomMoins" Source="/HoMIAdmiN;component/Images/zoom_arriere_32.png" Width="23" Height="23" />
             </StackPanel>
@@ -35,14 +35,14 @@
 
             <Canvas Width="5" DockPanel.Dock="Right"  />
 
-            <ScrollViewer DockPanel.Dock="Top"  Name="ScrollViewer2" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+            <ScrollViewer DockPanel.Dock="Top"  Name="ScrollViewer2"  HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" MaxWidth="600">
                 <StackPanel CanHorizontallyScroll="True">
                     <StackPanel HorizontalAlignment="Left"  Name="StckPnlLib" VerticalAlignment="Top" Orientation="Horizontal" Background="DarkGray" CanHorizontallyScroll="True"/>
                     <StackPanel Background="DarkGray" Height="22" HorizontalAlignment="Left"  Name="StckPnlLibTr" Orientation="Horizontal" VerticalAlignment="Top" CanHorizontallyScroll="True"  />
                 </StackPanel>
             </ScrollViewer>
-            <ScrollViewer MinHeight="100"  MinWidth="300"  Name="ScrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" AllowDrop="True" VerticalAlignment="Stretch" HorizontalAlignment="Left" >
-                <StackPanel HorizontalAlignment="Left" Name="StackPanel1" VerticalAlignment="Top" MinHeight="100" CanHorizontallyScroll=" True" CanVerticallyScroll=" True"/>
+            <ScrollViewer  MinHeight="100" MaxWidth="600" Name="ScrollViewer1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" AllowDrop="True"  >
+                <StackPanel HorizontalAlignment="Left" MinHeight="100" Name="StackPanel1" VerticalAlignment="Top"  CanHorizontallyScroll=" True" CanVerticallyScroll=" True"/>
             </ScrollViewer>
             
         </DockPanel>

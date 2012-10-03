@@ -5674,8 +5674,10 @@ Namespace HoMIDom
                                     Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "effectué: " & x.Name & " Command: " & Action.Nom & " Parametre: " & Action.Parametres.Item(0).Value)
                                 Case 2
                                     _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value)
+                                    Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "effectué: " & x.Name & " Command: " & Action.Nom & " Parametre0: " & Action.Parametres.Item(0).Value & " Parametre1: " & Action.Parametres.Item(1).Value)
                                 Case 3
                                     _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value, Action.Parametres.Item(2).Value)
+                                    Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "effectué: " & x.Name & " Command: " & Action.Nom & " Parametre0: " & Action.Parametres.Item(0).Value & " Parametre1: " & Action.Parametres.Item(1).Value & " Parametre2: " & Action.Parametres.Item(2).Value)
                                 Case 4
                                     _retour = CallByName(x, Action.Nom, CallType.Method, Action.Parametres.Item(0).Value, Action.Parametres.Item(1).Value, Action.Parametres.Item(2).Value, Action.Parametres.Item(3).Value)
                                 Case 5

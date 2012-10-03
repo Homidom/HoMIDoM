@@ -6,7 +6,7 @@
     <Grid Background="#636060">
         <StackPanel >
             <ScrollViewer VerticalAlignment="Top" Margin="5" VerticalScrollBarVisibility="Auto" Height="400" Width="650">
-                <WrapPanel Name="Wrp"   Background="DarkGray" HorizontalAlignment="Left" />
+                <WrapPanel Name="Wrp" Background="DarkGray" HorizontalAlignment="Left" />
             </ScrollViewer>
             <Rectangle Height="10" />
             <StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Right">
