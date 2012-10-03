@@ -290,7 +290,7 @@ Imports System.Management
                 If Command = "" Then
                     Return False
                 Else
-                    ' _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & "ExecuteCommand", Param(0) & " , " & Param(1))
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & "ExecuteCommand", Command & " ; " & Param(0))
                     Write(MyDevice, Command, Param(0), Param(1))
                     ' Select Case UCase(Command)
                     '     Case ""
@@ -317,13 +317,13 @@ Imports System.Management
         Try
             Dim retour As String = "0"
             Select Case UCase(Champ)
-                Case "ADRESSE1" ' numero de telephone 
+                Case "ADRESSE2" ' numero de telephone 
                     If Value IsNot Nothing Then
                         If Value = "" Or Value = " " Then
                             retour = "Veuillez saisir un numero de telephone valide."
                         End If
                     End If
-                Case "ADRESSE2" ' textmessage
+                Case "ADRESSE1" ' textmessage
                     If Value IsNot Nothing Then
                         If Value = "" Or Value = " " Then
                             retour = "Veuillez saisir un message"
@@ -409,21 +409,23 @@ Imports System.Management
     ''' <summary>Commander un device</summary>
     ''' <param name="Objet">Objet représetant le device à interroger</param>
     ''' <param name="Command">La commande à passer</param>
-    ''' <param name="Parametre1"></param>
-    ''' <param name="Parametre2"></param>
+    ''' <param name="Parametre1">Message text</param>
+    ''' <param name="Parametre2">Phone Number</param>
     ''' <remarks></remarks>
     ''' 
 
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
 
         '  _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "writeSmsSubmitPdu", Command)
-        ' _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "writeSmsSubmitPdu", "param : " & Parametre1 & "," & Parametre2)
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "write ", "param : " & Command & "," & Parametre1)
 
-        'Parametre1 = phoneNumber
-        'Parametre2 = TxtMsg
+        'Parametre1 = TxtMsg
+        'Parametre2 = phoneNumber
         Try
             If _Enable = False Then Exit Sub
             Select Case UCase(Command)
+
+
                 Case "SEND"
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Sms Write", "SEND")
                     comm = New GsmCommMain(port_name.Substring(3), port.BaudRate, "100")
@@ -438,32 +440,33 @@ Imports System.Management
                         'If _IsConnect Then
                         If comm.IsConnected() = True Then
                             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "IsConnected")
-                            If Objet.adresse1 = "" Then
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Sms", "phone number empty, Veuillez parametrer votre composant")
-                                comm.Close()
-                                Return
-                            End If
-
-                            If Parametre2 = "" Then
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "sms", "txt msg empty")
-                                Parametre2 = Objet.adresse2.ToString
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Sms", "phone number set to " & Objet.adresse2.ToString)
-
-                                'comm.Close()
-
-                                'Return
-                            End If
-                            If Parametre1 = "" Then
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Sms", "phone number empty")
-                                Parametre1 = Objet.adresse1.ToString
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Sms", "phone number set to " & Objet.adresse1.ToString)
-
-                            End If
+                            ' If Objet.adresse1 = "" Then
+                            '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Sms", "Message texte vide, Veuillez parametrer votre composant")
+                            'comm.Close()
+                            'Return
+                            'End If
 
                             Try
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "sms", "parametre2 : " & Parametre2)
+                                If Parametre2 = "" Then
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "sms", "Numero de mobile inexistant, Veuillez parametrer votre composant")
+                                    Parametre2 = Objet.adresse2.ToString
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Sms", "phone number set to " & Objet.adresse2.ToString)
+
+                                    'comm.Close()
+
+                                    'Return
+                                End If
+                                If Parametre1 = "" Then
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Sms", "Message texte vide, Veuillez parametrer votre composant")
+                                    Parametre1 = Objet.adresse1.ToString
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Sms", "text message set to " & Objet.adresse1.ToString)
+
+                                End If
                                 _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Sms", "before sending")
-                                pdu = New SmsSubmitPdu(Parametre2, Parametre1, "")
+                                '  pdu = New SmsSubmitPdu(Parametre1, Parametre2, "")
+                                'Parametre1 = TxtMsg
+                                'Parametre2 = phoneNumber
+                                pdu = New SmsSubmitPdu(Parametre1, Parametre2, "")
                                 comm.SendMessage(pdu)
                                 _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Sms", "Message envoyé")
                                 comm.Close()
@@ -490,7 +493,7 @@ Imports System.Management
                     comm = New GsmCommMain(port_name.Substring(3), port.BaudRate, "100")
                     Try
                         comm.Open()
-                        comm.EnableMessageNotifications()
+                        ' comm.EnableMessageNotifications()
                         'If _IsConnect Then
                         If comm.IsConnected() = True Then
                             Try
@@ -498,7 +501,6 @@ Imports System.Management
                                 Dim counter As Integer = 0
                                 '       counter = 0
 
-                                '    If comm.IsConnected() Then
                                 ' Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Sim)
                                 ' Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.All, PhoneStorageType.Phone)
                                 Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Phone)
@@ -520,19 +522,15 @@ Imports System.Management
                                 Next
                                 If counter = 0 Then
                                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM SmsReceive", "Aucun message n'a été recu")
+                                    comm.Close()
                                 End If
-
-
                                 Exit Sub
-                                '    End If
-
 
                                 '  If counter > 0 Then
                                 ' NewMsg = True
                                 ' End If
                             Catch ex As GsmComm.GsmCommunication.CommException
                                 ' IsConnected = False
-                                'Debug.Print("error:" & ex.InnerException.Message)
                                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM SmsReceive", "error:" & ex.InnerException.Message)
                                 If comm.IsOpen = True Then
                                     comm.Close()
@@ -543,15 +541,23 @@ Imports System.Management
                                     comm.Close()
                                 End If
                             End Try
+                            comm.Close()
+
+
                         End If
+
                     Catch ex As GsmComm.GsmCommunication.CommException
                         ' IsConnected = False
                         _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM SmsReceive", "error:" & ex.InnerException.Message)
+                        comm.Close()
                     End Try
 
-                Case "SMS"
 
-                    sendsms(Parametre1, Parametre2) ' parametre1 = phonenumber , parametre2 = textmessage
+                Case "CALL"
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM CALL", "Not Yet Implemented")
+
+                Case Else
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM", "commande non gérée")
 
             End Select
 
@@ -667,6 +673,7 @@ Imports System.Management
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
             Add_DeviceCommande("SEND", "envoi un SMS", 2)
             Add_DeviceCommande("RECEIVE", "recevoir un ou des SMS", 0)
+            Add_DeviceCommande("CALL", "Appeler", 0)
   
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", True)
 
@@ -676,14 +683,15 @@ Imports System.Management
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "Numero destinataire", "numero du destinataire")
-            Add_LibelleDevice("ADRESSE2", "your text message", "< a 160 charactere")
+            Add_LibelleDevice("ADRESSE1", "your text message", "< a 160 charactere")
+            Add_LibelleDevice("ADRESSE2", "Numero destinataire", "numero du destinataire")
+
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
             Add_LibelleDevice("REFRESH", "Refresh", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "@", "")
             ' Add_LibelleDevice("ComPort", "COM7", "")
-            ' Add_LibelleDevice("CommBaudRate", "@", "")
+            Add_LibelleDevice("CommBaudRate", "57600", "Vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200 ")
             ' Add_LibelleDevice("CommTimeout", "LastChange Durée", "")
 
 
