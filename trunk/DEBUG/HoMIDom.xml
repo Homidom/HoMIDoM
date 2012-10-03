@@ -6,601 +6,7 @@ HoMIDom
 </name>
 </assembly>
 <members>
-<member name="M:HoMIDom.HoMIDom.Sqlite.#ctor(System.String)">
-	<summary>          
- Creation de l'objet
- </summary>
-	<param name="basename">Nom de la base de donnée : homidom / medias</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.getconnecte">
-	<summary>Fourni l'etat d'une connexion à la bdd</summary>
-	<returns>True/False</returns>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.connect">
-	<summary>          
- Connection à une BDD Sqlite
- </summary>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.disconnect">
-	<summary>
- DeConnection à une BDD Sqlite 
- </summary>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.nonquery(System.String,System.String[])">
-	<summary>
- Requete sans résultat
- </summary>
-	<param name="commande">ex : DELETE FROM contact where Contact_id=10</param>
-	<param name="params">Liste es paramètres utilisés dans la query sous forme @parameter0, @parameter1 etc</param>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.query(System.String,System.Data.DataTable@,System.String[])">
-	<summary>Requete avec résultat</summary>
-	<param name="commande">ex : SELECT * FROM contact</param>
-	<param name="resultat">Arralist contenant la liste des résultats</param>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.count(System.String,System.Int32@)">
-	<summary>Compte le nombre de resultat</summary>
-	<param name="commande">ex : SELECT COUNT(*) FROM table WHERE col1 = 'xxx'</param>
-	<param name="resultat">Nombre de resultat</param>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Sqlite">
-	<summary>      
- Classe de gestion des base de données sqlite     
- </summary>   
-    ''' <remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Api.GenerateGUID">
-	<summary>
- Génère un ID unique
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.My.Resources.Resources.ResourceManager">
-	<summary>
-  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
-</summary>
-</member><member name="P:HoMIDom.My.Resources.Resources.Culture">
-	<summary>
-  Remplace la propriété CurrentUICulture du thread actuel pour toutes
-  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
-</summary>
-</member><member name="T:HoMIDom.My.Resources.Resources">
-	<summary>
-  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
-</summary>
-</member><member name="T:HoMIDom.HoMIDom.DeviceAction">
-	<summary>
- Class template pour lister les actions possibles sur un device
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Users.TypeProfil.invite">
-	<summary>
- Invité
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Users.TypeProfil.user">
-	<summary>
- Utilisateur (actions limitées)
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Users.TypeProfil.admin">
-	<summary>
- Administrateur
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Users.TypeProfil">
-	<summary>
- Type de profil disponible
- </summary>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.ID">
-	<summary>
- ID du user
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.UserName">
-	<summary>
- Identifiant pour la connexion
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.Nom">
-	<summary>
- Nom du user
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.Prenom">
-	<summary>
- Prénom du user
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.Profil">
-	<summary>
- Profil du user (invité, user, admin)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.Password">
-	<summary>
- Password du user
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.NumberIdentification">
-	<summary>
- Identification du user utilisé pour RFID, code à barre....
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.Image">
-	<summary>
- Image du user
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.eMail">
-	<summary>
- eMail principale du user
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.eMailAutre">
-	<summary>
- Adresse secondaire email du user
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.TelFixe">
-	<summary>
- Numéro de telephone fixe du user
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.TelMobile">
-	<summary>
- Numéro de téléphone mobile du user
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.TelAutre">
-	<summary>
- Numéro de téléphone divers pour user
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.Adresse">
-	<summary>
- Adresse du user
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.Ville">
-	<summary>
- Ville du user
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.CodePostal">
-	<summary>
- Code Postal du user
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Users.User">
-	<summary>
- Classe permettant d'un user
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Users">
-	<summary>
- Classe Users pour gérer les utilisateurs
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.ThreadAction">
-	<summary>
- Execute chaque Action
- </summary>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Name">
-	<summary>
- Nom du device
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ID">
-	<summary>
- ID du device
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Enable">
-	<summary>
- Activation/désactivation du device
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.DriverID">
-	<summary>
- ID du driver associé au device
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Description">
-	<summary>
- Description qui peut être le modèle du device ou autre chose
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Type">
-	<summary>
- Type de device TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Adresse1">
-	<summary>
- Adresse par défaut (pour le X10 par exemple)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Adresse2">
-	<summary>
- Adresse supplémentaire si besoin (cas du RFXCOM)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.DateCreated">
-	<summary>
- Date et heure de création du device
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.LastChange">
-	<summary>
- Date et heure de la derniere modification de Value
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.LastChangeDuree">
-	<summary>
- Si Lastchanged+LastchangeDuree inférieur à Now alors le composant a un problème car il n'a pas emis depuis au moins lastchangedduree.
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Modele">
-	<summary>
- Modèle du device
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Picture">
-	<summary>
- Adresse de son image
- </summary>
-	<value></value>
-	<returns>Chemin complet du fichier image situé sur le serveur </returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Solo">
-	<summary>
- Si le device est solo ou s'il contient plusieurs I/O
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.LastEtat">
-	<summary>
- si =true, on ne prend pas en comtpe les modifications style 19.1 19 19.1 19...
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.DeviceAction">
-	<summary>
- List des actions associées au Device
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Refresh">
-	<summary>
- Valeur de rafraichissement du device
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Value">
-	<summary>
- Valeur du device
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueLast">
-	<summary>
- Contien l'avant derniere valeur
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueMin">
-	<summary>
- Valeur minimale que value peut avoir
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueMax">
-	<summary>
- Valeur maximale que value peut avoir 
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueDef">
-	<summary>
- Valeur par défaut de Value au démarrage du Device, si Vide = Value
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Precision">
-	<summary>
- Precision de value
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Correction">
-	<summary>
- Correction en +/-/*/div à effectuer sur la value
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Formatage">
-	<summary>
- Format de value 0.0 ou 0.00...
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionActuel">
-	<summary>
- Condition actuelle (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.TemperatureActuel">
-	<summary>
- Temperature actuelle (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.HumiditeActuel">
-	<summary>
- Humidité actuelle (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconActuel">
-	<summary>
- Icon de la meteo actuelle (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.VentActuel">
-	<summary>
- Vitesse du vent actuelle (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourToday">
-	<summary>
- Nom du jour actuel (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinToday">
-	<summary>
- Temperature minimale du jour actuel (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxToday">
-	<summary>
- Temperature maximale du jour actuel (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconToday">
-	<summary>
- Icon de la meteo du jour actuel (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionToday">
-	<summary>
- Condition météorologique du jour actuel (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourJ1">
-	<summary>
- Nom du jour + 1 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinJ1">
-	<summary>
- Température minimale à J+1 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxJ1">
-	<summary>
- Température maximale à J+1 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconJ1">
-	<summary>
- Icon de la météo à J+1 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionJ1">
-	<summary>
- Condition météorologique à J+1 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourJ2">
-	<summary>
- Nom du jour + 2 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinJ2">
-	<summary>
- Température minimale à J+2 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxJ2">
-	<summary>
- Température maximale à J+2 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconJ2">
-	<summary>
- Icon de la météo à J+2 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionJ2">
-	<summary>
- Condition météorologique à J+2 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourJ3">
-	<summary>
- Nom du jour à j+3 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinJ3">
-	<summary>
- Température minimale à j+3 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxJ3">
-	<summary>
- Température maximale à j+3 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconJ3">
-	<summary>
- Icon de la meteo à j+3 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionJ3">
-	<summary>
- Condition météorologique à j+3 (device meteo)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.GetDeviceCommandePlus">
-	<summary>
- Retourne la liste des commandes avancées
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.TemplateDevice.Commandes">
-	<summary>
- Liste des noms des commandes IR (device IR)
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.TemplateDevice">
-	<summary>
- Template de class de type Device pour le service web
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.FileData">
-	<summary>
- Classe de transfert de fichier en streaming
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.RequestFileData">
-	<summary>
- Classe de demande de fichier
- </summary>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Macro.ID">
+<member name="P:HoMIDom.HoMIDom.Macro.ID">
 	<summary>
  ID de la macro
  </summary>
@@ -928,52 +334,6 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action">
 	<summary>Class action, Défini les actions à réaliser depuis les macros...</summary>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Extension">
-	<summary>
- Nom de l'extension ex: .wma
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Enable">
-	<summary>
- Si l'extension doit être prise en compte
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio.ExtensionAudio">
-	<summary>Type d'extension Audio</summary>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Repertoire">
-	<summary>
- Chemin du répertoire
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Enable">
-	<summary>
- Si le répertoire doit être pris en compte
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio.RepertoireAudio">
-	<summary>
- Type Répertoire Audio
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio.FilePlayList">
-	<summary>
- Class Fichier Audio
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio">
-	<summary>
- Classe de gestion Audio
- </summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DriversEvent(System.String,System.String,System.Object)">
 	<summary>Evenement provenant des drivers </summary>
@@ -1758,6 +1118,73 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Server">
 	<summary>Classe Server</summary>
 	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Extension">
+	<summary>
+ Nom de l'extension ex: .wma
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Enable">
+	<summary>
+ Si l'extension doit être prise en compte
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio.ExtensionAudio">
+	<summary>Type d'extension Audio</summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Repertoire">
+	<summary>
+ Chemin du répertoire
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Enable">
+	<summary>
+ Si le répertoire doit être pris en compte
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio.RepertoireAudio">
+	<summary>
+ Type Répertoire Audio
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio.FilePlayList">
+	<summary>
+ Class Fichier Audio
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio">
+	<summary>
+ Classe de gestion Audio
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Soleil">
+	<summary>
+ Classe permettant le calcul des heures de lever et coucher du soleil
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Api.GenerateGUID">
+	<summary>
+ Génère un ID unique
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.FileData">
+	<summary>
+ Classe de transfert de fichier en streaming
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.RequestFileData">
+	<summary>
+ Classe de demande de fichier
+ </summary>
+	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Groupes.DeviceAction">
 	<summary>
  List des actions associées au Device
@@ -1770,14 +1197,254 @@ HoMIDom
  Permet de regrouper un ensemble de devices du même type
  </summary>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Soleil">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL">
 	<summary>
- Classe permettant le calcul des heures de lever et coucher du soleil
+ modules pour diriger un appareil  ON/OFF
  </summary>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.TemplateDriver">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.AUDIO">
 	<summary>
- Template de Classe de type Driver pour le service web
+ module de type audio
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE">
+	<summary>
+ pour stocker les valeur issu d'un barometre meteo ou web
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE">
+	<summary>
+ Pour stocker les valeurs issu d'une batterie
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR">
+	<summary>
+ compteur DS2423, RFXPower...
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.CONTACT">
+	<summary>
+ detecteur de contact : switch 1-wire
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR">
+	<summary>
+ tous detecteurs : mouvement, obscurite...
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.DIRECTIONVENT">
+	<summary>
+ module donnant la direction du vent
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE">
+	<summary>
+ Valeur de consommation d'energie instantanée
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE">
+	<summary>
+ Valeur de consommation d'energie totale
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.FREEBOX">
+	<summary>
+ FreeBox
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN">
+	<summary>
+ Générique Boolean
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING">
+	<summary>
+ Générique de type String
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE">
+	<summary>
+ Générique de type numérique
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE">
+	<summary>
+ Capteur d'humidité
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.LAMPE">
+	<summary>
+ Module de type lampe avec variation
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.METEO">
+	<summary>
+ Station meteo (physique ou web)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA">
+	<summary>
+ Multimedia
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT">
+	<summary>
+ Valeur de pluie courante
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL">
+	<summary>
+ Valeur de pluie totale
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.SWITCH">
+	<summary>
+ Interrupteur
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE">
+	<summary>
+ Telecommande
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE">
+	<summary>
+ Capteur de température
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE">
+	<summary>
+ Température de consigne (ex: thermostat)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.UV">
+	<summary>
+ Indice UV soleil
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT">
+	<summary>
+ Vitesse du vent
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.VOLET">
+	<summary>
+ Volet roulant
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device.ListeDevices">
+	<summary>Indique la liste des devices gérés</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.DeviceGenerique.GetDefautDeviceImage(System.String)">
+	<summary>
+ Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique">
+	<summary>Class de déclaration du Device Générique</summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueDouble">
+	<summary>Classe valeur Double avec min/max/def/correction...</summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueBool">
+	<summary>Classe valeur True/False pour device ON/OFF</summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueInt">
+	<summary>Classe valeur Integer pour device avec valeur de 0(OFF) à 100(ON)</summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueString">
+	<summary>Classe valeur String </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestWrite(System.String,System.String,System.String)">
+	<summary>Permet de tester une commande write</summary>
+	<param name="Commande"></param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestRead">
+	<summary>Permet de tester une commande read</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestWrite(System.String,System.String,System.String)">
+	<summary>Permet de tester une commande write</summary>
+	<param name="Commande"></param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestRead">
+	<summary>Permet de tester une commande read</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.MULTIMEDIA.EnvoyerCommande(System.String)">
+	<summary>
+ Envoyer une commande au driver
+ </summary>
+	<param name="Commande"></param>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device">
+	<summary>Class Device, définie tous différents types de devices</summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Zone.ID">
+	<summary>
+ Identification unique de la zone
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Zone.Image">
+	<summary>
+ Image de la zone pour arrière plan, plan.. (grand format)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Zone.Icon">
+	<summary>
+ Icone de la zone (pour bouton, treeview, représentation...)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Zone.Name">
+	<summary>
+ Nom de la zone
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Zone.ListElement">
+	<summary>
+ Contient la liste des devices associés à la zone de type Device_Zone
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Zone.Element_Zone.ElementID">
+	<summary>
+ ID du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Zone.Element_Zone.Visible">
+	<summary>
+ Si le device doit être visible dans la zone
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Zone.Element_Zone">
+	<summary>
+ Class Device_zone représente un device dans une zone
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Zone">
+	<summary>
+ Classe Zone, une zone peut représenter une maison, un étage, un groupe de pièces, une pièce, un endroit dans une pièce
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.ThreadAction">
+	<summary>
+ Execute chaque Action
  </summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSaveRealTime(System.Boolean)">
@@ -2633,6 +2300,636 @@ HoMIDom
  Liste toutes les functions et propriétés accessibles par les clients
  </summary>
 	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Fabricant">
+	<summary>
+ Définit ou retourne le fabricant de l'équipement
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Modele">
+	<summary>
+ Définit ou retourne le modèle d'équipement
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Driver">
+	<summary>
+ Définit ou retourne le type de driver (ex: http, ir, rs232...)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.File">
+	<summary>
+ Donne le nom du fichier ainsi que son extension (ex: TOTO.xml)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Ligne">
+	<summary>
+ Nombre de lignes de la grille du template
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Colonne">
+	<summary>
+ Nombre de colonnes de la grille du template
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Telecommande.TypeEquipement">
+	<summary>
+ Type d'équipement par défaut, pour définir ensuite les commandes de bases
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Telecommande">
+	<summary>
+ Class pour gérer les télécommandes
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.#ctor(System.String)">
+	<summary>          
+ Creation de l'objet
+ </summary>
+	<param name="basename">Nom de la base de donnée : homidom / medias</param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.getconnecte">
+	<summary>Fourni l'etat d'une connexion à la bdd</summary>
+	<returns>True/False</returns>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.connect">
+	<summary>          
+ Connection à une BDD Sqlite
+ </summary>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.disconnect">
+	<summary>
+ DeConnection à une BDD Sqlite 
+ </summary>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.nonquery(System.String,System.String[])">
+	<summary>
+ Requete sans résultat
+ </summary>
+	<param name="commande">ex : DELETE FROM contact where Contact_id=10</param>
+	<param name="params">Liste es paramètres utilisés dans la query sous forme @parameter0, @parameter1 etc</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.query(System.String,System.Data.DataTable@,System.String[])">
+	<summary>Requete avec résultat</summary>
+	<param name="commande">ex : SELECT * FROM contact</param>
+	<param name="resultat">Arralist contenant la liste des résultats</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.count(System.String,System.Int32@)">
+	<summary>Compte le nombre de resultat</summary>
+	<param name="commande">ex : SELECT COUNT(*) FROM table WHERE col1 = 'xxx'</param>
+	<param name="resultat">Nombre de resultat</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Sqlite">
+	<summary>      
+ Classe de gestion des base de données sqlite     
+ </summary>   
+    ''' <remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Name">
+	<summary>
+ Nom du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ID">
+	<summary>
+ ID du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Enable">
+	<summary>
+ Activation/désactivation du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.DriverID">
+	<summary>
+ ID du driver associé au device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Description">
+	<summary>
+ Description qui peut être le modèle du device ou autre chose
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Type">
+	<summary>
+ Type de device TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Adresse1">
+	<summary>
+ Adresse par défaut (pour le X10 par exemple)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Adresse2">
+	<summary>
+ Adresse supplémentaire si besoin (cas du RFXCOM)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.DateCreated">
+	<summary>
+ Date et heure de création du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.LastChange">
+	<summary>
+ Date et heure de la derniere modification de Value
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.LastChangeDuree">
+	<summary>
+ Si Lastchanged+LastchangeDuree inférieur à Now alors le composant a un problème car il n'a pas emis depuis au moins lastchangedduree.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Modele">
+	<summary>
+ Modèle du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Picture">
+	<summary>
+ Adresse de son image
+ </summary>
+	<value></value>
+	<returns>Chemin complet du fichier image situé sur le serveur </returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Solo">
+	<summary>
+ Si le device est solo ou s'il contient plusieurs I/O
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.LastEtat">
+	<summary>
+ si =true, on ne prend pas en comtpe les modifications style 19.1 19 19.1 19...
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.DeviceAction">
+	<summary>
+ List des actions associées au Device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Refresh">
+	<summary>
+ Valeur de rafraichissement du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Value">
+	<summary>
+ Valeur du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueLast">
+	<summary>
+ Contien l'avant derniere valeur
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueMin">
+	<summary>
+ Valeur minimale que value peut avoir
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueMax">
+	<summary>
+ Valeur maximale que value peut avoir 
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueDef">
+	<summary>
+ Valeur par défaut de Value au démarrage du Device, si Vide = Value
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Precision">
+	<summary>
+ Precision de value
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Correction">
+	<summary>
+ Correction en +/-/*/div à effectuer sur la value
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Formatage">
+	<summary>
+ Format de value 0.0 ou 0.00...
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionActuel">
+	<summary>
+ Condition actuelle (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.TemperatureActuel">
+	<summary>
+ Temperature actuelle (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.HumiditeActuel">
+	<summary>
+ Humidité actuelle (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconActuel">
+	<summary>
+ Icon de la meteo actuelle (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.VentActuel">
+	<summary>
+ Vitesse du vent actuelle (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourToday">
+	<summary>
+ Nom du jour actuel (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinToday">
+	<summary>
+ Temperature minimale du jour actuel (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxToday">
+	<summary>
+ Temperature maximale du jour actuel (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconToday">
+	<summary>
+ Icon de la meteo du jour actuel (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionToday">
+	<summary>
+ Condition météorologique du jour actuel (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourJ1">
+	<summary>
+ Nom du jour + 1 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinJ1">
+	<summary>
+ Température minimale à J+1 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxJ1">
+	<summary>
+ Température maximale à J+1 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconJ1">
+	<summary>
+ Icon de la météo à J+1 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionJ1">
+	<summary>
+ Condition météorologique à J+1 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourJ2">
+	<summary>
+ Nom du jour + 2 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinJ2">
+	<summary>
+ Température minimale à J+2 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxJ2">
+	<summary>
+ Température maximale à J+2 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconJ2">
+	<summary>
+ Icon de la météo à J+2 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionJ2">
+	<summary>
+ Condition météorologique à J+2 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourJ3">
+	<summary>
+ Nom du jour à j+3 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinJ3">
+	<summary>
+ Température minimale à j+3 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxJ3">
+	<summary>
+ Température maximale à j+3 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconJ3">
+	<summary>
+ Icon de la meteo à j+3 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionJ3">
+	<summary>
+ Condition météorologique à j+3 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.GetDeviceCommandePlus">
+	<summary>
+ Retourne la liste des commandes avancées
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.TemplateDevice.Commandes">
+	<summary>
+ Liste des noms des commandes IR (device IR)
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.TemplateDevice">
+	<summary>
+ Template de class de type Device pour le service web
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.DeviceAction">
+	<summary>
+ Class template pour lister les actions possibles sur un device
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Users.TypeProfil.invite">
+	<summary>
+ Invité
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Users.TypeProfil.user">
+	<summary>
+ Utilisateur (actions limitées)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Users.TypeProfil.admin">
+	<summary>
+ Administrateur
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Users.TypeProfil">
+	<summary>
+ Type de profil disponible
+ </summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.ID">
+	<summary>
+ ID du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.UserName">
+	<summary>
+ Identifiant pour la connexion
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.Nom">
+	<summary>
+ Nom du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.Prenom">
+	<summary>
+ Prénom du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.Profil">
+	<summary>
+ Profil du user (invité, user, admin)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.Password">
+	<summary>
+ Password du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.NumberIdentification">
+	<summary>
+ Identification du user utilisé pour RFID, code à barre....
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.Image">
+	<summary>
+ Image du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.eMail">
+	<summary>
+ eMail principale du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.eMailAutre">
+	<summary>
+ Adresse secondaire email du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.TelFixe">
+	<summary>
+ Numéro de telephone fixe du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.TelMobile">
+	<summary>
+ Numéro de téléphone mobile du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.TelAutre">
+	<summary>
+ Numéro de téléphone divers pour user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.Adresse">
+	<summary>
+ Adresse du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.Ville">
+	<summary>
+ Ville du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.CodePostal">
+	<summary>
+ Code Postal du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Users.User">
+	<summary>
+ Classe permettant d'un user
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Users">
+	<summary>
+ Classe Users pour gérer les utilisateurs
+ </summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:HoMIDom.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:HoMIDom.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member><member name="T:HoMIDom.HoMIDom.TemplateDriver">
+	<summary>
+ Template de Classe de type Driver pour le service web
+ </summary>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.XML.#ctor(System.String)">
 	<summary>Constructeur de la classe</summary>
 	<param name="leFichier"></param>
@@ -2826,303 +3123,6 @@ HoMIDom
  </summary>
 	<param name="xpath"></param>
 	<returns>Un entier</returns>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL">
-	<summary>
- modules pour diriger un appareil  ON/OFF
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.AUDIO">
-	<summary>
- module de type audio
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE">
-	<summary>
- pour stocker les valeur issu d'un barometre meteo ou web
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE">
-	<summary>
- Pour stocker les valeurs issu d'une batterie
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR">
-	<summary>
- compteur DS2423, RFXPower...
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.CONTACT">
-	<summary>
- detecteur de contact : switch 1-wire
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR">
-	<summary>
- tous detecteurs : mouvement, obscurite...
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.DIRECTIONVENT">
-	<summary>
- module donnant la direction du vent
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE">
-	<summary>
- Valeur de consommation d'energie instantanée
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE">
-	<summary>
- Valeur de consommation d'energie totale
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.FREEBOX">
-	<summary>
- FreeBox
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN">
-	<summary>
- Générique Boolean
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING">
-	<summary>
- Générique de type String
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE">
-	<summary>
- Générique de type numérique
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE">
-	<summary>
- Capteur d'humidité
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.LAMPE">
-	<summary>
- Module de type lampe avec variation
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.METEO">
-	<summary>
- Station meteo (physique ou web)
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA">
-	<summary>
- Multimedia
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT">
-	<summary>
- Valeur de pluie courante
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL">
-	<summary>
- Valeur de pluie totale
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.SWITCH">
-	<summary>
- Interrupteur
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE">
-	<summary>
- Telecommande
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE">
-	<summary>
- Capteur de température
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE">
-	<summary>
- Température de consigne (ex: thermostat)
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.UV">
-	<summary>
- Indice UV soleil
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT">
-	<summary>
- Vitesse du vent
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.VOLET">
-	<summary>
- Volet roulant
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.ListeDevices">
-	<summary>Indique la liste des devices gérés</summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.DeviceGenerique.GetDefautDeviceImage(System.String)">
-	<summary>
- Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique">
-	<summary>Class de déclaration du Device Générique</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueDouble">
-	<summary>Classe valeur Double avec min/max/def/correction...</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueBool">
-	<summary>Classe valeur True/False pour device ON/OFF</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueInt">
-	<summary>Classe valeur Integer pour device avec valeur de 0(OFF) à 100(ON)</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueString">
-	<summary>Classe valeur String </summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestWrite(System.String,System.String,System.String)">
-	<summary>Permet de tester une commande write</summary>
-	<param name="Commande"></param>
-	<param name="Parametre1"></param>
-	<param name="Parametre2"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestRead">
-	<summary>Permet de tester une commande read</summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestWrite(System.String,System.String,System.String)">
-	<summary>Permet de tester une commande write</summary>
-	<param name="Commande"></param>
-	<param name="Parametre1"></param>
-	<param name="Parametre2"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestRead">
-	<summary>Permet de tester une commande read</summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.MULTIMEDIA.EnvoyerCommande(System.String)">
-	<summary>
- Envoyer une commande au driver
- </summary>
-	<param name="Commande"></param>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device">
-	<summary>Class Device, définie tous différents types de devices</summary>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Fabricant">
-	<summary>
- Définit ou retourne le fabricant de l'équipement
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Modele">
-	<summary>
- Définit ou retourne le modèle d'équipement
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Driver">
-	<summary>
- Définit ou retourne le type de driver (ex: http, ir, rs232...)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.File">
-	<summary>
- Donne le nom du fichier ainsi que son extension (ex: TOTO.xml)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Ligne">
-	<summary>
- Nombre de lignes de la grille du template
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Colonne">
-	<summary>
- Nombre de colonnes de la grille du template
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Telecommande.TypeEquipement">
-	<summary>
- Type d'équipement par défaut, pour définir ensuite les commandes de bases
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Telecommande">
-	<summary>
- Class pour gérer les télécommandes
- </summary>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.ID">
-	<summary>
- Identification unique de la zone
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.Image">
-	<summary>
- Image de la zone pour arrière plan, plan.. (grand format)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.Icon">
-	<summary>
- Icone de la zone (pour bouton, treeview, représentation...)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.Name">
-	<summary>
- Nom de la zone
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.ListElement">
-	<summary>
- Contient la liste des devices associés à la zone de type Device_Zone
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.Element_Zone.ElementID">
-	<summary>
- ID du device
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.Element_Zone.Visible">
-	<summary>
- Si le device doit être visible dans la zone
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Zone.Element_Zone">
-	<summary>
- Class Device_zone représente un device dans une zone
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Zone">
-	<summary>
- Classe Zone, une zone peut représenter une maison, un étage, un groupe de pièces, une pièce, un endroit dans une pièce
- </summary>
-	<remarks></remarks>
 </member>
 </members>
 </doc>

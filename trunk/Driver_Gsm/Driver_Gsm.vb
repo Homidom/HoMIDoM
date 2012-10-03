@@ -1,4 +1,6 @@
-﻿Imports HoMIDom
+﻿
+
+Imports HoMIDom
 Imports HoMIDom.HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
@@ -72,6 +74,8 @@ Imports System.Management
 
     'param avancé
     Dim _DEBUG As Boolean = False
+    '    Dim _STORAGE As PhoneStorageType
+
     'Dim _PARAMMODE As String = "-----"
 
 
@@ -352,6 +356,7 @@ Imports System.Management
         'récupération des paramétres avancés
         Try
             _DEBUG = _Parametres.Item(0).Valeur
+            '  _STORAGE = _Parametres.Item(1).Valeur
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
         End Try
@@ -674,9 +679,9 @@ Imports System.Management
             Add_DeviceCommande("SEND", "envoi un SMS", 2)
             Add_DeviceCommande("RECEIVE", "recevoir un ou des SMS", 0)
             Add_DeviceCommande("CALL", "Appeler", 0)
-  
-            Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", True)
 
+            Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", True)
+            Add_ParamAvance("storage", "sim card : true / gsm : false", True)
             'ajout des commandes avancées pour les devices
 
             'Libellé Driver
@@ -687,13 +692,13 @@ Imports System.Management
             Add_LibelleDevice("ADRESSE2", "Numero destinataire", "numero du destinataire")
 
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "@", "")
+            Add_LibelleDevice("MODELE", "Type de stockage", "Type de stockage : GSM/SIM", "GSM|SIM")
+
             Add_LibelleDevice("REFRESH", "Refresh", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "@", "")
             ' Add_LibelleDevice("ComPort", "COM7", "")
-            Add_LibelleDevice("CommBaudRate", "57600", "Vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200 ")
+            Add_LibelleDevice("CommBaudRate", "57600", "Vitesse du port : 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200 ", "300|600|1200|2400|9600|14400|19200|38400|57600|115200")
             ' Add_LibelleDevice("CommTimeout", "LastChange Durée", "")
-
 
         Catch ex As Exception
             ' WriteLog("ERR: New Exception : " & ex.Message)
