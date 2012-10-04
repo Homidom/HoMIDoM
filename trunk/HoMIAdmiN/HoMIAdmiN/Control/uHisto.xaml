@@ -27,11 +27,14 @@
                             <Label Content="Fin:" Foreground="White" VerticalAlignment="center"/>
                             <DatePicker Name="DateFinSelect" Width="150" VerticalAlignment="Center" BorderBrush="{x:Null}" />
 
-                            <Rectangle Width="15"/>
+                            <Rectangle Width="10"/>
                             <Label Content="Format:" Foreground="White" VerticalAlignment="center"/>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <RadioButton Name="ChkLine" IsChecked="True" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
                                     <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/Line20Chart.png" Stretch="Fill"></Image>
+                                </RadioButton>
+                                <RadioButton Name="ChkLine_Full" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
+                                    <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/line_chart.png" Stretch="Fill"></Image>
                                 </RadioButton>
                                 <RadioButton Name="ChkHisto" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
                                     <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/bar_chart.png" Stretch="Fill"></Image>
@@ -40,7 +43,7 @@
                                     <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/pie_chart.png" Stretch="Fill"></Image>
                                 </RadioButton>
                             </StackPanel>
-                            <Rectangle Width="15"/>
+                            <Rectangle Width="10"/>
                             <Label Content="Moyenne:" Foreground="White" VerticalAlignment="Center" />
                             <ComboBox Background="DarkGray" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="2" Foreground="White" Name="ComboBoxMoyenne" SelectedIndex="0" Width="80">
                                 <ComboBoxItem Content="Aucune" />

@@ -63,6 +63,7 @@ Public Class uHisto
             Chart2.Width = 925
             Chart2.Height = 500
 
+
             Dim legend1 As New Legend
             Chart2.Legends.Add(legend1)
 
@@ -121,14 +122,22 @@ Public Class uHisto
             If ChkLine.IsChecked Then
                 For i As Integer = 0 To Chart2.Series.Count - 1
                     Chart2.Series(i).ChartType = SeriesChartType.Line
+                    Chart2.Series(i).ToolTip = "#VALX" & " Valeur:" & "#VALY"
+                Next
+            ElseIf ChkLine_Full.IsChecked Then
+                For i As Integer = 0 To Chart2.Series.Count - 1
+                    Chart2.Series(i).ChartType = SeriesChartType.SplineArea
+                    Chart2.Series(i).ToolTip = "#VALX" & " Valeur:" & "#VALY"
                 Next
             ElseIf ChkHisto.IsChecked Then
                 For i As Integer = 0 To Chart2.Series.Count - 1
                     Chart2.Series(i).ChartType = SeriesChartType.Bar
+                    Chart2.Series(i).ToolTip = "#VALX" & " Valeur:" & "#VALY"
                 Next
             Else
                 For i As Integer = 0 To Chart2.Series.Count - 1
                     Chart2.Series(i).ChartType = SeriesChartType.Pie
+                    Chart2.Series(i).ToolTip = "#VALX" & " Valeur:" & "#VALY"
                 Next
             End If
             
@@ -228,4 +237,6 @@ Public Class uHisto
 
         End If
     End Sub
+
+
 End Class
