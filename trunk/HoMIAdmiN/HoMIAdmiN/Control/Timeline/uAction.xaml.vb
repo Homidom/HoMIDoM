@@ -21,6 +21,7 @@ Public Class uAction
             j = (Span * j) / _Zoom
             Canvas.SetLeft(Rectangle1, j)
             Canvas.SetLeft(ImgDelete, j + 160)
+            Fond.Width = j
         End Set
     End Property
 
@@ -43,7 +44,6 @@ Public Class uAction
         j = (Span * j) / _Zoom
         Canvas.SetLeft(Rectangle1, j)
         Canvas.SetLeft(ImgDelete, j + 160)
-        Me.Width = j + 200
     End Sub
 
     'Objet action
