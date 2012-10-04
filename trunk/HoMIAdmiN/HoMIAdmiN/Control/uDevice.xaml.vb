@@ -549,9 +549,12 @@ Partial Public Class uDevice
                                     Label6.Visibility = Windows.Visibility.Collapsed
                                 Else
                                     Label6.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    TxtAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
-                                    TxtAdresse1.Visibility = Windows.Visibility.Visible
+                                    If _Driver.LabelsDevice.Item(k).Tooltip <> "" Then
+                                        Label6.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                        TxtAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    End If
                                     Label6.Visibility = Windows.Visibility.Visible
+                                    TxtAdresse1.Visibility = Windows.Visibility.Visible
                                 End If
                             Case "ADRESSE2"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
@@ -559,7 +562,10 @@ Partial Public Class uDevice
                                     Label7.Visibility = Windows.Visibility.Collapsed
                                 Else
                                     Label7.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    TxtAdresse2.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    If _Driver.LabelsDevice.Item(k).Tooltip <> "" Then
+                                        Label7.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                        TxtAdresse2.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    End If
                                     TxtAdresse2.Visibility = Windows.Visibility.Visible
                                     Label7.Visibility = Windows.Visibility.Visible
                                 End If
@@ -578,7 +584,10 @@ Partial Public Class uDevice
                                     rectrefresh2.Visibility = Windows.Visibility.Collapsed
                                 Else
                                     Label9.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    TxtRefresh.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    If _Driver.LabelsDevice.Item(k).Tooltip <> "" Then
+                                        Label9.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                        TxtRefresh.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    End If
                                     TxtRefresh.Visibility = Windows.Visibility.Visible
                                     rectrefresh1.Visibility = Windows.Visibility.Visible
                                     rectrefresh2.Visibility = Windows.Visibility.Visible
@@ -590,7 +599,12 @@ Partial Public Class uDevice
                                     Label19.Visibility = Windows.Visibility.Collapsed
                                 Else
                                     Label19.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    TxtLastChangeDuree.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    If _Driver.LabelsDevice.Item(k).Tooltip = "" Then
+                                        TxtLastChangeDuree.ToolTip = "Permet de vérifier si le composant a été mis à jour depuis moins de x minutes sinon il apparait en erreur"
+                                        Label19.ToolTip = "Permet de vérifier si le composant a été mis à jour depuis moins de x minutes sinon il apparait en erreur"
+                                    Else                                        TxtLastChangeDuree.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                        Label19.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    End If
                                     TxtLastChangeDuree.Visibility = Windows.Visibility.Visible
                                     Label19.Visibility = Windows.Visibility.Visible
                                 End If
@@ -608,7 +622,10 @@ Partial Public Class uDevice
                                     rectmodele1.Visibility = Windows.Visibility.Visible
                                     rectmodele2.Visibility = Windows.Visibility.Visible
                                     If _Driver.LabelsDevice.Item(k).LabelChamp <> "" Then Label8.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-
+                                    If _Driver.LabelsDevice.Item(k).Tooltip <> "" Then
+                                        Label8.ToolTip = _Driver.LabelsDevice.Item(k).ToolTip
+                                        TxtModele.ToolTip = _Driver.LabelsDevice.Item(k).ToolTip
+                                    End If
                                     If _Driver.LabelsDevice.Item(k).Parametre <> "" Then
                                         TxtModele.Items.Clear()
                                         Dim a() As String = _Driver.LabelsDevice.Item(k).Parametre.Split("|")
