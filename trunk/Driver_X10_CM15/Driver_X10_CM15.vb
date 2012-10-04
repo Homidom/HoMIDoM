@@ -335,20 +335,33 @@ Public Class Driver_X10_CM15
         If _Enable = False Then Exit Sub
         If _IsConnect = False Then Exit Sub
         Try
-            Dim TypeDev As String = "sendplc"
+            Dim TypeDev As String = ""
+            Dim idx As Integer = -1
 
-            Select Case Objet.Adresse2.ToString
-                Case "0" Or " " Or ""
+            'On vérifie que l'adresse2 est bien 0 ou 1 (type de device)
+            If IsNumeric(Objet.Adresse2.ToString) Then
+                idx = CInt(Objet.Adresse2.ToString)
+                If 0 < idx Or idx > 1 Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: l'adresse2 du composant " & Objet.Name & " doit être numérique et compris entre 0 et 1")
+                    Exit Sub
+                End If
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: l'adresse2 du composant " & Objet.Name & " doit être numérique et compris entre 0 et 1")
+                Exit Sub
+            End If
+
+            'On prépare la commande suivant le type de device
+            Select Case idx
+                Case 0
                     TypeDev = "sendplc"
-                Case "1"
+                Case 1
                     TypeDev = "sendrf"
-                Case "2"
+                Case 2
                     TypeDev = "sendsecurerf"
-                Case "3"
+                Case 3
                     TypeDev = "sendsecurehomecontrolrf"
-                Case Else
-                    TypeDev = "sendplc"
             End Select
+
             If Commande = "ON" Then
                 ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " on")
             End If
