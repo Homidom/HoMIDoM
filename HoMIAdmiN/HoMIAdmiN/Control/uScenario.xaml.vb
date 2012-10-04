@@ -74,15 +74,9 @@ Public Class uScenario
         Me.Cursor = Nothing
     End Sub
 
-    'Ajouter action device
-    Private Sub Image1_MouseLeftButtonDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActDevice.MouseLeftButtonDown
-        Dim effects As DragDropEffects
-        Dim obj As New DataObject()
-        obj.SetData(GetType(String), "ACTIONDEVICE")
-        effects = DragDrop.DoDragDrop(Me.ImgActDevice, obj, DragDropEffects.Copy Or DragDropEffects.Move)
-    End Sub
 
-    Private Sub ScrollViewer1_DragOver(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles ScrollViewer1.DragOver
+
+    Private Sub ScrollViewer1_DragOver(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles ScrollViewer2.DragOver
         If e.Data.GetDataPresent(GetType(String)) Then
             e.Effects = DragDropEffects.Copy
         Else
@@ -90,10 +84,8 @@ Public Class uScenario
         End If
     End Sub
 
-    Private Sub ScrollViewer1_Drop(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles ScrollViewer1.Drop
+    Private Sub ScrollViewer1_Drop(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles ScrollViewer2.Drop
         Try
-
-
             If e.Data.GetDataPresent(GetType(String)) Then
                 e.Effects = DragDropEffects.Copy
 
@@ -285,8 +277,20 @@ Public Class uScenario
     'Zoom arrière
     Private Sub ZoomMoins_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ZoomMoins.MouseDown
         _Zoom += 5
-        If _Zoom > 100 Then _Zoom = 100
         Afficher()
+    End Sub
+
+    Private Sub ScrollViewer1_ScrollChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.ScrollChangedEventArgs) Handles ScrollViewer2.ScrollChanged
+        ScrollViewer2.ScrollToHorizontalOffset(e.HorizontalOffset)
+    End Sub
+
+#Region "Ajout Action"
+    'Ajouter action device
+    Private Sub Image1_MouseLeftButtonDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActDevice.MouseLeftButtonDown
+        Dim effects As DragDropEffects
+        Dim obj As New DataObject()
+        obj.SetData(GetType(String), "ACTIONDEVICE")
+        effects = DragDrop.DoDragDrop(Me.ImgActDevice, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 
     'Ajouter action mail
@@ -295,7 +299,6 @@ Public Class uScenario
         Dim obj As New DataObject()
         obj.SetData(GetType(String), "ACTIONMAIL")
         effects = DragDrop.DoDragDrop(Me.ImgActMail, obj, DragDropEffects.Copy Or DragDropEffects.Move)
-
     End Sub
 
     'Ajouter action if
@@ -361,9 +364,8 @@ Public Class uScenario
         obj.SetData(GetType(String), "ACTIONVB")
         effects = DragDrop.DoDragDrop(Me.ImgActVB, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
+#End Region
 
-    Private Sub ScrollViewer1_ScrollChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.ScrollChangedEventArgs) Handles ScrollViewer1.ScrollChanged
-        ScrollViewer2.ScrollToHorizontalOffset(e.HorizontalOffset)
-    End Sub
+
 
 End Class

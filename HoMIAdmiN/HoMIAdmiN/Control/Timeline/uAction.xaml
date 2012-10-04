@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Height="50" Width="915">
-    <Grid>
-        <Canvas Name="Fond" Background="#FFC2CCDB" Margin="2">
+             mc:Ignorable="d" Height="50">
+
+        <Canvas Name="Fond" Background="#FFF0EEF3" Margin="2" Width="200">
             <Canvas Width="161" Height="46" Name="Rectangle1">
                 <Canvas.Background >
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -19,5 +19,5 @@
               </Canvas>
             <Image Canvas.Left="160" Canvas.Top="10" Height="27" Name="ImgDelete" Stretch="Fill" Width="25" Source="/HoMIAdmiN;component/Images/Supprimer_32.png" />
         </Canvas>
-    </Grid>
+
 </UserControl>

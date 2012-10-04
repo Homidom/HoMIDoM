@@ -569,10 +569,13 @@
   <ItemGroup>
     <Resource Include="Images\pie_chart.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\line_chart.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UseGlobalSettings="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
