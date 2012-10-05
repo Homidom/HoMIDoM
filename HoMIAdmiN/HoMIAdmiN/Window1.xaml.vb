@@ -117,23 +117,31 @@ Class Window1
                     ImgLog.ToolTip = a
                     LOG.Content = Mid(list(0), 1, 100) & "..."
 
-                    If flagShowMainMenu Then
-                        Try
-                            Dim MainMenu As uMainMenu = CanvasRight.Children.Item(0)
-                            'Affichage des dernieres erreurs et composants non a jour
-                            MainMenu.txtlasterror.Items.Clear()
-                            list = myService.GetLastLogsError
-                            If list.Count > 0 Then
-                                For Each logerror As String In list
-                                    MainMenu.txtlasterror.Items.Add(logerror)
-                                Next
-                            Else
-                                MainMenu.txtlasterror.Items.Add("Aucune")
-                            End If
-                        Catch ex As Exception
-
-                        End Try
+                    list = myService.GetLastLogsError
+                    If list.Count > 0 Then
+                        Dim _tool As String = ""
+                        For Each logerror As String In list
+                            If logerror <> "" Then _tool &= logerror & vbCrLf
+                        Next
+                        ImgError.Visibility = Windows.Visibility.Visible
+                        ImgError.ToolTip = _tool
+                    Else
+                        ImgError.Visibility = Windows.Visibility.Collapsed
                     End If
+                    list = Nothing
+
+                    list = myService.GetDeviceNoMaJ(IdSrv)
+                    If list.Count > 0 Then
+                        Dim _tool As String = ""
+                        For Each logerror As String In list
+                            If logerror <> "" Then _tool &= logerror & vbCrLf
+                        Next
+                        ImgDeviceNoMaj.Visibility = Windows.Visibility.Visible
+                        ImgDeviceNoMaj.ToolTip = _tool
+                    Else
+                        ImgDeviceNoMaj.Visibility = Windows.Visibility.Collapsed
+                    End If
+                    list = Nothing
 
                     Ellipse1.Fill = myBrushVert
                 Catch ex As Exception
@@ -1504,7 +1512,6 @@ Class Window1
     Private Sub ShowMainMenu()
         Try
             Dim MainMenu As New uMainMenu
-            Dim listdevicenomaj As List(Of String)
 
             MainMenu.Uid = "MAINMENU"
             AddHandler MainMenu.menu_contextmenu, AddressOf MainMenucontextmenu
@@ -1518,25 +1525,6 @@ Class Window1
             HMainMenu = CanvasRight.ActualHeight / 2 - (MainMenu.Height / 2)
             Canvas.SetLeft(MainMenu, WMainMenu)
             Canvas.SetTop(MainMenu, HMainMenu)
-
-            'Affichage des dernieres erreurs et composants non a jour
-            MainMenu.txtlasterror.Items.Clear()
-            MainMenu.txtlasterror.Items.Add("Recherche en cours")
-            MainMenu.txtlastdevice.Items.Clear()
-
-            Try
-                listdevicenomaj = myService.GetDeviceNoMaJ(IdSrv)
-                MainMenu.txtlastdevice.Items.Clear()
-                If listdevicenomaj.Count > 0 Then
-                    For Each _dev In listdevicenomaj
-                        MainMenu.txtlastdevice.Items.Add(_dev)
-                    Next
-                Else
-                    MainMenu.txtlastdevice.Items.Add("Aucun")
-                End If
-            Catch ex As Exception
-                MessageBox.Show("ERREUR Sub ShowMainMenu: Device en Erreurs : " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-            End Try
 
             AnimationApparition(MainMenu)
             flagShowMainMenu = True

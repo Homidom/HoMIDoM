@@ -104,30 +104,6 @@ Partial Friend NotInheritable Class MySettings
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
-    Public Property ShowDeviceNoMaJ() As Boolean
-        Get
-            Return CType(Me("ShowDeviceNoMaJ"),Boolean)
-        End Get
-        Set
-            Me("ShowDeviceNoMaJ") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
-    Public Property ShowLogError() As Boolean
-        Get
-            Return CType(Me("ShowLogError"),Boolean)
-        End Get
-        Set
-            Me("ShowLogError") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
     Public Property SaveRealTime() As Boolean
         Get
             Return CType(Me("SaveRealTime"),Boolean)
