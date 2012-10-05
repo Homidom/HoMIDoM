@@ -229,17 +229,17 @@ Namespace HoMIDom
             thr.IsBackground = True
             thr.Start()
 
-            If _CycleSave > 0 And _Finish = True Then
-                If ladate.Minute >= _NextTimeSave.Minute Then
-                    _NextTimeSave = Now.AddMinutes(_CycleSave)
-                    SaveConfig(_MonRepertoire & "\config\homidom.xml")
-                End If
-            End If
-
             Try
                 '---- Actions à effectuer toutes les minutes ----
                 If ladate.Second = 0 Then
                     VerifIsJour()
+
+                    If _CycleSave > 0 And _Finish = True Then
+                        If ladate.Minute >= _NextTimeSave.Minute Then
+                            _NextTimeSave = Now.AddMinutes(_CycleSave)
+                            SaveConfig(_MonRepertoire & "\config\homidom.xml")
+                        End If
+                    End If
                 End If
 
                 '---- Actions à effectuer toutes les heures ----
