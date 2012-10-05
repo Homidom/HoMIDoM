@@ -8,7 +8,7 @@
             <StackPanel >
                 <Label Name="Label1" HorizontalAlignment="Center"  VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Test Device</Label>
                 <StackPanel Orientation="Horizontal" >
-                    <Label Height="22" HorizontalAlignment="Left" Margin="5" Name="Label2" VerticalAlignment="Top" Width="62" Foreground="White">Fonction:</Label>
+                    <Label HorizontalAlignment="Left" Margin="5" Name="Label2" VerticalAlignment="Top" Width="62" Foreground="White">Fonction:</Label>
                     <ComboBox Height="25" Margin="5" Width="200" Name="CbCmd" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2"/>
                 </StackPanel>
                 <Rectangle Height="5" />
