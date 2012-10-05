@@ -112,7 +112,7 @@
                 </StackPanel>
             </StackPanel>
         </Border>
-        <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgDevice" Width="60" VerticalAlignment="Top" Source="/HoMIAdmiN;component/Images/Defaut_128.png" Stretch="Fill">
+        <Image Height="80" HorizontalAlignment="Left" Margin="17,1,0,0" Name="ImgDevice" Width="80" VerticalAlignment="Top" Source="/HoMIAdmiN;component/Images/Defaut_128.png" Stretch="Fill">
             <Image.LayoutTransform >
                 <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
             </Image.LayoutTransform>

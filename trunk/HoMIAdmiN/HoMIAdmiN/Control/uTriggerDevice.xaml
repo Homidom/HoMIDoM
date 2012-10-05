@@ -8,12 +8,12 @@
                 <Label HorizontalAlignment="Center"  Content="Trigger Device" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Name="Label1" />
                 <Rectangle Height="40" />
                 <StackPanel Orientation="Horizontal" >
-                    <Label Content="Nom :" HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Width="77" Foreground="White" Height="26" Margin="1" />
+                    <Label Content="Nom :" HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Width="75" Foreground="White" Height="26" Margin="1" />
                     <TextBox Height="25" HorizontalAlignment="Left"  Name="TxtNom" VerticalAlignment="Top" Width="218" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
                     <CheckBox Content="Enable" Margin="5" Name="ChkEnable" Background="DarkGray" BorderBrush="Black" Foreground="White" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
-                    <Label Content="Description :" Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" Width="77" Height="28" Margin="1" />
+                    <Label Content="Description :" Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" Width="75" Height="28" Margin="1" />
                     <TextBox Height="25" Name="TxtDescription" Width="400" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
                 </StackPanel>
                 <Rectangle Height="20" />
@@ -36,14 +36,14 @@
                     <StackPanel Margin="0,5,5,5">
                         <Label Content="Macro(s):" FontSize="14" Foreground="Orange" />
                         <StackPanel >
-                            <StackPanel Orientation="Horizontal" >
+                            <!--<StackPanel Orientation="Horizontal" >
                                 <Button Name="UpMacro" Template="{DynamicResource GlassButton}" ToolTip="Monter la macro" Margin="2">
                                     <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/fleche_haut_32.png"  />
                                 </Button>
                                 <Button Name="DownMacro" Template="{DynamicResource GlassButton}" ToolTip="Descendre la macro" Margin="2">
                                     <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
                                 </Button>
-                            </StackPanel>
+                            </StackPanel>-->
                             <ListBox Height="182" HorizontalAlignment="Left" Margin="2" Name="ListBox1" VerticalAlignment="Top" Width="205" AllowDrop="True" Background="DarkGray" BorderBrush="Black" Foreground="White" ToolTip="Astuce : Pour sélectionner une macro, cliquer à droite de son nom dans le vide."/>
                         </StackPanel>
                     </StackPanel>
