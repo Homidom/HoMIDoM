@@ -33,19 +33,11 @@
 
                     </StackPanel>
                     <Rectangle Width="20" />
-                    <StackPanel Margin="0,5,5,5">
+                    <StackPanel >
                         <Label Content="Macro(s):" FontSize="14" Foreground="Orange" />
                         <StackPanel >
-                            <!--<StackPanel Orientation="Horizontal" >
-                                <Button Name="UpMacro" Template="{DynamicResource GlassButton}" ToolTip="Monter la macro" Margin="2">
-                                    <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/fleche_haut_32.png"  />
-                                </Button>
-                                <Button Name="DownMacro" Template="{DynamicResource GlassButton}" ToolTip="Descendre la macro" Margin="2">
-                                    <Image Height="20" Width="20" Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
-                                </Button>
-                            </StackPanel>-->
-                            <ListBox Height="182" HorizontalAlignment="Left" Margin="2" Name="ListBox1" VerticalAlignment="Top" Width="205" AllowDrop="True" Background="DarkGray" BorderBrush="Black" Foreground="White" ToolTip="Astuce : Pour sélectionner une macro, cliquer à droite de son nom dans le vide."/>
-                        </StackPanel>
+                                  <ListBox Height="182" HorizontalAlignment="Left" Margin="2" Name="ListBox1" VerticalAlignment="Top" Width="205" AllowDrop="True" Background="DarkGray" BorderBrush="Black" Foreground="White" ToolTip="Astuce : Pour sélectionner une macro, cliquer à droite de son nom dans le vide."/>
+                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
