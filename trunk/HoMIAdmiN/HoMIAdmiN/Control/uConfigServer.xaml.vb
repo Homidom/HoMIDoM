@@ -117,8 +117,6 @@ Partial Public Class uConfigServer
 
                 myService.SetTypeLogEnable(_list)
 
-                My.Settings.ShowLogError = ChKShowLogError.IsChecked
-                My.Settings.ShowDeviceNoMaJ = ChkShowDeviceNoMaJ.IsChecked
                 My.Settings.SaveRealTime = ChKSaveRealTime.IsChecked
                 My.Settings.Save()
 
@@ -182,8 +180,6 @@ Partial Public Class uConfigServer
                 ChkTyp8.IsChecked = _list.Item(8)
                 ChkTyp9.IsChecked = _list.Item(9)
 
-                ChKShowLogError.IsChecked = My.Settings.ShowLogError
-                ChkShowDeviceNoMaJ.IsChecked = My.Settings.ShowDeviceNoMaJ
                 ChKSaveRealTime.IsChecked = My.Settings.SaveRealTime
             End If
 

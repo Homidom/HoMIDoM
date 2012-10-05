@@ -52,13 +52,6 @@
                                         <Label Foreground="White" Width="190">Sauvegarder en temps réel:</Label>
                                         <CheckBox Name="ChKSaveRealTime" IsChecked="True" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" />
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" >
-                                        <Label Foreground="White" Width="190">Menu principal, afficher:</Label>
-                                        <StackPanel>
-                                            <CheckBox Name="ChKShowLogError" Content="Logs en Erreur  " Height="15" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" IsChecked="True" />
-                                            <CheckBox Name="ChkShowDeviceNoMaJ" Content="Composants non à jour" Height="15" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" IsChecked="True" />
-                                        </StackPanel>
-                                    </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <Label Foreground=" White" Content="Voix par défaut:" VerticalAlignment="center" Width="100"/>
                                         <ComboBox Name="CbVoice" Width="150" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="24" />

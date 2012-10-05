@@ -338,31 +338,12 @@
             ctxMenuModule.Items.Add(mnu101)
             menu_module.ContextMenu = ctxMenuModule
 
-            If My.Settings.ShowLogError = True Then
-                groupBox1.Visibility = Windows.Visibility.Visible
-            Else
-                groupBox1.Visibility = Windows.Visibility.Collapsed
-            End If
-            If My.Settings.ShowDeviceNoMaJ = True Then
-                groupBox2.Visibility = Windows.Visibility.Visible
-            Else
-                groupBox2.Visibility = Windows.Visibility.Collapsed
-            End If
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub uMainMenu New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
     Private Sub menu_contextmenuclick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
-        'Select Case sender.tag
-        '    Case "drv"
-        '        Select Case sender.uid
-        '            Case "drv_gerer"
-        '                MessageBox.Show("ERREUR Sub menu_contextmenuclick Driver Gerer", "INFO", MessageBoxButton.OK, MessageBoxImage.Information)
-        '            Case "drv_modifier"
-        '                MessageBox.Show("ERREUR Sub menu_contextmenuclick Driver Modifier", "INFO", MessageBoxButton.OK, MessageBoxImage.Information)
-        '        End Select
-        'End Select
         RaiseEvent menu_contextmenu(sender.uid)
     End Sub
 End Class
