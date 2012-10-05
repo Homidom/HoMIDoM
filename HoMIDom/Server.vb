@@ -287,6 +287,13 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick TriggerTimer", "Exception : " & ex.Message)
             End Try
         End Sub
+
+        ''' <summary>Evenement sur UnhandleException</summary>
+        ''' <remarks></remarks>
+        Private Sub Server_UnhandledExceptionEvent(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs)
+            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "UnhandledExceptionEvent", "Exception : " & e.ExceptionObject.ToString())
+        End Sub
+
 #End Region
 
 #Region "Fonctions/Sub propres au serveur"
@@ -2533,6 +2540,9 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub start() Implements IHoMIDom.Start
             Try
+                'ajout d'un handler pour capturer les erreurs non catchés
+                AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf Server_UnhandledExceptionEvent
+
                 Dim retour As String
 
                 'Charge les types de log
@@ -2723,7 +2733,8 @@ Namespace HoMIDom
                 '    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Stop", "Erreur lors de la deconnexion de la BDD Medias : " & retour)
                 'End If
 
-
+                'suprression de l'handler pour recup les erreurs non catchés
+                RemoveHandler AppDomain.CurrentDomain.UnhandledException, AddressOf Server_UnhandledExceptionEvent
 
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Stop", "Serveur Arrêté")
             Catch ex As Exception
