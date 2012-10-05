@@ -39,7 +39,7 @@
                 <StackPanel CanHorizontallyScroll="True">
                     <StackPanel HorizontalAlignment="Left"  Name="StckPnlLib" VerticalAlignment="Top" Orientation="Horizontal" Background="DarkGray" CanHorizontallyScroll="True"/>
                     <StackPanel Background="DarkGray" Height="22" HorizontalAlignment="Left"  Name="StckPnlLibTr" Orientation="Horizontal" VerticalAlignment="Top" CanHorizontallyScroll="True"  />
-                    <StackPanel HorizontalAlignment="Left" MinHeight="100" Name="StackPanel1" VerticalAlignment="Top"   CanVerticallyScroll=" True" CanHorizontallyScroll="True"/>
+                    <StackPanel HorizontalAlignment="Left" MinHeight="300" Name="StackPanel1" VerticalAlignment="Top"   CanVerticallyScroll=" True" CanHorizontallyScroll="True"/>
                 </StackPanel>
             </ScrollViewer>
   

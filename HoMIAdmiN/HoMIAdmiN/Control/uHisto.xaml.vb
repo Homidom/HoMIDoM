@@ -213,6 +213,8 @@ Public Class uHisto
                 End If
                 _CurrentChart.SaveImage(saveFileDialog1.FileName, format)
             End If
+        Else
+            MessageBox.Show("No curent")
         End If
     End Sub
 
