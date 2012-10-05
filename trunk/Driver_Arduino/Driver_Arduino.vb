@@ -1,6 +1,7 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
+Imports System.IO.Ports
 Imports Firmata 'Référence à la dll Firmata
 
 '************************************************
@@ -385,13 +386,56 @@ Public Class Driver_Arduino
                     Next
                 End Try
 
-                'On ajoute à l'objet les évènements générés par la carte (fournis par la dll)
-                AddHandler ArduinoVB.DigitalMessageReceieved, AddressOf FirmataVB1_DigitalMessageReceieved 'Evènement lors d'un changement de port Binaire
-                AddHandler ArduinoVB.AnalogMessageReceieved, AddressOf FirmataVB1_AnalogMessageReceieved 'Evènement lors d'un changement d'entrée analogique
-                AddHandler ArduinoVB.VersionInfoReceieved, AddressOf FirmataVB1_VersionInfoReceieved 'Evènement lorsque la carte envoi sa version
 
                 'Connexion à la carte
                 Try
+                    Try
+                        Dim trv As Boolean = False
+                        Dim _ports As String = "<AUCUN>"
+
+                        If _Com = "" Or _Com = " " Then
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le port COM est vide veuillez le renseigner")
+                            Exit Sub
+                        End If
+
+                        Dim portNames As String() = SerialPort.GetPortNames()
+                        Array.Sort(portNames)
+                        For Each serialPortName As String In portNames
+                            _ports &= serialPortName & " "
+                            If UCase(serialPortName) = UCase(_Com) Then
+                                trv = True
+                            End If
+                        Next
+
+                        If trv = False Then
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le port COM " & _Com & " n'existe pas, seuls les ports " & _ports & " existe(s)!")
+                            Exit Sub
+                        End If
+
+                        Dim serialPortObj As SerialPort
+                        serialPortObj = New SerialPort()
+                        serialPortObj.PortName = _Com
+                        serialPortObj.BaudRate = 57600
+                        AddHandler serialPortObj.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf serialPortObj_ErrorReceived)
+
+                        serialPortObj.Open()
+                        Threading.Thread.Sleep(100)
+                        serialPortObj.Close()
+                        RemoveHandler serialPortObj.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf serialPortObj_ErrorReceived)
+                        serialPortObj.Dispose()
+
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur lors de la connexion au port COM: " & ex.ToString)
+                        _IsConnect = False
+                        Exit Sub
+                    End Try
+
+
+                    'On ajoute à l'objet les évènements générés par la carte (fournis par la dll)
+                    AddHandler ArduinoVB.DigitalMessageReceieved, AddressOf FirmataVB1_DigitalMessageReceieved 'Evènement lors d'un changement de port Binaire
+                    AddHandler ArduinoVB.AnalogMessageReceieved, AddressOf FirmataVB1_AnalogMessageReceieved 'Evènement lors d'un changement d'entrée analogique
+                    AddHandler ArduinoVB.VersionInfoReceieved, AddressOf FirmataVB1_VersionInfoReceieved 'Evènement lorsque la carte envoi sa version
+
                     ArduinoVB.Connect(_Com, _Baud)
                     Threading.Thread.Sleep(1000)
                 Catch ex As Exception
@@ -647,6 +691,11 @@ Public Class Driver_Arduino
 #End Region
 
 #Region "Fonctions propres au driver"
+
+    Private Sub serialPortObj_ErrorReceived(ByVal sender As Object, ByVal e As SerialErrorReceivedEventArgs)
+        _IsConnect = False
+        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Error: " & e.ToString)
+    End Sub
 
     ''' <summary>
     ''' Message envoyé par la carte (évènement) lorsqu'un port binaire a changée
