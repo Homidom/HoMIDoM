@@ -1132,6 +1132,12 @@ HoMIDom
  </summary>
 	<returns>A string array of all the voices installed</returns>
 	<remarks>Make sure you have the System.Speech namespace reference added to your project</remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetFirstVoice">
+	<summary>
+ Retourne la première voix disponible (utilisée pour la mettre par défaut si aucune voix n'est définie)
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SetSaveRealTime(System.Boolean)">
 	<summary>
  Indique au serveur si on sauvegarde en temps réel

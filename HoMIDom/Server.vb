@@ -451,6 +451,7 @@ Namespace HoMIDom
                                             _CycleSave = list.Item(0).Attributes.Item(j).Value
                                         Case "voice"
                                             _Voice = list.Item(0).Attributes.Item(j).Value
+                                            If _Voice = "" Or _Voice = " " Then _Voice = GetFirstVoice()
                                         Case "saverealtime"
                                             _SaveRealTime = list.Item(0).Attributes.Item(j).Value
                                         Case Else
@@ -855,20 +856,6 @@ Namespace HoMIDom
                                                 _DevicesNoMAJ.Add(.Name)
                                             End If
                                         End If
-                                        'If _Dev.type = "MULTIMEDIA" Then
-                                        '    For k As Integer = 0 To list.Item(j).ChildNodes.Count - 1
-                                        '        If list.Item(j).ChildNodes.Item(k).Name = "commands" Then
-                                        '            _Dev.ListCommandName.Clear()
-                                        '            _Dev.ListCommandData.Clear()
-                                        '            _Dev.ListCommandRepeat.Clear()
-                                        '            For k1 As Integer = 0 To list.Item(j).ChildNodes.Item(k).ChildNodes.Count - 1
-                                        '                _Dev.ListCommandName.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(0).Value)
-                                        '                _Dev.ListCommandData.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(1).Value)
-                                        '                _Dev.ListCommandRepeat.Add(list.Item(j).ChildNodes.Item(k).ChildNodes.Item(k1).Attributes(2).Value)
-                                        '            Next
-                                        '        End If
-                                        '    Next
-                                        'End If
                                         If .ID <> "" And .Name <> "" And .Adresse1 <> "" And .DriverId <> "" Then
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
                                             If .ID = "soleil01" Then
@@ -3236,6 +3223,27 @@ Namespace HoMIDom
             Return names
         End Function
 
+        ''' <summary>
+        ''' Retourne la première voix disponible (utilisée pour la mettre par défaut si aucune voix n'est définie)
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Private Function GetFirstVoice() As String
+            Try
+
+                Dim strAllVoices() As String = ReturnAllSpeechSynthesisVoices()
+                Dim retour As String = ""
+
+                If strAllVoices.Length > 0 Then
+                    retour = strAllVoices(0)
+                End If
+
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetFirstVoice", "Erreur : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
 
 #End Region
 
