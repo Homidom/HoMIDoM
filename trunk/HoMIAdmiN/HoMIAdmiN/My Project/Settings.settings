@@ -14,12 +14,6 @@
     <Setting Name="UserPassword" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ShowDeviceNoMaJ" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="ShowLogError" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="SaveRealTime" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
