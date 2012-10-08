@@ -292,6 +292,7 @@ Partial Public Class uDevice
                 Exit Sub
             End If
 
+            VerifDriver(_driverid)
             If _DeviceId = "" Then _DeviceId = result
             SaveInZone()
             FlagChange = True
@@ -485,6 +486,8 @@ Partial Public Class uDevice
                 End If
             Next
             myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
+
+            VerifDriver(_driverid)
             SaveInZone()
 
             BtnRead.Visibility = Windows.Visibility.Visible
@@ -602,7 +605,8 @@ Partial Public Class uDevice
                                     If _Driver.LabelsDevice.Item(k).Tooltip = "" Then
                                         TxtLastChangeDuree.ToolTip = "Permet de vérifier si le composant a été mis à jour depuis moins de x minutes sinon il apparait en erreur"
                                         Label19.ToolTip = "Permet de vérifier si le composant a été mis à jour depuis moins de x minutes sinon il apparait en erreur"
-                                    Else                                        TxtLastChangeDuree.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    Else
+                                        TxtLastChangeDuree.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                         Label19.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                     End If
                                     TxtLastChangeDuree.Visibility = Windows.Visibility.Visible
@@ -707,4 +711,24 @@ Partial Public Class uDevice
         End Try
     End Sub
 
+    Private Sub VerifDriver(ByVal IdDriver As String)
+        Try
+            Dim retour = ""
+
+            Dim x As TemplateDriver = myService.ReturnDriverByID(IdSrv, IdDriver)
+            If x IsNot Nothing Then
+                If x.Enable = False Then
+                    MessageBox.Show("Le driver " & x.Nom & " n'est pas activé (Enable), le composant ne pourra pas être utilisé!", "INFO", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+                If x.IsConnect = False Then
+                    MessageBox.Show("Le driver " & x.Nom & " n'est pas démarré, le composant ne pourra pas être utilisé!", "INFO", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                End If
+            Else
+                MessageBox.Show("Le driver n'a pas pu être trouvé ! (ID du driver: " & IdDriver & ")", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR VerifDriver: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
 End Class

@@ -2375,6 +2375,7 @@ Class Window1
 
                 If retour = -2 Then
                     MessageBox.Show("Vous ne pouvez pas supprimer cet élément!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Me.Cursor = Nothing
                     Exit Sub
                 Else
                     FlagChange = True
@@ -2382,6 +2383,7 @@ Class Window1
 
             Else
                 MessageBox.Show("Veuillez sélectionner un élément à supprimer!")
+                Me.Cursor = Nothing
             End If
         Catch ex As Exception
             MessageBox.Show("ERREUR de la suppression: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
