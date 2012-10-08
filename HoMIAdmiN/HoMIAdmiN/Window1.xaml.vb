@@ -842,6 +842,20 @@ Class Window1
                 stack.Orientation = Orientation.Horizontal
                 Dim _nbhisto As Long = myService.DeviceAsHisto(Dev.ID)
 
+                'gestion de l'image du composant dans le menu
+                img.Height = 20
+                img.Width = 20
+                If Trim(Dev.Picture) <> "" Then
+                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(Dev.Picture))
+                Else
+                    uri = MyRep & "\Images\Icones\Composant_32.png"
+                    bmpImage.BeginInit()
+                    bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
+                    bmpImage.EndInit()
+                    img.Source = bmpImage
+                End If
+                stack.Children.Add(img)
+
                 'creation du label
                 Dim label As New Label
                 If Dev.Enable = True Then
@@ -858,20 +872,6 @@ Class Window1
                     label.Foreground = New SolidColorBrush(Colors.Black)
                 End If
                 label.Content = Dev.Name & " (" & nomdriver & ")"
-
-                'gestion de l'image du composant dans le menu
-                img.Height = 20
-                img.Width = 20
-                If Trim(Dev.Picture) <> "" Then
-                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(Dev.Picture))
-                Else
-                    uri = MyRep & "\Images\Icones\Composant_32.png"
-                    bmpImage.BeginInit()
-                    bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
-                    bmpImage.EndInit()
-                    img.Source = bmpImage
-                End If
-                stack.Children.Add(img)
 
                 'verification si le device fait parti d'une zone
                 For Each Zon In ListeZones
@@ -904,6 +904,12 @@ Class Window1
 
                 Dim stkpopup As New StackPanel
 
+                Dim imgpopup As New Image
+                imgpopup.Width = 45
+                imgpopup.Height = 45
+                imgpopup.Source = img.Source
+                stkpopup.Children.Add(imgpopup)
+
                 Dim tool As New Label
                 tool.Content = "Nom: " & Dev.Name & vbCrLf
                 tool.Content &= "Enable " & Dev.Enable & vbCrLf
@@ -915,13 +921,8 @@ Class Window1
                 tool.Content &= "Value: " & Dev.Value
                 stkpopup.Children.Add(tool)
 
-                Dim imgpopup As New Image
-                imgpopup.Width = 45
-                imgpopup.Height = 45
-                imgpopup.Source = img.Source
-                stkpopup.Children.Add(imgpopup)
-
                 tl.Content = stkpopup
+                stkpopup = Nothing
 
                 label.ToolTip = tl
 
