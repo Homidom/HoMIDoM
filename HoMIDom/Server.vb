@@ -5988,7 +5988,8 @@ Namespace HoMIDom
                 If x IsNot Nothing Then
                     If x.ListElement.Count > 0 Then
                         For i As Integer = 0 To x.ListElement.Count - 1
-                            y.Add(ReturnDeviceById(_IdSrv, x.ListElement.Item(i).ElementID))
+                            Dim z As TemplateDevice = ReturnDeviceById(IdSrv, x.ListElement.Item(i).ElementID)
+                            If z IsNot Nothing Then y.Add(z)
                         Next
                     End If
                 End If
@@ -5996,6 +5997,64 @@ Namespace HoMIDom
                 y = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetDeviceInZone", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>Retourne la liste des zones d'une zone depuis son ID</summary>
+        ''' <param name="ZoneId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function GetZoneInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of Zone) Implements IHoMIDom.GetZoneInZone
+            If VerifIdSrv(IdSrv) = False Then
+                Return Nothing
+                Exit Function
+            End If
+
+            Try
+                Dim x As Zone = ReturnZoneById(_IdSrv, zoneId)
+                Dim y As New List(Of Zone)
+                If x IsNot Nothing Then
+                    If x.ListElement.Count > 0 Then
+                        For i As Integer = 0 To x.ListElement.Count - 1
+                            Dim z As Zone = ReturnZoneById(IdSrv, x.ListElement.Item(i).ElementID)
+                            If z IsNot Nothing Then y.Add(z)
+                        Next
+                    End If
+                End If
+                Return y
+                y = Nothing
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetZoneInZone", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>Retourne la liste des macros d'une zone depuis son ID</summary>
+        ''' <param name="ZoneId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Function GetMacroInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of Macro) Implements IHoMIDom.GetMacroInZone
+            If VerifIdSrv(IdSrv) = False Then
+                Return Nothing
+                Exit Function
+            End If
+
+            Try
+                Dim x As Zone = ReturnZoneById(_IdSrv, zoneId)
+                Dim y As New List(Of Macro)
+                If x IsNot Nothing Then
+                    If x.ListElement.Count > 0 Then
+                        For i As Integer = 0 To x.ListElement.Count - 1
+                            Dim z As Macro = ReturnMacroById(IdSrv, x.ListElement.Item(i).ElementID)
+                            If z IsNot Nothing Then y.Add(z)
+                        Next
+                    End If
+                End If
+                Return y
+                y = Nothing
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetMacroInZone", "Exception : " & ex.Message)
                 Return Nothing
             End Try
         End Function

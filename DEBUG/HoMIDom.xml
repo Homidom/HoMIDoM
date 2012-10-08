@@ -1503,6 +1503,16 @@ HoMIDom
 	<param name="ZoneId"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetZoneInZone(System.String,System.String)">
+	<summary>Retourne la liste des zones d'une zone depuis son ID</summary>
+	<param name="ZoneId"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetMacroInZone(System.String,System.String)">
+	<summary>Retourne la liste des macros d'une zone depuis son ID</summary>
+	<param name="ZoneId"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ZoneIsEmpty(System.String,System.String)">
 	<summary>
  Indique si la zone ne contient aucun device
@@ -2351,6 +2361,16 @@ HoMIDom
 	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
 	<param name="zoneId">ID de la zone</param>
 	<returns>List de type TemplateDevice, Nothing si zone non trouvée, vide ou si ID du serveur erroné</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetZoneInZone(System.String,System.String)">
+	<summary>Retourne la liste des zones d'une zone depuis son ID</summary>
+	<param name="ZoneId"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetMacroInZone(System.String,System.String)">
+	<summary>Retourne la liste des macros d'une zone depuis son ID</summary>
+	<param name="ZoneId"></param>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnZoneByID(System.String,System.String)">
 	<summary>
