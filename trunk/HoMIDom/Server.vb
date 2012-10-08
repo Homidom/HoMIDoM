@@ -235,7 +235,7 @@ Namespace HoMIDom
                     VerifIsJour()
 
                     If _CycleSave > 0 And _Finish = True Then
-                        If ladate.Minute >= _NextTimeSave.Minute Then
+                        If ladate >= _NextTimeSave Then
                             _NextTimeSave = Now.AddMinutes(_CycleSave)
                             SaveConfig(_MonRepertoire & "\config\homidom.xml")
                         End If
