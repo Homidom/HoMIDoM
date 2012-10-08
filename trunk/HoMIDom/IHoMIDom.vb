@@ -678,6 +678,18 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function GetDeviceInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of TemplateDevice)
 
+        ''' <summary>Retourne la liste des zones d'une zone depuis son ID</summary>
+        ''' <param name="ZoneId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetZoneInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of Zone)
+
+        ''' <summary>Retourne la liste des macros d'une zone depuis son ID</summary>
+        ''' <param name="ZoneId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetMacroInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of Macro)
+
         ''' <summary>
         ''' Retourne l'objet d'une zone par son ID
         ''' </summary>
