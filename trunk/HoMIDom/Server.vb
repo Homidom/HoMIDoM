@@ -5612,7 +5612,7 @@ Namespace HoMIDom
                 Dim retour As Object = Nothing
                 Dim listresultat As New ArrayList
                 For i As Integer = 0 To _ListDevices.Count - 1
-                    If (DeviceAdresse = "" Or _ListDevices.Item(i).Adresse1 = DeviceAdresse.ToUpper()) And (DeviceType = "" Or _ListDevices.Item(i).type = DeviceType.ToUpper()) And (DriverID = "" Or _ListDevices.Item(i).DriverID = DriverID.ToUpper()) And _ListDevices.Item(i).Enable = Enable Then
+                    If (DeviceAdresse = "" Or _ListDevices.Item(i).Adresse1.ToUpper() = DeviceAdresse.ToUpper()) And (DeviceType = "" Or _ListDevices.Item(i).type = DeviceType.ToUpper()) And (DriverID = "" Or _ListDevices.Item(i).DriverID = DriverID.ToUpper()) And _ListDevices.Item(i).Enable = Enable Then
                         retour = _ListDevices.Item(i)
                         listresultat.Add(retour)
                         retour = Nothing

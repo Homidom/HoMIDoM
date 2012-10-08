@@ -297,7 +297,7 @@ Public Class Driver_X10_CM11
                 Case "ADRESSE1"
                     If Value = " " Then retour = "l'adresse du module est obligatoire"
                     If IsNumeric(Mid(Value, 1, 1)) Then retour = "l'adresse doit commencer par une lettre (House), ex: A"
-                    If IsNumeric(Mid(Value, 2, Len(Value) - 1)) = False Then retour = "l'adresse doit être assciée au House puis le Code qui doit être compris entre 1 et 16, ex: C3"
+                    If IsNumeric(Mid(Value, 2, Len(Value) - 1)) = False Then retour = "l'adresse doit être associée au House puis le Code qui doit être compris entre 1 et 16, ex: C3"
             End Select
             Return retour
         Catch ex As Exception

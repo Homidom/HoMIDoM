@@ -272,8 +272,28 @@ Public Class Driver_X10_CM15
         Try
             Dim retour As String = "0"
             Select Case UCase(Champ)
-
-
+                Case "ADRESSE1"
+                    If Value = " " Or Value = "" Then
+                        retour = "l'adresse du module est obligatoire"
+                    ElseIf Len(Value) < 2 Then
+                        retour = "l'adresse doit à minima comporter une lettre (House) et un chiffre (Code)"
+                    ElseIf IsNumeric(Mid(Value, 1, 1)) Then
+                        retour = "l'adresse doit commencer par une lettre (House), ex: A"
+                    ElseIf Value < "A" Or Value > "P" Then
+                        retour = "l'adresse House doit être compris entre Ax et Px (x numéro de Code)"
+                    ElseIf IsNumeric(Mid(Value, 2, Len(Value) - 1)) = False Then
+                        retour = "l'adresse doit être assciée au House puis le Code qui doit être compris entre 1 et 16, ex: C3"
+                    ElseIf CInt(Mid(Value, 2, Len(Value) - 1)) < 1 Or CInt(Mid(Value, 2, Len(Value) - 1)) > 16 Then
+                        retour = "l'adresse doit être assciée au House puis le Code qui doit être compris entre 1 et 16, ex: C3"
+                    End If
+                Case "ADRESSE2"
+                    If Value = " " Or Value = "" Then
+                        retour = "Le type du module est obligatoire"
+                    ElseIf IsNumeric(Value.ToString) = False Then
+                        retour = "le type doit être numérique et doit être 0 (plc) ou 1 (RF)"
+                    ElseIf CInt(Value.ToString) < 0 Or CInt(Value.ToString) > 1 Then
+                        retour = "le type doit être 0 (plc) ou 1 (RF)"
+                    End If
             End Select
             Return retour
         Catch ex As Exception
@@ -332,8 +352,16 @@ Public Class Driver_X10_CM15
     End Property
 
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-        If _Enable = False Then Exit Sub
-        If _IsConnect = False Then Exit Sub
+        If _Enable = False Then
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Impossible d'exécuter la commande car le driver n'est pas activé (Enable)")
+            Exit Sub
+        End If
+        If _IsConnect = False Then
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Impossible d'exécuter la commande car le driver n'est pas démarré")
+            Exit Sub
+        End If
+
+
         Try
             Dim TypeDev As String = ""
             Dim idx As Integer = -1
@@ -342,7 +370,7 @@ Public Class Driver_X10_CM15
             If IsNumeric(Objet.Adresse2.ToString) Then
                 idx = CInt(Objet.Adresse2.ToString)
                 If 0 < idx Or idx > 1 Then
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: l'adresse2 du composant " & Objet.Name & " doit être numérique et compris entre 0 et 1")
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: l'adresse2 du composant " & Objet.Name & " doit être compris entre 0 et 1")
                     Exit Sub
                 End If
             Else

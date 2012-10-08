@@ -266,9 +266,19 @@ Public Class Driver_X10_CM11Bis
             Dim retour As String = "0"
             Select Case UCase(Champ)
                 Case "ADRESSE1"
-                    If Value = " " Then retour = "l'adresse du module est obligatoire"
-                    If IsNumeric(Mid(Value, 1, 1)) Then retour = "l'adresse doit commencer par une lettre (House), ex: A"
-                    If IsNumeric(Mid(Value, 2, Len(Value) - 1)) = False Then retour = "l'adresse doit être assciée au House puis le Code qui doit être compris entre 1 et 16, ex: C3"
+                    If Value = " " Or Value = "" Then
+                        retour = "l'adresse du module est obligatoire"
+                    ElseIf Len(Value) < 2 Then
+                        retour = "l'adresse doit à minima comporter une lettre (House) et un chiffre (Code)"
+                    ElseIf IsNumeric(Mid(Value, 1, 1)) Then
+                        retour = "l'adresse doit commencer par une lettre (House), ex: A"
+                    ElseIf Value < "A" Or Value > "P" Then
+                        retour = "l'adresse House doit être compris entre Ax et Px (x numéro de Code)"
+                    ElseIf IsNumeric(Mid(Value, 2, Len(Value) - 1)) = False Then
+                        retour = "l'adresse doit être assciée au House puis le Code qui doit être compris entre 1 et 16, ex: C3"
+                    ElseIf CInt(Mid(Value, 2, Len(Value) - 1)) < 1 Or CInt(Mid(Value, 2, Len(Value) - 1)) > 16 Then
+                        retour = "l'adresse doit être assciée au House puis le Code qui doit être compris entre 1 et 16, ex: C3"
+                    End If
             End Select
             Return retour
         Catch ex As Exception
@@ -358,8 +368,14 @@ Public Class Driver_X10_CM11Bis
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
-            If _Enable = False Then Exit Sub
-            If _IsConnect = False Then Exit Sub
+            If _Enable = False Then
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Impossible d'exécuter la commande car le driver n'est pas activé (Enable)")
+                Exit Sub
+            End If
+            If _IsConnect = False Then
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Impossible d'exécuter la commande car le driver n'est pas démarré")
+                Exit Sub
+            End If
 
             Select Case UCase(Command)
                 Case "ON"
