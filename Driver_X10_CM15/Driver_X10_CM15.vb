@@ -367,9 +367,9 @@ Public Class Driver_X10_CM15
             Dim idx As Integer = -1
 
             'On vérifie que l'adresse2 est bien 0 ou 1 (type de device)
-            If IsNumeric(Objet.Adresse2.ToString) Then
-                idx = CInt(Objet.Adresse2.ToString)
-                If 0 < idx Or idx > 1 Then
+            If IsNumeric(Objet.Adresse2) Then
+                idx = CInt(Objet.Adresse2)
+                If idx < 0 Or idx > 1 Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: l'adresse2 du composant " & Objet.Name & " doit être compris entre 0 et 1")
                     Exit Sub
                 End If
