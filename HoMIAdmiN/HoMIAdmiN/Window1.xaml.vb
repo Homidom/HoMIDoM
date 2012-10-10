@@ -121,10 +121,12 @@ Class Window1
                     If list.Count > 0 Then
                         Dim _tool As String = ""
                         For Each logerror As String In list
-                            If logerror <> "" Then _tool &= logerror & vbCrLf
+                            If logerror <> "" And logerror <> " " Then
+                                _tool &= logerror & vbCrLf
+                                ImgError.Visibility = Windows.Visibility.Visible
+                                ImgError.ToolTip = _tool
+                            End If
                         Next
-                        ImgError.Visibility = Windows.Visibility.Visible
-                        ImgError.ToolTip = _tool
                     Else
                         ImgError.Visibility = Windows.Visibility.Collapsed
                     End If
@@ -134,10 +136,12 @@ Class Window1
                     If list.Count > 0 Then
                         Dim _tool As String = ""
                         For Each logerror As String In list
-                            If logerror <> "" Then _tool &= logerror & vbCrLf
+                            If logerror <> "" And logerror <> " " Then
+                                _tool &= logerror & vbCrLf
+                                ImgDeviceNoMaj.Visibility = Windows.Visibility.Visible
+                                ImgDeviceNoMaj.ToolTip = _tool
+                            End If
                         Next
-                        ImgDeviceNoMaj.Visibility = Windows.Visibility.Visible
-                        ImgDeviceNoMaj.ToolTip = _tool
                     Else
                         ImgDeviceNoMaj.Visibility = Windows.Visibility.Collapsed
                     End If

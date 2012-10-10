@@ -233,11 +233,12 @@
             </Image>
             <Label Content="#####" Foreground=" White" Name="LblSrv"/>
             <Rectangle Width="10"/>
+            <Image Name="ImgError" Margin="2" Height="20" Width="20" Source="/HoMIAdmiN;component/Images/Error.png" Visibility="Collapsed" />
+            <Image Name="ImgDeviceNoMaj" Margin="2" Height="20" Width="20" Source="/HoMIAdmiN;component/Images/Device_MaJ.png" Visibility="Collapsed" />
+
             <Image Name="ImgLog" Margin="2" Height="20" Source="/HoMIAdmiN;component/Images/Logs_128.png" Tag="7" />
             <Label Name="LOG" Content="LOG" Foreground=" White" Tag="7" />
             <Rectangle Width="10"/>
-            <Image Name="ImgError" Margin="2" Height="20" Width="20" Source="/HoMIAdmiN;component/Images/Error.png" Visibility="Collapsed" />
-            <Image Name="ImgDeviceNoMaj" Margin="2" Height="20" Width="20" Source="/HoMIAdmiN;component/Images/Device_MaJ.png" Visibility="Collapsed" />
         </StackPanel>
         
         <DockPanel Name="DKpanel">

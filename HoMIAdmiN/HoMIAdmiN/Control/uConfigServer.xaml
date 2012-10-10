@@ -5,8 +5,19 @@
     <Grid Margin="1" Background="#636060" Opacity="0.85">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
             <StackPanel>
-                <Label Name="Label0" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Propriétés du Serveur</Label>
-                <Rectangle Height="20"/>
+                <DockPanel >
+                    <Image Height="60" HorizontalAlignment="Left" Margin="17,1,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Serveur.png">
+                        <Image.LayoutTransform >
+                            <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
+                        </Image.LayoutTransform>
+                    </Image>
+                    <StackPanel DockPanel.Dock="Right" VerticalAlignment="Top">
+                    <Button Height="25" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnCancel" VerticalAlignment="Top" Width="88.75" Foreground="White">Fermer</Button>
+                    <Button Height="25" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnOK" VerticalAlignment="Top" Width="88.75" Foreground="White">Ok</Button>
+                </StackPanel>
+                    <Label Name="Label0" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Top">Propriétés du Serveur</Label>
+                </DockPanel>
+                <Rectangle Height="10"/>
                 <StackPanel Margin="5">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Margin="0,0,3,0">
@@ -42,15 +53,6 @@
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" Name="Label4" Width="190">Correction Heure Coucher Soleil:</Label>
                                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="26" Name="HCC" Text="0" TextAlignment="center" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Label Foreground="White" Name="Label15" Width="190">Sauvegarder automatiquement:</Label>
-                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="TxtSave" Text="0"  TextAlignment="center" />
-                                        <Label Foreground="White"> (en minutes, 0=Inactif)</Label>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="center">
-                                        <Label Foreground="White" Width="190">Sauvegarder en temps réel:</Label>
-                                        <CheckBox Name="ChKSaveRealTime" IsChecked="True" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <Label Foreground=" White" Content="Voix par défaut:" VerticalAlignment="center" Width="100"/>
@@ -117,6 +119,37 @@
                                     <PasswordBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,68,0,0" Name="TxtPassword" VerticalAlignment="Top" Width="230" />
                                 </Grid>
                             </GroupBox>
+                            <GroupBox Name="GroupBox24" Margin="2">
+                                <GroupBox.Header>
+                                    <Label Foreground="White" FontWeight="Bold">Configuration</Label>
+                                </GroupBox.Header>
+                                <StackPanel >
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Foreground="White" Name="Label15" Width="190">Sauvegarder automatiquement:</Label>
+                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="TxtSave" Text="0"  TextAlignment="center" />
+                                        <Label Foreground="White">(en minutes, 0=Inactif)</Label>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="center">
+                                        <Label Foreground="White" Width="190">Sauvegarder en temps réel:</Label>
+                                        <CheckBox Name="ChKSaveRealTime" IsChecked="True" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Button  Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnExport" VerticalAlignment="Top" Width="88.75"  >
+                                            <StackPanel Orientation="Horizontal" >
+                                            <Image Source="/HoMIAdmiN;component/Images/Export_32.png" Width="16" />
+                                                <Label Content="Exporter" Foreground="White" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" />
+                                            </StackPanel>
+                                        </Button>
+                                        <Button  Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnImport" VerticalAlignment="Top" Width="88.75"  >
+                                            <StackPanel Orientation="Horizontal" >
+                                                <Image Source="/HoMIAdmiN;component/Images/Import_32.png" Width="16" />
+                                                <Label Content="Importer" Foreground="White" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" />
+                                            </StackPanel>
+                                        </Button>
+
+                                    </StackPanel>
+                                    </StackPanel>
+                            </GroupBox>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
@@ -125,7 +158,5 @@
                 </StackPanel>
             </StackPanel>
         </Border>
-        <Button Height="25" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,42.5,20,0" Name="BtnCancel" VerticalAlignment="Top" Width="88.75" Foreground="White">Fermer</Button>
-        <Button Height="25" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="0,11.25,20,0" Name="BtnOK" VerticalAlignment="Top" Width="88.75" Foreground="White">Ok</Button>
     </Grid>
 </UserControl>
