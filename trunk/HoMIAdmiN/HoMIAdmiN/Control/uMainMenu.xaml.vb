@@ -42,8 +42,8 @@
 
     'action quand on appuie sur un sous menu autre
     Private Sub Autre_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_histo.MouseLeftButtonDown, _
-        img_config.MouseLeftButtonDown, img_config_log.MouseLeftButtonDown, img_config_exporter.MouseLeftButtonDown, img_config_importer.MouseLeftButtonDown, _
-        img_config_sauvegarder.MouseLeftButtonDown, img_aide.MouseLeftButtonDown, img_multimedia.MouseDown, img_config_gerer.MouseLeftButtonDown, _
+        img_config.MouseLeftButtonDown, img_config_log.MouseLeftButtonDown, _
+        img_config_sauvegarder.MouseLeftButtonDown, img_aide.MouseLeftButtonDown, img_multimedia.MouseDown, _
         img_quitter.MouseLeftButtonDown, img_quitter_start.MouseLeftButtonDown, img_quitter_stop.MouseLeftButtonDown
         If e.ClickCount = 1 Then RaiseEvent menu_autre(sender.tag)
     End Sub
@@ -254,18 +254,7 @@
             mnu62.Uid = "cfg_configurer"
             AddHandler mnu62.Click, AddressOf menu_contextmenuclick
             ctxMenuConfig.Items.Add(mnu62)
-            Dim mnu63 As New MenuItem
-            mnu63.Header = "Importer le fichier de configuration"
-            mnu63.Tag = "cfg"
-            mnu63.Uid = "cfg_importer"
-            AddHandler mnu63.Click, AddressOf menu_contextmenuclick
-            ctxMenuConfig.Items.Add(mnu63)
-            Dim mnu64 As New MenuItem
-            mnu64.Header = "Exporter le fichier de configuration"
-            mnu64.Tag = "cfg"
-            mnu64.Uid = "cfg_exporter"
-            AddHandler mnu64.Click, AddressOf menu_contextmenuclick
-            ctxMenuConfig.Items.Add(mnu64)
+         
             Dim mnu65 As New MenuItem
             mnu65.Header = "Sauvegarder la configuration"
             mnu65.Tag = "cfg"

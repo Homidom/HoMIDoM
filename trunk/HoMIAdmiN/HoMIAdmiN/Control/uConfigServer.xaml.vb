@@ -1,4 +1,5 @@
 ﻿Imports System.Text.RegularExpressions
+Imports System.IO
 
 Partial Public Class uConfigServer
     Public Event CloseMe(ByVal MyObject As Object)
@@ -203,4 +204,83 @@ Partial Public Class uConfigServer
     End Sub
 
 
+    Private Sub BtnImport_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnImport.Click
+        Try
+            If IsConnect = False Then
+                Exit Sub
+            End If
+
+            Me.Cursor = Cursors.Wait
+
+            ' Configure open file dialog box
+            Dim dlg As New Microsoft.Win32.OpenFileDialog()
+            dlg.FileName = "Homidom" ' Default file name
+            dlg.DefaultExt = ".xml" ' Default file extension
+            dlg.Filter = "Fichier de configuration (.xml)|*.xml" ' Filter files by extension
+
+            ' Show open file dialog box
+            Dim result As Boolean = dlg.ShowDialog()
+
+            ' Process open file dialog box results
+            If result = True Then
+                ' Open document
+                Dim filename As String = dlg.FileName
+
+                If MessageBox.Show("Etes vous sur que le serveur puisse accéder au fichier " & filename & " que ce soit en local ou via le réseau, sinon il ne pourra pas l'importer!", "Import Config", MessageBoxButton.OKCancel, MessageBoxImage.Question) = MessageBoxResult.Cancel Then
+                    Exit Sub
+                End If
+
+                Dim retour As String = myService.ImportConfig(IdSrv, filename)
+                If retour <> "0" Then
+                    MessageBox.Show(retour, "Erreur import config", MessageBoxButton.OK, MessageBoxImage.Error)
+                Else
+                    MessageBox.Show("L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", MessageBoxButton.OK, MessageBoxImage.Information)
+                End If
+            End If
+
+            Me.Cursor = Nothing
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub BtnImport_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub BtnExport_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnExport.Click
+        Try
+            If IsConnect = False Then
+                Exit Sub
+            End If
+
+            Me.Cursor = Cursors.Wait
+           'Exporter le fichier de config
+
+            ' Configure open file dialog box
+            Dim dlg As New Microsoft.Win32.SaveFileDialog()
+            dlg.FileName = "" ' Default file name
+            dlg.DefaultExt = ".xml" ' Default file extension
+            dlg.Filter = "Fichier de configuration (.xml)|*.xml" ' Filter files by extension
+
+            ' Show open file dialog box
+            Dim result As Boolean = dlg.ShowDialog()
+
+            ' Process open file dialog box results
+            If result = True Then
+                ' Open document
+                Dim filename As String = dlg.FileName
+                Dim retour As String = myService.ExportConfig(IdSrv)
+                If retour.StartsWith("ERREUR") Then
+                    MessageBox.Show(retour, "Erreur export config", MessageBoxButton.OK, MessageBoxImage.Error)
+                Else
+                    Dim TargetFile As StreamWriter
+                    TargetFile = New StreamWriter(filename, False)
+                    TargetFile.Write(retour)
+                    TargetFile.Close()
+                    MessageBox.Show("L'export du fichier de configuration a été effectué", "Export config", MessageBoxButton.OK, MessageBoxImage.Information)
+                End If
+            End If
+       
+        Me.Cursor = Nothing
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub BtnExport_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
 End Class
