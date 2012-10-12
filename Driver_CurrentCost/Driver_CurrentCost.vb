@@ -306,25 +306,13 @@ Public Class Driver_CurrentCost
                 serialPortObj.Parity = Parity.None
                 serialPortObj.DataBits = 8
                 serialPortObj.StopBits = 1
-                serialPortObj.ReadTimeout = 12000
-                serialPortObj.DtrEnable = True
+                serialPortObj.ReadTimeout = 50000
 
                 AddHandler serialPortObj.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf serialPortObj_ErrorReceived)
                 AddHandler serialPortObj.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
 
                 serialPortObj.Open()
                 _IsConnect = True
-
-                Dim update As New CurrentCostUpdate(serialPortObj.ReadLine())
-
-                If update.ValidUpdate Then
-                    traitement("tmpr", update.Temperature)
-                    traitement("ch1", update.Channel1Watts)
-                    traitement("ch2", update.Channel2Watts)
-                    traitement("ch3", update.Channel3Watts)
-                    traitement("time", update.Time)
-                End If
-
 
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Port " & _Com & " ouvert")
             Else
@@ -505,18 +493,22 @@ Public Class Driver_CurrentCost
     ''' <remarks></remarks>
     Private Sub DataReceived(ByVal sender As Object, ByVal e As SerialDataReceivedEventArgs)
         Try
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "Données reçues")
+            If e.EventType = SerialData.Eof Then
 
-            Dim update As New CurrentCostUpdate(serialPortObj.ReadLine())
+                Dim line As String = serialPortObj.ReadLine()
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "Données reçues: " & line)
 
-            If update.ValidUpdate Then
-                traitement("tmpr", update.Temperature)
-                traitement("ch1", update.Channel1Watts)
-                traitement("ch2", update.Channel2Watts)
-                traitement("ch3", update.Channel3Watts)
-                traitement("time", update.Time)
-            Else
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "Update non réussi")
+                Dim update As New CurrentCostUpdate(line)
+
+                If update.ValidUpdate Then
+                    traitement("tmpr", update.Temperature)
+                    traitement("ch1", update.Channel1Watts)
+                    traitement("ch2", update.Channel2Watts)
+                    traitement("ch3", update.Channel3Watts)
+                    traitement("time", update.Time)
+                Else
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "Update non réussi")
+                End If
             End If
         Catch Ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Datareceived", "Erreur:" & Ex.ToString)
