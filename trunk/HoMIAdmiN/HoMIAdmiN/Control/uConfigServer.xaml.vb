@@ -1,5 +1,6 @@
 ﻿Imports System.Text.RegularExpressions
 Imports System.IO
+Imports System.Threading
 
 Partial Public Class uConfigServer
     Public Event CloseMe(ByVal MyObject As Object)
@@ -59,6 +60,8 @@ Partial Public Class uConfigServer
                 myService.SetSMTPServeur(IdSrv, TxtAdresse.Text)
                 myService.SetSMTPLogin(IdSrv, TxtLogin.Text)
                 myService.SetSMTPPassword(IdSrv, TxtPassword.Password)
+                myService.SetSMTPPort(IdSrv, TxtSmtpPort.Text)
+                myService.SetSMTPSSL(IdSrv, ChkSSL.IsChecked)
                 myService.SetMaxFileSizeLog(CDbl(TxtFile.Text))
                 myService.SetMaxMonthLog(CDbl(TxtMaxLogMonth.Text))
                 myService.SetDefautVoice(CbVoice.Text)
@@ -161,6 +164,8 @@ Partial Public Class uConfigServer
                 TxtMail.Text = myService.GetSMTPMailServeur(IdSrv)
                 TxtLogin.Text = myService.GetSMTPLogin(IdSrv)
                 TxtPassword.Password = myService.GetSMTPPassword(IdSrv)
+                TxtSmtpPort.Text = myService.GetSMTPPort(IdSrv)
+                ChkSSL.IsChecked = myService.GetSMTPSSL(IdSrv)
 
                 Dim idx = -1
                 For i As Integer = 0 To myService.GetAllVoice.Count - 1
@@ -281,6 +286,26 @@ Partial Public Class uConfigServer
         Me.Cursor = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub BtnExport_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub BtnTestMail_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTestMail.Click
+        Try
+            If IsConnect = False Then
+                Exit Sub
+            End If
+
+            Dim mail As String = InputBox("Veuillez saisir l'adresse mail du destinataire (ex: xy@xxx.com)", "Saisie de l'adresse mail")
+            Dim retour As String = myService.TestSendMail(IdSrv, TxtMail.Text, mail, TxtAdresse.Text, TxtSmtpPort.Text, ChkSSL.IsChecked, TxtLogin.Text, TxtPassword.Password)
+
+            If retour = "0" Then
+                MessageBox.Show("Le mail de test a été envoyé à l'adresse: " & mail, "Test mail", MessageBoxButton.OK, MessageBoxImage.Information)
+            Else
+                MessageBox.Show("Erreur lors de l'envoi du mail de test envoyé à l'adresse: " & mail & ": " & retour, "Test mail", MessageBoxButton.OK, MessageBoxImage.Error)
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub BtnTestMail_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 End Class

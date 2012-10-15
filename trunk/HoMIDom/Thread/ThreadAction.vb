@@ -340,7 +340,13 @@ Namespace HoMIDom
                         Dim x As Action.ActionMail = _Action
                         Dim _user As Users.User = _Server.ReturnUserById(_IdSrv, x.UserId)
                         If _user IsNot Nothing Then
-                            Send_email(_user.eMail, x.Sujet, x.Message)
+                            Dim _action As New Mail(_Server, _Server.GetSMTPMailServeur(_IdSrv), _user.eMail, x.Sujet, x.Message, _Server.GetSMTPServeur(_IdSrv), _Server.GetSMTPPort(_IdSrv), _Server.GetSMTPSSL(_IdSrv), _Server.GetSMTPLogin(_IdSrv), _Server.GetSMTPPassword(_IdSrv))
+                            Dim y As New Thread(AddressOf _action.Send_email)
+                            y.Name = "Traitement du script"
+                            y.Start()
+                            y = Nothing
+
+                            'Send_email(_user.eMail, x.Sujet, x.Message)
                         Else
                             _Server.Log(Server.TypeLog.MESSAGE, Server.TypeSource.SCRIPT, "ThreadAction Execute", "Le user Id:" & x.UserId & " n'a pas pu être trouvé, le mail ne pourra pas être donc envoyé")
                         End If
@@ -406,35 +412,35 @@ Namespace HoMIDom
         End Sub
 
 
-        Public Sub Send_email(ByVal adresse As String, ByVal sujet As String, ByVal texte As String)
-            Try
-                If adresse <> "" And sujet <> "" And texte <> "" And _Server.GetSMTPServeur(_IdSrv) <> "" Then
-                    'envoi de l'email à adresse avec sujet et texte via les smtp définis dans le serveur
-                    Dim email As System.Net.Mail.MailMessage = New System.Net.Mail.MailMessage()
-                    email.From = New MailAddress(_Server.GetSMTPMailServeur(_IdSrv))
-                    email.To.Add(adresse)
-                    email.Subject = sujet
-                    email.Body = DecodeCommand(texte)
-                    Dim mailSender As New System.Net.Mail.SmtpClient(_Server.GetSMTPServeur(_IdSrv))
+        'Public Sub Send_email(ByVal adresse As String, ByVal sujet As String, ByVal texte As String)
+        '    Try
+        '        If adresse <> "" And sujet <> "" And texte <> "" And _Server.GetSMTPServeur(_IdSrv) <> "" Then
+        '            'envoi de l'email à adresse avec sujet et texte via les smtp définis dans le serveur
+        '            Dim email As System.Net.Mail.MailMessage = New System.Net.Mail.MailMessage()
+        '            email.From = New MailAddress(_Server.GetSMTPMailServeur(_IdSrv))
+        '            email.To.Add(adresse)
+        '            email.Subject = sujet
+        '            email.Body = DecodeCommand(texte)
+        '            Dim mailSender As New System.Net.Mail.SmtpClient(_Server.GetSMTPServeur(_IdSrv))
 
-                    If _Server.GetSMTPLogin(_IdSrv) <> "" Then
-                        mailSender.Credentials = New Net.NetworkCredential(_Server.GetSMTPLogin(_IdSrv), _Server.GetSMTPPassword(_IdSrv))
-                        '
-                        'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate", "1")
-                        'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername", mMailServerLogin)
-                        'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword", mMailServerPassword)
-                    End If
+        '            If _Server.GetSMTPLogin(_IdSrv) <> "" Then
+        '                mailSender.Credentials = New Net.NetworkCredential(_Server.GetSMTPLogin(_IdSrv), _Server.GetSMTPPassword(_IdSrv))
+        '                '
+        '                'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate", "1")
+        '                'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername", mMailServerLogin)
+        '                'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword", mMailServerPassword)
+        '            End If
 
-                    mailSender.Send(email)
+        '            mailSender.Send(email)
 
-                    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "SendMail", "Envoi du mail effectué, Adresse:" & adresse & " Sujet: " & sujet & " Message: " & texte)
-                    email = Nothing
-                    mailSender = Nothing
-                End If
-            Catch ex As Exception
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "SendMail", "Erreur lors de l'envoi du mail: " & ex.Message)
-            End Try
-        End Sub
+        '            _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "SendMail", "Envoi du mail effectué, Adresse:" & adresse & " Sujet: " & sujet & " Message: " & texte)
+        '            email = Nothing
+        '            mailSender = Nothing
+        '        End If
+        '    Catch ex As Exception
+        '        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "SendMail", "Erreur lors de l'envoi du mail: " & ex.Message)
+        '    End Try
+        'End Sub
 
         Private Sub Parler(ByVal Message As String)
             Dim texte As String = Message

@@ -51,6 +51,8 @@ Namespace HoMIDom
         <NonSerialized()> Shared _SMTPLogin As String = "" 'login du serveur SMTP
         <NonSerialized()> Shared _SMTPassword As String = "" 'password du serveur SMTP
         <NonSerialized()> Shared _SMTPmailEmetteur As String = "homidom@mail.com" 'adresse mail de l'émetteur
+        <NonSerialized()> Shared _SMTPPort As Integer = 587 'port smtp à utiliser
+        <NonSerialized()> Shared _SMTPSSL As Boolean = True 'mail avec SSL
         <NonSerialized()> Private Shared _PortSOAP As String = "" 'Port IP de connexion SOAP
         <NonSerialized()> Private Shared _IPSOAP As String = "localhost" 'IP de connexion SOAP
         <NonSerialized()> Dim TimerSecond As New Timers.Timer 'Timer à la seconde
@@ -435,6 +437,10 @@ Namespace HoMIDom
                                             _SMTPLogin = list.Item(0).Attributes.Item(j).Value
                                         Case "smtppassword"
                                             _SMTPassword = list.Item(0).Attributes.Item(j).Value
+                                        Case "smtpport"
+                                            _SMTPPort = list.Item(0).Attributes.Item(j).Value
+                                        Case "smtpssl"
+                                            _SMTPSSL = list.Item(0).Attributes.Item(j).Value
                                         Case "log0"
                                             _TypeLogEnable(0) = list.Item(0).Attributes.Item(j).Value
                                         Case "log1"
@@ -1261,6 +1267,12 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("smtppassword")
                 writer.WriteValue(_SMTPassword)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("smtpport")
+                writer.WriteValue(_SMTPPort)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("smtpssl")
+                writer.WriteValue(_SMTPSSL)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("log0")
                 writer.WriteValue(_TypeLogEnable(0))
@@ -4064,6 +4076,29 @@ Namespace HoMIDom
 #End Region
 
 #Region "SMTP"
+        ''' <summary>
+        ''' Permet de tester l'envoi de mail
+        ''' </summary>
+        ''' <param name="IdSrv"></param>
+        ''' <param name="Adresse"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function TestSendMail(ByVal IdSrv As String, ByVal De As String, ByVal Adresse As String, ByVal smtpserveur As String, ByVal Port As Integer, ByVal SSL As Boolean, Optional ByVal Login As String = "", Optional ByVal Password As String = "") As String Implements IHoMIDom.TestSendMail
+            Try
+                Dim _action As New Mail(Me, De, Adresse, "Test EnvoiMail Homidom", "Test EnvoiMail homidom à " & Now.ToString, smtpserveur, Port, SSL, Login, Password)
+                Dim y As New Thread(AddressOf _action.Send_email)
+                y.Name = "Traitement du script"
+                y.Start()
+                y = Nothing
+
+                Return "0"
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TestSendMail", "Exception : " & ex.Message)
+                Return "Erreur lors l'envoi du mail de test: " & ex.Message
+            End Try
+        End Function
+
+
         ''' <summary>Retourne l'adresse du serveur SMTP</summary>
         Public Function GetSMTPServeur(ByVal IdSrv As String) As String Implements IHoMIDom.GetSMTPServeur
             Try
@@ -4173,6 +4208,62 @@ Namespace HoMIDom
                 _SMTPmailEmetteur = Value
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetSMTPPassword", "Exception : " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>Retourne le port SMTP à utiliser</summary>
+        Public Function GetSMTPPort(ByVal IdSrv As String) As Integer Implements IHoMIDom.GetSMTPPort
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                Return _SMTPPort
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSMTPPort", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>Fixe le port SMTP</summary>
+        Public Sub SetSMTPPort(ByVal IdSrv As String, ByVal Value As Integer) Implements IHoMIDom.SetSMTPPort
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Exit Sub
+                End If
+
+                _SMTPPort = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetSMTPPort", "Exception : " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>Retourne si on doit utiliser une connexion SLL pour SMTP</summary>
+        Public Function GetSMTPSSL(ByVal IdSrv As String) As Boolean Implements IHoMIDom.GetSMTPSSL
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                Return _SMTPSSL
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSMTPSSL", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>Fixe si on doit utiliser une connexion SLL pour SMTP</summary>
+        Public Sub SetSMTPSSL(ByVal IdSrv As String, ByVal Value As Boolean) Implements IHoMIDom.SetSMTPSSL
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Exit Sub
+                End If
+
+                _SMTPSSL = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetSMTPSSL", "Exception : " & ex.Message)
             End Try
         End Sub
 #End Region
