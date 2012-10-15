@@ -43,6 +43,8 @@ Public Class Driver_CurrentCost
 
 #Region "Variables Internes"
     Private serialPortObj As SerialPort
+    Dim _BAUD As Integer = 57600
+    Dim _RCVERROR As Boolean = True
 #End Region
 
 #Region "Déclaration"
@@ -281,6 +283,16 @@ Public Class Driver_CurrentCost
                 Dim trv As Boolean = False
                 Dim _ports As String = "<AUCUN>"
 
+                'récupération des paramétres avancés
+                Try
+                    _BAUD = _Parametres.Item(0).Valeur
+                    _RCVERROR = _Parametres.Item(1).Valeur
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+                    _BAUD = 57600
+                    _RCVERROR = True
+                End Try
+
                 If _Com = "" Or _Com = " " Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le port COM est vide veuillez le renseigner")
                     Exit Sub
@@ -302,17 +314,31 @@ Public Class Driver_CurrentCost
 
                 serialPortObj = New SerialPort()
                 serialPortObj.PortName = _Com
-                serialPortObj.BaudRate = 57600
+                serialPortObj.BaudRate = _BAUD
                 serialPortObj.Parity = Parity.None
                 serialPortObj.DataBits = 8
                 serialPortObj.StopBits = 1
                 serialPortObj.ReadTimeout = 50000
 
-                AddHandler serialPortObj.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf serialPortObj_ErrorReceived)
+                If _RCVERROR Then AddHandler serialPortObj.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf serialPortObj_ErrorReceived)
                 AddHandler serialPortObj.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
 
                 serialPortObj.Open()
                 _IsConnect = True
+
+                'on traite si des données dans le buffer
+                Dim line As String = serialPortObj.ReadLine()
+                Dim update As New CurrentCostUpdate(line)
+
+                If update.ValidUpdate Then
+                    traitement("tmpr", update.Temperature)
+                    traitement("ch1", update.Channel1Watts)
+                    traitement("ch2", update.Channel2Watts)
+                    traitement("ch3", update.Channel3Watts)
+                    traitement("time", update.Time)
+                Else
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Update non réussi mais buffer vidé")
+                End If
 
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Port " & _Com & " ouvert")
             Else
@@ -445,11 +471,32 @@ Public Class Driver_CurrentCost
         End Try
     End Sub
 
+    ''' <summary>ajout de parametre avancés</summary>
+    ''' <param name="nom">Nom du parametre (sans espace)</param>
+    ''' <param name="description">Description du parametre</param>
+    ''' <param name="valeur">Sa valeur</param>
+    ''' <remarks></remarks>
+    Private Sub add_paramavance(ByVal nom As String, ByVal description As String, ByVal valeur As Object)
+        Try
+            Dim x As New HoMIDom.HoMIDom.Driver.Parametre
+            x.Nom = nom
+            x.Description = description
+            x.Valeur = valeur
+            _Parametres.Add(x)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_paramavance", "ERR: " & ex.Message)
+        End Try
+    End Sub
+
     ''' <summary>Creation d'un objet de type</summary>
     ''' <remarks></remarks>
     Public Sub New()
         Try
             _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+
+            'Parametres avancés
+            add_paramavance("BaudRate", "Vitesse du port COM (57600 ou 9600)", 57600)
+            add_paramavance("ErrorReceived", "Gérer les erreurs de réception (True=Activé, False=Désactivé)", True)
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
@@ -482,7 +529,34 @@ Public Class Driver_CurrentCost
 
 #Region "Fonctions internes"
     Private Sub serialPortObj_ErrorReceived(ByVal sender As Object, ByVal e As SerialErrorReceivedEventArgs)
-        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Error: " & e.ToString)
+        Select Case e.EventType
+            Case SerialError.Frame
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Error: Le matériel a détecté une erreur de trame")
+            Case SerialError.Overrun
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Error: Un dépassement de mémoire tampon de caractères s'est produit.Le caractère suivant est perdu")
+            Case SerialError.RXOver
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Error: Un dépassement de la mémoire tampon d'entrée s'est produit.Il n'y a plus de place dans la mémoire tampon d'entrée ou un caractère a été reçu après le caractère de fin de fichier")
+            Case SerialError.RXParity
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Error: Le matériel a détecté une erreur de parité")
+            Case SerialError.TXFull
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Error: L'application a essayé de transmettre un caractère, mais la mémoire tampon de sortie était pleine")
+            Case Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Erreur inconnue, le driver va tenter de traiter les données")
+                Dim line As String = serialPortObj.ReadLine()
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Données reçues: " & line)
+
+                Dim update As New CurrentCostUpdate(line)
+
+                If update.ValidUpdate Then
+                    traitement("tmpr", update.Temperature)
+                    traitement("ch1", update.Channel1Watts)
+                    traitement("ch2", update.Channel2Watts)
+                    traitement("ch3", update.Channel3Watts)
+                    traitement("time", update.Time)
+                Else
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Update non réussi")
+                End If
+        End Select
     End Sub
 
     ''' <summary>
