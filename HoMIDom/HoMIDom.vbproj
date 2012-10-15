@@ -116,6 +116,7 @@
     <Compile Include="IHoMIDom.vb" />
     <Compile Include="ImageFile.vb" />
     <Compile Include="Macro.vb" />
+    <Compile Include="Mail.vb" />
     <Compile Include="Server.vb" />
     <Compile Include="Device.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -188,7 +189,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_AssemblyInfoFilename="" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UseGlobalSettings="False" />
+      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_AssemblyInfoFilename="" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -919,6 +919,15 @@ Namespace HoMIDom
 
 #Region "SMTP"
         ''' <summary>
+        ''' Permet de tester l'envoi de mail
+        ''' </summary>
+        ''' <param name="IdSrv"></param>
+        ''' <param name="Adresse"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function TestSendMail(ByVal IdSrv As String, ByVal De As String, ByVal Adresse As String, ByVal smtpserveur As String, ByVal Port As Integer, ByVal SSL As Boolean, Optional ByVal Login As String = "", Optional ByVal Password As String = "") As String
+
+        ''' <summary>
         ''' Retourne l'adresse SMTP du serveur
         ''' </summary>
         ''' <param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
@@ -981,6 +990,23 @@ Namespace HoMIDom
         ''' <param name="Value">Adresse mail du serveur SMTP</param>
         ''' <remarks></remarks>
         <OperationContract()> Sub SetSMTPMailServeur(ByVal IdSrv As String, ByVal Value As String)
+
+        ''' <summary>
+        ''' Retourne le port SMTP à utiliser
+        ''' </summary>
+        ''' <param name="IdSrv"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetSMTPPort(ByVal IdSrv As String) As Integer
+
+        ''' <summary>Fixe le password du serveur SMTP</summary>
+        <OperationContract()> Sub SetSMTPPort(ByVal IdSrv As String, ByVal Value As Integer)
+
+        ''' <summary>Retourne si on doit utiliser une connexion SLL pour SMTP</summary>
+        <OperationContract()> Function GetSMTPSSL(ByVal IdSrv As String) As Boolean
+
+        ''' <summary>Fixe si on doit utiliser une connexion SLL pour SMTP</summary>
+        <OperationContract()> Sub SetSMTPSSL(ByVal IdSrv As String, ByVal Value As Boolean)
 #End Region
 
 #Region "Telecommande"

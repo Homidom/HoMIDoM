@@ -108,16 +108,31 @@
                                 <GroupBox.Header>
                                     <Label Foreground="White" FontWeight="Bold">Paramètres SMTP</Label>
                                 </GroupBox.Header>
-                                <Grid Height="94">
-                                    <Label Content="Adresse Mail:" Height="25" HorizontalAlignment="Left" Margin="0,0,0,0" Name="Label10" VerticalAlignment="Top" Width="100" Foreground="White" />
-                                    <Label Content="Adresse SMTP:" Height="23" HorizontalAlignment="Left" Margin="0,19,0,0" Name="Label11" VerticalAlignment="Top" Width="100" Foreground="White" />
-                                    <Label Content="Login:" Height="27" HorizontalAlignment="Left" Margin="0,40,0,0" Name="Label12" VerticalAlignment="Top" Width="100" Foreground="White" />
-                                    <Label Content="Password:" Height="27" HorizontalAlignment="Left" Margin="0,63,0,0" Name="Label13" VerticalAlignment="Top" Width="100" Foreground="White" />
-                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,2,0,0" Name="TxtMail" VerticalAlignment="Top" Width="230" />
-                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,24,0,0" Name="TxtAdresse" VerticalAlignment="Top" Width="230" />
-                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,46,0,0" Name="TxtLogin" VerticalAlignment="Top" Width="230" />
-                                    <PasswordBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Margin="98,68,0,0" Name="TxtPassword" VerticalAlignment="Top" Width="230" />
-                                </Grid>
+                                <StackPanel >
+                                    <StackPanel Orientation="Horizontal" >
+                                    <Label Content="Adresse Mail:" Height="25" HorizontalAlignment="Left" Name="Label10" VerticalAlignment="Top" Width="100" Foreground="White" />
+                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtMail" VerticalAlignment="Top" Width="230" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" >
+                                    <Label Content="Adresse SMTP:" Height="23" HorizontalAlignment="Left" Name="Label11" VerticalAlignment="Top" Width="100" Foreground="White" />
+                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtAdresse" VerticalAlignment="Top" Width="230" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Label Content="Port SMTP:" Height="23" HorizontalAlignment="Left" Name="Lbl45" VerticalAlignment="Top" Width="100" Foreground="White" />
+                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtSmtpPort" VerticalAlignment="Top" Width="40" />
+                                        <CheckBox Name="ChkSSL" Margin="2" Content="Utiliser SSL" Foreground="White"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Label Content="Login:" Height="27" HorizontalAlignment="Left"  Name="Label12" VerticalAlignment="Top" Width="100" Foreground="White" />
+                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left"  Name="TxtLogin" VerticalAlignment="Top" Width="230" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" >
+                                    <Label Content="Password:" Height="27" HorizontalAlignment="Left"  Name="Label13" VerticalAlignment="Top" Width="100" Foreground="White" />
+                                        <PasswordBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtPassword" VerticalAlignment="Top" Width="230" />
+                                    </StackPanel>
+                                    <Button Height="25" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnTestMail" VerticalAlignment="Top" Width="88.75" Foreground="White">Tester</Button>
+
+                                </StackPanel>
                             </GroupBox>
                             <GroupBox Name="GroupBox24" Margin="2">
                                 <GroupBox.Header>
