@@ -89,7 +89,7 @@ Module Service
                 host.CloseTimeout = TimeSpan.FromMinutes(60)
                 host.OpenTimeout = TimeSpan.FromMinutes(60)
                 AddHandler host.Faulted, AddressOf HostFaulted
-                AddHandler host.UnknownMessageReceived, AddressOf HostUnknown
+                'AddHandler host.UnknownMessageReceived, AddressOf HostUnknown
                 host.Open()
                 Console.WriteLine(Now & " ServiceWeb Démarré") ' & obj.PortTCP)
                 Console.WriteLine("")
