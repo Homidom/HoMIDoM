@@ -324,21 +324,8 @@ Public Class Driver_CurrentCost
                 AddHandler serialPortObj.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
 
                 serialPortObj.Open()
+                serialPortObj.DiscardInBuffer()
                 _IsConnect = True
-
-                'on traite si des données dans le buffer
-                Dim line As String = serialPortObj.ReadLine()
-                Dim update As New CurrentCostUpdate(line)
-
-                If update.ValidUpdate Then
-                    traitement("tmpr", update.Temperature)
-                    traitement("ch1", update.Channel1Watts)
-                    traitement("ch2", update.Channel2Watts)
-                    traitement("ch3", update.Channel3Watts)
-                    traitement("time", update.Time)
-                Else
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", "Update non réussi mais buffer vidé")
-                End If
 
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Port " & _Com & " ouvert")
             Else
@@ -355,6 +342,8 @@ Public Class Driver_CurrentCost
         Try
             If _IsConnect Then
                 serialPortObj.Close()
+                RemoveHandler serialPortObj.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf serialPortObj_ErrorReceived)
+                RemoveHandler serialPortObj.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
                 _IsConnect = False
             End If
         Catch ex As Exception
@@ -536,6 +525,7 @@ Public Class Driver_CurrentCost
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Error: Un dépassement de mémoire tampon de caractères s'est produit.Le caractère suivant est perdu")
             Case SerialError.RXOver
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Error: Un dépassement de la mémoire tampon d'entrée s'est produit.Il n'y a plus de place dans la mémoire tampon d'entrée ou un caractère a été reçu après le caractère de fin de fichier")
+                serialPortObj.DiscardInBuffer()
             Case SerialError.RXParity
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Error: Le matériel a détecté une erreur de parité")
             Case SerialError.TXFull
