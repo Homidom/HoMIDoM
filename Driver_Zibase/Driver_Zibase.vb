@@ -677,7 +677,7 @@ Imports ZibaseDll
         If adresse.Length = 2 Then valeur = valeurstring 'on utilise la valeur normale et non l'entier
 
         'Action suivant le type
-        Select Case type
+        Select Case LCase(type)
             Case "bat" : If STRGS.UCase(valeur) = "LOW" Then WriteBattery(adresse) 'Niveau de batterie (Ok / Low)
             Case "lev" : If _DEBUG Then WriteLog("DBG: Signal Level : " & valeur & " (Adresse:" & adresse & ")") 'on log le level si debug : Niveau de réception RF (1 à 5)
             Case "lnk" : WriteLog("DBG: Etat de la connexion avec la Zibase " & adresse & " : " & valeur) 'Etat de la connexion Zibase
