@@ -29,6 +29,7 @@ Public Class uWidgetEmpty
     Dim _Action_GestureDroiteGauche As New List(Of cWidget.Action)
     Dim _Action_GestureHautBas As New List(Of cWidget.Action)
     Dim _Action_GestureBasHaut As New List(Of cWidget.Action)
+    Dim _oldposition As Point = Nothing
     Dim dt As DispatcherTimer
 
     Public Event Click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
@@ -565,29 +566,271 @@ Public Class uWidgetEmpty
         TraiteRefresh()
     End Sub
 
+    Private Sub uWidgetEmpty_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Me.MouseLeave
+        If e.LeftButton = MouseButtonState.Released Then Exit Sub
+
+        Dim _NewPos As Point = e.GetPosition(Me)
+        Dim _DiffY As Double = _oldposition.Y - _NewPos.Y
+        Dim _DiffX As Double = _oldposition.X - _NewPos.X
+
+        'Gesture Bas Haut 
+        If _DiffY > 20 And (-20 < _DiffX < 20) Then
+            If IsEmpty = True Then
+               Traite_Action_BasHaut
+            End If
+            RaiseEvent GestureBasHaut(Me, e)
+            Exit Sub
+        End If
+        'Gesture Haut Bas
+        If _DiffY < -20 And (-20 < _DiffX < 20) Then
+            If IsEmpty = True Then
+              Traite_Action_HautBas
+            End If
+            RaiseEvent GestureHautBas(Me, e)
+            Exit Sub
+        End If
+        'Gesture Gauche Droite
+        If _DiffX < -20 And (-20 < _DiffY < 20) Then
+            If IsEmpty = True Then
+               Traite_Action_GaucheDroite
+            End If
+            RaiseEvent GestureGaucheDroite(Me, e)
+            Exit Sub
+        End If
+        'Gesture Droite Gauche
+        If _DiffX > 20 And (-20 < _DiffY < 20) Then
+            If IsEmpty = True Then
+               Traite_Action_DroiteGauche
+            End If
+            RaiseEvent GestureDroiteGauche(Me, e)
+            Exit Sub
+        End If
+    End Sub
+
     Private Sub Image_MouseLeftButtonUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Me.MouseLeftButtonUp
         Dim vDiff As TimeSpan = Now - _Down
+        Dim _NewPos As Point = e.GetPosition(Me)
+        Dim _DiffY As Double = _oldposition.Y - _NewPos.Y
+        Dim _DiffX As Double = _oldposition.X - _NewPos.X
+
+        'Gesture Bas Haut 
+        If _DiffY > 20 And (-20 < _DiffX < 20) Then
+            If IsEmpty = True Then
+              Traite_Action_BasHaut
+            End If
+            RaiseEvent GestureBasHaut(Me, e)
+            Exit Sub
+        End If
+        'Gesture Haut Bas
+        If _DiffY < -20 And (-20 < _DiffX < 20) Then
+            If IsEmpty = True Then
+               Traite_Action_HautBas
+            End If
+            RaiseEvent GestureHautBas(Me, e)
+            Exit Sub
+        End If
+        'Gesture Gauche Droite
+        If _DiffX < -20 And (-20 < _DiffY < 20) Then
+            If IsEmpty = True Then
+               Traite_Action_GaucheDroite
+            End If
+            RaiseEvent GestureGaucheDroite(Me, e)
+            Exit Sub
+        End If
+        'Gesture Droite Gauche
+        If _DiffX > 20 And (-20 < _DiffY < 20) Then
+            If IsEmpty = True Then
+             Traite_Action_DroiteGauche
+            End If
+            RaiseEvent GestureDroiteGauche(Me, e)
+            Exit Sub
+        End If
+
         If vDiff.Seconds < 1 Then
             If IsEmpty = True Then
-                For Each _act As cWidget.Action In _Action_On_Click
-                    Dim x As New HoMIDom.HoMIDom.DeviceAction
-                    x.Nom = _act.Methode
-                    If _act.Value.ToString <> "" Then
-                        Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
-                        param.Value = _act.Value
-                        x.Parametres.Add(param)
-                    End If
-                    myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
-                Next
+                Traite_Action_OnClick()
             End If
             RaiseEvent Click(Me, e)
         Else
+            If IsEmpty = True Then
+                Traite_Action_OnLongClick()
+            End If
             RaiseEvent LongClick(Me, e)
         End If
     End Sub
 
+    Private Sub Traite_Action_OnClick()
+        For Each _act As cWidget.Action In _Action_On_Click
+            Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+            If _dev IsNot Nothing Then
+                Dim x As New HoMIDom.HoMIDom.DeviceAction
+                x.Nom = _act.Methode
+                If _act.Value.ToString <> "" Then
+                    Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                    param.Value = _act.Value
+                    x.Parametres.Add(param)
+                End If
+                myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+            Else
+                Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
+                If _mac IsNot Nothing Then
+                    Dim x As New HoMIDom.HoMIDom.DeviceAction
+                    x.Nom = _act.Methode
+                    myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                Else
+                    Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
+                    If _zon IsNot Nothing Then
+                        frmMere.ShowZone(_act.IdObject)
+                    End If
+                End If
+            End If
+        Next
+    End Sub
+
+    Private Sub Traite_Action_OnLongClick()
+        For Each _act As cWidget.Action In _Action_On_LongClick
+            Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+            If _dev IsNot Nothing Then
+                Dim x As New HoMIDom.HoMIDom.DeviceAction
+                x.Nom = _act.Methode
+                If _act.Value.ToString <> "" Then
+                    Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                    param.Value = _act.Value
+                    x.Parametres.Add(param)
+                End If
+                myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+            Else
+                Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
+                If _mac IsNot Nothing Then
+                    Dim x As New HoMIDom.HoMIDom.DeviceAction
+                    x.Nom = _act.Methode
+                    myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                Else
+                    Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
+                    If _zon IsNot Nothing Then
+                        frmMere.ShowZone(_act.IdObject)
+                    End If
+                End If
+            End If
+        Next
+    End Sub
+
+    Private Sub Traite_Action_HautBas()
+        For Each _act As cWidget.Action In _Action_GestureHautBas
+            Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+            If _dev IsNot Nothing Then
+                Dim x As New HoMIDom.HoMIDom.DeviceAction
+                x.Nom = _act.Methode
+                If _act.Value.ToString <> "" Then
+                    Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                    param.Value = _act.Value
+                    x.Parametres.Add(param)
+                End If
+                myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+            Else
+                Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
+                If _mac IsNot Nothing Then
+                    Dim x As New HoMIDom.HoMIDom.DeviceAction
+                    x.Nom = _act.Methode
+                    myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                Else
+                    Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
+                    If _zon IsNot Nothing Then
+                        frmMere.ShowZone(_act.IdObject)
+                    End If
+                End If
+            End If
+        Next
+    End Sub
+
+    Private Sub Traite_Action_BasHaut()
+        For Each _act As cWidget.Action In _Action_GestureBasHaut
+            Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+            If _dev IsNot Nothing Then
+                Dim x As New HoMIDom.HoMIDom.DeviceAction
+                x.Nom = _act.Methode
+                If _act.Value.ToString <> "" Then
+                    Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                    param.Value = _act.Value
+                    x.Parametres.Add(param)
+                End If
+                myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+            Else
+                Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
+                If _mac IsNot Nothing Then
+                    Dim x As New HoMIDom.HoMIDom.DeviceAction
+                    x.Nom = _act.Methode
+                    myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                Else
+                    Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
+                    If _zon IsNot Nothing Then
+                        frmMere.ShowZone(_act.IdObject)
+                    End If
+                End If
+            End If
+        Next
+    End Sub
+
+    Private Sub Traite_Action_GaucheDroite()
+        For Each _act As cWidget.Action In _Action_GestureGaucheDroite
+            Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+            If _dev IsNot Nothing Then
+                Dim x As New HoMIDom.HoMIDom.DeviceAction
+                x.Nom = _act.Methode
+                If _act.Value.ToString <> "" Then
+                    Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                    param.Value = _act.Value
+                    x.Parametres.Add(param)
+                End If
+                myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+            Else
+                Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
+                If _mac IsNot Nothing Then
+                    Dim x As New HoMIDom.HoMIDom.DeviceAction
+                    x.Nom = _act.Methode
+                    myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                Else
+                    Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
+                    If _zon IsNot Nothing Then
+                        frmMere.ShowZone(_act.IdObject)
+                    End If
+                End If
+            End If
+        Next
+    End Sub
+
+    Private Sub Traite_Action_DroiteGauche()
+        For Each _act As cWidget.Action In _Action_GestureDroiteGauche
+            Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+            If _dev IsNot Nothing Then
+                Dim x As New HoMIDom.HoMIDom.DeviceAction
+                x.Nom = _act.Methode
+                If _act.Value.ToString <> "" Then
+                    Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                    param.Value = _act.Value
+                    x.Parametres.Add(param)
+                End If
+                myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+            Else
+                Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
+                If _mac IsNot Nothing Then
+                    Dim x As New HoMIDom.HoMIDom.DeviceAction
+                    x.Nom = _act.Methode
+                    myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                Else
+                    Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
+                    If _zon IsNot Nothing Then
+                        frmMere.ShowZone(_act.IdObject)
+                    End If
+                End If
+            End If
+        Next
+    End Sub
+
+
     Private Sub Image_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Me.PreviewMouseDown
         _Down = Now
+        _oldposition = e.GetPosition(Me)
     End Sub
 
     Private Sub ClosePopup()

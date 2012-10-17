@@ -25,7 +25,9 @@
             <Rectangle Width="50" DockPanel.Dock="Left" />
             <StackPanel Height="30" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right">
 
-                <Button Height="23" HorizontalAlignment="Right" Margin="3" Name="BtnQuit" Content="X" Width="23"  VerticalAlignment="Bottom" Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" />
+                <Button Height="23" HorizontalAlignment="Right" Margin="3" Name="BtnQuit"  Width="23"  VerticalAlignment="Bottom" Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" >
+                    <Image Source="/HoMIWpF;component/Images/btnQuitter_32.png" />
+                    </Button> 
             </StackPanel> 
             <Rectangle Height="130" DockPanel.Dock="Bottom"/>
             <Rectangle Width="50" DockPanel.Dock="Right"/>
@@ -37,15 +39,36 @@
             <DockPanel >
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Height="25" Name="StkTop">
                 <Menu >
-                    <MenuItem Header="Homidom" >
+                    <MenuItem Header="Homidom" Name="MenuItem1">
                         <MenuItem.Icon>
                             <Image Source="/HoMIWpF;component/icone.ico" />
                         </MenuItem.Icon>
-                        <MenuItem Name="Chk1" Header="Déplacer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" />
-                        <MenuItem Name="Chk2" Header="Editer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" />
-                        <MenuItem Name="Chk3" Header="Ajouter" Visibility="Collapsed" >
-                            <MenuItem Name="NewWidgetEmpty" Header="Nouveau Widget Vide" />
-                            </MenuItem> 
+                        <MenuItem Name="Chk1" Header="Déplacer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10">
+                            <MenuItem.Icon>
+                                <Image Width="20" Height="20" Source="/HoMIWpF;component/Images/move.png" />
+                            </MenuItem.Icon>
+                            </MenuItem>
+                        <MenuItem Name="Chk2" Header="Editer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10" >
+                            <MenuItem.Icon>
+                                <Image Width="20" Height="20" Source="/HoMIWpF;component/Images/Modifier_32.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Name="Chk3" Header="Ajouter" Visibility="Collapsed" FontSize="10">
+                            <MenuItem.Icon>
+                                <Image Width="20" Height="20"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                            </MenuItem.Icon>
+                            <MenuItem Name="NewWidgetEmpty" Header="Nouveau Widget Vide" FontSize="10" />
+                            </MenuItem>
+                        <MenuItem Name="ViewLog" Header="Consulter les logs" FontSize="10" >
+                            <MenuItem.Icon>
+                                <Image Width="20" Height="20" Source="/HoMIWpF;component/Images/Log_32.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Name="MnuHisto" Header="Historique" FontSize="10">
+                            <MenuItem.Icon>
+                                <Image Width="20" Height="20" Source="/HoMIWpF;component/Images/Courbe_32.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem> 
                 </Menu>
                 <Label Margin="1" Name="LblTime" FontSize="10" Foreground="White" FlowDirection="RightToLeft">Label</Label>
