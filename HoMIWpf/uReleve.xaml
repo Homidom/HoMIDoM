@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="uReleve"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+              Margin="2" MinWidth="400">
+    
+    <Grid Background="#636060">
+        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0">
+            <StackPanel Height="550"></StackPanel>
+        </Border>
+        <Image Height="40" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="40" Source="/HoMIWpF;component/Releve_128.png">
+            <Image.LayoutTransform >
+                <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
+            </Image.LayoutTransform>
+        </Image>
+        <StackPanel Margin="10,55,10,10">
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" >
+                    <Label Name="LblDev" Content="#####" Width="250" Foreground="White" />
+                 </StackPanel>
+                <DataGrid Name="DataGrid1" Margin="5" RowBackground="LightBlue" AlternatingRowBackground="LightYellow" Width="400" Height="450"></DataGrid>
+            </StackPanel>
+    </Grid>
+
+</UserControl>

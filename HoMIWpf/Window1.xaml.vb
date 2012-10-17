@@ -35,6 +35,7 @@ Class Window1
     Private scrollStartPoint As Point
     Private scrollStartOffset As Point
     Private imgStackPnl As New StackPanel()
+    Dim FlagMsgDeconnect As Boolean = False
 
     'Paramètres de connexion à HomeSeer
     Dim _Serveur As String = ""
@@ -188,13 +189,16 @@ Class Window1
     End Sub
 
     Public Sub UnloadControl(ByVal uid As String)
-        For i As Integer = 0 To Canvas1.Children.Count - 1
-            If Canvas1.Children.Item(i).Uid = uid Then
-                Canvas1.Children.RemoveAt(i)
-                Exit For
-            End If
-        Next
-
+        Try
+            For i As Integer = 0 To Canvas1.Children.Count - 1
+                If Canvas1.Children.Item(i).Uid = uid Then
+                    Canvas1.Children.RemoveAt(i)
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur UnloadControl: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Public Sub New()
@@ -1211,6 +1215,10 @@ Class Window1
             End If
         Catch ex As Exception
             IsConnect = False
+            If FlagMsgDeconnect = False Then
+                MessageBox.Show("La communication a été perdue avec le serveur, veuillez vérifier que celui-ci est toujours actif et redémarrer le client", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                FlagMsgDeconnect = True
+            End If
             Log(TypeLog.INFO, TypeSource.CLIENT, "DispatcherTimer", "DispatcherTimer: " & ex.Message)
             LblTime.Content = Now.ToLongDateString & " " & Now.ToShortTimeString
         End Try
@@ -1391,7 +1399,7 @@ Class Window1
     End Sub
 
 
-    Private Sub ShowZone(ByVal IdZone As String)
+    Public Sub ShowZone(ByVal IdZone As String)
         Try
             'Gestion de l'erreur si le serveur n'est pas connecté
             If IsConnect = False Then
@@ -1732,5 +1740,47 @@ Class Window1
         Canvas1.Children.Add(x)
         Canvas.SetLeft(x, 300)
         Canvas.SetTop(x, 300)
+    End Sub
+
+    Private Sub ViewLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewLog.Click
+        Try
+            Me.Cursor = Cursors.Wait
+            If Canvas1.Children.Count > 0 Then
+                Canvas1.Children.Clear()
+            End If
+
+            Chk1.Visibility = Windows.Visibility.Collapsed
+            Chk2.Visibility = Windows.Visibility.Collapsed
+            Chk3.Visibility = Windows.Visibility.Collapsed
+            ImageBackGround = _ImageBackGroundDefault
+
+            Dim x As New uLog
+            x.Uid = System.Guid.NewGuid.ToString()
+            AddHandler x.CloseMe, AddressOf UnloadControl
+            x.Width = Canvas1.ActualWidth - 100
+            x.Height = Canvas1.ActualHeight - 50
+            Canvas1.Children.Add(x)
+
+            Me.Cursor = Nothing
+        Catch ex As Exception
+            Me.Cursor = Nothing
+            MessageBox.Show("Erreur ViewLog_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+
+    Private Sub MnuHisto_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuHisto.Click
+        Try
+            Dim x As New uHisto(Nothing)
+            x.Uid = System.Guid.NewGuid.ToString()
+            x.Width = Canvas1.ActualWidth - 50
+            x.Height = Canvas1.ActualHeight - 20
+            AddHandler x.CloseMe, AddressOf UnloadControl
+            Canvas1.Children.Clear()
+            Canvas1.Children.Add(x)
+        Catch ex As Exception
+            Me.Cursor = Nothing
+            MessageBox.Show("Erreur MnuHisto_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 End Class

@@ -48,6 +48,7 @@ Public Class WConfig
         Next
         MyListMnu = Frm.ListMnu
 
+        LblVersion.Content = My.Application.Info.Version.ToString
     End Sub
 
     Private Sub SliderFriction_ValueChanged(ByVal sender As System.Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of System.Double)) Handles SliderFriction.ValueChanged

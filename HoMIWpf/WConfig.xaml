@@ -196,6 +196,14 @@
                     <CheckBox Content="Activer" Margin="3" Name="ChkServiceTV" />
                 </GroupBox >
             </TabItem>
+            <TabItem Header="Info">
+                <GroupBox Header="" Margin="2">
+                    <StackPanel Orientation="Horizontal" >
+                    <Label Content="Version:" />
+                    <Label Name="LblVersion" />
+                    </StackPanel>
+                </GroupBox >
+            </TabItem>
         </TabControl>
     </StackPanel>
 </Window>

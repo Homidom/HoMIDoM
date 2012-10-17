@@ -64,6 +64,20 @@ Public Class WWidgetProperty
                 lbl1 = Nothing
                 lbl2 = Nothing
             Next
+            For Each obj As Zone In myService.GetAllZones(IdSrv)
+                Dim lbl1 As New ComboBoxItem
+                Dim lbl2 As New ComboBoxItem
+                lbl1.Content = obj.Name & " [Zone]"
+                lbl1.Tag = "ZONE"
+                lbl1.Uid = obj.ID
+                lbl2.Content = obj.Name & " [Zone]"
+                lbl2.Tag = "ZONE"
+                lbl2.Uid = obj.ID
+                CbObjet.Items.Add(lbl1)
+                CbObjetVisu.Items.Add(lbl2)
+                lbl1 = Nothing
+                lbl2 = Nothing
+            Next
             End If
 
     End Sub
@@ -171,6 +185,25 @@ Public Class WWidgetProperty
                 LblActionValue.Visibility = Windows.Visibility.Collapsed
                 TxtValue.Visibility = Windows.Visibility.Collapsed
             End If
+
+            If CbObjet.SelectedItem.tag = "ZONE" Then
+                Dim _ZoneId As String
+                Dim _Zone As HoMIDom.HoMIDom.Zone
+
+                _ZoneId = CbObjet.SelectedItem.uid
+                _Zone = myService.ReturnZoneByID(IdSrv, _ZoneId)
+                CbMethode.Items.Clear()
+
+                Dim lbl1 As New ComboBoxItem
+                lbl1.Content = "Afficher"
+                lbl1.Tag = 9 'c une zone
+                CbMethode.Items.Add(lbl1)
+                CbMethode.SelectedIndex = 0
+                _Zone = Nothing
+
+                LblActionValue.Visibility = Windows.Visibility.Collapsed
+                TxtValue.Visibility = Windows.Visibility.Collapsed
+            End If
         End If
     End Sub
 
@@ -241,12 +274,20 @@ Public Class WWidgetProperty
         For Each Action As cWidget.Action In _list
             Dim x As New ListBoxItem
             x.Uid = Action.IdObject
+
             Dim _dev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, Action.IdObject)
             If _dev IsNot Nothing Then
                 x.Content = _dev.Name
             Else
                 Dim _mac As Macro = myService.ReturnMacroById(IdSrv, Action.IdObject)
-                If _mac IsNot Nothing Then x.Content = _mac.Nom
+                If _mac IsNot Nothing Then
+                    x.Content = _mac.Nom & "[Macro]"
+                Else
+                    Dim _zon As Zone = myService.ReturnZoneByID(IdSrv, Action.IdObject)
+                    If _zon IsNot Nothing Then
+                        x.Content = _zon.Name & "[Zone]"
+                    End If
+                End If
             End If
             LstObjetActions.Items.Add(x)
         Next

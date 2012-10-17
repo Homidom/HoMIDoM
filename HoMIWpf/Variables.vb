@@ -3,7 +3,7 @@
     Public IsConnect As Boolean
     Public IdSrv As String = "123456789"
     Public _ListElement As New List(Of uWidgetEmpty)
-    Public frmMere As Window
+    Public frmMere As Window1
     Public Design As Boolean = False
     Public _MonRepertoire As String = System.Environment.CurrentDirectory
 
