@@ -319,6 +319,7 @@ Public Class Driver_CurrentCost
                 serialPortObj.DataBits = 8
                 serialPortObj.StopBits = 1
                 serialPortObj.ReadTimeout = 50000
+                serialPortObj.DtrEnable = True
 
                 If _RCVERROR Then AddHandler serialPortObj.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf serialPortObj_ErrorReceived)
                 AddHandler serialPortObj.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
