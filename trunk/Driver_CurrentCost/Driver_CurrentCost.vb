@@ -45,6 +45,7 @@ Public Class Driver_CurrentCost
     Private serialPortObj As SerialPort
     Dim _BAUD As Integer = 57600
     Dim _RCVERROR As Boolean = True
+    Dim first As Boolean = False
 #End Region
 
 #Region "Déclaration"
@@ -319,15 +320,18 @@ Public Class Driver_CurrentCost
                 serialPortObj.DataBits = 8
                 serialPortObj.StopBits = 1
                 serialPortObj.ReadTimeout = 50000
-                serialPortObj.DtrEnable = True
 
                 If _RCVERROR Then AddHandler serialPortObj.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf serialPortObj_ErrorReceived)
                 AddHandler serialPortObj.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
 
+                If serialPortObj.IsOpen Then
+                    serialPortObj.Close()
+                End If
+
                 serialPortObj.Open()
                 serialPortObj.DiscardInBuffer()
                 _IsConnect = True
-
+                first = True
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Port " & _Com & " ouvert")
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Port " & _Com & " déjà ouvert")
@@ -558,9 +562,13 @@ Public Class Driver_CurrentCost
     ''' <remarks></remarks>
     Private Sub DataReceived(ByVal sender As Object, ByVal e As SerialDataReceivedEventArgs)
         Try
-            If e.EventType = SerialData.Eof Then
+            If first Then
+                first = False
+            Else
+                'on attend d'avoir le reste
+                System.Threading.Thread.Sleep(1500)
 
-                Dim line As String = serialPortObj.ReadLine()
+                Dim line As String = serialPortObj.ReadExisting
                 _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "Données reçues: " & line)
 
                 Dim update As New CurrentCostUpdate(line)
