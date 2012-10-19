@@ -30,9 +30,11 @@ Public Class WWidgetProperty
         If Obj.IsEmpty = False Then
             BtnEditAction.Visibility = Windows.Visibility.Collapsed
             BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+            BtnDelete.Visibility = Windows.Visibility.Collapsed
         Else
             BtnEditAction.Visibility = Windows.Visibility.Visible
             BtnEditVisu.Visibility = Windows.Visibility.Visible
+            BtnDelete.Visibility = Windows.Visibility.Visible
 
             Refresh_LstObjetVisu()
 
@@ -610,5 +612,17 @@ Public Class WWidgetProperty
         Catch ex As Exception
             MessageBox.Show("Erreur ImgVisu_MouseDown: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+    Private Sub BtnDelete_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelete.Click
+        For i As Integer = 0 To _ListElement.Count - 1
+            If _ListElement.Item(i).Id = Obj.Id And _ListElement.Item(i).ZoneId = Obj.ZoneId Then
+                _ListElement.RemoveAt(i)
+                frmMere.ShowZone(frmMere._CurrentIdZone)
+                Exit For
+            End If
+        Next
+
+        DialogResult = True
     End Sub
 End Class
