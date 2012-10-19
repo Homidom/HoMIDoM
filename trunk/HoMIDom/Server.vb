@@ -2808,6 +2808,52 @@ Namespace HoMIDom
             '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start Check", "Exception : " & ex.Message)
             'End Try
 
+            'Manage SQLliste DB : updates
+            Try
+                'get sqlite moteur version
+                Dim sqliteversion As String = ""
+                Dim retour As String
+                retour = sqlite_homidom.querysimple("SELECT SQLITE_VERSION()", sqliteversion)
+                If Mid(retour, 1, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur sqlite : " & retour)
+                Else
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version du moteur SQLlite: " & sqliteversion)
+                End If
+
+                'Get homidom BDD version
+                sqliteversion = ""
+                retour = sqlite_homidom.querysimple("PRAGMA user_version", sqliteversion)
+                If Mid(retour, 1, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur sqlite : " & retour)
+                Else
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version de la BDD HoMIDoM: " & sqliteversion)
+                    If sqliteversion = 0 Then
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "BDD HoMIDoM Update vers la version 1")
+                        retour = sqlite_homidom.nonquery("CREATE TABLE 'config' ('id' INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , 'parametre' TEXT, 'valeur' TEXT)")
+                        If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
+                        retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(1,'date_install','');")
+                        If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
+                        retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(2,'version_dll','');")
+                        If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
+                        retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(3,'date_register',NULL);")
+                        If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
+                        retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(4,'date_maj',NULL);")
+                        If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
+                        retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(5,'uid',NULL);")
+                        If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
+                        retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(6,'cle_register',NULL);")
+                        If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
+                        retour = sqlite_homidom.nonquery("PRAGMA user_version=1")
+                        If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
+                        sqliteversion = 1
+                    End If
+                    If sqliteversion = 1 Then
+
+                    End If
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLlite versionning", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>Arrêt du serveur</summary>

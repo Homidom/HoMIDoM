@@ -207,6 +207,48 @@ Namespace HoMIDom
             End Try
         End Function
 
+        ''' <summary>Requete avec résultat simple</summary>          
+        ''' <param name="commande">ex : SELECT * FROM contact</param>          
+        ''' <param name="resultat">Arralist contenant la liste des résultats</param>          
+        ''' <returns>String si OK, String "ERR:..." si erreur</returns>          
+        ''' <remarks></remarks>          
+        Public Function querysimple(ByVal commande As String, ByRef resultat As String, ByVal ParamArray params() As String) As String
+            Dim SQLcommand As SQLiteCommand
+            Try
+                connect()
+
+                'on vérifie si on est connecté à la BDD   
+                If SQLconnect.State = ConnectionState.Open Then
+                    'on vérifie si la commande n'est pas vide  
+                    If commande IsNot Nothing And commande <> "" Then
+                        SQLcommand = SQLconnect.CreateCommand
+                        SQLcommand.CommandText = commande
+
+                        If params IsNot Nothing Then
+                            For p = 0 To params.Length - 1
+                                SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
+                            Next
+                        End If
+                        'lock pour etre sur de ne pas faire deux operations en meme temps
+                        SyncLock lock
+                            resultat = SQLcommand.ExecuteScalar
+                        End SyncLock
+                        SQLcommand.Dispose()
+                        disconnect()
+                        Return "Commande éxécutée avec succés : " & commande
+                    Else
+                        disconnect()
+                        Return "ERR: La commande est vide"
+                    End If
+                Else
+                    connecte = False
+                    Return "ERR: Non connecté à la BDD " & bdd_name
+                End If
+            Catch ex As Exception
+                Return "ERR: Erreur lors de la query " & commande & " Erreur: " & ex.ToString
+            End Try
+        End Function
+
         ''' <summary>Compte le nombre de resultat</summary>          
         ''' <param name="commande">ex : SELECT COUNT(*) FROM table WHERE col1 = 'xxx'</param>          
         ''' <param name="resultat">Nombre de resultat</param>          
