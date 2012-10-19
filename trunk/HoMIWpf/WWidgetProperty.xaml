@@ -160,7 +160,9 @@
             <Button Margin="3" Name="BtnCancel" Content="Annuler" Width="75" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
             <Button Margin="3" Name="BtnEditAction" Content="Actions>>" Width="75" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
             <Button Margin="3" Name="BtnEditVisu" Content="Visu>>" Width="75" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
-        </StackPanel>
+                <Button Margin="3" Name="BtnDelete" Content="Supprimer" Width="75" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
+
+            </StackPanel>
         </StackPanel>
 </Grid>
 </Window>

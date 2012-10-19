@@ -54,7 +54,7 @@ Class Window1
     Dim _ListMnu As New List(Of uCtrlImgMnu)
     Dim _Design As Boolean = False
     Dim mybuttonstyle As Style
-    Dim _CurrentIdZone As String
+    Public _CurrentIdZone As String
     'Service TV
     Dim _ServiceTV As New ServiceTV(Me)
 
@@ -542,6 +542,7 @@ Class Window1
                                             End Select
                                         Next
                                     End If
+
                                     If UCase(list.Item(j).ChildNodes.Item(l).Name) = "VISUELS" Then
                                         For m As Integer = 0 To list.Item(j).ChildNodes.Item(l).ChildNodes.Count - 1
                                             Dim _act As New cWidget.Visu
@@ -562,6 +563,10 @@ Class Window1
                                 If IsConnect Then
                                     If myService.ReturnDeviceByID(IdSrv, x.Id) IsNot Nothing Then 'Si le device n'a pas été trouvé on le prend pas en compte pour le supprimer par la suite
                                         _ListElement.Add(x)
+                                    Else
+                                        If myService.ReturnMacroById(IdSrv, x.Id) IsNot Nothing Then
+                                            _ListElement.Add(x)
+                                        End If
                                     End If
                                 End If
                             Else
@@ -1391,8 +1396,6 @@ Class Window1
 
     'Bouton Quitter
     Private Sub BtnQuit_Click_1(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnQuit.Click
-        If Chk1.IsChecked = True Then Chk1.IsChecked = False
-
         SaveConfig(_MonRepertoire & "\config\HoMIWpF.xml")
         Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
         End
@@ -1595,12 +1598,13 @@ Class Window1
         Destination.Visuel = Source.Visuel
     End Sub
 
-    Private Sub RdB1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk1.Click
+    Private Sub Deplacement_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk1.Click
         Try
             'Mode déplacement
             If Chk1.IsChecked = True Then
                 Chk2.IsChecked = False
                 Design = True
+
                 For Each child As ContentControl In Canvas1.Children
                     Dim obj As uWidgetEmpty = child.Content
                     obj.ModeEdition = True
@@ -1656,8 +1660,53 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub Chk2_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk2.Click
-        If Chk2.IsChecked = True Then Chk1.IsChecked = False
+    Private Sub ModeEdition_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk2.Click
+        If Chk2.IsChecked = True Then
+            Chk1.IsChecked = False
+
+            'On a finit le déplacement
+            Design = False
+            Dim a As String = ""
+            Chk2.IsChecked = True
+
+            For Each child As ContentControl In Canvas1.Children
+                Dim obj As uWidgetEmpty = child.Content
+                obj.IsHitTestVisible = False
+                obj.ModeEdition = False
+                obj = Nothing
+
+                Selector.SetIsSelected(child, False)
+
+                For j As Integer = 0 To _ListElement.Count - 1
+                    If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                        _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
+                        _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
+                        _ListElement.Item(j).Width = child.Width
+                        _ListElement.Item(j).Height = child.Height
+
+                        If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
+                            Dim gt As TransformGroup = child.RenderTransform '.GetValue(RotateTransform.AngleProperty)
+                            For k = 0 To gt.Children.Count - 1
+                                If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
+                                    Dim rt As RotateTransform = gt.Children.Item(k)
+                                    If rt IsNot Nothing Then
+                                        _ListElement.Item(j).Rotation = rt.Angle
+                                    End If
+                                    Exit For
+                                End If
+                            Next
+                        End If
+                        If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
+                            _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                        End If
+                    End If
+                Next
+
+                Dim lbl As uWidgetEmpty = child.Content
+                lbl.IsHitTestVisible = True
+
+            Next
+        End If
 
         For Each child As ContentControl In Canvas1.Children
             Dim obj As uWidgetEmpty = child.Content
@@ -1710,7 +1759,6 @@ Class Window1
         Next
 
     End Sub
-
 
     Private Sub NewWidgetEmpty_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetEmpty.Click
         'Ajouter un nouveau Control
@@ -1768,7 +1816,6 @@ Class Window1
         End Try
     End Sub
 
-
     Private Sub MnuHisto_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuHisto.Click
         Try
             Dim x As New uHisto(Nothing)
@@ -1783,4 +1830,5 @@ Class Window1
             MessageBox.Show("Erreur MnuHisto_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
 End Class

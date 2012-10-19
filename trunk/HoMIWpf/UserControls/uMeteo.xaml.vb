@@ -49,7 +49,6 @@ Partial Public Class uMeteo
                     If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconActuel & ".png") = True Then
                         bmpImage.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconActuel & ".png", UriKind.Absolute)
                     Else
-                        MsgBox(_dev.IconActuel)
                         bmpImage.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
                     End If
                     bmpImage.EndInit()

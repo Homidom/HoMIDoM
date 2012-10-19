@@ -547,8 +547,8 @@ Namespace HoMIDom
                                                 x.Name = list.Item(i).Attributes.Item(j).Value
                                             Case "icon"
                                                 If list.Item(i).Attributes.Item(j).Value <> Nothing Then
-                                                    If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
-                                                        x.Icon = list.Item(0).Attributes.Item(j).Value
+                                                    If IO.File.Exists(list.Item(i).Attributes.Item(j).Value) Then
+                                                        x.Icon = list.Item(i).Attributes.Item(j).Value
                                                     Else
                                                         x.Icon = _MonRepertoire & "\images\Zones\icon\defaut.png"
                                                     End If
@@ -557,8 +557,8 @@ Namespace HoMIDom
                                                 End If
                                             Case "image"
                                                 If list.Item(i).Attributes.Item(j).Value <> Nothing Then
-                                                    If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
-                                                        x.Image = list.Item(0).Attributes.Item(j).Value
+                                                    If IO.File.Exists(list.Item(i).Attributes.Item(j).Value) Then
+                                                        x.Image = list.Item(i).Attributes.Item(j).Value
                                                     Else
                                                         x.Image = _MonRepertoire & "\images\Zones\image\defaut.jpg"
                                                     End If
@@ -615,8 +615,8 @@ Namespace HoMIDom
                                                 x.NumberIdentification = list.Item(i).Attributes.Item(j).Value
                                             Case "image"
                                                 If list.Item(i).Attributes.Item(j).Value <> Nothing Then
-                                                    If IO.File.Exists(list.Item(0).Attributes.Item(j).Value) Then
-                                                        x.Image = list.Item(0).Attributes.Item(j).Value
+                                                    If IO.File.Exists(list.Item(i).Attributes.Item(j).Value) Then
+                                                        x.Image = list.Item(i).Attributes.Item(j).Value
                                                     Else
                                                         x.Image = _MonRepertoire & "\images\icones\user_128.png"
                                                     End If
