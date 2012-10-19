@@ -574,6 +574,11 @@ Public Class Driver_CurrentCost
                 Dim update As New CurrentCostUpdate(line)
 
                 If update.ValidUpdate Then
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "tmpr: " & update.Temperature)
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "time: " & update.Time)
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "ch1: " & update.Channel1Watts)
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "ch2: " & update.Channel2Watts)
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "ch3: " & update.Channel3Watts)
                     traitement("tmpr", update.Temperature)
                     traitement("ch1", update.Channel1Watts)
                     traitement("ch2", update.Channel2Watts)
