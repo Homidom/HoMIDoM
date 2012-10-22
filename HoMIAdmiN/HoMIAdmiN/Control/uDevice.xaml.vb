@@ -103,7 +103,7 @@ Partial Public Class uDevice
                                        Or x.Type = ListeDevices.PLUIECOURANT _
                                        Or x.Type = ListeDevices.VITESSEVENT _
                                        Or x.Type = ListeDevices.UV _
-                                       Or x.Type = ListeDevices.HUMIDITE _
+                                       Or x.Type = ListeDevices.COMPTEUR _
                                        Then
                         StkValueLabel.Visibility = Windows.Visibility.Visible
                         StkValue2Label.Visibility = Windows.Visibility.Visible
@@ -368,6 +368,7 @@ Partial Public Class uDevice
                 'Gestion si Device avec Value
                 If CbType.SelectedValue Is Nothing Then Exit Sub
                 If CbType.SelectedValue = "TEMPERATURE" _
+                                   Or CbType.Text = "COMPTEUR" _
                                    Or CbType.Text = "HUMIDITE" _
                                    Or CbType.Text = "TEMPERATURECONSIGNE" _
                                    Or CbType.Text = "ENERGIETOTALE" _

@@ -19,7 +19,6 @@ Namespace HoMIDom
         ''' <summary>
         ''' Demande au serveur si on sauvegarde en temps réel
         ''' </summary>
-        ''' <param name="Value"></param>
         ''' <remarks></remarks>
         <OperationContract()> Function GetSaveRealTime() As Boolean
 
@@ -302,6 +301,14 @@ Namespace HoMIDom
         ''' <returns>Liste (Type ImageFile) de tous les fichiers image (png, jpg) présents sur le serveur</returns>
         ''' <remarks></remarks>
         <OperationContract()> Function GetListOfImage() As List(Of ImageFile)
+
+        ''' <summary>Retourne la version BDD sqlite</summary>
+        ''' <returns>String : version BDD</returns>
+        <OperationContract()> Function GetSqliteBddVersion() As String
+
+        ''' <summary>Retourne la version du moteur sqlite</summary>
+        ''' <returns>String : version Sqlite</returns>
+        <OperationContract()> Function GetSqliteVersion() As String
 #End Region
 
 #Region "Historisation"

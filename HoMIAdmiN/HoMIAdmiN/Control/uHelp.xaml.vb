@@ -32,6 +32,8 @@ Partial Public Class uHelp
             listesversionsprogrammes.Text &= " Service démarré : " & myService.GetLastStartTime & vbCrLf
             listesversionsprogrammes.Text &= " Heure du serveur : " & myService.GetTime & vbCrLf
             listesversionsprogrammes.Text &= " Port SOAP utilisé : " & myService.GetPortSOAP & vbCrLf
+            listesversionsprogrammes.Text &= " Version Moteur SQLlite: " & myService.GetSqliteVersion & vbCrLf
+            listesversionsprogrammes.Text &= " Version de la BDD: " & myService.GetSqliteBddVersion & vbCrLf
 
             'affiche des infos sur la config
             listesdivers.Text = ""
