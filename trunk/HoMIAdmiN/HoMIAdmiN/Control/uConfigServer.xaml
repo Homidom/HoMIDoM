@@ -6,7 +6,7 @@
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
             <StackPanel>
                 <DockPanel >
-                    <Image Height="60" HorizontalAlignment="Left" Margin="17,1,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Serveur.png">
+                    <Image Height="60" HorizontalAlignment="Left" Margin="17,1,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/homidom_logo_128.png">
                         <Image.LayoutTransform >
                             <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
                         </Image.LayoutTransform>

@@ -3830,6 +3830,44 @@ Namespace HoMIDom
                 Return ex.Message
             End Try
         End Function
+
+        ''' <summary>Retourne la version BDD sqlite</summary>
+        ''' <returns>String : version BDD</returns>
+        Public Function GetSqliteBddVersion() As String Implements IHoMIDom.GetSqliteBddVersion
+            Try
+                Dim sqliteversion As String = ""
+                Dim retour As String
+                retour = sqlite_homidom.querysimple("PRAGMA user_version", sqliteversion)
+                If Mid(retour, 1, 4) <> "ERR:" Then
+                    Return sqliteversion
+                Else
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSqliteBddVersion", retour)
+                    Return "ERROR"
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSqliteBddVersion", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>Retourne la version du moteur sqlite</summary>
+        ''' <returns>String : version Moteur sqlite</returns>
+        Public Function GetSqliteVersion() As String Implements IHoMIDom.GetSqliteVersion
+            Try
+                Dim sqliteversion As String = ""
+                Dim retour As String
+                retour = sqlite_homidom.querysimple("SELECT SQLITE_VERSION()", sqliteversion)
+                If Mid(retour, 1, 4) <> "ERR:" Then
+                    Return sqliteversion
+                Else
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSqliteBddVersion", retour)
+                    Return "ERROR"
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSqliteVersion", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
 #End Region
 
 #Region "Historisation"

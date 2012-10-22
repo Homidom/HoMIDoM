@@ -43,7 +43,7 @@
                 <StackPanel >
                     <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">
                         <StackPanel Name="menu_composant" Width="110" Height="110" Background="Black">
-                            <Image Tag="tag_composant" Name="img_composant" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/Composant_1281.png" ToolTip="Gérer les composants" />
+                            <Image Tag="tag_composant" Name="img_composant" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/Composant_128.png" ToolTip="Gérer les composants" />
                             <Label Name="label_menu_composant" Content="Composants" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Image Tag="tag_composant" Name="img_composant_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Configurer_32.png" ToolTip="Gérer les composants" />
