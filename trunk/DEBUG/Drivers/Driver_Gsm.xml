@@ -6,7 +6,20 @@ Driver_Gsm
 </name>
 </assembly>
 <members>
-<member name="M:Driver_Gsm.Driver_Gsm.GetCommandPlus">
+<member name="P:Driver_Gsm.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_Gsm.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_Gsm.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:Driver_Gsm.Driver_Gsm.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
@@ -45,7 +58,6 @@ Driver_Gsm
 	<param name="Command">La commande à passer</param>
 	<param name="Parametre1">Message text</param>
 	<param name="Parametre2">Phone Number</param>
-	<remarks></remarks>
 </member><member name="M:Driver_Gsm.Driver_Gsm.DeleteDevice(System.String)">
 	<summary>Fonction lancée lors de la suppression d'un device</summary>
 	<param name="DeviceId">Objet représetant le device à interroger</param>
@@ -84,35 +96,17 @@ Driver_Gsm
 </member><member name="M:Driver_Gsm.Driver_Gsm.TimerTick">
 	<summary>Si refresh &gt;0 gestion du timer</summary>
 	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-</member><member name="M:Driver_Gsm.Driver_Gsm.ouvrir(System.String)">
+</member><member name="M:Driver_Gsm.Driver_Gsm.ouvrir">
 	<summary>Ouvrir le port du modem</summary>
-	<param name="numero">Nom/Numero du port COM: COM6</param>
-	<remarks></remarks>
 </member><member name="M:Driver_Gsm.Driver_Gsm.fermer">
 	<summary>Fermer le port du modem</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_Gsm.Driver_Gsm.sendsms(System.String,System.String)">
-	<summary>Envoyer un SMS</summary>
-	<param name="parametre1">PhoneNumber</param>
-	<param name="parametre2">txtmsg</param>
-	<remarks></remarks>
+</member><member name="M:Driver_Gsm.Driver_Gsm.ReceptionSMS">
+	<summary>Reception de SMS</summary>
 </member><member name="T:Driver_Gsm.Driver_Gsm">
 	<summary>Class Driver GSM </summary>
 	<remarks>Les drivers de votre modem doivent etre installés
  Nécessite les dll GSMCommServer.dll,  GSMCommunication.dll, GSMCommShared.dll,  PDUConverter.dll </remarks>
-</member><member name="P:Driver_Gsm.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_Gsm.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_Gsm.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
 </member>
 </members>
 </doc>
