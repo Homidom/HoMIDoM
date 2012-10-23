@@ -1550,7 +1550,7 @@ Namespace HoMIDom
                     Or _ListDevices.Item(i).Type = "PLUIECOURANT" _
                     Or _ListDevices.Item(i).Type = "VITESSEVENT" _
                     Or _ListDevices.Item(i).Type = "UV" _
-                    Or _ListDevices.Item(i).Type = "HUMIDITE" _
+                    Or _ListDevices.Item(i).Type = "COMPTEUR" _
                     Then
                         writer.WriteStartAttribute("valuemin")
                         writer.WriteValue(_ListDevices.Item(i).valuemin)

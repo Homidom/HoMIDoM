@@ -3019,11 +3019,11 @@ Imports System.Media
             'WriteMessage("Sequence nbr  = " & recbuf(HUM.seqnbr).ToString)
             'Select Case recbuf(HUM.humidity_status)
             '    Case &H0
-            '        WriteMessage("Status        = Dry")
+            '        WriteMessage("Status        = Normal")
             '    Case &H1
             '        WriteMessage("Status        = Comfortable")
             '    Case &H2
-            '        WriteMessage("Status        = Normal")
+            '        WriteMessage("Status        = Dry")
             '    Case &H3
             '        WriteMessage("Status        = Wet")
             'End Select
@@ -3084,11 +3084,11 @@ Imports System.Media
             'WriteMessage("Sequence nbr  = " & recbuf(TEMP_HUM.seqnbr).ToString)
             'Select Case recbuf(TEMP_HUM.humidity_status)
             '    Case &H0
-            '        WriteMessage("Status        = Dry")
+            '        WriteMessage("Status        = Normal")
             '    Case &H1
             '        WriteMessage("Status        = Comfortable")
             '    Case &H2
-            '        WriteMessage("Status        = Normal")
+            '        WriteMessage("Status        = Dry")
             '    Case &H3
             '        WriteMessage("Status        = Wet")
             'End Select
@@ -3144,11 +3144,11 @@ Imports System.Media
 
             'Select Case recbuf(TEMP_HUM_BARO.humidity_status)
             '    Case &H0
-            '        WriteMessage("Status        = Dry")
+            '        WriteMessage("Status        = Normal")
             '    Case &H1
             '        WriteMessage("Status        = Comfortable")
             '    Case &H2
-            '        WriteMessage("Status        = Normal")
+            '        WriteMessage("Status        = Dry")
             '    Case &H3
             '        WriteMessage("Status        = Wet")
             'End Select
