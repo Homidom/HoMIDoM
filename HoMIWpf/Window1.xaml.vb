@@ -448,6 +448,8 @@ Class Window1
                                                 _MnuType = uCtrlImgMnu.TypeOfMnu.Zone
                                             Case uCtrlImgMnu.TypeOfMnu.Config.ToString
                                                 _MnuType = uCtrlImgMnu.TypeOfMnu.Config
+                                            Case uCtrlImgMnu.TypeOfMnu.LecteurMedia.ToString
+                                                _MnuType = uCtrlImgMnu.TypeOfMnu.LecteurMedia
                                         End Select
                                     Case "icon"
                                         _MnuIcon = list.Item(j).Attributes.Item(k).Value
@@ -1265,6 +1267,15 @@ Class Window1
                                     imgStackPnl.Children.Add(ListMnu.Item(i))
                                 End If
                             Next
+                            x.Close()
+                        Else
+                            x.Close()
+                        End If
+                    Case uCtrlImgMnu.TypeOfMnu.LecteurMedia
+                        Dim x As New WMedia
+                        x.Owner = Me
+                        x.ShowDialog()
+                        If x.DialogResult.HasValue And x.DialogResult.Value Then
                             x.Close()
                         Else
                             x.Close()

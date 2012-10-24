@@ -78,65 +78,71 @@ Public Class WConfig
     End Sub
 
     Private Sub ListMnu_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles ListMnu.SelectionChanged
-        If ListMnu.SelectedIndex < 0 Then Exit Sub
+        Try
 
-        If ListMnu.SelectedIndex >= 0 Then
-            BtnUP.IsEnabled = True
-            BtnDown.IsEnabled = True
-        End If
-        If ListMnu.SelectedIndex = 0 Then
-            BtnUP.IsEnabled = False
-        End If
-        If ListMnu.SelectedIndex = ListMnu.Items.Count - 1 Then
-            BtnDown.IsEnabled = False
-        End If
+            If ListMnu.SelectedIndex < 0 Then Exit Sub
 
-        If MyListMnu.Item(ListMnu.SelectedIndex).Defaut = True Then
-            ListMnu.ContextMenu.Items(1).isenabled = False
-            TxtName.Text = MyListMnu.Item(ListMnu.SelectedIndex).Text
-            LblType.Content = MyListMnu.Item(ListMnu.SelectedIndex).Type.ToString
-            TxtImage.Text = MyListMnu.Item(ListMnu.SelectedIndex).Icon
-            StkProperty.Visibility = Windows.Visibility.Visible
-            StkImage.Visibility = Windows.Visibility.Visible
-
-            If TxtImage.Text <> "" Then
-                If File.Exists(TxtImage.Text) Then
-                    Dim bmpImage As New BitmapImage()
-                    bmpImage.BeginInit()
-                    bmpImage.UriSource = New Uri(TxtImage.Text, UriKind.Absolute)
-                    bmpImage.EndInit()
-                    ImgMnu.Source = bmpImage
-                End If
+            If ListMnu.SelectedIndex >= 0 Then
+                BtnUP.IsEnabled = True
+                BtnDown.IsEnabled = True
+            End If
+            If ListMnu.SelectedIndex = 0 Then
+                BtnUP.IsEnabled = False
+            End If
+            If ListMnu.SelectedIndex = ListMnu.Items.Count - 1 Then
+                BtnDown.IsEnabled = False
             End If
 
-        Else
-            ListMnu.ContextMenu.Items(1).isenabled = True
-            TxtName.Text = MyListMnu.Item(ListMnu.SelectedIndex).Text
-            LblType.Content = MyListMnu.Item(ListMnu.SelectedIndex).Type.ToString
-            If Frm.ListMnu.Item(ListMnu.SelectedIndex).Type <> uCtrlImgMnu.TypeOfMnu.Zone Then
+            If MyListMnu.Item(ListMnu.SelectedIndex).Defaut = True Then
+                ListMnu.ContextMenu.Items(1).isenabled = False
+                TxtName.Text = MyListMnu.Item(ListMnu.SelectedIndex).Text
+                LblType.Content = MyListMnu.Item(ListMnu.SelectedIndex).Type.ToString
+                TxtImage.Text = MyListMnu.Item(ListMnu.SelectedIndex).Icon
+                StkProperty.Visibility = Windows.Visibility.Visible
                 StkImage.Visibility = Windows.Visibility.Visible
-                Button1.Visibility = Windows.Visibility.Visible
-                TxtName.IsReadOnly = False
-                ChkVisible.Visibility = Windows.Visibility.Hidden
+
+                If TxtImage.Text <> "" Then
+                    If File.Exists(TxtImage.Text) Then
+                        Dim bmpImage As New BitmapImage()
+                        bmpImage.BeginInit()
+                        bmpImage.UriSource = New Uri(TxtImage.Text, UriKind.Absolute)
+                        bmpImage.EndInit()
+                        ImgMnu.Source = bmpImage
+                    End If
+                End If
+
             Else
-                ImgMnu.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(IdSrv, MyListMnu.Item(ListMnu.SelectedIndex).IDElement).Icon))
-                Button1.Visibility = Windows.Visibility.Hidden
-                StkImage.Visibility = Windows.Visibility.Hidden
-                TxtName.IsReadOnly = True
-                ChkVisible.IsChecked = MyListMnu.Item(ListMnu.SelectedIndex).Visible
-                ChkVisible.Visibility = Windows.Visibility.Visible
-            End If
-            TxtImage.Text = MyListMnu.Item(ListMnu.SelectedIndex).Icon
-            If Frm.ListMnu.Item(ListMnu.SelectedIndex).Type = uCtrlImgMnu.TypeOfMnu.Internet Then
-                LblParam.Content = "Url: "
-                TxtParam.Text = MyListMnu.Item(ListMnu.SelectedIndex).Parametres.Item(0)
-                StkParam.Visibility = Windows.Visibility.Visible
-            Else
-                StkParam.Visibility = Windows.Visibility.Hidden
+                ListMnu.ContextMenu.Items(1).isenabled = True
+                TxtName.Text = MyListMnu.Item(ListMnu.SelectedIndex).Text
+                LblType.Content = MyListMnu.Item(ListMnu.SelectedIndex).Type.ToString
+                If Frm.ListMnu.Item(ListMnu.SelectedIndex).Type <> uCtrlImgMnu.TypeOfMnu.Zone Then
+                    StkImage.Visibility = Windows.Visibility.Visible
+                    Button1.Visibility = Windows.Visibility.Visible
+                    TxtName.IsReadOnly = False
+                    ChkVisible.Visibility = Windows.Visibility.Hidden
+                Else
+                    ImgMnu.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(IdSrv, MyListMnu.Item(ListMnu.SelectedIndex).IDElement).Icon))
+                    Button1.Visibility = Windows.Visibility.Hidden
+                    StkImage.Visibility = Windows.Visibility.Hidden
+                    TxtName.IsReadOnly = True
+                    ChkVisible.IsChecked = MyListMnu.Item(ListMnu.SelectedIndex).Visible
+                    ChkVisible.Visibility = Windows.Visibility.Visible
+                End If
+                TxtImage.Text = MyListMnu.Item(ListMnu.SelectedIndex).Icon
+                If Frm.ListMnu.Item(ListMnu.SelectedIndex).Type = uCtrlImgMnu.TypeOfMnu.Internet Then
+                    LblParam.Content = "Url: "
+                    TxtParam.Text = MyListMnu.Item(ListMnu.SelectedIndex).Parametres.Item(0)
+                    StkParam.Visibility = Windows.Visibility.Visible
+                Else
+                    StkParam.Visibility = Windows.Visibility.Hidden
+                End If
+
+                StkProperty.Visibility = Windows.Visibility.Visible
             End If
 
-            StkProperty.Visibility = Windows.Visibility.Visible
-            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString, "Erreur")
+        End Try
     End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Button1.Click
@@ -204,6 +210,13 @@ Public Class WConfig
 
                 '    MyListMnu.Add(x)
                 '    ListMnu.Items.Add(TxtName.Text)
+            Case 4 'New Media
+                Dim x As New uCtrlImgMnu
+                x.Text = TxtName.Text
+                x.Type = uCtrlImgMnu.TypeOfMnu.LecteurMedia
+                x.Icon = TxtImage.Text
+                MyListMnu.Add(x)
+                ListMnu.Items.Add(TxtName.Text)
         End Select
         StkProperty.Visibility = Windows.Visibility.Hidden
     End Sub
@@ -243,6 +256,18 @@ Public Class WConfig
         StkParam.Visibility = Windows.Visibility.Hidden
         StkProperty.Visibility = Windows.Visibility.Visible
         FlagNewMnu = 2
+    End Sub
+
+    Private Sub MnuAddMedia_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuAddMedia.Click
+        TxtName.Text = ""
+        LblType.Content = uCtrlImgMnu.TypeOfMnu.LecteurMedia.ToString
+        TxtImage.Text = ""
+        TxtName.IsReadOnly = False
+        ChkVisible.Visibility = Windows.Visibility.Hidden
+        StkImage.Visibility = Windows.Visibility.Visible
+        StkParam.Visibility = Windows.Visibility.Hidden
+        StkProperty.Visibility = Windows.Visibility.Visible
+        FlagNewMnu = 4
     End Sub
 
     'Supprimer un menu

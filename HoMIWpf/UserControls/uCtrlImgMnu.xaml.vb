@@ -6,6 +6,7 @@ Partial Public Class uCtrlImgMnu
         Internet = 1
         Meteo = 2
         Zone = 3
+        LecteurMedia = 4
         Config = 99
     End Enum
 

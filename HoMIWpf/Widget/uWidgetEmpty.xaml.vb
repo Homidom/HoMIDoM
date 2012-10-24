@@ -1,8 +1,9 @@
 ﻿Imports System.Windows.Threading
 
 Public Class uWidgetEmpty
-
+    'Variables
     Dim _Id As String
+    Dim _ParentId As String
     Dim _Down As DateTime
     Dim _dev As HoMIDom.HoMIDom.TemplateDevice = Nothing
     Dim _macro As HoMIDom.HoMIDom.Macro = Nothing
@@ -13,7 +14,7 @@ Public Class uWidgetEmpty
     Dim _X As Double = 0
     Dim _Y As Double = 0
     Dim _Rotation As Double = 0
-    Dim _ModeEdition As Boolean
+    Dim _ModeEdition As Boolean '=True si on est en mode edition
     Dim _Picture As String
     Dim _ImageBackGround As String
     Dim _LabelStatus As String
@@ -30,8 +31,11 @@ Public Class uWidgetEmpty
     Dim _Action_GestureHautBas As New List(Of cWidget.Action)
     Dim _Action_GestureBasHaut As New List(Of cWidget.Action)
     Dim _oldposition As Point = Nothing
-    Dim dt As DispatcherTimer
+    Dim _FlagBlock As Boolean = False
+    Dim _dt As DispatcherTimer
+    Dim _CurrentValue As Object = Nothing
 
+    'Event
     Public Event Click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event LongClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event GestureHautBas(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
@@ -46,7 +50,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As String)
             _Id = value
-            If IsConnect = True Then
+            If IsConnect = True And value <> "" Then
                 _dev = myService.ReturnDeviceByID(IdSrv, _Id)
                 _macro = myService.ReturnMacroById(IdSrv, _Id)
                 _zone = myService.ReturnZoneByID(IdSrv, _Id)
@@ -164,9 +168,19 @@ Public Class uWidgetEmpty
                     _Picture = _zone.Icon
                     IsEmpty = False
                 End If
+
             End If
 
             TraiteRefresh()
+        End Set
+    End Property
+
+    Public Property ParentId As String
+        Get
+            Return _Id
+        End Get
+        Set(ByVal value As String)
+            _ParentId = value
         End Set
     End Property
 
@@ -337,7 +351,9 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Integer)
             _Refresh = value
-            dt.Interval = New TimeSpan(0, 0, _Refresh)
+            _dt.Interval = New TimeSpan(0, 0, _Refresh)
+            _dt.Stop()
+            _dt.Start()
         End Set
     End Property
 
@@ -450,10 +466,10 @@ Public Class uWidgetEmpty
         InitializeComponent()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        dt = New DispatcherTimer()
-        AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
-        dt.Interval = New TimeSpan(0, 0, _Refresh)
-        dt.Start()
+        _dt = New DispatcherTimer()
+        AddHandler _dt.Tick, AddressOf dispatcherTimer_Tick
+        _dt.Interval = New TimeSpan(0, 0, _Refresh)
+        _dt.Start()
 
         LblStatus.Content = DefautLabelStatus
     End Sub
@@ -487,60 +503,131 @@ Public Class uWidgetEmpty
 
                     Select Case _dev.Type
                         Case HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.AUDIO
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.CONTACT
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.DIRECTIONVENT
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE
-                            LblStatus.Content = "Status: " & _dev.Value & "%"
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value & "%"
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.LAMPE
-                            LblStatus.Content = "Status: " & _dev.Value & "%"
-                            If StkPopup.Children.Count = 2 Then
-                                Dim x2 As uVariateur = StkPopup.Children.Item(1)
-                                x2.Value = _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value & "%"
+                                _CurrentValue = _dev.Value
+                                If StkPopup.Children.Count = 2 Then
+                                    Dim x2 As uVariateur = StkPopup.Children.Item(1)
+                                    x2.Value = _dev.Value
+                                End If
                             End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.METEO
-
                         Case HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA
                         Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.SWITCH
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE
-                            LblStatus.Content = "Status: " & _dev.Value & "°C"
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value & "°C"
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE
-                            LblStatus.Content = "Status: " & _dev.Value & "°C"
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value & "°C"
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.VOLET
-                            LblStatus.Content = "Status: " & _dev.Value & "%"
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value & "%"
+                                _CurrentValue = _dev.Value
+                            End If
                         Case HoMIDom.HoMIDom.Device.ListeDevices.UV
-                            LblStatus.Content = "Status: " & _dev.Value
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = "Status: " & _dev.Value
+                                _CurrentValue = _dev.Value
+                            End If
                     End Select
                 End If
 
@@ -558,12 +645,12 @@ Public Class uWidgetEmpty
 
             End If
         Catch ex As Exception
-            MsgBox("Error Refresh: " & ex.ToString & vbCrLf)
+            MessageBox.Show("Error Refresh: " & ex.ToString & vbCrLf, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
-        TraiteRefresh()
+        If _FlagBlock = False Then TraiteRefresh()
     End Sub
 
     Private Sub uWidgetEmpty_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Me.MouseLeave
@@ -659,6 +746,7 @@ Public Class uWidgetEmpty
         End If
     End Sub
 
+#Region "Gerer_Action_Gesture"
     Private Sub Traite_Action_OnClick()
         For Each _act As cWidget.Action In _Action_On_Click
             Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
@@ -670,13 +758,20 @@ Public Class uWidgetEmpty
                     param.Value = _act.Value
                     x.Parametres.Add(param)
                 End If
+
+                _FlagBlock = True
                 myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                _FlagBlock = False
+
             Else
                 Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
                 If _mac IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
+
+                    _FlagBlock = True
                     myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                    _FlagBlock = False
                 Else
                     Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
                     If _zon IsNot Nothing Then
@@ -698,7 +793,10 @@ Public Class uWidgetEmpty
                     param.Value = _act.Value
                     x.Parametres.Add(param)
                 End If
+
+                _FlagBlock = True
                 myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                _FlagBlock = False
             Else
                 Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
                 If _mac IsNot Nothing Then
@@ -726,13 +824,19 @@ Public Class uWidgetEmpty
                     param.Value = _act.Value
                     x.Parametres.Add(param)
                 End If
+
+                _FlagBlock = True
                 myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                _FlagBlock = False
             Else
                 Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
                 If _mac IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
+
+                    _FlagBlock = True
                     myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                    _FlagBlock = False
                 Else
                     Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
                     If _zon IsNot Nothing Then
@@ -754,13 +858,19 @@ Public Class uWidgetEmpty
                     param.Value = _act.Value
                     x.Parametres.Add(param)
                 End If
+
+                _FlagBlock = True
                 myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                _FlagBlock = False
             Else
                 Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
                 If _mac IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
+
+                    _FlagBlock = True
                     myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                    _FlagBlock = False
                 Else
                     Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
                     If _zon IsNot Nothing Then
@@ -782,13 +892,19 @@ Public Class uWidgetEmpty
                     param.Value = _act.Value
                     x.Parametres.Add(param)
                 End If
+
+                _FlagBlock = True
                 myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                _FlagBlock = False
             Else
                 Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
                 If _mac IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
+
+                    _FlagBlock = True
                     myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                    _FlagBlock = False
                 Else
                     Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
                     If _zon IsNot Nothing Then
@@ -810,13 +926,19 @@ Public Class uWidgetEmpty
                     param.Value = _act.Value
                     x.Parametres.Add(param)
                 End If
+
+                _FlagBlock = True
                 myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                _FlagBlock = False
             Else
                 Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
                 If _mac IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
+
+                    _FlagBlock = True
                     myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                    _FlagBlock = False
                 Else
                     Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
                     If _zon IsNot Nothing Then
@@ -826,6 +948,7 @@ Public Class uWidgetEmpty
             End If
         Next
     End Sub
+#End Region
 
 
     Private Sub Image_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Me.PreviewMouseDown
@@ -844,10 +967,15 @@ Public Class uWidgetEmpty
             If _dev IsNot Nothing Then
                 x.Nom = Touche
                 x.Parametres = Nothing
+
+                _FlagBlock = True
                 myService.ExecuteDeviceCommand(IdSrv, Id, x)
+                _FlagBlock = False
+
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK)
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            _FlagBlock = False
         End Try
     End Sub
 
@@ -861,7 +989,10 @@ Public Class uWidgetEmpty
                     x.Nom = "OPEN"
                 End If
                 x.Parametres = Nothing
+
+                _FlagBlock = True
                 myService.ExecuteDeviceCommand(IdSrv, Id, x)
+                _FlagBlock = False
 
                 If StkPopup.Children.Count > 0 Then
                     If Popup1.IsOpen = True Then
@@ -870,7 +1001,8 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK)
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            _FlagBlock = False
         End Try
     End Sub
 
@@ -884,7 +1016,10 @@ Public Class uWidgetEmpty
                     x.Nom = "CLOSE"
                 End If
                 x.Parametres = Nothing
+
+                _FlagBlock = True
                 myService.ExecuteDeviceCommand(IdSrv, Id, x)
+                _FlagBlock = False
 
                 If StkPopup.Children.Count > 0 Then
                     If Popup1.IsOpen = True Then
@@ -893,7 +1028,8 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK)
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            _FlagBlock = False
         End Try
     End Sub
 
@@ -911,10 +1047,14 @@ Public Class uWidgetEmpty
 
                 y.Value = Value
                 x.Parametres.Add(y)
+
+                _FlagBlock = True
                 myService.ExecuteDeviceCommand(IdSrv, Id, x)
+                _FlagBlock = False
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK)
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            _FlagBlock = False
         End Try
     End Sub
 #End Region
@@ -935,22 +1075,24 @@ Public Class uWidgetEmpty
                 MessageBox.Show("Erreur: " & ex.ToString)
             End Try
         Else
-            If _zone IsNot Nothing Then
-                RaiseEvent ShowZone(_zone.ID)
-                Exit Sub
-            End If
-            If _macro IsNot Nothing Then
-                myService.RunMacro(IdSrv, _macro.ID)
-                Exit Sub
-            End If
-            If StkPopup.Children.Count > 0 Then
-                If Popup1.IsOpen = False Then
-                    Popup1.IsOpen = True
-                Else
-                    Popup1.IsOpen = False
+            If IsEmpty = False Then
+                If _zone IsNot Nothing Then
+                    RaiseEvent ShowZone(_zone.ID)
+                    Exit Sub
+                End If
+                If _macro IsNot Nothing Then
+                    myService.RunMacro(IdSrv, _macro.ID)
+                    Exit Sub
+                End If
+                If StkPopup.Children.Count > 0 Then
+                    If Popup1.IsOpen = False Then
+                        Popup1.IsOpen = True
+                    Else
+                        Popup1.IsOpen = False
+                    End If
                 End If
             End If
-        End If
+            End If
     End Sub
 
 End Class

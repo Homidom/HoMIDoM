@@ -41,6 +41,12 @@ HoMIDom
 	<param name="resultat">Arralist contenant la liste des résultats</param>
 	<returns>String si OK, String "ERR:..." si erreur</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.querysimple(System.String,System.String@,System.String[])">
+	<summary>Requete avec résultat simple</summary>
+	<param name="commande">ex : SELECT * FROM contact</param>
+	<param name="resultat">Arralist contenant la liste des résultats</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Sqlite.count(System.String,System.Int32@)">
 	<summary>Compte le nombre de resultat</summary>
 	<param name="commande">ex : SELECT COUNT(*) FROM table WHERE col1 = 'xxx'</param>
@@ -1241,6 +1247,12 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetSqliteBddVersion">
+	<summary>Retourne la version BDD sqlite</summary>
+	<returns>String : version BDD</returns>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetSqliteVersion">
+	<summary>Retourne la version du moteur sqlite</summary>
+	<returns>String : version Moteur sqlite</returns>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetHistoDeviceSource(System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Retourne un datatable d'historique d'un device suivant sa propriété (source) puis suivant une date de début et de fin
@@ -1820,6 +1832,11 @@ HoMIDom
  Template de Classe de type Driver pour le service web
  </summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSaveRealTime">
+	<summary>
+ Demande au serveur si on sauvegarde en temps réel
+ </summary>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSaveRealTime(System.Boolean)">
 	<summary>
  Indique au serveur si on enregistre en temps réel
@@ -2059,6 +2076,12 @@ HoMIDom
  </summary>
 	<returns>Liste (Type ImageFile) de tous les fichiers image (png, jpg) présents sur le serveur</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSqliteBddVersion">
+	<summary>Retourne la version BDD sqlite</summary>
+	<returns>String : version BDD</returns>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSqliteVersion">
+	<summary>Retourne la version du moteur sqlite</summary>
+	<returns>String : version Sqlite</returns>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DevicesAsHisto">
 	<summary>
  Retourne un dictionnary retourant en clé l'id du device et la valeur True/False s'il contient des historiques

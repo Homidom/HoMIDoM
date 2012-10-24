@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="uMedia"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Background="DarkGray">
+            
+    <StackPanel>
+
+        <MediaElement Height="300" Name="MediaElement1" VerticalAlignment="Stretch" Width="300" />
+        <StackPanel Name="Toolbar" Background=" Gray">
+            <Slider Name="SliderSeek" />
+            <StackPanel Orientation="Horizontal" >
+            <Image Name="BtnPlay" Height="30" Width="30" Source="/HoMIWpF;component/Images/Playback-Start-64.png" />
+            <Image Name="BtnPause" Height="30" Width="30" Source="/HoMIWpF;component/Images/Playback-Pause-64.png" />
+            <Image Name="BtnStop" Height="30" Width="30" Source="/HoMIWpF;component/Images/Playback-Stop-64.png" />
+            <Image Name="BtnReculTitre" Height="30" Width="30" Source="/HoMIWpF;component/Images/Skip-Backward-64.png" />
+            <Image Name="BtnRecul" Height="30" Width="30" Source="/HoMIWpF;component/Images/Seek-Backward-64.png" />
+            <Image Name="BtnAvance" Height="30" Width="30" Source="/HoMIWpF;component/Images/Seek-Forward-64.png" />
+            <Image Name="BtnAvanceTitre" Height="30" Width="30" Source="/HoMIWpF;component/Images/Skip-Forward-64.png" />
+                <StackPanel Orientation="Horizontal" Name="StkVolume">
+                <Image Name="BtnVolumeMute" Height="30" Width="30" Source="/HoMIWpF;component/Images/volume-muted.png" />
+                <Image Name="BtnVolumeDown" Height="30" Width="30" Source="/HoMIWpF;component/Images/volume-low.png" />
+                <Image Name="BtnVolumeUp" Height="30" Width="30" Source="/HoMIWpF;component/Images/volume-high.png" />
+                </StackPanel>
+                <Image Name="BtnOpen" Height="30" Width="30" Source="/HoMIWpF;component/Images/plus.png" />
+        </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</UserControl>
