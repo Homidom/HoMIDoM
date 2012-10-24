@@ -1,4 +1,6 @@
-﻿Public Class uMedia
+﻿Imports System.Windows.Threading
+
+Public Class uMedia
 
     Dim _ShowToolBar As Boolean = True
     Dim _ShowBtnPlay As Boolean = True
@@ -15,6 +17,7 @@
     Dim _VideoWidth As Double = 300
     Dim _VideoHeight As Double = 300
     Dim _Uri As String = ""
+    Dim dt As DispatcherTimer = New DispatcherTimer()
 
     Public Sub New()
 
@@ -25,6 +28,10 @@
         ShowBtnReculTitre = False
         ShowBtnAvanceTitre = False
         _Volume = MediaElement1.Volume
+
+        AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
+        dt.Interval = New TimeSpan(0, 0, 1)
+        dt.Start()
     End Sub
 
     Public Property ShowToolBar As Boolean
@@ -34,9 +41,9 @@
         Set(ByVal value As Boolean)
             _ShowToolBar = value
             If value = True Then
-                ToolBar.Visibility = Windows.Visibility.Visible
+                Toolbar.Visibility = Windows.Visibility.Visible
             Else
-                ToolBar.Visibility = Windows.Visibility.Collapsed
+                Toolbar.Visibility = Windows.Visibility.Collapsed
             End If
         End Set
     End Property
@@ -239,6 +246,8 @@
 
     Private Sub BtnStop_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnStop.MouseDown
         MediaElement1.LoadedBehavior = MediaState.Stop
+        dt.Stop()
+        SliderSeek.Value = 0
     End Sub
 
     Private Sub BtnReculTitre_ImageFailed(ByVal sender As System.Object, ByVal e As System.Windows.ExceptionRoutedEventArgs) Handles BtnReculTitre.ImageFailed
@@ -271,11 +280,18 @@
         End Try
     End Sub
 
-    Private Sub MediaElement1_MediaOpened(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MediaElement1.MediaOpened
-        SliderSeek.Maximum = MediaElement1.NaturalDuration.TimeSpan.TotalMilliseconds
+    Private Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
+        SliderSeek.Value = MediaElement1.Position.TotalSeconds
     End Sub
 
-    Private Sub SliderSeek_ValueChanged(ByVal sender As System.Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of System.Double)) Handles SliderSeek.ValueChanged
+    Private Sub MediaElement1_MediaOpened(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MediaElement1.MediaOpened
+        dt.stop()
+        SliderSeek.Maximum = MediaElement1.NaturalDuration.TimeSpan.Seconds
+        SliderSeek.SmallChange = 2
+        dt.Start()
+    End Sub
+
+    Private Sub SliderSeek_ValueChanged() Handles SliderSeek.MouseLeftButtonUp
         Dim SliderValue As Integer = CType(SliderSeek.Value, Integer)
 
         ' Overloaded constructor takes the arguments days, hours, minutes, seconds, miniseconds. 
