@@ -148,8 +148,14 @@
     <Compile Include="UserControls\CustomControl.xaml.vb">
       <DependentUpon>CustomControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\uMedia.xaml.vb">
+      <DependentUpon>uMedia.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WindowImg.xaml.vb">
       <DependentUpon>WindowImg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WMedia.xaml.vb">
+      <DependentUpon>WMedia.xaml</DependentUpon>
     </Compile>
     <Compile Include="WWidgetProperty.xaml.vb">
       <DependentUpon>WWidgetProperty.xaml</DependentUpon>
@@ -205,6 +211,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\CustomControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\uMedia.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -329,6 +339,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="WindowImg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WMedia.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -646,10 +660,32 @@
   <ItemGroup>
     <Resource Include="Images\Supprimer_32.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Backward-48.png" />
+    <Resource Include="Images\Playback-Pause-64.png" />
+    <Resource Include="Images\Playback-Start-64.png" />
+    <Resource Include="Images\Playback-Stop-64.png" />
+    <Resource Include="Images\Playlist-Repeat-64.png" />
+    <Resource Include="Images\Playlist-Shuffle-64.png" />
+    <Resource Include="Images\Record-64.png" />
+    <Resource Include="Images\Seek-Backward-64.png" />
+    <Resource Include="Images\Seek-Forward-64.png" />
+    <Resource Include="Images\Skip-Backward-48.png" />
+    <Resource Include="Images\Skip-Backward-64.png" />
+    <Resource Include="Images\Skip-Forward-64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\volume-high.png" />
+    <Resource Include="Images\volume-low.png" />
+    <Resource Include="Images\volume-muted.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
+      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

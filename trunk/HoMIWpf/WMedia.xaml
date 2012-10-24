@@ -1,0 +1,9 @@
+﻿<Window xmlns:my="clr-namespace:HoMIWpF"  x:Class="WMedia"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Media" WindowStartupLocation="CenterScreen" Width="300" MinHeight="200" ResizeMode="NoResize" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+    
+    <Grid MinWidth="300">
+        <my:uMedia x:Name="UMedia1" />
+    </Grid>
+</Window>
