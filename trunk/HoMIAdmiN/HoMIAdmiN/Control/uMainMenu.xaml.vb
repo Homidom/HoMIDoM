@@ -59,7 +59,7 @@
         Try
             'ContextMenu Drivers
             Dim ctxMenudrv As New ContextMenu
-            ctxMenudrv.Foreground = System.Windows.Media.Brushes.White
+            ctxMenudrv.Foreground = System.Windows.Media.Brushes.Black
             ctxMenudrv.Background = System.Windows.Media.Brushes.LightGray
             ctxMenudrv.BorderBrush = System.Windows.Media.Brushes.Black
             Dim mnu01 As New MenuItem
@@ -78,7 +78,7 @@
 
             'ContextMenu Composants
             Dim ctxMenuComposants As New ContextMenu
-            ctxMenuComposants.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuComposants.Foreground = System.Windows.Media.Brushes.Black
             ctxMenuComposants.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuComposants.BorderBrush = System.Windows.Media.Brushes.Black
             Dim mnu11 As New MenuItem
@@ -109,7 +109,7 @@
 
             'ContextMenu Zone
             Dim ctxMenuZone As New ContextMenu
-            ctxMenuZone.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuZone.Foreground = System.Windows.Media.Brushes.Black
             ctxMenuZone.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuZone.BorderBrush = System.Windows.Media.Brushes.Black
             Dim mnu21 As New MenuItem
@@ -140,7 +140,7 @@
 
             'ContextMenu user
             Dim ctxMenuUser As New ContextMenu
-            ctxMenuUser.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuUser.Foreground = System.Windows.Media.Brushes.Black
             ctxMenuUser.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuUser.BorderBrush = System.Windows.Media.Brushes.Black
             Dim mnu31 As New MenuItem
@@ -171,7 +171,7 @@
 
             'ContextMenu Trigger
             Dim ctxMenuTrigger As New ContextMenu
-            ctxMenuTrigger.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuTrigger.Foreground = System.Windows.Media.Brushes.Black
             ctxMenuTrigger.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuTrigger.BorderBrush = System.Windows.Media.Brushes.Black
             Dim mnu41 As New MenuItem
@@ -208,7 +208,7 @@
 
             'ContextMenu macro
             Dim ctxMenuMacro As New ContextMenu
-            ctxMenuMacro.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuMacro.Foreground = System.Windows.Media.Brushes.Black
             ctxMenuMacro.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuMacro.BorderBrush = System.Windows.Media.Brushes.Black
             Dim mnu51 As New MenuItem
@@ -239,7 +239,7 @@
 
             'ContextMenu Config
             Dim ctxMenuConfig As New ContextMenu
-            ctxMenuConfig.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuConfig.Foreground = System.Windows.Media.Brushes.Black
             ctxMenuConfig.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuConfig.BorderBrush = System.Windows.Media.Brushes.Black
             Dim mnu61 As New MenuItem
@@ -265,7 +265,7 @@
 
             'ContextMenu Quitter
             Dim ctxMenuQuitter As New ContextMenu
-            ctxMenuQuitter.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuQuitter.Foreground = System.Windows.Media.Brushes.Black
             ctxMenuQuitter.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuQuitter.BorderBrush = System.Windows.Media.Brushes.Black
             Dim mnu71 As New MenuItem
@@ -290,7 +290,7 @@
 
             'ContextMenu Histo
             Dim ctxMenuHisto As New ContextMenu
-            ctxMenuHisto.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuHisto.Foreground = System.Windows.Media.Brushes.Black
             ctxMenuHisto.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuHisto.BorderBrush = System.Windows.Media.Brushes.Black
             Dim mnu81 As New MenuItem
@@ -303,7 +303,7 @@
 
             'ContextMenu Aide
             Dim ctxMenuAide As New ContextMenu
-            ctxMenuAide.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuAide.Foreground = System.Windows.Media.Brushes.Black
             ctxMenuAide.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuAide.BorderBrush = System.Windows.Media.Brushes.Black
             Dim mnu91 As New MenuItem
@@ -316,7 +316,7 @@
 
             'ContextMenu Module
             Dim ctxMenuModule As New ContextMenu
-            ctxMenuModule.Foreground = System.Windows.Media.Brushes.White
+            ctxMenuModule.Foreground = System.Windows.Media.Brushes.Black
             ctxMenuModule.Background = System.Windows.Media.Brushes.LightGray
             ctxMenuModule.BorderBrush = System.Windows.Media.Brushes.Black
             Dim mnu101 As New MenuItem
