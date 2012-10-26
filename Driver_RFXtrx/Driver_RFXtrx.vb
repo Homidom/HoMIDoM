@@ -1642,8 +1642,10 @@ Imports System.Media
         Try
             'get firmware version
             SendCommand(ICMD.RESET, "Reset receiver/transceiver:")
+            System.Threading.Thread.Sleep(2000)
             'configure Transceiver mode
             SetMode(_PARAMMODE)
+            System.Threading.Thread.Sleep(2000)
 
             dateheurelancement = DateTime.Now
 
