@@ -47,7 +47,7 @@
                         <Label Foreground="White" Name="Label19" >LastChange Duree:</Label>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                            <ComboBox Background="White" BorderBrush="Black" Width="215" Foreground="Black" Name="TxtModele" BorderThickness="2" Height="25" VerticalAlignment="Top" IsEditable="True" Tag="0" Visibility="Collapsed" />
+                            <ComboBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Width="215" Name="TxtModele" BorderThickness="2" Height="25" VerticalAlignment="Top" IsEditable="True" Tag="0" Visibility="Collapsed" />
                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtModele2" Width="215" Tag="1" Visibility="Collapsed" />
                             <Rectangle Width="10" Name="rectmodele2"/>
                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Width="75" Name="TxtRefresh">0</TextBox>
@@ -88,7 +88,7 @@
                         <StackPanel HorizontalAlignment="Left">
                             <Label Content="Zones:" Foreground="White" />
                             <Label Content="Visible" Foreground="White" FontSize="10" HorizontalContentAlignment="Right" />
-                            <ListBox Background="DarkGray" BorderBrush="Black" Name="ListZone" Margin="5" Padding="2" Width="250" Height="120" ToolTip="Liste des zones pour lesquels le composant y est associé" />
+                            <ListBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Name="ListZone" Margin="5" Padding="2" Width="250" Height="120" ToolTip="Liste des zones pour lesquels le composant y est associé" />
                             <StackPanel.Background>
                                 <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
                                     <GradientStop Color="#35000000" Offset="0.576" />

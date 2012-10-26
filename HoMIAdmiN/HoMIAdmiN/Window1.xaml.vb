@@ -764,7 +764,7 @@ Class Window1
                 stack.Children.Add(Graph)
                 stack.Children.Add(label)
 
-                newchild.Foreground = New SolidColorBrush(Colors.White)
+                'newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
                 newchild.Uid = Drv.ID
 
@@ -932,7 +932,7 @@ Class Window1
 
                 '*************************** CLIC DROIT **************************
                 Dim ctxMenu As New ContextMenu
-                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                ctxMenu.Foreground = System.Windows.Media.Brushes.Black
                 ctxMenu.Background = System.Windows.Media.Brushes.LightGray
                 ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
                 Dim mnu0 As New MenuItem
@@ -1078,7 +1078,7 @@ Class Window1
                 label.Content = Mac.Nom
 
                 Dim ctxMenu As New ContextMenu
-                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                ctxMenu.Foreground = System.Windows.Media.Brushes.Black
                 ctxMenu.Background = System.Windows.Media.Brushes.LightGray
                 ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
                 Dim mnu0 As New MenuItem
@@ -1170,7 +1170,7 @@ Class Window1
                 label.Content = Trig.Nom
 
                 Dim ctxMenu As New ContextMenu
-                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                ctxMenu.Foreground = System.Windows.Media.Brushes.Black
                 ctxMenu.Background = System.Windows.Media.Brushes.LightGray
                 ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
                 Dim mnu0 As New MenuItem
@@ -1272,7 +1272,7 @@ Class Window1
                         IsNode = True
                     Else
                         y.Content = _dev.Name
-                        y.Foreground = New SolidColorBrush(Colors.DimGray)
+                        y.Foreground = New SolidColorBrush(Colors.Black)
                         y.Background = New SolidColorBrush(Colors.DarkGray)
                         y.BorderBrush = New SolidColorBrush(Colors.Black)
                         y.Margin = New Thickness(-15, 1, 0, 0)
@@ -1292,7 +1292,7 @@ Class Window1
 
                                 '*************************** CLIC DROIT **************************
                                 Dim ctxMenu As New ContextMenu
-                                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                                ctxMenu.Foreground = System.Windows.Media.Brushes.Black
                                 ctxMenu.Background = System.Windows.Media.Brushes.LightGray
                                 ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
                                 Dim mnu0 As New MenuItem
@@ -1320,7 +1320,7 @@ Class Window1
 
                                 '*************************** CLIC DROIT **************************
                                 Dim ctxMenu As New ContextMenu
-                                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                                ctxMenu.Foreground = System.Windows.Media.Brushes.Black
                                 ctxMenu.Background = System.Windows.Media.Brushes.LightGray
                                 ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
                                 Dim mnu0 As New MenuItem

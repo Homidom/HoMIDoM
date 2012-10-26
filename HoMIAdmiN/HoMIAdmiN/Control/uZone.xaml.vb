@@ -136,6 +136,9 @@ Partial Public Class uZone
                 x.ToolTip = Device.Name
                 x.Uid = Device.ID
                 x.Width = 185
+                x.Foreground = System.Windows.Media.Brushes.White
+                x.Background = System.Windows.Media.Brushes.DarkGray
+                x.BorderBrush = System.Windows.Media.Brushes.Black
                 AddHandler x.Click, AddressOf ChkElement_Click
                 stk.Children.Add(x)
 
@@ -167,6 +170,9 @@ Partial Public Class uZone
                 x.ToolTip = Zone.Name
                 x.Uid = Zone.ID
                 x.Width = 195
+                x.Foreground = System.Windows.Media.Brushes.White
+                x.Background = System.Windows.Media.Brushes.DarkGray
+                x.BorderBrush = System.Windows.Media.Brushes.Black
                 AddHandler x.Click, AddressOf ChkElement_Click
                 stk.Children.Add(x)
 
@@ -187,6 +193,9 @@ Partial Public Class uZone
                 x.ToolTip = Macro.Nom
                 x.Uid = Macro.ID
                 x.Width = 215
+                x.Foreground = System.Windows.Media.Brushes.White
+                x.Background = System.Windows.Media.Brushes.DarkGray
+                x.BorderBrush = System.Windows.Media.Brushes.Black
                 AddHandler x.Click, AddressOf ChkElement_Click
                 stk.Children.Add(x)
 

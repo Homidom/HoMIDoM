@@ -20,6 +20,9 @@
         <SolidColorBrush x:Key="HorizontalNormalBrush" Color="#888" />
         <SolidColorBrush x:Key="HorizontalNormalBorderBrush" Color="#888" />
         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="DimGray"/>
+        <!-- <SolidColorBrush x:Key="{x:Static SystemColors.MenuHighlightBrushKey}" Color="DimGray"/> -->
+        <!-- <SolidColorBrush x:Key="{x:Static SystemColors.MenuBrushKey}" Color="DimGray"/> -->
+        
         <LinearGradientBrush x:Key="ListBoxBackgroundBrush"
             StartPoint="0,0" EndPoint="1,0.001">
             <GradientBrush.GradientStops>
