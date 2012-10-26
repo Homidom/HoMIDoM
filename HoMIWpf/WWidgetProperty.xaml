@@ -61,8 +61,11 @@
             </StackPanel>
        
     </StackPanel>
-        
-    </StackPanel>
+                        <StackPanel Orientation="Horizontal" Name="StkWeb" Visibility="Collapsed" >
+                            <Label Width="120" Content="URL:" Foreground="White"/>
+                            <TextBox Name="TxtURL" Width="150" Text=""/>
+                        </StackPanel>
+                        </StackPanel>
     </GroupBox>
 
             <GroupBox Name="GrpEditAction" Visibility="Collapsed" Margin="2"  Width="270">

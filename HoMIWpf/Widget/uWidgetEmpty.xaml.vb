@@ -1,6 +1,14 @@
 ﻿Imports System.Windows.Threading
+Imports System.Reflection
 
 Public Class uWidgetEmpty
+    Public Enum TypeOfWidget
+        Empty = 0
+        Web = 1
+        Media = 2
+        Device = 99
+    End Enum
+
     'Variables
     Dim _Id As String
     Dim _ParentId As String
@@ -34,6 +42,11 @@ Public Class uWidgetEmpty
     Dim _FlagBlock As Boolean = False
     Dim _dt As DispatcherTimer
     Dim _CurrentValue As Object = Nothing
+    Dim _type As TypeOfWidget = TypeOfWidget.Empty
+
+    'Variables Widget Web
+    Dim _URL As String = ""
+    Dim _Webbrowser As WebBrowser = Nothing
 
     'Event
     Public Event Click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
@@ -202,7 +215,28 @@ Public Class uWidgetEmpty
             If value = True Then
                 Image.Width = Double.NaN
                 Image.Height = Double.NaN
+            Else
+                _type = TypeOfWidget.Device
             End If
+        End Set
+    End Property
+
+    Public Property Type As TypeOfWidget
+        Get
+            Return _type
+        End Get
+        Set(ByVal value As TypeOfWidget)
+            _type = value
+
+            Select Case _type
+                Case TypeOfWidget.Web
+                    StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
+                    StkTool.Visibility = Windows.Visibility.Visible
+
+                    _Webbrowser = New WebBrowser
+                    _Webbrowser.VerticalAlignment = Windows.VerticalAlignment.Stretch
+                    StkTool.Children.Add(_Webbrowser)
+            End Select
         End Set
     End Property
 
@@ -403,6 +437,39 @@ Public Class uWidgetEmpty
             End If
         End Set
     End Property
+
+#Region "Property/Sub Web"
+    Public Property URL As String
+        Get
+            Return _URL
+        End Get
+        Set(ByVal value As String)
+            _URL = value
+            Try
+                _Webbrowser.Navigate(New Uri(_URL))
+            Catch ex As Exception
+                'MessageBox.Show("Erreur (URL ou autre): " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
+        End Set
+    End Property
+
+    Private Sub wb_Navigating(ByVal sender As Object, ByVal e As NavigatingCancelEventArgs)
+        Dim wb As Controls.WebBrowser = sender
+        SuppressScriptErrors(wb, True)
+    End Sub
+
+    Sub SuppressScriptErrors(ByVal wb As Controls.WebBrowser, ByVal Hide As Boolean)
+        Dim fi As FieldInfo = GetType(Controls.WebBrowser).GetField("_axIWebBrowser2", BindingFlags.NonPublic)
+        If fi IsNot Nothing Then
+            Dim browser As Controls.WebBrowser = fi.GetValue(wb)
+            If browser IsNot Nothing Then
+
+            End If
+        End If
+
+    End Sub
+
+#End Region
 
 #Region "Property Actions"
     Public Property Action_On_Click As List(Of cWidget.Action)
@@ -653,6 +720,14 @@ Public Class uWidgetEmpty
         If _FlagBlock = False Then TraiteRefresh()
     End Sub
 
+    Private Sub uWidgetEmpty_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
+        Select Case _type
+            Case TypeOfWidget.Web
+                _Webbrowser.Width = Me.ActualWidth
+                _Webbrowser.Height = Me.ActualHeight - 20
+        End Select
+    End Sub
+
     Private Sub uWidgetEmpty_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Me.MouseLeave
         If e.LeftButton = MouseButtonState.Released Then Exit Sub
 
@@ -662,32 +737,32 @@ Public Class uWidgetEmpty
 
         'Gesture Bas Haut 
         If _DiffY > 20 And (-20 < _DiffX < 20) Then
-            If IsEmpty = True Then
-               Traite_Action_BasHaut
+            If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                Traite_Action_BasHaut()
             End If
             RaiseEvent GestureBasHaut(Me, e)
             Exit Sub
         End If
         'Gesture Haut Bas
         If _DiffY < -20 And (-20 < _DiffX < 20) Then
-            If IsEmpty = True Then
-              Traite_Action_HautBas
+            If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                Traite_Action_HautBas()
             End If
             RaiseEvent GestureHautBas(Me, e)
             Exit Sub
         End If
         'Gesture Gauche Droite
         If _DiffX < -20 And (-20 < _DiffY < 20) Then
-            If IsEmpty = True Then
-               Traite_Action_GaucheDroite
+            If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                Traite_Action_GaucheDroite()
             End If
             RaiseEvent GestureGaucheDroite(Me, e)
             Exit Sub
         End If
         'Gesture Droite Gauche
         If _DiffX > 20 And (-20 < _DiffY < 20) Then
-            If IsEmpty = True Then
-               Traite_Action_DroiteGauche
+            If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                Traite_Action_DroiteGauche()
             End If
             RaiseEvent GestureDroiteGauche(Me, e)
             Exit Sub
@@ -702,44 +777,44 @@ Public Class uWidgetEmpty
 
         'Gesture Bas Haut 
         If _DiffY > 20 And (-20 < _DiffX < 20) Then
-            If IsEmpty = True Then
-              Traite_Action_BasHaut
+            If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                Traite_Action_BasHaut()
             End If
             RaiseEvent GestureBasHaut(Me, e)
             Exit Sub
         End If
         'Gesture Haut Bas
         If _DiffY < -20 And (-20 < _DiffX < 20) Then
-            If IsEmpty = True Then
-               Traite_Action_HautBas
+            If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                Traite_Action_HautBas()
             End If
             RaiseEvent GestureHautBas(Me, e)
             Exit Sub
         End If
         'Gesture Gauche Droite
         If _DiffX < -20 And (-20 < _DiffY < 20) Then
-            If IsEmpty = True Then
-               Traite_Action_GaucheDroite
+            If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                Traite_Action_GaucheDroite()
             End If
             RaiseEvent GestureGaucheDroite(Me, e)
             Exit Sub
         End If
         'Gesture Droite Gauche
         If _DiffX > 20 And (-20 < _DiffY < 20) Then
-            If IsEmpty = True Then
-             Traite_Action_DroiteGauche
+            If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                Traite_Action_DroiteGauche()
             End If
             RaiseEvent GestureDroiteGauche(Me, e)
             Exit Sub
         End If
 
         If vDiff.Seconds < 1 Then
-            If IsEmpty = True Then
+            If IsEmpty = True And _type = TypeOfWidget.Empty Then
                 Traite_Action_OnClick()
             End If
             RaiseEvent Click(Me, e)
         Else
-            If IsEmpty = True Then
+            If IsEmpty = True And _type = TypeOfWidget.Empty Then
                 Traite_Action_OnLongClick()
             End If
             RaiseEvent LongClick(Me, e)
@@ -1092,7 +1167,14 @@ Public Class uWidgetEmpty
                     End If
                 End If
             End If
-            End If
+        End If
     End Sub
 
+    Private Sub uWidgetEmpty_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles Me.SizeChanged
+        Select Case _type
+            Case TypeOfWidget.Web
+                _Webbrowser.Width = Me.ActualWidth
+                _Webbrowser.Height = Me.ActualHeight - 20
+        End Select
+    End Sub
 End Class
