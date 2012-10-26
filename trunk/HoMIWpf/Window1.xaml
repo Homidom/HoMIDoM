@@ -57,7 +57,8 @@
                             <MenuItem.Icon>
                                 <Image Width="20" Height="20"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
                             </MenuItem.Icon>
-                            <MenuItem Name="NewWidgetEmpty" Header="Nouveau Widget Vide" FontSize="10" />
+                                <MenuItem Name="NewWidgetEmpty" Header="Nouveau Widget Vide" FontSize="10" />
+                            <MenuItem Name="NewWidgetWeb" Header="Nouveau Widget Web" FontSize="10" />
                             </MenuItem>
                         <MenuItem Name="ViewLog" Header="Consulter les logs" FontSize="10" >
                             <MenuItem.Icon>

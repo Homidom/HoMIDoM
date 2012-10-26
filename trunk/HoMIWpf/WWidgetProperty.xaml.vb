@@ -26,60 +26,70 @@ Public Class WWidgetProperty
         lblColor.Background = Obj.ColorBackGround
         ColorPicker1.SelectedColor = Obj.ColorBackGround
         ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
+        TxtURL.Text = Obj.URL
 
         If Obj.IsEmpty = False Then
             BtnEditAction.Visibility = Windows.Visibility.Collapsed
             BtnEditVisu.Visibility = Windows.Visibility.Collapsed
             BtnDelete.Visibility = Windows.Visibility.Collapsed
         Else
-            BtnEditAction.Visibility = Windows.Visibility.Visible
-            BtnEditVisu.Visibility = Windows.Visibility.Visible
-            BtnDelete.Visibility = Windows.Visibility.Visible
+            Select Case Obj.Type
+                Case uWidgetEmpty.TypeOfWidget.Empty
+                    BtnEditAction.Visibility = Windows.Visibility.Visible
+                    BtnEditVisu.Visibility = Windows.Visibility.Visible
+                    BtnDelete.Visibility = Windows.Visibility.Visible
 
-            Refresh_LstObjetVisu()
+                    Refresh_LstObjetVisu()
 
-            For Each obj As TemplateDevice In myService.GetAllDevices(IdSrv)
-                Dim lbl1 As New ComboBoxItem
-                Dim lbl2 As New ComboBoxItem
-                lbl1.Content = obj.Name & " [Device]"
-                lbl1.Tag = "DEVICE"
-                lbl1.Uid = obj.ID
-                lbl2.Content = obj.Name & " [Device]"
-                lbl2.Tag = "DEVICE"
-                lbl2.Uid = obj.ID
-                CbObjet.Items.Add(lbl1)
-                CbObjetVisu.Items.Add(lbl2)
-                lbl1 = Nothing
-                lbl2 = Nothing
-            Next
-            For Each obj As Macro In myService.GetAllMacros(IdSrv)
-                Dim lbl1 As New ComboBoxItem
-                Dim lbl2 As New ComboBoxItem
-                lbl1.Content = obj.Nom & " [Macro]"
-                lbl1.Tag = "MACRO"
-                lbl1.Uid = obj.ID
-                lbl2.Content = obj.Nom & " [Macro]"
-                lbl2.Tag = "MACRO"
-                lbl2.Uid = obj.ID
-                CbObjet.Items.Add(lbl1)
-                CbObjetVisu.Items.Add(lbl2)
-                lbl1 = Nothing
-                lbl2 = Nothing
-            Next
-            For Each obj As Zone In myService.GetAllZones(IdSrv)
-                Dim lbl1 As New ComboBoxItem
-                Dim lbl2 As New ComboBoxItem
-                lbl1.Content = obj.Name & " [Zone]"
-                lbl1.Tag = "ZONE"
-                lbl1.Uid = obj.ID
-                lbl2.Content = obj.Name & " [Zone]"
-                lbl2.Tag = "ZONE"
-                lbl2.Uid = obj.ID
-                CbObjet.Items.Add(lbl1)
-                CbObjetVisu.Items.Add(lbl2)
-                lbl1 = Nothing
-                lbl2 = Nothing
-            Next
+                    For Each obj As TemplateDevice In myService.GetAllDevices(IdSrv)
+                        Dim lbl1 As New ComboBoxItem
+                        Dim lbl2 As New ComboBoxItem
+                        lbl1.Content = obj.Name & " [Device]"
+                        lbl1.Tag = "DEVICE"
+                        lbl1.Uid = obj.ID
+                        lbl2.Content = obj.Name & " [Device]"
+                        lbl2.Tag = "DEVICE"
+                        lbl2.Uid = obj.ID
+                        CbObjet.Items.Add(lbl1)
+                        CbObjetVisu.Items.Add(lbl2)
+                        lbl1 = Nothing
+                        lbl2 = Nothing
+                    Next
+                    For Each obj As Macro In myService.GetAllMacros(IdSrv)
+                        Dim lbl1 As New ComboBoxItem
+                        Dim lbl2 As New ComboBoxItem
+                        lbl1.Content = obj.Nom & " [Macro]"
+                        lbl1.Tag = "MACRO"
+                        lbl1.Uid = obj.ID
+                        lbl2.Content = obj.Nom & " [Macro]"
+                        lbl2.Tag = "MACRO"
+                        lbl2.Uid = obj.ID
+                        CbObjet.Items.Add(lbl1)
+                        CbObjetVisu.Items.Add(lbl2)
+                        lbl1 = Nothing
+                        lbl2 = Nothing
+                    Next
+                    For Each obj As Zone In myService.GetAllZones(IdSrv)
+                        Dim lbl1 As New ComboBoxItem
+                        Dim lbl2 As New ComboBoxItem
+                        lbl1.Content = obj.Name & " [Zone]"
+                        lbl1.Tag = "ZONE"
+                        lbl1.Uid = obj.ID
+                        lbl2.Content = obj.Name & " [Zone]"
+                        lbl2.Tag = "ZONE"
+                        lbl2.Uid = obj.ID
+                        CbObjet.Items.Add(lbl1)
+                        CbObjetVisu.Items.Add(lbl2)
+                        lbl1 = Nothing
+                        lbl2 = Nothing
+                    Next
+                Case uWidgetEmpty.TypeOfWidget.Web
+                    StkWeb.Visibility = Windows.Visibility.Visible
+                    BtnEditAction.Visibility = Windows.Visibility.Collapsed
+                    BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                    BtnDelete.Visibility = Windows.Visibility.Collapsed
+            End Select
+            
             End If
 
     End Sub
@@ -95,6 +105,7 @@ Public Class WWidgetProperty
         Obj.Rotation = TxtRotation.Text
         Obj.DefautLabelStatus = TxtDefStatus.Text
         Obj.ColorBackGround = ColorPicker1.SelectedColor
+        Obj.URL = TxtURL.Text
 
         For i As Integer = 0 To _ListElement.Count - 1
             If _ListElement.Item(i).Id = Obj.Id And _ListElement.Item(i).ZoneId = Obj.ZoneId Then

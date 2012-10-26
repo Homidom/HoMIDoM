@@ -250,6 +250,8 @@ Class Window1
                 If cntNewZone > 0 Then
                     MessageBox.Show(cntNewZone & " nouvelle(s) zone(s) ajoutée(s)")
                 End If
+            Else
+                MessageBox.Show("Pas de connexion au serveur")
             End If
             'NewBtnMnu("Journal", uCtrlImgMnu.TypeOfMnu.Internet, , , , "/parametres-icone-3667-128.png")
             'NewBtnMnu("Programme TV", "1", "C:\ehome\images\125_tv.png")
@@ -487,6 +489,17 @@ Class Window1
                                         x.Id = list.Item(j).Attributes.Item(k).Value
                                     Case "isempty"
                                         x.IsEmpty = list.Item(j).Attributes.Item(k).Value
+                                    Case "type"
+                                        Select Case list.Item(j).Attributes.Item(k).Value
+                                            Case uWidgetEmpty.TypeOfWidget.Empty.ToString
+                                                x.Type = uWidgetEmpty.TypeOfWidget.Empty
+                                            Case uWidgetEmpty.TypeOfWidget.Device.ToString
+                                                x.Type = uWidgetEmpty.TypeOfWidget.Device
+                                            Case uWidgetEmpty.TypeOfWidget.Media.ToString
+                                                x.Type = uWidgetEmpty.TypeOfWidget.Media
+                                            Case uWidgetEmpty.TypeOfWidget.Web.ToString
+                                                x.Type = uWidgetEmpty.TypeOfWidget.Web
+                                        End Select
                                     Case "zoneid"
                                         x.ZoneId = list.Item(j).Attributes.Item(k).Value
                                     Case "x"
@@ -513,6 +526,8 @@ Class Window1
                                         Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
                                         Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
                                         x.ColorBackGround = New SolidColorBrush(Color.FromArgb(a, R, G, B))
+                                    Case "url"
+                                        x.URL = list.Item(j).Attributes.Item(k).Value
                                 End Select
                             Next
 
@@ -731,6 +746,9 @@ Class Window1
                 writer.WriteStartAttribute("isempty") 'ID de l'élément (device, zone, macro...)
                 writer.WriteValue(_ListElement.Item(i).IsEmpty)
                 writer.WriteEndAttribute()
+                writer.WriteStartAttribute("type") 'type de widget
+                writer.WriteValue(_ListElement.Item(i).Type.ToString)
+                writer.WriteEndAttribute()
                 writer.WriteStartAttribute("zoneid")
                 writer.WriteValue(_ListElement.Item(i).ZoneId)
                 writer.WriteEndAttribute()
@@ -763,6 +781,9 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("colorbackground")
                 writer.WriteValue(_ListElement.Item(i).ColorBackGround.ToString)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("url")
+                writer.WriteValue(_ListElement.Item(i).URL)
                 writer.WriteEndAttribute()
 
                 writer.WriteStartElement("actions")
@@ -1235,7 +1256,7 @@ Class Window1
     Private Sub IconMnuDoubleClick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
         Try
             Me.Cursor = Cursors.Wait
-            If Canvas1.Children.Count > 0 Then
+            If Canvas1.Children.Count > 0 And sender.Type <> uCtrlImgMnu.TypeOfMnu.LecteurMedia Then
                 Canvas1.Children.Clear()
             End If
 
@@ -1559,6 +1580,7 @@ Class Window1
                     y.Y = _ListElement.Item(i).Y
                     y.Rotation = _ListElement.Item(i).Rotation
                     y.IsEmpty = _ListElement.Item(i).IsEmpty
+                    y.Type = _ListElement.Item(i).Type
                     y.ShowEtiquette = _ListElement.Item(i).ShowEtiquette
                     y.ShowStatus = _ListElement.Item(i).ShowStatus
                     y.Etiquette = _ListElement.Item(i).Etiquette
@@ -1572,6 +1594,7 @@ Class Window1
                     y.Action_On_Click = _ListElement.Item(i).Action_On_Click
                     y.Action_On_LongClick = _ListElement.Item(i).Action_On_LongClick
                     y.Visuel = _ListElement.Item(i).Visuel
+                    y.URL = _ListElement.Item(i).URL
                     AddHandler y.ShowZone, AddressOf ElementShowZone
                     x.Content = y
                     Canvas1.Children.Add(x)
@@ -1594,6 +1617,7 @@ Class Window1
         Destination.Y = Source.Y
         Destination.Rotation = Source.Rotation
         Destination.IsEmpty = Source.IsEmpty
+        Destination.Type = Source.Type
         Destination.ShowEtiquette = Source.ShowEtiquette
         Destination.ShowStatus = Source.ShowStatus
         Destination.Etiquette = Source.Etiquette
@@ -1607,6 +1631,7 @@ Class Window1
         Destination.Action_On_Click = Source.Action_On_Click
         Destination.Action_On_LongClick = Source.Action_On_LongClick
         Destination.Visuel = Source.Visuel
+        Destination.URL = Source.URL
     End Sub
 
     Private Sub Deplacement_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk1.Click
@@ -1622,6 +1647,7 @@ Class Window1
                     obj.IsHitTestVisible = False
                     obj = Nothing
                     Selector.SetIsSelected(child, True)
+                    AddHandler child.SizeChanged, AddressOf Resize
                 Next
             Else
                 'On a finit le déplacement
@@ -1665,6 +1691,18 @@ Class Window1
                     lbl.IsHitTestVisible = True
 
                 Next
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub Resize(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs)
+        Try
+            If sender.Content IsNot Nothing Then
+                Dim obj As uWidgetEmpty = sender.Content
+                obj.Width = e.NewSize.Width
+                obj.Height = e.NewSize.Height
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur: " & ex.ToString)
@@ -1789,6 +1827,38 @@ Class Window1
         elmt.X = 300
         elmt.Y = 300
         elmt.IsEmpty = True
+        elmt.Type = uWidgetEmpty.TypeOfWidget.Empty
+        elmt.ShowStatus = False
+        elmt.Etiquette = "Widget " & Canvas1.Children.Count
+        _ListElement.Add(elmt)
+
+        Dim y As New uWidgetEmpty
+        elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+        x.Content = elmt
+        Canvas1.Children.Add(x)
+        Canvas.SetLeft(x, 300)
+        Canvas.SetTop(x, 300)
+    End Sub
+
+    Private Sub NewWidgetWeb_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetWeb.Click
+        'Ajouter un nouveau Control
+        Dim x As New ContentControl
+        x.Width = 100
+        x.Height = 100
+        x.Style = mybuttonstyle
+        x.Tag = True
+
+        'Ajoute l'élément dans la liste
+        Dim elmt As New uWidgetEmpty
+        elmt.Uid = System.Guid.NewGuid.ToString()
+        elmt.ZoneId = _CurrentIdZone
+        elmt.Width = 100
+        elmt.Height = 100
+        elmt.Rotation = 0
+        elmt.X = 300
+        elmt.Y = 300
+        elmt.IsEmpty = True
+        elmt.Type = uWidgetEmpty.TypeOfWidget.Empty
         elmt.ShowStatus = False
         elmt.Etiquette = "Widget " & Canvas1.Children.Count
         _ListElement.Add(elmt)
@@ -1841,5 +1911,6 @@ Class Window1
             MessageBox.Show("Erreur MnuHisto_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
 
 End Class
