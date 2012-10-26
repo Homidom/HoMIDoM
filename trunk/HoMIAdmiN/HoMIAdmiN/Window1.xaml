@@ -19,6 +19,7 @@
         <SolidColorBrush x:Key="NormalBorderBrush" Color="#888" />
         <SolidColorBrush x:Key="HorizontalNormalBrush" Color="#888" />
         <SolidColorBrush x:Key="HorizontalNormalBorderBrush" Color="#888" />
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="DimGray"/>
         <LinearGradientBrush x:Key="ListBoxBackgroundBrush"
             StartPoint="0,0" EndPoint="1,0.001">
             <GradientBrush.GradientStops>
