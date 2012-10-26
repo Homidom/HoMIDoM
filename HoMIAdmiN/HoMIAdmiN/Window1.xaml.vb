@@ -470,7 +470,7 @@ Class Window1
                 label.Content = zon.Name & " {" & zon.ListElement.Count & " éléments}"
 
                 Dim ctxMenu As New ContextMenu
-                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                ctxMenu.Foreground = System.Windows.Media.Brushes.Black
                 ctxMenu.Background = System.Windows.Media.Brushes.LightGray
                 ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
                 Dim mnu0 As New MenuItem
@@ -563,7 +563,7 @@ Class Window1
                 label.Content = Usr.UserName
 
                 Dim ctxMenu As New ContextMenu
-                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                ctxMenu.Foreground = System.Windows.Media.Brushes.Black
                 ctxMenu.Background = System.Windows.Media.Brushes.LightGray
                 ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
                 Dim mnu0 As New MenuItem
@@ -718,7 +718,7 @@ Class Window1
 
                 '*************************** CLIC DROIT **************************
                 Dim ctxMenu As New ContextMenu
-                ctxMenu.Foreground = System.Windows.Media.Brushes.White
+                ctxMenu.Foreground = System.Windows.Media.Brushes.Black
                 ctxMenu.Background = System.Windows.Media.Brushes.LightGray
                 ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
                 If Drv.Enable = False Then
