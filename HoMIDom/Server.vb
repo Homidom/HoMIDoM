@@ -2700,114 +2700,6 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Exception : " & ex.Message)
             End Try
 
-            ''Check Registration and Version in BDD
-            'Try
-            '    Dim retoursql As String = ""
-            '    Dim db_date_install As String = ""
-            '    Dim db_date_register As String = ""
-            '    Dim db_cle_register As String = ""
-            '    Dim db_version As String = ""
-            '    Dim db_uid As String = ""
-            '    Dim uid As String = ""
-
-            '    'on recupere les infos stockées en BDD
-            '    Dim result As New DataTable
-            '    retoursql = sqlite_homidom.query("SELECT valeur FROM config WHERE parametre='date_install'", result)
-            '    If Mid(retoursql, 1, 4) = "ERR:" Then
-            '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_date_install", "Erreur Requete sqlite : " & retoursql)
-            '    Else
-            '        If result IsNot Nothing Then
-            '            db_date_install = result.Rows.Item(0).Item(0).ToString
-            '        Else
-            '            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "db_date_install date_install", "La base de donnée Homidom.db n'est pas à jour !")
-            '        End If
-            '    End If
-            '    retoursql = sqlite_homidom.query("SELECT valeur FROM config WHERE parametre='version_dll'", result)
-            '    If Mid(retoursql, 1, 4) = "ERR:" Then
-            '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_version", "Erreur Requete sqlite : " & retoursql)
-            '    Else
-            '        If result IsNot Nothing Then
-            '            db_version = result.Rows.Item(0).Item(0).ToString
-            '        Else
-            '            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_version", "La base de donnée Homidom.db n'est pas à jour !")
-            '        End If
-            '    End If
-            '    retoursql = sqlite_homidom.query("SELECT valeur FROM config WHERE parametre='date_register'", result)
-            '    If Mid(retoursql, 1, 4) = "ERR:" Then
-            '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_date_register", "Erreur Requete sqlite : " & retoursql)
-            '    Else
-            '        If result IsNot Nothing Then
-            '            db_date_register = result.Rows.Item(0).Item(0).ToString
-            '        Else
-            '            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_date_register", "La base de donnée Homidom.db n'est pas à jour !")
-            '        End If
-            '    End If
-            '    retoursql = sqlite_homidom.query("SELECT valeur FROM config WHERE parametre='uid'", result)
-            '    If Mid(retoursql, 1, 4) = "ERR:" Then
-            '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_uid", "Erreur Requete sqlite : " & retoursql)
-            '    Else
-            '        If result IsNot Nothing Then
-            '            db_uid = result.Rows.Item(0).Item(0).ToString
-            '        Else
-            '            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_uid", "La base de donnée Homidom.db n'est pas à jour !")
-            '        End If
-            '    End If
-            '    retoursql = sqlite_homidom.query("SELECT valeur FROM config WHERE parametre='cle_register'", result)
-            '    If Mid(retoursql, 1, 4) = "ERR:" Then
-            '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_cle_register", "Erreur Requete sqlite : " & retoursql)
-            '    Else
-            '        If result IsNot Nothing Then
-            '            db_cle_register = result.Rows.Item(0).Item(0).ToString
-            '        Else
-            '            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_cle_register", "La base de donnée Homidom.db n'est pas à jour !")
-            '        End If
-            '    End If
-
-            '    'on recup UID
-            '    Dim objMOS As ManagementObjectSearcher
-            '    Dim objMOC As Management.ManagementObjectCollection
-            '    Dim objMO As Management.ManagementObject
-            '    objMOS = New ManagementObjectSearcher("Select * From Win32_Processor")
-            '    objMOC = objMOS.Get
-            '    For Each objMO In objMOC
-            '        db_uid &= objMO("ProcessorID")
-            '    Next
-            '    objMOS.Dispose()
-            '    objMOS = Nothing
-            '    objMO = Nothing
-
-            '    '    'verif si premiere installation
-            '    '    If db_uid = "" Then
-            '    '        ''premiere install : update uid/dateinstall/versiondll puis thanks puis register
-            '    '        ''on maj la db
-            '    '        'retour = sqlite_homidom.nonquery("UPDATE config Set valeur=" & uid & " WHERE parametre='uid'")
-            '    '        'If Mid(retour, 1, 4) = "ERR:" Then
-            '    '        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update UID", "Erreur Requete sqlite : " & retour)
-            '    '        'End If
-            '    '        'retour = sqlite_homidom.nonquery("UPDATE config Set valeur=" & Now.ToString("yyyMMdd HH:mm:ss") & " WHERE parametre='date_install'")
-            '    '        'If Mid(retour, 1, 4) = "ERR:" Then
-            '    '        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update Date_Install", "Erreur Requete sqlite : " & retour)
-            '    '        'End If
-            '    '        'retour = sqlite_homidom.nonquery("UPDATE config Set valeur=" & GetServerVersion() & " WHERE parametre='version_dll'")
-            '    '        'If Mid(retour, 1, 4) = "ERR:" Then
-            '    '        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update Date_Install", "Erreur Requete sqlite : " & retour)
-            '    '        'End If
-
-            '    '        ''on ouvre la page web de remerciement
-            '    '        'Process.Start("http://www.homidom.com/afterinstall-" & Now.ToString("yyyMMddHHmmss") & "-" & HtmlEncode(uid) & "-" & HtmlEncode(GetServerVersion().Replace(".", "")) & ".html")
-
-            '    '        ''Gestion clé enregistrement
-
-            '    '    Else
-
-
-            '    '    End If
-
-
-            'Catch ex As Exception
-            '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start Check", "Exception : " & ex.Message)
-            'End Try
-
             'Manage SQLliste DB : updates
             Try
                 'get sqlite moteur version
@@ -2827,32 +2719,148 @@ Namespace HoMIDom
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur sqlite : " & retour)
                 Else
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version de la BDD HoMIDoM: " & sqliteversion)
-                    If sqliteversion = 0 Then
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "BDD HoMIDoM Update vers la version 1")
+                    If sqliteversion <= 1 Then
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "BDD HoMIDoM Update vers la version 2")
+                        retour = sqlite_homidom.nonquery("DROP TABLE 'config'")
+                        If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
                         retour = sqlite_homidom.nonquery("CREATE TABLE 'config' ('id' INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , 'parametre' TEXT, 'valeur' TEXT)")
                         If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
                         retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(1,'date_install','');")
                         If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
                         retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(2,'version_dll','');")
                         If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
-                        retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(3,'date_register',NULL);")
+                        retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(3,'date_register','');")
                         If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
-                        retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(4,'date_maj',NULL);")
+                        retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(4,'date_maj','');")
                         If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
-                        retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(5,'uid',NULL);")
+                        retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(5,'uid','');")
                         If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
-                        retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(6,'cle_register',NULL);")
+                        retour = sqlite_homidom.nonquery("INSERT INTO 'config' VALUES(6,'cle_register','');")
                         If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
-                        retour = sqlite_homidom.nonquery("PRAGMA user_version=1")
+                        retour = sqlite_homidom.nonquery("PRAGMA user_version=2")
                         If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
-                        sqliteversion = 1
+                        sqliteversion = 2
                     End If
-                    If sqliteversion = 1 Then
+                    If sqliteversion = 2 Then
+                        'Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "BDD HoMIDoM Update vers la version 3")
 
+                        'retour = sqlite_homidom.nonquery("PRAGMA user_version=3")
+                        'If Mid(retour, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLite versionning", "Erreur Update BDD : " & retour)
+                        'sqliteversion = 3
                     End If
                 End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLlite versionning", "Exception : " & ex.Message)
+            End Try
+
+
+            'Check Registration and Version in BDD
+            Try
+                Dim retoursql As String = ""
+                Dim db_date_install As String = ""
+                Dim db_date_register As String = ""
+                Dim db_cle_register As String = ""
+                Dim db_version As String = ""
+                Dim db_uid As String = ""
+                Dim uid As String = ""
+
+                'on recupere les infos stockées en BDD
+                Dim result As New DataTable
+                retoursql = sqlite_homidom.query("SELECT valeur FROM config WHERE parametre='date_install'", result)
+                If Mid(retoursql, 1, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_date_install", "Erreur Requete sqlite : " & retoursql)
+                Else
+                    If result IsNot Nothing Then
+                        db_date_install = result.Rows.Item(0).Item(0).ToString
+                    Else
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "db_date_install date_install", "La base de donnée Homidom.db n'est pas à jour !")
+                    End If
+                End If
+                retoursql = sqlite_homidom.query("SELECT valeur FROM config WHERE parametre='version_dll'", result)
+                If Mid(retoursql, 1, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_version", "Erreur Requete sqlite : " & retoursql)
+                Else
+                    If result IsNot Nothing Then
+                        db_version = result.Rows.Item(0).Item(0).ToString
+                    Else
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_version", "La base de donnée Homidom.db n'est pas à jour !")
+                    End If
+                End If
+                retoursql = sqlite_homidom.query("SELECT valeur FROM config WHERE parametre='date_register'", result)
+                If Mid(retoursql, 1, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_date_register", "Erreur Requete sqlite : " & retoursql)
+                Else
+                    If result IsNot Nothing Then
+                        db_date_register = result.Rows.Item(0).Item(0).ToString
+                    Else
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_date_register", "La base de donnée Homidom.db n'est pas à jour !")
+                    End If
+                End If
+                retoursql = sqlite_homidom.query("SELECT valeur FROM config WHERE parametre='uid'", result)
+                If Mid(retoursql, 1, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_uid", "Erreur Requete sqlite : " & retoursql)
+                Else
+                    If result IsNot Nothing Then
+                        db_uid = result.Rows.Item(0).Item(0).ToString
+                    Else
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_uid", "La base de donnée Homidom.db n'est pas à jour !")
+                    End If
+                End If
+                retoursql = sqlite_homidom.query("SELECT valeur FROM config WHERE parametre='cle_register'", result)
+                If Mid(retoursql, 1, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_cle_register", "Erreur Requete sqlite : " & retoursql)
+                Else
+                    If result IsNot Nothing Then
+                        db_cle_register = result.Rows.Item(0).Item(0).ToString
+                    Else
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_cle_register", "La base de donnée Homidom.db n'est pas à jour !")
+                    End If
+                End If
+
+                'on recup UID
+                Dim objMOS As ManagementObjectSearcher
+                Dim objMOC As Management.ManagementObjectCollection
+                Dim objMO As Management.ManagementObject
+                objMOS = New ManagementObjectSearcher("Select * From Win32_Processor")
+                objMOC = objMOS.Get
+                For Each objMO In objMOC
+                    uid &= objMO("ProcessorID")
+                Next
+                objMOS.Dispose()
+                objMOS = Nothing
+                objMO = Nothing
+
+                'verif si premiere installation
+                If db_uid = "" Then
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Premiere Installation :Remerciements")
+                    '        ''premiere install : update uid/dateinstall/versiondll puis thanks puis register
+                    '        ''on maj la db
+                    '        'retour = sqlite_homidom.nonquery("UPDATE config Set valeur=" & uid & " WHERE parametre='uid'")
+                    '        'If Mid(retour, 1, 4) = "ERR:" Then
+                    '        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update UID", "Erreur Requete sqlite : " & retour)
+                    '        'End If
+                    '        'retour = sqlite_homidom.nonquery("UPDATE config Set valeur=" & Now.ToString("yyyMMdd HH:mm:ss") & " WHERE parametre='date_install'")
+                    '        'If Mid(retour, 1, 4) = "ERR:" Then
+                    '        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update Date_Install", "Erreur Requete sqlite : " & retour)
+                    '        'End If
+                    '        'retour = sqlite_homidom.nonquery("UPDATE config Set valeur=" & GetServerVersion() & " WHERE parametre='version_dll'")
+                    '        'If Mid(retour, 1, 4) = "ERR:" Then
+                    '        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update Date_Install", "Erreur Requete sqlite : " & retour)
+                    '        'End If
+
+                    'on ouvre la page web de remerciement
+                    'Process.Start("http://www.homidom.com/afterinstall-" & Now.ToString("yyyMMddHHmmss") & "-" & HtmlEncode(uid) & "-" & HtmlEncode(GetServerVersion().Replace(".", "_")) & ".html")
+
+                    ''Gestion clé enregistrement
+
+                Else
+
+
+                End If
+
+
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start Check", "Exception : " & ex.Message)
             End Try
         End Sub
 
