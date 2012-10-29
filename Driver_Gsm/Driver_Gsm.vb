@@ -284,8 +284,8 @@ Imports System.Management
                 If Command = "" Then
                     Return False
                 Else
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & "ExecuteCommand", Command & " ; " & Param(0))
-                    Write(MyDevice, Command, Param(0), Param(1))
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & "ExecuteCommand", Command & " - " & Param(0))
+                    Write(MyDevice, Command, Param(0))
                     Return True
                 End If
             Else
@@ -407,7 +407,6 @@ Imports System.Management
     ''' <param name="Parametre2">Phone Number</param>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         'Parametre1 = TxtMsg
-        'Parametre2 = phoneNumber
         Try
             If _Enable = False Then Exit Sub
 

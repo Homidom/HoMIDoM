@@ -33,7 +33,7 @@ Partial Public Class uConfigServer
                 End If
                 If TxtIPSOAP.Text <> myService.GetIPSOAP Then
                     MessageBox.Show("Vous avez modifié l'adresse IP SOAP (donc celle du serveur), n'oubliez pas:" & vbCrLf & "- D'enregistrer la configuration pour qu'elle soit prise en compte au prochain démarrage" & vbCrLf & "- De redémarrer le service" & vbCrLf & "- De modifier l'adresse du serveur au prochain lancement de l'admin", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                    myService.SetPortSOAP(IdSrv, TxtIPSOAP.Text)
+                    myService.SetIPSOAP(IdSrv, TxtIPSOAP.Text)
                     If TxtIPSOAP.Text <> myService.GetIPSOAP Then
                         MessageBox.Show("Une erreur est survenue lors du changement de l'adresse IP SOAP, veuillez consulter le log", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     End If
