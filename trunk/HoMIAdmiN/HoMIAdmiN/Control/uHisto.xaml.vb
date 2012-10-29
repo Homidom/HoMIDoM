@@ -101,13 +101,16 @@ Public Class uHisto
 
                     'Construction de la serie dans le graphe
                     Dim series As New System.Windows.Forms.DataVisualization.Charting.Series(_namedevice & ": " & kvp.Value)
+                    series.XValueType = ChartValueType.DateTime
                     Dim cnt As Integer = 0
                     For Each data As Historisation In result
-                        series.Points.AddXY(data.DateTime.ToString("G"), data.Value.Replace(",", "."))
+                        'series.Points.AddXY(data.DateTime.ToString("G"), data.Value.Replace(",", "."))
+                        series.Points.AddXY(data.DateTime, data.Value.Replace(",", "."))
                         cnt += 1
                         If cnt > _MaxData Then Exit For
                     Next
                     series.BorderWidth = 3
+                    series.IsXValueIndexed = False
                     Chart2.Series.Add(series)
 
                     'Tableau de valeur
