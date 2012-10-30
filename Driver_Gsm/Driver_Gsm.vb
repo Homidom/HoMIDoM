@@ -8,7 +8,7 @@ Imports System.IO
 Imports System.Net
 Imports System.Web
 Imports System.Text
-'Imports System.Web.HttpUtility
+
 
 Imports System
 Imports System.Collections.Generic
@@ -307,24 +307,24 @@ Imports System.Management
         Try
             Dim retour As String = "0"
             Select Case UCase(Champ)
-                Case "ADRESSE2" ' numero de telephone 
+                Case "ADRESSE1" ' numero de telephone 
                     If Value IsNot Nothing Then
                         If Value = "" Or Value = " " Then
                             retour = "Veuillez saisir un numero de telephone valide."
                         End If
                     End If
-                Case "ADRESSE1" ' textmessage
-                    If Value IsNot Nothing Then
-                        If Value = "" Or Value = " " Then
-                            retour = "Veuillez saisir un message"
+                    ' Case "ADRESSE2" ' textmessage
+                    '        If Value IsNot Nothing Then
+                    'If Value = "" Or Value = " " Then
+                    'retour = "Veuillez saisir un message"
+                    '
+                    'End If
+                    'If (Len(Value) > 150) Then
+                    'retour = "Veuillez saisir un message de taille inférieure à 150 characteres"
 
-                        End If
-                        If (Len(Value) > 150) Then
-                            retour = "Veuillez saisir un message de taille inférieure à 150 characteres"
+                    ' End If
 
-                        End If
-
-                    End If
+                    'End If
             End Select
 
 
@@ -403,8 +403,7 @@ Imports System.Management
     ''' <summary>Commander un device</summary>
     ''' <param name="Objet">Objet représetant le device à interroger</param>
     ''' <param name="Command">La commande à passer</param>
-    ''' <param name="Parametre1">Message text</param>
-    ''' <param name="Parametre2">Phone Number</param>
+    ''' <param name="Parametre1">Phone Number</param>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         'Parametre1 = TxtMsg
         Try
@@ -415,15 +414,17 @@ Imports System.Management
                 Case "SEND"
                     Try
                         Dim pdu As SmsSubmitPdu
-                        If comm.IsConnected Then
-                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "IsConnected")
-                            'on verifie si un texte est passé en paramétre
+                        If _IsConnect Then
+                            'on verifie si un texte est passé en paramètre
                             If Parametre1 = "" Then
                                 _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS à envoyer vide, annulation")
                             Else
-                                pdu = New SmsSubmitPdu(Parametre1, Objet.adresse1, "")
+
+                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS envoyé : " & Parametre1 & " à " & Objet.adresse1.ToString)
+
+                                pdu = New SmsSubmitPdu(Parametre1, Objet.adresse1.ToString, "")
+
                                 comm.SendMessage(pdu)
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS envoyé : " & Parametre1)
                             End If
                         Else
                             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "No GSM Phone / Modem Connected")
@@ -608,12 +609,13 @@ Imports System.Management
 
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "Type de stockage", "Type de stockage : GSM/SIM", "GSM|SIM")
+            'Add_LibelleDevice("CommBaudRate", "Vitesse du port", " BAUD :300|600|1200|2400|9600|14400|19200|38400|57600|115200", "300|600|1200|2400|9600|14400|19200|38400|57600|115200")
+
 
             Add_LibelleDevice("REFRESH", "Refresh", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "@", "")
             ' Add_LibelleDevice("ComPort", "COM7", "")
-            Add_LibelleDevice("CommBaudRate", "57600", "Vitesse du port : 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200 ", "300|600|1200|2400|9600|14400|19200|38400|57600|115200")
-            ' Add_LibelleDevice("CommTimeout", "LastChange Durée", "")
+              ' Add_LibelleDevice("CommTimeout", "LastChange Durée", "")
 
         Catch ex As Exception
             ' WriteLog("ERR: New Exception : " & ex.Message)
@@ -637,8 +639,13 @@ Imports System.Management
                 'ouverture du port
                 If Not _IsConnect Then
                     'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
-                    comm = New GsmCommMain(_Com, 57600, "100")
-                    comm.EnableMessageNotifications()
+                    comm = New GsmCommMain(_Com.Substring(3), 57600, "100")
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", _Com & "port :" & _Com.Substring(3)) ' commx
+                    'comm.EnableMessageNotifications()
+                    comm.Open()
+
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "port is open :" & comm.IsOpen()) ' commx
+
 
                     ' AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
                     'AddHandler comm.MessageEventHandler, AddressOf ReceptionSMS
