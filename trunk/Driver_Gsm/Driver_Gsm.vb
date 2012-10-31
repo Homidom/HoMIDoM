@@ -74,7 +74,7 @@ Imports System.Management
 
     'param avancé
     Dim _DEBUG As Boolean = False
-    Dim _MODE As Boolean = "PDU"
+    Dim _MODE As String = "PDU"
     '    Dim _STORAGE As PhoneStorageType
 
 
