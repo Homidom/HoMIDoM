@@ -8,7 +8,7 @@ Imports System.IO
 Imports System.Net
 Imports System.Web
 Imports System.Text
-
+Imports STRGS = Microsoft.VisualBasic.Strings
 
 Imports System
 Imports System.Collections.Generic
@@ -337,10 +337,11 @@ Imports System.Management
     ''' <summary>Démarrer le du driver</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
+        Dim retour As String = ""
         'récupération des paramétres avancés
         Try
             _DEBUG = _Parametres.Item(0).Valeur
-            _Mode = _Parametres.Item(1).Valeur
+            _MODE = _Parametres.Item(1).Valeur
             '_STORAGE = _Parametres.Item(2).Valeur
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
@@ -349,14 +350,20 @@ Imports System.Management
         'ouverture de la communication avec le GSM
         Try
             If _Com <> "" Then
-                ouvrir()
+                retour = ouvrir()
             Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Gsm Start", "Port Com non défini. Impossible d'ouvrir le port !")
+                retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
             End If
-            _IsConnect = True
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Gsm", "Driver " & Me.Nom & " démarré")
+            If STRGS.Left(retour, 4) = "ERR:" Then
+                _IsConnect = False
+                retour = STRGS.Right(retour, retour.Length - 5)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Driver non démarré : " & retour)
+            Else
+                _IsConnect = True
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GSM Start", retour)
+            End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Gsm Start", " Driver en erreur lors du démarrage: " & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", " Driver en erreur lors du démarrage: " & ex.Message)
 
         End Try
     End Sub
@@ -633,31 +640,23 @@ Imports System.Management
 
 #Region "Fonctions internes"
     ''' <summary>Ouvrir le port du modem</summary>
-    Private Sub ouvrir()
+    Private Function ouvrir() As String
         Try
-            If (_Com <> "") Then
-                'ouverture du port
-                If Not _IsConnect Then
-                    'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
-                    comm = New GsmCommMain(_Com.Substring(3), 57600, 100)
-                    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", _Com & "port :" & _Com.Substring(3)) ' commx
-                    'comm.EnableMessageNotifications()
-                    comm.Open()
-                    comm.EnableMessageRouting()
-
-                    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "port is open :" & comm.IsOpen()) ' commx
-
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "Port " & _Com & " ouvert")
-                Else
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "Port " & _Com & " dejà ouvert")
-                End If
+            'ouverture du port
+            If Not _IsConnect Then
+                'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
+                comm = New GsmCommMain(_Com.Substring(3), 57600, 100)
+                comm.Open()
+                'comm.EnableMessageNotifications()
+                comm.EnableMessageRouting()
+                Return ("Port " & _Com & " ouvert")
             Else
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM", "Port COM non défini.")
+                Return ("Port " & _Com & " dejà ouvert")
             End If
         Catch ex As Exception
-            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM Ouvrir", "Exception" & ex.Message)
+            Return ("ERR: " & ex.Message)
         End Try
-    End Sub
+    End Function
 
     ''' <summary>Fermer le port du modem</summary>
     ''' <remarks></remarks>
