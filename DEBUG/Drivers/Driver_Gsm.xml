@@ -100,7 +100,7 @@ Driver_Gsm
 </member><member name="M:Driver_Gsm.Driver_Gsm.fermer">
 	<summary>Fermer le port du modem</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_Gsm.Driver_Gsm.ReceptionSMS">
+</member><member name="M:Driver_Gsm.Driver_Gsm.ReceptionSMS(System.String,System.String,System.String,System.String)">
 	<summary>Reception de SMS</summary>
 </member><member name="T:Driver_Gsm.Driver_Gsm">
 	<summary>Class Driver GSM </summary>

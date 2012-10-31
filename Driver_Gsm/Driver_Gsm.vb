@@ -17,9 +17,9 @@ Imports System.Data
 'Imports System.Drawing
 'Imports System.Windows.Forms
 Imports GsmComm.GsmCommunication
-Imports GsmComm.Interfaces
+'Imports GsmComm.Interfaces
 Imports GsmComm.PduConverter
-Imports GsmComm.Server
+'Imports GsmComm.Server
 
 Imports System.Data.OleDb
 Imports System.Management
@@ -84,8 +84,7 @@ Imports System.Management
 #Region "Variables Internes"
 
     Private ackreceived As Boolean = False
-    Private comm As GsmCommMain
-
+    Private WithEvents comm As GsmCommMain
 
 #End Region
 
@@ -422,7 +421,7 @@ Imports System.Management
                             Else
                                 _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS envoyé : " & Parametre1 & " à " & Objet.adresse1.ToString)
                                 pdu = New SmsSubmitPdu(Parametre1, Objet.adresse1.ToString, "")
-                                comm.SendMessage(pdu)
+                                comm.SendMessage(pdu, True)
                                 'on modifie la valeur du composant pour stocker les sms envoyés
                                 Objet.Value = "SEND - " & Parametre1
                             End If
@@ -640,16 +639,13 @@ Imports System.Management
                 'ouverture du port
                 If Not _IsConnect Then
                     'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
-                    comm = New GsmCommMain(_Com.Substring(3), 57600, "100")
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", _Com & "port :" & _Com.Substring(3)) ' commx
+                    comm = New GsmCommMain(_Com.Substring(3), 57600, 100)
+                    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", _Com & "port :" & _Com.Substring(3)) ' commx
                     'comm.EnableMessageNotifications()
                     comm.Open()
+                    comm.EnableMessageRouting()
 
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "port is open :" & comm.IsOpen()) ' commx
-
-
-                    ' AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
-                    'AddHandler comm.MessageEventHandler, AddressOf ReceptionSMS
+                    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "port is open :" & comm.IsOpen()) ' commx
 
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "Port " & _Com & " ouvert")
                 Else
@@ -689,63 +685,78 @@ Imports System.Management
         Return True
     End Function
 
-    ''' <summary>Reception de SMS</summary>
-    Private Sub ReceptionSMS()
-        Try
+    Private Sub MessageReceived(ByVal sender As Object, ByVal e As MessageReceivedEventArgs) Handles comm.MessageReceived
+        Dim obj As IMessageIndicationObject = e.IndicationObject
 
+        Try
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM MessageReceived", "un message a été reçu")
+
+            'If it's just a notification, print out the memory location of the new message
+            If TypeOf obj Is MemoryLocation Then
+                Dim loc As MemoryLocation = CType(obj, MemoryLocation)
+                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MessageReceived", String.Format("New message received in storage {0}, index {1}.", loc.Storage, loc.Index))
+                Exit Sub
+            End If
+
+            'If it's a complete message, then it was routed directly
+            If TypeOf obj Is ShortMessage Then
+                Dim msg As ShortMessage = CType(obj, ShortMessage)
+                Dim pdu As SmsPdu = comm.DecodeReceivedMessage(msg)
+                If TypeOf pdu Is SmsSubmitPdu Then
+                    'Stored (sent/unsent) message
+                    Dim data As SmsSubmitPdu = CType(pdu, SmsSubmitPdu)
+                    ReceptionSMS("STORED", data.DestinationAddress, data.UserDataText, "")
+                    Exit Sub
+                End If
+
+                If TypeOf pdu Is SmsDeliverPdu Then
+                    'Received message
+                    Dim data As SmsDeliverPdu = CType(pdu, SmsDeliverPdu)
+                    ReceptionSMS("RECEIVED", data.OriginatingAddress, data.UserDataText, data.SCTimestamp.ToString())
+                    Exit Sub
+                End If
+
+                If TypeOf pdu Is SmsStatusReportPdu Then
+                    'Status report
+                    Dim data As SmsStatusReportPdu = CType(pdu, SmsStatusReportPdu)
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MessageReceived", "STATUS REPORT, Recipient:" & data.RecipientAddress & ", Status:" & data.Status.ToString() & ", Timestamp: " & data.DischargeTime.ToString() & ", Message ref: " & data.MessageReference.ToString())
+                    Exit Sub
+                End If
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM MessageReceived", "Typede SMS inconnu.")
+                Exit Sub
+            End If
+
+            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM MessageReceived", "Notification inconnue.")
+        Catch ex As Exception
+            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM MessageReceived", "Exception" & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Reception de SMS</summary>
+    Private Sub ReceptionSMS(ByVal type As String, ByVal numero As String, ByVal texte As String, ByVal dateenvoi As String)
+        Try
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM ReceptionSMS", "Rception d un SMS de type " & type & ", numéro " & numero & ", texte " & texte & ",  Date " & dateenvoi)
+
+            'Recherche si un device affecté
+            Dim listedevices As New ArrayList
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_Idsrv, numero, "", Me._ID, True)
+            'un device trouvé on maj la value
+            If (listedevices.Count = 1) Then
+                listedevices.Item(0).Value = "RECEIVE - " & texte & "(" & dateenvoi & ")"
+            ElseIf (listedevices.Count > 1) Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM ReceptionSMS", "Plusieurs composants correspondent à : " & numero & ":" & texte)
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM ReceptionSMS", "Composant non trouvé : " & numero & ":" & texte)
+
+
+                'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+
+
+            End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM ReceptionSMS", "Exception" & ex.Message)
         End Try
     End Sub
-
-
-    ' ''' <summary>Envoyer un SMS</summary>
-    ' ''' <param name="parametre1">PhoneNumber</param>
-    ' ''' <param name="parametre2">txtmsg</param>
-    ' ''' <remarks></remarks>
-    'Private Function sendsms(ByVal parametre1 As String, ByVal parametre2 As String) As String
-    '    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", Command)
-
-    '    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "SEND")
-    '    'comm = New GsmCommMain(port_name.Substring(3), port.BaudRate, "100")
-
-    '    Dim pdu As SmsSubmitPdu
-    '    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", _Com & " " & 57600) ' commx
-    '    Try
-    '        'comm.Open()
-    '        'ouvrir(comm)
-    '        If _IsConnect Then
-    '            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "IsConnected")
-    '            If parametre1 = "" Then
-    '                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "Phone Number empty")
-    '                Return ""
-    '            ElseIf parametre2 = "" Then
-    '                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "txt msg empty")
-    '                Return ""
-    '            End If
-    '            Try
-    '                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "before sending")
-
-    '                pdu = New SmsSubmitPdu(parametre2, parametre1, "")
-    '                comm.SendMessage(pdu)
-    '                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "Message envoyé")
-    '                'comm.Close()
-    '            Catch E5 As Exception
-    '                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "Error Sending SMS To Destination")
-    '                'comm.Close()
-    '                'fermer()
-    '            End Try
-    '        Else
-    '            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Sms", "No GSM Phone / Modem Connected")
-    '            Return ""
-    '        End If
-
-    '    Catch E5 As Exception
-    '        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Sms", "Error Sending SMS To Destination")
-    '    End Try
-    '    Return ""
-
-    'End Function
 
 #End Region
 
