@@ -74,6 +74,7 @@ Imports System.Management
 
     'param avancé
     Dim _DEBUG As Boolean = False
+    Dim _MODE As Boolean = "PDU"
     '    Dim _STORAGE As PhoneStorageType
 
 
@@ -340,7 +341,8 @@ Imports System.Management
         'récupération des paramétres avancés
         Try
             _DEBUG = _Parametres.Item(0).Valeur
-            '  _STORAGE = _Parametres.Item(1).Valeur
+            _Mode = _Parametres.Item(1).Valeur
+            '_STORAGE = _Parametres.Item(2).Valeur
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
         End Try
@@ -595,6 +597,7 @@ Imports System.Management
             Add_DeviceCommande("CALL", "Appeler", 0)
 
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", True)
+            Add_ParamAvance("Mode", "Choisir le mode de connexion (PDU/TEXTE)", True)
             'Add_ParamAvance("storage", "sim card : true / gsm : false", True)
             'ajout des commandes avancées pour les devices
 
@@ -602,7 +605,7 @@ Imports System.Management
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "Numero destinataire", "")
+            Add_LibelleDevice("ADRESSE1", "Numero téléphone (ex: 0605040302)", "")
             Add_LibelleDevice("ADRESSE2", "@", "")
 
             Add_LibelleDevice("SOLO", "@", "")
