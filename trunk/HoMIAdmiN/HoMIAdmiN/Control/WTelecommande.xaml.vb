@@ -5,7 +5,7 @@
     Dim x As HoMIDom.HoMIDom.TemplateDevice = Nothing
     Dim _DeviceId As String 'Id du device à modifier
     Dim _Driver As HoMIDom.HoMIDom.TemplateDriver
-    Dim _SelectDriverIndex As Integer 'Index du driver sélectionné
+    'Dim _SelectDriverIndex As Integer 'Index du driver sélectionné
     Dim ListButton As New List(Of ImageButton)
     Dim _Row As Integer
     Dim _Col As Integer
@@ -69,6 +69,11 @@
                 End If
 
             End If
+
+            ListCmd.Items.Clear()
+            For i2 As Integer = 0 To x.Commandes.Count - 1
+                ListCmd.Items.Add(x.Commandes.Item(i2).Name)
+            Next
 
             BtnNewCmd.Visibility = Windows.Visibility.Visible
             FlagNewCmd = False
@@ -288,9 +293,15 @@
                 Exit Sub
             End If
 
-            Dim mytemplate As String = LCase(TxtTplFab.Text) & "-" & LCase(TxtTplMod.Text) & "-" & LCase(myService.GetAllDrivers(IdSrv).Item(_SelectDriverIndex).Protocol)
+            If _Driver IsNot Nothing Then
+                MsgBox("OK")
+            Else
+                MsgBox("VIDE")
+            End If
 
-            Dim retour As String = myService.CreateNewTemplate(TxtTplFab.Text, TxtTplMod.Text, myService.GetAllDrivers(IdSrv).Item(_SelectDriverIndex).Protocol, cbBase.SelectedIndex, slider_Row.Value, slider_Column.Value)
+            Dim mytemplate As String = LCase(TxtTplFab.Text) & "-" & LCase(TxtTplMod.Text) & "-" & _Driver.Protocol
+
+            Dim retour As String = myService.CreateNewTemplate(TxtTplFab.Text, TxtTplMod.Text, _Driver.Protocol, cbBase.SelectedIndex, slider_Row.Value, slider_Column.Value)
             If retour <> "0" Then
                 MessageBox.Show("Erreur lors de la création du nouveau template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
@@ -323,25 +334,26 @@
 #End Region
 
 
-    Public Sub New(Optional ByVal DeviceId As String = "", Optional ByVal SelectDriverIndex As Integer = -1, Optional ByVal Driver As HoMIDom.HoMIDom.TemplateDriver = Nothing, Optional ByVal Template As HoMIDom.HoMIDom.TemplateDevice = Nothing)
+    Public Sub New(Optional ByVal DeviceId As String = "", Optional ByVal DriverUid As String = "", Optional ByVal Template As HoMIDom.HoMIDom.TemplateDevice = Nothing)
 
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
 
         Try
             _DeviceId = DeviceId
-            _SelectDriverIndex = SelectDriverIndex
-            _Driver = Driver
+            _Driver = myService.ReturnDriverByID(IdSrv, DriverUid)
             x = Template
 
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             ListCmd.Items.Clear()
 
             'Affiche le bouton apprendre que c'est un protocole de type IR
-            If _Driver.Protocol = "IR" Then
-                BtnLearn.Visibility = Windows.Visibility.Visible
-            Else
-                BtnLearn.Visibility = Windows.Visibility.Collapsed
+            If _Driver IsNot Nothing Then
+                If _Driver.Protocol = "IR" Then
+                    BtnLearn.Visibility = Windows.Visibility.Visible
+                Else
+                    BtnLearn.Visibility = Windows.Visibility.Collapsed
+                End If
             End If
 
             'Récupère la liste des template
@@ -354,24 +366,25 @@
                 cbTemplate.Items.Add(tpl) 'ajoute le nom du template dans la liste
 
                 'si le device compote un template (qui est stocké dans son modele)
-                If x.Modele IsNot Nothing Then
-                    If tpl = x.Modele.ToString Then
+                If x IsNot Nothing Then
+                    If x.Modele <> "" Then
+                        If tpl = x.Modele.ToString Then
 
-                        cbTemplate.IsEnabled = False 'impossible de modifier le template
-                        BtnNewTemplate.Visibility = Windows.Visibility.Collapsed
-                        TxtTplFab.Text = _list.Item(i).Fabricant
-                        TxtTplMod.Text = _list.Item(i).Modele
-                        idx = i
-                        _Col = _list.Item(i).Colonne
-                        _Row = _list.Item(i).Ligne
+                            cbTemplate.IsEnabled = False 'impossible de modifier le template
+                            BtnNewTemplate.Visibility = Windows.Visibility.Collapsed
+                            TxtTplFab.Text = _list.Item(i).Fabricant
+                            TxtTplMod.Text = _list.Item(i).Modele
+                            idx = i
+                            _Col = _list.Item(i).Colonne
+                            _Row = _list.Item(i).Ligne
 
-                        If x.Commandes IsNot Nothing Then
-                            GrpCmd.Visibility = Windows.Visibility.Visible
+                            If x.Commandes IsNot Nothing Then
+                                GrpCmd.Visibility = Windows.Visibility.Visible
 
-                            For i2 As Integer = 0 To x.Commandes.Count - 1
-                                ListCmd.Items.Add(x.Commandes.Item(i2).Name)
-
-                            Next
+                                For i2 As Integer = 0 To x.Commandes.Count - 1
+                                    ListCmd.Items.Add(x.Commandes.Item(i2).Name)
+                                Next
+                            End If
                         End If
                     End If
                 End If
@@ -657,7 +670,6 @@ Retour:
     'Fermer
     Private Sub button_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles button.Click
         x.Modele = cbTemplate.Text
-
         For i As Integer = 0 To grid_Telecommande.Children.Count - 1
             Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
 
@@ -682,6 +694,7 @@ Retour:
                 MessageBox.Show("Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End If
         End If
+
         DialogResult = True
     End Sub
 
@@ -694,43 +707,45 @@ Retour:
             slider_Column.Value = _Col
             slider_Row.Value = _Row
 
-            If x.Commandes IsNot Nothing Then
-                GrpCmd.Visibility = Windows.Visibility.Visible
+            If x IsNot Nothing Then
+                If x.Commandes IsNot Nothing Then
+                    GrpCmd.Visibility = Windows.Visibility.Visible
 
-                Remplir()
+                    Remplir()
 
-                For i2 As Integer = 0 To x.Commandes.Count - 1
+                    For i2 As Integer = 0 To x.Commandes.Count - 1
 
-                    If x.Commandes.Item(i2).Row > 0 And x.Commandes.Item(i2).Column > 0 Then
-                        Dim cvs As New Canvas
-                        cvs.Width = 45
-                        cvs.Height = 45
-                        cvs.Background = Brushes.Black
-                        cvs.AllowDrop = True
-                        cvs.Tag = x.Commandes.Item(i2).Row & "|" & x.Commandes.Item(i2).Column 'ListButton(i).Row & "|" & ListButton(i).Column
-                        AddHandler cvs.DragOver, AddressOf CVS_DragOver
-                        AddHandler cvs.Drop, AddressOf CVS_Drop
-                        Grid.SetColumn(cvs, x.Commandes.Item(i2).Column) ' ListButton(i).Column)
-                        Grid.SetRow(cvs, x.Commandes.Item(i2).Row) 'ListButton(i).Row)
+                        If x.Commandes.Item(i2).Row > 0 And x.Commandes.Item(i2).Column > 0 Then
+                            Dim cvs As New Canvas
+                            cvs.Width = 45
+                            cvs.Height = 45
+                            cvs.Background = Brushes.Black
+                            cvs.AllowDrop = True
+                            cvs.Tag = x.Commandes.Item(i2).Row & "|" & x.Commandes.Item(i2).Column 'ListButton(i).Row & "|" & ListButton(i).Column
+                            AddHandler cvs.DragOver, AddressOf CVS_DragOver
+                            AddHandler cvs.Drop, AddressOf CVS_Drop
+                            Grid.SetColumn(cvs, x.Commandes.Item(i2).Column) ' ListButton(i).Column)
+                            Grid.SetRow(cvs, x.Commandes.Item(i2).Row) 'ListButton(i).Row)
 
-                        Dim img1 As New ImageButton
-                        img1.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Commandes.Item(i2).Picture))
-                        img1.Tag = x.Commandes.Item(i2).Picture
-                        img1.Command = x.Commandes.Item(i2).Name
+                            Dim img1 As New ImageButton
+                            img1.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Commandes.Item(i2).Picture))
+                            img1.Tag = x.Commandes.Item(i2).Picture
+                            img1.Command = x.Commandes.Item(i2).Name
 
-                        img1.AllowDrop = True
-                        Dim a() As String = cvs.Tag.split("|")
-                        img1.Row = a(0)
-                        img1.Column = a(1)
-                        img1.HorizontalAlignment = Windows.HorizontalAlignment.Stretch
-                        img1.VerticalAlignment = Windows.VerticalAlignment.Stretch
-                        AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
-                        AddHandler img1.Delete, AddressOf DeleteButton
-                        cvs.Children.Add(img1)
+                            img1.AllowDrop = True
+                            Dim a() As String = cvs.Tag.split("|")
+                            img1.Row = a(0)
+                            img1.Column = a(1)
+                            img1.HorizontalAlignment = Windows.HorizontalAlignment.Stretch
+                            img1.VerticalAlignment = Windows.VerticalAlignment.Stretch
+                            AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
+                            AddHandler img1.Delete, AddressOf DeleteButton
+                            cvs.Children.Add(img1)
 
-                        grid_Telecommande.Children.Add(cvs)
-                    End If
-                Next
+                            grid_Telecommande.Children.Add(cvs)
+                        End If
+                    Next
+                End If
             End If
         Catch ex As Exception
             MessageBox.Show(ex.ToString)

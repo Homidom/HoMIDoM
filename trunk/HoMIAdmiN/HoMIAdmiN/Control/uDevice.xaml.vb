@@ -45,7 +45,6 @@ Partial Public Class uDevice
                 ImgDevice.Tag = ""
                 CbType.IsEnabled = False
 
-
             Else 'Modification d'un Device
 
                 FlagNewDevice = False
@@ -272,14 +271,18 @@ Partial Public Class uDevice
             Dim result As String = ""
 
             If CbType.Text = "MULTIMEDIA" Then
-                If x.Modele = "" Then
-                    MessageBox.Show("Veuillez sélectionner ou ajouter un template au device!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                    Exit Sub
-                Else
-                    _modele = x.Modele
+
+                If x IsNot Nothing Then
+                    If x.Modele = "" Then
+                        MessageBox.Show("Veuillez sélectionner ou ajouter un template au device!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        Exit Sub
+                    Else
+                        _modele = x.Modele
+                    End If
                 End If
+
                 If _Action = EAction.Modifier Then
-                    result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes)
+                    If x IsNot Nothing Then result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes)
                 Else
                     result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text)
                 End If
@@ -393,12 +396,11 @@ Partial Public Class uDevice
                 End If
 
                 If CbType.SelectedValue = "MULTIMEDIA" Then
-                    BtnEditTel.Visibility = Windows.Visibility.Visible
-                    TxtModele2.Visibility = Visibility.Hidden
-                    Label8.Visibility = Windows.Visibility.Hidden
+                    TxtModele2.Visibility = Visibility.Collapsed
+                    Label8.Visibility = Windows.Visibility.Collapsed
+                    rectmodele1.Visibility = Windows.Visibility.Collapsed
+                    rectmodele2.Visibility = Windows.Visibility.Collapsed
                 End If
-
-
             End If
         Catch Ex As Exception
             MessageBox.Show("Erreur lors du changement de type: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -486,13 +488,21 @@ Partial Public Class uDevice
                     Exit For
                 End If
             Next
-            myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
+
+            Dim uid As String = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
 
             VerifDriver(_driverid)
             SaveInZone()
 
             BtnRead.Visibility = Windows.Visibility.Visible
 
+            If CbType.SelectedValue = "MULTIMEDIA" Then
+                BtnEditTel.Visibility = Windows.Visibility.Visible
+                TxtModele2.Visibility = Visibility.Hidden
+                Label8.Visibility = Windows.Visibility.Hidden
+            End If
+
+            If uid.Length > 3 Then x = myService.ReturnDeviceByID(IdSrv, uid)
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub uDevice BtnSave_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -670,13 +680,23 @@ Partial Public Class uDevice
 
     Private Sub BtnEditTel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnEditTel.Click
         Try
-            Dim frm As New WTelecommande(_DeviceId, CbDriver.SelectedIndex, _Driver, x)
+            Dim _driverid As String = ""
+            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
+                If myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
+                    _driverid = myService.GetAllDrivers(IdSrv).Item(i).ID
+                    Exit For
+                End If
+            Next
+
+            Dim frm As New WTelecommande(_DeviceId, _driverid, x)
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-                If x.Modele <> "" And x.Commandes.Count = 0 Then
-                    BtnEditTel.Visibility = Windows.Visibility.Collapsed
+                If x IsNot Nothing Then
+                    If x.Modele <> "" And x.Commandes.Count = 0 Then
+                        BtnEditTel.Visibility = Windows.Visibility.Collapsed
+                    End If
+                    frm.Close()
                 End If
-                frm.Close()
             Else
                 frm.Close()
             End If
