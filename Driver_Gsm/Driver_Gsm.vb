@@ -337,7 +337,6 @@ Imports System.Management
     ''' <summary>Démarrer le du driver</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
-        Dim retour As String
         'récupération des paramétres avancés
         Try
             _DEBUG = _Parametres.Item(0).Valeur
@@ -349,9 +348,9 @@ Imports System.Management
         'ouverture de la communication avec le GSM
         Try
             If _Com <> "" Then
-                retour = ouvrir()
+                ouvrir()
             Else
-                retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Gsm Start", "Port Com non défini. Impossible d'ouvrir le port !")
             End If
             _IsConnect = True
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Gsm", "Driver " & Me.Nom & " démarré")
@@ -419,12 +418,11 @@ Imports System.Management
                             If Parametre1 = "" Then
                                 _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS à envoyer vide, annulation")
                             Else
-
                                 _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS envoyé : " & Parametre1 & " à " & Objet.adresse1.ToString)
-
                                 pdu = New SmsSubmitPdu(Parametre1, Objet.adresse1.ToString, "")
-
                                 comm.SendMessage(pdu)
+                                'on modifie la valeur du composant pour stocker les sms envoyés
+                                Objet.Value = "SEND - " & Parametre1
                             End If
                         Else
                             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "No GSM Phone / Modem Connected")
@@ -633,7 +631,7 @@ Imports System.Management
 
 #Region "Fonctions internes"
     ''' <summary>Ouvrir le port du modem</summary>
-    Private Function ouvrir() As String
+    Private Sub ouvrir()
         Try
             If (_Com <> "") Then
                 'ouverture du port
@@ -650,17 +648,17 @@ Imports System.Management
                     ' AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
                     'AddHandler comm.MessageEventHandler, AddressOf ReceptionSMS
 
-                    Return ("Port " & _Com & " ouvert")
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "Port " & _Com & " ouvert")
                 Else
-                    Return ("Port " & _Com & " dejà ouvert")
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "Port " & _Com & " dejà ouvert")
                 End If
             Else
-                Return ("Port COM non défini.")
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM", "Port COM non défini.")
             End If
         Catch ex As Exception
-            Return ("ERR: " & ex.Message)
+            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM Ouvrir", "Exception" & ex.Message)
         End Try
-    End Function
+    End Sub
 
     ''' <summary>Fermer le port du modem</summary>
     ''' <remarks></remarks>

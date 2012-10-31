@@ -4,7 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" VerticalAlignment="Center" Width="500" Height=" 400" >
+
+    
     <Grid>
+        <Grid.Resources>
+            <Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="MenuItem">
+                <Setter Property="OverridesDefaultStyle" Value="True"/>
+                <Setter Property="Foreground" Value="Green"/>
+                <Setter Property="Background" Value="Yellow"/>
+                <Style.Triggers>
+                    <Trigger Property="IsHighlighted" Value="True">
+                        <Setter Property="Background" Value="Yellow"/>
+                        <Setter Property="Foreground" Value="Yellow"/>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="Red"/>
+                        <Setter Property="Foreground" Value="Red"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+        
         <StackPanel Orientation="Vertical">
 
             <StackPanel Orientation="Horizontal">
