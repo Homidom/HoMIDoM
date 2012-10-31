@@ -56,8 +56,7 @@ Driver_Gsm
 	<summary>Commander un device</summary>
 	<param name="Objet">Objet représetant le device à interroger</param>
 	<param name="Command">La commande à passer</param>
-	<param name="Parametre1">Message text</param>
-	<param name="Parametre2">Phone Number</param>
+	<param name="Parametre1">Phone Number</param>
 </member><member name="M:Driver_Gsm.Driver_Gsm.DeleteDevice(System.String)">
 	<summary>Fonction lancée lors de la suppression d'un device</summary>
 	<param name="DeviceId">Objet représetant le device à interroger</param>
