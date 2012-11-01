@@ -645,10 +645,14 @@ Imports System.Management
             'ouverture du port
             If Not _IsConnect Then
                 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
-                comm = New GsmCommMain(_Com.Substring(3), 57600, 100)
+
+                Dim portnumber As Integer
+                If (Integer.TryParse(_Com.Substring(3), portnumber)) Then
+                    comm = New GsmCommMain(portnumber, 57600, 100)
+                End If
                 comm.Open()
                 'comm.EnableMessageNotifications()
-                comm.EnableMessageRouting()
+                'comm.EnableMessageRouting()
                 Return ("Port " & _Com & " ouvert")
             Else
                 Return ("Port " & _Com & " dejà ouvert")
