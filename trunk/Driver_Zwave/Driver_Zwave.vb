@@ -428,6 +428,10 @@ Public Class Driver_ZWave
                                 NodeTemp = GetNode(m_homeId, MyDevice.Adresse1)
                                 m_manager.RequestNodeState(m_homeId, NodeTemp.ID)
 
+                            Case "SETCONFIGPARAM"
+                                NodeTemp = GetNode(m_homeId, MyDevice.Adresse1)
+                                m_manager.SetConfigParam(m_homeId, NodeTemp.ID, Param(0), Param(1))
+
                                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "Passage par la commande RequestNodeState")
 
                             Case Else
@@ -572,16 +576,21 @@ Public Class Driver_ZWave
 
                 NodeTemp = GetNode(m_homeId, Objet.Adresse1)
                 m_manager.RequestNodeState(m_homeId, NodeTemp.ID)
-                Console.WriteLine("Valeur de l'info Adresse2 : " & Objet.Adresse2)
-                Dim TypeInfo As String = Objet.Adresse2
-                If (TypeInfo = "") Then TypeInfo = "Basic"
-                Console.WriteLine("Valeur de l'info Adresse2 : " & Objet.Adresse2 & "-" & TypeInfo)
+                '--DEBUG
+
+                Dim LabelInfo As String = Objet.Adresse2 ' L'info contient le nom du label.
+                If (LabelInfo = "") Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZWave Read", "Erreur: le label du device (Adresse2) " & Objet.Adresse2 & " n'est pas défini.")
+                    Exit Sub
+                End If
+
+                Console.WriteLine("Valeur de l'info Adresse2 : " & Objet.Adresse2 & "-" & LabelInfo)
 
                 If IsNothing(NodeTemp) Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZWave Read", "Erreur: l'adresse du device (Adresse1) " & Objet.Adresse1 & " n'existe pas")
                 Else
                     If Objet IsNot Nothing Then
-                        ValeurTemp = GetValueID(NodeTemp, TypeInfo.ToString)
+                        ValeurTemp = GetValueID(NodeTemp, LabelInfo.ToString)
                         If Not (IsNothing(ValeurTemp)) Then   ' Il y a des valeurs pour ce noeud
                             IndexTemp = ValeurTemp.GetIndex()
                             Select Case ValeurTemp.GetType()
@@ -777,12 +786,21 @@ Public Class Driver_ZWave
             Try
 
                 ''liste des devices compatibles
-                _DeviceSupport.Add(ListeDevices.APPAREIL) 'SORTIE     
-                _DeviceSupport.Add(ListeDevices.LAMPE) 'SORTIE     
-                _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN) 'ENTREE
-                _DeviceSupport.Add(ListeDevices.GENERIQUESTRING) 'ENTREE
-                _DeviceSupport.Add(ListeDevices.SWITCH) 'ENTREE
-                _DeviceSupport.Add(ListeDevices.CONTACT) 'ENTREE   
+                _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
+                _DeviceSupport.Add(ListeDevices.BATTERIE.ToString)
+                _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
+                _DeviceSupport.Add(ListeDevices.DETECTEUR.ToString)
+                _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE.ToString)
+                _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
+                _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
+                _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE.ToString)
+                _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
+                _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
+                _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
+                _DeviceSupport.Add(ListeDevices.TELECOMMANDE.ToString)
+                _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
+                _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE.ToString)
+
 
                 'Paramétres avancés
                 Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
@@ -793,14 +811,15 @@ Public Class Driver_ZWave
                 Add_DeviceCommande("ALL_LIGHT_OFF", "", 0)
                 Add_DeviceCommande("SetName", "Nom du composant", 0)
                 Add_DeviceCommande("GetName", "Nom du composant", 0)
-                Add_DeviceCommande("RequestNodeState", "Nom du composant", 0)
+                ' Add_DeviceCommande("RequestNodeState", "Nom du composant", 0)
+                Add_DeviceCommande("SetConfigParam", "paramètre de configuration - Par1 : Index - Par2 : Valeur", 2)
 
                 'Libellé Driver
                 Add_LibelleDriver("HELP", "Aide...", "Ce module permet de recuperer les informations delivrées par la controleur Z-Wave ")
 
                 'Libellé Device
                 Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant de Z-Wave")
-                Add_LibelleDevice("ADRESSE2", "Type de la donnée", "Basic, User, Config, System, Count")
+                Add_LibelleDevice("ADRESSE2", "Label de la donnée", "Temperature, Relative Humidity, Battery Level")
                 Add_LibelleDevice("SOLO", "@", "")
                 Add_LibelleDevice("MODELE", "@", "")
                 Add_LibelleDevice("REFRESH", "Refresh", "")
@@ -902,7 +921,7 @@ Public Class Driver_ZWave
                         m_manager.RemoveDriver("\\.\" & _Com)
                         m_manager.Destroy()
                         m_options.Destroy()
-                        m_nodeList = Nothing
+                        m_nodeList.Clear()
 
                         port.Dispose()
                         port.Close()
