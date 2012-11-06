@@ -506,13 +506,15 @@ Public Class Driver_ZWave
                         ' Debug Information Controleur
                         Dim NodeControler As Byte = m_manager.GetControllerNodeId(m_homeId)
 
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "Home ID : 0x" & Convert.ToString(m_homeId, 16).ToUpper)
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "Home ID : 0x" & Convert.ToString(m_homeId, 16).ToUpper & " " & m_nodeList.Count.ToString)
                         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "ID Node Controleur : " & NodeControler & " Nom Controleur :" & m_nodeList(NodeControler).Name)
                         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "Controleur : " & m_manager.GetNodeManufacturerName(m_homeId, NodeControler) & " " & m_manager.GetNodeProductName(m_homeId, NodeControler))
                         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "Type Controleur : " & m_manager.GetLibraryTypeName(m_homeId) & " Biblio Version : " & m_manager.GetLibraryVersion(m_homeId))
 
                         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "Adresse Node " & vbTab & "  Basic type" & vbTab & vbTab & "  label  ")
-                        For i = NodeControler To m_nodeList.Count - 1
+                        '   For i = NodeControler To m_nodeList.Count - 1
+
+                        For i = NodeControler To m_nodeList.Count - 1 Step 1
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", m_nodeList(i).ID & " - " & m_nodeList(i).Name & vbTab & m_manager.GetNodeType(m_homeId, NodeControler) & " " & m_nodeList(i).Manufacturer & m_nodeList(i).Product & vbTab & vbTab & m_nodeList(i).Label)
                         Next
                     End If
@@ -616,7 +618,8 @@ Public Class Driver_ZWave
                                 Console.WriteLine("ValueUnit      :" & m_manager.GetValueUnits(ValeurTemp))
                                 Console.WriteLine("Value relevée :" & Objet.value & " de type " & Objet.GetType.Name)
                             End If
-                            NodeTemp.Values.RemoveAt(IndexTemp)
+                            ' NodeTemp.Values.RemoveAt(IndexTemp)
+                            NodeTemp.Values.Remove(ValeurTemp)
                         Else
                             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "Pas de valeur trouvée")
                             Exit Sub
@@ -966,18 +969,13 @@ Public Class Driver_ZWave
                         node.RemoveValue(m_notification.GetValueID())
                     End If
 
-
-
                 Case ZWNotification.Type.ValueChanged
                     Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
                     If IsNothing(node) Then
                         node.SetValue(m_notification.GetValueID())
                     End If
 
-
                 Case ZWNotification.Type.Group
-
-
 
 
                 Case ZWNotification.Type.NodeAdded
