@@ -27,8 +27,8 @@ Partial Public Class uMeteo
                     Lbl.Content = _dev.Name
                     LblTemps.Content = _dev.ConditionActuel
                     LblTemp.Content = _dev.TemperatureActuel & "°"
-                    LblHum.Content = _dev.HumiditeActuel
-                    LblVent.Content = _dev.VentActuel
+                    LblHum.Content = "Humidité: " & _dev.HumiditeActuel
+                    LblVent.Content = "Vent: " & _dev.VentActuel
                     Day0.Content = _dev.JourToday
                     Day1.Content = _dev.JourJ1
                     Day2.Content = _dev.JourJ2

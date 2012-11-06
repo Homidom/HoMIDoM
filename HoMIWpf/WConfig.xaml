@@ -151,7 +151,7 @@
                                     <MenuItem Name="MnuAdd" Header="Ajouter" >
                                         <MenuItem Name="MnuAddInternet" Header="Page Internet"/>
                                         <MenuItem Name="MnuAddMeteo" Header="Meteo"/>
-                                            <MenuItem Name="MnuAddMedia" Header="Lecteur Media"/>
+                                            <MenuItem Name="MnuAddMedia" Header="Lecteur Audio"/>
                                         </MenuItem> 
                                     <MenuItem Header="Supprimer" Name="MenuItem1" />
                                 </ContextMenu> 
