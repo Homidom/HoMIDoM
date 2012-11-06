@@ -1,4 +1,7 @@
 ﻿Imports System.Windows.Threading
+Imports TagLib
+Imports System.IO
+Imports System.Drawing.Imaging
 
 Public Class uMedia
 
@@ -13,11 +16,15 @@ Public Class uMedia
     Dim _ShowBtnOpen As Boolean = True
     Dim _ShowSliderTime As Boolean = True
     Dim _ShowBtnVolume As Boolean = True
+    Dim _ShowVideo As Boolean = True
     Dim _Volume As Double = 0.5
     Dim _VideoWidth As Double = 300
     Dim _VideoHeight As Double = 300
+    Public Filter As New List(Of String)
+
     Dim _Uri As String = ""
     Dim dt As DispatcherTimer = New DispatcherTimer()
+    Private Const THUMBNAIL_DATA As Integer = 20507
 
     Public Sub New()
 
@@ -236,6 +243,20 @@ Public Class uMedia
         End Set
     End Property
 
+    Public Property ShowVideo As Boolean
+        Get
+            Return _ShowVideo
+        End Get
+        Set(ByVal value As Boolean)
+            _ShowVideo = value
+            If value = True Then
+                MediaElement1.Visibility = Windows.Visibility.Visible
+            Else
+                MediaElement1.Visibility = Windows.Visibility.Collapsed
+            End If
+        End Set
+    End Property
+
     Private Sub BtnPlay_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnPlay.MouseDown
         MediaElement1.LoadedBehavior = MediaState.Play
     End Sub
@@ -248,10 +269,7 @@ Public Class uMedia
         MediaElement1.LoadedBehavior = MediaState.Stop
         dt.Stop()
         SliderSeek.Value = 0
-    End Sub
-
-    Private Sub BtnReculTitre_ImageFailed(ByVal sender As System.Object, ByVal e As System.Windows.ExceptionRoutedEventArgs) Handles BtnReculTitre.ImageFailed
-
+        ImgThumb.Source = Nothing
     End Sub
 
     Private Sub BtnRecul_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnRecul.MouseDown
@@ -268,16 +286,57 @@ Public Class uMedia
 
     Private Sub BtnOpen_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnOpen.MouseDown
         Try
+            Me.Cursor = Cursors.Wait
             Dim ofd As System.Windows.Forms.OpenFileDialog = New System.Windows.Forms.OpenFileDialog
-            ofd.Filter = "Tous (*.*)|*.*"
+            If Filter.Count = 0 Then
+                ofd.Filter = "Tous (*.*)|*.*"
+            Else
+                For i As Integer = 0 To Filter.Count - 1
+                    If Filter.Count > 1 Then
+                        ofd.Filter = Filter(i) & "|"
+                    Else
+                        ofd.Filter = Filter(i)
+                    End If
+                Next
+            End If
+
 
             If ofd.ShowDialog = Forms.DialogResult.OK Then
+                Dim X As TagLib.File
+                _Uri = ofd.FileName
+
+                ' Recupere les tags du fichier Audio 
+                X = TagLib.File.Create(ofd.FileName)
+                LblTitle.Content = X.Tag.Title
+                LblArtiste.Content = X.Tag.FirstPerformer
+                LblAlbum.Content = X.Tag.Album
+                LblAnnee.Content = X.Tag.Year
+                LblComment.Content = X.Tag.Comment
+                LblGenre.Content = X.Tag.FirstGenre
+                LblDuree.Content = System.Convert.ToString(X.Properties.Duration.Minutes) & ":" & System.Convert.ToString(Format(X.Properties.Duration.Seconds, "00"))
+
+                If X.Tag.Pictures.Length > 0 Then
+                    Dim bin = DirectCast(X.Tag.Pictures(0).Data.Data, Byte())
+                    Dim bImg As New System.Windows.Media.Imaging.BitmapImage()
+                    bImg.BeginInit()
+                    bImg.StreamSource = New MemoryStream(bin)
+                    bImg.EndInit()
+                    ImgThumb.Source = bImg
+                Else
+                    ImgThumb.Visibility = Windows.Visibility.Collapsed
+                End If
+
+                X = Nothing
+
                 MediaElement1.Source = New Uri(ofd.FileName)
                 MediaElement1.LoadedBehavior = MediaState.Play
             End If
+
         Catch ex As Exception
             MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+
+        Me.Cursor = Nothing
     End Sub
 
     Private Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
@@ -285,7 +344,7 @@ Public Class uMedia
     End Sub
 
     Private Sub MediaElement1_MediaOpened(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MediaElement1.MediaOpened
-        dt.stop()
+        dt.Stop()
         SliderSeek.Maximum = MediaElement1.NaturalDuration.TimeSpan.Seconds
         SliderSeek.SmallChange = 2
         dt.Start()

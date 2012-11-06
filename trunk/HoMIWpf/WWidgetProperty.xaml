@@ -40,7 +40,7 @@
             <Label Width="120" Content="Rotation:" Foreground="White"/>
                 <TextBox Name="TxtRotation" Width="150" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal" >
+            <StackPanel Name="StkPicture" Orientation="Horizontal" >
             <Label Width="120" Content="Picture:" Foreground="White"/>
                     <Border BorderThickness="2" BorderBrush="Black" >
                         <Image Name="ImgPicture" Width="50" Height=" 50"/>
@@ -48,7 +48,7 @@
                     <Button Margin="2" Name="BtnInitPict" Content="Init" Width="25" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
 
                 </StackPanel>
-            <StackPanel Orientation="Horizontal" >
+            <StackPanel Name="StkStatus" Orientation="Horizontal" >
             <Label Width="120" Content="Defaut Status:" Foreground="White"/>
                 <TextBox Name="TxtDefStatus" Width="150" Text="?"/>
             </StackPanel>

@@ -1137,11 +1137,23 @@ Public Class uWidgetEmpty
     Private Sub Stk1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Me.MouseDown
         If _ModeEdition Then
             Try
-                Dim x As New WWidgetProperty(Me)
+                Dim x As New WWidgetProperty
+                x.Objet = Me
                 x.Owner = frmMere
                 x.ShowDialog()
-                If x.DialogResult.HasValue And x.DialogResult.Value Then
+
+                If x.DialogResult.HasValue Then
+
+                    For i As Integer = 0 To _ListElement.Count - 1
+                        If _ListElement.Item(i).Uid = Me.Uid And _ListElement.Item(i).ZoneId = Me.ZoneId Then
+                            _ListElement.Item(i) = x.Objet
+                            Exit For
+                        End If
+                    Next
+
                     x.Close()
+
+                    frmMere.ShowZone(frmMere._CurrentIdZone)
                 Else
                     x.Close()
                 End If

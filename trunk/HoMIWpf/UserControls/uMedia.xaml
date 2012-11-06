@@ -6,9 +6,42 @@
              mc:Ignorable="d" Background="DarkGray">
             
     <StackPanel>
-
+        
         <MediaElement Height="300" Name="MediaElement1" VerticalAlignment="Stretch" Width="300" />
         <StackPanel Name="Toolbar" Background=" Gray">
+            <StackPanel Name="StkInfo" Orientation="Horizontal" >
+                <Image Name="ImgThumb" Height="80" Width="80" />
+                <StackPanel >
+                <StackPanel Orientation="Horizontal" >
+                    <Label Content="Titre:" Foreground=" White" FontSize="10" />
+                    <Label Name="LblTitle" Foreground=" White" FontSize="10"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <Label Content="Artiste:" Foreground=" White" FontSize="10" />
+                    <Label Name="LblArtiste" Foreground=" White" FontSize="10"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <Label Content="Album:" Foreground=" White" FontSize="10" />
+                    <Label Name="LblAlbum" Foreground=" White" FontSize="10"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <Label Content="Année:" Foreground=" White" FontSize="10" />
+                    <Label Name="LblAnnee" Foreground=" White" FontSize="10"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <Label Content="Genre:" Foreground=" White" FontSize="10" />
+                    <Label Name="LblGenre" Foreground=" White" FontSize="10"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <Label Content="Commentaire:" Foreground=" White" FontSize="10" />
+                    <Label Name="LblComment" Foreground=" White" FontSize="10"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <Label Content="Durée:" Foreground=" White" FontSize="10" />
+                    <Label Name="LblDuree" Foreground=" White" FontSize="10"/>
+                </StackPanel>
+            </StackPanel>
+            </StackPanel>
             <Slider Name="SliderSeek" />
             <StackPanel Orientation="Horizontal" >
             <Image Name="BtnPlay" Height="30" Width="30" Source="/HoMIWpF;component/Images/Playback-Start-64.png" />

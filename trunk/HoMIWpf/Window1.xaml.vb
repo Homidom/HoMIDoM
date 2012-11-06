@@ -1459,6 +1459,8 @@ Class Window1
             Chk1.Visibility = Windows.Visibility.Visible
             Chk2.Visibility = Windows.Visibility.Visible
             Chk3.Visibility = Windows.Visibility.Visible
+            If Chk1.IsChecked = True Then Chk1.IsChecked = False
+            If Chk2.IsChecked = True Then Chk2.IsChecked = False
 
             'On parcours tous les éléments de la zone (hors widgets empty)
             For i As Integer = 0 To _zone.ListElement.Count - 1
@@ -1484,6 +1486,7 @@ Class Window1
                             Dim y As New uWidgetEmpty
                             y.Uid = _ListElement.Item(j).Uid
                             y.Id = z.ElementID
+                            y.Type = uWidgetEmpty.TypeOfWidget.Device
                             y.ZoneId = _ListElement.Item(j).ZoneId
                             y.Width = x.Width
                             y.Height = x.Height
@@ -1538,6 +1541,7 @@ Class Window1
                         elmt.Y = _Top
                         elmt.ZoneId = IdZone
                         elmt.IsEmpty = False
+                        elmt.Type = uWidgetEmpty.TypeOfWidget.Device
 
                         ' y = elmt
                         elmt.IsHitTestVisible = True
@@ -1816,10 +1820,11 @@ Class Window1
         x.Height = 100
         x.Style = mybuttonstyle
         x.Tag = True
+        x.Uid = System.Guid.NewGuid.ToString()
 
         'Ajoute l'élément dans la liste
         Dim elmt As New uWidgetEmpty
-        elmt.Uid = System.Guid.NewGuid.ToString()
+        elmt.Uid = x.Uid
         elmt.ZoneId = _CurrentIdZone
         elmt.Width = 100
         elmt.Height = 100
@@ -1829,10 +1834,9 @@ Class Window1
         elmt.IsEmpty = True
         elmt.Type = uWidgetEmpty.TypeOfWidget.Empty
         elmt.ShowStatus = False
-        elmt.Etiquette = "Widget " & Canvas1.Children.Count
+        elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
         _ListElement.Add(elmt)
 
-        Dim y As New uWidgetEmpty
         elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
         x.Content = elmt
         Canvas1.Children.Add(x)
@@ -1847,10 +1851,11 @@ Class Window1
         x.Height = 100
         x.Style = mybuttonstyle
         x.Tag = True
+        x.Uid = System.Guid.NewGuid.ToString()
 
         'Ajoute l'élément dans la liste
         Dim elmt As New uWidgetEmpty
-        elmt.Uid = System.Guid.NewGuid.ToString()
+        elmt.Uid = x.Uid
         elmt.ZoneId = _CurrentIdZone
         elmt.Width = 100
         elmt.Height = 100
@@ -1858,12 +1863,11 @@ Class Window1
         elmt.X = 300
         elmt.Y = 300
         elmt.IsEmpty = True
-        elmt.Type = uWidgetEmpty.TypeOfWidget.Empty
+        elmt.Type = uWidgetEmpty.TypeOfWidget.Web
         elmt.ShowStatus = False
-        elmt.Etiquette = "Widget " & Canvas1.Children.Count
+        elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
         _ListElement.Add(elmt)
 
-        Dim y As New uWidgetEmpty
         elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
         x.Content = elmt
         Canvas1.Children.Add(x)
