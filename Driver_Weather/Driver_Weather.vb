@@ -493,7 +493,6 @@ Imports System.Threading
 
             ' Create a new XmlDocument   
             doc = New XmlDocument()
-
             Dim url As New Uri("http://xml.weather.com/weather/local/" & objet.adresse1 & "?cc=*&unit=m&dayf=4")
             Dim Request As HttpWebRequest = CType(HttpWebRequest.Create(url), System.Net.HttpWebRequest)
             ' Request.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7"
@@ -511,7 +510,7 @@ Imports System.Threading
                             Case "t"
                                 objet.ConditionActuel = Traduire(_child.FirstChild.Value)
                             Case "icon"
-                                objet.IconActuel = ExtractFile(_child.FirstChild.Value)
+                                objet.IconActuel = _child.FirstChild.Value
                             Case "hmid"
                                 If IsNumeric(_child.FirstChild.Value) Then objet.HumiditeActuel = _child.FirstChild.Value
                             Case "s"
@@ -520,13 +519,13 @@ Imports System.Threading
                         If _child.HasChildNodes = True Then
                             For Each _child2 As XmlNode In _child
                                 ' If _child2.Name.StartsWith("#text") = False Then Console.WriteLine(_child2.Name & ":" & _child2.InnerText)
-                                Select Case _child.Name
+                                Select Case _child2.Name
                                     Case "tmp"
                                         If IsNumeric(_child.FirstChild.Value) Then objet.TemperatureActuel = _child2.InnerText
                                     Case "t"
-                                        objet.ConditionActuel = Traduire(_child2.InnerText)
+                                        'objet.ConditionActuel = Traduire(_child2.InnerText)
                                     Case "icon"
-                                        objet.IconActuel = _child2.InnerText
+                                        'objet.IconActuel = _child2.InnerText
                                     Case "hmid"
                                         If IsNumeric(_child.FirstChild.Value) Then objet.HumiditeActuel = _child2.InnerText
                                     Case "s"
@@ -584,16 +583,16 @@ Imports System.Threading
                                         If IsNumeric(_child.FirstChild.Value) Then objet.MinJ3 = _child.FirstChild.Value
                                 End Select
                             Case "icon"
-                                Select Case idx
-                                    Case 0
-                                        objet.IconToday = ExtractFile(_child.FirstChild.Value)
-                                    Case 1
-                                        objet.IconJ1 = ExtractFile(_child.FirstChild.Value)
-                                    Case 2
-                                        objet.IconJ2 = ExtractFile(_child.FirstChild.Value)
-                                    Case 3
-                                        objet.IconJ3 = ExtractFile(_child.FirstChild.Value)
-                                End Select
+                                'Select Case idx
+                                '    Case 0
+                                '        objet.IconToday = _child.FirstChild.Value
+                                '    Case 1
+                                '        objet.IconJ1 = _child.FirstChild.Value
+                                '    Case 2
+                                '        objet.IconJ2 = _child.FirstChild.Value
+                                '    Case 3
+                                '        objet.IconJ3 = _child.FirstChild.Value
+                                'End Select
                             Case "t"
                                 Select Case idx
                                     Case 0
@@ -608,7 +607,7 @@ Imports System.Threading
                         End Select
                         If _child.HasChildNodes = True Then
                             For Each _child2 As XmlNode In _child
-                                Select Case _child.Name
+                                Select Case _child2.Name
                                     Case "hi"
                                         Select Case idx
                                             Case 0
@@ -634,13 +633,13 @@ Imports System.Threading
                                     Case "icon"
                                         Select Case idx
                                             Case 0
-                                                objet.IconToday = ExtractFile(_child2.InnerText)
+                                                objet.IconToday = _child2.InnerText
                                             Case 1
-                                                objet.IconJ1 = ExtractFile(_child2.InnerText)
+                                                objet.IconJ1 = _child2.InnerText
                                             Case 2
-                                                objet.IconJ2 = ExtractFile(_child2.InnerText)
+                                                objet.IconJ2 = _child2.InnerText
                                             Case 3
-                                                objet.IconJ3 = ExtractFile(_child2.InnerText)
+                                                objet.IconJ3 = _child2.InnerText
                                         End Select
                                     Case "t"
                                         Select Case idx
