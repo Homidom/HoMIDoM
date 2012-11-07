@@ -4014,6 +4014,39 @@ Imports System.Media
                 WriteLog("ERR: Send Lighting2 Exception : Adresse incorrecte")
             End Try
 
+            If dimlevel = 0 Then
+                dimlevel = 0
+            ElseIf dimlevel < 7 Then
+                dimlevel = 1
+            ElseIf dimlevel < 14 Then
+                dimlevel = 2
+            ElseIf dimlevel < 21 Then
+                dimlevel = 3
+            ElseIf dimlevel < 28 Then
+                dimlevel = 4
+            ElseIf dimlevel < 34 Then
+                dimlevel = 5
+            ElseIf dimlevel < 40 Then
+                dimlevel = 6
+            ElseIf dimlevel < 46 Then
+                dimlevel = 7
+            ElseIf dimlevel < 53 Then
+                dimlevel = 8
+            ElseIf dimlevel < 60 Then
+                dimlevel = 9
+            ElseIf dimlevel < 67 Then
+                dimlevel = 10
+            ElseIf dimlevel < 74 Then
+                dimlevel = 11
+            ElseIf dimlevel < 81 Then
+                dimlevel = 12
+            ElseIf dimlevel < 88 Then
+                dimlevel = 13
+            ElseIf dimlevel < 95 Then
+                dimlevel = 14
+            Else
+                dimlevel = 15
+            End If
             kar(LIGHTING2.level) = dimlevel
             kar(LIGHTING2.filler) = 0
 
@@ -4080,6 +4113,39 @@ Imports System.Media
             End Select
 
             If kar(LIGHTING5.cmnd) = LIGHTING5.sSetLevel Then
+                If dimlevel = 0 Then
+                    dimlevel = 0
+                ElseIf dimlevel < 7 Then
+                    dimlevel = 1
+                ElseIf dimlevel < 14 Then
+                    dimlevel = 2
+                ElseIf dimlevel < 21 Then
+                    dimlevel = 3
+                ElseIf dimlevel < 28 Then
+                    dimlevel = 4
+                ElseIf dimlevel < 34 Then
+                    dimlevel = 5
+                ElseIf dimlevel < 40 Then
+                    dimlevel = 6
+                ElseIf dimlevel < 46 Then
+                    dimlevel = 7
+                ElseIf dimlevel < 53 Then
+                    dimlevel = 8
+                ElseIf dimlevel < 60 Then
+                    dimlevel = 9
+                ElseIf dimlevel < 67 Then
+                    dimlevel = 10
+                ElseIf dimlevel < 74 Then
+                    dimlevel = 11
+                ElseIf dimlevel < 81 Then
+                    dimlevel = 12
+                ElseIf dimlevel < 88 Then
+                    dimlevel = 13
+                ElseIf dimlevel < 95 Then
+                    dimlevel = 14
+                Else
+                    dimlevel = 15
+                End If
                 kar(LIGHTING5.level) = dimlevel
             Else
                 kar(LIGHTING5.level) = 0
