@@ -4591,7 +4591,7 @@ Imports System.Media
             'My.Application.ChangeCulture("en-US")
 
             'log tous les paquets en mode debug
-            'WriteLog("DBG: WriteRetour receive from " & adresse & " (" & type & ") -> " & valeur)
+            If _DEBUG Then WriteLog("DBG: WriteRetour send to " & adresse & " (" & type & ") -> " & valeur)
 
             'on ne traite rien pendant les 6 premieres secondes
             If DateTime.Now > DateAdd(DateInterval.Second, 6, dateheurelancement) Then
