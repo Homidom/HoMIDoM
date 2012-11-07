@@ -606,6 +606,9 @@ Imports HoMIDom.HoMIDom.Device
             _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
             _DeviceSupport.Add(ListeDevices.GENERIQUESTRING)
             _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURE)
+            _DeviceSupport.Add(ListeDevices.VITESSEVENT)
 
 
             'Parametres avancés

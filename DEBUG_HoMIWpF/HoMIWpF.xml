@@ -6,7 +6,15 @@ HoMIWpF
 </name>
 </assembly>
 <members>
-<member name="M:HoMIWpF.uWidgetEmpty.InitializeComponent">
+<member name="M:HoMIWpF.uEditValue.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.uEditValue">
+	<summary>
+uEditValue
+</summary>
+</member><member name="M:HoMIWpF.uWidgetEmpty.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
@@ -114,6 +122,10 @@ uReleve
 	<summary>
 InitializeComponent
 </summary>
+</member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
+	<summary>
+Colorpicker
+</summary>
 </member><member name="M:HoMIWpF.uVariateur.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -121,6 +133,14 @@ InitializeComponent
 </member><member name="T:HoMIWpF.uVariateur">
 	<summary>
 uVariateur
+</summary>
+</member><member name="M:HoMIWpF.uRSS.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.uRSS">
+	<summary>
+uRSS
 </summary>
 </member><member name="M:HoMIWpF.uMeteos.InitializeComponent">
 	<summary>
