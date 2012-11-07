@@ -7209,6 +7209,8 @@ Namespace HoMIDom
 
                 If IO.File.Exists(MyPath) = False Then
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReadTemplate", "Erreur le fichier n'existe pas: " & MyPath)
+                    Return Nothing
+                    Exit Function
                 End If
 
                 Dim xml As XML = Nothing

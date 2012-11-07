@@ -730,10 +730,8 @@
             </StackPanel>
          </StackPanel>
             
-            <Rectangle x:Name="rectangle1" Stroke="Black" Width="0" Height="0" Fill="#33FFFFFF" Margin="0,40,30,0" HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Collapsed" />
-
             <Canvas x:Name="Caneva_grid" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" MinWidth="270" MinHeight="500" Background="#33FFFFFF">
-                <Rectangle x:Name="rectangle" Stroke="Black" RadiusX="20" RadiusY="20" RenderTransformOrigin="0.5,0.5" Width="70" d:LayoutOverrides="Margin" IsHitTestVisible="True" Height="70" >
+            <Rectangle x:Name="rectangle" Stroke="Black" RadiusX="20" RadiusY="20" RenderTransformOrigin="0.5,0.5" Width="70" d:LayoutOverrides="Margin" Height="70" >
                     <Rectangle.Fill>
                         <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                             <LinearGradientBrush.RelativeTransform>
@@ -753,7 +751,7 @@
                     <Rectangle.Effect>
                         <DropShadowEffect RenderingBias="Quality" ShadowDepth="11" Opacity="0.555"/>
                     </Rectangle.Effect>
-                </Rectangle>
+            </Rectangle>
 
                 <Grid x:Name="grid_Telecommande" Width="50" Margin="10" ShowGridLines="True" UseLayoutRounding="True" Height="50"  />
 
