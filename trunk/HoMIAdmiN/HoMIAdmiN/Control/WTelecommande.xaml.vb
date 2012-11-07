@@ -22,8 +22,11 @@
         TxtCmdName.Text = ""
         TxtCmdRepeat.Text = "0"
         TxtCmdData.Text = ""
+        ImgCommande.Source = Nothing
+        ImgCommande.Tag = ""
 
         BtnNewCmd.Visibility = Windows.Visibility.Hidden
+        BtnSaveCmd.Visibility = Windows.Visibility.Visible
         FlagNewCmd = True
     End Sub
 
@@ -164,13 +167,7 @@
                 If retour <> "" Then
                     ImgCommande.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
                     ImgCommande.Tag = retour
-
-                    Dim idx As Integer = ListCmd.SelectedIndex
-                    If idx >= 0 Then
-                        With x.Commandes.Item(idx)
-                            .Picture = ImgCommande.Tag
-                        End With
-                    End If
+                    BtnSaveCmd.Visibility = Windows.Visibility.Visible
                 End If
                 frm.Close()
             Else
@@ -193,6 +190,7 @@
             Dim i As Integer = ListCmd.SelectedIndex
             If i < 0 Then Exit Sub
 
+            BtnSaveCmd.Visibility = Windows.Visibility.Collapsed
             BtnDelCmd.Visibility = Windows.Visibility.Visible
             BtnTstCmd.Visibility = Windows.Visibility.Visible
             TxtCmdName.Text = x.Commandes.Item(i).Name
@@ -209,6 +207,10 @@
         Catch Ex As Exception
             MessageBox.Show("Erreur ListCmd_SelectionChanged: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+    Private Sub TxtCmdData_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtCmdData.TextChanged
+        BtnSaveCmd.Visibility = Windows.Visibility.Visible
     End Sub
 
     ''' <summary>
@@ -365,7 +367,7 @@
                 Dim tpl As String = Replace(_list(i).File, ".xml", "") 'récupère le nom du template
                 cbTemplate.Items.Add(tpl) 'ajoute le nom du template dans la liste
 
-                'si le device compote un template (qui est stocké dans son modele)
+                'si le device comporte un template (qui est stocké dans son modele)
                 If x IsNot Nothing Then
                     If x.Modele <> "" Then
                         If tpl = x.Modele.ToString Then
@@ -391,6 +393,7 @@
             Next
             cbTemplate.SelectedIndex = idx
 
+            BtnSaveCmd.Visibility = Windows.Visibility.Collapsed
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'ouverture de la fenêtre d'édition:" & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -414,16 +417,19 @@
                 End If
             End If
 
+            'Augmente la hauteur de la grille
+            grid_Telecommande.Height = slider_Row.Value * 50
+            'Augmente la hauteur du background
+            rectangle.Height = slider_Row.Value * 50 + 20
+            Caneva_grid.Height = slider_Row.Value * 50 + 60
+
             '==== Modification de la grille et du background pour chaque division du slider ====
             If slider_Row.Value > 1 Then
                 'Si la grille contient moins de ligne que définit
                 If Me.grid_Telecommande.RowDefinitions.Count < slider_Row.Value Then
                     Dim diff As Integer = slider_Row.Value - Me.grid_Telecommande.RowDefinitions.Count
                     For i As Integer = 1 To diff
-                        'Augmente la hauteur de la grille
-                        grid_Telecommande.Height = slider_Row.Value * 50
-                        'Augmente la hauteur du background
-                        rectangle.Height = slider_Row.Value * 50 + 20
+
                         'Ajoute une ligne à la grille
                         Dim rowDef As New RowDefinition
                         grid_Telecommande.RowDefinitions.Add(rowDef)
@@ -448,10 +454,6 @@
                 If Me.grid_Telecommande.RowDefinitions.Count > slider_Row.Value Then
                     Dim diff As Integer = Me.grid_Telecommande.RowDefinitions.Count - slider_Row.Value
                     For i As Integer = 1 To diff
-                        'Augmente la hauteur de la grille
-                        grid_Telecommande.Height = slider_Row.Value * 50
-                        'Augmente la hauteur du background
-                        rectangle.Height = slider_Row.Value * 50 + 20
                         'Retire une ligne à la grille
                         grid_Telecommande.RowDefinitions.RemoveAt(Me.grid_Telecommande.RowDefinitions.Count - 1)
                     Next
@@ -488,16 +490,19 @@ Retour:
                 End If
             End If
 
+            'Augmente la largeur de la grille
+            grid_Telecommande.Width = slider_Column.Value * 50
+            'Augmente la largeur du background
+            rectangle.Width = slider_Column.Value * 50 + 20
+            Caneva_grid.Width = slider_Column.Value * 50 + 60
+
             '==== Modification de la grille et du background pour chaque division du slider ====
             If slider_Column.Value > 1 Then
                 'Si la grille contient moins de ligne que définit
                 If Me.grid_Telecommande.ColumnDefinitions.Count < slider_Column.Value Then
                     Dim diff As Integer = slider_Column.Value - Me.grid_Telecommande.ColumnDefinitions.Count
                     For i As Integer = 1 To diff
-                        'Augmente la largeur de la grille
-                        grid_Telecommande.Width = slider_Column.Value * 50
-                        'Augmente la largeur du background
-                        rectangle.Width = slider_Column.Value * 50 + 20
+
                         'Ajoute une colonne à la grille
                         Dim colDef As New ColumnDefinition
                         grid_Telecommande.ColumnDefinitions.Add(colDef)
@@ -516,15 +521,14 @@ Retour:
                             grid_Telecommande.Children.Add(x)
                         Next
                     Next
+
+                    Me.Width = grid_Telecommande.Width + 300
                 End If
+
                 'Si la grille contient plus de colonne que définit
                 If Me.grid_Telecommande.ColumnDefinitions.Count > slider_Column.Value Then
                     Dim diff As Integer = Me.grid_Telecommande.ColumnDefinitions.Count - slider_Column.Value
                     For i As Integer = 1 To diff
-                        'Augmente la hauteur de la grille
-                        grid_Telecommande.Height = slider_Row.Value * 50
-                        'Augmente la hauteur du background
-                        rectangle.Height = slider_Row.Value * 50 + 20
                         'Retire une ligne à la grille
                         grid_Telecommande.ColumnDefinitions.RemoveAt(Me.grid_Telecommande.ColumnDefinitions.Count - 1)
                     Next
@@ -539,6 +543,7 @@ Retour:
                     Next
                 End If
             End If
+
 
             'Remplir()
         Catch ex As Exception
@@ -609,7 +614,9 @@ Retour:
                 ' Utiliser uri comme vous le souhaitez
                 Dim img1 As New ImageButton
                 If InStr(e.Data.GetData(GetType(Image)).parent.GetType.ToString, "Canvas") Then
-                    e.Data.GetData(GetType(Image)).parent.children.clear()
+                    If e.Data.GetData(GetType(Image)).name <> "ImgCommande" Then
+                        e.Data.GetData(GetType(Image)).parent.children.clear()
+                    End If
                 End If
                 img1.Source = e.Data.GetData(GetType(Image)).source
                 img1.Tag = e.Data.GetData(GetType(Image)).Tag
@@ -768,5 +775,13 @@ Retour:
         Catch ex As Exception
             MessageBox.Show("Erreur: " & ex.ToString)
         End Try
+    End Sub
+
+    Private Sub TxtCmdName_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtCmdName.TextChanged
+        BtnSaveCmd.Visibility = Windows.Visibility.Visible
+    End Sub
+
+    Private Sub TxtCmdRepeat_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtCmdRepeat.TextChanged
+        BtnSaveCmd.Visibility = Windows.Visibility.Visible
     End Sub
 End Class

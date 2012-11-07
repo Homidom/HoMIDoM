@@ -125,6 +125,10 @@ Public Class uWidgetEmpty
                         Case HoMIDom.HoMIDom.Device.ListeDevices.METEO
                             Me.Visibility = Windows.Visibility.Hidden
                         Case HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA
+                            ShowStatus = False
+                            Dim x As New uTelecommande(_Id)
+                            AddHandler x.SendCommand, AddressOf SendCommand
+                            StkPopup.Children.Add(x)
                         Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT
                             LblStatus.Content = "Status: " & _dev.Value
                         Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL
@@ -1126,6 +1130,27 @@ Public Class uWidgetEmpty
                 _FlagBlock = True
                 myService.ExecuteDeviceCommand(IdSrv, Id, x)
                 _FlagBlock = False
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            _FlagBlock = False
+        End Try
+    End Sub
+
+    Private Sub SendCommand(ByVal Commande As String)
+        Try
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If _dev IsNot Nothing Then
+                Dim retour As String = myService.TelecommandeSendCommand(IdSrv, _dev.ID, Commande)
+                If retour <> 0 Then
+                    MessageBox.Show(retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                End If
+
+                If StkPopup.Children.Count > 0 Then
+                    If Popup1.IsOpen = True Then
+                        Popup1.IsOpen = False
+                    End If
+                End If
             End If
         Catch ex As Exception
             MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
