@@ -341,8 +341,23 @@ Imports System.Management
         'récupération des paramétres avancés
         Try
             _DEBUG = _Parametres.Item(0).Valeur
-            _MODE = _Parametres.Item(1).Valeur
+            _MODE = _Parametres.Item(1).Valeur.ToString.ToUpper
             '_STORAGE = _Parametres.Item(2).Valeur
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+        End Try
+
+        'Verification du MODE de connexion
+        Try
+            'verif si le mode choisi par le user est bon
+            If _MODE <> "PDU" And _MODE <> "TEXTE" Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Driver non démarré : Le mode '" & _MODE & "' n'est pas correct, choisi PDU ou TEXTE")
+                _IsConnect = False
+                Exit Sub
+            End If
+            'interroge le tel/modem pour verifier si ce mode est supporté
+
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
         End Try
