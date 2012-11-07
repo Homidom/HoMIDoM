@@ -6,6 +6,7 @@ Imports System.Drawing.Imaging
 Public Class uMedia
 
     Dim _ShowToolBar As Boolean = True
+    Dim _ShowTag As Boolean = True
     Dim _ShowBtnPlay As Boolean = True
     Dim _ShowBtnPause As Boolean = True
     Dim _ShowBtnStop As Boolean = True
@@ -20,11 +21,24 @@ Public Class uMedia
     Dim _Volume As Double = 0.5
     Dim _VideoWidth As Double = 300
     Dim _VideoHeight As Double = 300
+    Dim _IsLocal As Boolean = True 'Si true on utilise le lecteur media local
     Public Filter As New List(Of String)
 
     Dim _Uri As String = ""
     Dim dt As DispatcherTimer = New DispatcherTimer()
     Private Const THUMBNAIL_DATA As Integer = 20507
+
+    'EVENT *************************************************
+    Public Event Play()
+    Public Event Pause()
+    Public Event [Stop]()
+    Public Event Avance()
+    Public Event Recul()
+    Public Event PreviousChap()
+    Public Event NextChap()
+    Public Event Mute()
+    Public Event VolumeUp()
+    Public Event VolumeDown()
 
     Public Sub New()
 
@@ -34,7 +48,7 @@ Public Class uMedia
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         ShowBtnReculTitre = False
         ShowBtnAvanceTitre = False
-        _Volume = MediaElement1.Volume
+        If _IsLocal Then _Volume = MediaElement1.Volume
 
         AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
         dt.Interval = New TimeSpan(0, 0, 1)
@@ -51,6 +65,20 @@ Public Class uMedia
                 Toolbar.Visibility = Windows.Visibility.Visible
             Else
                 Toolbar.Visibility = Windows.Visibility.Collapsed
+            End If
+        End Set
+    End Property
+
+    Public Property ShowTag As Boolean
+        Get
+            Return _ShowTag
+        End Get
+        Set(ByVal value As Boolean)
+            _ShowTag = value
+            If value = True Then
+                StkInfo.Visibility = Windows.Visibility.Visible
+            Else
+                StkInfo.Visibility = Windows.Visibility.Collapsed
             End If
         End Set
     End Property
@@ -257,31 +285,51 @@ Public Class uMedia
         End Set
     End Property
 
+    Public Property IsLocal As Boolean
+        Get
+            Return _IsLocal
+        End Get
+        Set(ByVal value As Boolean)
+            _IsLocal = value
+        End Set
+    End Property
+
     Private Sub BtnPlay_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnPlay.MouseDown
-        MediaElement1.LoadedBehavior = MediaState.Play
+        RaiseEvent Play()
+        If _IsLocal Then MediaElement1.LoadedBehavior = MediaState.Play
     End Sub
 
     Private Sub BtnPause_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnPause.MouseDown
-        MediaElement1.LoadedBehavior = MediaState.Pause
+        RaiseEvent Pause()
+        If _IsLocal Then MediaElement1.LoadedBehavior = MediaState.Pause
     End Sub
 
     Private Sub BtnStop_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnStop.MouseDown
-        MediaElement1.LoadedBehavior = MediaState.Stop
-        dt.Stop()
-        SliderSeek.Value = 0
+        RaiseEvent Stop()
+        If _IsLocal Then
+            MediaElement1.LoadedBehavior = MediaState.Stop
+            dt.Stop()
+            SliderSeek.Value = 0
+        End If
         ImgThumb.Source = Nothing
     End Sub
 
     Private Sub BtnRecul_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnRecul.MouseDown
-        MediaElement1.Position = MediaElement1.Position - TimeSpan.FromSeconds(10)
+        RaiseEvent Recul()
+        If _IsLocal Then MediaElement1.Position = MediaElement1.Position - TimeSpan.FromSeconds(10)
+    End Sub
+
+    Private Sub BtnReculTitre_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnReculTitre.MouseDown
+        RaiseEvent PreviousChap()
     End Sub
 
     Private Sub BtnAvance_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnAvance.MouseDown
-        MediaElement1.Position = MediaElement1.Position + TimeSpan.FromSeconds(10)
+        RaiseEvent Avance()
+        If _IsLocal Then MediaElement1.Position = MediaElement1.Position + TimeSpan.FromSeconds(10)
     End Sub
 
     Private Sub BtnAvanceTitre_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnAvanceTitre.MouseDown
-
+        RaiseEvent NextChap()
     End Sub
 
     Private Sub BtnOpen_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnOpen.MouseDown
@@ -299,7 +347,6 @@ Public Class uMedia
                     End If
                 Next
             End If
-
 
             If ofd.ShowDialog = Forms.DialogResult.OK Then
                 Dim X As TagLib.File
@@ -328,8 +375,8 @@ Public Class uMedia
 
                 X = Nothing
 
-                MediaElement1.Source = New Uri(ofd.FileName)
-                MediaElement1.LoadedBehavior = MediaState.Play
+                If _IsLocal Then MediaElement1.Source = New Uri(ofd.FileName)
+                If _IsLocal Then MediaElement1.LoadedBehavior = MediaState.Play
             End If
 
         Catch ex As Exception
@@ -340,7 +387,7 @@ Public Class uMedia
     End Sub
 
     Private Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
-        SliderSeek.Value = MediaElement1.Position.TotalSeconds
+        If _IsLocal Then SliderSeek.Value = MediaElement1.Position.TotalSeconds
     End Sub
 
     Private Sub MediaElement1_MediaOpened(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MediaElement1.MediaOpened
@@ -356,24 +403,28 @@ Public Class uMedia
         ' Overloaded constructor takes the arguments days, hours, minutes, seconds, miniseconds. 
         ' Create a TimeSpan with miliseconds equal to the slider value. 
         Dim ts As New TimeSpan(0, 0, 0, 0, SliderValue)
-        MediaElement1.Position = ts
-
+        If _IsLocal Then MediaElement1.Position = ts
     End Sub
 
     Private Sub BtnVolumeMute_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnVolumeMute.MouseDown
         _Volume = 0
-        MediaElement1.Volume = _Volume
+        RaiseEvent Mute()
+        If _IsLocal Then MediaElement1.Volume = _Volume
     End Sub
 
     Private Sub BtnVolumeDown_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnVolumeDown.MouseDown
         _Volume -= 0.1
         If _Volume < 0 Then _Volume = 0
-        MediaElement1.Volume = _Volume
+        RaiseEvent VolumeDown()
+        If _IsLocal Then MediaElement1.Volume = _Volume
     End Sub
 
     Private Sub BtnVolumeUp_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnVolumeUp.MouseDown
         _Volume += 0.1
         If _Volume > 0 Then _Volume = 1
-        MediaElement1.Volume = _Volume
+        RaiseEvent VolumeUp()
+        If _IsLocal Then MediaElement1.Volume = _Volume
     End Sub
+
+
 End Class

@@ -40,7 +40,11 @@
             <Label Width="120" Content="Rotation:" Foreground="White"/>
                 <TextBox Name="TxtRotation" Width="150" />
             </StackPanel>
-            <StackPanel Name="StkPicture" Orientation="Horizontal" >
+                        <StackPanel Orientation="Horizontal" >
+                            <CheckBox Name="ChkEditValue" Content="Valeur Editable" Foreground=" White"/>
+                        </StackPanel>
+
+                        <StackPanel Name="StkPicture" Orientation="Horizontal" >
             <Label Width="120" Content="Picture:" Foreground="White"/>
                     <Border BorderThickness="2" BorderBrush="Black" >
                         <Image Name="ImgPicture" Width="50" Height=" 50"/>
@@ -65,7 +69,11 @@
                             <Label Width="120" Content="URL:" Foreground="White"/>
                             <TextBox Name="TxtURL" Width="150" Text=""/>
                         </StackPanel>
+                        <StackPanel Orientation="Horizontal" Name="StkRss" Visibility="Collapsed" >
+                            <Label Width="120" Content="URL Rss:" Foreground="White"/>
+                            <TextBox Name="TxtURLRss" Width="150" Text=""/>
                         </StackPanel>
+                    </StackPanel>
     </GroupBox>
 
             <GroupBox Name="GrpEditAction" Visibility="Collapsed" Margin="2"  Width="270">

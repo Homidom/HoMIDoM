@@ -6,6 +6,7 @@ Public Class uWidgetEmpty
         Empty = 0
         Web = 1
         Media = 2
+        Rss = 3
         Device = 99
     End Enum
 
@@ -43,10 +44,15 @@ Public Class uWidgetEmpty
     Dim _dt As DispatcherTimer
     Dim _CurrentValue As Object = Nothing
     Dim _type As TypeOfWidget = TypeOfWidget.Empty
+    Dim _CanEditValue As Boolean = False
 
     'Variables Widget Web
     Dim _URL As String = ""
     Dim _Webbrowser As WebBrowser = Nothing
+
+    'Variables Widget RSS
+    Dim _URLRss As String
+    Dim _RSS As uRSS = Nothing
 
     'Event
     Public Event Click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
@@ -87,6 +93,25 @@ Public Class uWidgetEmpty
                             StkPopup.Children.Add(x)
                         Case HoMIDom.HoMIDom.Device.ListeDevices.AUDIO
                             LblStatus.Content = "Status: " & _dev.Value
+                            Dim x As New uMedia
+                            x.IsLocal = False
+                            x.ShowVideo = False
+                            x.ShowTag = False
+                            x.ShowBtnAvance = False
+                            x.ShowBtnRecul = False
+                            x.ShowSliderTime = False
+                            AddHandler x.Play, AddressOf AudioPlay
+                            AddHandler x.Pause, AddressOf AudioPause
+                            AddHandler x.Stop, AddressOf AudioStop
+                            AddHandler x.Avance, AddressOf AudioAvance
+                            AddHandler x.Recul, AddressOf AudioRecul
+                            AddHandler x.NextChap, AddressOf AudioNextChap
+                            AddHandler x.PreviousChap, AddressOf AudioPreviousChap
+                            AddHandler x.Mute, AddressOf AudioMute
+                            AddHandler x.VolumeUp, AddressOf AudioVolumeUp
+                            AddHandler x.VolumeDown, AddressOf AudioVolumeDown
+
+                            StkPopup.Children.Add(x)
                         Case HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE
                             LblStatus.Content = "Status: " & _dev.Value
                         Case HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE
@@ -105,10 +130,25 @@ Public Class uWidgetEmpty
                             LblStatus.Content = "Status: " & _dev.Value
                         Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING
                             LblStatus.Content = "Status: " & _dev.Value
+
+                            Dim x As New uEditValue
+                            AddHandler x.ChangeValue, AddressOf ChangeValue
+                            StkPopup.Children.Add(x)
+
                         Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN
                             LblStatus.Content = "Status: " & _dev.Value
+
+                            Dim x As New uEditValue
+                            AddHandler x.ChangeValue, AddressOf ChangeValue
+                            StkPopup.Children.Add(x)
+
                         Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE
                             LblStatus.Content = "Status: " & _dev.Value
+
+                            Dim x As New uEditValue
+                            AddHandler x.ChangeValue, AddressOf ChangeValue
+                            StkPopup.Children.Add(x)
+
                         Case HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE
                             LblStatus.Content = "Status: " & _dev.Value & "%"
                         Case HoMIDom.HoMIDom.Device.ListeDevices.LAMPE
@@ -147,6 +187,10 @@ Public Class uWidgetEmpty
                             LblStatus.Content = "Status: " & _dev.Value & "°C"
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE
                             LblStatus.Content = "Status: " & _dev.Value & "°C"
+                            Dim x As New uEditValue
+                            AddHandler x.ChangeValue, AddressOf ChangeValue
+                            StkPopup.Children.Add(x)
+
                         Case HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT
                             LblStatus.Content = "Status: " & _dev.Value
                         Case HoMIDom.HoMIDom.Device.ListeDevices.VOLET
@@ -232,15 +276,35 @@ Public Class uWidgetEmpty
         Set(ByVal value As TypeOfWidget)
             _type = value
 
-            Select Case _type
-                Case TypeOfWidget.Web
-                    StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
-                    StkTool.Visibility = Windows.Visibility.Visible
+            Try
+                Select Case _type
+                    Case TypeOfWidget.Web
+                        StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
+                        StkTool.Visibility = Windows.Visibility.Visible
 
-                    _Webbrowser = New WebBrowser
-                    _Webbrowser.VerticalAlignment = Windows.VerticalAlignment.Stretch
-                    StkTool.Children.Add(_Webbrowser)
-            End Select
+                        _Webbrowser = New WebBrowser
+                        _Webbrowser.VerticalAlignment = Windows.VerticalAlignment.Stretch
+                        StkTool.Children.Add(_Webbrowser)
+                    Case TypeOfWidget.Rss
+                        StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
+                        StkTool.Visibility = Windows.Visibility.Visible
+
+                        _RSS = New uRSS
+                        _RSS.VerticalAlignment = Windows.VerticalAlignment.Stretch
+                        StkTool.Children.Add(_RSS)
+                End Select
+            Catch ex As Exception
+                MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
+        End Set
+    End Property
+
+    Public Property CanEditValue As Boolean
+        Get
+            Return _CanEditValue
+        End Get
+        Set(ByVal value As Boolean)
+            _CanEditValue = value
         End Set
     End Property
 
@@ -474,6 +538,19 @@ Public Class uWidgetEmpty
     End Sub
 
 #End Region
+
+#Region "Property/Sub Rss"
+    Public Property UrlRss As String
+        Get
+            Return _URLRss
+        End Get
+        Set(ByVal value As String)
+            _URLRss = value
+            If _RSS IsNot Nothing Then _RSS.URIRss = value
+        End Set
+    End Property
+#End Region
+
 
 #Region "Property Actions"
     Public Property Action_On_Click As List(Of cWidget.Action)
@@ -729,6 +806,9 @@ Public Class uWidgetEmpty
             Case TypeOfWidget.Web
                 _Webbrowser.Width = Me.ActualWidth
                 _Webbrowser.Height = Me.ActualHeight - 20
+            Case TypeOfWidget.Rss
+                _RSS.Width = Me.ActualWidth
+                _RSS.Height = Me.ActualHeight - 20
         End Select
     End Sub
 
@@ -1157,6 +1237,221 @@ Public Class uWidgetEmpty
             _FlagBlock = False
         End Try
     End Sub
+
+    Private Sub ChangeValue(ByVal Value As String)
+        Try
+            Dim _value As Object = Nothing
+            Dim _flag As Boolean = False
+
+            If _dev IsNot Nothing And Value <> "" Then
+                If _dev.Type = HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN Then
+                    Try
+                        _value = Value
+                        _flag = True
+                    Catch ex As Exception
+                        MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                        _flag = False
+                    End Try
+                End If
+                If _dev.Type = HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE Or HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE Then
+                    If IsNumeric(Value) Then
+                        _value = Value
+                        _flag = True
+                    Else
+                        MessageBox.Show("Erreur: La valeur saisie doit être numérique", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                        _flag = False
+                    End If
+                End If
+                If _dev.Type = HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING Then
+                    _value = Value
+                    _flag = True
+                End If
+
+                If _flag = True Then
+                    _FlagBlock = True
+                    myService.ChangeValueOfDevice(IdSrv, _dev.ID, _value)
+                    _FlagBlock = False
+                End If
+            End If
+
+            If StkPopup.Children.Count > 0 Then
+                If Popup1.IsOpen = True Then
+                    Popup1.IsOpen = False
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            _FlagBlock = False
+        End Try
+    End Sub
+
+    Private Sub AudioPlay()
+        Try
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If _dev IsNot Nothing Then
+                x.Nom = "Play"
+            End If
+            x.Parametres = Nothing
+
+            myService.ExecuteDeviceCommand(IdSrv, Id, x)
+
+            If StkPopup.Children.Count > 0 Then
+                If Popup1.IsOpen = True Then
+                    Popup1.IsOpen = False
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub AudioPause()
+        Try
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If _dev IsNot Nothing Then
+                x.Nom = "PauseAudio"
+            End If
+            x.Parametres = Nothing
+
+            myService.ExecuteDeviceCommand(IdSrv, Id, x)
+
+            If StkPopup.Children.Count > 0 Then
+                If Popup1.IsOpen = True Then
+                    Popup1.IsOpen = False
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub AudioStop()
+        Try
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If _dev IsNot Nothing Then
+                x.Nom = "StopAudio"
+            End If
+            x.Parametres = Nothing
+
+            myService.ExecuteDeviceCommand(IdSrv, Id, x)
+
+            If StkPopup.Children.Count > 0 Then
+                If Popup1.IsOpen = True Then
+                    Popup1.IsOpen = False
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub AudioAvance()
+
+    End Sub
+
+    Private Sub AudioRecul()
+
+    End Sub
+
+    Private Sub AudioNextChap()
+        Try
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If _dev IsNot Nothing Then
+                x.Nom = "NextAudio"
+            End If
+            x.Parametres = Nothing
+
+            myService.ExecuteDeviceCommand(IdSrv, Id, x)
+
+            If StkPopup.Children.Count > 0 Then
+                If Popup1.IsOpen = True Then
+                    Popup1.IsOpen = False
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub AudioPreviousChap()
+        Try
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If _dev IsNot Nothing Then
+                x.Nom = "PreviousAudio"
+            End If
+            x.Parametres = Nothing
+
+            myService.ExecuteDeviceCommand(IdSrv, Id, x)
+
+            If StkPopup.Children.Count > 0 Then
+                If Popup1.IsOpen = True Then
+                    Popup1.IsOpen = False
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub AudioMute()
+        Try
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If _dev IsNot Nothing Then
+                x.Nom = "VolumeMuteAudio"
+            End If
+            x.Parametres = Nothing
+
+            myService.ExecuteDeviceCommand(IdSrv, Id, x)
+
+            If StkPopup.Children.Count > 0 Then
+                If Popup1.IsOpen = True Then
+                    Popup1.IsOpen = False
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub AudioVolumeUp()
+        Try
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If _dev IsNot Nothing Then
+                x.Nom = "VolumeUpAudio"
+            End If
+            x.Parametres = Nothing
+
+            myService.ExecuteDeviceCommand(IdSrv, Id, x)
+
+            If StkPopup.Children.Count > 0 Then
+                If Popup1.IsOpen = True Then
+                    Popup1.IsOpen = False
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub AudioVolumeDown()
+        Try
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If _dev IsNot Nothing Then
+                x.Nom = "VolumeDownAudio"
+            End If
+            x.Parametres = Nothing
+
+            myService.ExecuteDeviceCommand(IdSrv, Id, x)
+
+            If StkPopup.Children.Count > 0 Then
+                If Popup1.IsOpen = True Then
+                    Popup1.IsOpen = False
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
 #End Region
 
     Private Sub Stk1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Me.MouseDown
@@ -1197,10 +1492,18 @@ Public Class uWidgetEmpty
                     Exit Sub
                 End If
                 If StkPopup.Children.Count > 0 Then
-                    If Popup1.IsOpen = False Then
-                        Popup1.IsOpen = True
+                    If (_dev.Type = HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE Or HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN Or HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING Or HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE) And _CanEditValue = True Then
+                        If Popup1.IsOpen = False Then
+                            Popup1.IsOpen = True
+                        Else
+                            Popup1.IsOpen = False
+                        End If
                     Else
-                        Popup1.IsOpen = False
+                        If Popup1.IsOpen = False Then
+                            Popup1.IsOpen = True
+                        Else
+                            Popup1.IsOpen = False
+                        End If
                     End If
                 End If
             End If
@@ -1212,6 +1515,13 @@ Public Class uWidgetEmpty
             Case TypeOfWidget.Web
                 _Webbrowser.Width = Me.ActualWidth
                 _Webbrowser.Height = Me.ActualHeight - 20
+            Case TypeOfWidget.Rss
+                _RSS.Width = Me.ActualWidth
+                _RSS.Height = Me.ActualHeight - 20
         End Select
     End Sub
+
+
+
+
 End Class

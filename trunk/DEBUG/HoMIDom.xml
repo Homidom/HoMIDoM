@@ -1390,6 +1390,15 @@ HoMIDom
 	<param name="DriverId"></param>
 	<param name="Action"></param>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ChangeValueOfDevice(System.String,System.String,System.Object)">
+	<summary>
+ Permet de changer la valeur d'un device
+ </summary>
+	<param name="idsrv"></param>
+	<param name="IdDevice"></param>
+	<param name="Value"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetDeviceNoMaJ(System.Object)">
 	<summary>
  Retourne la liste des devices non à jour
@@ -2195,6 +2204,15 @@ HoMIDom
 	<param name="Ville">Ville du user</param>
 	<param name="CodePostal">Code Postal du user</param>
 	<returns>ID du user, -1 si erreur, message d'erreur, 99 si ID du serveur erroné</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ChangeValueOfDevice(System.String,System.String,System.Object)">
+	<summary>
+ Permet de changer la valeur d'un device
+ </summary>
+	<param name="idsrv"></param>
+	<param name="IdDevice"></param>
+	<param name="Value"></param>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllDevices(System.String)">
 	<summary>

@@ -140,6 +140,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CtrlDevice\uEditValue.xaml.vb">
+      <DependentUpon>uEditValue.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CtrlDevice\uRSS.xaml.vb">
+      <DependentUpon>uRSS.xaml</DependentUpon>
+    </Compile>
     <Compile Include="uHisto.xaml.vb">
       <DependentUpon>uHisto.xaml</DependentUpon>
     </Compile>
@@ -165,11 +171,19 @@
     <Compile Include="WWidgetProperty.xaml.vb">
       <DependentUpon>WWidgetProperty.xaml</DependentUpon>
     </Compile>
+    <Page Include="CtrlDevice\uEditValue.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CtrlDevice\uFreeBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CtrlDevice\uOnOff.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CtrlDevice\uRSS.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

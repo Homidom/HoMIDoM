@@ -17,6 +17,7 @@ Public Class WWidgetProperty
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             ChkShowStatus.IsChecked = Obj.ShowStatus
             ChkShowEtiq.IsChecked = Obj.ShowEtiquette
+            ChkEditValue.IsChecked = Obj.CanEditValue
             TxtEtiq.Text = Obj.Etiquette
             TxtX.Text = Obj.X
             TxtY.Text = Obj.Y
@@ -28,6 +29,7 @@ Public Class WWidgetProperty
             ColorPicker1.SelectedColor = Obj.ColorBackGround
             ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
             TxtURL.Text = Obj.URL
+            TxtURLRss.Text = Obj.UrlRss
 
             If Obj.IsEmpty = False Then
                 BtnEditAction.Visibility = Windows.Visibility.Collapsed
@@ -91,6 +93,14 @@ Public Class WWidgetProperty
                         BtnEditAction.Visibility = Windows.Visibility.Collapsed
                         BtnEditVisu.Visibility = Windows.Visibility.Collapsed
                         BtnDelete.Visibility = Windows.Visibility.Visible
+                    Case uWidgetEmpty.TypeOfWidget.Rss
+                        StkPicture.Visibility = Visibility.Collapsed
+                        StkStatus.Visibility = Visibility.Collapsed
+                        StkWeb.Visibility = Windows.Visibility.Collapsed
+                        StkRss.Visibility = Windows.Visibility.Visible
+                        BtnEditAction.Visibility = Windows.Visibility.Collapsed
+                        BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                        BtnDelete.Visibility = Windows.Visibility.Visible
                 End Select
 
             End If
@@ -101,14 +111,12 @@ Public Class WWidgetProperty
 
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
-
-
-
     End Sub
 
     Private Sub BtnOk_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOk.Click
         Obj.ShowStatus = ChkShowStatus.IsChecked
         Obj.ShowEtiquette = ChkShowEtiq.IsChecked
+        Obj.CanEditValue = ChkEditValue.IsChecked
         Obj.Etiquette = TxtEtiq.Text
         Obj.X = TxtX.Text
         Obj.Y = TxtY.Text
@@ -118,6 +126,7 @@ Public Class WWidgetProperty
         Obj.DefautLabelStatus = TxtDefStatus.Text
         Obj.ColorBackGround = ColorPicker1.SelectedColor
         Obj.URL = TxtURL.Text
+        Obj.UrlRss = TxtURLRss.Text
 
         DialogResult = True
     End Sub
@@ -144,7 +153,6 @@ Public Class WWidgetProperty
             Return Nothing
         End If
     End Function
-
 
     Private Sub BtnEditAction_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnEditAction.Click
         GrpEditAction.Visibility = Windows.Visibility.Visible
@@ -522,7 +530,6 @@ Public Class WWidgetProperty
             ImgVisu.Visibility = Windows.Visibility.Visible
         End If
     End Sub
-
 
     Private Sub BtnNewVisu_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewVisu.Click
         BtnOkVisu.Visibility = Windows.Visibility.Visible

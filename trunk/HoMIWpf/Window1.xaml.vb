@@ -499,7 +499,11 @@ Class Window1
                                                 x.Type = uWidgetEmpty.TypeOfWidget.Media
                                             Case uWidgetEmpty.TypeOfWidget.Web.ToString
                                                 x.Type = uWidgetEmpty.TypeOfWidget.Web
+                                            Case uWidgetEmpty.TypeOfWidget.Rss.ToString
+                                                x.Type = uWidgetEmpty.TypeOfWidget.Rss
                                         End Select
+                                    Case "caneditvalue"
+                                        x.CanEditValue = list.Item(j).Attributes.Item(k).Value
                                     Case "zoneid"
                                         x.ZoneId = list.Item(j).Attributes.Item(k).Value
                                     Case "x"
@@ -528,6 +532,8 @@ Class Window1
                                         x.ColorBackGround = New SolidColorBrush(Color.FromArgb(a, R, G, B))
                                     Case "url"
                                         x.URL = list.Item(j).Attributes.Item(k).Value
+                                    Case "urlrss"
+                                        x.UrlRss = list.Item(j).Attributes.Item(k).Value
                                 End Select
                             Next
 
@@ -749,6 +755,9 @@ Class Window1
                 writer.WriteStartAttribute("type") 'type de widget
                 writer.WriteValue(_ListElement.Item(i).Type.ToString)
                 writer.WriteEndAttribute()
+                writer.WriteStartAttribute("caneditvalue") 'type de widget
+                writer.WriteValue(_ListElement.Item(i).CanEditValue)
+                writer.WriteEndAttribute()
                 writer.WriteStartAttribute("zoneid")
                 writer.WriteValue(_ListElement.Item(i).ZoneId)
                 writer.WriteEndAttribute()
@@ -784,6 +793,9 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("url")
                 writer.WriteValue(_ListElement.Item(i).URL)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("urlrss")
+                writer.WriteValue(_ListElement.Item(i).UrlRss)
                 writer.WriteEndAttribute()
 
                 writer.WriteStartElement("actions")
@@ -1183,6 +1195,15 @@ Class Window1
             Try
                 myService.GetServerVersion()
                 IsConnect = True
+
+                MnuMacro.Items.Clear()
+                For Each _mac As Macro In myService.GetAllMacros(IdSrv)
+                    Dim mnu As New MenuItem
+                    mnu.Tag = _mac.ID
+                    mnu.Header = _mac.Nom
+                    AddHandler mnu.Click, AddressOf MnuExecuteMacro
+                    MnuMacro.Items.Add(mnu)
+                Next
             Catch ex As Exception
                 IsConnect = False
             End Try
@@ -1240,6 +1261,16 @@ Class Window1
                     LblTime.Content = Now.ToLongDateString & " " & Now.ToShortTimeString
                 End If
 
+                If Now.Second = 1 Then
+                    MnuMacro.Items.Clear()
+                    For Each _mac As Macro In myService.GetAllMacros(IdSrv)
+                        Dim mnu As New MenuItem
+                        mnu.Tag = _mac.ID
+                        mnu.Header = _mac.Nom
+                        AddHandler mnu.Click, AddressOf MnuExecuteMacro
+                        MnuMacro.Items.Add(mnu)
+                    Next
+                End If
             End If
         Catch ex As Exception
             IsConnect = False
@@ -1296,11 +1327,6 @@ Class Window1
                         Dim x As New WMedia
                         x.Owner = Me
                         x.ShowDialog()
-                        If x.DialogResult.HasValue And x.DialogResult.Value Then
-                            x.Close()
-                        Else
-                            x.Close()
-                        End If
                     Case uCtrlImgMnu.TypeOfMnu.Meteo
                         Dim x As New uMeteos
                         Canvas1.Children.Add(x)
@@ -1433,7 +1459,6 @@ Class Window1
         End
     End Sub
 
-
     Public Sub ShowZone(ByVal IdZone As String)
         Try
             'Gestion de l'erreur si le serveur n'est pas connecté
@@ -1487,6 +1512,7 @@ Class Window1
                             y.Uid = _ListElement.Item(j).Uid
                             y.Id = z.ElementID
                             y.Type = uWidgetEmpty.TypeOfWidget.Device
+                            y.CanEditValue = _ListElement.Item(j).CanEditValue
                             y.ZoneId = _ListElement.Item(j).ZoneId
                             y.Width = x.Width
                             y.Height = x.Height
@@ -1585,6 +1611,7 @@ Class Window1
                     y.Rotation = _ListElement.Item(i).Rotation
                     y.IsEmpty = _ListElement.Item(i).IsEmpty
                     y.Type = _ListElement.Item(i).Type
+                    y.CanEditValue = _ListElement.Item(i).CanEditValue
                     y.ShowEtiquette = _ListElement.Item(i).ShowEtiquette
                     y.ShowStatus = _ListElement.Item(i).ShowStatus
                     y.Etiquette = _ListElement.Item(i).Etiquette
@@ -1599,6 +1626,7 @@ Class Window1
                     y.Action_On_LongClick = _ListElement.Item(i).Action_On_LongClick
                     y.Visuel = _ListElement.Item(i).Visuel
                     y.URL = _ListElement.Item(i).URL
+                    y.UrlRss = _ListElement.Item(i).UrlRss
                     AddHandler y.ShowZone, AddressOf ElementShowZone
                     x.Content = y
                     Canvas1.Children.Add(x)
@@ -1622,6 +1650,7 @@ Class Window1
         Destination.Rotation = Source.Rotation
         Destination.IsEmpty = Source.IsEmpty
         Destination.Type = Source.Type
+        Destination.CanEditValue = Source.CanEditValue
         Destination.ShowEtiquette = Source.ShowEtiquette
         Destination.ShowStatus = Source.ShowStatus
         Destination.Etiquette = Source.Etiquette
@@ -1636,6 +1665,7 @@ Class Window1
         Destination.Action_On_LongClick = Source.Action_On_LongClick
         Destination.Visuel = Source.Visuel
         Destination.URL = Source.URL
+        Destination.UrlRss = Source.UrlRss
     End Sub
 
     Private Sub Deplacement_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk1.Click
@@ -1845,34 +1875,73 @@ Class Window1
     End Sub
 
     Private Sub NewWidgetWeb_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetWeb.Click
-        'Ajouter un nouveau Control
-        Dim x As New ContentControl
-        x.Width = 100
-        x.Height = 100
-        x.Style = mybuttonstyle
-        x.Tag = True
-        x.Uid = System.Guid.NewGuid.ToString()
+        Try
+            'Ajouter un nouveau Control
+            Dim x As New ContentControl
+            x.Width = 100
+            x.Height = 100
+            x.Style = mybuttonstyle
+            x.Tag = True
+            x.Uid = System.Guid.NewGuid.ToString()
 
-        'Ajoute l'élément dans la liste
-        Dim elmt As New uWidgetEmpty
-        elmt.Uid = x.Uid
-        elmt.ZoneId = _CurrentIdZone
-        elmt.Width = 100
-        elmt.Height = 100
-        elmt.Rotation = 0
-        elmt.X = 300
-        elmt.Y = 300
-        elmt.IsEmpty = True
-        elmt.Type = uWidgetEmpty.TypeOfWidget.Web
-        elmt.ShowStatus = False
-        elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
-        _ListElement.Add(elmt)
+            'Ajoute l'élément dans la liste
+            Dim elmt As New uWidgetEmpty
+            elmt.Uid = x.Uid
+            elmt.ZoneId = _CurrentIdZone
+            elmt.Width = 100
+            elmt.Height = 100
+            elmt.Rotation = 0
+            elmt.X = 300
+            elmt.Y = 300
+            elmt.IsEmpty = True
+            elmt.Type = uWidgetEmpty.TypeOfWidget.Web
+            elmt.ShowStatus = False
+            elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            _ListElement.Add(elmt)
 
-        elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
-        x.Content = elmt
-        Canvas1.Children.Add(x)
-        Canvas.SetLeft(x, 300)
-        Canvas.SetTop(x, 300)
+            elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            x.Content = elmt
+            Canvas1.Children.Add(x)
+            Canvas.SetLeft(x, 300)
+            Canvas.SetTop(x, 300)
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub NewWidgetRss_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetRss.Click
+        Try
+            'Ajouter un nouveau Control
+            Dim x As New ContentControl
+            x.Width = 100
+            x.Height = 100
+            x.Style = mybuttonstyle
+            x.Tag = True
+            x.Uid = System.Guid.NewGuid.ToString()
+
+            'Ajoute l'élément dans la liste
+            Dim elmt As New uWidgetEmpty
+            elmt.Uid = x.Uid
+            elmt.ZoneId = _CurrentIdZone
+            elmt.Width = 100
+            elmt.Height = 100
+            elmt.Rotation = 0
+            elmt.X = 300
+            elmt.Y = 300
+            elmt.IsEmpty = True
+            elmt.Type = uWidgetEmpty.TypeOfWidget.Rss
+            elmt.ShowStatus = False
+            elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            _ListElement.Add(elmt)
+
+            elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            x.Content = elmt
+            Canvas1.Children.Add(x)
+            Canvas.SetLeft(x, 300)
+            Canvas.SetTop(x, 300)
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub ViewLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewLog.Click
@@ -1914,6 +1983,10 @@ Class Window1
             Me.Cursor = Nothing
             MessageBox.Show("Erreur MnuHisto_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+    Private Sub MnuExecuteMacro(ByVal sender As Object, ByVal e As RoutedEventArgs)
+        myService.RunMacro(IdSrv, sender.tag)
     End Sub
 
 
