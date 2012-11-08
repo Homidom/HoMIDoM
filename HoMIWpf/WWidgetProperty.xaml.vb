@@ -31,6 +31,7 @@ Public Class WWidgetProperty
             lblColorStatus.Background = Obj.ColorStatus
             ColorPicker1.SelectedColor = Obj.ColorBackGround
             ColorPicker2.SelectedColor = Obj.ColorStatus
+            TxtUnite.Text = Obj.Unite
             ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
             TxtURL.Text = Obj.URL
             TxtURLRss.Text = Obj.UrlRss
@@ -157,6 +158,7 @@ Public Class WWidgetProperty
             Obj.Rotation = TxtRotation.Text
             Obj.DefautLabelStatus = TxtDefStatus.Text
             Obj.Picture = ImgPicture.Tag
+            Obj.Unite = TxtUnite.Text
 
             Try
                 Obj.TailleStatus = TxtTailleStatus.Text
@@ -164,6 +166,7 @@ Public Class WWidgetProperty
                 MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub
             End Try
+
             Obj.ColorBackGround = ColorPicker1.SelectedColor
             Obj.ColorStatus = ColorPicker2.SelectedColor
             Obj.URL = TxtURL.Text
