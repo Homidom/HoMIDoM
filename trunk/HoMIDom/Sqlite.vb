@@ -25,6 +25,8 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub New(ByVal basename As String)
             Try
+                'ajout d'un handler pour capturer les erreurs non catchés
+                AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf sqlite_UnhandledExceptionEvent
                 bdd_name = basename
                 connecte = False
             Catch ex As Exception
@@ -287,6 +289,10 @@ Namespace HoMIDom
                 Return "ERR: Erreur lors de la query Count " & commande & " Erreur: " & ex.ToString
             End Try
         End Function
+
+        Private Sub sqlite_UnhandledExceptionEvent(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs)
+            _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SQLite UnhandledExceptionEvent", "Exception : " & e.ExceptionObject.ToString())
+        End Sub
 
     End Class
 End Namespace
