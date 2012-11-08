@@ -13,6 +13,7 @@ Public Class uHisto
     Dim _Devices As New List(Of Dictionary(Of String, String))
     Dim _MaxData As Integer = 1000
     Dim _CurrentChart As Chart = Nothing
+    Dim _FirstGener As Boolean = False
 
     Public Sub New(ByVal Devices As List(Of Dictionary(Of String, String)))
 
@@ -39,6 +40,8 @@ Public Class uHisto
 
     Private Sub Refresh_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Refresh.Click
         Try
+            If _FirstGener = False Then Generation()
+
             _MaxData = TxtMaxData.Text
             If IsNumeric(_MaxData) = False Or _MaxData > 5000 Or _MaxData < 0 Then
                 MessageBox.Show("Le nombre maximal de données doit être un numérique et <5000", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
@@ -331,6 +334,10 @@ Public Class uHisto
 
 
     Private Sub BtnGenereGraph_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereGraph.Click
+        Generation()
+    End Sub
+
+    Private Sub Generation()
         Try
             If IsConnect = False Then
                 Exit Sub
@@ -370,9 +377,11 @@ Public Class uHisto
             _Devices = Devices
             Update_Graphe()
             Me.Cursor = Nothing
+
+            _FirstGener = True
         Catch ex As Exception
             Me.Cursor = Nothing
-            MessageBox.Show("ERREUR Sub BtnGenereGraph_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("ERREUR Sub Generation: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 End Class
