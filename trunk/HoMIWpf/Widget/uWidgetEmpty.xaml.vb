@@ -293,7 +293,7 @@ Public Class uWidgetEmpty
                         StkTool.Children.Add(_METEO)
                 End Select
             Catch ex As Exception
-                MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End Try
         End Set
     End Property
@@ -695,7 +695,7 @@ Public Class uWidgetEmpty
 
                     Select Case _dev.Type
                         Case HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL
-                            
+
                         Case HoMIDom.HoMIDom.Device.ListeDevices.AUDIO
 
                         Case HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE
@@ -748,7 +748,7 @@ Public Class uWidgetEmpty
                             _Unit = " %"
                             _IsVariation = True
                         Case HoMIDom.HoMIDom.Device.ListeDevices.UV
-                            
+
                     End Select
 
                     If _ShowValue Then
@@ -774,7 +774,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Error Refresh: " & ex.ToString & vbCrLf, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Error Refresh: " & ex.Message & vbCrLf, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1114,7 +1114,7 @@ Public Class uWidgetEmpty
 
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             _FlagBlock = False
         End Try
     End Sub
@@ -1141,7 +1141,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             _FlagBlock = False
         End Try
     End Sub
@@ -1168,7 +1168,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             _FlagBlock = False
         End Try
     End Sub
@@ -1193,7 +1193,7 @@ Public Class uWidgetEmpty
                 _FlagBlock = False
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             _FlagBlock = False
         End Try
     End Sub
@@ -1214,7 +1214,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             _FlagBlock = False
         End Try
     End Sub
@@ -1263,7 +1263,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             _FlagBlock = False
         End Try
     End Sub
@@ -1284,7 +1284,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1304,7 +1304,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1324,7 +1324,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1352,7 +1352,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1372,7 +1372,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1392,7 +1392,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1412,7 +1412,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1432,7 +1432,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show(ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 #End Region
@@ -1464,7 +1464,7 @@ Public Class uWidgetEmpty
                     End If
 
                 Catch ex As Exception
-                    MessageBox.Show("Erreur Stk1_MouseDown: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    MessageBox.Show("Erreur Stk1_MouseDown: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                 End Try
             Else
                 If IsEmpty = False Then
@@ -1522,7 +1522,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur Stk1_MouseDown: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur Stk1_MouseDown: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 

@@ -89,7 +89,7 @@ Public Class uWMeteo
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur GetMeteo: " & ex.ToString)
+            MessageBox.Show("Erreur GetMeteo: " & ex.Message)
         End Try
 
     End Sub

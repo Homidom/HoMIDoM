@@ -139,7 +139,7 @@ Public Class WConfig
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString, "Erreur")
+            MessageBox.Show("Erreur: " & ex.Message, "Erreur")
         End Try
     End Sub
 

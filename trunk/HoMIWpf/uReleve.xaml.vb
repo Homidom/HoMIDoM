@@ -14,7 +14,7 @@ Public Class uReleve
 
             LblDev.Content = Label
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'affichage du relevé: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur lors de l'affichage du relevé: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -25,7 +25,7 @@ Public Class uReleve
             Loop
 
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'affichage du relevé GridOK: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur lors de l'affichage du relevé GridOK: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 End Class

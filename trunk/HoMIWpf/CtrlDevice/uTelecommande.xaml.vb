@@ -70,7 +70,7 @@ Public Class uTelecommande
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            MessageBox.Show(ex.Message)
         End Try
     End Sub
 
@@ -203,7 +203,7 @@ Retour2:
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur SetGrid: " & ex.ToString)
+            MessageBox.Show("Erreur SetGrid: " & ex.Message)
         End Try
     End Sub
 

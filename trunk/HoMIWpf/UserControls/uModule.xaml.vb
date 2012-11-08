@@ -99,7 +99,7 @@ Partial Public Class uModule
                 Next
             Next
         Catch ex As Exception
-            MsgBox("Error AfficheStk: " & ex.ToString & vbCrLf)
+            MsgBox("Error AfficheStk: " & ex.Message & vbCrLf)
         End Try
     End Sub
 
@@ -246,7 +246,7 @@ Partial Public Class uModule
             End If
 
         Catch ex As Exception
-            MsgBox("Error dispatcherTimer_Tick: " & ex.ToString & vbCrLf)
+            MsgBox("Error dispatcherTimer_Tick: " & ex.Message & vbCrLf)
         End Try
     End Sub
 

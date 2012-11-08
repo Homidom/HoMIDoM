@@ -30,7 +30,7 @@ Public Class uHisto
 
             AffHisto()
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de la création de la fenêtre des relevés: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur lors de la création de la fenêtre des relevés: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -51,7 +51,7 @@ Public Class uHisto
 
             Update_Graphe()
         Catch ex As Exception
-            MessageBox.Show("Erreur uHisto Refresh_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur uHisto Refresh_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -142,7 +142,7 @@ Public Class uHisto
                     Chart2.Series(i).ToolTip = "#VALX" & " Valeur:" & "#VALY"
                 Next
             End If
-            
+
             ' Zoom into the X axis
             'Chart2.ChartAreas("Default").AxisX.ScaleView.Zoom(2, 3)
 
@@ -169,7 +169,7 @@ Public Class uHisto
             Me.Cursor = Nothing
         Catch ex As Exception
             Me.Cursor = Nothing
-            MessageBox.Show("Erreur uHisto Update_Graphe: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur uHisto Update_Graphe: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -311,7 +311,7 @@ Public Class uHisto
             TreeViewHisto.Items.SortDescriptions.Clear()
             TreeViewHisto.Items.SortDescriptions.Add(New SortDescription("Content", ListSortDirection.Ascending))
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub AffHisto: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("ERREUR Sub AffHisto: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
