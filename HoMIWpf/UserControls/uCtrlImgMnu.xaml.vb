@@ -43,6 +43,8 @@ Partial Public Class uCtrlImgMnu
                 bmpImage.UriSource = New Uri(vImage, UriKind.Absolute)
                 bmpImage.EndInit()
                 Image.Source = bmpImage
+            ElseIf File.Exists(value) = False And _type <> TypeOfMnu.Zone Then
+                vImage = ""
             End If
         End Set
     End Property
