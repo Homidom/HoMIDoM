@@ -380,7 +380,7 @@ Public Class uMedia
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
 
         Me.Cursor = Nothing

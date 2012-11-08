@@ -45,7 +45,7 @@ Public Class WindowImg
                 stk.Children.Add(lbl)
                 ListBoxImg.Items.Add(stk)
             Catch ex As Exception
-                MessageBox.Show(ex.ToString)
+                MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End Try
         Next
     End Sub

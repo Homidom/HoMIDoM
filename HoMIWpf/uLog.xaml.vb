@@ -35,7 +35,7 @@ Partial Public Class uLog
                         Dim data As String() = Nothing
 
                         If tmp.Length < 6 And tmp.Length > 3 Then
-                            If tmp(4).Length > 255 Then tmp(4) = Mid(tmp(4), 1, 255)
+                            If tmp(4).Length > 255 And tmp(4).Length > 0 Then tmp(4) = Mid(tmp(4), 1, 255)
                             data = tmp
                         Else
                             _LigneIgnorees += 1
@@ -55,7 +55,7 @@ Partial Public Class uLog
                         sensorData = Nothing
                         lineCount += 1
                     Catch ex As Exception
-                        MessageBox.Show("Erreur lors de la ligne du fichier log: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        MessageBox.Show("Erreur lors de la ligne du fichier log: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
                 End While
             End If
@@ -63,13 +63,13 @@ Partial Public Class uLog
             Try
                 DGW.DataContext = ligneLog
             Catch ex As Exception
-                MessageBox.Show("Erreur: " & ex.ToString)
+                MessageBox.Show("Erreur: " & ex.Message)
             End Try
 
 
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de la récuppération du fichier log: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur lors de la récuppération du fichier log: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -80,7 +80,7 @@ Partial Public Class uLog
             col1.Binding = New Binding(String.Format("[{0}]", headerText))
             DGW.Columns.Add(col1)
         Catch ex As Exception
-            MessageBox.Show("Erreur Sub CreateGridColumn: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur Sub CreateGridColumn: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -98,7 +98,7 @@ Partial Public Class uLog
 
             RefreshLog()
         Catch ex As Exception
-            MessageBox.Show("Erreur lors sur la fonction New de uLog: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur lors sur la fonction New de uLog: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -146,7 +146,7 @@ Partial Public Class uLog
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Erreur DGW_LoadingRow: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur DGW_LoadingRow: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -174,7 +174,7 @@ Partial Public Class uLog
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur ExportLog: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur ExportLog: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 

@@ -297,7 +297,7 @@ Class Window1
             myxml = Nothing
             frmMere = Me
         Catch ex As Exception
-            MessageBox.Show("Erreur lors du lancement de l'application: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur lors du lancement de l'application: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -632,7 +632,7 @@ Class Window1
             Return " Chargement de la configuration terminée"
 
         Catch ex As Exception
-            MsgBox("ERREUR LOADCONFIG " & ex.ToString, MsgBoxStyle.Exclamation, "Erreur Client WPF")
+            MsgBox("ERREUR LOADCONFIG " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Client WPF")
             Return " Erreur de chargement de la config: " & ex.Message
         End Try
     End Function
@@ -976,7 +976,7 @@ Class Window1
             writer.Close()
             Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde terminée")
         Catch ex As Exception
-            MsgBox("ERREUR SAVECONFIG " & ex.ToString, MsgBoxStyle.Exclamation, "Erreur Client WPF")
+            MsgBox("ERREUR SAVECONFIG " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Client WPF")
             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: " & ex.Message)
         End Try
 
@@ -1272,7 +1272,7 @@ Class Window1
 
         Catch ex As Exception
             Log(TypeLog.INFO, TypeSource.CLIENT, "NewBtnMnu", "Erreur NewBtnMnu: " & ex.Message)
-            MessageBox.Show("Erreur lors de la création du bouton menu: " & ex.ToString)
+            MessageBox.Show("Erreur lors de la création du bouton menu: " & ex.Message)
         End Try
     End Sub
 
@@ -1388,7 +1388,7 @@ Class Window1
             End If
             Me.Cursor = Cursors.Arrow
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString, "Erreur")
+            MessageBox.Show("Erreur: " & ex.Message, "Erreur")
             Log(TypeLog.INFO, TypeSource.CLIENT, "IconMnuDoubleClick", "Erreur: " & ex.Message)
         End Try
     End Sub
@@ -1616,7 +1616,7 @@ Class Window1
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur ShowZone: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur ShowZone: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1713,7 +1713,7 @@ Class Window1
                 Next
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString)
+            MessageBox.Show("Erreur: " & ex.Message)
         End Try
     End Sub
 
@@ -1725,7 +1725,7 @@ Class Window1
                 obj.Height = e.NewSize.Height
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString)
+            MessageBox.Show("Erreur: " & ex.Message)
         End Try
     End Sub
 
@@ -1891,7 +1891,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1926,7 +1926,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1961,7 +1961,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 

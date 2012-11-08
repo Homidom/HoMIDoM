@@ -54,7 +54,7 @@ Partial Public Class uMeteos
             imgStackPnl.Children.Add(ctrl)
 
         Catch ex As Exception
-            MessageBox.Show("Erreur NewBtnMnu: " & ex.ToString)
+            MessageBox.Show("Erreur NewBtnMnu: " & ex.Message)
         End Try
     End Sub
 

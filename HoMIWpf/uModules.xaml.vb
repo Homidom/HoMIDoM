@@ -65,7 +65,7 @@ Partial Public Class uModules
         '                    End If
         '                Next
         '            Catch ex As Exception
-        '                MsgBox("Error chargement des macros: " & ex.ToString)
+        '                MsgBox("Error chargement des macros: " & ex.Message)
         '            End Try
         '        Loop
         'List = Nothing
@@ -86,10 +86,10 @@ Partial Public Class uModules
         '        imgStackPnl.Children.Add(ctrl)
         '    Next
         'Catch ex As Exception
-        '    MsgBox("Error chargement des macros: " & ex.ToString)
+        '    MsgBox("Error chargement des macros: " & ex.Message)
         'End Try
         '    Catch ex As Exception
-        '    MsgBox("Error chargement des macros et devices: " & ex.ToString)
+        '    MsgBox("Error chargement des macros et devices: " & ex.Message)
         'End Try
         'Else
         'MessageBox.Show("Impossible d'afficher les modules, vous n'êtes pas connecté à HomeSeer")
