@@ -60,6 +60,11 @@
                 <TextBox Name="TxtDefStatus" Width="150" Text="?"/>
             </StackPanel>
                             <StackPanel  Orientation="Horizontal" >
+                                <Label Width="120" Content="Unité:" Foreground="White"/>
+                                <TextBox Name="TxtUnite" Width="150" Text=""/>
+                            </StackPanel>
+
+                            <StackPanel  Orientation="Horizontal" >
                                 <Label Width="120" Content="Taille Status:" Foreground="White"/>
                                 <TextBox Name="TxtTailleStatus" Width="30" Text="?"/>
                             </StackPanel>

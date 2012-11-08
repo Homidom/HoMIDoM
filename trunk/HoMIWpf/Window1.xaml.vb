@@ -525,6 +525,8 @@ Class Window1
                                         x.ShowEtiquette = list.Item(j).Attributes.Item(k).Value
                                     Case "showstatus"
                                         x.ShowStatus = list.Item(j).Attributes.Item(k).Value
+                                    Case "unite"
+                                        x.Unite = list.Item(j).Attributes.Item(k).Value
                                     Case "etiquette"
                                         x.Etiquette = list.Item(j).Attributes.Item(k).Value
                                     Case "picture"
@@ -800,6 +802,9 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("showstatus")
                 writer.WriteValue(_ListElement.Item(i).ShowStatus)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("unite")
+                writer.WriteValue(_ListElement.Item(i).Unite)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("showpicture")
                 writer.WriteValue(_ListElement.Item(i).ShowPicture)
@@ -1317,18 +1322,20 @@ Class Window1
             Chk1.Visibility = Windows.Visibility.Collapsed
             Chk2.Visibility = Windows.Visibility.Collapsed
             Chk3.Visibility = Windows.Visibility.Collapsed
-            ImageBackGround = _ImageBackGroundDefault
+
 
             Dim y As uCtrlImgMnu = sender
 
             If y IsNot Nothing Then
                 Select Case y.Type
                     Case uCtrlImgMnu.TypeOfMnu.Internet
+                        ImageBackGround = _ImageBackGroundDefault
                         Dim x As New uInternet(y.Parametres(0))
                         Canvas1.Children.Add(x)
                         x.Width = Canvas1.ActualWidth
                         x.Height = Canvas1.ActualHeight
                     Case uCtrlImgMnu.TypeOfMnu.Config
+                        ImageBackGround = _ImageBackGroundDefault
                         Dim x As New WConfig(Me)
                         x.Owner = Me
                         x.ShowDialog()
@@ -1351,39 +1358,13 @@ Class Window1
                         x.Owner = Me
                         x.ShowDialog()
                     Case uCtrlImgMnu.TypeOfMnu.Meteo
+                        ImageBackGround = _ImageBackGroundDefault
                         Dim x As New uMeteos
                         Canvas1.Children.Add(x)
                         x.Width = Canvas1.ActualWidth
                         x.Height = Canvas1.ActualHeight
                     Case uCtrlImgMnu.TypeOfMnu.Zone
                         ShowZone(y.IDElement)
-                        'Case 1 'Prgr TV
-                        '    'Dim x As New uInternet("http://www.programme-tv.net/programme/toutes-les-chaines/")
-                        '    Dim x As New uProgrammeTV
-                        '    Canvas1.Children.Add(x)
-                        '    x.Width = Canvas1.ActualWidth
-                        '    x.Height = Canvas1.ActualHeight
-                        'Case 2 'Contacts
-                        '    Dim x As New uContact
-                        '    Canvas1.Children.Add(x)
-                        '    x.Width = Canvas1.ActualWidth
-                        '    x.Height = Canvas1.ActualHeight
-                        'Case 3 'Module
-                        '    Dim x As New uModules
-                        '    Canvas1.Children.Add(x)
-                        '    x.Width = Canvas1.ActualWidth
-                        '    x.Height = Canvas1.ActualHeight
-                        'Case 10 'Calculatrice
-                        'Case 14 'Calendrier
-                        '    'Dim x As New uCalendar
-                        '    'Canvas1.Children.Add(x)
-                        '    'x.Width = Canvas1.ActualWidth
-                        '    'x.Height = Canvas1.ActualHeight
-                        'Case 15 'Notes
-                        '    Dim x As New uNotes
-                        '    Canvas1.Children.Add(x)
-                        '    x.Width = Canvas1.ActualWidth
-                        '    x.Height = Canvas1.ActualHeight
                 End Select
             End If
             Me.Cursor = Cursors.Arrow
@@ -1482,6 +1463,7 @@ Class Window1
 
                             Dim y As New uWidgetEmpty
                             y.Uid = _ListElement.Item(j).Uid
+                            y.Unite = _ListElement.Item(j).Unite
                             y.Id = z.ElementID
                             y.Type = uWidgetEmpty.TypeOfWidget.Device
                             y.CanEditValue = _ListElement.Item(j).CanEditValue
@@ -1592,6 +1574,7 @@ Class Window1
                     y.ShowPicture = _ListElement.Item(i).ShowPicture
                     y.ShowEtiquette = _ListElement.Item(i).ShowEtiquette
                     y.ShowStatus = _ListElement.Item(i).ShowStatus
+                    y.Unite = _ListElement.Item(i).Unite
                     y.Etiquette = _ListElement.Item(i).Etiquette
                     y.DefautLabelStatus = _ListElement.Item(i).DefautLabelStatus
                     y.TailleStatus = _ListElement.Item(i).TailleStatus
@@ -1636,6 +1619,7 @@ Class Window1
         Destination.Picture = Source.Picture
         Destination.ShowEtiquette = Source.ShowEtiquette
         Destination.ShowStatus = Source.ShowStatus
+        Destination.Unite = Source.Unite
         Destination.Etiquette = Source.Etiquette
         Destination.DefautLabelStatus = Source.DefautLabelStatus
         Destination.TailleStatus = Source.TailleStatus
@@ -1965,7 +1949,6 @@ Class Window1
         End Try
     End Sub
 
-
     Private Sub ViewLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewLog.Click
         Try
             Me.Cursor = Cursors.Wait
@@ -1976,7 +1959,6 @@ Class Window1
             Chk1.Visibility = Windows.Visibility.Collapsed
             Chk2.Visibility = Windows.Visibility.Collapsed
             Chk3.Visibility = Windows.Visibility.Collapsed
-            ImageBackGround = _ImageBackGroundDefault
 
             Dim x As New uLog
             x.Uid = System.Guid.NewGuid.ToString()
@@ -1993,9 +1975,13 @@ Class Window1
     End Sub
 
     Private Sub ViewCalendar_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewCalendar.Click
-        Dim x As New WCalendar
-        x.Owner = Me
-        x.ShowDialog()
+        Try
+            Dim x As New WCalendar
+            x.Owner = Me
+            x.ShowDialog()
+        Catch ex As Exception
+            MessageBox.Show("Erreur:" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub MnuHisto_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuHisto.Click

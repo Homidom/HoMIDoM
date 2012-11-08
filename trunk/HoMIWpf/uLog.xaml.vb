@@ -34,7 +34,7 @@ Partial Public Class uLog
                         Dim tmp As String() = line.Trim.Split(vbTab)
                         Dim data As String() = Nothing
 
-                        If tmp.Length < 6 And tmp.Length > 3 Then
+                        If tmp.Length >= 5 Then
                             If tmp(4).Length > 255 And tmp(4).Length > 0 Then tmp(4) = Mid(tmp(4), 1, 255)
                             data = tmp
                         Else

@@ -12,40 +12,42 @@ Public Class WCalendar
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
 
-        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        Dim months As New List(Of String)() From { _
- "Janvier", _
- "Fevrier", _
- "Mars", _
- "Avril", _
- "Mai", _
- "Juin", _
- "Juillet", _
- "Aout", _
- "Septembre", _
- "Octobre", _
- "Novembre", _
- "Decembre" _
-}
-        cboMonth.ItemsSource = months
+        Try
+            ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+            Dim months As New List(Of String)() From { _
+     "Janvier", _
+     "Fevrier", _
+     "Mars", _
+     "Avril", _
+     "Mai", _
+     "Juin", _
+     "Juillet", _
+     "Aout", _
+     "Septembre", _
+     "Octobre", _
+     "Novembre", _
+     "Decembre" _
+    }
 
-        For i As Integer = -50 To 49
-            cboYear.Items.Add(DateTime.Today.AddYears(i).Year)
-        Next
+            cboMonth.ItemsSource = months
 
-        cboMonth.SelectedIndex = DateTime.Today.Month - 1
-        cboYear.SelectedItem = DateTime.Today.Year
+            For i As Integer = -50 To 49
+                cboYear.Items.Add(DateTime.Today.AddYears(i).Year)
+            Next
 
-        Calendar.DayNames.Item(0) = "Dim"
-        Calendar.DayNames.Item(1) = "Lun"
-        Calendar.DayNames.Item(2) = "Mar"
-        Calendar.DayNames.Item(3) = "Mer"
-        Calendar.DayNames.Item(4) = "Jeu"
-        Calendar.DayNames.Item(5) = "Ven"
-        Calendar.DayNames.Item(6) = "Sam"
-        'For i As Integer = 0 To Calendar.DayNames.Count - 1
-        '    MsgBox(Calendar.DayNames.Item(i))
-        'Next
+            cboMonth.SelectedIndex = DateTime.Today.Month - 1
+            cboYear.SelectedItem = DateTime.Today.Year
+
+            Calendar.DayNames.Item(0) = "Dim"
+            Calendar.DayNames.Item(1) = "Lun"
+            Calendar.DayNames.Item(2) = "Mar"
+            Calendar.DayNames.Item(3) = "Mer"
+            Calendar.DayNames.Item(4) = "Jeu"
+            Calendar.DayNames.Item(5) = "Ven"
+            Calendar.DayNames.Item(6) = "Sam"
+        Catch ex As Exception
+            MessageBox.Show("Erreur New wCalendar: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub RefreshCalendar()

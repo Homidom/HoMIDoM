@@ -49,6 +49,7 @@ Public Class uWidgetEmpty
     Dim _CurrentValue As Object = Nothing
     Dim _type As TypeOfWidget = TypeOfWidget.Empty
     Dim _CanEditValue As Boolean = False
+    Dim _Unite As String = ""
 
     'Variables Widget Web
     Dim _URL As String = ""
@@ -90,7 +91,6 @@ Public Class uWidgetEmpty
                     _Picture = _dev.Picture
                     Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_dev.Picture))
 
-                    Dim _Unit As String = ""
                     Dim _ShowValue As Boolean = True
 
                     Select Case _dev.Type
@@ -145,7 +145,7 @@ Public Class uWidgetEmpty
                             StkPopup.Children.Add(x)
 
                         Case HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE
-                            _Unit = " %"
+                            If _Unite = "" Then _Unite = " %"
                         Case HoMIDom.HoMIDom.Device.ListeDevices.LAMPE
                             Dim x As New uOnOff
                             x.ContentOn = "ON"
@@ -177,16 +177,16 @@ Public Class uWidgetEmpty
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE
                             _ShowValue = False
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE
-                            _Unit = " °C"
+                            If _Unite = "" Then _Unite = " °"
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE
-                            _Unit = " °C"
+                            If _Unite = "" Then _Unite = " °"
                             Dim x As New uEditValue
                             AddHandler x.ChangeValue, AddressOf ChangeValue
                             StkPopup.Children.Add(x)
 
                         Case HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT
                         Case HoMIDom.HoMIDom.Device.ListeDevices.VOLET
-                            _Unit = " %"
+
                             Dim x As New uOnOff
                             x.ContentOn = "OUVRIR"
                             x.ContentOff = "FERMER"
@@ -208,7 +208,7 @@ Public Class uWidgetEmpty
                     End Select
 
                     If _ShowValue Then
-                        LblStatus.Content = _dev.Value & _Unit
+                        LblStatus.Content = _dev.Value & _Unite
                         _CurrentValue = _dev.Value
                     End If
                 ElseIf _macro IsNot Nothing Then
@@ -258,6 +258,15 @@ Public Class uWidgetEmpty
             Else
                 _type = TypeOfWidget.Device
             End If
+        End Set
+    End Property
+
+    Public Property Unite As String
+        Get
+            Return _Unite
+        End Get
+        Set(ByVal value As String)
+            _Unite = value
         End Set
     End Property
 
@@ -690,7 +699,6 @@ Public Class uWidgetEmpty
                     End If
 
                     Dim _ShowValue As Boolean = True
-                    Dim _Unit As String = ""
                     Dim _IsVariation As Boolean = False
 
                     Select Case _dev.Type
@@ -721,10 +729,10 @@ Public Class uWidgetEmpty
                         Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE
 
                         Case HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE
-                            _Unit = " %"
+                            _Unite = " %"
 
                         Case HoMIDom.HoMIDom.Device.ListeDevices.LAMPE
-                            _Unit = " %"
+                            _Unite = " %"
                             _IsVariation = True
                         Case HoMIDom.HoMIDom.Device.ListeDevices.METEO
                             _ShowValue = False
@@ -739,13 +747,12 @@ Public Class uWidgetEmpty
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE
 
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE
-                            _Unit = " °C"
+
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE
-                            _Unit = " °C"
+
                         Case HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT
 
                         Case HoMIDom.HoMIDom.Device.ListeDevices.VOLET
-                            _Unit = " %"
                             _IsVariation = True
                         Case HoMIDom.HoMIDom.Device.ListeDevices.UV
 
@@ -753,7 +760,7 @@ Public Class uWidgetEmpty
 
                     If _ShowValue Then
                         If _CurrentValue <> _dev.Value Then
-                            LblStatus.Content = _dev.Value & _Unit
+                            LblStatus.Content = _dev.Value & _Unite
                             _CurrentValue = _dev.Value
                             If _IsVariation Then
                                 If StkPopup.Children.Count = 2 Then
