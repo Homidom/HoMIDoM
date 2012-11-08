@@ -86,7 +86,6 @@
                 <GroupBox Header="Affichage" Margin="2" >
                     <StackPanel >
                         <CheckBox Name="ChkSoleil" Content="Afficher heure Lever/Coucher Soleil" Margin=" 2"  />
-                        <CheckBox Name="ChkTemp" Content="Afficher température intérieure/extérieure" Margin="2"  />
                         <StackPanel Orientation="Horizontal">
                             <Label Content="File Image Background: " />
                             <TextBox Name="TxtImgBack" Width="200" />

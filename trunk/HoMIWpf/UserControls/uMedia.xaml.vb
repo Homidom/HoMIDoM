@@ -49,7 +49,7 @@ Public Class uMedia
         ShowBtnReculTitre = False
         ShowBtnAvanceTitre = False
         If _IsLocal Then _Volume = MediaElement1.Volume
-
+        VolumeValue.Value = _Volume
         AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
         dt.Interval = New TimeSpan(0, 0, 1)
         dt.Start()
@@ -408,6 +408,7 @@ Public Class uMedia
 
     Private Sub BtnVolumeMute_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnVolumeMute.MouseDown
         _Volume = 0
+        VolumeValue.Value = _Volume
         RaiseEvent Mute()
         If _IsLocal Then MediaElement1.Volume = _Volume
     End Sub
@@ -415,13 +416,15 @@ Public Class uMedia
     Private Sub BtnVolumeDown_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnVolumeDown.MouseDown
         _Volume -= 0.1
         If _Volume < 0 Then _Volume = 0
+        VolumeValue.Value = _Volume
         RaiseEvent VolumeDown()
         If _IsLocal Then MediaElement1.Volume = _Volume
     End Sub
 
     Private Sub BtnVolumeUp_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnVolumeUp.MouseDown
         _Volume += 0.1
-        If _Volume > 0 Then _Volume = 1
+        If _Volume > 1 Then _Volume = 1
+        VolumeValue.Value = _Volume
         RaiseEvent VolumeUp()
         If _IsLocal Then MediaElement1.Volume = _Volume
     End Sub

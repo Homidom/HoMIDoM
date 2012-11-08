@@ -501,6 +501,8 @@ Class Window1
                                                 x.Type = uWidgetEmpty.TypeOfWidget.Web
                                             Case uWidgetEmpty.TypeOfWidget.Rss.ToString
                                                 x.Type = uWidgetEmpty.TypeOfWidget.Rss
+                                            Case uWidgetEmpty.TypeOfWidget.Meteo.ToString
+                                                x.Type = uWidgetEmpty.TypeOfWidget.Meteo
                                         End Select
                                     Case "caneditvalue"
                                         x.CanEditValue = list.Item(j).Attributes.Item(k).Value
@@ -522,18 +524,32 @@ Class Window1
                                         x.ShowStatus = list.Item(j).Attributes.Item(k).Value
                                     Case "etiquette"
                                         x.Etiquette = list.Item(j).Attributes.Item(k).Value
+                                    Case "picture"
+                                        x.Picture = list.Item(j).Attributes.Item(k).Value
+                                    Case "showpicture"
+                                        x.ShowPicture = list.Item(j).Attributes.Item(k).Value
                                     Case "defautlabelstatus"
                                         x.DefautLabelStatus = list.Item(j).Attributes.Item(k).Value
+                                    Case "taillestatus"
+                                        x.TailleStatus = list.Item(j).Attributes.Item(k).Value
                                     Case "colorbackground"
                                         Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
                                         Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
                                         Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
                                         Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
                                         x.ColorBackGround = New SolidColorBrush(Color.FromArgb(a, R, G, B))
+                                    Case "colorstatus"
+                                        Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
+                                        Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
+                                        Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
+                                        Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
+                                        x.ColorStatus = New SolidColorBrush(Color.FromArgb(a, R, G, B))
                                     Case "url"
                                         x.URL = list.Item(j).Attributes.Item(k).Value
                                     Case "urlrss"
                                         x.UrlRss = list.Item(j).Attributes.Item(k).Value
+                                    Case "idmeteo"
+                                        x.IDMeteo = list.Item(j).Attributes.Item(k).Value
                                 End Select
                             Next
 
@@ -782,20 +798,35 @@ Class Window1
                 writer.WriteStartAttribute("showstatus")
                 writer.WriteValue(_ListElement.Item(i).ShowStatus)
                 writer.WriteEndAttribute()
+                writer.WriteStartAttribute("showpicture")
+                writer.WriteValue(_ListElement.Item(i).ShowPicture)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("picture")
+                writer.WriteValue(_ListElement.Item(i).Picture)
+                writer.WriteEndAttribute()
                 writer.WriteStartAttribute("etiquette")
                 writer.WriteValue(_ListElement.Item(i).Etiquette)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("defautlabelstatus")
                 writer.WriteValue(_ListElement.Item(i).DefautLabelStatus)
                 writer.WriteEndAttribute()
+                writer.WriteStartAttribute("taillestatus")
+                writer.WriteValue(_ListElement.Item(i).TailleStatus)
+                writer.WriteEndAttribute()
                 writer.WriteStartAttribute("colorbackground")
                 writer.WriteValue(_ListElement.Item(i).ColorBackGround.ToString)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("colorstatus")
+                writer.WriteValue(_ListElement.Item(i).ColorStatus.ToString)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("url")
                 writer.WriteValue(_ListElement.Item(i).URL)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("urlrss")
                 writer.WriteValue(_ListElement.Item(i).UrlRss)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("idmeteo")
+                writer.WriteValue(_ListElement.Item(i).IDMeteo)
                 writer.WriteEndAttribute()
 
                 writer.WriteStartElement("actions")
@@ -1257,20 +1288,9 @@ Class Window1
                     mydate = myService.GetHeureCoucherSoleil
                     LblCouche.Content = mydate.ToShortTimeString
                 Else
-                    LblTemp.Content = "?"
                     LblTime.Content = Now.ToLongDateString & " " & Now.ToShortTimeString
                 End If
 
-                If Now.Second = 1 Then
-                    MnuMacro.Items.Clear()
-                    For Each _mac As Macro In myService.GetAllMacros(IdSrv)
-                        Dim mnu As New MenuItem
-                        mnu.Tag = _mac.ID
-                        mnu.Header = _mac.Nom
-                        AddHandler mnu.Click, AddressOf MnuExecuteMacro
-                        MnuMacro.Items.Add(mnu)
-                    Next
-                End If
             End If
         Catch ex As Exception
             IsConnect = False
@@ -1333,13 +1353,7 @@ Class Window1
                         x.Width = Canvas1.ActualWidth
                         x.Height = Canvas1.ActualHeight
                     Case uCtrlImgMnu.TypeOfMnu.Zone
-                        'Dim x As New uZone(y.IDElement, Canvas1.ActualHeight, Canvas1.ActualWidth)
                         ShowZone(y.IDElement)
-                        'Case 0 'Actualités
-                        '    Dim x As New uInternet("http://fr.news.yahoo.com/")
-                        '    Canvas1.Children.Add(x)
-                        '    x.Width = Canvas1.ActualWidth
-                        '    x.Height = Canvas1.ActualHeight
                         'Case 1 'Prgr TV
                         '    'Dim x As New uInternet("http://www.programme-tv.net/programme/toutes-les-chaines/")
                         '    Dim x As New uProgrammeTV
@@ -1356,47 +1370,7 @@ Class Window1
                         '    Canvas1.Children.Add(x)
                         '    x.Width = Canvas1.ActualWidth
                         '    x.Height = Canvas1.ActualHeight
-                        'Case 4 'Scene
-                        '    'Dim x As New uScenes
-                        '    'Canvas1.Children.Add(x)
-                        '    'x.Width = Canvas1.ActualWidth
-                        '    'x.Height = Canvas1.ActualHeight
-                        'Case 6 'Recette
-                        '    Dim x As New uInternet("http://www.marmiton.org/")
-                        '    Canvas1.Children.Add(x)
-                        '    x.Width = Canvas1.ActualWidth
-                        '    x.Height = Canvas1.ActualHeight
-                        'Case 7 'Pages jaunes
-                        '    Dim x As New uInternet("http://www.pagesjaunes.fr/")
-                        '    Canvas1.Children.Add(x)
-                        '    x.Width = Canvas1.ActualWidth
-                        '    x.Height = Canvas1.ActualHeight
-                        'Case 8 'Internet
-                        '    Dim x As New uInternet("http://www.google.fr/")
-                        '    Canvas1.Children.Add(x)
-                        '    x.Width = Canvas1.ActualWidth
-                        '    x.Height = Canvas1.ActualHeight
-                        'Case 9 'Itinéraire
-                        '    Dim x As New uInternet("http://maps.google.fr/maps?hl=fr&tab=wl")
-                        '    Canvas1.Children.Add(x)
-                        '    x.Width = Canvas1.ActualWidth
-                        '    x.Height = Canvas1.ActualHeight
                         'Case 10 'Calculatrice
-                        'Case 11 'Facebook
-                        '    Dim x As New uInternet("http://fr-fr.facebook.com/")
-                        '    Canvas1.Children.Add(x)
-                        '    x.Width = Canvas1.ActualWidth
-                        '    x.Height = Canvas1.ActualHeight
-                        'Case 12 'Horloge
-                        '    'Dim x As New uHorloge
-                        '    'Canvas1.Children.Add(x)
-                        '    'x.Width = Canvas1.ActualWidth
-                        '    'x.Height = Canvas1.ActualHeight
-                        'Case 13 'Meteo
-                        '    Dim x As New uMeteos
-                        '    Canvas1.Children.Add(x)
-                        '    x.Width = Canvas1.ActualWidth
-                        '    x.Height = Canvas1.ActualHeight
                         'Case 14 'Calendrier
                         '    'Dim x As New uCalendar
                         '    'Canvas1.Children.Add(x)
@@ -1404,11 +1378,6 @@ Class Window1
                         '    'x.Height = Canvas1.ActualHeight
                         'Case 15 'Notes
                         '    Dim x As New uNotes
-                        '    Canvas1.Children.Add(x)
-                        '    x.Width = Canvas1.ActualWidth
-                        '    x.Height = Canvas1.ActualHeight
-                        'Case 16
-                        '    Dim x As New uInternet("http://www.bison-fute.equipement.gouv.fr/diri/Accueil.do")
                         '    Canvas1.Children.Add(x)
                         '    x.Width = Canvas1.ActualWidth
                         '    x.Height = Canvas1.ActualHeight
@@ -1522,9 +1491,13 @@ Class Window1
                             y.IsEmpty = _ListElement.Item(j).IsEmpty
                             y.ShowEtiquette = _ListElement.Item(j).ShowEtiquette
                             y.ShowStatus = _ListElement.Item(j).ShowStatus
+                            y.ShowPicture = _ListElement.Item(j).ShowPicture
+                            y.Picture = _ListElement.Item(j).Picture
                             y.Etiquette = _ListElement.Item(j).Etiquette
                             y.DefautLabelStatus = _ListElement.Item(j).DefautLabelStatus
+                            y.TailleStatus = _ListElement.Item(j).TailleStatus
                             y.ColorBackGround = _ListElement.Item(j).ColorBackGround
+                            y.ColorStatus = _ListElement.Item(j).ColorStatus
                             y.IsHitTestVisible = True 'True:bouge pas False:Bouge
                             AddHandler y.ShowZone, AddressOf ElementShowZone
                             x.Content = y
@@ -1612,11 +1585,15 @@ Class Window1
                     y.IsEmpty = _ListElement.Item(i).IsEmpty
                     y.Type = _ListElement.Item(i).Type
                     y.CanEditValue = _ListElement.Item(i).CanEditValue
+                    y.Picture = _ListElement.Item(i).Picture
+                    y.ShowPicture = _ListElement.Item(i).ShowPicture
                     y.ShowEtiquette = _ListElement.Item(i).ShowEtiquette
                     y.ShowStatus = _ListElement.Item(i).ShowStatus
                     y.Etiquette = _ListElement.Item(i).Etiquette
                     y.DefautLabelStatus = _ListElement.Item(i).DefautLabelStatus
+                    y.TailleStatus = _ListElement.Item(i).TailleStatus
                     y.ColorBackGround = _ListElement.Item(i).ColorBackGround
+                    y.ColorStatus = _ListElement.Item(i).ColorStatus
                     y.IsHitTestVisible = True 'True:bouge pas False:Bouge
                     y.Action_GestureBasHaut = _ListElement.Item(i).Action_GestureBasHaut
                     y.Action_GestureDroiteGauche = _ListElement.Item(i).Action_GestureDroiteGauche
@@ -1627,6 +1604,7 @@ Class Window1
                     y.Visuel = _ListElement.Item(i).Visuel
                     y.URL = _ListElement.Item(i).URL
                     y.UrlRss = _ListElement.Item(i).UrlRss
+                    y.IDMeteo = _ListElement.Item(i).IDMeteo
                     AddHandler y.ShowZone, AddressOf ElementShowZone
                     x.Content = y
                     Canvas1.Children.Add(x)
@@ -1635,7 +1613,7 @@ Class Window1
                 End If
             Next
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            MessageBox.Show("Erreur ShowZone: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1651,11 +1629,15 @@ Class Window1
         Destination.IsEmpty = Source.IsEmpty
         Destination.Type = Source.Type
         Destination.CanEditValue = Source.CanEditValue
+        Destination.ShowPicture = Source.ShowPicture
+        Destination.Picture = Source.Picture
         Destination.ShowEtiquette = Source.ShowEtiquette
         Destination.ShowStatus = Source.ShowStatus
         Destination.Etiquette = Source.Etiquette
         Destination.DefautLabelStatus = Source.DefautLabelStatus
+        Destination.TailleStatus = Source.TailleStatus
         Destination.ColorBackGround = Source.ColorBackGround
+        Destination.ColorStatus = Source.ColorStatus
         Destination.IsHitTestVisible = True 'True:bouge pas False:Bouge
         Destination.Action_GestureBasHaut = Source.Action_GestureBasHaut
         Destination.Action_GestureDroiteGauche = Source.Action_GestureDroiteGauche
@@ -1666,6 +1648,7 @@ Class Window1
         Destination.Visuel = Source.Visuel
         Destination.URL = Source.URL
         Destination.UrlRss = Source.UrlRss
+        Destination.IDMeteo = Source.IDMeteo
     End Sub
 
     Private Sub Deplacement_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk1.Click
@@ -1944,6 +1927,42 @@ Class Window1
         End Try
     End Sub
 
+    Private Sub NewWidgetMeteo_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetMeteo.Click
+        Try
+            'Ajouter un nouveau Control
+            Dim x As New ContentControl
+            x.Width = 100
+            x.Height = 100
+            x.Style = mybuttonstyle
+            x.Tag = True
+            x.Uid = System.Guid.NewGuid.ToString()
+
+            'Ajoute l'élément dans la liste
+            Dim elmt As New uWidgetEmpty
+            elmt.Uid = x.Uid
+            elmt.ZoneId = _CurrentIdZone
+            elmt.Width = 100
+            elmt.Height = 100
+            elmt.Rotation = 0
+            elmt.X = 300
+            elmt.Y = 300
+            elmt.IsEmpty = True
+            elmt.Type = uWidgetEmpty.TypeOfWidget.Meteo
+            elmt.ShowStatus = False
+            elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            _ListElement.Add(elmt)
+
+            elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            x.Content = elmt
+            Canvas1.Children.Add(x)
+            Canvas.SetLeft(x, 300)
+            Canvas.SetTop(x, 300)
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+
     Private Sub ViewLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewLog.Click
         Try
             Me.Cursor = Cursors.Wait
@@ -1970,6 +1989,12 @@ Class Window1
         End Try
     End Sub
 
+    Private Sub ViewCalendar_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewCalendar.Click
+        Dim x As New WCalendar
+        x.Owner = Me
+        x.ShowDialog()
+    End Sub
+
     Private Sub MnuHisto_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuHisto.Click
         Try
             Dim x As New uHisto(Nothing)
@@ -1987,6 +2012,17 @@ Class Window1
 
     Private Sub MnuExecuteMacro(ByVal sender As Object, ByVal e As RoutedEventArgs)
         myService.RunMacro(IdSrv, sender.tag)
+    End Sub
+
+    Private Sub MnuMacro_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles MnuMacro.PreviewMouseDown
+        MnuMacro.Items.Clear()
+        For Each _mac As Macro In myService.GetAllMacros(IdSrv)
+            Dim mnu As New MenuItem
+            mnu.Tag = _mac.ID
+            mnu.Header = _mac.Nom
+            AddHandler mnu.Click, AddressOf MnuExecuteMacro
+            MnuMacro.Items.Add(mnu)
+        Next
     End Sub
 
 

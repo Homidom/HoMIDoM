@@ -18,6 +18,7 @@ Public Class WWidgetProperty
             ChkShowStatus.IsChecked = Obj.ShowStatus
             ChkShowEtiq.IsChecked = Obj.ShowEtiquette
             ChkEditValue.IsChecked = Obj.CanEditValue
+            ChkPicture.IsChecked = Obj.ShowPicture
             TxtEtiq.Text = Obj.Etiquette
             TxtX.Text = Obj.X
             TxtY.Text = Obj.Y
@@ -25,8 +26,11 @@ Public Class WWidgetProperty
             TxtHeight.Text = Obj.Height
             TxtRotation.Text = Obj.Rotation
             TxtDefStatus.Text = Obj.DefautLabelStatus
+            TxtTailleStatus.Text = Obj.TailleStatus
             lblColor.Background = Obj.ColorBackGround
+            lblColorStatus.Background = Obj.ColorStatus
             ColorPicker1.SelectedColor = Obj.ColorBackGround
+            ColorPicker2.SelectedColor = Obj.ColorStatus
             ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
             TxtURL.Text = Obj.URL
             TxtURLRss.Text = Obj.UrlRss
@@ -101,6 +105,32 @@ Public Class WWidgetProperty
                         BtnEditAction.Visibility = Windows.Visibility.Collapsed
                         BtnEditVisu.Visibility = Windows.Visibility.Collapsed
                         BtnDelete.Visibility = Windows.Visibility.Visible
+                    Case uWidgetEmpty.TypeOfWidget.Meteo
+                        StkPicture.Visibility = Visibility.Collapsed
+                        StkStatus.Visibility = Visibility.Collapsed
+                        StkWeb.Visibility = Windows.Visibility.Collapsed
+                        StkRss.Visibility = Windows.Visibility.Collapsed
+                        StkMeteo.Visibility = Windows.Visibility.Visible
+                        BtnEditAction.Visibility = Windows.Visibility.Collapsed
+                        BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                        BtnDelete.Visibility = Windows.Visibility.Visible
+
+                        If IsConnect Then
+                            CbVilleMeteo.Items.Clear()
+                            Dim idx As Integer = -1
+                            For Each _devmeteo As TemplateDevice In myService.GetAllDevices(IdSrv)
+                                If _devmeteo.Type = Device.ListeDevices.METEO Then
+                                    Dim x As New ComboBoxItem
+                                    x.Content = _devmeteo.Name
+                                    x.Tag = _devmeteo.ID
+                                    CbVilleMeteo.Items.Add(x)
+
+                                    If _devmeteo.ID = Obj.IDMeteo Then idx = CbVilleMeteo.Items.Count - 1
+                                End If
+                            Next
+
+                            CbVilleMeteo.SelectedIndex = idx
+                        End If
                 End Select
 
             End If
@@ -114,21 +144,40 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub BtnOk_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOk.Click
-        Obj.ShowStatus = ChkShowStatus.IsChecked
-        Obj.ShowEtiquette = ChkShowEtiq.IsChecked
-        Obj.CanEditValue = ChkEditValue.IsChecked
-        Obj.Etiquette = TxtEtiq.Text
-        Obj.X = TxtX.Text
-        Obj.Y = TxtY.Text
-        Obj.Width = TxtWidth.Text
-        Obj.Height = TxtHeight.Text
-        Obj.Rotation = TxtRotation.Text
-        Obj.DefautLabelStatus = TxtDefStatus.Text
-        Obj.ColorBackGround = ColorPicker1.SelectedColor
-        Obj.URL = TxtURL.Text
-        Obj.UrlRss = TxtURLRss.Text
+        Try
+            Obj.ShowStatus = ChkShowStatus.IsChecked
+            Obj.ShowEtiquette = ChkShowEtiq.IsChecked
+            Obj.ShowPicture = ChkPicture.IsChecked
+            Obj.CanEditValue = ChkEditValue.IsChecked
+            Obj.Etiquette = TxtEtiq.Text
+            Obj.X = TxtX.Text
+            Obj.Y = TxtY.Text
+            Obj.Width = TxtWidth.Text
+            Obj.Height = TxtHeight.Text
+            Obj.Rotation = TxtRotation.Text
+            Obj.DefautLabelStatus = TxtDefStatus.Text
+            Obj.Picture = ImgPicture.Tag
 
-        DialogResult = True
+            Try
+                Obj.TailleStatus = TxtTailleStatus.Text
+            Catch ex As Exception
+                MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Exit Sub
+            End Try
+            Obj.ColorBackGround = ColorPicker1.SelectedColor
+            Obj.ColorStatus = ColorPicker2.SelectedColor
+            Obj.URL = TxtURL.Text
+            Obj.UrlRss = TxtURLRss.Text
+
+            If CbVilleMeteo.SelectedIndex >= 0 Then
+                Dim x As ComboBoxItem = CbVilleMeteo.Items(CbVilleMeteo.SelectedIndex)
+                Obj.IDMeteo = x.Tag
+            End If
+
+            DialogResult = True
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub BtnCancel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCancel.Click
@@ -649,4 +698,28 @@ Public Class WWidgetProperty
     End Sub
 
 
+    Private Sub ImgPicture_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgPicture.MouseDown
+        Try
+            Dim frm As New WindowImg
+            frm.ShowDialog()
+            If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+                Dim retour As String = frm.FileName
+                If retour <> "" Then
+                    ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
+                    ImgPicture.Tag = retour
+                End If
+                frm.Close()
+            Else
+                frm.Close()
+            End If
+            frm = Nothing
+        Catch ex As Exception
+            MessageBox.Show("Erreur ImgPicture_MouseDown: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub BtnInitPict_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnInitPict.Click
+        ImgPicture.Source = Nothing
+        ImgPicture.Tag = ""
+    End Sub
 End Class

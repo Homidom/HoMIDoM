@@ -14,6 +14,14 @@ InitializeComponent
 	<summary>
 uEditValue
 </summary>
+</member><member name="M:HoMIWpF.WCalendar.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.WCalendar">
+	<summary>
+WCalendar
+</summary>
 </member><member name="M:HoMIWpF.uWidgetEmpty.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -149,6 +157,14 @@ InitializeComponent
 </member><member name="T:HoMIWpF.uMeteos">
 	<summary>
 uMeteos
+</summary>
+</member><member name="M:HoMIWpF.uWMeteo.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.uWMeteo">
+	<summary>
+uWMeteo
 </summary>
 </member><member name="M:HoMIWpF.uContact.InitializeComponent">
 	<summary>

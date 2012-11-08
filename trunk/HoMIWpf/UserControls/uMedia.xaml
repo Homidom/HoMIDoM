@@ -54,6 +54,7 @@
                 <StackPanel Orientation="Horizontal" Name="StkVolume">
                 <Image Name="BtnVolumeMute" Height="30" Width="30" Source="/HoMIWpF;component/Images/volume-muted.png" />
                 <Image Name="BtnVolumeDown" Height="30" Width="30" Source="/HoMIWpF;component/Images/volume-low.png" />
+                    <ProgressBar Name="VolumeValue" Width="50" Maximum="1" />
                 <Image Name="BtnVolumeUp" Height="30" Width="30" Source="/HoMIWpF;component/Images/volume-high.png" />
                 </StackPanel>
                 <Image Name="BtnOpen" Height="30" Width="30" Source="/HoMIWpF;component/Images/plus.png" />
