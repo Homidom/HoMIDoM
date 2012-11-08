@@ -7,7 +7,6 @@ Public Class WConfig
 
     Private Sub BtnOk_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOk.Click
         Frm.ShowSoleil = ChkSoleil.IsChecked
-        Frm.ShowTemperature = ChkTemp.IsChecked
         Frm.Friction = SliderFriction.Value
         Frm.ImageBackGround = TxtImgBack.Text
         Frm.SpeedTouch = SliderSpeed.Value
@@ -32,7 +31,6 @@ Public Class WConfig
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         Frm = FrmMere
         ChkSoleil.IsChecked = Frm.ShowSoleil
-        ChkTemp.IsChecked = Frm.ShowTemperature
         SliderFriction.Value = Frm.Friction
         LblFriction.Content = Frm.Friction
         TxtImgBack.Text = Frm.ImageBackGround

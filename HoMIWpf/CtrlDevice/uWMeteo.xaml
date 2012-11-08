@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="uWMeteo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="202" Height="193"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             >
+    <Grid Background="DodgerBlue" >
+        <Border CornerRadius="5">
+            <Grid>
+                <DockPanel MaxHeight="90" VerticalAlignment="Top" >
+                    <StackPanel DockPanel.Dock="Left"  >
+                        <Label Name="LblMin" Content="##" Foreground="LightGray" MaxWidth="100"  HorizontalAlignment="Center" HorizontalContentAlignment="Center" />
+                        <Label Name="LblVille" Content="#####" Foreground="White" MaxWidth="100" HorizontalAlignment="Center" HorizontalContentAlignment="Center" FontSize="14" />
+                        <Label Name="LblMax" Content="##" Foreground="LightGray" MaxWidth="100" HorizontalAlignment="Center" HorizontalContentAlignment="Center" />
+                    </StackPanel>
+                    <Label Name="LblTemp" DockPanel.Dock="Right"  Foreground=" White" FontSize="24" Content="##°" HorizontalContentAlignment="Center" />
+                    <Image Name="Icon" Height="45" Width="45"/>
+                    
+                </DockPanel >
+                <StackPanel Orientation="Horizontal" Margin="0,80,0,0">
+                    <StackPanel Width="50">
+                        <Label Name="LblJ1" Foreground=" White" Content="###" Background="SteelBlue" HorizontalContentAlignment="Center" />
+                        <Image Name="IconJ1" Width="25" Height="25" />
+                        <Label Name="LblMaxJ1" Foreground=" White" Content="##°" FontSize="16" HorizontalContentAlignment="Center" />
+                        <Label Name="LblMinJ1" Foreground="DarkBlue" Content="##°"  FontSize="14" HorizontalContentAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Width="50">
+                        <Label Name="LblJ2" Foreground=" White" Content="###" Background="SteelBlue" HorizontalContentAlignment="Center" />
+                        <Image Name="IconJ2" Width="25" Height="25" />
+                        <Label Name="LblMaxJ2" Foreground=" White" Content="##°" FontSize="16" HorizontalContentAlignment="Center" />
+                        <Label Name="LblMinJ2" Foreground="DarkBlue" Content="##°"  FontSize="14" HorizontalContentAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Width="50">
+                        <Label Name="LblJ3" Foreground=" White" Content="###" Background="SteelBlue" HorizontalContentAlignment="Center" />
+                        <Image Name="IconJ3" Width="25" Height="25" />
+                        <Label Name="LblMaxJ3" Foreground=" White" Content="##°" FontSize="16" HorizontalContentAlignment="Center" />
+                        <Label Name="LblMinJ3" Foreground="DarkBlue" Content="##°"  FontSize="14" HorizontalContentAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Width="50">
+                        <Label Name="LblJ4" Foreground=" White" Content="###" Background="SteelBlue" HorizontalContentAlignment="Center" />
+                        <Image Name="IconJ4" Width="25" Height="25" />
+                        <Label Name="LblMaxJ4" Foreground=" White" Content="##°" FontSize="16" HorizontalContentAlignment="Center" />
+                        <Label Name="LblMinJ4" Foreground="DarkBlue" Content="##°"  FontSize="14" HorizontalContentAlignment="Center" />
+                    </StackPanel>
+
+
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

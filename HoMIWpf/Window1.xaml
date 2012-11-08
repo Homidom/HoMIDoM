@@ -60,10 +60,16 @@
                                 <MenuItem Name="NewWidgetEmpty" Header="Nouveau Widget Vide" FontSize="10" />
                                 <MenuItem Name="NewWidgetWeb" Header="Nouveau Widget Web" FontSize="10" />
                                 <MenuItem Name="NewWidgetRss" Header="Nouveau Widget Rss" FontSize="10" />
+                                <MenuItem Name="NewWidgetMeteo" Header="Nouveau Widget Meteo" FontSize="10" />
                             </MenuItem>
                         <MenuItem Name="ViewLog" Header="Consulter les logs" FontSize="10" >
                             <MenuItem.Icon>
                                 <Image Width="20" Height="20" Source="/HoMIWpF;component/Images/Log_32.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Name="ViewCalendar" Header="Calendrier" FontSize="10" >
+                            <MenuItem.Icon>
+                                <Image Width="20" Height="20" Source="/HoMIWpF;component/Images/Calendar.png" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Name="MnuHisto" Header="Historique" FontSize="10">
@@ -78,7 +84,7 @@
                         </MenuItem>
                     </MenuItem> 
                 </Menu>
-                <Label Margin="1" Name="LblTime" FontSize="10" Foreground="White" FlowDirection="RightToLeft">Label</Label>
+                <Label Margin="1" Name="LblTime" FontSize="10" Foreground="White" FlowDirection="RightToLeft">#####</Label>
                 <StackPanel Orientation="Horizontal" >
                     <!--<CheckBox  Name="Chk1" Content="Déplacer Widget" Foreground="White" Visibility="Collapsed"  />
                     <CheckBox  Name="Chk2" Content="Editer Widget" Foreground="White"  Visibility="Collapsed"/>-->
@@ -89,8 +95,6 @@
                 <Image HorizontalAlignment="Left" Margin="1" Name="ImageCouche" Stretch="Fill" Tag="Soleil" Width="20"  Height="20" Source="/HoMIWpF;component/Images/36.png" />
                 <Label Foreground="White" HorizontalAlignment="Left" Margin="1" Name="LblCouche" Tag="Soleil" FontSize="10">?</Label>
                 <Rectangle Width="100" />
-                <Image HorizontalAlignment="Left" Margin="1" Name="ImgTemp" Tag="Temperature" Stretch="Fill" Width="20" Grid.Column="1" Height="20" Source="/HoMIWpF;component/Images/temperature.png" Visibility="Hidden" />
-                <Label FontSize="10" Foreground="White" Margin="1" Tag="Temperature" Name="LblTemp" Visibility="Hidden">?</Label>
         </StackPanel>
         <StackPanel DockPanel.Dock="Bottom" >
             <local:AniScrollViewer  x:Name="ScrollViewer1" Margin="2" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" BorderBrush="DarkGray">
