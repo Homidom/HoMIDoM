@@ -61,10 +61,6 @@ Partial Public Class uLog
             End If
 
             Try
-                If _LigneIgnorees > 0 Then
-                    MessageBox.Show(_LigneIgnorees & " ligne(s) du log ne seront pas prises en compte car elles ne respectent pas le format attendu, veuillez consultez le fichier log sur le serveur pour avoir la totalité", "INFO", MessageBoxButton.OK, MessageBoxImage.Information)
-                End If
-
                 DGW.DataContext = ligneLog
             Catch ex As Exception
                 MessageBox.Show("Erreur: " & ex.ToString)

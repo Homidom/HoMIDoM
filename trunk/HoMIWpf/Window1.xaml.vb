@@ -95,6 +95,9 @@ Class Window1
                     bmpImage.UriSource = New Uri(_ImageBackGroundDefault, UriKind.Absolute)
                     bmpImage.EndInit()
                     ImgBackground.Source = bmpImage
+                Else
+                    ImgBackground.Source = Nothing
+                    _ImageBackGroundDefault = ""
                 End If
             End If
         End Set

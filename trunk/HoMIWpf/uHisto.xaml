@@ -80,10 +80,9 @@
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" >
                     <DockPanel MaxWidth="230" DockPanel.Dock="Left" Width="230" Background=" Black">
                         <StackPanel Orientation="Horizontal" Name="StkMnu6" DockPanel.Dock="Bottom">
-                            <Button Height="22" Margin="2" Name="BtnGenereGraph" Template="{DynamicResource GlassButton}" Width="22" ToolTip="Générer">
+                            <Button Height="30" Margin="2" Name="BtnGenereGraph" Template="{DynamicResource GlassButton}" Width="30" ToolTip="Générer">
                                 <Image  Name="Image1" Source="/HoMIWpF;component/Images/Courbe_32.png" />
                             </Button>
-
                         </StackPanel>
                         <TreeView Margin="0" Name="TreeViewHisto" Background="DimGray" Foreground="White" VerticalContentAlignment="Top"  />
                     </DockPanel>
