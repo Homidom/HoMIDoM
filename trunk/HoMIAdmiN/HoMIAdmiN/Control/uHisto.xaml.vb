@@ -9,7 +9,7 @@ Public Class uHisto
     Public Event CloseMe(ByVal MyObject As Object)
     Dim result As New List(Of Historisation)
     Dim _Devices As New List(Of Dictionary(Of String, String))
-    Dim _MaxData As Integer = 1000
+    Dim _MaxData As Integer = 2000
     Dim _CurrentChart As Chart = Nothing
 
     Public Sub New(ByVal Devices As List(Of Dictionary(Of String, String)))
@@ -20,8 +20,8 @@ Public Class uHisto
         Try
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
 
-            DateStartSelect.DisplayDate = Now.Date.AddDays(-31).ToString '"01/01/2012"
-            DateStartSelect.Text = Now.Date.AddDays(-7).ToString '"01/01/2012"
+            DateStartSelect.DisplayDate = Now.Date.AddDays(-14).ToString '"01/01/2012"
+            DateStartSelect.Text = Now.Date.AddDays(-14).ToString '"01/01/2012"
             DateFinSelect.DisplayDate = Now.Date.AddDays(1).ToString
             DateFinSelect.Text = Now.Date.AddDays(1).ToString
 
@@ -41,9 +41,9 @@ Public Class uHisto
     Private Sub Refresh_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Refresh.Click
         Try
             _MaxData = TxtMaxData.Text
-            If IsNumeric(_MaxData) = False Or _MaxData > 5000 Or _MaxData < 0 Then
-                MessageBox.Show("Le nombre maximal de données doit être un numérique et <5000", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                TxtMaxData.Text = 1000
+            If IsNumeric(_MaxData) = False Or _MaxData > 9999 Or _MaxData < 0 Then
+                MessageBox.Show("Le nombre maximal de données doit être un numérique et <9999", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                TxtMaxData.Text = 2000
                 Exit Sub
             End If
 

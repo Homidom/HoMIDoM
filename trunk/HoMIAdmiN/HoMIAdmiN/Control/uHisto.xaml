@@ -51,7 +51,7 @@
                                 <ComboBoxItem Content="Jour" />
                             </ComboBox>
                             <Label Content="Max Data:" Foreground="White" VerticalAlignment="center"/>
-                            <TextBox Name="TxtMaxData" Width="40" Text="1000" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" TextAlignment="Center"/>
+                            <TextBox Name="TxtMaxData" Width="40" Text="2000" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" TextAlignment="Center"/>
                             <Rectangle Width="15"/>
                             <Button Height="25" Width="25" Name="Refresh" ToolTip="Rafraichir le graphe" Template="{DynamicResource GlassButton}">
                                 <Image Name="ImgRefrsh" Source="/HoMIAdmiN;component/Images/Refresh.png"/>
