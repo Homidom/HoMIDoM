@@ -53,6 +53,28 @@ Public Class uHisto
         End Try
     End Sub
 
+
+
+    Private Sub Chart2_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
+        ' Call HitTest
+        Dim result As HitTestResult = _CurrentChart.HitTest(e.X, e.Y)
+
+        ' Reset Data Point Attributes
+        Dim point As DataPoint
+        For Each point In _CurrentChart.Series(0).Points
+            point.BorderWidth = 3
+        Next
+
+        ' If the mouse if over a data point
+        If result.ChartElementType = ChartElementType.DataPoint Then
+            Dim pointt As DataPoint = _CurrentChart.Series(0).Points(result.PointIndex)
+            pointt.BorderWidth = 1
+        Else
+            ' Set default cursor
+            Me.Cursor = Cursors.Arrow
+        End If
+    End Sub
+
     Sub Update_Graphe()
         Try
             Cursor = Cursors.Wait
@@ -63,6 +85,7 @@ Public Class uHisto
             Chart2.Width = 925
             Chart2.Height = 500
 
+            AddHandler Chart2.MouseMove, AddressOf Chart2_MouseMove
 
             Dim legend1 As New Legend
             Chart2.Legends.Add(legend1)
@@ -77,7 +100,6 @@ Public Class uHisto
             Chart2.ChartAreas("Default").AxisX.ScaleView.Zoomable = True
             Chart2.ChartAreas("Default").AxisY.ScaleView.Zoomable = True
 
-            'Chart2.ChartAreas("Default").AxisX.MajorGrid.LineColor = Color.SlateGray
             'Chart2.ChartAreas("Default").AxisX.MajorGrid.Interval = 1
             'Chart2.ChartAreas("Default").AxisX.MajorGrid.IntervalType = DateTimeIntervalType.Hours
             'Chart2.ChartAreas("Default").AxisX.MajorTickMark.Interval = 1
@@ -89,6 +111,13 @@ Public Class uHisto
             Chart2.ChartAreas("Default").AxisX.LabelStyle.Angle = -60
             Chart2.ChartAreas("Default").AxisX.LabelStyle.Format = "dd/MM/yyyy HH:mm"
             Chart2.ChartAreas("Default").AxisX.LabelStyle.IntervalType = DateTimeIntervalType.Auto
+            Chart2.ChartAreas("Default").AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount
+            Chart2.ChartAreas("Default").AxisX.MajorGrid.LineDashStyle = ChartDashStyle.Dot
+            Chart2.ChartAreas("Default").AxisX.MajorGrid.LineColor = Color.SlateGray
+
+            Chart2.ChartAreas("Default").AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount
+            Chart2.ChartAreas("Default").AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot
+            Chart2.ChartAreas("Default").AxisY.MajorGrid.LineColor = Color.SlateGray
 
             ' Set automatic scrolling
             Chart2.ChartAreas("Default").CursorX.AutoScroll = True
@@ -139,22 +168,22 @@ Public Class uHisto
             If ChkLine.IsChecked Then
                 For i As Integer = 0 To Chart2.Series.Count - 1
                     Chart2.Series(i).ChartType = SeriesChartType.Line
-                    Chart2.Series(i).ToolTip = "#VALX" & " Valeur:" & "#VALY"
+                    Chart2.Series(i).ToolTip = "#VALX{dd/MM/yyyy HH:mm:ss}" & " Valeur:" & "#VALY"
                 Next
             ElseIf ChkLine_Full.IsChecked Then
                 For i As Integer = 0 To Chart2.Series.Count - 1
                     Chart2.Series(i).ChartType = SeriesChartType.SplineArea
-                    Chart2.Series(i).ToolTip = "#VALX" & " Valeur:" & "#VALY"
+                    Chart2.Series(i).ToolTip = "#VALX{dd/MM/yyyy HH:mm:ss}" & " Valeur:" & "#VALY"
                 Next
             ElseIf ChkHisto.IsChecked Then
                 For i As Integer = 0 To Chart2.Series.Count - 1
                     Chart2.Series(i).ChartType = SeriesChartType.Bar
-                    Chart2.Series(i).ToolTip = "#VALX" & " Valeur:" & "#VALY"
+                    Chart2.Series(i).ToolTip = "#VALX{dd/MM/yyyy HH:mm:ss}" & " Valeur:" & "#VALY"
                 Next
             Else
                 For i As Integer = 0 To Chart2.Series.Count - 1
                     Chart2.Series(i).ChartType = SeriesChartType.Pie
-                    Chart2.Series(i).ToolTip = "#VALX" & " Valeur:" & "#VALY"
+                    Chart2.Series(i).ToolTip = "#VALX{dd/MM/yyyy HH:mm:ss}" & " Valeur:" & "#VALY"
                 Next
             End If
 
@@ -173,7 +202,10 @@ Public Class uHisto
                 Case 2 : Chart2.ChartAreas("Default").BackColor = Color.LightYellow
                 Case 3 : Chart2.ChartAreas("Default").BackColor = Color.Red
                 Case 4 : Chart2.ChartAreas("Default").BackColor = Color.LightGreen
-                Case 5 : Chart2.ChartAreas("Default").BackColor = Color.LightGray
+                Case 5
+                    Chart2.ChartAreas("Default").BackColor = Color.LightGray
+                    Chart2.ChartAreas("Default").BackGradientStyle = GradientStyle.TopBottom
+                    Chart2.ChartAreas("Default").BackSecondaryColor = Color.WhiteSmoke
                 Case 6 : Chart2.ChartAreas("Default").BackColor = Color.Transparent
             End Select
 
