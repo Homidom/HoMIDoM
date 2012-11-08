@@ -77,6 +77,19 @@ Public Class uHisto
             Chart2.ChartAreas("Default").AxisX.ScaleView.Zoomable = True
             Chart2.ChartAreas("Default").AxisY.ScaleView.Zoomable = True
 
+            'Chart2.ChartAreas("Default").AxisX.MajorGrid.LineColor = Color.SlateGray
+            'Chart2.ChartAreas("Default").AxisX.MajorGrid.Interval = 1
+            'Chart2.ChartAreas("Default").AxisX.MajorGrid.IntervalType = DateTimeIntervalType.Hours
+            'Chart2.ChartAreas("Default").AxisX.MajorTickMark.Interval = 1
+            'Chart2.ChartAreas("Default").AxisX.MajorTickMark.IntervalType = DateTimeIntervalType.Hours
+            'Chart2.ChartAreas("Default").AxisX.Interval = 1
+            'Chart2.ChartAreas("Default").AxisX.IntervalType = DateTimeIntervalType.Hours
+            'Chart2.ChartAreas("Default").AxisX.LabelStyle.Interval = 1
+            'Chart2.ChartAreas("Default").AxisX.LabelStyle.IntervalType = DateTimeIntervalType.Hours
+            Chart2.ChartAreas("Default").AxisX.LabelStyle.Angle = -60
+            Chart2.ChartAreas("Default").AxisX.LabelStyle.Format = "dd/MM/yyyy HH:mm"
+            Chart2.ChartAreas("Default").AxisX.LabelStyle.IntervalType = DateTimeIntervalType.Auto
+
             ' Set automatic scrolling
             Chart2.ChartAreas("Default").CursorX.AutoScroll = True
             Chart2.ChartAreas("Default").CursorY.AutoScroll = True
@@ -85,18 +98,19 @@ Public Class uHisto
                 TabControl1.Items.RemoveAt(1)
             Loop
 
+            Dim datestart As String = DateStartSelect.Text
+            Dim dateend As String = DateFinSelect.Text 'displaydate
+            Dim moyenne As String = ComboBoxMoyenne.Text
+            Dim a() As String = datestart.Split("/")
+            If a.Length = 3 Then datestart = a(2) & "-" & a(1) & "-" & a(0) Else datestart = ""
+            a = dateend.Split("/")
+            If a.Length = 3 Then dateend = a(2) & "-" & a(1) & "-" & a(0) Else dateend = ""
+
             For Each _item In _Devices
                 For Each kvp As KeyValuePair(Of String, String) In _item
                     Dim _namedevice As String = myService.ReturnDeviceByID(IdSrv, kvp.Key).Name
-                    Dim datestart As String = DateStartSelect.Text
-                    Dim dateend As String = DateFinSelect.Text 'displaydate
-                    Dim moyenne As String = ComboBoxMoyenne.Text
 
                     'Recuperation des historiques
-                    Dim a() As String = datestart.Split("/")
-                    If a.Length = 3 Then datestart = a(2) & "-" & a(1) & "-" & a(0) Else datestart = ""
-                    a = dateend.Split("/")
-                    If a.Length = 3 Then dateend = a(2) & "-" & a(1) & "-" & a(0) Else dateend = ""
                     result = myService.GetHistoDeviceSource(IdSrv, kvp.Key, kvp.Value, datestart, dateend, moyenne)
 
                     'Construction de la serie dans le graphe
@@ -143,7 +157,7 @@ Public Class uHisto
                     Chart2.Series(i).ToolTip = "#VALX" & " Valeur:" & "#VALY"
                 Next
             End If
-            
+
             ' Zoom into the X axis
             'Chart2.ChartAreas("Default").AxisX.ScaleView.Zoom(2, 3)
 
