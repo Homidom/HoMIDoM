@@ -14,6 +14,14 @@ InitializeComponent
 	<summary>
 uEditValue
 </summary>
+</member><member name="M:HoMIWpF.uKeyPad.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.uKeyPad">
+	<summary>
+uKeyPad
+</summary>
 </member><member name="M:HoMIWpF.WCalendar.InitializeComponent">
 	<summary>
 InitializeComponent

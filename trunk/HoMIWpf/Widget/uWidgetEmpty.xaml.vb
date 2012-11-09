@@ -8,6 +8,7 @@ Public Class uWidgetEmpty
         Media = 2
         Rss = 3
         Meteo = 4
+        KeyPad = 5
         Device = 99
     End Enum
 
@@ -62,6 +63,10 @@ Public Class uWidgetEmpty
     'Variables Widget Meteo
     Dim _IDMeteo As String = ""
     Dim _METEO As uWMeteo = Nothing
+
+    'Variables Widget KeyPad
+    Dim _IDKeyPad As String = ""
+    Dim _KeyPad As uKeyPad = Nothing
 
     'Event
     Public Event Click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
@@ -300,6 +305,13 @@ Public Class uWidgetEmpty
 
                         _METEO = New uWMeteo
                         StkTool.Children.Add(_METEO)
+                    Case TypeOfWidget.KeyPad
+                        StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
+                        StkTool.Visibility = Windows.Visibility.Visible
+
+                        _KeyPad = New uKeyPad
+                        AddHandler _KeyPad.KeyPadOk, AddressOf KeyPadOK
+                        StkTool.Children.Add(_KeyPad)
                 End Select
             Catch ex As Exception
                 MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -556,7 +568,9 @@ Public Class uWidgetEmpty
         Set(ByVal value As String)
             _URL = value
             Try
-                _Webbrowser.Navigate(New Uri(_URL))
+                If My.Computer.Network.IsAvailable = True Then
+                    _Webbrowser.Navigate(New Uri(_URL))
+                End If
             Catch ex As Exception
                 'MessageBox.Show("Erreur (URL ou autre): " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End Try
@@ -600,6 +614,17 @@ Public Class uWidgetEmpty
         Set(ByVal value As String)
             _IDMeteo = value
             If _METEO IsNot Nothing Then _METEO.ID = value
+        End Set
+    End Property
+#End Region
+
+#Region "Property/Sub Meteo"
+    Public Property IDKeyPad As String
+        Get
+            Return _IDKeyPad
+        End Get
+        Set(ByVal value As String)
+            _IDKeyPad = value
         End Set
     End Property
 #End Region
@@ -1543,6 +1568,8 @@ Public Class uWidgetEmpty
                 _RSS.Height = Me.ActualHeight - 20
             Case TypeOfWidget.Meteo
                 Exit Sub
+            Case TypeOfWidget.KeyPad
+                Exit Sub
         End Select
 
         If ShowEtiquette And ShowPicture Then
@@ -1567,5 +1594,16 @@ Public Class uWidgetEmpty
         MyBase.Finalize()
         _Webbrowser = Nothing
         _RSS = Nothing
+        _METEO = Nothing
+        _KeyPad = Nothing
     End Sub
+
+    Private Sub KeyPadOK(ByVal Value As Integer)
+        If IsConnect Then
+            If _IDKeyPad <> "" Then
+                myService.ChangeValueOfDevice(IdSrv, _IDKeyPad, Value)
+            End If
+        End If
+    End Sub
+
 End Class

@@ -132,6 +132,33 @@ Public Class WWidgetProperty
 
                             CbVilleMeteo.SelectedIndex = idx
                         End If
+                    Case uWidgetEmpty.TypeOfWidget.KeyPad
+                        StkPicture.Visibility = Visibility.Collapsed
+                        StkStatus.Visibility = Visibility.Collapsed
+                        StkWeb.Visibility = Windows.Visibility.Collapsed
+                        StkRss.Visibility = Windows.Visibility.Collapsed
+                        StkMeteo.Visibility = Windows.Visibility.Collapsed
+                        StkKeyPad.Visibility = Windows.Visibility.Visible
+                        BtnEditAction.Visibility = Windows.Visibility.Collapsed
+                        BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                        BtnDelete.Visibility = Windows.Visibility.Visible
+
+                        If IsConnect Then
+                            CbDeviceKeyPad.Items.Clear()
+                            Dim idx As Integer = -1
+                            For Each _devk As TemplateDevice In myService.GetAllDevices(IdSrv)
+                                If _devk.Type = Device.ListeDevices.GENERIQUEVALUE Then
+                                    Dim x As New ComboBoxItem
+                                    x.Content = _devk.Name
+                                    x.Tag = _devk.ID
+                                    CbDeviceKeyPad.Items.Add(x)
+
+                                    If _devk.ID = Obj.IDKeyPad Then idx = CbDeviceKeyPad.Items.Count - 1
+                                End If
+                            Next
+
+                            CbDeviceKeyPad.SelectedIndex = idx
+                        End If
                 End Select
 
             End If
@@ -175,6 +202,10 @@ Public Class WWidgetProperty
             If CbVilleMeteo.SelectedIndex >= 0 Then
                 Dim x As ComboBoxItem = CbVilleMeteo.Items(CbVilleMeteo.SelectedIndex)
                 Obj.IDMeteo = x.Tag
+            End If
+            If CbDeviceKeyPad.SelectedIndex >= 0 Then
+                Dim x As ComboBoxItem = CbDeviceKeyPad.Items(CbDeviceKeyPad.SelectedIndex)
+                Obj.IDKeyPad = x.Tag
             End If
 
             DialogResult = True
@@ -699,7 +730,6 @@ Public Class WWidgetProperty
 
         DialogResult = True
     End Sub
-
 
     Private Sub ImgPicture_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgPicture.MouseDown
         Try
