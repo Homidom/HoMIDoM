@@ -506,6 +506,8 @@ Class Window1
                                                 x.Type = uWidgetEmpty.TypeOfWidget.Rss
                                             Case uWidgetEmpty.TypeOfWidget.Meteo.ToString
                                                 x.Type = uWidgetEmpty.TypeOfWidget.Meteo
+                                            Case uWidgetEmpty.TypeOfWidget.KeyPad.ToString
+                                                x.Type = uWidgetEmpty.TypeOfWidget.KeyPad
                                         End Select
                                     Case "caneditvalue"
                                         x.CanEditValue = list.Item(j).Attributes.Item(k).Value
@@ -555,6 +557,8 @@ Class Window1
                                         x.UrlRss = list.Item(j).Attributes.Item(k).Value
                                     Case "idmeteo"
                                         x.IDMeteo = list.Item(j).Attributes.Item(k).Value
+                                    Case "idkeypad"
+                                        x.IDKeyPad = list.Item(j).Attributes.Item(k).Value
                                 End Select
                             Next
 
@@ -835,6 +839,9 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("idmeteo")
                 writer.WriteValue(_ListElement.Item(i).IDMeteo)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("idkeypad")
+                writer.WriteValue(_ListElement.Item(i).IDKeyPad)
                 writer.WriteEndAttribute()
 
                 writer.WriteStartElement("actions")
@@ -1591,6 +1598,7 @@ Class Window1
                     y.URL = _ListElement.Item(i).URL
                     y.UrlRss = _ListElement.Item(i).UrlRss
                     y.IDMeteo = _ListElement.Item(i).IDMeteo
+                    y.IDKeyPad = _ListElement.Item(i).IDKeyPad
                     AddHandler y.ShowZone, AddressOf ElementShowZone
                     x.Content = y
                     Canvas1.Children.Add(x)
@@ -1636,6 +1644,7 @@ Class Window1
         Destination.URL = Source.URL
         Destination.UrlRss = Source.UrlRss
         Destination.IDMeteo = Source.IDMeteo
+        Destination.IDKeyPad = Source.IDKeyPad
     End Sub
 
     Private Sub Deplacement_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk1.Click
@@ -1918,8 +1927,8 @@ Class Window1
         Try
             'Ajouter un nouveau Control
             Dim x As New ContentControl
-            x.Width = 100
-            x.Height = 100
+            x.Width = 202
+            x.Height = 193
             x.Style = mybuttonstyle
             x.Tag = True
             x.Uid = System.Guid.NewGuid.ToString()
@@ -1928,8 +1937,8 @@ Class Window1
             Dim elmt As New uWidgetEmpty
             elmt.Uid = x.Uid
             elmt.ZoneId = _CurrentIdZone
-            elmt.Width = 100
-            elmt.Height = 100
+            elmt.Width = 202
+            elmt.Height = 193
             elmt.Rotation = 0
             elmt.X = 300
             elmt.Y = 300
@@ -1948,6 +1957,42 @@ Class Window1
             MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
+    Private Sub NewWidgetKeyPad_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetKeyPad.Click
+        Try
+            'Ajouter un nouveau Control
+            Dim x As New ContentControl
+            x.Width = 214
+            x.Height = 287
+            x.Style = mybuttonstyle
+            x.Tag = True
+            x.Uid = System.Guid.NewGuid.ToString()
+
+            'Ajoute l'élément dans la liste
+            Dim elmt As New uWidgetEmpty
+            elmt.Uid = x.Uid
+            elmt.ZoneId = _CurrentIdZone
+            elmt.Width = 214
+            elmt.Height = 287
+            elmt.Rotation = 0
+            elmt.X = 300
+            elmt.Y = 300
+            elmt.IsEmpty = True
+            elmt.Type = uWidgetEmpty.TypeOfWidget.KeyPad
+            elmt.ShowStatus = False
+            elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            _ListElement.Add(elmt)
+
+            elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            x.Content = elmt
+            Canvas1.Children.Add(x)
+            Canvas.SetLeft(x, 300)
+            Canvas.SetTop(x, 300)
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
 
     Private Sub ViewLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewLog.Click
         Try

@@ -61,6 +61,7 @@
                                 <MenuItem Name="NewWidgetWeb" Header="Nouveau Widget Web" FontSize="10" />
                                 <MenuItem Name="NewWidgetRss" Header="Nouveau Widget Rss" FontSize="10" />
                                 <MenuItem Name="NewWidgetMeteo" Header="Nouveau Widget Meteo" FontSize="10" />
+                            <MenuItem Name="NewWidgetKeyPad" Header="Nouveau Widget KeyPad" FontSize="10" />
                             </MenuItem>
                         <MenuItem Name="ViewLog" Header="Consulter les logs" FontSize="10" >
                             <MenuItem.Icon>

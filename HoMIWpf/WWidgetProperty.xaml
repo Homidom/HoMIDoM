@@ -97,6 +97,10 @@
                             <Label Width="120" Content="Ville:" Foreground="White"/>
                             <ComboBox Name="CbVilleMeteo" Width="200" />
                         </StackPanel>
+                        <StackPanel Orientation="Horizontal" Name="StkKeyPad" Visibility="Collapsed" >
+                            <Label Width="120" Content="Composant:" Foreground="White"/>
+                            <ComboBox Name="CbDeviceKeyPad" Width="200" />
+                        </StackPanel>
 
                     </StackPanel>
     </GroupBox>

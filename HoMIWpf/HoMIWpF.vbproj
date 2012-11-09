@@ -146,6 +146,9 @@
     <Compile Include="CtrlDevice\uEditValue.xaml.vb">
       <DependentUpon>uEditValue.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CtrlDevice\uKeyPad.xaml.vb">
+      <DependentUpon>uKeyPad.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CtrlDevice\uWMeteo.xaml.vb">
       <DependentUpon>uWMeteo.xaml</DependentUpon>
     </Compile>
@@ -185,6 +188,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CtrlDevice\uFreeBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CtrlDevice\uKeyPad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -724,7 +731,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
+      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

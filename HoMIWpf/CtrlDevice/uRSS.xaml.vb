@@ -28,6 +28,10 @@ Public Class uRSS
     End Sub
 
     Private Sub RefreshChannel()
+        If My.Computer.Network.IsAvailable = False Then
+            Exit Sub
+        End If
+
         If _Uri <> "" Then
             Dim channel As New RSSChannel(_Uri)
 
