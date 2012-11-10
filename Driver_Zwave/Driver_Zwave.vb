@@ -503,25 +503,39 @@ Public Class Driver_ZWave
                         _IsConnect = True
                         retour = "Port " & _Com & " ouvert "
                         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", retour)
+
                         ' Debug Information Controleur
                         Dim NodeControler As Byte = m_manager.GetControllerNodeId(m_homeId)
+                        Dim IsPrimSUC As String = ""
+                        If m_manager.IsPrimaryController(m_homeId) Then IsPrimSUC = "Primaire" Else IsPrimSUC = "Secondaire"
+                        If m_manager.IsStaticUpdateController(m_homeId) Then IsPrimSUC = IsPrimSUC & "(SUC)" Else IsPrimSUC = IsPrimSUC & " (SIS)"
 
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "Home ID : 0x" & Convert.ToString(m_homeId, 16).ToUpper & " " & m_nodeList.Count.ToString)
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "ID Node Controleur : " & NodeControler & " Nom Controleur :" & m_nodeList(NodeControler).Name)
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "Controleur : " & m_manager.GetNodeManufacturerName(m_homeId, NodeControler) & " " & m_manager.GetNodeProductName(m_homeId, NodeControler))
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "Type Controleur : " & m_manager.GetLibraryTypeName(m_homeId) & " Biblio Version : " & m_manager.GetLibraryVersion(m_homeId))
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "+---------------------------------------------------------------------------------------------")
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|  Home ID : 0x" & Convert.ToString(m_homeId, 16).ToUpper & " Nombre de noeuds : " & m_nodeList.Count.ToString)
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|  Mode    : " & IsPrimSUC)
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "+---------------------------------------------------------------------------------------------")
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|  ID  Controleur  : " & NodeControler & vbTab & "Nom Controleur :" & m_manager.GetNodeName(m_homeId, NodeControler))
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|  Marque/modele   : " & m_manager.GetNodeManufacturerName(m_homeId, NodeControler) & vbTab & m_manager.GetNodeProductName(m_homeId, NodeControler))
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|  Type Controleur : " & m_manager.GetLibraryTypeName(m_homeId) & vbTab & " Biblio Version : " & m_manager.GetLibraryVersion(m_homeId))
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|") ' +---------------------------------------------------------------------------------------------")
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "+- Noeuds ------------------------------------------------------------------------------------")
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|  Id:Nom " & vbTab & vbTab & "type" & vbTab & vbTab & "Constr./Modèle" & vbTab & "Version")
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|  Endormi ? ")
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "+---------------------------------------------------------------------------------------------")
 
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "Adresse Node " & vbTab & "  Basic type" & vbTab & vbTab & "  label  ")
-                        '   For i = NodeControler To m_nodeList.Count - 1
 
                         For i = NodeControler To m_nodeList.Count - 1 Step 1
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", m_nodeList(i).ID & " - " & m_nodeList(i).Name & vbTab & m_manager.GetNodeType(m_homeId, NodeControler) & " " & m_nodeList(i).Manufacturer & m_nodeList(i).Product & vbTab & vbTab & m_nodeList(i).Label)
+                            Dim NodeTempID As Byte = m_nodeList(i).ID
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "| " & m_nodeList(i).ID & " : " & m_nodeList(i).Name & vbTab & m_manager.GetNodeType(m_homeId, m_nodeList(i).ID) & vbTab & m_nodeList(i).Manufacturer & "/" & m_nodeList(i).Product & vbTab & m_manager.GetNodeVersion(m_homeId, m_nodeList(i).ID))
+                            Dim IsSleeping As String = ""
+                            If m_manager.IsNodeListeningDevice(m_homeId, m_nodeList(i).ID) Then IsSleeping = "Endormi" Else IsSleeping = "à l'ecoute"
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "| " & IsSleeping)
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "+---------------------------------------------------------------------------------------------")
                         Next
                     End If
                 Else
                     retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
                 End If
-
 
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave Start", ex.Message)
@@ -585,8 +599,6 @@ Public Class Driver_ZWave
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZWave Read", "Erreur: le label du device (Adresse2) " & Objet.Adresse2 & " n'est pas défini.")
                     Exit Sub
                 End If
-
-                Console.WriteLine("Valeur de l'info Adresse2 : " & Objet.Adresse2 & "-" & LabelInfo)
 
                 If IsNothing(NodeTemp) Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZWave Read", "Erreur: l'adresse du device (Adresse1) " & Objet.Adresse1 & " n'existe pas")
@@ -1040,7 +1052,7 @@ Public Class Driver_ZWave
         Private Shared Function GetNode(ByVal homeId As UInt32, ByVal nodeId As Byte) As Node
 
             For Each node As Node In m_nodeList
-                If (node.ID = nodeId) AndAlso (node.HomeID = homeId) Then
+                If (node.ID = nodeId) And (node.HomeID = homeId) Then
                     Return node
                 End If
             Next
