@@ -14,11 +14,16 @@ Namespace HoMIDom
         Implements IFileServer
 
         Public Function Download(ByVal Fichier As RequestFileData) As FileData Implements IFileServer.Download
-            If System.IO.File.Exists(Fichier.Name) Then
-                Dim Stream As System.IO.FileStream = New System.IO.FileStream(Fichier.Name, IO.FileMode.Open)
-                Return New FileData(Stream)
-            End If
-            Return Nothing
+            Try
+                If System.IO.File.Exists(Fichier.Name) Then
+                    Dim Stream As System.IO.FileStream = New System.IO.FileStream(Fichier.Name, IO.FileMode.Open)
+                    Return New FileData(Stream)
+                End If
+                Return Nothing
+            Catch ex As Exception
+
+                Return Nothing
+            End Try
         End Function
 
     End Class

@@ -71,27 +71,57 @@ Namespace HoMIDom
         End Sub
 
         Private Function RadiansToDegrees(ByVal dAndgleInRadians As Double) As Double
-            Return 180 * dAndgleInRadians / PI
+            Try
+                Return 180 * dAndgleInRadians / PI
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "Soleil:RadiansToDegrees", "Exception : " & ex.ToString)
+                Return 0
+            End Try
         End Function
 
         Private Function DegreesToRadians(ByVal dAngleInDegrees As Double) As Double
-            Return PI * dAngleInDegrees / 180
+            Try
+                Return PI * dAngleInDegrees / 180
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "Soleil:DegreesToRadians", "Exception : " & ex.ToString)
+                Return 0
+            End Try
         End Function
 
         Private Function CalculateGamma(ByVal nJulianDay As Long) As Double
-            Return (2 * PI / 365) * (nJulianDay - 1)
+            Try
+                Return (2 * PI / 365) * (nJulianDay - 1)
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "Soleil:CalculateGamma", "Exception : " & ex.ToString)
+                Return 0
+            End Try
         End Function
 
         Private Function CalculateGamma2(ByVal nJulianDay As Long, ByVal lHour As Long) As Double
-            Return (2 * PI / 365) * (nJulianDay - 1 + (lHour / 24))
+            Try
+                Return (2 * PI / 365) * (nJulianDay - 1 + (lHour / 24))
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "Soleil:CalculateGamma2", "Exception : " & ex.ToString)
+                Return 0
+            End Try
         End Function
 
         Private Function CalculatedEquationOfTime(ByVal dGamma As Double) As Double
-            Return (229.18 * (0.000075 + 0.001568 * Cos(dGamma) - 0.032077 * Sin(dGamma) - 0.014615 * Cos(2 * dGamma) - 0.040849 * Sin(2 * dGamma)))
+            Try
+                Return (229.18 * (0.000075 + 0.001568 * Cos(dGamma) - 0.032077 * Sin(dGamma) - 0.014615 * Cos(2 * dGamma) - 0.040849 * Sin(2 * dGamma)))
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "Soleil:CalculatedEquationOfTime", "Exception : " & ex.ToString)
+                Return 0
+            End Try
         End Function
 
         Private Function CalculateSolarDeclination(ByVal dGamma As Double) As Double
-            Return (0.006918 - 0.399912 * Cos(dGamma) + 0.070257 * Sin(dGamma) - 0.006758 * Cos(2 * dGamma) + 0.000907 * Sin(2 * dGamma))
+            Try
+                Return (0.006918 - 0.399912 * Cos(dGamma) + 0.070257 * Sin(dGamma) - 0.006758 * Cos(2 * dGamma) + 0.000907 * Sin(2 * dGamma))
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "Soleil:CalculateSolarDeclination", "Exception : " & ex.ToString)
+                Return 0
+            End Try
         End Function
 
         Private Function CalculateHourAngle(ByVal dLatitude As Double, ByVal dSolarDeclination As Double, ByVal bIsTime As Boolean) As Double

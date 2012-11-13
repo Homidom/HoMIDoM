@@ -225,14 +225,14 @@ Namespace HoMIDom
         ''' <summary>Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi</summary>
         ''' <remarks></remarks>
         Sub TimerSecTick()
-            Dim ladate As DateTime = Now 'on récupére la date/heure
+            try
+                Dim ladate As DateTime = Now 'on récupére la date/heure
 
-            '---- Action à effectuer toutes les secondes ----
-            Dim thr As New Thread(AddressOf VerifTimeDevice)
-            thr.IsBackground = True
-            thr.Start()
+                '---- Action à effectuer toutes les secondes ----
+                Dim thr As New Thread(AddressOf VerifTimeDevice)
+                thr.IsBackground = True
+                thr.Start()
 
-            Try
                 '---- Actions à effectuer toutes les minutes ----
                 If ladate.Second = 0 Then
                     VerifIsJour()
@@ -332,30 +332,34 @@ Namespace HoMIDom
 
 #Region "Soleil"
         Private Sub VerifIsJour()
-            If _HeureLeverSoleil <= Now And _HeureCoucherSoleil >= Now Then
-                For i As Integer = 0 To _ListDevices.Count - 1
-                    If _ListDevices.Item(i).id = "soleil01" Then
-                        If _ListDevices.Item(i).value = False Then _ListDevices.Item(i).value = True
-                        Exit For
-                    End If
-                Next
-            Else
-                For i As Integer = 0 To _ListDevices.Count - 1
-                    If _ListDevices.Item(i).id = "soleil01" Then
-                        If _ListDevices.Item(i).value = True Then _ListDevices.Item(i).value = False
-                        Exit For
-                    End If
-                Next
-            End If
+            Try
+                If _HeureLeverSoleil <= Now And _HeureCoucherSoleil >= Now Then
+                    For i As Integer = 0 To _ListDevices.Count - 1
+                        If _ListDevices.Item(i).id = "soleil01" Then
+                            If _ListDevices.Item(i).value = False Then _ListDevices.Item(i).value = True
+                            Exit For
+                        End If
+                    Next
+                Else
+                    For i As Integer = 0 To _ListDevices.Count - 1
+                        If _ListDevices.Item(i).id = "soleil01" Then
+                            If _ListDevices.Item(i).value = True Then _ListDevices.Item(i).value = False
+                            Exit For
+                        End If
+                    Next
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "VerifIsJour", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>Initialisation des heures du soleil</summary>
         ''' <remarks></remarks>
         Public Sub MAJ_HeuresSoleil()
-            Dim dtSunrise As Date
-            Dim dtSolarNoon As Date
-            Dim dtSunset As Date
             Try
+                Dim dtSunrise As Date
+                Dim dtSolarNoon As Date
+                Dim dtSunset As Date
                 Soleil.CalculateSolarTimes(_Latitude, _Longitude, Date.Now, dtSunrise, dtSolarNoon, dtSunset)
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Initialisation des heures du soleil")
                 _HeureCoucherSoleil = DateAdd(DateInterval.Minute, _HeureCoucherSoleilCorrection, dtSunset)
@@ -373,7 +377,11 @@ Namespace HoMIDom
 
 #Region "Configuration"
         Private Sub SaveRealTime()
-            If _SaveRealTime Then SaveConfig(_MonRepertoire & "\config\homidom.xml")
+            Try
+                If _SaveRealTime Then SaveConfig(_MonRepertoire & "\config\homidom.xml")
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveRealTime", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>Chargement de la config depuis le fichier XML</summary>
@@ -2228,10 +2236,10 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function EncryptTripleDES(ByVal sIn As String, ByVal sKey As String) As String
-            Dim DES As New System.Security.Cryptography.TripleDESCryptoServiceProvider
-            Dim hashMD5 As New System.Security.Cryptography.MD5CryptoServiceProvider
-
             Try
+                Dim DES As New System.Security.Cryptography.TripleDESCryptoServiceProvider
+                Dim hashMD5 As New System.Security.Cryptography.MD5CryptoServiceProvider
+
                 ' scramble the key
                 sKey = ScrambleKey(sKey)
                 ' Compute the MD5 hash.
@@ -2256,10 +2264,10 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function DecryptTripleDES(ByVal sOut As String, ByVal sKey As String) As String
-            Dim DES As New System.Security.Cryptography.TripleDESCryptoServiceProvider()
-            Dim hashMD5 As New System.Security.Cryptography.MD5CryptoServiceProvider
-
             Try
+                Dim DES As New System.Security.Cryptography.TripleDESCryptoServiceProvider()
+                Dim hashMD5 As New System.Security.Cryptography.MD5CryptoServiceProvider
+
                 ' scramble the key
                 sKey = ScrambleKey(sKey)
                 ' Compute the MD5 hash.
@@ -2278,19 +2286,20 @@ Namespace HoMIDom
         End Function
 
         Private Shared Function ScrambleKey(ByVal v_strKey As String) As String
-            Dim sbKey As New System.Text.StringBuilder
-            Dim intPtr As Integer
             Try
-                For intPtr = 1 To v_strKey.Length
-                    Dim intIn As Integer = v_strKey.Length - intPtr + 1
-                    sbKey.Append(Mid(v_strKey, intIn, 1))
-                Next
-                Dim strKey As String = sbKey.ToString
-                Return sbKey.ToString
-            Catch ex As Exception
-                'Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ScrambleKey", "Exception : " & ex.Message)
-                Return ""
-            End Try
+                Dim sbKey As New System.Text.StringBuilder
+                Dim intPtr As Integer
+
+                    For intPtr = 1 To v_strKey.Length
+                        Dim intIn As Integer = v_strKey.Length - intPtr + 1
+                        sbKey.Append(Mid(v_strKey, intIn, 1))
+                    Next
+                    Dim strKey As String = sbKey.ToString
+                    Return sbKey.ToString
+                Catch ex As Exception
+                    'Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ScrambleKey", "Exception : " & ex.Message)
+                    Return ""
+                End Try
         End Function
 #End Region
 
@@ -2371,10 +2380,14 @@ Namespace HoMIDom
         ''' <param name="Message"></param>
         ''' <remarks></remarks>
         Private Sub WriteLastLogs(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
-            For i = (_LastLogs.Count - 1) To 1 Step -1
-                _LastLogs(i) = _LastLogs(i - 1)
-            Next
-            _LastLogs(0) = Now & " - " & TypLog.ToString & " - " & Source.ToString & " - " & Fonction & " - " & Message
+            Try
+                For i = (_LastLogs.Count - 1) To 1 Step -1
+                    _LastLogs(i) = _LastLogs(i - 1)
+                Next
+                _LastLogs(0) = Now & " - " & TypLog.ToString & " - " & Source.ToString & " - " & Fonction & " - " & Message
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "WriteLastLogs", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>
@@ -2386,10 +2399,14 @@ Namespace HoMIDom
         ''' <param name="Message"></param>
         ''' <remarks></remarks>
         Private Sub WriteLastLogsError(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
-            For i = (_LastLogsError.Count - 1) To 1 Step -1
-                _LastLogsError(i) = _LastLogsError(i - 1)
-            Next
-            _LastLogsError(0) = Now & " - " & TypLog.ToString & " - " & Source.ToString & " - " & Fonction & " - " & Message
+            Try
+                For i = (_LastLogsError.Count - 1) To 1 Step -1
+                    _LastLogsError(i) = _LastLogsError(i - 1)
+                Next
+                _LastLogsError(0) = Now & " - " & TypLog.ToString & " - " & Source.ToString & " - " & Fonction & " - " & Message
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "WriteLastLogsError", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>Ecrit un log dans le fichier log au format xml</summary>
@@ -2531,9 +2548,12 @@ Namespace HoMIDom
         ''' <summary>Déclaration de la class Server</summary>
         ''' <remarks></remarks>
         Public Sub New()
-            'Check If Homidom Run in 32 or 64 bits
-            If IntPtr.Size = 8 Then _OsPlatForm = "64" Else _OsPlatForm = "32"
-
+            Try
+                'Check If Homidom Run in 32 or 64 bits
+                If IntPtr.Size = 8 Then _OsPlatForm = "64" Else _OsPlatForm = "32"
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>
@@ -2541,12 +2561,16 @@ Namespace HoMIDom
         ''' </summary>
         ''' <remarks></remarks>
         Public Sub Restart(ByVal IdSrv As String) Implements IHoMIDom.ReStart
-            If VerifIdSrv(IdSrv) = False Then
-                Exit Sub
-            End If
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Exit Sub
+                End If
 
-            [stop](_IdSrv)
-            start()
+                [stop](_IdSrv)
+                start()
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Restart", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>Démarrage du serveur</summary>
@@ -2867,11 +2891,11 @@ Namespace HoMIDom
         ''' <summary>Arrêt du serveur</summary>
         ''' <remarks></remarks>
         Public Sub [stop](ByVal IdSrv As String) Implements IHoMIDom.Stop
-            If VerifIdSrv(IdSrv) = False Then
-                Exit Sub
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Exit Sub
+                End If
+
                 'Dim retour As String
 
                 'on change l'etat du server pour ne plus lancer de traitement
@@ -3235,86 +3259,97 @@ Namespace HoMIDom
             End Try
         End Function
 
-
 #Region "Gestion des chaines"
         'Permet de lister les chaines dans la base de données
         Public Sub ChaineFromXMLToDB()
-            MyXML = New HoMIDom.XML(_MonRepertoire & "\data\complet.xml")
-            Dim liste As XmlNodeList = MyXML.SelectNodes("/tv/channel")
-            Dim i As Integer
-            Dim a As String
-            Dim b As String
-            Dim SQLconnect As New SQLiteConnection()
-            Dim SQLcommand As SQLiteCommand
-            SQLconnect.ConnectionString = "Data Source= " & _MonRepertoire & "\bdd\guidetv.db;"
-            SQLconnect.Open()
-            SQLcommand = SQLconnect.CreateCommand
-            SQLcommand.CommandText = "DELETE FROM chaineTV where id<>''"
-            SQLcommand.ExecuteNonQuery()
-            SQLcommand = SQLconnect.CreateCommand
-            Dim SQLreader As SQLiteDataReader
+            Try
+                MyXML = New HoMIDom.XML(_MonRepertoire & "\data\complet.xml")
+                Dim liste As XmlNodeList = MyXML.SelectNodes("/tv/channel")
+                Dim i As Integer
+                Dim a As String
+                Dim b As String
+                Dim SQLconnect As New SQLiteConnection()
+                Dim SQLcommand As SQLiteCommand
+                SQLconnect.ConnectionString = "Data Source= " & _MonRepertoire & "\bdd\guidetv.db;"
+                SQLconnect.Open()
+                SQLcommand = SQLconnect.CreateCommand
+                SQLcommand.CommandText = "DELETE FROM chaineTV where id<>''"
+                SQLcommand.ExecuteNonQuery()
+                SQLcommand = SQLconnect.CreateCommand
+                Dim SQLreader As SQLiteDataReader
 
-            'liste toute les chaines
-            For i = 0 To liste.Count - 1
-                a = liste(i).Attributes.Item(0).Value
-                'Affiche l'ID et le nom
-                SQLcommand.CommandText = "SELECT * FROM chaineTV where ID='" & a & "'"
-                SQLreader = SQLcommand.ExecuteReader()
-                If SQLreader.HasRows = False Then
-                    b = liste(i).ChildNodes.Item(0).ChildNodes.Item(0).Value
-                    b = ConvertTextToHTML(b)
-                    SQLreader.Close()
-                    SQLcommand = SQLconnect.CreateCommand
-                    SQLcommand.CommandText = "INSERT INTO chaineTV (id, nom,ico,enable,numero,categorie) VALUES ('" & a & "', '" & b & "','?','0','0','99')"
-                    SQLcommand.ExecuteNonQuery()
-                End If
-            Next
-            SQLcommand.Dispose()
-            SQLconnect.Close()
-            ChargeChaineFromDB()
-            MyXML = Nothing
+                'liste toute les chaines
+                For i = 0 To liste.Count - 1
+                    a = liste(i).Attributes.Item(0).Value
+                    'Affiche l'ID et le nom
+                    SQLcommand.CommandText = "SELECT * FROM chaineTV where ID='" & a & "'"
+                    SQLreader = SQLcommand.ExecuteReader()
+                    If SQLreader.HasRows = False Then
+                        b = liste(i).ChildNodes.Item(0).ChildNodes.Item(0).Value
+                        b = ConvertTextToHTML(b)
+                        SQLreader.Close()
+                        SQLcommand = SQLconnect.CreateCommand
+                        SQLcommand.CommandText = "INSERT INTO chaineTV (id, nom,ico,enable,numero,categorie) VALUES ('" & a & "', '" & b & "','?','0','0','99')"
+                        SQLcommand.ExecuteNonQuery()
+                    End If
+                Next
+                SQLcommand.Dispose()
+                SQLconnect.Close()
+                ChargeChaineFromDB()
+                MyXML = Nothing
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ChaineFromXMLToDB", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         'Charge les chaines depuis la base de données en mémoire
         Public Sub ChargeChaineFromDB()
-            Dim SQLconnect As New SQLiteConnection()
-            Dim SQLcommand As SQLiteCommand
-            SQLconnect.ConnectionString = "Data Source= " & _MonRepertoire & "\bdd\guidetv.db;"
-            SQLconnect.Open()
-            SQLcommand = SQLconnect.CreateCommand
-            Dim SQLreader As SQLiteDataReader
+            Try
+                Dim SQLconnect As New SQLiteConnection()
+                Dim SQLcommand As SQLiteCommand
+                SQLconnect.ConnectionString = "Data Source= " & _MonRepertoire & "\bdd\guidetv.db;"
+                SQLconnect.Open()
+                SQLcommand = SQLconnect.CreateCommand
+                Dim SQLreader As SQLiteDataReader
 
-            SQLcommand.CommandText = "SELECT * FROM chaineTV"
-            SQLreader = SQLcommand.ExecuteReader()
-            If SQLreader.HasRows = True Then
-                While SQLreader.Read()
-                    Dim vChaine As sChaine = New sChaine
-                    vChaine.Nom = SQLreader(1)
-                    vChaine.ID = SQLreader(2)
-                    vChaine.Ico = SQLreader(3)
-                    vChaine.Enable = SQLreader(4)
-                    vChaine.Numero = SQLreader(5)
-                    vChaine.Categorie = SQLreader(6)
-                    MyChaine.Add(vChaine)
-                End While
-            Else
-                Console.WriteLine(Now & ": aucune chaine à charger depuis la DB!")
-            End If
-            SQLcommand.Dispose()
-            SQLconnect.Close()
+                SQLcommand.CommandText = "SELECT * FROM chaineTV"
+                SQLreader = SQLcommand.ExecuteReader()
+                If SQLreader.HasRows = True Then
+                    While SQLreader.Read()
+                        Dim vChaine As sChaine = New sChaine
+                        vChaine.Nom = SQLreader(1)
+                        vChaine.ID = SQLreader(2)
+                        vChaine.Ico = SQLreader(3)
+                        vChaine.Enable = SQLreader(4)
+                        vChaine.Numero = SQLreader(5)
+                        vChaine.Categorie = SQLreader(6)
+                        MyChaine.Add(vChaine)
+                    End While
+                Else
+                    Console.WriteLine(Now & ": aucune chaine à charger depuis la DB!")
+                End If
+                SQLcommand.Dispose()
+                SQLconnect.Close()
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ChargeChaineFromDB", "Exception : " & ex.Message)
+            End Try
         End Sub
 
 #End Region
 
-
 #Region "Compression"
         Public Function decompression(ByVal cheminSource As String, ByVal cheminDestination As String) As Boolean
-            Dim process As Process = New Process()
-            process.StartInfo.FileName = "C:\Program Files\7-zip\7z.exe"
-            process.StartInfo.Arguments = " e " + cheminSource & " -aoa -o" & cheminDestination
-            process.Start()
+            Try
+                Dim process As Process = New Process()
+                process.StartInfo.FileName = "C:\Program Files\7-zip\7z.exe"
+                process.StartInfo.Arguments = " e " + cheminSource & " -aoa -o" & cheminDestination
+                process.Start()
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "decompression", "Exception : " & ex.Message)
+            End Try
         End Function
 #End Region
+
 #End Region
 
 #Region "Bibliotheques"
@@ -3397,17 +3432,22 @@ Namespace HoMIDom
         ''' <returns>A string array of all the voices installed</returns>
         ''' <remarks>Make sure you have the System.Speech namespace reference added to your project</remarks>
         Function ReturnAllSpeechSynthesisVoices() As String()
-            Dim oSpeech As New System.Speech.Synthesis.SpeechSynthesizer()
-            Dim installedVoices As System.Collections.ObjectModel. _
-                                    ReadOnlyCollection(Of System.Speech.Synthesis.InstalledVoice) _
-                                    = oSpeech.GetInstalledVoices
+            Try
+                Dim oSpeech As New System.Speech.Synthesis.SpeechSynthesizer()
+                Dim installedVoices As System.Collections.ObjectModel. _
+                                        ReadOnlyCollection(Of System.Speech.Synthesis.InstalledVoice) _
+                                        = oSpeech.GetInstalledVoices
 
-            Dim names(installedVoices.Count - 1) As String
-            For i As Integer = 0 To installedVoices.Count - 1
-                names(i) = installedVoices(i).VoiceInfo.Name
-            Next
+                Dim names(installedVoices.Count - 1) As String
+                For i As Integer = 0 To installedVoices.Count - 1
+                    names(i) = installedVoices(i).VoiceInfo.Name
+                Next
 
-            Return names
+                Return names
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnAllSpeechSynthesisVoices", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
         ''' <summary>
@@ -3496,24 +3536,24 @@ Namespace HoMIDom
         ''' <returns>Retourne une erreur commencant par ERREUR ou la liste des noms des macros, zones...</returns>
         ''' <remarks></remarks>
         Public Function CanDelete(ByVal IdSrv As String, ByVal Id As String) As List(Of String) Implements IHoMIDom.CanDelete
-            Dim retour As New List(Of String)
             Try
-                Dim thr As New ThreadDelete(Me, IdSrv, Id, retour)
-                Dim x As New Thread(AddressOf thr.Traite)
-                x.Start()
+                Dim retour As New List(Of String)
+                    Dim thr As New ThreadDelete(Me, IdSrv, Id, retour)
+                    Dim x As New Thread(AddressOf thr.Traite)
+                    x.Start()
 
-                Do While retour.Count = 0
+                    Do While retour.Count = 0
 
-                Loop
-                Do While retour(retour.Count - 1) <> "0"
+                    Loop
+                    Do While retour(retour.Count - 1) <> "0"
 
-                Loop
-                Return retour
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CanDelete", "Erreur : " & ex.Message)
-                retour.Add("ERREUR lors de l'exécution de la fonction: " & ex.ToString)
-                Return retour
-            End Try
+                    Loop
+                    Return retour
+                Catch ex As Exception
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CanDelete", "Erreur : " & ex.Message)
+                    retour.Add("ERREUR lors de l'exécution de la fonction: " & ex.ToString)
+                    Return retour
+                End Try
         End Function
 
         Private Class ThreadDelete
@@ -3530,7 +3570,11 @@ Namespace HoMIDom
             End Sub
 
             Public Sub Traite()
-                _server._CanDelete(_Idsrv, _id, _retour)
+                Try
+                    _server._CanDelete(_Idsrv, _id, _retour)
+                Catch ex As Exception
+                    'Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadDelete Traite", "Exception : " & ex.Message)
+                End Try
             End Sub
         End Class
 
@@ -3574,10 +3618,14 @@ Namespace HoMIDom
         End Sub
 
         Private Sub AddLabel(ByVal List As List(Of String), ByVal Message As String)
-            For i As Integer = 0 To List.Count - 1
-                If List(i) = Message Then Exit Sub
-            Next
-            List.Add(Message)
+            Try
+                For i As Integer = 0 To List.Count - 1
+                    If List(i) = Message Then Exit Sub
+                Next
+                List.Add(Message)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddLabel", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>
@@ -3587,14 +3635,11 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Function GetAllVoice() As List(Of String) Implements IHoMIDom.GetAllVoice
             Try
-
                 Dim strAllVoices() As String = ReturnAllSpeechSynthesisVoices()
                 Dim list As New List(Of String)
-
                 For Each Str As String In strAllVoices
                     list.Add(Str)
                 Next
-
                 Return list
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllVoice", "Erreur : " & ex.Message)
@@ -3665,18 +3710,23 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function SetTimeSave(ByVal IdSrv As String, ByVal Value As Integer) As String Implements IHoMIDom.SetTimeSave
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
 
-            If IsNumeric(Value) = False Or Value < 0 Then
-                Return "ERR: la valeur doit être numérique, positive et non nulle"
-            Else
-                _CycleSave = Value
-                _NextTimeSave = Now.AddMinutes(Value)
-                Return 0
-            End If
+                If IsNumeric(Value) = False Or Value < 0 Then
+                    Return "ERR: la valeur doit être numérique, positive et non nulle"
+                Else
+                    _CycleSave = Value
+                    _NextTimeSave = Now.AddMinutes(Value)
+                    Return 0
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetTimeSave", "Exception : " & ex.Message)
+                Return "ERR: exception"
+            End Try
         End Function
 
         ''' <summary>
@@ -3685,11 +3735,16 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetIdServer(ByVal IdSrv As String) As String Implements IHoMIDom.GetIdServer
-            If VerifIdSrv(IdSrv) = False Then
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return "99"
+                    Exit Function
+                End If
+                Return _IdSrv
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetIdServer", "Exception : " & ex.Message)
                 Return "99"
-                Exit Function
-            End If
-            Return _IdSrv
+            End Try
         End Function
 
         ''' <summary>
@@ -3699,17 +3754,22 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function SetIdServer(ByVal IdSrv As String, ByVal Value As String) As String Implements IHoMIDom.SetIdServer
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
 
-            If Value = "" Or Value = " " Then
-                Return "ERR: l'Id ne peut être null"
-            Else
-                _IdSrv = Value
-                Return 0
-            End If
+                If Value = "" Or Value = " " Then
+                    Return "ERR: l'Id ne peut être null"
+                Else
+                    _IdSrv = Value
+                    Return 0
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetIdServer", "Exception : " & ex.Message)
+                Return "ERR: Exception"
+            End Try
         End Function
 
         ''' <summary>Retourne la date et heure du dernier démarrage du serveur</summary>
@@ -3723,7 +3783,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetServerVersion() As String Implements IHoMIDom.GetServerVersion
-            Return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString
+            Try
+                Return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetServerVersion", "Exception : " & ex.Message)
+                Return "ERR: Exception"
+            End Try
         End Function
 
         ''' <summary>Retourne l'heure du serveur</summary>
@@ -3754,31 +3819,31 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetByteFromImage(ByVal file As String) As Byte() Implements IHoMIDom.GetByteFromImage
-            Dim array As Byte() = Nothing
             Try
-                If file = "" Then
-                    Return Nothing
-                End If
-
-                If IO.File.Exists(file) = False Then
-                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetByteFromImage", "le fichier n'existe pas: " & file)
-                    Return Nothing
-                End If
-
-                Using fs As New FileStream(file, FileMode.Open, FileAccess.Read)
-                    Dim reader As New BinaryReader(fs)
-                    If reader IsNot Nothing Then
-                        array = reader.ReadBytes(CInt(fs.Length))
-                        reader.Close()
-                        reader = Nothing
+                Dim array As Byte() = Nothing
+                    If file = "" Then
+                        Return Nothing
                     End If
-                End Using
-                Return array
-                array = Nothing
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetByteFromImage", ex.Message)
-                Return Nothing
-            End Try
+
+                    If IO.File.Exists(file) = False Then
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetByteFromImage", "le fichier n'existe pas: " & file)
+                        Return Nothing
+                    End If
+
+                    Using fs As New FileStream(file, FileMode.Open, FileAccess.Read)
+                        Dim reader As New BinaryReader(fs)
+                        If reader IsNot Nothing Then
+                            array = reader.ReadBytes(CInt(fs.Length))
+                            reader.Close()
+                            reader = Nothing
+                        End If
+                    End Using
+                    Return array
+                    array = Nothing
+                Catch ex As Exception
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetByteFromImage", ex.Message)
+                    Return Nothing
+                End Try
         End Function
 
         ''' <summary>
@@ -3787,9 +3852,9 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetListOfImage() As List(Of ImageFile) Implements IHoMIDom.GetListOfImage
-            Dim _list As New List(Of ImageFile)
-
             Try
+                Dim _list As New List(Of ImageFile)
+
                 Dim dirInfo As New System.IO.DirectoryInfo(_MonRepertoire & "\images\")
                 Dim file As System.IO.FileInfo
                 Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.*g", System.IO.SearchOption.AllDirectories)
@@ -4189,7 +4254,6 @@ Namespace HoMIDom
                 Return "Erreur lors l'envoi du mail de test: " & ex.Message
             End Try
         End Function
-
 
         ''' <summary>Retourne l'adresse du serveur SMTP</summary>
         Public Function GetSMTPServeur(ByVal IdSrv As String) As String Implements IHoMIDom.GetSMTPServeur
@@ -4593,14 +4657,14 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function GetAllDrivers(ByVal IdSrv As String) As List(Of TemplateDriver) Implements IHoMIDom.GetAllDrivers
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
-            Dim _list As New List(Of TemplateDriver)
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
+                Dim _list As New List(Of TemplateDriver)
+
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     Dim x As New TemplateDriver
 
@@ -4689,7 +4753,12 @@ Namespace HoMIDom
         End Function
 
         Private Function sortDriver(ByVal x As TemplateDriver, ByVal y As TemplateDriver) As Integer
-            Return x.Nom.CompareTo(y.Nom)
+            Try
+                Return x.Nom.CompareTo(y.Nom)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "sortDriver", "Exception : " & ex.Message)
+                Return 0
+            End Try
         End Function
 
         ''' <summary>Sauvegarde ou créer un driver dans la config</summary>
@@ -4708,13 +4777,14 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function SaveDriver(ByVal IdSrv As String, ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String, ByVal modele As String, Optional ByVal Parametres As ArrayList = Nothing) As String Implements IHoMIDom.SaveDriver
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim myID As String
             Try
+
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                Dim myID As String
                 'Driver Existant
                 myID = driverId
 
@@ -4757,14 +4827,14 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnDriverById(ByVal IdSrv As String, ByVal DriverId As String) As TemplateDriver Implements IHoMIDom.ReturnDriverByID
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
-            Dim retour As New TemplateDriver
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
+                Dim retour As New TemplateDriver
+
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).ID = DriverId Then
                         retour.Nom = _ListDrivers.Item(i).nom
@@ -4854,13 +4924,13 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnDrvById(ByVal IdSrv As String, ByVal DriverId As String) As Object
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
-            Dim retour As Object = Nothing
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
+                Dim retour As Object = Nothing
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).ID = DriverId Then
                         retour = _ListDrivers.Item(i)
@@ -4879,13 +4949,13 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnDriverByNom(ByVal IdSrv As String, ByVal DriverNom As String) As Object Implements IHoMIDom.ReturnDriverByNom
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
-            Dim retour As New TemplateDriver
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
+                Dim retour As New TemplateDriver
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).Nom = DriverNom.ToUpper() Then
                         retour.Nom = _ListDrivers.Item(i).nom
@@ -4977,14 +5047,14 @@ Namespace HoMIDom
         ''' <param name="Action"></param>
         ''' <remarks></remarks>
         Sub ExecuteDriverCommand(ByVal IdSrv As String, ByVal DriverId As String, ByVal Action As DeviceAction) Implements IHoMIDom.ExecuteDriverCommand
-            If VerifIdSrv(IdSrv) = False Then
-                Exit Sub
-            End If
-
-            Dim _retour As Object
-            Dim x As Object = Nothing
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Exit Sub
+                End If
+
+                Dim _retour As Object
+                Dim x As Object = Nothing
+
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).id = DriverId Then
                         x = _ListDrivers.Item(i)
@@ -5055,7 +5125,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetDeviceNoMaJ(ByVal idsrv) As List(Of String) Implements IHoMIDom.GetDeviceNoMaJ
-            Return _DevicesNoMAJ
+            Try
+                Return _DevicesNoMAJ
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetDeviceNoMaJ", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
         ''' <summary>
@@ -5088,12 +5163,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function DeleteDevice(ByVal IdSrv As String, ByVal deviceId As String) As Integer Implements IHoMIDom.DeleteDevice
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).Id = deviceId Then
                         'on teste si c'est un device systeme pour ne pas le supprimer
@@ -5160,30 +5235,35 @@ Namespace HoMIDom
         End Sub
 
         Private Function DeviceInZone(ByVal IdDevice As Integer) As Integer
-            Dim retour As Integer = -1
+            Try
+                Dim retour As Integer = -1
 
-            For i As Integer = 0 To _ListZones.Count - 1
-                For j As Integer = 0 To _ListZones.Item(i).ListElement.Count - 1
-                    If _ListZones.Item(i).ListElement.Item(j).ElementID = IdDevice Then
-                        retour = j
-                        Exit For
-                    End If
+                For i As Integer = 0 To _ListZones.Count - 1
+                    For j As Integer = 0 To _ListZones.Item(i).ListElement.Count - 1
+                        If _ListZones.Item(i).ListElement.Item(j).ElementID = IdDevice Then
+                            retour = j
+                            Exit For
+                        End If
+                    Next
                 Next
-            Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceInZone", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
         ''' <summary>Retourne la liste de tous les devices</summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetAllDevices(ByVal IdSrv As String) As List(Of TemplateDevice) Implements IHoMIDom.GetAllDevices
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
-            Dim _list As New List(Of TemplateDevice)
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
+                Dim _list As New List(Of TemplateDevice)
+
                 For i As Integer = 0 To _ListDevices.Count - 1
                     Dim x As New TemplateDevice
                     Dim _listact As New List(Of String)
@@ -5333,7 +5413,12 @@ Namespace HoMIDom
         End Function
 
         Private Function sortDevice(ByVal x As TemplateDevice, ByVal y As TemplateDevice) As Integer
-            Return x.Name.CompareTo(y.Name)
+            Try
+                Return x.Name.CompareTo(y.Name)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceInZone", "Exception : " & ex.Message)
+                Return 0
+            End Try
         End Function
 
         ''' <summary>
@@ -5363,16 +5448,16 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As Double = 0, Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing) As String Implements IHoMIDom.SaveDevice
-            'Vérification de l'Id du serveur pour accepter le traitement
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            'Déclaration des variables
-            Dim myID As String = ""
-
             Try
+                'Vérification de l'Id du serveur pour accepter le traitement
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                'Déclaration des variables
+                Dim myID As String = ""
+
                 'Test si c'est un nouveau device
                 If deviceId = "" Then 'C'est un nouveau device
 
@@ -5590,12 +5675,11 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function DeleteDeviceCommandIR(ByVal IdSrv As String, ByVal deviceId As String, ByVal CmdName As String) As Integer Implements IHoMIDom.DeleteDeviceCommandIR
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
 
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).Id = deviceId Then
@@ -5625,13 +5709,14 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function SaveDeviceCommandIR(ByVal IdSrv As String, ByVal deviceId As String, ByVal CmdName As String, ByVal CmdData As String, ByVal CmdRepeat As String) As String Implements IHoMIDom.SaveDeviceCommandIR
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim flag As Boolean
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                Dim flag As Boolean
+
                 'On vérifie avant que si la commande existe on la modifie
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).id = deviceId Then
@@ -5662,13 +5747,13 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function StartIrLearning(ByVal IdSrv As String) As String Implements IHoMIDom.StartIrLearning
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim retour As String = ""
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                Dim retour As String = ""
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).protocol = "IR" Then
                         Dim x As Object = _ListDrivers.Item(i)
@@ -5688,15 +5773,15 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnDeviceById(ByVal IdSrv As String, ByVal DeviceId As String) As TemplateDevice Implements IHoMIDom.ReturnDeviceByID
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
-            Dim retour As New TemplateDevice
-            Dim _listact As New List(Of String)
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
+                Dim retour As New TemplateDevice
+                Dim _listact As New List(Of String)
+
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).ID = DeviceId Then
                         retour.ID = _ListDevices.Item(i).id
@@ -5893,8 +5978,9 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function ListMethod(ByVal DeviceId As String) As List(Of String) Implements IHoMIDom.ListMethod
-            Dim _list As New List(Of String)
             Try
+                Dim _list As New List(Of String)
+
                 'recherche du device
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).ID = DeviceId Then
@@ -5925,12 +6011,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnDeviceByAdresse1TypeDriver(ByVal IdSrv As String, ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DriverID As String, ByVal Enable As Boolean) As ArrayList Implements IHoMIDom.ReturnDeviceByAdresse1TypeDriver
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
                 Dim retour As Object = Nothing
                 Dim listresultat As New ArrayList
                 For i As Integer = 0 To _ListDevices.Count - 1
@@ -5952,15 +6038,15 @@ Namespace HoMIDom
         ''' <param name="Action"></param>
         ''' <remarks></remarks>
         Sub ExecuteDeviceCommand(ByVal IdSrv As String, ByVal DeviceId As String, ByVal Action As DeviceAction) Implements IHoMIDom.ExecuteDeviceCommand
-            If VerifIdSrv(IdSrv) = False Then
-                Exit Sub
-            End If
-
-            Dim _retour As Object
-            Dim x As Object = Nothing
-            Dim verifaction As Boolean = False
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Exit Sub
+                End If
+
+                Dim _retour As Object
+                Dim x As Object = Nothing
+                Dim verifaction As Boolean = False
+
                 'recherche du device
                 'For i As Integer = 0 To _ListDevices.Count - 1
                 '    If _ListDevices.Item(i).ID = DeviceId Then
@@ -6045,15 +6131,15 @@ Namespace HoMIDom
         ''' <param name="Action"></param>
         ''' <remarks></remarks>
         Sub ExecuteDeviceCommandSimple(ByVal IdSrv As String, ByVal DeviceId As String, ByVal Action As DeviceActionSimple) Implements IHoMIDom.ExecuteDeviceCommandSimple
-            If VerifIdSrv(IdSrv) = False Then
-                Exit Sub
-            End If
-
-            Dim _retour As Object
-            Dim x As Object = Nothing
-            Dim verifaction As Boolean = False
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Exit Sub
+                End If
+
+                Dim _retour As Object
+                Dim x As Object = Nothing
+                Dim verifaction As Boolean = False
+
                 'recherche du device
                 'For i As Integer = 0 To _ListDevices.Count - 1
                 '    If _ListDevices.Item(i).ID = DeviceId Then
@@ -6119,12 +6205,12 @@ Namespace HoMIDom
         ''' <summary>Supprimer une zone de la config</summary>
         ''' <param name="zoneId"></param>
         Public Function DeleteZone(ByVal IdSrv As String, ByVal zoneId As String) As Integer Implements IHoMIDom.DeleteZone
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
                 For i As Integer = 0 To _ListZones.Count - 1
                     If _ListZones.Item(i).ID = zoneId Then
                         _ListZones.RemoveAt(i)
@@ -6144,12 +6230,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function GetAllZones(ByVal IdSrv As String) As List(Of Zone) Implements IHoMIDom.GetAllZones
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
                 Dim _list As New List(Of Zone)
                 For i As Integer = 0 To _ListZones.Count - 1
                     Dim x As New Zone
@@ -6174,7 +6260,12 @@ Namespace HoMIDom
         End Function
 
         Private Function sortZone(ByVal x As Zone, ByVal y As Zone) As Integer
-            Return x.Name.CompareTo(y.Name)
+            Try
+                Return x.Name.CompareTo(y.Name)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "sortZone", "Exception : " & ex.Message)
+                Return 0
+            End Try
         End Function
 
         ''' <summary>ajouter un device à une zone</summary>
@@ -6184,14 +6275,15 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function AddDeviceToZone(ByVal IdSrv As String, ByVal ZoneId As String, ByVal DeviceId As String, ByVal Visible As Boolean) As String Implements IHoMIDom.AddDeviceToZone
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim _zone As Zone = ReturnZoneById(_IdSrv, ZoneId)
-            Dim _retour As String = -1
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                Dim _zone As Zone = ReturnZoneById(_IdSrv, ZoneId)
+                Dim _retour As String = -1
+
                 If _zone IsNot Nothing Then
                     For i As Integer = 0 To _zone.ListElement.Count - 1
                         If _zone.ListElement.Item(i).ElementID = DeviceId Then
@@ -6217,14 +6309,14 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function DeleteDeviceToZone(ByVal IdSrv As String, ByVal ZoneId As String, ByVal DeviceId As String) As String Implements IHoMIDom.DeleteDeviceToZone
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim _zone As Zone = ReturnZoneById(_IdSrv, ZoneId)
-            Dim _retour As String = -1
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                Dim _zone As Zone = ReturnZoneById(_IdSrv, ZoneId)
+                Dim _retour As String = -1
                 If _zone IsNot Nothing Then
                     For i As Integer = 0 To _zone.ListElement.Count - 1
                         If _zone.ListElement.Item(i).ElementID = DeviceId Then
@@ -6250,17 +6342,16 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function SaveZone(ByVal IdSrv As String, ByVal zoneId As String, ByVal name As String, Optional ByVal ListElement As List(Of Zone.Element_Zone) = Nothing, Optional ByVal icon As String = "", Optional ByVal image As String = "") As String Implements IHoMIDom.SaveZone
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim myID As String = ""
-
-            If icon = "" Then icon = _MonRepertoire & "\images\icones\Zone_128.png"
-            If image = "" Then image = _MonRepertoire & "\images\icones\Zone_Image.png"
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                Dim myID As String = ""
+
+                If icon = "" Then icon = _MonRepertoire & "\images\icones\Zone_128.png"
+                If image = "" Then image = _MonRepertoire & "\images\icones\Zone_Image.png"
                 If zoneId = "" Then
                     Dim x As New Zone
                     With x
@@ -6299,12 +6390,13 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function GetDeviceInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of TemplateDevice) Implements IHoMIDom.GetDeviceInZone
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
+
                 Dim x As Zone = ReturnZoneById(_IdSrv, zoneId)
                 Dim y As New List(Of TemplateDevice)
                 If x IsNot Nothing Then
@@ -6328,12 +6420,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function GetZoneInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of Zone) Implements IHoMIDom.GetZoneInZone
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
                 Dim x As Zone = ReturnZoneById(_IdSrv, zoneId)
                 Dim y As New List(Of Zone)
                 If x IsNot Nothing Then
@@ -6357,12 +6449,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function GetMacroInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of Macro) Implements IHoMIDom.GetMacroInZone
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
                 Dim x As Zone = ReturnZoneById(_IdSrv, zoneId)
                 Dim y As New List(Of Macro)
                 If x IsNot Nothing Then
@@ -6388,19 +6480,24 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ZoneIsEmpty(ByVal IdSrv As String, ByVal zoneId As String) As Boolean Implements IHoMIDom.ZoneIsEmpty
-            If VerifIdSrv(IdSrv) = False Then
-                Return False
-                Exit Function
-            End If
-
-            Dim retour As Boolean = True
-            Dim x As Zone = ReturnZoneById(_IdSrv, zoneId)
-            If x IsNot Nothing Then
-                If x.ListElement.Count > 0 Then
-                    retour = False
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return False
+                    Exit Function
                 End If
-            End If
-            Return retour
+
+                Dim retour As Boolean = True
+                Dim x As Zone = ReturnZoneById(_IdSrv, zoneId)
+                If x IsNot Nothing Then
+                    If x.ListElement.Count > 0 Then
+                        retour = False
+                    End If
+                End If
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ZoneIsEmpty", "Exception : " & ex.Message)
+                Return False
+            End Try
         End Function
 
         ''' <summary>Retourne la zone par son ID</summary>
@@ -6408,12 +6505,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnZoneById(ByVal IdSrv As String, ByVal ZoneId As String) As Zone Implements IHoMIDom.ReturnZoneByID
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
                 If (From Zone In _ListZones Where Zone.ID = ZoneId Select Zone).Count > 0 Then
                     Dim Resultat = (From Zone In _ListZones Where Zone.ID = ZoneId Select Zone).First
                     Return Resultat
@@ -6436,13 +6533,13 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function DeleteIDToAction(ByVal IdSrv As String, ByVal Actions As ArrayList, ByVal Id As String) As String
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim _retour As String = -1
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                Dim _retour As String = -1
                 For j As Integer = 0 To Actions.Count - 1
                     Select Case Actions.Item(j).TypeAction
                         Case Action.TypeAction.ActionDevice
@@ -6486,12 +6583,12 @@ Namespace HoMIDom
         ''' <summary>Supprimer une macro de la config</summary>
         ''' <param name="macroId"></param>
         Public Function DeleteMacro(ByVal IdSrv As String, ByVal macroId As String) As Integer Implements IHoMIDom.DeleteMacro
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
                 For i As Integer = 0 To _ListMacros.Count - 1
                     If _ListMacros.Item(i).ID = macroId Then
                         _ListMacros.RemoveAt(i)
@@ -6511,12 +6608,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function GetAllMacros(ByVal IdSrv As String) As List(Of Macro) Implements IHoMIDom.GetAllMacros
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
                 Dim _list As New List(Of Macro)
                 For i As Integer = 0 To _ListMacros.Count - 1
                     Dim x As New Macro
@@ -6538,7 +6635,12 @@ Namespace HoMIDom
         End Function
 
         Private Function sortMacro(ByVal x As Macro, ByVal y As Macro) As Integer
-            Return x.Nom.CompareTo(y.Nom)
+            Try
+                Return x.Nom.CompareTo(y.Nom)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "RunMacro", "Exception : " & ex.Message)
+                Return 0
+            End Try
         End Function
 
         ''' <summary>
@@ -6552,13 +6654,13 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function SaveMacro(ByVal IdSrv As String, ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal listactions As ArrayList = Nothing) As String Implements IHoMIDom.SaveMacro
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim myID As String = ""
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                Dim myID As String = ""
                 If macroId = "" Then
                     Dim x As New Macro
                     With x
@@ -6598,12 +6700,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnMacroById(ByVal IdSrv As String, ByVal MacroId As String) As Macro Implements IHoMIDom.ReturnMacroById
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
                 If (From Macro In _ListMacros Where Macro.ID = MacroId Select Macro).Count > 0 Then
                     Dim Resultat = (From Macro In _ListMacros Where Macro.ID = MacroId Select Macro).First
                     Return Resultat
@@ -6617,11 +6719,15 @@ Namespace HoMIDom
         End Function
 
         Public Sub RunMacro(ByVal IDSrv As String, ByVal Id As String) Implements IHoMIDom.RunMacro
-            If VerifIdSrv(IDSrv) = False Then
-                Exit Sub
-            End If
+            Try
+                If VerifIdSrv(IDSrv) = False Then
+                    Exit Sub
+                End If
 
-            Execute(Id)
+                Execute(Id)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "RunMacro", "Exception : " & ex.Message)
+            End Try
         End Sub
 #End Region
 
@@ -6632,14 +6738,14 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function DeleteDeviceToTrigger(ByVal IdSrv As String, ByVal TriggerId As String, ByVal DeviceId As String) As String
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim _Trigger As Trigger = ReturnTriggerById(_IdSrv, TriggerId)
-            Dim _retour As String = -1
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                Dim _Trigger As Trigger = ReturnTriggerById(_IdSrv, TriggerId)
+                Dim _retour As String = -1
                 If _Trigger IsNot Nothing Then
                     If _Trigger.ConditionDeviceId = DeviceId Then
                         _Trigger.ConditionDeviceId = ""
@@ -6656,12 +6762,12 @@ Namespace HoMIDom
         ''' <summary>Supprimer un trigger de la config</summary>
         ''' <param name="triggerId"></param>
         Public Function DeleteTrigger(ByVal IdSrv As String, ByVal triggerId As String) As Integer Implements IHoMIDom.DeleteTrigger
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
                 For i As Integer = 0 To _ListTriggers.Count - 1
                     If _ListTriggers.Item(i).ID = triggerId Then
                         _ListTriggers.RemoveAt(i)
@@ -6681,12 +6787,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function GetAllTriggers(ByVal IdSrv As String) As List(Of Trigger) Implements IHoMIDom.GetAllTriggers
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
                 Dim _list As New List(Of Trigger)
                 For i As Integer = 0 To _ListTriggers.Count - 1
                     Dim x As New Trigger
@@ -6713,7 +6819,12 @@ Namespace HoMIDom
         End Function
 
         Private Function sortTrigger(ByVal x As Trigger, ByVal y As Trigger) As Integer
-            Return x.Nom.CompareTo(y.Nom)
+            Try
+                Return x.Nom.CompareTo(y.Nom)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "sortTrigger", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 
         ''' <summary>
@@ -6731,13 +6842,13 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function SaveTrigger(ByVal IdSrv As String, ByVal triggerId As String, ByVal nom As String, ByVal enable As Boolean, ByVal TypeTrigger As Trigger.TypeTrigger, Optional ByVal description As String = "", Optional ByVal conditiontimer As String = "", Optional ByVal deviceid As String = "", Optional ByVal deviceproperty As String = "", Optional ByVal macro As List(Of String) = Nothing) As String Implements IHoMIDom.SaveTrigger
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim myID As String = ""
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                Dim myID As String = ""
                 If triggerId = "" Then
                     Dim x As New Trigger
                     With x
@@ -6801,12 +6912,11 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnTriggerById(ByVal IdSrv As String, ByVal TriggerId As String) As Trigger Implements IHoMIDom.ReturnTriggerById
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
                 Dim Resultat = (From Trigger In _ListTriggers Where Trigger.ID = TriggerId Select Trigger).First
                 Return Resultat
 
@@ -6822,12 +6932,12 @@ Namespace HoMIDom
         ''' <summary>Supprime un user</summary>
         ''' <param name="userId"></param>
         Public Function DeleteUser(ByVal IdSrv As String, ByVal userId As String) As Integer Implements IHoMIDom.DeleteUser
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
                 For i As Integer = 0 To _ListUsers.Count - 1
                     If _ListUsers.Item(i).ID = userId Then
                         _ListUsers.RemoveAt(i)
@@ -6847,13 +6957,13 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function GetAllUsers(ByVal IdSrv As String) As List(Of Users.User) Implements IHoMIDom.GetAllUsers
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
-            Dim _list As New List(Of Users.User)
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
+                Dim _list As New List(Of Users.User)
                 For i As Integer = 0 To _ListUsers.Count - 1
                     Dim x As New Users.User
                     With x
@@ -6885,7 +6995,12 @@ Namespace HoMIDom
         End Function
 
         Private Function sortUser(ByVal x As Users.User, ByVal y As Users.User) As Integer
-            Return x.UserName.CompareTo(y.UserName)
+            Try
+                Return x.UserName.CompareTo(y.UserName)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "sortUser", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 
         ''' <summary>
@@ -6895,13 +7010,18 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnUserByUsername(ByVal IdSrv As String, ByVal Username As String) As Users.User Implements IHoMIDom.ReturnUserByUsername
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
 
-            Dim Resultat = (From User In _ListUsers Where User.UserName = Username Select User).First
-            Return Resultat
+                Dim Resultat = (From User In _ListUsers Where User.UserName = Username Select User).First
+                Return Resultat
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnUserByUsername", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
         ''' <summary>
@@ -6926,13 +7046,13 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function SaveUser(ByVal IdSrv As String, ByVal userId As String, ByVal UserName As String, ByVal Password As String, ByVal Profil As Users.TypeProfil, ByVal Nom As String, ByVal Prenom As String, Optional ByVal NumberIdentification As String = "", Optional ByVal Image As String = "", Optional ByVal eMail As String = "", Optional ByVal eMailAutre As String = "", Optional ByVal TelFixe As String = "", Optional ByVal TelMobile As String = "", Optional ByVal TelAutre As String = "", Optional ByVal Adresse As String = "", Optional ByVal Ville As String = "", Optional ByVal CodePostal As String = "") As String Implements IHoMIDom.SaveUser
-            If VerifIdSrv(IdSrv) = False Then
-                Return 99
-                Exit Function
-            End If
-
-            Dim myID As String = ""
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                Dim myID As String = ""
                 If userId = "" Then
                     For i As Integer = 0 To _ListUsers.Count - 1
                         If _ListUsers.Item(i).UserName = UserName Then
@@ -7001,8 +7121,8 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function VerifLogin(ByVal Username As String, ByVal Password As String) As Boolean Implements IHoMIDom.VerifLogin
-            Dim retour As Boolean = False
             Try
+                Dim retour As Boolean = False
                 For i As Integer = 0 To _ListUsers.Count - 1
                     If _ListUsers.Item(i).UserName = Username Then
                         Dim a As String = EncryptTripleDES(Password, "homidom")
@@ -7026,13 +7146,13 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function ChangePassword(ByVal IdSrv As String, ByVal Username As String, ByVal OldPassword As String, ByVal ConfirmNewPassword As String, ByVal Password As String) As Boolean Implements IHoMIDom.ChangePassword
-            If VerifIdSrv(IdSrv) = False Then
-                Return False
-                Exit Function
-            End If
-
-            Dim retour As Boolean = False
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return False
+                    Exit Function
+                End If
+
+                Dim retour As Boolean = False
                 For i As Integer = 0 To _ListUsers.Count - 1
                     If _ListUsers.Item(i).UserName = Username Then
                         If _ListUsers.Item(i).Password = OldPassword Then
@@ -7056,12 +7176,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function ReturnUserById(ByVal IdSrv As String, ByVal UserId As String) As Users.User Implements IHoMIDom.ReturnUserById
-            If VerifIdSrv(IdSrv) = False Then
-                Return Nothing
-                Exit Function
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                    Exit Function
+                End If
+
                 Dim Resultat = (From User In _ListUsers Where User.ID = UserId Select User).First
                 Return Resultat
 
@@ -7299,13 +7419,13 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function StartLearning(ByVal IdSrv As String, ByVal DriverId As String) As String Implements IHoMIDom.StartLearning
-            If VerifIdSrv(IdSrv) = False Then
-                Return "ERREUR: l'Id du serveur est erroné"
-                Exit Function
-            End If
-
-            Dim retour As String = ""
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return "ERREUR: l'Id du serveur est erroné"
+                    Exit Function
+                End If
+
+                Dim retour As String = ""
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).ID = DriverId Then
                         Dim x As Object = _ListDrivers.Item(i)
@@ -7452,17 +7572,22 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetTypeLogEnable() As List(Of Boolean) Implements IHoMIDom.GetTypeLogEnable
-            Dim _list As New List(Of Boolean)
+            Try
+                Dim _list As New List(Of Boolean)
 
-            For i As Integer = 0 To _TypeLogEnable.Count - 1
-                If _TypeLogEnable.Item(i) = True Then
-                    _list.Add(False)
-                Else
-                    _list.Add(True)
-                End If
-            Next
+                For i As Integer = 0 To _TypeLogEnable.Count - 1
+                    If _TypeLogEnable.Item(i) = True Then
+                        _list.Add(False)
+                    Else
+                        _list.Add(True)
+                    End If
+                Next
 
-            Return _list
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetTypeLogEnable", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
         ''' <summary>
@@ -7490,11 +7615,16 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetLastLogs() As List(Of String) Implements IHoMIDom.GetLastLogs
-            Dim list As New List(Of String)
-            For i = 0 To (_LastLogs.Count - 1)
-                list.Add(_LastLogs(i))
-            Next
-            Return list
+            Try
+                Dim list As New List(Of String)
+                For i = 0 To (_LastLogs.Count - 1)
+                    list.Add(_LastLogs(i))
+                Next
+                Return list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetLastLogs", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
         ''' <summary>
@@ -7503,11 +7633,16 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetLastLogsError() As List(Of String) Implements IHoMIDom.GetLastLogsError
-            Dim list As New List(Of String)
-            For i = 0 To (_LastLogsError.Count - 1)
-                list.Add(_LastLogsError(i))
-            Next
-            Return list
+            Try
+                Dim list As New List(Of String)
+                For i = 0 To (_LastLogsError.Count - 1)
+                    list.Add(_LastLogsError(i))
+                Next
+                Return list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetLastLogsError", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
         End Function
 
         ''' <summary>
@@ -7516,9 +7651,13 @@ Namespace HoMIDom
         ''' <param name="Month"></param>
         ''' <remarks></remarks>
         Public Sub SetMaxMonthLog(ByVal Month As Integer) Implements IHoMIDom.SetMaxMonthLog
-            If IsNumeric(Month) Then
-                _MaxMonthLog = Month
-            End If
+            Try
+                If IsNumeric(Month) Then
+                    _MaxMonthLog = Month
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetMaxMonthLog", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>
@@ -7527,7 +7666,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetMaxMonthLog() As Integer Implements IHoMIDom.GetMaxMonthLog
-            Return _MaxMonthLog
+            Try
+                Return _MaxMonthLog
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetMaxMonthLog", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 
         ''' <summary>renvoi le fichier log suivant une requête xml si besoin</summary>
@@ -7565,7 +7709,11 @@ Namespace HoMIDom
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
         Public Sub SetMaxFileSizeLog(ByVal Value As Long) Implements IHoMIDom.SetMaxFileSizeLog
-            MaxFileSize = Value
+            Try
+                MaxFileSize = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetMaxFileSizeLog", "Exception : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>
@@ -7574,7 +7722,12 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function GetMaxFileSizeLog() As Long Implements IHoMIDom.GetMaxFileSizeLog
-            Return MaxFileSize
+            Try
+                Return MaxFileSize
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetMaxFileSizeLog", "Exception : " & ex.Message)
+                Return -1
+            End Try
         End Function
 #End Region
 
@@ -7633,11 +7786,11 @@ Namespace HoMIDom
         ''' <summary>Sauvegarder la configuration</summary>
         ''' <remarks></remarks>
         Public Function SaveConfiguration(ByVal IdSrv As String) As String Implements IHoMIDom.SaveConfig
-            If VerifIdSrv(IdSrv) = False Then
-                Return "L'Id du serveur est incorrect"
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return "L'Id du serveur est incorrect"
+                End If
+
                 If SaveConfig(_MonRepertoire & "\config\homidom.xml") = True Then
                     Return "0"
                 Else
@@ -7656,11 +7809,11 @@ Namespace HoMIDom
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
         Public Sub SetPortSOAP(ByVal IdSrv As String, ByVal Value As Double) Implements IHoMIDom.SetPortSOAP
-            If VerifIdSrv(IdSrv) = False Then
-                Exit Sub
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Exit Sub
+                End If
+
                 _PortSOAP = Value
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetPortSOAP", "Exception : " & ex.Message)
@@ -7683,11 +7836,11 @@ Namespace HoMIDom
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
         Public Sub SetIPSOAP(ByVal IdSrv As String, ByVal Value As String) Implements IHoMIDom.SetIPSOAP
-            If VerifIdSrv(IdSrv) = False Then
-                Exit Sub
-            End If
-
             Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Exit Sub
+                End If
+
                 _IPSOAP = Value
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetIPSOAP", "Erreur: " & ex.Message)
