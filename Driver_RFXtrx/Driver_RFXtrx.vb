@@ -2494,7 +2494,7 @@ Imports System.Media
         End Try
     End Sub
 
-    Public Sub decode_BLINDS1()
+    Private Sub decode_BLINDS1()
         Try
             Dim adresse As String = ""
             Dim valeur As String = ""
