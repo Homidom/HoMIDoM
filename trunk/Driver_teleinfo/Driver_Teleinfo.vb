@@ -619,7 +619,6 @@ Public Class Driver_Teleinfo
                         ProcessReceivedChar(BufferIn(i))
                     Next
                 End If
-
             Catch Ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Datareceived", "Exception : " & Ex.Message)
             End Try
@@ -629,8 +628,7 @@ Public Class Driver_Teleinfo
         ''' <param name="temp">Byte recu</param>
         ''' <remarks></remarks>
         Private Sub ProcessReceivedChar(ByVal temp As Byte)
-            Try
-                
+            Try             
                 If (temp = 2) Then ' Debut de trame recu 
                     DebutTrame = True
                     DebutInfo = False
@@ -638,21 +636,17 @@ Public Class Driver_Teleinfo
                     messcnt = 0
                     mess = False
                     trame = False
-
                 ElseIf (DebutTrame And temp = 3) Then 'Fin de trame recue
                     trame = True
-
                 ElseIf (DebutTrame And temp = 10) Then ' debut d'info recu
                     mess = False
                     bytecnt = 0
-
                 ElseIf (DebutTrame And temp = 13) Then ' Fin d'info rec
                     mess = True
                 Else 'Recuperation de l'info
                     recbuf(bytecnt) = temp
                     bytecnt += 1
                 End If
-
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo  ProcessReceivedChar", ex.Message)
             End Try
@@ -660,13 +654,11 @@ Public Class Driver_Teleinfo
             Try
                 If trame Then
                     Process(InfoTrame)
-
                 ElseIf mess Then ' Un message est recu ==> on le stocke
                     Dim xxx As String = ""
                     For i As Integer = 0 To bytecnt - 1
                         xxx = xxx & (ChrW(recbuf(i)))
                     Next
-
                     ReDim Preserve InfoTrame(messcnt)
                     InfoTrame(messcnt) = xxx.ToString
                     If _DEBUG Then
@@ -674,7 +666,6 @@ Public Class Driver_Teleinfo
                     End If
                     messcnt += 1
                 End If
-
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo ProcessReceivedChar - Traite Message", ex.Message)
             End Try
@@ -703,129 +694,51 @@ Public Class Driver_Teleinfo
                         Else
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo Process", " Get data Error trame incorrecte")
                         End If
-
-
                     Catch ex As Exception
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Get data", TeleInfo_adresse & " avec la valeur : " & data1 & "Exception :  " & ex.Message)
                     End Try
 
-
                     Try
-
                         ' Console.WriteLine("Test:#" & LTrim(UCase(TeleInfo_adresse)) & "#")
                         Select Case (LTrim(UCase(TeleInfo_adresse)))
-
-                            Case "ADCO"
-                                ADCO = data1
-
-                            Case "OPTARIF"
-                                OPTARIF = data1
-
-                            Case "ISOUSC"
-                                ISOUSC = data1
-
-                            Case "HCHC"
-                                HCHC = data1
-
-                            Case "HCHP"
-                                HCHP = data1
-
-                            Case "BASE"
-                                BASE = data1
-
-                            Case "PTEC"
-                                PTEC = data1
-
-                            Case "PEJP"
-                                PEJP = data1
-
-                            Case "IMAX"
-                                IMAX = data1
-
-                            Case "PAPP"
-                                PAPP = data1
-
-                            Case "HHPHC"
-                                HHPHC = data1
-
-                            Case "IINST"
-                                IINST = data1
-
-                            Case "MOTDETAT"
-                                MOTDETAT = data1
-
+                            Case "ADCO" : ADCO = data1
+                            Case "OPTARIF" : OPTARIF = data1
+                            Case "ISOUSC" : ISOUSC = data1
+                            Case "HCHC" : HCHC = data1
+                            Case "HCHP" : HCHP = data1
+                            Case "BASE" : BASE = data1
+                            Case "PTEC" : PTEC = data1
+                            Case "PEJP" : PEJP = data1
+                            Case "IMAX" : IMAX = data1
+                            Case "PAPP" : PAPP = data1
+                            Case "HHPHC" : HHPHC = data1
+                            Case "IINST" : IINST = data1
+                            Case "MOTDETAT" : MOTDETAT = data1
                                 ' Pour compteur linky triphasé
-                            Case "IINST1"
-                                IINST1 = data1
-
-                            Case "IINST2"
-                                IINST2 = data1
-
-                            Case "IINST3"
-                                IINST3 = data1
-
-                            Case "IMAX1"
-                                IMAX1 = data1
-
-                            Case "IMAX2"
-                                IMAX2 = data1
-
-                            Case "IMAX3"
-                                IMAX3 = data1
-
-                            Case "PMAX"
-                                PMAX = data1
-
-                            Case "PPOT"
-                                PPOT = data1
-
-                            Case "ADIR1"
-                                ADIR1 = data1
-
-                            Case "ADIR2"
-                                ADIR2 = data1
-
-                            Case "ADIR3"
-                                ADIR3 = data1
-
-                            Case "ADPS"
-                                ADPS = data1
-
-                            Case "BBRHCJB"
-                                BBRHCJB = data1
-
-                            Case "BBRHCJR"
-                                BBRHCJR = data1
-
-                            Case "BBRHCJW"
-                                BBRHCJW = data1
-
-                            Case "BBRHPJB"
-                                BBRHPJB = data1
-
-                            Case "BBRHPJR"
-                                BBRHPJR = data1
-
-                            Case "BBRHPJW"
-                                BBRHPJW = data1
-
-                            Case "DEMAIN"
-                                DEMAIN = data1
-
-                            Case "EJPHN"
-                                EJPHN = data1
-
-                            Case "EJPHPM"
-                                EJPHPM = data1
-
-
-
+                            Case "IINST1" : IINST1 = data1
+                            Case "IINST2" : IINST2 = data1
+                            Case "IINST3" : IINST3 = data1
+                            Case "IMAX1" : IMAX1 = data1
+                            Case "IMAX2" : IMAX2 = data1
+                            Case "IMAX3" : IMAX3 = data1
+                            Case "PMAX" : PMAX = data1
+                            Case "PPOT" : PPOT = data1
+                            Case "ADIR1" : ADIR1 = data1
+                            Case "ADIR2" : ADIR2 = data1
+                            Case "ADIR3" : ADIR3 = data1
+                            Case "ADPS" : ADPS = data1
+                            Case "BBRHCJB" : BBRHCJB = data1
+                            Case "BBRHCJR" : BBRHCJR = data1
+                            Case "BBRHCJW" : BBRHCJW = data1
+                            Case "BBRHPJB" : BBRHPJB = data1
+                            Case "BBRHPJR" : BBRHPJR = data1
+                            Case "BBRHPJW" : BBRHPJW = data1
+                            Case "DEMAIN" : DEMAIN = data1
+                            Case "EJPHN" : EJPHN = data1
+                            Case "EJPHPM" : EJPHPM = data1
                             Case Else
                                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Case Teleinfo_adresse ", "Parametre non reconnu adresse : " & TeleInfo_adresse)
-
                         End Select
-
-
                     Catch ex As Exception
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Traitement Exception ", "Exception : " & ex.Message)
                     End Try
@@ -836,12 +749,9 @@ Public Class Driver_Teleinfo
         End Sub
 
         Private Function Sauve_temp_teleinfo(ByVal adresse As String) As String
-
-            Dim retour As String = ""
             Try
-
+                Dim retour As String = ""
                 Select Case LTrim(UCase(adresse))
-
                     Case "ADCO" : retour = ADCO
                     Case "OPTARIF" : retour = OPTARIF
                     Case "ISOUSC" : retour = ISOUSC
@@ -882,8 +792,6 @@ Public Class Driver_Teleinfo
                         retour = "-1"
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Sauve_temp_teleinfo : Case Teleinfo_adresse ", "Parametre non reconnu adresse : " & adresse)
                 End Select
-
-
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Traitement Exception ", "Exception : " & ex.Message)
             End Try
