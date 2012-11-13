@@ -36,14 +36,18 @@
     End Property
 
     Public Sub New()
-        Dim MyContextMenu As New ContextMenu
+        Try
+            Dim MyContextMenu As New ContextMenu
 
-        Dim MyContextMenuFille As New MenuItem
-        MyContextMenuFille.Header = "Supprimer"
-        AddHandler MyContextMenuFille.Click, AddressOf _Delete
+            Dim MyContextMenuFille As New MenuItem
+            MyContextMenuFille.Header = "Supprimer"
+            AddHandler MyContextMenuFille.Click, AddressOf _Delete
 
-        MyContextMenu.Items.Add(MyContextMenuFille)
-        Me.ContextMenu = MyContextMenu
+            MyContextMenu.Items.Add(MyContextMenuFille)
+            Me.ContextMenu = MyContextMenu
+        Catch ex As Exception
+            MessageBox.Show("Erreur ImageButton New: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub _Delete()

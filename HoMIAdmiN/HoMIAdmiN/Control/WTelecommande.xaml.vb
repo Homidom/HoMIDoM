@@ -552,55 +552,66 @@ Retour:
     End Sub
 
     Private Sub Save()
-        ListButton.Clear()
+        Try
+            ListButton.Clear()
 
-        For i As Integer = 0 To grid_Telecommande.Children.Count - 1
-            Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
-            If cvs IsNot Nothing Then
-                If cvs.Children.Count <> 0 Then
-                    ListButton.Add(cvs.Children.Item(0))
+            For i As Integer = 0 To grid_Telecommande.Children.Count - 1
+                Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
+                If cvs IsNot Nothing Then
+                    If cvs.Children.Count <> 0 Then
+                        ListButton.Add(cvs.Children.Item(0))
+                    End If
                 End If
-            End If
-        Next
+            Next
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub Telecommande Save: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub Recharge()
-        Remplir()
+        Try
+            Remplir()
 
-        For i As Integer = 0 To ListButton.Count - 1
-            Dim x As New Canvas
-            x.Width = 45
-            x.Height = 45
-            x.Background = Brushes.Black
-            x.AllowDrop = True
-            x.Tag = ListButton(i).Row & "|" & ListButton(i).Column
-            AddHandler x.DragOver, AddressOf CVS_DragOver
-            AddHandler x.Drop, AddressOf CVS_Drop
-            Grid.SetColumn(x, ListButton(i).Column)
-            Grid.SetRow(x, ListButton(i).Row)
+            For i As Integer = 0 To ListButton.Count - 1
+                Dim x As New Canvas
+                x.Width = 45
+                x.Height = 45
+                x.Background = Brushes.Black
+                x.AllowDrop = True
+                x.Tag = ListButton(i).Row & "|" & ListButton(i).Column
+                AddHandler x.DragOver, AddressOf CVS_DragOver
+                AddHandler x.Drop, AddressOf CVS_Drop
+                Grid.SetColumn(x, ListButton(i).Column)
+                Grid.SetRow(x, ListButton(i).Row)
 
-            Dim img1 As New ImageButton
-            img1.Source = ListButton(i).Source
-            img1.Command = ListButton(i).Command
-            img1.AllowDrop = True
-            Dim a() As String = x.Tag.split("|")
-            img1.Row = a(0)
-            img1.Column = a(1)
-            AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
-            AddHandler img1.Delete, AddressOf DeleteButton
-            x.Children.Add(img1)
+                Dim img1 As New ImageButton
+                img1.Source = ListButton(i).Source
+                img1.Command = ListButton(i).Command
+                img1.AllowDrop = True
+                Dim a() As String = x.Tag.split("|")
+                img1.Row = a(0)
+                img1.Column = a(1)
+                AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
+                AddHandler img1.Delete, AddressOf DeleteButton
+                x.Children.Add(img1)
 
-            grid_Telecommande.Children.Add(x)
-        Next
+                grid_Telecommande.Children.Add(x)
+            Next
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub Telecommande Recharge: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub CVS_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs)
-        If e.Data.GetDataPresent(GetType(Image)) Then
-            e.Effects = DragDropEffects.Copy
-        Else
-            e.Effects = DragDropEffects.None
-        End If
-
+        Try
+            If e.Data.GetDataPresent(GetType(Image)) Then
+                e.Effects = DragDropEffects.Copy
+            Else
+                e.Effects = DragDropEffects.None
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub Telecommande CVS_DragOver: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub CVS_Drop(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs)
@@ -633,76 +644,92 @@ Retour:
                 e.Effects = DragDropEffects.None
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString)
+            MessageBox.Show("ERREUR Sub Telecommande CVS_Drop: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
     Private Sub Remplir()
-        For i As Integer = 0 To grid_Telecommande.RowDefinitions.Count - 1
-            For j As Integer = 0 To grid_Telecommande.ColumnDefinitions.Count - 1
-                Dim x As New Canvas
-                x.Width = 45
-                x.Height = 45
-                x.Background = Brushes.Black
-                x.AllowDrop = True
-                x.Tag = i & "|" & j
-                AddHandler x.DragOver, AddressOf CVS_DragOver
-                AddHandler x.Drop, AddressOf CVS_Drop
-                Grid.SetColumn(x, j)
-                Grid.SetRow(x, i)
-                grid_Telecommande.Children.Add(x)
+        Try
+            For i As Integer = 0 To grid_Telecommande.RowDefinitions.Count - 1
+                For j As Integer = 0 To grid_Telecommande.ColumnDefinitions.Count - 1
+                    Dim x As New Canvas
+                    x.Width = 45
+                    x.Height = 45
+                    x.Background = Brushes.Black
+                    x.AllowDrop = True
+                    x.Tag = i & "|" & j
+                    AddHandler x.DragOver, AddressOf CVS_DragOver
+                    AddHandler x.Drop, AddressOf CVS_Drop
+                    Grid.SetColumn(x, j)
+                    Grid.SetRow(x, i)
+                    grid_Telecommande.Children.Add(x)
+                Next
             Next
-        Next
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub Telecommande Remplir: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'Supprimer un bouton via menu contextuel
     Private Sub DeleteButton(ByVal sender As Object)
-        sender.parent.children.clear()
+        Try
+            sender.parent.children.clear()
 
-        For i As Integer = 0 To x.Commandes.Count - 1
-            If x.Commandes(i).Name = sender.command Then
-                x.Commandes(i).Row = -1
-                x.Commandes(i).Column = -1
-            End If
-        Next
+            For i As Integer = 0 To x.Commandes.Count - 1
+                If x.Commandes(i).Name = sender.command Then
+                    x.Commandes(i).Row = -1
+                    x.Commandes(i).Column = -1
+                End If
+            Next
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub Telecommande DeleteButton: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub Img_MouseLeftButtonDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
-        Dim effects As DragDropEffects
-        Dim obj As New DataObject()
-        obj.SetData(GetType(Image), sender)
-        effects = DragDrop.DoDragDrop(sender, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+        Try
+            Dim effects As DragDropEffects
+            Dim obj As New DataObject()
+            obj.SetData(GetType(Image), sender)
+            effects = DragDrop.DoDragDrop(sender, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub Telecommande Img_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'Fermer
     Private Sub button_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles button.Click
-        x.Modele = cbTemplate.Text
-        For i As Integer = 0 To grid_Telecommande.Children.Count - 1
-            Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
+        Try
+            x.Modele = cbTemplate.Text
+            For i As Integer = 0 To grid_Telecommande.Children.Count - 1
+                Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
 
-            If cvs IsNot Nothing Then
-                If cvs.Children.Count <> 0 Then
-                    For j As Integer = 0 To x.Commandes.Count - 1
+                If cvs IsNot Nothing Then
+                    If cvs.Children.Count <> 0 Then
+                        For j As Integer = 0 To x.Commandes.Count - 1
 
-                        Dim y As ImageButton = cvs.Children.Item(0)
-                        If x.Commandes(j).Name = y.Command Then
-                            x.Commandes(j).Row = y.Row
-                            x.Commandes(j).Column = y.Column
-                            Exit For
-                        End If
-                    Next
+                            Dim y As ImageButton = cvs.Children.Item(0)
+                            If x.Commandes(j).Name = y.Command Then
+                                x.Commandes(j).Row = y.Row
+                                x.Commandes(j).Column = y.Column
+                                Exit For
+                            End If
+                        Next
+                    End If
+                End If
+            Next
+
+            If cbTemplate.Text <> "" Then
+                Dim retour As String = myService.SaveTemplate(IdSrv, cbTemplate.Text, x.Commandes, slider_Row.Value, slider_Column.Value)
+                If retour <> "0" Then
+                    MessageBox.Show("Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                 End If
             End If
-        Next
 
-        If cbTemplate.Text <> "" Then
-            Dim retour As String = myService.SaveTemplate(IdSrv, cbTemplate.Text, x.Commandes, slider_Row.Value, slider_Column.Value)
-            If retour <> "0" Then
-                MessageBox.Show("Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-            End If
-        End If
-
-        DialogResult = True
+            DialogResult = True
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub Telecommande button_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
 

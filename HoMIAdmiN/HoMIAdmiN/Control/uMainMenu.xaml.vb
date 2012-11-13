@@ -9,35 +9,55 @@
     'action quand on appuie sur une icone principale
     Private Sub Gerer_ContextMenu(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_driver.MouseLeftButtonDown, _
         img_composant.MouseLeftButtonDown, img_zone.MouseLeftButtonDown, img_user.MouseLeftButtonDown, img_trigger.MouseLeftButtonDown, img_macro.MouseLeftButtonDown
-        If e.ClickCount = 1 Then RaiseEvent menu_gerer(sender.tag)
+        Try
+            If e.ClickCount = 1 Then RaiseEvent menu_gerer(sender.tag)
+        Catch ex As Exception
+            MessageBox.Show("Erreur uMainMenu Gerer_ContextMenu : " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'action quand on appuie sur un sous menu Gérer
     Private Sub Gerer_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles _
         img_composant_gerer.MouseLeftButtonDown, img_zone_gerer.MouseLeftButtonDown, img_user_gerer.MouseLeftButtonDown, _
         img_trigger_gerer.MouseLeftButtonDown, img_macro_gerer.MouseLeftButtonDown, img_driver_gerer.MouseLeftButtonDown
-        If e.ClickCount = 1 Then RaiseEvent menu_gerer(sender.tag)
+        Try
+            If e.ClickCount = 1 Then RaiseEvent menu_gerer(sender.tag)
+        Catch ex As Exception
+            MessageBox.Show("Erreur uMainMenu Gerer_MouseLeftButtonDown : " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'action quand on appuie sur un sous menu Supprimer
     Private Sub Delete_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_composant_supprimer.MouseLeftButtonDown, _
         img_macro_supprimer.MouseLeftButtonDown, img_trigger_supprimer.MouseLeftButtonDown, img_user_supprimer.MouseLeftButtonDown, img_zone_supprimer.MouseLeftButtonDown
         'Attention 1002 correspond à enregistrer la config et non supprimer
-        If e.ClickCount = 1 Then RaiseEvent menu_delete(sender.tag)
+        Try
+            If e.ClickCount = 1 Then RaiseEvent menu_delete(sender.tag)
+        Catch ex As Exception
+            MessageBox.Show("Erreur uMainMenu Delete_MouseLeftButtonDown : " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'action quand on appuie sur un sous menu Créer
     Private Sub Create_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_composant_ajouter.MouseLeftButtonDown, _
         img_user_ajouter.MouseLeftButtonDown, img_zone_ajouter.MouseLeftButtonDown, img_macro_ajouter.MouseLeftButtonDown, img_trigger_ajouterdevice.MouseLeftButtonDown, _
         img_trigger_ajoutertimer.MouseLeftButtonDown, img_module_ajouter.MouseLeftButtonDown, img_module.MouseLeftButtonDown
-        If e.ClickCount = 1 Then RaiseEvent menu_create(sender.tag)
+        Try
+            If e.ClickCount = 1 Then RaiseEvent menu_create(sender.tag)
+        Catch ex As Exception
+            MessageBox.Show("Erreur uMainMenu Create_MouseLeftButtonDown : " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'action quand on appuie sur un sous menu Editer
     Private Sub Edit_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_composant_editer.MouseLeftButtonDown, _
         img_zone_editer.MouseLeftButtonDown, img_driver_editer.MouseLeftButtonDown, img_macro_editer.MouseLeftButtonDown, img_trigger_editer.MouseLeftButtonDown, _
         img_user_editer.MouseLeftButtonDown
-        If e.ClickCount = 1 Then RaiseEvent menu_edit(sender.tag)
+        Try
+            If e.ClickCount = 1 Then RaiseEvent menu_edit(sender.tag)
+        Catch ex As Exception
+            MessageBox.Show("Erreur uMainMenu Edit_MouseLeftButtonDown : " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'action quand on appuie sur un sous menu autre
@@ -45,7 +65,11 @@
         img_config.MouseLeftButtonDown, img_config_log.MouseLeftButtonDown, _
         img_config_sauvegarder.MouseLeftButtonDown, img_aide.MouseLeftButtonDown, img_multimedia.MouseDown, _
         img_quitter.MouseLeftButtonDown, img_quitter_start.MouseLeftButtonDown, img_quitter_stop.MouseLeftButtonDown
-        If e.ClickCount = 1 Then RaiseEvent menu_autre(sender.tag)
+        Try
+            If e.ClickCount = 1 Then RaiseEvent menu_autre(sender.tag)
+        Catch ex As Exception
+            MessageBox.Show("Erreur uMainMenu Autre_MouseLeftButtonDown : " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
 

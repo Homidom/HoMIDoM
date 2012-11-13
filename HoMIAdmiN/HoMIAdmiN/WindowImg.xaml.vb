@@ -61,14 +61,18 @@ Public Class WindowImg
     End Sub
 
     Private Sub stk_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
-        FileName = sender.tag
+        Try
+            FileName = sender.tag
 
-        If _oldstk IsNot Nothing Then
-            _oldstk.Background = Brushes.DarkGray
-        End If
+            If _oldstk IsNot Nothing Then
+                _oldstk.Background = Brushes.DarkGray
+            End If
 
-        sender.Background = Brushes.LightGray
-        _oldstk = sender
+            sender.Background = Brushes.LightGray
+            _oldstk = sender
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub stk_MouseDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnUpload_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnUpload.Click

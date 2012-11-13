@@ -184,57 +184,65 @@
     End Sub
 
     Private Sub NewSite_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewSite.Click
-        Dim flagnew As Boolean
+        Try
+            Dim flagnew As Boolean
 
-        For i As Integer = 0 To Window1.ListServer.Count - 1
-            If Window1.ListServer.Item(i).Nom = TxtName.Text Then
-                Window1.ListServer.Item(i).Adresse = TxtIP.Text
-                Window1.ListServer.Item(i).Port = TxtPort.Text
-                Window1.ListServer.Item(i).Defaut = ChkDefaut.IsChecked
-                Window1.ListServer.Item(i).Id = TxtID.Text
-                flagnew = True
-            End If
-        Next
-
-        If flagnew = False Then
-            If TxtName.Text = "" Or TxtName.Text = " " Or TxtIP.Text = "" Or TxtIP.Text = " " Or TxtPort.Text = "" Or TxtPort.Text = " " Or TxtID.Text = "" Or TxtID.Text = " " Then
-                MessageBox.Show("Le nom, l'ID, l'adresse et le port du serveur ne peuvent être vide!", "Admin", MessageBoxButton.OK, MessageBoxImage.Error)
-                Exit Sub
-            End If
-            Dim x As New ClServer
-            x.Nom = TxtName.Text
-            x.Adresse = TxtIP.Text
-            x.Port = TxtPort.Text
-            x.Defaut = ChkDefaut.IsChecked
-            x.Id = TxtID.Text
-
-            Window1.ListServer.Add(x)
-        End If
-
-        If ChkDefaut.IsChecked = True Then
             For i As Integer = 0 To Window1.ListServer.Count - 1
-                If Window1.ListServer.Item(i).Nom <> TxtName.Text And Window1.ListServer.Item(i).Defaut = True Then
-                    Window1.ListServer.Item(i).Defaut = False
+                If Window1.ListServer.Item(i).Nom = TxtName.Text Then
+                    Window1.ListServer.Item(i).Adresse = TxtIP.Text
+                    Window1.ListServer.Item(i).Port = TxtPort.Text
+                    Window1.ListServer.Item(i).Defaut = ChkDefaut.IsChecked
+                    Window1.ListServer.Item(i).Id = TxtID.Text
+                    flagnew = True
                 End If
             Next
-        End If
 
-        ShowSrv()
+            If flagnew = False Then
+                If TxtName.Text = "" Or TxtName.Text = " " Or TxtIP.Text = "" Or TxtIP.Text = " " Or TxtPort.Text = "" Or TxtPort.Text = " " Or TxtID.Text = "" Or TxtID.Text = " " Then
+                    MessageBox.Show("Le nom, l'ID, l'adresse et le port du serveur ne peuvent être vide!", "Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Exit Sub
+                End If
+                Dim x As New ClServer
+                x.Nom = TxtName.Text
+                x.Adresse = TxtIP.Text
+                x.Port = TxtPort.Text
+                x.Defaut = ChkDefaut.IsChecked
+                x.Id = TxtID.Text
+
+                Window1.ListServer.Add(x)
+            End If
+
+            If ChkDefaut.IsChecked = True Then
+                For i As Integer = 0 To Window1.ListServer.Count - 1
+                    If Window1.ListServer.Item(i).Nom <> TxtName.Text And Window1.ListServer.Item(i).Defaut = True Then
+                        Window1.ListServer.Item(i).Defaut = False
+                    End If
+                Next
+            End If
+
+            ShowSrv()
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub NewSite_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub DelSite_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles DelSite.Click
-        If TxtName.Text = "Connexion Manuelle" Then
-            MessageBox.Show("Vous ne pouvez pas supprimer ce serveur!", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        End If
-        For i As Integer = 0 To Window1.ListServer.Count - 1
-            If Window1.ListServer.Item(i).Nom = TxtName.Text Then
-                Window1.ListServer.RemoveAt(i)
-                Exit For
+        Try
+            If TxtName.Text = "Connexion Manuelle" Then
+                MessageBox.Show("Vous ne pouvez pas supprimer ce serveur!", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
             End If
-        Next
+            For i As Integer = 0 To Window1.ListServer.Count - 1
+                If Window1.ListServer.Item(i).Nom = TxtName.Text Then
+                    Window1.ListServer.RemoveAt(i)
+                    Exit For
+                End If
+            Next
 
-        ShowSrv()
+            ShowSrv()
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub DelSite_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
 End Class

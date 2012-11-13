@@ -381,58 +381,73 @@ Class Window1
 #Region "Treeview"
 
     Private Sub CloseTreeView()
-        DKpanel.Width = 0
-        flagTreeV = False
+        Try
+            DKpanel.Width = 0
+            flagTreeV = False
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub CloseTreeView: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub ShowTreeView()
-        If flagTreeV = True Then Exit Sub
-        DKpanel.Width = Double.NaN
-        Dim da3 As DoubleAnimation = New DoubleAnimation
-        da3.From = 0
-        da3.To = 1
-        da3.Duration = New Duration(TimeSpan.FromMilliseconds(600))
-        Dim sc As ScaleTransform = New ScaleTransform()
-        DKpanel.RenderTransform = sc
-        sc.BeginAnimation(ScaleTransform.ScaleXProperty, da3)
-        flagTreeV = True
-
+        Try
+            If flagTreeV = True Then Exit Sub
+            DKpanel.Width = Double.NaN
+            Dim da3 As DoubleAnimation = New DoubleAnimation
+            da3.From = 0
+            da3.To = 1
+            da3.Duration = New Duration(TimeSpan.FromMilliseconds(600))
+            Dim sc As ScaleTransform = New ScaleTransform()
+            DKpanel.RenderTransform = sc
+            sc.BeginAnimation(ScaleTransform.ScaleXProperty, da3)
+            flagTreeV = True
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub ShowTreeView: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub ClearAllTreeview()
-        TreeViewDriver.Items.Clear()
-        TreeViewDevice.Items.Clear()
-        TreeViewZone.Items.Clear()
-        TreeViewUser.Items.Clear()
-        TreeViewTrigger.Items.Clear()
-        TreeViewMacro.Items.Clear()
-        TreeViewHisto.Items.Clear()
+        Try
+            TreeViewDriver.Items.Clear()
+            TreeViewDevice.Items.Clear()
+            TreeViewZone.Items.Clear()
+            TreeViewUser.Items.Clear()
+            TreeViewTrigger.Items.Clear()
+            TreeViewMacro.Items.Clear()
+            TreeViewHisto.Items.Clear()
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub ClearAllTreeview: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub RefreshTreeView()
-        If IsConnect = False Then
-            'Serveur_notconnected_action()
-            Exit Sub
-        End If
+        Try
+            If IsConnect = False Then
+                'Serveur_notconnected_action()
+                Exit Sub
+            End If
 
-        Me.Cursor = Cursors.Wait
-        Select Case Tabcontrol1.SelectedIndex
-            Case 0
-                AffDriver()
-            Case 1
-                AffDevice()
-            Case 2
-                AffZone()
-            Case 3
-                AffUser()
-            Case 4
-                AffTrigger()
-            Case 5
-                AffScene()
-            Case 6
-                AffHisto()
-        End Select
-        Me.Cursor = Nothing
+            Me.Cursor = Cursors.Wait
+            Select Case Tabcontrol1.SelectedIndex
+                Case 0
+                    AffDriver()
+                Case 1
+                    AffDevice()
+                Case 2
+                    AffZone()
+                Case 3
+                    AffUser()
+                Case 4
+                    AffTrigger()
+                Case 5
+                    AffScene()
+                Case 6
+                    AffHisto()
+            End Select
+            Me.Cursor = Nothing
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub RefreshTreeView: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'Afficher la liste des zones
@@ -989,17 +1004,20 @@ Class Window1
     'Retourne True si le device a plusieurs histo sur des propriétés différents
     Private Function AsMultiHisto(ByVal Deviceid As String, ByVal x As List(Of HoMIDom.HoMIDom.Historisation)) As Boolean
         Dim retour As Boolean = False
-        Dim tmp As Boolean = False
-        Dim _name As String = ""
+        Try
+            Dim tmp As Boolean = False
+            Dim _name As String = ""
 
-        For Each _histo As HoMIDom.HoMIDom.Historisation In x
-            If _histo.IdDevice = Deviceid And _name = "" Then
-                _name = _histo.Nom
-            ElseIf _histo.IdDevice = Deviceid And _name <> _histo.Nom Then
-                retour = True
-            End If
-        Next
-
+            For Each _histo As HoMIDom.HoMIDom.Historisation In x
+                If _histo.IdDevice = Deviceid And _name = "" Then
+                    _name = _histo.Nom
+                ElseIf _histo.IdDevice = Deviceid And _name <> _histo.Nom Then
+                    retour = True
+                End If
+            Next
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub AsMultiHisto: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
         Return retour
     End Function
 
@@ -2398,7 +2416,11 @@ Class Window1
     End Sub
 
     Private Sub ControlLoaded()
-        Me.Cursor = Nothing
+        Try
+            Me.Cursor = Nothing
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub ControlLoaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     ''' <summary>
@@ -2407,37 +2429,43 @@ Class Window1
     ''' <param name="Objet"></param>
     ''' <remarks></remarks>
     Private Sub AffControlPage(ByVal Objet As Object)
+        Try
+            If CanvasRight.Children.Count > 0 Then
 
-        If CanvasRight.Children.Count > 0 Then
+                For i As Integer = 0 To CanvasRight.Children.Count - 1
+                    Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
+                    myDoubleAnimation.From = 1.0
+                    myDoubleAnimation.To = 0.0
+                    myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(650))
+                    Dim myStoryboard As Storyboard
+                    myStoryboard = New Storyboard()
+                    myStoryboard.Children.Add(myDoubleAnimation)
+                    AddHandler myStoryboard.Completed, AddressOf AffControlPageSuite
 
-            For i As Integer = 0 To CanvasRight.Children.Count - 1
-                Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
-                myDoubleAnimation.From = 1.0
-                myDoubleAnimation.To = 0.0
-                myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(650))
-                Dim myStoryboard As Storyboard
-                myStoryboard = New Storyboard()
-                myStoryboard.Children.Add(myDoubleAnimation)
-                AddHandler myStoryboard.Completed, AddressOf AffControlPageSuite
+                    Storyboard.SetTarget(myDoubleAnimation, CanvasRight.Children.Item(i))
+                    Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
+                    myStoryboard.Begin()
 
-                Storyboard.SetTarget(myDoubleAnimation, CanvasRight.Children.Item(i))
-                Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
-                myStoryboard.Begin()
+                Next
+            End If
 
-            Next
-        End If
-
-        Objet3 = Objet
-
+            Objet3 = Objet
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub AffControlPage: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Dim Objet3 As Object = Nothing
 
     Private Sub AffControlPageSuite()
-        CanvasRight.Children.Clear()
-        CanvasRight.Children.Add(Objet3)
-        AnimationApparition(Objet3)
-        Objet3 = Nothing
+        Try
+            CanvasRight.Children.Clear()
+            CanvasRight.Children.Add(Objet3)
+            AnimationApparition(Objet3)
+            Objet3 = Nothing
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub AffControlPageSuite: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'Décharger une fenêtre suivant son Id
@@ -2541,7 +2569,11 @@ Class Window1
     End Sub
 
     Private Sub Ellipse1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Ellipse1.MouseDown
-        If IsConnect = False Then PageConnexion()
+        Try
+            If IsConnect = False Then PageConnexion()
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub Ellipse1_MouseDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub Tabcontrol1_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles Tabcontrol1.SelectionChanged
@@ -2549,15 +2581,19 @@ Class Window1
     End Sub
 
     Private Sub LOG_PreviewMouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles LOG.PreviewMouseMove, ImgLog.PreviewMouseMove
-        If IsConnect = True Then
-            Dim list As List(Of String) = myService.GetLastLogs
-            Dim a As String = ""
-            For i As Integer = 0 To list.Count - 1
-                a &= list(i)
-                If (i <> list.Count - 1) Then a &= vbCrLf
-            Next
-            LOG.ToolTip = a
-        End If
+        Try
+            If IsConnect = True Then
+                Dim list As List(Of String) = myService.GetLastLogs
+                Dim a As String = ""
+                For i As Integer = 0 To list.Count - 1
+                    a &= list(i)
+                    If (i <> list.Count - 1) Then a &= vbCrLf
+                Next
+                LOG.ToolTip = a
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub LOG_PreviewMouseMove: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
 

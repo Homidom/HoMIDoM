@@ -53,26 +53,28 @@ Public Class uHisto
         End Try
     End Sub
 
-
-
     Private Sub Chart2_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
-        ' Call HitTest
-        Dim result As HitTestResult = _CurrentChart.HitTest(e.X, e.Y)
+        Try
+            ' Call HitTest
+            Dim result As HitTestResult = _CurrentChart.HitTest(e.X, e.Y)
 
-        ' Reset Data Point Attributes
-        Dim point As DataPoint
-        For Each point In _CurrentChart.Series(0).Points
-            point.BorderWidth = 3
-        Next
+            ' Reset Data Point Attributes
+            Dim point As DataPoint
+            For Each point In _CurrentChart.Series(0).Points
+                point.BorderWidth = 3
+            Next
 
-        ' If the mouse if over a data point
-        If result.ChartElementType = ChartElementType.DataPoint Then
-            Dim pointt As DataPoint = _CurrentChart.Series(0).Points(result.PointIndex)
-            pointt.BorderWidth = 1
-        Else
-            ' Set default cursor
-            Me.Cursor = Cursors.Arrow
-        End If
+            ' If the mouse if over a data point
+            If result.ChartElementType = ChartElementType.DataPoint Then
+                Dim pointt As DataPoint = _CurrentChart.Series(0).Points(result.PointIndex)
+                pointt.BorderWidth = 1
+            Else
+                ' Set default cursor
+                Me.Cursor = Cursors.Arrow
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uHisto Chart2_MouseMove: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Sub Update_Graphe()
@@ -221,72 +223,80 @@ Public Class uHisto
     End Sub
 
     Private Sub BtnSave_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSave.Click
-        If _CurrentChart IsNot Nothing Then
+        Try
+            If _CurrentChart IsNot Nothing Then
 
-            ' Create a new save file dialog
-            Dim saveFileDialog1 As New Microsoft.Win32.SaveFileDialog()
+                ' Create a new save file dialog
+                Dim saveFileDialog1 As New Microsoft.Win32.SaveFileDialog()
 
-            ' Sets the current file name filter string, which determines 
-            ' the choices that appear in the "Save as file type" or 
-            ' "Files of type" box in the dialog box.
-            saveFileDialog1.Filter = "Bitmap (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg|EMF (*.emf)|*.emf|PNG (*.png)|*.png|SVG (*.svg)|*.svg|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif"
-            saveFileDialog1.FilterIndex = 2
-            saveFileDialog1.RestoreDirectory = True
+                ' Sets the current file name filter string, which determines 
+                ' the choices that appear in the "Save as file type" or 
+                ' "Files of type" box in the dialog box.
+                saveFileDialog1.Filter = "Bitmap (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg|EMF (*.emf)|*.emf|PNG (*.png)|*.png|SVG (*.svg)|*.svg|GIF (*.gif)|*.gif|TIFF (*.tif)|*.tif"
+                saveFileDialog1.FilterIndex = 2
+                saveFileDialog1.RestoreDirectory = True
 
-            ' Set image file format
-            If saveFileDialog1.ShowDialog() = Forms.DialogResult.OK Then
-                Dim format As ChartImageFormat = ChartImageFormat.Bmp
+                ' Set image file format
+                If saveFileDialog1.ShowDialog() = Forms.DialogResult.OK Then
+                    Dim format As ChartImageFormat = ChartImageFormat.Bmp
 
-                If saveFileDialog1.FileName.EndsWith("bmp") Then
-                    format = ChartImageFormat.Bmp
-                Else
-                    If saveFileDialog1.FileName.EndsWith("jpg") Then
-                        format = ChartImageFormat.Jpeg
+                    If saveFileDialog1.FileName.EndsWith("bmp") Then
+                        format = ChartImageFormat.Bmp
                     Else
-                        If saveFileDialog1.FileName.EndsWith("emf") Then
-                            format = ChartImageFormat.Emf
+                        If saveFileDialog1.FileName.EndsWith("jpg") Then
+                            format = ChartImageFormat.Jpeg
                         Else
-                            If saveFileDialog1.FileName.EndsWith("gif") Then
-                                format = ChartImageFormat.Gif
+                            If saveFileDialog1.FileName.EndsWith("emf") Then
+                                format = ChartImageFormat.Emf
                             Else
-                                If saveFileDialog1.FileName.EndsWith("png") Then
-                                    format = ChartImageFormat.Png
+                                If saveFileDialog1.FileName.EndsWith("gif") Then
+                                    format = ChartImageFormat.Gif
                                 Else
-                                    If saveFileDialog1.FileName.EndsWith("tif") Then
-                                        format = ChartImageFormat.Tiff
-                                    End If
-                                End If ' Save image
+                                    If saveFileDialog1.FileName.EndsWith("png") Then
+                                        format = ChartImageFormat.Png
+                                    Else
+                                        If saveFileDialog1.FileName.EndsWith("tif") Then
+                                            format = ChartImageFormat.Tiff
+                                        End If
+                                    End If ' Save image
+                                End If
                             End If
                         End If
                     End If
+                    _CurrentChart.SaveImage(saveFileDialog1.FileName, format)
                 End If
-                _CurrentChart.SaveImage(saveFileDialog1.FileName, format)
+            Else
+                MessageBox.Show("No curent")
             End If
-        Else
-            MessageBox.Show("No curent")
-        End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uHisto BtnSave_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub CbBackColor_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbBackColor.SelectionChanged
-        If _CurrentChart IsNot Nothing Then
-            Select Case CbBackColor.SelectedIndex
-                Case 0
-                    _CurrentChart.ChartAreas("Default").BackColor = Color.White
-                Case 1
-                    _CurrentChart.ChartAreas("Default").BackColor = Color.LightBlue
-                Case 2
-                    _CurrentChart.ChartAreas("Default").BackColor = Color.LightYellow
-                Case 3
-                    _CurrentChart.ChartAreas("Default").BackColor = Color.Red
-                Case 4
-                    _CurrentChart.ChartAreas("Default").BackColor = Color.LightGreen
-                Case 5
-                    _CurrentChart.ChartAreas("Default").BackColor = Color.LightGray
-                Case 6
-                    _CurrentChart.ChartAreas("Default").BackColor = Color.Transparent
-            End Select
+        Try
+            If _CurrentChart IsNot Nothing Then
+                Select Case CbBackColor.SelectedIndex
+                    Case 0
+                        _CurrentChart.ChartAreas("Default").BackColor = Color.White
+                    Case 1
+                        _CurrentChart.ChartAreas("Default").BackColor = Color.LightBlue
+                    Case 2
+                        _CurrentChart.ChartAreas("Default").BackColor = Color.LightYellow
+                    Case 3
+                        _CurrentChart.ChartAreas("Default").BackColor = Color.Red
+                    Case 4
+                        _CurrentChart.ChartAreas("Default").BackColor = Color.LightGreen
+                    Case 5
+                        _CurrentChart.ChartAreas("Default").BackColor = Color.LightGray
+                    Case 6
+                        _CurrentChart.ChartAreas("Default").BackColor = Color.Transparent
+                End Select
 
-        End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uHisto CbBackColor_SelectionChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
 

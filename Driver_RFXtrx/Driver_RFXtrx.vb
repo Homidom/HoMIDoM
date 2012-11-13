@@ -1606,33 +1606,38 @@ Imports System.Media
     ''' <summary>Lances les handlers sur le port</summary>
     ''' <remarks></remarks>
     Private Function lancer() As String
-        'lancer les handlers
-        If tcp Then
-            Try
-                stream = client.GetStream()
-                stream.BeginRead(TCPData, 0, 1024, AddressOf TCPDataReceived, Nothing)
-                Return "Handler IP OK"
-            Catch ex As Exception
-                WriteLog("ERR: LANCER GETSTREAM Exception : " & ex.Message)
-                Return "ERR: Handler IP"
-            End Try
-        Else
-            Try
-                AddHandler RS232Port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
-                AddHandler RS232Port.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf ReadErrorEvent)
-                Return "Handler COM OK"
-            Catch ex As Exception
-                WriteLog("ERR: LANCER Serial Exception : " & ex.Message)
-                Return "ERR: Handler COM"
-            End Try
-        End If
-        recbuf(0) = 0
-        maxticks = 0
+        Try
+            'lancer les handlers
+            If tcp Then
+                Try
+                    stream = client.GetStream()
+                    stream.BeginRead(TCPData, 0, 1024, AddressOf TCPDataReceived, Nothing)
+                    Return "Handler IP OK"
+                Catch ex As Exception
+                    WriteLog("ERR: LANCER GETSTREAM Exception : " & ex.Message)
+                    Return "ERR: Handler IP"
+                End Try
+            Else
+                Try
+                    AddHandler RS232Port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
+                    AddHandler RS232Port.ErrorReceived, New SerialErrorReceivedEventHandler(AddressOf ReadErrorEvent)
+                    Return "Handler COM OK"
+                Catch ex As Exception
+                    WriteLog("ERR: LANCER Serial Exception : " & ex.Message)
+                    Return "ERR: Handler COM"
+                End Try
+            End If
+            recbuf(0) = 0
+            maxticks = 0
 
-        ''tmrRead.Enabled = True
-        'If tmrRead.Enabled Then MyTimer.Stop()
-        'tmrRead.Interval = 100
-        'tmrRead.Start()
+            ''tmrRead.Enabled = True
+            'If tmrRead.Enabled Then MyTimer.Stop()
+            'tmrRead.Interval = 100
+            'tmrRead.Start()
+        Catch ex As Exception
+            WriteLog("ERR: LANCER Serial Exception : " & ex.Message)
+            Return "ERR: Exception"
+        End Try
     End Function
 
     ''' <summary>Configurer le RFXtrx</summary>
@@ -1727,31 +1732,36 @@ Imports System.Media
     End Function
 
     Private Sub SendCommand(ByVal command As Byte, ByRef message As String)
-        Dim kar(ICMD.size) As Byte
-        kar(ICMD.packetlength) = ICMD.size
-        kar(ICMD.packettype) = ICMD.pType
-        kar(ICMD.subtype) = ICMD.sType
-        kar(ICMD.seqnbr) = bytSeqNbr
-        kar(ICMD.cmnd) = command
-        kar(ICMD.msg1) = 0
-        kar(ICMD.msg2) = 0
-        kar(ICMD.msg3) = 0
-        kar(ICMD.msg4) = 0
-        kar(ICMD.msg5) = 0
-        kar(ICMD.msg6) = 0
-        kar(ICMD.msg7) = 0
-        kar(ICMD.msg8) = 0
-        kar(ICMD.msg9) = 0
-
-        For Each bt As Byte In kar
-            message = message + VB.Right("0" & Hex(bt), 2)
-        Next
-        WriteLog("SendCommand : " & message)
-
         Try
-            ecrire(kar)
-        Catch exc As Exception
-            WriteLog("ERR: SendCommand: Unable to write to port")
+
+            Dim kar(ICMD.size) As Byte
+            kar(ICMD.packetlength) = ICMD.size
+            kar(ICMD.packettype) = ICMD.pType
+            kar(ICMD.subtype) = ICMD.sType
+            kar(ICMD.seqnbr) = bytSeqNbr
+            kar(ICMD.cmnd) = command
+            kar(ICMD.msg1) = 0
+            kar(ICMD.msg2) = 0
+            kar(ICMD.msg3) = 0
+            kar(ICMD.msg4) = 0
+            kar(ICMD.msg5) = 0
+            kar(ICMD.msg6) = 0
+            kar(ICMD.msg7) = 0
+            kar(ICMD.msg8) = 0
+            kar(ICMD.msg9) = 0
+
+            For Each bt As Byte In kar
+                message = message + VB.Right("0" & Hex(bt), 2)
+            Next
+            WriteLog("SendCommand : " & message)
+
+            Try
+                ecrire(kar)
+            Catch exc As Exception
+                WriteLog("ERR: SendCommand: Unable to write to port")
+            End Try
+        Catch ex As Exception
+            WriteLog("ERR: SendCommand Exception : " & ex.Message)
         End Try
     End Sub
     'Private Sub ecrirecommande(ByVal kar As Byte())

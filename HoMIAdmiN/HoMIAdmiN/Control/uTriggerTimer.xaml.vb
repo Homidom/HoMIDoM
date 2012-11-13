@@ -294,17 +294,21 @@
     End Sub
 
     Private Sub CheckClick(ByVal sender As Object, ByVal e As Windows.RoutedEventArgs)
-        If sender.IsChecked = True Then
-            _ListMacro.Add(sender.uid)
-        Else
-            For j As Integer = 0 To _ListMacro.Count - 1
-                If _ListMacro.Item(j) = sender.uid Then
-                    _ListMacro.RemoveAt(j)
-                    Exit For
-                End If
-            Next
-        End If
-        RemplirMacro()
+        Try
+            If sender.IsChecked = True Then
+                _ListMacro.Add(sender.uid)
+            Else
+                For j As Integer = 0 To _ListMacro.Count - 1
+                    If _ListMacro.Item(j) = sender.uid Then
+                        _ListMacro.RemoveAt(j)
+                        Exit For
+                    End If
+                Next
+            End If
+            RemplirMacro()
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uMacro CheckClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Function IsInList(ByVal uid As String) As Boolean
@@ -320,234 +324,289 @@
 
             Return flag
         Catch ex As Exception
-            MessageBox.Show("Erreur IsInList: " & ex.ToString, "Erreur")
+            MessageBox.Show("Erreur uMacro IsInList: " & ex.ToString, "Erreur")
         End Try
     End Function
 
 #Region "Gestion Date/time"
     Private Sub BtnPHr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPHr.Click
-        Dim i As Integer
-        If TxtHr.Text = "" Then
-            i = 0
-            TxtHr.Text = Format(i, "00")
-        Else
-            i = TxtHr.Text
-            i += 1
-            If i > 23 Then
-                TxtHr.Text = ""
+        Try
+            Dim i As Integer
+            If TxtHr.Text = "" Then
+                i = 0
+                TxtHr.Text = Format(i, "00")
             Else
-                TxtHr.Text = i
-            End If
+                i = TxtHr.Text
+                i += 1
+                If i > 23 Then
+                    TxtHr.Text = ""
+                Else
+                    TxtHr.Text = i
+                End If
 
-        End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer BtnPHr_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnPMn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPMn.Click
-        Dim i As Integer
-        If TxtMn.Text = "" Then
-            i = 0
-            TxtMn.Text = Format(i, "00")
-        Else
-            i = TxtMn.Text
-            i += 1
-            If i > 59 Then
-                TxtMn.Text = ""
+        Try
+            Dim i As Integer
+            If TxtMn.Text = "" Then
+                i = 0
+                TxtMn.Text = Format(i, "00")
             Else
-                TxtMn.Text = i
-            End If
+                i = TxtMn.Text
+                i += 1
+                If i > 59 Then
+                    TxtMn.Text = ""
+                Else
+                    TxtMn.Text = i
+                End If
 
-        End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer BtnPMn_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnPSc_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPSc.Click
-        Dim i As Integer
-        If TxtSc.Text = "" Then
-            i = 0
-            TxtSc.Text = Format(i, "00")
-        Else
-            i = TxtSc.Text
-            i += 1
-            If i > 59 Then
-                TxtSc.Text = ""
+        Try
+            Dim i As Integer
+            If TxtSc.Text = "" Then
+                i = 0
+                TxtSc.Text = Format(i, "00")
             Else
-                TxtSc.Text = i
-            End If
+                i = TxtSc.Text
+                i += 1
+                If i > 59 Then
+                    TxtSc.Text = ""
+                Else
+                    TxtSc.Text = i
+                End If
 
-        End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer BtnPSc_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnMHr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMHr.Click
-        Dim i As Integer
-        If TxtHr.Text = "" Then
-            i = 23
-            TxtHr.Text = Format(i, "00")
-        Else
-            i = TxtHr.Text
-            i -= 1
-            If i < 0 Then
-                TxtHr.Text = ""
+        Try
+            Dim i As Integer
+            If TxtHr.Text = "" Then
+                i = 23
+                TxtHr.Text = Format(i, "00")
             Else
-                TxtHr.Text = i
-            End If
+                i = TxtHr.Text
+                i -= 1
+                If i < 0 Then
+                    TxtHr.Text = ""
+                Else
+                    TxtHr.Text = i
+                End If
 
-        End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer BtnMHr_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnMMn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMMn.Click
-        Dim i As Integer
-        If TxtMn.Text = "" Then
-            i = 59
-            TxtMn.Text = Format(i, "00")
-        Else
-            i = TxtMn.Text
-            i -= 1
-            If i < 0 Then
-                TxtMn.Text = ""
+        Try
+            Dim i As Integer
+            If TxtMn.Text = "" Then
+                i = 59
+                TxtMn.Text = Format(i, "00")
             Else
-                TxtMn.Text = i
+                i = TxtMn.Text
+                i -= 1
+                If i < 0 Then
+                    TxtMn.Text = ""
+                Else
+                    TxtMn.Text = i
+                End If
+
             End If
-
-        End If
-
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer BtnMMn_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnMSec_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMSec.Click
-        Dim i As Integer
-        If TxtSc.Text = "" Then
-            i = 59
-            TxtSc.Text = Format(i, "00")
-        Else
-            i = TxtSc.Text
-            i -= 1
-            If i < 0 Then
-                TxtSc.Text = ""
+        Try
+            Dim i As Integer
+            If TxtSc.Text = "" Then
+                i = 59
+                TxtSc.Text = Format(i, "00")
             Else
-                TxtSc.Text = i
+                i = TxtSc.Text
+                i -= 1
+                If i < 0 Then
+                    TxtSc.Text = ""
+                Else
+                    TxtSc.Text = i
+                End If
             End If
-
-        End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer BtnMSec_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnPJr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPJr.Click
-        Dim i As Integer
-        If TxtJr.Text = "" Then
-            i = 1
-            TxtJr.Text = Format(i, "00")
-        Else
-            i = TxtJr.Text
-            i += 1
-            If i > 31 Then
-                TxtJr.Text = ""
+        Try
+            Dim i As Integer
+            If TxtJr.Text = "" Then
+                i = 1
+                TxtJr.Text = Format(i, "00")
             Else
-                TxtJr.Text = i
+                i = TxtJr.Text
+                i += 1
+                If i > 31 Then
+                    TxtJr.Text = ""
+                Else
+                    TxtJr.Text = i
+                End If
             End If
-        End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer BtnPJr_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnPMs_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPMs.Click
-        Dim i As Integer
-        If TxtMs.Text = "" Then
-            i = 1
-            TxtMs.Text = Format(i, "00")
-        Else
-            i = TxtMs.Text
-            i += 1
-            If i > 12 Then
-                TxtMs.Text = ""
+        Try
+            Dim i As Integer
+            If TxtMs.Text = "" Then
+                i = 1
+                TxtMs.Text = Format(i, "00")
             Else
-                TxtMs.Text = i
+                i = TxtMs.Text
+                i += 1
+                If i > 12 Then
+                    TxtMs.Text = ""
+                Else
+                    TxtMs.Text = i
+                End If
             End If
-
-        End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer BtnPMs_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnMJr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMJr.Click
-        Dim i As Integer
-        If TxtJr.Text = "" Then
-            i = 31
-            TxtJr.Text = Format(i, "00")
-        Else
-            i = TxtJr.Text
-            i -= 1
-            If i < 1 Then
-                TxtJr.Text = ""
+        Try
+            Dim i As Integer
+            If TxtJr.Text = "" Then
+                i = 31
+                TxtJr.Text = Format(i, "00")
             Else
-                TxtJr.Text = i
+                i = TxtJr.Text
+                i -= 1
+                If i < 1 Then
+                    TxtJr.Text = ""
+                Else
+                    TxtJr.Text = i
+                End If
             End If
-
-        End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer BtnMJr_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnMMs_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMMs.Click
-        Dim i As Integer
-        If TxtMs.Text = "" Then
-            i = 12
-            TxtMs.Text = Format(i, "00")
-        Else
-            i = TxtMs.Text
-            i -= 1
-            If i < 1 Then
-                TxtMs.Text = ""
+        Try
+            Dim i As Integer
+            If TxtMs.Text = "" Then
+                i = 12
+                TxtMs.Text = Format(i, "00")
             Else
-                TxtMs.Text = i
+                i = TxtMs.Text
+                i -= 1
+                If i < 1 Then
+                    TxtMs.Text = ""
+                Else
+                    TxtMs.Text = i
+                End If
             End If
-
-        End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer BtnMMs_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub TxtHr_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHr.TextChanged
-        If TxtHr.Text <> "" Then
-            If IsNumeric(TxtHr.Text) = False Then
-                TxtHr.Text = "0"
-            ElseIf TxtHr.Text <> "" Then
-                If TxtHr.Text < 0 Then TxtHr.Text = ""
-                If TxtHr.Text > 23 Then TxtHr.Text = ""
+        Try
+            If TxtHr.Text <> "" Then
+                If IsNumeric(TxtHr.Text) = False Then
+                    TxtHr.Text = "0"
+                ElseIf TxtHr.Text <> "" Then
+                    If TxtHr.Text < 0 Then TxtHr.Text = ""
+                    If TxtHr.Text > 23 Then TxtHr.Text = ""
+                End If
             End If
-        End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer TxtHr_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub TxtMn_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMn.TextChanged
-        If TxtMn.Text <> "" Then
-            If IsNumeric(TxtMn.Text) = False Then
-                TxtMn.Text = "0"
-            ElseIf TxtMn.Text <> "" Then
-                If TxtMn.Text < 0 Then TxtMn.Text = ""
-                If TxtMn.Text > 59 Then TxtMn.Text = ""
+        Try
+            If TxtMn.Text <> "" Then
+                If IsNumeric(TxtMn.Text) = False Then
+                    TxtMn.Text = "0"
+                ElseIf TxtMn.Text <> "" Then
+                    If TxtMn.Text < 0 Then TxtMn.Text = ""
+                    If TxtMn.Text > 59 Then TxtMn.Text = ""
+                End If
             End If
-        End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer TxtMn_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub TxtSc_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtSc.TextChanged
-        If TxtSc.Text <> "" Then
-            If IsNumeric(TxtSc.Text) = False Then
-                TxtSc.Text = "0"
-            ElseIf TxtSc.Text <> "" Then
-                If TxtSc.Text < 0 Then TxtSc.Text = ""
-                If TxtSc.Text > 59 Then TxtSc.Text = ""
+        Try
+            If TxtSc.Text <> "" Then
+                If IsNumeric(TxtSc.Text) = False Then
+                    TxtSc.Text = "0"
+                ElseIf TxtSc.Text <> "" Then
+                    If TxtSc.Text < 0 Then TxtSc.Text = ""
+                    If TxtSc.Text > 59 Then TxtSc.Text = ""
+                End If
             End If
-        End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer TxtSc_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub TxtJr_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtJr.TextChanged
-        If TxtJr.Text <> "" Then
-            If IsNumeric(TxtJr.Text) = False Then
-                TxtJr.Text = "1"
-            ElseIf TxtJr.Text <> "" Then
-                If TxtJr.Text < 0 Then TxtJr.Text = ""
-                If TxtJr.Text > 31 Then TxtJr.Text = ""
+        Try
+            If TxtJr.Text <> "" Then
+                If IsNumeric(TxtJr.Text) = False Then
+                    TxtJr.Text = "1"
+                ElseIf TxtJr.Text <> "" Then
+                    If TxtJr.Text < 0 Then TxtJr.Text = ""
+                    If TxtJr.Text > 31 Then TxtJr.Text = ""
+                End If
             End If
-        End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer TxtJr_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub TxtMs_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMs.TextChanged
-        If TxtMs.Text <> "" Then
-            If IsNumeric(TxtMs.Text) = False Then
-                TxtMs.Text = "1"
-            ElseIf TxtMs.Text <> "" Then
-                If TxtMs.Text < 0 Then TxtMs.Text = ""
-                If TxtMs.Text > 12 Then TxtMs.Text = ""
+        Try
+            If TxtMs.Text <> "" Then
+                If IsNumeric(TxtMs.Text) = False Then
+                    TxtMs.Text = "1"
+                ElseIf TxtMs.Text <> "" Then
+                    If TxtMs.Text < 0 Then TxtMs.Text = ""
+                    If TxtMs.Text > 12 Then TxtMs.Text = ""
+                End If
             End If
-        End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerTimer TxtMs_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 #End Region
 
