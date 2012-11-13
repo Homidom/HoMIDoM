@@ -195,17 +195,25 @@ Partial Public Class uConfigServer
     End Sub
 
     Private Sub TxtMaxLogMonth_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMaxLogMonth.TextChanged
-        If IsNumeric(TxtMaxLogMonth.Text) = False Then
-            MessageBox.Show("Veuillez saisir un chiffre comme durée de mois maximum", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            TxtMaxLogMonth.Text = myService.GetMaxMonthLog
-        End If
+        Try
+            If IsNumeric(TxtMaxLogMonth.Text) = False Then
+                MessageBox.Show("Veuillez saisir un chiffre comme durée de mois maximum", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                TxtMaxLogMonth.Text = myService.GetMaxMonthLog
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uConfigServer TxtMaxLogMonth_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub TxtFile_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtFile.TextChanged
-        If IsNumeric(TxtFile.Text) = False Then
-            MessageBox.Show("Veuillez saisir un chiffre comme taille maximale", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            TxtFile.Text = myService.GetMaxFileSizeLog
-        End If
+        Try
+            If IsNumeric(TxtFile.Text) = False Then
+                MessageBox.Show("Veuillez saisir un chiffre comme taille maximale", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                TxtFile.Text = myService.GetMaxFileSizeLog
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uConfigServer TxtFile_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
 

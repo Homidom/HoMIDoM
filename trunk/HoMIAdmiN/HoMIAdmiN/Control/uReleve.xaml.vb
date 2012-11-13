@@ -6,9 +6,7 @@ Public Class uReleve
         Try
             ' Cet appel est requis par le concepteur.
             InitializeComponent()
-
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-
             DataGrid1.ItemsSource = ListReleve
             AddHandler DataGrid1.Loaded, AddressOf GridOk
 

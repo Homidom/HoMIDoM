@@ -584,51 +584,67 @@ Public Class WActionParametrage
 #Region "Gestion Condition"
 
     Private Sub BtnCondiTime_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnCondiTime.MouseLeftButtonDown
-        Dim x As New uCondition
-        x.TypeCondition = Action.TypeCondition.DateTime
-        x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
-        AddHandler x.DeleteCondition, AddressOf DeleteCondition
-        AddHandler x.UpCondition, AddressOf UpCondition
-        StkCondition.Children.Add(x)
-        _ListuConditions.Add(x)
+        Try
+            Dim x As New uCondition
+            x.TypeCondition = Action.TypeCondition.DateTime
+            x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
+            AddHandler x.DeleteCondition, AddressOf DeleteCondition
+            AddHandler x.UpCondition, AddressOf UpCondition
+            StkCondition.Children.Add(x)
+            _ListuConditions.Add(x)
+        Catch ex As Exception
+            MessageBox.Show("Erreur WAction BtnCondiTime_MouseLeftButtonDown: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnCondiDevice_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnCondiDevice.MouseLeftButtonDown
-        Dim x As New uCondition
-        x.TypeCondition = Action.TypeCondition.Device
-        x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
-        AddHandler x.DeleteCondition, AddressOf DeleteCondition
-        AddHandler x.UpCondition, AddressOf UpCondition
-        StkCondition.Children.Add(x)
-        _ListuConditions.Add(x)
+        Try
+            Dim x As New uCondition
+            x.TypeCondition = Action.TypeCondition.Device
+            x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
+            AddHandler x.DeleteCondition, AddressOf DeleteCondition
+            AddHandler x.UpCondition, AddressOf UpCondition
+            StkCondition.Children.Add(x)
+            _ListuConditions.Add(x)
+        Catch ex As Exception
+            MessageBox.Show("Erreur WAction BtnCondiDevice_MouseLeftButtonDown: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub DeleteCondition(ByVal uid As String)
-        For i As Integer = 0 To StkCondition.Children.Count - 1
-            If StkCondition.Children.Item(i).Uid = uid Then
-                StkCondition.Children.RemoveAt(i)
-                _ListuConditions.RemoveAt(i)
-                Exit For
-            End If
-        Next
+        Try
+            For i As Integer = 0 To StkCondition.Children.Count - 1
+                If StkCondition.Children.Item(i).Uid = uid Then
+                    StkCondition.Children.RemoveAt(i)
+                    _ListuConditions.RemoveAt(i)
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur WAction DeleteCondition: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub UpCondition(ByVal uid As String)
-        For i As Integer = 0 To _StkCondition.Children.Count - 1
-            If _StkCondition.Children.Item(i).Uid = uid Then
-                If i = 0 Then Exit Sub
-                'on verifi si c'est le 1er car on peu plus monter
-                Dim x As Object = _ListuConditions.Item(i - 1)
-                _ListuConditions.Item(i - 1) = _ListuConditions.Item(i)
-                _ListuConditions.Item(i) = x
+        Try
+            For i As Integer = 0 To _StkCondition.Children.Count - 1
+                If _StkCondition.Children.Item(i).Uid = uid Then
+                    If i = 0 Then Exit Sub
+                    'on verifi si c'est le 1er car on peu plus monter
+                    Dim x As Object = _ListuConditions.Item(i - 1)
+                    _ListuConditions.Item(i - 1) = _ListuConditions.Item(i)
+                    _ListuConditions.Item(i) = x
 
-                StkCondition.Children.Clear()
-                For j As Integer = 0 To _ListuConditions.Count - 1
-                    StkCondition.Children.Add(_ListuConditions.Item(j))
-                Next
-                Exit For
-            End If
-        Next
+                    StkCondition.Children.Clear()
+                    For j As Integer = 0 To _ListuConditions.Count - 1
+                        StkCondition.Children.Add(_ListuConditions.Item(j))
+                    Next
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur WAction UpCondition: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 #End Region
 

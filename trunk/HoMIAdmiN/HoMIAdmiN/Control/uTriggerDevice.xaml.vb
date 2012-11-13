@@ -11,8 +11,6 @@
 
     Public Sub New(ByVal Action As Classe.EAction, ByVal TriggerId As String)
         Try
-
-
             ' Cet appel est requis par le concepteur.
             InitializeComponent()
 
@@ -232,17 +230,21 @@
     End Sub
 
     Private Sub CheckClick(ByVal sender As Object, ByVal e As Windows.RoutedEventArgs)
-        If sender.IsChecked = True Then
-            _ListMacro.Add(sender.uid)
-        Else
-            For j As Integer = 0 To _ListMacro.Count - 1
-                If _ListMacro.Item(j) = sender.uid Then
-                    _ListMacro.RemoveAt(j)
-                    Exit For
-                End If
-            Next
-        End If
-        RemplirMacro()
+        Try
+            If sender.IsChecked = True Then
+                _ListMacro.Add(sender.uid)
+            Else
+                For j As Integer = 0 To _ListMacro.Count - 1
+                    If _ListMacro.Item(j) = sender.uid Then
+                        _ListMacro.RemoveAt(j)
+                        Exit For
+                    End If
+                Next
+            End If
+            RemplirMacro()
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uTriggerDevice CheckClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Function IsInList(ByVal uid As String) As Boolean

@@ -408,10 +408,14 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub TxtLastChangeDuree_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtLastChangeDuree.TextChanged
-        If TxtLastChangeDuree.Text <> "" And IsNumeric(TxtLastChangeDuree.Text) = False Then
-            MessageBox.Show("Veuillez saisir une valeur numérique")
-            TxtLastChangeDuree.Text = 0
-        End If
+        Try
+            If TxtLastChangeDuree.Text <> "" And IsNumeric(TxtLastChangeDuree.Text) = False Then
+                MessageBox.Show("Veuillez saisir une valeur numérique")
+                TxtLastChangeDuree.Text = 0
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uDevice TxtLastChangeDuree_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub ImgDevice_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgDevice.MouseLeftButtonDown
@@ -435,12 +439,12 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub BtnRead_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnRead.Click
-        If myService.ReturnDeviceByID(IdSrv, _DeviceId).Enable = False Then
-            MessageBox.Show("Vous ne pouvez pas exécuter de commandes car le device n'est pas activé (propriété Enable)!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            Exit Sub
-        End If
-
         Try
+            If myService.ReturnDeviceByID(IdSrv, _DeviceId).Enable = False Then
+                MessageBox.Show("Vous ne pouvez pas exécuter de commandes car le device n'est pas activé (propriété Enable)!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+
             Dim y As New uTestDevice(_DeviceId)
             y.Uid = System.Guid.NewGuid.ToString()
             AddHandler y.CloseMe, AddressOf UnloadControl
@@ -451,13 +455,16 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub UnloadControl(ByVal MyControl As Object)
-        For i As Integer = 0 To Window1.CanvasUser.Children.Count - 1
-            If Window1.CanvasUser.Children.Item(i).Uid = MyControl.uid Then
-                Window1.CanvasUser.Children.RemoveAt(i)
-                Exit Sub
-            End If
-        Next
-
+        Try
+            For i As Integer = 0 To Window1.CanvasUser.Children.Count - 1
+                If Window1.CanvasUser.Children.Item(i).Uid = MyControl.uid Then
+                    Window1.CanvasUser.Children.RemoveAt(i)
+                    Exit Sub
+                End If
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur uDevice UnloadControl: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnSave_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSave.Click
@@ -509,14 +516,18 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub ChkElement_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs)
-        For Each stk As StackPanel In ListZone.Items
-            Dim x As CheckBox = stk.Children.Item(1)
-            If x.IsChecked = True Then
-                stk.Children.Item(2).Visibility = Windows.Visibility.Visible
-            Else
-                stk.Children.Item(2).Visibility = Windows.Visibility.Collapsed
-            End If
-        Next
+        Try
+            For Each stk As StackPanel In ListZone.Items
+                Dim x As CheckBox = stk.Children.Item(1)
+                If x.IsChecked = True Then
+                    stk.Children.Item(2).Visibility = Windows.Visibility.Visible
+                Else
+                    stk.Children.Item(2).Visibility = Windows.Visibility.Collapsed
+                End If
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur uDevice ChkElement_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Dim tmp As String = ""

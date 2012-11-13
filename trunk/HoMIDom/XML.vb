@@ -125,25 +125,24 @@ Namespace HoMIDom
         ''' <param name="xpath">La requête XPath</param>
         ''' <returns>Un noeud (XmlNode)</returns>
         Public Function SelectFirstNode(ByVal xpath As String) As XmlNode
+            Dim n As XmlNode
             Try
-                'déclarations
-                Dim n As XmlNode
-                    'on charge le fichier xml
-                    Dim doc As New XmlDocument
-                    doc.Load(fichier)
+                'on charge le fichier xml
+                Dim doc As New XmlDocument
+                doc.Load(fichier)
 
-                    'execute et récupère la valeur de la requête
-                    n = doc.SelectSingleNode(xpath)
+                'execute et récupère la valeur de la requête
+                n = doc.SelectSingleNode(xpath)
 
-                    'libère les ressources
-                    doc = Nothing
+                'libère les ressources
+                doc = Nothing
 
-                Catch ex As Exception
-                    'en cas d'erreur
-                    ' MsgBox(ex.Message)
-                    _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "XML SelectFirstNode", "Erreur: " & ex.ToString)
-                    n = Nothing
-                End Try
+            Catch ex As Exception
+                'en cas d'erreur
+                ' MsgBox(ex.Message)
+                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "XML SelectFirstNode", "Erreur: " & ex.ToString)
+                n = Nothing
+            End Try
 
                 Return n
 
@@ -155,10 +154,8 @@ Namespace HoMIDom
         ''' <param name="xpath">Une requête XPath</param>
         ''' <returns>Une liste de noeuds (XmlNodeList)</returns>
         Public Function SelectNodes(ByVal xpath As String) As XmlNodeList
+            Dim nl As XmlNodeList
             Try
-                'déclarations
-                Dim nl As XmlNodeList
-
                 'on charge le fichier xml
                 Dim doc As New XmlDocument
                 doc.Load(fichier)
@@ -193,10 +190,8 @@ Namespace HoMIDom
         ''' exemple 2 : getElementValue("/polygone/point[2]") renvoie la même chose
         ''' </remarks>
         Public Function getElementValue(ByVal xpath As String, Optional ByVal index As Integer = 1) As String
+            Dim valeur As String = String.Empty
             Try
-                'declarations
-                Dim valeur As String = String.Empty
-
                 'on charge le fichier xml
                 Dim doc As New XmlDocument
                 doc.Load(fichier)
@@ -491,23 +486,23 @@ Namespace HoMIDom
         ''' exemple 2 : getAttribute("/cd/piste[5]","numero") fait la même chose.
         ''' </remarks>
         Public Function getAttribute(ByVal Xml As String, ByVal xpath As String, ByVal nom As String, Optional ByVal index As Integer = 1) As String
+            Dim valeur As String = String.Empty
             Try
-                Dim valeur As String = String.Empty
-                    'charge le fichier xml
-                    Dim doc As New XmlDocument
-                    doc.LoadXml(Xml)
+                'charge le fichier xml
+                Dim doc As New XmlDocument
+                doc.LoadXml(Xml)
 
-                    'declarations
-                    Dim root As XmlNode = doc.SelectNodes(xpath).ItemOf(index - 1)
-                    Dim attrib As XmlAttribute = root.Attributes.GetNamedItem(nom)
+                'declarations
+                Dim root As XmlNode = doc.SelectNodes(xpath).ItemOf(index - 1)
+                Dim attrib As XmlAttribute = root.Attributes.GetNamedItem(nom)
 
-                    'récupération de la valeur de l'attribut
-                    valeur = attrib.InnerText()
+                'récupération de la valeur de l'attribut
+                valeur = attrib.InnerText()
 
-                Catch ex As Exception
-                    'MsgBox("Erreur dans le retour de l'attribut : " & e.Message)
-                    _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "XML getAttribute", "Erreur dans le retour de l'attribut : " & ex.ToString)
-                End Try
+            Catch ex As Exception
+                'MsgBox("Erreur dans le retour de l'attribut : " & e.Message)
+                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "XML getAttribute", "Erreur dans le retour de l'attribut : " & ex.ToString)
+            End Try
 
                 'retourne la valeur de l'attribut
                 Return valeur
@@ -588,36 +583,37 @@ Namespace HoMIDom
         ''' <param name="valeur">La valeur à rechercher</param>
         ''' <returns>Un entier</returns>
         Public Function getIndexOfElementContaining(ByVal xpath As String, ByVal valeur As String) As Integer
+            Dim num As Integer = -1
             Try
-                Dim num As Integer = -1
-                    'charge le fichier xml
-                    Dim doc As New XmlDocument
-                    doc.Load(fichier)
 
-                    'déclarations
-                    Dim nodes As XmlNodeList = doc.SelectNodes(xpath)
-                    Dim nod As XmlElement
-                    Dim trouve As Boolean = False
+                'charge le fichier xml
+                Dim doc As New XmlDocument
+                doc.Load(fichier)
 
-                    'recherche de l'élément
-                    For Each nod In nodes
-                        num = num + 1
-                        'si la valeur de l'élément correspond à la valeur cherchée alors
-                        If nod.InnerText = valeur Then
-                            trouve = True
-                            num += 1
-                            Exit For
-                        End If
-                    Next
+                'déclarations
+                Dim nodes As XmlNodeList = doc.SelectNodes(xpath)
+                Dim nod As XmlElement
+                Dim trouve As Boolean = False
 
-                    'si non trouvé num <-- -1
-                    If Not trouve Then num = -1
+                'recherche de l'élément
+                For Each nod In nodes
+                    num = num + 1
+                    'si la valeur de l'élément correspond à la valeur cherchée alors
+                    If nod.InnerText = valeur Then
+                        trouve = True
+                        num += 1
+                        Exit For
+                    End If
+                Next
 
-                    'on retourne la position
-                Catch ex As Exception
-                    'MsgBox("Erreur de retour de l'index : " & e.Message)
-                    _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "XML getIndexOfElementContaining", "Erreur de retour de l'index : " & ex.ToString)
-                End Try
+                'si non trouvé num <-- -1
+                If Not trouve Then num = -1
+
+                'on retourne la position
+            Catch ex As Exception
+                'MsgBox("Erreur de retour de l'index : " & e.Message)
+                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "XML getIndexOfElementContaining", "Erreur de retour de l'index : " & ex.ToString)
+            End Try
                 Return num
         End Function
 
@@ -627,8 +623,9 @@ Namespace HoMIDom
         ''' <param name="xpath"></param>
         ''' <returns>Un entier</returns>
         Public Function countElements(ByVal xpath As String) As Integer
+            Dim nb As Integer = 0
             Try
-                Dim nb As Integer = 0
+
 
                 'Charge le fichier xml
                 Dim doc As New XmlDocument

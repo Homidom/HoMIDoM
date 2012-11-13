@@ -36,38 +36,41 @@ Partial Public Class uUser
         ' Cet appel est requis par le Concepteur Windows Form.
         InitializeComponent()
 
-        ImgIcon.Tag = " "
+        Try
+            ImgIcon.Tag = " "
 
-        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        If Action = EAction.Nouveau Then 'Nouveau user
+            ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+            If Action = EAction.Nouveau Then 'Nouveau user
 
-        Else 'Modifier zone
-            Dim x As Users.User = myservice.ReturnUserById(IdSrv, UserId)
-            _UserId = UserId
-            If x IsNot Nothing Then
-                TxtUsername.Text = x.UserName
-                TxtNom.Text = x.Nom
-                TxtPrenom.Text = x.Prenom
-                TxtPassword.Password = x.Password
-                TxtConfirm.Password = x.Password
-                ComboProfil.SelectedIndex = x.Profil
-                TxtIden.Text = x.NumberIdentification
-                TxteMail.Text = x.eMail
-                TxteMailAutre.Text = x.eMailAutre
-                TxtTelFixe.Text = x.TelFixe
-                TxtTelMobile.Text = x.TelMobile
-                TxtTelAutre.Text = x.TelAutre
-                TxtAdresse.Text = x.Adresse
-                TxtVille.Text = x.Ville
-                TxtCodePostal.Text = x.CodePostal
+            Else 'Modifier zone
+                Dim x As Users.User = myService.ReturnUserById(IdSrv, UserId)
+                _UserId = UserId
+                If x IsNot Nothing Then
+                    TxtUsername.Text = x.UserName
+                    TxtNom.Text = x.Nom
+                    TxtPrenom.Text = x.Prenom
+                    TxtPassword.Password = x.Password
+                    TxtConfirm.Password = x.Password
+                    ComboProfil.SelectedIndex = x.Profil
+                    TxtIden.Text = x.NumberIdentification
+                    TxteMail.Text = x.eMail
+                    TxteMailAutre.Text = x.eMailAutre
+                    TxtTelFixe.Text = x.TelFixe
+                    TxtTelMobile.Text = x.TelMobile
+                    TxtTelAutre.Text = x.TelAutre
+                    TxtAdresse.Text = x.Adresse
+                    TxtVille.Text = x.Ville
+                    TxtCodePostal.Text = x.CodePostal
 
-                If x.Image <> "" And x.Image <> " " Then
-                    ImgIcon.Source = ConvertArrayToImage(myservice.GetByteFromImage(x.Image))
-                    ImgIcon.Tag = x.Image
+                    If x.Image <> "" And x.Image <> " " Then
+                        ImgIcon.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Image))
+                        ImgIcon.Tag = x.Image
+                    End If
                 End If
             End If
-        End If
-
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uUser New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub ImgIcon_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgIcon.MouseLeftButtonDown
@@ -85,7 +88,7 @@ Partial Public Class uUser
                 frm.Close()
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub ImgIcon_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("ERREUR Sub uUser ImgIcon_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 

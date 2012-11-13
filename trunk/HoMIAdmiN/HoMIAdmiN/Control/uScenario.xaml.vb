@@ -37,25 +37,29 @@ Public Class uScenario
             Return _ListAction
         End Get
         Set(ByVal value As ArrayList)
-            For i As Integer = 0 To value.Count - 1
-                Dim x As New uAction
-                x.ObjAction = value.Item(i)
-                x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
-                x.Span = Span
-                x.Zoom = _Zoom
-                AddHandler x.DeleteAction, AddressOf DeleteAction
-                AddHandler x.ChangeAction, AddressOf ChangeAction
-                Dim j As Double = x.ObjAction.Timing.Minute + (x.ObjAction.Timing.Hour * 60)
-                If j >= Duree Then
-                    Duree = j + 1
-                    StckPnlLib.Dispatcher.BeginInvoke(New Affiche_Label2(AddressOf Affiche_Label))
-                    StckPnlLibTr.Dispatcher.BeginInvoke(New Affiche_Trait2(AddressOf Affiche_Trait))
-                End If
-                _ListAction.Add(value.Item(i))
-                StackPanel1.Children.Add(x)
-                Me.Dispatcher.BeginInvoke(New Affiche_Action2(AddressOf Affiche_Action))
-                x = Nothing
-            Next
+            Try
+                For i As Integer = 0 To value.Count - 1
+                    Dim x As New uAction
+                    x.ObjAction = value.Item(i)
+                    x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
+                    x.Span = Span
+                    x.Zoom = _Zoom
+                    AddHandler x.DeleteAction, AddressOf DeleteAction
+                    AddHandler x.ChangeAction, AddressOf ChangeAction
+                    Dim j As Double = x.ObjAction.Timing.Minute + (x.ObjAction.Timing.Hour * 60)
+                    If j >= Duree Then
+                        Duree = j + 1
+                        StckPnlLib.Dispatcher.BeginInvoke(New Affiche_Label2(AddressOf Affiche_Label))
+                        StckPnlLibTr.Dispatcher.BeginInvoke(New Affiche_Trait2(AddressOf Affiche_Trait))
+                    End If
+                    _ListAction.Add(value.Item(i))
+                    StackPanel1.Children.Add(x)
+                    Me.Dispatcher.BeginInvoke(New Affiche_Action2(AddressOf Affiche_Action))
+                    x = Nothing
+                Next
+            Catch ex As Exception
+                MessageBox.Show("ERREUR Sub uScenario Items: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
         End Set
     End Property
 
@@ -63,25 +67,32 @@ Public Class uScenario
 
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
+        Try
+            Me.Cursor = Cursors.Wait
 
-        Me.Cursor = Cursors.Wait
+            ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+            Me.Dispatcher.BeginInvoke(New Affiche_Label2(AddressOf Affiche_Label))
+            Me.Dispatcher.BeginInvoke(New Affiche_Trait2(AddressOf Affiche_Trait))
+            Me.Dispatcher.BeginInvoke(New Affiche_Action2(AddressOf Affiche_Action))
 
-        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        Me.Dispatcher.BeginInvoke(New Affiche_Label2(AddressOf Affiche_Label))
-        Me.Dispatcher.BeginInvoke(New Affiche_Trait2(AddressOf Affiche_Trait))
-        Me.Dispatcher.BeginInvoke(New Affiche_Action2(AddressOf Affiche_Action))
-
-        Me.Cursor = Nothing
+            Me.Cursor = Nothing
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uScenario New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
 
 
     Private Sub ScrollViewer1_DragOver(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles ScrollViewer2.DragOver
-        If e.Data.GetDataPresent(GetType(String)) Then
-            e.Effects = DragDropEffects.Copy
-        Else
-            e.Effects = DragDropEffects.None
-        End If
+        Try
+            If e.Data.GetDataPresent(GetType(String)) Then
+                e.Effects = DragDropEffects.Copy
+            Else
+                e.Effects = DragDropEffects.None
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uScenario ScrollViewer1_DragOver: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub ScrollViewer1_Drop(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles ScrollViewer2.Drop
@@ -144,31 +155,39 @@ Public Class uScenario
 
     'Supprimer une action
     Private Sub DeleteAction(ByVal Id As String)
-        For i As Integer = 0 To StackPanel1.Children.Count - 1
-            If StackPanel1.Children.Item(i).Uid = Id Then
-                StackPanel1.Children.RemoveAt(i)
-                _ListAction.RemoveAt(i)
-                Exit For
-            End If
-        Next
-        RaiseEvent AsChange()
+        Try
+            For i As Integer = 0 To StackPanel1.Children.Count - 1
+                If StackPanel1.Children.Item(i).Uid = Id Then
+                    StackPanel1.Children.RemoveAt(i)
+                    _ListAction.RemoveAt(i)
+                    Exit For
+                End If
+            Next
+            RaiseEvent AsChange()
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uScenario DeleteAction: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'Mise à jour d'une action
     Private Sub ChangeAction(ByVal Id As String)
-        For i As Integer = 0 To StackPanel1.Children.Count - 1
-            Dim x As uAction = StackPanel1.Children.Item(i)
-            Dim j As Double = x.ObjAction.Timing.Minute + (x.ObjAction.Timing.Hour * 60)
-            If j >= Duree Then
-                Duree = j + 1
-                StckPnlLib.Dispatcher.BeginInvoke(New Affiche_Label2(AddressOf Affiche_Label))
-                StckPnlLibTr.Dispatcher.BeginInvoke(New Affiche_Trait2(AddressOf Affiche_Trait))
-            End If
-            x = Nothing
-            j = 0
-        Next
-        Me.Dispatcher.BeginInvoke(New Affiche_Action2(AddressOf Affiche_Action))
-        RaiseEvent AsChange()
+        Try
+            For i As Integer = 0 To StackPanel1.Children.Count - 1
+                Dim x As uAction = StackPanel1.Children.Item(i)
+                Dim j As Double = x.ObjAction.Timing.Minute + (x.ObjAction.Timing.Hour * 60)
+                If j >= Duree Then
+                    Duree = j + 1
+                    StckPnlLib.Dispatcher.BeginInvoke(New Affiche_Label2(AddressOf Affiche_Label))
+                    StckPnlLibTr.Dispatcher.BeginInvoke(New Affiche_Trait2(AddressOf Affiche_Trait))
+                End If
+                x = Nothing
+                j = 0
+            Next
+            Me.Dispatcher.BeginInvoke(New Affiche_Action2(AddressOf Affiche_Action))
+            RaiseEvent AsChange()
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uScenario ChangeAction: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'Afficher les éléments du timeline
@@ -188,14 +207,18 @@ Public Class uScenario
     Private Delegate Sub Affiche_Action2()
 
     Private Sub Affiche_Action()
-        If StackPanel1 IsNot Nothing Then
-            For i As Integer = 0 To StackPanel1.Children.Count - 1
-                Dim x As uAction = StackPanel1.Children.Item(i)
-                x.Width = _Width '(_Duree * 60) * 60 '+ 100
-                x.Zoom = _Zoom
-                x = Nothing
-            Next
-        End If
+        Try
+            If StackPanel1 IsNot Nothing Then
+                For i As Integer = 0 To StackPanel1.Children.Count - 1
+                    Dim x As uAction = StackPanel1.Children.Item(i)
+                    x.Width = _Width '(_Duree * 60) * 60 '+ 100
+                    x.Zoom = _Zoom
+                    x = Nothing
+                Next
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uScenario Affiche_Action: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Delegate Sub Affiche_Label2()
@@ -269,19 +292,31 @@ Public Class uScenario
 
     'Zoom avant
     Private Sub ZoomPlus_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ZoomPlus.MouseDown
-        _Zoom -= 5
-        If _Zoom <= 0 Then _Zoom = 1
-        Afficher()
+        Try
+            _Zoom -= 5
+            If _Zoom <= 0 Then _Zoom = 1
+            Afficher()
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uScenario ZoomPlus_MouseDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'Zoom arrière
     Private Sub ZoomMoins_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ZoomMoins.MouseDown
-        _Zoom += 5
-        Afficher()
+        Try
+            _Zoom += 5
+            Afficher()
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uScenario ZoomMoins_MouseDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub ScrollViewer1_ScrollChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.ScrollChangedEventArgs) Handles ScrollViewer2.ScrollChanged
-        ScrollViewer2.ScrollToHorizontalOffset(e.HorizontalOffset)
+        Try
+            ScrollViewer2.ScrollToHorizontalOffset(e.HorizontalOffset)
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uScenario ScrollViewer1_ScrollChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
 #Region "Ajout Action"

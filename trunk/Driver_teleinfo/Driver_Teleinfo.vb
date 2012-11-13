@@ -749,8 +749,8 @@ Public Class Driver_Teleinfo
         End Sub
 
         Private Function Sauve_temp_teleinfo(ByVal adresse As String) As String
+            Dim retour As String = ""
             Try
-                Dim retour As String = ""
                 Select Case LTrim(UCase(adresse))
                     Case "ADCO" : retour = ADCO
                     Case "OPTARIF" : retour = OPTARIF

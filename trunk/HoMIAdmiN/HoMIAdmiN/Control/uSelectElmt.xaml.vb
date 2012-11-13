@@ -109,27 +109,39 @@
     End Sub
 
     Private Sub BtnOK_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        If ListBox1.SelectedItem IsNot Nothing Then
+        try
+If ListBox1.SelectedItem IsNot Nothing Then
             Dim stk As uElement = ListBox1.SelectedItem
             _retour = stk.ID
             RaiseEvent CloseMe(Me)
-        End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uSelectElmt BtnOK_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub ListBox1_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ListBox1.MouseDoubleClick
-        If ListBox1.SelectedItem IsNot Nothing Then
-            Dim stk As uElement = ListBox1.SelectedItem
-            _retour = stk.ID
-            RaiseEvent CloseMe(Me)
-        End If
+        Try
+            If ListBox1.SelectedItem IsNot Nothing Then
+                Dim stk As uElement = ListBox1.SelectedItem
+                _retour = stk.ID
+                RaiseEvent CloseMe(Me)
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uSelectElmt ListBox1_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub ListBox1_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles ListBox1.SelectionChanged
-        For Each Objet As uElement In e.RemovedItems
-            Objet.IsSelect = False
-        Next
-        For Each Objet As uElement In e.AddedItems
-            Objet.IsSelect = True
-        Next
+        Try
+            For Each Objet As uElement In e.RemovedItems
+                Objet.IsSelect = False
+            Next
+            For Each Objet As uElement In e.AddedItems
+                Objet.IsSelect = True
+            Next
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uSelectElmt ListBox1_SelectionChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 End Class

@@ -3536,24 +3536,24 @@ Namespace HoMIDom
         ''' <returns>Retourne une erreur commencant par ERREUR ou la liste des noms des macros, zones...</returns>
         ''' <remarks></remarks>
         Public Function CanDelete(ByVal IdSrv As String, ByVal Id As String) As List(Of String) Implements IHoMIDom.CanDelete
+            Dim retour As New List(Of String)
             Try
-                Dim retour As New List(Of String)
-                    Dim thr As New ThreadDelete(Me, IdSrv, Id, retour)
-                    Dim x As New Thread(AddressOf thr.Traite)
-                    x.Start()
+                Dim thr As New ThreadDelete(Me, IdSrv, Id, retour)
+                Dim x As New Thread(AddressOf thr.Traite)
+                x.Start()
 
-                    Do While retour.Count = 0
+                Do While retour.Count = 0
 
-                    Loop
-                    Do While retour(retour.Count - 1) <> "0"
+                Loop
+                Do While retour(retour.Count - 1) <> "0"
 
-                    Loop
-                    Return retour
-                Catch ex As Exception
-                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CanDelete", "Erreur : " & ex.Message)
-                    retour.Add("ERREUR lors de l'exécution de la fonction: " & ex.ToString)
-                    Return retour
-                End Try
+                Loop
+                Return retour
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CanDelete", "Erreur : " & ex.Message)
+                retour.Add("ERREUR lors de l'exécution de la fonction: " & ex.ToString)
+                Return retour
+            End Try
         End Function
 
         Private Class ThreadDelete

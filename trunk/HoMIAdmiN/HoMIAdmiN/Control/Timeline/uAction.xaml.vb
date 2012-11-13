@@ -16,34 +16,45 @@ Public Class uAction
             Return _Zoom
         End Get
         Set(ByVal value As Integer)
-            _Zoom = value
-            Dim j As Double = (_ObjAction.Timing.Hour * 3600) + (_ObjAction.Timing.Minute * 60) + _ObjAction.Timing.Second
-            j = (Span * j) / _Zoom
-            Canvas.SetLeft(Rectangle1, j)
-            Canvas.SetLeft(ImgDelete, j + 160)
-            Fond.Width = j
+            Try
+                _Zoom = value
+                Dim j As Double = (_ObjAction.Timing.Hour * 3600) + (_ObjAction.Timing.Minute * 60) + _ObjAction.Timing.Second
+                j = (Span * j) / _Zoom
+                Canvas.SetLeft(Rectangle1, j)
+                Canvas.SetLeft(ImgDelete, j + 160)
+                Fond.Width = j
+            Catch ex As Exception
+                MessageBox.Show("Erreur uAction Zoom: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
         End Set
     End Property
 
     'Paramétrage de l'action 
     Private Sub Rectangle1_MouseLeftButtonDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Rectangle1.MouseLeftButtonDown
-        Dim frm As New WActionParametrage(ObjAction)
-        frm.ShowDialog()
-        If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-            ObjAction = frm.ObjAction
-            frm.Close()
-            RaiseEvent ChangeAction(Me.Uid)
-            Refresh_Position()
-        End If
-
+        Try
+            Dim frm As New WActionParametrage(ObjAction)
+            frm.ShowDialog()
+            If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+                ObjAction = frm.ObjAction
+                frm.Close()
+                RaiseEvent ChangeAction(Me.Uid)
+                Refresh_Position()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uAction Rectangle1_MouseLeftButtonDown: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'Mise à jour de la position de l'action dans le timeline suite à sa valeur de timing
     Sub Refresh_Position()
-        Dim j As Double = (_ObjAction.Timing.Hour * 3600) + (_ObjAction.Timing.Minute * 60) + _ObjAction.Timing.Second
-        j = (Span * j) / _Zoom
-        Canvas.SetLeft(Rectangle1, j)
-        Canvas.SetLeft(ImgDelete, j + 160)
+        Try
+            Dim j As Double = (_ObjAction.Timing.Hour * 3600) + (_ObjAction.Timing.Minute * 60) + _ObjAction.Timing.Second
+            j = (Span * j) / _Zoom
+            Canvas.SetLeft(Rectangle1, j)
+            Canvas.SetLeft(ImgDelete, j + 160)
+        Catch ex As Exception
+            MessageBox.Show("Erreur uAction Refresh_Position: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     'Objet action

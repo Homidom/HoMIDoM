@@ -209,90 +209,105 @@ Partial Public Class uDriver
     End Sub
 
     Private Sub TxtRefresh_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtRefresh.TextChanged
-        If TxtRefresh.Text <> "" And IsNumeric(TxtRefresh.Text) = False Then
-            MessageBox.Show("Veuillez saisir une valeur numérique")
-            TxtRefresh.Text = 0
-        End If
+        Try
+            If TxtRefresh.Text <> "" And IsNumeric(TxtRefresh.Text) = False Then
+                MessageBox.Show("Veuillez saisir une valeur numérique")
+                TxtRefresh.Text = 0
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uDriver TxtRefresh_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub UnloadControl(ByVal MyControl As Object)
-        For i As Integer = 0 To Window1.CanvasUser.Children.Count - 1
-            If Window1.CanvasUser.Children.Item(i).Uid = MyControl.uid Then
-                Window1.CanvasUser.Children.RemoveAt(i)
-                Exit Sub
-            End If
-        Next
-
+        Try
+            For i As Integer = 0 To Window1.CanvasUser.Children.Count - 1
+                If Window1.CanvasUser.Children.Item(i).Uid = MyControl.uid Then
+                    Window1.CanvasUser.Children.RemoveAt(i)
+                    Exit Sub
+                End If
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur uDriver UnloadControl: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnAv_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnAv.Click
-        If GroupBox1.Visibility = Windows.Visibility.Collapsed Then
-            BtnAv.Content = "<<"
-            GroupBox1.Visibility = Windows.Visibility.Visible
-            CbCmd.Items.Clear()
-            If x IsNot Nothing Then
-                For i As Integer = 0 To x.DeviceAction.Count - 1
-                    CbCmd.Items.Add(x.DeviceAction.Item(i).Nom)
-                Next
+        Try
+            If GroupBox1.Visibility = Windows.Visibility.Collapsed Then
+                BtnAv.Content = "<<"
+                GroupBox1.Visibility = Windows.Visibility.Visible
+                CbCmd.Items.Clear()
+                If x IsNot Nothing Then
+                    For i As Integer = 0 To x.DeviceAction.Count - 1
+                        CbCmd.Items.Add(x.DeviceAction.Item(i).Nom)
+                    Next
+                End If
+            Else
+                CbCmd.Items.Clear()
+                BtnAv.Content = ">>"
+                GroupBox1.Visibility = Windows.Visibility.Collapsed
             End If
-        Else
-            CbCmd.Items.Clear()
-            BtnAv.Content = ">>"
-            GroupBox1.Visibility = Windows.Visibility.Collapsed
-        End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uDriver BtnAv_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub CbCmd_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbCmd.MouseLeave
-        LblP1.Visibility = Windows.Visibility.Hidden
-        LblP2.Visibility = Windows.Visibility.Hidden
-        LblP3.Visibility = Windows.Visibility.Hidden
-        LblP4.Visibility = Windows.Visibility.Hidden
-        LblP5.Visibility = Windows.Visibility.Hidden
-        TxtP1.Text = ""
-        TxtP2.Text = ""
-        TxtP3.Text = ""
-        TxtP4.Text = ""
-        TxtP5.Text = ""
-        TxtP1.Visibility = Windows.Visibility.Hidden
-        TxtP2.Visibility = Windows.Visibility.Hidden
-        TxtP3.Visibility = Windows.Visibility.Hidden
-        TxtP4.Visibility = Windows.Visibility.Hidden
-        TxtP5.Visibility = Windows.Visibility.Hidden
+        Try
+            LblP1.Visibility = Windows.Visibility.Hidden
+            LblP2.Visibility = Windows.Visibility.Hidden
+            LblP3.Visibility = Windows.Visibility.Hidden
+            LblP4.Visibility = Windows.Visibility.Hidden
+            LblP5.Visibility = Windows.Visibility.Hidden
+            TxtP1.Text = ""
+            TxtP2.Text = ""
+            TxtP3.Text = ""
+            TxtP4.Text = ""
+            TxtP5.Text = ""
+            TxtP1.Visibility = Windows.Visibility.Hidden
+            TxtP2.Visibility = Windows.Visibility.Hidden
+            TxtP3.Visibility = Windows.Visibility.Hidden
+            TxtP4.Visibility = Windows.Visibility.Hidden
+            TxtP5.Visibility = Windows.Visibility.Hidden
 
-        If CbCmd.Text = "" Then Exit Sub
-        If CbCmd.SelectedIndex < 0 Then Exit Sub
+            If CbCmd.Text = "" Then Exit Sub
+            If CbCmd.SelectedIndex < 0 Then Exit Sub
 
-        Dim Idx As Integer = CbCmd.SelectedIndex
-        For j As Integer = 0 To x.DeviceAction.Item(Idx).Parametres.Count - 1
+            Dim Idx As Integer = CbCmd.SelectedIndex
+            For j As Integer = 0 To x.DeviceAction.Item(Idx).Parametres.Count - 1
 
-            Select Case j
-                Case 0
-                    LblP1.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
-                    LblP1.Visibility = Windows.Visibility.Visible
-                    TxtP1.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
-                    TxtP1.Visibility = Windows.Visibility.Visible
-                Case 1
-                    LblP2.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
-                    LblP2.Visibility = Windows.Visibility.Visible
-                    TxtP2.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
-                    TxtP2.Visibility = Windows.Visibility.Visible
-                Case 2
-                    LblP3.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
-                    LblP3.Visibility = Windows.Visibility.Visible
-                    TxtP3.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
-                    TxtP3.Visibility = Windows.Visibility.Visible
-                Case 3
-                    LblP4.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
-                    LblP4.Visibility = Windows.Visibility.Visible
-                    TxtP4.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
-                    TxtP4.Visibility = Windows.Visibility.Visible
-                Case 4
-                    LblP5.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
-                    LblP5.Visibility = Windows.Visibility.Visible
-                    TxtP5.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
-                    TxtP5.Visibility = Windows.Visibility.Visible
-            End Select
-        Next
+                Select Case j
+                    Case 0
+                        LblP1.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                        LblP1.Visibility = Windows.Visibility.Visible
+                        TxtP1.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                        TxtP1.Visibility = Windows.Visibility.Visible
+                    Case 1
+                        LblP2.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                        LblP2.Visibility = Windows.Visibility.Visible
+                        TxtP2.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                        TxtP2.Visibility = Windows.Visibility.Visible
+                    Case 2
+                        LblP3.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                        LblP3.Visibility = Windows.Visibility.Visible
+                        TxtP3.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                        TxtP3.Visibility = Windows.Visibility.Visible
+                    Case 3
+                        LblP4.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                        LblP4.Visibility = Windows.Visibility.Visible
+                        TxtP4.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                        TxtP4.Visibility = Windows.Visibility.Visible
+                    Case 4
+                        LblP5.Content = x.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                        LblP5.Visibility = Windows.Visibility.Visible
+                        TxtP5.ToolTip = x.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                        TxtP5.Visibility = Windows.Visibility.Visible
+                End Select
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur uDriver CbCmd_MouseLeave: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTest.Click
@@ -332,19 +347,28 @@ Partial Public Class uDriver
             MessageBox.Show("Erreur lors du test: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
     Private Sub CbParam_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbParam.SelectionChanged
-        If CbParam.SelectedIndex >= 0 Then
-            CbParam.ToolTip = x.Parametres.Item(CbParam.SelectedIndex).Description
-            TxtParam.Text = _ListParam.Item(CbParam.SelectedIndex)
-        End If
+        Try
+            If CbParam.SelectedIndex >= 0 Then
+                CbParam.ToolTip = x.Parametres.Item(CbParam.SelectedIndex).Description
+                TxtParam.Text = _ListParam.Item(CbParam.SelectedIndex)
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uDriver CbParam_SelectionChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnOkParam_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkParam.Click
-        If CbParam.SelectedIndex >= 0 And TxtParam.Text <> "" Then
-            _ListParam.Item(CbParam.SelectedIndex) = TxtParam.Text
-        Else
-            MessageBox.Show("Veuillez sélectionner un paramètre ou saisir sa valeur", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-        End If
+        Try
+            If CbParam.SelectedIndex >= 0 And TxtParam.Text <> "" Then
+                _ListParam.Item(CbParam.SelectedIndex) = TxtParam.Text
+            Else
+                MessageBox.Show("Veuillez sélectionner un paramètre ou saisir sa valeur", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uDriver BtnOkParam_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnHelp_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnHelp.Click
@@ -352,56 +376,64 @@ Partial Public Class uDriver
     End Sub
 
     Private Function IsValidIP(ByVal addr As String) As Boolean
-        If addr = "" Or addr = " " Then
-            Return True
-            Exit Function
-        End If
+        Try
+            If addr = "" Or addr = " " Then
+                Return True
+                Exit Function
+            End If
 
-        'create our match pattern
-        Dim pattern As String = "^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\." & _
-        "([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$"
-        'create our Regular Expression object
-        Dim check As New Text.RegularExpressions.Regex(pattern)
-        'boolean variable to hold the status
-        Dim valid As Boolean = False
-        'check to make sure an ip address was provided
-        If addr = "" Then
-            'no address provided so return false
-            valid = False
-        Else
-            'address provided so use the IsMatch Method
-            'of the Regular Expression object
-            valid = check.IsMatch(addr, 0)
-        End If
-        'return the results
-        Return (valid)
+            'create our match pattern
+            Dim pattern As String = "^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\." & _
+            "([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$"
+            'create our Regular Expression object
+            Dim check As New Text.RegularExpressions.Regex(pattern)
+            'boolean variable to hold the status
+            Dim valid As Boolean = False
+            'check to make sure an ip address was provided
+            If addr = "" Then
+                'no address provided so return false
+                valid = False
+            Else
+                'address provided so use the IsMatch Method
+                'of the Regular Expression object
+                valid = check.IsMatch(addr, 0)
+            End If
+            'return the results
+            Return (valid)
+        Catch ex As Exception
+            MessageBox.Show("Erreur uDriver IsValidIP: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Function
 
     Private Function IsValidPortIP(ByVal addr As String) As Boolean
-        Dim valid As Boolean = False
-        Dim _addr As Integer
+        Try
+            Dim valid As Boolean = False
+            Dim _addr As Integer
 
-        If addr = "" Or addr = " " Then
-            Return True
-            Exit Function
-        End If
+            If addr = "" Or addr = " " Then
+                Return True
+                Exit Function
+            End If
 
-        If IsNumeric(addr) = False Then
-            valid = False
-        Else
-            _addr = CInt(addr)
-            If _addr < 0 Then
+            If IsNumeric(addr) = False Then
                 valid = False
             Else
-                If _addr > 65535 Then
+                _addr = CInt(addr)
+                If _addr < 0 Then
                     valid = False
                 Else
-                    valid = True
+                    If _addr > 65535 Then
+                        valid = False
+                    Else
+                        valid = True
+                    End If
                 End If
             End If
-        End If
 
-        Return valid
+            Return valid
+        Catch ex As Exception
+            MessageBox.Show("Erreur uDriver IsValidPortIP: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Function
 
 End Class

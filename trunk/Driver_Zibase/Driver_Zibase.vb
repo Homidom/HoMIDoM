@@ -657,47 +657,50 @@ Imports ZibaseDll
 #Region "Write"
 
     Private Sub traitement(ByVal adresse As String, ByVal type As String, ByVal valeurentiere As Long, ByVal valeurstring As String)
-        Dim valeur As String = CStr(valeurentiere)
-        If [String].IsNullOrEmpty(valeurstring) Then valeurstring = " "
-        'modification des informations suivant le type
-        Select Case UCase(type)
-            Case "TEM"
-                'valeur = STRGS.Left(valeur, (valeur.Length - 2))
-                valeur = valeur / 100
-                type = "THE" 'tem Température (°C)
-                'Case "hum"
-                'valeur = STRGS.Left(valeur, (valeur.Length - 1))
-            Case "TEMC"
-                'valeur = STRGS.Left(valeur, (valeur.Length - 2))
-                valeur = valeur / 100
-                type = "THC" 'Température de consigne (Thermostat : °C)
-            Case "XSE", "BAT", "LNK", "STA" : valeur = valeurstring 'on utilise la valeur normale et non l'entier
-        End Select
-        'dans le cas des adresse du tpe M5
-        If adresse.Length = 2 Then valeur = valeurstring 'on utilise la valeur normale et non l'entier
+        Try
+            Dim valeur As String = CStr(valeurentiere)
+            If [String].IsNullOrEmpty(valeurstring) Then valeurstring = " "
+            'modification des informations suivant le type
+            Select Case UCase(type)
+                Case "TEM"
+                    'valeur = STRGS.Left(valeur, (valeur.Length - 2))
+                    valeur = valeur / 100
+                    type = "THE" 'tem Température (°C)
+                    'Case "hum"
+                    'valeur = STRGS.Left(valeur, (valeur.Length - 1))
+                Case "TEMC"
+                    'valeur = STRGS.Left(valeur, (valeur.Length - 2))
+                    valeur = valeur / 100
+                    type = "THC" 'Température de consigne (Thermostat : °C)
+                Case "XSE", "BAT", "LNK", "STA" : valeur = valeurstring 'on utilise la valeur normale et non l'entier
+            End Select
+            'dans le cas des adresse du tpe M5
+            If adresse.Length = 2 Then valeur = valeurstring 'on utilise la valeur normale et non l'entier
 
-        'Action suivant le type
-        Select Case LCase(type)
-            Case "bat" : If STRGS.UCase(valeur) = "LOW" Then WriteBattery(adresse) 'Niveau de batterie (Ok / Low)
-            Case "lev" : If _DEBUG Then WriteLog("DBG: Signal Level : " & valeur & " (Adresse:" & adresse & ")") 'on log le level si debug : Niveau de réception RF (1 à 5)
-            Case "lnk" : WriteLog("DBG: Etat de la connexion avec la Zibase " & adresse & " : " & valeur) 'Etat de la connexion Zibase
-            Case "" : WriteRetour(adresse, "", valeur) ' si pas de type particulier
-            Case "the" : WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur) 'Température (°C)
-            Case "thc" : WriteRetour(adresse, ListeDevices.TEMPERATURECONSIGNE.ToString, valeur) 'Température de consigne (Thermostat : °C)
-            Case "hum" : WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur) 'Humidité (%)
-            Case "uvl" : WriteRetour(adresse, ListeDevices.UV.ToString, valeur) 'Niveau d’UV
-            Case "tra" : WriteRetour(adresse, ListeDevices.PLUIETOTAL.ToString, valeur) 'Niveau de pluie total (Total Rain)
-            Case "cra" : WriteRetour(adresse, ListeDevices.PLUIECOURANT.ToString, valeur) 'Niveau de pluie courant (Currant Rain)
-            Case "Kw" : WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE.ToString, valeur) 'Mesure d’énergie instantanée (CM119)
-            Case "kwh" : WriteRetour(adresse, ListeDevices.ENERGIETOTALE.ToString, valeur) 'Mesure d’énergie totale (CM119)
-            Case "awi" : WriteRetour(adresse, ListeDevices.VITESSEVENT.ToString, valeur) ' Mesure de la vitesse du vent
-            Case "drt" : WriteRetour(adresse, ListeDevices.DIRECTIONVENT.ToString, valeur) 'Direction du vent
-            Case "xse" : WriteRetour(adresse, "", valeur) 'detecteurs fumées/co... (Alert, Normal)
-            Case "Lnk" : WriteRetour(adresse, "", valeur) 'Etat de la connexion Zibase
-            Case "sta" : WriteRetour(adresse, ListeDevices.SWITCH.ToString, valeur) 'Status pour un switch (ON/OFF)
-            Case Else : WriteRetour(adresse & "_" & STRGS.UCase(type), "", valeur)
-        End Select
-
+            'Action suivant le type
+            Select Case LCase(type)
+                Case "bat" : If STRGS.UCase(valeur) = "LOW" Then WriteBattery(adresse) 'Niveau de batterie (Ok / Low)
+                Case "lev" : If _DEBUG Then WriteLog("DBG: Signal Level : " & valeur & " (Adresse:" & adresse & ")") 'on log le level si debug : Niveau de réception RF (1 à 5)
+                Case "lnk" : WriteLog("DBG: Etat de la connexion avec la Zibase " & adresse & " : " & valeur) 'Etat de la connexion Zibase
+                Case "" : WriteRetour(adresse, "", valeur) ' si pas de type particulier
+                Case "the" : WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur) 'Température (°C)
+                Case "thc" : WriteRetour(adresse, ListeDevices.TEMPERATURECONSIGNE.ToString, valeur) 'Température de consigne (Thermostat : °C)
+                Case "hum" : WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur) 'Humidité (%)
+                Case "uvl" : WriteRetour(adresse, ListeDevices.UV.ToString, valeur) 'Niveau d’UV
+                Case "tra" : WriteRetour(adresse, ListeDevices.PLUIETOTAL.ToString, valeur) 'Niveau de pluie total (Total Rain)
+                Case "cra" : WriteRetour(adresse, ListeDevices.PLUIECOURANT.ToString, valeur) 'Niveau de pluie courant (Currant Rain)
+                Case "Kw" : WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE.ToString, valeur) 'Mesure d’énergie instantanée (CM119)
+                Case "kwh" : WriteRetour(adresse, ListeDevices.ENERGIETOTALE.ToString, valeur) 'Mesure d’énergie totale (CM119)
+                Case "awi" : WriteRetour(adresse, ListeDevices.VITESSEVENT.ToString, valeur) ' Mesure de la vitesse du vent
+                Case "drt" : WriteRetour(adresse, ListeDevices.DIRECTIONVENT.ToString, valeur) 'Direction du vent
+                Case "xse" : WriteRetour(adresse, "", valeur) 'detecteurs fumées/co... (Alert, Normal)
+                Case "Lnk" : WriteRetour(adresse, "", valeur) 'Etat de la connexion Zibase
+                Case "sta" : WriteRetour(adresse, ListeDevices.SWITCH.ToString, valeur) 'Status pour un switch (ON/OFF)
+                Case Else : WriteRetour(adresse & "_" & STRGS.UCase(type), "", valeur)
+            End Select
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase traitement", ex.Message)
+        End Try
     End Sub
 
     Private Sub WriteLog(ByVal message As String)
