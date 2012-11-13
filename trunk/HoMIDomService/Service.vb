@@ -165,8 +165,8 @@ Module Service
     End Sub
 
     Function LoadPort() As String
-        Dim _portip As String = ""
         Try
+            Dim _portip As String = ""
             MyRep = MyRep & "\Config\homidom.xml"
 
             If File.Exists(MyRep) = True Then
@@ -204,8 +204,14 @@ Module Service
 
 
     Sub close()
-        myService.Stop(_IdSrv)
-        End
+        Try
+            myService.Stop(_IdSrv)
+            End
+        Catch ex As Exception
+            MsgBox("Erreur lors de l'arret du service: " & ex.Message, MsgBoxStyle.Critical, "ERREUR SERVICE close")
+            Console.WriteLine(Now & " ERREUR SERVICE close : " & ex.Message & " : " & ex.ToString)
+            Console.ReadLine()
+        End Try
     End Sub
 
 End Module
