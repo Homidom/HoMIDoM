@@ -99,9 +99,8 @@ Namespace HoMIDom
         ''' <returns>String si OK, String "ERR:..." si erreur</returns>
         ''' <remarks></remarks>
         Public Function nonquery(ByVal commande As String, ByVal ParamArray params() As String)
-            Dim SQLcommand As SQLiteCommand
-
             Try
+                Dim SQLcommand As SQLiteCommand
                 connect()
                 'on vérifie si on est connecté à la BDD       
                 If SQLconnect.State = ConnectionState.Open Then
@@ -140,12 +139,12 @@ Namespace HoMIDom
         ''' <returns>String si OK, String "ERR:..." si erreur</returns>          
         ''' <remarks></remarks>          
         Public Function query(ByVal commande As String, ByRef resultat As DataTable, ByVal ParamArray params() As String) As String
-            Dim SQLcommand As SQLiteCommand
-            Dim SQLreader As SQLiteDataReader
-            Dim resultattemp As New DataTable
-            Dim x As DataColumn
+           Try
+                Dim SQLcommand As SQLiteCommand
+                Dim SQLreader As SQLiteDataReader
+                Dim resultattemp As New DataTable
+                Dim x As DataColumn
 
-            Try
                 connect()
 
                 'on vérifie si on est connecté à la BDD   
@@ -215,8 +214,8 @@ Namespace HoMIDom
         ''' <returns>String si OK, String "ERR:..." si erreur</returns>          
         ''' <remarks></remarks>          
         Public Function querysimple(ByVal commande As String, ByRef resultat As String, ByVal ParamArray params() As String) As String
-            Dim SQLcommand As SQLiteCommand
             Try
+                Dim SQLcommand As SQLiteCommand
                 connect()
 
                 'on vérifie si on est connecté à la BDD   
@@ -257,9 +256,9 @@ Namespace HoMIDom
         ''' <returns>String si OK, String "ERR:..." si erreur</returns>          
         ''' <remarks></remarks>          
         Public Function count(ByVal commande As String, ByRef resultat As Integer) As String
-            Dim SQLcommand As SQLiteCommand
-            Dim resultattemp As Integer = 0
             Try
+                Dim SQLcommand As SQLiteCommand
+                Dim resultattemp As Integer = 0
                 connect()
 
                 'on vérifie si on est connecté à la BDD   
@@ -291,7 +290,11 @@ Namespace HoMIDom
         End Function
 
         Private Sub sqlite_UnhandledExceptionEvent(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs)
-            _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SQLite UnhandledExceptionEvent", "Exception : " & e.ExceptionObject.ToString())
+            Try
+                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SQLite UnhandledExceptionEvent", "Exception : " & e.ExceptionObject.ToString())
+            Catch ex As Exception
+
+            End Try
         End Sub
 
     End Class
