@@ -24,6 +24,7 @@ Imports GsmComm.PduConverter
 Imports System.Data.OleDb
 Imports System.Management
 
+Imports System.IO.Ports
 
 ' Auteur : Fabien
 ' Date : 09/09/2012
@@ -85,6 +86,9 @@ Imports System.Management
 
     Private ackreceived As Boolean = False
     Private WithEvents comm As GsmCommMain
+
+    Private ATport As New SerialPort(_Com, 9600, Parity.None, 8, StopBits.One)
+
 
 #End Region
 
@@ -654,17 +658,55 @@ Imports System.Management
 #End Region
 
 #Region "Fonctions internes"
+
     ''' <summary>Ouvrir le port du modem</summary>
     Private Function ouvrir() As String
         Try
             'ouverture du port
             If Not _IsConnect Then
                 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
+                 '   http://www.me.umn.edu/courses/me2011/smartprodcourse/technotes/docs/serial-port-vb.pdf
+
+                '
+                'lecture AT+CMGF=? pour connaitre les modes supportés par le modem gsm connecté PDU ou TEXT
+                ' reponse 0 pour le mode PDU
+                ' reponse 1 pour le mode TEXT
+                '
+                ATport.ReadTimeout = 500
+                ATport.WriteTimeout = 500
+                ATport.Open()
+                Dim sIncomming As String = ""
+                Do Until Left(sIncomming, 6) = "+CMGF:"
+                    ATport.WriteLine("AT+CMGF=?" & vbCrLf) ' vbcrlf
+                    sIncomming = ATport.ReadLine()  
+                Loop
+
+                Dim startIndex As Integer = sIncomming.IndexOf("(") + "(".Length
+                Dim endIndex As Integer = sIncomming.IndexOf(")")
+                Dim result As String = sIncomming.Substring(startIndex, endIndex - startIndex)
+                '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM PORT", "Read:" & result)
+                Dim MODES As String() = result.Split(New Char() {","c})
+                Dim MODE As String
+                For Each MODE In MODES
+                    Select MODE
+                        Case "0"
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM PORT", "Mode PDU possible")
+
+                        Case "1"
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM PORT", "Mode TEXT possible")
+
+                        Case Else
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM PORT", "Mode inconnu ( ne sera pas utilisé)")
+                    End Select
+                Next
+                ATport.Close()
 
                 Dim portnumber As Integer
                 If (Integer.TryParse(_Com.Substring(3), portnumber)) Then
                     comm = New GsmCommMain(portnumber, 57600, 100)
                 End If
+
+
                 comm.Open()
                 'comm.EnableMessageNotifications()
                 'comm.EnableMessageRouting()
@@ -672,10 +714,14 @@ Imports System.Management
             Else
                 Return ("Port " & _Com & " dejà ouvert")
             End If
+
+
         Catch ex As Exception
             Return ("ERR: " & ex.Message)
         End Try
     End Function
+
+
 
     ''' <summary>Fermer le port du modem</summary>
     ''' <remarks></remarks>
