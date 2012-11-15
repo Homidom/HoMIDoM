@@ -34,6 +34,13 @@ Partial Public Class uHelp
             listesversionsprogrammes.Text &= " Port SOAP utilisé : " & myService.GetPortSOAP & vbCrLf
             listesversionsprogrammes.Text &= " Version Moteur SQLlite: " & myService.GetSqliteVersion & vbCrLf
             listesversionsprogrammes.Text &= " Version de la BDD: " & myService.GetSqliteBddVersion & vbCrLf
+            listesversionsprogrammes.Text &= " Version du frameWork: " & System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion() & vbCrLf
+            If System.Environment.Is64BitOperatingSystem = True Then
+                listesversionsprogrammes.Text &= " Version de l'OS: " & My.Computer.Info.OSFullName.ToString & " 64 Bits" & vbCrLf
+            Else
+                listesversionsprogrammes.Text &= " Version de l'OS: " & My.Computer.Info.OSFullName.ToString & " 32 Bits" & vbCrLf
+            End If
+            listesversionsprogrammes.Text &= " Répertoire utilisé: " & My.Application.Info.DirectoryPath.ToString & vbCrLf
 
             'affiche des infos sur la config
             listesdivers.Text = ""
