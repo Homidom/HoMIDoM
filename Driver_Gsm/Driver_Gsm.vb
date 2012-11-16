@@ -78,8 +78,6 @@ Imports System.IO.Ports
     Dim _MODE As String = "PDU"
     '    Dim _STORAGE As PhoneStorageType
 
-
-
 #End Region
 
 #Region "Variables Internes"
@@ -88,7 +86,7 @@ Imports System.IO.Ports
     Private WithEvents comm As GsmCommMain
 
     Private ATport As New SerialPort(_Com, 9600, Parity.None, 8, StopBits.One)
-
+    Dim MODES As Array
 
 #End Region
 
@@ -309,6 +307,7 @@ Imports System.IO.Ports
     ''' <remarks></remarks>
     Public Function VerifChamp(ByVal Champ As String, ByVal Value As Object) As String Implements HoMIDom.HoMIDom.IDriver.VerifChamp
         Try
+
             Dim retour As String = "0"
             Select Case UCase(Champ)
                 Case "ADRESSE1" ' numero de telephone 
@@ -341,10 +340,68 @@ Imports System.IO.Ports
     ''' <summary>Démarrer le du driver</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
+
+
+        Try
+            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "Lecture des mode Supportés")
+
+
+
+            '
+            'lecture AT+CMGF=? pour connaitre les modes supportés par le modem gsm connecté PDU ou TEXT
+            ' reponse 0 pour le mode PDU
+            ' reponse 1 pour le mode TEXT
+            '
+            ATport.ReadTimeout = 500
+            ATport.WriteTimeout = 500
+            ATport.Open()
+            Dim sIncomming As String = ""
+            Do Until Left(sIncomming, 6) = "+CMGF:"
+                ATport.WriteLine("AT+CMGF=?" & vbCrLf) ' vbcrlf
+                sIncomming = ATport.ReadLine()
+            Loop
+
+            Dim startIndex As Integer = sIncomming.IndexOf("(") + "(".Length
+            Dim endIndex As Integer = sIncomming.IndexOf(")")
+            Dim result As String = sIncomming.Substring(startIndex, endIndex - startIndex)
+            '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM PORT", "Read:" & result)
+            MODES = result.Split(New Char() {","c})
+
+            Dim SuportedMode As Boolean = False
+            For m = 0 To (MODES.Length - 1)
+                Select Case MODES(m).ToString
+                    Case "0"
+                        MODES(m) = "PDU"
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MODE", "Mode " & m & " (PDU) possible")
+                    Case "1"
+                        MODES(m) = "TEXTE"
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MODE", "Mode " & m & "(TEXTE) possible")
+                    Case Else
+                        MODES(m) = "UNKNOW"
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MODE", "Mode " & m & " inconnu ( ne sera pas utilisé)")
+                End Select
+
+                'If _MODE = MODES(m) Then
+                'SuportedMode = True
+                'Else
+                'SuportedMode = SuportedMode Or False
+                '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Driver non démarré : Le mode '" & _MODE & "' n'est pas correct, choisi PDU ou TEXTE")
+                'End If
+            Next
+
+            ATport.Close()
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+
+        End Try
+
+
+
+
         Dim retour As String = ""
         'récupération des paramétres avancés
         Try
-            _DEBUG = _Parametres.Item(0).Valeur
+            _DEBUG = _Parametres.Item(0).Valeur.ToString.ToUpper
             _MODE = _Parametres.Item(1).Valeur.ToString.ToUpper
             '_STORAGE = _Parametres.Item(2).Valeur
         Catch ex As Exception
@@ -353,17 +410,49 @@ Imports System.IO.Ports
 
         'Verification du MODE de connexion
         Try
-            'verif si le mode choisi par le user est bon
-            If _MODE <> "PDU" And _MODE <> "TEXTE" Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Driver non démarré : Le mode '" & _MODE & "' n'est pas correct, choisi PDU ou TEXTE")
+
+            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "Verification du mode selectionné")
+            ' verif si le mode choisi par le user est bon
+            Dim SuportedMode As Boolean = False
+            Dim ModeToUse As String = ""
+            For m As Integer = 0 To MODES.Length - 1
+                If _MODE = MODES(m).ToString Then
+                    SuportedMode = True
+                Else
+                    SuportedMode = (SuportedMode Or False)
+                End If
+            Next
+          
+            If SuportedMode = False Then
+                For n As Integer = 0 To MODES.Length - 1
+                    If n > 1 Then
+
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "SuportedMode : '" & MODES(n).ToString & "'.")
+
+                        ModeToUse = MODES(n)
+
+                    Else
+                        ModeToUse = ModeToUse & " ou " & MODES(n)
+                    End If
+                Next
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Driver non démarré : Le mode choisi '" & _MODE & "' n'est pas correct, Veuillez choisir le mode " & ModeToUse & ".")
                 _IsConnect = False
                 Exit Sub
+            Else
+                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "Démarrage du driver avec le mode '" & _MODE & "'.")
+
             End If
+
+            ' If _MODE <> "PDU" And _MODE <> "TEXTE" Then
+            '  _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Driver non démarré : Le mode '" & _MODE & "' n'est pas correct, choisi PDU ou TEXTE")
+            ' _IsConnect = False
+            'Exit Sub
+            'End If
+
             'interroge le tel/modem pour verifier si ce mode est supporté
 
-
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur Dans la verification du mode " & ex.Message)
         End Try
 
         'ouverture de la communication avec le GSM
@@ -432,79 +521,132 @@ Imports System.IO.Ports
     ''' <param name="Parametre1">Phone Number</param>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         'Parametre1 = TxtMsg
+        'Objet.adresse1.ToString = phonedestination
         Try
             If _Enable = False Then Exit Sub
 
             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "WRITE", "Commande: " & Command & ", Texte: " & Parametre1 & ", Composant: " & Objet.Name)
             Select Case UCase(Command)
                 Case "SEND"
-                    Try
-                        Dim pdu As SmsSubmitPdu
-                        If _IsConnect Then
-                            'on verifie si un texte est passé en paramètre
-                            If Parametre1 = "" Then
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS à envoyer vide, annulation")
-                            Else
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS envoyé : " & Parametre1 & " à " & Objet.adresse1.ToString)
-                                pdu = New SmsSubmitPdu(Parametre1, Objet.adresse1.ToString, "")
-                                comm.SendMessage(pdu, True)
-                                'on modifie la valeur du composant pour stocker les sms envoyés
-                                Objet.Value = "SEND - " & Parametre1
-                            End If
-                        Else
-                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "No GSM Phone / Modem Connected")
-                        End If
-                    Catch ex As Exception
-                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "Error Sending SMS: " & ex.ToString)
-                    End Try
+
+                    Select Case _MODE
+                        Case "PDU"
+                            Try
+                                Dim pdu As SmsSubmitPdu
+                                If _IsConnect Then
+                                    'on verifie si un texte est passé en paramètre
+                                    If Parametre1 = "" Then
+                                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS à envoyer vide, annulation")
+                                    Else
+                                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS envoyé : " & Parametre1 & " à " & Objet.adresse1.ToString)
+                                        pdu = New SmsSubmitPdu(Parametre1, Objet.adresse1.ToString, "")
+                                        comm.SendMessage(pdu, True)
+                                        'on modifie la valeur du composant pour stocker les sms envoyés
+                                        Objet.Value = "SEND - " & Parametre1
+                                    End If
+                                Else
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "No GSM Phone / Modem Connected")
+                                End If
+                            Catch ex As Exception
+                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "Error Sending SMS: " & ex.ToString)
+                            End Try
+
+                        Case "TEXTE"
+
+                            Try
+                                If _IsConnect Then
+                                    'a titre indicatif ( passerelle sms )
+                                    'Bouygues Télécom : +33660003000
+                                    'Orange : +33689004000
+                                    'SFR : +33609001390
+                                    'sending AT commands
+                                    'ATport.WriteLine("AT")
+                                    If Parametre1 = "" Then
+                                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS à envoyer vide, annulation")
+                                    Else
+                                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS envoi en cours : " & Parametre1 & " à " & Objet.adresse1.ToString)
+                                        ATport.WriteLine("AT+CMGF=1" & vbCrLf) 'set command message format to text mode(1)
+                                        ' SMSPort.WriteLine("AT+CSCA=""+33689004000""" & vbCrLf) 'set service center address (orange) 
+                                        ATport.WriteLine("AT+CMGS=" & Objet.adresse1.ToString & vbCrLf) ' enter the mobile number whom you want to send the SMS
+                                        '_ContSMS = False
+                                        ATport.WriteLine(Parametre1 & vbCrLf & Chr(26)) 'SMS sending
+                                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS envoyé : " & Parametre1 & " à " & Objet.adresse1.ToString)
+                                        Objet.Value = "SEND - " & Parametre1
+                                    End If
+                                Else
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "No GSM Phone / Modem Connected")
+                                End If
+
+                            Catch ex As Exception
+                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "Error Sending SMS: " & ex.ToString)
+
+                            End Try
+                             
+
+                        Case Else
+                            Try
+                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "No GSM Phone / Modem Connected")
+
+                            Catch ex As Exception
+                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "Error Sending SMS: " & ex.ToString)
+                            End Try
+
+                    End Select
+
+
+
+
+
+
+
 
                 Case "RECEIVE"
-                    Try
-                        If comm.IsConnected() = True Then
-                            Try
-                                Dim MsgLocation As Integer
-                                Dim counter As Integer = 0
-                                '       counter = 0
+        Try
+            If comm.IsConnected() = True Then
+                Try
+                    Dim MsgLocation As Integer
+                    Dim counter As Integer = 0
+                    '       counter = 0
 
-                                ' Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Sim)
-                                ' Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.All, PhoneStorageType.Phone)
-                                Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Phone)
-                                For Each Message In messages
-                                    MsgLocation = Message.Index
-                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write SmsReceive", " message recu: " & Message.Data.UserDataText)
-                                    ' Message.Data.UserDataText) '& (Message.Status).ToString & (Message.Storage).ToString & (Message.Index).ToString
-                                    counter = counter + 1
-                                    'Thread.Sleep(1000)
-                                    Try
-                                        comm.DeleteMessage(MsgLocation, PhoneStorageType.Phone)
-                                    Catch ex As Exception
-                                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write SmsReceive", "error deleting from inbox")
-                                        Exit Sub
-                                    Finally
-                                        messages = Nothing
-                                    End Try
-                                Next
-                                If counter = 0 Then
-                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write SmsReceive", "Aucun message n'a été recu")
-                                    'comm.Close()
-                                End If
-                                Exit Sub
+                    ' Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Sim)
+                    ' Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.All, PhoneStorageType.Phone)
+                    Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Phone)
+                    For Each Message In messages
+                        MsgLocation = Message.Index
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write SmsReceive", " message recu: " & Message.Data.UserDataText)
+                        ' Message.Data.UserDataText) '& (Message.Status).ToString & (Message.Storage).ToString & (Message.Index).ToString
+                        counter = counter + 1
+                        'Thread.Sleep(1000)
+                        Try
+                            comm.DeleteMessage(MsgLocation, PhoneStorageType.Phone)
+                        Catch ex As Exception
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write SmsReceive", "error deleting from inbox")
+                            Exit Sub
+                        Finally
+                            messages = Nothing
+                        End Try
+                    Next
+                    If counter = 0 Then
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write SmsReceive", "Aucun message n'a été recu")
+                        'comm.Close()
+                    End If
+                    Exit Sub
 
-                                '  If counter > 0 Then
-                                ' NewMsg = True
-                                ' End If
-                            Catch ex As GsmComm.GsmCommunication.CommException
-                                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM Write SmsReceive", "error:" & ex.InnerException.Message)
-                            End Try
-                        End If
-                    Catch ex As GsmComm.GsmCommunication.CommException
-                        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM Write SmsReceive", "error:" & ex.InnerException.Message)
-                    End Try
+                    '  If counter > 0 Then
+                    ' NewMsg = True
+                    ' End If
+                Catch ex As GsmComm.GsmCommunication.CommException
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM Write SmsReceive", "error:" & ex.InnerException.Message)
+                End Try
+            End If
+        Catch ex As GsmComm.GsmCommunication.CommException
+            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM Write SmsReceive", "error:" & ex.InnerException.Message)
+        End Try
 
                 Case "CALL"
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write CALL", "Not Yet Implemented")
+        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write CALL", "Not Yet Implemented")
                 Case Else
-                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM Write", "Commande " & Command & " non gérée")
+        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM Write", "Commande " & Command & " non gérée")
             End Select
 
         Catch ex As Exception
@@ -635,7 +777,7 @@ Imports System.IO.Ports
 
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "Type de stockage", "Type de stockage : GSM/SIM", "GSM|SIM")
-            'Add_LibelleDevice("CommBaudRate", "Vitesse du port", " BAUD :300|600|1200|2400|9600|14400|19200|38400|57600|115200", "300|600|1200|2400|9600|14400|19200|38400|57600|115200")
+            Add_LibelleDevice("BAUDRATE", "Vitesse du port", " BAUD :300|600|1200|2400|9600|14400|19200|38400|57600|115200", "300|600|1200|2400|9600|14400|19200|38400|57600|115200")
 
 
             Add_LibelleDevice("REFRESH", "Refresh", "")
@@ -661,59 +803,37 @@ Imports System.IO.Ports
 
     ''' <summary>Ouvrir le port du modem</summary>
     Private Function ouvrir() As String
-        Try
+          Try
             'ouverture du port
-            If Not _IsConnect Then
-                'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
-                 '   http://www.me.umn.edu/courses/me2011/smartprodcourse/technotes/docs/serial-port-vb.pdf
+            Select Case _MODE
+                Case "PDU"
+                    If Not _IsConnect Then
+                        'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
+                        Dim portnumber As Integer
+                        If (Integer.TryParse(_Com.Substring(3), portnumber)) Then
+                            comm = New GsmCommMain(portnumber, 57600, 100)
+                        End If
 
-                '
-                'lecture AT+CMGF=? pour connaitre les modes supportés par le modem gsm connecté PDU ou TEXT
-                ' reponse 0 pour le mode PDU
-                ' reponse 1 pour le mode TEXT
-                '
-                ATport.ReadTimeout = 500
-                ATport.WriteTimeout = 500
-                ATport.Open()
-                Dim sIncomming As String = ""
-                Do Until Left(sIncomming, 6) = "+CMGF:"
-                    ATport.WriteLine("AT+CMGF=?" & vbCrLf) ' vbcrlf
-                    sIncomming = ATport.ReadLine()  
-                Loop
+                        comm.Open()
+                        'comm.EnableMessageNotifications()
+                        'comm.EnableMessageRouting()
+                        Return ("Port " & _Com & " ouvert")
+                    Else
+                        Return ("Port " & _Com & " dejà ouvert")
+                    End If
+                Case "TEXTE"
+                    If Not _IsConnect Then
 
-                Dim startIndex As Integer = sIncomming.IndexOf("(") + "(".Length
-                Dim endIndex As Integer = sIncomming.IndexOf(")")
-                Dim result As String = sIncomming.Substring(startIndex, endIndex - startIndex)
-                '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM PORT", "Read:" & result)
-                Dim MODES As String() = result.Split(New Char() {","c})
-                Dim MODE As String
-                For Each MODE In MODES
-                    Select MODE
-                        Case "0"
-                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM PORT", "Mode PDU possible")
-
-                        Case "1"
-                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM PORT", "Mode TEXT possible")
-
-                        Case Else
-                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM PORT", "Mode inconnu ( ne sera pas utilisé)")
-                    End Select
-                Next
-                ATport.Close()
-
-                Dim portnumber As Integer
-                If (Integer.TryParse(_Com.Substring(3), portnumber)) Then
-                    comm = New GsmCommMain(portnumber, 57600, 100)
-                End If
-
-
-                comm.Open()
-                'comm.EnableMessageNotifications()
-                'comm.EnableMessageRouting()
-                Return ("Port " & _Com & " ouvert")
-            Else
-                Return ("Port " & _Com & " dejà ouvert")
-            End If
+                        ATport.ReadTimeout = 500
+                        ATport.WriteTimeout = 500
+                        ATport.Open()
+                        Return ("Port " & _Com & " ouvert")
+                    Else
+                        Return ("Port " & _Com & " dejà ouvert")
+                    End If
+                Case Else
+                    Return ("Port " & _Com & "  non ouvert")
+            End Select
 
 
         Catch ex As Exception
@@ -726,28 +846,72 @@ Imports System.IO.Ports
     ''' <summary>Fermer le port du modem</summary>
     ''' <remarks></remarks>
     Private Function fermer() As String
-        Try
-            If _IsConnect Then
-                If (Not (comm Is Nothing)) Then ' The COM port exists.
-                    If comm.IsOpen Then
-                        comm.Close()
-                        _IsConnect = False
-                        Return ("Port " & _Com & " fermé")
+
+
+        Select Case _MODE
+
+            Case "PDU"
+
+                Try
+                    If _IsConnect Then
+                        If (Not (comm Is Nothing)) Then ' The COM port exists.
+                            If comm.IsOpen Then
+                                comm.Close()
+                                _IsConnect = False
+                                Return ("Port " & _Com & " fermé")
+                            Else
+                                Return ("Port " & _Com & "  est déjà fermé")
+                            End If
+                        Else
+                            Return ("Port " & _Com & " n'existe pas")
+                        End If
                     Else
-                        Return ("Port " & _Com & "  est déjà fermé")
+                        Return ("Port " & _Com & "  est déjà fermé (Disconnected)")
                     End If
-                Else
-                    Return ("Port " & _Com & " n'existe pas")
-                End If
-            Else
-                Return ("Port " & _Com & "  est déjà fermé (Disconnected)")
-            End If
-        Catch ex As UnauthorizedAccessException
-            Return ("ERR: Port " & _Com & " IGNORE")
-            ' The port may have been removed. Ignore.
-        End Try
-        Return True
+                Catch ex As UnauthorizedAccessException
+                    Return ("ERR: Port " & _Com & " IGNORE")
+                    ' The port may have been removed. Ignore.
+                End Try
+                Return True
+
+
+            Case "TEXTE"
+
+                Try
+                    If _IsConnect Then
+
+                        If (Not (ATport Is Nothing)) Then ' The COM port exists.
+                            If ATport.IsOpen Then
+                                ATport.Close()
+                                _IsConnect = False
+                                Return ("Port " & _Com & " fermé")
+                            Else
+                                Return ("Port " & _Com & "  est déjà fermé")
+                            End If
+                        Else
+                            Return ("Port " & _Com & " n'existe pas")
+                        End If
+                    Else
+                        Return ("Port " & _Com & "  est déjà fermé (Disconnected)")
+                    End If
+                Catch ex As UnauthorizedAccessException
+                    Return ("ERR: Port " & _Com & " IGNORE")
+                    ' The port may have been removed. Ignore.
+                End Try
+                Return True
+
+            Case Else
+                Try
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM close", "unknow")
+                 Catch ex As UnauthorizedAccessException
+                    Return ("ERR: Port " & _Com & " IGNORE")
+                    ' The port may have been removed. Ignore.
+                End Try
+                Return True
+        End Select
+
     End Function
+
 
     Private Sub MessageReceived(ByVal sender As Object, ByVal e As MessageReceivedEventArgs) Handles comm.MessageReceived
         Dim obj As IMessageIndicationObject = e.IndicationObject
