@@ -340,12 +340,18 @@ Imports System.IO.Ports
     ''' <summary>Démarrer le du driver</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
-
+        Dim retour As String = ""
+        'récupération des paramétres avancés
+        Try
+            _DEBUG = _Parametres.Item(0).Valeur.ToString.ToUpper
+            _MODE = _Parametres.Item(1).Valeur.ToString.ToUpper
+            '_STORAGE = _Parametres.Item(2).Valeur
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+        End Try
 
         Try
             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "Lecture des mode Supportés")
-
-
 
             '
             'lecture AT+CMGF=? pour connaitre les modes supportés par le modem gsm connecté PDU ou TEXT
@@ -395,22 +401,8 @@ Imports System.IO.Ports
 
         End Try
 
-
-
-
-        Dim retour As String = ""
-        'récupération des paramétres avancés
-        Try
-            _DEBUG = _Parametres.Item(0).Valeur.ToString.ToUpper
-            _MODE = _Parametres.Item(1).Valeur.ToString.ToUpper
-            '_STORAGE = _Parametres.Item(2).Valeur
-        Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
-        End Try
-
         'Verification du MODE de connexion
         Try
-
             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "Verification du mode selectionné")
             ' verif si le mode choisi par le user est bon
             Dim SuportedMode As Boolean = False
@@ -764,7 +756,7 @@ Imports System.IO.Ports
             Add_DeviceCommande("CALL", "Appeler", 0)
 
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", True)
-            Add_ParamAvance("Mode", "Choisir le mode de connexion (PDU/TEXTE)", True)
+            Add_ParamAvance("Mode", "Choisir le mode de connexion (PDU/TEXTE)", "PDU")
             'Add_ParamAvance("storage", "sim card : true / gsm : false", True)
             'ajout des commandes avancées pour les devices
 
