@@ -796,10 +796,18 @@ Imports System.IO.Ports
                     ATport.WriteTimeout = 500
                     ATport.Open()
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "|  port  " & port_name & " ouvert")
-
-
-
                     Dim sIncomming As String = ""
+                    '+CPIN: (READY,SIM PIN,SIM PUK,SIM PIN2,SIM PUK2,PH-SIM PIN,PH-NET PIN,PH-NETSUB PIN,PH-SP PIN,PH-CORP PIN,PH-ESL PIN,PH-SIMLOCK PIN,BLOCKED)
+                    'AT+CPIN? doit on rentrer un code pin ?
+                    Do Until (Left(sIncomming, 12) = "+CPIN: READY" Or Left(sIncomming, 14) = "+CPIN: SIM PIN" Or Left(sIncomming, 14) = "+CPIN: SIM PUK" Or Left(sIncomming, 15) = "+CPIN: SIM PIN2" Or Left(sIncomming, 15) = "+CPIN: SIM PUK2" Or Left(sIncomming, 17) = "+CPIN: PH-SIM PIN" Or Left(sIncomming, 14) = "+CPIN: BLOCKED")
+                        ATport.WriteLine("AT+CPIN?" & vbCrLf) ' vbcrlf
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| " & sIncomming)
+                        sIncomming = ATport.ReadLine()
+                    Loop
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "|  AT+CPIN?")
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| " & sIncomming)
+
+
                     'AT+CPIN? doit on rentrer un code pin ?
                     Do Until (Left(sIncomming, 2) = "OK" Or Left(sIncomming, 11) = "+CME ERROR:" Or Left(sIncomming, 5) = "ERROR")
                         ATport.WriteLine("AT+CPIN=" & _PinCode & vbCrLf) ' vbcrlf
@@ -810,14 +818,7 @@ Imports System.IO.Ports
 
 
 
-                    '+CPIN: (READY,SIM PIN,SIM PUK,SIM PIN2,SIM PUK2,PH-SIM PIN,PH-NET PIN,PH-NETSUB PIN,PH-SP PIN,PH-CORP PIN,PH-ESL PIN,PH-SIMLOCK PIN,BLOCKED)
-                    'AT+CPIN? doit on rentrer un code pin ?
-                    Do Until (Left(sIncomming, 12) = "+CPIN: READY" Or Left(sIncomming, 14) = "+CPIN: SIM PIN" Or Left(sIncomming, 14) = "+CPIN: SIM PUK" Or Left(sIncomming, 15) = "+CPIN: SIM PIN2" Or Left(sIncomming, 15) = "+CPIN: SIM PUK2" Or Left(sIncomming, 17) = "+CPIN: PH-SIM PIN" Or Left(sIncomming, 14) = "+CPIN: BLOCKED")
-                        ATport.WriteLine("AT+CPIN?" & vbCrLf) ' vbcrlf
-                        sIncomming = ATport.ReadLine()
-                    Loop
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "|  AT+CPIN?")
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| " & sIncomming)
+                  
 
                     'AT+CMFG=?  lister les mode supporté
                     Do Until Left(sIncomming, 6) = "+CMGF:"
