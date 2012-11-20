@@ -674,8 +674,8 @@ Imports System.Globalization
     Private Function ouvrir(ByVal numero As String) As String
         'Forcer le . 
         Try
-            Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
-            My.Application.ChangeCulture("en-US")
+            'Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
+            'My.Application.ChangeCulture("en-US")
             If Not _IsConnect Then
                 port_name = numero 'pour se rapeller du nom du port
                 If VB.Left(numero, 3) <> "COM" Then

@@ -613,8 +613,8 @@ Imports System.Globalization
     ''' <remarks></remarks>
     Private Function ouvrir(ByVal numero As String) As String
         'Forcer le . 
-        Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
-        My.Application.ChangeCulture("en-US")
+        'Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
+        'My.Application.ChangeCulture("en-US")
         Try
             If Not _IsConnect Then
                 port_name = numero 'pour se rapeller du nom du port
