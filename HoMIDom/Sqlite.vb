@@ -101,33 +101,35 @@ Namespace HoMIDom
         Public Function nonquery(ByVal commande As String, ByVal ParamArray params() As String)
             Try
                 Dim SQLcommand As SQLiteCommand
-                connect()
-                'on vérifie si on est connecté à la BDD       
-                If SQLconnect.State = ConnectionState.Open Then
-                    'on vérifie si la commande n'est pas vide
-                    If Not String.IsNullOrEmpty(commande) Then
-                        SQLcommand = SQLconnect.CreateCommand
-                        SQLcommand.CommandText = commande
-                        If params IsNot Nothing Then
-                            For p = 0 To params.Length - 1
-                                SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
-                            Next
-                        End If
-                        'lock pour etre sur de ne pas faire deux operations en meme temps      
-                        SyncLock lock
+                SyncLock lock
+                    connect()
+                    'on vérifie si on est connecté à la BDD       
+                    If SQLconnect.State = ConnectionState.Open Then
+                        'on vérifie si la commande n'est pas vide
+                        If Not String.IsNullOrEmpty(commande) Then
+                            SQLcommand = SQLconnect.CreateCommand
+                            SQLcommand.CommandText = commande
+                            If params IsNot Nothing Then
+                                For p = 0 To params.Length - 1
+                                    SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
+                                Next
+                            End If
+                            'lock pour etre sur de ne pas faire deux operations en meme temps      
+                            'SyncLock lock
                             SQLcommand.ExecuteNonQuery()
-                        End SyncLock
-                        SQLcommand.Dispose()
-                        disconnect()
-                        Return "Commande éxécutée avec succés : " & commande
+                            'End SyncLock
+                            SQLcommand.Dispose()
+                            disconnect()
+                            Return "Commande éxécutée avec succés : " & commande
+                        Else
+                            disconnect()
+                            Return "ERR: La commande est vide"
+                        End If
                     Else
-                        disconnect()
-                        Return "ERR: La commande est vide"
+                        connecte = False
+                        Return "ERR: Non connecté à la BDD " & bdd_name
                     End If
-                Else
-                    connecte = False
-                    Return "ERR: Non connecté à la BDD " & bdd_name
-                End If
+                End SyncLock
             Catch ex As Exception
                 Return "ERR: Erreur lors de la query " & commande & "  --> " & ex.ToString
             End Try
