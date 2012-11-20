@@ -533,9 +533,10 @@ Namespace HoMIDom
                 Dim startcmd As Integer = InStr(1, Command, "<")
                 Dim endcmd As Integer = InStr(1, Command, ">")
                 Dim retour As String = Command
+                Dim newcmd As String = Command
 
                 Do While startcmd > 0 And endcmd > 0
-                    Dim _device As String = Mid(Command, startcmd + 1, endcmd - startcmd - 1)
+                    Dim _device As String = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
                     Dim Tabl() As String = _device.Split(".")
 
                     If Tabl.Length = 1 Then
@@ -553,13 +554,12 @@ Namespace HoMIDom
                         End If
                     End If
 
-                    Dim start As String = Mid(Command, 1, startcmd - 1)
-                    Dim fin As String = Mid(Command, endcmd + 1, Command.Length - endcmd)
-                    Dim newcmd As String = start & _device & fin
-
+                    Dim start As String = Mid(newcmd, 1, startcmd - 1)
+                    Dim fin As String = Mid(newcmd, endcmd + 1, newcmd.Length - endcmd)
+                    newcmd = start & _device & fin
                     retour = newcmd
-                    startcmd = InStr(endcmd + 1, Command, "<")
-                    endcmd = InStr(startcmd + 1, Command, ">")
+                    startcmd = InStr(1, newcmd, "<")
+                    endcmd = InStr(1, newcmd, ">")
                 Loop
 
                 Return retour
