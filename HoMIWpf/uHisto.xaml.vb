@@ -65,6 +65,7 @@ Public Class uHisto
             Chart2.Width = 925
             Chart2.Height = 500
 
+            AddHandler Chart2.MouseMove, AddressOf Chart2_MouseMove
 
             Dim legend1 As New Legend
             Chart2.Legends.Add(legend1)
@@ -79,6 +80,25 @@ Public Class uHisto
             Chart2.ChartAreas("Default").AxisX.ScaleView.Zoomable = True
             Chart2.ChartAreas("Default").AxisY.ScaleView.Zoomable = True
 
+            'Chart2.ChartAreas("Default").AxisX.MajorGrid.Interval = 1
+            'Chart2.ChartAreas("Default").AxisX.MajorGrid.IntervalType = DateTimeIntervalType.Hours
+            'Chart2.ChartAreas("Default").AxisX.MajorTickMark.Interval = 1
+            'Chart2.ChartAreas("Default").AxisX.MajorTickMark.IntervalType = DateTimeIntervalType.Hours
+            'Chart2.ChartAreas("Default").AxisX.Interval = 1
+            'Chart2.ChartAreas("Default").AxisX.IntervalType = DateTimeIntervalType.Hours
+            'Chart2.ChartAreas("Default").AxisX.LabelStyle.Interval = 1
+            'Chart2.ChartAreas("Default").AxisX.LabelStyle.IntervalType = DateTimeIntervalType.Hours
+            Chart2.ChartAreas("Default").AxisX.LabelStyle.Angle = -60
+            Chart2.ChartAreas("Default").AxisX.LabelStyle.Format = "dd/MM/yyyy HH:mm"
+            Chart2.ChartAreas("Default").AxisX.LabelStyle.IntervalType = DateTimeIntervalType.Auto
+            Chart2.ChartAreas("Default").AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount
+            Chart2.ChartAreas("Default").AxisX.MajorGrid.LineDashStyle = ChartDashStyle.Dot
+            Chart2.ChartAreas("Default").AxisX.MajorGrid.LineColor = Color.SlateGray
+
+            Chart2.ChartAreas("Default").AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount
+            Chart2.ChartAreas("Default").AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot
+            Chart2.ChartAreas("Default").AxisY.MajorGrid.LineColor = Color.SlateGray
+
             ' Set automatic scrolling
             Chart2.ChartAreas("Default").CursorX.AutoScroll = True
             Chart2.ChartAreas("Default").CursorY.AutoScroll = True
@@ -87,29 +107,33 @@ Public Class uHisto
                 TabControl1.Items.RemoveAt(1)
             Loop
 
+            Dim datestart As String = DateStartSelect.Text
+            Dim dateend As String = DateFinSelect.Text 'displaydate
+            Dim moyenne As String = ComboBoxMoyenne.Text
+            Dim a() As String = datestart.Split("/")
+            If a.Length = 3 Then datestart = a(2) & "-" & a(1) & "-" & a(0) Else datestart = ""
+            a = dateend.Split("/")
+            If a.Length = 3 Then dateend = a(2) & "-" & a(1) & "-" & a(0) Else dateend = ""
+
             For Each _item In _Devices
                 For Each kvp As KeyValuePair(Of String, String) In _item
                     Dim _namedevice As String = myService.ReturnDeviceByID(IdSrv, kvp.Key).Name
-                    Dim datestart As String = DateStartSelect.Text
-                    Dim dateend As String = DateFinSelect.Text 'displaydate
-                    Dim moyenne As String = ComboBoxMoyenne.Text
 
                     'Recuperation des historiques
-                    Dim a() As String = datestart.Split("/")
-                    If a.Length = 3 Then datestart = a(2) & "-" & a(1) & "-" & a(0) Else datestart = ""
-                    a = dateend.Split("/")
-                    If a.Length = 3 Then dateend = a(2) & "-" & a(1) & "-" & a(0) Else dateend = ""
                     result = myService.GetHistoDeviceSource(IdSrv, kvp.Key, kvp.Value, datestart, dateend, moyenne)
 
                     'Construction de la serie dans le graphe
                     Dim series As New System.Windows.Forms.DataVisualization.Charting.Series(_namedevice & ": " & kvp.Value)
+                    series.XValueType = ChartValueType.DateTime
                     Dim cnt As Integer = 0
                     For Each data As Historisation In result
-                        series.Points.AddXY(data.DateTime.ToString("G"), data.Value.Replace(",", "."))
+                        'series.Points.AddXY(data.DateTime.ToString("G"), data.Value.Replace(",", "."))
+                        series.Points.AddXY(data.DateTime, data.Value.Replace(",", "."))
                         cnt += 1
                         If cnt > _MaxData Then Exit For
                     Next
                     series.BorderWidth = 3
+                    series.IsXValueIndexed = False
                     Chart2.Series.Add(series)
 
                     'Tableau de valeur
@@ -124,22 +148,22 @@ Public Class uHisto
             If ChkLine.IsChecked Then
                 For i As Integer = 0 To Chart2.Series.Count - 1
                     Chart2.Series(i).ChartType = SeriesChartType.Line
-                    Chart2.Series(i).ToolTip = "#VALX" & " Valeur:" & "#VALY"
+                    Chart2.Series(i).ToolTip = "#VALX{dd/MM/yyyy HH:mm:ss}" & " Valeur:" & "#VALY"
                 Next
             ElseIf ChkLine_Full.IsChecked Then
                 For i As Integer = 0 To Chart2.Series.Count - 1
                     Chart2.Series(i).ChartType = SeriesChartType.SplineArea
-                    Chart2.Series(i).ToolTip = "#VALX" & " Valeur:" & "#VALY"
+                    Chart2.Series(i).ToolTip = "#VALX{dd/MM/yyyy HH:mm:ss}" & " Valeur:" & "#VALY"
                 Next
             ElseIf ChkHisto.IsChecked Then
                 For i As Integer = 0 To Chart2.Series.Count - 1
                     Chart2.Series(i).ChartType = SeriesChartType.Bar
-                    Chart2.Series(i).ToolTip = "#VALX" & " Valeur:" & "#VALY"
+                    Chart2.Series(i).ToolTip = "#VALX{dd/MM/yyyy HH:mm:ss}" & " Valeur:" & "#VALY"
                 Next
             Else
                 For i As Integer = 0 To Chart2.Series.Count - 1
                     Chart2.Series(i).ChartType = SeriesChartType.Pie
-                    Chart2.Series(i).ToolTip = "#VALX" & " Valeur:" & "#VALY"
+                    Chart2.Series(i).ToolTip = "#VALX{dd/MM/yyyy HH:mm:ss}" & " Valeur:" & "#VALY"
                 Next
             End If
 
@@ -158,7 +182,10 @@ Public Class uHisto
                 Case 2 : Chart2.ChartAreas("Default").BackColor = Color.LightYellow
                 Case 3 : Chart2.ChartAreas("Default").BackColor = Color.Red
                 Case 4 : Chart2.ChartAreas("Default").BackColor = Color.LightGreen
-                Case 5 : Chart2.ChartAreas("Default").BackColor = Color.LightGray
+                Case 5
+                    Chart2.ChartAreas("Default").BackColor = Color.LightGray
+                    Chart2.ChartAreas("Default").BackGradientStyle = GradientStyle.TopBottom
+                    Chart2.ChartAreas("Default").BackSecondaryColor = Color.WhiteSmoke
                 Case 6 : Chart2.ChartAreas("Default").BackColor = Color.Transparent
             End Select
 
@@ -332,7 +359,6 @@ Public Class uHisto
         Return retour
     End Function
 
-
     Private Sub BtnGenereGraph_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnGenereGraph.Click
         Generation()
     End Sub
@@ -384,4 +410,29 @@ Public Class uHisto
             MessageBox.Show("ERREUR Sub Generation: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
+    Private Sub Chart2_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
+        Try
+            ' Call HitTest
+            Dim result As HitTestResult = _CurrentChart.HitTest(e.X, e.Y)
+
+            ' Reset Data Point Attributes
+            Dim point As DataPoint
+            For Each point In _CurrentChart.Series(0).Points
+                point.BorderWidth = 3
+            Next
+
+            ' If the mouse if over a data point
+            If result.ChartElementType = ChartElementType.DataPoint Then
+                Dim pointt As DataPoint = _CurrentChart.Series(0).Points(result.PointIndex)
+                pointt.BorderWidth = 1
+            Else
+                ' Set default cursor
+                Me.Cursor = Cursors.Arrow
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uHisto Chart2_MouseMove: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
 End Class

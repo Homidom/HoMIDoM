@@ -31,14 +31,15 @@ Partial Public Class uInternet
     'End Sub
 
     Sub SuppressScriptErrors(ByVal wb As Controls.WebBrowser, ByVal Hide As Boolean)
-        Dim fi As FieldInfo = GetType(Controls.WebBrowser).GetField("_axIWebBrowser2", BindingFlags.NonPublic)
-        If fi IsNot Nothing Then
-            Dim browser As Controls.WebBrowser = fi.GetValue(wb)
-            If browser IsNot Nothing Then
-                browser.[GetType]().InvokeMember("Silent", BindingFlags.SetProperty, Nothing, browser, New Object() {Hide})
-            End If
+        Dim fiComWebBrowser As FieldInfo = GetType(WebBrowser).GetField("_axIWebBrowser2", BindingFlags.Instance Or BindingFlags.NonPublic)
+        If fiComWebBrowser Is Nothing Then
+            Return
         End If
-
+        Dim objComWebBrowser As Object = fiComWebBrowser.GetValue(wb)
+        If objComWebBrowser Is Nothing Then
+            Return
+        End If
+        objComWebBrowser.[GetType]().InvokeMember("Silent", BindingFlags.SetProperty, Nothing, objComWebBrowser, New Object() {Hide})
     End Sub
 
     Private Sub x_Navigated(ByVal sender As Object, ByVal e As System.Windows.Navigation.NavigationEventArgs) Handles x.Navigated

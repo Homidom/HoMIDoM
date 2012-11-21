@@ -16,10 +16,16 @@
                 <StackPanel >
         <CheckBox  Name="ChkShowEtiq" Content="Afficher Etiquette" Foreground="White" />
         <CheckBox Name="ChkShowStatus" Content="Afficher Status" Foreground="White"/>
-            <StackPanel Orientation="Horizontal" >
-            <Label Width="120" Content="Etiquette:" Foreground="White"/>
-                <TextBox Name="TxtEtiq" Width="150" />
-            </StackPanel>
+                        <StackPanel Name="StkEtiq">
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Width="120" Content="Etiquette:" Foreground="White"/>
+                                 <TextBox Name="TxtEtiq" Width="150" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Width="120" Content="Size Etiquette:" Foreground="White"/>
+                                <TextBox Name="TxtSizeEtiq" Width="50" />
+                            </StackPanel>
+                        </StackPanel>
             <StackPanel Orientation="Horizontal" >
             <Label Width="120" Content="X:" Foreground="White"/>
                 <TextBox Name="TxtX" Width="150" />

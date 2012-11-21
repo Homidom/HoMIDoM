@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Threading
 Imports System.IO
+Imports System.Threading
 
 Public Class uWMeteo
     Dim _Id As String
@@ -10,7 +11,10 @@ Public Class uWMeteo
         End Get
         Set(ByVal value As String)
             _Id = value
-            If _Id <> "" Then GetMeteo()
+            If _Id <> "" Then
+                GetMeteo()
+            End If
+
         End Set
     End Property
 
@@ -20,6 +24,24 @@ Public Class uWMeteo
             If IsConnect = True Then
                 If _Id <> "" Then
                     Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _Id)
+                    If IsNothing(_dev) Then Exit Sub
+                    'LblVille.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblVille.Content = _dev.Name, ThreadStart))
+                    'LblTemp.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblTemp.Content = _dev.TemperatureActuel & "°", ThreadStart))
+                    'LblMin.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMin.Content = "Min: " & _dev.MinToday & "°", ThreadStart))
+                    'LblMinJ1.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMinJ1.Content = _dev.MinToday & "°", ThreadStart))
+                    'LblMinJ2.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMinJ2.Content = _dev.MinJ1 & "°", ThreadStart))
+                    'LblMinJ3.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMinJ3.Content = _dev.MinJ2 & "°", ThreadStart))
+                    'LblMinJ4.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMinJ4.Content = _dev.MinJ3 & "°", ThreadStart))
+                    'LblMax.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMax.Content = "Max: " & _dev.MaxToday & "°", ThreadStart))
+                    'LblMaxJ1.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMaxJ1.Content = _dev.MaxToday & "°", ThreadStart))
+                    'LblMaxJ2.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMaxJ2.Content = _dev.MaxJ1 & "°", ThreadStart))
+                    'LblMaxJ3.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMaxJ3.Content = _dev.MaxJ2 & "°", ThreadStart))
+                    'LblMaxJ4.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMaxJ4.Content = _dev.MaxJ3 & "°", ThreadStart))
+                    'LblJ1.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblJ1.Content = _dev.JourToday, ThreadStart))
+                    'LblJ2.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblJ2.Content = _dev.JourJ1, ThreadStart))
+                    'LblJ3.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblJ3.Content = _dev.JourJ2, ThreadStart))
+                    'LblJ4.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblJ4.Content = _dev.JourJ3, ThreadStart))
+
                     LblVille.Content = _dev.Name
                     LblTemp.Content = _dev.TemperatureActuel & "°"
                     LblMin.Content = "Min: " & _dev.MinToday & "°"
@@ -45,6 +67,7 @@ Public Class uWMeteo
                         bmpImage.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
                     End If
                     bmpImage.EndInit()
+                    'Icon.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() Icon.Source = bmpImage, ThreadStart))
                     Icon.Source = bmpImage
 
                     Dim bmpImage2 As New BitmapImage()
@@ -56,6 +79,7 @@ Public Class uWMeteo
                     End If
                     bmpImage2.EndInit()
                     IconJ1.Source = bmpImage2
+                    'IconJ1.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() IconJ1.Source = bmpImage2, ThreadStart))
 
                     Dim bmpImage3 As New BitmapImage()
                     bmpImage3.BeginInit()
@@ -66,6 +90,7 @@ Public Class uWMeteo
                     End If
                     bmpImage3.EndInit()
                     IconJ2.Source = bmpImage3
+                    'IconJ2.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() IconJ2.Source = bmpImage3, ThreadStart))
 
                     Dim bmpImage4 As New BitmapImage()
                     bmpImage4.BeginInit()
@@ -76,6 +101,7 @@ Public Class uWMeteo
                     End If
                     bmpImage4.EndInit()
                     IconJ3.Source = bmpImage4
+                    'IconJ3.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() IconJ3.Source = bmpImage4, ThreadStart))
 
                     Dim bmpImage5 As New BitmapImage()
                     bmpImage5.BeginInit()
@@ -86,6 +112,8 @@ Public Class uWMeteo
                     End If
                     bmpImage5.EndInit()
                     IconJ4.Source = bmpImage5
+                    'IconJ4.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() IconJ4.Source = bmpImage5, ThreadStart))
+
                 End If
             End If
         Catch ex As Exception
@@ -115,9 +143,9 @@ Public Class uWMeteo
         End Select
     End Function
 
-
-
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
+        'Dim x As New Thread(AddressOf GetMeteo)
+        'x.Start()
         GetMeteo()
     End Sub
 

@@ -3,6 +3,7 @@ Imports System.Xml
 Imports System.Xml.XmlReader
 Imports System.IO
 Imports System.ServiceModel.Syndication
+Imports System.Threading
 
 Public Class uRSS
     Dim _Uri As String
@@ -100,6 +101,7 @@ Public Class RSSChannel
             m_FeedURL = value
         End Set
     End Property
+
     Public Property Title() As String
         Get
             Return m_Title
@@ -134,45 +136,64 @@ Public Class RSSChannel
         Title = ""
         Link = ""
         Description = ""
-        GetChannelInfo()
+        Dim x As New Thread(AddressOf GetChannelInfo)
+        x.Start()
     End Sub
 
     Private Function GetXMLDoc(ByVal node As String) As XmlNodeList
-        Dim tempNodeList As System.Xml.XmlNodeList = Nothing
+        Try
 
-        Dim request As WebRequest = WebRequest.Create(Me.FeedURL)
-        Dim response As WebResponse = request.GetResponse()
-        Dim rssStream As Stream = response.GetResponseStream()
-        Dim rssDoc As XmlDocument = New XmlDocument()
-        rssDoc.Load(rssStream)
-        tempNodeList = rssDoc.SelectNodes(node)
+            Dim tempNodeList As System.Xml.XmlNodeList = Nothing
 
-        Return tempNodeList
+            Dim request As WebRequest = WebRequest.Create(Me.FeedURL)
+            Dim response As WebResponse = request.GetResponse()
+            Dim rssStream As Stream = response.GetResponseStream()
+            Dim rssDoc As XmlDocument = New XmlDocument()
+            rssDoc.Load(rssStream)
+            tempNodeList = rssDoc.SelectNodes(node)
+
+            Return tempNodeList
+
+        Catch ex As Exception
+            MessageBox.Show("Erreur GetXMLDoc: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            Return Nothing
+        End Try
     End Function
 
     Private Sub GetChannelInfo()
-        Dim rss As XmlNodeList = GetXMLDoc("rss/channel")
-        Title = rss(0).SelectSingleNode("title").InnerText
-        Link = rss(0).SelectSingleNode("link").InnerText
-        Description = rss(0).SelectSingleNode("description").InnerText
+        Try
+
+            Dim rss As XmlNodeList = GetXMLDoc("rss/channel")
+            Title = rss(0).SelectSingleNode("title").InnerText
+            Link = rss(0).SelectSingleNode("link").InnerText
+            Description = rss(0).SelectSingleNode("description").InnerText
+
+        Catch ex As Exception
+            MessageBox.Show("Erreur GetChannelInfo: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Public Function GetChannelItems() As ArrayList
-        Dim tempArrayList As New ArrayList
+        Try
+            Dim tempArrayList As New ArrayList
 
-        Dim rssItems As XmlNodeList = GetXMLDoc("rss/channel/item")
-        Dim item As XmlNode
-        For Each item In rssItems
-            Dim newItem As New RSSItem
-            With newItem
-                .Title = item.SelectSingleNode("title").InnerText
-                .Link = item.SelectSingleNode("link").InnerText
-                .Description = item.SelectSingleNode("description").InnerText
-            End With
-            tempArrayList.Add(newItem)
-        Next
+            Dim rssItems As XmlNodeList = GetXMLDoc("rss/channel/item")
+            Dim item As XmlNode
+            For Each item In rssItems
+                Dim newItem As New RSSItem
+                With newItem
+                    .Title = item.SelectSingleNode("title").InnerText
+                    .Link = item.SelectSingleNode("link").InnerText
+                    .Description = item.SelectSingleNode("description").InnerText
+                End With
+                tempArrayList.Add(newItem)
+            Next
 
-        Return tempArrayList
+            Return tempArrayList
+        Catch ex As Exception
+            MessageBox.Show("Erreur GetChannelItems: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            Return Nothing
+        End Try
     End Function
 #End Region
 End Class

@@ -192,7 +192,7 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="Services">
-                <GroupBox Header="Service TV" Margin="2">
+                <GroupBox Header="Service TV" Margin="2" Visibility="Collapsed">
                     <CheckBox Content="Activer" Margin="3" Name="ChkServiceTV" />
                 </GroupBox >
             </TabItem>

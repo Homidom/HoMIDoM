@@ -199,15 +199,6 @@ Public Class WConfig
                 x.Icon = TxtImage.Text
                 MyListMnu.Add(x)
                 ListMnu.Items.Add(TxtName.Text)
-                'Case 3 'New zone
-                '    Dim x As New uCtrlImgMnu
-                '    x.Text = TxtName.Text
-                '    x.Type = uCtrlImgMnu.TypeOfMnu.Zone
-                '    'x.Icon = TxtImage.Text
-                '    'x.Parametres.Add(TxtParam.Text)
-
-                '    MyListMnu.Add(x)
-                '    ListMnu.Items.Add(TxtName.Text)
             Case 4 'New Media
                 Dim x As New uCtrlImgMnu
                 x.Text = TxtName.Text
