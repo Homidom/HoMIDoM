@@ -795,8 +795,20 @@ Imports System.IO.Ports
                     ATport.ReadTimeout = 100
                     ATport.WriteTimeout = 500
                     ATport.Open()
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "|  port  " & port_name & " ouvert")
+
                     Dim sIncomming As String = ""
+                    'at+CLAC
+                    ' regardons ce que votre modem a dans le ventre !
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "+-- AT+CLAC  Start listes des commandes du modem ")
+
+                    'AT+CLAC
+                    ATport.WriteLine("AT+CLAC" & vbCrLf) ' vbcrlf
+                    sIncomming = ATport.ReadLine()
+
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| " & sIncomming)
+
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "+-- AT+CLAC  End listes des commandes du modem ")
+
                     '+CPIN: (READY,SIM PIN,SIM PUK,SIM PIN2,SIM PUK2,PH-SIM PIN,PH-NET PIN,PH-NETSUB PIN,PH-SP PIN,PH-CORP PIN,PH-ESL PIN,PH-SIMLOCK PIN,BLOCKED)
                     'AT+CPIN? doit on rentrer un code pin ?
                     Do Until (Left(sIncomming, 12) = "+CPIN: READY" Or Left(sIncomming, 14) = "+CPIN: SIM PIN" Or Left(sIncomming, 14) = "+CPIN: SIM PUK" Or Left(sIncomming, 15) = "+CPIN: SIM PIN2" Or Left(sIncomming, 15) = "+CPIN: SIM PUK2" Or Left(sIncomming, 17) = "+CPIN: PH-SIM PIN" Or Left(sIncomming, 14) = "+CPIN: BLOCKED")
@@ -818,7 +830,7 @@ Imports System.IO.Ports
 
 
 
-                  
+
 
                     'AT+CMFG=?  lister les mode supporté
                     Do Until Left(sIncomming, 6) = "+CMGF:"
@@ -868,9 +880,9 @@ Imports System.IO.Ports
                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GSM Mode", "+---------------------------------------------------------------------------------------------")
                     ATport.Close()
                 Catch ex As Exception
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
 
-                End Try
+        End Try
 
 
 
