@@ -1391,9 +1391,9 @@ Imports System.Media
                 Case "X10"
                     send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypeX10)
                 Case "aucun"
-                    WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Nom)
+                    WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Name)
                 Case ""
-                    WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Nom)
+                    WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Name)
                 Case Else
                     WriteLog("ERR: WRITE Protocole non géré : " & Objet.Modele.ToString.ToUpper)
             End Select
