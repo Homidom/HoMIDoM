@@ -208,7 +208,8 @@ Class Window1
         Try
             ' Cet appel est requis par le Concepteur Windows Form.
             InitializeComponent()
-            ' _MonRepertoire = System.Environment.CurrentDirectory 'représente le répertoire de l'application 
+
+            Me.Cursor = Cursors.Wait
 
             Dim mystyles As New ResourceDictionary()
             mystyles.Source = New Uri("/HoMIWpF;component/Resources/DesignerItem.xaml",
@@ -219,16 +220,11 @@ Class Window1
             Log(TypeLog.INFO, TypeSource.CLIENT, "LOADCONFIG", "Message: " & LoadConfig(_MonRepertoire & "\Config\"))
 
             ' Create StackPanel and set child elements to horizontal orientation
-            imgStackPnl.HorizontalAlignment = HorizontalAlignment.Left
+            imgStackPnl.HorizontalAlignment = HorizontalAlignment.Center
             imgStackPnl.VerticalAlignment = VerticalAlignment.Center
             imgStackPnl.Orientation = Orientation.Horizontal
 
             ConnectToHomidom()
-
-            'Creation  du menu
-            If ListMnu.Count = 0 Then
-                NewBtnMnu("Paramètres", uCtrlImgMnu.TypeOfMnu.Config, , True, , )
-            End If
 
             If IsConnect = True Then
                 Dim cntNewZone As Integer = 0
@@ -256,18 +252,6 @@ Class Window1
             Else
                 MessageBox.Show("Pas de connexion au serveur")
             End If
-            'NewBtnMnu("Journal", uCtrlImgMnu.TypeOfMnu.Internet, , , , "/parametres-icone-3667-128.png")
-            'NewBtnMnu("Programme TV", "1", "C:\ehome\images\125_tv.png")
-            'NewBtnMnu("Contacts", "2", "C:\ehome\images\contact2.png")
-            'NewBtnMnu("Module", "3", "C:\ehome\images\125_light.png")
-            'NewBtnMnu("Meteo", "13", "C:\ehome\images\125_goodmorning.png")
-            'NewBtnMnu("Paramètres", "5", "C:\ehome\images\125_settings.png")
-            'NewBtnMnu("Recette", "6", "C:\ehome\images\Recette.png")
-            'NewBtnMnu("Pages Jaunes", "7", "C:\ehome\images\pages-jaunes.png")
-            'NewBtnMnu("Internet", "8", "C:\ehome\images\Internet.png")
-            'NewBtnMnu("Itinéraire", "9", "C:\ehome\images\map.png")
-            'NewBtnMnu("Note", "15", "C:\ehome\images\calendar3.png")
-            'NewBtnMnu("Traffic", "16", "C:\ehome\images\traffic.png")
 
             'Mise en forme du scrollviewer
             ScrollViewer1.Content = imgStackPnl
@@ -278,14 +262,6 @@ Class Window1
             dt.Interval = New TimeSpan(0, 0, 1)
             dt.Start()
 
-            ''Connexion à HomeSeer
-            'ConnectToHS()
-
-
-            'If IsHSConnect = True Then
-            '    LblLeve.Content = Mid(hs.Sunrise, 1, 5)
-            '    LblCouche.Content = Mid(hs.Sunset, 1, 5)
-            'End If
             If IsConnect = True And ShowSoleil = True Then
                 Dim mydate As Date
                 mydate = myService.GetHeureLeverSoleil
@@ -315,7 +291,7 @@ Class Window1
             File.Copy(_file & ".xml", Mid(_file & ".xml", 1, Len(_file & ".xml") - 4) & ".bak")
             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
         Catch ex As Exception
-            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
+            MessageBox.Show("Erreur lors du lancement de l'application: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
 
         Try
@@ -455,6 +431,8 @@ Class Window1
                                                 _MnuType = uCtrlImgMnu.TypeOfMnu.Config
                                             Case uCtrlImgMnu.TypeOfMnu.LecteurMedia.ToString
                                                 _MnuType = uCtrlImgMnu.TypeOfMnu.LecteurMedia
+                                            Case uCtrlImgMnu.TypeOfMnu.None.ToString
+                                                _MnuType = uCtrlImgMnu.TypeOfMnu.Config
                                         End Select
                                     Case "icon"
                                         _MnuIcon = list.Item(j).Attributes.Item(k).Value
@@ -469,7 +447,7 @@ Class Window1
                                         End If
                                 End Select
                             Next
-                            NewBtnMnu(_MnuNom, _MnuType, _MnuParam, _Mnudefaut, , _MnuIcon, _MnuIDElement, _MnuVisible)
+                            If _MnuType <> uCtrlImgMnu.TypeOfMnu.Config Then NewBtnMnu(_MnuNom, _MnuType, _MnuParam, _Mnudefaut, , _MnuIcon, _MnuIDElement, _MnuVisible)
                         Next
                     Else
                         'MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
@@ -508,6 +486,8 @@ Class Window1
                                                 x.Type = uWidgetEmpty.TypeOfWidget.Meteo
                                             Case uWidgetEmpty.TypeOfWidget.KeyPad.ToString
                                                 x.Type = uWidgetEmpty.TypeOfWidget.KeyPad
+                                            Case uWidgetEmpty.TypeOfWidget.Label.ToString
+                                                x.Type = uWidgetEmpty.TypeOfWidget.Label
                                         End Select
                                     Case "caneditvalue"
                                         x.CanEditValue = list.Item(j).Attributes.Item(k).Value
@@ -539,6 +519,8 @@ Class Window1
                                         x.DefautLabelStatus = list.Item(j).Attributes.Item(k).Value
                                     Case "taillestatus"
                                         x.TailleStatus = list.Item(j).Attributes.Item(k).Value
+                                    Case "tailleetiquette"
+                                        x.TailleEtiquette = list.Item(j).Attributes.Item(k).Value
                                     Case "colorbackground"
                                         Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
                                         Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
@@ -824,6 +806,9 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("taillestatus")
                 writer.WriteValue(_ListElement.Item(i).TailleStatus)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("tailleetiquette")
+                writer.WriteValue(_ListElement.Item(i).TailleEtiquette)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("colorbackground")
                 writer.WriteValue(_ListElement.Item(i).ColorBackGround.ToString)
@@ -1159,18 +1144,22 @@ Class Window1
     ''' <param name="NewFichier"></param>
     ''' <remarks></remarks>
     Public Sub CreateNewFileLog(ByVal NewFichier As String)
-        Dim rw As XmlTextWriter = New XmlTextWriter(NewFichier, Nothing)
-        rw.WriteStartDocument()
-        rw.WriteStartElement("logs")
-        rw.WriteStartElement("log")
-        rw.WriteAttributeString("time", Now)
-        rw.WriteAttributeString("type", 0)
-        rw.WriteAttributeString("source", 0)
-        rw.WriteAttributeString("message", "Création du nouveau fichier log")
-        rw.WriteEndElement()
-        rw.WriteEndElement()
-        rw.WriteEndDocument()
-        rw.Close()
+        Try
+            Dim rw As XmlTextWriter = New XmlTextWriter(NewFichier, Nothing)
+            rw.WriteStartDocument()
+            rw.WriteStartElement("logs")
+            rw.WriteStartElement("log")
+            rw.WriteAttributeString("time", Now)
+            rw.WriteAttributeString("type", 0)
+            rw.WriteAttributeString("source", 0)
+            rw.WriteAttributeString("message", "Création du nouveau fichier log")
+            rw.WriteEndElement()
+            rw.WriteEndElement()
+            rw.WriteEndDocument()
+            rw.Close()
+        Catch ex As Exception
+            MessageBox.Show("Erreur CreateNewFileLog: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 #End Region
 
@@ -1302,8 +1291,6 @@ Class Window1
                     LblLeve.Content = mydate.ToShortTimeString
                     mydate = myService.GetHeureCoucherSoleil
                     LblCouche.Content = mydate.ToShortTimeString
-                Else
-                    LblTime.Content = Now.ToLongDateString & " " & Now.ToShortTimeString
                 End If
 
             End If
@@ -1315,6 +1302,7 @@ Class Window1
             End If
             Log(TypeLog.INFO, TypeSource.CLIENT, "DispatcherTimer", "DispatcherTimer: " & ex.Message)
             LblTime.Content = Now.ToLongDateString & " " & Now.ToShortTimeString
+            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1342,24 +1330,6 @@ Class Window1
                         x.Width = Canvas1.ActualWidth
                         x.Height = Canvas1.ActualHeight
                     Case uCtrlImgMnu.TypeOfMnu.Config
-                        ImageBackGround = _ImageBackGroundDefault
-                        Dim x As New WConfig(Me)
-                        x.Owner = Me
-                        x.ShowDialog()
-                        If x.DialogResult.HasValue And x.DialogResult.Value Then
-                            imgStackPnl.Children.Clear()
-                            For i As Integer = 0 To ListMnu.Count - 1
-                                AddHandler ListMnu.Item(i).click, AddressOf IconMnuDoubleClick
-                                If ListMnu.Item(i).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
-                                    If ListMnu.Item(i).Visible = True Then imgStackPnl.Children.Add(ListMnu.Item(i))
-                                Else
-                                    imgStackPnl.Children.Add(ListMnu.Item(i))
-                                End If
-                            Next
-                            x.Close()
-                        Else
-                            x.Close()
-                        End If
                     Case uCtrlImgMnu.TypeOfMnu.LecteurMedia
                         Dim x As New WMedia
                         x.Owner = Me
@@ -1414,9 +1384,14 @@ Class Window1
 
     'Bouton Quitter
     Private Sub BtnQuit_Click_1(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnQuit.Click
-        SaveConfig(_MonRepertoire & "\config\HoMIWpF.xml")
-        Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
-        End
+        Try
+            SaveConfig(_MonRepertoire & "\config\HoMIWpF.xml")
+            Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
+            End
+        Catch ex As Exception
+            MessageBox.Show("Erreur BtnQuit_Click_1: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            End
+        End Try
     End Sub
 
     Public Sub ShowZone(ByVal IdZone As String)
@@ -1488,6 +1463,7 @@ Class Window1
                             y.Etiquette = _ListElement.Item(j).Etiquette
                             y.DefautLabelStatus = _ListElement.Item(j).DefautLabelStatus
                             y.TailleStatus = _ListElement.Item(j).TailleStatus
+                            y.TailleEtiquette = _ListElement.Item(j).TailleEtiquette
                             y.ColorBackGround = _ListElement.Item(j).ColorBackGround
                             y.ColorStatus = _ListElement.Item(j).ColorStatus
                             y.IsHitTestVisible = True 'True:bouge pas False:Bouge
@@ -1585,6 +1561,7 @@ Class Window1
                     y.Etiquette = _ListElement.Item(i).Etiquette
                     y.DefautLabelStatus = _ListElement.Item(i).DefautLabelStatus
                     y.TailleStatus = _ListElement.Item(i).TailleStatus
+                    y.TailleEtiquette = _ListElement.Item(i).TailleEtiquette
                     y.ColorBackGround = _ListElement.Item(i).ColorBackGround
                     y.ColorStatus = _ListElement.Item(i).ColorStatus
                     y.IsHitTestVisible = True 'True:bouge pas False:Bouge
@@ -1609,42 +1586,6 @@ Class Window1
         Catch ex As Exception
             MessageBox.Show("Erreur ShowZone: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
-    End Sub
-
-    Private Sub Clone_Element(ByVal Source As uWidgetEmpty, ByVal Destination As uWidgetEmpty)
-        Destination.Uid = Source.Uid
-        Destination.Id = Source.Id
-        Destination.ZoneId = Source.ZoneId
-        Destination.Width = Source.Width
-        Destination.Height = Source.Height
-        Destination.X = Source.X
-        Destination.Y = Source.Y
-        Destination.Rotation = Source.Rotation
-        Destination.IsEmpty = Source.IsEmpty
-        Destination.Type = Source.Type
-        Destination.CanEditValue = Source.CanEditValue
-        Destination.ShowPicture = Source.ShowPicture
-        Destination.Picture = Source.Picture
-        Destination.ShowEtiquette = Source.ShowEtiquette
-        Destination.ShowStatus = Source.ShowStatus
-        Destination.Unite = Source.Unite
-        Destination.Etiquette = Source.Etiquette
-        Destination.DefautLabelStatus = Source.DefautLabelStatus
-        Destination.TailleStatus = Source.TailleStatus
-        Destination.ColorBackGround = Source.ColorBackGround
-        Destination.ColorStatus = Source.ColorStatus
-        Destination.IsHitTestVisible = True 'True:bouge pas False:Bouge
-        Destination.Action_GestureBasHaut = Source.Action_GestureBasHaut
-        Destination.Action_GestureDroiteGauche = Source.Action_GestureDroiteGauche
-        Destination.Action_GestureGaucheDroite = Source.Action_GestureGaucheDroite
-        Destination.Action_GestureHautBas = Source.Action_GestureHautBas
-        Destination.Action_On_Click = Source.Action_On_Click
-        Destination.Action_On_LongClick = Source.Action_On_LongClick
-        Destination.Visuel = Source.Visuel
-        Destination.URL = Source.URL
-        Destination.UrlRss = Source.UrlRss
-        Destination.IDMeteo = Source.IDMeteo
-        Destination.IDKeyPad = Source.IDKeyPad
     End Sub
 
     Private Sub Deplacement_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk1.Click
@@ -1706,7 +1647,7 @@ Class Window1
                 Next
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message)
+            MessageBox.Show("Erreur Chk1: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1718,21 +1659,81 @@ Class Window1
                 obj.Height = e.NewSize.Height
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message)
+            MessageBox.Show("Erreur Resize: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
     Private Sub ModeEdition_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk2.Click
-        If Chk2.IsChecked = True Then
-            Chk1.IsChecked = False
 
-            'On a finit le déplacement
-            Design = False
-            Dim a As String = ""
-            Chk2.IsChecked = True
+        Try
+
+            If Chk2.IsChecked = True Then
+                Chk1.IsChecked = False
+
+                'On a finit le déplacement
+                Design = False
+                Dim a As String = ""
+                Chk2.IsChecked = True
+
+                For Each child As ContentControl In Canvas1.Children
+                    Dim obj As uWidgetEmpty = child.Content
+                    obj.IsHitTestVisible = False
+                    obj.ModeEdition = False
+                    obj = Nothing
+
+                    Selector.SetIsSelected(child, False)
+
+                    For j As Integer = 0 To _ListElement.Count - 1
+                        If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                            _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
+                            _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
+                            _ListElement.Item(j).Width = child.Width
+                            _ListElement.Item(j).Height = child.Height
+
+                            If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
+                                Dim gt As TransformGroup = child.RenderTransform '.GetValue(RotateTransform.AngleProperty)
+                                For k = 0 To gt.Children.Count - 1
+                                    If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
+                                        Dim rt As RotateTransform = gt.Children.Item(k)
+                                        If rt IsNot Nothing Then
+                                            _ListElement.Item(j).Rotation = rt.Angle
+                                        End If
+                                        Exit For
+                                    End If
+                                Next
+                            End If
+                            If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
+                                _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                            End If
+                        End If
+                    Next
+
+                    Dim lbl As uWidgetEmpty = child.Content
+                    lbl.IsHitTestVisible = True
+
+                Next
+            End If
 
             For Each child As ContentControl In Canvas1.Children
                 Dim obj As uWidgetEmpty = child.Content
+                obj.ModeEdition = Chk2.IsChecked
+                obj = Nothing
+            Next
+
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub MaJ_Element(Optional ByVal Objet As Object = Nothing)
+        Try
+            Dim a As String = ""
+
+            For Each child As ContentControl In Canvas1.Children
+                Dim obj As uWidgetEmpty = child.Content
+                If Objet IsNot Nothing Then
+                    obj = Objet.Content
+                End If
                 obj.IsHitTestVisible = False
                 obj.ModeEdition = False
                 obj = Nothing
@@ -1740,7 +1741,7 @@ Class Window1
                 Selector.SetIsSelected(child, False)
 
                 For j As Integer = 0 To _ListElement.Count - 1
-                    If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                    If _ListElement.Item(j).Id = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
                         _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
                         _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
                         _ListElement.Item(j).Width = child.Width
@@ -1752,7 +1753,7 @@ Class Window1
                                 If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
                                     Dim rt As RotateTransform = gt.Children.Item(k)
                                     If rt IsNot Nothing Then
-                                        _ListElement.Item(j).Rotation = rt.Angle
+                                        _ListElement.Item(j).Rotation = rt.Angle 'child.RenderTransform.GetValue(RotateTransform.AngleProperty)
                                     End If
                                     Exit For
                                 End If
@@ -1766,91 +1767,45 @@ Class Window1
 
                 Dim lbl As uWidgetEmpty = child.Content
                 lbl.IsHitTestVisible = True
-
             Next
-        End If
-
-        For Each child As ContentControl In Canvas1.Children
-            Dim obj As uWidgetEmpty = child.Content
-            obj.ModeEdition = Chk2.IsChecked
-            obj = Nothing
-        Next
-    End Sub
-
-    Private Sub MaJ_Element(Optional ByVal Objet As Object = Nothing)
-        Dim a As String = ""
-
-        For Each child As ContentControl In Canvas1.Children
-            Dim obj As uWidgetEmpty = child.Content
-            If Objet IsNot Nothing Then
-                obj = Objet.Content
-            End If
-            obj.IsHitTestVisible = False
-            obj.ModeEdition = False
-            obj = Nothing
-
-            Selector.SetIsSelected(child, False)
-
-            For j As Integer = 0 To _ListElement.Count - 1
-                If _ListElement.Item(j).Id = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
-                    _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
-                    _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
-                    _ListElement.Item(j).Width = child.Width
-                    _ListElement.Item(j).Height = child.Height
-
-                    If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
-                        Dim gt As TransformGroup = child.RenderTransform '.GetValue(RotateTransform.AngleProperty)
-                        For k = 0 To gt.Children.Count - 1
-                            If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
-                                Dim rt As RotateTransform = gt.Children.Item(k)
-                                If rt IsNot Nothing Then
-                                    _ListElement.Item(j).Rotation = rt.Angle 'child.RenderTransform.GetValue(RotateTransform.AngleProperty)
-                                End If
-                                Exit For
-                            End If
-                        Next
-                    End If
-                    If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
-                        _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
-                    End If
-                End If
-            Next
-
-            Dim lbl As uWidgetEmpty = child.Content
-            lbl.IsHitTestVisible = True
-        Next
-
+        Catch ex As Exception
+            MessageBox.Show("Erreur Resize: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub NewWidgetEmpty_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetEmpty.Click
-        'Ajouter un nouveau Control
-        Dim x As New ContentControl
-        x.Width = 100
-        x.Height = 100
-        x.Style = mybuttonstyle
-        x.Tag = True
-        x.Uid = System.Guid.NewGuid.ToString()
+        Try
+            'Ajouter un nouveau Control
+            Dim x As New ContentControl
+            x.Width = 100
+            x.Height = 100
+            x.Style = mybuttonstyle
+            x.Tag = True
+            x.Uid = System.Guid.NewGuid.ToString()
 
-        'Ajoute l'élément dans la liste
-        Dim elmt As New uWidgetEmpty
-        elmt.Uid = x.Uid
-        elmt.ZoneId = _CurrentIdZone
-        elmt.Width = 100
-        elmt.Height = 100
-        elmt.Rotation = 0
-        elmt.X = 300
-        elmt.Y = 300
-        elmt.IsEmpty = True
-        elmt.Type = uWidgetEmpty.TypeOfWidget.Empty
-        elmt.ShowStatus = False
-        elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
-        _ListElement.Add(elmt)
+            'Ajoute l'élément dans la liste
+            Dim elmt As New uWidgetEmpty
+            elmt.Uid = x.Uid
+            elmt.ZoneId = _CurrentIdZone
+            elmt.Width = 100
+            elmt.Height = 100
+            elmt.Rotation = 0
+            elmt.X = 300
+            elmt.Y = 300
+            elmt.IsEmpty = True
+            elmt.Type = uWidgetEmpty.TypeOfWidget.Empty
+            elmt.ShowStatus = False
+            elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            _ListElement.Add(elmt)
 
-        elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
-        x.Content = elmt
-        Canvas1.Children.Add(x)
-        Canvas.SetLeft(x, 300)
-        Canvas.SetTop(x, 300)
+            elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            x.Content = elmt
+            Canvas1.Children.Add(x)
+            Canvas.SetLeft(x, 300)
+            Canvas.SetTop(x, 300)
+        Catch ex As Exception
+            MessageBox.Show("Erreur NewWidgetEmpty: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub NewWidgetWeb_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetWeb.Click
@@ -1884,7 +1839,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur NewWidgetWeb: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1919,7 +1874,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur NewWidgetRss: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1954,7 +1909,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur NewWidgetMeteo: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1989,10 +1944,47 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur NewWidgetKeyPad: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
+    Private Sub NewWidgetLabel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetLabel.Click
+        Try
+            'Ajouter un nouveau Control
+            Dim x As New ContentControl
+            x.Width = 100
+            x.Height = 25
+            x.Style = mybuttonstyle
+            x.Tag = True
+            x.Uid = System.Guid.NewGuid.ToString()
+
+            'Ajoute l'élément dans la liste
+            Dim elmt As New uWidgetEmpty
+            elmt.Uid = x.Uid
+            elmt.ZoneId = _CurrentIdZone
+            elmt.Width = 100
+            elmt.Height = 25
+            elmt.Rotation = 0
+            elmt.X = 300
+            elmt.Y = 300
+            elmt.IsEmpty = True
+            elmt.Type = uWidgetEmpty.TypeOfWidget.Label
+            elmt.ShowStatus = False
+            elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            _ListElement.Add(elmt)
+
+            elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            x.Content = elmt
+            Canvas1.Children.Add(x)
+            Canvas.SetLeft(x, 300)
+            Canvas.SetTop(x, 300)
+            Canvas.SetZIndex(x, 0)
+        Catch ex As Exception
+            MessageBox.Show("Erreur NewWidgetLabel_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+#Region "Menu"
 
     Private Sub ViewLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewLog.Click
         Try
@@ -2015,7 +2007,7 @@ Class Window1
             Me.Cursor = Nothing
         Catch ex As Exception
             Me.Cursor = Nothing
-            MessageBox.Show("Erreur ViewLog_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur ViewLog: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -2025,7 +2017,7 @@ Class Window1
             x.Owner = Me
             x.ShowDialog()
         Catch ex As Exception
-            MessageBox.Show("Erreur:" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur ViewCalendar:" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -2040,24 +2032,68 @@ Class Window1
             Canvas1.Children.Add(x)
         Catch ex As Exception
             Me.Cursor = Nothing
-            MessageBox.Show("Erreur MnuHisto_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur MnuHisto: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
     Private Sub MnuExecuteMacro(ByVal sender As Object, ByVal e As RoutedEventArgs)
-        myService.RunMacro(IdSrv, sender.tag)
+        Try
+            myService.RunMacro(IdSrv, sender.tag)
+        Catch ex As Exception
+            MessageBox.Show("Erreur MnuMacro_MouseDown: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
-    Private Sub MnuMacro_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles MnuMacro.PreviewMouseDown
-        MnuMacro.Items.Clear()
-        For Each _mac As Macro In myService.GetAllMacros(IdSrv)
-            Dim mnu As New MenuItem
-            mnu.Tag = _mac.ID
-            mnu.Header = _mac.Nom
-            AddHandler mnu.Click, AddressOf MnuExecuteMacro
-            MnuMacro.Items.Add(mnu)
-        Next
+    Private Sub MnuMacro_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles MnuMacro.MouseDown
+        Try
+            MnuMacro.Items.Clear()
+            For Each _mac As Macro In myService.GetAllMacros(IdSrv)
+                Dim mnu As New MenuItem
+                mnu.Tag = _mac.ID
+                mnu.Header = _mac.Nom
+                AddHandler mnu.Click, AddressOf MnuExecuteMacro
+                MnuMacro.Items.Add(mnu)
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur MnuMacro_MouseDown: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
+
+    Private Sub MnuConfig_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuConfig.Click
+        Try
+            ImageBackGround = _ImageBackGroundDefault
+            Dim x As New WConfig(Me)
+            x.Owner = Me
+            x.ShowDialog()
+            If x.DialogResult.HasValue And x.DialogResult.Value Then
+                imgStackPnl.Children.Clear()
+                For i As Integer = 0 To ListMnu.Count - 1
+                    AddHandler ListMnu.Item(i).click, AddressOf IconMnuDoubleClick
+                    If ListMnu.Item(i).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
+                        If ListMnu.Item(i).Visible = True Then imgStackPnl.Children.Add(ListMnu.Item(i))
+                    Else
+                        imgStackPnl.Children.Add(ListMnu.Item(i))
+                    End If
+                Next
+                x.Close()
+            Else
+                x.Close()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur MnuConfig_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+#End Region
+
+
+    Private Sub Window1_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
+        Try
+            Me.Cursor = Nothing
+        Catch ex As Exception
+            MessageBox.Show("Erreur Window1_Loaded: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
 
 
 End Class

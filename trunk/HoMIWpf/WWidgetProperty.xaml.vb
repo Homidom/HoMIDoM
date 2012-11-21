@@ -20,6 +20,7 @@ Public Class WWidgetProperty
             ChkEditValue.IsChecked = Obj.CanEditValue
             ChkPicture.IsChecked = Obj.ShowPicture
             TxtEtiq.Text = Obj.Etiquette
+            TxtSizeEtiq.Text = Obj.TailleEtiquette
             TxtX.Text = Obj.X
             TxtY.Text = Obj.Y
             TxtWidth.Text = Obj.Width
@@ -158,7 +159,17 @@ Public Class WWidgetProperty
                             Next
 
                             CbDeviceKeyPad.SelectedIndex = idx
+
                         End If
+                    Case uWidgetEmpty.TypeOfWidget.Label
+                        StkPicture.Visibility = Visibility.Collapsed
+                        StkStatus.Visibility = Visibility.Collapsed
+                        ChkShowStatus.Visibility = Visibility.Collapsed
+                        ChkShowEtiq.Visibility = Visibility.Collapsed
+                        BtnEditAction.Visibility = Windows.Visibility.Collapsed
+                        ChkEditValue.Visibility = Windows.Visibility.Collapsed
+                        BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                        BtnDelete.Visibility = Windows.Visibility.Visible
                 End Select
 
             End If
@@ -189,6 +200,13 @@ Public Class WWidgetProperty
 
             Try
                 Obj.TailleStatus = TxtTailleStatus.Text
+            Catch ex As Exception
+                MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Exit Sub
+            End Try
+
+            Try
+                Obj.TailleEtiquette = CDbl(TxtSizeEtiq.Text)
             Catch ex As Exception
                 MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Exit Sub

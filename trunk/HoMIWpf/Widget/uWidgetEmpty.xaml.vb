@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Threading
 Imports System.Reflection
+Imports System.Threading
 
 Public Class uWidgetEmpty
     Public Enum TypeOfWidget
@@ -9,6 +10,7 @@ Public Class uWidgetEmpty
         Rss = 3
         Meteo = 4
         KeyPad = 5
+        Label = 6
         Device = 99
     End Enum
 
@@ -22,6 +24,7 @@ Public Class uWidgetEmpty
     Dim _ShowStatus As Boolean = True 'Affiche le status - Oui par défaut
     Dim _ShowEtiquette As Boolean = True 'Affiche le libellé du composant par défaut - Oui par défaut
     Dim _Etiquette As String = "" 'Etiquette
+    Dim _TailleEtiquette As Double = 9
     Dim _X As Double = 0
     Dim _Y As Double = 0
     Dim _Rotation As Double = 0
@@ -287,9 +290,9 @@ Public Class uWidgetEmpty
                     Case TypeOfWidget.Web
                         StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
                         StkTool.Visibility = Windows.Visibility.Visible
-
                         _Webbrowser = New WebBrowser
-                        AddHandler _Webbrowser.Navigated, AddressOf x_Navigated
+                        AddHandler _Webbrowser.Navigated, AddressOf wb_Navigated
+                        AddHandler _Webbrowser.Navigating, AddressOf wb_Navigating
                         _Webbrowser.VerticalAlignment = Windows.VerticalAlignment.Stretch
                         StkTool.Children.Add(_Webbrowser)
                     Case TypeOfWidget.Rss
@@ -312,12 +315,27 @@ Public Class uWidgetEmpty
                         _KeyPad = New uKeyPad
                         AddHandler _KeyPad.KeyPadOk, AddressOf KeyPadOK
                         StkTool.Children.Add(_KeyPad)
+                    Case TypeOfWidget.Label
+                        ColorBackGround = Brushes.Transparent
+                        Lbl.MinWidth = 100
+                        StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
+                        StkTool.Visibility = Windows.Visibility.Collapsed
+                        ShowPicture = False
                 End Select
             Catch ex As Exception
-                MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                MessageBox.Show("Erreur Property Type Set: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End Try
         End Set
     End Property
+
+
+    Private Sub wb_Navigated(ByVal sender As Object, ByVal e As System.Windows.Navigation.NavigationEventArgs)
+        SuppressScriptErrors(sender, True)
+    End Sub
+
+    Private Sub wb_Navigating(ByVal sender As Object, ByVal e As System.Windows.Navigation.NavigatingCancelEventArgs)
+        SuppressScriptErrors(sender, True)
+    End Sub
 
     Public Property CanEditValue As Boolean
         Get
@@ -358,6 +376,20 @@ Public Class uWidgetEmpty
         Set(ByVal value As String)
             _Etiquette = value
             Lbl.Content = _Etiquette
+        End Set
+    End Property
+
+    Public Property TailleEtiquette As Double
+        Get
+            Return _TailleEtiquette
+        End Get
+        Set(ByVal value As Double)
+            Try
+                _TailleEtiquette = value
+                Lbl.FontSize = value
+            Catch ex As Exception
+                MessageBox.Show("Erreur Property TailleEtiquette Set: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
         End Set
     End Property
 
@@ -568,27 +600,25 @@ Public Class uWidgetEmpty
         Set(ByVal value As String)
             _URL = value
             Try
-                If My.Computer.Network.IsAvailable = True Then
-                    _Webbrowser.Navigate(New Uri(_URL))
+                If My.Computer.Network.IsAvailable = True And _URL <> "" Then
+                    _Webbrowser.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() _Webbrowser.Navigate(New Uri(_URL)), ThreadStart))
                 End If
             Catch ex As Exception
-                'MessageBox.Show("Erreur (URL ou autre): " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                MessageBox.Show("Erreur UWidget.Empty.URL: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End Try
         End Set
     End Property
 
     Sub SuppressScriptErrors(ByVal wb As Controls.WebBrowser, ByVal Hide As Boolean)
-        Dim fi As FieldInfo = GetType(Controls.WebBrowser).GetField("_axIWebBrowser2", BindingFlags.NonPublic)
-        If fi IsNot Nothing Then
-            Dim browser As Controls.WebBrowser = fi.GetValue(wb)
-            If browser IsNot Nothing Then
-                browser.[GetType]().InvokeMember("Silent", BindingFlags.SetProperty, Nothing, browser, New Object() {Hide})
-            End If
+        Dim fiComWebBrowser As FieldInfo = GetType(WebBrowser).GetField("_axIWebBrowser2", BindingFlags.Instance Or BindingFlags.NonPublic)
+        If fiComWebBrowser Is Nothing Then
+            Return
         End If
-
-    End Sub
-
-    Private Sub x_Navigated(ByVal sender As Object, ByVal e As System.Windows.Navigation.NavigationEventArgs)
+        Dim objComWebBrowser As Object = fiComWebBrowser.GetValue(wb)
+        If objComWebBrowser Is Nothing Then
+            Return
+        End If
+        objComWebBrowser.[GetType]().InvokeMember("Silent", BindingFlags.SetProperty, Nothing, objComWebBrowser, New Object() {Hide})
     End Sub
 
 
@@ -618,7 +648,7 @@ Public Class uWidgetEmpty
     End Property
 #End Region
 
-#Region "Property/Sub Meteo"
+#Region "Property/Sub Keypad"
     Public Property IDKeyPad As String
         Get
             Return _IDKeyPad
@@ -692,16 +722,26 @@ Public Class uWidgetEmpty
         InitializeComponent()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        _dt = New DispatcherTimer()
-        AddHandler _dt.Tick, AddressOf dispatcherTimer_Tick
-        _dt.Interval = New TimeSpan(0, 0, _Refresh)
-        _dt.Start()
+        Try
+            _dt = New DispatcherTimer()
+            AddHandler _dt.Tick, AddressOf dispatcherTimer_Tick
+            _dt.Interval = New TimeSpan(0, 0, _Refresh)
+            _dt.Start()
 
-        LblStatus.Content = DefautLabelStatus
+            LblStatus.Content = DefautLabelStatus
+        Catch ex As Exception
+            MessageBox.Show("Erreur New: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub TraiteRefresh()
         Try
+            Try
+                Dim str As String = myService.GetTime
+            Catch ex As Exception
+                IsConnect = False
+            End Try
+
             If _ModeEdition = False And IsConnect Then
                 If _Visuel.Count > 0 Then
                     For Each _ElmtVisu As cWidget.Visu In _Visuel
@@ -815,107 +855,119 @@ Public Class uWidgetEmpty
     End Sub
 
     Private Sub uWidgetEmpty_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
-        Select Case _type
-            Case TypeOfWidget.Web
-                _Webbrowser.Width = Me.ActualWidth
-                _Webbrowser.Height = Me.ActualHeight - 20
-            Case TypeOfWidget.Rss
-                _RSS.Width = Me.ActualWidth
-                _RSS.Height = Me.ActualHeight - 20
-        End Select
+        Try
+            Select Case _type
+                Case TypeOfWidget.Web
+                    _Webbrowser.Width = Me.ActualWidth
+                    _Webbrowser.Height = Me.ActualHeight
+                Case TypeOfWidget.Rss
+                    _RSS.Width = Me.ActualWidth
+                    _RSS.Height = Me.ActualHeight
+            End Select
+        Catch ex As Exception
+            MessageBox.Show("Erreur uWidgetEmpty_Loaded: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub uWidgetEmpty_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Me.MouseLeave
-        If e.LeftButton = MouseButtonState.Released Then Exit Sub
+        Try
+            If e.LeftButton = MouseButtonState.Released Then Exit Sub
 
-        Dim _NewPos As Point = e.GetPosition(Me)
-        Dim _DiffY As Double = _oldposition.Y - _NewPos.Y
-        Dim _DiffX As Double = _oldposition.X - _NewPos.X
+            Dim _NewPos As Point = e.GetPosition(Me)
+            Dim _DiffY As Double = _oldposition.Y - _NewPos.Y
+            Dim _DiffX As Double = _oldposition.X - _NewPos.X
 
-        'Gesture Bas Haut 
-        If _DiffY > 20 And (-20 < _DiffX < 20) Then
-            If IsEmpty = True And _type = TypeOfWidget.Empty Then
-                Traite_Action_BasHaut()
+            'Gesture Bas Haut 
+            If _DiffY > 20 And (-20 < _DiffX < 20) Then
+                If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                    Traite_Action_BasHaut()
+                End If
+                RaiseEvent GestureBasHaut(Me, e)
+                Exit Sub
             End If
-            RaiseEvent GestureBasHaut(Me, e)
-            Exit Sub
-        End If
-        'Gesture Haut Bas
-        If _DiffY < -20 And (-20 < _DiffX < 20) Then
-            If IsEmpty = True And _type = TypeOfWidget.Empty Then
-                Traite_Action_HautBas()
+            'Gesture Haut Bas
+            If _DiffY < -20 And (-20 < _DiffX < 20) Then
+                If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                    Traite_Action_HautBas()
+                End If
+                RaiseEvent GestureHautBas(Me, e)
+                Exit Sub
             End If
-            RaiseEvent GestureHautBas(Me, e)
-            Exit Sub
-        End If
-        'Gesture Gauche Droite
-        If _DiffX < -20 And (-20 < _DiffY < 20) Then
-            If IsEmpty = True And _type = TypeOfWidget.Empty Then
-                Traite_Action_GaucheDroite()
+            'Gesture Gauche Droite
+            If _DiffX < -20 And (-20 < _DiffY < 20) Then
+                If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                    Traite_Action_GaucheDroite()
+                End If
+                RaiseEvent GestureGaucheDroite(Me, e)
+                Exit Sub
             End If
-            RaiseEvent GestureGaucheDroite(Me, e)
-            Exit Sub
-        End If
-        'Gesture Droite Gauche
-        If _DiffX > 20 And (-20 < _DiffY < 20) Then
-            If IsEmpty = True And _type = TypeOfWidget.Empty Then
-                Traite_Action_DroiteGauche()
+            'Gesture Droite Gauche
+            If _DiffX > 20 And (-20 < _DiffY < 20) Then
+                If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                    Traite_Action_DroiteGauche()
+                End If
+                RaiseEvent GestureDroiteGauche(Me, e)
+                Exit Sub
             End If
-            RaiseEvent GestureDroiteGauche(Me, e)
-            Exit Sub
-        End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uWidgetEmpty_MouseLeave: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub Image_MouseLeftButtonUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Me.MouseLeftButtonUp
-        Dim vDiff As TimeSpan = Now - _Down
-        Dim _NewPos As Point = e.GetPosition(Me)
-        Dim _DiffY As Double = _oldposition.Y - _NewPos.Y
-        Dim _DiffX As Double = _oldposition.X - _NewPos.X
+        Try
+            Dim vDiff As TimeSpan = Now - _Down
+            Dim _NewPos As Point = e.GetPosition(Me)
+            Dim _DiffY As Double = _oldposition.Y - _NewPos.Y
+            Dim _DiffX As Double = _oldposition.X - _NewPos.X
 
-        'Gesture Bas Haut 
-        If _DiffY > 20 And (-20 < _DiffX < 20) Then
-            If IsEmpty = True And _type = TypeOfWidget.Empty Then
-                Traite_Action_BasHaut()
+            'Gesture Bas Haut 
+            If _DiffY > 20 And (-20 < _DiffX < 20) Then
+                If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                    Traite_Action_BasHaut()
+                End If
+                RaiseEvent GestureBasHaut(Me, e)
+                Exit Sub
             End If
-            RaiseEvent GestureBasHaut(Me, e)
-            Exit Sub
-        End If
-        'Gesture Haut Bas
-        If _DiffY < -20 And (-20 < _DiffX < 20) Then
-            If IsEmpty = True And _type = TypeOfWidget.Empty Then
-                Traite_Action_HautBas()
+            'Gesture Haut Bas
+            If _DiffY < -20 And (-20 < _DiffX < 20) Then
+                If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                    Traite_Action_HautBas()
+                End If
+                RaiseEvent GestureHautBas(Me, e)
+                Exit Sub
             End If
-            RaiseEvent GestureHautBas(Me, e)
-            Exit Sub
-        End If
-        'Gesture Gauche Droite
-        If _DiffX < -20 And (-20 < _DiffY < 20) Then
-            If IsEmpty = True And _type = TypeOfWidget.Empty Then
-                Traite_Action_GaucheDroite()
+            'Gesture Gauche Droite
+            If _DiffX < -20 And (-20 < _DiffY < 20) Then
+                If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                    Traite_Action_GaucheDroite()
+                End If
+                RaiseEvent GestureGaucheDroite(Me, e)
+                Exit Sub
             End If
-            RaiseEvent GestureGaucheDroite(Me, e)
-            Exit Sub
-        End If
-        'Gesture Droite Gauche
-        If _DiffX > 20 And (-20 < _DiffY < 20) Then
-            If IsEmpty = True And _type = TypeOfWidget.Empty Then
-                Traite_Action_DroiteGauche()
+            'Gesture Droite Gauche
+            If _DiffX > 20 And (-20 < _DiffY < 20) Then
+                If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                    Traite_Action_DroiteGauche()
+                End If
+                RaiseEvent GestureDroiteGauche(Me, e)
+                Exit Sub
             End If
-            RaiseEvent GestureDroiteGauche(Me, e)
-            Exit Sub
-        End If
 
-        If vDiff.Seconds < 1 Then
-            If IsEmpty = True And _type = TypeOfWidget.Empty Then
-                Traite_Action_OnClick()
+            If vDiff.Seconds < 1 Then
+                If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                    Traite_Action_OnClick()
+                End If
+                RaiseEvent Click(Me, e)
+            Else
+                If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                    Traite_Action_OnLongClick()
+                End If
+                RaiseEvent LongClick(Me, e)
             End If
-            RaiseEvent Click(Me, e)
-        Else
-            If IsEmpty = True And _type = TypeOfWidget.Empty Then
-                Traite_Action_OnLongClick()
-            End If
-            RaiseEvent LongClick(Me, e)
-        End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur Image_MouseLeftButtonUp: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
 #Region "Gerer_Action_Gesture"
@@ -1559,35 +1611,43 @@ Public Class uWidgetEmpty
     End Sub
 
     Private Sub uWidgetEmpty_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles Me.SizeChanged
-        Select Case _type
-            Case TypeOfWidget.Web
-                _Webbrowser.Width = Me.ActualWidth
-                _Webbrowser.Height = Me.ActualHeight - 20
-            Case TypeOfWidget.Rss
-                _RSS.Width = Me.ActualWidth
-                _RSS.Height = Me.ActualHeight - 20
-            Case TypeOfWidget.Meteo
-                Exit Sub
-            Case TypeOfWidget.KeyPad
-                Exit Sub
-        End Select
+        Try
 
-        If ShowEtiquette And ShowPicture Then
-            Image.Height = Me.ActualHeight - Lbl.ActualHeight
-        End If
-        If ShowEtiquette = False And ShowPicture Then
-            Image.Height = Me.ActualHeight
-        End If
-        If ShowStatus And ShowPicture Then
-            Image.Width = Me.ActualWidth - LblStatus.ActualWidth
-        End If
-        If ShowStatus = False And ShowPicture Then
-            Image.Width = Me.ActualWidth
-        End If
-        If ShowStatus Then
-            If Image.Width < Image.Height Then Image.Height = Image.Width
-            If Image.Height < Image.Width Then Image.Width = Image.Height
-        End If
+            Select Case _type
+                Case TypeOfWidget.Web
+                    _Webbrowser.Width = Me.ActualWidth
+                    _Webbrowser.Height = Me.ActualHeight - 20
+                Case TypeOfWidget.Rss
+                    _RSS.Width = Me.ActualWidth
+                    _RSS.Height = Me.ActualHeight - 20
+                Case TypeOfWidget.Meteo
+                    Exit Sub
+                Case TypeOfWidget.KeyPad
+                    Exit Sub
+                Case TypeOfWidget.Label
+                    Exit Sub
+            End Select
+
+            If ShowEtiquette And ShowPicture And Lbl.ActualHeight > 0 And Me.ActualHeight > 0 Then
+                Dim H As Double = Me.ActualHeight - Lbl.ActualHeight
+                If H > 0 Then Image.Height = H
+            End If
+            If ShowEtiquette = False And ShowPicture And Me.ActualHeight > 0 Then
+                Image.Height = Me.ActualHeight
+            End If
+            If ShowStatus And ShowPicture And LblStatus.ActualHeight > 0 And Me.ActualWidth > 0 Then
+                Image.Width = Me.ActualWidth - LblStatus.ActualWidth
+            End If
+            If ShowStatus = False And ShowPicture Then
+                Image.Width = Me.ActualWidth
+            End If
+            If ShowStatus Then
+                If Image.Width < Image.Height Then Image.Height = Image.Width
+                If Image.Height < Image.Width Then Image.Width = Image.Height
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uWidgetEmpty_SizeChanged: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Protected Overrides Sub Finalize()

@@ -45,7 +45,7 @@
                             </StackPanel>
                             <Rectangle Width="10"/>
                             <Label Content="Moyenne:" Foreground="White" VerticalAlignment="Center" />
-                            <ComboBox Background="DarkGray" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="2" Foreground="White" Name="ComboBoxMoyenne" SelectedIndex="0" Width="80">
+                            <ComboBox VerticalAlignment="Center" BorderBrush="Black" BorderThickness="2" Name="ComboBoxMoyenne" SelectedIndex="0" Width="80">
                                 <ComboBoxItem Content="Aucune" />
                                 <ComboBoxItem Content="Heure" />
                                 <ComboBoxItem Content="Jour" />

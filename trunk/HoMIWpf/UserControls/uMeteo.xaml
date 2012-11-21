@@ -9,11 +9,11 @@
                 <ImageBrush ImageSource="/HoMIWpF;component/Images/Panel01.png" Stretch="Fill" />
             </StackPanel.Background>
             <StackPanel Orientation="Horizontal">
-                    <Label FontSize="14" Foreground="White" Height="25" Margin="3" Name="Lbl" VerticalAlignment="Top" Width="188">Label</Label>
+                    <Label FontSize="14" Foreground="White" Margin="3" Name="Lbl" VerticalAlignment="Top" Width="188">Label</Label>
                     <Image Height="60" HorizontalAlignment="Right" Margin="3" Name="Ico" Stretch="Fill" VerticalAlignment="Top" Width="60" />        
                 </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Width="200" Height="Auto" Margin="3" Name="LblTemps" VerticalAlignment="Top" FontSize="14" Foreground="White">?</Label>
+            <StackPanel >
+                <Label Width="250" Height="Auto" Margin="3" Name="LblTemps" VerticalAlignment="Top" FontSize="12" Foreground="White" HorizontalAlignment="Left">?</Label>
                 <Label Height="54" HorizontalAlignment="Right" Margin="3" Name="LblTemp" VerticalAlignment="Top" Width="64" Foreground="White" FontSize="34">0°</Label>
             </StackPanel>
                 <StackPanel VerticalAlignment="Top" >

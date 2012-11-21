@@ -39,51 +39,59 @@
             <DockPanel >
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Height="25" Name="StkTop">
                 <Menu >
-                    <MenuItem Header="Homidom" Name="MenuItem1">
+                    <MenuItem Header="Homidom" Name="MenuItem1" Opacity="50">
                         <MenuItem.Icon>
                             <Image Source="/HoMIWpF;component/icone.ico" />
                         </MenuItem.Icon>
                         <MenuItem Name="Chk1" Header="Déplacer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10">
                             <MenuItem.Icon>
-                                <Image Width="20" Height="20" Source="/HoMIWpF;component/Images/move.png" />
+                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/move.png" />
                             </MenuItem.Icon>
                             </MenuItem>
                         <MenuItem Name="Chk2" Header="Editer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10" >
                             <MenuItem.Icon>
-                                <Image Width="20" Height="20" Source="/HoMIWpF;component/Images/Modifier_32.png" />
+                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Modifier_32.png" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Name="Chk3" Header="Ajouter" Visibility="Collapsed" FontSize="10">
                             <MenuItem.Icon>
-                                <Image Width="20" Height="20"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
                             </MenuItem.Icon>
                                 <MenuItem Name="NewWidgetEmpty" Header="Nouveau Widget Vide" FontSize="10" />
                                 <MenuItem Name="NewWidgetWeb" Header="Nouveau Widget Web" FontSize="10" />
                                 <MenuItem Name="NewWidgetRss" Header="Nouveau Widget Rss" FontSize="10" />
                                 <MenuItem Name="NewWidgetMeteo" Header="Nouveau Widget Meteo" FontSize="10" />
-                            <MenuItem Name="NewWidgetKeyPad" Header="Nouveau Widget KeyPad" FontSize="10" />
+                                <MenuItem Name="NewWidgetKeyPad" Header="Nouveau Widget KeyPad" FontSize="10" />
+                                <MenuItem Name="NewWidgetLabel" Header="Nouveau Widget Label" FontSize="10" />
                             </MenuItem>
                         <MenuItem Name="ViewLog" Header="Consulter les logs" FontSize="10" >
                             <MenuItem.Icon>
-                                <Image Width="20" Height="20" Source="/HoMIWpF;component/Images/Log_32.png" />
+                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Log_32.png" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Name="ViewCalendar" Header="Calendrier" FontSize="10" >
                             <MenuItem.Icon>
-                                <Image Width="20" Height="20" Source="/HoMIWpF;component/Images/Calendar.png" />
+                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Calendar.png" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Name="MnuHisto" Header="Historique" FontSize="10">
                             <MenuItem.Icon>
-                                <Image Width="20" Height="20" Source="/HoMIWpF;component/Images/Courbe_32.png" />
+                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Courbe_32.png" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Name="MnuMacro" Header="Macros" FontSize="10">
                             <MenuItem.Icon>
-                                <Image Width="20" Height="20" Source="/HoMIWpF;component/Images/script-128.png" />
+                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/script-128.png" />
                             </MenuItem.Icon>
                         </MenuItem>
-                    </MenuItem> 
+                        <MenuItem Name="MnuConfig" Header="Configurer" FontSize="10">
+                            <MenuItem.Icon>
+                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Configurer_64.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                    </MenuItem>
+
                 </Menu>
                 <Label Margin="1" Name="LblTime" FontSize="10" Foreground="White" FlowDirection="RightToLeft">#####</Label>
                 <StackPanel Orientation="Horizontal" >
