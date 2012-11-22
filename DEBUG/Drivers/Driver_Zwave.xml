@@ -91,6 +91,9 @@ Driver_Zwave
 </member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.fermer">
 	<summary>Fermer le port Z-Wave</summary>
 	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.ResetControler">
+	<summary>Reset le controleur Z-Wave avec les parametres d'Usine</summary>
+	<remarks></remarks>
 </member><member name="T:Driver_Zwave.Driver_ZWave.Driver_ZWave">
 	<summary>Class Driver_ZWave, permet de communiquer avec le controleur Z-Wave</summary>
 	<remarks>Nécessite l'installation des pilotes fournis sur le site </remarks>
