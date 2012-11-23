@@ -176,32 +176,70 @@ Module Service
                 myxml = New XML(MyRep)
 
                 list = myxml.SelectNodes("/homidom/server")
-                If list.Count > 0 Then 'présence des paramètres du server
-                    For j As Integer = 0 To list.Item(0).Attributes.Count - 1
-                        Select Case list.Item(0).Attributes.Item(j).Name
-                            Case "ipsoap"
-                                _Addrip = list.Item(0).Attributes.Item(j).Value
-                            Case "portsoap"
-                                _portip = list.Item(0).Attributes.Item(j).Value
-                            Case "idsrv"
-                                _IdSrv = list.Item(0).Attributes.Item(j).Value
-                        End Select
-                    Next
-                Else
-                    _portip = ""
+                If list IsNot Nothing Then
+                    If list.Count > 0 Then 'présence des paramètres du server
+                        For j As Integer = 0 To list.Item(0).Attributes.Count - 1
+                            Select Case list.Item(0).Attributes.Item(j).Name
+                                Case "ipsoap"
+                                    _Addrip = list.Item(0).Attributes.Item(j).Value
+                                Case "portsoap"
+                                    _portip = list.Item(0).Attributes.Item(j).Value
+                                Case "idsrv"
+                                    _IdSrv = list.Item(0).Attributes.Item(j).Value
+                            End Select
+                        Next
+                    Else
+                        _portip = ""
+                    End If
                 End If
-
             End If
+
             Return _portip
         Catch ex As Exception
-            MsgBox("Erreur lors du service: " & ex.Message, MsgBoxStyle.Critical, "ERREUR SERVICE LoadPort")
+            Dim reponse As MsgBoxResult = MsgBox("Erreur lors de la lecture des paramètres du serveur dans le fichier xml: " & ex.Message & vbCrLf & "Voulez-vous tenter de récupérer ces paramètres depuis le fichier de config sauvegardé?", MsgBoxStyle.YesNo, "ERREUR SERVICE LoadPort")
             Console.WriteLine(Now & " ERREUR LoadPort : " & ex.Message & " : " & ex.ToString)
-            Console.ReadLine()
-            Return ""
+
+            If reponse = MsgBoxResult.Yes Then
+                Try 'Seconde chance
+                    Dim _portip As String = ""
+                    MyRep = MyRep & "\Config\homidom.sav"
+
+                    If File.Exists(MyRep) = True Then
+                        Dim myxml As XML
+                        Dim list As XmlNodeList
+
+                        myxml = New XML(MyRep)
+
+                        list = myxml.SelectNodes("/homidom/server")
+                        If list IsNot Nothing Then
+                            If list.Count > 0 Then 'présence des paramètres du server
+                                For j As Integer = 0 To list.Item(0).Attributes.Count - 1
+                                    Select Case list.Item(0).Attributes.Item(j).Name
+                                        Case "ipsoap"
+                                            _Addrip = list.Item(0).Attributes.Item(j).Value
+                                        Case "portsoap"
+                                            _portip = list.Item(0).Attributes.Item(j).Value
+                                        Case "idsrv"
+                                            _IdSrv = list.Item(0).Attributes.Item(j).Value
+                                    End Select
+                                Next
+                            Else
+                                _portip = ""
+                            End If
+                        End If
+                    End If
+                    Return _portip
+                Catch ex2 As Exception
+                    MsgBox("Erreur lors de la lecture des paramètres du serveur dans le fichier xml de sauvegarde: " & ex.Message, MsgBoxStyle.Critical, "ERREUR SERVICE LoadPort")
+                    Console.WriteLine(Now & " ERREUR LoadPort seconde chance: " & ex.Message & " : " & ex.ToString)
+                    Console.ReadLine()
+                    Return ""
+                End Try
+            Else
+                Return ""
+            End If
         End Try
     End Function
-
-
 
     Sub close()
         Try

@@ -415,6 +415,33 @@ Namespace HoMIDom
 
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement du fichier config: " & myfile)
 
+                        'on va tester le fichier
+                        If myxml IsNot Nothing Then
+                            Try
+                                list = myxml.SelectNodes("/homidom/server")
+                            Catch ex3 As Exception
+                                Dim reponse As MsgBoxResult = MsgBox("Erreur lors de la lecture du fichier de config: " & ex3.Message & vbCrLf & vbCrLf & "Voulez-vous tenter de démarrer depuis le fichier de config sauvegardé (si Oui pensez à sauvegarder la configuration depuis l'admin si réussite)?", MsgBoxStyle.YesNo, "ERREUR SERVICE LoadConfig")
+                                Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement de la configuration du serveur : " & ex3.ToString)
+
+                                If reponse = MsgBoxResult.Yes Then
+                                    Try 'Seconde chance
+                                        Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement de la configuration chargement du fichier de sauvegarde")
+                                        myfile = myfile.Replace(".xml", ".sav") 'on va chercher le fichier sav
+
+                                        If IO.File.Exists(myfile) = True Then
+                                            myxml = New XML(myfile)
+                                            list = myxml.SelectNodes("/homidom/server")
+                                        Else
+                                            Return "Erreur lors du chargement de la configuration du serveur en seconde chance car le fichier de sauvegarde n'existe pas"
+                                        End If
+
+                                    Catch ex2 As Exception
+                                        Return "Erreur lors du chargement de la configuration du serveur en seconde chance : " & ex2.ToString
+                                    End Try
+                                End If
+                            End Try
+                        End If
+
                         '******************************************
                         'on va chercher les paramètres du serveur
                         '******************************************
