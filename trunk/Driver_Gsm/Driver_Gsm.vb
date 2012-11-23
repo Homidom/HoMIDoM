@@ -537,6 +537,10 @@ Imports System.IO.Ports
                                         For Each Message In messages
                                             MsgLocation = Message.Index
                                             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write SmsReceive", " message recu: " & Message.Data.UserDataText)
+
+                                            ReceptionSMS("RECEIVED", "0000000000", Message.Data.UserDataText, "2012/01/01 00:00:00")
+
+
                                             ' Message.Data.UserDataText) '& (Message.Status).ToString & (Message.Storage).ToString & (Message.Index).ToString
                                             counter = counter + 1
                                             'Thread.Sleep(1000)
@@ -952,7 +956,7 @@ Imports System.IO.Ports
 
                     comm.Open()
 
-                    'comm.EnableMessageNotifications()
+                    comm.EnableMessageNotifications()
                     'comm.EnableMessageRouting()
                     Return ("Port " & _Com & " ouvert")
                 Else
