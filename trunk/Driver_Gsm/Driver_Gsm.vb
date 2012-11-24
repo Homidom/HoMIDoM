@@ -76,6 +76,7 @@ Imports System.IO.Ports
     'param avancé
     Dim _DEBUG As Boolean = False
     Dim _MODE As String = "PDU"
+    Dim _BAUD As Integer = "57600"
     Dim _PinCode As String = ""
     '    Dim _STORAGE As PhoneStorageType
 
@@ -350,7 +351,8 @@ Imports System.IO.Ports
         Try
             _DEBUG = _Parametres.Item(0).Valeur.ToString.ToUpper
             _MODE = _Parametres.Item(1).Valeur.ToString.ToUpper
-            _PinCode = _Parametres.Item(2).Valeur.ToString.ToUpper
+            _BAUD = _Parametres.Item(2).Valeur.ToString.ToUpper
+            _PinCode = _Parametres.Item(3).Valeur.ToString.ToUpper
 
             '_STORAGE = _Parametres.Item(2).Valeur
         Catch ex As Exception
@@ -729,7 +731,8 @@ Imports System.IO.Ports
 
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", True)
             Add_ParamAvance("Mode", "Choisir le mode de connexion (PDU/TEXTE)", "PDU")
-            Add_ParamAvance("PinCode", "Code PIN de la cate SIM ( not yet implemeted )", "")
+            Add_ParamAvance("Baud", "Vitesse du port : 300|600|1200|2400|9600|14400|19200|38400|57600|115200", "57600")
+            Add_ParamAvance("PinCode", "En test, inscrire le code pin de la carte SIM", "")
             'Add_ParamAvance("storage", "sim card : true / gsm : false", True)
             'ajout des commandes avancées pour les devices
 
@@ -785,10 +788,10 @@ Imports System.IO.Ports
                     ' reponse 0 pour le mode PDU
                     ' reponse 1 pour le mode TEXT
                     '
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| ouverture du port : " & port_name)
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| ouverture du port : " & port_name & " à " & _BAUD & " bauds")
 
                     ATport.PortName = port_name 'nom du port : COM1
-                    ATport.BaudRate = 9600 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
+                    ATport.BaudRate = _BAUD 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
                     ATport.Parity = Parity.None 'pas de parité
                     ATport.StopBits = StopBits.One '1 bit d'arrêt par octet
                     ATport.DataBits = 8 'nombre de bit par octet
@@ -799,6 +802,7 @@ Imports System.IO.Ports
                     ATport.ReadTimeout = 100
                     ATport.WriteTimeout = 500
                     ATport.Open()
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| port ouvert : " & port_name)
 
                     Dim sIncomming As String = ""
                     'at+CLAC
@@ -833,9 +837,6 @@ Imports System.IO.Ports
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| " & sIncomming)
 
 
-
-
-
                     'AT+CMFG=?  lister les mode supporté
                     Do Until Left(sIncomming, 6) = "+CMGF:"
                         ATport.WriteLine("AT+CMGF=?" & vbCrLf) ' vbcrlf
@@ -861,32 +862,32 @@ Imports System.IO.Ports
                                 MODES(m) = "UNKNOW"
                                 _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MODE", "| Mode " & m & " inconnu ( ne sera pas utilisé)")
                         End Select
-
-
-                        'quel heure est  il ?
-
-                        '
-                        Do Until Left(sIncomming, 5) = "+CCLK"
-                            ATport.WriteLine("AT+CCLK?" & vbCrLf) ' vbcrlf
-                            sIncomming = ATport.ReadLine()
-                        Loop
-                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "|  AT+CCLK?")
-                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| " & sIncomming)
-
-
-                        'If _MODE = MODES(m) Then
-                        'SuportedMode = True
-                        'Else
-                        'SuportedMode = SuportedMode Or False
-                        '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Driver non démarré : Le mode '" & _MODE & "' n'est pas correct, choisi PDU ou TEXTE")
-                        'End If
                     Next
+
+                    'quel heure est  il ?
+
+                    '
+                    Do Until Left(sIncomming, 5) = "+CCLK"
+                        ATport.WriteLine("AT+CCLK?" & vbCrLf) ' vbcrlf
+                        sIncomming = ATport.ReadLine()
+                    Loop
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "|  AT+CCLK?")
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| " & sIncomming)
+
+
+                    'If _MODE = MODES(m) Then
+                    'SuportedMode = True
+                    'Else
+                    'SuportedMode = SuportedMode Or False
+                    '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Driver non démarré : Le mode '" & _MODE & "' n'est pas correct, choisi PDU ou TEXTE")
+                    'End If
+
                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GSM Mode", "+---------------------------------------------------------------------------------------------")
                     ATport.Close()
                 Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
 
-        End Try
+                End Try
 
 
 
@@ -907,11 +908,8 @@ Imports System.IO.Ports
                     If SuportedMode = False Then
                         For n As Integer = 0 To MODES.Length - 1
                             If n > 1 Then
-
                                 _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| SuportedMode : '" & MODES(n).ToString & "'.")
-
                                 ModeToUse = MODES(n)
-
                             Else
                                 ModeToUse = ModeToUse & " ou " & MODES(n)
                             End If
@@ -923,7 +921,6 @@ Imports System.IO.Ports
                         ' 
                     Else
                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| Démarrage du driver avec le mode '" & _MODE & "'.")
-
                     End If
 
                     ' If _MODE <> "PDU" And _MODE <> "TEXTE" Then
@@ -933,7 +930,6 @@ Imports System.IO.Ports
                     'End If
 
                     'interroge le tel/modem pour verifier si ce mode est supporté
-
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur Dans la verification du mode " & ex.Message)
                 End Try
@@ -951,14 +947,14 @@ Imports System.IO.Ports
                     'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
                     Dim portnumber As Integer
                     If (Integer.TryParse(numero.Substring(3), portnumber)) Then
-                        comm = New GsmCommMain(portnumber, 57600, 100)
+                        comm = New GsmCommMain(portnumber, _BAUD, 100)
                     End If
 
                     comm.Open()
 
                     comm.EnableMessageNotifications()
                     'comm.EnableMessageRouting()
-                    Return ("Port " & _Com & " ouvert")
+                    Return ("Port " & _Com & " ouvert à " & _BAUD & " bauds.")
                 Else
                     Return ("Port " & _Com & " dejà ouvert")
                 End If
@@ -966,7 +962,7 @@ Imports System.IO.Ports
             Case "TEXTE"
                 If Not _IsConnect Then
                     ATport.PortName = port_name 'nom du port : COM1
-                    ATport.BaudRate = 9600 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
+                    ATport.BaudRate = _BAUD 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
                     ATport.Parity = Parity.None 'pas de parité
                     ATport.StopBits = StopBits.One '1 bit d'arrêt par octet
                     ATport.DataBits = 8 'nombre de bit par octet
@@ -977,7 +973,7 @@ Imports System.IO.Ports
                     ATport.ReadTimeout = 100
                     ATport.WriteTimeout = 500
                     ATport.Open()
-                    Return ("Port " & port_name & " ouvert")
+                    Return ("Port " & port_name & " ouvert à " & _BAUD & " bauds.")
                 Else
                     Return ("Port " & port_name & " dejà ouvert")
                 End If
