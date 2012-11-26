@@ -441,7 +441,7 @@ Imports System.IO.Ports
                                         pdu = New SmsSubmitPdu(Parametre1, Objet.adresse1.ToString, "")
                                         comm.SendMessage(pdu, True)
                                         'on modifie la valeur du composant pour stocker les sms envoyés
-                                        Objet.Value = "SEND - " & Parametre1
+                                        Objet.Value = "SEND    : " & Parametre1
                                     End If
                                 Else
                                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "No GSM Phone / Modem Connected")
@@ -485,7 +485,7 @@ Imports System.IO.Ports
                                         Loop
                                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS envoyé : " & sIncomming)
                                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS envoyé : " & Parametre1 & " à " & Objet.adresse1.ToString)
-                                        Objet.Value = "SEND - " & Parametre1
+                                        Objet.Value = "SEND    : " & Parametre1
                                     End If
                                 Else
                                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "No GSM Phone / Modem Connected")
@@ -980,8 +980,15 @@ Imports System.IO.Ports
                                 If TypeOf Message.Data Is SmsDeliverPdu Then
                                     Dim data As SmsDeliverPdu = CType(Message.Data, SmsDeliverPdu)
                                     ReceptionSMS("RECEIVED", data.OriginatingAddress, data.UserDataText, data.SCTimestamp.ToString())
+                                ElseIf TypeOf Message.Data Is SmsSubmitPdu Then
+                                    Dim data As SmsSubmitPdu = CType(Message.Data, SmsSubmitPdu)
+                                    ReceptionSMS("STORED", data.DestinationAddress, data.UserDataText, "")
+                                    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Lecture_sms", " -> sms envoyé à " & data.DestinationAddress & " : " & data.UserDataText)
+                                ElseIf TypeOf Message.Data Is SmsStatusReportPdu Then
+                                    Dim data As SmsStatusReportPdu = CType(Message.Data, SmsStatusReportPdu)
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Lecture_sms", " -> sms status report de " & data.RecipientAddress & ", Status: " & data.Status.ToString() & ", Date: " & data.DischargeTime.ToString())
                                 Else
-                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Lecture_sms", "le SMS lu n'est pas un sms reçu")
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Lecture_sms", " -> Format de SMS non reconnu: " & Message.Data.UserDataText)
                                 End If
                                 
                                 ' Message.Data.UserDataText) '& (Message.Status).ToString & (Message.Storage).ToString & (Message.Index).ToString
@@ -992,7 +999,7 @@ Imports System.IO.Ports
                                     comm.DeleteMessage(MsgLocation, PhoneStorageType.Phone)
                                     If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Lecture_sms", " -> Message effacé.")
                                 Catch ex As Exception
-                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Lecture_sms", "error deleting from inbox")
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Lecture_sms", " -> Error deleting from inbox")
                                     Exit Sub
                                 Finally
                                     messages = Nothing
@@ -1008,6 +1015,9 @@ Imports System.IO.Ports
                             _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM Lecture_sms", "error:" & ex.InnerException.Message)
                         End Try
                     Case "TEXTE"
+
+
+
 
                     Case Else : _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "No MODE configured")
                 End Select
@@ -1031,7 +1041,7 @@ Imports System.IO.Ports
             'If it's just a notification, print out the memory location of the new message
             If TypeOf obj Is MemoryLocation Then
                 Dim loc As MemoryLocation = CType(obj, MemoryLocation)
-                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MessageReceived", String.Format("Nouveau message reçu : {0}, index {1}.", loc.Storage, loc.Index))
+                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM MessageReceived", String.Format("Nouveau message reçu : {0}, index {1}.", loc.Storage, loc.Index))
                 'si le routage n'est pas actif, on lance une lecture manuelle du sms reçu
                 If _SMSROUTING = False Then Lecture_sms()
                 Exit Sub
@@ -1082,7 +1092,12 @@ Imports System.IO.Ports
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_Idsrv, numero, "", Me._ID, True)
             'un device trouvé on maj la value
             If (listedevices.Count = 1) Then
-                listedevices.Item(0).Value = "RECEIVE - " & texte & "(" & dateenvoi & ")"
+                If type = "RECEIVED" Then
+                    listedevices.Item(0).Value = "RECEIVED: " & texte & "(" & dateenvoi & ")"
+                ElseIf type = "STORED" Then
+                    listedevices.Item(0).Value = "STORED  : " & texte & "(" & dateenvoi & ")"
+                End If
+
             ElseIf (listedevices.Count > 1) Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM ReceptionSMS", "Plusieurs composants correspondent à : " & numero & ":" & texte)
             Else
