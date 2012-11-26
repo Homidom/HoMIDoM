@@ -977,16 +977,20 @@ Imports System.IO.Ports
                             ' Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.All, PhoneStorageType.Phone)
                             Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Phone)
                             For Each Message In messages
-                                MsgLocation = Message.Index
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Lecture_sms", " message recu: " & Message.Data.UserDataText)
-
-                                ReceptionSMS("RECEIVED", "0000000000", Message.Data.UserDataText, "2012/01/01 00:00:00")
-
+                                If TypeOf Message.Data Is SmsDeliverPdu Then
+                                    Dim data As SmsDeliverPdu = CType(Message.Data, SmsDeliverPdu)
+                                    ReceptionSMS("RECEIVED", data.OriginatingAddress, data.UserDataText, data.SCTimestamp.ToString())
+                                Else
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Lecture_sms", "le SMS lu n'est pas un sms reçu")
+                                End If
+                                
                                 ' Message.Data.UserDataText) '& (Message.Status).ToString & (Message.Storage).ToString & (Message.Index).ToString
                                 counter = counter + 1
                                 'Thread.Sleep(1000)
+                                MsgLocation = Message.Index
                                 Try
                                     comm.DeleteMessage(MsgLocation, PhoneStorageType.Phone)
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Lecture_sms", " -> Message effacé.")
                                 Catch ex As Exception
                                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Lecture_sms", "error deleting from inbox")
                                     Exit Sub
@@ -1057,7 +1061,7 @@ Imports System.IO.Ports
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MessageReceived", "STATUS REPORT, Recipient:" & data.RecipientAddress & ", Status:" & data.Status.ToString() & ", Timestamp: " & data.DischargeTime.ToString() & ", Message ref: " & data.MessageReference.ToString())
                     Exit Sub
                 End If
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM MessageReceived", "Typede SMS inconnu.")
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM MessageReceived", "Type de SMS inconnu.")
                 Exit Sub
             End If
 
