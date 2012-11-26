@@ -953,7 +953,7 @@ Imports System.IO.Ports
                     comm.Open()
 
                     comm.EnableMessageNotifications()
-                    'comm.EnableMessageRouting()
+                    comm.EnableMessageRouting()
                     Return ("Port " & _Com & " ouvert à " & _BAUD & " bauds.")
                 Else
                     Return ("Port " & _Com & " dejà ouvert")
