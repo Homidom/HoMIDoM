@@ -678,7 +678,7 @@ Imports System.IO.Ports
 
 #Region "Fonctions internes"
 
-    ''' <summary>Ouvrir le port du modem<</summary>
+    ''' <summary>Ouvrir le port du modem</summary>
     ''' <param name="numero">Nom/Numero du port COM</param>
     ''' <remarks></remarks>
     Private Function ouvrir(ByVal numero As String) As String

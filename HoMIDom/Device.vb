@@ -13,7 +13,7 @@ Namespace HoMIDom
     ''' <remarks></remarks>
     <Serializable()> Public Class Device
 
-        <NonSerialized()> Dim _Server As Server
+        <NonSerialized()> Shared _Server As Server
 
         ''' <summary>Indique la liste des devices gérés</summary>
         ''' <remarks></remarks>
@@ -449,7 +449,7 @@ Namespace HoMIDom
                         'si timer déjà lancé, on l'arrete
                         If MyTimer.Enabled Then MyTimer.Stop()
                         'si le serveur n'a pas fini de démarrer, on décale le lancement du timer pour eviter les conflits
-                        If Not Server.Etat_server Then System.Threading.Thread.Sleep(1100)
+                        If Not _Server.Etat_server Then System.Threading.Thread.Sleep(1100)
                         MyTimer.Interval = _Refresh
                         MyTimer.Start()
                     Else
@@ -578,7 +578,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As Double)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not Server.Etat_server Then
+                        If Not _Server.Etat_server Then
                             _Value = tmp
                             _ValueLast = tmp
                         Else
@@ -677,7 +677,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As Boolean)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not Server.Etat_server Then
+                        If Not _Server.Etat_server Then
                             _Value = tmp
                             _ValueLast = tmp
                         Else
@@ -823,37 +823,38 @@ Namespace HoMIDom
                     '    _Value = tmp 'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois
 
                     Try
-                        If Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
+                        'If Server.Etat_server Then RaiseEvent DeviceChanged(Me, "Value", _Value)
 
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        ''If Not _Server.Etat_server Then
-                        ''    _Value = tmp
-                        ''    _ValueLast = tmp
-                        ''Else
-                        _LastChange = Now
-                        If tmp < _ValueMin Then tmp = _ValueMin 'If tmp < 0 Then tmp = 0
-                        If tmp > _ValueMax Then tmp = _ValueMax 'If tmp > 100 Then tmp = 100
-                        If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                        tmp += _Correction
-
-                        If tmp = _Value Then
-                            _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceINT Value", _Name & " : " & _Adresse1 & " : " & _Value & " (Inchangé)")
+                        If Not _Server.Etat_server Then
+                            _Value = tmp
+                            _ValueLast = tmp
                         Else
-                            '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
-                            If _LastEtat And tmp = _ValueLast Then
-                                'log de "inchangé lastetat"
-                                _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceINT", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé lastetat " & _ValueLast.ToString & ")")
+                            _LastChange = Now
+                            If tmp < _ValueMin Then tmp = _ValueMin 'If tmp < 0 Then tmp = 0
+                            If tmp > _ValueMax Then tmp = _ValueMax 'If tmp > 100 Then tmp = 100
+                            If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
+                            tmp += _Correction
+
+                            If tmp = _Value Then
+                                _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceINT Value", _Name & " : " & _Adresse1 & " : " & _Value & " (Inchangé)")
                             Else
-                                'on vérifie que la valeur a changé de plus de precision sinon inchangé
-                                If ((tmp + _Precision) >= _Value) And ((tmp - _Precision) <= _Value) Then
-                                    'log de "inchangé précision"
-                                    _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DEVICE, "DeviceINT", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé precision " & _Value.ToString & "+-" & _Precision.ToString & ")")
+                                '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
+                                If _LastEtat And tmp = _ValueLast Then
+                                    'log de "inchangé lastetat"
+                                    _Server.Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.DEVICE, "DeviceINT", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé lastetat " & _ValueLast.ToString & ")")
                                 Else
-                                    'enregistre la nouvelle valeur
-                                    _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceINT Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString)
-                                    _ValueLast = _Value 'on garde l'ancienne value en memoire
-                                    _Value = tmp
-                                    RaiseEvent DeviceChanged(Me, "Value", _Value)
+                                    'on vérifie que la valeur a changé de plus de precision sinon inchangé
+                                    If ((tmp + _Precision) >= _Value) And ((tmp - _Precision) <= _Value) Then
+                                        'log de "inchangé précision"
+                                        _Server.Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.DEVICE, "DeviceINT", _Name & " : " & _Adresse1 & " : " & tmp.ToString & " (inchangé precision " & _Value.ToString & "+-" & _Precision.ToString & ")")
+                                    Else
+                                        'enregistre la nouvelle valeur
+                                        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceINT Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString)
+                                        _ValueLast = _Value 'on garde l'ancienne value en memoire
+                                        _Value = tmp
+                                        RaiseEvent DeviceChanged(Me, "Value", _Value)
+                                    End If
                                 End If
                             End If
                         End If
@@ -919,7 +920,7 @@ Namespace HoMIDom
 
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not Server.Etat_server Then
+                        If Not _Server.Etat_server Then
                             _ValueLast = tmp
                             _Value = tmp
                         Else
@@ -975,7 +976,7 @@ Namespace HoMIDom
             End Sub
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "APPAREIL"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1025,7 +1026,7 @@ Namespace HoMIDom
             End Sub
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "AUDIO"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1327,7 +1328,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "BAROMETRE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1339,7 +1340,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueString
 
             'Creation d'un device BATTERIE
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "BATTERIE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1351,7 +1352,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "COMPTEUR"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1363,7 +1364,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueBool
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "CONTACT"
                 _valuemustchange = True 'on ne prend en compte que si la value change
@@ -1376,7 +1377,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueBool
 
             'Creation du device
-            Public Sub New(ByVal server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = server
                 _Type = "DETECTEUR"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1388,7 +1389,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueString
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "DIRECTIONVENT"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1400,7 +1401,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "ENERGIEINSTANTANEE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1412,7 +1413,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "ENERGIETOTALE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1424,7 +1425,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueBool
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "GENERIQUEBOOLEEN"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1456,7 +1457,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueString
 
             'Creation du device
-            Public Sub New(ByVal server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = server
                 _Type = "GENERIQUESTRING"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1468,7 +1469,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation d'un device Temperature
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "GENERIQUEVALUE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1482,7 +1483,7 @@ Namespace HoMIDom
             Dim _AdresseBox As String = "http://hd1.freebox.fr"
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "FREEBOX"
                 Adresse1 = _AdresseBox
@@ -1657,7 +1658,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "HUMIDITE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1669,7 +1670,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueInt
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "LAMPE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1743,7 +1744,7 @@ Namespace HoMIDom
             Dim _ConditionJ3 As String = ""
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "METEO"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1765,7 +1766,7 @@ Namespace HoMIDom
             Public Sub Read()
 
                 If _Enable = False Then Exit Sub
-                If Driver.IsConnect() And Server.Etat_server Then Driver.Read(Me)
+                If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
 
                 'If _Enable = False Then
                 '   _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "le driver n'est pas activé pour le device " & Me.Name)
@@ -1801,7 +1802,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not Server.Etat_server Then
+                        If Not _Server.Etat_server Then
                             _Value = tmp
                             _ValueLast = tmp
                         Else
@@ -1829,7 +1830,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not Server.Etat_server Then
+                        If Not _Server.Etat_server Then
                             _ConditionActuel = tmp
                         Else
                             If _ConditionActuel <> tmp Then
@@ -1853,7 +1854,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not Server.Etat_server Then
+                        If Not _Server.Etat_server Then
                             _TempActuel = tmp
                         Else
                             If _TempActuel <> tmp Then
@@ -1877,7 +1878,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not Server.Etat_server Then
+                        If Not _Server.Etat_server Then
                             _HumActuel = tmp
                         Else
                             If _HumActuel <> tmp Then
@@ -1910,7 +1911,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not Server.Etat_server Then
+                        If Not _Server.Etat_server Then
                             _VentActuel = tmp
                         Else
                             If _VentActuel <> tmp Then
@@ -1934,7 +1935,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not Server.Etat_server Then
+                        If Not _Server.Etat_server Then
                             _JourToday = tmp
                         Else
                             If _JourToday <> tmp Then
@@ -1958,7 +1959,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not Server.Etat_server Then
+                        If Not _Server.Etat_server Then
                             _MinToday = tmp
                         Else
                             If _MinToday <> tmp Then
@@ -1982,7 +1983,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not Server.Etat_server Then
+                        If Not _Server.Etat_server Then
                             _MaxToday = tmp
                         Else
                             If _MaxToday <> tmp Then
@@ -2015,7 +2016,7 @@ Namespace HoMIDom
                 Set(ByVal tmp As String)
                     Try
                         'si le serveur n'a pas fini de démarrer, on affecte juste la valeur
-                        If Not Server.Etat_server Then
+                        If Not _Server.Etat_server Then
                             _ConditionToday = tmp
                         Else
                             If _ConditionToday <> tmp Then
@@ -2217,7 +2218,7 @@ Namespace HoMIDom
             'Public ListCommandRepeat As New ArrayList
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "MULTIMEDIA"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2326,7 +2327,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "PLUIECOURANT"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2338,7 +2339,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "PLUIETOTAL"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2350,7 +2351,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueBool
 
             'Creation du device
-            Public Sub New(ByVal server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = server
                 _Type = "SWITCH"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2382,7 +2383,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueString
 
             'Creation du device
-            Public Sub New(ByVal server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = server
                 _Type = "TELECOMMANDE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2399,7 +2400,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation d'un device Temperature
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "TEMPERATURE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2411,7 +2412,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "TEMPERATURECONSIGNE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2423,7 +2424,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "UV"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2435,7 +2436,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByVal Server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = Server
                 _Type = "VITESSEVENT"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2447,7 +2448,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueInt
 
             'Creation du device
-            Public Sub New(ByVal server As Server)
+            Public Sub New(ByRef Server As Server)
                 _Server = server
                 _Type = "VOLET"
                 AddHandler MyTimer.Elapsed, AddressOf Read

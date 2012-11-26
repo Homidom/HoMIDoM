@@ -100,7 +100,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <param name="Server"></param>
         ''' <remarks></remarks>
-        Public Sub Execute(ByVal Server As Server)
+        Public Sub Execute(ByRef Server As Server)
             _Server = Server
             Try
 

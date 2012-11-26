@@ -2033,7 +2033,7 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Macro.Execute(HoMIDom.HoMIDom.Server)">
+</member><member name="M:HoMIDom.HoMIDom.Macro.Execute(HoMIDom.HoMIDom.Server@)">
 	<summary>
  Exécuter la macro
  </summary>
@@ -2564,7 +2564,7 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Device">
 	<summary>Class Device, définie tous différents types de devices</summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.#ctor(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.#ctor(System.String,HoMIDom.HoMIDom.Server@)">
 	<summary>          
  Creation de l'objet
  </summary>

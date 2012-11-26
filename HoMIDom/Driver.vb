@@ -196,7 +196,7 @@
             End Get
         End Property
 
-        Public Sub New(ByVal Serveur As Server, ByVal SrvId As String, ByVal DriverId As String)
+        Public Sub New(ByRef Serveur As Server, ByVal SrvId As String, ByVal DriverId As String)
             _Server = Serveur
             _ID = DriverId
             _IdSrv = SrvId
