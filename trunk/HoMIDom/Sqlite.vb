@@ -23,8 +23,9 @@ Namespace HoMIDom
         ''' </summary>
         ''' <param name="basename">Nom de la base de donnée : homidom / medias</param>
         ''' <remarks></remarks>
-        Public Sub New(ByVal basename As String)
+        Public Sub New(ByVal basename As String, ByRef server As Server)
             Try
+                _Server = Server
                 'ajout d'un handler pour capturer les erreurs non catchés
                 AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf sqlite_UnhandledExceptionEvent
                 bdd_name = basename

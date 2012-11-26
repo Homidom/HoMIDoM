@@ -38,8 +38,8 @@ Namespace HoMIDom
         <NonSerialized()> Private Shared _ListMacros As New List(Of Macro) 'Liste des macros
         <NonSerialized()> Private Shared _ListTriggers As New List(Of Trigger) 'Liste de tous les triggers
         <NonSerialized()> Private Shared _ListGroups As New List(Of Groupes) 'Liste de tous les groupes
-        <NonSerialized()> Private sqlite_homidom As New Sqlite("homidom") 'BDD sqlite pour Homidom
-        <NonSerialized()> Private sqlite_medias As New Sqlite("medias") 'BDD sqlite pour les medias
+        <NonSerialized()> Private sqlite_homidom As New Sqlite("homidom", Me) 'BDD sqlite pour Homidom
+        <NonSerialized()> Private sqlite_medias As New Sqlite("medias", Me) 'BDD sqlite pour les medias
         <NonSerialized()> Shared Soleil As New Soleil 'Déclaration class Soleil
         <NonSerialized()> Shared _Longitude As Double = 0 'Longitude
         <NonSerialized()> Shared _Latitude As Double = 0 'latitude
@@ -57,7 +57,8 @@ Namespace HoMIDom
         <NonSerialized()> Private Shared _IPSOAP As String = "localhost" 'IP de connexion SOAP
         <NonSerialized()> Dim TimerSecond As New Timers.Timer 'Timer à la seconde
         <NonSerialized()> Shared _DateTimeLastStart As Date = Now
-        <NonSerialized()> Public Shared Etat_server As Boolean 'etat du serveur : true = démarré
+        Public Etat_server As Boolean 'etat du serveur : true = démarré
+        '<NonSerialized()> Public Shared Etat_server As Boolean 'etat du serveur : true = démarré
         <NonSerialized()> Dim fsw As FileSystemWatcher
         <NonSerialized()> Dim _MaxMonthLog As Integer = 2
         <NonSerialized()> Private Shared _TypeLogEnable As New List(Of Boolean) 'True si on doit pas prendre en compte le type de log
@@ -3590,7 +3591,7 @@ Namespace HoMIDom
             Dim _id As String
             Dim _Idsrv As String
 
-            Public Sub New(ByVal Server As Server, ByVal IdSrv As String, ByVal Id As String, ByVal Retour As List(Of String))
+            Public Sub New(ByRef Server As Server, ByVal IdSrv As String, ByVal Id As String, ByVal Retour As List(Of String))
                 _server = Server
                 _retour = Retour
                 _id = Id
@@ -7937,7 +7938,6 @@ Namespace HoMIDom
 #End Region
 
 #End Region
-
 
     End Class
 

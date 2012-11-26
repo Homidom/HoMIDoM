@@ -1,4 +1,4 @@
-﻿Imports System.Data.SQLite
+﻿'Imports System.Data.SQLite
 
 Partial Public Class uContact
 #Region "VARIABLE"
@@ -188,46 +188,46 @@ Partial Public Class uContact
     End Sub
 
     Private Function NewContact(ByVal Nom As String, ByVal Prenom As String, ByVal TelFix As String, ByVal TelMobil As String, ByVal TelAutre As String, ByVal Mail As String, ByVal Adresse As String) As String
-        'Try
-        '    Dim SQLcommand As SQLiteCommand
-        '    Dim RandomClass As New Random
-        '    Dim j As Double = RandomClass.Next(0, 30000)
-        '    SQLcommand = SQLconnect.CreateCommand
-        '    SQLcommand.CommandText = "INSERT INTO contact (contact_id,nom, prenom,telfixe,telmobile,telautre,mail,adresse) VALUES ('" & j & "','" & Nom & "', '" & Prenom & "','" & TelFix & "','" & TelMobil & "','" & TelAutre & "','" & Mail & "','" & Adresse & "')"
-        '    SQLcommand.ExecuteNonQuery()
-        '    SQLcommand.Dispose()
-        '    MaxRecord += 1
-        '    Return ""
-        'Catch ex As Exception
-        '    Return ex.Message
-        'End Try
+        Try
+            '    Dim SQLcommand As SQLiteCommand
+            '    Dim RandomClass As New Random
+            '    Dim j As Double = RandomClass.Next(0, 30000)
+            '    SQLcommand = SQLconnect.CreateCommand
+            '    SQLcommand.CommandText = "INSERT INTO contact (contact_id,nom, prenom,telfixe,telmobile,telautre,mail,adresse) VALUES ('" & j & "','" & Nom & "', '" & Prenom & "','" & TelFix & "','" & TelMobil & "','" & TelAutre & "','" & Mail & "','" & Adresse & "')"
+            '    SQLcommand.ExecuteNonQuery()
+            '    SQLcommand.Dispose()
+            '    MaxRecord += 1
+            Return ""
+        Catch ex As Exception
+            Return ex.Message
+        End Try
     End Function
 
     Private Function DelContact(ByVal ID As Integer) As String
-        'Try
-        '    Dim SQLcommand As SQLiteCommand
-        '    SQLcommand = SQLconnect.CreateCommand
-        '    SQLcommand.CommandText = "DELETE FROM contact where Contact_id='" & ID & "'"
-        '    SQLcommand.ExecuteNonQuery()
-        '    SQLcommand.Dispose()
-        '    MaxRecord -= 1
-        '    Return ""
-        'Catch ex As Exception
-        '    Return ex.Message
-        'End Try
+        Try
+            '    Dim SQLcommand As SQLiteCommand
+            '    SQLcommand = SQLconnect.CreateCommand
+            '    SQLcommand.CommandText = "DELETE FROM contact where Contact_id='" & ID & "'"
+            '    SQLcommand.ExecuteNonQuery()
+            '    SQLcommand.Dispose()
+            '    MaxRecord -= 1
+            Return ""
+        Catch ex As Exception
+            Return ex.Message
+        End Try
     End Function
 
     Private Function ModifyContact(ByVal ID As String, ByVal Nom As String, ByVal Prenom As String, ByVal TelFix As String, ByVal TelMobil As String, ByVal TelAutre As String, ByVal Mail As String, ByVal Adresse As String) As String
-        'Try
-        '    Dim SQLcommand As SQLiteCommand
-        '    SQLcommand = SQLconnect.CreateCommand
-        '    SQLcommand.CommandText = "UPDATE contact SET nom='" & Nom & "', prenom='" & Prenom & "',telfixe='" & TelFix & "',telmobile='" & TelMobil & "',telautre='" & TelAutre & "',mail='" & Mail & "',adresse='" & Adresse & "' WHERE Contact_ID='" & ID & "'"
-        '    SQLcommand.ExecuteNonQuery()
-        '    SQLcommand.Dispose()
-        '    Return ""
-        'Catch ex As Exception
-        '    Return ex.Message
-        'End Try
+        Try
+            '    Dim SQLcommand As SQLiteCommand
+            '    SQLcommand = SQLconnect.CreateCommand
+            '    SQLcommand.CommandText = "UPDATE contact SET nom='" & Nom & "', prenom='" & Prenom & "',telfixe='" & TelFix & "',telmobile='" & TelMobil & "',telautre='" & TelAutre & "',mail='" & Mail & "',adresse='" & Adresse & "' WHERE Contact_ID='" & ID & "'"
+            '    SQLcommand.ExecuteNonQuery()
+            '    SQLcommand.Dispose()
+            Return ""
+        Catch ex As Exception
+            Return ex.Message
+        End Try
     End Function
 
     Private Sub BtnNew_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNew.Click

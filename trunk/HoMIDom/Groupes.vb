@@ -59,7 +59,7 @@
             End Set
         End Property
 
-        Sub New(ByVal Server As Server)
+        Sub New(ByRef Server As Server)
             _Server = Server
         End Sub
 
