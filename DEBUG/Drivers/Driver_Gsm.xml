@@ -98,6 +98,12 @@ Driver_Gsm
 </member><member name="M:Driver_Gsm.Driver_Gsm.fermer">
 	<summary>Fermer le port du modem</summary>
 	<remarks></remarks>
+</member><member name="M:Driver_Gsm.Driver_Gsm.Lecture_sms">
+	<summary>Lit les SMS non lus sur le modem/tel</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Gsm.Driver_Gsm.MessageReceived(System.Object,GsmComm.GsmCommunication.MessageReceivedEventArgs)">
+	<summary>Gestion des SMS/Notifications automatiquement reçus</summary>
+	<remarks></remarks>
 </member><member name="M:Driver_Gsm.Driver_Gsm.ReceptionSMS(System.String,System.String,System.String,System.String)">
 	<summary>Reception de SMS</summary>
 </member><member name="T:Driver_Gsm.Driver_Gsm">
