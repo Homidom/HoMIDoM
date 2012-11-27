@@ -266,7 +266,7 @@ Public Class Driver_X10_CM11Bis
             Dim retour As String = "0"
             Select Case UCase(Champ)
                 Case "ADRESSE1"
-                    If Value = " " Or Value = "" Then
+                    If String.IsNullOrEmpty(Value) = True Then
                         retour = "l'adresse du module est obligatoire"
                     ElseIf Len(Value) < 2 Then
                         retour = "l'adresse doit à minima comporter une lettre (House) et un chiffre (Code)"
@@ -294,7 +294,7 @@ Public Class Driver_X10_CM11Bis
                 Dim trv As Boolean = False
                 Dim _ports As String = "<AUCUN>"
 
-                If _Com = "" Or _Com = " " Then
+                If String.IsNullOrEmpty(_Com) = True Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 Start", "Le port COM est vide veuillez le renseigner")
                     Exit Sub
                 End If
@@ -409,7 +409,12 @@ Public Class Driver_X10_CM11Bis
                             cm11.Execute(Objet.Adresse1 & " On")
                         End If
                         If 0 < x < 100 Then
-                            cm11.Execute(Objet.Adresse1 & " Dim" & x)
+                            If Objet.value > Parametre1 Then
+                                cm11.Execute(Objet.Adresse1 & " Dim" & x)
+                            Else
+                                cm11.Execute(Objet.Adresse1 & " Brighten" & x)
+                            End If
+
                         End If
                         'ecrire(Objet.adresse1, "EXTENDED_CODE", x)
                         Objet.value = x
