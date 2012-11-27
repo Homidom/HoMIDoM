@@ -144,70 +144,78 @@ Public Class WConfig
     End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Button1.Click
-        Dim dlg As New Microsoft.Win32.OpenFileDialog()
-        dlg.Filter = "jpeg (*.jpg) |*.jpg;*.jpeg|(*.png) |*.png|(*.*) |*.*"
+        Try
+            Dim dlg As New Microsoft.Win32.OpenFileDialog()
+            dlg.Filter = "jpeg (*.jpg) |*.jpg;*.jpeg|(*.png) |*.png|(*.*) |*.*"
 
-        If dlg.ShowDialog() = True Then
-            TxtImage.Text = dlg.FileName
-            If TxtImage.Text <> "" Then
-                If File.Exists(TxtImage.Text) Then
-                    Dim bmpImage As New BitmapImage()
-                    bmpImage.BeginInit()
-                    bmpImage.UriSource = New Uri(TxtImage.Text, UriKind.Absolute)
-                    bmpImage.EndInit()
-                    ImgMnu.Source = bmpImage
+            If dlg.ShowDialog() = True Then
+                TxtImage.Text = dlg.FileName
+                If String.IsNullOrEmpty(TxtImage.Text) = False Then
+                    If File.Exists(TxtImage.Text) Then
+                        Dim bmpImage As New BitmapImage()
+                        bmpImage.BeginInit()
+                        bmpImage.UriSource = New Uri(TxtImage.Text, UriKind.Absolute)
+                        bmpImage.EndInit()
+                        ImgMnu.Source = bmpImage
+                    End If
                 End If
             End If
-        End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur WConfig.Button1_Click: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnOkMnu_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkMnu.Click
-        If TxtName.Text = "" Then
-            MessageBox.Show("Veuillez saisir le nom du menu!", "Erreur")
-            Exit Sub
-        End If
-        Select Case FlagNewMnu
-            Case -1
-                If ListMnu.SelectedIndex < 0 Then Exit Sub
-                MyListMnu.Item(ListMnu.SelectedIndex).Text = TxtName.Text
-                If MyListMnu.Item(ListMnu.SelectedIndex).Type <> uCtrlImgMnu.TypeOfMnu.Zone Then
-                    MyListMnu.Item(ListMnu.SelectedIndex).Icon = TxtImage.Text
-                End If
-                If MyListMnu.Item(ListMnu.SelectedIndex).Type = uCtrlImgMnu.TypeOfMnu.Internet Then
-                    MyListMnu.Item(ListMnu.SelectedIndex).Parametres.Item(0) = TxtParam.Text
-                End If
-                If MyListMnu.Item(ListMnu.SelectedIndex).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
-                    MyListMnu.Item(ListMnu.SelectedIndex).Visible = ChkVisible.IsChecked
-                End If
-            Case 1 'New Internet
-                If TxtParam.Text = "" Then
-                    MessageBox.Show("Veuillez saisir l'url internet!", "Erreur")
-                    Exit Sub
-                End If
-                Dim x As New uCtrlImgMnu
-                x.Text = TxtName.Text
-                x.Type = uCtrlImgMnu.TypeOfMnu.Internet
-                x.Icon = TxtImage.Text
-                x.Parametres.Add(TxtParam.Text)
-                x.Visible = ChkVisible.IsChecked
-                MyListMnu.Add(x)
-                ListMnu.Items.Add(TxtName.Text)
-            Case 2 'New Meteo
-                Dim x As New uCtrlImgMnu
-                x.Text = TxtName.Text
-                x.Type = uCtrlImgMnu.TypeOfMnu.Meteo
-                x.Icon = TxtImage.Text
-                MyListMnu.Add(x)
-                ListMnu.Items.Add(TxtName.Text)
-            Case 4 'New Media
-                Dim x As New uCtrlImgMnu
-                x.Text = TxtName.Text
-                x.Type = uCtrlImgMnu.TypeOfMnu.LecteurMedia
-                x.Icon = TxtImage.Text
-                MyListMnu.Add(x)
-                ListMnu.Items.Add(TxtName.Text)
-        End Select
-        StkProperty.Visibility = Windows.Visibility.Hidden
+        Try
+            If String.IsNullOrEmpty(TxtName.Text) = True Then
+                MessageBox.Show("Veuillez saisir le nom du menu!", "Erreur")
+                Exit Sub
+            End If
+            Select Case FlagNewMnu
+                Case -1
+                    If ListMnu.SelectedIndex < 0 Then Exit Sub
+                    MyListMnu.Item(ListMnu.SelectedIndex).Text = TxtName.Text
+                    If MyListMnu.Item(ListMnu.SelectedIndex).Type <> uCtrlImgMnu.TypeOfMnu.Zone Then
+                        MyListMnu.Item(ListMnu.SelectedIndex).Icon = TxtImage.Text
+                    End If
+                    If MyListMnu.Item(ListMnu.SelectedIndex).Type = uCtrlImgMnu.TypeOfMnu.Internet Then
+                        MyListMnu.Item(ListMnu.SelectedIndex).Parametres.Item(0) = TxtParam.Text
+                    End If
+                    If MyListMnu.Item(ListMnu.SelectedIndex).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
+                        MyListMnu.Item(ListMnu.SelectedIndex).Visible = ChkVisible.IsChecked
+                    End If
+                Case 1 'New Internet
+                    If String.IsNullOrEmpty(TxtParam.Text) = True Then
+                        MessageBox.Show("Veuillez saisir l'url internet!", "Erreur")
+                        Exit Sub
+                    End If
+                    Dim x As New uCtrlImgMnu
+                    x.Text = TxtName.Text
+                    x.Type = uCtrlImgMnu.TypeOfMnu.Internet
+                    x.Icon = TxtImage.Text
+                    x.Parametres.Add(TxtParam.Text)
+                    x.Visible = ChkVisible.IsChecked
+                    MyListMnu.Add(x)
+                    ListMnu.Items.Add(TxtName.Text)
+                Case 2 'New Meteo
+                    Dim x As New uCtrlImgMnu
+                    x.Text = TxtName.Text
+                    x.Type = uCtrlImgMnu.TypeOfMnu.Meteo
+                    x.Icon = TxtImage.Text
+                    MyListMnu.Add(x)
+                    ListMnu.Items.Add(TxtName.Text)
+                Case 4 'New Media
+                    Dim x As New uCtrlImgMnu
+                    x.Text = TxtName.Text
+                    x.Type = uCtrlImgMnu.TypeOfMnu.LecteurMedia
+                    x.Icon = TxtImage.Text
+                    MyListMnu.Add(x)
+                    ListMnu.Items.Add(TxtName.Text)
+            End Select
+            StkProperty.Visibility = Windows.Visibility.Hidden
+        Catch ex As Exception
+            MessageBox.Show("Erreur WConfig.BtnOkMnu_Click: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnCancelMnu_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCancelMnu.Click
@@ -261,14 +269,18 @@ Public Class WConfig
 
     'Supprimer un menu
     Private Sub MenuItem1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem1.Click
-        If ListMnu.SelectedIndex < 0 Then Exit Sub
-        If MyListMnu.Item(ListMnu.SelectedIndex).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
-            MessageBox.Show("Une zone ne peut être supprimée, veuillez sélectionner sa propriété visible pour la cacher dans les menus")
-            Exit Sub
-        End If
-        MyListMnu.RemoveAt(ListMnu.SelectedIndex)
-        ListMnu.Items.RemoveAt(ListMnu.SelectedIndex)
-        StkProperty.Visibility = Windows.Visibility.Hidden
+        Try
+            If ListMnu.SelectedIndex < 0 Then Exit Sub
+            If MyListMnu.Item(ListMnu.SelectedIndex).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
+                MessageBox.Show("Une zone ne peut être supprimée, veuillez sélectionner sa propriété visible pour la cacher dans les menus")
+                Exit Sub
+            End If
+            MyListMnu.RemoveAt(ListMnu.SelectedIndex)
+            ListMnu.Items.RemoveAt(ListMnu.SelectedIndex)
+            StkProperty.Visibility = Windows.Visibility.Hidden
+        Catch ex As Exception
+            MessageBox.Show("Erreur WConfig.MenuItem1_Click: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub BtnUP_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnUP.Click
