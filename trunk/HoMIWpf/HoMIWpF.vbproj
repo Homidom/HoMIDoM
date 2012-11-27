@@ -146,6 +146,9 @@
     <Compile Include="CtrlDevice\uEditValue.xaml.vb">
       <DependentUpon>uEditValue.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CtrlDevice\uHttp.xaml.vb">
+      <DependentUpon>uHttp.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CtrlDevice\uKeyPad.xaml.vb">
       <DependentUpon>uKeyPad.xaml</DependentUpon>
     </Compile>
@@ -167,6 +170,7 @@
     <Compile Include="UserControls\CustomControl.xaml.vb">
       <DependentUpon>CustomControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\DynamicImageButton.vb" />
     <Compile Include="UserControls\ImageButton.vb" />
     <Compile Include="UserControls\uMedia.xaml.vb">
       <DependentUpon>uMedia.xaml</DependentUpon>
@@ -188,6 +192,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CtrlDevice\uFreeBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CtrlDevice\uHttp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -730,6 +738,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Configurer_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Error.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>

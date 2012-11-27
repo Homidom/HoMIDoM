@@ -586,6 +586,21 @@ Class Window1
                                             x.Visuel.Add(_act)
                                         Next
                                     End If
+
+                                    If UCase(list.Item(j).ChildNodes.Item(l).Name) = "WEB" Then
+                                        For m As Integer = 0 To list.Item(j).ChildNodes.Item(l).ChildNodes.Count - 1
+                                            Dim _btn As New uHttp.ButtonHttp
+                                            With _btn
+                                                .Content = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(0).Value
+                                                .URL = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(1).Value
+                                                .Width = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(2).Value
+                                                .Height = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value
+                                            End With
+
+                                            x.ListHttpButton.Add(_btn)
+                                           
+                                        Next
+                                    End If
                                 Next
                             End If
 
@@ -828,6 +843,27 @@ Class Window1
                 writer.WriteStartAttribute("idkeypad")
                 writer.WriteValue(_ListElement.Item(i).IDKeyPad)
                 writer.WriteEndAttribute()
+
+                If _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.Web Then
+                    writer.WriteStartElement("web")
+                    For j As Integer = 0 To _ListElement.Item(i).ListHttpButton.Count - 1
+                        writer.WriteStartElement("httpbutton")
+                        writer.WriteStartAttribute("label")
+                        writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Content)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("url")
+                        writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).URL)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("width")
+                        writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Width)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("height")
+                        writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Height)
+                        writer.WriteEndAttribute()
+                        writer.WriteEndElement()
+                    Next
+                    writer.WriteEndElement()
+                End If
 
                 writer.WriteStartElement("actions")
                 For j As Integer = 0 To _ListElement.Item(i).Action_GestureBasHaut.Count - 1
@@ -1239,6 +1275,22 @@ Class Window1
                     AddHandler mnu.Click, AddressOf MnuExecuteMacro
                     MnuMacro.Items.Add(mnu)
                 Next
+
+                MnuLastError.Items.Clear()
+                Dim list As List(Of String) = myService.GetLastLogsError
+                If list.Count > 0 Then
+                    Dim _tool As String = ""
+                    For Each logerror As String In list
+                        If logerror <> "" And logerror <> " " Then
+                            Dim mnu As New MenuItem
+                            mnu.Header = logerror
+                            mnu.FontSize = 10
+                            MnuLastError.Items.Add(mnu)
+                        End If
+                    Next
+                End If
+                list = Nothing
+
             Catch ex As Exception
                 IsConnect = False
             End Try
@@ -1574,6 +1626,7 @@ Class Window1
                     y.Visuel = _ListElement.Item(i).Visuel
                     y.URL = _ListElement.Item(i).URL
                     y.UrlRss = _ListElement.Item(i).UrlRss
+                    y.ListHttpButton = _ListElement.Item(i).ListHttpButton
                     y.IDMeteo = _ListElement.Item(i).IDMeteo
                     y.IDKeyPad = _ListElement.Item(i).IDKeyPad
                     AddHandler y.ShowZone, AddressOf ElementShowZone
@@ -1584,7 +1637,7 @@ Class Window1
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur ShowZone: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur ShowZone: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -2051,6 +2104,7 @@ Class Window1
                 Dim mnu As New MenuItem
                 mnu.Tag = _mac.ID
                 mnu.Header = _mac.Nom
+                mnu.FontSize = 14
                 AddHandler mnu.Click, AddressOf MnuExecuteMacro
                 MnuMacro.Items.Add(mnu)
             Next
@@ -2081,6 +2135,30 @@ Class Window1
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur MnuConfig_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub MenuItem1_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem1.Click
+        Try
+            MnuLastError.Items.Clear()
+
+            If IsConnect Then
+                Dim list As List(Of String) = myService.GetLastLogsError
+                If list.Count > 0 Then
+                    Dim _tool As String = ""
+                    For Each logerror As String In list
+                        If logerror <> "" And logerror <> " " Then
+                            Dim mnu As New MenuItem
+                            mnu.Header = logerror
+                            mnu.FontSize = 10
+                            MnuLastError.Items.Add(mnu)
+                        End If
+                    Next
+                End If
+                list = Nothing
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur MenuItem1_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 #End Region
