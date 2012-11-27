@@ -89,7 +89,11 @@
                                 <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Configurer_64.png" />
                             </MenuItem.Icon>
                         </MenuItem>
-
+                        <MenuItem Name="MnuLastError" Header="Dernières erreurs" FontSize="10">
+                            <MenuItem.Icon>
+                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Error.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
 
                 </Menu>

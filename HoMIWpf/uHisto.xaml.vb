@@ -417,19 +417,22 @@ Public Class uHisto
             Dim result As HitTestResult = _CurrentChart.HitTest(e.X, e.Y)
 
             ' Reset Data Point Attributes
-            Dim point As DataPoint
-            For Each point In _CurrentChart.Series(0).Points
+            For Each point As DataPoint In _CurrentChart.Series(0).Points
                 point.BorderWidth = 3
             Next
 
             ' If the mouse if over a data point
-            If result.ChartElementType = ChartElementType.DataPoint Then
-                Dim pointt As DataPoint = _CurrentChart.Series(0).Points(result.PointIndex)
-                pointt.BorderWidth = 1
-            Else
-                ' Set default cursor
-                Me.Cursor = Cursors.Arrow
-            End If
+            'If result.ChartElementType = ChartElementType.DataPoint Then
+            '    If result.PointIndex >= 0 Then
+            '        If _CurrentChart.Series(0).Points(result.PointIndex) IsNot Nothing Then
+            '            Dim pointt As DataPoint = _CurrentChart.Series(0).Points(result.PointIndex)
+            '            pointt.BorderWidth = 1
+            '        End If
+            '    End If
+            'Else
+            '    ' Set default cursor
+            '    Me.Cursor = Cursors.Arrow
+            'End If
         Catch ex As Exception
             MessageBox.Show("Erreur uHisto Chart2_MouseMove: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try

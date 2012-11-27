@@ -91,10 +91,6 @@
             </StackPanel>
        
     </StackPanel>
-                        <StackPanel Orientation="Horizontal" Name="StkWeb" Visibility="Collapsed" >
-                            <Label Width="120" Content="URL:" Foreground="White"/>
-                            <TextBox Name="TxtURL" Width="150" Text=""/>
-                        </StackPanel>
                         <StackPanel Orientation="Horizontal" Name="StkRss" Visibility="Collapsed" >
                             <Label Width="120" Content="URL Rss:" Foreground="White"/>
                             <TextBox Name="TxtURLRss" Width="150" Text=""/>
@@ -199,7 +195,64 @@
                 </StackPanel>
             </GroupBox>
 
-        </StackPanel>
+                <GroupBox Name="GrpPropertyHttp" Visibility="Collapsed" Width="300" Margin="2" >
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Foreground="White" FontWeight="Bold">Propriétés Http</Label>
+                            <Button Name="BtnCloseProperty" Width="25" Template="{DynamicResource GlassButton}" Foreground="White">X</Button>
+                        </StackPanel>
+
+                    </GroupBox.Header>
+                    <StackPanel >
+                        <StackPanel Orientation="Horizontal" Margin="2">
+                            <Label Foreground=" White" Content="URL:" Width="70" />
+                            <TextBox Name="TxtURL" Width="200" Text=""/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="2" Visibility="Collapsed">
+                            <Label Foreground=" White" Content="Refresh:" Width="70" />
+                            <TextBox Name="TxtRefresh" Width="35" Text="0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="2">
+                            <Label Foreground=" White" Content="Bouton:" Width="70" />
+                            <ListBox Height="100" Name="HttpListBtn" Width="150"/>
+                            <StackPanel >
+                                <Button Margin="2" Name="HttpBtnNewBtn" Content="+" Width="25" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
+                                <Button Margin="2" Name="HttpDelBtn" Content="-" Width="25" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
+                                <Button Margin="2" Name="HttpOkBtn" Content="Ok" Width="25" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
+                            </StackPanel>
+                            
+                        </StackPanel>
+                        <StackPanel Name="HttpStkEditBtn" Visibility="Collapsed" >
+                            <StackPanel Orientation="Horizontal" Margin="2">
+                                <Label Foreground=" White" Content="Label:" Width="60" />
+                                <TextBox Name="TxtHttpLabel" Width="200" Text=""/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="2" Visibility="Collapsed">
+                                <Label Foreground=" White" Content="Icon:" Width="60" />
+                                <Border BorderThickness="1" BorderBrush="Black">
+                                    <Image Name="HttpIcon" Width="30" Height="30" />
+                                </Border>
+                                <Button Margin="2" Name="HttpSearchIcon" Content="..." Width="25" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="2">
+                                <Label Foreground=" White" Content="Width:" Width="60" />
+                                <TextBox Name="TxtHttpWidth" Width="50" Text="20"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="2">
+                                <Label Foreground=" White" Content="Height:" Width="60" />
+                                <TextBox Name="TxtHttpHeight" Width="50" Text="20"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="2">
+                                <Label Foreground=" White" Content="URL:" Width="60" />
+                                <TextBox Name="TxtHttpURL" Width="200" Text=""/>
+                            </StackPanel>
+                        </StackPanel> 
+                        
+                    </StackPanel>
+                </GroupBox>
+
+
+            </StackPanel>
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
                 <Button Margin="3" Name="BtnOk" Content="OK" Width="75" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>

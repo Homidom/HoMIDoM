@@ -1,11 +1,13 @@
 ﻿Imports System.Windows.Forms
 Imports System.Drawing
 Imports HoMIDom.HoMIDom
+Imports System.Net
 
 Public Class WWidgetProperty
     Dim Obj As uWidgetEmpty
     Dim _FlagNewAction As Boolean = False
     Dim _FlagNewVisu As Boolean = False
+    Dim _listhttpbtn As New List(Of uHttp.ButtonHttp)
 
     Public Property Objet As uWidgetEmpty
         Get
@@ -36,6 +38,7 @@ Public Class WWidgetProperty
             ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
             TxtURL.Text = Obj.URL
             TxtURLRss.Text = Obj.UrlRss
+            _listhttpbtn = Obj.ListHttpButton
 
             If Obj.IsEmpty = False Then
                 BtnEditAction.Visibility = Windows.Visibility.Collapsed
@@ -95,14 +98,14 @@ Public Class WWidgetProperty
                     Case uWidgetEmpty.TypeOfWidget.Web
                         StkPicture.Visibility = Visibility.Collapsed
                         StkStatus.Visibility = Visibility.Collapsed
-                        StkWeb.Visibility = Windows.Visibility.Visible
                         BtnEditAction.Visibility = Windows.Visibility.Collapsed
                         BtnEditVisu.Visibility = Windows.Visibility.Collapsed
                         BtnDelete.Visibility = Windows.Visibility.Visible
+                        GrpPropertyHttp.Visibility = Windows.Visibility.Visible
+                        Refresh_LstHttpBtn()
                     Case uWidgetEmpty.TypeOfWidget.Rss
                         StkPicture.Visibility = Visibility.Collapsed
                         StkStatus.Visibility = Visibility.Collapsed
-                        StkWeb.Visibility = Windows.Visibility.Collapsed
                         StkRss.Visibility = Windows.Visibility.Visible
                         BtnEditAction.Visibility = Windows.Visibility.Collapsed
                         BtnEditVisu.Visibility = Windows.Visibility.Collapsed
@@ -110,7 +113,6 @@ Public Class WWidgetProperty
                     Case uWidgetEmpty.TypeOfWidget.Meteo
                         StkPicture.Visibility = Visibility.Collapsed
                         StkStatus.Visibility = Visibility.Collapsed
-                        StkWeb.Visibility = Windows.Visibility.Collapsed
                         StkRss.Visibility = Windows.Visibility.Collapsed
                         StkMeteo.Visibility = Windows.Visibility.Visible
                         BtnEditAction.Visibility = Windows.Visibility.Collapsed
@@ -136,7 +138,6 @@ Public Class WWidgetProperty
                     Case uWidgetEmpty.TypeOfWidget.KeyPad
                         StkPicture.Visibility = Visibility.Collapsed
                         StkStatus.Visibility = Visibility.Collapsed
-                        StkWeb.Visibility = Windows.Visibility.Collapsed
                         StkRss.Visibility = Windows.Visibility.Collapsed
                         StkMeteo.Visibility = Windows.Visibility.Collapsed
                         StkKeyPad.Visibility = Windows.Visibility.Visible
@@ -197,6 +198,7 @@ Public Class WWidgetProperty
             Obj.DefautLabelStatus = TxtDefStatus.Text
             Obj.Picture = ImgPicture.Tag
             Obj.Unite = TxtUnite.Text
+            Obj.ListHttpButton = _listhttpbtn
 
             Try
                 Obj.TailleStatus = TxtTailleStatus.Text
@@ -216,6 +218,7 @@ Public Class WWidgetProperty
             Obj.ColorStatus = ColorPicker2.SelectedColor
             Obj.URL = TxtURL.Text
             Obj.UrlRss = TxtURLRss.Text
+            'Obj.ListHttpButton = Objet.ListHttpButton
 
             If CbVilleMeteo.SelectedIndex >= 0 Then
                 Dim x As ComboBoxItem = CbVilleMeteo.Items(CbVilleMeteo.SelectedIndex)
@@ -773,4 +776,177 @@ Public Class WWidgetProperty
         ImgPicture.Source = Nothing
         ImgPicture.Tag = ""
     End Sub
+
+#Region "Http"
+    Dim _FlagNewBtnhttp As Boolean = False
+
+    Private Sub BtnCloseProperty_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCloseProperty.Click
+        GrpPropertyHttp.Visibility = Windows.Visibility.Collapsed
+    End Sub
+
+    Private Sub HttpBtnNewBtn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles HttpBtnNewBtn.Click
+        HttpStkEditBtn.Visibility = Windows.Visibility.Visible
+        TxtHttpLabel.Text = ""
+        TxtHttpURL.Text = ""
+        TxtHttpWidth.Text = "20"
+        TxtHttpHeight.Text = "20"
+        _FlagNewBtnhttp = True
+    End Sub
+
+    Private Sub HttpDelBtn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles HttpDelBtn.Click
+        Try
+            If HttpListBtn.SelectedIndex < 0 Then
+                MessageBox.Show("Veuillez sélectionner un bouton à supprimer!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            Else
+                Objet.ListHttpButton.RemoveAt(HttpListBtn.SelectedIndex)
+                Refresh_LstHttpBtn()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Public Sub Refresh_LstHttpBtn()
+        Try
+            HttpListBtn.Items.Clear()
+
+            For i As Integer = 0 To _listhttpbtn.Count - 1
+                HttpListBtn.Items.Add(_listhttpbtn.Item(i).Content)
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Function UrlIsValid(ByVal url As String) As Boolean
+        Dim is_valid As Boolean = False
+        If url.ToLower().StartsWith("www.") Then url = _
+            "http://" & url
+
+        Dim web_response As HttpWebResponse = Nothing
+        Try
+            Dim web_request As HttpWebRequest = _
+                HttpWebRequest.Create(url)
+            web_response = _
+                DirectCast(web_request.GetResponse(),  _
+                HttpWebResponse)
+            Return True
+        Catch ex As Exception
+            Return False
+        Finally
+            If Not (web_response Is Nothing) Then _
+                web_response.Close()
+        End Try
+    End Function
+
+
+    Private Sub HttpOkBtn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles HttpOkBtn.Click
+        Try
+            If String.IsNullOrEmpty(TxtHttpLabel.Text) = True Then
+                MessageBox.Show("Le Label du nouveau bouton est obligatoire!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            ElseIf String.IsNullOrEmpty(TxtHttpURL.Text) = True Then
+                MessageBox.Show("L'URL du nouveau bouton est obligatoire!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            ElseIf UrlIsValid(TxtHttpURL.Text) = False Then
+                MessageBox.Show("L'URL n'est pas valide!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            ElseIf String.IsNullOrEmpty(TxtHttpWidth.Text) = True Then
+                MessageBox.Show("La propriété Width du nouveau bouton est obligatoire!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            ElseIf String.IsNullOrEmpty(TxtHttpHeight.Text) = True Then
+                MessageBox.Show("La propriété Height du nouveau bouton est obligatoire!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            End If
+
+            If _FlagNewBtnhttp Then
+                Dim x As New uHttp.ButtonHttp
+                With x
+                    .Content = TxtHttpLabel.Text
+                    .URL = TxtHttpURL.Text
+                    .Width = TxtHttpWidth.Text
+                    .Height = TxtHttpHeight.Text
+                    'If String.IsNullOrEmpty(HttpIcon.Tag) = False Then .IconImageUri = HttpIcon.Tag
+                End With
+                HttpListBtn.Items.Add(x.Content)
+                _listhttpbtn.Add(x)
+            Else
+                If HttpListBtn.SelectedIndex >= 0 Then
+                    _listhttpbtn.Item(HttpListBtn.SelectedIndex).Content = TxtHttpLabel.Text
+                    _listhttpbtn.Item(HttpListBtn.SelectedIndex).URL = TxtHttpURL.Text
+                    _listhttpbtn.Item(HttpListBtn.SelectedIndex).Width = TxtHttpWidth.Text
+                    _listhttpbtn.Item(HttpListBtn.SelectedIndex).Height = TxtHttpHeight.Text
+                    ' _listhttpbtn.Item(HttpListBtn.SelectedIndex).IconImageUri = HttpIcon.Tag
+                End If
+            End If
+            HttpStkEditBtn.Visibility = Visibility.Collapsed
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub HttpListBtn_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles HttpListBtn.SelectionChanged
+        Try
+            If HttpListBtn.SelectedIndex >= 0 Then
+                Dim _btn As uHttp.ButtonHttp = Objet.ListHttpButton.Item(HttpListBtn.SelectedIndex)
+
+                HttpStkEditBtn.Visibility = Windows.Visibility.Visible
+
+                TxtHttpLabel.Text = _btn.Content
+                TxtHttpURL.Text = _btn.URL
+                TxtHttpWidth.Text = _btn.Width
+                TxtHttpHeight.Text = _btn.Height
+                'HttpIcon.Tag = _btn.IconImageUri
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub HttpSearchIcon_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles HttpSearchIcon.Click
+        Try
+            Dim frm As New WindowImg
+            frm.ShowDialog()
+            If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+                Dim retour As String = frm.FileName
+                If retour <> "" Then
+                    HttpIcon.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
+                    HttpIcon.Tag = retour
+                End If
+                frm.Close()
+            Else
+                frm.Close()
+            End If
+            frm = Nothing
+        Catch ex As Exception
+            MessageBox.Show("Erreur HttpSearchIcon_Click: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub TxtHttpWidth_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHttpWidth.TextChanged
+        If IsNumeric(TxtHttpWidth.Text) = False Then
+            MessageBox.Show("La valeur doit être numérique", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
+
+    Private Sub TxtHttpHeight_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHttpHeight.TextChanged
+        If IsNumeric(TxtHttpHeight.Text) = False Then
+            MessageBox.Show("La valeur doit être numérique", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
+
+    Private Sub TxtRefresh_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtRefresh.TextChanged
+        If String.IsNullOrEmpty(TxtRefresh.Text) Then
+            e.Handled = True
+            MessageBox.Show("La valeur doit être numérique", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        ElseIf 0 < CInt(TxtRefresh.Text) > 3600 Then
+            e.Handled = True
+            MessageBox.Show("La valeur doit être comprise entre 0 et 3600", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
+
+#End Region
+
+
 End Class

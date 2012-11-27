@@ -57,7 +57,9 @@ Public Class uWidgetEmpty
 
     'Variables Widget Web
     Dim _URL As String = ""
-    Dim _Webbrowser As WebBrowser = Nothing
+    Dim _Webbrowser As uHttp = Nothing
+    Dim _ListHttpBtn As New List(Of uHttp.ButtonHttp)
+    Dim _RefreshHttp As Integer = 0
 
     'Variables Widget RSS
     Dim _URLRss As String = ""
@@ -290,10 +292,10 @@ Public Class uWidgetEmpty
                     Case TypeOfWidget.Web
                         StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
                         StkTool.Visibility = Windows.Visibility.Visible
-                        _Webbrowser = New WebBrowser
-                        AddHandler _Webbrowser.Navigated, AddressOf wb_Navigated
-                        AddHandler _Webbrowser.Navigating, AddressOf wb_Navigating
-                        _Webbrowser.VerticalAlignment = Windows.VerticalAlignment.Stretch
+                        _Webbrowser = New uHttp 'WebBrowser
+                        'AddHandler _Webbrowser.Navigated, AddressOf wb_Navigated
+                        'AddHandler _Webbrowser.Navigating, AddressOf wb_Navigating
+                        '_Webbrowser.VerticalAlignment = Windows.VerticalAlignment.Stretch
                         StkTool.Children.Add(_Webbrowser)
                     Case TypeOfWidget.Rss
                         StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
@@ -327,15 +329,6 @@ Public Class uWidgetEmpty
             End Try
         End Set
     End Property
-
-
-    Private Sub wb_Navigated(ByVal sender As Object, ByVal e As System.Windows.Navigation.NavigationEventArgs)
-        SuppressScriptErrors(sender, True)
-    End Sub
-
-    Private Sub wb_Navigating(ByVal sender As Object, ByVal e As System.Windows.Navigation.NavigatingCancelEventArgs)
-        SuppressScriptErrors(sender, True)
-    End Sub
 
     Public Property CanEditValue As Boolean
         Get
@@ -600,8 +593,9 @@ Public Class uWidgetEmpty
         Set(ByVal value As String)
             _URL = value
             Try
-                If My.Computer.Network.IsAvailable = True And _URL <> "" Then
-                    _Webbrowser.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() _Webbrowser.Navigate(New Uri(_URL)), ThreadStart))
+                If My.Computer.Network.IsAvailable = True And _Webbrowser IsNot Nothing Then
+                    _Webbrowser.URL = _URL
+                    '_Webbrowser.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() _Webbrowser.Navigate(New Uri(_URL)), ThreadStart))
                 End If
             Catch ex As Exception
                 MessageBox.Show("Erreur UWidget.Empty.URL: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -609,19 +603,24 @@ Public Class uWidgetEmpty
         End Set
     End Property
 
-    Sub SuppressScriptErrors(ByVal wb As Controls.WebBrowser, ByVal Hide As Boolean)
-        Dim fiComWebBrowser As FieldInfo = GetType(WebBrowser).GetField("_axIWebBrowser2", BindingFlags.Instance Or BindingFlags.NonPublic)
-        If fiComWebBrowser Is Nothing Then
-            Return
-        End If
-        Dim objComWebBrowser As Object = fiComWebBrowser.GetValue(wb)
-        If objComWebBrowser Is Nothing Then
-            Return
-        End If
-        objComWebBrowser.[GetType]().InvokeMember("Silent", BindingFlags.SetProperty, Nothing, objComWebBrowser, New Object() {Hide})
-    End Sub
+    Public Property ListHttpButton As List(Of uHttp.ButtonHttp)
+        Get
+            Return _ListHttpBtn
+        End Get
+        Set(ByVal value As List(Of uHttp.ButtonHttp))
+            _ListHttpBtn = value
+            If _Webbrowser IsNot Nothing Then _Webbrowser.ListButton = value
+        End Set
+    End Property
 
-
+    Public Property HttpRefresh As Integer
+        Get
+            Return _RefreshHttp
+        End Get
+        Set(ByVal value As Integer)
+            _RefreshHttp = value
+        End Set
+    End Property
 #End Region
 
 #Region "Property/Sub Rss"
