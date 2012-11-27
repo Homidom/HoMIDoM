@@ -85,28 +85,6 @@ Public Class uHttp
         End Try
     End Sub
 
-    Private Function UrlIsValid(ByVal url As String) As Boolean
-        Dim is_valid As Boolean = False
-        If url.ToLower().StartsWith("www.") Then url = _
-            "http://" & url
-
-        Dim web_response As HttpWebResponse = Nothing
-        Try
-            Dim web_request As HttpWebRequest = _
-                HttpWebRequest.Create(url)
-            web_response = _
-                DirectCast(web_request.GetResponse(),  _
-                HttpWebResponse)
-            Return True
-        Catch ex As Exception
-            Return False
-        Finally
-            If Not (web_response Is Nothing) Then _
-                web_response.Close()
-        End Try
-    End Function
-
-
     Private Sub wb_Navigated(ByVal sender As Object, ByVal e As System.Windows.Navigation.NavigationEventArgs) Handles WebBrowser1.Navigated
         Try
             SuppressScriptErrors(sender, True)

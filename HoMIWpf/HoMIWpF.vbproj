@@ -239,12 +239,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="uContact.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="uHisto.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -351,7 +345,6 @@
       <DependentUpon>Application.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="cElement.vb" />
     <Compile Include="CtrlDevice\uFreeBox.xaml.vb">
       <DependentUpon>uFreeBox.xaml</DependentUpon>
     </Compile>
@@ -444,9 +437,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <Compile Include="uContact.xaml.vb">
-      <DependentUpon>uContact.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\uCtrlImgMnu.xaml.vb">
       <DependentUpon>uCtrlImgMnu.xaml</DependentUpon>

@@ -46,30 +46,6 @@ InitializeComponent
 	<summary>
 uModule
 </summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
-	<summary>
-CreateInstance
-</summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
-	<summary>
-GetPropertyValue
-</summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
-	<summary>
-SetPropertyValue
-</summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
-	<summary>
-CreateDelegate
-</summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
-	<summary>
-AddEventHandler
-</summary>
-</member><member name="T:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper">
-	<summary>
-GeneratedInternalTypeHelper
-</summary>
 </member><member name="M:HoMIWpF.uLog.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -138,10 +114,6 @@ uReleve
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
-	<summary>
-Colorpicker
-</summary>
 </member><member name="M:HoMIWpF.uVariateur.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -181,14 +153,6 @@ InitializeComponent
 </member><member name="T:HoMIWpF.uWMeteo">
 	<summary>
 uWMeteo
-</summary>
-</member><member name="M:HoMIWpF.uContact.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIWpF.uContact">
-	<summary>
-uContact
 </summary>
 </member><member name="M:HoMIWpF.Application.InitializeComponent">
 	<summary>
