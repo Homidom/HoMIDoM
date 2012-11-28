@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
             Margin="10" Width="970">
 
-    <DockPanel Background="#636060" Opacity="0.85">
+    <DockPanel Background="#636060" Opacity="1">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0">
             <DockPanel DockPanel.Dock="Top" >
                 <DockPanel DockPanel.Dock="Top" >

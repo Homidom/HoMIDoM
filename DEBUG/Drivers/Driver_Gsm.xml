@@ -95,6 +95,10 @@ Driver_Gsm
 </member><member name="M:Driver_Gsm.Driver_Gsm.TimerTick">
 	<summary>Si refresh &gt;0 gestion du timer</summary>
 	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+</member><member name="M:Driver_Gsm.Driver_Gsm.ouvrir(System.String)">
+	<summary>Ouvrir le port du modem</summary>
+	<param name="numero">Nom/Numero du port COM</param>
+	<remarks></remarks>
 </member><member name="M:Driver_Gsm.Driver_Gsm.fermer">
 	<summary>Fermer le port du modem</summary>
 	<remarks></remarks>

@@ -1093,9 +1093,11 @@ Imports System.IO.Ports
             'un device trouvé on maj la value
             If (listedevices.Count = 1) Then
                 If type = "RECEIVED" Then
-                    listedevices.Item(0).Value = "RECEIVED: " & texte & "(" & dateenvoi & ")"
+                    'listedevices.Item(0).Value = "RECEIVED: " & texte & "(" & dateenvoi & ")"
+                    listedevices.Item(0).Value = "RECEIVED: " & texte
                 ElseIf type = "STORED" Then
-                    listedevices.Item(0).Value = "STORED  : " & texte & "(" & dateenvoi & ")"
+                    'listedevices.Item(0).Value = "STORED  : " & texte & "(" & dateenvoi & ")"
+                    listedevices.Item(0).Value = "STORED  : " & texte
                 End If
 
             ElseIf (listedevices.Count > 1) Then

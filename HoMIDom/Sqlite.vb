@@ -25,13 +25,18 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub New(ByVal basename As String, ByRef server As Server)
             Try
-                _Server = Server
+                _Server = server
+                If basename <> "" Then
+                    bdd_name = basename
+                Else
+                    bdd_name = ""
+                    _Server.Log(server.TypeLog.ERREUR, server.TypeSource.SERVEUR, "SQLlite:New", "Le nom de la BDD est vide")
+                End If
                 'ajout d'un handler pour capturer les erreurs non catchés
                 AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf sqlite_UnhandledExceptionEvent
-                bdd_name = basename
                 connecte = False
             Catch ex As Exception
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "SQLlite:New", "Exception : " & ex.ToString)
+                _Server.Log(server.TypeLog.ERREUR, server.TypeSource.SERVEUR, "SQLlite:New", "Exception : " & ex.ToString)
             End Try
         End Sub
 
@@ -102,12 +107,12 @@ Namespace HoMIDom
         Public Function nonquery(ByVal commande As String, ByVal ParamArray params() As String)
             Try
                 Dim SQLcommand As SQLiteCommand
-                SyncLock lock
-                    connect()
-                    'on vérifie si on est connecté à la BDD       
-                    If SQLconnect.State = ConnectionState.Open Then
-                        'on vérifie si la commande n'est pas vide
-                        If Not String.IsNullOrEmpty(commande) Then
+                'on vérifie si la commande n'est pas vide
+                If Not String.IsNullOrEmpty(commande) Then
+                    SyncLock lock
+                        connect()
+                        'on vérifie si on est connecté à la BDD       
+                        If SQLconnect.State = ConnectionState.Open Then
                             SQLcommand = SQLconnect.CreateCommand
                             SQLcommand.CommandText = commande
                             If params IsNot Nothing Then
@@ -123,14 +128,14 @@ Namespace HoMIDom
                             disconnect()
                             Return "Commande éxécutée avec succés : " & commande
                         Else
-                            disconnect()
-                            Return "ERR: La commande est vide"
+                            connecte = False
+                            Return "ERR: Non connecté à la BDD " & bdd_name
                         End If
-                    Else
-                        connecte = False
-                        Return "ERR: Non connecté à la BDD " & bdd_name
-                    End If
-                End SyncLock
+                    End SyncLock
+                Else
+                    disconnect()
+                    Return "ERR: La commande est vide"
+                End If
             Catch ex As Exception
                 Return "ERR: Erreur lors de la query " & commande & "  --> " & ex.ToString
             End Try
@@ -148,12 +153,13 @@ Namespace HoMIDom
                 Dim resultattemp As New DataTable
                 Dim x As DataColumn
 
-                connect()
+                'on vérifie si la commande n'est pas vide  
+                'If commande IsNot Nothing And commande <> "" Then
+                If Not String.IsNullOrEmpty(commande) Then
+                    connect()
 
-                'on vérifie si on est connecté à la BDD   
-                If SQLconnect.State = ConnectionState.Open Then
-                    'on vérifie si la commande n'est pas vide  
-                    If commande IsNot Nothing And commande <> "" Then
+                    'on vérifie si on est connecté à la BDD   
+                    If SQLconnect.State = ConnectionState.Open Then
                         SQLcommand = SQLconnect.CreateCommand
                         SQLcommand.CommandText = commande
 
@@ -176,8 +182,6 @@ Namespace HoMIDom
                                 resultattemp.Columns.Add(x)
                             Next
 
-
-
                             'lecture des lignes   
                             Dim j As Integer = 0
                             While SQLreader.Read()
@@ -199,12 +203,11 @@ Namespace HoMIDom
                         End If
                         'SQLcommand.Dispose()
                     Else
-                        disconnect()
-                        Return "ERR: La commande est vide"
+                        connecte = False
+                        Return "ERR: Non connecté à la BDD " & bdd_name
                     End If
                 Else
-                    connecte = False
-                    Return "ERR: Non connecté à la BDD " & bdd_name
+                    Return "ERR: La commande est vide"
                 End If
             Catch ex As Exception
                 Return "ERR: Erreur lors de la query " & commande & " Erreur: " & ex.ToString
@@ -219,34 +222,34 @@ Namespace HoMIDom
         Public Function querysimple(ByVal commande As String, ByRef resultat As String, ByVal ParamArray params() As String) As String
             Try
                 Dim SQLcommand As SQLiteCommand
-                connect()
 
-                'on vérifie si on est connecté à la BDD   
-                If SQLconnect.State = ConnectionState.Open Then
-                    'on vérifie si la commande n'est pas vide  
-                    If commande IsNot Nothing And commande <> "" Then
-                        SQLcommand = SQLconnect.CreateCommand
-                        SQLcommand.CommandText = commande
+                'on vérifie si la commande n'est pas vide
+                'If commande IsNot Nothing And commande <> "" Then
+                If Not String.IsNullOrEmpty(commande) Then
+                    connect()
+                    'on vérifie si on est connecté à la BDD   
+                    If SQLconnect.State = ConnectionState.Open Then
+                            SQLcommand = SQLconnect.CreateCommand
+                            SQLcommand.CommandText = commande
 
-                        If params IsNot Nothing Then
-                            For p = 0 To params.Length - 1
-                                SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
-                            Next
+                            If params IsNot Nothing Then
+                                For p = 0 To params.Length - 1
+                                    SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
+                                Next
+                            End If
+                            'lock pour etre sur de ne pas faire deux operations en meme temps
+                            SyncLock lock
+                                resultat = SQLcommand.ExecuteScalar
+                            End SyncLock
+                            SQLcommand.Dispose()
+                            disconnect()
+                            Return "Commande éxécutée avec succés : " & commande
+                        Else
+                            connecte = False
+                            Return "ERR: Non connecté à la BDD " & bdd_name
                         End If
-                        'lock pour etre sur de ne pas faire deux operations en meme temps
-                        SyncLock lock
-                            resultat = SQLcommand.ExecuteScalar
-                        End SyncLock
-                        SQLcommand.Dispose()
-                        disconnect()
-                        Return "Commande éxécutée avec succés : " & commande
-                    Else
-                        disconnect()
-                        Return "ERR: La commande est vide"
-                    End If
                 Else
-                    connecte = False
-                    Return "ERR: Non connecté à la BDD " & bdd_name
+                    Return "ERR: La commande est vide"
                 End If
             Catch ex As Exception
                 Return "ERR: Erreur lors de la query " & commande & " Erreur: " & ex.ToString
@@ -262,12 +265,13 @@ Namespace HoMIDom
             Try
                 Dim SQLcommand As SQLiteCommand
                 Dim resultattemp As Integer = 0
-                connect()
 
-                'on vérifie si on est connecté à la BDD   
-                If SQLconnect.State = ConnectionState.Open Then
-                    'on vérifie si la commande n'est pas vide  
-                    If commande IsNot Nothing And commande <> "" Then
+                'on vérifie si la commande n'est pas vide
+                'If commande IsNot Nothing And commande <> "" Then
+                If Not String.IsNullOrEmpty(commande) Then
+                    connect()
+                    'on vérifie si on est connecté à la BDD   
+                    If SQLconnect.State = ConnectionState.Open Then
                         SQLcommand = SQLconnect.CreateCommand
                         SQLcommand.CommandText = commande
 
@@ -279,13 +283,13 @@ Namespace HoMIDom
                         resultat = resultattemp
                         disconnect()
                         Return "Commande éxécutée avec succés : " & commande
+
                     Else
-                        disconnect()
-                        Return "ERR: La commande est vide"
+                        connecte = False
+                        Return "ERR: Non connecté à la BDD " & bdd_name
                     End If
                 Else
-                    connecte = False
-                    Return "ERR: Non connecté à la BDD " & bdd_name
+                    Return "ERR: La commande est vide"
                 End If
             Catch ex As Exception
                 Return "ERR: Erreur lors de la query Count " & commande & " Erreur: " & ex.ToString
