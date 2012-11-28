@@ -4679,7 +4679,7 @@ Imports System.Media
                     If valeur = "ON" Then
                         If TypeOf listedevices.Item(0).Value Is Boolean Then
                             listedevices.Item(0).Value = True
-                        ElseIf TypeOf listedevices.Item(0).Value Is Long Then
+                        ElseIf TypeOf listedevices.Item(0).Value Is Long Or TypeOf listedevices.Item(0).Value Is Integer Then
                             listedevices.Item(0).Value = 100
                         Else
                             listedevices.Item(0).Value = "ON"
@@ -4687,7 +4687,7 @@ Imports System.Media
                     ElseIf valeur = "OFF" Then
                         If TypeOf listedevices.Item(0).Value Is Boolean Then
                             listedevices.Item(0).Value = False
-                        ElseIf TypeOf listedevices.Item(0).Value Is Long Then
+                        ElseIf TypeOf listedevices.Item(0).Value Is Long Or TypeOf listedevices.Item(0).Value Is Integer Then
                             listedevices.Item(0).Value = 0
                         Else
                             listedevices.Item(0).Value = "OFF"
