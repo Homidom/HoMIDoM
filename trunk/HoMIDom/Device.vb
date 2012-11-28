@@ -873,6 +873,7 @@ Namespace HoMIDom
 
             Protected _Value As String = ""
             Protected _ValueLast As String = ""
+            Protected _valuemustchange As Boolean = True 'si true alors value n'est modifié que si la valeur change
             Protected Shadows _TypeGenerique As String = "STRING"
 
             'Contient l'avant derniere valeur
@@ -926,7 +927,8 @@ Namespace HoMIDom
                         Else
                             _LastChange = Now
                             'If Mid(tmp, 1, 4) <> "CFG:" Then
-                            If tmp = _Value Then
+                            'on prend en compte la value à chaque fois car on peut donne le même ordre plusieurs fois (sauf si _valuemustchange = TRUE)
+                            If _valuemustchange And tmp = _Value Then
                                 _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceSTR Value", _Name & " : " & _Adresse1 & " : " & _Value & " (Inchangé)")
                             Else
                                 '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
@@ -1460,6 +1462,7 @@ Namespace HoMIDom
             Public Sub New(ByRef Server As Server)
                 _Server = server
                 _Type = "GENERIQUESTRING"
+                _valuemustchange = False
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 

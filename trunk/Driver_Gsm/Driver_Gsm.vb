@@ -441,7 +441,7 @@ Imports System.IO.Ports
                                         pdu = New SmsSubmitPdu(Parametre1, Objet.adresse1.ToString, "")
                                         comm.SendMessage(pdu, True)
                                         'on modifie la valeur du composant pour stocker les sms envoyés
-                                        Objet.Value = "SEND    : " & Parametre1
+                                        Objet.Value = "SEND: " & Parametre1
                                     End If
                                 Else
                                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "No GSM Phone / Modem Connected")
@@ -485,7 +485,7 @@ Imports System.IO.Ports
                                         Loop
                                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS envoyé : " & sIncomming)
                                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS envoyé : " & Parametre1 & " à " & Objet.adresse1.ToString)
-                                        Objet.Value = "SEND    : " & Parametre1
+                                        Objet.Value = "SEND: " & Parametre1
                                     End If
                                 Else
                                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "No GSM Phone / Modem Connected")
@@ -1096,8 +1096,8 @@ Imports System.IO.Ports
                     'listedevices.Item(0).Value = "RECEIVED: " & texte & "(" & dateenvoi & ")"
                     listedevices.Item(0).Value = "RECEIVED: " & texte
                 ElseIf type = "STORED" Then
-                    'listedevices.Item(0).Value = "STORED  : " & texte & "(" & dateenvoi & ")"
-                    listedevices.Item(0).Value = "STORED  : " & texte
+                    'listedevices.Item(0).Value = "STORED: " & texte & "(" & dateenvoi & ")"
+                    listedevices.Item(0).Value = "STORED: " & texte
                 End If
 
             ElseIf (listedevices.Count > 1) Then
