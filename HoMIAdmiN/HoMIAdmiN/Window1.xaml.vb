@@ -85,9 +85,9 @@ Class Window1
                 Try
 
                     'Modifie la date et Heure
-                    Dim mytime As String = myService.GetTime
-                    LblStatus.Content = Now.ToLongDateString & " " & mytime & " "
-                    mytime = ""
+                    'Dim mytime As String = myService.GetTime
+                    LblStatus.Content = Now.ToLongDateString & " " & myService.GetTime & " "
+                    'mytime = ""
 
                     'Modifie l'adresse/port du serveur connecté
                     Dim serveurcomplet As String = myChannelFactory.Endpoint.Address.ToString()
@@ -98,6 +98,9 @@ Class Window1
                     LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & serveuradresse & ":" & serveurport
                     'LblConnect.Content = Mid(myChannelFactory.Endpoint.Address.ToString(), 1, 32) & "..."
                     LblConnect.Content = serveuradresse & ":" & serveurport
+                    serveuradresse = Nothing
+                    serveurport = Nothing
+                    serveurcomplet = Nothing
 
                     'Modifie les heures du soleil
                     Dim mydate As Date
@@ -105,6 +108,7 @@ Class Window1
                     LHS.Content = mydate.ToShortTimeString
                     mydate = myService.GetHeureCoucherSoleil
                     LCS.Content = mydate.ToShortTimeString
+                    mydate = Nothing
 
                     'Modifie les LOG
                     Dim list As List(Of String) = myService.GetLastLogs
@@ -127,6 +131,7 @@ Class Window1
                                 ImgError.ToolTip = _tool
                             End If
                         Next
+                        _tool = Nothing
                     Else
                         ImgError.Visibility = Windows.Visibility.Collapsed
                     End If
@@ -142,6 +147,7 @@ Class Window1
                                 ImgDeviceNoMaj.ToolTip = _tool
                             End If
                         Next
+                        _tool = Nothing
                     Else
                         ImgDeviceNoMaj.Visibility = Windows.Visibility.Collapsed
                     End If
@@ -185,6 +191,7 @@ Class Window1
                 Dim x As New XmlSerializer(ListServer.GetType)
                 x.Serialize(objStreamWriter, ListServer)
                 objStreamWriter.Close()
+                x = Nothing
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'enregistrement du fichier de config xml de l'application Admin : " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
