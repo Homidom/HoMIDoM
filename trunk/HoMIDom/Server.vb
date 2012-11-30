@@ -4013,13 +4013,18 @@ Namespace HoMIDom
                             a.Nom = result.Rows.Item(i).Item(0).ToString
                             a.IdDevice = result.Rows.Item(i).Item(1).ToString
                             _list.Add(a)
+                            a = Nothing
                         Next
+                        result = Nothing
                         Return _list
+                        _list = Nothing
                     Else
+                        result = Nothing
                         Return Nothing
                     End If
                 Else
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllListHisto", retour)
+                    result = Nothing
                     Return Nothing
                 End If
             Catch ex As Exception
@@ -4050,11 +4055,13 @@ Namespace HoMIDom
                             a.DateTime = CDate(result.Rows.Item(i).Item(3).ToString)
                             a.Value = result.Rows.Item(i).Item(4).ToString
                             _list.Add(a)
+                            a = Nothing
                         Next
                         result = Nothing
                         Return _list
                         _list = Nothing
                     Else
+                        result = Nothing
                         Return Nothing
                     End If
                 Else
@@ -4152,11 +4159,13 @@ Namespace HoMIDom
                         a.DateTime = CDate(result.Rows.Item(i).Item(2).ToString)
                         a.Value = result.Rows.Item(i).Item(3).ToString
                         _list.Add(a)
+                        a = Nothing
                     Next
                 End If
 
                 result = Nothing
                 Return _list
+                _list = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHistoDeviceSource", "Exception : " & ex.Message)
                 Return Nothing
@@ -4271,6 +4280,7 @@ Namespace HoMIDom
                 Next
 
                 Return Retour
+                Retour = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DevicesAsHisto", "Exception : " & ex.Message)
                 Return Nothing
@@ -5197,6 +5207,7 @@ Namespace HoMIDom
                         If X < Now Then
                             _DevicesNoMAJ.Add(_ListDevices.Item(i).name)
                         End If
+                        X = Nothing
                     End If
                 Next
             Catch ex As Exception
@@ -5268,7 +5279,6 @@ Namespace HoMIDom
         Private Sub DeleteDeviceToBD(ByVal DeviceId As String)
             Try
                 Dim commande As String
-                Dim result As New DataTable("HistoDB")
                 Dim retourDB As String
 
                 commande = "delete from historiques where device_id='" & DeviceId & "' ;"
@@ -5450,6 +5460,7 @@ Namespace HoMIDom
                     End With
 
                     _list.Add(x)
+                    x = Nothing
                 Next
 
                 _list.Sort(AddressOf sortDevice)
