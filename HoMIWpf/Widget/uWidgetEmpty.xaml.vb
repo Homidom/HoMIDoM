@@ -841,6 +841,10 @@ Public Class uWidgetEmpty
                     End If
                 End If
             End If
+
+            _dev = Nothing
+            _zone = Nothing
+            _macro = Nothing
         Catch ex As Exception
             MessageBox.Show("Error Refresh: " & ex.Message & vbCrLf, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try

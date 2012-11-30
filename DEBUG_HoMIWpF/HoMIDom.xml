@@ -1001,6 +1001,9 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.TimerSecTick">
 	<summary>Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi</summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.VerifTimeDevice">
+	<summary>on checke si il y a cron à faire</summary>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.Server_UnhandledExceptionEvent(System.Object,System.UnhandledExceptionEventArgs)">
 	<summary>Evenement sur UnhandleException</summary>
 	<remarks></remarks>

@@ -652,13 +652,12 @@ Imports System.Threading
                 End If
             Next
 
-            objet.LastChange = Now
-
             doc = Nothing
             nodes = Nothing
             response = Nothing
             Request = Nothing
             url = Nothing
+            objet.LastChange = Now
             objet = Nothing
 
             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GOOGLEMETEO", "MAJ Meteo effectuée pour " & objet.name)
@@ -1669,6 +1668,9 @@ Imports System.Threading
             End If
 
             Return _retour
+
+            _retour = Nothing
+            _txt = Nothing
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEOWeather", "Traduire: " & ex.Message)
             Return txt
