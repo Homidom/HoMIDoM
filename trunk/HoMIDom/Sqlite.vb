@@ -104,7 +104,7 @@ Namespace HoMIDom
         ''' <param name="params">Liste es paramètres utilisés dans la query sous forme @parameter0, @parameter1 etc</param>
         ''' <returns>String si OK, String "ERR:..." si erreur</returns>
         ''' <remarks></remarks>
-        Public Function nonquery(ByVal commande As String, ByVal ParamArray params() As String)
+        Public Function nonquery(ByVal commande As String, ByVal ParamArray params() As String) As String
             Try
                 Dim SQLcommand As SQLiteCommand
                 'on vérifie si la commande n'est pas vide

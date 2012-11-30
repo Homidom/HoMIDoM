@@ -114,6 +114,10 @@ uReleve
 	<summary>
 InitializeComponent
 </summary>
+</member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
+	<summary>
+Colorpicker
+</summary>
 </member><member name="M:HoMIWpF.uVariateur.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -174,14 +178,6 @@ InitializeComponent
 	<summary>
 uFreeBox
 </summary>
-</member><member name="M:HoMIWpF.uProgrammeTV.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIWpF.uProgrammeTV">
-	<summary>
-uProgrammeTV
-</summary>
 </member><member name="M:HoMIWpF.WindowImg.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -205,14 +201,6 @@ InitializeComponent
 </member><member name="T:HoMIWpF.WConfig">
 	<summary>
 WConfig
-</summary>
-</member><member name="M:HoMIWpF.FrmConfigChaine.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIWpF.FrmConfigChaine">
-	<summary>
-FrmConfigChaine
 </summary>
 </member><member name="M:HoMIWpF.uModules.InitializeComponent">
 	<summary>
@@ -246,14 +234,6 @@ InitializeComponent
 	<summary>
 uHisto
 </summary>
-</member><member name="M:HoMIWpF.FrmDetailProgram.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIWpF.FrmDetailProgram">
-	<summary>
-FrmDetailProgram
-</summary>
 </member><member name="M:HoMIWpF.uCtrlImgMnu.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -261,14 +241,6 @@ InitializeComponent
 </member><member name="T:HoMIWpF.uCtrlImgMnu">
 	<summary>
 uCtrlImgMnu
-</summary>
-</member><member name="M:HoMIWpF.uNotes.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:HoMIWpF.uNotes">
-	<summary>
-uNotes
 </summary>
 </member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
 	<summary>

@@ -735,19 +735,16 @@ Public Class uWidgetEmpty
 
     Private Sub TraiteRefresh()
         Try
-            Try
-                Dim str As String = myService.GetTime
-            Catch ex As Exception
-                IsConnect = False
-            End Try
-
             If _ModeEdition = False And IsConnect Then
                 If _Visuel.Count > 0 Then
                     For Each _ElmtVisu As cWidget.Visu In _Visuel
-                        Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _ElmtVisu.IdObject)
+                        _dev = myService.ReturnDeviceByID(IdSrv, _ElmtVisu.IdObject)
                         If _dev IsNot Nothing Then
                             If _dev.Value = _ElmtVisu.Value Then
-                                Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_ElmtVisu.Image))
+                                If Image.Tag <> _ElmtVisu.Image Then
+                                    Image.Tag = _ElmtVisu.Image
+                                    Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_ElmtVisu.Image))
+                                End If
                             End If
                         End If
                     Next

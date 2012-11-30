@@ -656,6 +656,10 @@ Imports System.Threading
 
             doc = Nothing
             nodes = Nothing
+            response = Nothing
+            Request = Nothing
+            url = Nothing
+            objet = Nothing
 
             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GOOGLEMETEO", "MAJ Meteo effectuée pour " & objet.name)
         Catch ex As Exception

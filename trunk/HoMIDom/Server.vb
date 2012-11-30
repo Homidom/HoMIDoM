@@ -5862,7 +5862,7 @@ Namespace HoMIDom
                         retour.LastChangeDuree = _ListDevices.Item(i).LastChangeDuree
 
                         _listact = ListMethod(_ListDevices.Item(i).id)
-                        _listact = _listact
+
                         If _listact.Count > 0 Then
                             For n As Integer = 0 To _listact.Count - 1
                                 Dim a() As String = _listact.Item(n).Split("|")
@@ -5882,6 +5882,8 @@ Namespace HoMIDom
                                     End If
                                 End With
                                 retour.DeviceAction.Add(p)
+                                p = Nothing
+                                a = Nothing
                             Next
                         End If
 
@@ -5954,6 +5956,8 @@ Namespace HoMIDom
                     Return Nothing
                 End If
 
+                retour = Nothing
+                _listact = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDeviceById", "Exception : " & ex.Message)
                 Return Nothing
@@ -7650,6 +7654,7 @@ Namespace HoMIDom
                     list.Add(_LastLogs(i))
                 Next
                 Return list
+                list = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetLastLogs", "Exception : " & ex.Message)
                 Return Nothing
@@ -7668,6 +7673,7 @@ Namespace HoMIDom
                     list.Add(_LastLogsError(i))
                 Next
                 Return list
+                list = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetLastLogsError", "Exception : " & ex.Message)
                 Return Nothing
