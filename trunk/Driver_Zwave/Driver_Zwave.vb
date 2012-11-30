@@ -915,7 +915,6 @@ Public Class Driver_ZWave
             Catch ex As Exception
                 Return ("ERR: " & ex.Message)
             End Try
-
         End Function
 
         ''' <summary>Fermer le port Z-Wave</summary>
@@ -974,8 +973,8 @@ Public Class Driver_ZWave
         ' Console.WriteLine("Retour de get Neighbors : " & Retour.ToString)
         'End Sub
 
-        '<summary>Handler lors d'une reception d'une trame</summary>
-        '<param name="m_notification"></param>
+        ''' <summary>Handler lors d'une reception d'une trame</summary>
+        ''' <param name="m_notification"></param>
         Sub NotificationHandler(ByVal m_notification As ZWNotification)
             Try
                 If m_notification Is Nothing Then Exit Sub
@@ -1090,10 +1089,10 @@ Public Class Driver_ZWave
             End Try
         End Sub
 
-        '<summary>Gets a node based on the homeId and the nodeId</summary>
-        '<param name="homeId"></param>
-        '<param name="nodeId"></param>
-        '<returns>Node</returns>
+        ''' <summary>Gets a node based on the homeId and the nodeId</summary>
+        ''' <param name="homeId"></param>
+        ''' <param name="nodeId"></param>
+        ''' <returns>Node</returns>
         Private Shared Function GetNode(ByVal homeId As UInt32, ByVal nodeId As Byte) As Node
             Try
                 For Each node As Node In m_nodeList
@@ -1105,10 +1104,10 @@ Public Class Driver_ZWave
             Return Nothing
         End Function
 
-        '<summary>Gets a Node value ID</summary>
-        '<param name="node"></param>
-        '<param name="valueLabel"></param>
-        '<returns>ValueId</returns>
+        ''' <summary>Gets a Node value ID</summary>
+        ''' <param name="node"></param>
+        ''' <param name="valueLabel"></param>
+        ''' <returns>ValueId</returns>
         Function GetValueID(ByVal node As Node, ByVal valueLabel As String) As ZWValueID
             Try
                 For Each valueID As ZWValueID In node.Values
