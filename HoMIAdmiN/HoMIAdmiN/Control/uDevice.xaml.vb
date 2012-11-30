@@ -728,6 +728,7 @@ Partial Public Class uDevice
                 Dim Devices As New List(Of Dictionary(Of String, String))
                 Dim y As New Dictionary(Of String, String)
                 y.Add(_DeviceId, "Value")
+                Devices.Add(y)
 
                 Dim x As New uHisto(Devices)
                 x.Uid = System.Guid.NewGuid.ToString()
