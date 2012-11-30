@@ -682,23 +682,18 @@ Imports System.IO.Ports
     ''' <param name="numero">Nom/Numero du port COM</param>
     ''' <remarks></remarks>
     Private Function ouvrir(ByVal numero As String) As String
-
         port_name = numero 'pour se rapeller du nom du port 
-
         Try
-
             If Not _IsConnect Then
                 Try
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GSM Mode", "+--Testing lecture d'infos--------------------------------------------------------------------")
+                    Dim sIncomming As String = ""
 
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GSM Ouvrir", "Testing du model/téléphone :")
 
-                    '
                     'lecture AT+CMGF=? pour connaitre les modes supportés par le modem gsm connecté PDU ou TEXT
                     ' reponse 0 pour le mode PDU
                     ' reponse 1 pour le mode TEXT
-                    '
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| ouverture du port : " & port_name & " à " & _BAUD & " bauds")
-
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * ouverture du port : " & port_name & " à " & _BAUD & " bauds")
                     ATport.PortName = port_name 'nom du port : COM1
                     ATport.BaudRate = _BAUD 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
                     ATport.Parity = Parity.None 'pas de parité
@@ -711,48 +706,35 @@ Imports System.IO.Ports
                     ATport.ReadTimeout = 100
                     ATport.WriteTimeout = 500
                     ATport.Open()
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| port ouvert : " & port_name)
-
-                    Dim sIncomming As String = ""
-                    'at+CLAC
+                    
                     ' regardons ce que votre modem a dans le ventre !
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "+-- AT+CLAC  Start listes des commandes du modem ")
-
-                    'AT+CLAC
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CLAC Start listes des commandes du modem :")
                     ATport.WriteLine("AT+CLAC" & vbCrLf) ' vbcrlf
                     sIncomming = ATport.ReadLine()
-
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| " & sIncomming)
-
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "+-- AT+CLAC  End listes des commandes du modem ")
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & Replace(sIncomming, vbCrLf, ""))
 
                     '+CPIN: (READY,SIM PIN,SIM PUK,SIM PIN2,SIM PUK2,PH-SIM PIN,PH-NET PIN,PH-NETSUB PIN,PH-SP PIN,PH-CORP PIN,PH-ESL PIN,PH-SIMLOCK PIN,BLOCKED)
                     'AT+CPIN? doit on rentrer un code pin ?
                     Do Until (Left(sIncomming, 12) = "+CPIN: READY" Or Left(sIncomming, 14) = "+CPIN: SIM PIN" Or Left(sIncomming, 14) = "+CPIN: SIM PUK" Or Left(sIncomming, 15) = "+CPIN: SIM PIN2" Or Left(sIncomming, 15) = "+CPIN: SIM PUK2" Or Left(sIncomming, 17) = "+CPIN: PH-SIM PIN" Or Left(sIncomming, 14) = "+CPIN: BLOCKED")
                         ATport.WriteLine("AT+CPIN?" & vbCrLf) ' vbcrlf
-                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| " & sIncomming)
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & Replace(sIncomming, vbCrLf, ""))
                         sIncomming = ATport.ReadLine()
                     Loop
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "|  AT+CPIN?")
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| " & sIncomming)
-
-
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CPIN")
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & Replace(sIncomming, vbCrLf, ""))
                     'AT+CPIN? doit on rentrer un code pin ?
                     Do Until (Left(sIncomming, 2) = "OK" Or Left(sIncomming, 11) = "+CME ERROR:" Or Left(sIncomming, 5) = "ERROR")
                         ATport.WriteLine("AT+CPIN=" & _PinCode & vbCrLf) ' vbcrlf
                         sIncomming = ATport.ReadLine()
                     Loop
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "|  AT+CPIN=" & _PinCode)
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| " & sIncomming)
-
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> AT+CPIN=" & _PinCode & " - " & Replace(sIncomming, vbCrLf, ""))
 
                     'AT+CMFG=?  lister les mode supporté
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * Lecture des mode Supportés")
                     Do Until Left(sIncomming, 6) = "+CMGF:"
                         ATport.WriteLine("AT+CMGF=?" & vbCrLf) ' vbcrlf
                         sIncomming = ATport.ReadLine()
                     Loop
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "| GSM Mode", "Lecture des mode Supportés")
-
                     Dim startIndex As Integer = sIncomming.IndexOf("(") + "(".Length
                     Dim endIndex As Integer = sIncomming.IndexOf(")")
                     Dim result As String = sIncomming.Substring(startIndex, endIndex - startIndex)
@@ -763,46 +745,33 @@ Imports System.IO.Ports
                         Select Case MODES(m).ToString
                             Case "0"
                                 MODES(m) = "PDU"
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MODE", "| Mode " & m & " (PDU) possible")
+                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MODE", "    -> Mode " & m & " (PDU) possible")
                             Case "1"
                                 MODES(m) = "TEXTE"
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MODE", "| Mode " & m & "(TEXTE) possible")
+                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MODE", "    -> Mode " & m & " (TEXTE) possible")
                             Case Else
                                 MODES(m) = "UNKNOW"
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MODE", "| Mode " & m & " inconnu ( ne sera pas utilisé)")
+                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MODE", "    -> Mode " & m & " inconnu (ne sera pas utilisé)")
                         End Select
                     Next
 
                     'quel heure est  il ?
-
-                    '
                     Do Until Left(sIncomming, 5) = "+CCLK"
                         ATport.WriteLine("AT+CCLK?" & vbCrLf) ' vbcrlf
                         sIncomming = ATport.ReadLine()
                     Loop
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "|  AT+CCLK?")
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| " & sIncomming)
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CCLK: " & Replace(sIncomming, vbCrLf, ""))
 
-
-                    'If _MODE = MODES(m) Then
-                    'SuportedMode = True
-                    'Else
-                    'SuportedMode = SuportedMode Or False
-                    '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Driver non démarré : Le mode '" & _MODE & "' n'est pas correct, choisi PDU ou TEXTE")
-                    'End If
-
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GSM Mode", "+---------------------------------------------------------------------------------------------")
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * Fermeture du port COM pour le testing")
                     ATport.Close()
                 Catch ex As Exception
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
-
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "   * Erreur dans les tests de lecture des infos: " & ex.Message)
                 End Try
 
 
-
                 'Verification du MODE de connexion
+                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * Verification du mode selectionné")
                 Try
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| Verification du mode selectionné")
                     ' verif si le mode choisi par le user est bon
                     Dim SuportedMode As Boolean = False
                     Dim ModeToUse As String = ""
@@ -813,36 +782,24 @@ Imports System.IO.Ports
                             SuportedMode = (SuportedMode Or False)
                         End If
                     Next
-
                     If SuportedMode = False Then
                         For n As Integer = 0 To MODES.Length - 1
                             If n > 1 Then
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| SuportedMode : '" & MODES(n).ToString & "'.")
+                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> SuportedMode : '" & MODES(n).ToString & "'.")
                                 ModeToUse = MODES(n)
                             Else
                                 ModeToUse = ModeToUse & " ou " & MODES(n)
                             End If
                         Next
-
+                        _IsConnect = False
                         Return ("ERR: " & "Le mode choisi '" & _MODE & "' n'est pas correct, Veuillez choisir le mode " & ModeToUse & ".")
                         Exit Function
-                        ' _IsConnect = False
-                        ' 
                     Else
-                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "| Démarrage du driver avec le mode '" & _MODE & "'.")
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> Mode '" & _MODE & "' valide.")
                     End If
-
-                    ' If _MODE <> "PDU" And _MODE <> "TEXTE" Then
-                    '  _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Driver non démarré : Le mode '" & _MODE & "' n'est pas correct, choisi PDU ou TEXTE")
-                    ' _IsConnect = False
-                    'Exit Sub
-                    'End If
-
-                    'interroge le tel/modem pour verifier si ce mode est supporté
                 Catch ex As Exception
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur Dans la verification du mode " & ex.Message)
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "    -> Erreur Dans la verification du mode " & ex.Message)
                 End Try
-
 
             End If
         Catch ex As Exception
@@ -853,21 +810,20 @@ Imports System.IO.Ports
         Select Case _MODE
             Case "PDU"
                 If Not _IsConnect Then
-                    'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * ouverture du port : " & port_name & " à " & _BAUD & " bauds")
                     Dim portnumber As Integer
-                    If (Integer.TryParse(numero.Substring(3), portnumber)) Then
-                        comm = New GsmCommMain(portnumber, _BAUD, 100)
+                    If (Integer.TryParse(port_name.Substring(3), portnumber)) Then
+                        comm = New GsmCommMain(portnumber, _BAUD, 100) 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
                     End If
-
                     comm.Open()
-
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "   * Activation des notifications")
                     comm.EnableMessageNotifications()
                     Try
                         comm.EnableMessageRouting()
-                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "| Routage des SMS activé")
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "   * Activation du routage des SMS")
                         _SMSROUTING = True
                     Catch ex As Exception
-                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "| Routage des SMS desactivé car non supporté par le modem")
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "   * Désactivation du routage des SMS car non supporté par le modem")
                         _SMSROUTING = False
                     End Try
 

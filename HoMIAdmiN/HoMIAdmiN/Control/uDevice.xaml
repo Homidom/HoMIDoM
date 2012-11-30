@@ -15,7 +15,7 @@
                         <TextBox Height="22" Name="TxtNom" Width="215" Foreground="White" Background="DarkGray" BorderBrush="Black" />
                             <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChkEnable" VerticalAlignment="Top" IsChecked="True">Enable</CheckBox>
                             <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" Name="ChKSolo" VerticalAlignment="Top" IsChecked="True">Solo</CheckBox>
-                        <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" Name="ChKLastEtat" VerticalAlignment="Top" IsChecked="True" ToolTip="Prendre en compte l'avant dernier etat d'un device">LastEtat</CheckBox>
+                        <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" Name="ChKLastEtat" VerticalAlignment="Top" IsChecked="False" ToolTip="Prendre en compte l'avant dernier etat d'un device">LastEtat</CheckBox>
                     </StackPanel>
                     <Label Foreground="White" Name="Label3">Description:</Label>
                     <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtDescript" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" />

@@ -487,13 +487,13 @@ Public Class Driver_ZWave
             Catch ex As Exception
                 _DEBUG = False
                 _AFFICHELOG = False
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave Start", "Erreur dans les paramétres avancés. utilisation des valeurs par défaut" & ex.Message)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave", "Erreur dans les paramétres avancés. utilisation des valeurs par défaut" & ex.Message)
             End Try
 
             'ouverture du port suivant le Port Com
             Try
                 If _Com <> "" Then
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Demarrage du pilote Z-Wave, ceci peut prendre plusieurs secondes", retour)
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "Demarrage du pilote, ceci peut prendre plusieurs secondes")
                     retour = ouvrir(_Com)
                     ' ZWave network is started, and our control of hardware can begin once all the nodes have reported in
                     While (m_nodesReady = False And CptBoucle < 10)
@@ -508,38 +508,31 @@ Public Class Driver_ZWave
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave", "Driver non démarré : " & retour)
                     Else
                         _IsConnect = True
-                        retour = "Port " & _Com & " ouvert "
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", retour)
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "Port " & _Com & " ouvert ")
 
                         ' Affichage des Informations Controleur du controleur
                         Dim NodeControler As Byte = m_manager.GetControllerNodeId(m_homeId)
                         Dim IsPrimSUC As String = ""
                         If m_manager.IsPrimaryController(m_homeId) Then IsPrimSUC = "Primaire" Else IsPrimSUC = "Secondaire"
                         If m_manager.IsStaticUpdateController(m_homeId) Then IsPrimSUC = IsPrimSUC & "(SUC)" Else IsPrimSUC = IsPrimSUC & " (SIS)"
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "+---------------------------------------------------------------------------------------------")
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|  Home ID : 0x" & Convert.ToString(m_homeId, 16).ToUpper & " Nombre de noeuds : " & m_nodeList.Count.ToString)
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|  Mode    : " & IsPrimSUC)
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "+---------------------------------------------------------------------------------------------")
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|  ID  Controleur  : " & NodeControler & vbTab & "Nom Controleur :" & m_manager.GetNodeName(m_homeId, NodeControler))
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|  Marque/modele   : " & m_manager.GetNodeManufacturerName(m_homeId, NodeControler) & vbTab & m_manager.GetNodeProductName(m_homeId, NodeControler))
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|  Type Controleur : " & m_manager.GetLibraryTypeName(m_homeId) & vbTab & " Biblio Version : " & m_manager.GetLibraryVersion(m_homeId))
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|") ' +---------------------------------------------------------------------------------------------")
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "    * Home ID : 0x" & Convert.ToString(m_homeId, 16).ToUpper & " Nombre de noeuds : " & m_nodeList.Count.ToString)
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "    * Mode    : " & IsPrimSUC)
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "    * ID  Controleur  : " & NodeControler & vbTab & "Nom Controleur :" & m_manager.GetNodeName(m_homeId, NodeControler))
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "    * Marque/modele   : " & m_manager.GetNodeManufacturerName(m_homeId, NodeControler) & vbTab & m_manager.GetNodeProductName(m_homeId, NodeControler))
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "    * Type Controleur : " & m_manager.GetLibraryTypeName(m_homeId) & vbTab & " Biblio Version : " & m_manager.GetLibraryVersion(m_homeId))
                         ' Si le controleur a des noeuds d'associés
                         If m_nodeList.Count Then
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "+- Noeuds ------------------------------------------------------------------------------------")
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|  Id:Nom " & vbTab & vbTab & "type" & vbTab & vbTab & "Constr./Modèle" & vbTab & "Version")
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "|  Endormi ? ")
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "+---------------------------------------------------------------------------------------------")
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "    * Noeuds: ")
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "          Id:Nom " & vbTab & vbTab & "type" & vbTab & vbTab & "Constr./Modèle" & vbTab & "Version" & vbTab & " Endormi ? ")
                             ' Affichages des informations de chaque noeud 
+                            Dim IsSleeping As String = ""
+                            Dim NodeTempID As Byte
                             For Each NodeTemp As Node In m_nodeList
-                                Dim NodeTempID As Byte = NodeTemp.ID
-                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "| " & NodeTempID & " : " & NodeTemp.Name & vbTab & m_manager.GetNodeType(m_homeId, NodeTempID) & vbTab & NodeTemp.Manufacturer & "/" & NodeTemp.Product & vbTab & m_manager.GetNodeVersion(m_homeId, NodeTemp.ID))
-                                Dim IsSleeping As String = ""
+                                NodeTempID = NodeTemp.ID
                                 If m_manager.IsNodeListeningDevice(m_homeId, NodeTempID) Then IsSleeping = "à l'écoute" Else IsSleeping = "Endormi"
-                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "| " & IsSleeping)
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "      -> " & NodeTempID & " : " & NodeTemp.Name & vbTab & m_manager.GetNodeType(m_homeId, NodeTempID) & vbTab & NodeTemp.Manufacturer & "/" & NodeTemp.Product & vbTab & m_manager.GetNodeVersion(m_homeId, NodeTemp.ID) & vbTab & IsSleeping)
                             Next
                         End If
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Z-Wave", "+---------------------------------------------------------------------------------------------")
                     End If
                 Else
                     retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
@@ -823,7 +816,6 @@ Public Class Driver_ZWave
                 _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
                 _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE.ToString)
 
-
                 'Paramétres avancés
                 Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
                 Add_ParamAvance("AfficheLog", "Afficher Log OpenZwave à l'écran (True/False)", True)
@@ -904,7 +896,6 @@ Public Class Driver_ZWave
                             m_options.Lock()
                             m_manager.Create()
 
-
                             ' Ajout d'un gestionnaire d'evenements()
                             m_manager.OnNotification = New ManagedNotificationsHandler(AddressOf NotificationHandler)
                             ' Creation du driver - Ouverture du port du controleur
@@ -914,13 +905,10 @@ Public Class Driver_ZWave
                             ' Le port n'existe pas ==> le controleur n'est pas present
                             Return ("Port " & port_name & " fermé")
                         End If
-
-
                     Catch ex As Exception
                         Return ("Port " & port_name & " n'existe pas")
                         Exit Function
                     End Try
-
                 Else
                     Return ("Port " & port_name & " dejà ouvert")
                 End If
@@ -945,21 +933,15 @@ Public Class Driver_ZWave
                                 For Each node As Node In m_nodeList : m_nodeList.Remove(node)
                                 Next
                             End If
-                          
                         Catch ex As UnauthorizedAccessException
                             Return ("Probleme lors de la suppression des noeuds" & m_nodeList.Count)
                         End Try
-
                         m_manager.RemoveDriver("\\.\" & _Com)
                         m_manager.Destroy()
                         m_options.Destroy()
-
                         port.Dispose()
                         port.Close()
-
-
                         Return ("Port " & _Com & " fermé")
-
                     Else
                         Return ("Port " & _Com & " n'existe pas")
                     End If
@@ -968,16 +950,22 @@ Public Class Driver_ZWave
                 End If
             Catch ex As UnauthorizedAccessException
                 Return ("ERR: Port " & _Com & " IGNORE")
+            Catch ex As Exception
+                Return ("ERR: Port " & _Com & " IGNORE: " & ex.Message)
             End Try
-
-            Return True
         End Function
 
         ''' <summary>Reset le controleur Z-Wave avec les parametres d'Usine</summary>
         ''' <remarks></remarks>
         Sub ResetControler()
-            Dim RetBox As Byte = MsgBox("Est vous sur de vouloir reseter votre controleur ?" & vbLf & "Ceci va supprimer toute votre configuration", vbQuestion + vbSystemModal + vbYesNo, "Reset Usine du controleur")
-            If RetBox = 6 Then m_manager.ResetController(m_homeId)
+            Try
+                'Dim RetBox As Byte = MsgBox("Est vous sur de vouloir reseter votre controleur ?" & vbLf & "Ceci va supprimer toute votre configuration", vbQuestion + vbSystemModal + vbYesNo, "Reset Usine du controleur")
+                'If RetBox = 6 Then m_manager.ResetController(m_homeId)
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " ResetControler ", "Reset du controleur, ceci va supprimer toute votre configuration")
+                m_manager.ResetController(m_homeId)
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ResetControler ", "Exception: " & ex.Message)
+            End Try
         End Sub
 
         ' Sub GetNodeNeighbors()
@@ -986,60 +974,51 @@ Public Class Driver_ZWave
         ' Console.WriteLine("Retour de get Neighbors : " & Retour.ToString)
         'End Sub
 
-
-
+        '<summary>Handler lors d'une reception d'une trame</summary>
+        '<param name="m_notification"></param>
         Sub NotificationHandler(ByVal m_notification As ZWNotification)
+            Try
+                If m_notification Is Nothing Then Exit Sub
+                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Une notification a été reçue:")
 
-            If m_notification Is Nothing Then
-                Return
-            End If
+                Select Case m_notification.[GetType]()
+                    Case ZWNotification.Type.ValueAdded
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - ValueAdded")
+                        Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
+                        If Not IsNothing(node) Then node.AddValue(m_notification.GetValueID())
 
-            Select Case m_notification.[GetType]()
+                    Case ZWNotification.Type.ValueRemoved
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - ValueRemoved")
+                        Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
+                        If Not IsNothing(node) Then node.RemoveValue(m_notification.GetValueID())
 
-                Case ZWNotification.Type.ValueAdded
-                    Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
-                    If Not IsNothing(node) Then
-                        node.AddValue(m_notification.GetValueID())
-                    End If
+                    Case ZWNotification.Type.ValueChanged
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - ValueChanged")
+                        Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
+                        If IsNothing(node) Then node.SetValue(m_notification.GetValueID())
 
-                Case ZWNotification.Type.ValueRemoved
-                    Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
-                    If Not IsNothing(node) Then
-                        node.RemoveValue(m_notification.GetValueID())
-                    End If
+                    Case ZWNotification.Type.Group
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - Group")
 
-                Case ZWNotification.Type.ValueChanged
-                    Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
-                    If IsNothing(node) Then
-                        node.SetValue(m_notification.GetValueID())
-                    End If
-
-                Case ZWNotification.Type.Group
-
-
-                Case ZWNotification.Type.NodeAdded
-                    ' Ajoute une nouveau noeud à notre liste
-                    Dim node As New Node()
-                    node.ID = m_notification.GetNodeId()
-                    ' Si ce n'est pas le controleur 
-                    If node.ID <> m_manager.GetControllerNodeId(m_homeId) Then
-                        node.HomeID = m_notification.GetHomeId()
-                        m_nodeList.Add(node)
-                        If _DEBUG Then
-                            Console.WriteLine("Le nb de noeuds est : " & m_nodeList.Count)
-                            Console.WriteLine("Le nouveau node est : " & node.ID)
-                            Console.WriteLine("Le nom est          : " & node.Name)
-                            Console.WriteLine("Le manufacturer est : " & node.Manufacturer)
-                            Console.WriteLine("Le produit est      : " & node.Product)
-                            Console.WriteLine("Le label est        : " & node.Label)
-                            Console.WriteLine("La location est     : " & node.Location)
-                            Console.WriteLine("Le Nb values est    : " & node.Values.Count)
+                    Case ZWNotification.Type.NodeAdded
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeAdded")
+                        ' Ajoute une nouveau noeud à notre liste
+                        Dim node As New Node()
+                        node.ID = m_notification.GetNodeId()
+                        ' Si ce n'est pas le controleur 
+                        If node.ID <> m_manager.GetControllerNodeId(m_homeId) Then
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Ajout d'un nouveau noeud")
+                            node.HomeID = m_notification.GetHomeId()
+                            m_nodeList.Add(node)
+                            If _DEBUG Then
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - ID: " & node.ID & ", Nom: " & node.Name & ", Manufacturer: " & node.Manufacturer)
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - Produit: " & node.Product & ", Label : " & node.Label)
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - Nb noeuds: " & m_nodeList.Count & ", Location: " & node.Location & ", Nb values: " & node.Values.Count)
+                            End If
                         End If
-                    End If
 
-
-
-                Case ZWNotification.Type.NodeRemoved
+                    Case ZWNotification.Type.NodeRemoved
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeRemoved")
                         For Each node As Node In m_nodeList
                             If node.ID = m_notification.GetNodeId() Then
                                 m_nodeList.Remove(node)
@@ -1047,13 +1026,15 @@ Public Class Driver_ZWave
                             End If
                         Next
 
-                Case ZWNotification.Type.NodeProtocolInfo
+                    Case ZWNotification.Type.NodeProtocolInfo
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeProtocolInfo")
                         Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
                         If Not IsNothing(node) Then
                             node.Label = m_manager.GetNodeType(m_homeId, node.ID)
                         End If
 
-                Case ZWNotification.Type.NodeNaming
+                    Case ZWNotification.Type.NodeNaming
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeNaming")
                         Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
                         If Not IsNothing(node) Then
                             node.Manufacturer = m_manager.GetNodeManufacturerName(m_homeId, node.ID)
@@ -1062,77 +1043,84 @@ Public Class Driver_ZWave
                             node.Name = m_manager.GetNodeName(m_homeId, node.ID)
                         End If
 
+                    Case ZWNotification.Type.NodeEvent
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeEvent")
 
-                Case ZWNotification.Type.NodeEvent
+                    Case ZWNotification.Type.PollingDisabled
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - PollingDisabled")
 
+                    Case ZWNotification.Type.PollingEnabled
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - PollingEnabled")
 
-                Case ZWNotification.Type.PollingDisabled
-
-
-                Case ZWNotification.Type.PollingEnabled
-
-                Case ZWNotification.Type.DriverReady
+                    Case ZWNotification.Type.DriverReady
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - DriverReady")
                         m_homeId = m_notification.GetHomeId()
 
-                Case ZWNotification.Type.NodeQueriesComplete
+                    Case ZWNotification.Type.NodeQueriesComplete
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeQueriesComplete")
 
-                Case ZWNotification.Type.AllNodesQueried
-                    ' Pour simulation de noeuds
-                    ' Dim nodeTempAdd As New Node
-                    ' nodeTempAdd.ID = 2
-                    ' nodeTempAdd.HomeID = 21816633
-                    ' nodeTempAdd.Manufacturer = "Everspring"
-                    ' nodeTempAdd.Product = "ST814 Temperature and Humidity Sensor"
-                    ' nodeTempAdd.Label = "Temperature and Humidity Sensor"
-                    ' nodeTempAdd.Name = "Capteur Chambre"
-                    ' m_nodeList.Add(nodeTempAdd)
+                    Case ZWNotification.Type.AllNodesQueried
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - AllNodesQueried")
+                        ' Pour simulation de noeuds
+                        ' Dim nodeTempAdd As New Node
+                        ' nodeTempAdd.ID = 2
+                        ' nodeTempAdd.HomeID = 21816633
+                        ' nodeTempAdd.Manufacturer = "Everspring"
+                        ' nodeTempAdd.Product = "ST814 Temperature and Humidity Sensor"
+                        ' nodeTempAdd.Label = "Temperature and Humidity Sensor"
+                        ' nodeTempAdd.Name = "Capteur Chambre"
+                        ' m_nodeList.Add(nodeTempAdd)
 
-                    ' Dim nodeTempAdd2 As New Node
-                    ' nodeTempAdd2.ID = 3
-                    ' nodeTempAdd2.HomeID = 21816633
-                    ' nodeTempAdd2.Manufacturer = "Everspring-DEFRE"
-                    ' nodeTempAdd2.Product = "ST99 Temperature"
-                    ' nodeTempAdd2.Label = "Temperature and Humidity Sensor"
-                    'nodeTempAdd2.Name = "Capteur bureau"
-                    ' m_nodeList.Add(nodeTempAdd2)
-                    m_nodesReady = True
+                        ' Dim nodeTempAdd2 As New Node
+                        ' nodeTempAdd2.ID = 3
+                        ' nodeTempAdd2.HomeID = 21816633
+                        ' nodeTempAdd2.Manufacturer = "Everspring-DEFRE"
+                        ' nodeTempAdd2.Product = "ST99 Temperature"
+                        ' nodeTempAdd2.Label = "Temperature and Humidity Sensor"
+                        'nodeTempAdd2.Name = "Capteur bureau"
+                        ' m_nodeList.Add(nodeTempAdd2)
+                        m_nodesReady = True
 
-                Case ZWNotification.Type.AwakeNodesQueried
+                    Case ZWNotification.Type.AwakeNodesQueried
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - AwakeNodesQueried")
 
-            End Select
+                End Select
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Exception: " & ex.Message)
+            End Try
         End Sub
 
-        '<summary>
-
-        'Gets a node based on the homeId and the nodeId
-        '</summary>
+        '<summary>Gets a node based on the homeId and the nodeId</summary>
         '<param name="homeId"></param>
         '<param name="nodeId"></param>
-        '<returns></returns>
+        '<returns>Node</returns>
         Private Shared Function GetNode(ByVal homeId As UInt32, ByVal nodeId As Byte) As Node
-
-            For Each node As Node In m_nodeList
-                If (node.ID = nodeId) And (node.HomeID = homeId) Then
-                    Return node
-                End If
-            Next
+            Try
+                For Each node As Node In m_nodeList
+                    If (node.ID = nodeId) And (node.HomeID = homeId) Then Return node
+                Next
+            Catch ex As Exception
+                '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave GetNode ", "Exception: " & ex.Message)
+            End Try
             Return Nothing
         End Function
 
-
-
+        '<summary>Gets a Node value ID</summary>
+        '<param name="node"></param>
+        '<param name="valueLabel"></param>
+        '<returns>ValueId</returns>
         Function GetValueID(ByVal node As Node, ByVal valueLabel As String) As ZWValueID
-
-            For Each valueID As ZWValueID In node.Values
-                If (valueID.GetNodeId = node.ID) And (m_manager.GetValueLabel(valueID) = valueLabel) Then
-                    Return valueID
-                End If
-            Next
+            Try
+                For Each valueID As ZWValueID In node.Values
+                    If (valueID.GetNodeId = node.ID) And (m_manager.GetValueLabel(valueID) = valueLabel) Then Return valueID
+                Next
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GetValueID ", "Exception: " & ex.Message)
+            End Try
             Return Nothing
         End Function
 
 #End Region
-
 
     End Class
 
