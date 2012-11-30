@@ -863,7 +863,7 @@ Namespace HoMIDom
                                         If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = Replace(list.Item(j).Attributes.GetNamedItem("refresh").Value, ".", ",")
                                         If (Not list.Item(j).Attributes.GetNamedItem("modele") Is Nothing) Then .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
                                         If list.Item(j).Attributes.GetNamedItem("picture").Value IsNot Nothing Then
-                                            If IO.File.Exists(.Picture = list.Item(j).Attributes.GetNamedItem("picture").Value) Then
+                                            If IO.File.Exists(list.Item(j).Attributes.GetNamedItem("picture").Value) Then
                                                 .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
                                             Else
                                                 Dim fileimg As String = _MonRepertoire & "\images\Devices\" & LCase(_Dev.type) & "-defaut.png"
