@@ -1716,7 +1716,6 @@ Imports System.Media
     ''' <param name="commande">premier paquet à envoyer</param>
     ''' <remarks></remarks>
     Private Function ecrire(ByVal commande() As Byte) As String
-        Dim message As String = ""
         Try
             If tcp Then
                 stream.Write(commande, 0, commande.Length)
@@ -1760,6 +1759,7 @@ Imports System.Media
             Catch exc As Exception
                 WriteLog("ERR: SendCommand: Unable to write to port")
             End Try
+            kar = Nothing
         Catch ex As Exception
             WriteLog("ERR: SendCommand Exception : " & ex.Message)
         End Try
@@ -2124,6 +2124,7 @@ Imports System.Media
                         Case Else : WriteLog("ERR: decode_InterfaceMessage : Données incorrectes reçues : type=" & Hex(recbuf(IRESPONSE.packettype)) & ", Sub type=" & Hex(recbuf(IRESPONSE.subtype)) & " cmnd=" & Hex(recbuf(IRESPONSE.cmnd)))
                     End Select
             End Select
+            messagelog = Nothing
         Catch ex As Exception
             WriteLog("ERR: decode_InterfaceMessage : " & ex.Message)
         End Try
@@ -4653,6 +4654,7 @@ Imports System.Media
                 'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
 
             End If
+            listedevices = Nothing
         Catch ex As Exception
             WriteLog("ERR: WriteBattery Exception : " & ex.Message & " --> " & adresse)
         End Try
@@ -4700,6 +4702,7 @@ Imports System.Media
                 Else
                     WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
                 End If
+                listedevices = Nothing
             End If
 
         Catch ex As Exception
@@ -4762,6 +4765,7 @@ Imports System.Media
                 'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
 
             End If
+            listedevices = Nothing
         Catch ex As Exception
             WriteLog("ERR: Writeretour Exception : " & ex.Message)
         End Try

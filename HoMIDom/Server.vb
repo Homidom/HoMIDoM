@@ -116,13 +116,14 @@ Namespace HoMIDom
                         '------------------------------------------------------------------------------------------------
                         Try
                             'Parcour des triggers pour vérifier si le device déclenche des macros
+                            Dim _m As Macro
                             For i As Integer = 0 To _ListTriggers.Count - 1
                                 If _ListTriggers.Item(i).Enable = True Then
                                     If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE And Device.id = _ListTriggers.Item(i).ConditionDeviceId And _ListTriggers.Item(i).ConditionDeviceProperty = [Property] Then 'c'est un trigger type device + enable + device concerné
                                         Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", " -> " & Device.name & " est associé au trigger : " & _ListTriggers.Item(i).Nom)
                                         'on lance toutes les macros associés
                                         For j As Integer = 0 To _ListTriggers.Item(i).ListMacro.Count - 1
-                                            Dim _m As Macro = ReturnMacroById(_IdSrv, _ListTriggers.Item(i).ListMacro.Item(j))
+                                            _m = ReturnMacroById(_IdSrv, _ListTriggers.Item(i).ListMacro.Item(j))
                                             Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", " --> " & _ListTriggers.Item(i).Nom & " Lance la macro : " & _m.Nom)
                                             If _m IsNot Nothing Then _m.Execute(Me)
                                             _m = Nothing
@@ -268,9 +269,11 @@ Namespace HoMIDom
             End Try
         End Sub
 
+        ''' <summary>on checke si il y a cron à faire</summary>
+        ''' <remarks></remarks>
         Private Sub VerifTimeDevice()
-            'on checke si il y a cron à faire
             Try
+                Dim _m As Macro
                 For i As Integer = 0 To _ListTriggers.Count() - 1
                     If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
                         If _ListTriggers.Item(i).Enable = True Then
@@ -279,7 +282,7 @@ Namespace HoMIDom
                                 'lancement des macros associées
                                 For j As Integer = 0 To _ListTriggers.Item(i).ListMacro.Count - 1
                                     'on cherche la macro et on la lance en testant ces conditions
-                                    Dim _m As Macro = ReturnMacroById(_IdSrv, _ListTriggers.Item(i).ListMacro.Item(j))
+                                    _m = ReturnMacroById(_IdSrv, _ListTriggers.Item(i).ListMacro.Item(j))
                                     If _m IsNot Nothing Then _m.Execute(Me)
                                     _m = Nothing
                                 Next
@@ -406,10 +409,11 @@ Namespace HoMIDom
                 Dim file As System.IO.FileInfo
                 Dim files() As System.IO.FileInfo = dirInfo.GetFiles("homidom.xml")
                 Dim myxml As XML
+                Dim myfile As String
 
                 If (files IsNot Nothing) Then
                     For Each file In files
-                        Dim myfile As String = file.FullName
+                        myfile = file.FullName
                         Dim list As XmlNodeList
 
                         myxml = New XML(myfile)
@@ -526,10 +530,7 @@ Namespace HoMIDom
 
                             If list.Count > 0 Then 'présence d'un ou des driver(s)
                                 For j As Integer = 0 To list.Count - 1
-                                    'on récupère l'id du driver
-                                    Dim _IdDriver = list.Item(j).Attributes.Item(0).Value
-                                    Dim _drv As IDriver = ReturnDrvById(_IdSrv, _IdDriver)
-
+                                    Dim _drv As IDriver = ReturnDrvById(_IdSrv, list.Item(j).Attributes.Item(0).Value)
                                     If _drv IsNot Nothing Then
                                         _drv.Enable = list.Item(j).Attributes.GetNamedItem("enable").Value
                                         _drv.StartAuto = list.Item(j).Attributes.GetNamedItem("startauto").Value
@@ -541,18 +542,20 @@ Namespace HoMIDom
                                         _drv.Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
                                         _drv.Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
 
-
-
+                                        Dim a As String
+                                        Dim idx As Integer
                                         For i As Integer = 0 To list.Item(j).Attributes.Count - 1
-                                            Dim a As String = UCase(list.Item(j).Attributes.Item(i).Name)
+                                            a = UCase(list.Item(j).Attributes.Item(i).Name)
                                             If a.StartsWith("PARAMETRE") Then
-                                                Dim idx As Integer = Mid(a, 10, Len(a) - 9)
+                                                idx = Mid(a, 10, Len(a) - 9)
                                                 If idx < _drv.Parametres.Count Then
                                                     _drv.Parametres.Item(idx).valeur = list.Item(j).Attributes.Item(i).Value
                                                 End If
                                             End If
-                                            a = Nothing
+
                                         Next
+                                        a = Nothing
+                                        idx = Nothing
 
                                         Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _drv.Nom & " chargé")
                                         _drv = Nothing
@@ -610,10 +613,12 @@ Namespace HoMIDom
                                             If list.Item(i).ChildNodes.Item(k).Name = "element" Then
                                                 Dim _dev As New Zone.Element_Zone(list.Item(i).ChildNodes.Item(k).Attributes(0).Value, list.Item(i).ChildNodes.Item(k).Attributes(1).Value)
                                                 x.ListElement.Add(_dev)
+                                                _dev = Nothing
                                             End If
                                         Next
                                     End If
                                     _ListZones.Add(x)
+                                    x = Nothing
                                 Next
                             Else
                                 Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucune zone enregistrée dans le fichier de config")
@@ -680,6 +685,7 @@ Namespace HoMIDom
                                         End Select
                                     Next
                                     _ListUsers.Add(x)
+                                    x = Nothing
                                 Next
                             Else
                                 Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Création de l'utilisateur admin par défaut !!")
@@ -866,6 +872,7 @@ Namespace HoMIDom
                                                 Else
                                                     .Picture = _MonRepertoire & "\images\icones\composant_128.png"
                                                 End If
+                                                fileimg = Nothing
                                             End If
                                         Else
                                             .Picture = _MonRepertoire & "\images\icones\composant_128.png"
@@ -905,6 +912,7 @@ Namespace HoMIDom
                                             If X < Now Then
                                                 _DevicesNoMAJ.Add(.Name)
                                             End If
+                                            X = Nothing
                                         End If
                                         If .ID <> "" And .Name <> "" And .Adresse1 <> "" And .DriverId <> "" Then
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
@@ -991,6 +999,7 @@ Namespace HoMIDom
                                         End If
                                     End If
                                     _ListTriggers.Add(x)
+                                    x = Nothing
                                 Next
                             Else
                                 Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucun trigger enregistré dans le fichier de config")
@@ -1027,6 +1036,7 @@ Namespace HoMIDom
                                     Next
                                     LoadAction(list.Item(i), x.ListActions)
                                     _ListMacros.Add(x)
+                                    x = Nothing
                                 Next
                             Else
                                 Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucune macro enregistrée dans le fichier de config")
@@ -1050,7 +1060,7 @@ Namespace HoMIDom
                 file = Nothing
                 files = Nothing
                 myxml = Nothing
-
+                myfile = Nothing
                 Return " Chargement de la configuration terminée"
 
             Catch ex As Exception
@@ -2062,8 +2072,8 @@ Namespace HoMIDom
         Public Function ReturnDriver(ByVal DriverId As String) As ArrayList
             Try
                 For i As Integer = 0 To _ListDrivers.Count - 1
-                    Dim tabl As New ArrayList
                     If _ListDrivers.Item(i).ID = DriverId Then
+                        Dim tabl As New ArrayList
                         tabl.Add(_ListDrivers.Item(i).nom)
                         tabl.Add(_ListDrivers.Item(i).enable)
                         tabl.Add(_ListDrivers.Item(i).description)
@@ -2084,6 +2094,7 @@ Namespace HoMIDom
                         tabl.Add(_ListDrivers.Item(i).Labels)
                         tabl.Add(_ListDrivers.Item(i).OsPlatform)
                         Return tabl
+                        tabl = Nothing
                         Exit For
                     End If
                 Next
@@ -2280,6 +2291,8 @@ Namespace HoMIDom
                 Dim Buffer As Byte() = System.Text.ASCIIEncoding.ASCII.GetBytes(sIn)
                 ' Transform and return the string.
                 Return Convert.ToBase64String(DESEncrypt.TransformFinalBlock(Buffer, 0, Buffer.Length))
+                DES = Nothing
+                hashMD5 = Nothing
             Catch ex As Exception
                 'Log(TypeLog.ERREUR, TypeSource.SERVEUR, "EncryptTripleDES", "Exception : " & ex.Message)
                 Return ""
@@ -2482,7 +2495,8 @@ Namespace HoMIDom
                     'wait(500)
                     Console.WriteLine(Now & " " & TypLog & " SERVER LOG ERROR Exception : " & ex.ToString)
                 End Try
-
+                texte = Nothing
+                FreeF = Nothing
             Catch ex As Exception
                 Console.WriteLine("Erreur lors de l'écriture d'un log: " & ex.ToString, MsgBoxStyle.Exclamation, "Erreur Serveur")
             End Try
@@ -2529,6 +2543,7 @@ Namespace HoMIDom
                     Case TypeEventLog.INFORMATION : myEventLog.WriteEntry(message, EventLogEntryType.Information, eventid)
                 End Select
                 'Diagnostics.EventLog.WriteEntry("HoMIDoM", message)
+                myEventLog = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LogEvent", "Exception : " & ex.ToString)
             End Try
@@ -2802,6 +2817,8 @@ Namespace HoMIDom
                         'sqliteversion = 3
                     End If
                 End If
+                sqliteversion = Nothing
+                retour = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start SQLlite versionning", "Exception : " & ex.Message)
             End Try
@@ -2881,7 +2898,9 @@ Namespace HoMIDom
                 Next
                 objMOS.Dispose()
                 objMOS = Nothing
+                objMOC = Nothing
                 objMO = Nothing
+                result = Nothing
 
                 'verif si premiere installation
                 If db_uid = "" Then
@@ -2994,6 +3013,7 @@ Namespace HoMIDom
                         Dim x As New Thread(AddressOf _Action.Execute)
                         x.Start()
                     Next
+                    mymacro = Nothing
                 End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:Action", ex.ToString)
@@ -7607,7 +7627,6 @@ Namespace HoMIDom
         Public Function GetTypeLogEnable() As List(Of Boolean) Implements IHoMIDom.GetTypeLogEnable
             Try
                 Dim _list As New List(Of Boolean)
-
                 For i As Integer = 0 To _TypeLogEnable.Count - 1
                     If _TypeLogEnable.Item(i) = True Then
                         _list.Add(False)
@@ -7615,8 +7634,8 @@ Namespace HoMIDom
                         _list.Add(True)
                     End If
                 Next
-
                 Return _list
+                _list = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetTypeLogEnable", "Exception : " & ex.Message)
                 Return Nothing
