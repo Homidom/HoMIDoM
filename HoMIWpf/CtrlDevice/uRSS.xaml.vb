@@ -154,6 +154,7 @@ Public Class RSSChannel
 
             Return tempNodeList
 
+            tempNodeList = Nothing
         Catch ex As Exception
             MessageBox.Show("Erreur GetXMLDoc: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             Return Nothing
@@ -190,6 +191,8 @@ Public Class RSSChannel
             Next
 
             Return tempArrayList
+
+            tempArrayList = Nothing
         Catch ex As Exception
             MessageBox.Show("Erreur GetChannelItems: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             Return Nothing

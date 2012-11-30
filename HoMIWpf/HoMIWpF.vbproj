@@ -267,14 +267,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\FrmConfigChaine.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\FrmDetailProgram.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\keyboard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -315,18 +307,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="uNotes.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControls\uProgrammeTV.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="WConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -361,16 +341,9 @@
     <Compile Include="MoveThumb.vb" />
     <Compile Include="ResizeThumb.vb" />
     <Compile Include="RotateThumb.vb" />
-    <Compile Include="ServiceTV.vb" />
     <Compile Include="Widget\cWidget.vb" />
     <Compile Include="Widget\uWidgetEmpty.xaml.vb">
       <DependentUpon>uWidgetEmpty.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\FrmConfigChaine.xaml.vb">
-      <DependentUpon>FrmConfigChaine.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\FrmDetailProgram.xaml.vb">
-      <DependentUpon>FrmDetailProgram.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\keyboard.xaml.vb">
       <DependentUpon>keyboard.xaml</DependentUpon>
@@ -420,7 +393,6 @@
     <Compile Include="Appointment.vb" />
     <Compile Include="clsXML.vb" />
     <Compile Include="Fonctions.vb" />
-    <Compile Include="GuideTV.vb" />
     <Compile Include="My Project\AssemblyInfo.vb">
       <SubType>Code</SubType>
     </Compile>
@@ -455,12 +427,6 @@
     </Compile>
     <Compile Include="uModules.xaml.vb">
       <DependentUpon>uModules.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="uNotes.xaml.vb">
-      <DependentUpon>uNotes.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\uProgrammeTV.xaml.vb">
-      <DependentUpon>uProgrammeTV.xaml</DependentUpon>
     </Compile>
     <Compile Include="Variables.vb" />
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -735,7 +701,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
+      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -15,6 +15,8 @@ Module Fonctions
             ImgSource.EndInit()
         End If
         Return ImgSource
+        ImgSource = Nothing
+        array = Nothing
     End Function
 
 

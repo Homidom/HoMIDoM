@@ -55,8 +55,6 @@ Class Window1
     Dim _Design As Boolean = False
     Dim mybuttonstyle As Style
     Public _CurrentIdZone As String
-    'Service TV
-    Dim _ServiceTV As New ServiceTV(Me)
 
 #End Region
 
