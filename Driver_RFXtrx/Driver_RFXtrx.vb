@@ -992,6 +992,7 @@ Imports System.Media
     Private gRecComPortEnabled As Boolean = False
     'Private Resettimer As Integer = 0
     Private trxType As Integer = 0
+    Private Shared rfxtrxlock As New Object
 
     Private recbuf(40), recbytes As Byte
     Private bytecnt As Integer = 0
@@ -1753,13 +1754,15 @@ Imports System.Media
     ''' <remarks></remarks>
     Private Function ecrire(ByVal commande() As Byte) As String
         Try
-            If tcp Then
-                stream.Write(commande, 0, commande.Length)
-                bytSeqNbr = CByte(bytSeqNbr + 1)
-            Else
-                RS232Port.Write(commande, 0, commande.Length)
-                bytSeqNbr = CByte(bytSeqNbr + 1)
-            End If
+            SyncLock rfxtrxlock 'lock pour etre sur de ne pas faire deux operations en meme temps 
+                If tcp Then
+                    stream.Write(commande, 0, commande.Length)
+                    bytSeqNbr = CByte(bytSeqNbr + 1)
+                Else
+                    RS232Port.Write(commande, 0, commande.Length)
+                    bytSeqNbr = CByte(bytSeqNbr + 1)
+                End If
+            End SyncLock
             Return ""
         Catch ex As Exception
             Return ("ERR: " & ex.Message)

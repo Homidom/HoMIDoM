@@ -57,6 +57,7 @@ Imports System.IO.Ports
     Private WithEvents port As New System.IO.Ports.SerialPort
     Private ackreceived As Boolean = False
     Private port_name As String = ""
+    Private Shared plcbuslock As New Object
 
     Dim com_to_hex As New Dictionary(Of String, Integer)
     Dim hex_to_com As New Dictionary(Of Integer, String)
@@ -862,24 +863,26 @@ Imports System.IO.Ports
                     Dim donnee() As Byte = {&H2, &H5, CByte(plcusercode), CByte(_adresse), CByte(_cmd), CByte(data1), CByte(data2), &H3}
 
                     'ecriture sur le port
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Ecrire", " Ecrire " & adresse & " : " & commande & " " & data1 & "-" & data2 & " (data:" & &H2 & "." & &H5 & "." & plcusercode & "." & _adresse & "." & _cmd & "." & data1 & "." & data2 & "." & &H3 & ")")
-                    port.Write(donnee, 0, donnee.Length)
-                    'If ecriretwice Then port.Write(donnee, 0, donnee.Length) 'on ecrit deux fois : voir la norme PLCBUS
-
-                    'gestion des acks (sauf pour les status_request car pas important et encombre le port)
-                    If plcack And Not attente_ack() And commande <> "STATUS_REQUEST" And commande <> "GetOnlyOnIdPulse" And commande <> "GetAllIdPulse" And commande <> "ReportAllIdPulse3Phase" And commande <> "ReportOnlyOnIdPulse3Phase" Then
-                        'pas de ack, on relance l ordre
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Pas de Ack -> resend : " & adresse & " : " & commande & " " & data1 & "-" & data2)
+                    SyncLock plcbuslock 'lock pour etre sur de ne pas faire deux operations en meme temps 
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Ecrire", " Ecrire " & adresse & " : " & commande & " " & data1 & "-" & data2 & " (data:" & &H2 & "." & &H5 & "." & plcusercode & "." & _adresse & "." & _cmd & "." & data1 & "." & data2 & "." & &H3 & ")")
                         port.Write(donnee, 0, donnee.Length)
-                        'port.Write(donnee, 0, donnee.Length) 'on ecrit deux fois : voir la norme PLCBUS
-                        If Not attente_ack() Then
-                            'pas de ack > NOK
-                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Pas de Ack --> " & adresse & " : " & commande & " " & data1 & "-" & data2)
-                            Return "" 'on renvoi rien car le composant n'a pas recu l'ordre
+                        'If ecriretwice Then port.Write(donnee, 0, donnee.Length) 'on ecrit deux fois : voir la norme PLCBUS
+
+                        'gestion des acks (sauf pour les status_request car pas important et encombre le port)
+                        If plcack And Not attente_ack() And commande <> "STATUS_REQUEST" And commande <> "GetOnlyOnIdPulse" And commande <> "GetAllIdPulse" And commande <> "ReportAllIdPulse3Phase" And commande <> "ReportOnlyOnIdPulse3Phase" Then
+                            'pas de ack, on relance l ordre
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Pas de Ack -> resend : " & adresse & " : " & commande & " " & data1 & "-" & data2)
+                            port.Write(donnee, 0, donnee.Length)
+                            'port.Write(donnee, 0, donnee.Length) 'on ecrit deux fois : voir la norme PLCBUS
+                            If Not attente_ack() Then
+                                'pas de ack > NOK
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Pas de Ack --> " & adresse & " : " & commande & " " & data1 & "-" & data2)
+                                Return "" 'on renvoi rien car le composant n'a pas recu l'ordre
+                            End If
+                        Else
+                            wait(20) 'on attend 0.2s pour liberer le bus correctement
                         End If
-                    Else
-                        wait(20) 'on attend 0.2s pour liberer le bus correctement
-                    End If
+                    End SyncLock
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Ecrire", "Ecriture sur le port exception : " & ex.Message & " --> " & adresse & " : " & commande & " " & data1 & "-" & data2)
                     Return "" 'on renvoi rien car il y a eu une erreur
