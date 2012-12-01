@@ -2647,9 +2647,9 @@ Namespace HoMIDom
                     System.IO.Directory.CreateDirectory(_MonRepertoire & "\Images")
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier images")
                 End If
-                If System.IO.Directory.Exists(_MonRepertoire & "\Images\User") = False Then
-                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\Images\User")
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier images\User")
+                If System.IO.Directory.Exists(_MonRepertoire & "\Images\Users") = False Then
+                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\Images\Users")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier images\Users")
                 End If
                 If System.IO.Directory.Exists(_MonRepertoire & "\Drivers") = False Then
                     System.IO.Directory.CreateDirectory(_MonRepertoire & "\Drivers")

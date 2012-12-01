@@ -650,7 +650,7 @@ Imports System.IO.Ports
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "Numero téléphone (ex: 0605040302)", "")
+            Add_LibelleDevice("ADRESSE1", "Numero téléphone (ex: +33 605040302)", "")
             Add_LibelleDevice("ADRESSE2", "@", "")
 
             Add_LibelleDevice("SOLO", "@", "")
