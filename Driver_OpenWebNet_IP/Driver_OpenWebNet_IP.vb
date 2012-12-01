@@ -286,24 +286,37 @@ Imports OpenWebNet
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
+            'test IP/port
             If _IP_TCP <> "" And _Port_TCP <> "" Then
-                GatewayCommand = New WebServer(_IP_TCP, _Port_TCP, OpenSocketType.Command)
-                GatewayMonitor = New WebServer(_IP_TCP, _Port_TCP, OpenSocketType.Monitor)
+                If Not My.Computer.Network.Ping(_IP_TCP) Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Start", "L'adresse IP " & _IP_TCP & " ne répond pas au ping, connexion impossible")
+                    Exit Sub
+                End If
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Start", "L'adresse IP et/ou le port ne sont pas renseignés")
                 Exit Sub
             End If
 
+            GatewayCommand = New WebServer(_IP_TCP, _Port_TCP, OpenSocketType.Command)
+            GatewayCommand.Connect()
+            If Not GatewayCommand.IsConnected Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Start", "GatewayCommand: Erreur lors de la connexion IP")
+                Exit Sub
+            End If
+
+            GatewayMonitor = New WebServer(_IP_TCP, _Port_TCP, OpenSocketType.Monitor)
+            GatewayMonitor.Connect()
+            If GatewayMonitor.IsConnected Then
+                GatewayCommand.Disconnect()
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "OpenWebNet Start", "GatewayMonitor: Erreur lors de la connexion IP")
+                Exit Sub
+            End If
 
             AddHandler GatewayCommand.DataReceived, AddressOf GatewayCommand_DataReceived
             AddHandler GatewayCommand.MessageReceived, AddressOf GatewayCommand_MessageReceived
 
-
             AddHandler GatewayMonitor.DataReceived, AddressOf GatewayMonitor_DataReceived
             AddHandler GatewayMonitor.MessageReceived, AddressOf GatewayMonitor_MessageReceived
-
-            GatewayCommand.Connect()
-            GatewayMonitor.Connect()
 
             _IsConnect = True
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "OpenWebNet", "Driver " & Me.Nom & " démarré")

@@ -53,29 +53,29 @@ Public Class uHisto
         End Try
     End Sub
 
-    Private Sub Chart2_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
-        Try
-            ' Call HitTest
-            Dim result As HitTestResult = _CurrentChart.HitTest(e.X, e.Y)
+    'Private Sub Chart2_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
+    '    Try
+    '        ' Call HitTest
+    '        Dim result As HitTestResult = _CurrentChart.HitTest(e.X, e.Y)
 
-            ' Reset Data Point Attributes
-            Dim point As DataPoint
-            For Each point In _CurrentChart.Series(0).Points
-                point.BorderWidth = 3
-            Next
+    '        ' Reset Data Point Attributes
+    '        Dim point As DataPoint
+    '        For Each point In _CurrentChart.Series(0).Points
+    '            point.BorderWidth = 3
+    '        Next
 
-            ' If the mouse if over a data point
-            If result.ChartElementType = ChartElementType.DataPoint Then
-                Dim pointt As DataPoint = _CurrentChart.Series(0).Points(result.PointIndex)
-                pointt.BorderWidth = 1
-            Else
-                ' Set default cursor
-                Me.Cursor = Cursors.Arrow
-            End If
-        Catch ex As Exception
-            MessageBox.Show("Erreur uHisto Chart2_MouseMove: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
+    '        ' If the mouse if over a data point
+    '        If result.ChartElementType = ChartElementType.DataPoint Then
+    '            Dim pointt As DataPoint = _CurrentChart.Series(0).Points(result.PointIndex)
+    '            pointt.BorderWidth = 1
+    '        Else
+    '            ' Set default cursor
+    '            Me.Cursor = Cursors.Arrow
+    '        End If
+    '    Catch ex As Exception
+    '        MessageBox.Show("Erreur uHisto Chart2_MouseMove: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+    '    End Try
+    'End Sub
 
     Sub Update_Graphe()
         Try
@@ -87,7 +87,7 @@ Public Class uHisto
             Chart2.Width = 925
             Chart2.Height = 500
 
-            AddHandler Chart2.MouseMove, AddressOf Chart2_MouseMove
+            'AddHandler Chart2.MouseMove, AddressOf Chart2_MouseMove
 
             Dim legend1 As New Legend
             Chart2.Legends.Add(legend1)
