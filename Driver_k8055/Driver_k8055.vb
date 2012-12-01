@@ -13,7 +13,7 @@ Imports HoMIDom.HoMIDom.Device
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "1BB97374-34F5-11E0-BF44-48D8DED72085"
     Dim _Nom As String = "K8055"
-    Dim _Enable As String = False
+    Dim _Enable As Boolean = False
     Dim _Description As String = "Carte Velleman k8055"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "USB"
@@ -193,11 +193,11 @@ Imports HoMIDom.HoMIDom.Device
         End Set
     End Property
 
-    Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
+    Public Property Port_TCP() As String Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
         End Get
-        Set(ByVal value As Object)
+        Set(ByVal value As String)
             _Port_TCP = value
         End Set
     End Property

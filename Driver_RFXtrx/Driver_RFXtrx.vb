@@ -1,4 +1,5 @@
-﻿Imports HoMIDom
+﻿'Option Strict On
+Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports STRGS = Microsoft.VisualBasic.Strings
@@ -40,7 +41,7 @@ Imports System.Media
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "3D9D5D42-475B-11E1-B117-64314824019B"
     Dim _Nom As String = "RFXtrx"
-    Dim _Enable As String = False
+    Dim _Enable As Boolean = False
     Dim _Description As String = "RFXtrx USB/Ethernet Interface"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "RF"
@@ -1148,11 +1149,11 @@ Imports System.Media
             _Picture = value
         End Set
     End Property
-    Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
+    Public Property Port_TCP() As String Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
         End Get
-        Set(ByVal value As Object)
+        Set(ByVal value As String)
             _Port_TCP = value
         End Set
     End Property
@@ -1351,45 +1352,74 @@ Imports System.Media
             'suivant le protocole, on lance la bonne fonction
             'AC / ACEU / ANSLUT / ARC / BLYSS / ELROAB400D / EMW100 / EMW200 / IMPULS / LIGHTWAVERF / PHILIPS / WAVEMAN / X10
 
-            Select Case UCase(Objet.modele)
+            Select Case UCase(Objet.Modele)
                 Case "AC" 'AC : Chacon...
-                    If IsNothing(Parametre1) Then
-                        send_Lighting2(Objet.adresse1, Command, LIGHTING2.sTypeAC)
+                    If IsNothing(parametre1) Then
+                        send_Lighting2(Objet.Adresse1, Command, LIGHTING2.sTypeAC)
                     Else
-                        send_Lighting2(Objet.adresse1, Command, LIGHTING2.sTypeAC, Parametre1)
+                        If IsNumeric(parametre1) Then
+                            send_Lighting2(Objet.Adresse1, Command, LIGHTING2.sTypeAC, CInt(parametre1))
+                        Else
+                            WriteLog("ERR: WRITE Le parametre " & CStr(Parametre1) & " n'est pas un entier")
+                        End If
                     End If
                 Case "ACEU" 'AC norme Europe
                     If IsNothing(Parametre1) Then
-                        send_Lighting2(Objet.adresse1, Command, LIGHTING2.sTypeHEU)
+                        send_Lighting2(Objet.Adresse1, Command, LIGHTING2.sTypeHEU)
                     Else
-                        send_Lighting2(Objet.adresse1, Command, LIGHTING2.sTypeHEU, Parametre1)
+                        If IsNumeric(Parametre1) Then
+                            send_Lighting2(Objet.Adresse1, Command, LIGHTING2.sTypeHEU, CInt(Parametre1))
+                        Else
+                            WriteLog("ERR: WRITE Le parametre " & CStr(Parametre1) & " n'est pas un entier")
+                        End If
                     End If
                 Case "ANSLUT"
                     If IsNothing(Parametre1) Then
-                        send_Lighting2(Objet.adresse1, Command, LIGHTING2.sTypeANSLUT)
+                        send_Lighting2(Objet.Adresse1, Command, LIGHTING2.sTypeANSLUT)
                     Else
-                        send_Lighting2(Objet.adresse1, Command, LIGHTING2.sTypeANSLUT, Parametre1)
+                        If IsNumeric(Parametre1) Then
+                            send_Lighting2(Objet.Adresse1, Command, LIGHTING2.sTypeANSLUT, CInt(Parametre1))
+                        Else
+                            WriteLog("ERR: WRITE Le parametre " & CStr(Parametre1) & " n'est pas un entier")
+                        End If
                     End If
                 Case "ARC"
-                    send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypeARC)
+                        send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeARC)
                 Case "BLYSS"
-                    send_lighting6(Objet.adresse1, Command, LIGHTING6.sTypeBlyss)
+                        send_lighting6(Objet.Adresse1, Command, LIGHTING6.sTypeBlyss)
                 Case "ELROAB400D"
-                    send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypeAB400D)
+                        send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeAB400D)
                 Case "EMW100"
-                    send_lighting5(Objet.Adresse1, Command, LIGHTING5.sTypeEMW100, Parametre1)
+                    If Not IsNothing(Parametre1) Then
+                        If IsNumeric(Parametre1) Then
+                            send_lighting5(Objet.Adresse1, Command, LIGHTING5.sTypeEMW100, CInt(Parametre1))
+                        Else
+                            WriteLog("ERR: WRITE Le parametre " & CStr(Parametre1) & " n'est pas un entier")
+                        End If
+                    Else
+                        WriteLog("ERR: WRITE Il manque un parametre")
+                    End If
+
                 Case "EMW200"
-                    send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypeEMW200)
+                    send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeEMW200)
                 Case "IMPULS"
-                    send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypeIMPULS)
+                    send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeIMPULS)
                 Case "LIGHTWAVERF"
-                    send_lighting5(Objet.Adresse1, Command, LIGHTING5.sTypeLightwaveRF, Parametre1)
+                    If Not IsNothing(Parametre1) Then
+                        If IsNumeric(Parametre1) Then
+                            send_lighting5(Objet.Adresse1, Command, LIGHTING5.sTypeLightwaveRF, CInt(Parametre1))
+                        Else
+                            WriteLog("ERR: WRITE Le parametre " & CStr(Parametre1) & " n'est pas un entier")
+                        End If
+                    Else
+                        WriteLog("ERR: WRITE Il manque un parametre")
+                    End If
                 Case "PHILIPS"
-                    send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypePhilips)
+                    send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypePhilips)
                 Case "WAVEMAN"
-                    send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypeWaveman)
+                    send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeWaveman)
                 Case "X10"
-                    send_lighting1(Objet.adresse1, Command, LIGHTING1.sTypeX10)
+                    send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeX10)
                 Case "aucun"
                     WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Name)
                 Case ""
@@ -1546,7 +1576,7 @@ Imports System.Media
 
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-    Private Sub TimerTick()
+    Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
 
     End Sub
 
@@ -1567,7 +1597,7 @@ Imports System.Media
                 If VB.Left(numero, 3) <> "COM" Then
                     'RFXtrx est un modele ethernet
                     tcp = True
-                    client = New TcpClient(numero, _Port_TCP)
+                    client = New TcpClient(numero, CInt(_Port_TCP))
                     _IsConnect = True
                     Return ("Port IP " & port_name & ":" & _Port_TCP & " ouvert")
                 Else
@@ -1709,7 +1739,7 @@ Imports System.Media
         Catch ex As Exception
             Return ("ERR: Port " & port_name & " : " & ex.Message)
         End Try
-        Return True
+        Return "ERR: Not defined"
     End Function
 
     ''' <summary>ecrire sur le port</summary>
@@ -1719,10 +1749,10 @@ Imports System.Media
         Try
             If tcp Then
                 stream.Write(commande, 0, commande.Length)
-                bytSeqNbr = bytSeqNbr + 1
+                bytSeqNbr = CByte(bytSeqNbr + 1)
             Else
                 RS232Port.Write(commande, 0, commande.Length)
-                bytSeqNbr = bytSeqNbr + 1
+                bytSeqNbr = CByte(bytSeqNbr + 1)
             End If
             Return ""
         Catch ex As Exception
@@ -1852,7 +1882,7 @@ Imports System.Media
     Private Sub DataReceived(ByVal sender As Object, ByVal e As SerialDataReceivedEventArgs)
         Try
             While gRecComPortEnabled And RS232Port.BytesToRead() > 0
-                ProcessReceivedChar(RS232Port.ReadByte())
+                ProcessReceivedChar(CByte(RS232Port.ReadByte()))
             End While
         Catch Ex As Exception
             WriteLog("ERR: Datareceived Exception : " & Ex.Message)
@@ -1864,7 +1894,7 @@ Imports System.Media
     Private Sub ReadErrorEvent(ByVal sender As Object, ByVal ev As SerialErrorReceivedEventArgs)
         Try
             While gRecComPortEnabled And RS232Port.BytesToRead() > 0
-                ProcessReceivedChar(RS232Port.ReadByte())
+                ProcessReceivedChar(CByte(RS232Port.ReadByte()))
             End While
         Catch Ex As Exception
             WriteLog("ERR: ReadErrorEvent Exception : " & Ex.Message)
@@ -3507,7 +3537,7 @@ Imports System.Media
                     WriteRetour(adresse, "", "CFG: " & valeur)
                 Case RFXMETER.Calib
                     adresse = (recbuf(RFXMETER.id1) * 256 + recbuf(RFXMETER.id2)).ToString
-                    counter = ((CLng(recbuf(RFXMETER.count2) And &H3F) << 16) + (CLng(recbuf(RFXMETER.count3)) << 8) + recbuf(RFXMETER.count4)) / 1000
+                    counter = CLng(((CLng(recbuf(RFXMETER.count2) And &H3F) << 16) + (CLng(recbuf(RFXMETER.count3)) << 8) + recbuf(RFXMETER.count4)) / 1000)
                     Select Case (recbuf(RFXMETER.count2) And &HC0)
                         Case &H0 : WriteRetour(adresse, "", "CFG: Calibrate mode for channel 1 : " & counter.ToString & " msec - RFXPwr        = " & Convert.ToString(Round(1 / ((16 * counter) / (3600000 / 62.5)), 3)) & " kW")
                         Case &H40 : WriteRetour(adresse, "", "CFG: Calibrate mode for channel 2 : " & counter.ToString & " msec - RFXPwr        = " & Convert.ToString(Round(1 / ((16 * counter) / (3600000 / 62.5)), 3)) & " kW")
@@ -3672,7 +3702,7 @@ Imports System.Media
                         Case &HA : valeur = "decalcification cycle : valve position: " & VB.Right("0" & Hex(recbuf(FS20.cmd2)), 2) & " is " & (CInt(recbuf(FS20.cmd2) / 2.55)).ToString & "%"
                         Case &HC : valeur = "synchronization active : count down is " & (recbuf(FS20.cmd2) >> 1).ToString & " seconds"
                         Case &HE : valeur = "test, drive valve and produce an audible signal"
-                        Case &HF : valeur = "pair valve (cmd2 bit 7-1 is count down in seconds, bit 0=1) : count down is " & recbuf(FS20.cmd2) >> 1 & " seconds"
+                        Case &HF : valeur = "pair valve (cmd2 bit 7-1 is count down in seconds, bit 0=1) : count down is " & CStr(recbuf(FS20.cmd2) >> 1) & " seconds"
                         Case Else : valeur = "ERROR: Unknown"
                     End Select
                     WriteRetour(adresse, "", valeur)
@@ -3753,7 +3783,7 @@ Imports System.Media
             kar(ICMD.cmnd) = ICMD.SETMODE
 
             'type frequence
-            Select Case paramMode.Substring(0, 1)
+            Select Case CInt(paramMode.Substring(0, 1))
                 Case 0 : kar(ICMD.msg1) = IRESPONSE.recType310
                 Case 1 : kar(ICMD.msg1) = IRESPONSE.recType315
                 Case 2 : kar(ICMD.msg1) = IRESPONSE.recType43392
@@ -3765,40 +3795,40 @@ Imports System.Media
             End Select
 
             'UNDEC
-            If paramMode.Substring(1, 1) = 1 Then kar(ICMD.msg3) = &H80 Else kar(ICMD.msg3) = 0
+            If CInt(paramMode.Substring(1, 1)) = 1 Then kar(ICMD.msg3) = &H80 Else kar(ICMD.msg3) = 0
 
-            If paramMode.Substring(17, 1) = 1 Then
+            If CInt(paramMode.Substring(17, 1)) = 1 Then
                 'All other protocol receiving is disabled if BlindsT0 enabled, BlindsT0 receive is only used to read the address code of the remote
                 kar(ICMD.msg4) = 0
                 kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_BlindsT0
                 kar(ICMD.msg5) = 0
             Else
-                If paramMode.Substring(18, 1) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU6
-                If paramMode.Substring(19, 1) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU5
-                If paramMode.Substring(20, 1) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU4
-                If paramMode.Substring(21, 1) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU3
-                If paramMode.Substring(22, 1) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_FINEOFFSET
-                If paramMode.Substring(23, 1) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RUBICSON
-                If paramMode.Substring(24, 1) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_AE
+                If CInt(paramMode.Substring(18, 1)) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU6
+                If CInt(paramMode.Substring(19, 1)) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU5
+                If CInt(paramMode.Substring(20, 1)) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU4
+                If CInt(paramMode.Substring(21, 1)) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU3
+                If CInt(paramMode.Substring(22, 1)) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_FINEOFFSET
+                If CInt(paramMode.Substring(23, 1)) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RUBICSON
+                If CInt(paramMode.Substring(24, 1)) = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_AE
 
                 kar(ICMD.msg4) = 0
-                If paramMode.Substring(25, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_BlindsT1
-                If paramMode.Substring(3, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_PROGUARD
-                If paramMode.Substring(4, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_FS20
-                If paramMode.Substring(5, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_LCROS
-                If paramMode.Substring(6, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_HID
-                If paramMode.Substring(7, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_AD
-                If paramMode.Substring(8, 1) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_MERTIK
+                If CInt(paramMode.Substring(25, 1)) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_BlindsT1
+                If CInt(paramMode.Substring(3, 1)) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_PROGUARD
+                If CInt(paramMode.Substring(4, 1)) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_FS20
+                If CInt(paramMode.Substring(5, 1)) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_LCROS
+                If CInt(paramMode.Substring(6, 1)) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_HID
+                If CInt(paramMode.Substring(7, 1)) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_AD
+                If CInt(paramMode.Substring(8, 1)) = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_MERTIK
 
                 kar(ICMD.msg5) = 0
-                If paramMode.Substring(9, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_VISONIC
-                If paramMode.Substring(10, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_ATI
-                If paramMode.Substring(11, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_OREGON
-                If paramMode.Substring(12, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_MEI
-                If paramMode.Substring(13, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_HEU
-                If paramMode.Substring(14, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_AC
-                If paramMode.Substring(15, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_ARC
-                If paramMode.Substring(16, 1) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_X10
+                If CInt(paramMode.Substring(9, 1)) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_VISONIC
+                If CInt(paramMode.Substring(10, 1)) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_ATI
+                If CInt(paramMode.Substring(11, 1)) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_OREGON
+                If CInt(paramMode.Substring(12, 1)) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_MEI
+                If CInt(paramMode.Substring(13, 1)) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_HEU
+                If CInt(paramMode.Substring(14, 1)) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_AC
+                If CInt(paramMode.Substring(15, 1)) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_ARC
+                If CInt(paramMode.Substring(16, 1)) = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_X10
 
             End If
             If _DEBUG Then
@@ -3885,10 +3915,10 @@ Imports System.Media
 
             kar(LIGHTING1.packetlength) = LIGHTING1.size
             kar(LIGHTING1.packettype) = LIGHTING1.pType
-            kar(LIGHTING1.subtype) = type
+            kar(LIGHTING1.subtype) = CByte(type)
             kar(LIGHTING1.seqnbr) = bytSeqNbr
             kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
-            kar(LIGHTING1.unitcode) = adresse.Substring(1, 1)
+            kar(LIGHTING1.unitcode) = CByte(adresse.Substring(1, 1))
 
             Select Case commande
                 Case "OFF"
@@ -3978,7 +4008,7 @@ Imports System.Media
             kar(LIGHTING2.packetlength) = LIGHTING2.size
             kar(LIGHTING2.packettype) = LIGHTING2.pType
             kar(LIGHTING2.seqnbr) = bytSeqNbr
-            kar(LIGHTING2.subtype) = type
+            kar(LIGHTING2.subtype) = CByte(type)
             Select Case commande
                 Case "OFF"
                     kar(LIGHTING2.cmnd) = 0
@@ -4002,25 +4032,25 @@ Imports System.Media
 
                 Case "GROUP_DIM"
                     kar(LIGHTING2.cmnd) = 5
-                    WriteRetourSend(adresse, "", dimlevel)
+                    WriteRetourSend(adresse, "", CStr(dimlevel))
                     'traiter toutes le groupe
 
 
 
                 Case "DIM"
                     kar(LIGHTING2.cmnd) = 2
-                    WriteRetourSend(adresse, "", dimlevel)
+                    WriteRetourSend(adresse, "", CStr(dimlevel))
                 Case Else
                     WriteLog("ERR: Send AC : Commande invalide : " & commande)
                     Exit Sub
             End Select
             Try
-                Dim adressetab As String() = adresse.Split("-")
-                kar(LIGHTING2.unitcode) = adressetab(1)
-                kar(LIGHTING2.id1) = adressetab(0).Substring(0, 1)
-                kar(LIGHTING2.id2) = Array.IndexOf(adressetoint, adressetab(0).Substring(1, 2))
-                kar(LIGHTING2.id3) = Array.IndexOf(adressetoint, adressetab(0).Substring(3, 2))
-                kar(LIGHTING2.id4) = Array.IndexOf(adressetoint, adressetab(0).Substring(5, 2))
+                Dim adressetab As String() = adresse.Split(CChar("-"))
+                kar(LIGHTING2.unitcode) = CByte(adressetab(1))
+                kar(LIGHTING2.id1) = CByte(adressetab(0).Substring(0, 1))
+                kar(LIGHTING2.id2) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(1, 2)))
+                kar(LIGHTING2.id3) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(3, 2)))
+                kar(LIGHTING2.id4) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(5, 2)))
             Catch ex As Exception
                 WriteLog("ERR: Send Lighting2 Exception : Adresse incorrecte")
             End Try
@@ -4058,7 +4088,7 @@ Imports System.Media
             Else
                 dimlevel = 15
             End If
-            kar(LIGHTING2.level) = dimlevel
+            kar(LIGHTING2.level) = CByte(dimlevel)
             kar(LIGHTING2.filler) = 0
 
             ecrire(kar)
@@ -4091,14 +4121,14 @@ Imports System.Media
 
             kar(LIGHTING5.packetlength) = LIGHTING5.size
             kar(LIGHTING5.packettype) = LIGHTING5.pType
-            kar(LIGHTING5.subtype) = type '0=EMW100 / 1=LIGHTWAVERF
+            kar(LIGHTING5.subtype) = CByte(type) '0=EMW100 / 1=LIGHTWAVERF
             kar(LIGHTING2.seqnbr) = bytSeqNbr
             Try
-                Dim adressetab As String() = adresse.Split("-")
-                kar(LIGHTING5.unitcode) = adressetab(1)
-                kar(LIGHTING5.id1) = adressetab(0).Substring(0, 2)
-                kar(LIGHTING5.id2) = Array.IndexOf(adressetoint, adressetab(0).Substring(2, 2))
-                kar(LIGHTING5.id3) = Array.IndexOf(adressetoint, adressetab(0).Substring(4, 2))
+                Dim adressetab As String() = adresse.Split(CChar("-"))
+                kar(LIGHTING5.unitcode) = CByte(adressetab(1))
+                kar(LIGHTING5.id1) = CByte(adressetab(0).Substring(0, 2))
+                kar(LIGHTING5.id2) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(2, 2)))
+                kar(LIGHTING5.id3) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(4, 2)))
             Catch ex As Exception
                 WriteLog("ERR: Send lighting5 Exception : Adresse incorrecte")
             End Try
@@ -4157,7 +4187,7 @@ Imports System.Media
                 Else
                     dimlevel = 15
                 End If
-                kar(LIGHTING5.level) = dimlevel
+                kar(LIGHTING5.level) = CByte(dimlevel)
             Else
                 kar(LIGHTING5.level) = 0
             End If
@@ -4202,11 +4232,11 @@ Imports System.Media
             kar(LIGHTING6.subtype) = 0 '0=BLYSS
             kar(LIGHTING6.seqnbr) = bytSeqNbr
             Try
-                Dim adressetab As String() = adresse.Split("-")
+                Dim adressetab As String() = adresse.Split(CChar("-"))
                 kar(LIGHTING6.groupcode) = convert_housecode(adressetab(1).Substring(0, 1))
-                kar(LIGHTING6.unitcode) = adressetab(1).Substring(1, 1)
-                kar(LIGHTING6.id1) = adressetab(0).Substring(0, 2)
-                kar(LIGHTING6.id2) = Array.IndexOf(adressetoint, adressetab(0).Substring(2, 2))
+                kar(LIGHTING6.unitcode) = CByte(adressetab(1).Substring(1, 1))
+                kar(LIGHTING6.id1) = CByte(adressetab(0).Substring(0, 2))
+                kar(LIGHTING6.id2) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(2, 2)))
             Catch ex As Exception
                 WriteLog("ERR: Send lighting6 Exception : Adresse incorrecte")
             End Try

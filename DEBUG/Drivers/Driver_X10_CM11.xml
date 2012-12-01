@@ -6,7 +6,20 @@ Driver_X10_CM11
 </name>
 </assembly>
 <members>
-<member name="M:Driver_X10_CM11.Driver_X10_CM11.GetCommandPlus">
+<member name="P:Driver_X10_CM11.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:Driver_X10_CM11.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:Driver_X10_CM11.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
@@ -72,7 +85,7 @@ Driver_X10_CM11
 </member><member name="M:Driver_X10_CM11.Driver_X10_CM11.#ctor">
 	<summary>Creation d'un objet de type</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.TimerTick">
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.TimerTick(System.Object,System.Timers.ElapsedEventArgs)">
 	<summary>Si refresh &gt;0 gestion du timer</summary>
 	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
 </member><member name="M:Driver_X10_CM11.Driver_X10_CM11.DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
@@ -160,19 +173,6 @@ Driver_X10_CM11
 	<param name="Bin"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_X10_CM11.My.Resources.Resources.ResourceManager">
-	<summary>
-  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
-</summary>
-</member><member name="P:Driver_X10_CM11.My.Resources.Resources.Culture">
-	<summary>
-  Remplace la propriété CurrentUICulture du thread actuel pour toutes
-  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
-</summary>
-</member><member name="T:Driver_X10_CM11.My.Resources.Resources">
-	<summary>
-  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
-</summary>
 </member>
 </members>
 </doc>

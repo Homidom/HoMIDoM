@@ -16,7 +16,7 @@ Imports System.IO
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "22FED268-34F6-11E0-A23E-80D9DED72085"
     Dim _Nom As String = "K8056"
-    Dim _Enable As String = False
+    Dim _Enable As Boolean = False
     Dim _Description As String = "Carte Velleman k8056"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "RS232"
@@ -210,11 +210,11 @@ Imports System.IO
         End Set
     End Property
 
-    Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
+    Public Property Port_TCP() As String Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
         End Get
-        Set(ByVal value As Object)
+        Set(ByVal value As String)
             _Port_TCP = value
         End Set
     End Property

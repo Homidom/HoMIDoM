@@ -20,7 +20,7 @@ Imports System.Web.HttpUtility
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "9C3E7696-34F7-11E0-AEB0-53DBDED72085"
     Dim _Nom As String = "Foobar"
-    Dim _Enable As String = False
+    Dim _Enable As Boolean = False
     Dim _Description As String = "Multiroom audio Foobar"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "AUDIO"
@@ -156,11 +156,11 @@ Imports System.Web.HttpUtility
             _Picture = value
         End Set
     End Property
-    Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
+    Public Property Port_TCP() As String Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
         End Get
-        Set(ByVal value As Object)
+        Set(ByVal value As String)
             _Port_TCP = value
         End Set
     End Property
@@ -708,7 +708,7 @@ Imports System.Web.HttpUtility
 
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-    Private Sub TimerTick()
+    Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
 
     End Sub
 

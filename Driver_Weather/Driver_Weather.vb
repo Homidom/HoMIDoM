@@ -1,4 +1,5 @@
-﻿Imports HoMIDom
+﻿'Option Strict On
+Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports System.Xml
@@ -18,7 +19,7 @@ Imports System.Threading
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "8B8EFC7E-F66D-11E1-AD40-71AF6188709B"
     Dim _Nom As String = "MeteoWeather"
-    Dim _Enable As String = False
+    Dim _Enable As Boolean = False
     Dim _Description As String = "Meteo provenant de Weather Channel"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "WEB"
@@ -163,11 +164,11 @@ Imports System.Threading
             _Picture = value
         End Set
     End Property
-    Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
+    Public Property Port_TCP() As String Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
         End Get
-        Set(ByVal value As Object)
+        Set(ByVal value As String)
             _Port_TCP = value
         End Set
     End Property
@@ -273,7 +274,7 @@ Imports System.Threading
             Select Case UCase(Champ)
                 Case "ADRESSE1"
                     If Value IsNot Nothing Then
-                        If Value = "" Or Value = " " Or IsNumeric(Value) Then
+                        If CStr(Value) = "" Or CStr(Value) = " " Or IsNumeric(Value) Then
                             retour = "Veuillez saisir le code de la ville, ex: FRXX0151"
                         End If
                     End If
@@ -471,7 +472,7 @@ Imports System.Threading
 
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-    Private Sub TimerTick()
+    Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
 
     End Sub
 
@@ -480,8 +481,8 @@ Imports System.Threading
 #Region "Fonctions internes"
 
     Private Sub MAJ()
-        Dim objet As Object = _Obj
-        If objet Is Nothing Then Exit Sub
+        'Dim objet As Object = _Obj
+        If _Obj Is Nothing Then Exit Sub
 
         Try
             'Si internet n'est pas disponible on ne mets pas à jour les informations
@@ -494,7 +495,7 @@ Imports System.Threading
 
             ' Create a new XmlDocument   
             doc = New XmlDocument()
-            Dim url As New Uri("http://xml.weather.com/weather/local/" & objet.adresse1 & "?cc=*&unit=m&dayf=4")
+            Dim url As New Uri("http://xml.weather.com/weather/local/" & _Obj.adresse1 & "?cc=*&unit=m&dayf=4")
             Dim Request As HttpWebRequest = CType(HttpWebRequest.Create(url), System.Net.HttpWebRequest)
             ' Request.UserAgent = "Mozilla/5.0 (windows; U; windows NT 5.1; fr; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7"
             Dim response As Net.HttpWebResponse = CType(Request.GetResponse(), Net.HttpWebResponse)
@@ -506,31 +507,21 @@ Imports System.Threading
                 If node.HasChildNodes = True Then
                     For Each _child As XmlNode In node
                         Select Case _child.Name
-                            Case "tmp"
-                                If IsNumeric(_child.FirstChild.Value) Then objet.TemperatureActuel = _child.FirstChild.Value
-                            Case "t"
-                                objet.ConditionActuel = Traduire(_child.FirstChild.Value)
-                            Case "icon"
-                                objet.IconActuel = _child.FirstChild.Value
-                            Case "hmid"
-                                If IsNumeric(_child.FirstChild.Value) Then objet.HumiditeActuel = _child.FirstChild.Value
-                            Case "s"
-                                objet.VentActuel = _child.FirstChild.Value
+                            Case "tmp" : If IsNumeric(_child.FirstChild.Value) Then _Obj.TemperatureActuel = _child.FirstChild.Value
+                            Case "t" : _Obj.ConditionActuel = Traduire(_child.FirstChild.Value)
+                            Case "icon" : _Obj.IconActuel = _child.FirstChild.Value
+                            Case "hmid" : If IsNumeric(_child.FirstChild.Value) Then _Obj.HumiditeActuel = _child.FirstChild.Value
+                            Case "s" : _Obj.VentActuel = _child.FirstChild.Value
                         End Select
                         If _child.HasChildNodes = True Then
                             For Each _child2 As XmlNode In _child
                                 ' If _child2.Name.StartsWith("#text") = False Then Console.WriteLine(_child2.Name & ":" & _child2.InnerText)
                                 Select Case _child2.Name
-                                    Case "tmp"
-                                        If IsNumeric(_child.FirstChild.Value) Then objet.TemperatureActuel = _child2.InnerText
-                                    Case "t"
-                                        'objet.ConditionActuel = Traduire(_child2.InnerText)
-                                    Case "icon"
-                                        'objet.IconActuel = _child2.InnerText
-                                    Case "hmid"
-                                        If IsNumeric(_child.FirstChild.Value) Then objet.HumiditeActuel = _child2.InnerText
-                                    Case "s"
-                                        objet.VentActuel = _child2.InnerText
+                                    Case "tmp" : If IsNumeric(_child.FirstChild.Value) Then _Obj.TemperatureActuel = _child2.InnerText
+                                    Case "t" 'objet.ConditionActuel = Traduire(_child2.InnerText)
+                                    Case "icon" 'objet.IconActuel = _child2.InnerText
+                                    Case "hmid" : If IsNumeric(_child.FirstChild.Value) Then _Obj.HumiditeActuel = _child2.InnerText
+                                    Case "s" : _Obj.VentActuel = _child2.InnerText
                                 End Select
                             Next
                         End If
@@ -547,14 +538,10 @@ Imports System.Threading
                 idx = idx + 1
 
                 Select Case idx
-                    Case 0
-                        objet.JourToday = TraduireJour(Mid(Now.DayOfWeek.ToString, 1, 3))
-                    Case 1
-                        objet.JourJ1 = TraduireJour(Mid(Now.AddDays(1).DayOfWeek.ToString, 1, 3))
-                    Case 2
-                        objet.JourJ2 = TraduireJour(Mid(Now.AddDays(2).DayOfWeek.ToString, 1, 3))
-                    Case 3
-                        objet.JourJ3 = TraduireJour(Mid(Now.AddDays(3).DayOfWeek.ToString, 1, 3))
+                    Case 0 : _Obj.JourToday = TraduireJour(Mid(Now.DayOfWeek.ToString, 1, 3))
+                    Case 1 : _Obj.JourJ1 = TraduireJour(Mid(Now.AddDays(1).DayOfWeek.ToString, 1, 3))
+                    Case 2 : _Obj.JourJ2 = TraduireJour(Mid(Now.AddDays(2).DayOfWeek.ToString, 1, 3))
+                    Case 3 : _Obj.JourJ3 = TraduireJour(Mid(Now.AddDays(3).DayOfWeek.ToString, 1, 3))
                 End Select
 
                 If node.HasChildNodes = True Then
@@ -563,37 +550,25 @@ Imports System.Threading
                         Select Case _child.Name
                             Case "hi"
                                 Select Case idx
-                                    Case 0
-                                        If IsNumeric(_child.FirstChild.Value) Then objet.MaxToday = _child.FirstChild.Value
-                                    Case 1
-                                        If IsNumeric(_child.FirstChild.Value) Then objet.MaxJ1 = _child.FirstChild.Value
-                                    Case 2
-                                        If IsNumeric(_child.FirstChild.Value) Then objet.MaxJ2 = _child.FirstChild.Value
-                                    Case 3
-                                        If IsNumeric(_child.FirstChild.Value) Then objet.MaxJ3 = _child.FirstChild.Value
+                                    Case 0 : If IsNumeric(_child.FirstChild.Value) Then _Obj.MaxToday = _child.FirstChild.Value
+                                    Case 1 : If IsNumeric(_child.FirstChild.Value) Then _Obj.MaxJ1 = _child.FirstChild.Value
+                                    Case 2 : If IsNumeric(_child.FirstChild.Value) Then _Obj.MaxJ2 = _child.FirstChild.Value
+                                    Case 3 : If IsNumeric(_child.FirstChild.Value) Then _Obj.MaxJ3 = _child.FirstChild.Value
                                 End Select
                             Case "low"
                                 Select Case idx
-                                    Case 0
-                                        If IsNumeric(_child.FirstChild.Value) Then objet.MinToday = _child.FirstChild.Value
-                                    Case 1
-                                        If IsNumeric(_child.FirstChild.Value) Then objet.MinJ1 = _child.FirstChild.Value
-                                    Case 2
-                                        If IsNumeric(_child.FirstChild.Value) Then objet.MinJ2 = _child.FirstChild.Value
-                                    Case 3
-                                        If IsNumeric(_child.FirstChild.Value) Then objet.MinJ3 = _child.FirstChild.Value
+                                    Case 0 : If IsNumeric(_child.FirstChild.Value) Then _Obj.MinToday = _child.FirstChild.Value
+                                    Case 1 : If IsNumeric(_child.FirstChild.Value) Then _Obj.MinJ1 = _child.FirstChild.Value
+                                    Case 2 : If IsNumeric(_child.FirstChild.Value) Then _Obj.MinJ2 = _child.FirstChild.Value
+                                    Case 3 : If IsNumeric(_child.FirstChild.Value) Then _Obj.MinJ3 = _child.FirstChild.Value
                                 End Select
                             Case "icon"
                             Case "t"
                                 Select Case idx
-                                    Case 0
-                                        objet.ConditionToday = Traduire(_child.FirstChild.Value)
-                                    Case 1
-                                        objet.ConditionJ1 = Traduire(_child.FirstChild.Value)
-                                    Case 2
-                                        objet.ConditionJ2 = Traduire(_child.FirstChild.Value)
-                                    Case 3
-                                        objet.ConditionJ3 = Traduire(_child.FirstChild.Value)
+                                    Case 0 : _Obj.ConditionToday = Traduire(_child.FirstChild.Value)
+                                    Case 1 : _Obj.ConditionJ1 = Traduire(_child.FirstChild.Value)
+                                    Case 2 : _Obj.ConditionJ2 = Traduire(_child.FirstChild.Value)
+                                    Case 3 : _Obj.ConditionJ3 = Traduire(_child.FirstChild.Value)
                                 End Select
                         End Select
                         If _child.HasChildNodes = True Then
@@ -601,47 +576,35 @@ Imports System.Threading
                                 Select Case _child2.Name
                                     Case "hi"
                                         Select Case idx
-                                            Case 0
-                                                If IsNumeric(_child2.InnerText) Then objet.MaxToday = _child2.InnerText
-                                            Case 1
-                                                If IsNumeric(_child2.InnerText) Then objet.MaxJ1 = _child2.InnerText
-                                            Case 2
-                                                If IsNumeric(_child2.InnerText) Then objet.MaxJ2 = _child2.InnerText
-                                            Case 3
-                                                If IsNumeric(_child2.InnerText) Then objet.MaxJ3 = _child2.InnerText
+                                            Case 0 : If IsNumeric(_child2.InnerText) Then _Obj.MaxToday = _child2.InnerText
+                                            Case 1 : If IsNumeric(_child2.InnerText) Then _Obj.MaxJ1 = _child2.InnerText
+                                            Case 2 : If IsNumeric(_child2.InnerText) Then _Obj.MaxJ2 = _child2.InnerText
+                                            Case 3 : If IsNumeric(_child2.InnerText) Then _Obj.MaxJ3 = _child2.InnerText
                                         End Select
                                     Case "low"
                                         Select Case idx
-                                            Case 0
-                                                If IsNumeric(_child2.InnerText) Then objet.MinToday = _child2.InnerText
-                                            Case 1
-                                                If IsNumeric(_child2.InnerText) Then objet.MinJ1 = _child2.InnerText
-                                            Case 2
-                                                If IsNumeric(_child2.InnerText) Then objet.MinJ2 = _child2.InnerText
-                                            Case 3
-                                                If IsNumeric(_child2.InnerText) Then objet.MinJ3 = _child2.InnerText
+                                            Case 0 : If IsNumeric(_child2.InnerText) Then _Obj.MinToday = _child2.InnerText
+                                            Case 1 : If IsNumeric(_child2.InnerText) Then _Obj.MinJ1 = _child2.InnerText
+                                            Case 2 : If IsNumeric(_child2.InnerText) Then _Obj.MinJ2 = _child2.InnerText
+                                            Case 3 : If IsNumeric(_child2.InnerText) Then _Obj.MinJ3 = _child2.InnerText
                                         End Select
                                     Case "icon"
                                         Select Case idx
                                             Case 0
-                                                objet.IconToday = _child2.InnerText
+                                                _Obj.IconToday = _child2.InnerText
                                             Case 1
-                                                objet.IconJ1 = _child2.InnerText
+                                                _Obj.IconJ1 = _child2.InnerText
                                             Case 2
-                                                objet.IconJ2 = _child2.InnerText
+                                                _Obj.IconJ2 = _child2.InnerText
                                             Case 3
-                                                objet.IconJ3 = _child2.InnerText
+                                                _Obj.IconJ3 = _child2.InnerText
                                         End Select
                                     Case "t"
                                         Select Case idx
-                                            Case 0
-                                                objet.ConditionToday = Traduire(_child2.InnerText)
-                                            Case 1
-                                                objet.ConditionJ1 = Traduire(_child2.InnerText)
-                                            Case 2
-                                                objet.ConditionJ2 = Traduire(_child2.InnerText)
-                                            Case 3
-                                                objet.ConditionJ3 = Traduire(_child2.InnerText)
+                                            Case 0 : _Obj.ConditionToday = Traduire(_child2.InnerText)
+                                            Case 1 : _Obj.ConditionJ1 = Traduire(_child2.InnerText)
+                                            Case 2 : _Obj.ConditionJ2 = Traduire(_child2.InnerText)
+                                            Case 3 : _Obj.ConditionJ3 = Traduire(_child2.InnerText)
                                         End Select
                                 End Select
                                 'If _child2.Name.StartsWith("#text") = False Then Console.WriteLine(_child2.Name & ":" & _child2.InnerText)
@@ -657,12 +620,12 @@ Imports System.Threading
             response = Nothing
             Request = Nothing
             url = Nothing
-            objet.LastChange = Now
-            objet = Nothing
+            _Obj.LastChange = Now
+            'objet = Nothing
 
-            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GOOGLEMETEO", "MAJ Meteo effectuée pour " & objet.name)
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GOOGLEMETEO", "MAJ Meteo effectuée pour " & _Obj.name)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEOWeather", "Erreur Lors de la MaJ de " & objet.name & " : " & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEOWeather", "Erreur Lors de la MaJ de " & _Obj.name & " : " & ex.Message)
         End Try
     End Sub
 
