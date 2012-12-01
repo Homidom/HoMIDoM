@@ -228,42 +228,42 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Sub TimerSecTick()
             try
-                Dim ladate As DateTime = Now 'on récupére la date/heure
+                'Dim ladate As DateTime = Now 'on récupére la date/heure
 
-                '---- Action à effectuer toutes les secondes ----
-                Dim thr As New Thread(AddressOf VerifTimeDevice)
-                thr.IsBackground = True
-                thr.Start()
+                ''---- Action à effectuer toutes les secondes ----
+                'Dim thr As New Thread(AddressOf VerifTimeDevice)
+                'thr.IsBackground = True
+                'thr.Start()
 
-                '---- Actions à effectuer toutes les minutes ----
-                If ladate.Second = 0 Then
-                    VerifIsJour()
+                ''---- Actions à effectuer toutes les minutes ----
+                'If ladate.Second = 0 Then
+                '    VerifIsJour()
 
-                    If _CycleSave > 0 And _Finish = True Then
-                        If ladate >= _NextTimeSave Then
-                            _NextTimeSave = Now.AddMinutes(_CycleSave)
-                            SaveConfig(_MonRepertoire & "\config\homidom.xml")
-                        End If
-                    End If
-                End If
+                '    If _CycleSave > 0 And _Finish = True Then
+                '        If ladate >= _NextTimeSave Then
+                '            _NextTimeSave = Now.AddMinutes(_CycleSave)
+                '            SaveConfig(_MonRepertoire & "\config\homidom.xml")
+                '        End If
+                '    End If
+                'End If
 
-                '---- Actions à effectuer toutes les heures ----
-                If ladate.Minute = 59 And ladate.Second = 59 Then
-                    SearchDeviceNoMaJ()
-                End If
+                ''---- Actions à effectuer toutes les heures ----
+                'If ladate.Minute = 59 And ladate.Second = 59 Then
+                '   SearchDeviceNoMaJ()
+                'End If
 
-                '---- Actions à effectuer à minuit ----
-                If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
-                    MAJ_HeuresSoleil()
-                    CleanLog(_MaxMonthLog)
-                End If
+                ''---- Actions à effectuer à minuit ----
+                'If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
+                '    MAJ_HeuresSoleil()
+                '    CleanLog(_MaxMonthLog)
+                'End If
 
-                '---- Actions à effectuer à midi ----
-                If ladate.Hour = 12 And ladate.Minute = 0 And ladate.Second = 0 Then
-                    MAJ_HeuresSoleil()
-                End If
+                ''---- Actions à effectuer à midi ----
+                'If ladate.Hour = 12 And ladate.Minute = 0 And ladate.Second = 0 Then
+                '    MAJ_HeuresSoleil()
+                'End If
 
-                ladate = Nothing
+                'ladate = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception : " & ex.Message)
             End Try
@@ -2716,9 +2716,9 @@ Namespace HoMIDom
                 Next
 
                 '----- Démarre le Timer -----
-                TimerSecond.Interval = 1000
-                AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
-                TimerSecond.Enabled = True
+                'TimerSecond.Interval = 1000
+                'AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
+                'TimerSecond.Enabled = True
 
                 'Change l'etat du server
                 Etat_server = True
@@ -3611,7 +3611,7 @@ Namespace HoMIDom
             Dim _id As String
             Dim _Idsrv As String
 
-            Public Sub New(ByRef Server As Server, ByVal IdSrv As String, ByVal Id As String, ByVal Retour As List(Of String))
+            Public Sub New(ByVal Server As Server, ByVal IdSrv As String, ByVal Id As String, ByVal Retour As List(Of String))
                 _server = Server
                 _retour = Retour
                 _id = Id

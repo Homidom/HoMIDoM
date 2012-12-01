@@ -6,20 +6,7 @@ Driver_RFXtrx
 </name>
 </assembly>
 <members>
-<member name="P:Driver_RFXtrx.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_RFXtrx.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_RFXtrx.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.GetCommandPlus">
+<member name="M:Driver_RFXtrx.Driver_RFXtrx.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
@@ -88,7 +75,7 @@ Driver_RFXtrx
 </member><member name="M:Driver_RFXtrx.Driver_RFXtrx.#ctor">
 	<summary>Creation d'un objet de type</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.TimerTick">
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.TimerTick(System.Object,System.Timers.ElapsedEventArgs)">
 	<summary>Si refresh &gt;0 gestion du timer</summary>
 	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
 </member><member name="M:Driver_RFXtrx.Driver_RFXtrx.ouvrir(System.String)">
@@ -157,6 +144,19 @@ Driver_RFXtrx
 </member><member name="T:Driver_RFXtrx.Driver_RFXtrx">
 	<summary>Class Driver_RFXTrx, permet de communiquer avec le RFXtrx Ethernet/COM</summary>
 	<remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
+</member><member name="P:Driver_RFXtrx.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_RFXtrx.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_RFXtrx.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member>
 </members>
 </doc>

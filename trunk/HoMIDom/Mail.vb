@@ -21,7 +21,7 @@ Namespace HoMIDom
         Dim _SSL As Boolean = True
         Dim _De As String
 
-        Public Sub New(ByRef Server As Server, ByVal De As String, ByVal adresse As String, ByVal sujet As String, ByVal texte As String, ByVal smtpserver As String, ByVal smtpPort As Integer, ByVal UserSSL As Boolean, Optional ByVal Login As String = "", Optional ByVal Password As String = "")
+        Public Sub New(ByVal Server As Server, ByVal De As String, ByVal adresse As String, ByVal sujet As String, ByVal texte As String, ByVal smtpserver As String, ByVal smtpPort As Integer, ByVal UserSSL As Boolean, Optional ByVal Login As String = "", Optional ByVal Password As String = "")
             Try
                 _Server = Server
                 _adresse = adresse

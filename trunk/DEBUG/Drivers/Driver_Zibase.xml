@@ -94,7 +94,7 @@ Driver_Zibase
 </member><member name="M:Driver_Zibase.Driver_Zibase.#ctor">
 	<summary>Creation d'un objet de type</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_Zibase.Driver_Zibase.TimerTick">
+</member><member name="M:Driver_Zibase.Driver_Zibase.TimerTick(System.Object,System.Timers.ElapsedEventArgs)">
 	<summary>Si refresh &gt;0 gestion du timer</summary>
 	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
 </member><member name="T:Driver_Zibase.Driver_Zibase">

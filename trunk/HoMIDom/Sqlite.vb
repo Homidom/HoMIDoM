@@ -23,7 +23,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <param name="basename">Nom de la base de donnée : homidom / medias</param>
         ''' <remarks></remarks>
-        Public Sub New(ByVal basename As String, ByRef server As Server)
+        Public Sub New(ByVal basename As String, ByVal Server As Server)
             Try
                 _Server = server
                 If basename <> "" Then

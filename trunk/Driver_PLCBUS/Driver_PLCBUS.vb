@@ -1,4 +1,5 @@
-﻿Imports HoMIDom
+﻿'Option Strict On
+Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports STRGS = Microsoft.VisualBasic.Strings
@@ -18,7 +19,7 @@ Imports System.IO.Ports
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "5AEDF3A8-3568-11E0-9DEC-D164DFD72085"
     Dim _Nom As String = "PLCBUS"
-    Dim _Enable As String = False
+    Dim _Enable As Boolean = False
     Dim _Description As String = "PLCBUS COM / USB (PLC1141)"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "COM"
@@ -57,8 +58,8 @@ Imports System.IO.Ports
     Private ackreceived As Boolean = False
     Private port_name As String = ""
 
-    Dim com_to_hex As New Dictionary(Of String, String)
-    Dim hex_to_com As New Dictionary(Of String, String)
+    Dim com_to_hex As New Dictionary(Of String, Integer)
+    Dim hex_to_com As New Dictionary(Of Integer, String)
 
     Private BufferIn(8192) As Byte
     Private firstbyte As Boolean = True
@@ -176,11 +177,11 @@ Imports System.IO.Ports
             _Picture = value
         End Set
     End Property
-    Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
+    Public Property Port_TCP() As String Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
         End Get
-        Set(ByVal value As Object)
+        Set(ByVal value As String)
             _Port_TCP = value
         End Set
     End Property
@@ -622,7 +623,7 @@ Imports System.IO.Ports
 
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-    Private Sub TimerTick()
+    Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
         Try
 
         Catch ex As Exception
@@ -702,15 +703,15 @@ Imports System.IO.Ports
             Return ("ERR: Port " & port_name & " IGNORE")
             ' The port may have been removed. Ignore.
         End Try
-        Return True
+        Return "ERR: Not defined"
     End Function
 
     ''' <summary>Converti les adresses de string en hexa</summary>
     ''' <remarks></remarks>
-    Private Function adresse_to_hex(ByVal adresse As String)
+    Private Function adresse_to_hex(ByVal adresse As String) As Integer
         'convertit une adresse du type L1 en byte
         Try
-            Dim table() As String = {0, 16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240}
+            Dim table() As Integer = {0, 16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240}
             If adresse.Length > 1 Then
                 Return table(Asc(Microsoft.VisualBasic.Left(adresse, 1)) - 65) + CInt(Microsoft.VisualBasic.Right(adresse, adresse.Length - 1)) - 1
             Else
@@ -718,9 +719,23 @@ Imports System.IO.Ports
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS adresse_to_hex", ex.Message)
-            Return ""
+            Return 0
         End Try
     End Function
+    'Private Function adresse_to_hex(ByVal adresse As String)
+    '    'convertit une adresse du type L1 en byte
+    '    Try
+    '        Dim table() As String = {0, 16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240}
+    '        If adresse.Length > 1 Then
+    '            Return table(Asc(Microsoft.VisualBasic.Left(adresse, 1)) - 65) + CInt(Microsoft.VisualBasic.Right(adresse, adresse.Length - 1)) - 1
+    '        Else
+    '            Return table(Asc(adresse) - 65)
+    '        End If
+    '    Catch ex As Exception
+    '        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS adresse_to_hex", ex.Message)
+    '        Return ""
+    '    End Try
+    'End Function
 
     ''' <summary>Converti les adresses d'hexa en string</summary>
     ''' <remarks></remarks>
@@ -732,35 +747,35 @@ Imports System.IO.Ports
 
             If adresse >= 128 Then
                 x = x + 8
-                adresse = adresse - 128
+                adresse = CByte(adresse - 128)
             End If
             If adresse >= 64 Then
                 x = x + 4
-                adresse = adresse - 64
+                adresse = CByte(adresse - 64)
             End If
             If adresse >= 32 Then
                 x = x + 2
-                adresse = adresse - 32
+                adresse = CByte(adresse - 32)
             End If
             If adresse >= 16 Then
                 x = x + 1
-                adresse = adresse - 16
+                adresse = CByte(adresse - 16)
             End If
             If adresse >= 8 Then
                 y = y + 8
-                adresse = adresse - 8
+                adresse = CByte(adresse - 8)
             End If
             If adresse >= 4 Then
                 y = y + 4
-                adresse = adresse - 4
+                adresse = CByte(adresse - 4)
             End If
             If adresse >= 2 Then
                 y = y + 2
-                adresse = adresse - 2
+                adresse = CByte(adresse - 2)
             End If
             If adresse >= 1 Then
                 y = y + 1
-                adresse = adresse - 1
+                adresse = CByte(adresse - 1)
             End If
             Return Chr(x + 65) & (y + 1)
         Catch ex As Exception
@@ -844,7 +859,7 @@ Imports System.IO.Ports
                     '    checksum = &H3
                     'End If
 
-                    Dim donnee() As Byte = {&H2, &H5, plcusercode, _adresse, _cmd, data1, data2, &H3}
+                    Dim donnee() As Byte = {&H2, &H5, CByte(plcusercode), CByte(_adresse), CByte(_cmd), CByte(data1), CByte(data2), &H3}
 
                     'ecriture sur le port
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Ecrire", " Ecrire " & adresse & " : " & commande & " " & data1 & "-" & data2 & " (data:" & &H2 & "." & &H5 & "." & plcusercode & "." & _adresse & "." & _cmd & "." & data1 & "." & data2 & "." & &H3 & ")")
@@ -877,7 +892,7 @@ Imports System.IO.Ports
                         Case "ON", "OFF", "BRIGHT", "BLINK", "FADE_STOP", "STATUS_REQUEST"
                             If data1 = 0 Then traitement("OFF", adresse, commande, True) Else traitement("ON", adresse, commande, True)
                         Case "DIM", "PRESET_DIM"
-                            traitement(data1, adresse, commande, True)
+                            traitement(CStr(data1), adresse, commande, True)
                         Case "ALL_UNITS_OFF", "All_USER_UNITS_OFF", "ALL_LIGHTS_OFF", "All_USER_LIGHTS_OFF"
                             traitement("OFF", adresse, commande, True)
                         Case "ALL_LIGHTS_ON", "All_USER_LIGHTS_ON"
@@ -972,7 +987,6 @@ Imports System.IO.Ports
         Dim plcbus_adresse As String = ""
         Dim data1 As String = ""
         Dim data2 As String = ""
-        Dim actif As Boolean
         Dim listeactif As String = ""
         Dim TblBits(7) As Boolean
         Dim unbyte As Byte
@@ -1011,8 +1025,8 @@ Imports System.IO.Ports
                 Try
                     plcbus_adresse = hex_to_adresse(comBuffer(3))
                     plcbus_commande = hex_to_com(comBuffer(4))
-                    data1 = comBuffer(5)
-                    data2 = comBuffer(6)
+                    data1 = CStr(comBuffer(5))
+                    data2 = CStr(comBuffer(6))
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process : Get data", "Exception : " & ex.Message)
                 End Try
@@ -1021,7 +1035,7 @@ Imports System.IO.Ports
                     'test si c'est un ack
                     unbyte = comBuffer(7)
                     For Iteration As Integer = 0 To 7
-                        TblBits(Iteration) = unbyte And 1
+                        TblBits(Iteration) = CBool(unbyte And 1)
                         unbyte >>= 1
                     Next
                 Catch ex As Exception
@@ -1047,7 +1061,7 @@ Imports System.IO.Ports
 
                         Select Case plcbus_commande
                             Case "ON", "OFF", "BRIGHT", "BLINK", "FADE_STOP", "STATUS_REQUEST"
-                                If data1 = 0 Then traitement("OFF", plcbus_adresse, plcbus_commande, True) Else traitement("ON", plcbus_adresse, plcbus_commande, True)
+                                If CInt(data1) = 0 Then traitement("OFF", plcbus_adresse, plcbus_commande, True) Else traitement("ON", plcbus_adresse, plcbus_commande, True)
                             Case "DIM", "PRESET_DIM"
                                 traitement(data1, plcbus_adresse, plcbus_commande, True)
                             Case "GetSignalStrength", "GetNoiseStrength"
@@ -1098,22 +1112,20 @@ Imports System.IO.Ports
                             Case "GetAllIdPulse", "ReportAllIdPulse3Phase"
                                 unbyte = comBuffer(6)
                                 For Iteration As Integer = 0 To 7
-                                    actif = (unbyte And 1)
-                                    If actif Then listeactif = listeactif & " " & Left(plcbus_adresse, 1) & (Iteration + 1)
+                                    If CBool((unbyte And 1)) Then listeactif = listeactif & " " & Left(plcbus_adresse, 1) & (Iteration + 1)
                                     unbyte >>= 1
                                 Next
                                 unbyte = comBuffer(5)
                                 For Iteration As Integer = 0 To 7
-                                    actif = (unbyte And 1)
-                                    If actif Then listeactif = listeactif & " " & Left(plcbus_adresse, 1) & (Iteration + 9)
+                                    If CBool((unbyte And 1)) Then listeactif = listeactif & " " & Left(plcbus_adresse, 1) & (Iteration + 9)
                                     unbyte >>= 1
                                 Next
                                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Process", " <- Liste des composants actifs : " & listeactif)
                             Case "GetOnlyOnIdPulse", "ReportOnlyOnIdPulse3Phase"
                                 unbyte = comBuffer(6)
                                 For Iteration As Integer = 0 To 7
-                                    actif = (unbyte And 1)
-                                    If actif Then
+
+                                    If CBool((unbyte And 1)) Then
                                         listeactif = listeactif & " " & Left(plcbus_adresse, 1) & (Iteration + 1)
                                         traitement("ON", Left(plcbus_adresse, 1) & (Iteration + 1), "GetOnlyOnIdPulse", False)
                                     Else
@@ -1123,8 +1135,7 @@ Imports System.IO.Ports
                                 Next
                                 unbyte = comBuffer(5)
                                 For Iteration As Integer = 0 To 7
-                                    actif = (unbyte And 1)
-                                    If actif Then
+                                    If CBool((unbyte And 1)) Then
                                         listeactif = listeactif & " " & Left(plcbus_adresse, 1) & (Iteration + 9)
                                         traitement("ON", Left(plcbus_adresse, 1) & (Iteration + 9), "GetOnlyOnIdPulse", False)
                                     Else
@@ -1160,20 +1171,21 @@ Imports System.IO.Ports
                     'correction valeur pour correspondre au type de value
                     If TypeOf listedevices.Item(0).Value Is Integer Then
                         If valeur = "ON" Then
-                            valeur = 100
+                            listedevices.Item(0).Value = 100
                         ElseIf valeur = "OFF" Then
-                            valeur = 0
+                            listedevices.Item(0).Value = 0
                         End If
                     ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
                         If valeur = "ON" Then
-                            valeur = True
+                            listedevices.Item(0).Value = True
                         ElseIf valeur = "OFF" Then
-                            valeur = False
+                            listedevices.Item(0).Value = False
                         Else
-                            valeur = True
+                            listedevices.Item(0).Value = True
                         End If
+                    Else
+                        listedevices.Item(0).Value = valeur
                     End If
-                    listedevices.Item(0).Value = valeur
                 ElseIf (listedevices.Count > 1) Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
                 Else

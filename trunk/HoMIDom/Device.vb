@@ -978,7 +978,7 @@ Namespace HoMIDom
             End Sub
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "APPAREIL"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1028,7 +1028,7 @@ Namespace HoMIDom
             End Sub
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "AUDIO"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1330,7 +1330,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "BAROMETRE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1342,7 +1342,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueString
 
             'Creation d'un device BATTERIE
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "BATTERIE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1354,7 +1354,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "COMPTEUR"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1366,7 +1366,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueBool
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "CONTACT"
                 _valuemustchange = True 'on ne prend en compte que si la value change
@@ -1379,8 +1379,8 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueBool
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
-                _Server = server
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "DETECTEUR"
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
@@ -1391,7 +1391,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueString
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "DIRECTIONVENT"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1403,7 +1403,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "ENERGIEINSTANTANEE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1415,7 +1415,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "ENERGIETOTALE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1427,7 +1427,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueBool
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "GENERIQUEBOOLEEN"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1459,8 +1459,8 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueString
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
-                _Server = server
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "GENERIQUESTRING"
                 _valuemustchange = False
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1472,7 +1472,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation d'un device Temperature
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "GENERIQUEVALUE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1486,7 +1486,7 @@ Namespace HoMIDom
             Dim _AdresseBox As String = "http://hd1.freebox.fr"
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "FREEBOX"
                 Adresse1 = _AdresseBox
@@ -1661,7 +1661,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "HUMIDITE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1673,7 +1673,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueInt
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "LAMPE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -1747,7 +1747,7 @@ Namespace HoMIDom
             Dim _ConditionJ3 As String = ""
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "METEO"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2209,7 +2209,7 @@ Namespace HoMIDom
 
             Protected Overrides Sub Finalize()
                 MyBase.Finalize()
-                MyTimer.Enabled = false
+                MyTimer.Enabled = False
             End Sub
         End Class
 
@@ -2221,7 +2221,7 @@ Namespace HoMIDom
             'Public ListCommandRepeat As New ArrayList
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "MULTIMEDIA"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2330,7 +2330,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "PLUIECOURANT"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2342,7 +2342,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "PLUIETOTAL"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2354,8 +2354,8 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueBool
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
-                _Server = server
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "SWITCH"
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
@@ -2386,8 +2386,8 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueString
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
-                _Server = server
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "TELECOMMANDE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
@@ -2403,7 +2403,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation d'un device Temperature
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "TEMPERATURE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2415,7 +2415,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "TEMPERATURECONSIGNE"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2427,7 +2427,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "UV"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2439,7 +2439,7 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueDouble
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
+            Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "VITESSEVENT"
                 AddHandler MyTimer.Elapsed, AddressOf Read
@@ -2451,8 +2451,8 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueInt
 
             'Creation du device
-            Public Sub New(ByRef Server As Server)
-                _Server = server
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
                 _Type = "VOLET"
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub

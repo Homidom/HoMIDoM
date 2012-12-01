@@ -22,7 +22,7 @@
         ReadOnly Property Protocol() As String
         ReadOnly Property IsConnect() As Boolean
         Property IP_TCP() As String
-        Property Port_TCP()
+        Property Port_TCP() As String
         Property IP_UDP() As String
         Property Port_UDP() As String
         Property COM() As String

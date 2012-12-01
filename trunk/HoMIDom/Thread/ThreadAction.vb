@@ -387,7 +387,7 @@ Namespace HoMIDom
             End Try
         End Sub
 
-        Public Sub New(ByRef Server As Server, ByVal Action As Object)
+        Public Sub New(ByVal Server As Server, ByVal Action As Object)
             Try
                 _Server = Server
                 _Action = Action

@@ -6,7 +6,20 @@ Driver_USBuirt
 </name>
 </assembly>
 <members>
-<member name="M:Driver_USBuirt.Driver_USBUIRT.GetCommandPlus">
+<member name="P:Driver_USBuirt.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:Driver_USBuirt.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:Driver_USBuirt.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member><member name="M:Driver_USBuirt.Driver_USBUIRT.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
@@ -81,7 +94,7 @@ Driver_USBuirt
 </member><member name="M:Driver_USBuirt.Driver_USBUIRT.#ctor">
 	<summary>Creation d'un objet de type</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_USBuirt.Driver_USBUIRT.TimerTick">
+</member><member name="M:Driver_USBuirt.Driver_USBUIRT.TimerTick(System.Object,System.Timers.ElapsedEventArgs)">
 	<summary>Si refresh &gt;0 gestion du timer</summary>
 	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
 </member><member name="M:Driver_USBuirt.Driver_USBUIRT.LearnCode">
@@ -103,19 +116,6 @@ Driver_USBuirt
 </member><member name="T:Driver_USBuirt.Driver_USBUIRT">
 	<summary>Class Driver_USBUIRT, permet d'apprendre des codes IR et de les restituer par la suite </summary>
 	<remarks>Nécessite la dll usbuirtmanagedwrapper</remarks>
-</member><member name="P:Driver_USBuirt.My.Resources.Resources.ResourceManager">
-	<summary>
-  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
-</summary>
-</member><member name="P:Driver_USBuirt.My.Resources.Resources.Culture">
-	<summary>
-  Remplace la propriété CurrentUICulture du thread actuel pour toutes
-  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
-</summary>
-</member><member name="T:Driver_USBuirt.My.Resources.Resources">
-	<summary>
-  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
-</summary>
 </member>
 </members>
 </doc>

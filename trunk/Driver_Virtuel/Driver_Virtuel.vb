@@ -15,7 +15,7 @@ Imports HoMIDom.HoMIDom.Device
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "DE96B466-2540-11E0-A321-65D7DFD72085" 'ne pas modifier car utilisé dans le code du serveur
     Dim _Nom As String = "Virtuel" 'Nom du driver à afficher
-    Dim _Enable As String = False 'Activer/Désactiver le driver
+    Dim _Enable As Boolean = False 'Activer/Désactiver le driver
     Dim _Description As String = "Driver Virtuel" 'Description du driver
     Dim _StartAuto As Boolean = False 'True si le driver doit démarrer automatiquement
     Dim _Protocol As String = "Virtuel" 'Protocole utilisé par le driver, exemple: RS232
@@ -262,11 +262,11 @@ Imports HoMIDom.HoMIDom.Device
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
+    Public Property Port_TCP() As String Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
         End Get
-        Set(ByVal value As Object)
+        Set(ByVal value As String)
             _Port_TCP = value
         End Set
     End Property
@@ -636,7 +636,7 @@ Imports HoMIDom.HoMIDom.Device
 
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-    Private Sub TimerTick()
+    Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
 
     End Sub
 

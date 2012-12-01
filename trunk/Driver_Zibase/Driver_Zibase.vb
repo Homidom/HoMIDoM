@@ -1,4 +1,5 @@
-﻿Imports HoMIDom
+﻿'Option Strict On
+Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports STRGS = Microsoft.VisualBasic.Strings
@@ -24,7 +25,7 @@ Imports ZibaseDll
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "0A94F22A-E824-11E0-B989-175F4824019B"
     Dim _Nom As String = "ZIBASE"
-    Dim _Enable As String = False
+    Dim _Enable As Boolean = False
     Dim _Description As String = "Zibase Ethernet"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "ETHERNET"
@@ -165,11 +166,11 @@ Imports ZibaseDll
             _Picture = value
         End Set
     End Property
-    Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
+    Public Property Port_TCP() As String Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
         End Get
-        Set(ByVal value As Object)
+        Set(ByVal value As String)
             _Port_TCP = value
         End Set
     End Property
@@ -247,8 +248,18 @@ Imports ZibaseDll
                 Else
                     'Write(deviceobject, Command, Param(0), Param(1))
                     Select Case UCase(Command)
-                        Case "RUN_SCENARIO" : WriteLog(ExecScript(Param(0)))
-                        Case "RUN_SCRIPT" : WriteLog(RunScenario(Param(0)))
+                        Case "RUN_SCENARIO"
+                            If Not IsNothing(Param(0)) Then
+                                RunScenario(CStr(Param(0)))
+                            Else
+                                WriteLog("ERR: ExecuteCommand : RUN_SCENARIO : il manque un parametre")
+                            End If
+                        Case "RUN_SCRIPT"
+                            If Not IsNothing(Param(0)) Then
+                                ExecScript(CStr(Param(0)))
+                            Else
+                                WriteLog("ERR: ExecuteCommand : RUN_SCRIPT : il manque un parametre")
+                            End If
                         Case Else : WriteLog("ERR: ExecuteCommand : command incorrecte : " & Command)
                     End Select
                     Return True
@@ -329,15 +340,15 @@ Imports ZibaseDll
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
             Dim sei As ZiBase.SensorInfo
-            Dim retour
+            Dim retour As String
             If _Enable = False Then Exit Sub
             If _DEBUG Then WriteLog("DBG: WRITE Read " & Objet.Name)
 
             sei = zba.GetSensorInfo(Objet.adresse1, Objet.Modele)
             If STRGS.UCase(sei.sType) = "TEM" Then
-                retour = sei.dwValue / 100 'si c'est une temperature on / par 100
+                retour = CStr(sei.dwValue / 100) 'si c'est une temperature on / par 100
             Else
-                retour = sei.dwValue
+                retour = CStr(sei.dwValue)
             End If
             WriteRetour(Objet.adresse, Objet.type.ToString, retour) 'Modification du device
 
@@ -358,7 +369,7 @@ Imports ZibaseDll
             If _Enable = False Then Exit Sub
             If _DEBUG Then WriteLog("DBG: WRITE Device " & Objet.Name & " <-- " & Command)
 
-            If IsNothing(Parametre1) Or Parametre1 = "" Then retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, 0) Else retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, Parametre1)
+            If IsNothing(Parametre1) Or Str(Parametre1) = "" Then retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, 0) Else retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, Parametre1)
             If STRGS.InStr(retour, "ERR:") > 0 Then
                 WriteLog(retour)
             Else
@@ -519,7 +530,7 @@ Imports ZibaseDll
 
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-    Private Sub TimerTick()
+    Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
 
     End Sub
 
@@ -564,7 +575,7 @@ Imports ZibaseDll
     End Sub
 
     'executer un script stocké sur la zibase
-    Private Function ExecScript(ByVal sScript As String)
+    Private Function ExecScript(ByVal sScript As String) As String
         'sScript : nom du script sur la zibase
         Try
             zba.ExecScript(sScript)
@@ -575,7 +586,7 @@ Imports ZibaseDll
     End Function
 
     'executer un scénario stocké sur la zibase
-    Private Function RunScenario(ByVal sCmd As String)
+    Private Function RunScenario(ByVal sCmd As String) As String
         'sCmd : nom du scenario sur la zibase
         Try
             zba.RunScenario(sCmd)
@@ -586,7 +597,7 @@ Imports ZibaseDll
     End Function
 
     'ecrire device
-    Private Function Ecrirecommand(ByVal composants_adresse As String, ByVal composants_modele_nom As String, ByVal composants_adresse2 As String, ByVal ordre As String, ByVal iDim As Integer)
+    Private Function Ecrirecommand(ByVal composants_adresse As String, ByVal composants_modele_nom As String, ByVal composants_adresse2 As String, ByVal ordre As String, ByVal iDim As Integer) As String
         'composants_adresse : adresse du composant
         'composants_modele_nom : modele du composant
         'composants_adresse2 : adresse secondaire du composant chacon
@@ -629,26 +640,26 @@ Imports ZibaseDll
             Select Case UCase(ordre)
                 Case "ON"
                     zba.SendCommand(adresse, ZiBase.State.STATE_ON, 0, protocole, 1)
-                    valeur = 100
+                    valeur = CStr(100)
                 Case "OFF"
                     zba.SendCommand(adresse, ZiBase.State.STATE_OFF, 0, protocole, 1)
-                    valeur = 0
+                    valeur = CStr(0)
                 Case "DIM"
                     If UCase(Modele(0)) <> "CHACON" Then
                         zba.SendCommand(adresse, ZiBase.State.STATE_DIM, 0, protocole, 1)
-                        valeur = 100
+                        valeur = CStr(100)
                     Else
                         zba.SendCommand(adresse, ZiBase.State.STATE_DIM, iDim, protocole, 1)
-                        valeur = iDim
+                        valeur = CStr(iDim)
                     End If
                 Case Else : Return ("ERR: ordre incorrect : " & ordre)
             End Select
 
             'retour normal : on renvoie la valeur
-            Return (valeur)
+            Return valeur
 
         Catch ex As Exception
-            Return ("ERR: Zib_ecrirecommand" & ex.Message & " --> adresse:" & composants_adresse & " (" & composants_adresse2 & ") commande:" & ordre & "-" & iDim)
+            Return "ERR: Zib_ecrirecommand" & ex.Message & " --> adresse:" & composants_adresse & " (" & composants_adresse2 & ") commande:" & ordre & "-" & iDim
         End Try
 
     End Function
@@ -664,13 +675,13 @@ Imports ZibaseDll
             Select Case UCase(type)
                 Case "TEM"
                     'valeur = STRGS.Left(valeur, (valeur.Length - 2))
-                    valeur = valeur / 100
+                    valeur = CStr(CInt(valeur) / 100)
                     type = "THE" 'tem Température (°C)
                     'Case "hum"
                     'valeur = STRGS.Left(valeur, (valeur.Length - 1))
                 Case "TEMC"
                     'valeur = STRGS.Left(valeur, (valeur.Length - 2))
-                    valeur = valeur / 100
+                    valeur = CStr(CInt(valeur) / 100)
                     type = "THC" 'Température de consigne (Thermostat : °C)
                 Case "XSE", "BAT", "LNK", "STA" : valeur = valeurstring 'on utilise la valeur normale et non l'entier
             End Select

@@ -48,7 +48,7 @@ Imports System.IO.Ports
     ' Dim _ID As String = "7396FA30-0050-11E2-9BC2-523B6288709B"
     Dim _ID As String = "596AD836-FA1D-11E1-BDE2-639C6188709B"
     Dim _Nom As String = "GSM"
-    Dim _Enable As String = False
+    Dim _Enable As Boolean = False
     Dim _Description As String = "Driver GSM"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "GSM"
@@ -203,11 +203,11 @@ Imports System.IO.Ports
             _Picture = value
         End Set
     End Property
-    Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
+    Public Property Port_TCP() As String Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
         End Get
-        Set(ByVal value As Object)
+        Set(ByVal value As String)
             _Port_TCP = value
         End Set
     End Property
@@ -670,7 +670,7 @@ Imports System.IO.Ports
 
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-    Private Sub TimerTick()
+    Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
 
     End Sub
 
