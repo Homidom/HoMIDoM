@@ -5465,7 +5465,6 @@ Namespace HoMIDom
 
                 _list.Sort(AddressOf sortDevice)
                 Return _list
-
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllDevices", "Exception : " & ex.ToString)
                 Return Nothing
