@@ -680,10 +680,14 @@ Imports System.Globalization
                 port_name = numero 'pour se rapeller du nom du port
                 If VB.Left(numero, 3) <> "COM" Then
                     'RFXMitter est un modele ethernet
-                    tcp = True
-                    client = New TcpClient(numero, _Port_TCP)
-                    _IsConnect = True
-                    Return ("Port IP " & port_name & ":" & _Port_TCP & " ouvert")
+                    If My.Computer.Network.Ping(numero) Then
+                        tcp = True
+                        client = New TcpClient(numero, _Port_TCP)
+                        _IsConnect = True
+                        Return ("Port IP " & port_name & ":" & _Port_TCP & " ouvert")
+                    Else
+                        Return ("ERR: Le RFXMitter de répond pas au ping")
+                    End If
                 Else
                     'RFXMitter est un modele usb
                     tcp = False
