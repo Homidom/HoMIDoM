@@ -4725,7 +4725,6 @@ Namespace HoMIDom
 
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     Dim x As New TemplateDriver
-
                     With x
                         .Nom = _ListDrivers.Item(i).nom
                         .ID = _ListDrivers.Item(i).id
@@ -4752,6 +4751,7 @@ Namespace HoMIDom
                             y.Description = _ListDrivers.Item(i).Parametres.item(j).description
                             y.Valeur = _ListDrivers.Item(i).Parametres.item(j).valeur
                             .Parametres.Add(y)
+                            y = Nothing
                         Next
                         For j As Integer = 0 To _ListDrivers.Item(i).LabelsDriver.count - 1
                             Dim y As New Driver.cLabels
@@ -4760,6 +4760,7 @@ Namespace HoMIDom
                             y.Tooltip = _ListDrivers.Item(i).LabelsDriver.item(j).Tooltip
                             y.Parametre = _ListDrivers.Item(i).LabelsDriver.item(j).Parametre
                             .LabelsDriver.Add(y)
+                            y = Nothing
                         Next
                         For j As Integer = 0 To _ListDrivers.Item(i).LabelsDevice.count - 1
                             Dim y As New Driver.cLabels
@@ -4768,8 +4769,9 @@ Namespace HoMIDom
                             y.Tooltip = _ListDrivers.Item(i).LabelsDevice.item(j).Tooltip
                             y.Parametre = _ListDrivers.Item(i).LabelsDevice.item(j).Parametre
                             .LabelsDevice.Add(y)
+                            y = Nothing
                         Next
-                        Dim _listactdrv As New ArrayList
+                        'Dim _listactdrv As New ArrayList
                         Dim _listactd As New List(Of String)
                         For j As Integer = 0 To Api.ListMethod(_ListDrivers.Item(i)).Count - 1
                             _listactd.Add(Api.ListMethod(_ListDrivers.Item(i)).Item(j).ToString)
@@ -4793,17 +4795,18 @@ Namespace HoMIDom
                                     End If
                                 End With
                                 .DeviceAction.Add(p)
+                                p = Nothing
                             Next
                         End If
 
                         _listactd = Nothing
-                        _listactdrv = Nothing
+                        '_listactdrv = Nothing
                     End With
                     _list.Add(x)
+                    x = Nothing
                 Next
                 _list.Sort(AddressOf sortDriver)
                 Return _list
-
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllDrivers", "Exception : " & ex.Message)
                 Return Nothing
