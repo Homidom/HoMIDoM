@@ -57,7 +57,7 @@
                                 <Border BorderThickness="2" BorderBrush="Black" >
                                     <Image Name="ImgPicture" Width="50" Height=" 50"/>
                                 </Border>
-                                <Button Margin="2" Name="BtnInitPict" Content="Init" Width="25" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
+                                <Button Margin="2" Name="BtnInitPict" Content="..." Width="25" Height="25" Template="{DynamicResource GlassButton}" Foreground="White"/>
                             </StackPanel>
                           </StackPanel>
                         <StackPanel Name="StkStatus">

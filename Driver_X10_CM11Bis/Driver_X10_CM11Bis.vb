@@ -158,11 +158,12 @@ Public Class Driver_X10_CM11Bis
             _Picture = value
         End Set
     End Property
-    Public Property Port_TCP() As Object Implements HoMIDom.HoMIDom.IDriver.Port_TCP
+
+    Public Property Port_TCP() As String Implements HoMIDom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
         End Get
-        Set(ByVal value As Object)
+        Set(ByVal value As String)
             _Port_TCP = value
         End Set
     End Property
