@@ -24,6 +24,7 @@ Namespace HoMIDom
 
     ''' <summary>Classe Server</summary>
     ''' <remarks></remarks>
+    <ServiceBehavior(InstanceContextMode:=InstanceContextMode.Single)>
     <Serializable()> Public Class Server
         Implements HoMIDom.IHoMIDom 'implémente l'interface dans cette class
         ' Implements HoMIDom.ICallBack
@@ -227,7 +228,7 @@ Namespace HoMIDom
         ''' <summary>Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi</summary>
         ''' <remarks></remarks>
         Sub TimerSecTick()
-            try
+            Try
                 'Dim ladate As DateTime = Now 'on récupére la date/heure
 
                 ''---- Action à effectuer toutes les secondes ----
@@ -2331,16 +2332,16 @@ Namespace HoMIDom
                 Dim sbKey As New System.Text.StringBuilder
                 Dim intPtr As Integer
 
-                    For intPtr = 1 To v_strKey.Length
-                        Dim intIn As Integer = v_strKey.Length - intPtr + 1
-                        sbKey.Append(Mid(v_strKey, intIn, 1))
-                    Next
-                    Dim strKey As String = sbKey.ToString
-                    Return sbKey.ToString
-                Catch ex As Exception
-                    'Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ScrambleKey", "Exception : " & ex.Message)
-                    Return ""
-                End Try
+                For intPtr = 1 To v_strKey.Length
+                    Dim intIn As Integer = v_strKey.Length - intPtr + 1
+                    sbKey.Append(Mid(v_strKey, intIn, 1))
+                Next
+                Dim strKey As String = sbKey.ToString
+                Return sbKey.ToString
+            Catch ex As Exception
+                'Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ScrambleKey", "Exception : " & ex.Message)
+                Return ""
+            End Try
         End Function
 #End Region
 
