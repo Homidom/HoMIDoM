@@ -85,30 +85,20 @@ Class Window1
                 Try
 
                     'Modifie la date et Heure
-                    'Dim mytime As String = myService.GetTime
                     LblStatus.Content = Now.ToLongDateString & " " & myService.GetTime & " "
-                    'mytime = ""
 
                     'Modifie l'adresse/port du serveur connecté
                     Dim serveurcomplet As String = myChannelFactory.Endpoint.Address.ToString()
                     serveurcomplet = Mid(serveurcomplet, 8, serveurcomplet.Length - 8)
                     serveurcomplet = Split(serveurcomplet, "/", 2)(0)
-                    Dim serveuradresse As String = Split(serveurcomplet, ":", 2)(0)
-                    Dim serveurport As String = Split(serveurcomplet, ":", 2)(1)
-                    LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & serveuradresse & ":" & serveurport
+                    LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & Split(serveurcomplet, ":", 2)(0) & ":" & Split(serveurcomplet, ":", 2)(1)
                     'LblConnect.Content = Mid(myChannelFactory.Endpoint.Address.ToString(), 1, 32) & "..."
-                    LblConnect.Content = serveuradresse & ":" & serveurport
-                    serveuradresse = Nothing
-                    serveurport = Nothing
+                    LblConnect.Content = Split(serveurcomplet, ":", 2)(0) & ":" & Split(serveurcomplet, ":", 2)(1)
                     serveurcomplet = Nothing
 
                     'Modifie les heures du soleil
-                    Dim mydate As Date
-                    mydate = myService.GetHeureLeverSoleil
-                    LHS.Content = mydate.ToShortTimeString
-                    mydate = myService.GetHeureCoucherSoleil
-                    LCS.Content = mydate.ToShortTimeString
-                    mydate = Nothing
+                    LHS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
+                    LCS.Content = CDate(myService.GetHeureCoucherSoleil).ToShortTimeString
 
                     'Modifie les LOG
                     Dim list As List(Of String) = myService.GetLastLogs

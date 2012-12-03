@@ -102,7 +102,7 @@ Module Service
                     'Dim myadress As String = "http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service"
                     Dim myadress As String = "http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/service"
                     Dim binding As New ServiceModel.BasicHttpBinding
-                    Dim Context As OperationContext = OperationContext.Current
+                    'Dim Context As OperationContext = OperationContext.Current 'non utilisé donc commenté : DMS
                     binding.MaxBufferPoolSize = 250000000
                     binding.MaxReceivedMessageSize = Integer.MaxValue
                     binding.MaxBufferSize = Integer.MaxValue
@@ -191,7 +191,9 @@ Module Service
                     Else
                         _portip = ""
                     End If
+                    list = Nothing
                 End If
+                myxml = Nothing
             End If
 
             Return _portip
@@ -226,7 +228,9 @@ Module Service
                             Else
                                 _portip = ""
                             End If
+                            list = Nothing
                         End If
+                        myxml = Nothing
                     End If
                     Return _portip
                 Catch ex2 As Exception
