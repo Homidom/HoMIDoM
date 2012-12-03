@@ -3869,30 +3869,27 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Function GetByteFromImage(ByVal file As String) As Byte() Implements IHoMIDom.GetByteFromImage
             Try
-                Dim array As Byte() = Nothing
-                    If file = "" Then
-                        Return Nothing
-                    End If
-
-                    If IO.File.Exists(file) = False Then
-                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetByteFromImage", "le fichier n'existe pas: " & file)
-                        Return Nothing
-                    End If
-
-                    Using fs As New FileStream(file, FileMode.Open, FileAccess.Read)
-                        Dim reader As New BinaryReader(fs)
-                        If reader IsNot Nothing Then
-                            array = reader.ReadBytes(CInt(fs.Length))
-                            reader.Close()
-                            reader = Nothing
-                        End If
-                    End Using
-                    Return array
-                    array = Nothing
-                Catch ex As Exception
-                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetByteFromImage", ex.Message)
+                If file = "" Then Return Nothing
+                If IO.File.Exists(file) = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetByteFromImage", "le fichier n'existe pas: " & file)
                     Return Nothing
-                End Try
+                End If
+
+                Dim array As Byte() = Nothing
+                Using fs As New FileStream(file, FileMode.Open, FileAccess.Read)
+                    Dim reader As New BinaryReader(fs)
+                    If reader IsNot Nothing Then
+                        array = reader.ReadBytes(CInt(fs.Length))
+                        reader.Close()
+                        reader = Nothing
+                    End If
+                End Using
+                Return array
+                array = Nothing
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetByteFromImage", ex.Message)
+                Return Nothing
+            End Try
         End Function
 
         ''' <summary>
@@ -3905,17 +3902,19 @@ Namespace HoMIDom
                 Dim _list As New List(Of ImageFile)
 
                 Dim dirInfo As New System.IO.DirectoryInfo(_MonRepertoire & "\images\")
-                Dim file As System.IO.FileInfo
                 Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.*g", System.IO.SearchOption.AllDirectories)
 
                 If (files IsNot Nothing) Then
-                    For Each file In files
+                    For Each file As System.IO.FileInfo In files
                         Dim x As New ImageFile
                         x.Path = file.FullName
                         x.FileName = file.Name
                         _list.Add(x)
+                        x = Nothing
                     Next
                 End If
+                files = Nothing
+                dirInfo = Nothing
 
                 Return _list
             Catch ex As Exception
@@ -3968,7 +3967,7 @@ Namespace HoMIDom
                 End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSqliteBddVersion", "Exception : " & ex.Message)
-                Return Nothing
+                Return "ERROR"
             End Try
         End Function
 
@@ -3983,11 +3982,11 @@ Namespace HoMIDom
                     Return sqliteversion
                 Else
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSqliteBddVersion", retour)
-                    Return "ERROR"
+                    Return retour
                 End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSqliteVersion", "Exception : " & ex.Message)
-                Return Nothing
+                Return "ERR:Exception GetSqliteVersion"
             End Try
         End Function
 #End Region
@@ -5241,7 +5240,6 @@ Namespace HoMIDom
                         _ListDevices.Item(i).refresh = 0
                         _ListDevices.Item(i).driver.deletedevice(deviceId)
                         _ListDevices.RemoveAt(i)
-
 
                         'va vérifier toutes les zones
                         For j As Integer = 0 To _ListZones.Count - 1
@@ -7691,7 +7689,7 @@ Namespace HoMIDom
         End Function
 
         ''' <summary>
-        ''' Retourne les 4 logs en erreur les plus récents (du plus récent au plus ancien)
+        ''' Retourne les logs en erreur les plus récents (du plus récent au plus ancien)
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
