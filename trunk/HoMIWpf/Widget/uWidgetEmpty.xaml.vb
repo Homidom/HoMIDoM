@@ -445,6 +445,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As String)
             _Picture = value
+            Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_Picture))
         End Set
     End Property
 

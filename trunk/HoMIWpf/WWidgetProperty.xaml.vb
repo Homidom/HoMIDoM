@@ -36,6 +36,7 @@ Public Class WWidgetProperty
             ColorPicker2.SelectedColor = Obj.ColorStatus
             TxtUnite.Text = Obj.Unite
             ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
+            ImgPicture.Tag = Obj.Picture
             TxtURL.Text = Obj.URL
             TxtURLRss.Text = Obj.UrlRss
             _listhttpbtn = Obj.ListHttpButton
@@ -773,8 +774,28 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub BtnInitPict_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnInitPict.Click
-        ImgPicture.Source = Nothing
-        ImgPicture.Tag = ""
+        If IsNothing(ImgPicture.Source) Then
+            Try
+                Dim frm As New WindowImg
+                frm.ShowDialog()
+                If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+                    Dim retour As String = frm.FileName
+                    If retour <> "" Then
+                        ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
+                        ImgPicture.Tag = retour
+                    End If
+                    frm.Close()
+                Else
+                    frm.Close()
+                End If
+                frm = Nothing
+            Catch ex As Exception
+                MessageBox.Show("Erreur BtnInitPict_Click: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        Else
+            ImgPicture.Source = Nothing
+            ImgPicture.Tag = ""
+        End If
     End Sub
 
 #Region "Http"
