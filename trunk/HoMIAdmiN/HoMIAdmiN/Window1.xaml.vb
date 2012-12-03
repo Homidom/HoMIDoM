@@ -305,6 +305,7 @@ Class Window1
                     Dim objStreamReader As New StreamReader(Myfile)
                     Dim x As New XmlSerializer(ListServer.GetType)
                     ListServer = x.Deserialize(objStreamReader)
+                    x = Nothing
                     objStreamReader.Close()
                 Catch ex As Exception
                     MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml (" & Myfile & "), vérifiez que toutes les balises requisent soient présentes: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -646,7 +647,7 @@ Class Window1
                 stack.Orientation = Orientation.Horizontal
                 stack.HorizontalAlignment = HorizontalAlignment.Left
                 Dim Graph As Object
-                Dim bmpImage As New BitmapImage()
+                'Dim bmpImage As New BitmapImage()
                 Dim img As New Image
                 Dim tool As New Label
 
@@ -664,36 +665,41 @@ Class Window1
                     myPointCollection.Add(New Point(10, 5))
                     myPointCollection.Add(New Point(0, 10))
                     Rect.Points = myPointCollection
+                    myPointCollection = Nothing
 
                     Rect.Width = 9
                     Rect.Height = 9
 
-                    Dim myBrush As New RadialGradientBrush()
-                    myBrush.GradientStops.Add(New GradientStop(Colors.LightGreen, 0.0))
-                    myBrush.GradientStops.Add(New GradientStop(Colors.Green, 0.5))
-                    myBrush.GradientStops.Add(New GradientStop(Colors.DarkGreen, 1.0))
+                    'a priori ne sert pas
+                    'Dim myBrush As New RadialGradientBrush()
+                    'myBrush.GradientStops.Add(New GradientStop(Colors.LightGreen, 0.0))
+                    'myBrush.GradientStops.Add(New GradientStop(Colors.Green, 0.5))
+                    'myBrush.GradientStops.Add(New GradientStop(Colors.DarkGreen, 1.0))
 
                     Rect.Fill = Brushes.DarkGreen 'myBrush
                     Rect.Tag = Drv.ID
                     Rect.ToolTip = "Arrêter le driver"
                     AddHandler Rect.MouseDown, AddressOf StopDriver
                     Graph = Rect
+                    Rect = Nothing
                 Else
                     Dim Rect As New Rectangle
                     Rect.Width = 9
                     Rect.Height = 9
 
-                    Dim myBrush As New RadialGradientBrush()
-                    myBrush.GradientOrigin = New Point(0.75, 0.25)
-                    myBrush.GradientStops.Add(New GradientStop(Colors.Yellow, 0.0))
-                    myBrush.GradientStops.Add(New GradientStop(Colors.Red, 0.5))
-                    myBrush.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
+                    'a priori ne sert pas
+                    'Dim myBrush As New RadialGradientBrush()
+                    'myBrush.GradientOrigin = New Point(0.75, 0.25)
+                    'myBrush.GradientStops.Add(New GradientStop(Colors.Yellow, 0.0))
+                    'myBrush.GradientStops.Add(New GradientStop(Colors.Red, 0.5))
+                    'myBrush.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
 
                     Rect.Fill = Brushes.Red 'myBrush
                     Rect.ToolTip = "Démarrer le driver"
                     Rect.Tag = Drv.ID
                     AddHandler Rect.MouseDown, AddressOf StartDriver
                     Graph = Rect
+                    Rect = Nothing
                 End If
 
 
@@ -712,21 +718,21 @@ Class Window1
                 If Drv.Modele <> "" Then tool.Content &= "Modele: " & Drv.Modele & vbCrLf
 
                 Dim tl As New ToolTip
+                Dim imgpopup As New Image
+                Dim stkpopup As New StackPanel
                 tl.Foreground = System.Windows.Media.Brushes.White
                 tl.Background = System.Windows.Media.Brushes.WhiteSmoke
                 tl.BorderBrush = System.Windows.Media.Brushes.Black
-                Dim imgpopup As New Image
-                Dim stkpopup As New StackPanel
-
                 imgpopup.Width = 45
                 imgpopup.Height = 45
                 imgpopup.Source = img.Source
-
                 stkpopup.Children.Add(imgpopup)
                 stkpopup.Children.Add(tool)
-
                 tl.Content = stkpopup
                 label.ToolTip = tl
+                tl = Nothing
+                imgpopup = Nothing
+                stkpopup = Nothing
 
                 '*************************** CLIC DROIT **************************
                 Dim ctxMenu As New ContextMenu
@@ -740,6 +746,7 @@ Class Window1
                     mnu1.Uid = Drv.ID
                     AddHandler mnu1.Click, AddressOf MnuitemDrv_Click
                     ctxMenu.Items.Add(mnu1)
+                    mnu1 = Nothing
                 Else
                     Dim mnu2 As New MenuItem
                     mnu2.Header = "Disable"
@@ -747,6 +754,7 @@ Class Window1
                     mnu2.Uid = Drv.ID
                     AddHandler mnu2.Click, AddressOf MnuitemDrv_Click
                     ctxMenu.Items.Add(mnu2)
+                    mnu2 = Nothing
                 End If
                 If Drv.IsConnect = False Then
                     Dim mnu3 As New MenuItem
@@ -756,6 +764,7 @@ Class Window1
                     AddHandler mnu3.Click, AddressOf MnuitemDrv_Click
                     ctxMenu.Items.Add(mnu3)
                     If Drv.Enable = False Then mnu3.IsEnabled = False
+                    mnu3 = Nothing
                 Else
                     Dim mnu4 As New MenuItem
                     mnu4.Header = "Arrêter"
@@ -763,6 +772,7 @@ Class Window1
                     mnu4.Uid = Drv.ID
                     AddHandler mnu4.Click, AddressOf MnuitemDrv_Click
                     ctxMenu.Items.Add(mnu4)
+                    mnu4 = Nothing
                 End If
                 Dim mnu5 As New MenuItem
                 mnu5.Header = "Modifier"
@@ -770,6 +780,7 @@ Class Window1
                 mnu5.Uid = Drv.ID
                 AddHandler mnu5.Click, AddressOf MnuitemDrv_Click
                 ctxMenu.Items.Add(mnu5)
+                mnu5 = Nothing
                 label.ContextMenu = ctxMenu
 
                 stack.Children.Add(img)
@@ -783,8 +794,15 @@ Class Window1
                 Dim marg As New Thickness(-12, 0, 0, 0)
                 newchild.Margin = marg
                 TreeViewDriver.Items.Add(newchild)
-            Next
+                marg = Nothing
 
+                newchild = Nothing
+                stack = Nothing
+                ctxMenu = Nothing
+                label = Nothing
+                Graph = Nothing
+            Next
+            ListeDrivers = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffDriver: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -849,10 +867,6 @@ Class Window1
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
-                Dim uri As String = ""
-                Dim uri2 As String = MyRep & "\Images\Icones\ZoneNo_32.png"
-                Dim bmpImage As New BitmapImage()
-                Dim bmpImage2 As New BitmapImage()
                 Dim FlagZone As Boolean = False
                 Dim nomdriver As String = myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom
                 stack.Orientation = Orientation.Horizontal
@@ -864,11 +878,15 @@ Class Window1
                 If Trim(Dev.Picture) <> "" Then
                     img.Source = ConvertArrayToImage(myService.GetByteFromImage(Dev.Picture))
                 Else
+                    Dim bmpImage As New BitmapImage()
+                    Dim uri As String = ""
                     uri = MyRep & "\Images\Icones\Composant_32.png"
                     bmpImage.BeginInit()
                     bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
                     bmpImage.EndInit()
                     img.Source = bmpImage
+                    uri = Nothing
+                    bmpImage = Nothing
                 End If
                 stack.Children.Add(img)
 
@@ -883,6 +901,7 @@ Class Window1
                         If X < Now Then
                             label.Foreground = New SolidColorBrush(Colors.Red)
                         End If
+                        X = Nothing
                     End If
                 Else
                     label.Foreground = New SolidColorBrush(Colors.Black)
@@ -901,6 +920,8 @@ Class Window1
                     End If
                 Next
                 If FlagZone = False Then
+                    Dim bmpImage2 As New BitmapImage()
+                    Dim uri2 As String = MyRep & "\Images\Icones\ZoneNo_32.png"
                     Dim img2 As New Image
                     img2.Height = 20
                     img2.Width = 20
@@ -910,6 +931,9 @@ Class Window1
                     img2.Source = bmpImage2
                     img2.ToolTip = "Ce composant ne fait pas partie d'une zone"
                     stack.Children.Add(img2)
+                    img2 = Nothing
+                    bmpImage2 = Nothing
+                    uri2 = Nothing
                 End If
 
                 '*************************** TOOL TIP **************************
@@ -925,6 +949,7 @@ Class Window1
                 imgpopup.Height = 45
                 imgpopup.Source = img.Source
                 stkpopup.Children.Add(imgpopup)
+                imgpopup = Nothing
 
                 Dim tool As New Label
                 tool.Content = "Nom: " & Dev.Name & vbCrLf
@@ -936,6 +961,7 @@ Class Window1
                 tool.Content &= "Nb Histo: " & _nbhisto & vbCrLf
                 tool.Content &= "Value: " & Dev.Value
                 stkpopup.Children.Add(tool)
+                tool = Nothing
 
                 tl.Content = stkpopup
                 stkpopup = Nothing
@@ -960,6 +986,7 @@ Class Window1
                     mnu1.Uid = Dev.ID
                     AddHandler mnu1.Click, AddressOf MnuitemDev_Click
                     ctxMenu.Items.Add(mnu1)
+                    mnu1 = Nothing
                 Else
                     Dim mnu2 As New MenuItem
                     mnu2.Header = "Disable"
@@ -967,6 +994,7 @@ Class Window1
                     mnu2.Uid = Dev.ID
                     AddHandler mnu2.Click, AddressOf MnuitemDev_Click
                     ctxMenu.Items.Add(mnu2)
+                    mnu2 = Nothing
                 End If
                 Dim mnu4 As New MenuItem
                 mnu4.Header = "Historique"
@@ -975,12 +1003,14 @@ Class Window1
                 If _nbhisto <= 0 Then mnu4.IsEnabled = False
                 AddHandler mnu4.Click, AddressOf MnuitemDev_Click
                 ctxMenu.Items.Add(mnu4)
+                mnu4 = Nothing
                 Dim mnu5 As New MenuItem
                 mnu5.Header = "Supprimer"
                 mnu5.Tag = 5
                 mnu5.Uid = Dev.ID
                 AddHandler mnu5.Click, AddressOf MnuitemDev_Click
                 ctxMenu.Items.Add(mnu5)
+                mnu5 = Nothing
 
                 label.ContextMenu = ctxMenu
 
@@ -992,7 +1022,16 @@ Class Window1
                 newchild.Uid = Dev.ID
                 newchild.Margin = New Thickness(-12, 0, 0, 0)
                 TreeViewDevice.Items.Add(newchild)
+
+                img = Nothing
+                ctxMenu = Nothing
+                label = Nothing
+                newchild = Nothing
+                stack = Nothing
+                tl = Nothing
             Next
+            ListeDevices = Nothing
+            ListeZones = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffDevice: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1322,6 +1361,8 @@ Class Window1
 
                                 TreeViewHisto.Items.Add(y)
                                 trv = True
+                                mnu0 = Nothing
+                                ctxMenu = Nothing
                             ElseIf _dev.ID = a.IdDevice And IsNode = True Then
                                 Dim y1 As New CheckBox
                                 y1.Content = _dev.Name
@@ -1345,19 +1386,28 @@ Class Window1
                                 AddHandler mnu0.Click, AddressOf MnuitemHisto_Click
                                 ctxMenu.Items.Add(mnu0)
                                 y1.ContextMenu = ctxMenu
-
+                                
                                 AddHandler y1.MouseDoubleClick, AddressOf MnuitemHisto_Click
 
                                 parent.Items.Add(y1)
                                 trv = True
+
+                                mnu0 = Nothing
+                                ctxMenu = Nothing
+                                y1 = Nothing
                             End If
+                            a = Nothing
                         Next
                         If IsNode Then
                             TreeViewHisto.Items.Add(parent)
                         End If
                     End If
                     If trv = False Then TreeViewHisto.Items.Add(y)
+                    parent = Nothing
+                    y = Nothing
                 Next
+                x = Nothing
+                ListeDevices = Nothing
             End If
 
             TreeViewHisto.Items.SortDescriptions.Clear()
