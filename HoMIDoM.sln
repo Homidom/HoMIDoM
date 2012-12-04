@@ -79,6 +79,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Gsm", "Driver_Gsm\Dr
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_CurrentCost", "Driver_CurrentCost\Driver_CurrentCost.vbproj", "{DF378B58-7FC8-4B66-9AE3-7A8EFDAE04B6}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_System", "Driver_System\Driver_System.vbproj", "{B70BAE66-3932-44F4-A411-C7EA6F1342AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -374,14 +376,24 @@ Global
 		{DF378B58-7FC8-4B66-9AE3-7A8EFDAE04B6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{DF378B58-7FC8-4B66-9AE3-7A8EFDAE04B6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DF378B58-7FC8-4B66-9AE3-7A8EFDAE04B6}.Release|x86.ActiveCfg = Release|Any CPU
+		{B70BAE66-3932-44F4-A411-C7EA6F1342AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B70BAE66-3932-44F4-A411-C7EA6F1342AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B70BAE66-3932-44F4-A411-C7EA6F1342AD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B70BAE66-3932-44F4-A411-C7EA6F1342AD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B70BAE66-3932-44F4-A411-C7EA6F1342AD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B70BAE66-3932-44F4-A411-C7EA6F1342AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B70BAE66-3932-44F4-A411-C7EA6F1342AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B70BAE66-3932-44F4-A411-C7EA6F1342AD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B70BAE66-3932-44F4-A411-C7EA6F1342AD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B70BAE66-3932-44F4-A411-C7EA6F1342AD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_UseGlobalSettings = False
-		BuildVersion_BuildVersioningStyle = None.None.Increment.None
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.Increment.None
+		BuildVersion_UseGlobalSettings = False
 	EndGlobalSection
 EndGlobal
