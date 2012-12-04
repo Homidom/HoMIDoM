@@ -40,16 +40,16 @@ Imports WUApiLib.UpdateSessionClass
 ' Driver SystemStatus
 ''' <summary>Class Driver SystemStatus</summary>
 ''' <remarks>infos system</remarks>
-<Serializable()> Public Class Driver_System
+<Serializable()> Public Class Driver_SystemStatus
     Implements HoMIDom.HoMIDom.IDriver
 
 #Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "7396FA30-0050-11E2-9BC2-523B6288709B"
-    Dim _Nom As String = "System"
+    Dim _Nom As String = "SystemStatus"
     Dim _Enable As String = False
-    Dim _Description As String = "Driver System"
+    Dim _Description As String = "Driver SystemStatus"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "System"
     Dim _IsConnect As Boolean = False
@@ -75,6 +75,8 @@ Imports WUApiLib.UpdateSessionClass
 
     'param avancé
     Dim _DEBUG As Boolean = False
+
+
 
 #End Region
 
@@ -252,7 +254,6 @@ Imports WUApiLib.UpdateSessionClass
     End Property
 
 #End Region
-
 #Region "Fonctions génériques"
     ''' <summary>
     ''' Retourne la liste des Commandes avancées
@@ -339,8 +340,9 @@ Imports WUApiLib.UpdateSessionClass
 
         Try
             'récupération des paramétres avancés
+            _DEBUG = _Parametres.Item(0).Valeur.ToString.ToUpper
             Try
-                _DEBUG = _Parametres.Item(0).Valeur.ToString.ToUpper
+
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
             End Try
@@ -392,7 +394,7 @@ Imports WUApiLib.UpdateSessionClass
                 Exit Sub
             End If
 
-            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "WRITE", "Commande: " & Command() & ", Texte: " & Objet.adresse1 & ", Composant: " & Objet.Name)
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "WRITE", "Commande: " & Command() & ", Action: " & Objet.adresse1 & ", Composant: " & Objet.Name)
 
 
             Select Case Objet.adresse1.ToString.ToUpper
@@ -519,14 +521,12 @@ Imports WUApiLib.UpdateSessionClass
                 Exit Sub
             End If
 
-            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "WRITE", "Commande: " & Command & ", Texte: " & Parametre1 & ", Composant: " & Objet.Name)
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "WRITE", "Commande: " & Command & ", Action: " & Parametre1 & ", Composant: " & Objet.Name)
 
 
             Select Case UCase(Command)
 
                 Case "PING"
-
-
                     If My.Computer.Network.Ping(Parametre1.ToString.ToUpper) Then
                         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Ping " & Parametre1.ToString & " OK")
                     Else
@@ -578,9 +578,9 @@ Imports WUApiLib.UpdateSessionClass
                                 If d.IsReady = True Then
                                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Volume label: {0}", d.VolumeLabel)
                                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File system: {0}", d.DriveFormat)
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user:{0, 15} bytes", d.AvailableFreeSpace)
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total available space:          {0, 15} bytes", d.TotalFreeSpace)
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total size of drive:            {0, 15} bytes ", d.TotalSize)
+                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user:{0, 15} bytes", ResizeKb(d.AvailableFreeSpace))
+                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total available space:          {0, 15} bytes", ResizeKb(d.TotalFreeSpace))
+                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total size of drive:            {0, 15} bytes ", ResizeKb(d.TotalSize))
                                 End If
 
                             Next
@@ -719,9 +719,9 @@ Imports WUApiLib.UpdateSessionClass
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
-            Add_DeviceCommande("PING", "Ping <IP>", 1)
-            Add_DeviceCommande("INFO", "Memoire/CPU/DisqueC/DisqueD/ALL", 1)
-            Add_DeviceCommande("WUAU", "affiche/afficheetinstall", 1)
+            Add_DeviceCommande("PING", "Ping <IP>,<Hostname>,<DomainName>", 1)
+            Add_DeviceCommande("INFO", "MEMORY/CPU/BATTERY/HDD", 1)
+            Add_DeviceCommande("WUAU", "DISPLAY/INSTALL", 1)
 
 
             'ajout des commandes avancées pour les devices
@@ -732,10 +732,12 @@ Imports WUApiLib.UpdateSessionClass
 
             'Libellé Device
 
-            '- adresse 1 = ip (pour le ping), Memoire/CPU/DisqueC/DisqueD/ALL... (pour le systeme),affiche/afficheetinstall(pour windows update)
-            Add_LibelleDevice("ADRESSE1", "Paramètre", "Ping: <IP>,INFO  <Memoire>/<CPU>/<DisqueC>/<DisqueD>/<ALL>,WUAU <display>/<displayinstall>")
             '- adresse2=  type d'action : PING, INFO, UPDATE...
-            Add_LibelleDevice("ADRESSE2", "Type d'action", "PING, INFO, WUAU")
+            Add_LibelleDevice("ADRESSE1", "Type d'action", "PING, INFO, WUAU")
+            '- adresse 1 = ip (pour le ping), Memoire/CPU/DisqueC/DisqueD/ALL... (pour le systeme),affiche/afficheetinstall(pour windows update)
+            Add_LibelleDevice("ADRESSE2", "Paramètre", "Ping: <IP>,<Hostname>,<DomainName>,INFO :MEMORY/CPU/BATTERY/HDD,WUA : display/install")
+
+
 
 
             Add_LibelleDevice("SOLO", "@", "")
@@ -930,8 +932,6 @@ Imports WUApiLib.UpdateSessionClass
 
     End Sub
 
-
-
     Public Sub systemdown()
         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "System will be shutdown ")
         System.Diagnostics.Process.Start("ShutDown", "/s")
@@ -962,8 +962,6 @@ Imports WUApiLib.UpdateSessionClass
         '                       yy is the minor reason code (positive integer less than 65536)
     End Sub
 
-
-
     Public Sub myprocess()
         ' http://msdn.microsoft.com/en-us/library/system.diagnostics.process.workingset64.aspx
         ' http://msdn.microsoft.com/en-us/library/system.diagnostics.process.virtualmemorysize64.aspx
@@ -984,14 +982,6 @@ Imports WUApiLib.UpdateSessionClass
 
 
 
-
-
-
-
-
-
-
-
     Private Function ResizeKb(ByVal b As Double) As String
 
         ResizeKb = ""
@@ -1008,8 +998,7 @@ Imports WUApiLib.UpdateSessionClass
             bSize(8) = "YB" 'Yottabytes
             For i = UBound(bSize) To 0 Step -1
                 If b >= (1024 ^ i) Then
-                    ResizeKb = ThreeNonZeroDigits(b / (1024 ^ _
-                            i)) & " " & bSize(i)
+                    ResizeKb = ThreeNonZeroDigits(b / (1024 ^ i)) & " " & bSize(i)
                     Exit For
                 End If
             Next
@@ -1018,7 +1007,6 @@ Imports WUApiLib.UpdateSessionClass
         End If
 
     End Function
-
 
     Private Function ThreeNonZeroDigits(ByVal value As Double) As Double
 
@@ -1032,11 +1020,6 @@ Imports WUApiLib.UpdateSessionClass
     End Function
 
 
-
-
-
-
 #End Region
-
 
 End Class
