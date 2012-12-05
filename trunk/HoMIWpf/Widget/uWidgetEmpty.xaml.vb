@@ -894,6 +894,7 @@ Public Class uWidgetEmpty
                 End If
             End If
 
+            Me.UpdateLayout()
         Catch ex As Exception
             MessageBox.Show("Error Refresh: " & ex.Message & vbCrLf, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1721,11 +1722,11 @@ Public Class uWidgetEmpty
     Protected Overrides Sub Finalize()
         Try
             Image.Source = Nothing
-            MyBase.Finalize()
             _Webbrowser = Nothing
             _RSS = Nothing
             _METEO = Nothing
             _KeyPad = Nothing
+            MyBase.Finalize()
         Catch ex As Exception
             MessageBox.Show("Erreur Finalize: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try

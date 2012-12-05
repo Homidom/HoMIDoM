@@ -1202,6 +1202,8 @@ Class Window1
     'Affiche la date et heure, heures levé et couché du soleil
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         Try
+            Me.UpdateLayout()
+
             If IsConnect Then
                 Dim mytime As String = myService.GetTime
                 LblTime.Content = Now.ToLongDateString & " " & mytime & " "
@@ -1233,6 +1235,7 @@ Class Window1
             Me.Cursor = Cursors.Wait
             ' If Canvas1.Children.Count > 0 And sender.Type <> uCtrlImgMnu.TypeOfMnu.LecteurMedia Then
             Canvas1.Children.Clear()
+            Me.UpdateLayout()
             '  End If
 
             Chk1.Visibility = Windows.Visibility.Collapsed
@@ -1930,6 +1933,7 @@ Class Window1
             Me.Cursor = Cursors.Wait
             If Canvas1.Children.Count > 0 Then
                 Canvas1.Children.Clear()
+                Me.UpdateLayout()
             End If
 
             Chk1.Visibility = Windows.Visibility.Collapsed
@@ -1968,6 +1972,7 @@ Class Window1
             x.Height = Canvas1.ActualHeight - 20
             AddHandler x.CloseMe, AddressOf UnloadControl
             Canvas1.Children.Clear()
+            Me.UpdateLayout()
             Canvas1.Children.Add(x)
         Catch ex As Exception
             Me.Cursor = Nothing
