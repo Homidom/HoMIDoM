@@ -10,13 +10,15 @@ Module Fonctions
 
         If array IsNot Nothing Then
             ImgSource = New BitmapImage()
+            ImgSource.CacheOption = BitmapCacheOption.None
             ImgSource.BeginInit()
             ImgSource.StreamSource = New MemoryStream(array)
+            array = Nothing
             ImgSource.EndInit()
         End If
+
         Return ImgSource
         ImgSource = Nothing
-        array = Nothing
     End Function
 
 

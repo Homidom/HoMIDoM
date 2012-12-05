@@ -98,11 +98,8 @@ Public Class uWidgetEmpty
                 IsEmpty = True
 
                 If _dev IsNot Nothing Then
-                    'IsEmpty = False
                     Etiquette = _dev.Name
-                    _Picture = _dev.Picture
-                    Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_dev.Picture))
-
+                    Picture = _dev.Picture
                     Dim _ShowValue As Boolean = True
 
                     Select Case _dev.Type
@@ -1723,6 +1720,7 @@ Public Class uWidgetEmpty
 
     Protected Overrides Sub Finalize()
         Try
+            Image.Source = Nothing
             MyBase.Finalize()
             _Webbrowser = Nothing
             _RSS = Nothing

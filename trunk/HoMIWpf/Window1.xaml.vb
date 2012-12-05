@@ -91,6 +91,7 @@ Class Window1
                 If File.Exists(_ImageBackGroundDefault) Then
                     Dim bmpImage As New BitmapImage()
                     bmpImage.BeginInit()
+                    bmpImage.CacheOption = BitmapCacheOption.None
                     bmpImage.UriSource = New Uri(_ImageBackGroundDefault, UriKind.Absolute)
                     bmpImage.EndInit()
                     ImgBackground.Source = bmpImage
