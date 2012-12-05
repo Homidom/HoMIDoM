@@ -1204,7 +1204,6 @@ Class Window1
             If IsConnect Then
                 Dim mytime As String = myService.GetTime
                 LblTime.Content = Now.ToLongDateString & " " & mytime & " "
-                mytime = ""
 
                 If ShowSoleil = True Then
                     Dim mydate As Date
@@ -1212,8 +1211,8 @@ Class Window1
                     LblLeve.Content = mydate.ToShortTimeString
                     mydate = myService.GetHeureCoucherSoleil
                     LblCouche.Content = mydate.ToShortTimeString
+                    mydate = Nothing
                 End If
-
             End If
         Catch ex As Exception
             IsConnect = False
@@ -1268,7 +1267,7 @@ Class Window1
             y = Nothing
             Me.Cursor = Cursors.Arrow
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message, "Erreur")
+            MessageBox.Show("Erreur IconMnuDoubleClick: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             Log(TypeLog.INFO, TypeSource.CLIENT, "IconMnuDoubleClick", "Erreur: " & ex.Message)
         End Try
     End Sub

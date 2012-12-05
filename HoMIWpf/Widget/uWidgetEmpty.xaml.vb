@@ -303,8 +303,8 @@ Public Class uWidgetEmpty
 
             Try
                 _dt = New DispatcherTimer()
-                AddHandler _dt.Tick, AddressOf dispatcherTimer_Tick
                 _dt.Interval = New TimeSpan(0, 0, _Refresh)
+                AddHandler _dt.Tick, AddressOf dispatcherTimer_Tick
                 _dt.Start()
 
                 Select Case _type
@@ -470,7 +470,10 @@ Public Class uWidgetEmpty
         Set(ByVal value As String)
             _Picture = value
             If Me.Visibility = Windows.Visibility.Visible Then
-                Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_Picture))
+                If Image.Tag <> _Picture Then
+                    Image.Tag = _Picture
+                    Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_Picture))
+                End If
             End If
         End Set
     End Property
@@ -805,6 +808,10 @@ Public Class uWidgetEmpty
                     If ShowEtiquette And _dev.Name <> _Etiquette And _IsEmpty = False Then
                         Etiquette = _dev.Name
                     End If
+                    If Image.Tag <> _dev.Picture Then
+                        Image.Tag = _dev.Picture
+                        Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_dev.Picture))
+                    End If
 
                     Dim _ShowValue As Boolean = True
                     Dim _IsVariation As Boolean = False
@@ -881,6 +888,10 @@ Public Class uWidgetEmpty
                 ElseIf _zone IsNot Nothing Then
                     If ShowEtiquette And _zone.Name <> Etiquette Then
                         Etiquette = _zone.Name
+                        If Image.Tag <> _zone.Icon Then
+                            Image.Tag = _zone.Icon
+                            Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Icon))
+                        End If
                     End If
                 ElseIf _macro IsNot Nothing Then
                     If ShowEtiquette And _macro.Nom <> Etiquette Then
