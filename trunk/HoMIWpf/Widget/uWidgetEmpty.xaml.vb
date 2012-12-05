@@ -55,9 +55,6 @@ Public Class uWidgetEmpty
     Dim _CanEditValue As Boolean = False
     Dim _Unite As String = ""
 
-    'Variables Widget
-    Dim _Widget As Object = Nothing 'Widget Rss, web, meteo...
-
     'Variables Widget Web
     Dim _URL As String = ""
     Dim _Webbrowser As uHttp = Nothing
@@ -643,7 +640,7 @@ Public Class uWidgetEmpty
             If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
 
             Try
-                If My.Computer.Network.IsAvailable = True And _Webbrowser IsNot Nothing Then
+                If My.Computer.Network.IsAvailable = True And _Webbrowser IsNot Nothing And _type = TypeOfWidget.Web Then
                     _Webbrowser.URL = _URL
                     '_Webbrowser.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() _Webbrowser.Navigate(New Uri(_URL)), ThreadStart))
                 End If
@@ -684,7 +681,7 @@ Public Class uWidgetEmpty
             _URLRss = value
             If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
 
-            If _RSS IsNot Nothing Then _RSS.URIRss = value
+            If _RSS IsNot Nothing And _type = TypeOfWidget.Rss Then _RSS.URIRss = value
         End Set
     End Property
 #End Region
@@ -698,7 +695,7 @@ Public Class uWidgetEmpty
             _IDMeteo = value
             If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
 
-            If _METEO IsNot Nothing Then _METEO.ID = value
+            If _METEO IsNot Nothing And _type = TypeOfWidget.Meteo Then _METEO.ID = value
         End Set
     End Property
 #End Region
