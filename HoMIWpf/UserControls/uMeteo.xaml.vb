@@ -97,7 +97,7 @@ Partial Public Class uMeteo
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur GetMeteo: " & ex.Message)
+            MessageBox.Show("Erreur GetMeteo: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
 
     End Sub
@@ -142,5 +142,9 @@ Partial Public Class uMeteo
 
     Private Sub uMeteo_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         If _Id <> "" Then GetMeteo2()
+    End Sub
+
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
     End Sub
 End Class

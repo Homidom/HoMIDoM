@@ -7,7 +7,7 @@ Imports System.Threading
 
 Public Class uRSS
     Dim _Uri As String
-    Private feedItems As ArrayList
+    Private feedItems As ArrayList = Nothing
 
     Public Property URIRss As String
         Get
@@ -43,6 +43,10 @@ Public Class uRSS
         End If
     End Sub
 
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
+
+    End Sub
 End Class
 
 Public Class RSSItem

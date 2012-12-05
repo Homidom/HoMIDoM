@@ -41,7 +41,7 @@ Partial Public Class uMeteos
                 End If
             Next
         Catch ex As Exception
-            MsgBox("Error updating meteo: " & ex.Message)
+            MessageBox.Show("Error updating meteo: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
 
         ScrollViewer1.Content = imgStackPnl
@@ -54,7 +54,7 @@ Partial Public Class uMeteos
             imgStackPnl.Children.Add(ctrl)
 
         Catch ex As Exception
-            MessageBox.Show("Erreur NewBtnMnu: " & ex.Message)
+            MessageBox.Show("Erreur NewBtnMnu: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 

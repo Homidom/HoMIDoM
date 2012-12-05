@@ -1753,7 +1753,7 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetLastLogsError">
 	<summary>
- Retourne les 4 logs en erreur les plus récents (du plus récent au plus ancien)
+ Retourne les logs en erreur les plus récents (du plus récent au plus ancien)
  </summary>
 	<returns></returns>
 	<remarks></remarks>
