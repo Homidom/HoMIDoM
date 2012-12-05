@@ -4,7 +4,7 @@ Imports System.Threading
 Imports System.Net
 
 Public Class uHttp
-    Dim _URL As String
+    Dim _URL As String = ""
     Dim _Refresh As Integer = 0
     Dim dt As DispatcherTimer = New DispatcherTimer()
     Dim _ListButton As New List(Of ButtonHttp)
@@ -162,6 +162,10 @@ Public Class uHttp
         End If
 
         WebBrowser1.Height = y
+    End Sub
+
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
     End Sub
 End Class
 

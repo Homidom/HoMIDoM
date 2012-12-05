@@ -4,7 +4,7 @@ Imports System.Net
 
 Module Fonctions
 
-    Public Function ConvertArrayToImage(ByVal value As Object) As Object
+    Public Function ConvertArrayToImage(ByVal value As Object) As BitmapImage
         Dim ImgSource As BitmapImage = Nothing
         Dim array As Byte() = TryCast(value, Byte())
 
@@ -59,6 +59,8 @@ Module Fonctions
                 DirectCast(web_request.GetResponse(),  _
                 HttpWebResponse)
             Return True
+            web_request = Nothing
+            web_response = Nothing
         Catch ex As Exception
             Return False
         Finally

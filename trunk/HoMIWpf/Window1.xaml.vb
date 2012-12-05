@@ -36,6 +36,7 @@ Class Window1
     Private scrollStartOffset As Point
     Private imgStackPnl As New StackPanel()
     Dim FlagMsgDeconnect As Boolean = False
+    Private Shared lock_logwrite As New Object
 
     'Paramètres de connexion à HomeSeer
     Dim _Serveur As String = ""
@@ -222,7 +223,7 @@ Class Window1
             imgStackPnl.VerticalAlignment = VerticalAlignment.Center
             imgStackPnl.Orientation = Orientation.Horizontal
 
-            ConnectToHomidom()
+            'ConnectToHomidom()
 
             If IsConnect = True Then
                 Dim cntNewZone As Integer = 0
@@ -245,10 +246,10 @@ Class Window1
                     End If
                 Next
                 If cntNewZone > 0 Then
-                    MessageBox.Show(cntNewZone & " nouvelle(s) zone(s) ajoutée(s)")
+                    MessageBox.Show(cntNewZone & " nouvelle(s) zone(s) ajoutée(s)", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
                 End If
             Else
-                MessageBox.Show("Pas de connexion au serveur")
+                MessageBox.Show("Pas de connexion au serveur", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
             End If
 
             'Mise en forme du scrollviewer
@@ -332,28 +333,6 @@ Class Window1
                     'ON peut se connecter
                     'Connexion à Homidom
                     ConnectToHomidom()
-
-                    '******************************************
-                    'on va chercher les paramètres HomeSeer
-                    '******************************************
-                    list = myxml.SelectNodes("/homidom/HS")
-                    If list.Count > 0 Then 'présence des paramètres du server
-                        For j As Integer = 0 To list.Item(0).Attributes.Count - 1
-                            Select Case list.Item(0).Attributes.Item(j).Name
-                                Case "adresse"
-                                    _Serveur = list.Item(0).Attributes.Item(j).Value
-                                Case "login"
-                                    _Login = list.Item(0).Attributes.Item(j).Value
-                                Case "password"
-                                    _Password = list.Item(0).Attributes.Item(j).Value
-                                Case Else
-                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
-                            End Select
-                        Next
-                    Else
-                        MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
-                    End If
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du Serveur HomeSeer chargés")
 
                     '******************************************
                     'on va chercher les paramètres tactile
@@ -1081,96 +1060,32 @@ Class Window1
     ''' <remarks></remarks>
     Public Sub Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
         Try
-            Dim Fichier As FileInfo
 
-            'Vérifie si le fichier log existe sinon le crée
-            If File.Exists(_File) Then
-                Fichier = New FileInfo(_File)
-                'Vérifie si le fichier est trop gros si oui, on l'archive
-                If (Fichier.Length / 1000) > _MaxFileSize Then
-                    Dim filearchive As String
-                    filearchive = STRGS.Left(_File, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                    File.Move(_File, filearchive)
-                End If
-            Else
-                CreateNewFileLog(_File)
-                Fichier = New FileInfo(_File)
-            End If
+            'écriture dans un fichier texte
+            _File = _MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt"
+            Dim FreeF As Integer
+            Dim texte As String = Now & vbTab & TypLog.ToString & vbTab & Source.ToString & vbTab & Fonction & vbTab & Message
 
-            'on affiche dans la console
-            Console.WriteLine(Now & " " & TypLog & " " & Source & " " & Fonction & " " & Message)
-
-            Dim xmldoc As New XmlDocument()
-
-            'Ecrire le log
             Try
-                xmldoc.Load(_File) 'ouvre le fichier xml
-                Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
-                Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
-                Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
-                Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
-                Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
-                Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
-
-                'on affecte les attributs à l'élément
-                elelog.SetAttributeNode(atttime)
-                elelog.SetAttributeNode(atttype)
-                elelog.SetAttributeNode(attsrc)
-                elelog.SetAttributeNode(attfct)
-                elelog.SetAttributeNode(attmsg)
-
-                'on affecte les valeur
-                elelog.SetAttribute("time", Now)
-                elelog.SetAttribute("type", TypLog)
-                elelog.SetAttribute("source", Source)
-                elelog.SetAttribute("fonction", HtmlEncode(Fonction))
-                elelog.SetAttribute("message", HtmlEncode(Message))
-
-                Dim root As XmlElement = xmldoc.Item("logs")
-                root.AppendChild(elelog)
-
-                'on enregistre le fichier xml
-                xmldoc.Save(_File)
-
-            Catch ex As Exception 'Le fichier xml est corrompu ou comporte des caractères non supportés par xml
-                Console.WriteLine(Now & " Impossible d'écrire dans le fichier log un nouveau fichier à été créé: " & ex.Message)
-                Dim filearchive As String
-                filearchive = STRGS.Left(_File, _File.Length - 4) & Now.ToString("_yyyyMMdd_HHmmss") & ".xml"
-                File.Move(_File, filearchive)
-                CreateNewFileLog(_File)
-                Fichier = New FileInfo(_File)
-                xmldoc.Load(_File) 'ouvre le fichier xml
-                Dim elelog As XmlElement = xmldoc.CreateElement("log") 'création de l'élément log
-                Dim atttime As XmlAttribute = xmldoc.CreateAttribute("time") 'création de l'attribut time
-                Dim atttype As XmlAttribute = xmldoc.CreateAttribute("type") 'création de l'attribut type
-                Dim attsrc As XmlAttribute = xmldoc.CreateAttribute("source") 'création de l'attribut source
-                Dim attfct As XmlAttribute = xmldoc.CreateAttribute("fonction") 'création de l'attribut source
-                Dim attmsg As XmlAttribute = xmldoc.CreateAttribute("message") 'création de l'attribut message
-
-                'on affecte les attributs à l'élément
-                elelog.SetAttributeNode(atttime)
-                elelog.SetAttributeNode(atttype)
-                elelog.SetAttributeNode(attsrc)
-                elelog.SetAttributeNode(attfct)
-                elelog.SetAttributeNode(attmsg)
-
-                'on affecte les valeur
-                elelog.SetAttribute("time", Now)
-                elelog.SetAttribute("type", TypLog)
-                elelog.SetAttribute("source", Source)
-                elelog.SetAttribute("fonction", Fonction)
-                elelog.SetAttribute("message", HtmlEncode(Message))
-
-                Dim root As XmlElement = xmldoc.Item("logs")
-                root.AppendChild(elelog)
-
-                'on enregistre le fichier xml
-                xmldoc.Save(_File)
+                FreeF = FreeFile()
+                texte = Replace(texte, vbLf, vbCrLf)
+                SyncLock lock_logwrite
+                    FileOpen(FreeF, _File, OpenMode.Append)
+                    Print(FreeF, texte & vbCrLf)
+                    FileClose(FreeF)
+                End SyncLock
+            Catch ex As IOException
+                'wait(500)
+                Console.WriteLine(Now & " " & TypLog & " CLIENT WPF LOG ERROR IOException : " & ex.ToString)
+            Catch ex As Exception
+                'wait(500)
+                Console.WriteLine(Now & " " & TypLog & " CLIENT WPF LOG ERROR Exception : " & ex.ToString)
             End Try
+            texte = Nothing
+            FreeF = Nothing
 
-            Fichier = Nothing
         Catch ex As Exception
-            MsgBox("Erreur lors de l'écriture d'un log: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
+            MessageBox.Show("Erreur lors de l'écriture d'un log: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Client WPF")
         End Try
     End Sub
 
@@ -1198,50 +1113,6 @@ Class Window1
 #End Region
 
 #Region "Connexion"
-    'Connexion au serveur HomeSeer
-    Private Sub ConnectToHS()
-        'If My.Computer.Network.IsAvailable = True Then
-        '    Try
-        '        myxml = New clsXML("C:\ehome\config\wehome_config.xml")
-        '        list = myxml.SelectNodes("/wehome/connect/element")
-        '        For i As Integer = 0 To list.Count - 1
-        '            _Serveur = list(i).Attributes.Item(0).Value
-        '            _Login = list(i).Attributes.Item(1).Value
-        '            _Password = list(i).Attributes.Item(2).Value
-        '        Next
-        '    Catch ex As Exception
-        '        Log(TypeLog.INFO, TypeSource.CLIENT, "ConnectToHS", "Erreur lors du chargement des paramètres de connexion: " & ex.Message)
-        '    End Try
-
-        '    Dim hsapp As HomeSeer2.application = New HomeSeer2.application
-        '    hsapp.SetHost(_Serveur) '("seb-serveur-002:81")
-        '    Dim rval As String = hsapp.Connect(_Login, _Password) '("sebastien", "clarisse1705")
-        '    If rval <> "" Then
-        '        Log(TypeLog.INFO, TypeSource.CLIENT, "ConnectToHS", "State: Unable to connect to HomeSeer, is it running? You need to be on the same subnet as HomeSeer")
-        '        rval = hsapp.Connect(_Login, _Password) '("sebastien", "clarisse1705")
-        '        If rval <> "" Then
-        '            IsHSConnect = False
-        '            rval = hsapp.Connect(_Login, _Password) '("sebastien", "clarisse1705")
-        '            If rval <> "" Then
-        '                IsHSConnect = False
-        '            Else
-        '                IsHSConnect = True
-        '                hs = hsapp.GetHSRef
-        '            End If
-        '        Else
-        '            IsHSConnect = True
-        '            hs = hsapp.GetHSRef
-        '        End If
-        '    Else
-        '        Log(TypeLog.INFO, TypeSource.CLIENT, "ConnectToHS", "State: Connect to HomeSeer")
-        '        IsHSConnect = True
-        '        hs = hsapp.GetHSRef
-        '    End If
-        'Else
-        '    IsHSConnect = False
-        'End If
-    End Sub
-
     'Connexion au serveur Homdidom
     Private Sub ConnectToHomidom()
         Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
@@ -1360,14 +1231,13 @@ Class Window1
     Private Sub IconMnuDoubleClick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
         Try
             Me.Cursor = Cursors.Wait
-            If Canvas1.Children.Count > 0 And sender.Type <> uCtrlImgMnu.TypeOfMnu.LecteurMedia Then
-                Canvas1.Children.Clear()
-            End If
+            ' If Canvas1.Children.Count > 0 And sender.Type <> uCtrlImgMnu.TypeOfMnu.LecteurMedia Then
+            Canvas1.Children.Clear()
+            '  End If
 
             Chk1.Visibility = Windows.Visibility.Collapsed
             Chk2.Visibility = Windows.Visibility.Collapsed
             Chk3.Visibility = Windows.Visibility.Collapsed
-
 
             Dim y As uCtrlImgMnu = sender
 
@@ -1394,6 +1264,8 @@ Class Window1
                         ShowZone(y.IDElement)
                 End Select
             End If
+
+            y = Nothing
             Me.Cursor = Cursors.Arrow
         Catch ex As Exception
             MessageBox.Show("Erreur: " & ex.Message, "Erreur")
@@ -1407,7 +1279,11 @@ Class Window1
     End Sub
 
     Protected Overrides Sub Finalize()
-        MyBase.Finalize()
+        Try
+            MyBase.Finalize()
+        Catch ex As Exception
+            MessageBox.Show("Erreur Finalize Window1: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub Window1_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
@@ -1462,10 +1338,10 @@ Class Window1
             'Init des variables communes
             _CurrentIdZone = IdZone
             _zone = myService.ReturnZoneByID(IdSrv, IdZone)
+            ImgBackground.Source = Nothing
             ImgBackground.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Image))
 
             'Desgin
-            Canvas1.Children.Clear()
             Chk1.Visibility = Windows.Visibility.Visible
             Chk2.Visibility = Windows.Visibility.Visible
             Chk3.Visibility = Windows.Visibility.Visible
@@ -1494,6 +1370,7 @@ Class Window1
                             x.Uid = _ListElement.Item(j).Uid
 
                             Dim y As New uWidgetEmpty
+                            y.Visibility = Windows.Visibility.Visible
                             y.Uid = _ListElement.Item(j).Uid
                             y.Unite = _ListElement.Item(j).Unite
                             y.Id = z.ElementID
@@ -1524,6 +1401,8 @@ Class Window1
                             Canvas.SetTop(x, _ListElement.Item(j).Y)
 
                             _flagTrouv = True
+                            x = Nothing
+                            y = Nothing
                             Exit For
                         End If
 
@@ -1548,6 +1427,7 @@ Class Window1
 
                         'Ajoute l'élément dans la liste
                         Dim elmt As New uWidgetEmpty
+                        elmt.Visibility = Windows.Visibility.Visible
                         elmt.Id = z.ElementID
                         elmt.Uid = x.Uid
                         elmt.ZoneId = IdZone
@@ -1570,6 +1450,8 @@ Class Window1
                         Canvas.SetTop(x, _Top)
 
                         _idx += 1
+                        x = Nothing
+                        elmt = Nothing
                     End If
 
                 End If
@@ -1593,6 +1475,7 @@ Class Window1
                     x.Uid = _ListElement.Item(i).Uid
 
                     Dim y As New uWidgetEmpty
+                    y.Visibility = Windows.Visibility.Visible
                     y.Uid = _ListElement.Item(i).Uid
                     y.ZoneId = _ListElement.Item(i).ZoneId
                     y.Width = x.Width
@@ -1632,8 +1515,13 @@ Class Window1
                     Canvas1.Children.Add(x)
                     Canvas.SetLeft(x, _ListElement.Item(i).X)
                     Canvas.SetTop(x, _ListElement.Item(i).Y)
+
+                    x = Nothing
+                    y = Nothing
                 End If
             Next
+
+
         Catch ex As Exception
             MessageBox.Show("Erreur ShowZone: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1664,7 +1552,7 @@ Class Window1
                     obj.IsHitTestVisible = False
                     obj.ModeEdition = False
                     obj = Nothing
-
+                    RemoveHandler child.SizeChanged, AddressOf Resize
                     Selector.SetIsSelected(child, False)
 
                     For j As Integer = 0 To _ListElement.Count - 1

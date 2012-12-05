@@ -144,8 +144,6 @@ Public Class uWMeteo
     End Function
 
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
-        'Dim x As New Thread(AddressOf GetMeteo)
-        'x.Start()
         GetMeteo()
     End Sub
 
@@ -1114,5 +1112,9 @@ Public Class uWMeteo
         AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
         dt.Interval = New TimeSpan(0, 5, 0)
         dt.Start()
+    End Sub
+
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
     End Sub
 End Class
