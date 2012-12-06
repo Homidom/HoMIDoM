@@ -24,12 +24,27 @@ Imports System.Math
 Imports WUApiLib.UpdateOperation
 Imports WUApiLib.UpdateSessionClass
 
+Imports System.Runtime.InteropServices
+
+
+
+Imports Microsoft.Win32
+
+'Module modWUA
+'Public objUpdateSession As WUApiLib.UpdateSession
+'Public objUpdateSearcher As WUApiLib.UpdateSearcher
+'Public objSearchResults As WUApiLib.ISearchResult
+'Public objUpdatesToDownload As WUApiLib.UpdateCollection
+'Public objUpdateDownloader As WUApiLib.UpdateDownloader
+'End Module
+
+
+
+
+
+
 '- adresse1 =  type d'action : PING, INFO, UPDATE, shutd...
 '- adresse 2 = ip (pour le ping), Memoire/CPU/DisqueC/DisqueD/ALL... (pour le systeme),affiche/afficheetinstall(pour windows update)
-'ensuite dans la fonction write suivant les deux champs, tu fais les bonnes actions.
-
-'Imports System.Runtime.InteropServices
-
 
 ' Auteur : Fabien
 ' Date : 09/09/2012
@@ -40,16 +55,16 @@ Imports WUApiLib.UpdateSessionClass
 ' Driver SystemStatus
 ''' <summary>Class Driver SystemStatus</summary>
 ''' <remarks>infos system</remarks>
-<Serializable()> Public Class Driver_SystemStatus
+<Serializable()> Public Class Driver_System
     Implements HoMIDom.HoMIDom.IDriver
 
 #Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "7396FA30-0050-11E2-9BC2-523B6288709B"
-    Dim _Nom As String = "SystemStatus"
+    Dim _Nom As String = "System"
     Dim _Enable As String = False
-    Dim _Description As String = "Driver SystemStatus"
+    Dim _Description As String = "Driver System"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "System"
     Dim _IsConnect As Boolean = False
@@ -321,7 +336,7 @@ Imports WUApiLib.UpdateSessionClass
                             'PING <IP>,
                             'INFO Memory/CPU/Battery/DisqueC/DisqueD/ALL 
                             'WUAU Display / Update
-                            retour = "Veuillez saisir un <parametre> compatible avec votre Action :PING <IP>, INFO <Memory>/<CPU>/<DisqueC>/<DisqueD>/<ALL> ou WUAU <Display>/< Update>."
+                            retour = "Veuillez saisir un <parametre> compatible avec votre Action : PING <IP> ou <Hostmane> ou <DomainName>, INFO MEMORY/CPU/BATTERY" & CheckHDD() & " ou WUAU DISPLAY/UPDATE."
                         End If
                     End If
             End Select
@@ -349,6 +364,9 @@ Imports WUApiLib.UpdateSessionClass
 
             _IsConnect = True
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Driver " & Me.Nom & " démarré")
+
+
+            'My.Computer.FileSystem.Drives.Count
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", ex.Message)
         End Try
@@ -436,28 +454,32 @@ Imports WUApiLib.UpdateSessionClass
                                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "PowerLineStatus : " & "unknow")
                             End Select
                             psBattery = Nothing
+
+
                         Case "HDD"
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Nbdisk:  " & My.Computer.FileSystem.Drives.Count)
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "YESSSSSSSSSSSSSSSSSSSSSSSSSSSS")
 
-                            Dim allDrives() As DriveInfo = DriveInfo.GetDrives()
+                            'Dim allDrives() As DriveInfo = DriveInfo.GetDrives()
 
-                            Dim d As DriveInfo
-                            For Each d In allDrives
-                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Drive {0}", d.Name)
+                            'Dim d As DriveInfo
+                            'For Each d In allDrives
+                            '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Drive {0}", d.Name)
 
-                                ' CDRom, Fixed, Unknown, Network, NoRootDirectory, Ram, Removable, or Unknown. 
-                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File type: {0}", d.DriveType)
+                            ' CDRom, Fixed, Unknown, Network, NoRootDirectory, Ram, Removable, or Unknown. 
+                            '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File type: {0}", d.DriveType)
 
-                                If d.IsReady = True Then
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Volume label: {0}", d.VolumeLabel)
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File system: {0}", d.DriveFormat)
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user:{0, 15} bytes", d.AvailableFreeSpace)
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total available space:          {0, 15} bytes", d.TotalFreeSpace)
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total size of drive:            {0, 15} bytes ", d.TotalSize)
-                                End If
+                            If My.Computer.FileSystem.Drives.Item(1).IsReady = True Then
+                                '  _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Volume label: {0}", My.Computer.FileSystem.Drives.Item(1).IsReady.VolumeLabel)
+                                '  _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File system: {0}", My.Computer.FileSystem.Drives.Item(1).IsReady.DriveFormat)
+                                ' _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user:{0, 15} bytes", d.AvailableFreeSpace)
+                                '  _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total available space:          {0, 15} bytes", d.TotalFreeSpace)
+                                '  _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total size of drive:            {0, 15} bytes ", d.TotalSize)
+                            End If
 
-                            Next
-                            d = Nothing
+                            '  Next
+                            ' d = Nothing
+
+
                         Case Else
                             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "SystemStatus", "information non implémenté")
 
@@ -543,7 +565,6 @@ Imports WUApiLib.UpdateSessionClass
                         Case "CPU"
                             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "SystemStatus", "CPU information non implémenté")
 
-
                         Case "BATTERY"
                             Dim psBattery As PowerStatus = SystemInformation.PowerStatus
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "BatteryChargeStatus : " & psBattery.BatteryChargeStatus)
@@ -585,6 +606,8 @@ Imports WUApiLib.UpdateSessionClass
 
                             Next
                             d = Nothing
+
+
                         Case Else
                             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "SystemStatus", "information non implémenté")
 
@@ -732,10 +755,13 @@ Imports WUApiLib.UpdateSessionClass
 
             'Libellé Device
 
-            '- adresse2=  type d'action : PING, INFO, UPDATE...
+            '- adresse1=  type d'action : PING, INFO, UPDATE...
             Add_LibelleDevice("ADRESSE1", "Type d'action", "PING, INFO, WUAU")
-            '- adresse 1 = ip (pour le ping), Memoire/CPU/DisqueC/DisqueD/ALL... (pour le systeme),affiche/afficheetinstall(pour windows update)
-            Add_LibelleDevice("ADRESSE2", "Paramètre", "Ping: <IP>,<Hostname>,<DomainName>,INFO :MEMORY/CPU/BATTERY/HDD,WUA : display/install")
+            '- adresse2 = ip (pour le ping), Memoire/CPU/DisqueC/DisqueD/ALL... (pour le systeme),affiche/afficheetinstall(pour windows update)
+
+
+
+            Add_LibelleDevice("ADRESSE2", "Paramètre", "Ping: <IP>,<Hostname>,<DomainName>,INFO :MEMORY/CPU/BATTERY" & CheckHDD() & ",WUA : display/install")
 
 
 
@@ -765,12 +791,20 @@ Imports WUApiLib.UpdateSessionClass
     'Insérer ci-dessous les fonctions propres au driver et nom communes (ex: start)
 
     Public Sub CheckForUpdates()
+ ' Info de l'agent
+        Dim oAgentInfo = CreateObject("Microsoft.Update.AgentInfo")
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "%system32%\wuapi.dll version: " & oAgentInfo.GetInfo("ProductVersionString"))
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "WUA version : " & oAgentInfo.GetInfo("ApiMajorVersion") & "." & oAgentInfo.GetInfo("ApiMinorVersion"))
 
+
+        '  http://msdn.microsoft.com/en-gb/library/windows/desktop/aa387102(v=vs.85).aspx
         ' This function checks for Windows Updates and returns a integer value containing the number of updates   ' found back to the calling routine
-        'Object for seach
 
-        Dim updateSession = CreateObject("Microsoft.Update.Session")
-        Dim updateSearcher = updateSession.CreateupdateSearcher()
+        Dim UpdateSession = New WUApiLib.UpdateSession
+        'Dim updateSession = CreateObject("Microsoft.Update.Session")
+        UpdateSession.ClientApplicationID = "Homidom automate Sytem update"
+
+        Dim updateSearcher = UpdateSession.CreateUpdateSearcher()
         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Searching for updates...")
 
         Dim searchResult = updateSearcher.Search("IsInstalled=0 and Type='Software'")
@@ -780,83 +814,30 @@ Imports WUApiLib.UpdateSessionClass
             'WScript.Echo(I + 1 & "> " & update.Title)
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", update.Title)
         Next
-
         If searchResult.Updates.Count = 0 Then
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "There are no applicable updates.")
             Exit Sub
         End If
 
 
-        'WScript.Echo(vbCrLf & "Creating collection of updates to download:")
-
-        'updatesToDownload = CreateObject("Microsoft.Update.UpdateColl")
-
-        ' For I = 0 To searchResult.Updates.Count - 1
-        'update = searchResult.Updates.Item(I)
-        ' WScript.Echo(I + 1 & "> adding: " & update.Title)
-        ' updatesToDownload.Add(update)
-        ' Next
-
-        ' WScript.Echo(vbCrLf & "Downloading updates...")
-
-        ' downloader = updateSession.CreateUpdateDownloader()
-        ' downloader.Updates = updatesToDownload
-        ' downloader.Download()
-
-        'WScript.Echo(vbCrLf & "List of downloaded updates:")
-
-        ' For I = 0 To searchResult.Updates.Count - 1
-        'update = searchResult.Updates.Item(I)
-        'If update.IsDownloaded Then
-        'WScript.Echo(I + 1 & "> " & update.Title)
-        ' End If
-        ' Next
-
-        ' updatesToInstall = CreateObject("Microsoft.Update.UpdateColl")
-
-        ' WScript.Echo(vbCrLf & _
-        '"Creating collection of downloaded updates to install:")
-
-        ' For I = 0 To searchResult.Updates.Count - 1
-        'update = searchResult.Updates.Item(I)
-        'If update.IsDownloaded = True Then
-        ' WScript.Echo(I + 1 & "> adding:  " & update.Title)
-        ' updatesToInstall.Add(update)
-        ' End If
-        'Next
-
-        ' WScript.Echo(vbCrLf & "Would you like to install updates now? (Y/N)")
-        ' strInput = WScript.StdIn.Readline
-        ' WScript.Echo()
-
-        ' If (strInput = "N" Or strInput = "n") Then
-        'WScript.Quit()
-        'ElseIf (strInput = "Y" Or strInput = "y") Then
-        'WScript.Echo("Installing updates...")
-        'installer = updateSession.CreateUpdateInstaller()
-        'installer.Updates = updatesToInstall
-        'installationResult = installer.Install()
-
-        ''Output results of install
-        'WScript.Echo("Installation Result: " & _
-        'installationResult.ResultCode)
-        'WScript.Echo("Reboot Required: " & _
-        ' installationResult.RebootRequired & vbCrLf)
-        'WScript.Echo("Listing of updates installed " & "and individual installation results:")
-
-        ' For I = 0 To updatesToInstall.Count - 1
-        'WScript.Echo(I + 1 & "> " & updatesToInstall.Item(I).Title &  ": " & installationResult.GetUpdateResult(I).ResultCode)
-        'Next
-        'End If
-
     End Sub
     Public Sub InstallUpdates()
 
-        ' This function checks for Windows Updates and returns a integer value containing the number of updates   ' found back to the calling routine
-        'Object for seach
+        ' Info de l'agent
+        Dim oAgentInfo = CreateObject("Microsoft.Update.AgentInfo")
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "%system32%/wuapi.dll version: " & oAgentInfo.GetInfo("ProductVersionString"))
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "WUA version : " & oAgentInfo.GetInfo("ApiMajorVersion") & "." & oAgentInfo.GetInfo("ApiMinorVersion"))
 
-        Dim updateSession = CreateObject("Microsoft.Update.Session")
-        Dim updateSearcher = updateSession.CreateupdateSearcher()
+
+        '  http://msdn.microsoft.com/en-gb/library/windows/desktop/aa387102(v=vs.85).aspx
+        ' This function checks for Windows Updates and returns a integer value containing the number of updates   ' found back to the calling routine
+
+        Dim CheckForUpdates = 0
+        Dim UpdateSession = New WUApiLib.UpdateSession
+        'Dim updateSession = CreateObject("Microsoft.Update.Session")
+        UpdateSession.ClientApplicationID = "Homidom automate Sytem update"
+
+        Dim updateSearcher = UpdateSession.CreateUpdateSearcher()
         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Searching for updates...")
 
         Dim searchResult = updateSearcher.Search("IsInstalled=0 and Type='Software'")
@@ -866,7 +847,6 @@ Imports WUApiLib.UpdateSessionClass
             'WScript.Echo(I + 1 & "> " & update.Title)
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", update.Title)
         Next
-
         If searchResult.Updates.Count = 0 Then
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "There are no applicable updates.")
             Exit Sub
@@ -874,61 +854,104 @@ Imports WUApiLib.UpdateSessionClass
 
         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Creating collection of updates to download:")
 
-        Dim updatesToDownload = CreateObject("Microsoft.Update.UpdateColl")
+        'Dim updatesToDownload = CreateObject("Microsoft.Update.UpdateColl")
+        Dim updatesToDownload = New WUApiLib.UpdateCollection
 
         For I = 0 To searchResult.Updates.Count - 1
             Dim update = searchResult.Updates.Item(I)
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", I + 1 & "> adding: " & update.Title)
-            updatesToDownload.Add(update)
-        Next
-
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Downloading updates...")
-        Dim downloader = updateSession.CreateUpdateDownloader()
-        downloader.Updates = updatesToDownload
-        downloader.Download()
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "List of downloaded updates:")
-
-        For J = 0 To searchResult.Updates.Count - 1
-            Dim update = searchResult.Updates.Item(J)
-            If update.IsDownloaded Then
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", J + 1 & "> " & update.Title)
+            Dim addThisUpdate = False
+            If update.InstallationBehavior.CanRequestUserInput = True Then
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", I + 1 & ">  skipping: " & update.Title & " because it requires user input")
+            Else
+                If update.EulaAccepted = False Then
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "> note: " & update.Title & " has a license agreement that must be accepted:")
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", update.EulaText)
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Do you accept this license agreement? (Y/N) ....Y autoupdate Accpete pour vous")
+                    ' strInput = WScript.StdIn.Readline
+                    '  WScript.Echo()
+                    'If (strInput = "Y" Or strInput = "y") Then
+                    update.AcceptEula()
+                    addThisUpdate = True
+                    'Else
+                    ' WScript.Echo(I + 1 & "> skipping: " & update.Title & _
+                    ' " because the license agreement was declined")
+                    'End If
+                Else
+                    addThisUpdate = True
+                End If
+            End If
+            If addThisUpdate = True Then
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", I + 1 & "> adding: " & update.Title)
+                updatesToDownload.Add(update)
             End If
         Next
 
+        If updatesToDownload.Count = 0 Then
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "All applicable updates were skipped.")
+            Exit Sub
+        End If
+
+        ' _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Downloading updates...")
+
+        Dim downloader As New WUApiLib.UpdateDownloader
+
+        For a As Integer = 0 To updatesToDownload.Count - 1
+
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Downloading updates..." & searchResult.Updates.Item(a).Title)
+
+            'If UpdatesTitle.ToUpper = patch.Title.ToUpper Then
+            downloader = UpdateSession.CreateUpdateDownloader()
+            downloader.Updates = updatesToDownload
+            downloader.Download()
+
+            downloader = Nothing
+            updatesToDownload = Nothing
+
+            ' End If
+        Next
         Dim updatesToInstall = CreateObject("Microsoft.Update.UpdateColl")
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Creating collection of downloaded updates to install:")
 
+        Dim rebootMayBeRequired = False
 
-        For K = 0 To searchResult.Updates.Count - 1
-            Dim update = searchResult.Updates.Item(K)
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Successfully downloaded updates:")
+
+        For i = 0 To searchResult.Updates.Count - 1
+            Dim update = searchResult.Updates.Item(i)
             If update.IsDownloaded = True Then
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", K + 1 & "> adding:  " & update.Title)
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", i + 1 & "> " & update.Title)
                 updatesToInstall.Add(update)
+                If update.InstallationBehavior.RebootBehavior > 0 Then
+                    rebootMayBeRequired = True
+                End If
             End If
         Next
 
-        ' WScript.Echo(vbCrLf & "Would you like to install updates now? (Y/N)")
-        ' strInput = WScript.StdIn.Readline
-        ' WScript.Echo()
+        If updatesToInstall.Count = 0 Then
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "No updates were successfully downloaded.")
+            Exit Sub
+        End If
 
-        ' If (strInput = "N" Or strInput = "n") Then
-        'WScript.Quit()
-        'ElseIf (strInput = "Y" Or strInput = "y") Then
+        If rebootMayBeRequired = True Then
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "These updates may require a reboot.")
+        End If
+
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Would you like to install updates now? (Y/N)....update seront validés")
+        'strInput = WScript.StdIn.Readline
+        ' If (strInput = "Y" Or strInput = "y") Then
         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Installing updates...")
-
-        Dim installer = updateSession.CreateUpdateInstaller()
+        Dim installer = UpdateSession.CreateUpdateInstaller()
         installer.Updates = updatesToInstall
         Dim installationResult = installer.Install()
 
         'Output results of install
         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Installation Result: " & installationResult.ResultCode)
-        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Reboot Required: " & installationResult.RebootRequired)
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Reboot Required: " & installationResult.RebootRequired & vbCrLf)
         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", "Listing of updates installed " & "and individual installation results:")
 
-        For L = 0 To updatesToInstall.Count - 1
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", L + 1 & "> " & updatesToInstall.Item(L).Title & ": " & installationResult.GetUpdateResult(L).ResultCode)
+        For i = 0 To updatesToInstall.Count - 1
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "SystemStatus", i + 1 & "> " & updatesToInstall.Item(i).Title & ": " & installationResult.GetUpdateResult(i).ResultCode)
         Next
-        'End If
+       
 
     End Sub
 
@@ -1019,7 +1042,25 @@ Imports WUApiLib.UpdateSessionClass
         End If
     End Function
 
+    'recupere la liste des volumes diponible ( affichage dans tooltip )
+    Private Function CheckHDD() As String
+        CheckHDD = ""
+        Dim d As DriveInfo
+        Dim infohdd As String = ""
+        For hddcpt As Integer = 0 To (My.Computer.FileSystem.Drives.Count - 1)
+            ' CDRom, Fixed, Unknown, Network, NoRootDirectory, Ram, Removable, or Unknown. 
+            ' _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File type: {0}", d.DriveType)
+            'CheckHDD(hddcpt)[0] = 
+            CheckHDD = CheckHDD & "/HDD" & hddcpt & "(" & My.Computer.FileSystem.Drives(hddcpt).RootDirectory.ToString & ")"
+        Next
+        d = Nothing
+
+    End Function
 
 #End Region
+
+    ' Private Function CheckHDD(hddcpt As Integer) As Integer
+    '     Throw New NotImplementedException
+    '  End Function
 
 End Class
