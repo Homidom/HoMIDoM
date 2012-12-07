@@ -84,7 +84,7 @@ Driver_System
 	<summary>Si refresh &gt;0 gestion du timer</summary>
 	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
 </member><member name="T:Driver_System.Driver_System">
-	<summary>Class Driver SystemStatus</summary>
+	<summary>Class Driver System</summary>
 	<remarks>infos system</remarks>
 </member><member name="P:Driver_System.My.Resources.Resources.ResourceManager">
 	<summary>
