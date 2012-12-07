@@ -4,6 +4,7 @@ Imports System.Threading
 
 Public Class uWMeteo
     Dim _Id As String
+    Dim dt As DispatcherTimer
 
     Public Property ID As String
         Get
@@ -11,7 +12,13 @@ Public Class uWMeteo
         End Get
         Set(ByVal value As String)
             _Id = value
-            If _Id <> "" Then
+            If String.IsNullOrEmpty(_Id) = False Then
+                If dt Is Nothing Then
+                    dt = New DispatcherTimer()
+                    AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
+                    dt.Interval = New TimeSpan(0, 5, 0)
+                    dt.Start()
+                End If
                 GetMeteo()
             End If
 
@@ -25,23 +32,7 @@ Public Class uWMeteo
                 If _Id <> "" Then
                     Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _Id)
                     If IsNothing(_dev) Then Exit Sub
-                    'LblVille.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblVille.Content = _dev.Name, ThreadStart))
-                    'LblTemp.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblTemp.Content = _dev.TemperatureActuel & "°", ThreadStart))
-                    'LblMin.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMin.Content = "Min: " & _dev.MinToday & "°", ThreadStart))
-                    'LblMinJ1.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMinJ1.Content = _dev.MinToday & "°", ThreadStart))
-                    'LblMinJ2.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMinJ2.Content = _dev.MinJ1 & "°", ThreadStart))
-                    'LblMinJ3.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMinJ3.Content = _dev.MinJ2 & "°", ThreadStart))
-                    'LblMinJ4.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMinJ4.Content = _dev.MinJ3 & "°", ThreadStart))
-                    'LblMax.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMax.Content = "Max: " & _dev.MaxToday & "°", ThreadStart))
-                    'LblMaxJ1.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMaxJ1.Content = _dev.MaxToday & "°", ThreadStart))
-                    'LblMaxJ2.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMaxJ2.Content = _dev.MaxJ1 & "°", ThreadStart))
-                    'LblMaxJ3.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMaxJ3.Content = _dev.MaxJ2 & "°", ThreadStart))
-                    'LblMaxJ4.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblMaxJ4.Content = _dev.MaxJ3 & "°", ThreadStart))
-                    'LblJ1.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblJ1.Content = _dev.JourToday, ThreadStart))
-                    'LblJ2.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblJ2.Content = _dev.JourJ1, ThreadStart))
-                    'LblJ3.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblJ3.Content = _dev.JourJ2, ThreadStart))
-                    'LblJ4.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() LblJ4.Content = _dev.JourJ3, ThreadStart))
-
+                  
                     LblVille.Content = _dev.Name
                     LblTemp.Content = _dev.TemperatureActuel & "°"
                     LblMin.Content = "Min: " & _dev.MinToday & "°"
@@ -61,58 +52,73 @@ Public Class uWMeteo
 
                     Dim bmpImage As New BitmapImage()
                     bmpImage.BeginInit()
+                    bmpImage.CacheOption = BitmapCacheOption.OnLoad
+                    bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
                     If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconActuel & ".png") = True Then
                         bmpImage.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconActuel & ".png", UriKind.Absolute)
                     Else
                         bmpImage.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
                     End If
                     bmpImage.EndInit()
-                    'Icon.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() Icon.Source = bmpImage, ThreadStart))
+                    If bmpImage.CanFreeze Then bmpImage.Freeze()
                     Icon.Source = bmpImage
+                    bmpImage = Nothing
 
                     Dim bmpImage2 As New BitmapImage()
                     bmpImage2.BeginInit()
+                    bmpImage2.CacheOption = BitmapCacheOption.OnLoad
+                    bmpImage2.CreateOptions = BitmapCreateOptions.DelayCreation
                     If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconToday & ".png") = True Then
                         bmpImage2.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconToday & ".png", UriKind.Absolute)
                     Else
                         bmpImage2.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
                     End If
                     bmpImage2.EndInit()
+                    If bmpImage2.CanFreeze Then bmpImage2.Freeze()
                     IconJ1.Source = bmpImage2
-                    'IconJ1.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() IconJ1.Source = bmpImage2, ThreadStart))
+                    bmpImage2 = Nothing
 
                     Dim bmpImage3 As New BitmapImage()
                     bmpImage3.BeginInit()
+                    bmpImage3.CacheOption = BitmapCacheOption.OnLoad
+                    bmpImage3.CreateOptions = BitmapCreateOptions.DelayCreation
                     If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ1 & ".png") = True Then
                         bmpImage3.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ1 & ".png", UriKind.Absolute)
                     Else
                         bmpImage3.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
                     End If
                     bmpImage3.EndInit()
+                    If bmpImage3.CanFreeze Then bmpImage3.Freeze()
                     IconJ2.Source = bmpImage3
-                    'IconJ2.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() IconJ2.Source = bmpImage3, ThreadStart))
+                    bmpImage3 = Nothing
 
                     Dim bmpImage4 As New BitmapImage()
                     bmpImage4.BeginInit()
+                    bmpImage4.CacheOption = BitmapCacheOption.OnLoad
+                    bmpImage4.CreateOptions = BitmapCreateOptions.DelayCreation
                     If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ2 & ".png") = True Then
                         bmpImage4.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ2 & ".png", UriKind.Absolute)
                     Else
                         bmpImage4.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
                     End If
                     bmpImage4.EndInit()
+                    If bmpImage4.CanFreeze Then bmpImage4.Freeze()
                     IconJ3.Source = bmpImage4
-                    'IconJ3.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() IconJ3.Source = bmpImage4, ThreadStart))
+                    bmpImage4 = Nothing
 
                     Dim bmpImage5 As New BitmapImage()
                     bmpImage5.BeginInit()
+                    bmpImage5.CacheOption = BitmapCacheOption.OnLoad
+                    bmpImage5.CreateOptions = BitmapCreateOptions.DelayCreation
                     If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ3 & ".png") = True Then
                         bmpImage5.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ3 & ".png", UriKind.Absolute)
                     Else
                         bmpImage5.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
                     End If
                     bmpImage5.EndInit()
+                    If bmpImage5.CanFreeze Then bmpImage5.Freeze()
                     IconJ4.Source = bmpImage5
-                    'IconJ4.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() IconJ4.Source = bmpImage5, ThreadStart))
+                    bmpImage5 = Nothing
 
                 End If
             End If
@@ -1108,13 +1114,27 @@ Public Class uWMeteo
         InitializeComponent()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        Dim dt As DispatcherTimer = New DispatcherTimer()
-        AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
-        dt.Interval = New TimeSpan(0, 5, 0)
-        dt.Start()
+
     End Sub
 
     Protected Overrides Sub Finalize()
         MyBase.Finalize()
+    End Sub
+
+    Private Sub uWMeteo_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
+        Try
+            If dt IsNot Nothing Then
+                dt.Stop()
+                RemoveHandler dt.Tick, AddressOf dispatcherTimer_Tick
+                dt = Nothing
+            End If
+            Icon.Source = Nothing
+            IconJ1.Source = Nothing
+            IconJ2.Source = Nothing
+            IconJ3.Source = Nothing
+            IconJ4.Source = Nothing
+        Catch ex As Exception
+            MessageBox.Show("Erreur uWMeteo_Unloaded: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 End Class

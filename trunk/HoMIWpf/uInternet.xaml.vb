@@ -52,9 +52,19 @@ Partial Public Class uInternet
 
     Private Sub x_Navigated(ByVal sender As Object, ByVal e As System.Windows.Navigation.NavigationEventArgs) Handles x.Navigated
         SuppressScriptErrors(x, True)
+        GC.Collect()
     End Sub
 
     Private Sub x_Navigating(ByVal sender As Object, ByVal e As System.Windows.Navigation.NavigatingCancelEventArgs) Handles x.Navigating
         SuppressScriptErrors(x, True)
+    End Sub
+
+    Private Sub uInternet_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
+        x.Dispose()
+    End Sub
+
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
+        x.Dispose()
     End Sub
 End Class

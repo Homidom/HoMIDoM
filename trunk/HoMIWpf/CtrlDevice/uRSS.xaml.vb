@@ -15,7 +15,7 @@ Public Class uRSS
         End Get
         Set(ByVal value As String)
             _Uri = value
-            RefreshChannel()
+            If String.IsNullOrEmpty(_Uri) = False Then RefreshChannel()
         End Set
     End Property
 
@@ -33,19 +33,23 @@ Public Class uRSS
             Exit Sub
         End If
 
-        If _Uri <> "" Then
             Dim channel As New RSSChannel(_Uri)
 
             feedItems = channel.GetChannelItems()
             For i As Integer = 0 To feedItems.Count - 1
                 Lstb.Items.Add(feedItems.Item(i).Title)
             Next
-        End If
+
+        channel = Nothing
     End Sub
 
     Protected Overrides Sub Finalize()
         MyBase.Finalize()
 
+    End Sub
+
+    Private Sub uRSS_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
+        Lstb.Items.Clear()
     End Sub
 End Class
 
@@ -159,6 +163,10 @@ Public Class RSSChannel
             Return tempNodeList
 
             tempNodeList = Nothing
+            request = Nothing
+            response = Nothing
+            rssStream = Nothing
+            rssDoc = Nothing
         Catch ex As Exception
             MessageBox.Show("Erreur GetXMLDoc: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             Return Nothing
@@ -173,6 +181,7 @@ Public Class RSSChannel
             Link = rss(0).SelectSingleNode("link").InnerText
             Description = rss(0).SelectSingleNode("description").InnerText
 
+            rss = Nothing
         Catch ex As Exception
             MessageBox.Show("Erreur GetChannelInfo: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -197,6 +206,7 @@ Public Class RSSChannel
             Return tempArrayList
 
             tempArrayList = Nothing
+            rssItems = Nothing
         Catch ex As Exception
             MessageBox.Show("Erreur GetChannelItems: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             Return Nothing
