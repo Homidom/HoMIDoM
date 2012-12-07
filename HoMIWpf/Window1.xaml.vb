@@ -91,10 +91,13 @@ Class Window1
                 If File.Exists(_ImageBackGroundDefault) Then
                     Dim bmpImage As New BitmapImage()
                     bmpImage.BeginInit()
-                    bmpImage.CacheOption = BitmapCacheOption.None
+                    bmpImage.CacheOption = BitmapCacheOption.OnLoad
+                    bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
                     bmpImage.UriSource = New Uri(_ImageBackGroundDefault, UriKind.Absolute)
                     bmpImage.EndInit()
+                    If bmpImage.CanFreeze Then bmpImage.Freeze()
                     ImgBackground.Source = bmpImage
+                    bmpImage =Nothing 
                 Else
                     ImgBackground.Source = Nothing
                     _ImageBackGroundDefault = ""
@@ -1235,7 +1238,13 @@ Class Window1
             Me.Cursor = Cursors.Wait
             ' If Canvas1.Children.Count > 0 And sender.Type <> uCtrlImgMnu.TypeOfMnu.LecteurMedia Then
             Canvas1.Children.Clear()
+
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
+
             Me.UpdateLayout()
+
             '  End If
 
             Chk1.Visibility = Windows.Visibility.Collapsed
@@ -1269,6 +1278,7 @@ Class Window1
             End If
 
             y = Nothing
+            Me.UpdateLayout()
             Me.Cursor = Cursors.Arrow
         Catch ex As Exception
             MessageBox.Show("Erreur IconMnuDoubleClick: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -1373,6 +1383,7 @@ Class Window1
                             x.Uid = _ListElement.Item(j).Uid
 
                             Dim y As New uWidgetEmpty
+                            y.Show = True
                             y.Visibility = Windows.Visibility.Visible
                             y.Uid = _ListElement.Item(j).Uid
                             y.Unite = _ListElement.Item(j).Unite
@@ -1430,7 +1441,7 @@ Class Window1
 
                         'Ajoute l'élément dans la liste
                         Dim elmt As New uWidgetEmpty
-                        elmt.Visibility = Windows.Visibility.Visible
+                        elmt.Show = True
                         elmt.Id = z.ElementID
                         elmt.Uid = x.Uid
                         elmt.ZoneId = IdZone
@@ -1478,7 +1489,7 @@ Class Window1
                     x.Uid = _ListElement.Item(i).Uid
 
                     Dim y As New uWidgetEmpty
-                    y.Visibility = Windows.Visibility.Visible
+                    y.Show = True
                     y.Uid = _ListElement.Item(i).Uid
                     y.ZoneId = _ListElement.Item(i).ZoneId
                     y.Width = x.Width
@@ -1536,8 +1547,8 @@ Class Window1
             If Chk1.IsChecked = True Then
                 Chk2.IsChecked = False
                 Design = True
-
-                For Each child As ContentControl In Canvas1.Children
+                Dim child As ContentControl
+                For Each child In Canvas1.Children
                     Dim obj As uWidgetEmpty = child.Content
                     obj.ModeEdition = True
                     obj.IsHitTestVisible = False
@@ -1549,8 +1560,8 @@ Class Window1
                 'On a finit le déplacement
                 Design = False
                 Dim a As String = ""
-
-                For Each child As ContentControl In Canvas1.Children
+                Dim child As ContentControl
+                For Each child In Canvas1.Children
                     Dim obj As uWidgetEmpty = child.Content
                     obj.IsHitTestVisible = False
                     obj.ModeEdition = False
@@ -1588,6 +1599,8 @@ Class Window1
 
                 Next
             End If
+
+            Me.UpdateLayout()
         Catch ex As Exception
             MessageBox.Show("Erreur Chk1: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1616,8 +1629,8 @@ Class Window1
                 Design = False
                 Dim a As String = ""
                 Chk2.IsChecked = True
-
-                For Each child As ContentControl In Canvas1.Children
+                Dim child As ContentControl
+                For Each child In Canvas1.Children
                     Dim obj As uWidgetEmpty = child.Content
                     obj.IsHitTestVisible = False
                     obj.ModeEdition = False
@@ -1652,16 +1665,18 @@ Class Window1
 
                     Dim lbl As uWidgetEmpty = child.Content
                     lbl.IsHitTestVisible = True
-
+                    lbl = Nothing
                 Next
             End If
 
-            For Each child As ContentControl In Canvas1.Children
-                Dim obj As uWidgetEmpty = child.Content
+            Dim child2 As ContentControl
+            For Each child2 In Canvas1.Children
+                Dim obj As uWidgetEmpty = child2.Content
                 obj.ModeEdition = Chk2.IsChecked
                 obj = Nothing
             Next
 
+            Me.UpdateLayout()
         Catch ex As Exception
             MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1670,8 +1685,8 @@ Class Window1
     Private Sub MaJ_Element(Optional ByVal Objet As Object = Nothing)
         Try
             Dim a As String = ""
-
-            For Each child As ContentControl In Canvas1.Children
+            Dim child As ContentControl
+            For Each child In Canvas1.Children
                 Dim obj As uWidgetEmpty = child.Content
                 If Objet IsNot Nothing Then
                     obj = Objet.Content

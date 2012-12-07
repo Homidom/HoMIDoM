@@ -15,8 +15,9 @@ Public Class uWidgetEmpty
     End Enum
 
     'Variables
-    Dim _Id As String
-    Dim _ParentId As String
+    Dim _Show As Boolean
+    Dim _Id As String = ""
+    Dim _ParentId As String = ""
     Dim _Down As DateTime
     Dim _dev As HoMIDom.HoMIDom.TemplateDevice = Nothing
     Dim _macro As HoMIDom.HoMIDom.Macro = Nothing
@@ -82,13 +83,22 @@ Public Class uWidgetEmpty
     Public Event GestureDroiteGauche(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event ShowZone(ByVal zoneid As String)
 
+    Public Property Show As Boolean
+        Get
+            Return _Show
+        End Get
+        Set(ByVal value As Boolean)
+            _Show = value
+        End Set
+    End Property
+
     Public Property Id As String
         Get
             Return _Id
         End Get
         Set(ByVal value As String)
             _Id = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             If IsConnect = True And value <> "" Then
                 _dev = myService.ReturnDeviceByID(IdSrv, _Id)
@@ -266,7 +276,7 @@ Public Class uWidgetEmpty
         Set(ByVal value As Boolean)
             _IsEmpty = value
 
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             If value = True Then
                 Image.Width = Double.NaN
@@ -293,14 +303,9 @@ Public Class uWidgetEmpty
         Set(ByVal value As TypeOfWidget)
             _type = value
 
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             Try
-                _dt = New DispatcherTimer()
-                _dt.Interval = New TimeSpan(0, 0, _Refresh)
-                AddHandler _dt.Tick, AddressOf dispatcherTimer_Tick
-                _dt.Start()
-
                 Select Case _type
                     Case TypeOfWidget.Web
                         StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
@@ -333,6 +338,11 @@ Public Class uWidgetEmpty
                         StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
                         StkTool.Visibility = Windows.Visibility.Collapsed
                         ShowPicture = False
+                    Case Else
+                        _dt = New DispatcherTimer()
+                        _dt.Interval = New TimeSpan(0, 0, _Refresh)
+                        AddHandler _dt.Tick, AddressOf dispatcherTimer_Tick
+                        _dt.Start()
                 End Select
             Catch ex As Exception
                 MessageBox.Show("Erreur Property Type Set: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -356,7 +366,7 @@ Public Class uWidgetEmpty
         Set(ByVal value As Boolean)
             _ShowEtiquette = value
 
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             If value = True Then
                 Lbl.Visibility = Windows.Visibility.Visible
@@ -381,7 +391,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As String)
             _Etiquette = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
             Lbl.Content = _Etiquette
         End Set
     End Property
@@ -393,7 +403,7 @@ Public Class uWidgetEmpty
         Set(ByVal value As Double)
             Try
                 _TailleEtiquette = value
-                If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+                If _Show = False Then Exit Property
                 Lbl.FontSize = value
             Catch ex As Exception
                 MessageBox.Show("Erreur Property TailleEtiquette Set: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -407,7 +417,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Double)
             _X = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
             If Me.Parent IsNot Nothing Then
                 Dim x As ContentControl = Me.Parent
                 Canvas.SetLeft(x, value)
@@ -421,7 +431,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Double)
             _Y = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             If Me.Parent IsNot Nothing Then
                 Dim x As ContentControl = Me.Parent
@@ -436,7 +446,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Double)
             _Rotation = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             If Me.Parent IsNot Nothing Then
                 Dim x As ContentControl = Me.Parent
@@ -463,7 +473,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As String)
             _Picture = value
-            If Me.Visibility = Windows.Visibility.Visible Then
+            If _Show = True Then
                 If Image.Tag <> _Picture Then
                     Image.Tag = _Picture
                     Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_Picture))
@@ -478,7 +488,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Boolean)
             _ShowPicture = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             If value = True Then
                 Image.Visibility = Windows.Visibility.Visible
@@ -503,7 +513,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As String)
             _LabelStatus = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             LblStatus.Content = value
         End Set
@@ -515,7 +525,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Double)
             _TailleStatus = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             LblStatus.FontSize = value
         End Set
@@ -527,7 +537,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Boolean)
             _ShowStatus = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             If value = False Then
                 LblStatus.Visibility = Windows.Visibility.Collapsed
@@ -554,13 +564,16 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Integer)
             _Refresh = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
-
-            If Me.Visibility = Windows.Visibility.Visible Then
+            If _Show = False Then
+                Exit Property
+            Else
                 _dt.Stop()
                 _dt.Interval = New TimeSpan(0, 0, _Refresh)
                 _dt.Start()
             End If
+
+
+
         End Set
     End Property
 
@@ -570,7 +583,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As SolidColorBrush)
             _ColorBackGround = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             Border1.Background = value
         End Set
@@ -582,7 +595,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As SolidColorBrush)
             _ColorStatus = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             LblStatus.Foreground = value
         End Set
@@ -603,7 +616,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Double)
             MyBase.Width = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             If Me.Parent IsNot Nothing Then
                 Dim x As ContentControl = Me.Parent
@@ -618,7 +631,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Double)
             MyBase.Height = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             If Me.Parent IsNot Nothing Then
                 Dim x As ContentControl = Me.Parent
@@ -634,7 +647,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As String)
             _URL = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             Try
                 If My.Computer.Network.IsAvailable = True And _Webbrowser IsNot Nothing And _type = TypeOfWidget.Web Then
@@ -653,7 +666,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As List(Of uHttp.ButtonHttp))
             _ListHttpBtn = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             If _Webbrowser IsNot Nothing Then _Webbrowser.ListButton = value
         End Set
@@ -676,7 +689,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As String)
             _URLRss = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             If _RSS IsNot Nothing And _type = TypeOfWidget.Rss Then _RSS.URIRss = value
         End Set
@@ -690,7 +703,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As String)
             _IDMeteo = value
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Property
+            If _Show = False Then Exit Property
 
             If _METEO IsNot Nothing And _type = TypeOfWidget.Meteo Then _METEO.ID = value
         End Set
@@ -906,7 +919,7 @@ Public Class uWidgetEmpty
 
     Private Sub uWidgetEmpty_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         Try
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Sub
+            If _Show = False Then Exit Sub
 
             Select Case _type
                 Case TypeOfWidget.Web
@@ -923,7 +936,7 @@ Public Class uWidgetEmpty
 
     Private Sub uWidgetEmpty_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Me.MouseLeave
         Try
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Sub
+            If _Show = False Then Exit Sub
 
             If e.LeftButton = MouseButtonState.Released Then Exit Sub
 
@@ -970,7 +983,7 @@ Public Class uWidgetEmpty
 
     Private Sub Image_MouseLeftButtonUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Me.MouseLeftButtonUp
         Try
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Sub
+            If _Show = False Then Exit Sub
 
             Dim vDiff As TimeSpan = Now - _Down
             Dim _NewPos As Point = e.GetPosition(Me)
@@ -1028,7 +1041,7 @@ Public Class uWidgetEmpty
 
 #Region "Gerer_Action_Gesture"
     Private Sub Traite_Action_OnClick()
-        If Me.Visibility = Windows.Visibility.Collapsed Then Exit Sub
+        If _Show = False Then Exit Sub
 
         For Each _act As cWidget.Action In _Action_On_Click
             Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
@@ -1065,7 +1078,7 @@ Public Class uWidgetEmpty
     End Sub
 
     Private Sub Traite_Action_OnLongClick()
-        If Me.Visibility = Windows.Visibility.Collapsed Then Exit Sub
+        If _Show = False Then Exit Sub
 
         For Each _act As cWidget.Action In _Action_On_LongClick
             Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
@@ -1098,7 +1111,7 @@ Public Class uWidgetEmpty
     End Sub
 
     Private Sub Traite_Action_HautBas()
-        If Me.Visibility = Windows.Visibility.Collapsed Then Exit Sub
+        If _Show = False Then Exit Sub
 
         For Each _act As cWidget.Action In _Action_GestureHautBas
             Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
@@ -1134,7 +1147,7 @@ Public Class uWidgetEmpty
     End Sub
 
     Private Sub Traite_Action_BasHaut()
-        If Me.Visibility = Windows.Visibility.Collapsed Then Exit Sub
+        If _Show = False Then Exit Sub
 
         For Each _act As cWidget.Action In _Action_GestureBasHaut
             Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
@@ -1170,7 +1183,7 @@ Public Class uWidgetEmpty
     End Sub
 
     Private Sub Traite_Action_GaucheDroite()
-        If Me.Visibility = Windows.Visibility.Collapsed Then Exit Sub
+        If _Show = False Then Exit Sub
 
         For Each _act As cWidget.Action In _Action_GestureGaucheDroite
             Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
@@ -1206,7 +1219,7 @@ Public Class uWidgetEmpty
     End Sub
 
     Private Sub Traite_Action_DroiteGauche()
-        If Me.Visibility = Windows.Visibility.Collapsed Then Exit Sub
+        If _Show = False Then Exit Sub
 
         For Each _act As cWidget.Action In _Action_GestureDroiteGauche
             Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
@@ -1590,7 +1603,7 @@ Public Class uWidgetEmpty
 
     Private Sub Stk1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Me.MouseDown
         Try
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Sub
+            If _Show = False Then Exit Sub
 
             If _ModeEdition Then
                 Try
@@ -1680,7 +1693,7 @@ Public Class uWidgetEmpty
 
     Private Sub uWidgetEmpty_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles Me.SizeChanged
         Try
-            If Me.Visibility = Windows.Visibility.Collapsed Then Exit Sub
+            If _Show = False Then Exit Sub
 
             Select Case _type
                 Case TypeOfWidget.Web
@@ -1721,14 +1734,9 @@ Public Class uWidgetEmpty
 
     Protected Overrides Sub Finalize()
         Try
-            Image.Source = Nothing
-            _Webbrowser = Nothing
-            _RSS = Nothing
-            _METEO = Nothing
-            _KeyPad = Nothing
             MyBase.Finalize()
         Catch ex As Exception
-            MessageBox.Show("Erreur Finalize: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur uWidgetEmpty_Finalize: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -1740,4 +1748,21 @@ Public Class uWidgetEmpty
         End If
     End Sub
 
+    Private Sub uWidgetEmpty_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
+        Try
+            If _dt IsNot Nothing Then
+                _dt.Stop()
+                RemoveHandler _dt.Tick, AddressOf dispatcherTimer_Tick
+                _dt = Nothing
+            End If
+            Image.Source = Nothing
+            _Webbrowser = Nothing
+            _RSS = Nothing
+            _METEO = Nothing
+            _KeyPad = Nothing
+        Catch ex As Exception
+            MessageBox.Show("Erreur uWidgetEmpty_Unloaded: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+
+    End Sub
 End Class

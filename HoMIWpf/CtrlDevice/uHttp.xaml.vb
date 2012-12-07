@@ -88,6 +88,8 @@ Public Class uHttp
     Private Sub wb_Navigated(ByVal sender As Object, ByVal e As System.Windows.Navigation.NavigationEventArgs) Handles WebBrowser1.Navigated
         Try
             SuppressScriptErrors(sender, True)
+            GC.Collect()
+
         Catch ex As Exception
             MessageBox.Show("Erreur uHttp.wb_Navigated: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -166,6 +168,10 @@ Public Class uHttp
 
     Protected Overrides Sub Finalize()
         MyBase.Finalize()
+    End Sub
+
+    Private Sub uHttp_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
+        WebBrowser1.Dispose()
     End Sub
 End Class
 
