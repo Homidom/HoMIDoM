@@ -256,6 +256,7 @@ Imports System.Runtime.InteropServices
     End Property
 
 #End Region
+
 #Region "Fonctions génériques"
     ''' <summary>
     ''' Retourne la liste des Commandes avancées
@@ -381,112 +382,156 @@ Imports System.Runtime.InteropServices
     ''' <param name="Objet">Objet représetant le device à interroger</param>
     ''' <remarks>pas utilisé</remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
-
-        '- adresse1 =  type d'action : PING, INFO, UPDATE...
-        '- adresse 2 = ip (pour le ping), INFO Memory/CPU/Battery/DisqueC/DisqueD/ALL ... (pour le systeme),affiche/afficheetinstall(pour windows update)
-        'ensuite dans la fonction write suivant les deux champs, tu fais les bonnes actions.
         Dim paramCommand As String = ""
         Try
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Read", "Composant: " & Objet.Name & " Action: " & Objet.modele.ToString & ", Paramètre: " & Objet.adresse1.ToString)
             If _Enable = False Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "Read", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
                 Exit Sub
             End If
-
             If _IsConnect = False Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "Read", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté")
                 Exit Sub
             End If
-            If Left(Objet.adresse2.ToString.ToUpper, 3) = "HDD" Then
-                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Read", "Action: " & Objet.adresse1.ToString & ", Paramètre: " & Objet.adresse2.ToString & ", Composant: " & Objet.Name)
-                paramCommand = Right(Objet.adresse2.ToString, (Len(Objet.adresse2.ToString) - 3))
-                'Objet.adresse2 = "HDD"
-                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Read", "Action: " & Objet.adresse2.ToString & ", paramCommand: " & paramCommand)
 
-            End If
-
-
-            Select Case Objet.adresse1.ToString.ToUpper
-
+            Select Case Left(Objet.modele.ToString.ToUpper, 4)
                 Case "PING"
-                    If My.Computer.Network.Ping(Objet.adresse2.ToString) Then
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Ping " & Objet.adresse2.ToString & " OK")
+                    'Adresse2 contient le hostname ou l'ip
+                    'Dim result As Boolean = My.Computer.Network.Ping(Objet.adresse2.ToString)
+                    Dim ping As New System.Net.NetworkInformation.Ping
+                    Dim reply As System.Net.NetworkInformation.PingReply
+                    reply = ping.Send(Objet.adresse1.ToString)
+
+                    If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Ping " & Objet.adresse1.ToString & " : " & reply.RoundtripTime & "ms")
                     Else
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Ping " & Objet.adresse2.ToString & " KO")
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Ping " & Objet.adresse1.ToString & " : NOK")
+                    End If
+                    If TypeOf Objet.Value Is Boolean Then
+                        If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then Objet.Value = True Else Objet.Value = False
+                    ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
+                        If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then Objet.Value = reply.RoundtripTime Else Objet.Value = 0
+                    Else
+                        If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then Objet.Value = "OK" Else Objet.Value = "NOK"
                     End If
 
-
                 Case "INFO"
-                    Select Case Objet.adresse2.ToString.ToUpper
-                        Case "MEMORY"
+                    '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "TotalPhysicalMemory:  " & System.Math.Round((My.Computer.Info.TotalPhysicalMemory) / (1024 * 1024), 2).ToString & " Mo")
+                    '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "AvailablePhysicalMemory:  " & System.Math.Round((My.Computer.Info.AvailablePhysicalMemory) / (1024 * 1024), 2).ToString & " Mo")
+                    '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "TotalVirtualMemory:  " & System.Math.Round((My.Computer.Info.TotalVirtualMemory) / (1024 * 1024), 2).ToString & " Mo")
+                    '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "AvailableVirtualMemory:  " & System.Math.Round((My.Computer.Info.AvailableVirtualMemory) / (1024 * 1024), 2).ToString & " Mo")
+                    Select Case Right(Objet.modele.ToString.ToUpper, (Len(Objet.modele.ToString.ToUpper) - 5))
+                        Case "ALL"
+                            'MEMORY
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "TotalPhysicalMemory:  " & System.Math.Round((My.Computer.Info.TotalPhysicalMemory) / (1024 * 1024), 2).ToString & " Mo")
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "AvailablePhysicalMemory:  " & System.Math.Round((My.Computer.Info.AvailablePhysicalMemory) / (1024 * 1024), 2).ToString & " Mo")
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "TotalVirtualMemory:  " & System.Math.Round((My.Computer.Info.TotalVirtualMemory) / (1024 * 1024), 2).ToString & " Mo")
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "AvailableVirtualMemory:  " & System.Math.Round((My.Computer.Info.AvailableVirtualMemory) / (1024 * 1024), 2).ToString & " Mo")
-
-                        Case "CPU"
-                            ' http://www.a1vbcode.com/snippet-4491.asp
-                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "System", "CPU information non implémenté")
-                        Case "BATTERY"
+                            'BATTERY
                             Dim psBattery As PowerStatus = SystemInformation.PowerStatus
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "BatteryChargeStatus : " & psBattery.BatteryChargeStatus)
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "BatteryChargeFullLifetime : " & psBattery.BatteryFullLifetime)
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "BatteryLifePercent : " & psBattery.BatteryLifePercent * 100 & "%")
                             If psBattery.BatteryLifeRemaining <> "-1" Then
-                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "BatteryLifeRemaining : " & psBattery.BatteryLifeRemaining / 60 & " Min")
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "BatteryLifeRemaining : " & CInt(psBattery.BatteryLifeRemaining / 60) & " Min")
                             Else
                                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "BatteryLifeRemaining : " & "N/A")
                             End If
                             Select Case psBattery.PowerLineStatus
-                                Case "0"
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "PowerLineStatus : " & "battery")
-                                Case "1"
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "PowerLineStatus : " & "Secteur")
-                                Case Else
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "PowerLineStatus : " & "unknow")
+                                Case "0" : _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "PowerLineStatus : " & "battery")
+                                Case "1" : _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "PowerLineStatus : " & "Secteur")
+                                Case Else : _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "PowerLineStatus : " & "unknow")
                             End Select
                             psBattery = Nothing
+                            'CPU
 
-                        Case Else
-                            If Left(Objet.adresse2.ToString, 3).ToString.ToUpper = "HDD" Then
+                            'HDD
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "Nbdisk:  " & My.Computer.FileSystem.Drives.Count)
+                            'pour chaque disque on recupere ses infos
+                            'Dim drv As New DriveInfo(Objet.adresse2.ToString)
+                            'If drv.IsReady Then
+                            '    ' CDRom, Fixed, Unknown, Network, NoRootDirectory, Ram, Removable, or Unknown. 
+                            '    If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "  File type: " & drv.DriveType)
+                            '    If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "  Volume label: " & drv.VolumeLabel)
+                            '    If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "  File system: " & drv.DriveFormat)
+                            '    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "  Available space to current user:" & (drv.AvailableFreeSpace / (1024 ^ 2) & " Mo"))
+                            '    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "  Total available space:          " & (drv.TotalFreeSpace / (1024 ^ 2) & " Mo"))
+                            '    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "  Total size of drive:            " & (drv.TotalSize / (1024 ^ 2) & " Mo"))
+                            'Else
+                            '    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "System", "Impossible de trouver le disque " & Objet.adresse2.ToString)
+                            'End If
+                            'drv = Nothing
 
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "READ", "Nbdisk:  " & My.Computer.FileSystem.Drives.Count)
-                                Dim drv As New DriveInfo(paramCommand)
-                                'Dim allDrives() As DriveInfo = DriveInfo.GetDrives()
-                                'Dim d As DriveInfo
-                                If drv.IsReady Then
-                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "READ", "disque selectionné :  " & paramCommand)
-                                    ' CDRom, Fixed, Unknown, Network, NoRootDirectory, Ram, Removable, or Unknown. 
-                                    If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File type: ", drv.DriveType)
-                                    If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Volume label: ", drv.VolumeLabel)
-                                    If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File system: ", drv.DriveFormat)
-                                    '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user:", (drv.AvailableFreeSpace / (1024 ^ 2) & " Mo"))
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total available space:          ", CType(drv.TotalFreeSpace / (1024 ^ 2), Integer) & " Mo")
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total size of drive:            ", CType(drv.TotalSize / (1024 ^ 2), Integer) & " Mo")
-
-                                Else
-                                    '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user: ", "0 bytes")
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total available space:          0 bytes", "0 bytes")
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total size of drive:            0 bytes ", "0 bytes")
-                                End If
-                                drv = Nothing
+                        Case "MEMORY_FREE"
+                            'Dim result As Double = System.Math.Round((My.Computer.Info.AvailablePhysicalMemory) / (1024 * 1024), 2)
+                            Dim result As Integer = CInt((My.Computer.Info.AvailablePhysicalMemory) / (1024 * 1024))
+                            If TypeOf Objet.Value Is Boolean Then
+                                If result > 0 Then Objet.Value = True Else Objet.Value = False
+                            ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
+                                Objet.Value = result
                             Else
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "System", "information non implémenté")
+                                Objet.Value = CStr(result) & " Mo"
                             End If
+                        Case "MEMORY_USED"
+                            'Dim result As Double = System.Math.Round((My.Computer.Info.TotalPhysicalMemory) / (1024 * 1024), 2) - System.Math.Round((My.Computer.Info.AvailablePhysicalMemory) / (1024 * 1024), 2)
+                            Dim result As Integer = CInt((My.Computer.Info.TotalPhysicalMemory) / (1024 * 1024)) - CInt((My.Computer.Info.AvailablePhysicalMemory) / (1024 * 1024))
+                            If TypeOf Objet.Value Is Boolean Then
+                                If result > 0 Then Objet.Value = True Else Objet.Value = False
+                            ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
+                                Objet.Value = result
+                            Else
+                                Objet.Value = CStr(result) & " Mo"
+                            End If
+                        Case "CPU"
+                            ' http://www.a1vbcode.com/snippet-4491.asp
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "System", "CPU information non implémenté")
+                        Case "BATTERY_STATUS"
+                            Dim psBattery As PowerStatus = SystemInformation.PowerStatus
+                            If TypeOf Objet.Value Is Boolean Then
+                                If psBattery.PowerLineStatus = 1 Then Objet.Value = True Else Objet.Value = False
+                            ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
+                                If psBattery.PowerLineStatus = 1 Then Objet.Value = 1 Else Objet.Value = 0
+                            Else
+                                Select Case psBattery.PowerLineStatus
+                                    Case "0" : Objet.Value = "battery"
+                                    Case "1" : Objet.Value = "Secteur"
+                                    Case Else : Objet.Value = "unknow"
+                                End Select
+                            End If
+                        Case "BATTERY_PERCENT"
+                            Dim psBattery As PowerStatus = SystemInformation.PowerStatus
+                            If TypeOf Objet.Value Is Boolean Then
+                                If psBattery.BatteryLifePercent * 100 >= 100 Then Objet.Value = True Else Objet.Value = False
+                            ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
+                                Objet.Value = CInt(psBattery.BatteryLifePercent * 100)
+                            Else
+                                Objet.Value = CStr(psBattery.BatteryLifePercent * 100) & "%"
+                            End If
+
+                        Case "HDD"
+                            'Adresse2 contient la lettre du disque "C:"
+                            Dim drv As New DriveInfo(Objet.adresse1.ToString)
+                            If drv.IsReady Then
+                                If TypeOf Objet.Value Is Boolean Then
+                                    If (drv.TotalFreeSpace / (1024 ^ 2)) > 0 Then Objet.Value = True Else Objet.Value = False
+                                ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
+                                    Objet.Value = CInt((drv.TotalFreeSpace / (1024 ^ 2)))
+                                Else
+                                    Objet.Value = CStr(CInt((drv.TotalFreeSpace / (1024 ^ 2)))) & " Mo Free"
+                                End If
+                            Else
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "System", "Impossible de trouver le disque " & Objet.adresse1.ToString)
+                            End If
+                            drv = Nothing
+                        Case Else
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "System", "Composant mal paramétré : " & Objet.adresse1.ToString.ToUpper)
                     End Select
 
                 Case "WUAU"
-                    Select Case Objet.adresse2.ToString.ToUpper
-                        Case "DISPLAY"
-                            CheckForUpdates()
-                        Case "INSTALL"
-                            InstallUpdates()
+                    CheckForUpdates(Objet)
 
-                        Case Else
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Parametre non valide")
-
-                    End Select
                 Case Else
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Action non valide")
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Action non valide")
             End Select
 
 
@@ -503,115 +548,24 @@ Imports System.Runtime.InteropServices
     ''' <param name="Parametre1">Action</param>
     ''' <param name="Parametre2">Parametre</param>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-
-        '- command =  type d'action : PING, INFO, UPDATE...
-        '- Parametre1 = ip (pour le ping), INFO Memory/CPU/Battery/DisqueC/DisqueD/ALL ... (pour le systeme),affiche/afficheetinstall(pour windows update)
-        'ensuite dans la fonction write suivant les deux champs, tu fais les bonnes actions.
-        Dim paramCommand As String = ""
         Try
             If _Enable = False Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "WRITE", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "Write", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
                 Exit Sub
             End If
-
             If _IsConnect = False Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "WRITE", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "Write", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
                 Exit Sub
             End If
-
-            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "WRITE", "Commande: " & Command & ", Action: " & Parametre1 & ", Composant: " & Objet.Name)
-
-            If Left(Parametre1.ToString, 3) = "HDD" Then
-                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "WRITE", "Commande: " & Command & ", Action: " & Parametre1 & ", Composant: " & Objet.Name)
-                paramCommand = Right(Parametre1, (Len(Parametre1) - 3))
-
-                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "WRITE", "Commande: " & Command & ", paramCommand: " & paramCommand)
-
-            End If
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Commande: " & Command & ", Action: " & Parametre1 & ", Composant: " & Objet.Name)
 
             Select Case UCase(Command)
-
-                Case "PING"
-                    If My.Computer.Network.Ping(Parametre1.ToString.ToUpper) Then
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Ping " & Parametre1.ToString & " OK")
-                    Else
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Ping " & Parametre1.ToString & " KO")
-                    End If
-                Case "INFO"
-                    Select Case Parametre1.ToString.ToUpper
-                        Case "MEMORY"
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "TotalPhysicalMemory:  " & System.Math.Round((My.Computer.Info.TotalPhysicalMemory) / (1024 * 1024), 2).ToString & " Mo")
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "AvailablePhysicalMemory:  " & System.Math.Round((My.Computer.Info.AvailablePhysicalMemory) / (1024 * 1024), 2).ToString & " Mo")
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "TotalVirtualMemory:  " & System.Math.Round((My.Computer.Info.TotalVirtualMemory) / (1024 * 1024), 2).ToString & " Mo")
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "AvailableVirtualMemory:  " & System.Math.Round((My.Computer.Info.AvailableVirtualMemory) / (1024 * 1024), 2).ToString & " Mo")
-
-                        Case "CPU"
-                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "System", "CPU information non implémenté")
-
-                        Case "BATTERY"
-                            Dim psBattery As PowerStatus = SystemInformation.PowerStatus
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "BatteryChargeStatus : " & psBattery.BatteryChargeStatus)
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "BatteryChargeFullLifetime : " & psBattery.BatteryFullLifetime)
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "BatteryLifePercent : " & psBattery.BatteryLifePercent * 100 & "%")
-                            If psBattery.BatteryLifeRemaining <> "-1" Then
-                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "BatteryLifeRemaining : " & psBattery.BatteryLifeRemaining / 60 & " Min")
-                            Else
-                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "BatteryLifeRemaining : " & "N/A")
-                            End If
-                            Select Case psBattery.PowerLineStatus
-                                Case "0"
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "PowerLineStatus : " & "battery")
-                                Case "1"
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "PowerLineStatus : " & "Secteur")
-                                Case Else
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "PowerLineStatus : " & "unknow")
-                            End Select
-                            psBattery = Nothing
-
-                      Case Else
-
-                            If Left(Parametre1.ToString, 3).ToString.ToUpper = "HDD" Then
-
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "READ", "Nbdisk:  " & My.Computer.FileSystem.Drives.Count)
-                                Dim drv As New DriveInfo(paramCommand)
-                                'Dim allDrives() As DriveInfo = DriveInfo.GetDrives()
-                                'Dim d As DriveInfo
-                                If drv.IsReady Then
-                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "READ", "disque selectionné :  " & paramCommand)
-                                    ' CDRom, Fixed, Unknown, Network, NoRootDirectory, Ram, Removable, or Unknown. 
-                                    If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File type: ", drv.DriveType)
-                                    If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Volume label: ", drv.VolumeLabel)
-                                    If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File system: ", drv.DriveFormat)
-                                    ' _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user:", (drv.AvailableFreeSpace / (1024 ^ 2) & " Mo"))
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total available space:          ", CType(drv.TotalFreeSpace / (1024 ^ 2), Integer) & " Mo")
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total size of drive:            ", CType(drv.TotalSize / (1024 ^ 2), Integer) & " Mo")
-
-                                Else
-                                    ' _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user: ", "0 bytes")
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total available space:          0 bytes", "0 bytes")
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total size of drive:            0 bytes ", "0 bytes")
-                                End If
-                                drv = Nothing
-                            Else
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "System", "information non implémenté")
-                            End If
-                         
-                    End Select
-
-                Case "WUAU"
-                    Select Case Parametre1.ToString.ToUpper
-                        Case "DISPLAY"
-                            CheckForUpdates()
-                        Case "INSTALL"
-                            InstallUpdates()
-                        Case Else
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Parametre non valide")
-                    End Select
-                Case Else
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Action non valide")
+                Case "SHUTDOWN" : systemdown()
+                Case "REBOOT" : systemreboot()
+                Case "UPDATE" : InstallUpdates(Objet)
+                Case "EXECUTE" : Read(Objet)
+                Case Else : _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Commande non supportée : " & Command)
             End Select
-
-
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
@@ -720,15 +674,19 @@ Imports System.Runtime.InteropServices
             'Liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.GENERIQUESTRING)
             _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
-            Add_DeviceCommande("PING", "Ping <IP>,<Hostname>,<DomainName>", 1)
-            Add_DeviceCommande("INFO", "MEMORY/CPU/BATTERY/HDD", 1)
-            Add_DeviceCommande("WUAU", "DISPLAY/INSTALL", 1)
+            'Add_DeviceCommande("PING", "Ping <IP>,<Hostname>,<DomainName>", 0)
+            'Add_DeviceCommande("INFO", "Get System ALL/MEMORY_USED/MEMORY_FREE/CPU/BATTERY_STATUS/BATTERY_PERCENT/HDD", 0)
+            'Add_DeviceCommande("WUAU", "Windows Updates", 0)
+            Add_DeviceCommande("SHUTDOWN", "Arrêter le serveur", 0)
+            Add_DeviceCommande("REBOOT", "Arrêter le serveur", 0)
+            Add_DeviceCommande("UPDATE", "Installer les Windows Updates", 0)
+            Add_DeviceCommande("EXECUTE", "Lancer l'action associé", 0)
 
-
-            'ajout des commandes avancées pour les devices
+            'ajout des parametres avancées
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", True)
 
             'Libellé Driver
@@ -737,17 +695,15 @@ Imports System.Runtime.InteropServices
             'Libellé Device
 
             '- adresse1=  type d'action : PING, INFO, UPDATE...
-            Add_LibelleDevice("ADRESSE1", "Type d'action", "PING, INFO, WUAU")
-            '- adresse2 = ip (pour le ping), Memoire/CPU/DisqueC/DisqueD/ALL... (pour le systeme),affiche/afficheetinstall(pour windows update)
-            Add_LibelleDevice("ADRESSE2", "Paramètre", "Ping: <IP>,<Hostname>,<DomainName>,INFO :MEMORY/CPU/BATTERY" & CheckHDD() & ",WUA : display/install")
+            Add_LibelleDevice("ADRESSE1", "Paramètre (ou adresse virtuelle)", "Ping: <IP>-<Hostname>-<DomainName>, INFO-HDD: " & CheckHDD() & ", adresse virtuelle")
+            Add_LibelleDevice("ADRESSE2", "@", "")
 
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "@", "")
+            Add_LibelleDevice("MODELE", "Type d'action", "PING, INFO-x, WUAU", "PING|INFO-ALL|INFO-MEMORY_USED|INFO-MEMORY_FREE|INFO-CPU|INFO-BATTERY_STATUS|INFO-BATTERY_PERCENT|INFO-HDD|WUAU")
 
             Add_LibelleDevice("REFRESH", "Refresh", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "@", "")
-            ' Add_LibelleDevice("CommTimeout", "LastChange Durée", "")
-
+            
         Catch ex As Exception
             ' WriteLog("ERR: New Exception : " & ex.Message)
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "System New", ex.Message)
@@ -765,12 +721,11 @@ Imports System.Runtime.InteropServices
 #Region "Fonctions internes"
     'Insérer ci-dessous les fonctions propres au driver et nom communes (ex: start)
 
-    Public Sub CheckForUpdates()
- ' Info de l'agent
+    Private Sub CheckForUpdates(ByVal Objet As Object)
+        ' Info de l'agent
         Dim oAgentInfo = CreateObject("Microsoft.Update.AgentInfo")
         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "%system32%\wuapi.dll version: " & oAgentInfo.GetInfo("ProductVersionString"))
         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "WUA version : " & oAgentInfo.GetInfo("ApiMajorVersion") & "." & oAgentInfo.GetInfo("ApiMinorVersion"))
-
 
         '  http://msdn.microsoft.com/en-gb/library/windows/desktop/aa387102(v=vs.85).aspx
         ' This function checks for Windows Updates and returns a integer value containing the number of updates   ' found back to the calling routine
@@ -789,14 +744,22 @@ Imports System.Runtime.InteropServices
             'WScript.Echo(I + 1 & "> " & update.Title)
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", update.Title)
         Next
-        If searchResult.Updates.Count = 0 Then
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "There are no applicable updates.")
-            Exit Sub
+
+        Dim NBupdates As Integer = searchResult.Updates.Count
+        If NBupdates = 0 Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "There are no applicable updates.")
+
+        'mise à jour de la valeur du composant
+        If TypeOf Objet.Value Is Boolean Then
+            If NBupdates > 0 Then Objet.Value = True Else Objet.Value = False
+        ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
+            Objet.Value = CInt(NBupdates)
+        Else
+            Objet.Value = CStr(NBupdates) & " Update(s) disponible(s)"
         End If
 
-
     End Sub
-    Public Sub InstallUpdates()
+
+    Private Sub InstallUpdates(ByVal Objet As Object)
 
         ' Info de l'agent
         Dim oAgentInfo = CreateObject("Microsoft.Update.AgentInfo")
@@ -821,10 +784,22 @@ Imports System.Runtime.InteropServices
             Dim update = searchResult.Updates.Item(I)
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", update.Title)
         Next
-        If searchResult.Updates.Count = 0 Then
+        Dim NBupdates As Integer = searchResult.Updates.Count
+        If NBupdates = 0 Then
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "There are no applicable updates.")
             Exit Sub
         End If
+
+        'mise à jour de la valeur du composant
+        If TypeOf Objet.Value Is Boolean Then
+            If NBupdates > 0 Then Objet.Value = True Else Objet.Value = False
+        ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
+            Objet.Value = CInt(NBupdates)
+        Else
+            Objet.Value = CStr(NBupdates) & " Update(s) disponible(s)"
+        End If
+
+
         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Creating collection of updates to download:")
 
         'Dim updatesToDownload = CreateObject("Microsoft.Update.UpdateColl")
@@ -837,18 +812,11 @@ Imports System.Runtime.InteropServices
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", I + 1 & ">  skipping: " & update.Title & " because it requires user input")
             Else
                 If update.EulaAccepted = False Then
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "> note: " & update.Title & " has a license agreement that must be accepted:")
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", update.EulaText)
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Do you accept this license agreement? (Y/N) ....Y autoupdate Accpete pour vous")
-                    ' strInput = WScript.StdIn.Readline
-                    '  WScript.Echo()
-                    'If (strInput = "Y" Or strInput = "y") Then
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "> note: " & update.Title & " has a license agreement automatically accepted:")
+                    '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", update.EulaText)
+                    '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Do you accept this license agreement? (Y/N) ....Y autoupdate Accpete pour vous")
                     update.AcceptEula()
                     addThisUpdate = True
-                    'Else
-                    ' WScript.Echo(I + 1 & "> skipping: " & update.Title & _
-                    ' " because the license agreement was declined")
-                    'End If
                 Else
                     addThisUpdate = True
                 End If
@@ -880,7 +848,7 @@ Imports System.Runtime.InteropServices
 
             ' End If
         Next
-       
+
         'Dim updatesToDownload = New WUApiLib.UpdateCollection
 
         Dim updatesToInstall = CreateObject("Microsoft.Update.UpdateColl")
@@ -925,16 +893,16 @@ Imports System.Runtime.InteropServices
         For i = 0 To updatesToInstall.Count - 1
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", i + 1 & "> " & updatesToInstall.Item(i).Title & ": " & installationResult.GetUpdateResult(i).ResultCode)
         Next
-       
+
 
     End Sub
 
-    Public Sub systemdown()
+    Private Sub systemdown()
         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "System will be shutdown ")
         System.Diagnostics.Process.Start("ShutDown", "/s")
     End Sub
 
-    Public Sub systemreboot()
+    Private Sub systemreboot()
         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "System will be shutdown ")
         System.Diagnostics.Process.Start("ShutDown", "/r")
 
@@ -959,7 +927,7 @@ Imports System.Runtime.InteropServices
         '                       yy is the minor reason code (positive integer less than 65536)
     End Sub
 
-    Public Sub myprocess()
+    Private Sub myprocess()
         ' http://msdn.microsoft.com/en-us/library/system.diagnostics.process.workingset64.aspx
         ' http://msdn.microsoft.com/en-us/library/system.diagnostics.process.virtualmemorysize64.aspx
 
@@ -976,8 +944,6 @@ Imports System.Runtime.InteropServices
         totalBytesOfMemoryUsed = Nothing
 
     End Sub
-
-
 
     Private Function ResizeKb(ByVal b As Double) As String
 
@@ -1025,8 +991,8 @@ Imports System.Runtime.InteropServices
             ' CDRom, Fixed, Unknown, Network, NoRootDirectory, Ram, Removable, or Unknown. 
             ' _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File type: {0}", d.DriveType)
             'CheckHDD(hddcpt)[0] = 
-            '            CheckHDD = CheckHDD & "/HDD" & hddcpt & "(" & My.Computer.FileSystem.Drives(hddcpt).RootDirectory.ToString & ")"
-            CheckHDD = CheckHDD & "/HDD" & My.Computer.FileSystem.Drives(hddcpt).RootDirectory.ToString
+            '            CheckHDD = CheckHDD & "-HDD" & hddcpt & "(" & My.Computer.FileSystem.Drives(hddcpt).RootDirectory.ToString & ")"
+            CheckHDD = CheckHDD & My.Computer.FileSystem.Drives(hddcpt).RootDirectory.ToString & " "
 
         Next
         d = Nothing
