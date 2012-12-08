@@ -410,7 +410,7 @@ Imports System.Runtime.InteropServices
                     If TypeOf Objet.Value Is Boolean Then
                         If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then Objet.Value = True Else Objet.Value = False
                     ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
-                        If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then Objet.Value = reply.RoundtripTime Else Objet.Value = 0
+                        If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then Objet.Value = reply.RoundtripTime Else Objet.Value = 999
                     Else
                         If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then Objet.Value = "OK" Else Objet.Value = "NOK"
                     End If
