@@ -722,8 +722,8 @@ Imports System.Xml
             Add_LibelleDevice("ADRESSE2", "Fin URL (Optionnel)", "")
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "Modele", "modèle du device: IPX800,RSS,Arduino")
-            Add_LibelleDevice("REFRESH", "Refresh", "")
-            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
+            'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
+            'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)

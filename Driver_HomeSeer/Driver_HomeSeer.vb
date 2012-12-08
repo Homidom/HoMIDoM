@@ -531,8 +531,6 @@ Public Class Driver_HomeSeer
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
-            Add_LibelleDevice("REFRESH", "Refresh", "")
-            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "HomeSeer New", ex.Message)
         End Try

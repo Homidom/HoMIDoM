@@ -836,8 +836,8 @@ Public Class Driver_ZWave
                 Add_LibelleDevice("ADRESSE2", "Label de la donnée", "Temperature, Relative Humidity, Battery Level")
                 Add_LibelleDevice("SOLO", "@", "")
                 Add_LibelleDevice("MODELE", "@", "")
-                Add_LibelleDevice("REFRESH", "Refresh", "")
-                Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
+                'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
+                'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
 
             Catch ex As Exception

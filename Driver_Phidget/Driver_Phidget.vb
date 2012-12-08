@@ -442,9 +442,8 @@ Public Class Driver_Phidget
         Add_LibelleDevice("ADRESSE2", "@", "")
         Add_LibelleDevice("SOLO", "@", "")
         Add_LibelleDevice("MODELE", "@", "")
-        Add_LibelleDevice("REFRESH", "Refresh", "")
-        Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
-
+            'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
+        'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
     End Sub
 #End Region
 

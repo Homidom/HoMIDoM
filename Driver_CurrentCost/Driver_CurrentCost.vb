@@ -506,8 +506,6 @@ Public Class Driver_CurrentCost
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
-            Add_LibelleDevice("REFRESH", "Refresh", "")
-            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.nom & " New", ex.Message)
         End Try

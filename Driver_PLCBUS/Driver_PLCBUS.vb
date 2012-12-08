@@ -550,7 +550,7 @@ Imports System.IO.Ports
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
             Add_LibelleDevice("REFRESH", "Fastpooling/STATUS_REQUEST (Secondes)", "Permet de faire un STATUS_REQUEST (ex: L2) ou du fastpooling (ex: 'L')")
-            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
+            'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
             'dictionnaire Commande STRING -> INT
             com_to_hex.Add("ALL_UNITS_OFF", 0)

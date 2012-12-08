@@ -496,8 +496,8 @@ Public Class Driver_X10_CM15
         Add_LibelleDevice("ADRESSE2", "Type de module", "Type de module 0:sendplc (courant porteur), 1:sendrf (RF)")
         Add_LibelleDevice("SOLO", "@", "")
         Add_LibelleDevice("MODELE", "@", "")
-        Add_LibelleDevice("REFRESH", "Refresh", "")
-        Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
+        'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
+        'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
     End Sub
 #End Region
