@@ -718,8 +718,8 @@ Imports System.Runtime.InteropServices
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "Type d'action", "PING, INFO-x, WUAU", "PING|INFO-ALL|INFO-MEMORY_USED|INFO-MEMORY_FREE|INFO-CPU|INFO-BATTERY_STATUS|INFO-BATTERY_PERCENT|INFO-HDD|WUAU")
 
-            Add_LibelleDevice("REFRESH", "Refresh", "")
-            Add_LibelleDevice("LASTCHANGEDUREE", "@", "")
+            'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
+            'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
             
         Catch ex As Exception
             ' WriteLog("ERR: New Exception : " & ex.Message)

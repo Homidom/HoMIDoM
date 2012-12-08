@@ -700,7 +700,6 @@ Imports System.Web.HttpUtility
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
             Add_LibelleDevice("REFRESH", "@", "")
-            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "FOOBAR New", ex.Message)
         End Try

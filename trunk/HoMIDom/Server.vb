@@ -2130,7 +2130,7 @@ Namespace HoMIDom
                             Case "REFRESH"
                                 _ListDrivers.Item(i).Refresh = Parametre
                             Case "MODELE"
-                                _ListDrivers.Item(i).Refresh = Parametre
+                                _ListDrivers.Item(i).Modele = Parametre
                             Case "STARTAUTO"
                                 _ListDrivers.Item(i).StartAuto = Parametre
                             Case "START"
@@ -2716,13 +2716,10 @@ Namespace HoMIDom
                     End If
                 Next
 
-                '----- Démarre le Timer -----
-                'TimerSecond.Interval = 1000
-                'AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
-                'TimerSecond.Enabled = True
-
-                'Change l'etat du server
-                Etat_server = True
+                '----- Démarre le Timer (triggers timers, actions programmées...) -----
+                TimerSecond.Interval = 1000
+                AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
+                TimerSecond.Enabled = True
 
                 'test biblio
                 '
@@ -2918,16 +2915,34 @@ Namespace HoMIDom
                     '        'End If
                     '        'retour = sqlite_homidom.nonquery("UPDATE config Set valeur=" & GetServerVersion() & " WHERE parametre='version_dll'")
                     '        'If Mid(retour, 1, 4) = "ERR:" Then
-                    '        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update Date_Install", "Erreur Requete sqlite : " & retour)
+                    '        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update version_dll", "Erreur Requete sqlite : " & retour)
                     '        'End If
 
                     'on ouvre la page web de remerciement
-                    'Process.Start("http://www.homidom.com/afterinstall-" & Now.ToString("yyyMMddHHmmss") & "-" & HtmlEncode(uid) & "-" & HtmlEncode(GetServerVersion().Replace(".", "_")) & ".html")
+                    'Process.Start("http://www.homidom.com/premiereinstall-" & Now.ToString("yyyMMddHHmmss") & "-" & HtmlEncode(uid) & "-" & HtmlEncode(GetServerVersion().Replace(".", "_")) & ".html")
 
                     ''Gestion clé enregistrement
 
                 Else
+                    If db_version <> GetServerVersion() Then
+                        'Homidom.dll a été mis à jour, on update la DB : version et date_maj puis remerciements
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Mise à jour :Remerciements")
 
+                        ''on maj la db
+                        'retour = sqlite_homidom.nonquery("UPDATE config Set valeur=" & Now.ToString("yyyMMdd HH:mm:ss") & " WHERE parametre='date_maj'")
+                        'If Mid(retour, 1, 4) = "ERR:" Then
+                        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update date_maj", "Erreur Requete sqlite : " & retour)
+                        'End If
+                        'retour = sqlite_homidom.nonquery("UPDATE config Set valeur=" & GetServerVersion() & " WHERE parametre='version_dll'")
+                        'If Mid(retour, 1, 4) = "ERR:" Then
+                        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update version_dll", "Erreur Requete sqlite : " & retour)
+                        'End If
+
+                        'on ouvre la page web de remerciement
+                        'Process.Start("http://www.homidom.com/miseajour-" & Now.ToString("yyyMMddHHmmss") & "-" & HtmlEncode(uid) & "-" & HtmlEncode(GetServerVersion().Replace(".", "_")) & ".html")
+
+                        ''Gestion clé enregistrement
+                    End If
 
                 End If
 
@@ -2935,6 +2950,10 @@ Namespace HoMIDom
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start Check", "Exception : " & ex.Message)
             End Try
+
+            'Change l'etat du server
+            Etat_server = True
+
         End Sub
 
         ''' <summary>Arrêt du serveur</summary>

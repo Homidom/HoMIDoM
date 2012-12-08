@@ -450,7 +450,7 @@ Namespace HoMIDom
                         If MyTimer.Enabled Then MyTimer.Stop()
                         'si le serveur n'a pas fini de démarrer, on décale le lancement du timer pour eviter les conflits
                         If Not _Server.Etat_server Then System.Threading.Thread.Sleep(1100)
-                        MyTimer.Interval = _Refresh
+                        MyTimer.Interval = _Refresh * 1000
                         MyTimer.Start()
                     Else
                         _Refresh = 0

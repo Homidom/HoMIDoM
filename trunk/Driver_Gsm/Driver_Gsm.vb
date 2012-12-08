@@ -655,12 +655,6 @@ Imports System.IO.Ports
 
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "Type de stockage", "Type de stockage : GSM/SIM", "GSM|SIM")
-            'Add_LibelleDevice("BAUDRATE", "Vitesse du port", " BAUD :300|600|1200|2400|9600|14400|19200|38400|57600|115200", "300|600|1200|2400|9600|14400|19200|38400|57600|115200")
-
-
-            Add_LibelleDevice("REFRESH", "Refresh", "")
-            Add_LibelleDevice("LASTCHANGEDUREE", "@", "")
-            ' Add_LibelleDevice("CommTimeout", "LastChange Durée", "")
 
         Catch ex As Exception
             ' WriteLog("ERR: New Exception : " & ex.Message)

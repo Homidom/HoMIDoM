@@ -1568,7 +1568,7 @@ Imports System.Media
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun/AC/ACEU/ANSLUT/ARC/BLYSS/ELROAB400D/EMW100/EMW200/LIGHTWAVERF/IMPULS/PHILIPS/WAVEMAN/X10", "aucun|AC|ACEU|ANSLUT|ARC|BLYSS|ELROAB400D|EMW100|EMW200|IMPULS|LIGHTWAVERF|PHILIPS|WAVEMAN|X10")
             Add_LibelleDevice("REFRESH", "@", "")
-            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
+            'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
         Catch ex As Exception
             WriteLog("ERR: New Exception : " & ex.Message)

@@ -588,7 +588,7 @@ Imports System.Globalization
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
             Add_LibelleDevice("REFRESH", "@", "")
-            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
+            'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER New", ex.Message)
         End Try

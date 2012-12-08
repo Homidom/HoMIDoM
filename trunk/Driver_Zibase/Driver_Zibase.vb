@@ -522,7 +522,7 @@ Imports ZibaseDll
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun / BROADC / CHACON / DOMIA / RFS10 / VIS433 / VIS868 / X10 / XDD433 / XDD868 / XDD868_INTER_SHUTTER / XDD868_BOILER_AC / XDD868_PILOT_WIRE / ZWAVE", "aucun|BROADC|CHACON|DOMIA|RFS10|VIS433|VIS868|X10|XDD868|XDD868_INTER_SHUTTER|XDD868_BOILER_AC|XDD868_PILOT_WIRE|ZWAVE")
             Add_LibelleDevice("REFRESH", "@", "")
-            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
+            'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase New", ex.Message)
         End Try

@@ -653,7 +653,7 @@ Imports System.Globalization
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : AC / ACEU / X10 / ARC / WAVEMAN", "AC|ACEU|ARC|WAVEMAN|X10")
             Add_LibelleDevice("REFRESH", "@", "")
-            Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
+            ' Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXmitter New", ex.Message)
         End Try
