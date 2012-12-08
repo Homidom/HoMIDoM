@@ -459,12 +459,12 @@ Imports System.Runtime.InteropServices
                                     If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File type: ", drv.DriveType)
                                     If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Volume label: ", drv.VolumeLabel)
                                     If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File system: ", drv.DriveFormat)
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user:", (drv.AvailableFreeSpace / (1024 ^ 2) & " Mo"))
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total available space:          ", (drv.TotalFreeSpace / (1024 ^ 2) & " Mo"))
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total size of drive:            ", (drv.TotalSize / (1024 ^ 2) & " Mo"))
+                                    '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user:", (drv.AvailableFreeSpace / (1024 ^ 2) & " Mo"))
+                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total available space:          ", CType(drv.TotalFreeSpace / (1024 ^ 2), Integer) & " Mo")
+                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total size of drive:            ", CType(drv.TotalSize / (1024 ^ 2), Integer) & " Mo")
 
                                 Else
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user: ", "0 bytes")
+                                    '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user: ", "0 bytes")
                                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total available space:          0 bytes", "0 bytes")
                                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total size of drive:            0 bytes ", "0 bytes")
                                 End If
@@ -582,12 +582,12 @@ Imports System.Runtime.InteropServices
                                     If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File type: ", drv.DriveType)
                                     If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Volume label: ", drv.VolumeLabel)
                                     If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  File system: ", drv.DriveFormat)
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user:", (drv.AvailableFreeSpace / (1024 ^ 2) & " Mo"))
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total available space:          ", (drv.TotalFreeSpace / (1024 ^ 2) & " Mo"))
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total size of drive:            ", (drv.TotalSize / (1024 ^ 2) & " Mo"))
+                                    ' _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user:", (drv.AvailableFreeSpace / (1024 ^ 2) & " Mo"))
+                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total available space:          ", CType(drv.TotalFreeSpace / (1024 ^ 2), Integer) & " Mo")
+                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total size of drive:            ", CType(drv.TotalSize / (1024 ^ 2), Integer) & " Mo")
 
                                 Else
-                                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user: ", "0 bytes")
+                                    ' _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Available space to current user: ", "0 bytes")
                                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total available space:          0 bytes", "0 bytes")
                                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "  Total size of drive:            0 bytes ", "0 bytes")
                                 End If
