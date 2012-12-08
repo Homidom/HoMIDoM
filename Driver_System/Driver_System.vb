@@ -309,25 +309,25 @@ Imports System.Runtime.InteropServices
         Try
 
             Dim retour As String = "0"
-            Select Case UCase(Champ)
-                Case "ADRESSE1" ' Action 
-                    If Value IsNot Nothing Then
-                        'PING, INFO, WUAU
-                        If (Value <> "PING" And Value <> "INFO" And Value <> "WUAU") Then
-                            retour = "Veuillez saisir un fonctionnalité disponible : PING, INFO ou WUAU."
-                        End If
-                    End If
+            'Select Case UCase(Champ)
+            '    Case "ADRESSE1" ' Action 
+            '        If Value IsNot Nothing Then
+            '            'PING, INFO, WUAU
+            '            If (Value <> "PING" And Value <> "INFO" And Value <> "WUAU") Then
+            '                retour = "Veuillez saisir un fonctionnalité disponible : PING, INFO ou WUAU."
+            '            End If
+            '        End If
 
-                Case "ADRESSE2" 'Parametre 
-                    If Value IsNot Nothing Then
-                        If Value = "" Or Value = " " Then
-                            'PING <IP>,
-                            'INFO Memory/CPU/Battery/DisqueC/DisqueD/ALL 
-                            'WUAU Display / Update
-                            retour = "Veuillez saisir un <parametre> compatible avec votre Action : PING <IP> ou <Hostmane> ou <DomainName>, INFO MEMORY/CPU/BATTERY" & CheckHDD() & " ou WUAU DISPLAY/UPDATE."
-                        End If
-                    End If
-            End Select
+            '    Case "ADRESSE2" 'Parametre 
+            '        If Value IsNot Nothing Then
+            '            If Value = "" Or Value = " " Then
+            '                'PING <IP>,
+            '                'INFO Memory/CPU/Battery/DisqueC/DisqueD/ALL 
+            '                'WUAU Display / Update
+            '                retour = "Veuillez saisir un <parametre> compatible avec votre Action : PING <IP> ou <Hostmane> ou <DomainName>, INFO MEMORY/CPU/BATTERY" & CheckHDD() & " ou WUAU DISPLAY/UPDATE."
+            '            End If
+            '        End If
+            'End Select
 
 
             Return retour
@@ -402,11 +402,14 @@ Imports System.Runtime.InteropServices
                     Dim reply As System.Net.NetworkInformation.PingReply
                     reply = ping.Send(Objet.adresse1.ToString)
 
-                    If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Ping " & Objet.adresse1.ToString & " : " & reply.RoundtripTime & "ms")
-                    Else
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "Ping " & Objet.adresse1.ToString & " : NOK")
+                    If _DEBUG Then
+                        If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "Ping " & Objet.adresse1.ToString & " : " & reply.RoundtripTime & "ms")
+                        Else
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "Ping " & Objet.adresse1.ToString & " : NOK")
+                        End If
                     End If
+
                     If TypeOf Objet.Value Is Boolean Then
                         If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then Objet.Value = True Else Objet.Value = False
                     ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
@@ -465,6 +468,7 @@ Imports System.Runtime.InteropServices
                         Case "MEMORY_FREE"
                             'Dim result As Double = System.Math.Round((My.Computer.Info.AvailablePhysicalMemory) / (1024 * 1024), 2)
                             Dim result As Integer = CInt((My.Computer.Info.AvailablePhysicalMemory) / (1024 * 1024))
+                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "MEMORY_FREE:  " & CStr(result) & " Mo")
                             If TypeOf Objet.Value Is Boolean Then
                                 If result > 0 Then Objet.Value = True Else Objet.Value = False
                             ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
@@ -475,6 +479,7 @@ Imports System.Runtime.InteropServices
                         Case "MEMORY_USED"
                             'Dim result As Double = System.Math.Round((My.Computer.Info.TotalPhysicalMemory) / (1024 * 1024), 2) - System.Math.Round((My.Computer.Info.AvailablePhysicalMemory) / (1024 * 1024), 2)
                             Dim result As Integer = CInt((My.Computer.Info.TotalPhysicalMemory) / (1024 * 1024)) - CInt((My.Computer.Info.AvailablePhysicalMemory) / (1024 * 1024))
+                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "MEMORY_USED:  " & CStr(result) & " Mo")
                             If TypeOf Objet.Value Is Boolean Then
                                 If result > 0 Then Objet.Value = True Else Objet.Value = False
                             ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
@@ -487,6 +492,16 @@ Imports System.Runtime.InteropServices
                             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "System", "CPU information non implémenté")
                         Case "BATTERY_STATUS"
                             Dim psBattery As PowerStatus = SystemInformation.PowerStatus
+                            If _DEBUG Then
+                                Dim retour As String
+                                Select Case psBattery.PowerLineStatus
+                                    Case "0" : retour = "battery"
+                                    Case "1" : retour = "Secteur"
+                                    Case Else : retour = "unknow"
+                                End Select
+                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "BATTERY_STATUS:  " & retour)
+                            End If
+
                             If TypeOf Objet.Value Is Boolean Then
                                 If psBattery.PowerLineStatus = 1 Then Objet.Value = True Else Objet.Value = False
                             ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
@@ -500,6 +515,7 @@ Imports System.Runtime.InteropServices
                             End If
                         Case "BATTERY_PERCENT"
                             Dim psBattery As PowerStatus = SystemInformation.PowerStatus
+                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "BATTERY_PERCENT:  " & CStr(psBattery.BatteryLifePercent * 100) & "%")
                             If TypeOf Objet.Value Is Boolean Then
                                 If psBattery.BatteryLifePercent * 100 >= 100 Then Objet.Value = True Else Objet.Value = False
                             ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
@@ -512,6 +528,7 @@ Imports System.Runtime.InteropServices
                             'Adresse2 contient la lettre du disque "C:"
                             Dim drv As New DriveInfo(Objet.adresse1.ToString)
                             If drv.IsReady Then
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "HDD " & Objet.adresse1.ToString & ": " & CStr(CInt((drv.TotalFreeSpace / (1024 ^ 2)))) & " Mo Free")
                                 If TypeOf Objet.Value Is Boolean Then
                                     If (drv.TotalFreeSpace / (1024 ^ 2)) > 0 Then Objet.Value = True Else Objet.Value = False
                                 ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
@@ -695,7 +712,7 @@ Imports System.Runtime.InteropServices
             'Libellé Device
 
             '- adresse1=  type d'action : PING, INFO, UPDATE...
-            Add_LibelleDevice("ADRESSE1", "Paramètre (ou adresse virtuelle)", "Ping: <IP>-<Hostname>-<DomainName>, INFO-HDD: " & CheckHDD() & ", adresse virtuelle")
+            Add_LibelleDevice("ADRESSE1", "Paramètre (ou adresse virtuelle)", "Ping: <IP>-<Hostname>-<DomainName>, INFO-HDD: " & CheckHDD() & ", adresse virtuelle", "PING|INFO-ALL|INFO-MEMORY_USED|INFO-MEMORY_FREE|INFO-CPU|INFO-BATTERY_STATUS|INFO-BATTERY_PERCENT|INFO-HDD|WUAU")
             Add_LibelleDevice("ADRESSE2", "@", "")
 
             Add_LibelleDevice("SOLO", "@", "")
