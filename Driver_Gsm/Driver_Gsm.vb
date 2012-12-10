@@ -679,8 +679,8 @@ Imports System.IO.Ports
         port_name = numero 'pour se rapeller du nom du port 
         Try
             If Not _IsConnect Then
+                Dim sIncomming As String = ""
                 Try
-                    Dim sIncomming As String = ""
 
                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GSM Ouvrir", "Testing du model/téléphone :")
 
@@ -700,7 +700,12 @@ Imports System.IO.Ports
                     ATport.ReadTimeout = 100
                     ATport.WriteTimeout = 500
                     ATport.Open()
-                    
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "   * Erreur dans l'ouverture du port : " & ex.Message)
+                    Return ("ERR: Port COM non ouvert : " & ex.Message)
+                End Try
+
+                Try
                     ' regardons ce que votre modem a dans le ventre !
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CLAC Start listes des commandes du modem :")
                     ATport.WriteLine("AT+CLAC" & vbCrLf) ' vbcrlf
@@ -801,53 +806,56 @@ Imports System.IO.Ports
         End Try
 
         'ouverture du port
-        Select Case _MODE
-            Case "PDU"
-                If Not _IsConnect Then
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * ouverture du port : " & port_name & " à " & _BAUD & " bauds")
-                    Dim portnumber As Integer
-                    If (Integer.TryParse(port_name.Substring(3), portnumber)) Then
-                        comm = New GsmCommMain(portnumber, _BAUD, 100) 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
+        Try
+            Select Case _MODE
+                Case "PDU"
+                    If Not _IsConnect Then
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * ouverture du port : " & port_name & " à " & _BAUD & " bauds")
+                        Dim portnumber As Integer
+                        If (Integer.TryParse(port_name.Substring(3), portnumber)) Then
+                            comm = New GsmCommMain(portnumber, _BAUD, 100) 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
+                        End If
+                        comm.Open()
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "   * Activation des notifications")
+                        comm.EnableMessageNotifications()
+                        Try
+                            comm.EnableMessageRouting()
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "   * Activation du routage des SMS")
+                            _SMSROUTING = True
+                        Catch ex As Exception
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "   * Désactivation du routage des SMS car non supporté par le modem")
+                            _SMSROUTING = False
+                        End Try
+
+                        Return ("Port " & _Com & " ouvert à " & _BAUD & " bauds.")
+                    Else
+                        Return ("Port " & _Com & " dejà ouvert")
                     End If
-                    comm.Open()
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "   * Activation des notifications")
-                    comm.EnableMessageNotifications()
-                    Try
-                        comm.EnableMessageRouting()
-                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "   * Activation du routage des SMS")
-                        _SMSROUTING = True
-                    Catch ex As Exception
-                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "   * Désactivation du routage des SMS car non supporté par le modem")
-                        _SMSROUTING = False
-                    End Try
 
-                    Return ("Port " & _Com & " ouvert à " & _BAUD & " bauds.")
-                Else
-                    Return ("Port " & _Com & " dejà ouvert")
-                End If
-
-            Case "TEXTE"
-                If Not _IsConnect Then
-                    ATport.PortName = port_name 'nom du port : COM1
-                    ATport.BaudRate = _BAUD 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
-                    ATport.Parity = Parity.None 'pas de parité
-                    ATport.StopBits = StopBits.One '1 bit d'arrêt par octet
-                    ATport.DataBits = 8 'nombre de bit par octet
-                    'RS232Port.Encoding = System.Text.Encoding.GetEncoding(1252)  'Extended ASCII (8-bits)
-                    ATport.Handshake = Handshake.None
-                    ATport.ReadBufferSize = CInt(4096)
-                    'RS232Port.ReceivedBytesThreshold = 1
-                    ATport.ReadTimeout = 100
-                    ATport.WriteTimeout = 500
-                    ATport.Open()
-                    Return ("Port " & port_name & " ouvert à " & _BAUD & " bauds.")
-                Else
-                    Return ("Port " & port_name & " dejà ouvert")
-                End If
-            Case Else
-                Return ("Port " & port_name & "  non ouvert")
-        End Select
-
+                Case "TEXTE"
+                    If Not _IsConnect Then
+                        ATport.PortName = port_name 'nom du port : COM1
+                        ATport.BaudRate = _BAUD 'vitesse du port 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200
+                        ATport.Parity = Parity.None 'pas de parité
+                        ATport.StopBits = StopBits.One '1 bit d'arrêt par octet
+                        ATport.DataBits = 8 'nombre de bit par octet
+                        'RS232Port.Encoding = System.Text.Encoding.GetEncoding(1252)  'Extended ASCII (8-bits)
+                        ATport.Handshake = Handshake.None
+                        ATport.ReadBufferSize = CInt(4096)
+                        'RS232Port.ReceivedBytesThreshold = 1
+                        ATport.ReadTimeout = 100
+                        ATport.WriteTimeout = 500
+                        ATport.Open()
+                        Return ("Port " & port_name & " ouvert à " & _BAUD & " bauds.")
+                    Else
+                        Return ("Port " & port_name & " dejà ouvert")
+                    End If
+                Case Else
+                    Return ("Port " & port_name & "  non ouvert")
+            End Select
+        Catch ex As Exception
+            Return ("ERR: Port COM non ouvert" & ex.Message)
+        End Try
     End Function
 
     ''' <summary>Fermer le port du modem</summary>
