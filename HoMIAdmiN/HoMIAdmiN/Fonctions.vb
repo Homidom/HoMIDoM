@@ -11,10 +11,16 @@ Module Fonctions
             If array IsNot Nothing Then
                 ImgSource = New BitmapImage()
                 ImgSource.BeginInit()
+                ImgSource.CacheOption = BitmapCacheOption.OnLoad
+                ImgSource.CreateOptions = BitmapCreateOptions.DelayCreation
                 ImgSource.StreamSource = New MemoryStream(array)
+                array = Nothing
                 ImgSource.EndInit()
+                If ImgSource.CanFreeze Then ImgSource.Freeze()
             End If
+
             Return ImgSource
+            ImgSource = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub ConvertArrayToImage: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
             Return Nothing
