@@ -5,22 +5,27 @@ Imports System.Net
 Module Fonctions
 
     Public Function ConvertArrayToImage(ByVal value As Object) As BitmapImage
-        Dim ImgSource As BitmapImage = Nothing
-        Dim array As Byte() = TryCast(value, Byte())
+        Try
+            Dim ImgSource As BitmapImage = Nothing
+            Dim array As Byte() = TryCast(value, Byte())
 
-        If array IsNot Nothing Then
-            ImgSource = New BitmapImage()
-            ImgSource.BeginInit()
-            ImgSource.CacheOption = BitmapCacheOption.OnLoad
-            ImgSource.CreateOptions = BitmapCreateOptions.DelayCreation
-            ImgSource.StreamSource = New MemoryStream(array)
-            array = Nothing
-            ImgSource.EndInit()
-            If ImgSource.CanFreeze Then ImgSource.Freeze()
-        End If
+            If array IsNot Nothing Then
+                ImgSource = New BitmapImage()
+                ImgSource.BeginInit()
+                ImgSource.CacheOption = BitmapCacheOption.OnLoad
+                ImgSource.CreateOptions = BitmapCreateOptions.DelayCreation
+                ImgSource.StreamSource = New MemoryStream(array)
+                array = Nothing
+                ImgSource.EndInit()
+                If ImgSource.CanFreeze Then ImgSource.Freeze()
+            End If
 
-        Return ImgSource
-        ImgSource = Nothing
+            Return ImgSource
+            ImgSource = Nothing
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub ConvertArrayToImage: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            Return Nothing
+        End Try
     End Function
 
 

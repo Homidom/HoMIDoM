@@ -300,4 +300,7 @@ Public Class uHisto
     End Sub
 
 
+    Private Sub uHisto_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
+        Test.Dispose()
+    End Sub
 End Class

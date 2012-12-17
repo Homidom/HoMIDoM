@@ -56,8 +56,6 @@ Class Window1
             myBrushRouge.GradientStops.Add(New GradientStop(Colors.Red, 0.5))
             myBrushRouge.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
 
-
-            'CloseTreeView()
             flagTreeV = True
 
             spl.Close()
@@ -110,6 +108,8 @@ Class Window1
                     LOG.ToolTip = a
                     ImgLog.ToolTip = a
                     LOG.Content = Mid(list(0), 1, 100) & "..."
+                    a = ""
+                    list = Nothing
 
                     list = myService.GetLastLogsError
                     If list.Count > 0 Then
@@ -117,7 +117,7 @@ Class Window1
                         For Each logerror As String In list
                             If logerror <> "" And logerror <> " " Then
                                 _tool &= logerror & vbCrLf
-                                ImgError.Visibility = Windows.Visibility.Visible
+                                If ImgError.Visibility <> Windows.Visibility.Visible Then ImgError.Visibility = Windows.Visibility.Visible
                                 ImgError.ToolTip = _tool
                             End If
                         Next
@@ -133,7 +133,7 @@ Class Window1
                         For Each logerror As String In list
                             If logerror <> "" And logerror <> " " Then
                                 _tool &= logerror & vbCrLf
-                                ImgDeviceNoMaj.Visibility = Windows.Visibility.Visible
+                                If ImgDeviceNoMaj.Visibility <> Windows.Visibility.Visible Then ImgDeviceNoMaj.Visibility = Windows.Visibility.Visible
                                 ImgDeviceNoMaj.ToolTip = _tool
                             End If
                         Next
@@ -369,7 +369,6 @@ Class Window1
     Private Sub Serveur_notconnected_action()
         MessageBox.Show("Action Impossible, le serveur n'est pas connecté !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
         ClearAllTreeview() 'vide le treeview
-        'CloseTreeView() 'ferme le treeview
         CanvasRight.Children.Clear()  'ferme le menu principal
         PageConnexion() 'affiche la fenetre de connexion
     End Sub
@@ -377,15 +376,6 @@ Class Window1
 #End Region
 
 #Region "Treeview"
-
-    Private Sub CloseTreeView()
-        Try
-            DKpanel.Width = 0
-            flagTreeV = False
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub CloseTreeView: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
 
     Private Sub ShowTreeView()
         Try
@@ -413,6 +403,8 @@ Class Window1
             TreeViewTrigger.Items.Clear()
             TreeViewMacro.Items.Clear()
             TreeViewHisto.Items.Clear()
+
+            Me.UpdateLayout()
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub ClearAllTreeview: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -473,9 +465,13 @@ Class Window1
                 Else
                     uri = MyRep & "\Images\icones\Zone_32.png"
                     bmpImage.BeginInit()
+                    bmpImage.CacheOption = BitmapCacheOption.OnLoad
+                    bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
                     bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
                     bmpImage.EndInit()
+                    If bmpImage.CanFreeze Then bmpImage.Freeze()
                     img.Source = bmpImage
+                    bmpImage = Nothing
                 End If
 
                 Dim label As New Label
@@ -511,6 +507,7 @@ Class Window1
                 TreeViewZone.Items.Add(newchild)
             Next
 
+            ListeZones = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffZone: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -565,9 +562,13 @@ Class Window1
                 Else
                     uri = MyRep & "\Images\icones\User_32.png"
                     bmpImage.BeginInit()
+                    bmpImage.CacheOption = BitmapCacheOption.OnLoad
+                    bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
                     bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
                     bmpImage.EndInit()
+                    If bmpImage.CanFreeze Then bmpImage.Freeze()
                     img.Source = bmpImage
+                    bmpImage = Nothing
                 End If
 
 
@@ -604,6 +605,7 @@ Class Window1
                 TreeViewUser.Items.Add(newchild)
             Next
 
+            ListeUsers = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffUser: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -654,7 +656,7 @@ Class Window1
                 img.Height = 20
                 img.Width = 20
                 img.Margin = New Thickness(2)
-                If Trim(Drv.Picture) <> "" Then
+                If String.IsNullOrEmpty(Drv.Picture) = False Then
                     img.Source = ConvertArrayToImage(myService.GetByteFromImage(Drv.Picture))
                 End If
 
@@ -670,12 +672,6 @@ Class Window1
                     Rect.Width = 9
                     Rect.Height = 9
 
-                    'a priori ne sert pas
-                    'Dim myBrush As New RadialGradientBrush()
-                    'myBrush.GradientStops.Add(New GradientStop(Colors.LightGreen, 0.0))
-                    'myBrush.GradientStops.Add(New GradientStop(Colors.Green, 0.5))
-                    'myBrush.GradientStops.Add(New GradientStop(Colors.DarkGreen, 1.0))
-
                     Rect.Fill = Brushes.DarkGreen 'myBrush
                     Rect.Tag = Drv.ID
                     Rect.ToolTip = "Arrêter le driver"
@@ -686,13 +682,6 @@ Class Window1
                     Dim Rect As New Rectangle
                     Rect.Width = 9
                     Rect.Height = 9
-
-                    'a priori ne sert pas
-                    'Dim myBrush As New RadialGradientBrush()
-                    'myBrush.GradientOrigin = New Point(0.75, 0.25)
-                    'myBrush.GradientStops.Add(New GradientStop(Colors.Yellow, 0.0))
-                    'myBrush.GradientStops.Add(New GradientStop(Colors.Red, 0.5))
-                    'myBrush.GradientStops.Add(New GradientStop(Colors.DarkRed, 1.0))
 
                     Rect.Fill = Brushes.Red 'myBrush
                     Rect.ToolTip = "Démarrer le driver"
@@ -802,6 +791,7 @@ Class Window1
                 label = Nothing
                 Graph = Nothing
             Next
+
             ListeDrivers = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffDriver: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -882,10 +872,12 @@ Class Window1
                     Dim uri As String = ""
                     uri = MyRep & "\Images\Icones\Composant_32.png"
                     bmpImage.BeginInit()
+                    bmpImage.CacheOption = BitmapCacheOption.OnLoad
+                    bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
                     bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
                     bmpImage.EndInit()
+                    If bmpImage.CanFreeze Then bmpImage.Freeze()
                     img.Source = bmpImage
-                    uri = Nothing
                     bmpImage = Nothing
                 End If
                 stack.Children.Add(img)
@@ -1030,6 +1022,7 @@ Class Window1
                 stack = Nothing
                 tl = Nothing
             Next
+
             ListeDevices = Nothing
             ListeZones = Nothing
         Catch ex As Exception
@@ -1151,9 +1144,13 @@ Class Window1
 
                 uri = MyRep & "\Images\Icones\Macro_32.png"
                 bmpImage.BeginInit()
+                bmpImage.CacheOption = BitmapCacheOption.OnLoad
+                bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
                 bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
                 bmpImage.EndInit()
+                If bmpImage.CanFreeze Then bmpImage.Freeze()
                 img.Source = bmpImage
+                bmpImage = Nothing
 
                 stack.Children.Add(img)
                 stack.Children.Add(label)
@@ -1166,6 +1163,7 @@ Class Window1
                 TreeViewMacro.Items.Add(newchild)
             Next
 
+            ListeMacros = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffScene: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1248,9 +1246,13 @@ Class Window1
                 End If
 
                 bmpImage.BeginInit()
+                bmpImage.CacheOption = BitmapCacheOption.OnLoad
+                bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
                 bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
                 bmpImage.EndInit()
+                If bmpImage.CanFreeze Then bmpImage.Freeze()
                 img.Source = bmpImage
+                bmpImage = Nothing
 
                 stack.Children.Add(img)
                 stack.Children.Add(label)
@@ -1263,6 +1265,7 @@ Class Window1
                 TreeViewTrigger.Items.Add(newchild)
             Next
 
+            ListeTriggers = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub Afftrigger: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1406,6 +1409,7 @@ Class Window1
                     parent = Nothing
                     y = Nothing
                 Next
+
                 x = Nothing
                 ListeDevices = Nothing
             End If
@@ -2294,6 +2298,11 @@ Class Window1
 
             If Objet.retour = "CANCEL" Then
                 CanvasRight.Children.Clear()
+                GC.Collect()
+                GC.WaitForPendingFinalizers()
+                GC.Collect()
+
+                Me.UpdateLayout()
                 ShowMainMenu()
             Else
                 If IsConnect = False Then
@@ -2313,6 +2322,11 @@ Class Window1
                                         x.Uid = System.Guid.NewGuid.ToString()
                                         AddHandler x.CloseMe, AddressOf UnloadControl
                                         CanvasRight.Children.Clear()
+                                        GC.Collect()
+                                        GC.WaitForPendingFinalizers()
+                                        GC.Collect()
+
+                                        Me.UpdateLayout()
                                         CanvasRight.Children.Add(x)
 
                                         AnimationApparition(x)
@@ -2321,6 +2335,11 @@ Class Window1
                                         x.Uid = System.Guid.NewGuid.ToString()
                                         AddHandler x.CloseMe, AddressOf UnloadControl
                                         CanvasRight.Children.Clear()
+                                        GC.Collect()
+                                        GC.WaitForPendingFinalizers()
+                                        GC.Collect()
+
+                                        Me.UpdateLayout()
                                         CanvasRight.Children.Add(x)
 
                                         AnimationApparition(x)
@@ -2329,6 +2348,11 @@ Class Window1
                                         x.Uid = System.Guid.NewGuid.ToString()
                                         AddHandler x.CloseMe, AddressOf UnloadControl
                                         CanvasRight.Children.Clear()
+                                        GC.Collect()
+                                        GC.WaitForPendingFinalizers()
+                                        GC.Collect()
+
+                                        Me.UpdateLayout()
                                         CanvasRight.Children.Add(x)
 
                                         AnimationApparition(x)
@@ -2337,6 +2361,11 @@ Class Window1
                                         x.Uid = System.Guid.NewGuid.ToString()
                                         AddHandler x.CloseMe, AddressOf UnloadControl
                                         CanvasRight.Children.Clear()
+                                        GC.Collect()
+                                        GC.WaitForPendingFinalizers()
+                                        GC.Collect()
+
+                                        Me.UpdateLayout()
                                         CanvasRight.Children.Add(x)
 
                                         AnimationApparition(x)
@@ -2350,6 +2379,11 @@ Class Window1
                                                 x.Uid = System.Guid.NewGuid.ToString()
                                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                                 CanvasRight.Children.Clear()
+                                                GC.Collect()
+                                                GC.WaitForPendingFinalizers()
+                                                GC.Collect()
+
+                                                Me.UpdateLayout()
                                                 CanvasRight.Children.Add(x)
 
                                                 AnimationApparition(x)
@@ -2359,6 +2393,11 @@ Class Window1
                                                 x.Uid = System.Guid.NewGuid.ToString()
                                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                                 CanvasRight.Children.Clear()
+                                                GC.Collect()
+                                                GC.WaitForPendingFinalizers()
+                                                GC.Collect()
+
+                                                Me.UpdateLayout()
                                                 CanvasRight.Children.Add(x)
 
                                                 AnimationApparition(x)
@@ -2371,6 +2410,11 @@ Class Window1
                                         x.Uid = System.Guid.NewGuid.ToString()
                                         AddHandler x.CloseMe, AddressOf UnloadControl
                                         CanvasRight.Children.Clear()
+                                        GC.Collect()
+                                        GC.WaitForPendingFinalizers()
+                                        GC.Collect()
+
+                                        Me.UpdateLayout()
                                         CanvasRight.Children.Add(x)
 
                                         AnimationApparition(x)
@@ -2388,7 +2432,7 @@ Class Window1
                     Case 2 'Supprimer
                         DeleteElement(Objet.retour, Objet.Type)
                 End Select
-
+                Me.UpdateLayout()
             End If
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub UnloadSelectElmt: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -2571,7 +2615,6 @@ Class Window1
             Me.Cursor = Cursors.Wait
 
             Dim Devices As New List(Of Dictionary(Of String, String))
-            
 
             For i As Integer = 0 To TreeViewHisto.Items.Count - 1
                 Dim chk As CheckBox
@@ -2608,6 +2651,7 @@ Class Window1
             CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
 
+            Devices = Nothing
             Me.Cursor = Nothing
         Catch ex As Exception
             Me.Cursor = Nothing
