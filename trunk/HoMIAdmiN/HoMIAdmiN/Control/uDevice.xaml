@@ -16,7 +16,11 @@
                             <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChkEnable" VerticalAlignment="Top" IsChecked="True">Enable</CheckBox>
                             <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" Name="ChKSolo" VerticalAlignment="Top" IsChecked="True" ToolTip="Utiliser dans certains drivers pour permettre de mettre à jour plusieurs composants d'un seul coup si décoché.">Solo</CheckBox>
                         <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" Name="ChKLastEtat" VerticalAlignment="Top" IsChecked="False" ToolTip="Prendre en compte l'avant dernier etat d'un device">LastEtat</CheckBox>
-                    </StackPanel>
+                            <Label Name="LblUnit" Content="Unité:"  Foreground="White"/>
+                            <TextBox Text="" Name="TxtUnit" Width="40" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Unité du composant (ex: °C, km/h, Watt..)"/>
+                            <Label Name="LblPuiss" Content="Puissance:"  Foreground="White"/>
+                            <TextBox Text="" Name="TxtPuissance" Width="40" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Puissance du composant en Watt(ex: 10)"/>
+                        </StackPanel>
                     <Label Foreground="White" Name="Label3">Description:</Label>
                     <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtDescript" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" />
                     <StackPanel Orientation="Horizontal" >
@@ -42,7 +46,7 @@
                     <StackPanel Orientation="Horizontal" >
                         <Label Foreground="White" Name="Label8" Width="215" >Modele:</Label>
                             <Rectangle Width="10"  Name="rectmodele1"/>
-                        <Label Foreground="White" Name="Label9" Width="75">Refresh (sec):</Label>
+                        <Label Foreground="White" Name="Label9" Width="80">Refresh (sec):</Label>
                             <Rectangle Width="10" Name="rectrefresh1"/>
                         <Label Foreground="White" Name="Label19" >LastChange Duree:</Label>
                     </StackPanel>
@@ -50,9 +54,9 @@
                             <ComboBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Width="215" Name="TxtModele" BorderThickness="2" Height="25" VerticalAlignment="Top" IsEditable="True" Tag="0" Visibility="Collapsed" />
                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtModele2" Width="215" Tag="1" Visibility="Collapsed" />
                             <Rectangle Width="10" Name="rectmodele2"/>
-                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Width="75" Name="TxtRefresh" ToolTip="Permet d'aller interroger à intervalles régulier le composant (en sec)">0</TextBox>
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Width="80" Name="TxtRefresh" ToolTip="Permet d'aller interroger à intervalles régulier le composant (en sec)">0</TextBox>
                         <Rectangle Width="10" Name="rectrefresh2"/>
-                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Right" Name="TxtLastChangeDuree" Width="75" ToolTip="Permet de mettre en erreur le composant si sa valeur n'a pas été modifié depuis x minutes">0</TextBox>
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Right" Name="TxtLastChangeDuree" Width="80" ToolTip="Permet de mettre en erreur le composant si sa valeur n'a pas été modifié depuis x minutes">0</TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Name="StkValueLabel">
                         <Label Foreground="White" Name="Label10" Width="215" Visibility="Visible">Value Min:</Label>

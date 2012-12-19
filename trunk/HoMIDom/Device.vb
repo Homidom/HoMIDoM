@@ -59,12 +59,12 @@ Namespace HoMIDom
             ''' <remarks></remarks>
             DIRECTIONVENT = 8
             ''' <summary>
-            ''' Valeur de consommation d'energie instantanée
+            ''' Valeur de Puissance d'energie instantanée
             ''' </summary>
             ''' <remarks></remarks>
             ENERGIEINSTANTANEE = 9
             ''' <summary>
-            ''' Valeur de consommation d'energie totale
+            ''' Valeur de Puissance d'energie totale
             ''' </summary>
             ''' <remarks></remarks>
             ENERGIETOTALE = 10
@@ -210,6 +210,9 @@ Namespace HoMIDom
             Protected _Solo As Boolean = True
             Protected _LastEtat As Boolean = True
             Protected MyTimer As New Timers.Timer
+            Protected _Unit As String = ""
+            Protected _Puiss As Integer = 0
+
             '<NonSerialized()> Protected _FirstTime As Boolean = True
             Public Commandes As New List(Of HoMIDom.Telecommande.Commandes)
 
@@ -395,6 +398,26 @@ Namespace HoMIDom
                 End Set
             End Property
 
+            'Unité du composant
+            Public Property Unit As String
+                Get
+                    Return _Unit
+                End Get
+                Set(ByVal value As String)
+                    _Unit = value
+                End Set
+            End Property
+
+            'Puissance du composant
+            Public Property Puissance As String
+                Get
+                    Return _Puiss
+                End Get
+                Set(ByVal value As String)
+                    _Puiss = value
+                End Set
+            End Property
+
             'Si le device est solo ou s'il contient plusieurs I/O
             Public Property Solo() As Boolean
                 Get
@@ -474,7 +497,7 @@ Namespace HoMIDom
             Protected _ValueMax As Double = 9999
             Protected _ValueDef As Double = 0
             Protected _Precision As Double = 0
-            Protected _Correction As Double = 0
+            Protected _Correction As String = "0"
             Protected _Formatage As String = ""
             Protected Shadows _TypeGenerique As String = "DOUBLE"
 
@@ -530,11 +553,11 @@ Namespace HoMIDom
             End Property
 
             'Correction en +/-/*/div à effectuer sur la value
-            Public Property Correction() As Double
+            Public Property Correction() As String
                 Get
                     Return _Correction
                 End Get
-                Set(ByVal value As Double)
+                Set(ByVal value As String)
                     _Correction = value
                 End Set
             End Property
@@ -586,7 +609,12 @@ Namespace HoMIDom
                             If tmp < _ValueMin Then tmp = _ValueMin
                             If tmp > _ValueMax Then tmp = _ValueMax
                             If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                            tmp += _Correction
+                            If IsNumeric(_Correction) Then
+                                tmp += _Correction
+                            Else
+                                tmp = Evaluation(_Correction, tmp)
+                            End If
+
                             'Si la valeur a changé on la prend en compte et on créer l'event
                             'If tmp <> _Value Then
                             '    _ValueLast = _Value 'on garde l'ancienne value en memoire
@@ -711,7 +739,7 @@ Namespace HoMIDom
             Protected _ValueMax As Integer = 100
             Protected _ValueDef As Integer = 0
             Protected _Precision As Integer = 0
-            Protected _Correction As Integer = 0
+            Protected _Correction As String = "0"
             Protected _Formatage As String = ""
             Protected Shadows _TypeGenerique As String = "INTEGER"
 
@@ -767,11 +795,11 @@ Namespace HoMIDom
             End Property
 
             'Correction en +/-/*/div à effectuer sur la value
-            Public Property Correction() As Integer
+            Public Property Correction() As String
                 Get
                     Return _Correction
                 End Get
-                Set(ByVal value As Integer)
+                Set(ByVal value As String)
                     _Correction = value
                 End Set
             End Property
@@ -834,7 +862,11 @@ Namespace HoMIDom
                             If tmp < _ValueMin Then tmp = _ValueMin 'If tmp < 0 Then tmp = 0
                             If tmp > _ValueMax Then tmp = _ValueMax 'If tmp > 100 Then tmp = 100
                             If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-                            tmp += _Correction
+                            If IsNumeric(_Correction) Then
+                                tmp += _Correction
+                            Else
+                                tmp = Evaluation(_Correction, tmp)
+                            End If
 
                             If tmp = _Value Then
                                 _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceINT Value", _Name & " : " & _Adresse1 & " : " & _Value & " (Inchangé)")
