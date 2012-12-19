@@ -1,4 +1,8 @@
-﻿Namespace HoMIDom
+﻿Imports System.IO
+Imports System.Net
+Imports System.Net.Sockets
+
+Namespace HoMIDom
 
     Public Module Api
 
@@ -68,7 +72,72 @@
             End Try
         End Function
 
-       
+        ''' <summary>
+        ''' Retourne le résultat d'un calcul (formule, ex: *2 +3) en se basant sur une valeur de base (Valeur)
+        ''' </summary>
+        ''' <param name="Formule"></param>
+        ''' <param name="Valeur"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function Evaluation(ByRef Formule As String, ByVal Valeur As Double) As Double
+            Dim PosSep As Integer
+            Dim PosCour As Integer
+            Dim PosAV As Integer
+            Dim PosAP As Integer
+            Dim Av, Ap As String
+            Dim Res As Double
+            Dim Separateurs(3) As String
+            Dim NumSep As Integer
+
+            'liste des separateurs
+            Formule = Valeur & Formule
+            Formule = Replace(Formule, " ", "")
+
+            Separateurs(0) = "/"
+            Separateurs(1) = "*"
+            Separateurs(2) = "+"
+            Separateurs(3) = "-"
+
+            For NumSep = 0 To 3
+
+                PosSep = InStr(1, Formule, Separateurs(NumSep))
+                While PosSep > 0
+                    'on determine le nombre AVANT le separateur
+                    PosCour = PosSep - 1
+                    While (IsNumeric(Mid(Formule, PosCour, 1)))
+                        PosCour = PosCour - 1
+                        If PosCour = 0 Then Exit While
+                    End While
+
+                    PosAV = PosCour + 1
+                    Av = Mid(Formule, PosAV, PosSep - PosAV)
+                    'on determine le nombre APRES le separateur
+                    PosCour = PosSep + 1
+                    While IsNumeric(Mid(Formule, PosCour, 1))
+                        PosCour = PosCour + 1
+                    End While
+                    PosAP = PosCour
+                    Ap = Mid(Formule, PosSep + 1, PosAP - PosSep - 1)
+
+                    'On calcule la sous-partie isolée
+                    Select Case NumSep
+                        Case 0 '/
+                            Res = Val(Av) / Val(Ap)
+                        Case 1 '*
+                            Res = Val(Av) * Val(Ap)
+                        Case 2 '+
+                            Res = Val(Av) + Val(Ap)
+                        Case 3 '-
+                            Res = Val(Av) - Val(Ap)
+                    End Select
+
+                    'on réécrit la formule avec la sous-partie calculée
+                    Formule = Left(Formule, PosAV - 1) & Trim(Str(Res)) & Mid(Formule, PosAP)
+                    PosSep = InStr(1, Formule, Separateurs(NumSep))
+                End While
+            Next
+            Evaluation = Val(Formule)
+        End Function
 
     End Module
 

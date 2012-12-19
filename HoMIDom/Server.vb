@@ -27,7 +27,6 @@ Namespace HoMIDom
     <ServiceBehavior(InstanceContextMode:=InstanceContextMode.Single)>
     <Serializable()> Public Class Server
         Implements HoMIDom.IHoMIDom 'implémente l'interface dans cette class
-        ' Implements HoMIDom.ICallBack
 
 #Region "Declaration des variables"
 
@@ -863,6 +862,8 @@ Namespace HoMIDom
                                         If (Not list.Item(j).Attributes.GetNamedItem("lastchangeduree") Is Nothing) Then .LastChangeDuree = list.Item(j).Attributes.GetNamedItem("lastchangeduree").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = Replace(list.Item(j).Attributes.GetNamedItem("refresh").Value, ".", ",")
                                         If (Not list.Item(j).Attributes.GetNamedItem("modele") Is Nothing) Then .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("unit") Is Nothing) Then .Unit = list.Item(j).Attributes.GetNamedItem("unit").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("puissance") Is Nothing) Then .Puissance = list.Item(j).Attributes.GetNamedItem("puissance").Value
                                         If list.Item(j).Attributes.GetNamedItem("picture").Value IsNot Nothing Then
                                             If IO.File.Exists(list.Item(j).Attributes.GetNamedItem("picture").Value) Then
                                                 .Picture = list.Item(j).Attributes.GetNamedItem("picture").Value
@@ -1571,6 +1572,12 @@ Namespace HoMIDom
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("modele")
                     writer.WriteValue(_ListDevices.Item(i).modele)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("unit")
+                    writer.WriteValue(_ListDevices.Item(i).unit)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("puissance")
+                    writer.WriteValue(_ListDevices.Item(i).Puissance)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("picture")
                     Dim _pict As String = _ListDevices.Item(i).picture
@@ -5396,6 +5403,7 @@ Namespace HoMIDom
                         .DateCreated = _ListDevices.Item(i).DateCreated
                         .LastChange = _ListDevices.Item(i).LastChange
                         .LastChangeDuree = _ListDevices.Item(i).LastChangeDuree
+                        .Unit = _ListDevices.Item(i).Unit
 
                         If IsNumeric(_ListDevices.Item(i).valuelast) Then .ValueLast = _ListDevices.Item(i).valuelast
 
@@ -5527,7 +5535,7 @@ Namespace HoMIDom
         ''' <param name="valuedef"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As Double = 0, Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing) As String Implements IHoMIDom.SaveDevice
+        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As String = "0", Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing, Optional ByVal Unit As String = "", Optional ByVal Puissance As Integer = 0) As String Implements IHoMIDom.SaveDevice
             Try
                 'Vérification de l'Id du serveur pour accepter le traitement
                 If VerifIdSrv(IdSrv) = False Then
@@ -5682,6 +5690,8 @@ Namespace HoMIDom
                         .Description = description
                         .LastChangeDuree = lastchangeduree
                         .LastEtat = lastEtat
+                        .Unit = Unit
+                        .Puissance = Puissance
                     End With
 
                     Select Case UCase(type)
@@ -5726,6 +5736,8 @@ Namespace HoMIDom
                             _ListDevices.Item(i).LastChangeDuree = lastchangeduree
                             _ListDevices.Item(i).LastEtat = lastEtat
                             _ListDevices.Item(i).Driver.newdevice(deviceId)
+                            _ListDevices.Item(i).Unit = Unit
+                            _ListDevices.Item(i).Puissance = Puissance
 
                             'si c'est un device de type double ou integer
                             If _ListDevices.Item(i).type = "VITESSEVENT" Or _ListDevices.Item(i).type = "UV" Or _ListDevices.Item(i).type = "TEMPERATURECONSIGNE" Or _ListDevices.Item(i).type = "TEMPERATURE" Or _ListDevices.Item(i).type = "PLUIETOTAL" Or _ListDevices.Item(i).type = "PLUIECOURANT" Or _ListDevices.Item(i).type = "LAMPE" Or _ListDevices.Item(i).type = "HUMIDITE" Or _ListDevices.Item(i).type = "GENERIQUEVALUE" Or _ListDevices.Item(i).type = "ENERGIETOTALE" Or _ListDevices.Item(i).type = "ENERGIEINSTANTANEE" Or _ListDevices.Item(i).type = "COMPTEUR" Or _ListDevices.Item(i).type = "BAROMETRE" Then
@@ -5911,6 +5923,8 @@ Namespace HoMIDom
                         retour.DateCreated = _ListDevices.Item(i).DateCreated
                         retour.LastChange = _ListDevices.Item(i).LastChange
                         retour.LastChangeDuree = _ListDevices.Item(i).LastChangeDuree
+                        retour.Unit = _ListDevices.Item(i).Unit
+                        retour.Puissance = _ListDevices.Item(i).Puissance
 
                         _listact = ListMethod(_ListDevices.Item(i).id)
 
@@ -6131,14 +6145,6 @@ Namespace HoMIDom
                 Dim x As Object = Nothing
                 Dim verifaction As Boolean = False
 
-                'recherche du device
-                'For i As Integer = 0 To _ListDevices.Count - 1
-                '    If _ListDevices.Item(i).ID = DeviceId Then
-                '        'device trouvé : _ListDevices.Item(i)
-                '        x = _ListDevices.Item(i)
-                '        Exit For
-                '    End If
-                'Next
                 x = ReturnDeviceById(IdSrv, DeviceId)
 
                 If x IsNot Nothing Then
@@ -6224,13 +6230,6 @@ Namespace HoMIDom
                 Dim x As Object = Nothing
                 Dim verifaction As Boolean = False
 
-                'recherche du device
-                'For i As Integer = 0 To _ListDevices.Count - 1
-                '    If _ListDevices.Item(i).ID = DeviceId Then
-                '        x = _ListDevices.Item(i)
-                '        Exit For
-                '    End If
-                'Next
                 x = ReturnDeviceById(IdSrv, DeviceId)
 
                 If x IsNot Nothing Then

@@ -160,7 +160,7 @@ Class Window1
             Else
                 LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString & "      "
                 LblConnect.Content = "Serveur non connecté"
-
+                IsConnect = False
                 Ellipse1.Fill = myBrushRouge
             End If
         Catch ex As Exception

@@ -32,7 +32,7 @@ Namespace HoMIDom
         Dim _ValueMax As Double = 9999
         Dim _ValueDef As Double = 0
         Dim _Precision As Double = 0
-        Dim _Correction As Double = 0
+        Dim _Correction As String = "0"
         Dim _Formatage As String = ""
         Dim _Value As Object = Nothing
         Dim _DeviceAction As New List(Of DeviceAction)
@@ -61,6 +61,8 @@ Namespace HoMIDom
         Dim _MaxJ3 As String = ""
         Dim _IconJ3 As String = ""
         Dim _ConditionJ3 As String = ""
+        Dim _Unit As String = ""
+        Dim _Puiss As Integer = 0
         Dim _ListCommandPlus As New List(Of Device.DeviceCommande)
 
         ''' <summary>
@@ -150,6 +152,36 @@ Namespace HoMIDom
             End Get
             Set(ByVal value As Device.ListeDevices)
                 _Type = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Unité du composant
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property Unit As String
+            Get
+                Return _Unit
+            End Get
+            Set(ByVal value As String)
+                _Unit = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Puissance du composant
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property Puissance As Integer
+            Get
+                Return _Puiss
+            End Get
+            Set(ByVal value As Integer)
+                _Puiss = value
             End Set
         End Property
 
@@ -415,11 +447,11 @@ Namespace HoMIDom
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Property Correction() As Double
+        Public Property Correction() As String
             Get
                 Return _Correction
             End Get
-            Set(ByVal value As Double)
+            Set(ByVal value As String)
                 _Correction = value
             End Set
         End Property

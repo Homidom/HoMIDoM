@@ -73,6 +73,8 @@ Partial Public Class uDevice
                     ChkEnable.IsChecked = x.Enable
                     ChKSolo.IsChecked = x.Solo
                     ChKLastEtat.IsChecked = x.LastEtat
+                    TxtUnit.Text = x.Unit
+                    TxtPuissance.Text = x.Puissance
 
                     If _Driver IsNot Nothing Then
                         CbDriver.SelectedValue = _Driver.Nom
@@ -161,6 +163,10 @@ Partial Public Class uDevice
                         Label8.Visibility = Windows.Visibility.Collapsed
                         Label9.Visibility = Windows.Visibility.Collapsed
                         Label19.Visibility = Windows.Visibility.Collapsed
+                        TxtUnit.Visibility = Windows.Visibility.Collapsed
+                        LblUnit.Visibility = Windows.Visibility.Collapsed
+                        TxtPuissance.Visibility = Windows.Visibility.Collapsed
+                        LblPuiss.Visibility = Windows.Visibility.Collapsed
                     End If
 
                     'affiche du bouton Historique si le device a un historique
@@ -282,12 +288,12 @@ Partial Public Class uDevice
                 End If
 
                 If _Action = EAction.Modifier Then
-                    If x IsNot Nothing Then result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes)
+                    If x IsNot Nothing Then result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text)
                 Else
-                    result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text)
+                    result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text)
                 End If
             Else
-                result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text)
+                result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text)
             End If
 
             If result = "98" Then
@@ -763,5 +769,12 @@ Partial Public Class uDevice
         Catch ex As Exception
             MessageBox.Show("ERREUR VerifDriver: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+    Private Sub TxtPuissance_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtPuissance.TextChanged
+        If IsNumeric(TxtPuissance.Text) = False Then
+            MessageBox.Show("Veuillez saisir une valeur numérique !!", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            TxtPuissance.Undo()
+        End If
     End Sub
 End Class
