@@ -862,6 +862,7 @@ Namespace HoMIDom
                                         If (Not list.Item(j).Attributes.GetNamedItem("lastchangeduree") Is Nothing) Then .LastChangeDuree = list.Item(j).Attributes.GetNamedItem("lastchangeduree").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = Replace(list.Item(j).Attributes.GetNamedItem("refresh").Value, ".", ",")
                                         If (Not list.Item(j).Attributes.GetNamedItem("modele") Is Nothing) Then .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("allvalue") Is Nothing) Then .AllValue = list.Item(j).Attributes.GetNamedItem("allvalue").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("unit") Is Nothing) Then .Unit = list.Item(j).Attributes.GetNamedItem("unit").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("puissance") Is Nothing) Then .Puissance = list.Item(j).Attributes.GetNamedItem("puissance").Value
                                         If list.Item(j).Attributes.GetNamedItem("picture").Value IsNot Nothing Then
@@ -1572,6 +1573,9 @@ Namespace HoMIDom
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("modele")
                     writer.WriteValue(_ListDevices.Item(i).modele)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("allvalue")
+                    writer.WriteValue(_ListDevices.Item(i).allvalue)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("unit")
                     writer.WriteValue(_ListDevices.Item(i).unit)
@@ -5404,6 +5408,7 @@ Namespace HoMIDom
                         .LastChange = _ListDevices.Item(i).LastChange
                         .LastChangeDuree = _ListDevices.Item(i).LastChangeDuree
                         .Unit = _ListDevices.Item(i).Unit
+                        .AllValue = _ListDevices.Item(i).AllValue
 
                         If IsNumeric(_ListDevices.Item(i).valuelast) Then .ValueLast = _ListDevices.Item(i).valuelast
 
@@ -5535,7 +5540,7 @@ Namespace HoMIDom
         ''' <param name="valuedef"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As String = "0", Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing, Optional ByVal Unit As String = "", Optional ByVal Puissance As Integer = 0) As String Implements IHoMIDom.SaveDevice
+        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As String = "0", Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing, Optional ByVal Unit As String = "", Optional ByVal Puissance As Integer = 0, Optional ByVal AllValue As Boolean = False) As String Implements IHoMIDom.SaveDevice
             Try
                 'Vérification de l'Id du serveur pour accepter le traitement
                 If VerifIdSrv(IdSrv) = False Then
@@ -5692,6 +5697,7 @@ Namespace HoMIDom
                         .LastEtat = lastEtat
                         .Unit = Unit
                         .Puissance = Puissance
+                        .AllValue = AllValue
                     End With
 
                     Select Case UCase(type)
@@ -5738,6 +5744,7 @@ Namespace HoMIDom
                             _ListDevices.Item(i).Driver.newdevice(deviceId)
                             _ListDevices.Item(i).Unit = Unit
                             _ListDevices.Item(i).Puissance = Puissance
+                            _ListDevices.Item(i).AllValue = AllValue
 
                             'si c'est un device de type double ou integer
                             If _ListDevices.Item(i).type = "VITESSEVENT" Or _ListDevices.Item(i).type = "UV" Or _ListDevices.Item(i).type = "TEMPERATURECONSIGNE" Or _ListDevices.Item(i).type = "TEMPERATURE" Or _ListDevices.Item(i).type = "PLUIETOTAL" Or _ListDevices.Item(i).type = "PLUIECOURANT" Or _ListDevices.Item(i).type = "LAMPE" Or _ListDevices.Item(i).type = "HUMIDITE" Or _ListDevices.Item(i).type = "GENERIQUEVALUE" Or _ListDevices.Item(i).type = "ENERGIETOTALE" Or _ListDevices.Item(i).type = "ENERGIEINSTANTANEE" Or _ListDevices.Item(i).type = "COMPTEUR" Or _ListDevices.Item(i).type = "BAROMETRE" Then
@@ -5925,6 +5932,7 @@ Namespace HoMIDom
                         retour.LastChangeDuree = _ListDevices.Item(i).LastChangeDuree
                         retour.Unit = _ListDevices.Item(i).Unit
                         retour.Puissance = _ListDevices.Item(i).Puissance
+                        retour.AllValue = _ListDevices.Item(i).AllValue
 
                         _listact = ListMethod(_ListDevices.Item(i).id)
 

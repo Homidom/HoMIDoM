@@ -63,6 +63,7 @@ Namespace HoMIDom
         Dim _ConditionJ3 As String = ""
         Dim _Unit As String = ""
         Dim _Puiss As Integer = 0
+        Dim _AllValue As Boolean
         Dim _ListCommandPlus As New List(Of Device.DeviceCommande)
 
         ''' <summary>
@@ -182,6 +183,21 @@ Namespace HoMIDom
             End Get
             Set(ByVal value As Integer)
                 _Puiss = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Prendre en compte toutes les valeurs même inchangées
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property AllValue As Boolean
+            Get
+                Return _AllValue
+            End Get
+            Set(ByVal value As Boolean)
+                _AllValue = value
             End Set
         End Property
 

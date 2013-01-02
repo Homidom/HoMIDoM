@@ -73,6 +73,7 @@ Partial Public Class uDevice
                     ChkEnable.IsChecked = x.Enable
                     ChKSolo.IsChecked = x.Solo
                     ChKLastEtat.IsChecked = x.LastEtat
+                    ChKAllValue.IsChecked = x.AllValue
                     TxtUnit.Text = x.Unit
                     TxtPuissance.Text = x.Puissance
 
@@ -138,8 +139,7 @@ Partial Public Class uDevice
                         BtnEditTel.Visibility = Windows.Visibility.Visible
                         TxtModele2.Visibility = Visibility.Collapsed
                         Label8.Visibility = Windows.Visibility.Collapsed
-                        rectmodele1.Visibility = Windows.Visibility.Collapsed
-                        rectmodele2.Visibility = Windows.Visibility.Collapsed
+                        StkModel.Visibility = Windows.Visibility.Collapsed
                     End If
 
                     'on verifie si le device est un device systeme pour ne pas le rendre modifiable
@@ -289,12 +289,12 @@ Partial Public Class uDevice
                 End If
 
                 If _Action = EAction.Modifier Then
-                    If x IsNot Nothing Then result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text)
+                    If x IsNot Nothing Then result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
                 Else
-                    result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text)
+                    result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
                 End If
             Else
-                result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text)
+                result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
             End If
 
             If result = "98" Then
@@ -406,8 +406,7 @@ Partial Public Class uDevice
                 If CbType.SelectedValue = "MULTIMEDIA" Then
                     TxtModele2.Visibility = Visibility.Collapsed
                     Label8.Visibility = Windows.Visibility.Collapsed
-                    rectmodele1.Visibility = Windows.Visibility.Collapsed
-                    rectmodele2.Visibility = Windows.Visibility.Collapsed
+                    StkModel.Visibility = Windows.Visibility.Collapsed
                 End If
             End If
         Catch Ex As Exception
@@ -613,8 +612,7 @@ Partial Public Class uDevice
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
                                     TxtRefresh.Visibility = Windows.Visibility.Collapsed
                                     Label9.Visibility = Windows.Visibility.Collapsed
-                                    rectrefresh1.Visibility = Windows.Visibility.Collapsed
-                                    rectrefresh2.Visibility = Windows.Visibility.Collapsed
+                                    StkRefresh.Visibility = Windows.Visibility.Collapsed
                                 Else
                                     Label9.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                     If _Driver.LabelsDevice.Item(k).Tooltip <> "" Then
@@ -622,8 +620,7 @@ Partial Public Class uDevice
                                         TxtRefresh.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                     End If
                                     TxtRefresh.Visibility = Windows.Visibility.Visible
-                                    rectrefresh1.Visibility = Windows.Visibility.Visible
-                                    rectrefresh2.Visibility = Windows.Visibility.Visible
+                                    StkRefresh.Visibility = Windows.Visibility.Visible
                                     Label9.Visibility = Windows.Visibility.Visible
                                 End If
                             Case "LASTCHANGEDUREE"
@@ -649,12 +646,10 @@ Partial Public Class uDevice
                                     TxtModele2.Visibility = Windows.Visibility.Collapsed
                                     TxtModele2.Tag = 0
                                     Label8.Visibility = Windows.Visibility.Collapsed
-                                    rectmodele1.Visibility = Windows.Visibility.Collapsed
-                                    rectmodele2.Visibility = Windows.Visibility.Collapsed
+                                    StkModel.Visibility = Windows.Visibility.Collapsed
                                 Else
                                     Label8.Visibility = Windows.Visibility.Visible
-                                    rectmodele1.Visibility = Windows.Visibility.Visible
-                                    rectmodele2.Visibility = Windows.Visibility.Visible
+                                    StkModel.Visibility = Windows.Visibility.Visible
                                     If _Driver.LabelsDevice.Item(k).LabelChamp <> "" Then Label8.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                     If _Driver.LabelsDevice.Item(k).Tooltip <> "" Then
                                         Label8.ToolTip = _Driver.LabelsDevice.Item(k).ToolTip
