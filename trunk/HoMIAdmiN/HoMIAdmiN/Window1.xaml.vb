@@ -23,7 +23,6 @@ Class Window1
     Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
     Dim myadress As String = ""
     Dim FlagStart As Boolean = False
-    Dim MemCanvas As Canvas
     Dim MyRep As String = System.Environment.CurrentDirectory
     Dim WMainMenu As Double = 0
     Dim HMainMenu As Double = 0
@@ -89,10 +88,11 @@ Class Window1
                     Dim serveurcomplet As String = myChannelFactory.Endpoint.Address.ToString()
                     serveurcomplet = Mid(serveurcomplet, 8, serveurcomplet.Length - 8)
                     serveurcomplet = Split(serveurcomplet, "/", 2)(0)
-                    LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & Split(serveurcomplet, ":", 2)(0) & ":" & Split(serveurcomplet, ":", 2)(1)
-                    'LblConnect.Content = Mid(myChannelFactory.Endpoint.Address.ToString(), 1, 32) & "..."
-                    LblConnect.Content = Split(serveurcomplet, ":", 2)(0) & ":" & Split(serveurcomplet, ":", 2)(1)
+                    Dim srblbl As String = Split(serveurcomplet, ":", 2)(0) & ":" & Split(serveurcomplet, ":", 2)(1)
+                    LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & srblbl
+                    LblConnect.Content = srblbl
                     serveurcomplet = Nothing
+                    srblbl = ""
 
                     'Modifie les heures du soleil
                     LHS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
@@ -248,11 +248,8 @@ Class Window1
             For i As Integer = 0 To ListServer.Count - 1
                 If ListServer.Item(i).Nom = Name Then
                     If File.Exists(ListServer.Item(i).Icon) Then
-                        Dim bmpImage As New BitmapImage()
-                        bmpImage.BeginInit()
-                        bmpImage.UriSource = New Uri(ListServer.Item(i).Icon, UriKind.Absolute)
-                        bmpImage.EndInit()
-                        ImgSrv.Source = bmpImage
+                        ImgSrv.Source = ImageFromUri(ListServer.Item(i).Icon)
+                        Exit For
                     End If
                 End If
             Next
