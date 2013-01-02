@@ -58,6 +58,7 @@
                                         <Label Foreground=" White" Content="Voix par défaut:" VerticalAlignment="center" Width="100"/>
                                         <ComboBox Name="CbVoice" Width="150" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="24" />
                                     </StackPanel>
+
                                 </StackPanel>
                             </GroupBox>
                             <GroupBox Name="GroupBox4" Width="389" Margin="2" >
@@ -165,6 +166,29 @@
                                     </StackPanel>
                                     </StackPanel>
                             </GroupBox>
+                            <GroupBox Name="GroupEnergie" Margin="2">
+                                <GroupBox.Header>
+                                    <Label Foreground="White" FontWeight="Bold">Energie</Label>
+                                </GroupBox.Header>
+                                <StackPanel >
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Label Foreground="White" Name="LblDevise" >Devise:</Label>
+                                        <TextBox Name="TxtDevise" Width="40" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20"/>
+                                    </StackPanel>
+                                    <CheckBox Name="ChkEnergie" Content="Gérer Energie" Foreground="White"/>
+                                    <StackPanel Name="StkTarifEnergie">
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Label Content="Tarif Jour:" Foreground="White"/>
+                                        <TextBox Name="TxtTarifJour" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="40"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Label Content="Tarif Nuit:" Foreground="White"/>
+                                        <TextBox Name="TxtTarifNuit" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="40"/>
+                                    </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </GroupBox>
+
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >

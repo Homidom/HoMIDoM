@@ -66,6 +66,10 @@ Partial Public Class uConfigServer
                 myService.SetMaxMonthLog(CDbl(TxtMaxLogMonth.Text))
                 myService.SetDefautVoice(CbVoice.Text)
                 myService.SetSaveRealTime(ChKSaveRealTime.IsChecked)
+                myService.SetDevise(TxtDevise.Text)
+                myService.SetGererEnergie(ChkEnergie.IsChecked)
+                myService.SetTarifJour(TxtTarifJour.Text)
+                myService.SetTarifNuit(TxtTarifNuit.Text)
 
                 Dim _list As New List(Of Boolean)
                 If ChkTyp0.IsChecked Then
@@ -167,6 +171,11 @@ Partial Public Class uConfigServer
                 TxtSmtpPort.Text = myService.GetSMTPPort(IdSrv)
                 ChkSSL.IsChecked = myService.GetSMTPSSL(IdSrv)
 
+                TxtDevise.Text = myService.GetDevise
+                ChkEnergie.IsChecked = myService.GetGererEnergie
+                TxtTarifJour.Text = myService.GetTarifJour
+                TxtTarifNuit.Text = myService.GetTarifNuit
+
                 Dim idx = -1
                 For i As Integer = 0 To myService.GetAllVoice.Count - 1
                     CbVoice.Items.Add(myService.GetAllVoice.Item(i))
@@ -215,7 +224,6 @@ Partial Public Class uConfigServer
             MessageBox.Show("Erreur uConfigServer TxtFile_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
-
 
     Private Sub BtnImport_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnImport.Click
         Try
@@ -315,5 +323,19 @@ Partial Public Class uConfigServer
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub BtnTestMail_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+    Private Sub TxtTarifJour_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtTarifJour.TextChanged
+        If IsNumeric(TxtTarifJour.Text) = False Then
+            MessageBox.Show("Veuillez saisir une valeur numérique pour le tarif de jour", MessageBoxButton.OK, MessageBoxImage.Error)
+            TxtTarifJour.Undo()
+        End If
+    End Sub
+
+    Private Sub TxtTarifNuit_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtTarifNuit.TextChanged
+        If IsNumeric(TxtTarifNuit.Text) = False Then
+            MessageBox.Show("Veuillez saisir une valeur numérique pour le tarif de jour", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            TxtTarifNuit.Undo()
+        End If
     End Sub
 End Class

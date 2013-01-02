@@ -72,7 +72,10 @@ Namespace HoMIDom
         <NonSerialized()> Private Shared _OsPlatForm As String  '32 ou 64 bits
         Private Shared lock_logwrite As New Object
         <NonSerialized()> Shared _SaveRealTime As Boolean = True 'True si on enregistre en temps réel
-
+        <NonSerialized()> Shared _Devise As String = "€"
+        <NonSerialized()> Shared _GererEnergie As Boolean = False
+        <NonSerialized()> Shared _TarifJour As Integer = "0"
+        <NonSerialized()> Shared _TarifNuit As Integer = "0"
 #End Region
 
 #Region "Event"
@@ -505,9 +508,17 @@ Namespace HoMIDom
                                             _CycleSave = list.Item(0).Attributes.Item(j).Value
                                         Case "voice"
                                             _Voice = list.Item(0).Attributes.Item(j).Value
-                                            If _Voice = "" Or _Voice = " " Then _Voice = GetFirstVoice()
+                                            If String.IsNullOrEmpty(_Voice) = False Then _Voice = GetFirstVoice()
                                         Case "saverealtime"
                                             _SaveRealTime = list.Item(0).Attributes.Item(j).Value
+                                        Case "devise"
+                                            _Devise = list.Item(0).Attributes.Item(j).Value
+                                        Case "gererenergie"
+                                            _GererEnergie = list.Item(0).Attributes.Item(j).Value
+                                        Case "tarifjour"
+                                            _TarifJour = list.Item(0).Attributes.Item(j).Value
+                                        Case "tarifnuit"
+                                            _TarifNuit = list.Item(0).Attributes.Item(j).Value
                                         Case Else
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
@@ -1361,6 +1372,18 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("saverealtime")
                 writer.WriteValue(_SaveRealTime)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("devise")
+                writer.WriteValue(_Devise)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("gererenergie")
+                writer.WriteValue(_GererEnergie)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("tarifjour")
+                writer.WriteValue(_TarifJour)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("tarifnuit")
+                writer.WriteValue(_TarifNuit)
                 writer.WriteEndAttribute()
                 writer.WriteEndElement()
 
@@ -3554,6 +3577,10 @@ Namespace HoMIDom
 
 #End Region
 
+#Region "Energie"
+
+#End Region
+
 #End Region
 
 #Region "Interface Client via IHOMIDOM"
@@ -4020,6 +4047,34 @@ Namespace HoMIDom
                 Return "ERR:Exception GetSqliteVersion"
             End Try
         End Function
+
+        ''' <summary>
+        ''' Retourne la devise du serveur
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetDevise() As String Implements IHoMIDom.GetDevise
+            Try
+                Return _Devise
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetDevise", "Erreur: " & ex.Message)
+                Return ""
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Fixe la devise du serveur
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        Public Sub SetDevise(ByVal Value As String) Implements IHoMIDom.setdevise
+            Try
+                _Devise = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetDevise", "Erreur: " & ex.Message)
+            End Try
+        End Sub
+
 #End Region
 
 #Region "Historisation"
@@ -7996,6 +8051,86 @@ Namespace HoMIDom
             Catch ex As Exception
                 Return "ERR:" & ex.ToString
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CleanLog", "Erreur: " & ex.Message)
+            End Try
+        End Function
+#End Region
+
+#Region "Energie"
+        ''' <summary>
+        ''' True si on doit gérer l'energie
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub SetGererEnergie(ByVal Value As Boolean) Implements IHoMIDom.SetGererEnergie
+            Try
+                _GererEnergie = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetGererEnergie", "Erreur: " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' True si on doit gérer l'energie
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetGererEnergie() As Boolean Implements IHoMIDom.GetGererEnergie
+            Try
+                Return _GererEnergie
+            Catch ex As Exception
+                Return False
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetGererEnergie", "Erreur: " & ex.Message)
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Set Tarif jour
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub SetTarifJour(ByVal Value As Integer) Implements IHoMIDom.SetTarifJour
+            Try
+                _TarifJour = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetTarifJour", "Erreur: " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Get Tarif joure
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetTarifJour() As Integer Implements IHoMIDom.GetTarifJour
+            Try
+                Return _TarifJour
+            Catch ex As Exception
+                Return 0
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetTarifJour", "Erreur: " & ex.Message)
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Set Tarif nuit
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub SetTarifNuit(ByVal Value As Integer) Implements IHoMIDom.SetTarifNuit
+            Try
+                _TarifNuit = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetTarifNuit", "Erreur: " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Get Tarif nuit
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetTarifNuit() As Integer Implements IHoMIDom.GetTarifNuit
+            Try
+                Return _TarifNuit
+            Catch ex As Exception
+                Return 0
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetTarifNuit", "Erreur: " & ex.Message)
             End Try
         End Function
 #End Region

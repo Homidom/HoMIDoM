@@ -309,6 +309,20 @@ Namespace HoMIDom
         ''' <summary>Retourne la version du moteur sqlite</summary>
         ''' <returns>String : version Sqlite</returns>
         <OperationContract()> Function GetSqliteVersion() As String
+
+        ''' <summary>
+        ''' Retourne la devise du serveur
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetDevise() As String
+
+        ''' <summary>
+        ''' Fixe la devise du serveur
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetDevise(ByVal Value As String)
 #End Region
 
 #Region "Historisation"
@@ -1069,6 +1083,15 @@ Namespace HoMIDom
         ''' <returns>0 si Ok sinon erreur</returns>
         ''' <remarks></remarks>
         <OperationContract()> Function TelecommandeSendCommand(ByVal IdSrv As String, ByVal IdDevice As String, ByVal Commande As String) As String
+#End Region
+
+#Region "Energie"
+        <OperationContract()> Sub SetGererEnergie(ByVal Value As Boolean)
+        <OperationContract()> Function GetGererEnergie() As Boolean
+        <OperationContract()> Sub SetTarifJour(ByVal Value As Integer)
+        <OperationContract()> Function GetTarifJour() As Integer
+        <OperationContract()> Sub SetTarifNuit(ByVal Value As Integer)
+        <OperationContract()> Function GetTarifNuit() As Integer
 #End Region
     End Interface
 
