@@ -64,6 +64,14 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Api.Evaluation(System.String@,System.Double)">
+	<summary>
+ Retourne le résultat d'un calcul (formule, ex: *2 +3) en se basant sur une valeur de base (Valeur)
+ </summary>
+	<param name="Formule"></param>
+	<param name="Valeur"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="P:HoMIDom.My.Resources.Resources.ResourceManager">
 	<summary>
   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
@@ -272,6 +280,20 @@ HoMIDom
 </member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Type">
 	<summary>
  Type de device TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Unit">
+	<summary>
+ Unité du composant
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Puissance">
+	<summary>
+ Puissance du composant
  </summary>
 	<value></value>
 	<returns></returns>
@@ -1432,7 +1454,7 @@ HoMIDom
 	<summary>Retourne la liste de tous les devices</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.Double,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes})">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.String,System.Int32)">
 	<summary>
  Sauvegarder ou créer un device
  </summary>
@@ -2275,7 +2297,7 @@ HoMIDom
 	<param name="DeviceDriver">ID driver du device</param>
 	<returns>List de device, Nothing si non trouvé ou ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.Double,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes})">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.String,System.Int32)">
 	<summary>
  Créer un nouveau device ou sauvegarder la modif (si ID est complété)
  </summary>
@@ -2983,12 +3005,12 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE">
 	<summary>
- Valeur de consommation d'energie instantanée
+ Valeur de Puissance d'energie instantanée
  </summary>
 	<remarks></remarks>
 </member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE">
 	<summary>
- Valeur de consommation d'energie totale
+ Valeur de Puissance d'energie totale
  </summary>
 	<remarks></remarks>
 </member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.FREEBOX">

@@ -1438,6 +1438,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "ENERGIEINSTANTANEE"
+                _Unit = "W"
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
@@ -1450,6 +1451,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "ENERGIETOTALE"
+                _Unit = "W"
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
@@ -1696,6 +1698,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "HUMIDITE"
+                _Unit = "%"
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
@@ -1708,6 +1711,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "LAMPE"
+                _Unit = "%"
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
@@ -2438,6 +2442,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "TEMPERATURE"
+                _Unit = "°C"
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
@@ -2450,6 +2455,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "TEMPERATURECONSIGNE"
+                _Unit = "°C"
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
@@ -2474,6 +2480,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "VITESSEVENT"
+                _Unit = "Km/h"
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
@@ -2486,6 +2493,7 @@ Namespace HoMIDom
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "VOLET"
+                _Unit = "%"
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
